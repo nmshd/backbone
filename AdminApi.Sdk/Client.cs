@@ -14,7 +14,8 @@ public class Client
     public Client(Configuration config)
     {
         var httpClient = new HttpClient { BaseAddress = new Uri(config.BaseUrl) };
-        var endpointClient = new EndpointClient(httpClient, config.ApiKey, config.JsonSerializerOptions);
+        var authenticator = new XsrfAndApiKeyAuthenticator(config.ApiKey, httpClient);
+        var endpointClient = new EndpointClient(httpClient, authenticator, config.JsonSerializerOptions);
 
         ApiKeyValidation = new ApiKeyValidationEndpoint(endpointClient);
         Clients = new ClientsEndpoint(endpointClient);

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Specialized;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
@@ -17,13 +16,13 @@ public class EndpointClient
         """;
 
     private readonly HttpClient _httpClient;
-    private readonly string _apiKey;
+    private readonly XsrfAndApiKeyAuthenticator _authenticator;
     private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-    public EndpointClient(HttpClient httpClient, string apiKey, JsonSerializerOptions jsonSerializerOptions)
+    public EndpointClient(HttpClient httpClient, XsrfAndApiKeyAuthenticator authenticator, JsonSerializerOptions jsonSerializerOptions)
     {
         _httpClient = httpClient;
-        _apiKey = apiKey;
+        _authenticator = authenticator;
         _jsonSerializerOptions = jsonSerializerOptions;
     }
 
@@ -56,7 +55,7 @@ public class EndpointClient
         .WithJson(requestContent)
         .Execute();
 
-    public RequestBuilder<T> Request<T>(HttpMethod method, string url) => new(this, _apiKey, _jsonSerializerOptions, method, url);
+    public RequestBuilder<T> Request<T>(HttpMethod method, string url) => new(this, _authenticator, _jsonSerializerOptions, method, url);
 
     private async Task<AdminApiResponse<T>> Execute<T>(HttpRequestMessage request)
     {
@@ -70,16 +69,16 @@ public class EndpointClient
             responseContent = new MemoryStream(Encoding.UTF8.GetBytes(EMPTY_RESULT));
         }
 
-        var deserializedResponseContent = JsonSerializer.Deserialize<AdminApiResponse<T>>(responseContent, _jsonSerializerOptions)!;
-        deserializedResponseContent.Status = statusCode;
+        var adminApiResponse = JsonSerializer.Deserialize<AdminApiResponse<T>>(responseContent, _jsonSerializerOptions)!;
+        adminApiResponse.Status = statusCode;
 
-        return deserializedResponseContent;
+        return adminApiResponse;
     }
 
     public class RequestBuilder<T>
     {
         private readonly EndpointClient _client;
-        private readonly string _apiKey;
+        private readonly XsrfAndApiKeyAuthenticator _authenticator;
         private readonly JsonSerializerOptions _jsonSerializerOptions;
 
         private readonly string _url;
@@ -89,10 +88,10 @@ public class EndpointClient
         private readonly NameValueCollection _extraHeaders = [];
         private readonly NameValueCollection _queryParameters = [];
 
-        public RequestBuilder(EndpointClient client, string apiKey, JsonSerializerOptions jsonSerializerOptions, HttpMethod method, string url)
+        public RequestBuilder(EndpointClient client, XsrfAndApiKeyAuthenticator authenticator, JsonSerializerOptions jsonSerializerOptions, HttpMethod method, string url)
         {
             _client = client;
-            _apiKey = apiKey;
+            _authenticator = authenticator;
             _jsonSerializerOptions = jsonSerializerOptions;
 
             _url = url;
@@ -180,16 +179,16 @@ public class EndpointClient
             return this;
         }
 
-        public async Task<AdminApiResponse<T>> Execute() => await _client.Execute<T>(CreateRequestMessage());
+        public async Task<AdminApiResponse<T>> Execute() => await _client.Execute<T>(await CreateRequestMessage());
 
-        private HttpRequestMessage CreateRequestMessage()
+        private async Task<HttpRequestMessage> CreateRequestMessage()
         {
             var request = new HttpRequestMessage(_method, EncodeParametersInUrl())
             {
                 Content = _content
             };
 
-            if (_authenticated) AddExtraHeader("X-API-KEY", _apiKey);
+            if (_authenticated) await _authenticator.Authenticate(request);
 
             foreach (var k in _extraHeaders.AllKeys)
             {
