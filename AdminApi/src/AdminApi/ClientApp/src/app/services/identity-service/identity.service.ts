@@ -192,6 +192,10 @@ export class IdentityService {
     public updateIdentity(identity: Identity, params: UpdateTierRequest): Observable<HttpResponseEnvelope<Identity>> {
         return this.http.put<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${identity.address}`, params);
     }
+
+    public getDeletionProcessesForIdentity(identity: string): Observable<HttpResponseEnvelope<DeletionProcessOverview[]>> {
+        return this.http.get<HttpResponseEnvelope<DeletionProcessOverview[]>>(`${this.apiUrl}/${identity}/DeletionProcesses`);
+    }
 }
 
 export interface Identity {
@@ -241,4 +245,20 @@ export interface IdentityOverviewFilter {
 
 export interface UpdateTierRequest {
     tierId: string;
+}
+
+export interface DeletionProcessOverview {
+    id: string;
+    status: number;
+    createdAt: string;
+    approvalReminder1SentAt?: string;
+    approvalReminder2SentAt?: string;
+    approvalReminder3SentAt?: string;
+    approvedAt: string;
+    approvedByDevice: string;
+    gracePeriodEndsAt: string;
+    gracePeriodReminder1SentAt?: string;
+    gracePeriodReminder2SentAt?: string;
+    gracePeriodReminder3SentAt?: string;
+    identityAddress: string;
 }

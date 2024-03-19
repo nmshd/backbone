@@ -9,6 +9,7 @@ using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExt
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
+
 public class MessagesRepository : IMessagesRepository
 {
     private readonly DbSet<Message> _messages;
@@ -46,7 +47,8 @@ public class MessagesRepository : IMessagesRepository
             .CountAsync(cancellationToken);
     }
 
-    public async Task<DbPaginationResult<Message>> FindMessagesWithIds(IEnumerable<MessageId> ids, IdentityAddress requiredParticipant, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
+    public async Task<DbPaginationResult<Message>> FindMessagesWithIds(IEnumerable<MessageId> ids, IdentityAddress requiredParticipant, PaginationFilter paginationFilter,
+        CancellationToken cancellationToken, bool track = false)
     {
         var query = (track ? _messages : _readOnlyMessages)
             .AsQueryable()
@@ -56,7 +58,6 @@ public class MessagesRepository : IMessagesRepository
             query = query.WithIdsIn(ids);
 
         var messages = await query.WithSenderOrRecipient(requiredParticipant)
-            .DoNotSendBeforePropertyIsNotInTheFuture()
             .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
         return messages;

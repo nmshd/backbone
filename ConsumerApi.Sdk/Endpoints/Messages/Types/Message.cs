@@ -8,7 +8,6 @@ public class Message
     public required string CreatedBy { get; set; }
     public required string CreatedByDevice { get; set; }
 
-    public DateTime? DoNotSendBefore { get; set; }
     public required byte[] Body { get; set; }
 
     public required List<Attachment> Attachments { get; set; }

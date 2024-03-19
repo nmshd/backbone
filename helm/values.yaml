@@ -374,13 +374,6 @@ global:
             provider: ""
             # connectionString - should be set via environment variable
             connectionString: ""
-          blobStorage:
-            # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            # cloudProvider: ""
-            # connectionInfo - should be set via environment variable
-            # connectionInfo: ""
-            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            # containerName: ""
       quotas:
         application:
           # pagination - the following options describe the default and maximum page size for the different endpoints
@@ -405,13 +398,6 @@ global:
             provider: ""
             # connectionString - should be set via environment variable
             connectionString: ""
-          blobStorage:
-            # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            # cloudProvider: ""
-            # connectionInfo - should be set via environment variable
-            # connectionInfo: ""
-            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            # containerName: ""
       synchronization:
         application:
           # pagination - the following options describe the default and maximum page size for the different endpoints
@@ -424,13 +410,6 @@ global:
             provider: ""
             # connectionString - should be set via environment variable
             connectionString: ""
-          blobStorage:
-            # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            # cloudProvider: ""
-            # connectionInfo - should be set via environment variable
-            # connectionInfo: ""
-            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            # containerName: ""
       tokens:
         application:
           # pagination - the following options describe the default and maximum page size for the different endpoints
@@ -443,13 +422,6 @@ global:
             provider: ""
             # connectionString - should be set via environment variable
             connectionString: ""
-          blobStorage:
-            # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            # cloudProvider: ""
-            # connectionInfo - should be set via environment variable
-            # connectionInfo: ""
-            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            # containerName: ""
     logging:
       minimumLevel:
         default: Error

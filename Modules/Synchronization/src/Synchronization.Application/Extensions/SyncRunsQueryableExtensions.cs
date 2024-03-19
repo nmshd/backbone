@@ -7,11 +7,6 @@ namespace Backbone.Modules.Synchronization.Application.Extensions;
 
 public static class SyncRunsQueryableExtensions
 {
-    public static IQueryable<SyncRun> WithId(this IQueryable<SyncRun> query, SyncRunId id)
-    {
-        return query.Where(d => d.Id == id);
-    }
-
     public static IQueryable<SyncRun> CreatedBy(this IQueryable<SyncRun> query, IdentityAddress createdBy)
     {
         return query.Where(d => d.CreatedBy == createdBy);

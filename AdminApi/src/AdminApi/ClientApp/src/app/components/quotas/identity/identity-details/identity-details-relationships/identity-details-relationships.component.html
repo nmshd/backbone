@@ -2,7 +2,7 @@
     <div *ngIf="loading" class="loading">
         <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
     </div>
-    <table mat-table class="responsive" [dataSource]="relationshipsTableData" *ngIf="!loading">
+    <table mat-table class="responsive" [dataSource]="relationshipsTableData" *ngIf="!loading" style="overflow-x: auto !important">
         <ng-container matColumnDef="peer">
             <th mat-header-cell *matHeaderCellDef>Peer</th>
             <td mat-cell *matCellDef="let Relationship" data-label="Peer:">
@@ -59,14 +59,14 @@
             <td class="mat-cell no-data" [attr.colspan]="relationshipsTableDisplayedColumns.length">No relationships found.</td>
         </tr>
     </table>
-    <mat-paginator
-        *ngIf="!loading"
-        (page)="relationshipsPageChangeEvent($event)"
-        [length]="relationshipsTotalRecords"
-        [pageSize]="relationshipsPageSize"
-        [pageIndex]="relationshipsPageIndex"
-        [pageSizeOptions]="[5, 10, 25, 100]"
-        showFirstLastButtons
-        aria-label="Select page of relationships">
-    </mat-paginator>
 </div>
+<mat-paginator
+    *ngIf="!loading"
+    (page)="relationshipsPageChangeEvent($event)"
+    [length]="relationshipsTotalRecords"
+    [pageSize]="relationshipsPageSize"
+    [pageIndex]="relationshipsPageIndex"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    showFirstLastButtons
+    aria-label="Select page of relationships">
+</mat-paginator>

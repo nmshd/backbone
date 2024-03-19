@@ -16,20 +16,6 @@ public class Configuration
         [Required]
         public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
 
-        public BlobStorageConfiguration? BlobStorage { get; set; }
-
-        public class BlobStorageConfiguration
-        {
-            [Required]
-            [MinLength(1)]
-            [RegularExpression("Azure|GoogleCloud")]
-            public string CloudProvider { get; set; } = string.Empty;
-
-            public string ConnectionInfo { get; set; } = string.Empty;
-
-            public string ContainerName { get; set; } = string.Empty;
-        }
-
         public class SqlDatabaseConfiguration
         {
             [Required]

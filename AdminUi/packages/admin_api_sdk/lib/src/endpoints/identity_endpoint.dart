@@ -32,21 +32,18 @@ class IdentitiesEndpoint extends Endpoint {
     int pageNumber = 0,
     int pageSize = 10,
   }) {
-    final queryParameters = <String, String>{
-      r'$top': '$pageSize',
-      r'$skip': '${pageNumber * pageSize}',
-      r'$count': 'true',
-      r'$expand': 'Tier',
-    };
+    final queryParameters = <String, String>{r'$expand': 'Tier'};
 
     if (filter != null) {
-      queryParameters[r'$filter'] = ODataFilterBuilder().buildOdataFilter(filter);
+      queryParameters[r'$filter'] = IdentityOverviewFilterBuilder(filter).build();
     }
 
     return getOData(
       '/odata/Identities',
       query: queryParameters,
       transformer: (e) => (e as List).map(IdentityOverview.fromJson).toList(),
+      pageNumber: pageNumber,
+      pageSize: pageSize,
     );
   }
 }

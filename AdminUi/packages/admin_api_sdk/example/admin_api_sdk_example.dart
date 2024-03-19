@@ -33,4 +33,7 @@ void main() async {
   print(updatedClient.data.maxIdentities);
 
   await client.clients.deleteClient(newClient.data.clientId);
+
+  final identitiesPaged = await client.identities.getIdentities(pageSize: 2);
+  print(identitiesPaged.isPaged ? identitiesPaged.pagination : 'Not paged');
 }

@@ -89,37 +89,50 @@ abstract class Endpoint {
 
       throw Exception('Invalid response type');
     }
-    return ApiResponse.success(transformer(payload['result']));
+
+    final pagination = payload['pagination'] != null ? Pagination.fromJson(Map<String, dynamic>.from(payload['pagination'] as Map)) : null;
+    return ApiResponse.success(transformer(payload['result']), pagination);
   }
 
   @protected
-  Future<ApiResponse<T>> getOData<T>(String path, {required T Function(dynamic) transformer, Map<String, dynamic>? query}) async {
+  Future<ApiResponse<T>> getOData<T>(
+    String path, {
+    required T Function(dynamic) transformer,
+    required int pageNumber,
+    required int pageSize,
+    Map<String, dynamic>? query,
+  }) async {
     final response = await _dio.get<Map<String, dynamic>>(
       path,
-      queryParameters: query,
+      queryParameters: {
+        r'$top': '$pageSize',
+        r'$skip': '${pageNumber * pageSize}',
+        r'$count': 'true',
+        ...query ?? {},
+      },
       options: Options(headers: {'Accept': 'application/json'}),
     );
-    return _makeODataResult(response, transformer);
+    return _makeODataResult(response, transformer, pageNumber: pageNumber, pageSize: pageSize);
   }
 
   ApiResponse<T> _makeODataResult<T>(
     Response<Map<String, dynamic>> httpResponse,
     T Function(dynamic) transformer, {
-    int? expectedStatus,
-    bool allowEmptyResponse = false,
+    required int pageNumber,
+    required int pageSize,
   }) {
-    expectedStatus ??= switch (httpResponse.requestOptions.method.toUpperCase()) { 'POST' => 201, _ => 200 };
-
     final payload = httpResponse.data;
+    if (payload == null) throw Exception('Invalid response type');
 
-    if (payload == null) {
-      if (allowEmptyResponse) {
-        return ApiResponse.success(transformer(null));
-      }
+    final count = payload['@odata.count'] as int;
 
-      throw Exception('Invalid response type');
-    }
+    final pagination = Pagination(
+      pageNumber: pageNumber,
+      pageSize: pageSize,
+      totalPages: count ~/ pageSize + (count % pageSize == 0 ? 0 : 1),
+      totalRecords: count,
+    );
 
-    return ApiResponse.success(transformer(payload['value']));
+    return ApiResponse.success(transformer(payload['value']), pagination);
   }
 }

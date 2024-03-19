@@ -3,9 +3,9 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Application.DTOs;
 
-public class IdentityDeletionProcessDTO
+public class IdentityDeletionProcessDetailsDTO
 {
-    public IdentityDeletionProcessDTO(IdentityDeletionProcess process)
+    public IdentityDeletionProcessDetailsDTO(IdentityDeletionProcess process)
     {
         Id = process.Id;
         AuditLog = process.AuditLog

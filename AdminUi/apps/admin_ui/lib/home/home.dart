@@ -1,4 +1,3 @@
-import 'package:admin_ui/widgets/identity_overview.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {
@@ -11,17 +10,7 @@ class Dashboard extends StatefulWidget {
 class _DashboardState extends State<Dashboard> {
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Padding(
-        padding: EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IdentityOverviewWidget(),
-          ],
-        ),
-      ),
-    );
+    return const Placeholder();
   }
 }
 

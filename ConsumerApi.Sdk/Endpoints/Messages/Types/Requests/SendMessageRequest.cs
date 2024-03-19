@@ -3,7 +3,6 @@
 public class SendMessageRequest
 {
     public required List<SendMessageRequestRecipientInformation> Recipients { get; set; }
-    public DateTime? DoNotSendBefore { get; set; }
     public required byte[] Body { get; set; }
     public required List<Attachment> Attachments { get; set; }
 }
