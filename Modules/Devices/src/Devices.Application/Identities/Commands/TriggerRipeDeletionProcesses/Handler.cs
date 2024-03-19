@@ -16,7 +16,7 @@ public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, Trig
     public async Task<TriggerRipeDeletionProcessesResponse> Handle(TriggerRipeDeletionProcessesCommand request, CancellationToken cancellationToken)
     {
         var identities = await _identitiesRepository.Find(Identity.IsReadyForDeletion(), cancellationToken, track: true);
-        
+
         var response = new TriggerRipeDeletionProcessesResponse();
 
         foreach (var identity in identities)
