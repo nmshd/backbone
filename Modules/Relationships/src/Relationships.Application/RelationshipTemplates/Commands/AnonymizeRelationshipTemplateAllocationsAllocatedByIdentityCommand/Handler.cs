@@ -3,7 +3,7 @@ using Backbone.Modules.Relationships.Domain.Entities;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand;
-public class Handler: IRequestHandler<AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand>
+public class Handler : IRequestHandler<AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand>
 {
     private const string DELETED_IDENTITY_STRING = "deleted identity";
     private readonly IRelationshipsRepository _relationshipsRepository;

@@ -17,7 +17,7 @@ public interface IRelationshipsRepository
     Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken);
     Task<bool> RelationshipBetweenTwoIdentitiesExists(IdentityAddress identityAddressA, IdentityAddress identityAddressB, CancellationToken cancellationToken);
     Task Delete(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken);
-    
+
     #endregion Relationships
 
     #region RelationshipChanges
@@ -27,13 +27,13 @@ public interface IRelationshipsRepository
         RelationshipChangeStatus? relationshipChangeStatus, OptionalDateRange? modifiedAt, OptionalDateRange? createdAt, OptionalDateRange? completedAt, IdentityAddress? createdBy,
         IdentityAddress? completedBy, IdentityAddress activeIdentity, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool onlyPeerChanges = false, bool track = false);
     Task<RelationshipChange?> FindRelationshipChange(RelationshipChangeId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false);
-    
+
     #endregion RelationshipChanges
 
     #region RelationshipTemplateAllocations
 
     Task<IEnumerable<RelationshipTemplateAllocation>> FindRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter, CancellationToken cancellationToken);
     Task UpdateRelationshipTemplateAllocation(RelationshipTemplateAllocation relationshipTemplateAllocation, CancellationToken cancellationToken);
-   
+
     #endregion RelationshipTemplateAllocations
 }

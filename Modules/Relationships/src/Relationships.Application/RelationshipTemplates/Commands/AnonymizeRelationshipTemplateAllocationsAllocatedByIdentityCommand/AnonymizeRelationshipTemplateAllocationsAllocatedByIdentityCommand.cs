@@ -2,7 +2,7 @@
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand;
-public class AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand:IRequest
+public class AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand : IRequest
 {
     public AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(IdentityAddress identityAddress)
     {
