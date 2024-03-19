@@ -27,9 +27,36 @@ namespace Backbone.Job.IdentityDeletion;
 
 public class Program
 {
-    public static async Task Main(string[] args)
+    public static async Task<int> Main(string[] args)
     {
-        await CreateHostBuilder(args).Build().RunAsync();
+
+        Log.Logger = new LoggerConfiguration()
+            .WriteTo.Console()
+            .CreateBootstrapLogger();
+
+        try
+        {
+            Log.Information("Creating app...");
+
+            var app = CreateHostBuilder(args);
+
+            Log.Information("App created.");
+            Log.Information("Starting app...");
+
+            await app.Build().RunAsync();
+
+            return 0;
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "Host terminated unexpectedly");
+            return 1;
+        }
+        finally
+        {
+            await Log.CloseAndFlushAsync();
+        }
+
     }
 
     private static IHostBuilder CreateHostBuilder(string[] args)
@@ -93,13 +120,14 @@ public class Program
             })
             .UseServiceProviderFactory(new AutofacServiceProviderFactory())
             .UseSerilog((context, configuration) => configuration
-            .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
-            .Enrich.WithDemystifiedStackTraces()
-            .Enrich.FromLogContext()
-            .Enrich.WithProperty("service", "jobs.identitydeletion")
-            .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
-                .WithDefaultDestructurers()
-                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
+                .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
+                .Enrich.WithDemystifiedStackTraces()
+                .Enrich.FromLogContext()
+                .Enrich.WithProperty("service", "jobs.identitydeletion")
+                .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
+                    .WithDefaultDestructurers()
+                    .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() })
+                )
         );
     }
 }
