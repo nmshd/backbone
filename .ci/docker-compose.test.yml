@@ -9,7 +9,7 @@ services:
       cache_from:
         - type=local,src=/tmp/.buildx-cache
       cache_to:
-        - type=local,dest=/tmp/.buildx-cache,mode=max
+        - type=local,dest=/tmp/.buildx-cache,mode=min
       args:
         DOCKER_BUILDKIT: 1
     environment:
@@ -38,7 +38,7 @@ services:
       cache_from:
         - type=local,src=/tmp/.buildx-cache
       cache_to:
-        - type=local,dest=/tmp/.buildx-cache,mode=max
+        - type=local,dest=/tmp/.buildx-cache,mode=min
       args:
         DOCKER_BUILDKIT: 1
     environment:
@@ -83,7 +83,7 @@ services:
       cache_from:
         - type=local,src=/tmp/.buildx-cache
       cache_to:
-        - type=local,dest=/tmp/.buildx-cache,mode=max
+        - type=local,dest=/tmp/.buildx-cache,mode=min
       args:
         DOCKER_BUILDKIT: 1
     depends_on:

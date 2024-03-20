@@ -21,8 +21,6 @@ jobs:
           check-latest: true
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
-      - name: Setup Docker
-        uses: docker/setup-buildx-action@v3
       
       - name: Cache Docker
         uses: actions/cache@v3
@@ -31,6 +29,9 @@ jobs:
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-buildx-
+            
+      - name: Setup Docker
+        uses: docker/setup-buildx-action@v3
       
       #- name: Cache npm dependencies
       #  uses: actions/cache@v3
@@ -67,9 +68,11 @@ jobs:
 
       - name: Run integration tests
         run: ./.ci/integrationTest.postgres.sh
+        
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.postgres.yml logs > docker-log.txt
+        
       - name: Archive logs
         if: failure()
         uses: actions/upload-artifact@v4
