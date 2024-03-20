@@ -37,12 +37,30 @@ public class RelationshipTests
         var relationship = new Relationship(relationshipTemplate, FROM_IDENTITY, FROM_DEVICE, null);
 
         // Assert
+        relationship.Id.Should().NotBeNull();
         relationship.From.Should().Be(FROM_IDENTITY);
         relationship.To.Should().Be(TO_IDENTITY);
         relationship.Status.Should().Be(RelationshipStatus.Pending);
+        relationship.RelationshipTemplateId.Should().Be(relationshipTemplate.Id);
+        relationship.RelationshipTemplate.Should().Be(relationshipTemplate);
+        relationship.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
+    }
 
+    [Fact]
+    public void New_Relationship_Has_AuditLogEntry()
+    {
+        // Arrange
+        var relationshipTemplate = new RelationshipTemplate(TO_IDENTITY, TO_DEVICE, 1, null, []);
+        SystemTime.Set("2000-01-01");
+
+        // Act
+        var relationship = new Relationship(relationshipTemplate, FROM_IDENTITY, FROM_DEVICE, null);
+
+        // Assert
         relationship.AuditLog.Should().HaveCount(1);
+
         var auditLogEntry = relationship.AuditLog.First();
+
         auditLogEntry.Id.Should().NotBeNull();
         auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.Creation);
         auditLogEntry.OldStatus.Should().Be(null);

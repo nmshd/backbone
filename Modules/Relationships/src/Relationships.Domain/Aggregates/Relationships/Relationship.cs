@@ -16,6 +16,7 @@ public class Relationship
         RelationshipTemplate = null!;
         From = null!;
         To = null!;
+        AuditLog = null!;
     }
 
     public Relationship(RelationshipTemplate relationshipTemplate, IdentityAddress from, DeviceId fromDevice, byte[]? requestContent)
@@ -32,7 +33,7 @@ public class Relationship
 
         AuditLog = new List<RelationshipAuditLogEntry>
         {
-            new RelationshipAuditLogEntry(RelationshipAuditLogEntryReason.Creation, null, RelationshipStatus.Pending, from, fromDevice)
+            new(RelationshipAuditLogEntryReason.Creation, null, RelationshipStatus.Pending, from, fromDevice)
         };
     }
 
