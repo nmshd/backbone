@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Tooling;
@@ -19,21 +20,26 @@ public class Relationship
         AuditLog = null!;
     }
 
-    public Relationship(RelationshipTemplate relationshipTemplate, IdentityAddress from, DeviceId fromDevice, byte[]? requestContent)
+    public Relationship(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationContent)
     {
+        if (activeIdentity == relationshipTemplate.CreatedBy)
+            throw new DomainException(DomainErrors.CannotSendRelationshipRequestToYourself());
+
         Id = RelationshipId.New();
         RelationshipTemplateId = relationshipTemplate.Id;
         RelationshipTemplate = relationshipTemplate;
 
-        From = from;
+        From = activeIdentity;
         To = relationshipTemplate.CreatedBy;
         Status = RelationshipStatus.Pending;
 
         CreatedAt = SystemTime.UtcNow;
 
+        CreationContent = creationContent;
+
         AuditLog = new List<RelationshipAuditLogEntry>
         {
-            new(RelationshipAuditLogEntryReason.Creation, null, RelationshipStatus.Pending, from, fromDevice)
+            new(RelationshipAuditLogEntryReason.Creation, null, RelationshipStatus.Pending, activeIdentity, activeDevice)
         };
     }
 
@@ -47,6 +53,7 @@ public class Relationship
     public DateTime CreatedAt { get; }
 
     public RelationshipStatus Status { get; private set; }
+    public byte[]? CreationContent { get; set; }
     public List<RelationshipAuditLogEntry> AuditLog { get; set; }
 
     #region Selectors
@@ -57,4 +64,17 @@ public class Relationship
     }
 
     #endregion
+
+    public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        if (Status != RelationshipStatus.Pending)
+            throw new DomainException(DomainErrors.RelationshipIsNotInCorrectStatus(RelationshipStatus.Pending));
+
+        if (To != activeIdentity)
+            throw new DomainException(DomainErrors.CannotSendRelationshipRequestToYourself());
+
+        Status = RelationshipStatus.Active;
+
+        AuditLog.Add(new RelationshipAuditLogEntry(RelationshipAuditLogEntryReason.AcceptanceOfCreation, RelationshipStatus.Pending, RelationshipStatus.Active, activeIdentity, activeDevice));
+    }
 }

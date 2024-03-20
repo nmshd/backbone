@@ -5,12 +5,12 @@ namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
 public class RelationshipAuditLogEntry
 {
-    public RelationshipAuditLogEntry(RelationshipAuditLogEntryReason creation, RelationshipStatus? oldStatus, RelationshipStatus newStatus, IdentityAddress createdBy, DeviceId createdByDevice)
+    public RelationshipAuditLogEntry(RelationshipAuditLogEntryReason reason, RelationshipStatus? oldStatus, RelationshipStatus newStatus, IdentityAddress createdBy, DeviceId createdByDevice)
     {
         Id = RelationshipAuditLogEntryId.New();
-        Reason = creation;
-        NewStatus = newStatus;
+        Reason = reason;
         OldStatus = oldStatus;
+        NewStatus = newStatus;
         CreatedBy = createdBy;
         CreatedByDevice = createdByDevice;
         CreatedAt = SystemTime.UtcNow;
