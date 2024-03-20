@@ -1,8 +1,7 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Domain.Errors;
 
-namespace Backbone.Modules.Relationships.Domain.Entities;
+namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
 public class RelationshipCreationChange : RelationshipChange
 {
@@ -11,7 +10,10 @@ public class RelationshipCreationChange : RelationshipChange
     {
     }
 
-    internal RelationshipCreationChange(Relationship relationship, IdentityAddress createdBy, DeviceId createdByDevice, byte[]? requestContent) : base(relationship, createdBy, createdByDevice, RelationshipChangeType.Creation, requestContent) { }
+    internal RelationshipCreationChange(Relationship relationship, IdentityAddress createdBy, DeviceId createdByDevice, byte[]? requestContent) : base(relationship, createdBy, createdByDevice,
+        RelationshipChangeType.Creation, requestContent)
+    {
+    }
 
     protected override void EnsureCanBeAccepted(IdentityAddress by, byte[]? content)
     {

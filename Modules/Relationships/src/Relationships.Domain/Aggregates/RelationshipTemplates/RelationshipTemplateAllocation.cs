@@ -1,8 +1,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Tooling;
 
-namespace Backbone.Modules.Relationships.Domain.Entities;
+namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
 public class RelationshipTemplateAllocation
 {

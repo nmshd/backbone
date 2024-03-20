@@ -1,7 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.DTOs;
 

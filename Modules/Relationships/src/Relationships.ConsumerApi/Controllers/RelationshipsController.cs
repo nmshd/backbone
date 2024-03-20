@@ -15,8 +15,7 @@ using Backbone.Modules.Relationships.Application.Relationships.Queries.GetRelati
 using Backbone.Modules.Relationships.Application.Relationships.Queries.ListChanges;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
 using Backbone.Modules.Relationships.Common;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;

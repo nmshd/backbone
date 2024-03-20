@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipChangeRequest;

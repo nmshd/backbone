@@ -1,8 +1,7 @@
 using Backbone.BuildingBlocks.Domain.Errors;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-namespace Backbone.Modules.Relationships.Domain.Errors;
+namespace Backbone.Modules.Relationships.Domain;
 
 public static class DomainErrors
 {
@@ -44,6 +43,7 @@ public static class DomainErrors
 
     public static DomainError MaxNumberOfAllocationsExhausted()
     {
-        return new DomainError("error.platform.validation.relationshipTemplate.maxNumberOfAllocationsExhausted", "The maximum number of allocations (maxNumberOfAllocations) of the template you are trying to read is exhausted.");
+        return new DomainError("error.platform.validation.relationshipTemplate.maxNumberOfAllocationsExhausted",
+            "The maximum number of allocations (maxNumberOfAllocations) of the template you are trying to read is exhausted.");
     }
 }

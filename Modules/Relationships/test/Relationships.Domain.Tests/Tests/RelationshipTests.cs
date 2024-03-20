@@ -1,9 +1,8 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Errors;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Domain.Tests.Extensions;
 using Backbone.Tooling;
 using FluentAssertions;

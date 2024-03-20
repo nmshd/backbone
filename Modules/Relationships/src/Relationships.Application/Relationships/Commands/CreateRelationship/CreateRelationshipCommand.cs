@@ -1,5 +1,5 @@
 using Backbone.BuildingBlocks.Application.Attributes;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;

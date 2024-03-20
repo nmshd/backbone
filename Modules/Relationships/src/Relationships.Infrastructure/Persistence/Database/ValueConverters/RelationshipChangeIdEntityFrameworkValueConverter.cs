@@ -1,11 +1,13 @@
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.ValueConverters;
 
 public class RelationshipChangeIdEntityFrameworkValueConverter : ValueConverter<RelationshipChangeId, string>
 {
-    public RelationshipChangeIdEntityFrameworkValueConverter() : this(null) { }
+    public RelationshipChangeIdEntityFrameworkValueConverter() : this(null)
+    {
+    }
 
     public RelationshipChangeIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
@@ -13,5 +15,6 @@ public class RelationshipChangeIdEntityFrameworkValueConverter : ValueConverter<
             value => RelationshipChangeId.Parse(value),
             mappingHints
         )
-    { }
+    {
+    }
 }

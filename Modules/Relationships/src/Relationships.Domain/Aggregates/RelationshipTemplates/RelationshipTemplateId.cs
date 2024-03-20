@@ -3,7 +3,7 @@ using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 
-namespace Backbone.Modules.Relationships.Domain.Ids;
+namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
 [Serializable]
 [TypeConverter(typeof(RelationshipTemplateIdTypeConverter))]
@@ -13,7 +13,9 @@ public class RelationshipTemplateId : StronglyTypedId
     private const string PREFIX = "RLT";
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
-    private RelationshipTemplateId(string stringValue) : base(stringValue) { }
+    private RelationshipTemplateId(string stringValue) : base(stringValue)
+    {
+    }
 
     public static RelationshipTemplateId Parse(string stringValue)
     {

@@ -1,5 +1,6 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.UnitTestTools.TestDoubles.Fakes;

@@ -1,7 +1,8 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
 namespace Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
+
 public class RelationshipChangeCreatedIntegrationEvent : IntegrationEvent
 {
     public RelationshipChangeCreatedIntegrationEvent(RelationshipChange change) : base($"{change.Id}/Created")

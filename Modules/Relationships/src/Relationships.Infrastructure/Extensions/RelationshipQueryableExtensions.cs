@@ -1,7 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Extensions;
