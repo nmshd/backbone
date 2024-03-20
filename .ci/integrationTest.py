@@ -69,9 +69,9 @@ def docker_compose_sqlserver(args: list[str]) -> int:
 def build_and_run_tests() -> int:
     ret = runCmd(RESTORE_PARTS)
 
-    if ret != 0:
+    if ret == 0:
         ret = runCmd(BUILD_PARTS)
-        if ret != 0:
+        if ret == 0:
             ret = runCmd(TEST_PARTS)
 
     return ret
