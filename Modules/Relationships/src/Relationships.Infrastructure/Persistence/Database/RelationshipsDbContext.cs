@@ -21,7 +21,6 @@ public class RelationshipsDbContext : AbstractDbContextBase
     }
 
     public DbSet<Relationship> Relationships { get; set; } = null!;
-    public DbSet<RelationshipChange> RelationshipChanges { get; set; } = null!;
     public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; } = null!;
 
     // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -37,10 +36,6 @@ public class RelationshipsDbContext : AbstractDbContextBase
         configurationBuilder.Properties<RelationshipId>().AreUnicode(false).AreFixedLength().HaveMaxLength(RelationshipId.MAX_LENGTH).HaveConversion<RelationshipIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<RelationshipTemplateId>().AreUnicode(false).AreFixedLength().HaveMaxLength(RelationshipTemplateId.MAX_LENGTH)
             .HaveConversion<RelationshipTemplateIdEntityFrameworkValueConverter>();
-
-        // Uncommenting the following means that we would have to recreate the table on the database, which is why we decided to leave RelationshipChangeIds in nvarchar(20) for now.
-        configurationBuilder.Properties<RelationshipChangeId>().HaveMaxLength(RelationshipChangeId.MAX_LENGTH)
-            .HaveConversion<RelationshipChangeIdEntityFrameworkValueConverter>(); //.AreFixedLength().AreUnicode(false)
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

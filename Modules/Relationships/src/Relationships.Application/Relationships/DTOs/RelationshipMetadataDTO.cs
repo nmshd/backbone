@@ -12,37 +12,8 @@ public class RelationshipMetadataDTO : IMapTo<Relationship>
 
     public required IdentityAddress From { get; set; }
     public required IdentityAddress To { get; set; }
-    public required IEnumerable<RelationshipChangeMetadataDTO> Changes { get; set; }
 
     public required DateTime CreatedAt { get; set; }
 
     public RelationshipStatus Status { get; set; }
-}
-
-public class RelationshipChangeMetadataDTO : IMapTo<RelationshipChange>
-{
-    public required RelationshipChangeId Id { get; set; }
-
-    public required RelationshipId RelationshipId { get; set; }
-
-    public required RelationshipChangeRequestMetadataDTO Request { get; set; }
-    public required RelationshipChangeResponseMetadataDTO? Response { get; set; }
-
-    public required RelationshipChangeType Type { get; set; }
-
-    public required RelationshipChangeStatus Status { get; set; }
-}
-
-public class RelationshipChangeRequestMetadataDTO : IMapTo<RelationshipChangeRequest>
-{
-    public required DateTime CreatedAt { get; set; }
-    public required IdentityAddress CreatedBy { get; set; }
-    public required DeviceId CreatedByDevice { get; set; }
-}
-
-public class RelationshipChangeResponseMetadataDTO : IMapTo<RelationshipChangeResponse>
-{
-    public required DateTime CreatedAt { get; set; }
-    public required IdentityAddress CreatedBy { get; set; }
-    public required DeviceId CreatedByDevice { get; set; }
 }

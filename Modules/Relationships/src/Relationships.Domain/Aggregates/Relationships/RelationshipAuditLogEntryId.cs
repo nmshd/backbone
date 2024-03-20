@@ -6,22 +6,22 @@ using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
 [Serializable]
-[TypeConverter(typeof(RelationshipChangeIdTypeConverter))]
-public class RelationshipChangeId : StronglyTypedId
+[TypeConverter(typeof(RelationshipAuditLogEntryIdTypeConverter))]
+public class RelationshipAuditLogEntryId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
-    private const string PREFIX = "RCH";
+    private const string PREFIX = "RAL";
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
-    private RelationshipChangeId(string stringValue) : base(stringValue)
+    private RelationshipAuditLogEntryId(string stringValue) : base(stringValue)
     {
     }
 
-    public static RelationshipChangeId Parse(string stringValue)
+    public static RelationshipAuditLogEntryId Parse(string stringValue)
     {
         UTILS.Validate(stringValue);
 
-        return new RelationshipChangeId(stringValue);
+        return new RelationshipAuditLogEntryId(stringValue);
     }
 
     public static bool IsValid(string stringValue)
@@ -29,13 +29,13 @@ public class RelationshipChangeId : StronglyTypedId
         return UTILS.IsValid(stringValue);
     }
 
-    public static RelationshipChangeId New()
+    public static RelationshipAuditLogEntryId New()
     {
         var stringValue = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
-        return new RelationshipChangeId(PREFIX + stringValue);
+        return new RelationshipAuditLogEntryId(PREFIX + stringValue);
     }
 
-    public class RelationshipChangeIdTypeConverter : TypeConverter
+    public class RelationshipAuditLogEntryIdTypeConverter : TypeConverter
     {
         public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {

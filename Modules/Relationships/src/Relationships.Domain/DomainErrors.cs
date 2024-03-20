@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Domain.Errors;
-using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
 namespace Backbone.Modules.Relationships.Domain;
 
@@ -20,20 +19,9 @@ public static class DomainErrors
         return new DomainError("error.platform.relationships.changeRequestCanOnlyBeRevokedByCreator", "A change request can only be revoked by its creator.");
     }
 
-    public static DomainError ChangeRequestIsAlreadyCompleted(RelationshipChangeStatus? changeStatus = null)
-    {
-        return new DomainError("error.platform.relationships.changeRequestIsAlreadyCompleted",
-            $"This change is already completed. (current status: '{changeStatus}').");
-    }
-
     public static DomainError OnlyActiveRelationshipsCanBeTerminated()
     {
         return new DomainError("error.platform.relationships.onlyActiveRelationshipsCanBeTerminated", "Only active relationships can be terminated.");
-    }
-
-    public static DomainError PendingChangeAlreadyExists(RelationshipChangeId? changeId = null)
-    {
-        return new DomainError("error.platform.relationships.pendingChangeAlreadyExists", $"There is already a pending change for this relationship. Change ID: {changeId}");
     }
 
     public static DomainError ContentIsRequiredForCompletingRelationships()

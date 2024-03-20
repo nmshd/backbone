@@ -7,64 +7,23 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Common;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
 
 public class RelationshipsRepository : IRelationshipsRepository
 {
     private readonly DbSet<Relationship> _relationships;
-    private readonly DbSet<RelationshipChange> _changes;
     private readonly IQueryable<Relationship> _readOnlyRelationships;
-    private readonly IQueryable<RelationshipChange> _readOnlyChanges;
     private readonly RelationshipsDbContext _dbContext;
 
     public RelationshipsRepository(RelationshipsDbContext dbContext)
     {
         _relationships = dbContext.Relationships;
         _readOnlyRelationships = dbContext.Relationships.AsNoTracking();
-        _changes = dbContext.RelationshipChanges;
-        _readOnlyChanges = dbContext.RelationshipChanges.AsNoTracking();
         _dbContext = dbContext;
-    }
-
-    public async Task<DbPaginationResult<RelationshipChange>> FindChangesWithIds(IEnumerable<RelationshipChangeId> ids,
-        RelationshipChangeType? relationshipChangeType, RelationshipChangeStatus? relationshipChangeStatus,
-        OptionalDateRange? modifiedAt, OptionalDateRange? createdAt, OptionalDateRange? completedAt,
-        IdentityAddress? createdBy, IdentityAddress? completedBy, IdentityAddress activeIdentity,
-        PaginationFilter paginationFilter, CancellationToken cancellationToken, bool onlyPeerChanges = false, bool track = false)
-    {
-        var query = (track ? _changes : _readOnlyChanges)
-            .AsQueryable()
-            .IncludeAll(_dbContext)
-            .WithRelationshipParticipant(activeIdentity);
-
-        if (relationshipChangeType.HasValue)
-            query = query.WithType(relationshipChangeType.Value);
-        if (relationshipChangeStatus.HasValue)
-            query = query.WithStatus(relationshipChangeStatus.Value);
-        if (modifiedAt != null)
-            query = query.ModifiedAt(modifiedAt);
-        if (createdAt != null)
-            query = query.CreatedAt(createdAt);
-        if (completedAt != null)
-            query = query.CompletedAt(completedAt);
-        if (createdBy != null)
-            query = query.CreatedBy(createdBy);
-        if (completedBy != null)
-            query = query.CompletedBy(completedBy);
-        if (ids.Any())
-            query = query.WithIdIn(ids);
-        if (onlyPeerChanges)
-            query = query.OnlyPeerChanges(activeIdentity);
-
-        var changes = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
-
-        return changes;
     }
 
     public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress,
@@ -76,18 +35,6 @@ public class RelationshipsRepository : IRelationshipsRepository
             .FirstWithId(id, cancellationToken);
 
         return relationship;
-    }
-
-    public async Task<RelationshipChange?> FindRelationshipChange(RelationshipChangeId id,
-        IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
-    {
-        var change = await (track ? _changes : _readOnlyChanges)
-            .IncludeAll(_dbContext)
-            .WithId(id)
-            .WithRelationshipParticipant(identityAddress)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        return change;
     }
 
     public async Task<DbPaginationResult<Relationship>> FindRelationshipsWithIds(IEnumerable<RelationshipId> ids,
@@ -141,14 +88,4 @@ public class RelationshipsRepository : IRelationshipsRepository
     {
         return await _relationships.Where(filter).ToListAsync(cancellationToken);
     }
-}
-
-internal static partial class RelationshipRepositoryLogs
-{
-    [LoggerMessage(
-        EventId = 664861,
-        EventName = "Relationships.RelationshipsRepository.ErrorTryingToSaveRelationshipChange",
-        Level = LogLevel.Error,
-        Message = "There was an error while trying to save the content of the RelationshipChange with the id '{id}'. The name of the blob was '{name}'.")]
-    public static partial void ErrorTryingToSaveRelationshipChange(this ILogger logger, RelationshipChangeId id, string name);
 }
