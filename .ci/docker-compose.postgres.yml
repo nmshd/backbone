@@ -1,0 +1,110 @@
+﻿version: "3.3"
+services:
+  consumer-api:
+    container_name: consumer-api-test
+    hostname: consumer-api
+    build:
+      context: ..
+      dockerfile: ConsumerApi/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5000:8080"
+    depends_on:
+      database:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+      seed-database:
+        condition: service_completed_successfully
+      azure-storage-emulator:
+        condition: service_started
+    configs:
+      - source: Config
+        target: app/appsettings.override.json
+
+  admin-ui:
+    container_name: admin-ui-test
+    hostname: admin-ui
+    build:
+      context: ..
+      dockerfile: AdminApi/src/AdminApi/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5173:8080"
+    depends_on:
+      database:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+      consumer-api:
+        condition: service_healthy
+    configs:
+      - source: Config
+        target: app/appsettings.override.json
+
+  ### infrastructure ###
+
+  azure-storage-emulator:
+    container_name: azure-storage-emulator-test
+    hostname: azurite
+    image: mcr.microsoft.com/azure-storage/azurite
+    command: azurite -d /data/debug.log -l /data --blobHost "0.0.0.0" --queueHost "0.0.0.0"
+    ports:
+      - "10000:10000"
+
+  rabbitmq:
+    container_name: bkb-rabbitmq-test
+    hostname: rabbitmq
+    image: rabbitmq:3.7-management-alpine
+    ports:
+      - "5672:5672"
+        
+  database:
+    container_name: bkb-postgres-test
+    hostname: postgres
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=Passw0rd
+      - POSTGRES_DB=enmeshed
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  ### seeds ###
+  
+  seed-database:
+    image: postgres
+    volumes:
+      - ../setup-db:/app/setup-db
+    environment:
+      PGPASSWORD: Passw0rd
+      Database__Provider: Postgres
+      Database__ConnectionString: "Server=postgres;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432"
+    command: psql -h postgres -U postgres -d enmeshed -f /app/setup-db/setup-postgres.sql
+    depends_on:
+      database:
+        condition: service_healthy
+
+  seed-client:
+    container_name: seed-client-test
+    build:
+      context: ..
+      dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
+    depends_on:
+      consumer-api:
+        condition: service_healthy
+    command: backbone client create --clientId test --clientSecret test --defaultTier Basic
+
+configs:
+  Config:
+    file: appsettings.override.postgres.json
+
+networks:
+  default:
+    name: backbone
