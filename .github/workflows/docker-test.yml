@@ -14,6 +14,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      
       - uses: actions/setup-node@v3
         with:
           node-version: 20
@@ -30,26 +31,26 @@ jobs:
       #    restore-keys: |
       #      ${{ runner.os }}-buildx-
       
-      #- name: Cache npm dependencies
-      #  uses: actions/cache@v3
-      #  with:
-      #    path: |
-      #      ./runtime/node_modules
-      #    key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-      #    restore-keys: |
-      #      ${{ runner.os }}-npm-
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ./runtime/node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
       
       - name: Install script dependencies
         run: npm install --prefix ./.ci
 
-      - name: Clear Docker Container
-        run: python .ci/integrationTest.py postgres down
+      #- name: Clear Docker Container
+      #  run: python .ci/integrationTest.py postgres down
       
-      - name: Build Docker
-        run: python .ci/integrationTest.py postgres build
+      #- name: Build Docker
+      #  run: python .ci/integrationTest.py postgres build
           
-      - name: Startup Docker
-        run: python .ci/integrationTest.py postgres up -d
+      #- name: Startup Docker
+      #  run: python .ci/integrationTest.py postgres up -d
         
       #- name: Build Docker
       #  uses: docker/build-push-action@v5
@@ -60,5 +61,19 @@ jobs:
       #    cache-from: type=gha
       #    cache-to: type=gha,mode=max
           
-      - name: Run Tests
-        run: python .ci/integrationTest.py build
+      #- name: Run Tests
+      #  run: python .ci/integrationTest.py build
+
+      - name: Run integration tests
+        run: ./.ci/integrationTest.postgres.sh
+      - name: Save Docker Logs
+        if: failure()
+        run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.postgres.yml logs > docker-log.txt
+      - name: Archive logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-test-postgres-docker-logs
+          path: docker-log.txt
+        env:
+          DOTNET_CONSOLE_ANSI_COLOR: true
