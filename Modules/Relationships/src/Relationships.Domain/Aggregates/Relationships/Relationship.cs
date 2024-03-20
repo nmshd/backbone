@@ -84,13 +84,26 @@ public class Relationship
 
         Status = RelationshipStatus.Active;
 
-        AuditLog.Add(new RelationshipAuditLogEntry(RelationshipAuditLogEntryReason.AcceptanceOfCreation, RelationshipStatus.Pending, RelationshipStatus.Active, activeIdentity, activeDevice));
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.AcceptanceOfCreation,
+            RelationshipStatus.Pending,
+            RelationshipStatus.Active,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
     }
 
     private void EnsureRelationshipRequestIsAddressedToSelf(IdentityAddress activeIdentity)
     {
         if (To != activeIdentity)
             throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse());
+    }
+
+    private void EnsureRelationshipRequestIsCreatedBySelf(IdentityAddress activeIdentity)
+    {
+        if (From != activeIdentity)
+            throw new DomainException(DomainErrors.CannotRevokeRelationshipRequestNotCreatedByYourself());
     }
 
     public void Reject(IdentityAddress activeIdentity, DeviceId activeDevice)
@@ -100,12 +113,36 @@ public class Relationship
 
         Status = RelationshipStatus.Rejected;
 
-        AuditLog.Add(new RelationshipAuditLogEntry(RelationshipAuditLogEntryReason.RejectionOfCreation, RelationshipStatus.Pending, RelationshipStatus.Rejected, activeIdentity, activeDevice));
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.RejectionOfCreation,
+            RelationshipStatus.Pending,
+            RelationshipStatus.Rejected,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
     }
 
     private void EnsureStatus(RelationshipStatus status)
     {
         if (Status != status)
             throw new DomainException(DomainErrors.RelationshipIsNotInCorrectStatus(status));
+    }
+
+    public void Revoke(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureStatus(RelationshipStatus.Pending);
+        EnsureRelationshipRequestIsCreatedBySelf(activeIdentity);
+
+        Status = RelationshipStatus.Revoked;
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.RevocationOfCreation,
+            RelationshipStatus.Pending,
+            RelationshipStatus.Revoked,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
     }
 }

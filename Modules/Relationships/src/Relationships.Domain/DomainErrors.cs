@@ -20,7 +20,13 @@ public static class DomainErrors
     public static DomainError CannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse()
     {
         return new DomainError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse",
-            "You cannot accept or reject a relationship request that was created by yourself.");
+            "You cannot accept or reject a relationship request that is addressed to someone else.");
+    }
+
+    public static DomainError CannotRevokeRelationshipRequestNotCreatedByYourself()
+    {
+        return new DomainError("error.platform.validation.relationshipRequest.cannotRevokeRelationshipRequestNotCreatedByYourself",
+            "You cannot revoke a relationship request that was not created by yourself.");
     }
 
     public static DomainError RelationshipIsNotInCorrectStatus(RelationshipStatus expectedStatus)
