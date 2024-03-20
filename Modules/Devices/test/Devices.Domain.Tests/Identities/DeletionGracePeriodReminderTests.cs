@@ -39,7 +39,7 @@ public class DeletionGracePeriodReminderTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder1Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusApproved");
     }
 
     [Fact]
@@ -71,7 +71,7 @@ public class DeletionGracePeriodReminderTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder2Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusApproved");
     }
 
     [Fact]
@@ -103,7 +103,7 @@ public class DeletionGracePeriodReminderTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder3Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.noDeletionProcessWithRequiredStatusExists");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusApproved");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
