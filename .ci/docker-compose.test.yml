@@ -7,9 +7,9 @@ services:
       context: ..
       dockerfile: ConsumerApi/Dockerfile
       cache_from:
-        - type=gha
+        - type=local,src=/tmp/.buildx-cache
       cache_to:
-        - type=gha,mode=max
+        - type=local,dest=/tmp/.buildx-cache,mode=max
       args:
         DOCKER_BUILDKIT: 1
     environment:
@@ -36,9 +36,9 @@ services:
       context: ..
       dockerfile: AdminApi/src/AdminApi/Dockerfile
       cache_from:
-        - type=gha
+        - type=local,src=/tmp/.buildx-cache
       cache_to:
-        - type=gha,mode=max
+        - type=local,dest=/tmp/.buildx-cache,mode=max
       args:
         DOCKER_BUILDKIT: 1
     environment:
@@ -81,9 +81,9 @@ services:
       context: ..
       dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
       cache_from:
-        - type=gha
+        - type=local,src=/tmp/.buildx-cache
       cache_to:
-        - type=gha,mode=max
+        - type=local,dest=/tmp/.buildx-cache,mode=max
       args:
         DOCKER_BUILDKIT: 1
     depends_on:
