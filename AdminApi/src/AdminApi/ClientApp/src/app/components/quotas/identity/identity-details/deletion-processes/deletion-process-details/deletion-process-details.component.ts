@@ -90,7 +90,7 @@ export class DeletionProcessDetailsComponent {
 
     public cancelDeletionProcess(): void {
         this.loading = true;
-        this.identityService.cancelDeletionProcessAsSupport(this.identityDeletionProcessID).subscribe({
+        this.identityService.cancelDeletionProcessAsSupport(this.identityAddress, this.identityDeletionProcessID).subscribe({
             next: () => {
                 this.snackBar.open("Identity updated successfully. Reloading...", "Dismiss", {
                     verticalPosition: "top",
