@@ -31,14 +31,14 @@ jobs:
       #    restore-keys: |
       #      ${{ runner.os }}-buildx-
       
-      - name: Cache npm dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ./runtime/node_modules
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
+      #- name: Cache npm dependencies
+      #  uses: actions/cache@v3
+      #  with:
+      #    path: |
+      #      ./runtime/node_modules
+      #    key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+      #    restore-keys: |
+      #      ${{ runner.os }}-npm-
       
       - name: Install script dependencies
         run: npm install --prefix ./.ci
