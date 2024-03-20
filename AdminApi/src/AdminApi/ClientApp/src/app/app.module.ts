@@ -45,6 +45,7 @@ import { PageNotFoundComponent } from "./components/error/page-not-found/page-no
 import { AssignQuotasDialogComponent } from "./components/quotas/assign-quotas-dialog/assign-quotas-dialog.component";
 import { DeletionProcessDetailsComponent } from "./components/quotas/identity/identity-details/deletion-processes/deletion-process-details/deletion-process-details.component";
 import { DeletionProcessesComponent } from "./components/quotas/identity/identity-details/deletion-processes/deletion-processes.component";
+import { CancelDeletionProcessDialogComponent } from "./components/quotas/identity/identity-details/deletion-processes/deletion-process-details/cancel-deletion-process-dialog/cancel-deletion-process-dialog.component";
 import { IdentityDetailsRelationshipsComponent } from "./components/quotas/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
 import { IdentityDetailsComponent } from "./components/quotas/identity/identity-details/identity-details.component";
 import { IdentityListComponent } from "./components/quotas/identity/identity-list/identity-list.component";
@@ -87,7 +88,8 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         BreadcrumbComponent,
         DeletionProcessesComponent,
         BreadcrumbComponent,
-        DeletionProcessDetailsComponent
+        DeletionProcessDetailsComponent,
+        CancelDeletionProcessDialogComponent
     ],
     imports: [
         FormsModule,

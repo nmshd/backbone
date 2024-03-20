@@ -1,8 +1,10 @@
 import { Component } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { DeletionProcess, DeletionProcessAuditLog, IdentityService } from "src/app/services/identity-service/identity.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
+import { CancelDeletionProcessDialogComponent } from "./cancel-deletion-process-dialog/cancel-deletion-process-dialog.component";
 
 @Component({
     selector: "app-deletion-process-details",
@@ -26,7 +28,9 @@ export class DeletionProcessDetailsComponent {
     public constructor(
         private readonly identityService: IdentityService,
         private readonly snackBar: MatSnackBar,
-        private readonly activatedRoute: ActivatedRoute
+        private readonly activatedRoute: ActivatedRoute,
+        private readonly dialog: MatDialog,
+        private readonly router: Router
     ) {
         this.header = "Deletion Process Details";
         this.headerDeletionProcessAuditLog = "Deletion Process Audit Logs";
@@ -70,5 +74,40 @@ export class DeletionProcessDetailsComponent {
     public styleStatus(status: string): string {
         if (status === "WaitingForApproval") return "Waiting for Approval";
         return status;
+    }
+
+    public openCancelDeletionProcessDialog(): void {
+        const dialogRef = this.dialog.open(CancelDeletionProcessDialogComponent, {
+            maxWidth: "100%"
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                this.cancelDeletionProcess();
+            }
+        });
+    }
+
+    public cancelDeletionProcess(): void {
+        this.loading = true;
+        this.identityService.cancelDeletionProcessAsSupport(this.identityDeletionProcessID).subscribe({
+            next: () => {
+                this.snackBar.open("Identity updated successfully. Reloading...", "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            },
+            complete: async () => {
+                await this.router.navigate(["/identities", this.identityAddress]);
+            },
+            error: (err: any) => {
+                this.loading = false;
+                const errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            }
+        });
     }
 }
