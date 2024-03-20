@@ -69,9 +69,4 @@ public class FindAllStubRepository : IIdentitiesRepository
     {
         throw new NotImplementedException();
     }
-
-    public Task<Identity?> FindWithDeletionProcess(IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken, bool track = false)
-    {
-        throw new NotImplementedException();
-    }
 }

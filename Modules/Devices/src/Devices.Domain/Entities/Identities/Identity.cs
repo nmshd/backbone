@@ -221,11 +221,12 @@ public class Identity
         return deletionProcess;
     }
 
-    public IdentityDeletionProcess CancelDeletionProcessAsSupport()
+    public IdentityDeletionProcess CancelDeletionProcessAsSupport(IdentityDeletionProcessId deletionProcessId)
     {
+        EnsureIdentityOwnsDeletionProcess(deletionProcessId);
         EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
 
-        var deletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Approved);
+        var deletionProcess = DeletionProcesses.First(d => d.Id == deletionProcessId);
 
         deletionProcess.CancelAsSupport(Address);
         TierId = TierIdBeforeDeletion;
@@ -233,6 +234,14 @@ public class Identity
         Status = IdentityStatus.Active;
 
         return deletionProcess;
+    }
+
+    private void EnsureIdentityOwnsDeletionProcess(IdentityDeletionProcessId deletionProcessId)
+    {
+        var isDeletionProcessOwnedByDevice = DeletionProcesses.Any(d => d.Id == deletionProcessId);
+
+        if (!isDeletionProcessOwnedByDevice)
+            throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
     }
 }
 

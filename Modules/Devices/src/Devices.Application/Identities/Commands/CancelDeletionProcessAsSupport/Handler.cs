@@ -21,6 +21,8 @@ public class Handler : IRequestHandler<CancelDeletionAsSupportCommand, CancelDel
 
     public async Task<CancelDeletionAsSupportResponse> Handle(CancelDeletionAsSupportCommand request, CancellationToken cancellationToken)
     {
+        var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
+
         var deletionProcessIdResult = IdentityDeletionProcessId.Create(request.DeletionProcessId);
 
         if (deletionProcessIdResult.IsFailure)
@@ -28,8 +30,7 @@ public class Handler : IRequestHandler<CancelDeletionAsSupportCommand, CancelDel
 
         var deletionProcessId = deletionProcessIdResult.Value;
 
-        var identity = await _identitiesRepository.FindWithDeletionProcess(deletionProcessId, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
-        var deletionProcess = identity.CancelDeletionProcessAsSupport();
+        var deletionProcess = identity.CancelDeletionProcessAsSupport(deletionProcessId);
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
