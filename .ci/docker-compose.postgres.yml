@@ -1,4 +1,4 @@
-﻿#version: "3.3"
+﻿version: "3.3"
 services:
   consumer-api:
     container_name: consumer-api-test
@@ -6,6 +6,12 @@ services:
     build:
       context: ..
       dockerfile: ConsumerApi/Dockerfile
+      cache_from:
+        - type=gha
+      cache_to:
+        - type=gha,mode=max
+      args:
+        DOCKER_BUILDKIT: 1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
@@ -29,6 +35,12 @@ services:
     build:
       context: ..
       dockerfile: AdminApi/src/AdminApi/Dockerfile
+      cache_from:
+        - type=gha
+      cache_to:
+        - type=gha,mode=max
+      args:
+        DOCKER_BUILDKIT: 1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
@@ -96,6 +108,12 @@ services:
     build:
       context: ..
       dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
+      cache_from:
+        - type=gha
+      cache_to:
+        - type=gha,mode=max
+      args:
+        DOCKER_BUILDKIT: 1
     depends_on:
       consumer-api:
         condition: service_healthy

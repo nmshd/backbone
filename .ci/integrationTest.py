@@ -7,9 +7,10 @@ POSTGRES_PARTS = [
     "docker",
     "compose",
     "-f",
-    "./.ci/docker-compose.test.yml",
-    "-f",
-    "./.ci/docker-compose.test.postgres.yml"
+    #"./.ci/docker-compose.test.yml",
+    #"-f",
+    #"./.ci/docker-compose.test.postgres.yml"
+    "./.ci/docker-compose.postgres.yml"
 ]
 
 SQLSERVER_PARTS = [

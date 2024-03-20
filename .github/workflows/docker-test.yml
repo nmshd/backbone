@@ -44,15 +44,21 @@ jobs:
 
       - name: Clear Docker Container
         run: python .ci/integrationTest.py postgres down
-        
+      
       - name: Build Docker
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: ./.ci/docker-compose.postgres.yml
-          push: false
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+        run: python .ci/integrationTest.py postgres build
+          
+      - name: Startup Docker
+        run: python .ci/integrationTest.py postgres up -d
+        
+      #- name: Build Docker
+      #  uses: docker/build-push-action@v5
+      #  with:
+      #    context: .
+      #    file: ./.ci/docker-compose.postgres.yml
+      #    push: false
+      #    cache-from: type=gha
+      #    cache-to: type=gha,mode=max
           
       - name: Run Tests
         run: python .ci/integrationTest.py build
