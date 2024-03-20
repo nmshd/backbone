@@ -22,7 +22,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
-        <ProjectReference Include="..\..\src\Jobs.IdentityDeletion\Job.IdentityDeletion.csproj" />
+        <ProjectReference Include="..\..\src\Job.IdentityDeletion\Job.IdentityDeletion.csproj" />
     </ItemGroup>
 
 </Project>
