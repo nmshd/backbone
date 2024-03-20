@@ -22,15 +22,101 @@ public class RelationshipTests
 
     private static Relationship CreatePendingRelationship()
     {
-        return new Relationship(RELATIONSHIP_TEMPLATE_OF_TO, FROM_IDENTITY, FROM_DEVICE, null);
+        return new Relationship(RELATIONSHIP_TEMPLATE_OF_TO, FROM_IDENTITY, FROM_DEVICE, null, []);
     }
 
     private static Relationship CreateActiveRelationship()
     {
-        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_TO, FROM_IDENTITY, FROM_DEVICE, null);
+        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_TO, FROM_IDENTITY, FROM_DEVICE, null, []);
         relationship.Accept(TO_IDENTITY, TO_DEVICE);
         return relationship;
     }
+
+    #region Reject Creation
+
+    [Fact]
+    public void Reject_creation_transitions_relationship_to_status_rejected()
+    {
+        // Arrange
+        var relationship = CreatePendingRelationship();
+
+        // Act
+        relationship.Reject(TO_IDENTITY, TO_DEVICE);
+
+        // Assert
+        relationship.Status.Should().Be(RelationshipStatus.Rejected);
+    }
+
+    [Fact]
+    public void Rejecting_creation_creates_an_audit_log_entry()
+    {
+        // Arrange
+        SystemTime.Set("2000-01-01");
+
+        var relationship = CreatePendingRelationship();
+
+        // Act
+        relationship.Reject(TO_IDENTITY, TO_DEVICE);
+
+        // Assert
+        relationship.AuditLog.Should().HaveCount(2);
+
+        var auditLogEntry = relationship.AuditLog.Last();
+
+        auditLogEntry.Id.Should().NotBeNull();
+        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.RejectionOfCreation);
+        auditLogEntry.OldStatus.Should().Be(RelationshipStatus.Pending);
+        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.Rejected);
+        auditLogEntry.CreatedBy.Should().Be(TO_IDENTITY);
+        auditLogEntry.CreatedByDevice.Should().Be(TO_DEVICE);
+        auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
+    }
+
+    [Fact]
+    public void Can_only_reject_creation_when_relationship_is_in_status_pending()
+    {
+        // Arrange
+        var relationship = CreateActiveRelationship();
+
+        // Act
+        var acting = () => relationship.Reject(TO_IDENTITY, TO_DEVICE);
+
+        // Assert
+        acting.Should().Throw<DomainException>().WithError(
+            "error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus",
+            nameof(RelationshipStatus.Pending)
+        );
+    }
+
+    [Fact]
+    public void Cannot_reject_own_relationship_request()
+    {
+        // Arrange
+        var relationship = CreatePendingRelationship();
+
+        // Act
+        var acting = () => relationship.Reject(FROM_IDENTITY, FROM_DEVICE);
+
+        // Assert
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
+    }
+
+    [Fact]
+    public void Cannot_reject_foreign_relationship_request()
+    {
+        // Arrange
+        var relationship = CreatePendingRelationship();
+        var foreignAddress = IdentityAddress.ParseUnsafe("some-other-identity");
+
+        // Act
+        var acting = () => relationship.Reject(foreignAddress, DeviceId.New());
+
+        // Assert
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
+    }
+
+    #endregion
+
 
     # region Creation
 
@@ -41,7 +127,7 @@ public class RelationshipTests
         SystemTime.Set("2000-01-01");
 
         // Act
-        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_TO, FROM_IDENTITY, FROM_DEVICE, [0, 1, 2]);
+        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_TO, FROM_IDENTITY, FROM_DEVICE, [0, 1, 2], []);
 
         // Assert
         relationship.Id.Should().NotBeNull();
@@ -61,7 +147,7 @@ public class RelationshipTests
         SystemTime.Set("2000-01-01");
 
         // Act
-        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_TO, FROM_IDENTITY, FROM_DEVICE, null);
+        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_TO, FROM_IDENTITY, FROM_DEVICE, null, []);
 
         // Assert
         relationship.AuditLog.Should().HaveCount(1);
@@ -81,10 +167,26 @@ public class RelationshipTests
     public void Cannot_create_Relationship_to_self()
     {
         // Act
-        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_FROM, FROM_IDENTITY, FROM_DEVICE, null);
+        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_FROM, FROM_IDENTITY, FROM_DEVICE, null, []);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError(DomainErrors.CannotSendRelationshipRequestToYourself());
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotSendRelationshipRequestToYourself");
+    }
+
+    [Fact]
+    public void Cannot_create_multiple_relationships_between_two_identities()
+    {
+        // Arrange
+        var existingRelationships = new List<Relationship>
+        {
+            CreateActiveRelationship()
+        };
+
+        // Act
+        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_FROM, TO_IDENTITY, TO_DEVICE, null, existingRelationships);
+
+        // Assert
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists");
     }
 
     #endregion
@@ -95,8 +197,6 @@ public class RelationshipTests
     public void Accepting_creation_transitions_relationship_to_status_active()
     {
         // Arrange
-        SystemTime.Set("2000-01-01");
-
         var relationship = CreatePendingRelationship();
 
         // Act
@@ -105,7 +205,6 @@ public class RelationshipTests
         // Assert
         relationship.Status.Should().Be(RelationshipStatus.Active);
     }
-
 
     [Fact]
     public void Accepting_creation_creates_an_audit_log_entry()
@@ -142,9 +241,10 @@ public class RelationshipTests
         var acting = () => relationship.Accept(TO_IDENTITY, TO_DEVICE);
 
         // Assert
-        var exception = acting.Should().Throw<DomainException>().Which;
-        exception.Code.Should().Be("error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus");
-        exception.Message.Should().Contain(nameof(RelationshipStatus.Pending));
+        acting.Should().Throw<DomainException>().WithError(
+            "error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus",
+            nameof(RelationshipStatus.Pending)
+        );
     }
 
     [Fact]
@@ -157,8 +257,7 @@ public class RelationshipTests
         var acting = () => relationship.Accept(FROM_IDENTITY, FROM_DEVICE);
 
         // Assert
-        var exception = acting.Should().Throw<DomainException>().Which;
-        exception.Code.Should().Be("error.platform.validation.relationshipRequest.cannotAcceptOwnRelationshipRequest");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
     }
 
     [Fact]
@@ -172,8 +271,7 @@ public class RelationshipTests
         var acting = () => relationship.Accept(foreignAddress, DeviceId.New());
 
         // Assert
-        var exception = acting.Should().Throw<DomainException>().Which;
-        exception.Code.Should().Be("error.platform.validation.relationshipRequest.cannotAcceptOwnRelationshipRequest");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
     }
 
     # endregion
