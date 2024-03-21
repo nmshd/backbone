@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using MediatR;
@@ -40,7 +41,6 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         _request = request;
 
         await ReadTemplateFromDb();
-        await EnsureRelationshipCanBeEstablished();
         await CreateAndSaveRelationship();
         PublishIntegrationEvent();
 
@@ -49,43 +49,36 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
 
     private async Task ReadTemplateFromDb()
     {
-        _template = await _relationshipTemplatesRepository.Find(_request.RelationshipTemplateId, _userContext.GetAddress(), _cancellationToken, track: true, fillContent: false);
-    }
-
-    private async Task EnsureRelationshipCanBeEstablished()
-    {
-        EnsureActiveIdentityIsNotTemplateOwner();
-        await EnsureThereIsNoExistingRelationshipBetweenActiveIdentityAndTemplateOwner();
-    }
-
-    private void EnsureActiveIdentityIsNotTemplateOwner()
-    {
-        if (_template.CreatedBy == _userContext.GetAddress())
-            throw new OperationFailedException(ApplicationErrors.Relationship.CannotSendRelationshipRequestToYourself());
-    }
-
-    private async Task EnsureThereIsNoExistingRelationshipBetweenActiveIdentityAndTemplateOwner()
-    {
-        var relationshipExists = await _relationshipsRepository.RelationshipBetweenTwoIdentitiesExists(_userContext.GetAddress(), _template.CreatedBy, _cancellationToken);
-
-        if (relationshipExists)
-            throw new OperationFailedException(ApplicationErrors.Relationship.RelationshipToTargetAlreadyExists(_template.CreatedBy));
+        _template = await _relationshipTemplatesRepository.Find(_request.RelationshipTemplateId, _userContext.GetAddress(), _cancellationToken, track: true) ??
+                    throw new NotFoundException(nameof(RelationshipTemplate));
     }
 
     private async Task CreateAndSaveRelationship()
     {
+        var activeIdentity = _userContext.GetAddress();
+        var templateOwner = _template.CreatedBy;
+
+        var existingRelationships = await _relationshipsRepository.FindRelationships(
+            r =>
+                (r.From == activeIdentity && r.To == templateOwner) ||
+                (r.From == templateOwner && r.To == activeIdentity),
+            _cancellationToken
+        );
+
         _relationship = new Relationship(
             _template,
-            _userContext.GetAddress(),
+            activeIdentity,
             _userContext.GetDeviceId(),
-            _request.Content);
+            _request.Content,
+            existingRelationships.ToList()
+        );
 
         await _relationshipsRepository.Add(_relationship, _cancellationToken);
     }
 
     private void PublishIntegrationEvent()
     {
-        throw new NotImplementedException();
+        _eventBus.Publish(new RelationshipCreatedIntegrationEvent(_relationship));
     }
 
     private CreateRelationshipResponse CreateResponse()
