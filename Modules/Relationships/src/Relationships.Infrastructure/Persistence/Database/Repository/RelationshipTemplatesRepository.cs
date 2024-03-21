@@ -48,13 +48,13 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<RelationshipTemplate> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
+    public async Task<RelationshipTemplate?> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
     {
         var template = await (track ? _templates : _readOnlyTemplates)
             .Include(r => r.Allocations)
             .NotExpiredFor(identityAddress)
             .NotDeleted()
-            .FirstWithId(id, cancellationToken);
+            .FirstWithIdOrDefault(id, cancellationToken);
 
         return template;
     }

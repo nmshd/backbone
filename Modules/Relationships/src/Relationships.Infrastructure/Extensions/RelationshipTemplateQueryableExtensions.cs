@@ -1,4 +1,3 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Tooling;
@@ -8,9 +7,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Extensions;
 
 public static class RelationshipTemplateQueryableExtensions
 {
-    public static async Task<RelationshipTemplate> FirstWithId(this IQueryable<RelationshipTemplate> query, RelationshipTemplateId templateId, CancellationToken cancellationToken)
+    public static async Task<RelationshipTemplate?> FirstWithIdOrDefault(this IQueryable<RelationshipTemplate> query, RelationshipTemplateId templateId, CancellationToken cancellationToken)
     {
-        var template = await query.FirstOrDefaultAsync(r => r.Id == templateId, cancellationToken) ?? throw new NotFoundException(nameof(RelationshipTemplate));
+        var template = await query.FirstOrDefaultAsync(r => r.Id == templateId, cancellationToken);
         return template;
     }
 
