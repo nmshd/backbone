@@ -86,15 +86,15 @@ jobs:
         run: ./.ci/integrationTest.postgres.sh
         
       - name: Push ConsumerAPI to local registry
-        run: docker tag consumer-api localhost:6000/test-consumerapi && docker push localhost:6000/consumerapi || true
+        run: docker tag consumer-api-test localhost:6000/consumer-api-test && docker push localhost:6000/consumer-api-test || true
         if: steps.cache.outputs.cache-hit != 'true'
         
       - name: Push AdminUI to local registry
-        run: docker tag admin-ui localhost:6000/test-adminui && docker push localhost:6000/adminui || true
+        run: docker tag admin-ui-test localhost:6000/admin-ui-test && docker push localhost:6000/admin-ui-test || true
         if: steps.cache.outputs.cache-hit != 'true'
         
       - name: Push Seed Client to local registry
-        run: docker tag seed-client localhost:6000/test-seed && docker push localhost:6000/seed || true
+        run: docker tag seed-client-test localhost:6000/seed-client-test && docker push localhost:6000/seed-client-test || true
         if: steps.cache.outputs.cache-hit != 'true'
         
       - name: Save Docker Logs
