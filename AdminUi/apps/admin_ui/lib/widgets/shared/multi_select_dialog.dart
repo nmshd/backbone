@@ -3,10 +3,10 @@ import 'package:multi_select_flutter/dialog/multi_select_dialog_field.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
 
 class MultiSelectDialog extends StatefulWidget {
-  MultiSelectDialog(
+  const MultiSelectDialog(
     this.sendFilters, {
     required this.title,
-    required this.selectedValues,
+    required this.onSelectedValues,
     required this.multiSelectItem,
     super.key,
   });
@@ -14,13 +14,15 @@ class MultiSelectDialog extends StatefulWidget {
   final String title;
   final void Function() sendFilters;
   final List<MultiSelectItem<String>> multiSelectItem;
-  late List<String> selectedValues;
+  final void Function(List<String> selectedValues) onSelectedValues;
 
   @override
   State<MultiSelectDialog> createState() => _MultiSelectDialogState();
 }
 
 class _MultiSelectDialogState extends State<MultiSelectDialog> {
+  late List<String> selectedValues = [];
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,8 +37,11 @@ class _MultiSelectDialogState extends State<MultiSelectDialog> {
         buttonText: Text('${widget.title}s'),
         onConfirm: (values) {
           setState(() {
-            widget.selectedValues.clear();
-            widget.selectedValues.addAll(values);
+            selectedValues
+              ..clear()
+              ..addAll(values);
+
+            widget.onSelectedValues(selectedValues);
           });
           widget.sendFilters();
         },

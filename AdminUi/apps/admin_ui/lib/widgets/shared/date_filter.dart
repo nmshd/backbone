@@ -1,40 +1,37 @@
 import 'package:flutter/material.dart';
 
 class DateFilter extends StatefulWidget {
-  DateFilter(
-    this.sendFilter, {
-    required this.operator,
+  DateFilter({
     required this.operators,
-    required this.isDateSelected,
-    required this.date,
+    required this.onDateSelected,
     super.key,
   });
 
-  final void Function() sendFilter;
+  final void Function(DateTime selectedDate, String operator, bool isDateSelected) onDateSelected;
   final List<String> operators;
-  late bool isDateSelected;
-  late DateTime date;
-  String operator;
 
   @override
   State<DateFilter> createState() => _DateFilterState();
 }
 
 class _DateFilterState extends State<DateFilter> {
+  late String operator = '=';
+  late DateTime selectedDate = DateTime.now();
+  late bool isDateSelected = false;
+
   Future<void> selectANewDate() async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: widget.date,
+      initialDate: selectedDate,
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-    if (picked != null && picked != widget.date) {
+    if (picked != null) {
       setState(() {
-        widget
-          ..date = picked
-          ..isDateSelected = true;
+        selectedDate = picked;
+        isDateSelected = true;
+        widget.onDateSelected(selectedDate, operator, isDateSelected);
       });
-      widget.sendFilter();
     }
   }
 
@@ -44,10 +41,10 @@ class _DateFilterState extends State<DateFilter> {
       child: Row(
         children: [
           DropdownButton<String>(
-            value: widget.operator,
+            value: operator,
             onChanged: (newValue) {
               setState(() {
-                widget.operator = newValue!;
+                operator = newValue!;
               });
             },
             items: widget.operators.map((operator) {
@@ -75,7 +72,7 @@ class _DateFilterState extends State<DateFilter> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${widget.date.year}-${widget.date.month}-${widget.date.day}',
+                          '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
                           style: const TextStyle(fontSize: 16),
                         ),
                         const Icon(Icons.calendar_today),

@@ -2,37 +2,34 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Importing services.dart for TextInputFormatters
 
 class NumberFilter extends StatefulWidget {
-  NumberFilter(
-    this.sendFilter, {
+  NumberFilter({
     required this.operators,
-    required this.operator,
-    required this.controller,
-    required this.enteredValue,
+    required this.onNumberSelected,
     super.key,
   });
 
   final List<String> operators;
-  final TextEditingController controller;
-  late String operator;
-  late String enteredValue;
-
-  void Function() sendFilter;
+  final void Function(String operator, String enteredValue) onNumberSelected;
 
   @override
   State<NumberFilter> createState() => _NumberFilterState();
 }
 
 class _NumberFilterState extends State<NumberFilter> {
+  late TextEditingController controller = TextEditingController();
+  late String operator = '=';
+  late String enteredValue = '';
+
   @override
   Widget build(BuildContext context) {
     return Container(
       child: Row(
         children: [
           DropdownButton<String>(
-            value: widget.operator,
+            value: operator,
             onChanged: (newValue) {
               setState(() {
-                widget.operator = newValue!;
+                operator = newValue!;
               });
             },
             items: widget.operators.map((operator) {
@@ -49,11 +46,11 @@ class _NumberFilterState extends State<NumberFilter> {
             width: 50,
             height: 40,
             child: TextField(
-              controller: widget.controller,
+              controller: controller,
               onChanged: (value) {
                 setState(() {
-                  widget.enteredValue = value;
-                  widget.sendFilter();
+                  enteredValue = value;
+                  widget.onNumberSelected(operator, enteredValue);
                 });
               },
               decoration: const InputDecoration(
