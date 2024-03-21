@@ -5,5 +5,7 @@
         <AssemblyName>Backbone.$(MSBuildProjectName)</AssemblyName>
         <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
         <Nullable>enable</Nullable>
+        <!-- Test Locking Nuget -->
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     </PropertyGroup>
 </Project>
