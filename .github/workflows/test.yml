@@ -122,7 +122,7 @@ jobs:
         run: npm install
       - name: Remove identity assertions
         working-directory: ./runtime/packages/transport/src/modules/accounts
-        run: sed -i '288,289,290d' AccountController.ts
+        run: sed -i '288d;289d;290d' AccountController.ts
       - name: Run transport Tests
         working-directory: ./runtime/packages/transport
         env:
@@ -162,7 +162,7 @@ jobs:
         run: npm install
       - name: Remove identity assertions
         working-directory: ./runtime/packages/transport/src/modules/accounts
-        run: sed -i '288,289,290d' AccountController.ts
+        run: sed -i '288d;289d;290d' AccountController.ts
       - name: Run transport Tests
         working-directory: ./runtime/packages/transport
         env:
