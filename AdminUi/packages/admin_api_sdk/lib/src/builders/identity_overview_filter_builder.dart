@@ -12,12 +12,12 @@ class IdentityOverviewFilterBuilder {
 
     if (filter.tiers != null) {
       final tiersFilter = filter.tiers!.map((tier) => "tier/Id eq '$tier'").join(' or ');
-      _appendFilter('($tiersFilter)');
+      _appendFilter(tiersFilter);
     }
 
     if (filter.clients != null) {
       final clientsFilter = filter.clients!.map((client) => "createdWithClient eq '$client'").join(' or ');
-      _appendFilter('($clientsFilter)');
+      _appendFilter(clientsFilter);
     }
 
     if (filter.createdAt != null) {
@@ -47,7 +47,7 @@ class IdentityOverviewFilterBuilder {
     if (_filter.isNotEmpty) {
       _filter += ' and ';
     }
-    _filter += '($filter)';
+    _filter += filter;
   }
 
   String _getOperatorString(FilterOperator operator) {
@@ -97,6 +97,28 @@ class IdentityOverviewFilter {
     this.datawalletVersion,
     this.identityVersion,
   });
+
+  IdentityOverviewFilter copyWith({
+    String? receivedAddress,
+    List<String>? receivedTiers,
+    List<String>? receivedClients,
+    FilterOperatorValue? receivedCreatedAt,
+    FilterOperatorValue? receivedLastLoginAt,
+    FilterOperatorValue? receivedNumberOfDevices,
+    FilterOperatorValue? receivedDatawalletVersion,
+    FilterOperatorValue? receivedIdentityVersion,
+  }) {
+    return IdentityOverviewFilter(
+      address: receivedAddress ?? address,
+      tiers: receivedTiers ?? tiers,
+      clients: receivedClients ?? clients,
+      createdAt: receivedCreatedAt ?? createdAt,
+      lastLoginAt: receivedLastLoginAt ?? lastLoginAt,
+      numberOfDevices: receivedNumberOfDevices ?? numberOfDevices,
+      datawalletVersion: receivedDatawalletVersion ?? datawalletVersion,
+      identityVersion: receivedIdentityVersion ?? identityVersion,
+    );
+  }
 }
 
 class FilterOperatorValue {

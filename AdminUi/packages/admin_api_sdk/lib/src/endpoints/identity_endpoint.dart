@@ -38,6 +38,10 @@ class IdentitiesEndpoint extends Endpoint {
       queryParameters[r'$filter'] = IdentityOverviewFilterBuilder(filter).build();
     }
 
+    if (queryParameters[r'$filter'] == '') {
+      queryParameters.remove(r'$filter');
+    }
+
     return getOData(
       '/odata/Identities',
       query: queryParameters,

@@ -56,6 +56,9 @@ class IdentityDataTableSource extends DataTableSource {
     }
     final identity = data[index];
     return DataRow(
+      onLongPress: () {
+        // TODO(stamenione): Navigate to the identity details screen
+      },
       cells: [
         DataCell(
           Center(
@@ -68,7 +71,7 @@ class IdentityDataTableSource extends DataTableSource {
           Center(
             child: GestureDetector(
               onTap: () {
-                // Navigate to the tier details screen or perform any other action
+                // TODO(stamenione): Navigate to the tier details screen
               },
               child: Text(identity.tier.name),
             ),
