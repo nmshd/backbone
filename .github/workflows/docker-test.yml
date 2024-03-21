@@ -37,7 +37,7 @@ jobs:
           path: /tmp/.buildx-cache
           key: ${{ runner.os }}-buildx-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-buildx-     
+            ${{ runner.os }}-buildx-
       
       #- name: Cache npm dependencies
       #  uses: actions/cache@v3
@@ -87,3 +87,11 @@ jobs:
           path: docker-log.txt
         env:
           DOTNET_CONSOLE_ANSI_COLOR: true
+          
+      - # Temp fix
+        # https://github.com/docker/build-push-action/issues/252
+        # https://github.com/moby/buildkit/issues/1896
+        name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-cache
+          mv /tmp/.buildx-cache-new /tmp/.buildx-cache
