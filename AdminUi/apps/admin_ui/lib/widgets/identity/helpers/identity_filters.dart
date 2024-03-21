@@ -1,6 +1,7 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:admin_ui/widgets/shared/date_filter.dart';
+import 'package:admin_ui/widgets/shared/input_field.dart';
 import 'package:admin_ui/widgets/shared/model/operator.dart';
 import 'package:admin_ui/widgets/shared/multi_select_dialog.dart';
 import 'package:admin_ui/widgets/shared/number_filter.dart';
@@ -26,11 +27,7 @@ class _IdentityFilterState extends State<IdentityFilter> {
 
   IdentityOverviewFilter filter = IdentityOverviewFilter();
 
-  final _searchAddressController = TextEditingController();
-  final _searchNumberOfDevicesController = TextEditingController();
-  final _searchDatawalletVersionController = TextEditingController();
-  final _searchIdentityVersionController = TextEditingController();
-  late String _identityAddress;
+  late String _enteredIdentityAddress;
   late List<String> _selectedTiers;
   late List<String> _selectedClients;
   late DateTime _selectedCreatedAt;
@@ -44,8 +41,8 @@ class _IdentityFilterState extends State<IdentityFilter> {
   late String _identityVersionOperator;
   late String _identityVersion;
 
-  bool isCreatedAtSelected = false;
-  bool isLastLoginAtSelected = false;
+  late bool isCreatedAtSelected;
+  late bool isLastLoginAtSelected;
 
   final operators = <String>['=', '<', '>', '<=', '>='];
   final List<Operator> comparableOperators = [
@@ -59,7 +56,7 @@ class _IdentityFilterState extends State<IdentityFilter> {
   @override
   void initState() {
     super.initState();
-    _identityAddress = '';
+    _enteredIdentityAddress = '';
     _selectedTiers = [];
     _selectedClients = [];
     _selectedCreatedAt = DateTime.now();
@@ -72,6 +69,8 @@ class _IdentityFilterState extends State<IdentityFilter> {
     _dataWalletVersion = '';
     _identityVersionOperator = '=';
     _identityVersion = '';
+    isCreatedAtSelected = false;
+    isLastLoginAtSelected = false;
     loadTiers().then((_) {
       setState(() {});
     });
@@ -92,10 +91,8 @@ class _IdentityFilterState extends State<IdentityFilter> {
   void sendFilters() {
     filter = IdentityOverviewFilter();
 
-    if (_identityAddress.isNotEmpty) {
-      filter = filter.copyWith(receivedAddress: _identityAddress);
-    } else {
-      filter = filter.copyWith();
+    if (_enteredIdentityAddress.isNotEmpty) {
+      filter = filter.copyWith(receivedAddress: _enteredIdentityAddress);
     }
 
     if (_selectedTiers.isNotEmpty) {
@@ -116,18 +113,18 @@ class _IdentityFilterState extends State<IdentityFilter> {
       filter = filter.copyWith(receivedLastLoginAt: lastLoginAtValue);
     }
 
-    if (_searchNumberOfDevicesController.text.isNotEmpty) {
-      final numberOfDevicesValue = FilterOperatorValue(findCorrectOperator(_numberOfDevicesOperator)!, _searchNumberOfDevicesController.text);
+    if (_numberOfDevices.isNotEmpty) {
+      final numberOfDevicesValue = FilterOperatorValue(findCorrectOperator(_numberOfDevicesOperator)!, _numberOfDevices);
       filter = filter.copyWith(receivedNumberOfDevices: numberOfDevicesValue);
     }
 
-    if (_searchDatawalletVersionController.text.isNotEmpty) {
-      final datawalletVersionValue = FilterOperatorValue(findCorrectOperator(_datawalletVersionOperator)!, _searchDatawalletVersionController.text);
+    if (_dataWalletVersion.isNotEmpty) {
+      final datawalletVersionValue = FilterOperatorValue(findCorrectOperator(_datawalletVersionOperator)!, _dataWalletVersion);
       filter = filter.copyWith(receivedDatawalletVersion: datawalletVersionValue);
     }
 
-    if (_searchIdentityVersionController.text.isNotEmpty) {
-      final identityVersionValue = FilterOperatorValue(findCorrectOperator(_identityVersionOperator)!, _searchIdentityVersionController.text);
+    if (_identityVersion.isNotEmpty) {
+      final identityVersionValue = FilterOperatorValue(findCorrectOperator(_identityVersionOperator)!, _identityVersion);
       filter = filter.copyWith(receivedIdentityVersion: identityVersionValue);
     }
 
@@ -152,73 +149,88 @@ class _IdentityFilterState extends State<IdentityFilter> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        SizedBox(
-          width: 150,
-          height: 60,
-          child: TextField(
-            controller: _searchAddressController,
-            onChanged: (value) {
-              _identityAddress = value;
-              sendFilters();
-            },
-            decoration: const InputDecoration(
-              labelText: 'Search Address',
-              border: OutlineInputBorder(),
-            ),
-          ),
+        InputField(
+          onEnteredText: (String enteredText) {
+            _enteredIdentityAddress = enteredText;
+
+            sendFilters();
+          },
         ),
         const SizedBox(width: 8),
         MultiSelectDialog(
           sendFilters,
           title: 'Tier',
           multiSelectItem: tiers.map((tier) => MultiSelectItem<String>(tier.id, tier.name)).toList(),
-          selectedValues: _selectedTiers,
+          onSelectedValues: (List<String> selectedValues) {
+            _selectedTiers = selectedValues;
+            sendFilters();
+          },
         ),
         const SizedBox(width: 8),
         MultiSelectDialog(
           sendFilters,
           title: 'Client',
           multiSelectItem: clients.map((client) => MultiSelectItem<String>(client.clientId, client.displayName)).toList(),
-          selectedValues: _selectedClients,
+          onSelectedValues: (List<String> selectedValues) {
+            _selectedClients = selectedValues;
+            sendFilters();
+          },
+        ),
+        const SizedBox(width: 8),
+        NumberFilter(
+          operators: operators,
+          onNumberSelected: (String operator, String enteredValue) {
+            _numberOfDevices = enteredValue;
+            _numberOfDevicesOperator = operator;
+
+            sendFilters();
+          },
         ),
         const SizedBox(width: 8),
         DateFilter(
-          sendFilters,
-          operator: _selectedLastLoginAtOperator,
           operators: operators,
-          isDateSelected: isCreatedAtSelected,
-          date: _selectedLastLoginAt,
+          onDateSelected: (DateTime selectedDate, String operator, bool isDateSelected) {
+            setState(() {
+              _selectedLastLoginAt = selectedDate;
+              _selectedLastLoginAtOperator = operator;
+              isLastLoginAtSelected = isDateSelected;
+
+              sendFilters();
+            });
+          },
         ),
+        const SizedBox(width: 8),
         DateFilter(
-          sendFilters,
-          operator: _selectedCreatedAtOperator,
           operators: operators,
-          isDateSelected: isLastLoginAtSelected,
-          date: _selectedCreatedAt,
+          onDateSelected: (DateTime selectedDate, String operator, bool isDateSelected) {
+            setState(() {
+              _selectedCreatedAt = selectedDate;
+              _selectedCreatedAtOperator = operator;
+              isCreatedAtSelected = isDateSelected;
+
+              sendFilters();
+            });
+          },
         ),
         const SizedBox(width: 8),
         NumberFilter(
-          sendFilters,
           operators: operators,
-          operator: _numberOfDevicesOperator,
-          controller: _searchNumberOfDevicesController,
-          enteredValue: _numberOfDevices,
+          onNumberSelected: (String operator, String enteredValue) {
+            _dataWalletVersion = enteredValue;
+            _datawalletVersionOperator = operator;
+
+            sendFilters();
+          },
         ),
         const SizedBox(width: 8),
         NumberFilter(
-          sendFilters,
           operators: operators,
-          operator: _datawalletVersionOperator,
-          controller: _searchDatawalletVersionController,
-          enteredValue: _dataWalletVersion,
-        ),
-        const SizedBox(width: 8),
-        NumberFilter(
-          sendFilters,
-          operators: operators,
-          operator: _identityVersionOperator,
-          controller: _searchIdentityVersionController,
-          enteredValue: _identityVersion,
+          onNumberSelected: (String operator, String enteredValue) {
+            _identityVersion = enteredValue;
+            _identityVersionOperator = operator;
+
+            sendFilters();
+          },
         ),
       ],
     );
