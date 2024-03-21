@@ -39,7 +39,8 @@ jobs:
       #    restore-keys: |
       #      ${{ runner.os }}-buildx-
 
-      - name: Cache Docker
+      - id: cache
+        name: Cache Docker
         uses: actions/cache@v3
         with:
           path: /tmp/docker-registry
@@ -77,9 +78,16 @@ jobs:
           
       #- name: Run Tests
       #  run: python .ci/integrationTest.py build
+      
+      - name: Run local registry
+        run: docker run -d -p 5000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:5000
 
       - name: Run integration tests
         run: ./.ci/integrationTest.postgres.sh
+        
+      - name: Push images to local registry
+        run: ./.ci/pushImages.sh
+        if: steps.cache.outputs.cache-hit != 'true'
         
       - name: Save Docker Logs
         if: failure()
