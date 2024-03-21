@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
-    public partial class identity100 : Migration
+    public partial class Identity100 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,7 +35,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "ApplyTo",
                 table: "TierQuotas",
-                type: "char(102)",
+                type: "char(100)",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "char(36)");
@@ -43,7 +43,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
                 table: "MetricStatuses",
-                type: "char(102)",
+                type: "char(100)",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "char(36)");
@@ -51,7 +51,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "ApplyTo",
                 table: "IndividualQuotas",
-                type: "char(102)",
+                type: "char(100)",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "char(36)");
@@ -59,10 +59,10 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
                 table: "Identities",
-                type: "char(102)",
+                type: "char(100)",
                 unicode: false,
                 fixedLength: true,
-                maxLength: 102,
+                maxLength: 100,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "char(36)",
@@ -135,7 +135,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
                 type: "char(36)",
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "char(102)");
+                oldType: "char(100)");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
@@ -143,7 +143,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
                 type: "char(36)",
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "char(102)");
+                oldType: "char(100)");
 
             migrationBuilder.AlterColumn<string>(
                 name: "ApplyTo",
@@ -151,7 +151,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
                 type: "char(36)",
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "char(102)");
+                oldType: "char(100)");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
@@ -162,10 +162,10 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "char(102)",
+                oldType: "char(100)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 102);
+                oldMaxLength: 100);
             #endregion AlterColumns
 
             migrationBuilder.AddPrimaryKey(

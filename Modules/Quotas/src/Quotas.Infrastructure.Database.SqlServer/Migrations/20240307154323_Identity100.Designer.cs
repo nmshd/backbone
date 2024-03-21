@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(QuotasDbContext))]
-    [Migration("20240307154323_identity100")]
-    partial class identity100
+    [Migration("20240307154323_Identity100")]
+    partial class Identity100
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,9 +51,9 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", b =>
                 {
                     b.Property<string>("Address")
-                        .HasMaxLength(102)
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(102)")
+                        .HasColumnType("char(100)")
                         .IsFixedLength();
 
                     b.Property<string>("TierId")
@@ -80,7 +80,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("ApplyTo")
                         .IsRequired()
-                        .HasColumnType("char(102)");
+                        .HasColumnType("char(100)");
 
                     b.Property<int>("Max")
                         .HasColumnType("int");
@@ -105,7 +105,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.MetricStatus", b =>
                 {
                     b.Property<string>("Owner")
-                        .HasColumnType("char(102)");
+                        .HasColumnType("char(100)");
 
                     b.Property<string>("MetricKey")
                         .HasMaxLength(50)
@@ -131,7 +131,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("ApplyTo")
                         .IsRequired()
-                        .HasColumnType("char(102)");
+                        .HasColumnType("char(100)");
 
                     b.Property<string>("_definitionId")
                         .HasMaxLength(20)
