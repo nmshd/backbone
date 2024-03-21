@@ -25,11 +25,11 @@ jobs:
       - name: Setup Docker
         uses: docker/setup-buildx-action@v3
         
-      #- name: Setup NuGet
-      #  uses: actions/setup-dotnet@v4
-      #  with:
-      #    dotnet-version: 8.x
-      #    cache: true
+      - name: Setup NuGet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+          cache: true
       
       - name: Cache Docker
         uses: actions/cache@v3
