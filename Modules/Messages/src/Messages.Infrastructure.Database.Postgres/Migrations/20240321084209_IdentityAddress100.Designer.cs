@@ -3,17 +3,20 @@ using System;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Messages.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(MessagesDbContext))]
-    partial class MessagesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240321084209_IdentityAddress100")]
+    partial class IdentityAddress100
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

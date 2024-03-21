@@ -19,7 +19,7 @@ public class FcmMessageBuilderTests
             .SetTag(1)
             .SetToken("token1")
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
-            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.New(), new { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(IdentityAddress.Parse("did:web:prod.enmesh.eu:dids:id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.New(), new { SomeProperty = "someValue" }))
             .Build();
 
         // Assert
@@ -45,13 +45,13 @@ public class FcmMessageBuilderTests
 
         // Act
         var message = new FcmMessageBuilder()
-            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"), new { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(IdentityAddress.Parse("did:web:prod.enmesh.eu:dids:id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"), new { SomeProperty = "someValue" }))
             .Build();
         var contentJson = FormatJson(message.Data["content"]);
 
         // Assert
         contentJson.Should().Be(FormatJson(@"{
-          'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
+          'accRef': 'did:web:prod.enmesh.eu:dids:id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
           'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
           'eventName': 'dynamic',
           'sentAt': '2021-01-01T00:00:00.000Z',

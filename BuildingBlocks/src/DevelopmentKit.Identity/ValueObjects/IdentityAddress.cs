@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using Backbone.BuildingBlocks.Domain;
 using SimpleBase;
 
@@ -11,7 +12,7 @@ namespace Backbone.DevelopmentKit.Identity.ValueObjects;
 [TypeConverter(typeof(IdentityAddressTypeConverter))]
 public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, IComparable<IdentityAddress>
 {
-    public const int MAX_LENGTH = 36;
+    public const int MAX_LENGTH = 100;
 
     private IdentityAddress(string stringValue)
     {
@@ -47,21 +48,31 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
 
         var lengthIsValid = stringValue.Length <= MAX_LENGTH;
 
-        var realm = stringValue[..3];
+        const string pattern = @"^did\:web\:(.+?)\:dids\:(.{3})(.+)$";
+        var matches = Regex.Matches(stringValue, pattern, RegexOptions.IgnoreCase);
 
-        var concatenation = Base58.Bitcoin.Decode(stringValue.AsSpan(3)).ToArray();
-        var hashedPublicKey = concatenation[..20];
-        var givenChecksum = concatenation[20..];
+        try
+        {
+            var realm = matches.First().Groups[2].Value;
+            var concatenation = Base58.Bitcoin.Decode(matches.First().Groups[3].Value).ToArray();
 
-        var realmBytes = Encoding.UTF8.GetBytes(realm);
-        var correctChecksum = CalculateChecksum(realmBytes, hashedPublicKey);
+            var hashedPublicKey = concatenation[..20];
+            var givenChecksum = concatenation[20..];
 
-        var checksumIsValid = givenChecksum.SequenceEqual(correctChecksum);
+            var realmBytes = Encoding.UTF8.GetBytes(realm);
+            var correctChecksum = CalculateChecksum(realmBytes, hashedPublicKey);
 
-        return lengthIsValid && checksumIsValid;
+            var checksumIsValid = givenChecksum.SequenceEqual(correctChecksum);
+
+            return lengthIsValid && checksumIsValid;
+        }
+        catch (IndexOutOfRangeException _)
+        {
+            return false;
+        }
     }
 
-    public static IdentityAddress Create(byte[] publicKey, string realm)
+    public static IdentityAddress Create(byte[] publicKey, string realm, string instanceUrl)
     {
         var hashedPublicKey = SHA256.Create().ComputeHash(SHA512.Create().ComputeHash(publicKey))[..20];
         var realmBytes = Encoding.UTF8.GetBytes(realm);
@@ -69,7 +80,7 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
         var concatenation = hashedPublicKey.Concat(checksum).ToArray();
         var address = realm + Base58.Bitcoin.Encode(concatenation);
 
-        return new IdentityAddress(address);
+        return new IdentityAddress($"did:web:{instanceUrl}:dids:{address}");
     }
 
     private static byte[] CalculateChecksum(byte[] realmBytes, byte[] hashedPublicKey)

@@ -95,7 +95,7 @@ public class RejectDeletionProcessTests
 
     private static Identity CreateIdentity()
     {
-        var address = IdentityAddress.Create([], "id1");
+        var address = IdentityAddress.Create([], "id1", "url");
         return new Identity("", address, [], TierId.Generate(), 1);
     }
 

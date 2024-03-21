@@ -14,7 +14,7 @@ public static class TestDataGenerator
 
     public static IdentityAddress CreateRandomIdentityAddress()
     {
-        return IdentityAddress.Create(CreateRandomBytes(), "id1");
+        return IdentityAddress.Create(CreateRandomBytes(), "id1", "url");
     }
 
     public static DeviceId CreateRandomDeviceId()

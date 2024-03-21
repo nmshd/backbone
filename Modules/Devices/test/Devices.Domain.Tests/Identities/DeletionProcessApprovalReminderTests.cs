@@ -146,7 +146,7 @@ public class DeletionProcessApprovalReminderTests
 
     private static Identity CreateIdentity()
     {
-        var address = IdentityAddress.Create(Array.Empty<byte>(), "id1");
+        var address = IdentityAddress.Create(Array.Empty<byte>(), "id1", "url");
         return new Identity("", address, Array.Empty<byte>(), TierId.Generate(), 1);
     }
 
