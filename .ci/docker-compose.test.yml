@@ -7,9 +7,11 @@ services:
       context: ..
       dockerfile: ConsumerApi/Dockerfile
       cache_from:
-        - type=local,src=/tmp/.buildx-cache
+        #- type=local,src=/tmp/.buildx-cache
+        - type=registry,ref=localhost:5000/test-consumerapi
       cache_to:
-        - type=local,dest=/tmp/.buildx-cache-new,mode=min
+        #- type=local,dest=/tmp/.buildx-cache-new,mode=min
+        - type=inline
       args:
         DOCKER_BUILDKIT: 1
     environment:
@@ -36,9 +38,11 @@ services:
       context: ..
       dockerfile: AdminApi/src/AdminApi/Dockerfile
       cache_from:
-        - type=local,src=/tmp/.buildx-cache
+        #- type=local,src=/tmp/.buildx-cache
+        - type=registry,ref=localhost:5000/test-adminui
       cache_to:
-        - type=local,dest=/tmp/.buildx-cache-new,mode=min
+        #- type=local,dest=/tmp/.buildx-cache-new,mode=min
+        - type=inline
       args:
         DOCKER_BUILDKIT: 1
     environment:
@@ -81,9 +85,11 @@ services:
       context: ..
       dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
       cache_from:
-        - type=local,src=/tmp/.buildx-cache
+        #- type=local,src=/tmp/.buildx-cache
+        - type=registry,ref=localhost:5000/test-seed
       cache_to:
-        - type=local,dest=/tmp/.buildx-cache-new,mode=min
+        #- type=local,dest=/tmp/.buildx-cache-new,mode=min
+        - type=inline
       args:
         DOCKER_BUILDKIT: 1
     depends_on:
