@@ -26,4 +26,18 @@ public static class TestData
         relationship.Accept(IDENTITY_2, DEVICE_2);
         return relationship;
     }
+
+    public static Relationship CreateRejectedRelationship()
+    {
+        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, []);
+        relationship.Reject(IDENTITY_2, DEVICE_2);
+        return relationship;
+    }
+
+    public static Relationship CreateRevokedRelationship()
+    {
+        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, []);
+        relationship.Revoke(IDENTITY_1, DEVICE_1);
+        return relationship;
+    }
 }

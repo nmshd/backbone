@@ -23,7 +23,7 @@ public class Relationship
     public Relationship(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationContent, List<Relationship> existingRelationships)
     {
         EnsureTargetIsNotSelf(relationshipTemplate, activeIdentity);
-        EnsureNoRelationshipExistsToTarget(relationshipTemplate.CreatedBy, existingRelationships);
+        EnsureNoActiveRelationshipToTargetExists(relationshipTemplate.CreatedBy, existingRelationships);
 
         Id = RelationshipId.New();
         RelationshipTemplateId = relationshipTemplate.Id;
@@ -53,8 +53,8 @@ public class Relationship
     public DateTime CreatedAt { get; }
 
     public RelationshipStatus Status { get; private set; }
-    public byte[]? CreationContent { get; set; }
-    public List<RelationshipAuditLogEntry> AuditLog { get; set; }
+    public byte[]? CreationContent { get; }
+    public List<RelationshipAuditLogEntry> AuditLog { get; }
 
     private static void EnsureTargetIsNotSelf(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity)
     {
@@ -62,9 +62,9 @@ public class Relationship
             throw new DomainException(DomainErrors.CannotSendRelationshipRequestToYourself());
     }
 
-    private static void EnsureNoRelationshipExistsToTarget(IdentityAddress target, List<Relationship> existingRelationships)
+    private static void EnsureNoActiveRelationshipToTargetExists(IdentityAddress target, List<Relationship> existingRelationships)
     {
-        if (existingRelationships.Count != 0)
+        if (existingRelationships.Any(r => r.Status == RelationshipStatus.Active))
             throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
     }
 

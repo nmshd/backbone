@@ -64,7 +64,7 @@ public class CreateRelationshipTests
     }
 
     [Fact]
-    public void Cannot_create_multiple_relationships_between_two_identities()
+    public void There_can_only_be_one_active_relationship_between_two_identities()
     {
         // Arrange
         var existingRelationships = new List<Relationship>
@@ -77,5 +77,22 @@ public class CreateRelationshipTests
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists");
+    }
+
+    [Fact]
+    public void Creating_a_new_relationship_is_possible_if_existing_ones_are_rejected_or_revoked()
+    {
+        // Arrange
+        var existingRelationships = new List<Relationship>
+        {
+            // CreateRejectedRelationship(),
+            CreateRevokedRelationship()
+        };
+
+        // Act
+        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
+
+        // Assert
+        acting.Should().NotThrow<DomainException>();
     }
 }
