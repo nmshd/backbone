@@ -29,8 +29,7 @@ public class RelationshipTemplateQueryableExtensionsTests
         var requestCreator = IdentityAddress.Create(new byte[5], "id0");
 
         var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, YESTERDAY, new byte[2]);
-        var relationship = new Relationship(template, requestCreator, DeviceId.New(), new byte[2]);
-
+        var relationship = new Relationship(template, requestCreator, DeviceId.New(), new byte[2], []);
 
         _arrangeContext.RelationshipTemplates.Add(template);
         _arrangeContext.Relationships.Add(relationship);
@@ -57,7 +56,7 @@ public class RelationshipTemplateQueryableExtensionsTests
         var requestCreator = TestDataGenerator.CreateRandomAddress();
 
         var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, null, TestDataGenerator.CreateRandomBytes());
-        var relationship = new Relationship(template, requestCreator, DeviceId.New(), TestDataGenerator.CreateRandomBytes());
+        var relationship = new Relationship(template, requestCreator, DeviceId.New(), TestDataGenerator.CreateRandomBytes(), []);
 
 
         _arrangeContext.RelationshipTemplates.Add(template);
@@ -87,7 +86,7 @@ public class RelationshipTemplateQueryableExtensionsTests
         var requestCreator = TestDataGenerator.CreateRandomAddress();
 
         var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, YESTERDAY, TestDataGenerator.CreateRandomBytes());
-        var relationship = new Relationship(template, requestCreator, DeviceId.New(), TestDataGenerator.CreateRandomBytes());
+        var relationship = new Relationship(template, requestCreator, DeviceId.New(), TestDataGenerator.CreateRandomBytes(), []);
 
 
         _arrangeContext.RelationshipTemplates.Add(template);
