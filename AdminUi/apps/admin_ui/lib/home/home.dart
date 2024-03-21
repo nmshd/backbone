@@ -1,3 +1,5 @@
+import 'package:admin_ui/widgets/identity/identity_overview.dart';
+import 'package:admin_ui/widgets/tier/tier_overview.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {
@@ -19,7 +21,14 @@ class Identities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        IdentityOverviewWidget(),
+      ],
+    );
   }
 }
 
@@ -28,7 +37,7 @@ class Tiers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const TierOverview();
   }
 }
 
