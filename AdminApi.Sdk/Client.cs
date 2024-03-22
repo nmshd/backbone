@@ -6,6 +6,7 @@ using Backbone.AdminApi.Sdk.Endpoints.Logs;
 using Backbone.AdminApi.Sdk.Endpoints.Metrics;
 using Backbone.AdminApi.Sdk.Endpoints.Relationships;
 using Backbone.AdminApi.Sdk.Endpoints.Tiers;
+using Backbone.BuildingBlocks.SDK.Endpoints.Common;
 
 namespace Backbone.AdminApi.Sdk;
 

@@ -1,5 +1,5 @@
-﻿using Backbone.AdminApi.Sdk.Endpoints.Common.Types;
-using Backbone.AdminApi.Sdk.Endpoints.Identities.Types;
+﻿using Backbone.AdminApi.Sdk.Endpoints.Identities.Types;
+using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 
 namespace Backbone.AdminApi.Sdk.Endpoints.Metrics.Types.Responses;
 
