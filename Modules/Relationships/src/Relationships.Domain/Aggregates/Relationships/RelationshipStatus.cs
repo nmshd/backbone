@@ -6,6 +6,4 @@ public enum RelationshipStatus
     Active = 20,
     Rejected = 30,
     Revoked = 40,
-    Terminating = 50,
-    Terminated = 60
 }

@@ -68,15 +68,6 @@ public class Relationship
             throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
     }
 
-    #region Selectors
-
-    public static Expression<Func<Relationship, bool>> HasParticipant(string identity)
-    {
-        return r => r.From == identity || r.To == identity;
-    }
-
-    #endregion
-
     public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureStatus(RelationshipStatus.Pending);
@@ -145,4 +136,19 @@ public class Relationship
         );
         AuditLog.Add(auditLogEntry);
     }
+
+    #region Expressions
+
+    public static Expression<Func<Relationship, bool>> HasParticipant(string identity)
+    {
+        return r => r.From == identity || r.To == identity;
+    }
+
+    public static Expression<Func<Relationship, bool>> CountsAsActive()
+    {
+        return r => r.Status != RelationshipStatus.Rejected &&
+                    r.Status != RelationshipStatus.Revoked;
+    }
+
+    #endregion
 }

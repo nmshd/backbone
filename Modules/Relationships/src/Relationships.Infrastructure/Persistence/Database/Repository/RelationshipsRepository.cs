@@ -79,8 +79,7 @@ public class RelationshipsRepository : IRelationshipsRepository
     {
         return await _readOnlyRelationships
             .BetweenParticipants(identityAddressA, identityAddressB)
-            .Where(r => r.Status != RelationshipStatus.Terminated && r.Status != RelationshipStatus.Rejected &&
-                        r.Status != RelationshipStatus.Revoked)
+            .Where(Relationship.CountsAsActive())
             .AnyAsync(cancellationToken);
     }
 
