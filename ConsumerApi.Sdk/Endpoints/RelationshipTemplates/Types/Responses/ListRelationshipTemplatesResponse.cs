@@ -2,4 +2,4 @@
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 
-public class ListRelationshipTemplatesResponse(IEnumerable<RelationshipTemplate> items) : EnumerableResponseBase<RelationshipTemplate>(items);
+public class ListRelationshipTemplatesResponse : EnumerableResponseBase<RelationshipTemplate>;

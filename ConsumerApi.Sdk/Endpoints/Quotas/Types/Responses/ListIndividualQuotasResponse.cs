@@ -2,4 +2,4 @@
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Quotas.Types.Responses;
 
-public class ListIndividualQuotasResponse(IEnumerable<QuotaGroup> items) : EnumerableResponseBase<QuotaGroup>(items);
+public class ListIndividualQuotasResponse : EnumerableResponseBase<QuotaGroup>;

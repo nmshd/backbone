@@ -2,4 +2,4 @@
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Responses;
 
-public class GetDatawalletModificationsResponse(IEnumerable<DatawalletModification> items) : EnumerableResponseBase<DatawalletModification>(items);
+public class GetDatawalletModificationsResponse : EnumerableResponseBase<DatawalletModification>;

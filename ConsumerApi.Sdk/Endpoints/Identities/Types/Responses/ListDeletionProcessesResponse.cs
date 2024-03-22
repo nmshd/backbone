@@ -2,4 +2,4 @@
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 
-public class ListDeletionProcessesResponse(IEnumerable<IdentityDeletionProcess> items) : EnumerableResponseBase<IdentityDeletionProcess>(items);
+public class ListDeletionProcessesResponse : EnumerableResponseBase<IdentityDeletionProcess>;
