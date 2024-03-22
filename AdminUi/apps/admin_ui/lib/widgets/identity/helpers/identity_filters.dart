@@ -189,7 +189,7 @@ class _IdentityFilterState extends State<IdentityFilter> {
         const SizedBox(width: 8),
         DateFilter(
           operators: operators,
-          onDateSelected: (DateTime selectedDate, String operator, bool isDateSelected) {
+          onDateSelected: (DateTime selectedDate, String operator, {bool isDateSelected = false}) {
             setState(() {
               _selectedLastLoginAt = selectedDate;
               _selectedLastLoginAtOperator = operator;
@@ -202,7 +202,7 @@ class _IdentityFilterState extends State<IdentityFilter> {
         const SizedBox(width: 8),
         DateFilter(
           operators: operators,
-          onDateSelected: (DateTime selectedDate, String operator, bool isDateSelected) {
+          onDateSelected: (DateTime selectedDate, String operator, {bool isDateSelected = false}) {
             setState(() {
               _selectedCreatedAt = selectedDate;
               _selectedCreatedAtOperator = operator;

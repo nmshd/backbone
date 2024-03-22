@@ -15,6 +15,7 @@ class IdentityOverviewWidget extends StatefulWidget {
 }
 
 class IdentityOverviewWidgetState extends State<IdentityOverviewWidget> {
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
   final _scrollController = ScrollController();
   late IdentityDataTableSource dataSource;
 
@@ -49,13 +50,17 @@ class IdentityOverviewWidgetState extends State<IdentityOverviewWidget> {
         dataSource.setData(identities, 0, columnAscending: true);
       });
     } catch (error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('An error occurred while loading identities: $error'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      showSnackbar(error as String);
     }
+  }
+
+  void showSnackbar(String error) {
+    _scaffoldKey.currentState?.showSnackBar(
+      SnackBar(
+        content: Text('An error occurred while loading identities: $error'),
+        backgroundColor: Colors.red,
+      ),
+    );
   }
 
   @override

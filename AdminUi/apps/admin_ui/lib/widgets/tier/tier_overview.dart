@@ -28,7 +28,6 @@ class _TierOverviewState extends State<TierOverview> {
 
   void _handleRowTap(Tier tier) {
     // TODO(stamenione): handle the navigation to tier detail page
-    print('Clicked on tier ${tier.id}');
   }
 
   @override

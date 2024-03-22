@@ -25,7 +25,7 @@ class _MultiSelectDialogState extends State<MultiSelectDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: 125,
       child: MultiSelectDialogField(
         searchable: true,
