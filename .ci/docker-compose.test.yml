@@ -12,8 +12,7 @@ services:
         - type=registry,ref=localhost:6000/consumer-api
       cache_to:
         #- type=local,dest=/tmp/.buildx-cache-new,mode=min
-        #- type=inline
-        - type=registry,ref=localhost:6000/consumer-api,mode=max
+        - type=inline
       args:
         DOCKER_BUILDKIT: 1
     environment:
@@ -45,8 +44,7 @@ services:
         - type=registry,ref=localhost:6000/test-adminui
       cache_to:
         #- type=local,dest=/tmp/.buildx-cache-new,mode=min
-        #- type=inline
-        - type=registry,ref=localhost:6000/admin-ui,mode=max
+        - type=inline
       args:
         DOCKER_BUILDKIT: 1
     environment:
@@ -94,8 +92,7 @@ services:
         - type=registry,ref=localhost:6000/seed-client
       cache_to:
         #- type=local,dest=/tmp/.buildx-cache-new,mode=min
-        #- type=inline
-        - type=registry,ref=localhost:6000/seed-client,mode=max
+        - type=inline
       args:
         DOCKER_BUILDKIT: 1
     depends_on:
