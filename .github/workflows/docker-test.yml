@@ -87,15 +87,15 @@ jobs:
         
       - name: Push ConsumerAPI to local registry
         run: docker tag consumer-api localhost:6000/consumer-api && docker push localhost:6000/consumer-api || true
-        if: steps.cache.outputs.cache-hit != 'true'
+        #if: steps.cache.outputs.cache-hit != 'true'
         
       - name: Push AdminUI to local registry
         run: docker tag admin-ui localhost:6000/admin-ui && docker push localhost:6000/admin-ui || true
-        if: steps.cache.outputs.cache-hit != 'true'
+        #if: steps.cache.outputs.cache-hit != 'true'
         
       - name: Push Seed Client to local registry
         run: docker tag seed-client localhost:6000/seed-client && docker push localhost:6000/seed-client || true
-        if: steps.cache.outputs.cache-hit != 'true'
+        #if: steps.cache.outputs.cache-hit != 'true'
         
       - name: Save Docker Logs
         if: failure()
