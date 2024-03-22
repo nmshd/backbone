@@ -28,7 +28,7 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
-        var command = new CancelDeletionProcessAsOwnerCommand(deletionProcess.Id);
+        var command = new CancelDeletionProcessAsOwnerCommand(activeIdentity.Address, deletionProcess.Id);
 
         // Act
         var response = await handler.Handle(command, CancellationToken.None);
@@ -48,11 +48,14 @@ public class HandlerTests
     public void Cannot_start_when_given_identity_does_not_exist()
     {
         // Arrange
-        var address = CreateRandomIdentityAddress();
+        var activeIdentity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var deletionProcess = activeIdentity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
+
+        var randomAddress = CreateRandomIdentityAddress();
         var handler = CreateHandler();
 
         // Act
-        var acting = async () => await handler.Handle(new CancelDeletionProcessAsOwnerCommand(address), CancellationToken.None);
+        var acting = async () => await handler.Handle(new CancelDeletionProcessAsOwnerCommand(randomAddress, deletionProcess.Id), CancellationToken.None);
 
         // Assert
         acting.Should().ThrowAsync<NotFoundException>();
