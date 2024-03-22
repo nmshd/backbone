@@ -57,17 +57,14 @@ public class EndpointClient
             .Authenticate()
             .WithJson(requestContent)
             .Execute();
-
-    public async Task<ApiResponse<T>> PutUnauthenticated<T>(string url, object? requestContent = null) => await Request<T>(HttpMethod.Put, url)
+    
+    public async Task<ApiResponse<T>> Patch<T>(string url, object? requestContent = null) => await Request<T>(HttpMethod.Patch, url)
+        .Authenticate()
         .WithJson(requestContent)
         .Execute();
 
     public async Task<ApiResponse<T>> Delete<T>(string url, object? requestContent = null) => await Request<T>(HttpMethod.Delete, url)
         .Authenticate()
-        .WithJson(requestContent)
-        .Execute();
-
-    public async Task<ApiResponse<T>> DeleteUnauthenticated<T>(string url, object? requestContent = null) => await Request<T>(HttpMethod.Delete, url)
         .WithJson(requestContent)
         .Execute();
 
