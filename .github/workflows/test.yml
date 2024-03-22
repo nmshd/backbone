@@ -115,14 +115,12 @@ jobs:
         with:
           repository: nmshd/runtime
           path: runtime
+          branch: backbone-specific-addresses
       - name: Run Consumer API
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml up -d
       - name: Install runtime dependencies
         working-directory: ./runtime
         run: npm install
-      - name: Remove identity assertions
-        working-directory: ./runtime/packages/transport/src/modules/accounts
-        run: sed -i '288d;289d;290d' AccountController.ts
       - name: Run transport Tests
         working-directory: ./runtime/packages/transport
         env:
@@ -155,14 +153,12 @@ jobs:
         with:
           repository: nmshd/runtime
           path: runtime
+          branch: backbone-specific-addresses
       - name: Run Consumer API
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml up -d
       - name: Install runtime dependencies
         working-directory: ./runtime
         run: npm install
-      - name: Remove identity assertions
-        working-directory: ./runtime/packages/transport/src/modules/accounts
-        run: sed -i '288d;289d;290d' AccountController.ts
       - name: Run transport Tests
         working-directory: ./runtime/packages/transport
         env:
