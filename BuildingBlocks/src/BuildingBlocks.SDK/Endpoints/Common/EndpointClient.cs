@@ -57,7 +57,7 @@ public class EndpointClient
             .Authenticate()
             .WithJson(requestContent)
             .Execute();
-    
+
     public async Task<ApiResponse<T>> Patch<T>(string url, object? requestContent = null) => await Request<T>(HttpMethod.Patch, url)
         .Authenticate()
         .WithJson(requestContent)
@@ -210,7 +210,7 @@ public class EndpointClient
         public async Task<ApiResponse<T>> Execute() => await _client.Execute<T>(await CreateRequestMessage());
 
         public async Task<RawApiResponse> ExecuteRaw() => await _client.ExecuteRaw(await CreateRequestMessage());
-        
+
         private async Task<HttpRequestMessage> CreateRequestMessage()
         {
             var request = new HttpRequestMessage(_method, EncodeParametersInUrl())
