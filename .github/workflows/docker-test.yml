@@ -45,6 +45,8 @@ jobs:
         with:
           path: /tmp/docker-registry
           key: ${{ runner.os }}-registry-${{ hashFiles('**/Dockerfile', './.ci/docker-compose.test*.yml') }}
+          restore-keys: |
+            ${{ runner.os }}-registry-
       
       #- name: Cache npm dependencies
       #  uses: actions/cache@v3
