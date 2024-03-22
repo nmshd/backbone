@@ -1,7 +1,7 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -13,19 +13,20 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Crea
 public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelationshipResponse>
 {
     private readonly IEventBus _eventBus;
-    private readonly IMapper _mapper;
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
-    private readonly IUserContext _userContext;
+    private readonly IdentityAddress _activeIdentity;
+    private readonly DeviceId _activeDevice;
+
     private CancellationToken _cancellationToken;
     private CreateRelationshipCommand _request;
     private RelationshipTemplate _template;
     private Relationship _relationship;
 
-    public Handler(IUserContext userContext, IMapper mapper, IEventBus eventBus, IRelationshipsRepository relationshipsRepository, IRelationshipTemplatesRepository relationshipTemplatesRepository)
+    public Handler(IUserContext userContext, IEventBus eventBus, IRelationshipsRepository relationshipsRepository, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
-        _userContext = userContext;
-        _mapper = mapper;
+        _activeIdentity = userContext.GetAddress();
+        _activeDevice = userContext.GetDeviceId();
         _relationshipsRepository = relationshipsRepository;
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
         _eventBus = eventBus;
@@ -44,31 +45,28 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         await CreateAndSaveRelationship();
         PublishIntegrationEvent();
 
-        return CreateResponse();
+        return new CreateRelationshipResponse(_relationship);
     }
 
     private async Task ReadTemplateFromDb()
     {
-        _template = await _relationshipTemplatesRepository.Find(_request.RelationshipTemplateId, _userContext.GetAddress(), _cancellationToken, track: true) ??
+        _template = await _relationshipTemplatesRepository.Find(_request.RelationshipTemplateId, _activeIdentity, _cancellationToken, track: true) ??
                     throw new NotFoundException(nameof(RelationshipTemplate));
     }
 
     private async Task CreateAndSaveRelationship()
     {
-        var activeIdentity = _userContext.GetAddress();
-        var templateOwner = _template.CreatedBy;
-
         var existingRelationships = await _relationshipsRepository.FindRelationships(
             r =>
-                (r.From == activeIdentity && r.To == templateOwner) ||
-                (r.From == templateOwner && r.To == activeIdentity),
+                (r.From == _activeIdentity && r.To == _template.CreatedBy) ||
+                (r.From == _template.CreatedBy && r.To == _activeIdentity),
             _cancellationToken
         );
 
         _relationship = new Relationship(
             _template,
-            activeIdentity,
-            _userContext.GetDeviceId(),
+            _activeIdentity,
+            _activeDevice,
             _request.Content,
             existingRelationships.ToList()
         );
@@ -79,10 +77,5 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
     private void PublishIntegrationEvent()
     {
         _eventBus.Publish(new RelationshipCreatedIntegrationEvent(_relationship));
-    }
-
-    private CreateRelationshipResponse CreateResponse()
-    {
-        return _mapper.Map<CreateRelationshipResponse>(_relationship);
     }
 }
