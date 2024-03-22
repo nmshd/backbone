@@ -1,6 +1,6 @@
 ﻿using System.Collections;
 
-namespace Backbone.ConsumerApi.Sdk.Endpoints.Common.Types;
+namespace Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 
 public abstract class EnumerableResponseBase<TItem> : IEnumerable<TItem>
 {

@@ -1,9 +1,9 @@
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
-namespace Backbone.ConsumerApi.Sdk.Endpoints.Common.Types;
+namespace Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 
-public class RawConsumerApiResponse
+public class RawApiResponse
 {
     [MemberNotNullWhen(true, nameof(Content))]
     [MemberNotNullWhen(false, nameof(Error))]
@@ -14,6 +14,6 @@ public class RawConsumerApiResponse
     public bool IsError => !IsSuccess;
 
     public byte[]? Content { get; set; }
-    public ConsumerApiError? Error { get; set; }
+    public ApiError? Error { get; set; }
     public required HttpStatusCode Status { get; set; }
 }
