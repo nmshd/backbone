@@ -29,7 +29,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AddColumn<int>(
                 name: "Status",
                 table: "Identities",
-                type: "integer",
+                type: "int",
                 nullable: false,
                 defaultValue: 0);
 
@@ -58,6 +58,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     GracePeriodReminder1SentAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     GracePeriodReminder2SentAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     GracePeriodReminder3SentAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    DeletionStartedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)),
                     IdentityAddress = table.Column<string>(type: "character(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: true)
                 },
                 constraints: table =>
@@ -67,7 +68,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
                         column: x => x.IdentityAddress,
                         principalTable: "Identities",
-                        principalColumn: "Address");
+                        principalColumn: "Address",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -90,7 +92,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_I~",
                         column: x => x.IdentityDeletionProcessId,
                         principalTable: "IdentityDeletionProcesses",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateIndex(
@@ -112,14 +115,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.DropTable(
                 name: "IdentityDeletionProcesses");
-
-            migrationBuilder.DropColumn(
-                name: "DeletionGracePeriodEndsAt",
-                table: "Identities");
-
-            migrationBuilder.DropColumn(
-                name: "Status",
-                table: "Identities");
 
             migrationBuilder.DropColumn(
                 name: "TierIdBeforeDeletion",

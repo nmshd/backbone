@@ -12,7 +12,7 @@ public class DatawalletEntityTypeConfiguration : IEntityTypeConfiguration<Datawa
 
         builder.HasKey(x => x.Id);
 
-        builder.HasMany(dw => dw.Modifications).WithOne(m => m.Datawallet);
+        builder.HasMany(dw => dw.Modifications).WithOne(m => m.Datawallet).OnDelete(DeleteBehavior.Cascade);
 
         builder.Ignore(x => x.LatestModification);
     }

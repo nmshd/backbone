@@ -22,6 +22,16 @@ public static class TestDataGenerator
             1);
     }
 
+    public static Identity CreateIdentityWithTier(TierId tierId)
+    {
+        return new Identity(
+            CreateRandomDeviceId(),
+            CreateRandomIdentityAddress(),
+            CreateRandomBytes(),
+            tierId,
+            1);
+    }
+
     public static Identity CreateIdentityWithOneDevice()
     {
         var identity = new Identity(

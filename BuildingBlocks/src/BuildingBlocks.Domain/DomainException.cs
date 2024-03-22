@@ -6,14 +6,15 @@ public class DomainException : Exception
 {
     public DomainException(DomainError error) : base(error.Message)
     {
-        Code = error.Code;
+        Error = error;
     }
 
     public DomainException(DomainError error, Exception innerException) : base(error.Message,
         innerException)
     {
-        Code = error.Code;
+        Error = error;
     }
 
-    public string Code { get; set; }
+    public string Code => Error.Code;
+    public DomainError Error { get; set; }
 }

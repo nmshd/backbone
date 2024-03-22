@@ -38,6 +38,7 @@ public class IdentityDeletionProcess
     public IdentityDeletionProcessId Id { get; }
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
+    public DateTime DeletionStartedAt { get; private set; }
     public DateTime CreatedAt { get; }
 
     public DateTime? ApprovalReminder1SentAt { get; private set; }
@@ -123,6 +124,21 @@ public class IdentityDeletionProcess
     {
         GracePeriodReminder3SentAt = SystemTime.UtcNow;
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.GracePeriodReminder3Sent(Id, address));
+    }
+
+    internal void DeletionStarted()
+    {
+        if (!IsReadyToStartDeletion())
+        {
+            throw new DomainException(DomainErrors.IdentityCannotBeDeleted());
+        }
+        Status = DeletionProcessStatus.Deleting;
+        DeletionStartedAt = SystemTime.UtcNow;
+    }
+
+    internal bool IsReadyToStartDeletion()
+    {
+        return Status == DeletionProcessStatus.Approved && GracePeriodEndsAt < SystemTime.UtcNow;
     }
 
     public void Approve(IdentityAddress address, DeviceId approvedByDevice)

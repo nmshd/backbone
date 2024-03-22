@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -14,6 +15,8 @@ public interface IIdentitiesRepository
     Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken);
     Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false);
     Task<int> CountByClientId(string clientId, CancellationToken cancellationToken);
+    Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false);
+    Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken);
     #endregion
 
     #region Users

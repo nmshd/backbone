@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -56,5 +57,10 @@ public class PnsRegistrationsRepository : IPnsRegistrationsRepository
     {
         _registrations.Update(registration);
         await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task Delete(Expression<Func<PnsRegistration, bool>> filter, CancellationToken cancellationToken)
+    {
+        await _registrations.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 }

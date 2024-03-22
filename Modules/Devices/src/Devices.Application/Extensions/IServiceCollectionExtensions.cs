@@ -22,6 +22,7 @@ public static class IServiceCollectionExtensions
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
         services.AddValidatorsFromAssembly(typeof(DeleteClientCommandValidator).Assembly);
         services.AddScoped<ChallengeValidator>();
+
         AddEventHandlers(services);
     }
 

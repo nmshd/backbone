@@ -20,6 +20,5 @@ public class SyncRunEntityTypeConfiguration : IEntityTypeConfiguration<SyncRun>
         builder.Property(x => x.EventCount);
         builder.Property(x => x.CreatedBy);
         builder.Property(x => x.CreatedByDevice);
-
     }
 }

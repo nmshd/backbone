@@ -5,6 +5,7 @@ using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FluentAssertions;
 using Xunit;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Extensions;
 
@@ -52,18 +53,18 @@ public class RelationshipTemplateQueryableExtensionsTests
     public void NotExpiredFor_DoesNotFilterOutTemplatesWithoutExpiryDate()
     {
         // Arrange
-        var templateCreator = TestDataGenerator.CreateRandomAddress();
-        var requestCreator = TestDataGenerator.CreateRandomAddress();
+        var templateCreator = CreateRandomIdentityAddress();
+        var requestCreator = CreateRandomIdentityAddress();
 
-        var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, null, TestDataGenerator.CreateRandomBytes());
-        var relationship = new Relationship(template, requestCreator, DeviceId.New(), TestDataGenerator.CreateRandomBytes());
+        var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, null, CreateRandomBytes());
+        var relationship = new Relationship(template, requestCreator, DeviceId.New(), CreateRandomBytes());
 
 
         _arrangeContext.RelationshipTemplates.Add(template);
         _arrangeContext.Relationships.Add(relationship);
         _arrangeContext.SaveChanges();
 
-        var accessor = TestDataGenerator.CreateRandomAddress();
+        var accessor = CreateRandomIdentityAddress();
 
 
         // Act
@@ -82,18 +83,18 @@ public class RelationshipTemplateQueryableExtensionsTests
     public void NotExpiredFor_FiltersOutExpiredTemplatesForNonParticipants()
     {
         // Arrange
-        var templateCreator = TestDataGenerator.CreateRandomAddress();
-        var requestCreator = TestDataGenerator.CreateRandomAddress();
+        var templateCreator = CreateRandomIdentityAddress();
+        var requestCreator = CreateRandomIdentityAddress();
 
-        var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, YESTERDAY, TestDataGenerator.CreateRandomBytes());
-        var relationship = new Relationship(template, requestCreator, DeviceId.New(), TestDataGenerator.CreateRandomBytes());
+        var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, YESTERDAY, CreateRandomBytes());
+        var relationship = new Relationship(template, requestCreator, DeviceId.New(), CreateRandomBytes());
 
 
         _arrangeContext.RelationshipTemplates.Add(template);
         _arrangeContext.Relationships.Add(relationship);
         _arrangeContext.SaveChanges();
 
-        var accessor = TestDataGenerator.CreateRandomAddress();
+        var accessor = CreateRandomIdentityAddress();
 
 
         // Act

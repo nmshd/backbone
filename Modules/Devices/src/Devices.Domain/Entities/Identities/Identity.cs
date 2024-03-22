@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -139,6 +140,30 @@ public class Identity
         return deletionProcess;
     }
 
+    public void DeletionStarted()
+    {
+        var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.IsActive())
+                              ?? throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
+
+        deletionProcess.DeletionStarted();
+        Status = IdentityStatus.Deleting;
+    }
+
+    public IdentityDeletionProcess CancelDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
+    {
+        EnsureIdentityOwnsDevice(canceledByDeviceId);
+
+        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ??
+                              throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+
+        deletionProcess.Cancel(Address, canceledByDeviceId);
+        TierId = TierIdBeforeDeletion;
+        TierIdBeforeDeletion = null;
+        Status = IdentityStatus.Active;
+
+        return deletionProcess;
+    }
+
     private IdentityDeletionProcess GetDeletionProcess(IdentityDeletionProcessId deletionProcessId)
     {
         var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
@@ -206,19 +231,14 @@ public class Identity
         return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
     }
 
-    public IdentityDeletionProcess CancelDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
+    public static Expression<Func<Identity, bool>> HasAddress(IdentityAddress address)
     {
-        EnsureIdentityOwnsDevice(canceledByDeviceId);
+        return i => i.Address == address;
+    }
 
-        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ??
-                              throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
-
-        deletionProcess.Cancel(Address, canceledByDeviceId);
-        TierId = TierIdBeforeDeletion;
-        TierIdBeforeDeletion = null;
-        Status = IdentityStatus.Active;
-
-        return deletionProcess;
+    public static Expression<Func<Identity, bool>> IsReadyForDeletion()
+    {
+        return i => i.Status == IdentityStatus.ToBeDeleted && i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow;
     }
 }
 
@@ -227,11 +247,13 @@ public enum DeletionProcessStatus
     WaitingForApproval = 0,
     Approved = 1,
     Cancelled = 2,
-    Rejected = 3
+    Rejected = 3,
+    Deleting = 10
 }
 
 public enum IdentityStatus
 {
     Active = 0,
-    ToBeDeleted = 1
+    ToBeDeleted = 1,
+    Deleting = 2
 }

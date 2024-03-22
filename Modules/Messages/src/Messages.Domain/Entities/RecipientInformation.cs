@@ -25,7 +25,7 @@ public class RecipientInformation
     }
 
     public int Id { get; }
-    public IdentityAddress Address { get; }
+    public IdentityAddress Address { get; private set; }
     public byte[] EncryptedKey { get; }
     public DateTime? ReceivedAt { get; private set; }
     public DeviceId? ReceivedByDevice { get; private set; }
@@ -38,5 +38,10 @@ public class RecipientInformation
 
         ReceivedAt = SystemTime.UtcNow;
         ReceivedByDevice = fetchedByDevice;
+    }
+
+    internal void UpdateAddress(IdentityAddress newIdentityAddress)
+    {
+        Address = newIdentityAddress;
     }
 }

@@ -1,9 +1,11 @@
 using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
+using Backbone.Modules.Synchronization.Application.Identities;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,7 +49,7 @@ public static class IServiceCollectionExtensions
 }
 
 public class RequestValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
+    where TRequest : notnull
 {
     private readonly IEnumerable<IValidator<TRequest>> _validators;
 

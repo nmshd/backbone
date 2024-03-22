@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
@@ -73,5 +74,12 @@ public class MessagesRepository : IMessagesRepository
     {
         _dbContext.UpdateRange(messages);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<Message>> FindMessagesWithParticipant(Expression<Func<Message, bool>> expression, CancellationToken cancellationToken)
+    {
+        return await _messages.IncludeAll(_dbContext)
+            .Where(expression)
+            .ToListAsync(cancellationToken);
     }
 }

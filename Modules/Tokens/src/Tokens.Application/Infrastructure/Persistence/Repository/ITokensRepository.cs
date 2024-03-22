@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -11,4 +12,5 @@ public interface ITokensRepository
     Task<Token> Find(TokenId tokenId);
     Task<DbPaginationResult<Token>> FindAllWithIds(IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken);
     Task<DbPaginationResult<Token>> FindAllOfOwner(IdentityAddress owner, PaginationFilter paginationFilter, CancellationToken cancellationToken);
+    Task DeleteTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken);
 }

@@ -48,7 +48,12 @@ public static class DomainErrors
 
     public static DomainError DeletionProcessMustBeInStatus(DeletionProcessStatus deletionProcessStatus)
     {
-        return new DomainError($"error.platform.validation.device.deletionProcessMustBeInStatus{deletionProcessStatus}", $"The deletion process must be in status '{deletionProcessStatus}'.");
+        return new DomainError($"error.platform.validation.device.deletionProcessIsNotInRequiredStatus", $"The deletion process must be in status '{deletionProcessStatus}' for the operation to continue, but it was in another status.");
+    }
+
+    public static DomainError IdentityCannotBeDeleted()
+    {
+        return new DomainError($"error.platform.validation.device.identityCannotBeDeleted", $"The identity cannot be deleted because it has not been approved or is not past due approval.");
     }
 
     public static DomainError DeletionProcessMustBePastDueApproval()
