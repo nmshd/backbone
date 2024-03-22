@@ -34,7 +34,7 @@ public class Handler : IRequestHandler<CancelDeletionAsSupportCommand, CancelDel
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        _eventBus.Publish(new IdentityDeletionProcessStartedIntegrationEvent(identity.Address, deletionProcess.Id));
+        _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, deletionProcess.Id));
 
         return new CancelDeletionAsSupportResponse(deletionProcess);
     }

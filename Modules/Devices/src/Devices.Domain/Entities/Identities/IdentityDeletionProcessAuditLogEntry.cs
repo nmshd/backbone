@@ -28,17 +28,6 @@ public class IdentityDeletionProcessAuditLogEntry
         NewStatus = newStatus;
     }
 
-    private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId processId, string message, byte[] identityAddressHash, DeletionProcessStatus? oldStatus, DeletionProcessStatus newStatus)
-    {
-        Id = IdentityDeletionProcessAuditLogEntryId.Generate();
-        ProcessId = processId;
-        CreatedAt = SystemTime.UtcNow;
-        Message = message;
-        IdentityAddressHash = identityAddressHash;
-        OldStatus = oldStatus;
-        NewStatus = newStatus;
-    }
-
     public IdentityDeletionProcessAuditLogEntryId Id { get; }
     public IdentityDeletionProcessId ProcessId { get; }
     public DateTime CreatedAt { get; }
@@ -114,6 +103,7 @@ public class IdentityDeletionProcessAuditLogEntry
             processId,
             "The deletion process was cancelled by a support employee.",
             Hasher.HashUtf8(identityAddress.StringValue),
+            null,
             DeletionProcessStatus.Approved,
             DeletionProcessStatus.Cancelled
         );

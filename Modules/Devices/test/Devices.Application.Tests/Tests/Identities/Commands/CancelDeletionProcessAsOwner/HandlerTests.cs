@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
 using FluentAssertions;
+using Microsoft.Azure.Amqp.Framing;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
@@ -52,7 +53,11 @@ public class HandlerTests
         var deletionProcess = activeIdentity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
 
         var randomAddress = CreateRandomIdentityAddress();
-        var handler = CreateHandler();
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+
+        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(randomAddress, CancellationToken.None, A<bool>._)).Returns<Identity?>(null);
+
+        var handler = CreateHandler(fakeIdentitiesRepository);
 
         // Act
         var acting = async () => await handler.Handle(new CancelDeletionProcessAsOwnerCommand(randomAddress, deletionProcess.Id), CancellationToken.None);

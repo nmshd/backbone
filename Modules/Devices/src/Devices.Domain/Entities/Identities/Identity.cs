@@ -208,10 +208,11 @@ public class Identity
 
     public IdentityDeletionProcess CancelDeletionProcessAsOwner(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
     {
+        EnsureDeletionProcessExists(deletionProcessId);
+        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
         EnsureIdentityOwnsDevice(canceledByDeviceId);
 
-        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ??
-                              throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+        var deletionProcess = DeletionProcesses.First(d => d.Id == deletionProcessId);
 
         deletionProcess.CancelAsOwner(Address, canceledByDeviceId);
         TierId = TierIdBeforeDeletion;
@@ -223,7 +224,7 @@ public class Identity
 
     public IdentityDeletionProcess CancelDeletionProcessAsSupport(IdentityDeletionProcessId deletionProcessId)
     {
-        EnsureIdentityOwnsDeletionProcess(deletionProcessId);
+        EnsureDeletionProcessExists(deletionProcessId);
         EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
 
         var deletionProcess = DeletionProcesses.First(d => d.Id == deletionProcessId);
@@ -236,7 +237,7 @@ public class Identity
         return deletionProcess;
     }
 
-    private void EnsureIdentityOwnsDeletionProcess(IdentityDeletionProcessId deletionProcessId)
+    private void EnsureDeletionProcessExists(IdentityDeletionProcessId deletionProcessId)
     {
         var isDeletionProcessOwnedByDevice = DeletionProcesses.Any(d => d.Id == deletionProcessId);
 

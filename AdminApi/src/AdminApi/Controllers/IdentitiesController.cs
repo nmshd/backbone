@@ -127,7 +127,7 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpPut("{address}/DeletionProcesses/{deletionProcessId}/Cancel")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CancelDeletionAsSupportResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CancelDeletionProcessAsSupport([FromRoute] string address, [FromRoute] string deletionProcessId, CancellationToken cancellationToken)
     {

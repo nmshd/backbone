@@ -1,6 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
@@ -44,7 +43,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Publishes_IdentityDeletionProcessStartedEvent()
+    public async void Publishes_IdentityDeletionProcessStatusChangedIntegrationEvent()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-01"));
@@ -64,7 +63,7 @@ public class HandlerTests
 
         // Assert
         A.CallTo(() => mockEventBus.Publish(
-            A<IdentityDeletionProcessStartedIntegrationEvent>.That.Matches(e =>
+            A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(e =>
                     e.Address == identity.Address &&
                     e.DeletionProcessId == response.Id))
         ).MustHaveHappenedOnceExactly();
