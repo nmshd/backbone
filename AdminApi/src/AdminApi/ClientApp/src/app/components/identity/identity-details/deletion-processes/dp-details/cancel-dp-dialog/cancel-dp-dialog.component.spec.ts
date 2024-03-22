@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { CancelDeletionProcessDialogComponent } from "./cancel-deletion-process-dialog.component";
+import { CancelDeletionProcessDialogComponent } from "./cancel-dp-dialog.component";
 
 describe("CancelDeletionProcessDialogComponent", function () {
     let component: CancelDeletionProcessDialogComponent;

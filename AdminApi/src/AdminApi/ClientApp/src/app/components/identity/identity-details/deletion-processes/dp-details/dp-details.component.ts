@@ -4,12 +4,12 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute, Router } from "@angular/router";
 import { DeletionProcess, DeletionProcessAuditLog, IdentityService } from "src/app/services/identity-service/identity.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
-import { CancelDeletionProcessDialogComponent } from "./cancel-deletion-process-dialog/cancel-deletion-process-dialog.component";
+import { CancelDeletionProcessDialogComponent } from "./cancel-dp-dialog/cancel-dp-dialog.component";
 
 @Component({
     selector: "app-deletion-process-details",
-    templateUrl: "./deletion-process-details.component.html",
-    styleUrl: "./deletion-process-details.component.css"
+    templateUrl: "./dp-details.component.html",
+    styleUrl: "./dp-details.component.css"
 })
 export class DeletionProcessDetailsComponent {
     public identityDeletionProcessID: string;
