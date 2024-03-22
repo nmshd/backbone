@@ -14,8 +14,8 @@ debugRun() {
     time $@
 }
 
-debugRun dockerCompose down
 {
+  debugRun dockerCompose down;
   debugRun dockerCompose build;
   debugRun dockerCompose up -d
 } &
