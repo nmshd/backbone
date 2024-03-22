@@ -15,7 +15,7 @@ public class RelationshipChangeResponseEntityTypeConfiguration : IEntityTypeConf
         builder.HasIndex(x => x.CreatedByDevice);
 
         var indexBuilder = builder.HasIndex(x => new { x.CreatedAt, x.CreatedBy, x.CreatedByDevice });
-        NpgsqlIndexBuilderExtensions.IncludeProperties(indexBuilder, x => x.Content);
+        NpgsqlIndexBuilderExtensions.IncludeProperties(indexBuilder, x => x.Content!);
         SqlServerIndexBuilderExtensions.IncludeProperties(indexBuilder, x => x.Content);
 
         builder.Property(x => x.CreatedBy)
