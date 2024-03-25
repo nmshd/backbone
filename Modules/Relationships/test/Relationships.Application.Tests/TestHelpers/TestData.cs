@@ -7,9 +7,10 @@ namespace Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 
 public static class TestData
 {
-    public static Relationship CreatePendingRelationship(IdentityAddress? to = null)
+    public static Relationship CreatePendingRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
     {
-        return new Relationship(CreateRelationshipTemplate(createdBy: to), TestDataGenerator.CreateRandomIdentityAddress(), TestDataGenerator.CreateRandomDeviceId(), null, []);
+        from ??= TestDataGenerator.CreateRandomIdentityAddress();
+        return new Relationship(CreateRelationshipTemplate(createdBy: to), from, TestDataGenerator.CreateRandomDeviceId(), null, []);
     }
 
     public static RelationshipTemplate CreateRelationshipTemplate(IdentityAddress? createdBy = null)
@@ -22,20 +23,6 @@ public static class TestData
     {
         var relationship = new Relationship(CreateRelationshipTemplate(), TestDataGenerator.CreateRandomIdentityAddress(), TestDataGenerator.CreateRandomDeviceId(), null, []);
         relationship.Accept(TestDataGenerator.CreateRandomIdentityAddress(), TestDataGenerator.CreateRandomDeviceId());
-        return relationship;
-    }
-
-    public static Relationship CreateRejectedRelationship()
-    {
-        var relationship = new Relationship(CreateRelationshipTemplate(), TestDataGenerator.CreateRandomIdentityAddress(), TestDataGenerator.CreateRandomDeviceId(), null, []);
-        relationship.Reject(TestDataGenerator.CreateRandomIdentityAddress(), TestDataGenerator.CreateRandomDeviceId());
-        return relationship;
-    }
-
-    public static Relationship CreateRevokedRelationship()
-    {
-        var relationship = new Relationship(CreateRelationshipTemplate(), TestDataGenerator.CreateRandomIdentityAddress(), TestDataGenerator.CreateRandomDeviceId(), null, []);
-        relationship.Revoke(TestDataGenerator.CreateRandomIdentityAddress(), TestDataGenerator.CreateRandomDeviceId());
         return relationship;
     }
 }

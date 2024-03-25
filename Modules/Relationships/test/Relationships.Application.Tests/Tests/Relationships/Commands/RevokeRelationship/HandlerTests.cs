@@ -2,7 +2,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -11,7 +11,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.RejectRelationship;
+namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.RevokeRelationship;
 
 public class HandlerTests
 {
@@ -23,7 +23,7 @@ public class HandlerTests
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreatePendingRelationship(to: activeIdentity);
+        var relationship = TestData.CreatePendingRelationship(from: activeIdentity);
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
@@ -33,14 +33,14 @@ public class HandlerTests
         var handler = CreateHandler(fakeUserContext, fakeRelationshipsRepository);
 
         // Act
-        var response = await handler.Handle(new RejectRelationshipCommand
+        var response = await handler.Handle(new RevokeRelationshipCommand
         {
             RelationshipId = relationship.Id
         }, CancellationToken.None);
 
         // Assert
         response.Id.Should().NotBeNull();
-        response.Status.Should().Be(RelationshipStatus.Rejected);
+        response.Status.Should().Be(RelationshipStatus.Revoked);
         response.AuditLog.Should().HaveCount(2);
     }
 
@@ -52,7 +52,7 @@ public class HandlerTests
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
         var mockRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreatePendingRelationship(to: activeIdentity);
+        var relationship = TestData.CreatePendingRelationship(from: activeIdentity);
         A.CallTo(() => mockRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
@@ -62,7 +62,7 @@ public class HandlerTests
         var handler = CreateHandler(fakeUserContext, mockRelationshipsRepository);
 
         // Act
-        await handler.Handle(new RejectRelationshipCommand
+        await handler.Handle(new RevokeRelationshipCommand
         {
             RelationshipId = relationship.Id
         }, CancellationToken.None);
@@ -70,7 +70,7 @@ public class HandlerTests
         // Assert
         A.CallTo(
                 () => mockRelationshipsRepository.Update(
-                    A<Relationship>.That.Matches(r => r.Id == relationship.Id && r.Status == RelationshipStatus.Rejected))
+                    A<Relationship>.That.Matches(r => r.Id == relationship.Id && r.Status == RelationshipStatus.Revoked))
             )
             .MustHaveHappenedOnceExactly();
     }
@@ -83,7 +83,7 @@ public class HandlerTests
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreatePendingRelationship(to: activeIdentity);
+        var relationship = TestData.CreatePendingRelationship(from: activeIdentity);
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
@@ -95,7 +95,7 @@ public class HandlerTests
         var handler = CreateHandler(fakeUserContext, fakeRelationshipsRepository, mockEventBus);
 
         // Act
-        await handler.Handle(new RejectRelationshipCommand
+        await handler.Handle(new RevokeRelationshipCommand
         {
             RelationshipId = relationship.Id
         }, CancellationToken.None);
@@ -104,7 +104,7 @@ public class HandlerTests
         A.CallTo(
                 () => mockEventBus.Publish(A<RelationshipStatusChangedIntegrationEvent>.That.Matches(e =>
                     e.RelationshipId == relationship.Id &&
-                    e.Status == RelationshipStatus.Rejected.ToDtoString() &&
+                    e.Status == RelationshipStatus.Revoked.ToDtoString() &&
                     e.From == relationship.From &&
                     e.To == relationship.To)
                 ))

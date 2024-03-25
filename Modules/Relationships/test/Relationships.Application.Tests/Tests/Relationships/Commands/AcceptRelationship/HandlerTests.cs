@@ -111,7 +111,7 @@ public class HandlerTests
             .MustHaveHappenedOnceExactly();
     }
 
-    private Handler CreateHandler(IUserContext userContext, IRelationshipsRepository relationshipsRepository, IEventBus? eventBus = null)
+    private static Handler CreateHandler(IUserContext userContext, IRelationshipsRepository relationshipsRepository, IEventBus? eventBus = null)
     {
         eventBus ??= A.Fake<IEventBus>();
         return new Handler(relationshipsRepository, userContext, eventBus);
