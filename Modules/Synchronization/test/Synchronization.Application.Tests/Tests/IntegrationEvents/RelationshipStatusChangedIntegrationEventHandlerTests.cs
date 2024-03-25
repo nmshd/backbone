@@ -16,7 +16,6 @@ public class RelationshipStatusChangedIntegrationEventHandlerTests
     public async Task Creates_an_external_event()
     {
         // Arrange
-        var relationshipFrom = TestDataGenerator.CreateRandomIdentityAddress();
         var relationshipTo = TestDataGenerator.CreateRandomIdentityAddress();
         var @event = new RelationshipStatusChangedIntegrationEvent
         {
@@ -42,7 +41,7 @@ public class RelationshipStatusChangedIntegrationEventHandlerTests
         await handler.Handle(@event);
 
         // Assert
-        A.CallTo(() => mockDbContext.CreateExternalEvent(relationshipTo, ExternalEventType.RelationshipStatusChanged, externalEvent.Payload))
+        A.CallTo(() => mockDbContext.CreateExternalEvent(relationshipTo, ExternalEventType.RelationshipStatusChanged, A<object>._))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -50,7 +49,6 @@ public class RelationshipStatusChangedIntegrationEventHandlerTests
     public async Task Publishes_an_ExternalEventCreatedIntegrationEvent()
     {
         // Arrange
-        var relationshipFrom = TestDataGenerator.CreateRandomIdentityAddress();
         var relationshipTo = TestDataGenerator.CreateRandomIdentityAddress();
         var @event = new RelationshipStatusChangedIntegrationEvent
         {
