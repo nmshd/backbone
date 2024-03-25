@@ -24,7 +24,7 @@ public class CancelDeletionProcessAsSupportTests
         identity.Status.Should().Be(IdentityStatus.Active);
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Cancelled);
         deletionProcess.CancelledAt.Should().Be(DateTime.Parse("2024-01-01"));
-        deletionProcess.CancelledByDevice.Should().Be(null);
+        deletionProcess.CancelledByDevice.Should().Be(null!);
         AssertAuditLogEntryWasCreated(deletionProcess);
     }
 

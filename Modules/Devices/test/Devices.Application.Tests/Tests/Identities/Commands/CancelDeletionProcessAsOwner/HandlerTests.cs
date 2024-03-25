@@ -1,7 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
 using FluentAssertions;
@@ -58,11 +60,49 @@ public class HandlerTests
         acting.Should().ThrowAsync<NotFoundException>();
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IUserContext? userContext = null)
+    [Fact]
+    public async Task Publishes_integration_events()
+    {
+        // Arrange
+        var activeIdentity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var activeDevice = activeIdentity.Devices[0];
+        var deletionProcess = activeIdentity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
+
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockUserContext = A.Fake<IUserContext>();
+        var fakeEventBus = A.Fake<IEventBus>();
+
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(activeIdentity.Address, CancellationToken.None, A<bool>._))
+            .Returns(activeIdentity);
+        A.CallTo(() => mockUserContext.GetAddress()).Returns(activeIdentity.Address);
+        A.CallTo(() => mockUserContext.GetDeviceId()).Returns(activeDevice.Id);
+
+        var handler = CreateHandler(mockIdentitiesRepository, mockUserContext, fakeEventBus);
+        var command = new CancelDeletionProcessAsOwnerCommand(deletionProcess.Id);
+
+        // Act
+        var response = await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => fakeEventBus.Publish(
+            A<TierOfIdentityChangedIntegrationEvent>.That.Matches(e =>
+                e.IdentityAddress == activeIdentity.Address &&
+                e.OldTierId == "TIR00000000000000001"))
+        ).MustHaveHappenedOnceExactly();
+
+        A.CallTo(() => fakeEventBus.Publish(
+            A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(e =>
+                e.Address == activeIdentity.Address &&
+                e.DeletionProcessId == response.Id))
+        ).MustHaveHappenedOnceExactly();
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IUserContext? userContext = null, IEventBus? eventBus = null)
     {
         userContext ??= A.Fake<IUserContext>();
         identitiesRepository ??= A.Fake<IIdentitiesRepository>();
+        eventBus ??= A.Fake<IEventBus>();
 
-        return new Handler(identitiesRepository, userContext);
+        return new Handler(identitiesRepository, userContext, eventBus);
     }
 }

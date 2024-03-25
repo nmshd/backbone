@@ -43,7 +43,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Publishes_IdentityDeletionProcessStatusChangedIntegrationEvent()
+    public async Task Publishes_integration_events()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-01"));
@@ -63,9 +63,15 @@ public class HandlerTests
 
         // Assert
         A.CallTo(() => mockEventBus.Publish(
+            A<TierOfIdentityChangedIntegrationEvent>.That.Matches(e =>
+                    e.IdentityAddress == identity.Address &&
+                    e.OldTierId == "TIR00000000000000001"))
+        ).MustHaveHappenedOnceExactly();
+
+        A.CallTo(() => mockEventBus.Publish(
             A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(e =>
-                    e.Address == identity.Address &&
-                    e.DeletionProcessId == response.Id))
+                e.Address == identity.Address &&
+                e.DeletionProcessId == response.Id))
         ).MustHaveHappenedOnceExactly();
     }
 
@@ -84,18 +90,11 @@ public class HandlerTests
         acting.Should().AwaitThrowAsync<NotFoundException, CancelDeletionAsSupportResponse>().Which.Message.Should().Contain("Identity");
     }
 
-    private static Handler CreateHandler()
+    private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IEventBus? eventBus = null)
     {
-        return CreateHandler(A.Fake<IIdentitiesRepository>(), A.Fake<IEventBus>());
-    }
+        identitiesRepository ??= A.Fake<IIdentitiesRepository>();
+        eventBus ??= A.Fake<IEventBus>();
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)
-    {
-        return CreateHandler(identitiesRepository, A.Fake<IEventBus>());
-    }
-
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IEventBus eventBus)
-    {
         return new Handler(identitiesRepository, eventBus);
     }
 }

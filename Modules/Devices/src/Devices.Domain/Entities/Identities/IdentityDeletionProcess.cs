@@ -147,6 +147,11 @@ public class IdentityDeletionProcess
             throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(deletionProcessStatus));
     }
 
+    public void EnsureHasStatus(DeletionProcessStatus deletionProcessStatus)
+    {
+        EnsureStatus(deletionProcessStatus);
+    }
+
     private void Reject(DeviceId rejectedByDevice)
     {
         Status = DeletionProcessStatus.Rejected;
