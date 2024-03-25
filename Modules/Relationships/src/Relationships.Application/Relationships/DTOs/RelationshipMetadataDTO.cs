@@ -30,27 +30,6 @@ public class RelationshipMetadataDTO
     public List<RelationshipAuditLogEntryDTO> AuditLog { get; set; }
 }
 
-public class RelationshipAuditLogEntryDTO
-{
-    public RelationshipAuditLogEntryDTO(RelationshipAuditLogEntry entry)
-    {
-        CreatedAt = entry.CreatedAt;
-        CreatedBy = entry.CreatedBy;
-        CreatedByDevice = entry.CreatedByDevice;
-        Reason = entry.Reason.ToString();
-        OldStatus = entry.OldStatus.ToDtoString();
-        NewStatus = entry.NewStatus.ToDtoString();
-    }
-
-    public DateTime CreatedAt { get; set; }
-    public string CreatedBy { get; set; }
-    public string CreatedByDevice { get; set; }
-    public string Reason { get; set; }
-
-    public string? OldStatus { get; set; }
-    public string NewStatus { get; set; }
-}
-
 public static class RelationshipStatusExtensions
 {
     public static string ToDtoString(this RelationshipStatus status)

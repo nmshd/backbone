@@ -16,4 +16,6 @@ public class RelationshipDTO : IMapTo<Relationship>
     public required DateTime CreatedAt { get; set; }
 
     public required RelationshipStatus Status { get; set; }
+
+    public required List<RelationshipAuditLogEntryDTO> AuditLog { get; set; }
 }
