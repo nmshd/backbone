@@ -11,12 +11,12 @@ public class RelationshipStatusChangedIntegrationEvent : IntegrationEvent
     {
         RelationshipId = relationship.Id;
         Status = relationship.Status.ToDtoString();
-        From = relationship.From;
-        To = relationship.To;
+        Initiator = relationship.LastModifiedBy;
+        Peer = relationship.LastModifiedBy == relationship.From ? relationship.To : relationship.From;
     }
 
     public string RelationshipId { get; set; }
     public string Status { get; set; }
-    public string From { get; set; }
-    public string To { get; set; }
+    public string Initiator { get; set; }
+    public string Peer { get; set; }
 }

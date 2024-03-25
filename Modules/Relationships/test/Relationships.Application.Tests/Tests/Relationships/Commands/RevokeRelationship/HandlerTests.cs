@@ -105,8 +105,8 @@ public class HandlerTests
                 () => mockEventBus.Publish(A<RelationshipStatusChangedIntegrationEvent>.That.Matches(e =>
                     e.RelationshipId == relationship.Id &&
                     e.Status == RelationshipStatus.Revoked.ToDtoString() &&
-                    e.From == relationship.From &&
-                    e.To == relationship.To)
+                    e.Initiator == activeIdentity &&
+                    e.Peer == relationship.To)
                 ))
             .MustHaveHappenedOnceExactly();
     }

@@ -5,6 +5,16 @@ namespace Backbone.Modules.Relationships.Application.Relationships.DTOs;
 
 public class RelationshipAuditLogEntryDTO : IMapTo<RelationshipAuditLogEntry>
 {
+    // This constructor is only used by AutoMapper.
+    // ReSharper disable once UnusedMember.Local
+    private RelationshipAuditLogEntryDTO()
+    {
+        CreatedBy = null!;
+        CreatedByDevice = null!;
+        Reason = null!;
+        NewStatus = null!;
+    }
+
     public RelationshipAuditLogEntryDTO(RelationshipAuditLogEntry entry)
     {
         CreatedAt = entry.CreatedAt;

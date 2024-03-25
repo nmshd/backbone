@@ -56,6 +56,8 @@ public class Relationship
     public byte[]? CreationContent { get; }
     public List<RelationshipAuditLogEntry> AuditLog { get; }
 
+    public IdentityAddress LastModifiedBy => AuditLog.Last().CreatedBy;
+
     private static void EnsureTargetIsNotSelf(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity)
     {
         if (activeIdentity == relationshipTemplate.CreatedBy)

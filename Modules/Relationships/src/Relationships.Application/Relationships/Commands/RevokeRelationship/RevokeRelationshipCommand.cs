@@ -4,5 +4,5 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Revo
 
 public class RevokeRelationshipCommand : IRequest<RevokeRelationshipResponse>
 {
-    public string RelationshipId { get; set; }
+    public required string RelationshipId { get; set; }
 }
