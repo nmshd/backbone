@@ -50,7 +50,9 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
 
     private async Task ReadTemplateFromDb()
     {
-        _template = await _relationshipTemplatesRepository.Find(_request.RelationshipTemplateId, _activeIdentity, _cancellationToken, track: true) ??
+        var templateId = RelationshipTemplateId.Parse(_request.RelationshipTemplateId);
+
+        _template = await _relationshipTemplatesRepository.Find(templateId, _activeIdentity, _cancellationToken, track: true) ??
                     throw new NotFoundException(nameof(RelationshipTemplate));
     }
 
