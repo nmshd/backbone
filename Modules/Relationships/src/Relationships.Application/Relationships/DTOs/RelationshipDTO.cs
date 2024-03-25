@@ -13,6 +13,8 @@ public class RelationshipDTO : IMapTo<Relationship>
     public required IdentityAddress From { get; set; }
     public required IdentityAddress To { get; set; }
 
+    public required byte[]? CreationContent { get; set; }
+
     public required DateTime CreatedAt { get; set; }
 
     public required RelationshipStatus Status { get; set; }
