@@ -19,9 +19,9 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
 
     public async Task<CancelDeletionProcessAsOwnerResponse> Handle(CancelDeletionProcessAsOwnerCommand request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
-        var deviceId = _userContext.GetDeviceId();
+        var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
 
+        var deviceId = _userContext.GetDeviceId();
         var deletionProcessIdResult = IdentityDeletionProcessId.Create(request.DeletionProcessId);
 
         if (deletionProcessIdResult.IsFailure)

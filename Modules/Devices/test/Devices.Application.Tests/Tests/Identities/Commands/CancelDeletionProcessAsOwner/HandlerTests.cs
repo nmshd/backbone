@@ -5,7 +5,6 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
 using FluentAssertions;
-using Microsoft.Azure.Amqp.Framing;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
@@ -29,7 +28,7 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
-        var command = new CancelDeletionProcessAsOwnerCommand(activeIdentity.Address, deletionProcess.Id);
+        var command = new CancelDeletionProcessAsOwnerCommand(deletionProcess.Id);
 
         // Act
         var response = await handler.Handle(command, CancellationToken.None);
@@ -49,18 +48,11 @@ public class HandlerTests
     public void Cannot_start_when_given_identity_does_not_exist()
     {
         // Arrange
-        var activeIdentity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
-        var deletionProcess = activeIdentity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
-
-        var randomAddress = CreateRandomIdentityAddress();
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(randomAddress, CancellationToken.None, A<bool>._)).Returns<Identity?>(null);
-
-        var handler = CreateHandler(fakeIdentitiesRepository);
+        var address = CreateRandomIdentityAddress();
+        var handler = CreateHandler();
 
         // Act
-        var acting = async () => await handler.Handle(new CancelDeletionProcessAsOwnerCommand(randomAddress, deletionProcess.Id), CancellationToken.None);
+        var acting = async () => await handler.Handle(new CancelDeletionProcessAsOwnerCommand(address), CancellationToken.None);
 
         // Assert
         acting.Should().ThrowAsync<NotFoundException>();

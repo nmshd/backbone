@@ -109,14 +109,13 @@ public class IdentitiesController : ApiControllerBase
         return Ok(response);
     }
 
-    //[HttpPut("Self/DeletionProcesses/{id}/Cancel")]
-    [HttpPut("{address}/DeletionProcesses/{deletionProcessId}/Cancel")]
+    [HttpPut("Self/DeletionProcesses/{id}/Cancel")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CancelDeletionProcessAsOwnerResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> CancelDeletionProcess([FromRoute] string address, [FromRoute] string deletionProcessId, CancellationToken cancellationToken)
+    public async Task<IActionResult> CancelDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new CancelDeletionProcessAsOwnerCommand(address, deletionProcessId), cancellationToken);
+        var response = await _mediator.Send(new CancelDeletionProcessAsOwnerCommand(id), cancellationToken);
         return Ok(response);
     }
 }
