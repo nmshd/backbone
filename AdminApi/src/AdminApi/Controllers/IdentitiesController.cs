@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.DTOs;
+using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Commands.CreateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
@@ -117,12 +118,21 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet("{identityAddress}/DeletionProcesses")]
-    [ProducesResponseType(typeof(GetDeletionProcessesAsSupportResponse), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(GetDeletionProcessesAsSupportResponse), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetDeletionProcessesAsSupport([FromRoute] string identityAddress, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetDeletionProcessesAsSupportQuery(identityAddress), cancellationToken);
         return Ok(response);
+    }
+
+    [HttpPut("{address}/DeletionProcesses/{deletionProcessId}/Cancel")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CancelDeletionAsSupportResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CancelDeletionProcessAsSupport([FromRoute] string address, [FromRoute] string deletionProcessId, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new CancelDeletionAsSupportCommand(address, deletionProcessId), cancellationToken);
+        return NoContent();
     }
 
     [HttpGet("{identityAddress}/DeletionProcesses/{deletionProcessId}")]

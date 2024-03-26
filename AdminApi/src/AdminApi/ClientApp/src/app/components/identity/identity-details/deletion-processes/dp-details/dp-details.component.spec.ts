@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { DeletionProcessDetailsComponent } from "./deletion-process-details.component";
+import { DeletionProcessDetailsComponent } from "./dp-details.component";
 
 describe("DeletionProcessDetailsComponent", function () {
     let component: DeletionProcessDetailsComponent;
