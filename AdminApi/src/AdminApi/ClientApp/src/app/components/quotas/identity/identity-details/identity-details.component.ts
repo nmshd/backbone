@@ -92,8 +92,7 @@ export class IdentityDetailsComponent {
     public loadAdmissibleTiers(): void {
         this.tierService.getTiers().subscribe({
             next: (tiers) => {
-                this.tiers = tiers.result;
-                this.tiers = this.tiers.filter((tier) => tier.canBeManuallyAssigned && tier.canBeUsedAsDefaultForUser);
+                this.tiers = tiers.result.filter((t) => t.canBeManuallyAssigned || t.id === this.identity.tierId);
                 this.updatedTier = this.tiers.find((t) => t.id === this.identity.tierId);
                 this.tier = this.updatedTier;
             }
