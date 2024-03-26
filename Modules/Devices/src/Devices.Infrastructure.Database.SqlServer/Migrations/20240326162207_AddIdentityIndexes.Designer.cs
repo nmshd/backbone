@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20240321141604_AddIdentityIndexes")]
+    [Migration("20240326162207_AddIdentityIndexes")]
     partial class AddIdentityIndexes
     {
         /// <inheritdoc />
@@ -241,6 +241,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TierId")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
