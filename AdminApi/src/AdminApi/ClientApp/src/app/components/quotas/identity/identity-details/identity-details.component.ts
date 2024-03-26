@@ -103,14 +103,8 @@ export class IdentityDetailsComponent {
         return tier.canBeManuallyAssigned;
     }
 
-    public verifyDisabledTiers(tier: TierOverview): boolean {
-        const isQueuedForDeletionIdentityTierId = this.identity.tierId === this.getQueuedForDeletionTierId();
-        return isQueuedForDeletionIdentityTierId && this.checkManualAssignmentEnabled(tier);
-    }
-
-    public getQueuedForDeletionTierId(): string {
-        const qfdTier = this.tiers.find((tier) => tier.id === "TIR00000000000000001");
-        return qfdTier ? qfdTier.id : "";
+    public isTierDisabled(tier: TierOverview): boolean {
+        return TierChecker.isTierDisabled(tier, this.tiers, this.identity);
     }
 
     public loadIdentityAndTiers(): void {
@@ -315,4 +309,13 @@ interface MetricGroup {
     metric: Metric;
     isGroup: boolean;
     tierDisabled: boolean;
+}
+
+// TODO: find a better name
+export class TierChecker {
+    public static isTierDisabled(tier: TierOverview, tiers: TierOverview[], identity: Identity): boolean {
+        const tiersThatCannotBeUnnassigned = tiers.filter((t) => !t.canBeManuallyAssigned);
+        const identityIsInTierThatCannotBeUnassigned = tiersThatCannotBeUnnassigned.some((t) => t.id === identity.tierId);
+        return identityIsInTierThatCannotBeUnassigned && tier.id === identity.tierId && tier.canBeManuallyAssigned;
+    }
 }
