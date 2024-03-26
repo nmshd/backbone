@@ -314,8 +314,8 @@ interface MetricGroup {
 // TODO: find a better name
 export class TierChecker {
     public static isTierDisabled(tier: TierOverview, tiers: TierOverview[], identity: Identity): boolean {
-        const tiersThatCannotBeUnnassigned = tiers.filter((t) => !t.canBeManuallyAssigned);
-        const identityIsInTierThatCannotBeUnassigned = tiersThatCannotBeUnnassigned.some((t) => t.id === identity.tierId);
-        return identityIsInTierThatCannotBeUnassigned && tier.id === identity.tierId && tier.canBeManuallyAssigned;
+        const tiersThatCannotBeUnassigned = tiers.filter((t) => !t.canBeManuallyAssigned);
+        const identityIsInTierThatCannotBeUnassigned = tiersThatCannotBeUnassigned.some((t) => t.id === identity.tierId);
+        return identityIsInTierThatCannotBeUnassigned && tier.id !== identity.tierId && tier.canBeManuallyAssigned;
     }
 }
