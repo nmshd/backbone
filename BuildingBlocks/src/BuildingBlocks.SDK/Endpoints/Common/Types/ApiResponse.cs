@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
 
-namespace Backbone.ConsumerApi.Sdk.Endpoints.Common.Types;
+namespace Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 
-public class ConsumerApiResponse<TResult>
+public class ApiResponse<TResult>
 {
     [MemberNotNullWhen(true, nameof(Result))]
     [MemberNotNullWhen(false, nameof(Error))]
@@ -17,7 +17,7 @@ public class ConsumerApiResponse<TResult>
     public bool IsPaginated => Pagination != null;
 
     public TResult? Result { get; set; }
-    public ConsumerApiError? Error { get; set; }
+    public ApiError? Error { get; set; }
     public PaginationData? Pagination { get; set; }
     public HttpStatusCode Status { get; set; }
 }

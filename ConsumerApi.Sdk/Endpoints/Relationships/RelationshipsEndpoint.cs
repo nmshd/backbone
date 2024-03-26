@@ -1,5 +1,5 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Common;
-using Backbone.ConsumerApi.Sdk.Endpoints.Common.Types;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common;
+using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Responses;
@@ -8,22 +8,22 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.Relationships;
 
 public class RelationshipsEndpoint(EndpointClient client) : Endpoint(client)
 {
-    public async Task<ConsumerApiResponse<Relationship>> GetRelationship(string id) => await _client.Get<Relationship>($"Relationships/{id}");
+    public async Task<ApiResponse<Relationship>> GetRelationship(string id) => await _client.Get<Relationship>($"Relationships/{id}");
 
-    public async Task<ConsumerApiResponse<ListRelationshipsResponse>> ListRelationships(PaginationFilter? pagination = null)
+    public async Task<ApiResponse<ListRelationshipsResponse>> ListRelationships(PaginationFilter? pagination = null)
         => await _client.Get<ListRelationshipsResponse>("Relationships", null, pagination);
 
-    public async Task<ConsumerApiResponse<ListRelationshipsResponse>> ListRelationships(IEnumerable<string> ids, PaginationFilter? pagination = null) => await _client
+    public async Task<ApiResponse<ListRelationshipsResponse>> ListRelationships(IEnumerable<string> ids, PaginationFilter? pagination = null) => await _client
         .Request<ListRelationshipsResponse>(HttpMethod.Get, "Relationships")
         .Authenticate()
         .WithPagination(pagination)
         .AddQueryParameter("ids", ids)
         .Execute();
 
-    public async Task<ConsumerApiResponse<RelationshipMetadata>> CreateRelationship(CreateRelationshipRequest request)
+    public async Task<ApiResponse<RelationshipMetadata>> CreateRelationship(CreateRelationshipRequest request)
         => await _client.Post<RelationshipMetadata>("Relationships", request);
 
-    public async Task<ConsumerApiResponse<ListRelationshipChangesResponse>> ListChanges(
+    public async Task<ApiResponse<ListRelationshipChangesResponse>> ListChanges(
         PaginationFilter? pagination = null, IEnumerable<string>? ids = null, OptionalDateRange? createdAt = null, OptionalDateRange? completedAt = null,
         OptionalDateRange? modifiedAt = null, bool? onlyPeerChanges = null, string? createdBy = null, string? completedBy = null, string? status = null,
         string? type = null
@@ -51,14 +51,14 @@ public class RelationshipsEndpoint(EndpointClient client) : Endpoint(client)
         return await builder.Execute();
     }
 
-    public async Task<ConsumerApiResponse<RelationshipChange>> GetChange(string id) => await _client.Get<RelationshipChange>($"Relationships/Changes/{id}");
+    public async Task<ApiResponse<RelationshipChange>> GetChange(string id) => await _client.Get<RelationshipChange>($"Relationships/Changes/{id}");
 
-    public async Task<ConsumerApiResponse<RelationshipMetadata>> AcceptChange(string relationshipId, string changeId, CompleteRelationshipChangeRequest request)
+    public async Task<ApiResponse<RelationshipMetadata>> AcceptChange(string relationshipId, string changeId, CompleteRelationshipChangeRequest request)
         => await _client.Put<RelationshipMetadata>($"Relationships/{relationshipId}/Changes/{changeId}/Accept", request);
 
-    public async Task<ConsumerApiResponse<RelationshipMetadata>> RejectChange(string relationshipId, string changeId, CompleteRelationshipChangeRequest request)
+    public async Task<ApiResponse<RelationshipMetadata>> RejectChange(string relationshipId, string changeId, CompleteRelationshipChangeRequest request)
         => await _client.Put<RelationshipMetadata>($"Relationships/{relationshipId}/Changes/{changeId}/Reject", request);
 
-    public async Task<ConsumerApiResponse<RelationshipMetadata>> RevokeChange(string relationshipId, string changeId, CompleteRelationshipChangeRequest request)
+    public async Task<ApiResponse<RelationshipMetadata>> RevokeChange(string relationshipId, string changeId, CompleteRelationshipChangeRequest request)
         => await _client.Put<RelationshipMetadata>($"Relationships/{relationshipId}/Changes/{changeId}/Revoke", request);
 }

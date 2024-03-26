@@ -1,5 +1,5 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Common.Types;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Responses;
 
-public class ListDevicesResponse(IEnumerable<Device> items) : EnumerableResponseBase<Device>(items);
+public class ListDevicesResponse : EnumerableResponseBase<Device>;

@@ -1,5 +1,5 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Common.Types;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 
-public class ListDeletionProcessesResponse(IEnumerable<IdentityDeletionProcess> items) : EnumerableResponseBase<IdentityDeletionProcess>(items);
+public class ListDeletionProcessesResponse : EnumerableResponseBase<IdentityDeletionProcess>;

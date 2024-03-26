@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -6,6 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks\src\BuildingBlocks.SDK\BuildingBlocks.SDK.csproj" />
     <ProjectReference Include="..\BuildingBlocks\src\Tooling\Tooling.csproj" />
   </ItemGroup>
 

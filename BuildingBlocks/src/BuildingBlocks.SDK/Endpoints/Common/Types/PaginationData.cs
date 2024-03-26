@@ -1,4 +1,5 @@
-﻿namespace Backbone.ConsumerApi.Sdk.Endpoints.Common.Types;
+﻿namespace Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+
 public class PaginationData
 {
     public required int PageNumber { get; set; }
