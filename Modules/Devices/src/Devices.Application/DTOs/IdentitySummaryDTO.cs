@@ -5,18 +5,6 @@ namespace Backbone.Modules.Devices.Application.DTOs;
 
 public class IdentitySummaryDTO
 {
-    public string Address { get; set; }
-    public string? ClientId { get; set; }
-    public byte[] PublicKey { get; set; }
-    public DateTime CreatedAt { get; set; }
-
-    public IEnumerable<DeviceDTO> Devices { get; set; }
-    public int NumberOfDevices { get; set; }
-
-    public byte IdentityVersion { get; set; }
-
-    public string TierId { get; set; }
-
     public IdentitySummaryDTO(Identity identity)
     {
         ClientId = identity.ClientId;
@@ -37,6 +25,18 @@ public class IdentitySummaryDTO
 
         IdentityVersion = identity.IdentityVersion;
 
-        TierId = identity.TierId!;
+        TierId = identity.TierId;
     }
+
+    public string Address { get; set; }
+    public string? ClientId { get; set; }
+    public byte[] PublicKey { get; set; }
+    public DateTime CreatedAt { get; set; }
+
+    public IEnumerable<DeviceDTO> Devices { get; set; }
+    public int NumberOfDevices { get; set; }
+
+    public byte IdentityVersion { get; set; }
+
+    public string TierId { get; set; }
 }

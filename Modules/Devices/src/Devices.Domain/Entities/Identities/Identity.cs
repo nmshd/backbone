@@ -35,7 +35,7 @@ public class Identity
     public byte IdentityVersion { get; private set; }
 
     public TierId? TierIdBeforeDeletion { get; private set; }
-    public TierId? TierId { get; private set; }
+    public TierId TierId { get; private set; }
 
     public IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
 
@@ -214,7 +214,7 @@ public class Identity
                               throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
 
         deletionProcess.Cancel(Address, canceledByDeviceId);
-        TierId = TierIdBeforeDeletion;
+        TierId = TierIdBeforeDeletion!;
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
 
