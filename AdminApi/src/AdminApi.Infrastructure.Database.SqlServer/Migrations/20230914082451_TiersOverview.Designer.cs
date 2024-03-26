@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
 {
-    [DbContext(typeof(AdminUiDbContext))]
+    [DbContext(typeof(AdminApiDbContext))]
     [Migration("20230914082451_TiersOverview")]
     partial class TiersOverview
     {

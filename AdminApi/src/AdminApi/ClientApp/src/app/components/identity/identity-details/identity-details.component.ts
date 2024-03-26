@@ -92,11 +92,15 @@ export class IdentityDetailsComponent {
     public loadAdmissibleTiers(): void {
         this.tierService.getTiers().subscribe({
             next: (tiers) => {
-                this.tiers = tiers.result;
+                this.tiers = tiers.result.filter((t) => t.canBeManuallyAssigned || t.id === this.identity.tierId);
                 this.updatedTier = this.tiers.find((t) => t.id === this.identity.tierId);
                 this.tier = this.updatedTier;
             }
         });
+    }
+
+    public isTierDisabled(tier: TierOverview): boolean {
+        return TierUtils.isTierDisabled(tier, this.tiers, this.identity);
     }
 
     public loadIdentityAndTiers(): void {
@@ -301,4 +305,12 @@ interface MetricGroup {
     metric: Metric;
     isGroup: boolean;
     tierDisabled: boolean;
+}
+
+export class TierUtils {
+    public static isTierDisabled(tier: TierOverview, tiers: TierOverview[], identity: Identity): boolean {
+        const tiersThatCannotBeUnassigned = tiers.filter((t) => !t.canBeManuallyAssigned);
+        const identityIsInTierThatCannotBeUnassigned = tiersThatCannotBeUnassigned.some((t) => t.id === identity.tierId);
+        return identityIsInTierThatCannotBeUnassigned && tier.id !== identity.tierId;
+    }
 }
