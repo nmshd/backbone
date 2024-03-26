@@ -3,7 +3,7 @@ import { Component } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { forkJoin, Observable } from "rxjs";
+import { Observable, forkJoin } from "rxjs";
 import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Device, Identity, IdentityService } from "src/app/services/identity-service/identity.service";
 import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
@@ -93,25 +93,23 @@ export class IdentityDetailsComponent {
         this.tierService.getTiers().subscribe({
             next: (tiers) => {
                 this.tiers = tiers.result;
-                if (this.identity.tierId !== "TIR00000000000000001") {
-                    this.tiers = this.tiers.filter((tier) => tier.id !== this.getQfDTierId());
-                }
+                this.tiers = this.tiers.filter((tier) => tier.canBeManuallyAssigned && tier.canBeUsedAsDefaultForUser);
                 this.updatedTier = this.tiers.find((t) => t.id === this.identity.tierId);
                 this.tier = this.updatedTier;
             }
         });
     }
 
-    public enablesManualAssignment(tier: TierOverview): boolean {
+    public checkManualAssignmentEnabled(tier: TierOverview): boolean {
         return tier.canBeManuallyAssigned;
     }
 
-    public disabledTiers(tier: TierOverview): boolean {
-        const isQfDIdentityTierId = this.identity.tierId === this.getQfDTierId();
-        return isQfDIdentityTierId && this.enablesManualAssignment(tier);
+    public verifyDisabledTiers(tier: TierOverview): boolean {
+        const isQueuedForDeletionIdentityTierId = this.identity.tierId === this.getQueuedForDeletionTierId();
+        return isQueuedForDeletionIdentityTierId && this.checkManualAssignmentEnabled(tier);
     }
 
-    public getQfDTierId(): string {
+    public getQueuedForDeletionTierId(): string {
         const qfdTier = this.tiers.find((tier) => tier.id === "TIR00000000000000001");
         return qfdTier ? qfdTier.id : "";
     }
