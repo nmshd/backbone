@@ -209,7 +209,7 @@ public class Identity
     public IdentityDeletionProcess CancelDeletionProcessAsOwner(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
     {
         var deletionProcess = GetDeletionProcessWithId(deletionProcessId);
-        deletionProcess.EnsureHasStatus(DeletionProcessStatus.Approved);
+        deletionProcess.EnsureStatus(DeletionProcessStatus.Approved);
 
         EnsureIdentityOwnsDevice(canceledByDeviceId);
 

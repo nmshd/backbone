@@ -141,15 +141,10 @@ public class IdentityDeletionProcess
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessRejected(Id, address, rejectedByDevice));
     }
 
-    private void EnsureStatus(DeletionProcessStatus deletionProcessStatus)
+    public void EnsureStatus(DeletionProcessStatus deletionProcessStatus)
     {
         if (Status != deletionProcessStatus)
             throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(deletionProcessStatus));
-    }
-
-    public void EnsureHasStatus(DeletionProcessStatus deletionProcessStatus)
-    {
-        EnsureStatus(deletionProcessStatus);
     }
 
     private void Reject(DeviceId rejectedByDevice)
