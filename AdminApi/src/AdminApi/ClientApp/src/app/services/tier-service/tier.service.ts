@@ -58,7 +58,7 @@ export interface TierOverview {
     id: string;
     name: string;
     numberOfIdentities: number;
-    canBeUsedAsDefaultForUser: boolean;
+    canBeUsedAsDefaultForClient: boolean;
     canBeManuallyAssigned: boolean;
 }
 

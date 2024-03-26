@@ -120,7 +120,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
                     b.Property<bool>("CanBeManuallyAssigned")
                         .HasColumnType("boolean");
 
-                    b.Property<bool>("CanBeUsedAsDefaultForUser")
+                    b.Property<bool>("CanBeUsedAsDefaultForClient")
                         .HasColumnType("boolean");
 
                     b.Property<string>("Id")

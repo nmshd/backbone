@@ -14,7 +14,7 @@ public class TierTests
 
         tier.Id.Should().NotBeNull();
         tier.Name.Should().Be(tierName);
-        tier.CanBeUsedAsDefaultForUser.Should().BeTrue();
+        tier.CanBeUsedAsDefaultForClient.Should().BeTrue();
         tier.CanBeManuallyAssigned.Should().BeTrue();
     }
 

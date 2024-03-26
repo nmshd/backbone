@@ -16,12 +16,12 @@ namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
                         TIERS."Id" AS "Id",
                         TIERS."Name" AS "Name",
                         COUNT (IDENTITIES."TierId") AS "NumberOfIdentities",
-                        TIERS."CanBeUsedAsDefaultForUser" AS "CanBeUsedAsDefaultForUser",
+                        TIERS."CanBeUsedAsDefaultForClient" AS "CanBeUsedAsDefaultForClient",
                         TIERS."CanBeManuallyAssigned" AS "CanBeManuallyAssigned"
                     FROM "Devices"."Tiers" TIERS
                     LEFT JOIN "Devices"."Identities" IDENTITIES
                     ON IDENTITIES."TierId" = TIERS."Id"
-                    GROUP BY TIERS."Id", TIERS."Name", TIERS."CanBeUsedAsDefaultForUser", TIERS."CanBeManuallyAssigned"
+                    GROUP BY TIERS."Id", TIERS."Name", TIERS."CanBeUsedAsDefaultForClient", TIERS."CanBeManuallyAssigned"
              """);
         }
 

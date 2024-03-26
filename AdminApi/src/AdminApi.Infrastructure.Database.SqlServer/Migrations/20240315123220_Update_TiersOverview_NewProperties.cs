@@ -16,19 +16,29 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
                         TIERS.Id,
                         TIERS.Name,
                         COUNT (IDENTITIES.TierId) AS NumberOfIdentities,
-                        TIERS.CanBeUsedAsDefaultForUser,
+                        TIERS.CanBeUsedAsDefaultForClient,
                         TIERS.CanBeManuallyAssigned
                     FROM Devices.Tiers TIERS
                     LEFT JOIN Devices.Identities IDENTITIES
                     ON IDENTITIES.TierId = TIERS.Id
-                    GROUP BY TIERS.Id, TIERS.Name, TIERS.CanBeUsedAsDefaultForUser, TIERS.CanBeManuallyAssigned
+                    GROUP BY TIERS.Id, TIERS.Name, TIERS.CanBeUsedAsDefaultForClient, TIERS.CanBeManuallyAssigned
              """);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(""" DROP VIEW TierOverviews """);
+            migrationBuilder.Sql("""
+                CREATE OR ALTER VIEW TierOverviews AS
+                    SELECT
+                       TIERS.Id,
+                       TIERS.Name,
+                       COUNT (IDENTITIES.TierId) AS NumberOfIdentities
+                   FROM Devices.Tiers TIERS
+                   LEFT JOIN Devices.Identities IDENTITIES
+                   ON IDENTITIES.TierId = TIERS.Id
+                   GROUP BY TIERS.Id, TIERS.Name
+             """);
         }
     }
 }

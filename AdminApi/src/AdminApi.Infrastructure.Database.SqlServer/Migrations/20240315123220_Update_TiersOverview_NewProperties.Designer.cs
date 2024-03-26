@@ -120,7 +120,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
                     b.Property<bool>("CanBeManuallyAssigned")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("CanBeUsedAsDefaultForUser")
+                    b.Property<bool>("CanBeUsedAsDefaultForClient")
                         .HasColumnType("bit");
 
                     b.Property<string>("Id")

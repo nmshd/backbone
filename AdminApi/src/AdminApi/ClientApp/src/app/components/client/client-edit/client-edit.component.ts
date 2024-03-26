@@ -105,7 +105,7 @@ export class ClientEditComponent {
         this.tierList = [];
         this.tierService.getTiers().subscribe({
             next: (data: PagedHttpResponseEnvelope<TierOverview>) => {
-                this.tierList = data.result.filter((tier) => tier.canBeUsedAsDefaultForUser);
+                this.tierList = data.result.filter((tier) => tier.canBeUsedAsDefaultForClient);
             },
             complete: () => (this.loading = false),
             error: (err: any) => {

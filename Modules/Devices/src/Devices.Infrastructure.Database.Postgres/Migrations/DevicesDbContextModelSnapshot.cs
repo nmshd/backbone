@@ -79,7 +79,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("boolean")
                         .HasDefaultValue(true);
 
-                    b.Property<bool>("CanBeUsedAsDefaultForUser")
+                    b.Property<bool>("CanBeUsedAsDefaultForClient")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
                         .HasDefaultValue(true);
