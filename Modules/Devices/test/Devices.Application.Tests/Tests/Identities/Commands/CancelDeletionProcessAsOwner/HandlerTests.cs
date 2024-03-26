@@ -11,6 +11,7 @@ using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelDeletionProcessAsOwner;
+
 public class HandlerTests
 {
     [Fact]
@@ -68,29 +69,29 @@ public class HandlerTests
         var activeDevice = activeIdentity.Devices[0];
         var deletionProcess = activeIdentity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
 
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        var mockUserContext = A.Fake<IUserContext>();
-        var fakeEventBus = A.Fake<IEventBus>();
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var fakeUserContext = A.Fake<IUserContext>();
+        var mockEventBus = A.Fake<IEventBus>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(activeIdentity.Address, CancellationToken.None, A<bool>._))
+        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(activeIdentity.Address, CancellationToken.None, A<bool>._))
             .Returns(activeIdentity);
-        A.CallTo(() => mockUserContext.GetAddress()).Returns(activeIdentity.Address);
-        A.CallTo(() => mockUserContext.GetDeviceId()).Returns(activeDevice.Id);
+        A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity.Address);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
-        var handler = CreateHandler(mockIdentitiesRepository, mockUserContext, fakeEventBus);
+        var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext, mockEventBus);
         var command = new CancelDeletionProcessAsOwnerCommand(deletionProcess.Id);
 
         // Act
         var response = await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => fakeEventBus.Publish(
+        A.CallTo(() => mockEventBus.Publish(
             A<TierOfIdentityChangedIntegrationEvent>.That.Matches(e =>
                 e.IdentityAddress == activeIdentity.Address &&
                 e.OldTierId == "TIR00000000000000001"))
         ).MustHaveHappenedOnceExactly();
 
-        A.CallTo(() => fakeEventBus.Publish(
+        A.CallTo(() => mockEventBus.Publish(
             A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(e =>
                 e.Address == activeIdentity.Address &&
                 e.DeletionProcessId == response.Id))
