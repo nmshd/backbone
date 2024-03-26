@@ -104,7 +104,7 @@ export class IdentityDetailsComponent {
     }
 
     public isTierDisabled(tier: TierOverview): boolean {
-        return TierValidator.isTierDisabled(tier, this.tiers, this.identity);
+        return TierUtils.isTierDisabled(tier, this.tiers, this.identity);
     }
 
     public loadIdentityAndTiers(): void {

@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
 import { BehaviorSubject } from "rxjs";
 import { Identity } from "../../../../services/identity-service/identity.service";
 import { TierOverview, TierService } from "../../../../services/tier-service/tier.service";
-import { IdentityDetailsComponent, TierValidator } from "./identity-details.component";
+import { IdentityDetailsComponent, TierUtils } from "./identity-details.component";
 
 class MockActivatedRoute {
     private readonly subject = new BehaviorSubject(this.testParams);
@@ -48,6 +48,10 @@ describe("IdentityDetailsComponent", function () {
         httpTestingController.verify();
     });
 
+    it("tier service should be created", async function () {
+        await expect(tierService).toBeTruthy();
+    });
+
     it("should be created", async function () {
         const fixture = TestBed.createComponent(IdentityDetailsComponent);
         identityDetailsComponent = fixture.componentInstance;
@@ -85,7 +89,7 @@ describe("IdentityDetailsComponent", function () {
                 publicKey: ""
             };
 
-            await expect(TierValidator.isTierDisabled(tier1, tiers, identity)).toBe(false);
+            await expect(TierUtils.isTierDisabled(tier1, tiers, identity)).toBe(false);
         });
 
         it("should return true if identity is in a tier that cannot be unassigned", async function () {
@@ -100,7 +104,7 @@ describe("IdentityDetailsComponent", function () {
                 publicKey: ""
             };
 
-            await expect(TierValidator.isTierDisabled(tier1, tiers, identity)).toBe(true);
+            await expect(TierUtils.isTierDisabled(tier1, tiers, identity)).toBe(true);
         });
 
         it("should return false if tier cannot be manually assigned and is not the identity's tier", async function () {
@@ -115,7 +119,7 @@ describe("IdentityDetailsComponent", function () {
                 publicKey: ""
             };
 
-            await expect(TierValidator.isTierDisabled(tier2, tiers, identity)).toBe(false);
+            await expect(TierUtils.isTierDisabled(tier2, tiers, identity)).toBe(false);
         });
     });
 });
