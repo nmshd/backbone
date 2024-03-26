@@ -39,7 +39,7 @@ public class QuotasDbContextSeeder : IDbSeeder<QuotasDbContext>
 
         foreach (var sourceIdentity in _devicesDbContext.Identities)
         {
-            await context.Identities.AddAsync(new Identity(sourceIdentity.Address, new TierId(sourceIdentity.TierId!)));
+            await context.Identities.AddAsync(new Identity(sourceIdentity.Address, new TierId(sourceIdentity.TierId)));
         }
 
         await context.SaveChangesAsync();
