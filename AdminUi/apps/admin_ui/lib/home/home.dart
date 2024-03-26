@@ -1,3 +1,4 @@
+import 'package:admin_ui/widgets/client/client_overview.dart';
 import 'package:admin_ui/widgets/identity/identity_overview.dart';
 import 'package:admin_ui/widgets/tier/tier_overview.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +47,6 @@ class Clients extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const ClientOverview();
   }
 }

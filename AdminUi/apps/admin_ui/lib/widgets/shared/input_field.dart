@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
 class InputField extends StatefulWidget {
-  const InputField({required this.onEnteredText, super.key});
+  const InputField({required this.onEnteredText, required this.title, super.key});
 
   final void Function(String enteredText) onEnteredText;
+  final String title;
 
   @override
   State<InputField> createState() => _InputFieldState();
@@ -24,9 +25,9 @@ class _InputFieldState extends State<InputField> {
             widget.onEnteredText(value);
           });
         },
-        decoration: const InputDecoration(
-          labelText: 'Search Address',
-          border: OutlineInputBorder(),
+        decoration: InputDecoration(
+          labelText: widget.title,
+          border: const OutlineInputBorder(),
         ),
       ),
     );

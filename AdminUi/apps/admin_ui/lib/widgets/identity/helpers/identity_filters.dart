@@ -79,6 +79,112 @@ class _IdentityFilterState extends State<IdentityFilter> {
     });
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        InputField(
+          title: 'Address',
+          onEnteredText: (String enteredText) {
+            _enteredIdentityAddress = enteredText;
+
+            sendFilters();
+          },
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        MultiSelectDialog(
+          sendFilters,
+          title: 'Tier',
+          multiSelectItem: tiers.map((tier) => MultiSelectItem<String>(tier.id, tier.name)).toList(),
+          onSelectedValues: (List<String> selectedValues) {
+            _selectedTiers = selectedValues;
+            sendFilters();
+          },
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        MultiSelectDialog(
+          sendFilters,
+          title: 'Client',
+          multiSelectItem: clients.map((client) => MultiSelectItem<String>(client.clientId, client.displayName)).toList(),
+          onSelectedValues: (List<String> selectedValues) {
+            _selectedClients = selectedValues;
+            sendFilters();
+          },
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        NumberFilter(
+          operators: operators,
+          onNumberSelected: (String operator, String enteredValue) {
+            _numberOfDevices = enteredValue;
+            _numberOfDevicesOperator = operator;
+
+            sendFilters();
+          },
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        DateFilter(
+          operators: operators,
+          onDateSelected: (DateTime selectedDate, String operator, {bool isDateSelected = false}) {
+            setState(() {
+              _selectedLastLoginAt = selectedDate;
+              _selectedLastLoginAtOperator = operator;
+              isLastLoginAtSelected = isDateSelected;
+
+              sendFilters();
+            });
+          },
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        DateFilter(
+          operators: operators,
+          onDateSelected: (DateTime selectedDate, String operator, {bool isDateSelected = false}) {
+            setState(() {
+              _selectedCreatedAt = selectedDate;
+              _selectedCreatedAtOperator = operator;
+              isCreatedAtSelected = isDateSelected;
+
+              sendFilters();
+            });
+          },
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        NumberFilter(
+          operators: operators,
+          onNumberSelected: (String operator, String enteredValue) {
+            _dataWalletVersion = enteredValue;
+            _datawalletVersionOperator = operator;
+
+            sendFilters();
+          },
+        ),
+        const SizedBox(
+          width: 8,
+        ),
+        NumberFilter(
+          operators: operators,
+          onNumberSelected: (String operator, String enteredValue) {
+            _identityVersion = enteredValue;
+            _identityVersionOperator = operator;
+
+            sendFilters();
+          },
+        ),
+      ],
+    );
+  }
+
   FilterOperator? findCorrectOperator(String operator) {
     for (final o in comparableOperators) {
       if (o.value == operator) {
@@ -143,96 +249,5 @@ class _IdentityFilterState extends State<IdentityFilter> {
     final response = await GetIt.I.get<AdminApiClient>().clients.getClients();
 
     clients = response.data;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        InputField(
-          onEnteredText: (String enteredText) {
-            _enteredIdentityAddress = enteredText;
-
-            sendFilters();
-          },
-        ),
-        const SizedBox(width: 8),
-        MultiSelectDialog(
-          sendFilters,
-          title: 'Tier',
-          multiSelectItem: tiers.map((tier) => MultiSelectItem<String>(tier.id, tier.name)).toList(),
-          onSelectedValues: (List<String> selectedValues) {
-            _selectedTiers = selectedValues;
-            sendFilters();
-          },
-        ),
-        const SizedBox(width: 8),
-        MultiSelectDialog(
-          sendFilters,
-          title: 'Client',
-          multiSelectItem: clients.map((client) => MultiSelectItem<String>(client.clientId, client.displayName)).toList(),
-          onSelectedValues: (List<String> selectedValues) {
-            _selectedClients = selectedValues;
-            sendFilters();
-          },
-        ),
-        const SizedBox(width: 8),
-        NumberFilter(
-          operators: operators,
-          onNumberSelected: (String operator, String enteredValue) {
-            _numberOfDevices = enteredValue;
-            _numberOfDevicesOperator = operator;
-
-            sendFilters();
-          },
-        ),
-        const SizedBox(width: 8),
-        DateFilter(
-          operators: operators,
-          onDateSelected: (DateTime selectedDate, String operator, {bool isDateSelected = false}) {
-            setState(() {
-              _selectedLastLoginAt = selectedDate;
-              _selectedLastLoginAtOperator = operator;
-              isLastLoginAtSelected = isDateSelected;
-
-              sendFilters();
-            });
-          },
-        ),
-        const SizedBox(width: 8),
-        DateFilter(
-          operators: operators,
-          onDateSelected: (DateTime selectedDate, String operator, {bool isDateSelected = false}) {
-            setState(() {
-              _selectedCreatedAt = selectedDate;
-              _selectedCreatedAtOperator = operator;
-              isCreatedAtSelected = isDateSelected;
-
-              sendFilters();
-            });
-          },
-        ),
-        const SizedBox(width: 8),
-        NumberFilter(
-          operators: operators,
-          onNumberSelected: (String operator, String enteredValue) {
-            _dataWalletVersion = enteredValue;
-            _datawalletVersionOperator = operator;
-
-            sendFilters();
-          },
-        ),
-        const SizedBox(width: 8),
-        NumberFilter(
-          operators: operators,
-          onNumberSelected: (String operator, String enteredValue) {
-            _identityVersion = enteredValue;
-            _identityVersionOperator = operator;
-
-            sendFilters();
-          },
-        ),
-      ],
-    );
   }
 }

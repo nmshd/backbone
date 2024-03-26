@@ -16,18 +16,9 @@ class _TierOverviewState extends State<TierOverview> {
   @override
   void initState() {
     super.initState();
-    loadTiers();
-  }
-
-  Future<void> loadTiers() async {
-    final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
-    setState(() {
-      tiers = response.data;
+    loadTiers().then((_) {
+      setState(() {});
     });
-  }
-
-  void _handleRowTap(Tier tier) {
-    // TODO(stamenione): handle the navigation to tier detail page
   }
 
   @override
@@ -66,5 +57,15 @@ class _TierOverviewState extends State<TierOverview> {
         ),
       ),
     );
+  }
+
+  Future<void> loadTiers() async {
+    final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
+
+    tiers = response.data;
+  }
+
+  void _handleRowTap(Tier tier) {
+    // TODO(stamenione): handle the navigation to tier detail page
   }
 }

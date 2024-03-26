@@ -11,10 +11,10 @@ class IdentityOverviewWidget extends StatefulWidget {
   });
 
   @override
-  State<IdentityOverviewWidget> createState() => IdentityOverviewWidgetState();
+  State<IdentityOverviewWidget> createState() => _IdentityOverviewWidgetState();
 }
 
-class IdentityOverviewWidgetState extends State<IdentityOverviewWidget> {
+class _IdentityOverviewWidgetState extends State<IdentityOverviewWidget> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey = GlobalKey<ScaffoldMessengerState>();
   final _scrollController = ScrollController();
   late IdentityDataTableSource dataSource;
@@ -31,36 +31,6 @@ class IdentityOverviewWidgetState extends State<IdentityOverviewWidget> {
     super.initState();
     dataSource = IdentityDataTableSource();
     loadIdentities();
-  }
-
-  void _sort(int columnIndex, bool ascending) {
-    setState(() {
-      _columnIndex = columnIndex;
-      _columnAscending = ascending;
-      dataSource.setData(identities, _columnIndex, columnAscending: _columnAscending);
-    });
-  }
-
-  Future<void> loadIdentities({IdentityOverviewFilter? filter}) async {
-    try {
-      final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(filter: filter);
-
-      setState(() {
-        identities = response.data;
-        dataSource.setData(identities, 0, columnAscending: true);
-      });
-    } catch (error) {
-      showSnackbar(error as String);
-    }
-  }
-
-  void showSnackbar(String error) {
-    _scaffoldKey.currentState?.showSnackBar(
-      SnackBar(
-        content: Text('An error occurred while loading identities: $error'),
-        backgroundColor: Colors.red,
-      ),
-    );
   }
 
   @override
@@ -129,6 +99,36 @@ class IdentityOverviewWidgetState extends State<IdentityOverviewWidget> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _sort(int columnIndex, bool ascending) {
+    setState(() {
+      _columnIndex = columnIndex;
+      _columnAscending = ascending;
+      dataSource.setData(identities, _columnIndex, columnAscending: _columnAscending);
+    });
+  }
+
+  Future<void> loadIdentities({IdentityOverviewFilter? filter}) async {
+    try {
+      final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(filter: filter);
+
+      setState(() {
+        identities = response.data;
+        dataSource.setData(identities, 0, columnAscending: true);
+      });
+    } catch (error) {
+      showSnackbar(error as String);
+    }
+  }
+
+  void showSnackbar(String error) {
+    _scaffoldKey.currentState?.showSnackBar(
+      SnackBar(
+        content: Text('An error occurred while loading identities: $error'),
+        backgroundColor: Colors.red,
       ),
     );
   }
