@@ -214,7 +214,7 @@ public class Identity
         EnsureIdentityOwnsDevice(canceledByDeviceId);
 
         deletionProcess.CancelAsOwner(Address, canceledByDeviceId);
-        TierId = TierIdBeforeDeletion;
+        TierId = TierIdBeforeDeletion!;
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
 
@@ -234,7 +234,7 @@ public class Identity
         var deletionProcess = DeletionProcesses.First(d => d.Id == deletionProcessId);
 
         deletionProcess.CancelAsSupport(Address);
-        TierId = TierIdBeforeDeletion;
+        TierId = TierIdBeforeDeletion!;
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
 
