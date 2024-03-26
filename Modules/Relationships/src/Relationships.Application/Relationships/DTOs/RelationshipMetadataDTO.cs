@@ -34,15 +34,15 @@ public static class RelationshipStatusExtensions
 {
     public static string ToDtoString(this RelationshipStatus status)
     {
-        return status._ToDtoString();
+        return status.ToDtoStringInternal();
     }
 
     public static string? ToDtoString(this RelationshipStatus? status)
     {
-        return status?._ToDtoString();
+        return status?.ToDtoStringInternal();
     }
 
-    private static string _ToDtoString(this RelationshipStatus status)
+    private static string ToDtoStringInternal(this RelationshipStatus status)
     {
         return status switch
         {
