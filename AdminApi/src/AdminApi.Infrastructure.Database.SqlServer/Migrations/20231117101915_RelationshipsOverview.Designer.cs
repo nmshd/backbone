@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
 {
-    [DbContext(typeof(AdminUiDbContext))]
+    [DbContext(typeof(AdminApiDbContext))]
     [Migration("20231117101915_RelationshipsOverview")]
     partial class RelationshipsOverview
     {
