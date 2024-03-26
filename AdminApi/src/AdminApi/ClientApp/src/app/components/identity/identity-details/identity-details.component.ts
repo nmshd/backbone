@@ -3,13 +3,13 @@ import { Component } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { forkJoin, Observable } from "rxjs";
+import { Observable, forkJoin } from "rxjs";
 import { ConfirmationDialogComponent } from "src/app/components/shared/confirmation-dialog/confirmation-dialog.component";
 import { Device, Identity, IdentityService } from "src/app/services/identity-service/identity.service";
 import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
-import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
+import { AssignQuotaData, AssignQuotasDialogComponent } from "../../quotas/assign-quotas-dialog/assign-quotas-dialog.component";
 
 @Component({
     selector: "app-identity-details",
