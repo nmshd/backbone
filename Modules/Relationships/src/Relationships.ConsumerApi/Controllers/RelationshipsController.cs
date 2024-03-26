@@ -4,7 +4,10 @@ using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Relationships.Application;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.GetRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
@@ -57,9 +60,41 @@ public class RelationshipsController : ApiControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateRelationship(CreateRelationshipCommand request, CancellationToken cancellationToken)
     {
         var relationship = await _mediator.Send(request, cancellationToken);
         return Created(relationship);
+    }
+
+    [HttpPut("{id}/Accept")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<AcceptRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AcceptRelationship([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new AcceptRelationshipCommand { RelationshipId = id }, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpPut("{id}/Reject")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RejectRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RejectRelationship([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new RejectRelationshipCommand { RelationshipId = id }, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpPut("{id}/Revoke")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RevokeRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RevokeRelationship([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new RevokeRelationshipCommand { RelationshipId = id }, cancellationToken);
+        return Ok(response);
     }
 }
