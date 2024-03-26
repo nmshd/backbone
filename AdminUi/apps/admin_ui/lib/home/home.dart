@@ -1,6 +1,6 @@
-import 'package:admin_ui/widgets/client/client_overview.dart';
-import 'package:admin_ui/widgets/identity/identity_overview.dart';
-import 'package:admin_ui/widgets/tier/tier_overview.dart';
+import 'package:admin_ui/screens/client_overview.dart';
+import 'package:admin_ui/screens/identity_overview.dart';
+import 'package:admin_ui/screens/tier_overview.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {

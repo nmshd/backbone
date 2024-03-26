@@ -1,7 +1,7 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
-import 'package:admin_ui/widgets/identity/helpers/identity_data_table_source.dart';
-import 'package:admin_ui/widgets/identity/helpers/identity_filters.dart';
+import 'package:admin_ui/screens/widgets/identity/helpers/identity_data_table_source.dart';
+import 'package:admin_ui/screens/widgets/identity/helpers/identity_filters.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
