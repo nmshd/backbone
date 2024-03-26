@@ -1,9 +1,9 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
-import 'package:admin_ui/screens/shared/date_filter.dart';
-import 'package:admin_ui/screens/shared/input_field.dart';
-import 'package:admin_ui/screens/shared/multi_select_dialog.dart';
-import 'package:admin_ui/screens/shared/number_filter.dart';
+import 'package:admin_ui/screens/widgets/shared/date_filter.dart';
+import 'package:admin_ui/screens/widgets/shared/input_field.dart';
+import 'package:admin_ui/screens/widgets/shared/multi_select_dialog.dart';
+import 'package:admin_ui/screens/widgets/shared/number_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:multi_select_flutter/util/multi_select_item.dart';
