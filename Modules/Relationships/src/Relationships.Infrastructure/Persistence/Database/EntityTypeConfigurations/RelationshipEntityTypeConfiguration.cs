@@ -16,5 +16,7 @@ public class RelationshipEntityTypeConfiguration : IEntityTypeConfiguration<Rela
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.RelationshipTemplateId);
+
+        builder.Property(x => x.CreationContent);
     }
 }

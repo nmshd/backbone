@@ -36,6 +36,8 @@ public class RelationshipsDbContext : AbstractDbContextBase
         configurationBuilder.Properties<RelationshipId>().AreUnicode(false).AreFixedLength().HaveMaxLength(RelationshipId.MAX_LENGTH).HaveConversion<RelationshipIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<RelationshipTemplateId>().AreUnicode(false).AreFixedLength().HaveMaxLength(RelationshipTemplateId.MAX_LENGTH)
             .HaveConversion<RelationshipTemplateIdEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<RelationshipAuditLogEntryId>().AreUnicode(false).AreFixedLength().HaveMaxLength(RelationshipAuditLogEntryId.MAX_LENGTH)
+            .HaveConversion<RelationshipAuditLogEntryIdEntityFrameworkValueConverter>();
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

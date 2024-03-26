@@ -2,8 +2,8 @@
 
 public enum RelationshipAuditLogEntryReason
 {
-    Creation,
-    AcceptanceOfCreation,
-    RejectionOfCreation,
-    RevocationOfCreation
+    Creation = 0,
+    AcceptanceOfCreation = 1,
+    RejectionOfCreation = 2,
+    RevocationOfCreation = 3
 }

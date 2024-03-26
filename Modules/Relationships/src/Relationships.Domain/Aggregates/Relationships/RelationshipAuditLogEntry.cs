@@ -5,6 +5,15 @@ namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
 public class RelationshipAuditLogEntry
 {
+    // ReSharper disable once UnusedMember.Local
+    private RelationshipAuditLogEntry()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        CreatedBy = null!;
+        CreatedByDevice = null!;
+    }
+
     public RelationshipAuditLogEntry(RelationshipAuditLogEntryReason reason, RelationshipStatus? oldStatus, RelationshipStatus newStatus, IdentityAddress createdBy, DeviceId createdByDevice)
     {
         Id = RelationshipAuditLogEntryId.New();
