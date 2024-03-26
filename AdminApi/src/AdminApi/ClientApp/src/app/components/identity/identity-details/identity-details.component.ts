@@ -99,10 +99,6 @@ export class IdentityDetailsComponent {
         });
     }
 
-    public checkManualAssignmentEnabled(tier: TierOverview): boolean {
-        return tier.canBeManuallyAssigned;
-    }
-
     public isTierDisabled(tier: TierOverview): boolean {
         return TierUtils.isTierDisabled(tier, this.tiers, this.identity);
     }

@@ -58,7 +58,7 @@ describe("IdentityDetailsComponent", function () {
         await expect(identityDetailsComponent).toBeTruthy();
     });
 
-    describe("TierValidator", function () {
+    describe("TierUtils", function () {
         const tier1: TierOverview = {
             id: "1",
             name: "Tier 1",
