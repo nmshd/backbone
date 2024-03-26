@@ -42,12 +42,13 @@ import { ClientListComponent } from "./components/client/client-list/client-list
 import { CreateClientDialogComponent } from "./components/client/create-client-dialog/create-client-dialog.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
+import { DeletionProcessesComponent } from "./components/identity/identity-details/deletion-processes/deletion-processes.component";
+import { CancelDeletionProcessDialogComponent } from "./components/identity/identity-details/deletion-processes/dp-details/cancel-dp-dialog/cancel-dp-dialog.component";
+import { DeletionProcessDetailsComponent } from "./components/identity/identity-details/deletion-processes/dp-details/dp-details.component";
+import { IdentityDetailsRelationshipsComponent } from "./components/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
+import { IdentityDetailsComponent } from "./components/identity/identity-details/identity-details.component";
+import { IdentityListComponent } from "./components/identity/identity-list/identity-list.component";
 import { AssignQuotasDialogComponent } from "./components/quotas/assign-quotas-dialog/assign-quotas-dialog.component";
-import { DeletionProcessDetailsComponent } from "./components/quotas/identity/identity-details/deletion-processes/deletion-process-details/deletion-process-details.component";
-import { DeletionProcessesComponent } from "./components/quotas/identity/identity-details/deletion-processes/deletion-processes.component";
-import { IdentityDetailsRelationshipsComponent } from "./components/quotas/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
-import { IdentityDetailsComponent } from "./components/quotas/identity/identity-details/identity-details.component";
-import { IdentityListComponent } from "./components/quotas/identity/identity-list/identity-list.component";
 import { CreateTierDialogComponent } from "./components/quotas/tier/create-tier-dialog/create-tier-dialog.component";
 import { TierEditComponent } from "./components/quotas/tier/tier-edit/tier-edit.component";
 import { TierListComponent } from "./components/quotas/tier/tier-list/tier-list.component";
@@ -87,7 +88,8 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         BreadcrumbComponent,
         DeletionProcessesComponent,
         BreadcrumbComponent,
-        DeletionProcessDetailsComponent
+        DeletionProcessDetailsComponent,
+        CancelDeletionProcessDialogComponent
     ],
     imports: [
         FormsModule,

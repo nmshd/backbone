@@ -5,7 +5,7 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
-public class CancelDeletionProcessTests
+public class CancelDeletionProcessAsSupportTests
 {
     [Fact]
     public void Cancel_deletion_process()
@@ -16,7 +16,7 @@ public class CancelDeletionProcessTests
         var tierIdBeforeDeletion = identity.TierIdBeforeDeletion;
 
         // Act
-        var deletionProcess = identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
+        var deletionProcess = identity.CancelDeletionProcessAsSupport(identity.DeletionProcesses[0].Id);
 
         // Assert
         identity.TierId.Should().Be(tierIdBeforeDeletion);
@@ -24,7 +24,7 @@ public class CancelDeletionProcessTests
         identity.Status.Should().Be(IdentityStatus.Active);
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Cancelled);
         deletionProcess.CancelledAt.Should().Be(DateTime.Parse("2024-01-01"));
-        deletionProcess.CancelledByDevice.Should().Be(identity.Devices[0].Id);
+        deletionProcess.CancelledByDevice.Should().Be(null!);
         AssertAuditLogEntryWasCreated(deletionProcess);
     }
 
@@ -34,11 +34,10 @@ public class CancelDeletionProcessTests
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
         identity.Devices.Add(new Device(identity));
-        var deviceId = identity.Devices[0].Id;
         var deletionProcessId = IdentityDeletionProcessId.Create("IDP00000000000000001").Value;
 
         // Act
-        var acting = () => identity.CancelDeletionProcessAsOwner(deletionProcessId, deviceId);
+        var acting = () => identity.CancelDeletionProcessAsSupport(deletionProcessId);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Message.Should().Contain("IdentityDeletionProcess");
@@ -51,7 +50,7 @@ public class CancelDeletionProcessTests
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
-        var acting = () => identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
+        var acting = () => identity.CancelDeletionProcessAsSupport(identity.DeletionProcesses[0].Id);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusApproved");

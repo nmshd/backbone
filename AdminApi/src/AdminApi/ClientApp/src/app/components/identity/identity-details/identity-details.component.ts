@@ -9,7 +9,7 @@ import { Device, Identity, IdentityService } from "src/app/services/identity-ser
 import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasService } from "src/app/services/quotas-service/quotas.service";
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
-import { AssignQuotaData, AssignQuotasDialogComponent } from "../../assign-quotas-dialog/assign-quotas-dialog.component";
+import { AssignQuotaData, AssignQuotasDialogComponent } from "../../quotas/assign-quotas-dialog/assign-quotas-dialog.component";
 
 @Component({
     selector: "app-identity-details",
