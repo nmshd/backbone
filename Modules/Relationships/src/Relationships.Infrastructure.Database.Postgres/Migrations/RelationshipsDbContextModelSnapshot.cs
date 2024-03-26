@@ -35,9 +35,9 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("From")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(100)")
                         .IsFixedLength();
 
                     b.Property<string>("RelationshipTemplateId")
@@ -52,9 +52,9 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("To")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(100)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -132,9 +132,9 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(100)")
                         .HasColumnName("Req_CreatedBy")
                         .IsFixedLength();
 
@@ -173,9 +173,9 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(100)")
                         .HasColumnName("Res_CreatedBy")
                         .IsFixedLength();
 
@@ -214,9 +214,9 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(100)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
@@ -259,9 +259,9 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("AllocatedBy")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(100)")
                         .IsFixedLength();
 
                     b.Property<string>("AllocatedByDevice")

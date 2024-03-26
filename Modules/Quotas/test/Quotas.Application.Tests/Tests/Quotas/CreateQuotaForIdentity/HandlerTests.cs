@@ -26,10 +26,10 @@ public class HandlerTests
         const int max = 5;
         const QuotaPeriod period = QuotaPeriod.Month;
         var metricKey = MetricKey.NumberOfSentMessages.Value;
-        var identityAddress = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
+        var identityAddress = IdentityAddress.Parse("did:web:prod.enmesh.eu:dids:id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
         var tierId = new TierId("TIRsomeTierId1111111");
         var command = new CreateQuotaForIdentityCommand(identityAddress, metricKey, max, period);
-        var identity = new Identity("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", tierId);
+        var identity = new Identity("did:web:prod.enmesh.eu:dids:id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", tierId);
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Find(identityAddress, A<CancellationToken>._, A<bool>._)).Returns(identity);
@@ -58,7 +58,7 @@ public class HandlerTests
     public void Create_quota_with_invalid_metric_key_throws_domain_exception()
     {
         // Arrange
-        var command = new CreateQuotaForIdentityCommand(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
+        var command = new CreateQuotaForIdentityCommand(IdentityAddress.Parse("did:web:prod.enmesh.eu:dids:id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
         var handler = CreateHandler(identitiesRepository, metricsRepository);
@@ -74,7 +74,7 @@ public class HandlerTests
     public void Create_quota_for_non_existent_identity_throws_not_found_exception()
     {
         // Arrange
-        var command = new CreateQuotaForIdentityCommand(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
+        var command = new CreateQuotaForIdentityCommand(IdentityAddress.Parse("did:web:prod.enmesh.eu:dids:id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns((Identity?)null);
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
@@ -94,9 +94,9 @@ public class HandlerTests
     {
         // Arrange
         var metricKey = MetricKey.NumberOfSentMessages.Value;
-        var identityAddress = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
+        var identityAddress = IdentityAddress.Parse("did:web:prod.enmesh.eu:dids:id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
         var command = new CreateQuotaForIdentityCommand(identityAddress, metricKey, 5, QuotaPeriod.Month);
-        var identity = new Identity("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", new TierId("TIRsomeTierId1111111"));
+        var identity = new Identity("did:web:prod.enmesh.eu:dids:id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", new TierId("TIRsomeTierId1111111"));
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Find(identityAddress, A<CancellationToken>._, A<bool>._)).Returns(identity);

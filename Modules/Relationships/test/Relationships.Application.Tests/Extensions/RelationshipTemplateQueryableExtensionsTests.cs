@@ -24,8 +24,8 @@ public class RelationshipTemplateQueryableExtensionsTests
     public void NotExpiredFor_DoesNotFilterOutTemplatesForParticipants()
     {
         // Arrange
-        var templateCreator = IdentityAddress.Create(new byte[2], "id0");
-        var requestCreator = IdentityAddress.Create(new byte[5], "id0");
+        var templateCreator = IdentityAddress.Create(new byte[2], "id0", "url");
+        var requestCreator = IdentityAddress.Create(new byte[5], "id0", "url");
 
         var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, YESTERDAY, new byte[2]);
         var relationship = new Relationship(template, requestCreator, DeviceId.New(), new byte[2]);

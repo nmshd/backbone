@@ -26,7 +26,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
         var basicTier = await _tiersRepository.FindBasicTier(cancellationToken);
 
         var user = new ApplicationUser(new Device(new Identity("test",
-            IdentityAddress.Create([1, 1, 1, 1, 1], "id1"),
+            IdentityAddress.Create([1, 1, 1, 1, 1], "id1", "url"),
             [1, 1, 1, 1, 1], basicTier!.Id, 1
         )))
         {
@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
         await _dbContext.Set<ApplicationUser>().AddAsync(user, cancellationToken);
 
         user = new ApplicationUser(new Device(new Identity("test",
-            IdentityAddress.Create([2, 2, 2, 2, 2], "id1"),
+            IdentityAddress.Create([2, 2, 2, 2, 2], "id1", "url"),
             [2, 2, 2, 2, 2], basicTier.Id, 1
         )))
         {

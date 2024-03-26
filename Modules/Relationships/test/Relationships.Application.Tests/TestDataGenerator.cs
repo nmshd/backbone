@@ -6,7 +6,7 @@ public static class TestDataGenerator
 {
     public static IdentityAddress CreateRandomAddress()
     {
-        return IdentityAddress.Create(CreateRandomBytes(), "id0");
+        return IdentityAddress.Create(CreateRandomBytes(), "id0", "url");
     }
 
     public static byte[] CreateRandomBytes()

@@ -59,9 +59,9 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(100)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
@@ -90,9 +90,9 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(100)")
                         .IsFixedLength();
 
                     b.Property<byte[]>("EncryptedKey")
@@ -148,16 +148,16 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("From")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(100)")
                         .IsFixedLength();
 
                     b.Property<string>("To")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(100)")
                         .IsFixedLength();
 
                     b.HasKey("Id");

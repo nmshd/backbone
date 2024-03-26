@@ -24,7 +24,7 @@ public class ApplePushNotificationServiceConnectorTests
         var connector = CreateConnector(client);
 
         // Act
-        var recipient = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
+        var recipient = IdentityAddress.Parse("did:web:prod.enmesh.eu:dids:id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
         var registrations = new List<PnsRegistration>
         {
             new(recipient, DeviceId.New(), PnsHandle.Parse(PushNotificationPlatform.Apns, "some-device-id").Value, APP_ID, PushEnvironment.Development)
