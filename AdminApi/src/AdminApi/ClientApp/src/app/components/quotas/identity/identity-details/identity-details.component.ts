@@ -104,7 +104,7 @@ export class IdentityDetailsComponent {
     }
 
     public isTierDisabled(tier: TierOverview): boolean {
-        return TierChecker.isTierDisabled(tier, this.tiers, this.identity);
+        return TierValidator.isTierDisabled(tier, this.tiers, this.identity);
     }
 
     public loadIdentityAndTiers(): void {
@@ -311,11 +311,10 @@ interface MetricGroup {
     tierDisabled: boolean;
 }
 
-// TODO: find a better name
-export class TierChecker {
+export class TierUtils {
     public static isTierDisabled(tier: TierOverview, tiers: TierOverview[], identity: Identity): boolean {
         const tiersThatCannotBeUnassigned = tiers.filter((t) => !t.canBeManuallyAssigned);
         const identityIsInTierThatCannotBeUnassigned = tiersThatCannotBeUnassigned.some((t) => t.id === identity.tierId);
-        return identityIsInTierThatCannotBeUnassigned && tier.id !== identity.tierId && tier.canBeManuallyAssigned;
+        return identityIsInTierThatCannotBeUnassigned && tier.id !== identity.tierId;
     }
 }
