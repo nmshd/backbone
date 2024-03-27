@@ -1,4 +1,4 @@
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,6 +17,6 @@ public class RelationshipEntityTypeConfiguration : IEntityTypeConfiguration<Rela
 
         builder.Property(x => x.RelationshipTemplateId);
 
-        builder.Metadata.FindNavigation(nameof(Relationship.Changes))!.SetPropertyAccessMode(PropertyAccessMode.Field);
+        builder.Property(x => x.CreationContent);
     }
 }

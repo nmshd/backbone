@@ -2,8 +2,8 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
-using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
-using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipCreated;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipStatusChanged;
 
 namespace Backbone.Modules.Synchronization.Application.Extensions;
 
@@ -27,7 +27,7 @@ public static class IEventBusExtensions
 
     private static void SubscribeToRelationshipsEvents(IEventBus eventBus)
     {
-        eventBus.Subscribe<RelationshipChangeCompletedIntegrationEvent, RelationshipChangeCompletedIntegrationEventHandler>();
-        eventBus.Subscribe<RelationshipChangeCreatedIntegrationEvent, RelationshipChangeCreatedIntegrationEventHandler>();
+        eventBus.Subscribe<RelationshipCreatedIntegrationEvent, RelationshipCreatedIntegrationEventHandler>();
+        eventBus.Subscribe<RelationshipStatusChangedIntegrationEvent, RelationshipStatusChangedIntegrationEventHandler>();
     }
 }

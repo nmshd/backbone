@@ -37,7 +37,7 @@ public class IdentityDeletionProcessStatusChangedIntegrationEventHandlerTests
         // Act
         await handler.Handle(identityDeletionProcessStatusChangedIntegrationEvent);
 
-        // Handle
+        // Assert
         A.CallTo(() => mockDbContext.CreateExternalEvent(identityAddress, ExternalEventType.IdentityDeletionProcessStatusChanged, A<object>._))
             .MustHaveHappenedOnceExactly();
     }
@@ -68,7 +68,7 @@ public class IdentityDeletionProcessStatusChangedIntegrationEventHandlerTests
         // Act
         await handler.Handle(identityDeletionProcessStatusChangedIntegrationEvent);
 
-        // Handle
+        // Assert
         A.CallTo(() => mockEventBus.Publish(
             A<ExternalEventCreatedIntegrationEvent>.That.Matches(e => e.Owner == externalEvent.Owner && e.EventId == externalEvent.Id))
         ).MustHaveHappenedOnceExactly();

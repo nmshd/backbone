@@ -1,4 +1,4 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
@@ -6,6 +6,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierOfIdentityChanged;
+
 public class TierOfIdentityChangedIntegrationEventHandler : IIntegrationEventHandler<TierOfIdentityChangedIntegrationEvent>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
