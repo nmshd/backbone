@@ -1,4 +1,4 @@
-# 1 Identity with 3 devices edits their attributes
+# 1. Identity with 3 devices edits their attributes
 
 Steps:
 
