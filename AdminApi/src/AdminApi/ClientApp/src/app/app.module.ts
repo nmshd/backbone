@@ -45,6 +45,7 @@ import { PageNotFoundComponent } from "./components/error/page-not-found/page-no
 import { DeletionProcessesComponent } from "./components/identity/identity-details/deletion-processes/deletion-processes.component";
 import { CancelDeletionProcessDialogComponent } from "./components/identity/identity-details/deletion-processes/dp-details/cancel-dp-dialog/cancel-dp-dialog.component";
 import { DeletionProcessDetailsComponent } from "./components/identity/identity-details/deletion-processes/dp-details/dp-details.component";
+import { StartDeletionProcessDialogComponent } from "./components/identity/identity-details/deletion-processes/start-deletion-process-dialog/start-deletion-process-dialog.component";
 import { IdentityDetailsRelationshipsComponent } from "./components/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
 import { IdentityDetailsComponent } from "./components/identity/identity-details/identity-details.component";
 import { IdentityListComponent } from "./components/identity/identity-list/identity-list.component";
@@ -89,7 +90,8 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         DeletionProcessesComponent,
         BreadcrumbComponent,
         DeletionProcessDetailsComponent,
-        CancelDeletionProcessDialogComponent
+        CancelDeletionProcessDialogComponent,
+        StartDeletionProcessDialogComponent
     ],
     imports: [
         FormsModule,

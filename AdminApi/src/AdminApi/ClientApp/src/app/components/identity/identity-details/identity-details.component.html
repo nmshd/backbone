@@ -213,6 +213,7 @@
     </mat-accordion>
     <div class="action-buttons">
         <button mat-raised-button [disabled]="!hasPendingChanges()" (click)="saveIdentity()" color="primary">Save</button>
+        <button mat-raised-button color="warn" (click)="openStartDeletionProcessDialog()">Start Deletion Process</button>
         <button mat-raised-button routerLink="/identities">Cancel</button>
     </div>
 </div>

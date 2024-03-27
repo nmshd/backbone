@@ -10,6 +10,7 @@ import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasServ
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../quotas/assign-quotas-dialog/assign-quotas-dialog.component";
+import { StartDeletionProcessDialogComponent } from "./deletion-processes/start-deletion-process-dialog/start-deletion-process-dialog.component";
 
 @Component({
     selector: "app-identity-details",
@@ -298,6 +299,41 @@ export class IdentityDetailsComponent {
             return `${this.isAllSelected() ? "deselect" : "select"} all`;
         }
         return `${this.selectionQuotas.isSelected(row) ? "deselect" : "select"} row ${index + 1}`;
+    }
+
+    public openStartDeletionProcessDialog(): void {
+        const dialogRef = this.dialog.open(StartDeletionProcessDialogComponent, {
+            maxWidth: "100%"
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                this.startDeletionProcess();
+            }
+        });
+    }
+
+    public startDeletionProcess(): void {
+        this.loading = true;
+        this.identityService.startDeletionProcessAsSupport(this.identityAddress!).subscribe({
+            next: () => {
+                this.snackBar.open("Identity deletion process started successfully. Reloading...", "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            },
+            complete: () => {
+                this.loadIdentityAndTiers();
+            },
+            error: (err: any) => {
+                this.loading = false;
+                const errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            }
+        });
     }
 }
 
