@@ -14,7 +14,7 @@ class ClientFilter extends StatefulWidget {
     super.key,
   });
 
-  final void Function(List<Clients> clients) filterClients;
+  final void Function(ClientOverviewFilter clientFilter) filterClients;
 
   @override
   State<ClientFilter> createState() => _ClientFilterState();
@@ -22,15 +22,7 @@ class ClientFilter extends StatefulWidget {
 
 class _ClientFilterState extends State<ClientFilter> {
   List<Tier> tiers = [];
-  List<Clients> clients = [];
-
-  late String _enteredClientId;
-  late String _enteredDisplayName;
-  late List<String> _selectedTiers;
-  late DateTime _selectedCreatedAt;
-  late String _selectedCreatedAtOperator;
-  late String _numberOfIdentitiesOperator;
-  late String _numberOfIdentities;
+  ClientOverviewFilter filter = ClientOverviewFilter();
 
   late bool isCreatedAtSelected;
   late bool isLastLoginAtSelected;
@@ -40,13 +32,6 @@ class _ClientFilterState extends State<ClientFilter> {
   @override
   void initState() {
     super.initState();
-    _enteredClientId = '';
-    _enteredDisplayName = '';
-    _selectedTiers = [];
-    _selectedCreatedAt = DateTime.now();
-    _selectedCreatedAtOperator = '=';
-    _numberOfIdentitiesOperator = '=';
-    _numberOfIdentities = '';
     isCreatedAtSelected = false;
     loadTiers().then((_) {
       setState(() {});
@@ -59,10 +44,12 @@ class _ClientFilterState extends State<ClientFilter> {
       children: [
         InputField(
           title: 'Client ID',
-          onEnteredText: (String enteredText) {
+          onEnteredText: (String enteredClientID) {
             setState(() {
-              _enteredClientId = enteredText;
-              setFilter();
+              if (enteredClientID.isNotEmpty) {
+                filter.clientID = enteredClientID;
+                setFilter();
+              }
             });
           },
         ),
@@ -71,10 +58,12 @@ class _ClientFilterState extends State<ClientFilter> {
         ),
         InputField(
           title: 'Display Name',
-          onEnteredText: (String enteredText) {
+          onEnteredText: (String enteredDisplayName) {
             setState(() {
-              _enteredDisplayName = enteredText;
-              setFilter();
+              if (enteredDisplayName.isNotEmpty) {
+                filter.displayName = enteredDisplayName;
+                setFilter();
+              }
             });
           },
         ),
@@ -85,10 +74,12 @@ class _ClientFilterState extends State<ClientFilter> {
           loadTiers,
           title: 'Tier',
           multiSelectItem: tiers.map((tier) => MultiSelectItem<String>(tier.id, tier.name)).toList(),
-          onSelectedValues: (List<String> selectedValues) {
+          onSelectedValues: (List<String> selectedTiers) {
             setState(() {
-              _selectedTiers = selectedValues;
-              setFilter();
+              if (selectedTiers.isNotEmpty) {
+                filter.tiers = selectedTiers;
+                setFilter();
+              }
             });
           },
         ),
@@ -97,11 +88,13 @@ class _ClientFilterState extends State<ClientFilter> {
         ),
         NumberFilter(
           operators: operators,
-          onNumberSelected: (String operator, String enteredValue) {
+          onNumberSelected: (String operator, String enteredNumberOfIdentities) {
             setState(() {
-              _numberOfIdentities = enteredValue;
-              _numberOfIdentitiesOperator = operator;
-
+              if (enteredNumberOfIdentities.isNotEmpty) {
+                filter
+                  ..numberOfIdentitiesOperator = enteredNumberOfIdentities
+                  ..numberOfIdentities = operator;
+              }
               setFilter();
             });
           },
@@ -113,13 +106,14 @@ class _ClientFilterState extends State<ClientFilter> {
           operators: operators,
           onDateSelected: (DateTime selectedDate, String operator, {bool isDateSelected = false}) {
             setState(() {
-              setState(() {
-                _selectedCreatedAt = selectedDate;
-                _selectedCreatedAtOperator = operator;
-                isCreatedAtSelected = isDateSelected;
+              isCreatedAtSelected = isDateSelected;
+              if (selectedDate.toString().isNotEmpty && isCreatedAtSelected) {
+                filter
+                  ..createdAt = selectedDate.toString().substring(0, 10)
+                  ..createdAtOperator = operator;
 
                 setFilter();
-              });
+              }
             });
           },
         ),
@@ -128,60 +122,8 @@ class _ClientFilterState extends State<ClientFilter> {
   }
 
   void setFilter() {
-    var filteredClients = List<Clients>.from(clients);
-
-    if (_enteredClientId.isNotEmpty) {
-      filteredClients = filteredClients.where((client) => client.clientId == _enteredClientId).toList();
-    }
-
-    if (_enteredDisplayName.isNotEmpty) {
-      filteredClients = filteredClients.where((client) => client.displayName == _enteredDisplayName).toList();
-    }
-
-    if (_selectedTiers.isNotEmpty) {
-      filteredClients = filteredClients.where((client) => _selectedTiers.contains(client.defaultTier.id)).toList();
-    }
-
-    if (_numberOfIdentities.isNotEmpty) {
-      switch (_numberOfIdentitiesOperator) {
-        case '=':
-          filteredClients = filteredClients.where((client) => client.numberOfIdentities == int.parse(_numberOfIdentities)).toList();
-        case '<':
-          filteredClients = filteredClients.where((client) => client.numberOfIdentities! < int.parse(_numberOfIdentities)).toList();
-        case '>':
-          filteredClients = filteredClients.where((client) => client.numberOfIdentities! > int.parse(_numberOfIdentities)).toList();
-        case '<=':
-          filteredClients = filteredClients.where((client) => client.numberOfIdentities! <= int.parse(_numberOfIdentities)).toList();
-        case '>=':
-          filteredClients = filteredClients.where((client) => client.numberOfIdentities! >= int.parse(_numberOfIdentities)).toList();
-      }
-    }
-
-    if (_selectedCreatedAt.toString().isNotEmpty && isCreatedAtSelected) {
-      switch (_selectedCreatedAtOperator) {
-        case '=':
-          filteredClients = filteredClients.where((client) => client.createdAt == _selectedCreatedAt.toString()).toList();
-        case '<':
-          filteredClients = filteredClients.where((client) => client.createdAt.compareTo(_selectedCreatedAt.toString()) < 0).toList();
-        case '>':
-          filteredClients = filteredClients.where((client) => client.createdAt.compareTo(_selectedCreatedAt.toString()) > 0).toList();
-        case '<=':
-          filteredClients = filteredClients.where((client) => client.createdAt.compareTo(_selectedCreatedAt.toString()) <= 0).toList();
-        case '>=':
-          filteredClients = filteredClients.where((client) => client.createdAt.compareTo(_selectedCreatedAt.toString()) >= 0).toList();
-      }
-    }
-
     setState(() {
-      widget.filterClients(clients);
-    });
-  }
-
-  Future<void> loadClients() async {
-    final response = await GetIt.instance.get<AdminApiClient>().clients.getClients();
-
-    setState(() {
-      clients = response.data;
+      widget.filterClients(filter);
     });
   }
 
@@ -190,4 +132,24 @@ class _ClientFilterState extends State<ClientFilter> {
 
     tiers = response.data;
   }
+}
+
+class ClientOverviewFilter {
+  String? clientID;
+  String? displayName;
+  List<String>? tiers;
+  String? createdAt;
+  String? createdAtOperator;
+  String? numberOfIdentitiesOperator;
+  String? numberOfIdentities;
+
+  ClientOverviewFilter({
+    this.clientID,
+    this.displayName,
+    this.tiers,
+    this.numberOfIdentities,
+    this.numberOfIdentitiesOperator,
+    this.createdAt,
+    this.createdAtOperator,
+  });
 }

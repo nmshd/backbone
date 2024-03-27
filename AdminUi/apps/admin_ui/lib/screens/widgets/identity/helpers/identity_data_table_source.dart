@@ -101,7 +101,7 @@ class IdentityDataTableSource extends DataTableSource {
         DataCell(
           Center(
             child: Text(
-              identity.lastLoginAt.toString().substring(0, 10),
+              identity.lastLoginAt.toString(),
             ),
           ),
         ),

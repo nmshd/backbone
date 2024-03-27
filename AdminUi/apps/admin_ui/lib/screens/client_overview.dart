@@ -1,7 +1,7 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:admin_ui/screens/widgets/client/helpers/client_data_table_source.dart';
-import 'package:admin_ui/screens/widgets/client/helpers/helpers/client_filters.dart';
+import 'package:admin_ui/screens/widgets/client/helpers/client_filters.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -57,8 +57,51 @@ class _ClientOverviewState extends State<ClientOverview> {
       ),
       body: Column(
         children: [
-          ClientFilter((List<Clients> filteredClients) {
-            clients = filteredClients;
+          ClientFilter((filteredClients) {
+            if (filteredClients.clientID!.isNotEmpty) {
+              setState(() {
+                print('Clients $clients');
+                clients = clients.where((client) => client.clientId == filteredClients.clientID!).toList();
+              });
+            }
+
+            // if (filteredClients.displayName!.isNotEmpty) {
+            //   clients = clients.where((client) => client.displayName == filteredClients.displayName!).toList();
+            // }
+
+            // if (filteredClients.tiers!.isNotEmpty) {
+            //   clients = clients.where((client) => filteredClients.tiers!.contains(client.defaultTier.id)).toList();
+            // }
+
+            // if (filteredClients.numberOfIdentities!.isNotEmpty) {
+            //   switch (filteredClients.numberOfIdentitiesOperator) {
+            //     case '=':
+            //       clients = clients.where((client) => client.numberOfIdentities == int.parse(filteredClients.numberOfIdentities!)).toList();
+            //     case '<':
+            //       clients = clients.where((client) => client.numberOfIdentities! < int.parse(filteredClients.numberOfIdentities!)).toList();
+            //     case '>':
+            //       clients = clients.where((client) => client.numberOfIdentities! > int.parse(filteredClients.numberOfIdentities!)).toList();
+            //     case '<=':
+            //       clients = clients.where((client) => client.numberOfIdentities! <= int.parse(filteredClients.numberOfIdentities!)).toList();
+            //     case '>=':
+            //       clients = clients.where((client) => client.numberOfIdentities! >= int.parse(filteredClients.numberOfIdentities!)).toList();
+            //   }
+            // }
+
+            // if (filteredClients.createdAt.toString().isNotEmpty) {
+            //   switch (filteredClients.createdAtOperator) {
+            //     case '=':
+            //       clients = clients.where((client) => client.createdAt == filteredClients.createdAt.toString()).toList();
+            //     case '<':
+            //       clients = clients.where((client) => client.createdAt.compareTo(filteredClients.createdAt.toString()) < 0).toList();
+            //     case '>':
+            //       clients = clients.where((client) => client.createdAt.compareTo(filteredClients.createdAt.toString()) > 0).toList();
+            //     case '<=':
+            //       clients = clients.where((client) => client.createdAt.compareTo(filteredClients.createdAt.toString()) <= 0).toList();
+            //     case '>=':
+            //       clients = clients.where((client) => client.createdAt.compareTo(filteredClients.createdAt.toString()) >= 0).toList();
+            //   }
+            // }
           }),
           const SizedBox(
             height: 8,
