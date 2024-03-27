@@ -31,7 +31,6 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
         await SeedBasicTier(context);
         await SeedQueuedForDeletionTier();
         await SeedApplicationUsers(context);
-        await AddBasicTierToIdentities(context);
     }
 
     private static async Task<Tier?> GetBasicTier(DevicesDbContext context)
@@ -58,15 +57,5 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
     private async Task SeedQueuedForDeletionTier()
     {
         await _mediator.Send(new CreateQueuedForDeletionTierCommand());
-    }
-
-    private async Task AddBasicTierToIdentities(DevicesDbContext context)
-    {
-        var basicTier = await GetBasicTier(context);
-        if (basicTier == null)
-            return;
-
-        // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-        await context.Identities.Where(i => i.TierId == null).ExecuteUpdateAsync(s => s.SetProperty(i => i.TierId, basicTier.Id));
     }
 }

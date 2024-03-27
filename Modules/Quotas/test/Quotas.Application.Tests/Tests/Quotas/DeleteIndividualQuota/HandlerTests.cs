@@ -83,7 +83,7 @@ public class HandlerTests
     public void Fails_to_delete_individual_quota_when_providing_an_inexistent_quota_id()
     {
         // Arrange
-        var identityAddress = "some-identity-address";
+        const string identityAddress = "some-identity-address";
         var identity = new Identity("some-identity-address", new TierId("SomeTierId"));
         var command = new DeleteQuotaForIdentityCommand(identityAddress, "QUOsomequotaid111111");
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
