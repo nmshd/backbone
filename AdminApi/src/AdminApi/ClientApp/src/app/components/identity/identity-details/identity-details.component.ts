@@ -10,7 +10,7 @@ import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasServ
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../quotas/assign-quotas-dialog/assign-quotas-dialog.component";
-import { StartDeletionProcessDialogComponent } from "./start-deletion-process-dialog/start-deletion-process-dialog.component";
+import { StartDeletionProcessDialogComponent } from "./deletion-processes/start-deletion-process-dialog/start-deletion-process-dialog.component";
 
 @Component({
     selector: "app-identity-details",
