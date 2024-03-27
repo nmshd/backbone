@@ -18,7 +18,10 @@ TransportLoggerFactory.init(new SimpleLoggerFactory(LogLevel.Fatal));
     const backboneClient3 = await backboneClient1.createNewClientForNewDevice();
 
     for (let i = 0; i < randomIntFromInterval(10, 15); i++) {
+        // TODO: check if the duration is sound
         let syncRes = await backboneClient1.sync.startSyncRun({ type: SyncRunType.DatawalletVersionUpgrade, duration: 2000 });
+
+        // TODO: ajust the payload to 300B
         await backboneClient1.sync.finalizeDatawalletVersionUpgrade(syncRes.value.syncRun?.id!, {
             newDatawalletVersion: 1,
             datawalletModifications: [{ objectIdentifier: "test", collection: "Messages", type: "Create", encryptedPayload: "encryptedPayload", datawalletVersion: 1 }]
@@ -29,6 +32,6 @@ TransportLoggerFactory.init(new SimpleLoggerFactory(LogLevel.Fatal));
         (await backboneClient2.sync.getDatawalletModifications({ localIndex: -100 })).value.collect();
         (await backboneClient3.sync.getDatawalletModifications({ localIndex: -100 })).value.collect();
 
-        //TODO: implement k6 checks for the received changes
+        // TODO: implement k6 checks for the received changes
     }
 })();
