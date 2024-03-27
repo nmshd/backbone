@@ -4,17 +4,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.AdminApi.Infrastructure.Persistence.Database;
 
-public class AdminUiDbContext : AbstractDbContextBase
+public class AdminApiDbContext : AbstractDbContextBase
 {
-    public AdminUiDbContext()
+    public AdminApiDbContext()
     {
     }
 
-    public AdminUiDbContext(DbContextOptions<AdminUiDbContext> options) : base(options)
+    public AdminApiDbContext(DbContextOptions<AdminApiDbContext> options) : base(options)
     {
     }
 
-    public AdminUiDbContext(DbContextOptions<AdminUiDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    public AdminApiDbContext(DbContextOptions<AdminApiDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
     {
     }
 
@@ -30,6 +30,6 @@ public class AdminUiDbContext : AbstractDbContextBase
     {
         base.OnModelCreating(builder);
 
-        builder.ApplyConfigurationsFromAssembly(typeof(AdminUiDbContext).Assembly);
+        builder.ApplyConfigurationsFromAssembly(typeof(AdminApiDbContext).Assembly);
     }
 }

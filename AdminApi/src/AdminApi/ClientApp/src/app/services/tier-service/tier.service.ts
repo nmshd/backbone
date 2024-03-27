@@ -58,6 +58,8 @@ export interface TierOverview {
     id: string;
     name: string;
     numberOfIdentities: number;
+    canBeUsedAsDefaultForClient: boolean;
+    canBeManuallyAssigned: boolean;
 }
 
 export interface TierDTO {

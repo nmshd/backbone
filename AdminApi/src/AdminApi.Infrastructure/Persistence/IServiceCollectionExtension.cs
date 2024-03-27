@@ -29,7 +29,7 @@ public static class IServiceCollectionExtensions
         setupOptions.Invoke(options);
 
         services
-            .AddDbContext<AdminUiDbContext>(dbContextOptions =>
+            .AddDbContext<AdminApiDbContext>(dbContextOptions =>
             {
                 switch (options.Provider)
                 {

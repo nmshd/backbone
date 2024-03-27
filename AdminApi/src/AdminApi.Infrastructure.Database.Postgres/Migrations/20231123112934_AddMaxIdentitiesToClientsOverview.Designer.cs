@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
 {
-    [DbContext(typeof(AdminUiDbContext))]
+    [DbContext(typeof(AdminApiDbContext))]
     [Migration("20231123112934_AddMaxIdentitiesToClientsOverview")]
     partial class AddMaxIdentitiesToClientsOverview
     {

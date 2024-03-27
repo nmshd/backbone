@@ -7,7 +7,7 @@ public class IdentityCreatedIntegrationEvent : IntegrationEvent
     public IdentityCreatedIntegrationEvent(Identity identity) : base($"{identity.Address}/Created")
     {
         Address = identity.Address;
-        Tier = identity.TierId!;
+        Tier = identity.TierId;
     }
 
     public string Address { get; }

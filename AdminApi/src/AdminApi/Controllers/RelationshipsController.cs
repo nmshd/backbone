@@ -18,13 +18,13 @@ namespace Backbone.AdminApi.Controllers;
 [Authorize("ApiKey")]
 public class RelationshipsController : ApiControllerBase
 {
-    private readonly AdminUiDbContext _adminUiDbContext;
+    private readonly AdminApiDbContext _adminApiDbContext;
     private readonly ApplicationOptions _options;
 
 
-    public RelationshipsController(IMediator mediator, IOptions<ApplicationOptions> options, AdminUiDbContext adminUiDbContext) : base(mediator)
+    public RelationshipsController(IMediator mediator, IOptions<ApplicationOptions> options, AdminApiDbContext adminApiDbContext) : base(mediator)
     {
-        _adminUiDbContext = adminUiDbContext;
+        _adminApiDbContext = adminApiDbContext;
         _options = options.Value;
     }
 
@@ -37,7 +37,7 @@ public class RelationshipsController : ApiControllerBase
             throw new ApplicationException(
                 GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
-        var relationshipOverviews = await _adminUiDbContext.RelationshipOverviews
+        var relationshipOverviews = await _adminApiDbContext.RelationshipOverviews
             .Where(r => r.To == participant || r.From == participant)
             .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 

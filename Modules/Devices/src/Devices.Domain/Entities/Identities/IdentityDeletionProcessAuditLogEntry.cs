@@ -97,6 +97,18 @@ public class IdentityDeletionProcessAuditLogEntry
         );
     }
 
+    public static IdentityDeletionProcessAuditLogEntry ProcessCancelledBySupport(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId,
+            "The deletion process was cancelled by a support employee.",
+            Hasher.HashUtf8(identityAddress.StringValue),
+            null,
+            DeletionProcessStatus.Approved,
+            DeletionProcessStatus.Cancelled
+        );
+    }
+
     public static IdentityDeletionProcessAuditLogEntry ProcessCancelledAutomatically(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(

@@ -22,8 +22,8 @@ public class HandlerTests
         var metric = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
         var identity = new Identity("some-identity-address", new TierId("SomeTierId"));
 
-        var max = 5;
-        var period = QuotaPeriod.Month;
+        const int max = 5;
+        const QuotaPeriod period = QuotaPeriod.Month;
 
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(metric.Key, max, period));
         identity.CreateIndividualQuota(metric.Key, max, period);

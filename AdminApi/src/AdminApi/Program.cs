@@ -79,7 +79,7 @@ static WebApplication CreateApp(string[] args)
     var app = builder.Build();
     Configure(app);
 
-    app.MigrateDbContext<AdminUiDbContext>();
+    app.MigrateDbContext<AdminApiDbContext>();
 
     return app;
 }

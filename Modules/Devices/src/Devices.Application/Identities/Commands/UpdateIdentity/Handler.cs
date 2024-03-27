@@ -8,6 +8,7 @@ using MediatR;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
+
 public class Handler : IRequestHandler<UpdateIdentityCommand>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
@@ -31,7 +32,7 @@ public class Handler : IRequestHandler<UpdateIdentityCommand>
 
         var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
 
-        var tiers = await _tiersRepository.FindByIds(new List<TierId>() { identity.TierId!, newTierIdResult.Value }, cancellationToken);
+        var tiers = await _tiersRepository.FindByIds(new List<TierId>() { identity.TierId, newTierIdResult.Value }, cancellationToken);
 
         var oldTier = tiers.Single(t => t.Id == identity.TierId);
         var newTier = tiers.SingleOrDefault(t => t.Id == newTierIdResult.Value) ?? throw new NotFoundException(nameof(Tier));

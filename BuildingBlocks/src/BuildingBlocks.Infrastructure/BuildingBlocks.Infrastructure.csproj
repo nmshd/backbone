@@ -4,7 +4,7 @@
         <PackageReference Include="Autofac" Version="8.0.0" />
         <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.17.4"/>
         <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
-        <PackageReference Include="Google.Cloud.PubSub.V1" Version="3.10.0"/>
+        <PackageReference Include="Google.Cloud.PubSub.V1" Version="3.10.1"/>
         <PackageReference Include="Google.Cloud.Storage.V1" Version="4.9.0"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.3"/>
