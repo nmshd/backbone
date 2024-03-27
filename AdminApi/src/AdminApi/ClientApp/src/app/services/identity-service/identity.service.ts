@@ -204,6 +204,10 @@ export class IdentityService {
     public cancelDeletionProcessAsSupport(identityAddress: string, deletionProcessId: string): Observable<HttpResponseEnvelope<void>> {
         return this.http.put<HttpResponseEnvelope<void>>(`${this.apiUrl}/${identityAddress}/DeletionProcesses/${deletionProcessId}/Cancel`, "");
     }
+
+    public startDeletionProcessAsSupport(identityAddress: string): Observable<HttpResponseEnvelope<DeletionProcessOverview>> {
+        return this.http.post<HttpResponseEnvelope<DeletionProcessOverview>>(`${this.apiUrl}/${identityAddress}/DeletionProcesses`, "");
+    }
 }
 
 export interface Identity {
