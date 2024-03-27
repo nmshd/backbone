@@ -195,6 +195,11 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("CreatedByDevice");
 
+                    b.HasIndex("CreatedAt", "CreatedBy", "CreatedByDevice")
+                        .HasAnnotation("Npgsql:IndexInclude", new[] { "Content" });
+
+                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("CreatedAt", "CreatedBy", "CreatedByDevice"), new[] { "Content" });
+
                     b.ToTable("RelationshipChanges", (string)null);
                 });
 
