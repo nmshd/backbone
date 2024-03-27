@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    [Migration("20240321141626_AddIdentityIndexes")]
+    [Migration("20240327091638_AddIdentityIndexes")]
     partial class AddIdentityIndexes
     {
         /// <inheritdoc />
@@ -76,6 +76,16 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
+
+                    b.Property<bool>("CanBeManuallyAssigned")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("CanBeUsedAsDefaultForClient")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -240,6 +250,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("TierId")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
