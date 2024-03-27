@@ -60,7 +60,6 @@ class _ClientOverviewState extends State<ClientOverview> {
           ClientFilter((filteredClients) {
             if (filteredClients.clientID!.isNotEmpty) {
               setState(() {
-                print('Clients $clients');
                 clients = clients.where((client) => client.clientId == filteredClients.clientID!).toList();
               });
             }
