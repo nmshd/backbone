@@ -1,3 +1,7 @@
+import 'package:admin_ui/theme/colors/color_schemes.dart';
+import 'package:admin_ui/theme/colors/custom_color.dart';
+import 'package:admin_ui/theme/theme_manager.dart';
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -68,13 +72,37 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const colorSchemeSeed = Color.fromARGB(255, 23, 66, 141);
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      themeMode: ThemeMode.light,
-      theme: ThemeData(colorSchemeSeed: colorSchemeSeed, useMaterial3: true),
-      darkTheme: ThemeData(brightness: Brightness.dark, colorSchemeSeed: colorSchemeSeed, useMaterial3: true),
-      routerConfig: _router,
+    return DynamicColorBuilder(
+      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+        ColorScheme lightScheme;
+        ColorScheme darkScheme;
+
+        if (lightDynamic != null && darkDynamic != null) {
+          lightScheme = lightDynamic.harmonized();
+          lightCustomColors = lightCustomColors.harmonized(lightScheme);
+
+          darkScheme = darkDynamic.harmonized();
+          darkCustomColors = darkCustomColors.harmonized(darkScheme);
+        } else {
+          lightScheme = lightColorScheme;
+          darkScheme = darkColorScheme;
+        }
+
+        return MaterialApp.router(
+          theme: ThemeData(
+            useMaterial3: true,
+            colorScheme: lightScheme,
+            extensions: [lightCustomColors],
+          ),
+          darkTheme: ThemeData(
+            useMaterial3: true,
+            colorScheme: darkScheme,
+            extensions: [darkCustomColors],
+          ),
+          debugShowCheckedModeBanner: false,
+          routerConfig: _router,
+        );
+      },
     );
   }
 }
