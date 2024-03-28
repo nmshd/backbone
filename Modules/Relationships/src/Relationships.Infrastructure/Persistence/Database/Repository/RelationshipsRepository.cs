@@ -1,12 +1,12 @@
 using System.Linq.Expressions;
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Domain;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
@@ -68,7 +68,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         catch (DbUpdateException ex)
         {
             if (ex.InnerException != null && ex.InnerException.Message.Contains(ConstraintNames.ONLY_ONE_ACTIVE_RELATIONSHIP_BETWEEN_TWO_IDENTITIES))
-                throw new OperationFailedException(ApplicationErrors.Relationship.RelationshipToTargetAlreadyExists(relationship.To));
+                throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(relationship.To));
 
             throw;
         }
