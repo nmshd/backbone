@@ -4,6 +4,7 @@ import 'package:admin_ui/theme/theme_manager.dart';
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import 'home/home.dart';
 import 'pages/pages.dart';
@@ -14,7 +15,12 @@ void main() async {
 
   await setup();
 
-  runApp(const MainApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => ThemeManager(),
+      child: const MainApp(),
+    ),
+  );
 }
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -89,6 +95,7 @@ class MainApp extends StatelessWidget {
         }
 
         return MaterialApp.router(
+          themeMode: Provider.of<ThemeManager>(context).themeMode,
           theme: ThemeData(
             useMaterial3: true,
             colorScheme: lightScheme,
