@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-const neutral_variant = Color(0xFF333333);
+const neutralVariant = Color(0xFF333333);
 const decorative = Color(0xFF61178C);
 const decorative_2 = Color(0xFF8EB0E9);
 const error = Color(0xFF8C1742);
