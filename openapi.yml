@@ -1,0 +1,314 @@
+openapi: 3.1.0
+info:
+  version: "2"
+  title: Relationships API v2
+
+paths:
+  "/api/v1/Relationships/{id}":
+    get:
+      tags:
+        - Relationships
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+            example: "REL_________________"
+            nullable: false
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationship"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+  "/api/v1/Relationships":
+    get:
+      tags:
+        - Relationships
+      parameters:
+        - name: PageNumber
+          in: query
+          style: form
+          required: false
+          schema:
+            type: integer
+        - name: PageSize
+          in: query
+          style: form
+          required: false
+          schema:
+            type: integer
+            format: int32
+        - name: ids
+          in: query
+          style: form
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+              example: "REL_________________"
+              nullable: false
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PagedHttpResponseEnvelopeListRelationshipsResponse"
+    post:
+      tags:
+        - Relationships
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                relationshipTemplateId:
+                  type: string
+                  example: "RLT_________________"
+                  nullable: false
+                content:
+                  type: string
+                  format: byte
+                  nullable: false
+              additionalProperties: false
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationship"
+        "400":
+          description: >
+            Bad Request<br><br>
+            Can contain one of the following error codes:
+              - `error.platform.validation.relationshipRequest.cannotSendRelationshipRequestToYourself`
+              - `error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists`
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+  "/api/v1/Relationships/{id}/Accept":
+    put:
+      tags:
+        - Relationships
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationship"
+        "400":
+          description: >
+            Bad Request<br><br>
+            Can contain one of the following error codes:
+              - `error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse`
+              - `error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus`
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+  "/api/v1/Relationships/{id}/Reject":
+    put:
+      tags:
+        - Relationships
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationship"
+        "400":
+          description: >
+            Bad Request<br><br>
+            Can contain one of the following error codes:
+              - `error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse`
+              - `error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus`
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+  "/api/v1/Relationships/{id}/Revoke":
+    put:
+      tags:
+        - Relationships
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationship"
+        "400":
+          description: >
+            Bad Request<br><br>
+            Can contain one of the following error codes:
+              - `error.platform.validation.relationshipRequest.cannotRevokeRelationshipRequestNotCreatedByYourself`
+              - `error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus`
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+
+components:
+  securitySchemes:
+    oauth:
+      type: "oauth2"
+      flows:
+        password:
+          tokenUrl: "http://localhost:8081/connect/token"
+          scopes: {}
+  schemas:
+    HttpResponseEnvelopeRelationship:
+      type: object
+      properties:
+        result:
+          $ref: "#/components/schemas/Relationship"
+
+    Relationship:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "REL_________________"
+        relationshipTemplateId:
+          type: string
+          example: "RLT_________________"
+        from:
+          type: string
+          example: "id1_________________________________"
+        to:
+          type: string
+          example: "id1_________________________________"
+        createdAt:
+          type: string
+          format: date-time
+        status:
+          $ref: "#/components/schemas/RelationshipStatus"
+        auditLog:
+          type: array
+          items:
+            $ref: "#/components/schemas/RelationshipAuditLogEntry"
+      additionalProperties: false
+
+    RelationshipAuditLogEntry:
+      type: object
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+          example: "id1_________________________________"
+        createdByDevice:
+          type: string
+          example: "DVC_________________"
+        reason:
+          type: string
+          example: "Creation|AcceptanceOfCreation|RejectionOfCreation|RevocationOfCreation"
+          enum:
+            - Creation
+            - AcceptanceOfCreation
+            - RejectionOfCreation
+            - RevocationOfCreation
+        oldStatus:
+          allOf:
+            - $ref: "#/components/schemas/RelationshipStatus"
+          nullable: true
+        newStatus:
+          allOf:
+            - $ref: "#/components/schemas/RelationshipStatus"
+      additionalProperties: false
+
+    RelationshipStatus:
+      type: string
+      enum:
+        - Pending
+        - Accepted
+        - Rejected
+        - Revoked
+      example: "Pending|Accepted|Rejected|Revoked"
+
+    HttpResponseEnvelopeError:
+      type: object
+      properties:
+        error:
+          $ref: "#/components/schemas/HttpError"
+      additionalProperties: false
+
+    HttpError:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "ERR_________________"
+        code:
+          type: string
+        message:
+          type: string
+        docs:
+          type: string
+        time:
+          type: string
+          format: date-time
+      additionalProperties: false
