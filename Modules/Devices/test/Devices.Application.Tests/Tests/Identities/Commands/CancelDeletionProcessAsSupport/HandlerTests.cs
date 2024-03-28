@@ -26,7 +26,7 @@ public class HandlerTests
 
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => fakeIdentitiesRepository
-                .FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
+                .FindByAddress(identity.Address, A<CancellationToken>._, true))
             .Returns(identity);
 
         var handler = CreateHandler(fakeIdentitiesRepository);
@@ -37,7 +37,7 @@ public class HandlerTests
         // Assert
         identity.Status.Should().Be(IdentityStatus.Active);
 
-        result.Id.Should().Be(deletionProcess!.Id);
+        result.Id.Should().Be(deletionProcess.Id);
         result.Status.Should().Be(DeletionProcessStatus.Cancelled);
         result.CancelledAt.Should().Be(utcNow);
     }
@@ -51,7 +51,7 @@ public class HandlerTests
 
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => fakeIdentitiesRepository
-                .FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
+                .FindByAddress(identity.Address, A<CancellationToken>._, true))
             .Returns(identity);
 
         var mockEventBus = A.Fake<IEventBus>();
@@ -64,8 +64,8 @@ public class HandlerTests
         // Assert
         A.CallTo(() => mockEventBus.Publish(
             A<TierOfIdentityChangedIntegrationEvent>.That.Matches(e =>
-                    e.IdentityAddress == identity.Address &&
-                    e.OldTierId == "TIR00000000000000001"))
+                e.IdentityAddress == identity.Address &&
+                e.OldTierId == "TIR00000000000000001"))
         ).MustHaveHappenedOnceExactly();
 
         A.CallTo(() => mockEventBus.Publish(

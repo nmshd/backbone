@@ -8,6 +8,7 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsOwner;
+
 public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, CancelDeletionProcessAsOwnerResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
@@ -24,7 +25,7 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
     public async Task<CancelDeletionProcessAsOwnerResponse> Handle(CancelDeletionProcessAsOwnerCommand request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
-        var oldTierId = identity.TierId!;
+        var oldTierId = identity.TierId;
 
         var deviceId = _userContext.GetDeviceId();
         var deletionProcessIdResult = IdentityDeletionProcessId.Create(request.DeletionProcessId);
@@ -37,7 +38,7 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
         var deletionProcess = identity.CancelDeletionProcessAsOwner(deletionProcessId, deviceId);
 
         await _identitiesRepository.Update(identity, cancellationToken);
-        var newTierId = identity.TierId!;
+        var newTierId = identity.TierId;
 
         _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTierId, newTierId));
         _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, deletionProcess.Id));
