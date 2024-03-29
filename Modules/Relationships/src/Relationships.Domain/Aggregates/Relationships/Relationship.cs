@@ -70,6 +70,12 @@ public class Relationship
             throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
     }
 
+    private static void EnsureNoTerminatedRelationshipToTargetExists(IdentityAddress target, List<Relationship> existingRelationships)
+    {
+        if (existingRelationships.Any(r => r.Status == RelationshipStatus.Terminated))
+            throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
+    }
+
     public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureStatus(RelationshipStatus.Pending);
@@ -133,6 +139,39 @@ public class Relationship
             RelationshipAuditLogEntryReason.RevocationOfCreation,
             RelationshipStatus.Pending,
             RelationshipStatus.Revoked,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+    public void Terminate(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureStatus(RelationshipStatus.Active);
+
+        Status = RelationshipStatus.Terminated;
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.Termination,
+            RelationshipStatus.Active,
+            RelationshipStatus.Terminated,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
+    public void Reactivate(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureStatus(RelationshipStatus.Terminated);
+        // TODO: Ensure it can reactivate only own relationship.
+        // TODO: Ensure there is not already an open reactivation.
+
+        Status = RelationshipStatus.Reactivated;
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.ReactivationRequested,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Reactivated,
             activeIdentity,
             activeDevice
         );
