@@ -110,7 +110,27 @@ class _LoginScreenState extends State<LoginScreen> {
                           height: 40,
                           child: ElevatedButton(
                             onPressed: _isButtonEnabled ? _login : null,
-                            child: const Text('Login'),
+                            style: _isButtonEnabled
+                                ? const ButtonStyle(
+                                    backgroundColor: MaterialStatePropertyAll(
+                                      Color.fromARGB(255, 0, 47, 114),
+                                    ),
+                                  )
+                                : null,
+                            child: Text(
+                              'Login',
+                              style: TextStyle(color: _isButtonEnabled ? Colors.white : null),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Visibility(
+                          visible: _attemptedLogin && !apiKeyValid,
+                          child: TextButton(
+                            onPressed: () {
+                              // TODO: Implement what should happen when "Forgot API Key?" is pressed
+                            },
+                            child: const Text('Forgot API Key?'),
                           ),
                         ),
                       ],
