@@ -34,6 +34,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final topPadding = screenSize.height > 1080 ? screenSize.height * 0.2 : screenSize.height * 0.3;
+
     return Scaffold(
       appBar: AppBar(
         title: Row(
