@@ -126,7 +126,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         const SizedBox(height: 8),
                         TextButton(
                           onPressed: () {
-                            // TODO: Implement what should happen when "Forgot API Key?" is pressed
+                            // TODO(stamenione): Implement what should happen when "Forgot API Key?" is pressed
                           },
                           child: const Text(
                             'Forgot API Key?',
