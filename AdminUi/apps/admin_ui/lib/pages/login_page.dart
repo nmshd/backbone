@@ -128,7 +128,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           onPressed: () {
                             // TODO: Implement what should happen when "Forgot API Key?" is pressed
                           },
-                          child: const Text('Forgot API Key?'),
+                          child: const Text(
+                            'Forgot API Key?',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 0, 47, 114),
+                            ),
+                          ),
                         ),
                       ],
                     ),
