@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             focusedErrorBorder: const OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.red, width: 2),
                             ),
-                            errorText: (_attemptedLogin && !apiKeyValid) ? '' : null,
+                            errorText: (_attemptedLogin && !apiKeyValid) ? 'Invalid API Key' : null,
                           ),
                           onSubmitted: (_) => _login(),
                           onChanged: (text) {
