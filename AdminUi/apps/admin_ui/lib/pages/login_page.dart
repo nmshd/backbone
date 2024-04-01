@@ -57,33 +57,65 @@ class _LoginScreenState extends State<LoginScreen> {
           width: 40,
         ),
       ),
-      body: Center(
-        child: SizedBox(
-          width: 300,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SvgPicture.asset('assets/logo.svg', width: 200, height: 200),
-              const SizedBox(height: 40),
-              TextField(
-                controller: _apiKeyController,
-                focusNode: _apiKeyFocusNode,
-                decoration: const InputDecoration(
-                  labelText: 'API Key',
-                  border: OutlineInputBorder(),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(top: topPadding),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: SizedBox(
+              width: 500,
+              height: 250,
+              child: Card(
+                child: SizedBox(
+                  width: 300,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        TextField(
+                          controller: _apiKeyController,
+                          focusNode: _apiKeyFocusNode,
+                          decoration: InputDecoration(
+                            labelText: 'API Key',
+                            border: const OutlineInputBorder(),
+                            errorBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red, width: 2),
+                            ),
+                            focusedErrorBorder: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.red, width: 2),
+                            ),
+                            errorText: (_attemptedLogin && !apiKeyValid) ? 'Invalid API Key' : null,
+                          ),
+                          onSubmitted: (_) => _login(),
+                          onChanged: (text) {
+                            setState(() {
+                              _isButtonEnabled = text.isNotEmpty;
+                              _attemptedLogin = false;
+                              apiKeyValid = false;
+                            });
+                          },
+                          obscureText: true,
+                        ),
+                        const SizedBox(height: 20),
+                        SizedBox(
+                          width: double.infinity,
+                          height: 40,
+                          child: ElevatedButton(
+                            onPressed: _isButtonEnabled ? _login : null,
+                            child: const Text('Login'),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-                onSubmitted: (_) => _login(),
-                obscureText: true,
               ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: _login,
-                child: const Text('Login'),
-              ),
-            ],
+            ),
           ),
         ),
       ),
+      backgroundColor: const Color.fromARGB(255, 211, 228, 255),
     );
   }
 
