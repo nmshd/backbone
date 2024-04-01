@@ -17,6 +17,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final _apiKeyController = TextEditingController();
   final _apiKeyFocusNode = FocusNode();
 
+  bool _isButtonEnabled = false;
+  bool apiKeyValid = false;
+  bool _attemptedLogin = false;
+
   @override
   void initState() {
     super.initState();
@@ -123,21 +127,17 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _login() async {
+    _attemptedLogin = true;
     final apiKey = _apiKeyController.text.trim();
     if (apiKey.isEmpty) return;
 
     const baseUrl = kIsWeb ? '' : String.fromEnvironment('base_url');
-    final apiKeyValid = await AdminApiClient.validateApiKey(baseUrl: baseUrl, apiKey: apiKey);
+    apiKeyValid = await AdminApiClient.validateApiKey(baseUrl: baseUrl, apiKey: apiKey);
 
     if (!mounted) return;
 
     if (!apiKeyValid) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Invalid API Key'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      setState(() {});
       return;
     }
 
