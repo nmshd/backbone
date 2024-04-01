@@ -15,6 +15,8 @@ TransportLoggerFactory.init(new SimpleLoggerFactory(LogLevel.Fatal));
     };
 
     const connector = await BackboneClient.initWithNewIdentity(config);
+    let userLocalDatawalletModificationsIndex = -1;
+    let connectorLocalDatawalletModificationsIndex = 1;
 
     const connectorRelationshipTemplate = await connector.relationshipTemplates.createRelationshipTemplate({
         content: randomBytesAsBase64String(64), // base64 encoded string
@@ -28,7 +30,8 @@ TransportLoggerFactory.init(new SimpleLoggerFactory(LogLevel.Fatal));
 
     let syncRes = await user.sync.startSyncRun({ type: SyncRunType.DatawalletVersionUpgrade, duration: 10 });
 
-    await user.sync.finalizeDatawalletVersionUpgrade(syncRes.value.syncRun?.id!, { newDatawalletVersion: 1, datawalletModifications: generateDataWalletModifications(40, 300) });
+    let upgrade = await user.sync.finalizeDatawalletVersionUpgrade(syncRes.value.syncRun?.id!, { newDatawalletVersion: 1, datawalletModifications: generateDataWalletModifications(40, 300) });
+    userLocalDatawalletModificationsIndex = (upgrade.value as any).newDatawalletModificationIndex; // Todo remove cast when PR is merged and package is updated
 
     //sleep(5);
 
@@ -45,12 +48,19 @@ TransportLoggerFactory.init(new SimpleLoggerFactory(LogLevel.Fatal));
         })
     ).value;
 
-    await user.sync.createDatawalletModifications({ modifications: generateDataWalletModifications(5, 300) });
+    let createRes = await user.sync.createDatawalletModifications({ localIndex: userLocalDatawalletModificationsIndex, modifications: generateDataWalletModifications(5, 300) });
+
+    userLocalDatawalletModificationsIndex = createRes.value.newIndex;
 
     //sleep(2);
 
     syncRes = await connector.sync.startSyncRun({ type: SyncRunType.DatawalletVersionUpgrade, duration: 10 });
-    await connector.sync.finalizeDatawalletVersionUpgrade(syncRes.value.syncRun?.id!, { newDatawalletVersion: 1 });
+    await connector.sync.finalizeDatawalletVersionUpgrade(syncRes.value.syncRun?.id!, {
+        newDatawalletVersion: connectorLocalDatawalletModificationsIndex,
+        datawalletModifications: generateDataWalletModifications(5, 300)
+    });
+
+    await sleep(0.5);
 
     syncRes = await connector.sync.startSyncRun({ type: SyncRunType.ExternalEventSync, duration: 10 });
     // k6 check (await res.collect()).length == 1
@@ -58,13 +68,16 @@ TransportLoggerFactory.init(new SimpleLoggerFactory(LogLevel.Fatal));
         | (BackboneExternalEvent & { payload: { relationshipId: string; changeId: string } })
         | undefined;
 
+    let b = (await connector.sync.finalizeExternalEventSync(syncRes.value.syncRun!.id, { externalEventResults: [], datawalletModifications: [] })).value;
+
+    connectorLocalDatawalletModificationsIndex = b.newDatawalletModificationIndex;
+
     // k6 check relationshipChangeCreated?.payload.relationshipId == userCreatedRelationship.id;
 
     //sleep(3); // simulates a customer system that has to make the decision
-
     await connector.relationships.acceptRelationshipChange(relationshipChangeCreated?.payload.relationshipId!, relationshipChangeCreated?.payload.changeId!);
 
-    await sleep(0.5);
+    await sleep(5);
 
     syncRes = await user.sync.startSyncRun({ type: SyncRunType.ExternalEventSync, duration: 10 });
 
@@ -73,8 +86,9 @@ TransportLoggerFactory.init(new SimpleLoggerFactory(LogLevel.Fatal));
         | undefined;
 
     // k6 check relationshipChangeCreated?.payload.relationshipId == relationshipChangeCompleted?.payload.relationshipId;
+    await user.sync.finalizeExternalEventSync(syncRes.value.syncRun?.id!, { datawalletModifications: [], externalEventResults: [] });
 
     await user.relationships.getRelationship(relationshipChangeCompleted?.payload.relationshipId!); // TODO why do we do this? (next to last step of the scenario)
 
-    await user.sync.createDatawalletModifications({ modifications: generateDataWalletModifications(5, 300) });
+    let a = await user.sync.createDatawalletModifications({ localIndex: userLocalDatawalletModificationsIndex, modifications: generateDataWalletModifications(5, 300) });
 })();
