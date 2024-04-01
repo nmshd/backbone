@@ -124,14 +124,11 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Visibility(
-                          visible: _attemptedLogin && !apiKeyValid,
-                          child: TextButton(
-                            onPressed: () {
-                              // TODO: Implement what should happen when "Forgot API Key?" is pressed
-                            },
-                            child: const Text('Forgot API Key?'),
-                          ),
+                        TextButton(
+                          onPressed: () {
+                            // TODO: Implement what should happen when "Forgot API Key?" is pressed
+                          },
+                          child: const Text('Forgot API Key?'),
                         ),
                       ],
                     ),
