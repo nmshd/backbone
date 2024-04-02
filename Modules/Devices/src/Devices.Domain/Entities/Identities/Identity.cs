@@ -36,7 +36,7 @@ public class Identity
     public byte IdentityVersion { get; private set; }
 
     public TierId? TierIdBeforeDeletion { get; private set; }
-    public TierId? TierId { get; private set; }
+    public TierId TierId { get; private set; }
 
     public IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
 
@@ -239,6 +239,49 @@ public class Identity
     public static Expression<Func<Identity, bool>> IsReadyForDeletion()
     {
         return i => i.Status == IdentityStatus.ToBeDeleted && i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow;
+    }
+
+    public IdentityDeletionProcess CancelDeletionProcessAsOwner(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
+    {
+        var deletionProcess = GetDeletionProcessWithId(deletionProcessId);
+        deletionProcess.EnsureStatus(DeletionProcessStatus.Approved);
+
+        EnsureIdentityOwnsDevice(canceledByDeviceId);
+
+        deletionProcess.CancelAsOwner(Address, canceledByDeviceId);
+        TierId = TierIdBeforeDeletion!;
+        TierIdBeforeDeletion = null;
+        Status = IdentityStatus.Active;
+
+        return deletionProcess;
+    }
+
+    private IdentityDeletionProcess GetDeletionProcessWithId(IdentityDeletionProcessId deletionProcessId)
+    {
+        return DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+    }
+
+    public IdentityDeletionProcess CancelDeletionProcessAsSupport(IdentityDeletionProcessId deletionProcessId)
+    {
+        EnsureDeletionProcessExists(deletionProcessId);
+        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
+
+        var deletionProcess = DeletionProcesses.First(d => d.Id == deletionProcessId);
+
+        deletionProcess.CancelAsSupport(Address);
+        TierId = TierIdBeforeDeletion!;
+        TierIdBeforeDeletion = null;
+        Status = IdentityStatus.Active;
+
+        return deletionProcess;
+    }
+
+    private void EnsureDeletionProcessExists(IdentityDeletionProcessId deletionProcessId)
+    {
+        var isDeletionProcessOwnedByDevice = DeletionProcesses.Any(d => d.Id == deletionProcessId);
+
+        if (!isDeletionProcessOwnedByDevice)
+            throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
     }
 }
 

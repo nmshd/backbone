@@ -16,7 +16,7 @@ public class CancelDeletionProcessTests
         var tierIdBeforeDeletion = identity.TierIdBeforeDeletion;
 
         // Act
-        var deletionProcess = identity.CancelDeletionProcess(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
+        var deletionProcess = identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
 
         // Assert
         identity.TierId.Should().Be(tierIdBeforeDeletion);
@@ -38,7 +38,7 @@ public class CancelDeletionProcessTests
         var deletionProcessId = IdentityDeletionProcessId.Create("IDP00000000000000001").Value;
 
         // Act
-        var acting = () => identity.CancelDeletionProcess(deletionProcessId, deviceId);
+        var acting = () => identity.CancelDeletionProcessAsOwner(deletionProcessId, deviceId);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Message.Should().Contain("IdentityDeletionProcess");
@@ -51,7 +51,7 @@ public class CancelDeletionProcessTests
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval();
 
         // Act
-        var acting = () => identity.CancelDeletionProcess(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
+        var acting = () => identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved).Code);
