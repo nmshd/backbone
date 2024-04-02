@@ -41,8 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    final topPadding = screenSize.height > 1080 ? screenSize.height * 0.2 : screenSize.height * 0.3;
+    final customColors = Theme.of(context).extension<CustomColors>();
 
     return Scaffold(
       appBar: AppBar(
@@ -78,12 +77,32 @@ class _LoginScreenState extends State<LoginScreen> {
                       onSubmitted: (_) => _login(),
                     ),
                   ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: _isButtonEnabled ? _login : null,
+                      style: _isButtonEnabled
+                          ? ButtonStyle(
+                              backgroundColor: MaterialStatePropertyAll(
+                                Theme.of(context).colorScheme.primary,
+                              ),
+                            )
+                          : null,
+                      child: Text(
+                        'Login',
+                        style: TextStyle(color: _isButtonEnabled ? customColors?.onNeutralvariant : null),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
           ),
         ),
       ),
+      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
     );
   }
 
