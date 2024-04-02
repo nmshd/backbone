@@ -1,9 +1,11 @@
-import 'package:admin_ui/main.dart';
+import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_ui/styles/widgets/app_title.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '/utils/utils.dart';
 
 class HomeScreen extends StatefulWidget {
   final Widget child;
@@ -79,8 +81,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _logout() async {
     final sp = await SharedPreferences.getInstance();
     await sp.remove('api_key');
-    await GetIt.I.reset();
-    setupLocator();
+    await GetIt.I.unregisterIfRegistered<AdminApiClient>();
+
     if (mounted) context.go('/login');
   }
 }

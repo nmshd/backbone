@@ -1,5 +1,4 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
-import 'package:admin_ui/main.dart';
 import 'package:admin_ui/styles/widgets/app_title.dart';
 import 'package:admin_ui/styles/widgets/custom_elevated_button.dart';
 import 'package:admin_ui/styles/widgets/custom_styled_container.dart';
@@ -9,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '/utils/utils.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -108,10 +109,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
     final sp = await SharedPreferences.getInstance();
     await sp.setString('api_key', apiKey);
-    await GetIt.I.reset();
 
-    setupLocator();
-
+    await GetIt.I.unregisterIfRegistered<AdminApiClient>();
     GetIt.I.registerSingleton(await AdminApiClient.create(baseUrl: baseUrl, apiKey: apiKey));
     if (mounted) context.go('/dashboard');
   }
