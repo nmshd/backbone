@@ -136,7 +136,7 @@ public class IdentityDeletionProcess
         DeletionStartedAt = SystemTime.UtcNow;
     }
 
-    internal bool IsReadyToStartDeletion()
+    private bool IsReadyToStartDeletion()
     {
         return Status == DeletionProcessStatus.Approved && GracePeriodEndsAt < SystemTime.UtcNow;
     }
