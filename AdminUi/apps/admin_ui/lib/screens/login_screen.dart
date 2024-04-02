@@ -1,5 +1,6 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_ui/styles/widgets/app_title.dart';
+import 'package:admin_ui/styles/widgets/custom_styled_container.dart';
 import 'package:admin_ui/styles/widgets/custom_text_field.dart';
 import 'package:admin_ui/theme/colors/custom_colors.dart';
 import 'package:flutter/foundation.dart';
@@ -51,52 +52,29 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: Center(
         child: Card(
-          child: SizedBox(
-            width: 400,
-            child: Padding(
-              padding: const EdgeInsets.all(25),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    height: 100,
-                    child: CustomTextField(
-                      controller: _apiKeyController,
-                      focusNode: _apiKeyFocusNode,
-                      label: 'API Key',
-                      obscureText: true,
-                      errorText: (_hasAttemptedLogin && !_isApiKeyValid) ? 'Invalid API Key' : null,
-                      onChanged: (text) {
-                        setState(() {
-                          _isButtonEnabled = text.isNotEmpty;
-                          _hasAttemptedLogin = false;
-                          _isApiKeyValid = false;
-                        });
-                      },
-                      onSubmitted: (_) => _login(),
-                    ),
+          child: CustomStyledContainer(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  height: 100,
+                  child: CustomTextField(
+                    controller: _apiKeyController,
+                    focusNode: _apiKeyFocusNode,
+                    label: 'API Key',
+                    obscureText: true,
+                    errorText: (_hasAttemptedLogin && !_isApiKeyValid) ? 'Invalid API Key' : null,
+                    onChanged: (text) {
+                      setState(() {
+                        _isButtonEnabled = text.isNotEmpty;
+                        _hasAttemptedLogin = false;
+                        _isApiKeyValid = false;
+                      });
+                    },
+                    onSubmitted: (_) => _login(),
                   ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: _isButtonEnabled ? _login : null,
-                      style: _isButtonEnabled
-                          ? ButtonStyle(
-                              backgroundColor: MaterialStatePropertyAll(
-                                Theme.of(context).colorScheme.primary,
-                              ),
-                            )
-                          : null,
-                      child: Text(
-                        'Login',
-                        style: TextStyle(color: _isButtonEnabled ? customColors?.onNeutralvariant : null),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
