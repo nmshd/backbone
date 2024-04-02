@@ -4,7 +4,6 @@ import 'package:admin_ui/styles/widgets/custom_text_field.dart';
 import 'package:admin_ui/theme/colors/custom_colors.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
