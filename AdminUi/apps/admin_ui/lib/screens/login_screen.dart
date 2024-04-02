@@ -42,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final _customColors = Theme.of(context).extension<CustomColors>();
+    final customColors = Theme.of(context).extension<CustomColors>();
 
     return Scaffold(
       appBar: AppBar(
@@ -81,7 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   isEnabled: _isButtonEnabled,
                   onPressed: _login,
                   backgroundColor: Theme.of(context).colorScheme.primary,
-                  textColor: _customColors?.onNeutralvariant,
+                  textColor: customColors?.onNeutralvariant,
                 ),
               ],
             ),
