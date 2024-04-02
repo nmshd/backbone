@@ -24,7 +24,7 @@ TransportLoggerFactory.init(new SimpleLoggerFactory(LogLevel.Fatal));
         // TODO: ajust the payload to 300B
         await backboneClient1.sync.finalizeDatawalletVersionUpgrade(syncRes.value.syncRun?.id!, {
             newDatawalletVersion: 1,
-            datawalletModifications: [{ objectIdentifier: "test", collection: "Messages", type: "Create", encryptedPayload: "encryptedPayload", datawalletVersion: 1 }]
+            datawalletModifications: generateDataWalletModifications(1, 300)
         });
 
         await Promise.all([backboneClient2.sync.startSyncRun(), backboneClient3.sync.startSyncRun()]);

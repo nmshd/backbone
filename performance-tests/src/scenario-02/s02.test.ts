@@ -15,8 +15,8 @@ TransportLoggerFactory.init(new SimpleLoggerFactory(LogLevel.Fatal));
 
     const backboneClient1 = await BackboneClient.initWithNewIdentity(config);
 
-    let syncRes = await backboneClient1.sync.startSyncRun({ type: SyncRunType.DatawalletVersionUpgrade, duration: 2000 });
+    let syncRes = await backboneClient1.sync.startSyncRun({ type: SyncRunType.DatawalletVersionUpgrade, duration: 20 });
 
-    // unssure whether we should call this or not.
+    // unsure whether we should call this or not.
     await backboneClient1.sync.finalizeDatawalletVersionUpgrade(syncRes.value.syncRun?.id!, { newDatawalletVersion: 1, datawalletModifications: [] });
 })();
