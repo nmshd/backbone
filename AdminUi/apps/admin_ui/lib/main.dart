@@ -13,7 +13,7 @@ void main() async {
   await setup();
 
   runApp(
-    const MainApp(),
+    const AdminUIApp(),
   );
 }
 
@@ -67,8 +67,8 @@ final _router = GoRouter(
   ],
 );
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class AdminUIApp extends StatelessWidget {
+  const AdminUIApp({super.key});
 
   @override
   Widget build(BuildContext context) {
