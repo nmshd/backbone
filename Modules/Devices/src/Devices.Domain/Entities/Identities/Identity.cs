@@ -142,7 +142,7 @@ public class Identity
 
     public void DeletionStarted()
     {
-        var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.IsActive())
+        var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.Status == DeletionProcessStatus.Approved)
                               ?? throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
 
         deletionProcess.DeletionStarted();

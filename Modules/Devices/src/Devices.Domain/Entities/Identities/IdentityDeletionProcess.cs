@@ -82,7 +82,7 @@ public class IdentityDeletionProcess
 
     public bool IsActive()
     {
-        return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.WaitingForApproval;
+        return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.WaitingForApproval or DeletionProcessStatus.Deleting;
     }
 
     public DateTime GetEndOfApprovalPeriod()
@@ -128,17 +128,17 @@ public class IdentityDeletionProcess
 
     internal void DeletionStarted()
     {
-        if (!IsReadyToStartDeletion())
-        {
-            throw new DomainException(DomainErrors.IdentityCannotBeDeleted());
-        }
+        EnsureStatus(DeletionProcessStatus.Approved);
+        EnsureGracePeriodHasExpired();
+
         Status = DeletionProcessStatus.Deleting;
         DeletionStartedAt = SystemTime.UtcNow;
     }
 
-    private bool IsReadyToStartDeletion()
+    private void EnsureGracePeriodHasExpired()
     {
-        return Status == DeletionProcessStatus.Approved && GracePeriodEndsAt < SystemTime.UtcNow;
+        if (GracePeriodEndsAt >= SystemTime.UtcNow)
+            throw new DomainException(DomainErrors.GracePeriodHasNotYetExpired());
     }
 
     public void Approve(IdentityAddress address, DeviceId approvedByDevice)

@@ -34,7 +34,7 @@ public class DeletionStartedTests
         var acting = identity.DeletionStarted;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be(DomainErrors.IdentityCannotBeDeleted().Code);
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.gracePeriodHasNotYetExpired");
     }
 
     [Fact]
@@ -47,7 +47,7 @@ public class DeletionStartedTests
         var acting = identity.DeletionStarted;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved).Code);
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     [Fact]
@@ -61,7 +61,7 @@ public class DeletionStartedTests
         var acting = identity.DeletionStarted;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be(DomainErrors.IdentityCannotBeDeleted().Code);
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     private static Identity CreateIdentityWithApprovedDeletionProcess()
