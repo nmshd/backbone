@@ -1,10 +1,10 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
+import 'package:admin_ui/main.dart';
 import 'package:admin_ui/styles/widgets/app_title.dart';
 import 'package:admin_ui/styles/widgets/custom_elevated_button.dart';
 import 'package:admin_ui/styles/widgets/custom_styled_container.dart';
 import 'package:admin_ui/styles/widgets/custom_text_field.dart';
 import 'package:admin_ui/theme/colors/custom_colors.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -28,7 +28,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-
     _apiKeyFocusNode.requestFocus();
   }
 
@@ -97,7 +96,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final apiKey = _apiKeyController.text.trim();
     if (apiKey.isEmpty) return;
 
-    const baseUrl = kIsWeb ? '' : String.fromEnvironment('base_url');
+    final baseUrl = GetIt.I<AppConfig>().baseUrl;
     _isApiKeyValid = await AdminApiClient.validateApiKey(baseUrl: baseUrl, apiKey: apiKey);
 
     if (!mounted) return;
@@ -110,6 +109,8 @@ class _LoginScreenState extends State<LoginScreen> {
     final sp = await SharedPreferences.getInstance();
     await sp.setString('api_key', apiKey);
     await GetIt.I.reset();
+
+    setupLocator();
 
     GetIt.I.registerSingleton(await AdminApiClient.create(baseUrl: baseUrl, apiKey: apiKey));
     if (mounted) context.go('/dashboard');

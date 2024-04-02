@@ -1,20 +1,35 @@
 import 'package:admin_ui/theme/colors/color_schemes.dart';
 import 'package:admin_ui/theme/colors/custom_colors.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import 'home/home.dart';
 import 'screens/screens.dart';
 import 'setup/setup_desktop.dart' if (dart.library.html) 'setup/setup_web.dart';
 
+class AppConfig {
+  final String baseUrl;
+  AppConfig({required this.baseUrl});
+}
+
+void setupLocator() {
+  if (!GetIt.I.isRegistered<AppConfig>()) {
+    GetIt.I.registerSingleton<AppConfig>(
+      AppConfig(baseUrl: kIsWeb ? '' : const String.fromEnvironment('base_url')),
+    );
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  setupLocator();
+
   await setup();
 
-  runApp(
-    const AdminUiApp(),
-  );
+  runApp(const AdminUiApp());
 }
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();

@@ -1,3 +1,4 @@
+import 'package:admin_ui/main.dart';
 import 'package:admin_ui/styles/widgets/app_title.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -79,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final sp = await SharedPreferences.getInstance();
     await sp.remove('api_key');
     await GetIt.I.reset();
+    setupLocator();
     if (mounted) context.go('/login');
   }
 }
