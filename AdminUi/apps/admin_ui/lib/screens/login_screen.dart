@@ -17,13 +17,12 @@ class _LoginScreenState extends State<LoginScreen> {
   final _apiKeyController = TextEditingController();
   final _apiKeyFocusNode = FocusNode();
 
-  bool _isButtonEnabled = false;
-  bool _isApiKeyValid = false;
-  bool _hasAttemptedLogin = false;
+  bool? _isApiKeyValid;
 
   @override
   void initState() {
     super.initState();
+
     _apiKeyFocusNode.requestFocus();
   }
 
@@ -45,38 +44,46 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
       body: Center(
-        child: Card(
-          child: CustomStyledContainer(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(
-                  height: 100,
-                  child: CustomTextField(
-                    controller: _apiKeyController,
-                    focusNode: _apiKeyFocusNode,
-                    label: 'API Key',
-                    obscureText: true,
-                    errorText: (_hasAttemptedLogin && !_isApiKeyValid) ? 'Invalid API Key' : null,
-                    onChanged: (text) {
-                      setState(() {
-                        _isButtonEnabled = text.isNotEmpty;
-                        _hasAttemptedLogin = false;
-                        _isApiKeyValid = false;
-                      });
-                    },
-                    onSubmitted: (_) => _login(),
+        child: SizedBox(
+          width: 400,
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(25),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    height: 100,
+                    child: TextField(
+                      controller: _apiKeyController,
+                      focusNode: _apiKeyFocusNode,
+                      decoration: InputDecoration(
+                        labelText: 'API Key',
+                        border: const OutlineInputBorder(),
+                        errorText: (_isApiKeyValid == false) ? 'Invalid API Key' : null,
+                      ),
+                      obscureText: true,
+                      onChanged: (text) {
+                        if (_isApiKeyValid == null) return;
+
+                        setState(() {
+                          _isApiKeyValid = null;
+                        });
+                      },
+                      onSubmitted: (_) => _login(),
+                    ),
                   ),
-                ),
-                Gaps.h16,
-                CustomElevatedButton(
-                  text: 'Login',
-                  isEnabled: _isButtonEnabled,
-                  onPressed: _login,
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  textColor: context.customColors.onNeutralvariant,
-                ),
-              ],
+                  Gaps.h16,
+                  SizedBox(
+                    height: 40,
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: _apiKeyController.text.isNotEmpty ? _login : null,
+                      child: const Text('Login'),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -86,19 +93,15 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _login() async {
-    _hasAttemptedLogin = true;
     final apiKey = _apiKeyController.text.trim();
     if (apiKey.isEmpty) return;
 
     final baseUrl = GetIt.I<AppConfig>().baseUrl;
-    _isApiKeyValid = await AdminApiClient.validateApiKey(baseUrl: baseUrl, apiKey: apiKey);
+    final isApiKeyValid = await AdminApiClient.validateApiKey(baseUrl: baseUrl, apiKey: apiKey);
 
     if (!mounted) return;
 
-    if (!_isApiKeyValid) {
-      setState(() {});
-      return;
-    }
+    if (!isApiKeyValid) return setState(() => _isApiKeyValid = false);
 
     final sp = await SharedPreferences.getInstance();
     await sp.setString('api_key', apiKey);
