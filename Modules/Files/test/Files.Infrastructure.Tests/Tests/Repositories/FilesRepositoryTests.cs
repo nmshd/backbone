@@ -28,10 +28,7 @@ public class FilesRepositoryTests
         await repository.DeleteFilesOfIdentity(File.WasCreatedBy(identityAddress), CancellationToken.None);
 
         // Assert
-        foreach (var file in files)
-        {
-            A.CallTo(() => mockBlobStorage.Remove(A<string>._, file.Id)).MustHaveHappenedOnceExactly();
-        }
+        A.CallTo(() => mockBlobStorage.Remove(A<string>._, A<string>.That.Matches(fileId => files.Select(f => f.Id.ToString()).ToList().Contains(fileId)))).MustHaveHappenedANumberOfTimesMatching(x => x == files.Count);
     }
 
     private static File GenerateFile(IdentityAddress identityAddress)
