@@ -1,5 +1,6 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_ui/styles/widgets/app_title.dart';
+import 'package:admin_ui/styles/widgets/custom_elevated_button.dart';
 import 'package:admin_ui/styles/widgets/custom_styled_container.dart';
 import 'package:admin_ui/styles/widgets/custom_text_field.dart';
 import 'package:admin_ui/theme/colors/custom_colors.dart';
@@ -73,6 +74,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     },
                     onSubmitted: (_) => _login(),
                   ),
+                ),
+                const SizedBox(height: 20),
+                CustomElevatedButton(
+                  text: 'Login',
+                  isEnabled: _isButtonEnabled,
+                  onPressed: _login,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  textColor: customColors?.onNeutralvariant,
                 ),
               ],
             ),
