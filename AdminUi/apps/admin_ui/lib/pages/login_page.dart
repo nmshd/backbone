@@ -46,23 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset(
-              'assets/logo.svg',
-              width: 30,
-              height: 30,
-            ),
-            const SizedBox(width: 10),
-            const Text(
-              'enmeshed',
-              style: TextStyle(fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(width: 10),
-            const Text('Admin UI'),
-          ],
-        ),
+        title: const AppTitle(),
         leading: const SizedBox(
           width: 40,
         ),
