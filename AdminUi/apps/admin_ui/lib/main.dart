@@ -1,10 +1,7 @@
 import 'package:admin_ui/theme/colors/color_schemes.dart';
-import 'package:admin_ui/theme/colors/custom_color.dart';
-import 'package:admin_ui/theme/theme_manager.dart';
-import 'package:dynamic_color/dynamic_color.dart';
+import 'package:admin_ui/theme/colors/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 
 import 'home/home.dart';
 import 'pages/pages.dart';
@@ -16,10 +13,7 @@ void main() async {
   await setup();
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => ThemeManager(),
-      child: const MainApp(),
-    ),
+    const MainApp(),
   );
 }
 
@@ -78,38 +72,19 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DynamicColorBuilder(
-      builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
-        ColorScheme lightScheme;
-        ColorScheme darkScheme;
-
-        if (lightDynamic != null && darkDynamic != null) {
-          lightScheme = lightDynamic.harmonized();
-          lightCustomColors = lightCustomColors.harmonized(lightScheme);
-
-          darkScheme = darkDynamic.harmonized();
-          darkCustomColors = darkCustomColors.harmonized(darkScheme);
-        } else {
-          lightScheme = lightColorScheme;
-          darkScheme = darkColorScheme;
-        }
-
-        return MaterialApp.router(
-          themeMode: Provider.of<ThemeManager>(context).themeMode,
-          theme: ThemeData(
-            useMaterial3: true,
-            colorScheme: lightScheme,
-            extensions: [lightCustomColors],
-          ),
-          darkTheme: ThemeData(
-            useMaterial3: true,
-            colorScheme: darkScheme,
-            extensions: [darkCustomColors],
-          ),
-          debugShowCheckedModeBanner: false,
-          routerConfig: _router,
-        );
-      },
+    return MaterialApp.router(
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: lightColorScheme,
+        extensions: [lightCustomColors],
+      ),
+      darkTheme: ThemeData(
+        useMaterial3: true,
+        colorScheme: darkColorScheme,
+        extensions: [darkCustomColors],
+      ),
+      debugShowCheckedModeBanner: false,
+      routerConfig: _router,
     );
   }
 }
