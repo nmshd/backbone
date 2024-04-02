@@ -4,7 +4,6 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../theme/custom_colors.dart';
 import '/utils/utils.dart';
 import '/utils/widgets/widgets.dart';
 
@@ -39,8 +38,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final customColors = Theme.of(context).extension<CustomColors>();
-
     return Scaffold(
       appBar: AppBar(
         title: const AppTitle(),
@@ -78,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   isEnabled: _isButtonEnabled,
                   onPressed: _login,
                   backgroundColor: Theme.of(context).colorScheme.primary,
-                  textColor: customColors?.onNeutralvariant,
+                  textColor: context.customColors.onNeutralvariant,
                 ),
               ],
             ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '/theme/custom_colors.dart';
+import '/utils/utils.dart';
 
 class CustomTextField extends StatelessWidget {
   final TextEditingController controller;
@@ -24,7 +24,6 @@ class CustomTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final customColors = Theme.of(context).extension<CustomColors>();
     return TextField(
       controller: controller,
       focusNode: focusNode,
@@ -32,10 +31,10 @@ class CustomTextField extends StatelessWidget {
         labelText: label,
         border: const OutlineInputBorder(),
         errorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: customColors?.error ?? Colors.red, width: 2),
+          borderSide: BorderSide(color: context.customColors.error ?? Colors.red, width: 2),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: customColors?.error ?? Colors.red, width: 2),
+          borderSide: BorderSide(color: context.customColors.error ?? Colors.red, width: 2),
         ),
         errorText: errorText,
       ),
