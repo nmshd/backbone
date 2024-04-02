@@ -4,8 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '/utils/utils.dart';
-import '/utils/widgets/widgets.dart';
+import '/core/core.dart';
 
 class HomeScreen extends StatefulWidget {
   final Widget child;

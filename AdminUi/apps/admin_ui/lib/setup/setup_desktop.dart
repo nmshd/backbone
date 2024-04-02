@@ -4,7 +4,7 @@ import 'dart:ui';
 import 'package:get_it/get_it.dart';
 import 'package:window_size/window_size.dart';
 
-import '/utils/utils.dart';
+import '/core/core.dart';
 
 Future<void> setup() async {
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
