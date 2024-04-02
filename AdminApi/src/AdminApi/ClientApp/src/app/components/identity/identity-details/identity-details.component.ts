@@ -10,6 +10,7 @@ import { CreateQuotaForIdentityRequest, IdentityQuota, Metric, Quota, QuotasServ
 import { TierOverview, TierService } from "src/app/services/tier-service/tier.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 import { AssignQuotaData, AssignQuotasDialogComponent } from "../../quotas/assign-quotas-dialog/assign-quotas-dialog.component";
+import { StartDeletionProcessDialogComponent } from "./deletion-processes/start-deletion-process-dialog/start-deletion-process-dialog.component";
 
 @Component({
     selector: "app-identity-details",
@@ -92,11 +93,15 @@ export class IdentityDetailsComponent {
     public loadAdmissibleTiers(): void {
         this.tierService.getTiers().subscribe({
             next: (tiers) => {
-                this.tiers = tiers.result;
+                this.tiers = tiers.result.filter((t) => t.canBeManuallyAssigned || t.id === this.identity.tierId);
                 this.updatedTier = this.tiers.find((t) => t.id === this.identity.tierId);
                 this.tier = this.updatedTier;
             }
         });
+    }
+
+    public isTierDisabled(tier: TierOverview): boolean {
+        return TierUtils.isTierDisabled(tier, this.tiers, this.identity);
     }
 
     public loadIdentityAndTiers(): void {
@@ -295,10 +300,53 @@ export class IdentityDetailsComponent {
         }
         return `${this.selectionQuotas.isSelected(row) ? "deselect" : "select"} row ${index + 1}`;
     }
+
+    public openStartDeletionProcessDialog(): void {
+        const dialogRef = this.dialog.open(StartDeletionProcessDialogComponent, {
+            maxWidth: "100%"
+        });
+
+        dialogRef.afterClosed().subscribe((result) => {
+            if (result) {
+                this.startDeletionProcess();
+            }
+        });
+    }
+
+    public startDeletionProcess(): void {
+        this.loading = true;
+        this.identityService.startDeletionProcessAsSupport(this.identityAddress!).subscribe({
+            next: () => {
+                this.snackBar.open("Identity deletion process started successfully. Reloading...", "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            },
+            complete: () => {
+                this.loadIdentityAndTiers();
+            },
+            error: (err: any) => {
+                this.loading = false;
+                const errorMessage = err.error?.error?.message ?? err.message;
+                this.snackBar.open(errorMessage, "Dismiss", {
+                    verticalPosition: "top",
+                    horizontalPosition: "center"
+                });
+            }
+        });
+    }
 }
 
 interface MetricGroup {
     metric: Metric;
     isGroup: boolean;
     tierDisabled: boolean;
+}
+
+export class TierUtils {
+    public static isTierDisabled(tier: TierOverview, tiers: TierOverview[], identity: Identity): boolean {
+        const tiersThatCannotBeUnassigned = tiers.filter((t) => !t.canBeManuallyAssigned);
+        const identityIsInTierThatCannotBeUnassigned = tiersThatCannotBeUnassigned.some((t) => t.id === identity.tierId);
+        return identityIsInTierThatCannotBeUnassigned && tier.id !== identity.tierId;
+    }
 }

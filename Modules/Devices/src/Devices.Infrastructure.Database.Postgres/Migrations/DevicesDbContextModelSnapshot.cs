@@ -74,6 +74,16 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
+                    b.Property<bool>("CanBeManuallyAssigned")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("CanBeUsedAsDefaultForClient")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -250,6 +260,10 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.HasKey("Address");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("TierId");
 
                     b.ToTable("Identities");
                 });
