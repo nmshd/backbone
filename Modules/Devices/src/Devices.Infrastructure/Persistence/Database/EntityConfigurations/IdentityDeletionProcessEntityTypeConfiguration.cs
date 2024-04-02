@@ -18,6 +18,7 @@ public class IdentityDeletionProcessEntityTypeConfiguration : IEntityTypeConfigu
 
         builder.HasMany(x => x.AuditLog).WithOne().OnDelete(DeleteBehavior.SetNull).IsRequired(false);
         builder.Ignore(x => x.HasApprovalPeriodExpired);
+        builder.Ignore(x => x.HasGracePeriodExpired);
     }
 }
 

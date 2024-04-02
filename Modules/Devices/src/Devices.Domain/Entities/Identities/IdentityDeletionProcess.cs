@@ -62,6 +62,8 @@ public class IdentityDeletionProcess
 
     public bool HasApprovalPeriodExpired => Status == DeletionProcessStatus.WaitingForApproval && SystemTime.UtcNow >= GetEndOfApprovalPeriod();
 
+    public bool HasGracePeriodExpired => Status == DeletionProcessStatus.Approved && SystemTime.UtcNow >= GracePeriodEndsAt;
+
     private void Approve(DeviceId createdByDevice)
     {
         Status = DeletionProcessStatus.Approved;
@@ -137,7 +139,7 @@ public class IdentityDeletionProcess
 
     private void EnsureGracePeriodHasExpired()
     {
-        if (GracePeriodEndsAt >= SystemTime.UtcNow)
+        if (!HasGracePeriodExpired)
             throw new DomainException(DomainErrors.GracePeriodHasNotYetExpired());
     }
 
