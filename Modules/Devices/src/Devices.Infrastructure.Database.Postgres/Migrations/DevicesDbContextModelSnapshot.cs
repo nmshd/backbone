@@ -336,6 +336,8 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
+                    b.Property<DateTime>("DeletionStartedAt");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityAddress");
