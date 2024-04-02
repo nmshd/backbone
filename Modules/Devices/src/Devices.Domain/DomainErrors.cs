@@ -53,7 +53,7 @@ public static class DomainErrors
 
     public static DomainError IdentityCannotBeDeleted()
     {
-        return new DomainError($"error.platform.validation.device.identityCannotBeDeleted", $"The identity cannot be deleted because it has not been approved or is not past due approval.");
+        return new DomainError($"error.platform.validation.device.identityCannotBeDeleted", $"The identity cannot be deleted because it is not past due approval, or its DeletionProcess has not been approved.");
     }
 
     public static DomainError DeletionProcessMustBePastDueApproval()
