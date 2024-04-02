@@ -51,6 +51,15 @@ class _LoginScreenState extends State<LoginScreen> {
           width: 40,
         ),
       ),
+      body: Center(
+        child: Card(
+          child: SizedBox(
+            width: 400,
+            child: Padding(
+              padding: const EdgeInsets.all(25),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
                   SizedBox(
                     height: 100,
                     child: CustomTextField(
@@ -69,6 +78,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       onSubmitted: (_) => _login(),
                     ),
                   ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
     );
   }
 
