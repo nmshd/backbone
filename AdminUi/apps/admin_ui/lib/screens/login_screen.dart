@@ -1,15 +1,12 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
-import 'package:admin_ui/styles/widgets/app_title.dart';
-import 'package:admin_ui/styles/widgets/custom_elevated_button.dart';
-import 'package:admin_ui/styles/widgets/custom_styled_container.dart';
-import 'package:admin_ui/styles/widgets/custom_text_field.dart';
-import 'package:admin_ui/theme/colors/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../theme/custom_colors.dart';
 import '/utils/utils.dart';
+import '/utils/widgets/widgets.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

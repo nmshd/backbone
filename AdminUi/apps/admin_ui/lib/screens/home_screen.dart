@@ -1,11 +1,11 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
-import 'package:admin_ui/styles/widgets/app_title.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '/utils/utils.dart';
+import '/utils/widgets/widgets.dart';
 
 class HomeScreen extends StatefulWidget {
   final Widget child;

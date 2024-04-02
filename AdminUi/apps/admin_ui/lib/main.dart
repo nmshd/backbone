@@ -1,11 +1,10 @@
-import 'package:admin_ui/theme/colors/color_schemes.dart';
-import 'package:admin_ui/theme/colors/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'home/home.dart';
 import 'screens/screens.dart';
 import 'setup/setup_desktop.dart' if (dart.library.html) 'setup/setup_web.dart';
+import 'theme/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
