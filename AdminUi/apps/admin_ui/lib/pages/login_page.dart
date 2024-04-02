@@ -64,6 +64,8 @@ class _LoginScreenState extends State<LoginScreen> {
           width: 40,
         ),
       ),
+                  SizedBox(
+                    height: 100,
                     child: CustomTextField(
                       controller: _apiKeyController,
                       focusNode: _apiKeyFocusNode,
@@ -79,6 +81,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       onSubmitted: (_) => _login(),
                     ),
+                  ),
     );
   }
 
