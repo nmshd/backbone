@@ -64,87 +64,21 @@ class _LoginScreenState extends State<LoginScreen> {
           width: 40,
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.only(top: topPadding),
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: SizedBox(
-              width: 500,
-              height: 250,
-              child: Card(
-                child: SizedBox(
-                  width: 300,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 20, left: 25, right: 25),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        TextField(
-                          controller: _apiKeyController,
-                          focusNode: _apiKeyFocusNode,
-                          decoration: InputDecoration(
-                            labelText: 'API Key',
-                            border: const OutlineInputBorder(),
-                            errorBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red, width: 2),
-                            ),
-                            focusedErrorBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.red, width: 2),
-                            ),
-                            errorText: (_attemptedLogin && !apiKeyValid) ? 'Invalid API Key' : null,
-                          ),
-                          onSubmitted: (_) => _login(),
-                          onChanged: (text) {
-                            setState(() {
-                              _isButtonEnabled = text.isNotEmpty;
-                              _attemptedLogin = false;
-                              apiKeyValid = false;
-                            });
-                          },
-                          obscureText: true,
-                        ),
-                        const SizedBox(height: 20),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 40,
-                          child: ElevatedButton(
-                            onPressed: _isButtonEnabled ? _login : null,
-                            style: _isButtonEnabled
-                                ? const ButtonStyle(
-                                    backgroundColor: MaterialStatePropertyAll(
-                                      Color.fromARGB(255, 0, 47, 114),
-                                    ),
-                                  )
-                                : null,
-                            child: Text(
-                              'Login',
-                              style: TextStyle(color: _isButtonEnabled ? Colors.white : null),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        TextButton(
-                          onPressed: () {
-                            // TODO(stamenione): Implement what should happen when "Forgot API Key?" is pressed
-                          },
-                          child: const Text(
-                            'Forgot API Key?',
-                            style: TextStyle(
-                              color: Color.fromARGB(255, 0, 47, 114),
-                            ),
-                          ),
-                        ),
-                      ],
+                    child: CustomTextField(
+                      controller: _apiKeyController,
+                      focusNode: _apiKeyFocusNode,
+                      label: 'API Key',
+                      obscureText: true,
+                      errorText: (_hasAttemptedLogin && !_isApiKeyValid) ? 'Invalid API Key' : null,
+                      onChanged: (text) {
+                        setState(() {
+                          _isButtonEnabled = text.isNotEmpty;
+                          _hasAttemptedLogin = false;
+                          _isApiKeyValid = false;
+                        });
+                      },
+                      onSubmitted: (_) => _login(),
                     ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ),
-      backgroundColor: const Color.fromARGB(255, 211, 228, 255),
     );
   }
 
