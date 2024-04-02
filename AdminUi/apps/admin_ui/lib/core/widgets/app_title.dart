@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
+import '../constants.dart';
+
 class AppTitle extends StatelessWidget {
   const AppTitle({super.key});
 
@@ -14,7 +16,7 @@ class AppTitle extends StatelessWidget {
           width: 30,
           height: 30,
         ),
-        const SizedBox(width: 10),
+        Gaps.w8,
         RichText(
           text: TextSpan(
             children: [
