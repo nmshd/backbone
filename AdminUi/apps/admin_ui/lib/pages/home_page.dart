@@ -1,5 +1,5 @@
+import 'package:admin_ui/styles/widgets/app_title.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -21,14 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset('assets/logo.svg', width: 30, height: 30),
-            const SizedBox(width: 10),
-            const Text('Enmeshed Admin UI'),
-          ],
-        ),
+        title: const AppTitle(),
         leading: IconButton(
           icon: const Icon(Icons.menu),
           onPressed: () {
