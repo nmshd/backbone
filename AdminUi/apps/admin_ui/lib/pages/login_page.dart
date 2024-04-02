@@ -18,8 +18,8 @@ class _LoginScreenState extends State<LoginScreen> {
   final _apiKeyFocusNode = FocusNode();
 
   bool _isButtonEnabled = false;
-  bool apiKeyValid = false;
-  bool _attemptedLogin = false;
+  bool _isApiKeyValid = false;
+  bool _hasAttemptedLogin = false;
 
   @override
   void initState() {
@@ -86,16 +86,16 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _login() async {
-    _attemptedLogin = true;
+    _hasAttemptedLogin = true;
     final apiKey = _apiKeyController.text.trim();
     if (apiKey.isEmpty) return;
 
     const baseUrl = kIsWeb ? '' : String.fromEnvironment('base_url');
-    apiKeyValid = await AdminApiClient.validateApiKey(baseUrl: baseUrl, apiKey: apiKey);
+    _isApiKeyValid = await AdminApiClient.validateApiKey(baseUrl: baseUrl, apiKey: apiKey);
 
     if (!mounted) return;
 
-    if (!apiKeyValid) {
+    if (!_isApiKeyValid) {
       setState(() {});
       return;
     }
