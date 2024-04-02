@@ -156,7 +156,7 @@ public class Identity
         var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ??
                               throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
 
-        deletionProcess.Cancel(Address, canceledByDeviceId);
+        deletionProcess.CancelAsOwner(Address, canceledByDeviceId);
         TierId = TierIdBeforeDeletion;
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
