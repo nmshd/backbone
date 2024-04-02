@@ -1,7 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
@@ -9,10 +8,10 @@ using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using CSharpFunctionalExtensions;
 using MediatR;
-using Microsoft.Extensions.Logging;
 using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
 
 namespace Backbone.Job.IdentityDeletion;
+
 public class ActualIdentityDeletionWorker : IHostedService
 {
     private readonly IEventBus _eventBus;
@@ -23,11 +22,11 @@ public class ActualIdentityDeletionWorker : IHostedService
     private readonly ILogger<ActualIdentityDeletionWorker> _logger;
 
     public ActualIdentityDeletionWorker(IHostApplicationLifetime host,
-                    IEnumerable<IIdentityDeleter> identityDeleters,
-                    IMediator mediator,
-                    IPushNotificationSender pushNotificationSender,
-                    IEventBus eventBus,
-                    ILogger<ActualIdentityDeletionWorker> logger)
+        IEnumerable<IIdentityDeleter> identityDeleters,
+        IMediator mediator,
+        IPushNotificationSender pushNotificationSender,
+        IEventBus eventBus,
+        ILogger<ActualIdentityDeletionWorker> logger)
     {
         _host = host;
         _identityDeleters = identityDeleters;
@@ -42,6 +41,11 @@ public class ActualIdentityDeletionWorker : IHostedService
         await StartProcessing(cancellationToken);
 
         _host.StopApplication();
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
     }
 
     public async Task StartProcessing(CancellationToken cancellationToken)
@@ -100,18 +104,13 @@ public class ActualIdentityDeletionWorker : IHostedService
             _logger.ErrorWhenTriggeringDeletionProcessForIdentity(erroringDeletion.Key, erroringDeletion.Value.Error.Code, erroringDeletion.Value.Error.Message);
         }
     }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
-    }
 }
 
 internal static partial class ActualIdentityDeletionWorkerLogs
 {
     [LoggerMessage(
         EventId = 390931,
-        EventName = "EventBusRabbitMQ.ErrorWhenTriggeringDeletionProcessForIdentity",
+        EventName = "ActualIdentityDeletionWorker.ErrorWhenTriggeringDeletionProcessForIdentity",
         Level = LogLevel.Error,
         Message = "There was an error when trying to trigger the deletion process for the identity with the address {identityAddress}. Error code: '{errorCode}. Error message: {errorMessage}...")]
     public static partial void ErrorWhenTriggeringDeletionProcessForIdentity(this ILogger logger, IdentityAddress identityAddress, string errorCode, string errorMessage);

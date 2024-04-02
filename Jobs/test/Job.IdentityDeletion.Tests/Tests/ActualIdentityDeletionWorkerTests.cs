@@ -15,6 +15,7 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Job.IdentityDeletion.Tests.Tests;
+
 public class ActualIdentityDeletionWorkerTests
 {
     [Fact]
@@ -60,7 +61,7 @@ public class ActualIdentityDeletionWorkerTests
     }
 
     [Fact]
-    public async Task Sends_PushNotification_For_Each_Relationship_In_Each_Identity()
+    public async Task Sends_push_notification_for_each_relationship_of_each_identity()
     {
         // Arrange
         var mockMediator = A.Fake<IMediator>();
@@ -90,9 +91,9 @@ public class ActualIdentityDeletionWorkerTests
     }
 
     private static ActualIdentityDeletionWorker CreateWorker(IMediator mediator,
-                                       List<IIdentityDeleter>? identityDeleters = null,
-                                       IEventBus? eventBus = null,
-                                       IPushNotificationSender? pushNotificationSender = null)
+        List<IIdentityDeleter>? identityDeleters = null,
+        IEventBus? eventBus = null,
+        IPushNotificationSender? pushNotificationSender = null)
     {
         var hostApplicationLifetime = A.Dummy<IHostApplicationLifetime>();
         identityDeleters ??= [A.Dummy<IIdentityDeleter>()];
