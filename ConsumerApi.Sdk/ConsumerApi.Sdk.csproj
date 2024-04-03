@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuildingBlocks\src\BuildingBlocks.SDK\BuildingBlocks.SDK.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\src\Crypto\Crypto.csproj" />
     <ProjectReference Include="..\BuildingBlocks\src\Tooling\Tooling.csproj" />
   </ItemGroup>
 
