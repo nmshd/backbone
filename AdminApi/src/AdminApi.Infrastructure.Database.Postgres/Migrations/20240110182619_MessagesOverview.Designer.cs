@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
 {
-    [DbContext(typeof(AdminUiDbContext))]
+    [DbContext(typeof(AdminApiDbContext))]
     [Migration("20240110182619_MessagesOverview")]
     partial class MessagesOverview
     {

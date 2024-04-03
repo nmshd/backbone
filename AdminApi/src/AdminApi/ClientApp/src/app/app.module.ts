@@ -42,6 +42,10 @@ import { ClientListComponent } from "./components/client/client-list/client-list
 import { CreateClientDialogComponent } from "./components/client/create-client-dialog/create-client-dialog.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
+import { DeletionProcessesComponent } from "./components/identity/identity-details/deletion-processes/deletion-processes.component";
+import { CancelDeletionProcessDialogComponent } from "./components/identity/identity-details/deletion-processes/dp-details/cancel-dp-dialog/cancel-dp-dialog.component";
+import { DeletionProcessDetailsComponent } from "./components/identity/identity-details/deletion-processes/dp-details/dp-details.component";
+import { StartDeletionProcessDialogComponent } from "./components/identity/identity-details/deletion-processes/start-deletion-process-dialog/start-deletion-process-dialog.component";
 import { IdentityDetailsRelationshipsComponent } from "./components/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
 import { IdentityDetailsComponent } from "./components/identity/identity-details/identity-details.component";
 import { IdentityListComponent } from "./components/identity/identity-list/identity-list.component";
@@ -78,6 +82,7 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         IdentityDetailsMessagesComponent,
         IdentityDetailsMessageRecipientsDialogComponent,
         TierListComponent,
+        DeletionProcessesComponent,
         TierEditComponent,
         CreateTierDialogComponent,
         ClientListComponent,
@@ -90,7 +95,11 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         ChangeSecretDialogComponent,
         IdentitiesOverviewComponent,
         IdentityDetailsRelationshipsComponent,
-        BreadcrumbComponent
+        BreadcrumbComponent,
+        DeletionProcessesComponent,
+        DeletionProcessDetailsComponent,
+        CancelDeletionProcessDialogComponent,
+        StartDeletionProcessDialogComponent
     ],
     imports: [
         FormsModule,

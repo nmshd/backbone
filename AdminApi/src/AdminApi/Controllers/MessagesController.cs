@@ -19,10 +19,10 @@ namespace Backbone.AdminApi.Controllers;
 [Authorize("ApiKey")]
 public class MessagesController : ApiControllerBase
 {
-    private readonly AdminUiDbContext _adminUiDbContext;
+    private readonly AdminApiDbContext _adminUiDbContext;
     private readonly ApplicationOptions _options;
 
-    public MessagesController(IMediator mediator, IOptions<ApplicationOptions> options, AdminUiDbContext adminUiDbContext) : base(mediator)
+    public MessagesController(IMediator mediator, IOptions<ApplicationOptions> options, AdminApiDbContext adminUiDbContext) : base(mediator)
     {
         _adminUiDbContext = adminUiDbContext;
         _options = options.Value;
@@ -55,7 +55,6 @@ public class MessagesController : ApiControllerBase
                     .OrderAndPaginate(d => d.SendDate, paginationFilter, cancellationToken);
 
                 return Paged(new PagedResponse<MessageOverview>(outgoingMessages.ItemsOnPage, paginationFilter, outgoingMessages.TotalNumberOfItems));
-
         }
 
         throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue(nameof(type)));

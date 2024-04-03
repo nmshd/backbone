@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
 {
-    [DbContext(typeof(AdminUiDbContext))]
+    [DbContext(typeof(AdminApiDbContext))]
     [Migration("20240111091759_MessagesOverview")]
     partial class MessagesOverview
     {
