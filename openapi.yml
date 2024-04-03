@@ -89,7 +89,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationship"
+                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationshipMetadata"
         "400":
           description: >
             Bad Request<br><br>
@@ -124,7 +124,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationship"
+                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationshipMetadata"
         "400":
           description: >
             Bad Request<br><br>
@@ -158,7 +158,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationship"
+                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationshipMetadata"
         "400":
           description: >
             Bad Request<br><br>
@@ -192,7 +192,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationship"
+                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationshipMetadata"
         "400":
           description: >
             Bad Request<br><br>
@@ -225,6 +225,12 @@ components:
         result:
           $ref: "#/components/schemas/Relationship"
 
+    HttpResponseEnvelopeRelationshipMetadata:
+      type: object
+      properties:
+        result:
+          $ref: "#/components/schemas/RelationshipMetadata"
+
     Relationship:
       type: object
       properties:
@@ -245,6 +251,35 @@ components:
           format: date-time
         status:
           $ref: "#/components/schemas/RelationshipStatus"
+        auditLog:
+          type: array
+          items:
+            $ref: "#/components/schemas/RelationshipAuditLogEntry"
+      additionalProperties: false
+
+    RelationshipMetadata:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "REL_________________"
+        relationshipTemplateId:
+          type: string
+          example: "RLT_________________"
+        from:
+          type: string
+          example: "id1_________________________________"
+        to:
+          type: string
+          example: "id1_________________________________"
+        createdAt:
+          type: string
+          format: date-time
+        status:
+          $ref: "#/components/schemas/RelationshipStatus"
+        creationContent:
+          type: string
+          format: byte
         auditLog:
           type: array
           items:
