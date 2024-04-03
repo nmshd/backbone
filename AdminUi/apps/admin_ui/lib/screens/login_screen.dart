@@ -37,6 +37,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       appBar: AppBar(
         title: const AppTitle(),
         centerTitle: false,
@@ -54,13 +55,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   TextField(
                     controller: _apiKeyController,
                     focusNode: _apiKeyFocusNode,
+                    obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'API Key',
                       border: const OutlineInputBorder(),
                       errorText: _isApiKeyValid == false ? 'Invalid API Key' : null,
                       helperText: '',
                     ),
-                    obscureText: true,
                     onChanged: (_) {
                       if (_isApiKeyValid == null) return setState(() {});
 
@@ -80,7 +81,6 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
     );
   }
 
