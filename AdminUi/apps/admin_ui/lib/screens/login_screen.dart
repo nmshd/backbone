@@ -52,35 +52,30 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
-                    height: 100,
-                    child: TextField(
-                      controller: _apiKeyController,
-                      focusNode: _apiKeyFocusNode,
-                      decoration: InputDecoration(
-                        labelText: 'API Key',
-                        border: const OutlineInputBorder(),
-                        errorText: (_isApiKeyValid == false) ? 'Invalid API Key' : null,
-                      ),
-                      obscureText: true,
-                      onChanged: (text) {
-                        if (_isApiKeyValid == null) return;
+                  TextField(
+                    controller: _apiKeyController,
+                    focusNode: _apiKeyFocusNode,
+                    decoration: InputDecoration(
+                      labelText: 'API Key',
+                      border: const OutlineInputBorder(),
+                      errorText: (_isApiKeyValid == false) ? 'Invalid API Key' : null,
+                      helperText: '',
+                    ),
+                    obscureText: true,
+                    onChanged: (text) {
+                      if (_isApiKeyValid == null) return;
 
-                        setState(() {
-                          _isApiKeyValid = null;
-                        });
-                      },
-                      onSubmitted: (_) => _login(),
-                    ),
+                      setState(() {
+                        _isApiKeyValid = null;
+                      });
+                    },
+                    onSubmitted: (_) => _login(),
                   ),
-                  Gaps.h16,
-                  SizedBox(
-                    height: 40,
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: _apiKeyController.text.isNotEmpty ? _login : null,
-                      child: const Text('Login'),
-                    ),
+                  Gaps.h24,
+                  FilledButton(
+                    style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(45)),
+                    onPressed: _apiKeyController.text.isNotEmpty ? _login : null,
+                    child: const Text('Login'),
                   ),
                 ],
               ),
