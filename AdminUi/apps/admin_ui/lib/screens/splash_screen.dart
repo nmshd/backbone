@@ -6,6 +6,8 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '/core/core.dart';
+
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
@@ -29,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             SvgPicture.asset('assets/logo.svg', width: 200, height: 200),
-            const SizedBox(height: 40),
+            Gaps.h40,
             const SizedBox(width: 300, child: LinearProgressIndicator()),
           ],
         ),
