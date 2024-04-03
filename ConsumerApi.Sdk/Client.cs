@@ -17,7 +17,7 @@ namespace Backbone.ConsumerApi.Sdk;
 
 public class Client
 {
-    public Client(Configuration configuration) : this(new HttpClient { BaseAddress = new Uri(Path.Combine(configuration.BaseUrl, "api", configuration.ApiVersion)) }, configuration)
+    public Client(Configuration configuration) : this(new HttpClient { BaseAddress = new Uri($"{configuration.BaseUrl}api/{configuration.ApiVersion}/") }, configuration)
     {
     }
 
