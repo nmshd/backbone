@@ -64,7 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       obscureText: true,
                       onChanged: (text) {
-                        if (_isApiKeyValid != null) return;
+                        if (_isApiKeyValid == null) return;
 
                         setState(() {
                           _isApiKeyValid = null;
