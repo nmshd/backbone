@@ -3,17 +3,20 @@ using System;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Tokens.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(TokensDbContext))]
-    partial class TokensDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240403135120_RemoveUnnecessaryIndexes")]
+    partial class RemoveUnnecessaryIndexes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -17,6 +17,8 @@ public class RelationshipChangeEntityTypeConfiguration : IEntityTypeConfiguratio
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.RelationshipId);
+        builder.Property(x => x.CreatedAt);
+        builder.Property(x => x.Type);
 
         builder.HasOne(x => x.Relationship).WithMany(x => x.Changes);
 
