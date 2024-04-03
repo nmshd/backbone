@@ -33,7 +33,7 @@ public class ReplaceIdentityAddressTests
         var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var newAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var message = CreateMessage((null, new List<IdentityAddress> { recipientAddress }));
+        var message = CreateMessage((TestDataGenerator.CreateRandomIdentityAddress(), new List<IdentityAddress> { recipientAddress }));
 
         // Act
         message.ReplaceIdentityAddress(recipientAddress, newAddress);
@@ -49,13 +49,13 @@ public class ReplaceIdentityAddressTests
         var recipient1Address = TestDataGenerator.CreateRandomIdentityAddress();
         var recipient2Address = TestDataGenerator.CreateRandomIdentityAddress();
         var createdByAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var testIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var addressToReplace = TestDataGenerator.CreateRandomIdentityAddress();
         var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
         var message = CreateMessage((createdByAddress, new List<IdentityAddress> { recipient1Address, recipient2Address }));
 
         // Act
-        message.ReplaceIdentityAddress(testIdentityAddress, newIdentityAddress);
+        message.ReplaceIdentityAddress(addressToReplace, newIdentityAddress);
 
         // Assert
         message.Recipients.First().Address.Should().Be(recipient1Address);
