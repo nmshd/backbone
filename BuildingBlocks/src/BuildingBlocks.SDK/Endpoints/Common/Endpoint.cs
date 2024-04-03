@@ -1,4 +1,4 @@
-﻿namespace Backbone.ConsumerApi.Sdk.Endpoints.Common;
+﻿namespace Backbone.BuildingBlocks.SDK.Endpoints.Common;
 
 public abstract class Endpoint(EndpointClient client)
 {
