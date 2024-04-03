@@ -13,11 +13,7 @@ class AppTitle extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        SvgPicture.asset(
-          'assets/logo.svg',
-          width: 30,
-          height: 30,
-        ),
+        SvgPicture.asset('assets/logo.svg', width: 30, height: 30),
         Gaps.w8,
         Text.rich(
           TextSpan(
