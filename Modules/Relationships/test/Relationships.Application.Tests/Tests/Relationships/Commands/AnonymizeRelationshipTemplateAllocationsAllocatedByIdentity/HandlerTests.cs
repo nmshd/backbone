@@ -1,14 +1,15 @@
 ﻿using System.Linq.Expressions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand;
+using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 using Xunit;
-using Handler = Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand.Handler;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
+
 public class HandlerTests
 {
     [Fact]
@@ -17,7 +18,7 @@ public class HandlerTests
         // Arrange
         var mockRepository = A.Fake<IRelationshipsRepository>();
 
-        var oldIdentityAddress = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress();
+        var oldIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var relationshipTemplateAllocations = new List<RelationshipTemplateAllocation> { new(RelationshipTemplateId.New(), oldIdentityAddress, DeviceId.New()) };
 
         var request = new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(oldIdentityAddress);
@@ -39,8 +40,8 @@ public class HandlerTests
         // Arrange
         var mockRepository = A.Fake<IRelationshipsRepository>();
 
-        var oldIdentityAddress = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress();
-        var anotherIdentityAddress = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress();
+        var oldIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var anotherIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var relationshipTemplateAllocations = new List<RelationshipTemplateAllocation> { new(RelationshipTemplateId.New(), oldIdentityAddress, DeviceId.New()) };
 
         var request = new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(anotherIdentityAddress);
