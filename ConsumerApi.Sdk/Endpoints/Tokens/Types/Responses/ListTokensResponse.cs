@@ -1,5 +1,5 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Common.Types;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 
-public class ListTokensResponse(IEnumerable<Token> items) : EnumerableResponseBase<Token>(items);
+public class ListTokensResponse : EnumerableResponseBase<Token>;

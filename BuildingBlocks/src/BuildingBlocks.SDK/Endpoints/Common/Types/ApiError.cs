@@ -1,6 +1,6 @@
-﻿namespace Backbone.ConsumerApi.Sdk.Endpoints.Common.Types;
+﻿namespace Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 
-public class ConsumerApiError
+public class ApiError
 {
     public required string Id { get; set; }
     public required string Code { get; set; }
