@@ -39,9 +39,8 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const AppTitle(),
-        leading: const SizedBox(
-          width: 40,
-        ),
+        centerTitle: false,
+        leading: Gaps.w40,
       ),
       body: Center(
         child: SizedBox(
@@ -58,16 +57,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     decoration: InputDecoration(
                       labelText: 'API Key',
                       border: const OutlineInputBorder(),
-                      errorText: (_isApiKeyValid == false) ? 'Invalid API Key' : null,
+                      errorText: _isApiKeyValid == false ? 'Invalid API Key' : null,
                       helperText: '',
                     ),
                     obscureText: true,
-                    onChanged: (text) {
-                      if (_isApiKeyValid == null) return;
+                    onChanged: (_) {
+                      if (_isApiKeyValid == null) return setState(() {});
 
-                      setState(() {
-                        _isApiKeyValid = null;
-                      });
+                      setState(() => _isApiKeyValid = null);
                     },
                     onSubmitted: (_) => _login(),
                   ),
@@ -88,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _login() async {
-    final apiKey = _apiKeyController.text.trim();
+    final apiKey = _apiKeyController.text;
     if (apiKey.isEmpty) return;
 
     final baseUrl = GetIt.I<AppConfig>().baseUrl;
@@ -96,7 +93,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (!mounted) return;
 
-    if (!isApiKeyValid) return setState(() => _isApiKeyValid = false);
+    if (!isApiKeyValid) {
+      setState(() => _isApiKeyValid = false);
+
+      _apiKeyFocusNode.requestFocus();
+
+      return;
+    }
 
     final sp = await SharedPreferences.getInstance();
     await sp.setString('api_key', apiKey);
