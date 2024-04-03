@@ -9,7 +9,6 @@ public class MessageEntityTypeConfiguration : IEntityTypeConfiguration<Message>
     public void Configure(EntityTypeBuilder<Message> builder)
     {
         builder.HasIndex(m => m.CreatedBy);
-        builder.HasIndex(m => m.CreatedAt);
 
         builder.Property(m => m.Body).IsRequired(false);
         builder.Property(x => x.CreatedByDevice);

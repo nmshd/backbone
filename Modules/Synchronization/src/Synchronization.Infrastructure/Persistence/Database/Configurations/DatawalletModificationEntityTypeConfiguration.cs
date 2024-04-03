@@ -9,7 +9,6 @@ public class DatawalletModificationEntityTypeConfiguration : IEntityTypeConfigur
     public void Configure(EntityTypeBuilder<DatawalletModification> builder)
     {
         builder.HasIndex(p => new { p.CreatedBy, p.Index }).IsUnique();
-        builder.HasIndex(p => p.CreatedBy);
 
         builder.HasKey(x => x.Id);
 

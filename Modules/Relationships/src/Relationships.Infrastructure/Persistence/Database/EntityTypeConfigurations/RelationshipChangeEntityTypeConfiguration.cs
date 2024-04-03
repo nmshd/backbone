@@ -10,10 +10,6 @@ public class RelationshipChangeEntityTypeConfiguration : IEntityTypeConfiguratio
     {
         builder.ToTable("RelationshipChanges");
 
-        builder.HasIndex(x => x.Status);
-        builder.HasIndex(x => x.Type);
-        builder.HasIndex(x => x.CreatedAt);
-
         builder.Ignore(x => x.IsCompleted);
         builder.Ignore(x => x.Request);
         builder.Ignore(x => x.Response);
