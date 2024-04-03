@@ -1,8 +1,10 @@
+import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '/core/core.dart';
 
 class HomeScreen extends StatefulWidget {
   final Widget child;
@@ -21,14 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            SvgPicture.asset('assets/logo.svg', width: 30, height: 30),
-            const SizedBox(width: 10),
-            const Text('Enmeshed Admin UI'),
-          ],
-        ),
+        title: const AppTitle(),
         leading: IconButton(
           icon: const Icon(Icons.menu),
           onPressed: () {
@@ -39,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(icon: const Icon(Icons.logout), onPressed: _logout),
-          const SizedBox(width: 10),
+          Gaps.w8,
         ],
       ),
       body: Row(
@@ -85,7 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _logout() async {
     final sp = await SharedPreferences.getInstance();
     await sp.remove('api_key');
-    await GetIt.I.reset();
+    await GetIt.I.unregisterIfRegistered<AdminApiClient>();
+
     if (mounted) context.go('/login');
   }
 }
