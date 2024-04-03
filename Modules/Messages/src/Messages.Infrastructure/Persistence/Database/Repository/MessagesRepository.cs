@@ -70,6 +70,12 @@ public class MessagesRepository : IMessagesRepository
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task Update(Message message)
+    {
+        _messages.Update(message);
+        await _dbContext.SaveChangesAsync();
+    }
+
     public async Task<IEnumerable<Message>> Find(Expression<Func<Message, bool>> expression, CancellationToken cancellationToken)
     {
         return await _messages.IncludeAll(_dbContext)
