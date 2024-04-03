@@ -64,19 +64,13 @@ public class MessagesRepository : IMessagesRepository
         return messages;
     }
 
-    public async Task Update(Message message)
-    {
-        _messages.Update(message);
-        await _dbContext.SaveChangesAsync();
-    }
-
     public async Task Update(IEnumerable<Message> messages)
     {
         _dbContext.UpdateRange(messages);
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task<IEnumerable<Message>> FindMessagesWithParticipant(Expression<Func<Message, bool>> expression, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Message>> Find(Expression<Func<Message, bool>> expression, CancellationToken cancellationToken)
     {
         return await _messages.IncludeAll(_dbContext)
             .Where(expression)

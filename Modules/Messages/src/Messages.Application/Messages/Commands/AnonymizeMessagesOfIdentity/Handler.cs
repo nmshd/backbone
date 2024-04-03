@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<AnonymizeMessagesOfIdentityCommand>
 
     public async Task Handle(AnonymizeMessagesOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        var messages = await _messagesRepository.FindMessagesWithParticipant(Message.WasCreatedBy(request.IdentityAddress), cancellationToken);
+        var messages = await _messagesRepository.Find(Message.WasCreatedBy(request.IdentityAddress), cancellationToken);
 
         var newIdentityAddress = IdentityAddress.Create(Encoding.Unicode.GetBytes(DELETED_IDENTITY_STRING), _applicationOptions.AddressPrefix);
 
