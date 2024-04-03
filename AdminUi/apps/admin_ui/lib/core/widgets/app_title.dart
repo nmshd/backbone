@@ -8,6 +8,8 @@ class AppTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const textStyle = TextStyle(fontSize: 25);
+
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -17,24 +19,11 @@ class AppTitle extends StatelessWidget {
           height: 30,
         ),
         Gaps.w8,
-        RichText(
-          text: TextSpan(
+        Text.rich(
+          TextSpan(
             children: [
-              TextSpan(
-                text: 'enmeshed',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Theme.of(context).colorScheme.scrim,
-                  fontSize: 25,
-                ),
-              ),
-              TextSpan(
-                text: ' Admin UI',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.scrim,
-                  fontSize: 25,
-                ),
-              ),
+              TextSpan(text: 'enmeshed', style: textStyle.copyWith(fontWeight: FontWeight.bold)),
+              const TextSpan(text: ' Admin UI', style: textStyle),
             ],
           ),
         ),
