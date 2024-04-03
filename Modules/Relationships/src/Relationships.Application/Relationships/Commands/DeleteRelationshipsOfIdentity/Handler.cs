@@ -15,6 +15,6 @@ public class Handler : IRequestHandler<DeleteRelationshipsOfIdentityCommand>
 
     public async Task Handle(DeleteRelationshipsOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        await _relationshipsRepository.Delete(Relationship.HasParticipant(request.IdentityAddress), cancellationToken);
+        await _relationshipsRepository.DeleteRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken);
     }
 }
