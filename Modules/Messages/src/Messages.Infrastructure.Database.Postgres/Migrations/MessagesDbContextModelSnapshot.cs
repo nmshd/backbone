@@ -73,8 +73,6 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedAt");
-
                     b.HasIndex("CreatedBy");
 
                     b.ToTable("Messages");
