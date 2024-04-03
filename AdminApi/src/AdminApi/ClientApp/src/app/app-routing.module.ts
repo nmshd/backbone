@@ -4,8 +4,9 @@ import { ClientEditComponent } from "./components/client/client-edit/client-edit
 import { ClientListComponent } from "./components/client/client-list/client-list.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
-import { IdentityDetailsComponent } from "./components/quotas/identity/identity-details/identity-details.component";
-import { IdentityListComponent } from "./components/quotas/identity/identity-list/identity-list.component";
+import { DeletionProcessDetailsComponent } from "./components/identity/identity-details/deletion-processes/dp-details/dp-details.component";
+import { IdentityDetailsComponent } from "./components/identity/identity-details/identity-details.component";
+import { IdentityListComponent } from "./components/identity/identity-list/identity-list.component";
 import { TierEditComponent } from "./components/quotas/tier/tier-edit/tier-edit.component";
 import { TierListComponent } from "./components/quotas/tier/tier-list/tier-list.component";
 import { LoginComponent } from "./components/shared/login/login.component";
@@ -24,6 +25,7 @@ const routes: Routes = [
     { path: "clients", component: ClientListComponent, data: { breadcrumb: "Clients" }, canActivate: [AuthGuard] },
     { path: "clients/create", component: ClientEditComponent, data: { breadcrumb: "Create Client" }, canActivate: [AuthGuard] },
     { path: "clients/:id", component: ClientEditComponent, canActivate: [AuthGuard] },
+    { path: "deletion-process-details/:address/:id", component: DeletionProcessDetailsComponent, data: { breadcrumb: "Identity Deletion Process" }, canActivate: [AuthGuard] },
     { path: "**", component: PageNotFoundComponent }
 ];
 

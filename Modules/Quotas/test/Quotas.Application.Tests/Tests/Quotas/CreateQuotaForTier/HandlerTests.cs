@@ -30,8 +30,8 @@ public class HandlerTests
     {
         // Arrange
         var tierId = new TierId("TIRsomeTierId1111111");
-        var max = 5;
-        var period = QuotaPeriod.Month;
+        const int max = 5;
+        const QuotaPeriod period = QuotaPeriod.Month;
         var metricKey = MetricKey.NumberOfSentMessages.Value;
         var command = new CreateQuotaForTierCommand(tierId, metricKey, max, period);
         var tier = new Tier(tierId, "some-tier-name");

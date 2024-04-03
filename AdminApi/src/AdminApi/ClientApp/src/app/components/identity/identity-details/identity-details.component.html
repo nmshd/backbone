@@ -1,0 +1,245 @@
+<div class="card-header">
+    <h2 class="header-title">{{ header }}</h2>
+    <p class="header-description">
+        {{ headerDescription }}
+    </p>
+</div>
+<div [ngClass]="{ 'disabled-container': loading }">
+    <mat-card>
+        <mat-card-content class="form-card">
+            <div *ngIf="loading" class="loading">
+                <mat-progress-spinner color="primary" mode="indeterminate"> </mat-progress-spinner>
+            </div>
+            <div class="form-details">
+                <mat-list>
+                    <mat-list-item>
+                        <span matListItemTitle>Address</span>
+                        <span matListItemLine>{{ identity.address }}</span>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span matListItemTitle>Client ID</span>
+                        <span matListItemLine>{{ identity.clientId }}</span>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span matListItemTitle>Public Key</span>
+                        <span matListItemLine>{{ identity.publicKey }}</span>
+                    </mat-list-item>
+                    <mat-list-item>
+                        <span matListItemTitle>Created At</span>
+                        <span matListItemLine>{{ identity.createdAt | date }}</span>
+                    </mat-list-item>
+                    <mat-list-item class="auto-height">
+                        <span matListItemTitle>Tier</span>
+                        <span matListItemLine
+                            ><mat-chip-listbox aria-label="Tier selection" selectable="false">
+                                <mat-chip-option *ngFor="let t of tiers" [selected]="t == updatedTier" (click)="updatedTier = t" [disabled]="isTierDisabled(t)">{{ t.name }} </mat-chip-option>
+                            </mat-chip-listbox>
+                        </span>
+                    </mat-list-item>
+                </mat-list>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <mat-accordion class="identity-accordion">
+        <mat-expansion-panel class="details-expansion-panel" [expanded]="true">
+            <mat-expansion-panel-header class="details-expansion-panel-header">
+                <mat-panel-title class="details-panel-header-title">
+                    {{ headerQuotas }}
+                </mat-panel-title>
+                <mat-panel-description class="details-panel-header-desc">
+                    {{ headerQuotasDescription }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <div class="action-buttons">
+                <button mat-mini-fab color="warn" (click)="openConfirmationDialogQuotaDeletion()" [disabled]="selectionQuotas.selected.length === 0">
+                    <mat-icon>delete</mat-icon>
+                </button>
+                <button mat-mini-fab color="primary" (click)="openAssignQuotaDialog()" [disabled]="!identity.address">
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+            <table mat-table class="responsive" [dataSource]="quotasTableData">
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox
+                            (change)="$event ? toggleAllRowsQuotas() : null"
+                            [checked]="selectionQuotas.hasValue() && isAllSelected()"
+                            color="primary"
+                            [indeterminate]="selectionQuotas.hasValue() && !isAllSelected()"
+                            [aria-label]="checkboxLabelQuotas()">
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row; let i = index">
+                        <mat-checkbox
+                            *ngIf="row.deleteable"
+                            (click)="$event.stopPropagation()"
+                            (change)="$event ? selectionQuotas.toggle(row) : null"
+                            [checked]="selectionQuotas.isSelected(row)"
+                            color="primary"
+                            [aria-label]="checkboxLabelQuotas(i, row)">
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="metric">
+                    <th mat-header-cell *matHeaderCellDef>Metric</th>
+                    <td mat-cell *matCellDef="let Quota"></td>
+                </ng-container>
+                <ng-container matColumnDef="source">
+                    <th mat-header-cell *matHeaderCellDef>Source</th>
+                    <td mat-cell *matCellDef="let Quota" data-label="Source:">
+                        {{ Quota.source }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="max">
+                    <th mat-header-cell *matHeaderCellDef>Used/Max</th>
+                    <td mat-cell *matCellDef="let Quota" data-label="Used/Max:">
+                        <div class="progressWrapper">
+                            <span>{{ Quota.usage }}/{{ Quota.max }}</span>
+                            <mat-progress-bar mode="determinate" [value]="(Quota.usage / Quota.max) * 100"></mat-progress-bar>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="period">
+                    <th mat-header-cell *matHeaderCellDef>Period</th>
+                    <td mat-cell *matCellDef="let Quota" data-label="Period:">
+                        {{ Quota.period }}
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="quotasTableDisplayedColumns"></tr>
+                <tr
+                    mat-row
+                    *matRowDef="let row; columns: quotasTableDisplayedColumns"
+                    [ngClass]="{ 'disabled-tier': row.disabled }"
+                    [matTooltipDisabled]="!row.disabled"
+                    matTooltip="Tier quotas do not take effect if there is an individual quota."></tr>
+
+                <!--Metric Group-->
+                <ng-container matColumnDef="metricGroup">
+                    <td mat-cell *matCellDef="let group" colspan="999" data-label="Metric:">
+                        {{ group.metric.displayName }}
+                    </td>
+                </ng-container>
+
+                <tr mat-row *matRowDef="let row; columns: ['metricGroup']; when: isGroup"></tr>
+
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell no-data" [attr.colspan]="quotasTableDisplayedColumns.length">No quotas found.</td>
+                </tr>
+            </table>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion class="identity-accordion">
+        <mat-expansion-panel class="details-expansion-panel">
+            <mat-expansion-panel-header class="details-expansion-panel-header">
+                <mat-panel-title class="details-panel-header-title">
+                    {{ headerDevices }}
+                </mat-panel-title>
+                <mat-panel-description class="details-panel-header-desc">
+                    {{ headerDevicesDescription }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <table mat-table class="responsive" [dataSource]="devicesTableData">
+                    <ng-container matColumnDef="id">
+                        <th mat-header-cell *matHeaderCellDef>ID</th>
+                        <td mat-cell *matCellDef="let Device" data-label="ID:">
+                            {{ Device.id }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="username">
+                        <th mat-header-cell *matHeaderCellDef>Username</th>
+                        <td mat-cell *matCellDef="let Device" data-label="Username:">
+                            {{ Device.username }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="createdAt">
+                        <th mat-header-cell *matHeaderCellDef>Creation Date</th>
+                        <td mat-cell *matCellDef="let Device" data-label="Creation Date:">
+                            {{ Device.createdAt | date }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="lastLogin">
+                        <th mat-header-cell *matHeaderCellDef>Last Login Date</th>
+                        <td mat-cell *matCellDef="let Device" data-label="Last Login Date:">
+                            {{ Device.lastLogin.time | date }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="createdByDevice">
+                        <th mat-header-cell *matHeaderCellDef>Created By Device</th>
+                        <td mat-cell *matCellDef="let Device" data-label="Created By Device:">
+                            {{ Device.createdByDevice }}
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="devicesTableDisplayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: devicesTableDisplayedColumns"></tr>
+
+                    <tr class="mat-row" *matNoDataRow>
+                        <td class="mat-cell no-data" [attr.colspan]="devicesTableDisplayedColumns.length">No devices found.</td>
+                    </tr>
+                </table>
+            </ng-template>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion class="identity-accordion">
+        <mat-expansion-panel class="details-expansion-panel">
+            <mat-expansion-panel-header class="details-expansion-panel-header">
+                <mat-panel-title class="details-panel-header-title">
+                    {{ headerRelationships }}
+                </mat-panel-title>
+                <mat-panel-description class="details-panel-header-desc">
+                    {{ headerRelationshipsDescription }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <app-identity-details-relationships [identityAddress]="identityAddress"></app-identity-details-relationships>
+            </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="details-expansion-panel">
+            <mat-expansion-panel-header class="details-expansion-panel-header">
+                <mat-panel-title class="details-panel-header-title">
+                    {{ headerReceivedMessages }}
+                </mat-panel-title>
+                <mat-panel-description class="details-panel-header-desc">
+                    {{ headerReceivedMessagesDescription }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <app-identity-details-messages [identityAddress]="identityAddress" type="Incoming"></app-identity-details-messages>
+            </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="details-expansion-panel">
+            <mat-expansion-panel-header class="details-expansion-panel-header">
+                <mat-panel-title class="details-panel-header-title">
+                    {{ headerSentMessages }}
+                </mat-panel-title>
+                <mat-panel-description class="details-panel-header-desc">
+                    {{ headerSentMessagesDescription }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <app-identity-details-messages [identityAddress]="identityAddress" type="Outgoing"></app-identity-details-messages>
+            </ng-template>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <mat-accordion class="identity-accordion">
+        <mat-expansion-panel class="details-expansion-panel">
+            <mat-expansion-panel-header class="details-expansion-panel-header">
+                <mat-panel-title class="details-panel-header-title">
+                    {{ headerDeletionProcesses }}
+                </mat-panel-title>
+                <mat-panel-description class="details-panel-header-desc">
+                    {{ headerDeletionProcessesDescription }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <app-deletion-processes [identityAddress]="identityAddress"></app-deletion-processes>
+            </ng-template>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <div class="action-buttons">
+        <button mat-raised-button [disabled]="!hasPendingChanges()" (click)="saveIdentity()" color="primary">Save</button>
+        <button mat-raised-button color="warn" (click)="openStartDeletionProcessDialog()">Start Deletion Process</button>
+        <button mat-raised-button routerLink="/identities">Cancel</button>
+    </div>
+</div>

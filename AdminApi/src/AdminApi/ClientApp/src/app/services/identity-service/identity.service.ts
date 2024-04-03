@@ -192,6 +192,22 @@ export class IdentityService {
     public updateIdentity(identity: Identity, params: UpdateTierRequest): Observable<HttpResponseEnvelope<Identity>> {
         return this.http.put<HttpResponseEnvelope<Identity>>(`${this.apiUrl}/${identity.address}`, params);
     }
+
+    public getDeletionProcessesForIdentity(identity: string): Observable<HttpResponseEnvelope<DeletionProcessOverview[]>> {
+        return this.http.get<HttpResponseEnvelope<DeletionProcessOverview[]>>(`${this.apiUrl}/${identity}/DeletionProcesses`);
+    }
+
+    public getDeletionProcessOfIdentityById(address: String, deletionProcessId: String): Observable<HttpResponseEnvelope<DeletionProcess>> {
+        return this.http.get<HttpResponseEnvelope<DeletionProcess>>(`${this.apiUrl}/${address}/DeletionProcesses/${deletionProcessId}`);
+    }
+
+    public cancelDeletionProcessAsSupport(identityAddress: string, deletionProcessId: string): Observable<HttpResponseEnvelope<void>> {
+        return this.http.put<HttpResponseEnvelope<void>>(`${this.apiUrl}/${identityAddress}/DeletionProcesses/${deletionProcessId}/Cancel`, "");
+    }
+
+    public startDeletionProcessAsSupport(identityAddress: string): Observable<HttpResponseEnvelope<DeletionProcessOverview>> {
+        return this.http.post<HttpResponseEnvelope<DeletionProcessOverview>>(`${this.apiUrl}/${identityAddress}/DeletionProcesses`, "");
+    }
 }
 
 export interface Identity {
@@ -241,4 +257,45 @@ export interface IdentityOverviewFilter {
 
 export interface UpdateTierRequest {
     tierId: string;
+}
+
+export interface DeletionProcessAuditLog {
+    id: string;
+    createdAt: string;
+    message: string;
+    oldStatus: number;
+    newStatus: number;
+}
+
+export interface DeletionProcess {
+    id: string;
+    status: string;
+    createdAt: string;
+    auditLog: DeletionProcessAuditLog[];
+    approvalReminder1SentAt: Date;
+    approvalReminder2SentAt: Date;
+    approvalReminder3SentAt: Date;
+    approvedAt: string;
+    approvedByDevice: string;
+    gracePeriodEndsAt: string;
+    gracePeriodReminder1SentAt: Date;
+    gracePeriodReminder2SentAt: Date;
+    gracePeriodReminder3SentAt: Date;
+    identityAddress: string;
+}
+
+export interface DeletionProcessOverview {
+    id: string;
+    status: string;
+    createdAt: string;
+    approvalReminder1SentAt: Date;
+    approvalReminder2SentAt: Date;
+    approvalReminder3SentAt: Date;
+    approvedAt: string;
+    approvedByDevice: string;
+    gracePeriodEndsAt: string;
+    gracePeriodReminder1SentAt: Date;
+    gracePeriodReminder2SentAt: Date;
+    gracePeriodReminder3SentAt: Date;
+    identityAddress: string;
 }

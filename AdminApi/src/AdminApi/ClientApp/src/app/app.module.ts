@@ -42,12 +42,12 @@ import { ClientListComponent } from "./components/client/client-list/client-list
 import { CreateClientDialogComponent } from "./components/client/create-client-dialog/create-client-dialog.component";
 import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { PageNotFoundComponent } from "./components/error/page-not-found/page-not-found.component";
+import { IdentityDetailsRelationshipsComponent } from "./components/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
+import { IdentityDetailsComponent } from "./components/identity/identity-details/identity-details.component";
+import { IdentityListComponent } from "./components/identity/identity-list/identity-list.component";
 import { AssignQuotasDialogComponent } from "./components/quotas/assign-quotas-dialog/assign-quotas-dialog.component";
 import { IdentityDetailsMessageRecipientsDialogComponent } from "./components/quotas/identity/identity-details/identity-details-message-recipients-dialog/identity-details-message-recipients-dialog.component";
 import { IdentityDetailsMessagesComponent } from "./components/quotas/identity/identity-details/identity-details-messages/identity-details-messages.component";
-import { IdentityDetailsRelationshipsComponent } from "./components/quotas/identity/identity-details/identity-details-relationships/identity-details-relationships.component";
-import { IdentityDetailsComponent } from "./components/quotas/identity/identity-details/identity-details.component";
-import { IdentityListComponent } from "./components/quotas/identity/identity-list/identity-list.component";
 import { CreateTierDialogComponent } from "./components/quotas/tier/create-tier-dialog/create-tier-dialog.component";
 import { TierEditComponent } from "./components/quotas/tier/tier-edit/tier-edit.component";
 import { TierListComponent } from "./components/quotas/tier/tier-list/tier-list.component";
@@ -89,6 +89,7 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         LoginComponent,
         ChangeSecretDialogComponent,
         IdentitiesOverviewComponent,
+        IdentityDetailsRelationshipsComponent,
         BreadcrumbComponent
     ],
     imports: [

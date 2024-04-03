@@ -10,19 +10,19 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 {
-    [DbContext(typeof(AdminUiDbContext))]
+    [DbContext(typeof(AdminApiDbContext))]
     partial class AdminUiDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.ClientOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.ClientOverview", b =>
                 {
                     b.Property<string>("ClientId")
                         .HasColumnType("text");
@@ -47,7 +47,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                     b.ToView("ClientOverviews", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.IdentityOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.IdentityOverview", b =>
                 {
                     b.Property<string>("Address")
                         .HasColumnType("text");
@@ -77,7 +77,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                     b.ToView("IdentityOverviews", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.MessageOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.MessageOverview", b =>
                 {
                     b.Property<string>("MessageId")
                         .HasColumnType("text");
@@ -103,7 +103,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                     b.ToView("MessageOverviews", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.MessageRecipient", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.MessageRecipient", b =>
                 {
                     b.Property<string>("Address")
                         .HasColumnType("text");
@@ -120,7 +120,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                     b.ToView("MessageRecipients", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.RelationshipOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.RelationshipOverview", b =>
                 {
                     b.Property<DateTime?>("AnsweredAt")
                         .HasColumnType("timestamp with time zone");
@@ -155,8 +155,14 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                     b.ToView("RelationshipOverviews", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.TierOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.TierOverview", b =>
                 {
+                    b.Property<bool>("CanBeManuallyAssigned")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("CanBeUsedAsDefaultForClient")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Id")
                         .HasColumnType("text");
 
@@ -172,9 +178,9 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                     b.ToView("TierOverviews", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.ClientOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.ClientOverview", b =>
                 {
-                    b.OwnsOne("Backbone.AdminUi.Infrastructure.DTOs.TierDTO", "DefaultTier", b1 =>
+                    b.OwnsOne("Backbone.AdminApi.Infrastructure.DTOs.TierDTO", "DefaultTier", b1 =>
                         {
                             b1.Property<string>("ClientOverviewClientId")
                                 .HasColumnType("text");
@@ -203,9 +209,9 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.IdentityOverview", b =>
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.IdentityOverview", b =>
                 {
-                    b.OwnsOne("Backbone.AdminUi.Infrastructure.DTOs.TierDTO", "Tier", b1 =>
+                    b.OwnsOne("Backbone.AdminApi.Infrastructure.DTOs.TierDTO", "Tier", b1 =>
                         {
                             b1.Property<string>("IdentityOverviewAddress")
                                 .HasColumnType("text");

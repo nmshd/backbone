@@ -82,21 +82,29 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.RecipientInformation", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
                     b.Property<string>("Address")
+                        .IsRequired()
                         .HasMaxLength(36)
                         .IsUnicode(false)
                         .HasColumnType("character(36)")
                         .IsFixedLength();
 
+                    b.Property<byte[]>("EncryptedKey")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
                     b.Property<string>("MessageId")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
-
-                    b.Property<byte[]>("EncryptedKey")
-                        .IsRequired()
-                        .HasColumnType("bytea");
 
                     b.Property<DateTime?>("ReceivedAt")
                         .HasColumnType("timestamp with time zone");
@@ -114,13 +122,15 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
-                    b.HasKey("Address", "MessageId");
+                    b.HasKey("Id");
 
                     b.HasIndex("MessageId");
 
                     b.HasIndex("ReceivedAt");
 
                     b.HasIndex("RelationshipId");
+
+                    b.HasIndex("Address", "MessageId");
 
                     b.ToTable("RecipientInformation");
                 });
