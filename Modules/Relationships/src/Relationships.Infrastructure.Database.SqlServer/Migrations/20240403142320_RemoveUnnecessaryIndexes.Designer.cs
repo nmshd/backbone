@@ -4,16 +4,19 @@ using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Relationships.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(RelationshipsDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240403142320_RemoveUnnecessaryIndexes")]
+    partial class RemoveUnnecessaryIndexes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
