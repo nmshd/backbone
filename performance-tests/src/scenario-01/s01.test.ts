@@ -2,7 +2,7 @@ import { SimpleLoggerFactory } from "@js-soft/simple-logger";
 import { SyncRunType, TransportLoggerFactory } from "@nmshd/transport";
 import { LogLevel } from "typescript-logging";
 import { BackboneClient } from "../BackboneClient";
-import { randomIntFromInterval } from "../utils";
+import { generateDataWalletModifications, randomIntFromInterval } from "../utils";
 
 TransportLoggerFactory.init(new SimpleLoggerFactory(LogLevel.Fatal));
 
