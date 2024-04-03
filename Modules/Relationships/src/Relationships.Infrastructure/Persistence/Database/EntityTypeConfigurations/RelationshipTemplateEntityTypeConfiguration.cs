@@ -1,4 +1,4 @@
-using Backbone.Modules.Relationships.Domain.Entities;
+ using Backbone.Modules.Relationships.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -23,6 +23,6 @@ public class RelationshipTemplateEntityTypeConfiguration : IEntityTypeConfigurat
             .HasMany(x => x.Allocations)
             .WithOne()
             .HasForeignKey(x => x.RelationshipTemplateId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
