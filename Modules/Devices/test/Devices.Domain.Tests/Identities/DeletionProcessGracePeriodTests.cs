@@ -9,6 +9,11 @@ namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
 public class DeletionProcessGracePeriodTests : IDisposable
 {
+    public void Dispose()
+    {
+        Hasher.Reset();
+    }
+
     [Fact]
     public void DeletionGracePeriodReminder1Sent_updates_GracePeriodReminder1SentAt()
     {
@@ -37,7 +42,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder1Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved).Code);
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     [Fact]
@@ -69,7 +74,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder2Sent;
 
         // Asserterror
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved).Code);
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     [Fact]
@@ -101,7 +106,7 @@ public class DeletionProcessGracePeriodTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder3Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved).Code);
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
@@ -123,10 +128,5 @@ public class DeletionProcessGracePeriodTests : IDisposable
         identity.StartDeletionProcessAsOwner(identity.Devices.First().Id);
 
         return identity;
-    }
-
-    public void Dispose()
-    {
-        Hasher.Reset();
     }
 }

@@ -8,6 +8,7 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
+
 public class RejectDeletionProcessTests
 {
     [Fact]
@@ -77,7 +78,7 @@ public class RejectDeletionProcessTests
         // Assert
         var exception = acting.Should().Throw<DomainException>().Which;
 
-        exception.Code.Should().Be(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.WaitingForApproval).Code);
+        exception.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
         exception.Message.Should().Contain("WaitingForApproval");
     }
 
