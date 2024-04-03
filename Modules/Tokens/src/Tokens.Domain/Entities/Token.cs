@@ -54,6 +54,6 @@ public class Token
 
     public static Expression<Func<Token, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
-        return t => t.CreatedBy == identityAddress;
+        return t => t.CreatedBy == identityAddress.ToString();
     }
 }

@@ -32,6 +32,6 @@ public class RelationshipTemplateAllocation
 
     public static Expression<Func<RelationshipTemplateAllocation, bool>> WasAllocatedBy(IdentityAddress allocatedBy)
     {
-        return x => x.AllocatedBy == allocatedBy;
+        return x => x.AllocatedBy == allocatedBy.ToString();
     }
 }

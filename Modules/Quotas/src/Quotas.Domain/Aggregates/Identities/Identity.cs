@@ -170,7 +170,7 @@ public class Identity
     #region Selectors
     public static Expression<Func<Identity, bool>> HasAddress(IdentityAddress identityAddress)
     {
-        return i => i.Address == identityAddress;
+        return i => i.Address == identityAddress.ToString();
     }
 
     #endregion

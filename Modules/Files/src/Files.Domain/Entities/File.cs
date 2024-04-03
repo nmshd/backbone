@@ -92,6 +92,6 @@ public class File
 
     public static Expression<Func<File, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
-        return i => i.CreatedBy == identityAddress;
+        return i => i.CreatedBy == identityAddress.ToString();
     }
 }

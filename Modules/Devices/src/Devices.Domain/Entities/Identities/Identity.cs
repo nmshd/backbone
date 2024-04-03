@@ -233,7 +233,7 @@ public class Identity
 
     public static Expression<Func<Identity, bool>> HasAddress(IdentityAddress address)
     {
-        return i => i.Address == address;
+        return i => i.Address == address.ToString();
     }
 
     public static Expression<Func<Identity, bool>> IsReadyForDeletion()

@@ -69,6 +69,6 @@ public class RelationshipTemplate
 
     public static Expression<Func<RelationshipTemplate, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
-        return r => r.CreatedBy == identityAddress;
+        return r => r.CreatedBy == identityAddress.ToString();
     }
 }

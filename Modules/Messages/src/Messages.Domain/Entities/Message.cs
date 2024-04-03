@@ -66,6 +66,6 @@ public class Message : IIdentifiable<MessageId>
 
     public static Expression<Func<Message, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
-        return i => i.CreatedBy == identityAddress;
+        return i => i.CreatedBy == identityAddress.ToString();
     }
 }
