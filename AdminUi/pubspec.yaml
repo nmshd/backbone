@@ -12,3 +12,4 @@ dev_dependencies:
   very_good_analysis: ^5.1.0
 dependencies:
   data_table_2: ^2.5.12
+  multi_select_flutter: ^4.1.3
