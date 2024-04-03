@@ -1,10 +1,9 @@
-import 'package:admin_ui/theme/colors/color_schemes.dart';
-import 'package:admin_ui/theme/colors/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
+import 'core/theme/theme.dart';
 import 'home/home.dart';
-import 'pages/pages.dart';
+import 'screens/screens.dart';
 import 'setup/setup_desktop.dart' if (dart.library.html) 'setup/setup_web.dart';
 
 void main() async {
@@ -12,9 +11,7 @@ void main() async {
 
   await setup();
 
-  runApp(
-    const AdminUiApp(),
-  );
+  runApp(const AdminUiApp());
 }
 
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
