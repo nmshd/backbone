@@ -21,6 +21,6 @@ public class HandlerTests
         await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockRelationshipTemplatesRepository.Delete(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._)).MustHaveHappened();
+        A.CallTo(() => mockRelationshipTemplatesRepository.DeleteRelationships(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._)).MustHaveHappened();
     }
 }
