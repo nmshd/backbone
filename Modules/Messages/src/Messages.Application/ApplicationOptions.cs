@@ -7,7 +7,7 @@ public class ApplicationOptions
     [Required]
     [MinLength(3)]
     [MaxLength(3)]
-    public string AddressPrefix { get; set; }
+    public string AddressPrefix { get; set; } = null!;
 
     [Range(1, 100)]
     public int MaxNumberOfUnreceivedMessagesFromOneSender { get; set; }

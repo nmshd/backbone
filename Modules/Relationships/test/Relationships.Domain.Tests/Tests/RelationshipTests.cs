@@ -571,16 +571,16 @@ public class RelationshipTests
         return CreateActiveRelationship((from, null));
     }
 
-    private static Relationship CreateActiveRelationship((IdentityAddress from, IdentityAddress to) parameters)
+    private static Relationship CreateActiveRelationship((IdentityAddress? from, IdentityAddress? to) parameters)
     {
-        RelationshipTemplate template = null;
+        RelationshipTemplate? template = null;
         if (parameters.to is not null)
         {
             template = new RelationshipTemplate(parameters.to, TO_DEVICE, 1, SystemTime.UtcNow.AddDays(1), [0]);
         }
 
         var relationship = new Relationship(template ?? TEMPLATE, parameters.from ?? FROM_IDENTITY, FROM_DEVICE, REQUEST_CONTENT);
-        var change = relationship.Changes.GetOpenCreation();
+        var change = relationship.Changes.GetOpenCreation()!;
         relationship.AcceptChange(change.Id, parameters.to ?? TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
         return relationship;
     }

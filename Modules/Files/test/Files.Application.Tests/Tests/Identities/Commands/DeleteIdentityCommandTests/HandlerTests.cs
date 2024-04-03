@@ -7,6 +7,7 @@ using static Backbone.UnitTestTools.Data.TestDataGenerator;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Application.Tests.Tests.Identities.Commands.DeleteIdentityCommandTests;
+
 public class HandlerTests
 {
     [Fact]
@@ -24,7 +25,7 @@ public class HandlerTests
         A.CallTo(() => mockFilesRepository.DeleteFilesOfIdentity(A<Expression<Func<File, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
-    private static Handler CreateHandler(IFilesRepository filesRepository = null)
+    private static Handler CreateHandler(IFilesRepository? filesRepository = null)
     {
         return new Handler(filesRepository ?? A.Fake<IFilesRepository>());
     }
