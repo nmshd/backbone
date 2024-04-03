@@ -2,7 +2,6 @@ using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
-using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application;
@@ -13,7 +12,6 @@ using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
 
@@ -151,24 +149,15 @@ public class RelationshipsRepository : IRelationshipsRepository
         return await _relationships.Where(filter).ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<RelationshipTemplateAllocation>> FindRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter, CancellationToken cancellationToken)
+    public async Task<IEnumerable<RelationshipTemplateAllocation>> FindRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter,
+        CancellationToken cancellationToken)
     {
         return await _relationshipTemplateAllocations.Where(filter).ToListAsync(cancellationToken);
     }
 
-    public async Task UpdateRelationshipTemplateAllocation(RelationshipTemplateAllocation relationshipTemplateAllocation, CancellationToken cancellationToken)
+    public async Task UpdateRelationshipTemplateAllocations(List<RelationshipTemplateAllocation> templateAllocations, CancellationToken cancellationToken)
     {
-        _relationshipTemplateAllocations.Update(relationshipTemplateAllocation);
+        _relationshipTemplateAllocations.UpdateRange(templateAllocations);
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
-}
-
-internal static partial class RelationshipRepositoryLogs
-{
-    [LoggerMessage(
-        EventId = 664861,
-        EventName = "Relationships.RelationshipsRepository.ErrorTryingToSaveRelationshipChange",
-        Level = LogLevel.Error,
-        Message = "There was an error while trying to save the content of the RelationshipChange with the id '{id}'. The name of the blob was '{name}'.")]
-    public static partial void ErrorTryingToSaveRelationshipChange(this ILogger logger, RelationshipChangeId id, string name);
 }

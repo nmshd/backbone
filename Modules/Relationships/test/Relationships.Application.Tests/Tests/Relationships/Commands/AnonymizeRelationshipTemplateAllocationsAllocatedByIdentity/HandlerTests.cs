@@ -13,7 +13,7 @@ namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.C
 public class HandlerTests
 {
     [Fact]
-    public async Task Command_calls_update_for_each_RelationshipTemplateAllocation()
+    public async Task Persists_updated_allocations()
     {
         // Arrange
         var mockRepository = A.Fake<IRelationshipsRepository>();
@@ -31,11 +31,14 @@ public class HandlerTests
         await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockRepository.UpdateRelationshipTemplateAllocation(A<RelationshipTemplateAllocation>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockRepository.UpdateRelationshipTemplateAllocations(
+            A<List<RelationshipTemplateAllocation>>.That.Matches(l => l.Contains(relationshipTemplateAllocations.First())),
+            A<CancellationToken>._)
+        ).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
-    public async Task Command_does_not_call_update_for_RelationshipTemplateAllocation_with_different_IdentityAddress()
+    public async Task Does_not_persist_allocations_that_were_not_updated()
     {
         // Arrange
         var mockRepository = A.Fake<IRelationshipsRepository>();
@@ -54,6 +57,9 @@ public class HandlerTests
         await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockRepository.UpdateRelationshipTemplateAllocation(A<RelationshipTemplateAllocation>._, A<CancellationToken>._)).MustNotHaveHappened();
+        A.CallTo(() => mockRepository.UpdateRelationshipTemplateAllocations(
+            A<List<RelationshipTemplateAllocation>>.That.Matches(l => l.Contains(relationshipTemplateAllocations.First())),
+            A<CancellationToken>._)
+        ).MustNotHaveHappened();
     }
 }

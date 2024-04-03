@@ -17,12 +17,14 @@ public class Handler : IRequestHandler<AnonymizeRelationshipTemplateAllocationsA
     public async Task Handle(AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand request, CancellationToken cancellationToken)
     {
         var allocations = await _relationshipsRepository.FindRelationshipTemplateAllocations(RelationshipTemplateAllocation.WasAllocatedBy(request.IdentityAddress), cancellationToken);
+        var updatedAllocations = new List<RelationshipTemplateAllocation>();
+
         foreach (var allocation in allocations)
         {
             if (allocation.ReplaceIdentityAddress(request.IdentityAddress, DELETED_IDENTITY_STRING))
-            {
-                await _relationshipsRepository.UpdateRelationshipTemplateAllocation(allocation, cancellationToken);
-            }
+                updatedAllocations.Add(allocation);
         }
+
+        await _relationshipsRepository.UpdateRelationshipTemplateAllocations(updatedAllocations, cancellationToken);
     }
 }
