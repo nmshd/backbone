@@ -70,7 +70,6 @@ class AdminUiApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      themeMode: ThemeMode.light,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: lightColorScheme,

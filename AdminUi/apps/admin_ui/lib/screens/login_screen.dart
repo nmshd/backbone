@@ -37,11 +37,11 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       appBar: AppBar(
         title: const AppTitle(),
-        leading: const SizedBox(
-          width: 40,
-        ),
+        centerTitle: false,
+        leading: Gaps.w40,
       ),
       body: Center(
         child: SizedBox(
@@ -52,35 +52,28 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
-                    height: 100,
-                    child: TextField(
-                      controller: _apiKeyController,
-                      focusNode: _apiKeyFocusNode,
-                      decoration: InputDecoration(
-                        labelText: 'API Key',
-                        border: const OutlineInputBorder(),
-                        errorText: (_isApiKeyValid == false) ? 'Invalid API Key' : null,
-                      ),
-                      obscureText: true,
-                      onChanged: (text) {
-                        if (_isApiKeyValid != null) return;
+                  TextField(
+                    controller: _apiKeyController,
+                    focusNode: _apiKeyFocusNode,
+                    obscureText: true,
+                    decoration: InputDecoration(
+                      labelText: 'API Key',
+                      border: const OutlineInputBorder(),
+                      errorText: _isApiKeyValid == false ? 'Invalid API Key' : null,
+                      helperText: '',
+                    ),
+                    onChanged: (_) {
+                      if (_isApiKeyValid == null) return setState(() {});
 
-                        setState(() {
-                          _isApiKeyValid = null;
-                        });
-                      },
-                      onSubmitted: (_) => _login(),
-                    ),
+                      setState(() => _isApiKeyValid = null);
+                    },
+                    onSubmitted: (_) => _login(),
                   ),
-                  Gaps.h16,
-                  SizedBox(
-                    height: 40,
-                    width: double.infinity,
-                    child: FilledButton(
-                      onPressed: _apiKeyController.text.isNotEmpty ? _login : null,
-                      child: const Text('Login'),
-                    ),
+                  Gaps.h24,
+                  FilledButton(
+                    style: FilledButton.styleFrom(minimumSize: const Size.fromHeight(45)),
+                    onPressed: _apiKeyController.text.isNotEmpty ? _login : null,
+                    child: const Text('Login'),
                   ),
                 ],
               ),
@@ -88,12 +81,11 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
-      backgroundColor: Theme.of(context).colorScheme.inversePrimary,
     );
   }
 
   Future<void> _login() async {
-    final apiKey = _apiKeyController.text.trim();
+    final apiKey = _apiKeyController.text;
     if (apiKey.isEmpty) return;
 
     final baseUrl = GetIt.I<AppConfig>().baseUrl;
@@ -101,7 +93,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (!mounted) return;
 
-    if (!isApiKeyValid) return setState(() => _isApiKeyValid = false);
+    if (!isApiKeyValid) {
+      setState(() => _isApiKeyValid = false);
+
+      _apiKeyFocusNode.requestFocus();
+
+      return;
+    }
 
     final sp = await SharedPreferences.getInstance();
     await sp.setString('api_key', apiKey);
