@@ -336,8 +336,6 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
-                    b.Property<DateTime>("DeletionStartedAt");
-
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityAddress");
@@ -767,16 +765,14 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                 {
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", null)
                         .WithMany("DeletionProcesses")
-                        .HasForeignKey("IdentityAddress")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("IdentityAddress");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcessAuditLogEntry", b =>
                 {
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", null)
                         .WithMany("AuditLog")
-                        .HasForeignKey("IdentityDeletionProcessId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("IdentityDeletionProcessId");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>

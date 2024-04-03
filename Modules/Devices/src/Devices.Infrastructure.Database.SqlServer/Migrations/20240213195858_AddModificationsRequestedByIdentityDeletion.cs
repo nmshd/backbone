@@ -20,18 +20,18 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 oldType: "int",
                 oldDefaultValue: 1);
 
+            migrationBuilder.AddColumn<DateTime>(
+                name: "DeletionGracePeriodEndsAt",
+                table: "Identities",
+                type: "datetime2",
+                nullable: true);
+
             migrationBuilder.AddColumn<int>(
                 name: "Status",
                 table: "Identities",
                 type: "int",
                 nullable: false,
                 defaultValue: 0);
-
-            migrationBuilder.AddColumn<DateTime>(
-                name: "DeletionGracePeriodEndsAt",
-                table: "Identities",
-                type: "datetime2",
-                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "TierIdBeforeDeletion",
@@ -58,7 +58,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     GracePeriodReminder1SentAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     GracePeriodReminder2SentAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     GracePeriodReminder3SentAt = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DeletionStartedAt = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)),
                     IdentityAddress = table.Column<string>(type: "char(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: true)
                 },
                 constraints: table =>
@@ -68,8 +67,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
                         column: x => x.IdentityAddress,
                         principalTable: "Identities",
-                        principalColumn: "Address",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Address");
                 });
 
             migrationBuilder.CreateTable(
@@ -92,8 +90,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_IdentityDeletionProcessId",
                         column: x => x.IdentityDeletionProcessId,
                         principalTable: "IdentityDeletionProcesses",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -115,6 +112,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.DropTable(
                 name: "IdentityDeletionProcesses");
+
+            migrationBuilder.DropColumn(
+                name: "DeletionGracePeriodEndsAt",
+                table: "Identities");
+
+            migrationBuilder.DropColumn(
+                name: "Status",
+                table: "Identities");
 
             migrationBuilder.DropColumn(
                 name: "TierIdBeforeDeletion",
