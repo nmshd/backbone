@@ -10,7 +10,6 @@ public class SyncRunEntityTypeConfiguration : IEntityTypeConfiguration<SyncRun>
     {
         builder.HasIndex(x => new { x.CreatedBy, x.Index }).IsUnique();
         builder.HasIndex(x => new { x.CreatedBy, x.FinalizedAt });
-        builder.HasIndex(x => x.CreatedBy);
 
         builder.Ignore(x => x.IsFinalized);
 

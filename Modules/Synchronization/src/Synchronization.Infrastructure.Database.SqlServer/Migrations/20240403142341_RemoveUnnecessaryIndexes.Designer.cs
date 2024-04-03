@@ -4,6 +4,7 @@ using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(SynchronizationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240403142341_RemoveUnnecessaryIndexes")]
+    partial class RemoveUnnecessaryIndexes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -266,8 +269,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                 {
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Datawallet", "Datawallet")
                         .WithMany("Modifications")
-                        .HasForeignKey("DatawalletId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("DatawalletId");
 
                     b.Navigation("Datawallet");
                 });

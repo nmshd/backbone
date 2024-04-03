@@ -116,8 +116,6 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
-
                     b.HasIndex("DatawalletId");
 
                     b.HasIndex("CreatedBy", "Index")
@@ -255,8 +253,6 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
 
                     b.HasIndex("CreatedBy", "FinalizedAt");
 
