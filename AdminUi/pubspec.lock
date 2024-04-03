@@ -33,6 +33,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.1.1"
+  characters:
+    dependency: transitive
+    description:
+      name: characters
+      sha256: "04a925763edad70e8443c99234dc3328f442e811f1d8fd1a72f1c8ad0f69a605"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.3.0"
   charcode:
     dependency: transitive
     description:
@@ -73,6 +81,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.0+1"
+  data_table_2:
+    dependency: "direct main"
+    description:
+      name: data_table_2
+      sha256: e403de6d9a58dddf27700114b614ea8ea5aa8442d7fbdfbe8b3d11b0512e7a49
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.12"
   file:
     dependency: transitive
     description:
@@ -81,6 +97,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
+  flutter:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   glob:
     dependency: transitive
     description:
@@ -137,6 +158,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.12.16+1"
+  material_color_utilities:
+    dependency: transitive
+    description:
+      name: material_color_utilities
+      sha256: "0e0a020085b65b6083975e499759762399b4475f766c21668c4ecca34ea74e5a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.8.0"
   melos:
     dependency: "direct dev"
     description:
@@ -149,10 +178,10 @@ packages:
     dependency: transitive
     description:
       name: meta
-      sha256: "7687075e408b093f36e6bbf6c91878cc0d4cd10f409506f7bc996f68220b9136"
+      sha256: d584fa6707a52763a52446f02cc621b077888fb63b93bbcb1143a7be5a0c0c04
       url: "https://pub.dev"
     source: hosted
-    version: "1.12.0"
+    version: "1.11.0"
   mustache_template:
     dependency: transitive
     description:
@@ -233,6 +262,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.2.1"
+  sky_engine:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.99"
   source_span:
     dependency: transitive
     description:
@@ -297,6 +331,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.0"
+  vector_math:
+    dependency: transitive
+    description:
+      name: vector_math
+      sha256: "80b3257d1492ce4d091729e3a67a60407d227c27241d6927be0130c98e741803"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.4"
   very_good_analysis:
     dependency: "direct dev"
     description:
@@ -331,3 +373,4 @@ packages:
     version: "2.2.0"
 sdks:
   dart: ">=3.3.0 <4.0.0"
+  flutter: ">=3.10.0"
