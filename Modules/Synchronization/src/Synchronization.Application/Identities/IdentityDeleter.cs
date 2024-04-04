@@ -17,8 +17,8 @@ public class IdentityDeleter : IIdentityDeleter
 
     public async Task Delete(IdentityAddress identityAddress)
     {
-        await _mediator.Send(new DeleteSyncRunsOfIdentityCommand(identityAddress));
         await _mediator.Send(new DeleteExternalEventsOfIdentityCommand(identityAddress));
+        await _mediator.Send(new DeleteSyncRunsOfIdentityCommand(identityAddress));
         await _mediator.Send(new DeleteDatawalletsOfIdentityCommand(identityAddress));
     }
 }
