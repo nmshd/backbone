@@ -287,6 +287,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2429FCAB-2
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationEventHandlerService", "IntegrationEventHandlerService\src\IntegrationEventHandlerService\IntegrationEventHandlerService.csproj", "{B4664E79-77A5-41AE-8480-C449ED5B2576}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationEventHandlerService.Tests", "IntegrationEventHandlerService\test\IntegrationEventHandlerService.Tests\IntegrationEventHandlerService.Tests.csproj", "{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -685,6 +687,10 @@ Global
 		{B4664E79-77A5-41AE-8480-C449ED5B2576}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4664E79-77A5-41AE-8480-C449ED5B2576}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4664E79-77A5-41AE-8480-C449ED5B2576}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -816,6 +822,7 @@ Global
 		{D54A9259-7708-45C1-B8D9-448B97F43B80} = {11FE034C-FA73-4766-99DB-D2C606018934}
 		{2429FCAB-2058-4403-94DA-DA26B1655A7D} = {11FE034C-FA73-4766-99DB-D2C606018934}
 		{B4664E79-77A5-41AE-8480-C449ED5B2576} = {D54A9259-7708-45C1-B8D9-448B97F43B80}
+		{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD} = {2429FCAB-2058-4403-94DA-DA26B1655A7D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}
