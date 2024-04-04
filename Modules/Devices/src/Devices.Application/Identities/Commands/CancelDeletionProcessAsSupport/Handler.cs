@@ -21,8 +21,8 @@ public class Handler : IRequestHandler<CancelDeletionAsSupportCommand, CancelDel
 
     public async Task<CancelDeletionAsSupportResponse> Handle(CancelDeletionAsSupportCommand request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
-        var oldTierId = identity.TierId!;
+        var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
+        var oldTierId = identity.TierId;
 
         var deletionProcessIdResult = IdentityDeletionProcessId.Create(request.DeletionProcessId);
 
@@ -34,7 +34,7 @@ public class Handler : IRequestHandler<CancelDeletionAsSupportCommand, CancelDel
         var deletionProcess = identity.CancelDeletionProcessAsSupport(deletionProcessId);
 
         await _identitiesRepository.Update(identity, cancellationToken);
-        var newTierId = identity.TierId!;
+        var newTierId = identity.TierId;
 
         _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTierId, newTierId));
         _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, deletionProcess.Id));

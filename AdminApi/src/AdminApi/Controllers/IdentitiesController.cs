@@ -96,8 +96,8 @@ public class IdentitiesController : ApiControllerBase
             IdentityVersion = request.IdentityVersion,
             SignedChallenge = new SignedChallengeDTO
             {
-                Challenge = request.SignedChallenge.Challenge,
-                Signature = request.SignedChallenge.Signature
+                Challenge = "-",
+                Signature = [0]
             },
             ShouldValidateChallenge = false
         };
@@ -111,7 +111,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> StartDeletionProcessAsSupport([FromRoute] string address, CancellationToken cancellationToken)
+    public async Task<IActionResult> StartDeletionProcess([FromRoute] string address, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new StartDeletionProcessAsSupportCommand(address), cancellationToken);
         return Created("", response);
@@ -177,11 +177,4 @@ public class CreateIdentityRequest
     public required byte[] IdentityPublicKey { get; set; }
     public required string DevicePassword { get; set; }
     public required byte IdentityVersion { get; set; }
-    public required CreateIdentityRequestSignedChallenge SignedChallenge { get; set; }
-}
-
-public class CreateIdentityRequestSignedChallenge
-{
-    public required string Challenge { get; set; }
-    public required byte[] Signature { get; set; }
 }
