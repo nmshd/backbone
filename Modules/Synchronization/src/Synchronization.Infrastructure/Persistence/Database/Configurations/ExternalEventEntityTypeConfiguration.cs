@@ -20,5 +20,7 @@ public class ExternalEventEntityTypeConfiguration : IEntityTypeConfiguration<Ext
         builder.Property(x => x.Payload)
             .HasMaxLength(200)
             .HasConversion<ExternalEventIdPayloadEntityFrameworkValueConverter>();
+
+        builder.HasOne(x => x.SyncRun).WithMany(y => y.ExternalEvents).OnDelete(DeleteBehavior.Cascade);
     }
 }
