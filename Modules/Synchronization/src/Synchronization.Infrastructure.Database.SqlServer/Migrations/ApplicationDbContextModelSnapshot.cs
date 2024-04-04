@@ -276,8 +276,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                 {
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", "SyncRun")
                         .WithMany("ExternalEvents")
-                        .HasForeignKey("SyncRunId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("SyncRunId");
 
                     b.Navigation("SyncRun");
                 });
