@@ -76,9 +76,30 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureServices((hostContext, services) =>
         {
             var configuration = hostContext.Configuration;
+            services.ConfigureAndValidate<IdentityDeletionJobConfiguration>(configuration.Bind);
 
-            services.AddHostedService<ActualIdentityDeletionWorker>();
-            services.AddHostedService<CancelIdentityDeletionProcessWorker>();
+#pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
+            var parsedConfiguration =
+                services.BuildServiceProvider().GetRequiredService<IOptions<IdentityDeletionJobConfiguration>>().Value;
+#pragma warning restore ASP0000
+
+            if (parsedConfiguration.Worker is null)
+            {
+                throw new ArgumentException("No Worker was defined when calling this job.");
+            }
+
+            switch (parsedConfiguration.Worker)
+            {
+                case nameof(ActualIdentityDeletionWorker):
+                services.AddHostedService<ActualIdentityDeletionWorker>();
+                break;
+                case nameof(CancelIdentityDeletionProcessWorker):
+                services.AddHostedService<CancelIdentityDeletionProcessWorker>();
+                break;
+                default:
+                throw new ArgumentException($"The specified worker {parsedConfiguration.Worker} could not be recognized.");
+            }
+
 
             services
                 .AddModule<DevicesModule>(configuration)
@@ -96,13 +117,6 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddCustomIdentity(hostContext.HostingEnvironment);
 
             services.RegisterIdentityDeleters();
-
-            services.ConfigureAndValidate<IdentityDeletionJobConfiguration>(configuration.Bind);
-
-#pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
-            var parsedConfiguration =
-                services.BuildServiceProvider().GetRequiredService<IOptions<IdentityDeletionJobConfiguration>>().Value;
-#pragma warning restore ASP0000
 
             services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 

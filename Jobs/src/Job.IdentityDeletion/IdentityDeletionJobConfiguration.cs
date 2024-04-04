@@ -6,6 +6,9 @@ public class IdentityDeletionJobConfiguration
 {
     [Required]
     public InfrastructureConfiguration Infrastructure { get; set; } = new();
+
+    [Required]
+    public string? Worker { get; set; }
 }
 
 public class InfrastructureConfiguration
