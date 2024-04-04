@@ -91,13 +91,13 @@ static IHostBuilder CreateHostBuilder(string[] args)
             switch (parsedConfiguration.Worker)
             {
                 case nameof(ActualIdentityDeletionWorker):
-                services.AddHostedService<ActualIdentityDeletionWorker>();
-                break;
+                    services.AddHostedService<ActualIdentityDeletionWorker>();
+                    break;
                 case nameof(CancelIdentityDeletionProcessWorker):
-                services.AddHostedService<CancelIdentityDeletionProcessWorker>();
-                break;
+                    services.AddHostedService<CancelIdentityDeletionProcessWorker>();
+                    break;
                 default:
-                throw new ArgumentException($"The specified worker {parsedConfiguration.Worker} could not be recognized.");
+                    throw new ArgumentException($"The specified worker {parsedConfiguration.Worker} could not be recognized.");
             }
 
 
