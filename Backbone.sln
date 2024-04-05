@@ -279,9 +279,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure.Dat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure.Database.SqlServer", "AdminApi\src\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj", "{5EB516C8-510A-437E-8E68-88431717AFC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdminApi.Sdk", "AdminApi.Sdk\AdminApi.Sdk.csproj", "{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Sdk", "AdminApi.Sdk\AdminApi.Sdk.csproj", "{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuildingBlocks.SDK", "BuildingBlocks\src\BuildingBlocks.SDK\BuildingBlocks.SDK.csproj", "{6CCACC81-F9A8-4953-AE1D-62AB01CC7CBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.SDK", "BuildingBlocks\src\BuildingBlocks.SDK\BuildingBlocks.SDK.csproj", "{6CCACC81-F9A8-4953-AE1D-62AB01CC7CBA}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationEventHandlerService", "IntegrationEventHandlerService", "{11FE034C-FA73-4766-99DB-D2C606018934}"
 EndProject
@@ -673,6 +673,8 @@ Global
 		{7B42684C-9846-4769-814B-5F96C8A7CE82}.Release|Any CPU.Build.0 = Release|Any CPU
 		{76956954-B37E-4055-B5F5-CF2FFD473598}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{76956954-B37E-4055-B5F5-CF2FFD473598}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76956954-B37E-4055-B5F5-CF2FFD473598}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76956954-B37E-4055-B5F5-CF2FFD473598}.Release|Any CPU.Build.0 = Release|Any CPU
 		{EC79D227-E181-43D1-8D61-0503AB17B689}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{EC79D227-E181-43D1-8D61-0503AB17B689}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC79D227-E181-43D1-8D61-0503AB17B689}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -687,6 +689,8 @@ Global
 		{5EB516C8-510A-437E-8E68-88431717AFC1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC66AB2F-F55B-4667-85DB-F5A24CCAC502}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6CCACC81-F9A8-4953-AE1D-62AB01CC7CBA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6CCACC81-F9A8-4953-AE1D-62AB01CC7CBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CCACC81-F9A8-4953-AE1D-62AB01CC7CBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
