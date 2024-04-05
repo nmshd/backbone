@@ -7,6 +7,9 @@ WORKDIR /src
 COPY ["Directory.Build.props", "."]
 COPY ["Jobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj", "Jobs/src/Job.IdentityDeletion/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.API/BuildingBlocks.API.csproj", "BuildingBlocks/src/BuildingBlocks.API/"]
+COPY ["Modules/Devices/src/Devices.ConsumerApi/Devices.ConsumerApi.csproj", "Modules/Devices/src/Devices.ConsumerApi/"]
+COPY ["Modules/Devices/src/Devices.Infrastructure.Database.Postgres/Devices.Infrastructure.Database.Postgres.csproj", "Modules/Devices/src/Devices.Infrastructure.Database.Postgres/"]
+COPY ["Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/Devices.Infrastructure.Database.SqlServer.csproj", "Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/"]
 COPY ["Modules/Devices/src/Devices.Infrastructure/Devices.Infrastructure.csproj", "Modules/Devices/src/Devices.Infrastructure/"]
 COPY ["Modules/Devices/src/Devices.Application/Devices.Application.csproj", "Modules/Devices/src/Devices.Application/"]
 COPY ["Modules/Devices/src/Devices.Domain/Devices.Domain.csproj", "Modules/Devices/src/Devices.Domain/"]
@@ -20,17 +23,17 @@ COPY ["BuildingBlocks/src/Tooling/Tooling.csproj", "BuildingBlocks/src/Tooling/"
 COPY ["BuildingBlocks/src/BuildingBlocks.Application.Abstractions/BuildingBlocks.Application.Abstractions.csproj", "BuildingBlocks/src/BuildingBlocks.Application.Abstractions/"]
 COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
 
-RUN dotnet restore "Jobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj"
+RUN dotnet restore -r linux-x64 "Jobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj"
 
 COPY . .
 
 WORKDIR "/src/Jobs/src/Job.IdentityDeletion"
-RUN dotnet build "Job.IdentityDeletion.csproj" --configuration Release --output /app/build --no-restore
+RUN dotnet build "Job.IdentityDeletion.csproj" --configuration Release -r linux-x64 --output /app/build --no-restore
 
 FROM build AS publish
-RUN dotnet publish /property:UseAppHost=false --configuration Release --output /app/publish --no-restore "Job.IdentityDeletion.csproj" 
+RUN dotnet publish -c Release --output /app/publish -r linux-x64 --self-contained true --no-restore "Job.IdentityDeletion.csproj" 
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Backbone.Job.IdentityDeletion.dll"]
+ENTRYPOINT ["/app/Backbone.Job.IdentityDeletion"]
