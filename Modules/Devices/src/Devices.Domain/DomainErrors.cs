@@ -63,4 +63,9 @@ public static class DomainErrors
     {
         return new DomainError("error.platform.validation.device.noDeletionProcessIsPastDueApproval", "No deletion process is past due approval.");
     }
+
+    public static DomainError CannotCancelDelletionProcess()
+    {
+        return new DomainError("error.platform.validation.identity.cannotCancelDeletionProcess", "The deletion process could not be cancelled because the previous tier could not be restored.");
+    }
 }

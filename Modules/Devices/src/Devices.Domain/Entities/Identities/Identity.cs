@@ -157,7 +157,8 @@ public class Identity
                               throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
 
         deletionProcess.CancelAsOwner(Address, canceledByDeviceId);
-        TierId = TierIdBeforeDeletion;
+
+        TierId = TierIdBeforeDeletion ?? throw new DomainException(DomainErrors.CannotCancelDeletionProcess());
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
 
