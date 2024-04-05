@@ -82,10 +82,10 @@ static IHostBuilder CreateHostBuilder(string[] args)
             var parsedConfiguration =
                 services.BuildServiceProvider().GetRequiredService<IOptions<IdentityDeletionJobConfiguration>>().Value;
 #pragma warning restore ASP0000
-            
+
             var worker = Type.GetType(parsedConfiguration.Worker) ?? throw new ArgumentException($"The specified worker could not be recognized, or no worker was set.");
             services.AddTransient(typeof(IHostedService), worker);
-            
+
             services
                 .AddModule<DevicesModule>(configuration)
                 .AddModule<RelationshipsModule>(configuration)
