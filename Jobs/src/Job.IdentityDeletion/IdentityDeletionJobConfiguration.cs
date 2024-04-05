@@ -8,7 +8,7 @@ public class IdentityDeletionJobConfiguration
     public InfrastructureConfiguration Infrastructure { get; set; } = new();
 
     [Required]
-    public string? Worker { get; set; }
+    public string Worker { get; set; } = "";
 }
 
 public class InfrastructureConfiguration

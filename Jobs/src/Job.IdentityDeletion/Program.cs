@@ -82,25 +82,10 @@ static IHostBuilder CreateHostBuilder(string[] args)
             var parsedConfiguration =
                 services.BuildServiceProvider().GetRequiredService<IOptions<IdentityDeletionJobConfiguration>>().Value;
 #pragma warning restore ASP0000
-
-            if (parsedConfiguration.Worker is null)
-            {
-                throw new ArgumentException("No Worker was defined when calling this job.");
-            }
-
-            switch (parsedConfiguration.Worker)
-            {
-                case nameof(ActualIdentityDeletionWorker):
-                    services.AddHostedService<ActualIdentityDeletionWorker>();
-                    break;
-                case nameof(CancelIdentityDeletionProcessWorker):
-                    services.AddHostedService<CancelIdentityDeletionProcessWorker>();
-                    break;
-                default:
-                    throw new ArgumentException($"The specified worker {parsedConfiguration.Worker} could not be recognized.");
-            }
-
-
+            
+            var worker = Type.GetType(parsedConfiguration.Worker) ?? throw new ArgumentException($"The specified worker could not be recognized, or no worker was set.");
+            services.AddTransient(typeof(IHostedService), worker);
+            
             services
                 .AddModule<DevicesModule>(configuration)
                 .AddModule<RelationshipsModule>(configuration)
