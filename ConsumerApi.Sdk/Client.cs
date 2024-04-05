@@ -1,4 +1,5 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Challenges;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common;
+using Backbone.ConsumerApi.Sdk.Endpoints.Challenges;
 using Backbone.ConsumerApi.Sdk.Endpoints.Common;
 using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices;
