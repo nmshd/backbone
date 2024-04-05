@@ -2,8 +2,12 @@
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.Infrastructure.EventBus;
 using Backbone.Job.IdentityDeletion;
+using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdentityDeletionProcesses;
+using Backbone.Modules.Devices.ConsumerApi;
 using FluentValidation.AspNetCore;
+using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
@@ -64,12 +68,24 @@ static IHostBuilder CreateHostBuilder(string[] args)
             var configuration = hostContext.Configuration;
             services.AddHostedService<CancelIdentityDeletionProcessWorker>();
 
+            services.AddMediatR(c => c
+                .RegisterServicesFromAssemblyContaining<CancelStaleIdentityDeletionProcessesCommand>());
+
+            services.AddModule<DevicesModule>(configuration);
+
             services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
             services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
 
             services.AddCustomIdentity(hostContext.HostingEnvironment);
 
             services.ConfigureAndValidate<DeletionProcessJobConfiguration>(configuration.Bind);
+
+#pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
+            var parsedConfiguration =
+                services.BuildServiceProvider().GetRequiredService<IOptions<DeletionProcessJobConfiguration>>().Value;
+#pragma warning restore ASP0000
+
+            services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration
