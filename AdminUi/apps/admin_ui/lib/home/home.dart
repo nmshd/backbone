@@ -20,7 +20,7 @@ class Identities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const IdentityOverviewWidget();
+    return const IdentitiesOverview();
   }
 }
 
