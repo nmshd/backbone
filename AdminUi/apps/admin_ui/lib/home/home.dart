@@ -1,3 +1,4 @@
+import 'package:admin_ui/components/components.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatefulWidget {
@@ -19,7 +20,7 @@ class Identities extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    return const IdentityOverviewWidget();
   }
 }
 
