@@ -97,6 +97,28 @@ class IdentityOverviewFilter {
     this.datawalletVersion,
     this.identityVersion,
   });
+
+  IdentityOverviewFilter copyWith({
+    String? receivedAddress,
+    List<String>? receivedTiers,
+    List<String>? receivedClients,
+    FilterOperatorValue? receivedCreatedAt,
+    FilterOperatorValue? receivedLastLoginAt,
+    FilterOperatorValue? receivedNumberOfDevices,
+    FilterOperatorValue? receivedDatawalletVersion,
+    FilterOperatorValue? receivedIdentityVersion,
+  }) {
+    return IdentityOverviewFilter(
+      address: receivedAddress ?? address,
+      tiers: receivedTiers ?? tiers,
+      clients: receivedClients ?? clients,
+      createdAt: receivedCreatedAt ?? createdAt,
+      lastLoginAt: receivedLastLoginAt ?? lastLoginAt,
+      numberOfDevices: receivedNumberOfDevices ?? numberOfDevices,
+      datawalletVersion: receivedDatawalletVersion ?? datawalletVersion,
+      identityVersion: receivedIdentityVersion ?? identityVersion,
+    );
+  }
 }
 
 class FilterOperatorValue {
