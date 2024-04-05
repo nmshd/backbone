@@ -10,12 +10,11 @@ public class RelationshipEntityTypeConfiguration : IEntityTypeConfiguration<Rela
     {
         builder.HasIndex(x => x.From);
         builder.HasIndex(x => x.To);
-        builder.HasIndex(x => x.CreatedAt);
-        builder.HasIndex(x => x.Status);
 
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.RelationshipTemplateId);
+        builder.Property(x => x.CreatedAt);
 
         builder.Property(x => x.CreationContent);
     }

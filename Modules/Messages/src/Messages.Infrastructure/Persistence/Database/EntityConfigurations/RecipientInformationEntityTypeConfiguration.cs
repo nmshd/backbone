@@ -11,8 +11,9 @@ public class RecipientInformationEntityTypeConfiguration : IEntityTypeConfigurat
         builder.HasKey(r => r.Id);
 
         builder.HasIndex(m => m.ReceivedAt);
-        builder.HasIndex(m => m.RelationshipId);
         builder.HasIndex(r => new { r.Address, r.MessageId });
+
+        builder.Property(r => r.RelationshipId);
 
         builder
             .Property(r => r.EncryptedKey)

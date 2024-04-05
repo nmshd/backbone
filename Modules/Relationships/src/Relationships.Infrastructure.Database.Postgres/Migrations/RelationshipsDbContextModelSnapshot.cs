@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Relationships.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(RelationshipsDbContext))]
     partial class RelationshipsDbContextModelSnapshot : ModelSnapshot
@@ -60,12 +60,6 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("DeletedAt");
-
-                    b.HasIndex("ExpiresAt");
 
                     b.ToTable("RelationshipTemplates");
                 });
@@ -149,13 +143,9 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedAt");
-
                     b.HasIndex("From");
 
                     b.HasIndex("RelationshipTemplateId");
-
-                    b.HasIndex("Status");
 
                     b.HasIndex("To");
 

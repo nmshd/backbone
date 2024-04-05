@@ -262,6 +262,10 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Address");
 
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("TierId");
+
                     b.ToTable("Identities");
                 });
 

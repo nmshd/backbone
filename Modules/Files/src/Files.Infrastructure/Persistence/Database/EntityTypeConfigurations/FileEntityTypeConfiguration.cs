@@ -10,8 +10,6 @@ public class FileEntityTypeConfiguration : IEntityTypeConfiguration<File>
     {
         builder.ToTable("FileMetadata");
 
-        builder.HasIndex(m => m.CreatedBy);
-
         builder.Property(m => m.CipherHash).IsRequired();
 
         builder.Ignore(m => m.Content);
