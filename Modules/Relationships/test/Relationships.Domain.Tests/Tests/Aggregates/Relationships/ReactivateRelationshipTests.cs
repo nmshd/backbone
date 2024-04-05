@@ -27,9 +27,7 @@ public class ReactivateRelationshipTests
     {
         // Arrange
         SystemTime.Set("2000-01-01");
-
-        var relationship = CreateActiveRelationship();
-        relationship.Terminate(IDENTITY_2, DEVICE_2);
+        var relationship = CreateTerminatedRelationship();
 
         // Act
         relationship.Reactivate(IDENTITY_2, DEVICE_2);
@@ -80,10 +78,7 @@ public class ReactivateRelationshipTests
             "error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus",
             nameof(RelationshipStatus.Terminated)
         );
-
     }
 
     // TODO: Cannot reactivate foreign relationships
-
-    // TODO: Cannot reactivate relationship that is already reactivated
 }
