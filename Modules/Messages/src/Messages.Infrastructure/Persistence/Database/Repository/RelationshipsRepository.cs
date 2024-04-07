@@ -1,5 +1,6 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,14 @@ public class RelationshipsRepository : IRelationshipsRepository
             .AsNoTracking()
             .WithParticipants(sender, recipient)
             .Select(r => r.Id)
+            .FirstOrDefaultAsync();
+    }
+
+    public Task<Relationship?> FindRelationship(RelationshipId id, CancellationToken cancellationToken, bool track = false)
+    {
+        return _dbContext.Relationships
+            .AsNoTracking()
+            .Where(r => r.Id == id)
             .FirstOrDefaultAsync();
     }
 }

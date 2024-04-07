@@ -17,4 +17,11 @@ public static class ApplicationErrors
 
         return new ApplicationError("error.platform.validation.message.maxNumberOfUnreceivedMessagesReached", $"The message could not be sent because {recipientText} already has the maximum number of unread messages from you.");
     }
+
+    public static ApplicationError RelationshipToRecipientNotActive(string recipient = "")
+    {
+        var recipientText = string.IsNullOrEmpty(recipient) ? "one of the recipients" : recipient;
+
+        return new ApplicationError("error.platform.validation.message.relationshipToRecipientNotActive", $"Cannot send message to {recipientText} because the relationship to it is not active.");
+    }
 }

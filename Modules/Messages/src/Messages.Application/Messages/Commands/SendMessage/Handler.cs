@@ -75,6 +75,20 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
                 throw new OperationFailedException(ApplicationErrors.NoRelationshipToRecipientExists(recipientDto.Address));
             }
 
+            var relationshipBetweenSenderAndRecipient = await _relationshipsRepository.FindRelationship(idOfRelationshipBetweenSenderAndRecipient, cancellationToken);
+
+            if (relationshipBetweenSenderAndRecipient == null)
+            {
+                _logger.LogInformation("Sending message aborted. There is no relationship between sender ({sender}) and recipient ({recipient}).", sender, recipientDto.Address);
+                throw new OperationFailedException(ApplicationErrors.NoRelationshipToRecipientExists(recipientDto.Address));
+            }
+
+            if (relationshipBetweenSenderAndRecipient.Status != RelationshipStatus.Active)
+            {
+                _logger.LogInformation("Sending message aborted. Relationship between sender ({sender}) and recipient ({recipient}) is not active.", sender, recipientDto.Address);
+                throw new OperationFailedException(ApplicationErrors.RelationshipToRecipientNotActive(recipientDto.Address));
+            }
+
             var numberOfUnreceivedMessagesFromActiveIdentity = await _messagesRepository.CountUnreceivedMessagesFromSenderToRecipient(sender, recipientDto.Address, cancellationToken);
 
             if (numberOfUnreceivedMessagesFromActiveIdentity >= _options.MaxNumberOfUnreceivedMessagesFromOneSender)
