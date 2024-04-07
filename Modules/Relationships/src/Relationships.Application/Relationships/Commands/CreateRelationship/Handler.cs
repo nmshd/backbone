@@ -65,15 +65,28 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
             _cancellationToken
         );
 
+        var relationships = existingRelationships.ToList();
+
+        EnsureNoTerminatedRelationshipExists(relationships);
+
         _relationship = new Relationship(
             _template,
             _activeIdentity,
             _activeDevice,
             _request.Content,
-            existingRelationships.ToList()
+            relationships
         );
 
         await _relationshipsRepository.Add(_relationship, _cancellationToken);
+    }
+
+    private void EnsureNoTerminatedRelationshipExists(List<Relationship> relationships)
+    {
+        foreach (var relationship in relationships)
+        {
+            if (relationship.Status == RelationshipStatus.Terminated)
+                throw new OperationFailedException(ApplicationErrors.Relationship.CannotCreateRelationshipWhileTerminatedRelationshipExists(relationship.Id.ToString()));
+        }
     }
 
     private void PublishIntegrationEvent()
