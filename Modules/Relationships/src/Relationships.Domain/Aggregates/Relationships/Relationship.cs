@@ -139,6 +139,22 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
+    public void Terminate(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureStatus(RelationshipStatus.Active);
+
+        Status = RelationshipStatus.Terminated;
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.Termination,
+            RelationshipStatus.Active,
+            RelationshipStatus.Terminated,
+            activeIdentity,
+            activeDevice
+        ); 
+        AuditLog.Add(auditLogEntry);
+    }
+
     #region Expressions
 
     public static Expression<Func<Relationship, bool>> HasParticipant(string identity)
