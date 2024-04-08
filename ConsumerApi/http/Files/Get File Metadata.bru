@@ -1,0 +1,15 @@
+meta {
+  name: Get File Metadata
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BaseUrl}}/Files/{{FileId}}/metadata
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  FileId: FILpj70CidfpQmKIZMGW
+}

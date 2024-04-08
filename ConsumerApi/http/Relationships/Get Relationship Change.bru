@@ -1,0 +1,15 @@
+meta {
+  name: Get Relationship Change
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{BaseUrl}}/Relationships/Changes/{{RelationshipChangeId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  RelationshipChangeId: RCHmgmQ5lJ7d9iTtDch3
+}

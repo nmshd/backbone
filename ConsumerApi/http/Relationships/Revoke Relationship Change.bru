@@ -1,0 +1,22 @@
+meta {
+  name: Revoke Relationship Change
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{BaseUrl}}/Relationships/{{RelationshipId}}/Changes/{{ChangeId}}/Accept
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "content": "Test"
+  }
+}
+
+vars:pre-request {
+  RelationshipId: test
+  ChangeId: test
+}

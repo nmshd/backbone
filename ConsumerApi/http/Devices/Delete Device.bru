@@ -1,0 +1,15 @@
+meta {
+  name: Delete Device
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{BaseUrl}}/Devices/{{DeviceId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  DeviceId: null
+}

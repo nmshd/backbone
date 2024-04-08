@@ -1,0 +1,11 @@
+meta {
+  name: Get Active Device
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{BaseUrl}}/Devices/Self
+  body: none
+  auth: inherit
+}

@@ -1,0 +1,20 @@
+meta {
+  name: Upload File
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{BaseUrl}}/Files
+  body: multipartForm
+  auth: inherit
+}
+
+body:multipart-form {
+  content: @file(C:\Users\mherrman\Documents\Scrum Workshop.md)
+  cipherHash: AAAA
+  owner: id1CsU6VwBMgBA4TLc61nj895ZD1mPjbddNW
+  expiresAt: 2024-12-07
+  encryptedProperties: AAAA
+  ownerSignature: AAAA
+}

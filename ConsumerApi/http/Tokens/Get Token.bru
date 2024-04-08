@@ -1,0 +1,15 @@
+meta {
+  name: Get Token
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BaseUrl}}/Tokens/{{TokenId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  TokenId: null
+}

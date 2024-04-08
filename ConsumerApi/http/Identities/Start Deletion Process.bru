@@ -1,0 +1,11 @@
+meta {
+  name: Start Deletion Process
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{BaseUrl}}/Identities/Self/DeletionProcesses
+  body: none
+  auth: inherit
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Refresh Expiration Time
+  type: http
+  seq: 6
+}
+
+put {
+  url: {{BaseUrl}}/SyncRuns/{{SyncRunId}}/RefreshExpirationTime
+  body: json
+  auth: inherit
+}
+
+vars:pre-request {
+  SyncRunId: test
+}

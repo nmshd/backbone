@@ -1,0 +1,21 @@
+meta {
+  name: Add Device
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{BaseUrl}}/Devices
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "devicePassword": "test",
+    "signedChallenge": {
+      "challenge": "CHLDXvGoAsAZD7132d8o",
+      "signature": "AAAA"
+    }
+  }
+}

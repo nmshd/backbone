@@ -1,0 +1,15 @@
+meta {
+  name: Get Relationship
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BaseUrl}}/Relationships/{{RelationshipId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  RelationshipId: RELUY2h3HVSFfYkdli0P
+}

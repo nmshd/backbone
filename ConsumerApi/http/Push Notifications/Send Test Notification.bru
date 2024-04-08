@@ -1,0 +1,19 @@
+meta {
+  name: Send Test Notification
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{BaseUrl}}/Devices/Self/PushNotifications/SendTestNotification
+  body: json
+  auth: inherit
+}
+
+body:json {
+  "Test"
+}
+
+body:text {
+  "Test"
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Approve Deletion Process
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{BaseUrl}}/Identities/Self/DeletionProcesses/{{DeletionProcessId}}/Approve
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  DeletionProcessId: IDPsVw1dFyzmdfc3Xd2Q
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Get External Events
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{BaseUrl}}/SyncRuns/{{SyncRunId}}/ExternalEvents
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  SyncRunId: SYR1nrDvwskRr0FoJNA4
+}

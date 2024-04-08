@@ -1,0 +1,18 @@
+meta {
+  name: Create Relationship
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{BaseUrl}}/Relationships
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "relationshipTemplateId": "",
+    "content": ""
+  }
+}

@@ -1,0 +1,11 @@
+meta {
+  name: List Deletion Processes
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BaseUrl}}/Identities/Self/DeletionProcesses
+  body: none
+  auth: inherit
+}

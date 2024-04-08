@@ -1,0 +1,16 @@
+meta {
+  name: List Tokens
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{BaseUrl}}/Tokens
+  body: none
+  auth: inherit
+}
+
+query {
+  ~PageNumber: 1
+  ~PageSize: 1
+}

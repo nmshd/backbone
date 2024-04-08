@@ -1,0 +1,19 @@
+meta {
+  name: Register for Push Notifications
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{BaseUrl}}/Devices/Self/PushNotifications
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "platform": "apns",
+    "Handle": "asdsdaasdasdasds",
+    "AppId": "de.bildungsraum.wallet.experimental"
+  }
+}

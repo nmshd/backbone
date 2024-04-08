@@ -1,0 +1,11 @@
+meta {
+  name: Unregister from Push Notifications
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{BaseUrl}}/Devices/Self/PushNotifications
+  body: none
+  auth: inherit
+}
