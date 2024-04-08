@@ -7,7 +7,7 @@ internal class UserContextStub : IUserContext
 {
     public IdentityAddress GetAddress()
     {
-        return IdentityAddress.Create([0], "id1", "url");
+        return IdentityAddress.Create([0], "prod.enmeshed.eu");
     }
 
     public IdentityAddress GetAddressOrNull()

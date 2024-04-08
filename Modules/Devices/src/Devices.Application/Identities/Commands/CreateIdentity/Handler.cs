@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         _logger.LogTrace("Challenge successfully validated.");
 
-        var address = IdentityAddress.Create(publicKey.Key, _applicationOptions.AddressPrefix, _applicationOptions.InstanceUrl);
+        var address = IdentityAddress.Create(publicKey.Key, _applicationOptions.InstanceUrl);
 
         _logger.LogTrace("Address created. Result: '{address}'", address);
 

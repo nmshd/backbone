@@ -5,20 +5,23 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
 
 public class Handler : IRequestHandler<SeedTestUsersCommand>
 {
     private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
+    private readonly ApplicationOptions _applicationOptions;
     private readonly IDevicesDbContext _dbContext;
     private readonly ITiersRepository _tiersRepository;
 
-    public Handler(IDevicesDbContext context, ITiersRepository tiersRepository, IPasswordHasher<ApplicationUser> passwordHasher)
+    public Handler(IDevicesDbContext context, ITiersRepository tiersRepository, IPasswordHasher<ApplicationUser> passwordHasher, IOptions<ApplicationOptions> applicationOptions)
     {
         _dbContext = context;
         _tiersRepository = tiersRepository;
         _passwordHasher = passwordHasher;
+        _applicationOptions = applicationOptions.Value;
     }
 
     public async Task Handle(SeedTestUsersCommand request, CancellationToken cancellationToken)
@@ -26,7 +29,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
         var basicTier = await _tiersRepository.FindBasicTier(cancellationToken);
 
         var user = new ApplicationUser(new Device(new Identity("test",
-            IdentityAddress.Create([1, 1, 1, 1, 1], "id1", "url"),
+            IdentityAddress.Create([1, 1, 1, 1, 1], _applicationOptions.InstanceUrl),
             [1, 1, 1, 1, 1], basicTier!.Id, 1
         )))
         {
@@ -39,7 +42,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
         await _dbContext.Set<ApplicationUser>().AddAsync(user, cancellationToken);
 
         user = new ApplicationUser(new Device(new Identity("test",
-            IdentityAddress.Create([2, 2, 2, 2, 2], "id1", "url"),
+            IdentityAddress.Create([2, 2, 2, 2, 2], _applicationOptions.InstanceUrl),
             [2, 2, 2, 2, 2], basicTier.Id, 1
         )))
         {
