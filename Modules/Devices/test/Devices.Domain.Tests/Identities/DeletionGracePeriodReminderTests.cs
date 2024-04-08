@@ -11,6 +11,11 @@ namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
 public class DeletionGracePeriodReminderTests : IDisposable
 {
+    public void Dispose()
+    {
+        Hasher.Reset();
+    }
+
     [Fact]
     public void DeletionGracePeriodReminder1Sent_updates_GracePeriodReminder1SentAt()
     {
@@ -39,7 +44,7 @@ public class DeletionGracePeriodReminderTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder1Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusApproved");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     [Fact]
@@ -71,7 +76,7 @@ public class DeletionGracePeriodReminderTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder2Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusApproved");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     [Fact]
@@ -103,7 +108,7 @@ public class DeletionGracePeriodReminderTests : IDisposable
         var acting = identity.DeletionGracePeriodReminder3Sent;
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusApproved");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
@@ -134,10 +139,5 @@ public class DeletionGracePeriodReminderTests : IDisposable
     {
         var address = IdentityAddress.Create(Array.Empty<byte>(), "prod.enmeshed.eu");
         return new Identity("", address, Array.Empty<byte>(), TierId.Generate(), 1);
-    }
-
-    public void Dispose()
-    {
-        Hasher.Reset();
     }
 }

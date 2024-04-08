@@ -306,6 +306,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime>("DeletionStartedAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<DateTime?>("GracePeriodEndsAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -765,14 +768,16 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                 {
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", null)
                         .WithMany("DeletionProcesses")
-                        .HasForeignKey("IdentityAddress");
+                        .HasForeignKey("IdentityAddress")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcessAuditLogEntry", b =>
                 {
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", null)
                         .WithMany("AuditLog")
-                        .HasForeignKey("IdentityDeletionProcessId");
+                        .HasForeignKey("IdentityDeletionProcessId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>

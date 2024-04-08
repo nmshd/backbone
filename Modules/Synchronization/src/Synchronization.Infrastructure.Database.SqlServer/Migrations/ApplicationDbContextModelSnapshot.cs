@@ -266,7 +266,8 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                 {
                     b.HasOne("Backbone.Modules.Synchronization.Domain.Entities.Datawallet", "Datawallet")
                         .WithMany("Modifications")
-                        .HasForeignKey("DatawalletId");
+                        .HasForeignKey("DatawalletId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Datawallet");
                 });
