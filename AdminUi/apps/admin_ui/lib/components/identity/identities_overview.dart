@@ -16,7 +16,6 @@ class IdentitiesOverview extends StatefulWidget {
 }
 
 class _IdentitiesOverviewState extends State<IdentitiesOverview> {
-  late PaginatorController _paginatorController;
   late ScrollController _scrollController;
   late IdentityDataTableSource dataSource;
 
@@ -33,7 +32,6 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _paginatorController = PaginatorController();
     dataSource = IdentityDataTableSource();
     loadIdentities();
   }
@@ -41,7 +39,6 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   @override
   void dispose() {
     _scrollController.dispose();
-    _paginatorController.dispose();
     super.dispose();
   }
 
@@ -75,11 +72,10 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
                 scrollController: _scrollController,
                 isVerticalScrollBarVisible: true,
                 renderEmptyRowsInTheEnd: false,
-                controller: _paginatorController,
                 availableRowsPerPage: const [5, 10, 25, 50, 100],
                 onPageChanged: (newPage) {
                   _currentPage = newPage;
-                  loadIdentities(pageNumber: newPage, pageSize: _rowsPerPage);
+                  loadIdentities();
                 },
                 columns: <DataColumn2>[
                   DataColumn2(label: const Text('Address'), onSort: _sort, size: ColumnSize.L),
@@ -103,7 +99,6 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
     setState(() {
       _rowsPerPage = newValue ?? _rowsPerPage;
     });
-    loadIdentities(pageNumber: _currentPage, pageSize: _rowsPerPage);
   }
 
   void _sort(int columnIndex, bool ascending) {
@@ -114,13 +109,12 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
     });
   }
 
-  Future<void> loadIdentities({IdentityOverviewFilter? filter, int pageNumber = 0, int pageSize = 5}) async {
+  Future<void> loadIdentities({IdentityOverviewFilter? filter}) async {
     final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(
           filter: filter,
-          pageNumber: pageNumber,
-          pageSize: pageSize,
+          pageNumber: _currentPage,
+          pageSize: _rowsPerPage,
         );
-
     setState(() {
       identities = response.data;
       pagination = response.pagination;

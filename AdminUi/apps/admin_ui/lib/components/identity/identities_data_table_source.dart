@@ -4,7 +4,7 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 
 class IdentityDataTableSource extends DataTableSource {
-  List<IdentityOverview> data = [];
+  List<IdentityOverview> identities = [];
   Pagination? pagination;
   int sortColumnIndex = 0;
   bool sortAscending = true;
@@ -15,7 +15,7 @@ class IdentityDataTableSource extends DataTableSource {
     int columnIndex, {
     required bool columnAscending,
   }) {
-    data = identities;
+    this.identities = identities;
     this.pagination = pagination;
     notifyListeners();
 
@@ -25,7 +25,7 @@ class IdentityDataTableSource extends DataTableSource {
   }
 
   void sort() {
-    data.sort((a, b) {
+    identities.sort((a, b) {
       final aValue = _getDisplayValue(a);
       final bValue = _getDisplayValue(b);
       return sortAscending ? Comparable.compare(aValue, bValue) : Comparable.compare(bValue, aValue);
@@ -57,38 +57,35 @@ class IdentityDataTableSource extends DataTableSource {
   }
 
   @override
-  DataRow? getRow(int index) {
-    if (index >= data.length) {
-      return null;
-    }
-    final identity = data[index];
-    return DataRow2.byIndex(
-      index: index,
-      onLongPress: () {
-        // Navigator.of(context).push(MaterialPageRoute(
-        //   builder: (context) => IdentityDetails(identity: identity),
-        // ));
-      },
-      cells: [
-        DataCell(Text(identity.address)),
-        DataCell(
-          Center(
-            child: GestureDetector(
-              onTap: () {
-                // TODO(stamenione): Navigate to the tier details screen
-              },
-              child: Text(identity.tier.name),
+  DataRow2? getRow(int index) {
+    for (var identity in identities) {
+      return DataRow2(
+        onLongPress: () {
+          // Navigator.of(context).push(MaterialPageRoute(
+          //   builder: (context) => IdentityDetails(identity: identity),
+          // ));
+        },
+        cells: [
+          DataCell(Text(identity.address)),
+          DataCell(
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  // TODO(stamenione): Navigate to the tier details screen
+                },
+                child: Text(identity.tier.name),
+              ),
             ),
           ),
-        ),
-        DataCell(Center(child: Text(identity.createdWithClient))),
-        DataCell(Center(child: Text(identity.numberOfDevices.toString()))),
-        DataCell(Center(child: Text(identity.createdAt.toString().substring(0, 10)))),
-        DataCell(Center(child: Text(identity.lastLoginAt != null ? identity.lastLoginAt.toString() : ''))),
-        DataCell(Center(child: Text(identity.datawalletVersion != null ? identity.datawalletVersion.toString() : ''))),
-        DataCell(Center(child: Text(identity.identityVersion.toString()))),
-      ],
-    );
+          DataCell(Center(child: Text(identity.createdWithClient))),
+          DataCell(Center(child: Text(identity.numberOfDevices.toString()))),
+          DataCell(Center(child: Text(identity.createdAt.toString().substring(0, 10)))),
+          DataCell(Center(child: Text(identity.lastLoginAt != null ? identity.lastLoginAt.toString() : ''))),
+          DataCell(Center(child: Text(identity.datawalletVersion != null ? identity.datawalletVersion.toString() : ''))),
+          DataCell(Center(child: Text(identity.identityVersion.toString()))),
+        ],
+      );
+    }
   }
 
   @override

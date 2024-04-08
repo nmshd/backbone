@@ -106,7 +106,7 @@ abstract class Endpoint {
       path,
       queryParameters: {
         r'$top': '$pageSize',
-        r'$skip': '${pageNumber * pageSize}',
+        r'$skip': '$pageNumber',
         r'$count': 'true',
         ...query ?? {},
       },
