@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(RelationshipsDbContext))]
-    [Migration("20240321143814_IdentityAddress100")]
+    [Migration("20240321140814_IdentityAddress100")]
     partial class IdentityAddress100
     {
         /// <inheritdoc />
