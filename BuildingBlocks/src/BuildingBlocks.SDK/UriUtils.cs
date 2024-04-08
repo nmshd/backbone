@@ -2,5 +2,10 @@
 
 public class UriUtils
 {
-    public static Uri CreateUriFromParts(params string[] parts) => new(parts.Aggregate((a, b) => $"{a.TrimEnd('/')}/{b.TrimStart('/')}"));
+    public static Uri CreateUriFromParts(params string[] parts)
+    {
+        var path = parts.Aggregate((a, b) => $"{a.TrimEnd('/')}/{b.TrimStart('/')}");
+
+        return new Uri(path);
+    }
 }
