@@ -38,6 +38,7 @@ public class IdentityDeletionProcess
     public IdentityDeletionProcessId Id { get; }
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
+    public DateTime DeletionStartedAt { get; private set; }
     public DateTime CreatedAt { get; }
 
     public DateTime? ApprovalReminder1SentAt { get; private set; }
@@ -61,6 +62,8 @@ public class IdentityDeletionProcess
 
     public bool HasApprovalPeriodExpired => Status == DeletionProcessStatus.WaitingForApproval && SystemTime.UtcNow >= GetEndOfApprovalPeriod();
 
+    public bool HasGracePeriodExpired => Status == DeletionProcessStatus.Approved && SystemTime.UtcNow >= GracePeriodEndsAt;
+
     private void Approve(DeviceId createdByDevice)
     {
         Status = DeletionProcessStatus.Approved;
@@ -81,7 +84,7 @@ public class IdentityDeletionProcess
 
     public bool IsActive()
     {
-        return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.WaitingForApproval;
+        return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.WaitingForApproval or DeletionProcessStatus.Deleting;
     }
 
     public DateTime GetEndOfApprovalPeriod()
@@ -123,6 +126,21 @@ public class IdentityDeletionProcess
     {
         GracePeriodReminder3SentAt = SystemTime.UtcNow;
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.GracePeriodReminder3Sent(Id, address));
+    }
+
+    internal void DeletionStarted()
+    {
+        EnsureStatus(DeletionProcessStatus.Approved);
+        EnsureGracePeriodHasExpired();
+
+        Status = DeletionProcessStatus.Deleting;
+        DeletionStartedAt = SystemTime.UtcNow;
+    }
+
+    private void EnsureGracePeriodHasExpired()
+    {
+        if (!HasGracePeriodExpired)
+            throw new DomainException(DomainErrors.GracePeriodHasNotYetExpired());
     }
 
     public void Approve(IdentityAddress address, DeviceId approvedByDevice)
