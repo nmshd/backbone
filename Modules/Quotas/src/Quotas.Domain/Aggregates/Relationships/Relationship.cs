@@ -1,11 +1,11 @@
-﻿namespace Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
+namespace Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
 public class Relationship : ICreatedAt
 {
-    public string Id { get; set; }
-    public string From { get; set; }
-    public string To { get; set; }
-    public RelationshipStatus Status { get; set; }
-    public DateTime CreatedAt { get; set; }
+    public required string Id { get; set; }
+    public required string From { get; set; }
+    public required string To { get; set; }
+    public required RelationshipStatus Status { get; set; }
+    public required DateTime CreatedAt { get; set; }
 }
 public enum RelationshipStatus
 {

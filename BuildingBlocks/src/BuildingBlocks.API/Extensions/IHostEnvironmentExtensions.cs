@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Hosting;
 
-namespace Enmeshed.BuildingBlocks.API.Extensions;
+namespace Backbone.BuildingBlocks.API.Extensions;
 
 public static class IHostEnvironmentExtensions
 {

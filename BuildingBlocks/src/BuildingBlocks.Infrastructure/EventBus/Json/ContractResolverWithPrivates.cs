@@ -1,8 +1,8 @@
-﻿using System.Reflection;
+using System.Reflection;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.Json;
+namespace Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 
 public class ContractResolverWithPrivates : CamelCasePropertyNamesContractResolver
 {

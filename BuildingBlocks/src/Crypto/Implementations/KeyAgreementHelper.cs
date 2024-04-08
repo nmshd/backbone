@@ -1,7 +1,7 @@
-﻿using Enmeshed.Crypto.Abstractions;
+using Backbone.Crypto.Abstractions;
 using NSec.Cryptography;
 
-namespace Enmeshed.Crypto.Implementations;
+namespace Backbone.Crypto.Implementations;
 
 public class KeyAgreementHelper : IKeyAgreementHelper
 {

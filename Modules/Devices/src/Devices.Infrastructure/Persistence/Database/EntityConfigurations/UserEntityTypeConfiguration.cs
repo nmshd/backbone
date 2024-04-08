@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,6 +12,7 @@ internal class UserEntityTypeConfiguration : IEntityTypeConfiguration<Applicatio
         builder
             .Ignore(x => x.Email)
             .Ignore(x => x.EmailConfirmed)
+            .Ignore(x => x.HasLoggedIn)
             .Ignore(x => x.NormalizedEmail)
             .Ignore(x => x.PhoneNumber)
             .Ignore(x => x.PhoneNumberConfirmed)

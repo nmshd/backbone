@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Application.Relationships.DTOs;
+using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Domain.Ids;
 using MediatR;
 
@@ -6,5 +6,5 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Queries.GetRe
 
 public class GetRelationshipQuery : IRequest<RelationshipDTO>
 {
-    public RelationshipId Id { get; set; }
+    public required RelationshipId Id { get; set; }
 }

@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.FluentValidation;
-using Enmeshed.Tooling;
-using Enmeshed.Tooling.Extensions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.Tooling;
+using Backbone.Tooling.Extensions;
 using FluentValidation;
 
 namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
@@ -23,12 +23,10 @@ public class CreateFileCommandValidator : AbstractValidator<CreateFileCommand>
             .GreaterThan(SystemTime.UtcNow).WithMessage("'{PropertyName}' must be in the future.").WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
 
         RuleFor(m => m.Owner)
-            .NotEmpty()
-            .When(m => m.OwnerSignature is { Length: > 0 })
-            .WithMessage(m => $"{nameof(m.Owner)} and {nameof(m.OwnerSignature)} have to be provided either both or none.");
+            .DetailedNotEmpty();
 
         RuleFor(m => m.OwnerSignature)
-            .NumberOfBytes(0, 512);
+            .NumberOfBytes(1, 512);
 
         RuleFor(r => r.EncryptedProperties)
             .NumberOfBytes(0, 1.Mebibytes());

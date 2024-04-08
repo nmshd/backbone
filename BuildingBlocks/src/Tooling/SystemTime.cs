@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
-namespace Enmeshed.Tooling;
+namespace Backbone.Tooling;
 
 /// <summary>
 /// Provides access to system time while allowing it to be set to a fixed <see cref="DateTime"/> value.
@@ -10,7 +10,8 @@ namespace Enmeshed.Tooling;
 /// </remarks>
 public static class SystemTime
 {
-    private static readonly ThreadLocal<Func<DateTime>> GET_TIME = new(() => () => DateTime.Now);
+    private static readonly ThreadLocal<Stack<Func<DateTime>>> HISTORY = new(() => new Stack<Func<DateTime>>());
+    private static readonly ThreadLocal<Func<DateTime>> GET_TIME = new(() => () => DateTime.UtcNow);
 
     /// <inheritdoc cref="DateTime.Today"/>
     public static DateTime UtcToday => GET_TIME.Value == null
@@ -22,23 +23,48 @@ public static class SystemTime
         ? throw new Exception("Time function is null")
         : GET_TIME.Value().ToUniversalTime();
 
+    public static void Set(string dateTimeString)
+    {
+        EnsureIsCalledFromTest();
+        SetInternal(DateTime.Parse(dateTimeString));
+    }
+
     /// <summary>
     /// Sets a fixed (deterministic) time for the current thread to return by <see cref="SystemTime"/>.
     /// </summary>
-    public static void Set(DateTime time)
+    public static void Set(DateTime dateTime)
+    {
+        EnsureIsCalledFromTest();
+        SetInternal(dateTime);
+    }
+
+    private static void EnsureIsCalledFromTest()
     {
         var stackTrace = new StackTrace();
-        var callerType = stackTrace.GetFrame(1)!.GetMethod()!.DeclaringType;
+        var callerType = stackTrace.GetFrame(2)!.GetMethod()!.DeclaringType;
 
-        if (callerType != null && callerType.Namespace != null && !callerType.Namespace.Contains("Test"))
+        if (callerType is { Namespace: not null } && !callerType.Namespace.Contains("Test"))
         {
             throw new NotSupportedException("You can't call this method from a Non-Test-class");
         }
+    }
 
-        if (time.Kind != DateTimeKind.Local)
-            time = time.ToLocalTime();
+    private static void SetInternal(DateTime dateTime)
+    {
+        if (dateTime.Kind != DateTimeKind.Local)
+            dateTime = dateTime.ToLocalTime();
 
-        GET_TIME.Value = () => time;
+        HISTORY.Value!.Push(GET_TIME.Value!);
+
+        GET_TIME.Value = () => dateTime;
+    }
+
+    public static void UndoSet()
+    {
+        if (HISTORY.Value!.Count == 0)
+            GET_TIME.Value = () => DateTime.UtcNow;
+
+        GET_TIME.Value = HISTORY.Value!.Pop();
     }
 
     /// <summary>

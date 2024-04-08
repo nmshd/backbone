@@ -1,7 +1,7 @@
-﻿using Microsoft.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
-namespace Enmeshed.BuildingBlocks.Application.Extensions;
+namespace Backbone.BuildingBlocks.Application.Extensions;
 
 public enum DbUpdateExceptionReason
 {

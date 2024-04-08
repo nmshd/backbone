@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+using AutoMapper;
 
-namespace Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
 public interface IHaveCustomMapping
 {

@@ -1,19 +1,19 @@
-﻿using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 
-namespace ConsumerApi.Tests.Integration;
+namespace Backbone.ConsumerApi.Tests.Integration;
 
-public class HttpClientFactory
+internal class HttpClientFactory
 {
     private readonly CustomWebApplicationFactory<Program> _factory;
 
-    public HttpClientFactory(CustomWebApplicationFactory<Program> factory)
+    internal HttpClientFactory(CustomWebApplicationFactory<Program> factory)
     {
         _factory = factory;
     }
 
-    public HttpClient CreateClient()
+    internal HttpClient CreateClient()
     {
         var baseAddress = Environment.GetEnvironmentVariable("CONSUMER_API_BASE_ADDRESS");
-        return baseAddress.IsNullOrEmpty() ? _factory.CreateClient() : new HttpClient() { BaseAddress = new Uri(baseAddress!) };
+        return baseAddress.IsNullOrEmpty() ? _factory.CreateClient() : new HttpClient() { BaseAddress = new Uri(baseAddress) };
     }
 }

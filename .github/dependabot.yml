@@ -1,5 +1,6 @@
 version: 2
 updates:
+  ##### NuGet packages for Backbone.sln #####
   - package-ecosystem: "nuget"
     directory: "/"
     schedule:
@@ -8,14 +9,12 @@ updates:
       update-nuget-dependencies:
         patterns:
           - "*"
-        exclude-patterns:
-          - "AspNetCore.HealthChecks.NpgSql"
-          - "Npgsql.EntityFrameworkCore.PostgreSQL"
     reviewers:
       - "tnotheis"
     labels:
       - "dependencies"
 
+  ##### GitHub Actions #####
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
@@ -29,8 +28,9 @@ updates:
     labels:
       - "dependencies"
 
+  ##### Pipeline scripts #####
   - package-ecosystem: "npm"
-    directory: "/"
+    directory: /.ci
     schedule:
       interval: "weekly"
     groups:
@@ -39,5 +39,20 @@ updates:
           - "*"
     reviewers:
       - "tnotheis"
+    labels:
+      - "dependencies"
+
+  ##### Admin UI Angular App #####
+  - package-ecosystem: "npm"
+    directory: "/AdminApi/src/AdminApi/ClientApp"
+    schedule:
+      interval: "weekly"
+    groups:
+      update-npm-dependencies:
+        patterns:
+          - "*"
+    reviewers:
+      - "tnotheis"
+      - "daniel-almeida-konkconsulting"
     labels:
       - "dependencies"

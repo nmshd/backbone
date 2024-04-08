@@ -1,4 +1,9 @@
-﻿using Backbone.Modules.Synchronization.Application;
+using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Mvc;
+using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Synchronization.Application;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
@@ -7,17 +12,12 @@ using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetSyncRunById;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Enmeshed.BuildingBlocks.API;
-using Enmeshed.BuildingBlocks.API.Mvc;
-using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Synchronization.ConsumerApi.Controllers;
 
@@ -50,31 +50,6 @@ public class SyncRunsController : ApiControllerBase
         return Ok(response);
     }
 
-    [HttpPut("{id}/Finalize")]
-    [Obsolete("Use '/{id}/FinalizeExternalEventSync' instead.")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FinalizeExternalEventSyncSyncRunResponse>),
-        StatusCodes.Status200OK)]
-    [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Finalize([FromRoute] SyncRunId id,
-        [FromBody] OldFinalizeExternalEventSyncRequest request, CancellationToken cancellationToken)
-    {
-        var modificationsWithVersion = request.DatawalletModifications.Select(m => new PushDatawalletModificationItem
-        {
-            DatawalletVersion = 0,
-            Type = m.Type,
-            Collection = m.Collection,
-            EncryptedPayload = m.EncryptedPayload,
-            ObjectIdentifier = m.ObjectIdentifier,
-            PayloadCategory = m.PayloadCategory
-        }).ToList();
-
-        var response =
-            await _mediator.Send(new FinalizeExternalEventSyncSyncRunCommand(id, request.ExternalEventResults,
-                modificationsWithVersion), cancellationToken);
-
-        return Ok(response);
-    }
-
     [HttpPut("{id}/FinalizeExternalEventSync")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FinalizeExternalEventSyncSyncRunResponse>),
         StatusCodes.Status200OK)]
@@ -98,7 +73,7 @@ public class SyncRunsController : ApiControllerBase
         var response = await _mediator.Send(new FinalizeDatawalletVersionUpgradeSyncRunCommand(id,
             request.NewDatawalletVersion, request.DatawalletModifications), cancellationToken);
 
-        return Ok(response!);
+        return Ok(response);
     }
 
     [HttpGet("{id}/ExternalEvents")]
@@ -149,27 +124,11 @@ public class StartSyncRunRequestBody
 public class FinalizeDatawalletVersionUpgradeRequest
 {
     public ushort NewDatawalletVersion { get; set; }
-    public List<PushDatawalletModificationItem> DatawalletModifications { get; set; } = new();
+    public List<PushDatawalletModificationItem> DatawalletModifications { get; set; } = [];
 }
 
 public class FinalizeExternalEventSyncRequest
 {
-    public List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> ExternalEventResults { get; set; } = new();
-    public List<PushDatawalletModificationItem> DatawalletModifications { get; set; } = new();
-}
-
-public class OldFinalizeExternalEventSyncRequest
-{
-    public List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> ExternalEventResults { get; set; } = new();
-    public List<FinalizeExternalEventSyncRequestDatawalletModification> DatawalletModifications { get; set; } = new();
-
-    public class FinalizeExternalEventSyncRequestDatawalletModification
-    {
-        public string ObjectIdentifier { get; set; }
-        public string PayloadCategory { get; set; }
-        public string Collection { get; set; }
-        public DatawalletModificationDTO.DatawalletModificationType Type { get; set; }
-        public byte[] EncryptedPayload { get; set; }
-        public ushort DatawalletVersion { get; set; }
-    }
+    public List<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult> ExternalEventResults { get; set; } = [];
+    public List<PushDatawalletModificationItem> DatawalletModifications { get; set; } = [];
 }

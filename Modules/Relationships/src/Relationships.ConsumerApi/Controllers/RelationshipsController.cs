@@ -1,4 +1,10 @@
-﻿using Backbone.Modules.Relationships.Application;
+using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Mvc;
+using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationshipChangeRequest;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipChangeRequest;
@@ -11,18 +17,12 @@ using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelat
 using Backbone.Modules.Relationships.Common;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
-using Enmeshed.BuildingBlocks.API;
-using Enmeshed.BuildingBlocks.API.Mvc;
-using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Pagination;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Relationships.ConsumerApi.Controllers;
 
@@ -68,12 +68,12 @@ public class RelationshipsController : ApiControllerBase
     public async Task<IActionResult> ListChanges(
         [FromQuery] PaginationFilter paginationFilter,
         [FromQuery] IEnumerable<RelationshipChangeId> ids,
-        [FromQuery] OptionalDateRange createdAt,
-        [FromQuery] OptionalDateRange completedAt,
-        [FromQuery] OptionalDateRange modifiedAt,
+        [FromQuery] OptionalDateRange? createdAt,
+        [FromQuery] OptionalDateRange? completedAt,
+        [FromQuery] OptionalDateRange? modifiedAt,
         [FromQuery] bool? onlyPeerChanges,
-        [FromQuery] IdentityAddress createdBy,
-        [FromQuery] IdentityAddress completedBy,
+        [FromQuery] IdentityAddress? createdBy,
+        [FromQuery] IdentityAddress? completedBy,
         [FromQuery] string? status,
         [FromQuery] string? type, CancellationToken cancellationToken)
     {

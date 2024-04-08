@@ -1,6 +1,20 @@
 consumerapi:
   nameOverride: ""
   replicas: 1
+  maxSurge: 2
+  maxUnavailable: 0
+
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+  readinessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
 
   image:
     repository: "ghcr.io/nmshd/backbone-consumer-api"
@@ -30,7 +44,6 @@ consumerapi:
 
   service:
     type: "ClusterIP"
-    port: 80
     loadBalancer:
       # ip - the static ip address the LoadBalancer should use
       ip: ""
@@ -86,12 +99,25 @@ consumerapi:
       unhealthyThreshold: 2
 
 adminui:
-  service:
-    type: "ClusterIP"
-    port: 80
-
   nameOverride: ""
   replicas: 1
+  maxSurge: 2
+  maxUnavailable: 0
+
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+  readinessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+  service:
+    type: "ClusterIP"
 
   image:
     repository: "ghcr.io/nmshd/backbone-admin-ui"
@@ -105,8 +131,8 @@ adminui:
       cpu: "50m"
       memory: "64Mi"
     limits:
-      cpu: "100m"
-      memory: "128Mi"
+      cpu: "200m"
+      memory: "512Mi"
 
   # securityContext - securityContext for the Consumer API container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
   securityContext: {}
@@ -315,7 +341,6 @@ global:
             #      bundleId1:
             #         # the name of the key that should be used to communicate with APNs (has to match the name of one of the keys specified above)
             #         keyName: ''
-            #         serverType: ''
       files:
         application:
           # pagination - the following options describe the default and maximum page size for the different endpoints
@@ -330,11 +355,11 @@ global:
             connectionString: ""
           blobStorage:
             # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            cloudProvider: ""
+            # cloudProvider: ""
             # connectionInfo - should be set via environment variable
-            connectionInfo: ""
+            # connectionInfo: ""
             # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            containerName: ""
+            # containerName: ""
       messages:
         application:
           # maxNumberOfUnreceivedMessagesFromOneSender - if this number is exceeded, the Consumer API will not accept any more messages from the sender to the recipient in order to prevent spam
@@ -349,13 +374,6 @@ global:
             provider: ""
             # connectionString - should be set via environment variable
             connectionString: ""
-          blobStorage:
-            # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            cloudProvider: ""
-            # connectionInfo - should be set via environment variable
-            connectionInfo: ""
-            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            containerName: ""
       quotas:
         application:
           # pagination - the following options describe the default and maximum page size for the different endpoints
@@ -380,13 +398,6 @@ global:
             provider: ""
             # connectionString - should be set via environment variable
             connectionString: ""
-          blobStorage:
-            # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            cloudProvider: ""
-            # connectionInfo - should be set via environment variable
-            connectionInfo: ""
-            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            containerName: ""
       synchronization:
         application:
           # pagination - the following options describe the default and maximum page size for the different endpoints
@@ -399,13 +410,6 @@ global:
             provider: ""
             # connectionString - should be set via environment variable
             connectionString: ""
-          blobStorage:
-            # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            cloudProvider: ""
-            # connectionInfo - should be set via environment variable
-            connectionInfo: ""
-            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            containerName: ""
       tokens:
         application:
           # pagination - the following options describe the default and maximum page size for the different endpoints
@@ -418,13 +422,6 @@ global:
             provider: ""
             # connectionString - should be set via environment variable
             connectionString: ""
-          blobStorage:
-            # cloudProvider - possible values: "GoogleCloud"/"Azure"
-            cloudProvider: ""
-            # connectionInfo - should be set via environment variable
-            connectionInfo: ""
-            # containerName - the name of the Bucket if CloudProvider=GoogleCloud; the name of the Container if CloudProvider=Azure
-            containerName: ""
     logging:
       minimumLevel:
         default: Error

@@ -1,7 +1,7 @@
-﻿using AutoMapper;
+using AutoMapper;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Challenges.Application.Challenges.DTOs;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
 
 namespace Backbone.Modules.Challenges.Application.Challenges.Queries.GetChallengeById;

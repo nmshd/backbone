@@ -1,9 +1,10 @@
-FROM mcr.microsoft.com/dotnet/runtime:7.0 AS base
+FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
+COPY ["Directory.Build.props", "."]
 COPY ["Modules/Files/src/Files.Jobs.SanityCheck/Files.Jobs.SanityCheck.csproj", "Modules/Files/src/Files.Jobs.SanityCheck/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Application.Abstractions/BuildingBlocks.Application.Abstractions.csproj", "BuildingBlocks/src/BuildingBlocks.Application.Abstractions/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Domain/BuildingBlocks.Domain.csproj", "BuildingBlocks/src/BuildingBlocks.Domain/"]
@@ -25,9 +26,9 @@ WORKDIR "/src/Modules/Files/src/Files.Jobs.SanityCheck"
 RUN dotnet build "Files.Jobs.SanityCheck.csproj" --configuration Release --output /app/build --no-restore
 
 FROM build AS publish
-RUN dotnet publish /property:UseAppHost=false /property:WarningLevel=0 --configuration Release --output /app/publish --no-restore "Files.Jobs.SanityCheck.csproj" 
+RUN dotnet publish /property:UseAppHost=false --configuration Release --output /app/publish --no-restore "Files.Jobs.SanityCheck.csproj" 
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Files.Jobs.SanityCheck.dll"]
+ENTRYPOINT ["dotnet", "Backbone.Modules.Files.Jobs.SanityCheck.dll"]

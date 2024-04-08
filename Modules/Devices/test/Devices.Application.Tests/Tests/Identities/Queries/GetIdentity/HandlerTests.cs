@@ -1,21 +1,23 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.UnitTestTools.Extensions;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetIdentity;
+
 public class HandlerTests
 {
     [Fact]
     public async void Gets_identity_by_address()
     {
         // Arrange
-        var identity = new Identity(TestDataGenerator.CreateRandomDeviceId(), TestDataGenerator.CreateRandomIdentityAddress(), new byte[] { 1, 1, 1, 1, 1 }, TestDataGenerator.CreateRandomTierId(), 1);
+        var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), [1, 1, 1, 1, 1], TestDataGenerator.CreateRandomTierId(), 1);
 
         var handler = CreateHandler(new FindByAddressStubRepository(identity));
 
@@ -31,11 +33,11 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Fails_when_no_identity_found()
+    public void Fails_when_no_identity_found()
     {
         // Arrange
         var identityRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identityRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._)).Returns((Identity)null);
+        A.CallTo(() => identityRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._)).Returns<Identity?>(null);
 
         var handler = CreateHandler(identityRepository);
 

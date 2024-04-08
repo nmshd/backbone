@@ -1,12 +1,12 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Enmeshed.UnitTestTools.Data;
+namespace Backbone.UnitTestTools.Data;
 
 public static class TestDataGenerator
 {
     public static string GenerateString(int resultLength, char[]? chars = null)
     {
-        chars ??= new char[] { 'A', 'B', 'C' };
+        chars ??= ['A', 'B', 'C'];
 
         Random random = new();
         return new string(Enumerable.Repeat(chars, resultLength).Select(s => s[random.Next(s.Length)]).ToArray());
@@ -15,6 +15,11 @@ public static class TestDataGenerator
     public static IdentityAddress CreateRandomIdentityAddress()
     {
         return IdentityAddress.Create(CreateRandomBytes(), "id1");
+    }
+
+    public static DeviceId CreateRandomDeviceId()
+    {
+        return DeviceId.New();
     }
 
     public static byte[] CreateRandomBytes()

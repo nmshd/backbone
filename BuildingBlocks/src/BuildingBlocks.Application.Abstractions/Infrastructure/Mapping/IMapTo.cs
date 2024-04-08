@@ -1,6 +1,4 @@
-﻿namespace Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
 // ReSharper disable once UnusedTypeParameter
-public interface IMapTo<TEntity>
-{
-}
+public interface IMapTo<TEntity>;

@@ -1,21 +1,22 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using FirebaseAdmin.Messaging;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
 
-/// <summary>
-///     See corresponding Unit Tests for an example of a built notification.
-/// </summary>
 public class FcmMessageBuilder
 {
-    protected JsonSerializerOptions _jsonSerializerOptions = new() { Converters = { new DateTimeConverter() }, PropertyNamingPolicy = JsonNamingPolicy.CamelCase /*, Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Latin1Supplement)*/};
-    private readonly MulticastMessage _message;
+    private readonly JsonSerializerOptions _jsonSerializerOptions = new()
+    {
+        Converters = { new DateTimeConverter() }, PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+    };
+
+    private readonly Message _message;
 
     private readonly Dictionary<string, string> _data;
 
     public FcmMessageBuilder()
     {
-        _message = new MulticastMessage
+        _message = new Message
         {
             Notification = new Notification(),
             Android = new AndroidConfig
@@ -66,20 +67,13 @@ public class FcmMessageBuilder
         return this;
     }
 
-    public FcmMessageBuilder SetTokens(IEnumerable<string> tokens)
+    public FcmMessageBuilder SetToken(string token)
     {
-        var tokenList = tokens.ToList();
-
-        if (tokenList.Count > 500)
-        {
-            throw new ArgumentOutOfRangeException(nameof(tokens), "FCM Messages cannot have more than 500 tokens.");
-        }
-
-        _message.Tokens = tokenList.ToList();
+        _message.Token = token;
         return this;
     }
 
-    public MulticastMessage Build()
+    public Message Build()
     {
         _message.Data = _data;
         return _message;

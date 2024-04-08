@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Pagination;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
@@ -35,11 +35,11 @@ public class HandlerTests
     {
         // Arrange
         var request = new PaginationFilter();
-        List<Tier> tiersList = new()
-        {
-            new(TierName.Create("my-tier-name-1").Value),
-            new(TierName.Create("my-tier-name-2").Value)
-        };
+        List<Tier> tiersList =
+        [
+            new Tier(TierName.Create("my-tier-name-1").Value),
+            new Tier(TierName.Create("my-tier-name-2").Value)
+        ];
 
         var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(tiersList)));
 
@@ -56,10 +56,7 @@ public class HandlerTests
         // Arrange
         var request = new PaginationFilter();
         var expectedName = TierName.Create("my-tier-name").Value;
-        List<Tier> tiersList = new()
-        {
-            new(expectedName)
-        };
+        List<Tier> tiersList = [new Tier(expectedName)];
 
         var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(tiersList)));
 

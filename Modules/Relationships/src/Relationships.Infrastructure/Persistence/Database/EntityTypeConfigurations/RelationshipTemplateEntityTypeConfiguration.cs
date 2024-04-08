@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,10 +8,11 @@ public class RelationshipTemplateEntityTypeConfiguration : IEntityTypeConfigurat
 {
     public void Configure(EntityTypeBuilder<RelationshipTemplate> builder)
     {
-        builder.HasIndex(x => x.CreatedBy);
-        builder.HasIndex(x => x.DeletedAt);
-        builder.HasIndex(x => x.ExpiresAt);
-
-        builder.Ignore(x => x.Content);
+        builder
+            .HasMany(x => x.Relationships)
+            .WithOne(x => x.RelationshipTemplate)
+            .HasForeignKey(x => x.RelationshipTemplateId)
+            .IsRequired()
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }

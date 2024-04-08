@@ -1,10 +1,10 @@
-﻿using Backbone.Modules.Quotas.Application.Identities.Commands.DeleteQuotaForIdentity;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.Modules.Quotas.Application.Identities.Commands.DeleteQuotaForIdentity;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -67,7 +67,7 @@ public class HandlerTests
         // Arrange
         var command = new DeleteQuotaForIdentityCommand("some-inexistent-identity", "QUOsomequotaid111111");
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.Find("some-inexistent-identity", A<CancellationToken>._, A<bool>._)).Returns(Task.FromResult<Identity>(null));
+        A.CallTo(() => identitiesRepository.Find("some-inexistent-identity", A<CancellationToken>._, A<bool>._))!.Returns(Task.FromResult<Identity>(null!));
         var handler = CreateHandler(identitiesRepository);
 
         // Act
@@ -83,7 +83,7 @@ public class HandlerTests
     public void Fails_to_delete_individual_quota_when_providing_an_inexistent_quota_id()
     {
         // Arrange
-        var identityAddress = "some-identity-address";
+        const string identityAddress = "some-identity-address";
         var identity = new Identity("some-identity-address", new TierId("SomeTierId"));
         var command = new DeleteQuotaForIdentityCommand(identityAddress, "QUOsomequotaid111111");
         var identitiesRepository = A.Fake<IIdentitiesRepository>();

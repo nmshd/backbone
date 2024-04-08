@@ -1,8 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Application.Messages.DTOs;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 
 namespace Backbone.Modules.Messages.Application.Messages.Queries.GetMessage;

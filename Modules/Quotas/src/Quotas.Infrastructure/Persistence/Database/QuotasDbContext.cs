@@ -1,3 +1,5 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Messages;
@@ -6,33 +8,31 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tokens;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.ValueConverters;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 
 public class QuotasDbContext : AbstractDbContextBase
 {
-    public QuotasDbContext() : base() { }
+    public QuotasDbContext() { }
 
     public QuotasDbContext(DbContextOptions<QuotasDbContext> options) : base(options) { }
 
     public QuotasDbContext(DbContextOptions<QuotasDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
 
-    public DbSet<Identity> Identities { get; set; }
+    public DbSet<Identity> Identities { get; set; } = null!;
 
-    public DbSet<Tier> Tiers { get; set; }
+    public DbSet<Tier> Tiers { get; set; } = null!;
 
-    public DbSet<Message> Messages { get; set; }
+    public DbSet<Message> Messages { get; set; } = null!;
 
-    public DbSet<FileMetadata> Files { get; set; }
+    public DbSet<FileMetadata> Files { get; set; } = null!;
 
-    public DbSet<Relationship> Relationships { get; set; }
+    public DbSet<Relationship> Relationships { get; set; } = null!;
 
-    public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; }
+    public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; } = null!;
 
-    public DbSet<Token> Tokens { get; set; }
+    public DbSet<Token> Tokens { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

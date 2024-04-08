@@ -1,7 +1,7 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Enmeshed.BuildingBlocks.API.Mvc.JsonConverters;
+namespace Backbone.BuildingBlocks.API.Mvc.JsonConverters;
 
 public class UtcDateTimeConverter : JsonConverter<DateTime>
 {

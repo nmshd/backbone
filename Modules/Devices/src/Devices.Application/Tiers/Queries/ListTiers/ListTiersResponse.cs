@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Tiers.DTOs;
-using Enmeshed.BuildingBlocks.Application.Pagination;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Devices.Application.Tiers.DTOs;
 
 namespace Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
 public class ListTiersResponse : PagedResponse<TierDTO>

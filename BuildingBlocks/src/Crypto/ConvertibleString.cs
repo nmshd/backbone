@@ -1,6 +1,6 @@
-﻿using System.Text;
+using System.Text;
 
-namespace Enmeshed.Crypto;
+namespace Backbone.Crypto;
 
 public class ConvertibleString
 {

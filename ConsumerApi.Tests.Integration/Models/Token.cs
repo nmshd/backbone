@@ -1,14 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace ConsumerApi.Tests.Integration.Models;
+namespace Backbone.ConsumerApi.Tests.Integration.Models;
 
 public class Token
 {
     [Required]
-    public string Id { get; set; }
+    public required string Id { get; set; }
     public DateTime? ExpiresAt { get; set; }
     [Required]
-    public DateTime CreatedAt { get; set; }
+    public required DateTime CreatedAt { get; set; }
     public string? CreatedBy { get; set; }
     public string? CreatedByDevice { get; set; }
     public string? Content { get; set; }

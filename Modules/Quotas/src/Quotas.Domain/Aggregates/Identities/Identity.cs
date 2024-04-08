@@ -1,8 +1,8 @@
+using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using CSharpFunctionalExtensions;
-using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.BuildingBlocks.Domain.Errors;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
@@ -13,15 +13,27 @@ public class Identity
     private readonly List<IndividualQuota> _individualQuotas;
     private readonly List<MetricStatus> _metricStatuses;
 
+    private readonly object _latestExhaustionDateLock = new();
+
+    // ReSharper disable once UnusedMember.Local
+    private Identity()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        _tierQuotas = null!;
+        _individualQuotas = null!;
+        _metricStatuses = null!;
+        Address = null!;
+        TierId = null!;
+    }
+
     public Identity(string address, TierId tierId)
     {
         Address = address;
         TierId = tierId;
-        _tierQuotas = new List<TierQuota>();
-        _individualQuotas = new List<IndividualQuota>();
-        _metricStatuses = new List<MetricStatus>();
+        _tierQuotas = [];
+        _individualQuotas = [];
+        _metricStatuses = [];
     }
-    private Identity() { }
 
     public string Address { get; }
     public TierId TierId { get; private set; }
@@ -34,8 +46,8 @@ public class Identity
 
     public IndividualQuota CreateIndividualQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
-        if (max <= 0)
-            throw new DomainException(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
+        if (max < 0)
+            throw new DomainException(DomainErrors.MaxValueCannotBeLowerThanZero());
 
         if (IndividualQuotaAlreadyExists(metricKey, period))
             throw new DomainException(DomainErrors.DuplicateQuota());
@@ -110,7 +122,7 @@ public class Identity
 
             var quotaExhaustion = quota.CalculateExhaustion(newUsage);
 
-            lock (latestExhaustionDate)
+            lock (_latestExhaustionDateLock)
             {
                 if (quotaExhaustion > latestExhaustionDate)
                     latestExhaustionDate = quotaExhaustion;

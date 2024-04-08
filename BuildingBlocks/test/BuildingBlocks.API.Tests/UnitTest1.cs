@@ -1,6 +1,6 @@
 using Xunit;
 
-namespace Enmeshed.BuildingBlocks.API.Tests;
+namespace Backbone.BuildingBlocks.API.Tests;
 
 public class UnitTest1
 {

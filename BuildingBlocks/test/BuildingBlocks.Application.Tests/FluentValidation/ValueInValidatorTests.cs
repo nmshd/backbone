@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Application.FluentValidation;
+using Backbone.BuildingBlocks.Application.FluentValidation;
 using FluentAssertions;
 using FluentValidation;
 using Xunit;
 
-namespace Enmeshed.BuildingBlocks.Application.Tests.FluentValidation;
+namespace Backbone.BuildingBlocks.Application.Tests.FluentValidation;
 
 public class ValueInValidatorTests
 {
@@ -47,7 +47,7 @@ public class ValueInValidatorTests
 
     private class AClass
     {
-        public string AStringProperty { get; set; }
+        public required string AStringProperty { get; init; }
     }
 
     private class AClassValidator : AbstractValidator<AClass>

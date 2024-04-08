@@ -1,11 +1,12 @@
-﻿using CSharpFunctionalExtensions;
-using Enmeshed.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.Errors;
+using CSharpFunctionalExtensions;
 
 namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
 public record TierName
 {
     public static readonly TierName BASIC_DEFAULT_NAME = new("Basic");
+
     public string Value { get; }
     public const int MIN_LENGTH = 3;
     public const int MAX_LENGTH = 30;

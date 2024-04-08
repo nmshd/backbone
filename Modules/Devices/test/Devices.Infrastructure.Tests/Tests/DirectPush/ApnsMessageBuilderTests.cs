@@ -1,11 +1,9 @@
-﻿using System;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
+using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
 
@@ -35,7 +33,7 @@ public class ApnsMessageBuilderTests
 
         // Act
         var request = new ApnsMessageBuilder("someAppBundleIdentifier", "https://api.development.push.apple.com/3/device/someDeviceId", "someValidJwt")
-            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), new { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"), new { SomeProperty = "someValue" }))
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
             .SetNotificationId(1)
             .Build();
@@ -46,6 +44,7 @@ public class ApnsMessageBuilderTests
             'notId': 1,
             'content': {
                 'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
+                'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
                 'eventName': 'dynamic',
                 'sentAt': '2021-01-01T00:00:00.000Z',
                 'payload': {

@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Devices.Domain.Tests;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using FluentAssertions;
 using Xunit;
 
@@ -9,8 +8,8 @@ public class TierIdTests
     [Fact]
     public void Can_create_tier_id_with_valid_value()
     {
-        var validTierIdPrefix = "TIR";
-        var validIdLengthWithoutPrefix = 17;
+        const string validTierIdPrefix = "TIR";
+        const int validIdLengthWithoutPrefix = 17;
         var validIdValue = validTierIdPrefix + TestDataGenerator.GenerateString(validIdLengthWithoutPrefix);
 
         var tierId = TierId.Create(validIdValue);
@@ -29,7 +28,7 @@ public class TierIdTests
     [Fact]
     public void Cannot_create_tier_id_with_invalid_id_prefix()
     {
-        var invalidTierIdPrefix = "TIE";
+        const string invalidTierIdPrefix = "TIE";
         var tierId = TierId.Create(invalidTierIdPrefix + TestDataGenerator.GenerateString(17));
 
         var isTierIdInvalid = tierId.IsFailure;

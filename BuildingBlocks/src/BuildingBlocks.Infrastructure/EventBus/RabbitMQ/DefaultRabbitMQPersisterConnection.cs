@@ -1,11 +1,11 @@
-﻿using System.Net.Sockets;
+using System.Net.Sockets;
 using Microsoft.Extensions.Logging;
 using Polly;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
+namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public class DefaultRabbitMqPersistentConnection
     : IRabbitMqPersistentConnection
@@ -26,7 +26,7 @@ public class DefaultRabbitMqPersistentConnection
         _retryCount = retryCount;
     }
 
-    public bool IsConnected => _connection != null && _connection.IsOpen && !_disposed;
+    public bool IsConnected => _connection is { IsOpen: true } && !_disposed;
 
     public IModel CreateModel()
     {

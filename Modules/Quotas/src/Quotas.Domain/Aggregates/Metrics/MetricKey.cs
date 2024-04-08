@@ -1,5 +1,5 @@
-﻿using CSharpFunctionalExtensions;
-using Enmeshed.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.Errors;
+using CSharpFunctionalExtensions;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
@@ -13,14 +13,15 @@ public record MetricKey
     public static MetricKey UsedFileStorageSpace = new("UsedFileStorageSpace");
 
 
-    private static readonly MetricKey[] SUPPORTED_METRIC_KEYS = {
+    private static readonly MetricKey[] SUPPORTED_METRIC_KEYS =
+    [
         NumberOfSentMessages,
         NumberOfRelationships,
         NumberOfFiles,
         NumberOfTokens,
         UsedFileStorageSpace,
         NumberOfRelationshipTemplates
-    };
+    ];
     private static readonly string[] SUPPORTED_METRIC_KEY_VALUES = SUPPORTED_METRIC_KEYS.Select(m => m.Value).ToArray();
 
     private MetricKey(string value)

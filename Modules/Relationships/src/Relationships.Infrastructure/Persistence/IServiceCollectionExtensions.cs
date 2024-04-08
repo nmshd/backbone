@@ -1,8 +1,6 @@
-﻿using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence;
@@ -12,7 +10,7 @@ public static class IServiceCollectionExtensions
     public static void AddPersistence(this IServiceCollection services, Action<PersistenceOptions> setupOptions)
     {
         var options = new PersistenceOptions();
-        setupOptions?.Invoke(options);
+        setupOptions.Invoke(options);
 
         services.AddPersistence(options);
     }
@@ -21,10 +19,6 @@ public static class IServiceCollectionExtensions
     {
         services.AddDatabase(options.DbOptions);
 
-        services.Configure<BlobOptions>(blobOptions =>
-            blobOptions.RootFolder = options.BlobStorageOptions.Container);
-        services.AddBlobStorage(options.BlobStorageOptions);
-
         services.AddTransient<IRelationshipsRepository, RelationshipsRepository>();
         services.AddTransient<IRelationshipTemplatesRepository, RelationshipTemplatesRepository>();
     }
@@ -32,6 +26,5 @@ public static class IServiceCollectionExtensions
 
 public class PersistenceOptions
 {
-    public global::Backbone.Modules.Relationships.Infrastructure.Persistence.Database.IServiceCollectionExtensions.DbOptions DbOptions { get; set; } = new();
-    public BlobStorageOptions BlobStorageOptions { get; set; } = new();
+    public Database.IServiceCollectionExtensions.DbOptions DbOptions { get; set; } = new();
 }

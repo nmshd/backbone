@@ -1,5 +1,5 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.FluentValidation;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.FluentValidation;
 using FluentValidation;
 
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
@@ -10,6 +10,8 @@ public class UpdateDeviceRegistrationValidator : AbstractValidator<UpdateDeviceR
     public UpdateDeviceRegistrationValidator()
     {
         RuleFor(dto => dto.Platform).In("fcm", "apns");
+
+        RuleFor(dto => dto.Environment).In("Development", "Production").When(dto => dto.Environment != null);
 
         RuleFor(dto => dto.Handle)
             .DetailedNotEmpty()

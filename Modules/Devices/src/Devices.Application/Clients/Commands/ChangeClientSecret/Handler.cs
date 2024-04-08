@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;

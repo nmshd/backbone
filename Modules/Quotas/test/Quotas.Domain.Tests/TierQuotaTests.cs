@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.UnitTestTools.Data;
+using Backbone.UnitTestTools.Data;
 using FluentAssertions;
 using Xunit;
 
@@ -13,9 +13,9 @@ public class TierQuotaTests
     public void Can_create_tier_quota_with_valid_properties()
     {
         // Arrange
-        var max = 5;
+        const int max = 5;
         var metricKey = MetricKey.NumberOfSentMessages;
-        var period = QuotaPeriod.Month;
+        const QuotaPeriod period = QuotaPeriod.Month;
         var tierQuotaDefinition = new TierQuotaDefinition(metricKey, max, period);
         var applyTo = TestDataGenerator.CreateRandomIdentityAddress();
 

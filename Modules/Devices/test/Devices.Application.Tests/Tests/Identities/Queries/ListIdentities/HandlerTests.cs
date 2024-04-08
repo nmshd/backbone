@@ -1,10 +1,11 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
-using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Pagination;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
 
@@ -35,19 +36,20 @@ public class HandlerTests
     {
         // Arrange
         var request = new PaginationFilter();
-        List<Identity> identitiesList = new()
-        {
-            new(TestDataGenerator.CreateRandomDeviceId(),
-            TestDataGenerator.CreateRandomIdentityAddress(),
-            TestDataGenerator.CreateRandomBytes(),
-            TestDataGenerator.CreateRandomTierId(),
-            1),
-            new(TestDataGenerator.CreateRandomDeviceId(),
-            TestDataGenerator.CreateRandomIdentityAddress(),
-            TestDataGenerator.CreateRandomBytes(),
-            TestDataGenerator.CreateRandomTierId(),
-            1)
-        };
+        List<Identity> identitiesList =
+        [
+            new Identity(CreateRandomDeviceId(),
+                CreateRandomIdentityAddress(),
+                CreateRandomBytes(),
+                TestDataGenerator.CreateRandomTierId(),
+                1),
+
+            new Identity(CreateRandomDeviceId(),
+                CreateRandomIdentityAddress(),
+                CreateRandomBytes(),
+                TestDataGenerator.CreateRandomTierId(),
+                1)
+        ];
 
         var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(identitiesList)));
 
@@ -63,13 +65,10 @@ public class HandlerTests
     {
         // Arrange
         var request = new PaginationFilter();
-        var expectedClientId = TestDataGenerator.CreateRandomDeviceId();
-        var expectedAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var expectedClientId = CreateRandomDeviceId();
+        var expectedAddress = CreateRandomIdentityAddress();
         var expectedTierId = TestDataGenerator.CreateRandomTierId();
-        List<Identity> identitiesList = new()
-        {
-            new(expectedClientId, expectedAddress, Array.Empty<byte>(), expectedTierId, 1)
-        };
+        List<Identity> identitiesList = [new(expectedClientId, expectedAddress, [], expectedTierId, 1)];
 
         var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(identitiesList)));
 

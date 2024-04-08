@@ -1,6 +1,6 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 
-namespace ConsumerApi.Tests.Integration.Models;
+namespace Backbone.ConsumerApi.Tests.Integration.Models;
 
 public class AccessTokenResponse
 {

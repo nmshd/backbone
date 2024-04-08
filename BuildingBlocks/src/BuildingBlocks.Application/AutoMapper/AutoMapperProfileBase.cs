@@ -1,7 +1,7 @@
-﻿using System.Reflection;
+using System.Reflection;
 using AutoMapper;
 
-namespace Enmeshed.BuildingBlocks.Application.AutoMapper;
+namespace Backbone.BuildingBlocks.Application.AutoMapper;
 
 public abstract class AutoMapperProfileBase : Profile
 {

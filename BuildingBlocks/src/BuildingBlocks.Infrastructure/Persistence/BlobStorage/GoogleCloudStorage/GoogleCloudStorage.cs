@@ -1,11 +1,11 @@
-﻿using System.Net;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using System.Net;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Google;
 using Google.Cloud.Storage.V1;
 using Microsoft.Extensions.Logging;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
+namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
 
 public class GoogleCloudStorage : IBlobStorage, IDisposable
 {
@@ -17,7 +17,7 @@ public class GoogleCloudStorage : IBlobStorage, IDisposable
     public GoogleCloudStorage(StorageClient storageClient, ILogger<GoogleCloudStorage> logger)
     {
         _storageClient = storageClient;
-        _changedBlobs = new List<ChangedBlob>();
+        _changedBlobs = [];
         _removedBlobs = new List<RemovedBlob>();
         _logger = logger;
     }

@@ -1,6 +1,7 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Modules.Quotas.Domain.Metrics;
 using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
@@ -8,11 +9,13 @@ public class Handler : IRequestHandler<GetIdentityQuery, GetIdentityResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IMetricsRepository _metricsRepository;
+    private readonly MetricCalculatorFactory _metricCalculatorFactory;
 
-    public Handler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository)
+    public Handler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository, MetricCalculatorFactory metricCalculatorFactory)
     {
         _identitiesRepository = identitiesRepository;
         _metricsRepository = metricsRepository;
+        _metricCalculatorFactory = metricCalculatorFactory;
     }
 
     public async Task<GetIdentityResponse> Handle(GetIdentityQuery request, CancellationToken cancellationToken)
@@ -21,7 +24,6 @@ public class Handler : IRequestHandler<GetIdentityQuery, GetIdentityResponse>
 
         var metricsKeys = identity.TierQuotas.Select(q => q.MetricKey).Union(identity.IndividualQuotas.Select(q => q.MetricKey));
         var metrics = await _metricsRepository.FindAllWithKeys(metricsKeys, cancellationToken);
-
-        return new GetIdentityResponse(identity.Address, identity.TierQuotas, identity.IndividualQuotas, metrics);
+        return await GetIdentityResponse.Create(_metricCalculatorFactory, identity.Address, identity.TierQuotas, identity.IndividualQuotas, metrics, cancellationToken);
     }
 }

@@ -1,9 +1,9 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
-using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Enmeshed.BuildingBlocks.API.Mvc.JsonConverters;
+namespace Backbone.BuildingBlocks.API.Mvc.JsonConverters;
 
 public class UsernameJsonConverter : JsonConverter<Username?>
 {

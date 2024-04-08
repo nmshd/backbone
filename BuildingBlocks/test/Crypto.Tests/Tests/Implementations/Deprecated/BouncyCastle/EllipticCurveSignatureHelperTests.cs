@@ -1,11 +1,11 @@
-using Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle.Asymmetric;
+using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Asymmetric;
 using Xunit;
 
-namespace Enmeshed.Crypto.Tests.Tests.Implementations.Deprecated.BouncyCastle;
+namespace Backbone.Crypto.Tests.Tests.Implementations.Deprecated.BouncyCastle;
 
-public class EllipticCurveSignatureHelperTests : IDisposable
+public class EllipticCurveSignatureHelperTests
 {
-    private EllipticCurveSignatureHelper _signatureHelper;
+    private readonly EllipticCurveSignatureHelper _signatureHelper;
 
     #region Test Data
 
@@ -25,11 +25,6 @@ public class EllipticCurveSignatureHelperTests : IDisposable
     public EllipticCurveSignatureHelperTests()
     {
         _signatureHelper = EllipticCurveSignatureHelper.CreateSha512WithEcdsa();
-    }
-
-    public void Dispose()
-    {
-        _signatureHelper = null;
     }
 
     #endregion
@@ -120,7 +115,7 @@ public class EllipticCurveSignatureHelperTests : IDisposable
         var plaintext = ConvertibleString.FromUtf8("Test");
 
         // Act
-        var signature = _signatureHelper.GetSignature(_validPrivateKey, plaintext);
+        var signature = _signatureHelper.CreateSignature(_validPrivateKey, plaintext);
         var isValid = _signatureHelper.VerifySignature(plaintext, signature, _validPublicKey);
 
         // Assert
@@ -137,7 +132,7 @@ public class EllipticCurveSignatureHelperTests : IDisposable
 
         // Act
         var exception =
-            Assert.Throws<ArgumentException>(() => _signatureHelper.GetSignature(invalidPrivateKey, plaintext));
+            Assert.Throws<ArgumentException>(() => _signatureHelper.CreateSignature(invalidPrivateKey, plaintext));
         Assert.Equal("privateKey", exception.ParamName);
         // Assert
     }

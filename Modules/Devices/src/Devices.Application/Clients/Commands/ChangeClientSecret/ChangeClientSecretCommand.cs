@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
 public class ChangeClientSecretCommand : IRequest<ChangeClientSecretResponse>

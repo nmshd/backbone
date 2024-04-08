@@ -1,12 +1,12 @@
-using Enmeshed.Crypto.Implementations;
+using Backbone.Crypto.Implementations;
 using NSec.Cryptography;
 using Xunit;
 
-namespace Enmeshed.Crypto.Tests.Tests.Implementations;
+namespace Backbone.Crypto.Tests.Tests.Implementations;
 
-public class SignatureHelperTests : IDisposable
+public class SignatureHelperTests
 {
-    private SignatureHelper _signatureHelper;
+    private readonly SignatureHelper _signatureHelper;
 
     #region Test Data
 
@@ -27,11 +27,6 @@ public class SignatureHelperTests : IDisposable
     public SignatureHelperTests()
     {
         _signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
-    }
-
-    public void Dispose()
-    {
-        _signatureHelper = null;
     }
 
     #endregion
@@ -107,7 +102,7 @@ public class SignatureHelperTests : IDisposable
         var plaintext = ConvertibleString.FromUtf8("Test");
 
         // Act
-        var signature = _signatureHelper.GetSignature(_validPrivateKey, plaintext);
+        var signature = _signatureHelper.CreateSignature(_validPrivateKey, plaintext);
 
         // Assert
         var isValid = _signatureHelper.VerifySignature(plaintext, signature, _validPublicKey);
@@ -124,7 +119,7 @@ public class SignatureHelperTests : IDisposable
 
         // Act
         var exception =
-            Assert.Throws<ArgumentException>(() => _signatureHelper.GetSignature(plaintext, invalidPrivateKey));
+            Assert.Throws<ArgumentException>(() => _signatureHelper.CreateSignature(invalidPrivateKey, plaintext));
         Assert.Equal("privateKey", exception.ParamName);
         // Assert
     }
@@ -136,7 +131,7 @@ public class SignatureHelperTests : IDisposable
     [Fact]
     public void IsValidPublicKey_ReturnsTrue_WhenPublicKeyIsValid()
     {
-        var _ = _signatureHelper.VerifySignature(ConvertibleString.FromUtf8("Test"),
+        _ = _signatureHelper.VerifySignature(ConvertibleString.FromUtf8("Test"),
             ConvertibleString.FromBase64(""),
             ConvertibleString.FromBase64("Y8ZG4ikthK/Tvql7MwM9blvifnneN0nw5qQTVI7gvEw="));
 
@@ -169,10 +164,10 @@ public class SignatureHelperTests : IDisposable
     {
         var key = Key.Create(new Ed25519(),
             new KeyCreationParameters { ExportPolicy = KeyExportPolicies.AllowPlaintextExport });
-        var _ = ConvertibleString.FromByteArray(key.PublicKey.Export(KeyBlobFormat.RawPublicKey));
+        _ = ConvertibleString.FromByteArray(key.PublicKey.Export(KeyBlobFormat.RawPublicKey));
         var privateKey = ConvertibleString.FromByteArray(key.Export(KeyBlobFormat.RawPrivateKey));
 
-        _signatureHelper.GetSignature(privateKey, ConvertibleString.FromUtf8("Test"));
+        _signatureHelper.CreateSignature(privateKey, ConvertibleString.FromUtf8("Test"));
         try
         {
             Key.Import(SignatureAlgorithm.Ed25519, _validPrivateKey.BytesRepresentation,
@@ -228,7 +223,7 @@ public class SignatureHelperTests : IDisposable
     [Fact]
     public void CreateSignature()
     {
-        _signatureHelper.GetSignature(_validPrivateKey, ConvertibleString.FromUtf8("Test"));
+        _signatureHelper.CreateSignature(_validPrivateKey, ConvertibleString.FromUtf8("Test"));
     }
 
     #endregion

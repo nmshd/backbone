@@ -1,6 +1,6 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using FluentAssertions.Specialized;
-using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Tests.Extensions;
 public static class ExceptionAssertionsExtensions

@@ -1,14 +1,6 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
-		<RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
-	</PropertyGroup>
-
-	<ItemGroup>
+    <ItemGroup>
 		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
 		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
 	</ItemGroup>

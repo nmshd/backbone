@@ -1,9 +1,9 @@
-﻿using ArchUnitNET.Domain;
+using ArchUnitNET.Domain;
 using ArchUnitNET.xUnit;
 using MediatR;
 using static ArchUnitNET.Fluent.ArchRuleDefinition;
 
-namespace Backbone.Tests.ArchUnit;
+namespace Backbone.Backbone.Tests.ArchUnit;
 public class Cqrs
 {
     private static readonly IObjectProvider<IType> NON_ABSTRACT_CLASSES_IMPLEMENTING_IREQUEST =

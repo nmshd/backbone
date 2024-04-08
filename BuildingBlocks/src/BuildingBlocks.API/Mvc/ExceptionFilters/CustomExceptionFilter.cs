@@ -1,11 +1,11 @@
-﻿using System.Net;
+using System.Net;
 using System.Text.Json;
 using System.Text.RegularExpressions;
-using Enmeshed.BuildingBlocks.API.Extensions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.BuildingBlocks.Domain.Errors;
-using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
+using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
@@ -13,9 +13,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Enmeshed.BuildingBlocks.API.Mvc.ExceptionFilters;
+namespace Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
 public class CustomExceptionFilter : ExceptionFilterAttribute
@@ -67,7 +67,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
                 context.HttpContext.Response.StatusCode = (int)GetStatusCodeForDomainException(domainException);
 
                 break;
-            case BadHttpRequestException _:
+            case BadHttpRequestException:
                 _logger.RequestBodyTooLarge(ERROR_CODE_REQUEST_BODY_TOO_LARGE);
 
                 httpError = HttpError.ForProduction(
@@ -80,7 +80,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
                 break;
             default:
-                _logger.ErrorWhileProcessingRequestToUri(context.HttpContext.Request.GetDisplayUrl());
+                _logger.ErrorWhileProcessingRequestToUri(context.HttpContext.Request.GetDisplayUrl(), context.Exception);
 
                 httpError = CreateHttpErrorForUnexpectedException(context);
 
@@ -132,12 +132,12 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
 
     private dynamic? GetCustomData(ApplicationException applicationException)
     {
-        if (applicationException is QuotaExhaustedException quotaExhautedException)
+        if (applicationException is QuotaExhaustedException quotaExhaustedException)
         {
-            return quotaExhautedException.ExhaustedMetricStatuses.Select(m => new
+            return quotaExhaustedException.ExhaustedMetricStatuses.Select(m => new
             {
 #pragma warning disable IDE0037
-                MetricKey = m.MetricKey,
+                MetricKey = m.MetricKey.Value,
                 IsExhaustedUntil = m.IsExhaustedUntil
 #pragma warning restore IDE0037
             });
@@ -146,7 +146,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         return null;
     }
 
-    private static HttpStatusCode GetStatusCodeForInfrastructureException(InfrastructureException exception)
+    private static HttpStatusCode GetStatusCodeForInfrastructureException(InfrastructureException _)
     {
         return HttpStatusCode.BadRequest;
     }
@@ -155,9 +155,9 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
     {
         return exception switch
         {
-            NotFoundException _ => HttpStatusCode.NotFound,
-            ActionForbiddenException _ => HttpStatusCode.Forbidden,
-            QuotaExhaustedException _ => HttpStatusCode.TooManyRequests,
+            NotFoundException => HttpStatusCode.NotFound,
+            ActionForbiddenException => HttpStatusCode.Forbidden,
+            QuotaExhaustedException => HttpStatusCode.TooManyRequests,
             _ => HttpStatusCode.BadRequest
         };
     }
@@ -236,5 +236,5 @@ internal static partial class ExceptionFilterLogs
         EventName = "ExceptionFilter.ErrorWhileProcessingRequestToUri",
         Level = LogLevel.Error,
         Message = "Unexpected Error while processing request to '{uri}'.")]
-    public static partial void ErrorWhileProcessingRequestToUri(this ILogger logger, string uri);
+    public static partial void ErrorWhileProcessingRequestToUri(this ILogger logger, string uri, Exception ex);
 }

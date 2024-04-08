@@ -1,6 +1,6 @@
-﻿using MediatR;
+using MediatR;
 
-namespace Enmeshed.UnitTestTools.Behaviors;
+namespace Backbone.UnitTestTools.Behaviors;
 public class NextMock<TResponse> where TResponse : new()
 {
     public NextMock()

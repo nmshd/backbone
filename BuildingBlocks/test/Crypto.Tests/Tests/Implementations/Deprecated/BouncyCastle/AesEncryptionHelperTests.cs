@@ -1,23 +1,18 @@
-﻿using Enmeshed.Crypto.Abstractions;
-using Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
+using Backbone.Crypto.Abstractions;
+using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
 using Xunit;
 
-namespace Enmeshed.Crypto.Tests.Tests.Implementations.Deprecated.BouncyCastle;
+namespace Backbone.Crypto.Tests.Tests.Implementations.Deprecated.BouncyCastle;
 
-public class AesEncryptionHelperTests : IDisposable
+public class AesEncryptionHelperTests
 {
-    private ISymmetricEncrypter _symmetricEncrypterUnderTest;
+    private readonly ISymmetricEncrypter _symmetricEncrypterUnderTest;
 
     #region Setup/Teardown
 
     public AesEncryptionHelperTests()
     {
         _symmetricEncrypterUnderTest = AesSymmetricEncrypter.CreateWith96BitIv128BitMac();
-    }
-
-    public void Dispose()
-    {
-        _symmetricEncrypterUnderTest = null;
     }
 
     #endregion
@@ -28,7 +23,7 @@ public class AesEncryptionHelperTests : IDisposable
     public void Decrypt_GivesCorrectResult_IfEncryptedTextWasGeneratedByEncrypt()
     {
         // Arrange
-        var expected = "Test";
+        const string expected = "Test";
         var key = ConvertibleString.FromBase64("ZcR3a8iOzdQnC0nWHWIH6zJIwBAu2rz4EWNVtr98C/c=");
         var cipherText = _symmetricEncrypterUnderTest.Encrypt(ConvertibleString.FromUtf8(expected), key);
 
@@ -92,7 +87,7 @@ public class AesEncryptionHelperTests : IDisposable
     public void Encrypt_ShouldReturnDifferentResults_EvenThoughParametersAreTheSame()
     {
         // Arrange
-        var plaintext = "Test";
+        const string plaintext = "Test";
         var key = ConvertibleString.FromBase64("ZcR3a8iOzdQnC0nWHWIH6zJIwBAu2rz4EWNVtr98C/c=");
 
         // Act

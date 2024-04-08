@@ -1,9 +1,10 @@
-﻿using Backbone.Modules.Quotas.Application.DTOs;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
@@ -29,7 +30,7 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
     {
         _logger.LogTrace("Handling CreateQuotaForTierCommand ...");
 
-        var tier = await _tiersRepository.Find(request.TierId, cancellationToken, true);
+        var tier = await _tiersRepository.Find(request.TierId, cancellationToken, true) ?? throw new NotFoundException(nameof(Tier));
 
         var parseMetricKeyResult = MetricKey.Parse(request.MetricKey);
 

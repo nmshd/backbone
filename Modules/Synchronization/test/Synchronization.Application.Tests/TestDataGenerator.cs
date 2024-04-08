@@ -1,4 +1,4 @@
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Synchronization.Application.Tests;
 

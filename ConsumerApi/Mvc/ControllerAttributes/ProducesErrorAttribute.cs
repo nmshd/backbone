@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ConsumerApi.Mvc.ControllerAttributes;
+namespace Backbone.ConsumerApi.Mvc.ControllerAttributes;
 
 public class ProducesErrorAttribute : ProducesResponseTypeAttribute
 {

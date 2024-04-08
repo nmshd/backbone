@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Relationships.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Enmeshed.BuildingBlocks.Application.Attributes;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
+using Backbone.BuildingBlocks.Application.Attributes;
+using Backbone.Modules.Relationships.Domain.Entities;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
@@ -10,5 +10,5 @@ public class CreateRelationshipTemplateCommand : IMapTo<RelationshipTemplate>, I
 {
     public DateTime? ExpiresAt { get; set; }
     public int? MaxNumberOfAllocations { get; set; }
-    public byte[] Content { get; set; }
+    public required byte[] Content { get; set; }
 }

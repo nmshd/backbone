@@ -1,7 +1,7 @@
-﻿using Enmeshed.Crypto.Abstractions;
+using Backbone.Crypto.Abstractions;
 using NSec.Cryptography;
 
-namespace Enmeshed.Crypto.Implementations;
+namespace Backbone.Crypto.Implementations;
 
 public class SignatureHelper : ISignatureHelper
 {
@@ -53,7 +53,7 @@ public class SignatureHelper : ISignatureHelper
         return PublicKey.TryImport(_signatureAlgorithm, publicKey.BytesRepresentation, _publicKeyFormat, out _);
     }
 
-    public ConvertibleString GetSignature(ConvertibleString privateKey, ConvertibleString message)
+    public ConvertibleString CreateSignature(ConvertibleString privateKey, ConvertibleString message)
     {
         var key = ImportPrivateKey(privateKey);
         var signature = _signatureAlgorithm.Sign(key, message.BytesRepresentation);
@@ -81,7 +81,6 @@ public class SignatureHelper : ISignatureHelper
 
     public static SignatureHelper CreateEd25519WithRawKeyFormat()
     {
-        new X25519();
         return new SignatureHelper(SignatureAlgorithm.Ed25519, KeyBlobFormat.RawPrivateKey,
             KeyBlobFormat.RawPublicKey);
     }

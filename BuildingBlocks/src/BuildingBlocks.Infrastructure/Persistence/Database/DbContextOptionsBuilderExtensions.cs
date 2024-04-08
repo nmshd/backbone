@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
+namespace Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 
 public static class DbContextOptionsBuilderExtensions
 {

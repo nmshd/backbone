@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 

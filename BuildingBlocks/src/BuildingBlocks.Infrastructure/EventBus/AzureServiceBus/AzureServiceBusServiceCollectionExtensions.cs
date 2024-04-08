@@ -1,9 +1,9 @@
-﻿using Autofac;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Autofac;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
+namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
 public static class AzureServiceBusServiceCollectionExtensions
 {
@@ -32,7 +32,5 @@ public static class AzureServiceBusServiceCollectionExtensions
 
 public class ServiceBusOptions : BasicBusOptions
 {
-#pragma warning disable CS8618
-    public string ConnectionString { get; set; }
-#pragma warning restore CS8618
+    public string ConnectionString { get; set; } = null!;
 }

@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.Common.Infrastructure.Persistence.Repository;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.Common.Infrastructure.Persistence.Repository;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Enmeshed.BuildingBlocks.Application.Tests.Mediatr;
+namespace Backbone.BuildingBlocks.Application.Tests.Mediatr;
 
 public class MetricStatusesStubRepository : IMetricStatusesRepository
 {
@@ -15,21 +15,10 @@ public class MetricStatusesStubRepository : IMetricStatusesRepository
             MetricStatuses = metricStatuses;
         }
     }
-    public List<MetricStatus> MetricStatuses { get; } = new();
+    public List<MetricStatus> MetricStatuses { get; } = [];
 
     public Task<IEnumerable<MetricStatus>> GetMetricStatuses(IdentityAddress identity, IEnumerable<MetricKey> keys)
     {
         return Task.FromResult(MetricStatuses.AsEnumerable());
-    }
-}
-
-public class MetricStatusesNoMatchStubRepository : IMetricStatusesRepository
-{
-    public MetricStatusesNoMatchStubRepository()
-    { }
-
-    public Task<IEnumerable<MetricStatus>> GetMetricStatuses(IdentityAddress identity, IEnumerable<MetricKey> keys)
-    {
-        return Task.FromResult(Enumerable.Empty<MetricStatus>());
     }
 }

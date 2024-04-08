@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Files.Domain.Entities;
+using Backbone.Modules.Files.Domain.Entities;
 
 namespace Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.Reporter;
 
@@ -12,8 +12,8 @@ public class LogReporter : IReporter
     {
         _logger = logger;
 
-        _databaseIds = new List<FileId>();
-        _blobIds = new List<string>();
+        _databaseIds = [];
+        _blobIds = [];
     }
 
     public void Complete()

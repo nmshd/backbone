@@ -1,6 +1,6 @@
-﻿using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 
 public interface IUserContext
 {

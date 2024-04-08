@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Ids;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.ValueConverters;
@@ -7,9 +7,9 @@ public class RelationshipTemplateIdEntityFrameworkValueConverter : ValueConverte
 {
     public RelationshipTemplateIdEntityFrameworkValueConverter() : this(null) { }
 
-    public RelationshipTemplateIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
+    public RelationshipTemplateIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id == null ? null : id.StringValue,
+            id => id.StringValue,
             value => RelationshipTemplateId.Parse(value),
             mappingHints
         )

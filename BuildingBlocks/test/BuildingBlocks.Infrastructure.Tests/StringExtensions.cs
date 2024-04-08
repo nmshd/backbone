@@ -1,6 +1,6 @@
-﻿using System.Text;
+using System.Text;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Tests;
+namespace Backbone.BuildingBlocks.Infrastructure.Tests;
 
 public static class StringExtensions
 {

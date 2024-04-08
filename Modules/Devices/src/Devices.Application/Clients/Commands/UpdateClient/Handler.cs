@@ -1,10 +1,9 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Domain;
 using MediatR;
-using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
 public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse>
@@ -30,11 +29,9 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
         if (!tierExists)
             throw new ApplicationException(ApplicationErrors.Devices.InvalidTierIdOrDoesNotExist());
 
-        var changeError = client.ChangeDefaultTier(tierIdResult.Value);
-        if (changeError != null)
-            throw new DomainException(changeError);
-
-        await _oAuthClientsRepository.Update(client, cancellationToken);
+        var hasChanges = client.Update(tierIdResult.Value, request.MaxIdentities);
+        if (hasChanges)
+            await _oAuthClientsRepository.Update(client, cancellationToken);
 
         return new UpdateClientResponse(client);
     }

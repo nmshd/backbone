@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 using Backbone.Modules.Relationships.Domain.Ids;
-using Enmeshed.BuildingBlocks.Application.Pagination;
 using FluentAssertions;
 using FluentValidation.TestHelper;
 using Xunit;
@@ -14,7 +14,7 @@ public class ListRelationshipTemplatesValidatorTests
     {
         var validator = new ListRelationshipTemplatesValidator();
 
-        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), new[] { RelationshipTemplateId.New() }));
+        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), [RelationshipTemplateId.New()]));
 
         validationResult.ShouldNotHaveAnyValidationErrors();
     }

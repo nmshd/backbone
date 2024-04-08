@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
+namespace Backbone.BuildingBlocks.Infrastructure.Exceptions;
 
 public class InfrastructureException : Exception
 {

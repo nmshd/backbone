@@ -1,12 +1,12 @@
-﻿using Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle;
-using Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
+using Backbone.Crypto.Implementations.Deprecated.BouncyCastle;
+using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
 using Xunit;
 
-namespace Enmeshed.Crypto.Tests;
+namespace Backbone.Crypto.Tests;
 
-public class KeyGeneratorTests : IDisposable
+public class KeyGeneratorTests
 {
-    private KeyGenerator _keyGeneratorUnderTest;
+    private readonly KeyGenerator _keyGeneratorUnderTest;
 
     #region GenerateSymmetricKey
 
@@ -15,7 +15,7 @@ public class KeyGeneratorTests : IDisposable
     {
         // Arrange
         var aesEncryptionHelper = AesSymmetricEncrypter.CreateWith96BitIv128BitMac();
-        var testString = "Test";
+        const string testString = "Test";
 
         // Act
         var symmetricKey = _keyGeneratorUnderTest.GenerateSymmetricKey(256);
@@ -33,11 +33,6 @@ public class KeyGeneratorTests : IDisposable
     public KeyGeneratorTests()
     {
         _keyGeneratorUnderTest = new KeyGenerator();
-    }
-
-    public void Dispose()
-    {
-        _keyGeneratorUnderTest = null;
     }
 
     #endregion
@@ -69,7 +64,7 @@ public class KeyGeneratorTests : IDisposable
         var privateKey = ConvertibleString.FromBase64(
             "MIHuAgEAMBAGByqGSM49AgEGBSuBBAAjBIHWMIHTAgEBBEIBAkkvXspQwTUbnqQE0PO5Xtnb9F223zF7XP0Y1NXxbaVQassO16X118JTCGOosEe3j28oVXQRbWGyEkQf6f0kv1ShgYkDgYYABAAc5lIvb4RUVQ7GJPWVNpL4VAJz0PZCbzHkTGCDvdFo4HOr/vA2AQrXOKZVtqOxQUj/ffUQhvsE8B49Sh0ZzPtRxgHx4uQSPqPlBcgqCHA4/XHs9LPbvKNYYkkPoBZy9spmtVrGktJi+M1inAlStTnxr//VC3ZAFbWS7fhW9EiGHBbeUA==");
         var aesEncryptionHelper = AesSymmetricEncrypter.CreateWith96BitIv128BitMac();
-        var testString = "Test";
+        const string testString = "Test";
 
         // Act
         var symmetricKey = _keyGeneratorUnderTest.DeriveSymmetricKeyWithEcdh(privateKey, publicKey, 256);

@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 

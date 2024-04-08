@@ -1,6 +1,6 @@
-﻿using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 
-namespace ConsumerApi.Mvc.Middleware;
+namespace Backbone.ConsumerApi.Mvc.Middleware;
 
 public class RequestResponseTimeMiddleware
 {

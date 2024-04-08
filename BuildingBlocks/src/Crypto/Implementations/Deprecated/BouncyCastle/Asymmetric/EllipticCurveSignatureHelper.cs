@@ -1,9 +1,9 @@
-﻿using Enmeshed.Crypto.Abstractions;
-using Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle.ExtensionMethods;
+using Backbone.Crypto.Abstractions;
+using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.ExtensionMethods;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 
-namespace Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle.Asymmetric;
+namespace Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Asymmetric;
 
 public class EllipticCurveSignatureHelper : ISignatureHelper
 {
@@ -45,7 +45,7 @@ public class EllipticCurveSignatureHelper : ISignatureHelper
         }
     }
 
-    public ConvertibleString GetSignature(ConvertibleString privateKey, ConvertibleString message)
+    public ConvertibleString CreateSignature(ConvertibleString privateKey, ConvertibleString message)
     {
         var privateKeyParameters = CreatePrivateKeyParameters(privateKey);
 

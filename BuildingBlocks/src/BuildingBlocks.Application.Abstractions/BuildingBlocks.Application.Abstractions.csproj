@@ -1,13 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<RootNamespace>Enmeshed.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-	</PropertyGroup>
-
-	<PropertyGroup>
 		<PackageId>Enmeshed.BuildingBlocks.Application.Abstractions</PackageId>
 		<PackageProjectUrl>https://enmeshed.eu</PackageProjectUrl>
 		<PackageTags>Enmeshed</PackageTags>
@@ -17,8 +10,8 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper" Version="12.0.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
+		<PackageReference Include="AutoMapper" Version="13.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3"/>
 	</ItemGroup>
 
 	<ItemGroup>

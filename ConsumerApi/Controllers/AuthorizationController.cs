@@ -1,9 +1,9 @@
-﻿using System.Security.Claims;
+using System.Security.Claims;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.ConsumerApi.Mvc;
 using Backbone.Modules.Devices.Application;
-using Backbone.Modules.Devices.Domain.Entities;
-using ConsumerApi.Mvc;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.Tooling.Extensions;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Tooling.Extensions;
 using MediatR;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
@@ -16,23 +16,21 @@ using OpenIddict.Server.AspNetCore;
 using OpenIddict.Validation.AspNetCore;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
-namespace ConsumerApi.Controllers;
+namespace Backbone.ConsumerApi.Controllers;
 
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class AuthorizationController : ApiControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
-    private readonly ILogger<AuthorizationController> _logger;
     private readonly SignInManager<ApplicationUser> _signInManager;
 
     public AuthorizationController(
         IMediator mediator,
         SignInManager<ApplicationUser> signInManager,
-        UserManager<ApplicationUser> userManager, ILogger<AuthorizationController> logger) : base(mediator)
+        UserManager<ApplicationUser> userManager) : base(mediator)
     {
         _signInManager = signInManager;
         _userManager = userManager;
-        _logger = logger;
     }
 
     [HttpPost("~/connect/token"), IgnoreAntiforgeryToken, Produces("application/json"),
@@ -58,7 +56,9 @@ public class AuthorizationController : ApiControllerBase
             throw new OperationFailedException(
                 ApplicationErrors.Authentication.InvalidOAuthRequest("missing password"));
 
-        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password!, lockoutOnFailure: true);
+        var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: true);
+        if (result.IsLockedOut)
+            return UserLockedOut();
         if (!result.Succeeded)
             return InvalidUserCredentials();
 
@@ -90,6 +90,18 @@ public class AuthorizationController : ApiControllerBase
             [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidGrant,
             [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
                 "The username/password couple is invalid."
+        });
+
+        return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
+    }
+
+    private IActionResult UserLockedOut()
+    {
+        var properties = new AuthenticationProperties(new Dictionary<string, string?>
+        {
+            [OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.AccessDenied,
+            [OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
+                "The user is temporarily locked out, please try again in a few minutes."
         });
 
         return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);

@@ -1,4 +1,9 @@
-﻿using System.Net.Mime;
+using System.Net.Mime;
+using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Mvc;
+using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Files.Application;
 using Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 using Backbone.Modules.Files.Application.Files.DTOs;
@@ -7,18 +12,13 @@ using Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
 using Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
 using Backbone.Modules.Files.ConsumerApi.DTOs;
 using Backbone.Modules.Files.Domain.Entities;
-using Enmeshed.BuildingBlocks.API;
-using Enmeshed.BuildingBlocks.API.Mvc;
-using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using NeoSmart.Utils;
-using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Files.ConsumerApi.Controllers;
 
@@ -49,7 +49,7 @@ public class FilesController : ApiControllerBase
             ExpiresAt = dto.ExpiresAt,
             CipherHash = UrlBase64.Decode(dto.CipherHash),
             Owner = dto.Owner,
-            OwnerSignature = dto.OwnerSignature == null ? null : UrlBase64.Decode(dto.OwnerSignature),
+            OwnerSignature = UrlBase64.Decode(dto.OwnerSignature),
             EncryptedProperties = UrlBase64.Decode(dto.EncryptedProperties)
         };
 

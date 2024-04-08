@@ -1,12 +1,12 @@
-﻿using Backbone.Modules.Files.Domain.Entities;
+using Backbone.Modules.Files.Domain.Entities;
 using Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.DataSource;
 
-namespace Files.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
+namespace Backbone.Modules.Files.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
 
 public class FakeDataSource : IDataSource
 {
-    public List<FileId> DatabaseIds { get; } = new();
-    public List<string> BlobIds { get; } = new();
+    public List<FileId> DatabaseIds { get; } = [];
+    public List<string> BlobIds { get; } = [];
 
     public Task<IEnumerable<string>> GetBlobIdsAsync(CancellationToken cancellationToken)
     {

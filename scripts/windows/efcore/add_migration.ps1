@@ -1,46 +1,53 @@
 Param(
-    [parameter(Mandatory)][ValidateSet("AdminUi", "Challenges", "Devices", "Files", "Messages", "Quotas", "Relationships", "Synchronization", "Tokens")] $moduleName,
+    [parameter(Mandatory)][ValidateSet("AdminApi", "Challenges", "Devices", "Files", "Messages", "Quotas", "Relationships", "Synchronization", "Tokens")] $moduleName,
     [parameter(Mandatory)] $migrationName,
-    [parameter(Mandatory)][ValidateSet("SqlServer", "Postgres", "")] $provider
+    [parameter(Mandatory)][ValidateSet("s", "p", "SqlServer", "Postgres", "")] $provider
 )
 
-$environment="dbmigrations-" + $provider.ToLower()
+$provider = switch ($provider) {
+    "s" { "SqlServer" }
+    "p" { "Postgres" }
+    Default { $provider }
+}
 $repoRoot = git rev-parse --show-toplevel
 $dbContextName = "${moduleName}DbContext"
-$adminUiProject = "$repoRoot\AdminUi\src\AdminUi"
+$adminApiProject = "$repoRoot\AdminApi\src\AdminApi"
 $consumerApiProject = "$repoRoot\ConsumerApi"
+$startupProject = If ($moduleName -eq "AdminApi") { $adminApiProject } Else { $consumerApiProject }
 
 function AddMigration {    
     param (
         $provider
     )
 
-    switch($moduleName){
-        "AdminUi" {
-            New-Item env:"${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
+    switch ($moduleName) {
+        "AdminApi" {
+            New-Item env:"Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
 
-            $migrationProject = "$repoRoot\AdminUi\src\AdminUi.Infrastructure.Database.$provider"
-            $startupProject = $adminUiProject
+            $migrationProject = "$repoRoot\AdminApi\src\AdminApi.Infrastructure.Database.$provider"
         }
         Default {
             New-Item env:"Modules__${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
 
             $migrationProject = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
-            $startupProject = $consumerApiProject
         }
     }
 
-    $cmd = "dotnet ef migrations add --startup-project '$startupProject' --project '$migrationProject' --context $dbContextName --output-dir Migrations --verbose $migrationName -- --environment $environment"
+    $cmd = "dotnet ef migrations add --no-build --startup-project '$startupProject' --project '$migrationProject' --context $dbContextName --output-dir Migrations --verbose $migrationName"
 
     Write-Host "Executing '$cmd'..."
     Invoke-Expression $cmd
-
-    & $PSScriptRoot/compile_models.ps1 $moduleName $provider
 }
 
+dotnet build $startupProject
+
 switch ($provider) {
-    "SqlServer" { AddMigration $provider }
-    "Postgres" { AddMigration $provider }
+    "SqlServer" { 
+        AddMigration "SqlServer" 
+    }
+    "Postgres" { 
+        AddMigration "Postgres" 
+    }
     "" { 
         AddMigration "SqlServer" 
         AddMigration "Postgres" 

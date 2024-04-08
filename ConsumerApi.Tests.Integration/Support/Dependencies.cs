@@ -1,10 +1,12 @@
-﻿using ConsumerApi.Tests.Integration.API;
-using ConsumerApi.Tests.Integration.Configuration;
+using Backbone.ConsumerApi.Tests.Integration.API;
+using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Backbone.Crypto.Abstractions;
+using Backbone.Crypto.Implementations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SolidToken.SpecFlow.DependencyInjection;
 
-namespace ConsumerApi.Tests.Integration.Support;
+namespace Backbone.ConsumerApi.Tests.Integration.Support;
 
 public static class Dependencies
 {
@@ -22,8 +24,13 @@ public static class Dependencies
         services.ConfigureAndValidate<HttpConfiguration>(options => config.GetSection("Http").Bind(options));
 
         services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory<Program>()));
+        services.AddSingleton<ISignatureHelper>(SignatureHelper.CreateEd25519WithRawKeyFormat());
+
         services.AddTransient<TokensApi>();
         services.AddTransient<ChallengesApi>();
+        services.AddTransient<IdentitiesApi>();
+        services.AddTransient<DevicesApi>();
+        services.AddTransient<PushNotificationsApi>();
 
         return services;
     }

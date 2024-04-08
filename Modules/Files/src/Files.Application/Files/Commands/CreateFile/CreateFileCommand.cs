@@ -1,5 +1,5 @@
-﻿using Enmeshed.BuildingBlocks.Application.Attributes;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Backbone.BuildingBlocks.Application.Attributes;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
@@ -7,14 +7,14 @@ namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 [ApplyQuotasForMetrics("NumberOfFiles", "UsedFileStorageSpace")]
 public class CreateFileCommand : IRequest<CreateFileResponse>
 {
-    public byte[] FileContent { get; set; }
+    public required byte[] FileContent { get; set; }
 
-    public IdentityAddress Owner { get; set; }
-    public byte[] OwnerSignature { get; set; }
+    public required IdentityAddress Owner { get; set; }
+    public required byte[] OwnerSignature { get; set; }
 
-    public byte[] CipherHash { get; set; }
+    public required byte[] CipherHash { get; set; }
 
-    public DateTime ExpiresAt { get; set; }
+    public required DateTime ExpiresAt { get; set; }
 
-    public byte[] EncryptedProperties { get; set; }
+    public required byte[] EncryptedProperties { get; set; }
 }

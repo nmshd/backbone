@@ -1,4 +1,4 @@
-﻿using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using MediatR;
 

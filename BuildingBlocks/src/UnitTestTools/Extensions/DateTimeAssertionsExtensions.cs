@@ -1,7 +1,7 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using FluentAssertions.Primitives;
 
-namespace Enmeshed.UnitTestTools.Extensions;
+namespace Backbone.UnitTestTools.Extensions;
 
 public static class DateTimeAssertionsExtensions
 {

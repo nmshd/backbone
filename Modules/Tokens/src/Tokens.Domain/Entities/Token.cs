@@ -1,14 +1,20 @@
-﻿using System.Linq.Expressions;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
+using System.Linq.Expressions;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Tokens.Domain.Entities;
 
 public class Token
 {
-#pragma warning disable CS8618
-    private Token() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private Token()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        CreatedBy = null!;
+        CreatedByDevice = null!;
+        Content = null!;
+    }
 
     public Token(IdentityAddress createdBy, DeviceId createdByDevice, byte[] content, DateTime expiresAt)
     {
@@ -28,9 +34,17 @@ public class Token
     public IdentityAddress CreatedBy { get; set; }
     public DeviceId CreatedByDevice { get; set; }
 
-    public byte[] Content { get; set; }
+    public byte[] Content { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
+
+    public void LoadContent(byte[] content)
+    {
+        if (Content != null)
+            throw new Exception("Cannot change the content of a token.");
+
+        Content = content;
+    }
 
     public static Expression<Func<Token, bool>> IsExpired =>
         challenge => challenge.ExpiresAt <= SystemTime.UtcNow;

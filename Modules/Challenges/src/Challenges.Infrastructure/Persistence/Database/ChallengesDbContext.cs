@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Challenges.Domain.Entities;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.Modules.Challenges.Domain.Entities;
 using Backbone.Modules.Challenges.Domain.Ids;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database.ValueConverters;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
@@ -14,7 +14,7 @@ public class ChallengesDbContext : AbstractDbContextBase
 
     public ChallengesDbContext(DbContextOptions<ChallengesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
 
-    public virtual DbSet<Challenge> Challenges { get; set; }
+    public virtual DbSet<Challenge> Challenges { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

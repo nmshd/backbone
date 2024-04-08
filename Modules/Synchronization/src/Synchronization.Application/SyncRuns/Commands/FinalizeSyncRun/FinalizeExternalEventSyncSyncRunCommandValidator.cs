@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
-using Enmeshed.BuildingBlocks.Application.FluentValidation;
+using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using FluentValidation;
 
 namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;

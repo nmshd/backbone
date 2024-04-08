@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Messages.Application;
 
 namespace Backbone.Modules.Messages.ConsumerApi;
@@ -15,21 +15,6 @@ public class Configuration
     {
         [Required]
         public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
-
-        [Required]
-        public BlobStorageConfiguration BlobStorage { get; set; } = new();
-
-        public class BlobStorageConfiguration
-        {
-            [Required]
-            [MinLength(1)]
-            [RegularExpression("Azure|GoogleCloud")]
-            public string CloudProvider { get; set; } = string.Empty;
-
-            public string ConnectionInfo { get; set; } = string.Empty;
-
-            public string ContainerName { get; set; } = string.Empty;
-        }
 
         public class SqlDatabaseConfiguration
         {

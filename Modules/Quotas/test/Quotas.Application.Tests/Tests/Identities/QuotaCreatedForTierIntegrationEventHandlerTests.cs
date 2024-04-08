@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Quotas.Application.Metrics;
@@ -68,7 +68,7 @@ public class QuotaCreatedForTierIntegrationEventHandlerTests
         ).MustHaveHappened();
     }
 
-    private static QuotaCreatedForTierIntegrationEventHandler CreateHandler(IIdentitiesRepository identities, ITiersRepository tierQuotaDefinitions, IMetricStatusesService metricStatusesService = null)
+    private static QuotaCreatedForTierIntegrationEventHandler CreateHandler(IIdentitiesRepository identities, ITiersRepository tierQuotaDefinitions, IMetricStatusesService? metricStatusesService = null)
     {
         var logger = A.Fake<ILogger<QuotaCreatedForTierIntegrationEventHandler>>();
         return new QuotaCreatedForTierIntegrationEventHandler(identities, tierQuotaDefinitions, logger, metricStatusesService ?? A.Fake<IMetricStatusesService>());

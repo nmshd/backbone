@@ -1,13 +1,13 @@
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
 using FluentAssertions;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.Tests;
+namespace Backbone.BuildingBlocks.Infrastructure.Tests.Tests;
 
 public class GoogleCloudStorageTests : IAsyncLifetime
 {

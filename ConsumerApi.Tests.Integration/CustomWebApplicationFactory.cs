@@ -1,9 +1,9 @@
-﻿using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 
-namespace ConsumerApi.Tests.Integration;
+namespace Backbone.ConsumerApi.Tests.Integration;
 
 public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
 {

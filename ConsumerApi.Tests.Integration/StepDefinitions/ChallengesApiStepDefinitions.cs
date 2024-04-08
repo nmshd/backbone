@@ -1,50 +1,49 @@
-using ConsumerApi.Tests.Integration.API;
-using ConsumerApi.Tests.Integration.Configuration;
-using ConsumerApi.Tests.Integration.Extensions;
-using ConsumerApi.Tests.Integration.Models;
+using Backbone.ConsumerApi.Tests.Integration.API;
+using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Backbone.ConsumerApi.Tests.Integration.Models;
+using Backbone.Crypto.Abstractions;
 using Microsoft.Extensions.Options;
 using TechTalk.SpecFlow.Assist;
 
-namespace ConsumerApi.Tests.Integration.StepDefinitions;
+namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "POST Challenge")]
 [Scope(Feature = "GET Challenge")]
-public class ChallengesApiStepDefinitions : BaseStepDefinitions
+internal class ChallengesApiStepDefinitions : BaseStepDefinitions
 {
-    private readonly ChallengesApi _challengeApi;
     private string _challengeId;
     private HttpResponse<Challenge>? _response;
 
-    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ChallengesApi challengeApi) : base(httpConfiguration)
+    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) :
+        base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
     {
-        _challengeApi = challengeApi;
         _challengeId = string.Empty;
     }
 
-    [Given(@"a Challenge c")]
+    [Given("a Challenge c")]
     public async Task GivenAChallengeC()
     {
-        var challengeResponse = await _challengeApi.CreateChallenge(_requestConfiguration);
+        var challengeResponse = await _challengesApi.CreateChallenge(_requestConfiguration);
         challengeResponse.IsSuccessStatusCode.Should().BeTrue();
 
         _challengeId = challengeResponse.Content.Result!.Id;
         _challengeId.Should().NotBeNullOrEmpty();
     }
 
-    [When(@"a POST request is sent to the Challenges endpoint with")]
+    [When("a POST request is sent to the Challenges endpoint with")]
     public async Task WhenAPOSTRequestIsSentToTheChallengesEndpointWith(Table table)
     {
         var requestConfiguration = table.CreateInstance<RequestConfiguration>();
         requestConfiguration.SupplementWith(_requestConfiguration);
 
-        _response = await _challengeApi.CreateChallenge(requestConfiguration);
+        _response = await _challengesApi.CreateChallenge(requestConfiguration);
     }
 
-    [When(@"a POST request is sent to the Challenges endpoint")]
+    [When("a POST request is sent to the Challenges endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheChallengesEndpoint()
     {
-        _response = await _challengeApi.CreateChallenge(_requestConfiguration);
+        _response = await _challengesApi.CreateChallenge(_requestConfiguration);
     }
 
     [When(@"a GET request is sent to the Challenges/{id} endpoint with ""?(.*?)""?")]
@@ -59,27 +58,26 @@ public class ChallengesApiStepDefinitions : BaseStepDefinitions
                 id = "CHLjVPS6h1082AuBVBaR";
                 break;
         }
-        _response = await _challengeApi.GetChallengeById(_requestConfiguration, id);
+        _response = await _challengesApi.GetChallengeById(_requestConfiguration, id);
     }
 
-    [Then(@"the response contains a Challenge")]
+    [Then("the response contains a Challenge")]
     public void ThenTheResponseContainsAChallenge()
     {
-        _response!.AssertHasValue();
-        _response!.AssertStatusCodeIsSuccess();
-        _response!.AssertContentTypeIs("application/json");
-
+        _response!.Should().NotBeNull();
+        _response!.IsSuccessStatusCode.Should().BeTrue();
+        _response!.ContentType.Should().Be("application/json");
         AssertExpirationDateIsInFuture();
     }
 
-    [Then(@"the Challenge does not contain information about the creator")]
+    [Then("the Challenge does not contain information about the creator")]
     public void ThenTheChallengeDoesNotContainInformationAboutTheCreator()
     {
         _response!.Content.Result!.CreatedBy.Should().BeNull();
         _response.Content.Result!.CreatedByDevice.Should().BeNull();
     }
 
-    [Then(@"the Challenge contains information about the creator")]
+    [Then("the Challenge contains information about the creator")]
     public void ThenTheChallengeContainsInformationAboutTheCreator()
     {
         _response!.Content.Result!.CreatedBy.Should().NotBeNull();

@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
@@ -14,7 +14,6 @@ public class RelationshipsRepository : IRelationshipsRepository
         _dbContext = dbContext;
     }
 
-#nullable enable
     public Task<RelationshipId?> GetIdOfRelationshipBetweenSenderAndRecipient(IdentityAddress sender, IdentityAddress recipient)
     {
         return _dbContext.Relationships
@@ -23,5 +22,4 @@ public class RelationshipsRepository : IRelationshipsRepository
             .Select(r => r.Id)
             .FirstOrDefaultAsync();
     }
-#nullable disable
 }

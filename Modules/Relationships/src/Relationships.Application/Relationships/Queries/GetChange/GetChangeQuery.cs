@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Application.Relationships.DTOs;
+using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Domain.Ids;
 using MediatR;
 
@@ -6,5 +6,5 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Queries.GetCh
 
 public class GetChangeQuery : IRequest<RelationshipChangeDTO>
 {
-    public RelationshipChangeId Id { get; set; }
+    public required RelationshipChangeId Id { get; set; }
 }

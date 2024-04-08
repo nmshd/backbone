@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.ValueConverters;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database;
@@ -14,9 +14,9 @@ public class MessagesDbContext : AbstractDbContextBase
 
     public MessagesDbContext(DbContextOptions<MessagesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
 
-    public virtual DbSet<Message> Messages { get; set; }
-    public virtual DbSet<RecipientInformation> RecipientInformation { get; set; }
-    public virtual DbSet<Relationship> Relationships { get; set; }
+    public virtual DbSet<Message> Messages { get; set; } = null!;
+    public virtual DbSet<RecipientInformation> RecipientInformation { get; set; } = null!;
+    public virtual DbSet<Relationship> Relationships { get; set; } = null!;
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

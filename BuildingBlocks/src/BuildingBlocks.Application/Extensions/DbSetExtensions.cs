@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Enmeshed.BuildingBlocks.Application.Extensions;
+namespace Backbone.BuildingBlocks.Application.Extensions;
 
 public static class DbSetExtensions
 {
@@ -47,7 +47,7 @@ public static class DbSetExtensions
             if (entityNavigations.Count == 0)
             {
                 if (stack.Count > 0)
-                    yield return string.Join(".", stack.Reverse().Select(e => e.Current!.Name));
+                    yield return string.Join(".", stack.Reverse().Select(e => e.Current.Name));
             }
             else
             {
@@ -69,7 +69,7 @@ public static class DbSetExtensions
             if (stack.Count == 0)
                 break;
 
-            entityType = stack.Peek().Current!.TargetEntityType;
+            entityType = stack.Peek().Current.TargetEntityType;
         }
     }
 }

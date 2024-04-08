@@ -1,13 +1,13 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Enmeshed.BuildingBlocks.API.Extensions;
+namespace Backbone.BuildingBlocks.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
@@ -24,7 +24,7 @@ public static class ServiceCollectionExtensions
                 break;
             case "Postgres":
                 services.AddHealthChecks().AddNpgSql(
-                    npgsqlConnectionString: connectionString,
+                    connectionString: connectionString,
                     name: name);
                 break;
             default:
@@ -63,6 +63,10 @@ public static class ServiceCollectionExtensions
                 options.Password.RequireNonAlphanumeric = false;
 
                 options.User.AllowedUserNameCharacters += " ";
+
+                options.Lockout.AllowedForNewUsers = true;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(1);
+                options.Lockout.MaxFailedAccessAttempts = 3;
             }
             else
             {
@@ -71,6 +75,10 @@ public static class ServiceCollectionExtensions
                 options.Password.RequireLowercase = true;
                 options.Password.RequireDigit = true;
                 options.Password.RequireNonAlphanumeric = true;
+
+                options.Lockout.AllowedForNewUsers = true;
+                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(10);
+                options.Lockout.MaxFailedAccessAttempts = 3;
             }
         })
         .AddEntityFrameworkStores<DevicesDbContext>()

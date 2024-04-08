@@ -1,17 +1,14 @@
-﻿using Backbone.Modules.Synchronization.Application.AutoMapper;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
-using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.BuildingBlocks.Application.Pagination;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.UnitTestTools.TestDoubles.Fakes;
+using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
-using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Queries.GetDatawalletModifications;
@@ -364,8 +361,6 @@ public class HandlerTests
         var userContext = A.Fake<IUserContext>();
         A.CallTo(() => userContext.GetAddress()).Returns(ACTIVE_IDENTITY);
 
-        var blobOptions = Options.Create(new BlobOptions { RootFolder = "not-relevant" });
-
-        return new Handler(_actContext, AutoMapperProfile.CreateMapper(), userContext, A.Fake<IBlobStorage>(), blobOptions);
+        return new Handler(_actContext, AutoMapperProfile.CreateMapper(), userContext);
     }
 }

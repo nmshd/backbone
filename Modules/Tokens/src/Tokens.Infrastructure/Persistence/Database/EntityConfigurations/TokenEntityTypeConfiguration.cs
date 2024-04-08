@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,8 +8,6 @@ public class TokenEntityTypeConfiguration : IEntityTypeConfiguration<Token>
 {
     public void Configure(EntityTypeBuilder<Token> builder)
     {
-        builder.HasIndex(r => r.CreatedBy);
-
-        builder.Ignore(a => a.Content);
+        builder.Property(r => r.Content).IsRequired(false);
     }
 }

@@ -1,6 +1,7 @@
-﻿using System.Text.RegularExpressions;
+using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
 
-namespace Enmeshed.Tooling.Extensions;
+namespace Backbone.Tooling.Extensions;
 
 public static class StringExtensions
 {
@@ -9,7 +10,7 @@ public static class StringExtensions
         return @string == string.Empty;
     }
 
-    public static bool IsNullOrEmpty(this string? @string)
+    public static bool IsNullOrEmpty([NotNullWhen(false)] this string? @string)
     {
         return string.IsNullOrEmpty(@string);
     }

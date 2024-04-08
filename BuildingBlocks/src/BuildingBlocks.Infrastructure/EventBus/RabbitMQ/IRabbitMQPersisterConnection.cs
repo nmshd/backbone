@@ -1,6 +1,6 @@
-﻿using RabbitMQ.Client;
+using RabbitMQ.Client;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
+namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
 public interface IRabbitMqPersistentConnection
     : IDisposable

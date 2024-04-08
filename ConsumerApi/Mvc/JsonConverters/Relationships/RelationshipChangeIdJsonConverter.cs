@@ -1,9 +1,9 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Relationships.Domain.Ids;
-using Enmeshed.BuildingBlocks.Domain;
 
-namespace ConsumerApi.Mvc.JsonConverters.Relationships;
+namespace Backbone.ConsumerApi.Mvc.JsonConverters.Relationships;
 
 public class RelationshipChangeIdJsonConverter : JsonConverter<RelationshipChangeId>
 {
@@ -15,8 +15,7 @@ public class RelationshipChangeIdJsonConverter : JsonConverter<RelationshipChang
     public override RelationshipChangeId Read(ref Utf8JsonReader reader, Type typeToConvert,
         JsonSerializerOptions options)
     {
-        var id = reader.GetString();
-
+        var id = reader.GetString() ?? throw new JsonException("The id cannot be null.");
         try
         {
             return RelationshipChangeId.Parse(id);

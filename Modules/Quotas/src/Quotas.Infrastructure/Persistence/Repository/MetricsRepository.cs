@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 
@@ -10,15 +10,15 @@ public class MetricsRepository : IMetricsRepository
 
     public MetricsRepository()
     {
-        _metrics = new List<Metric>
-        {
+        _metrics =
+        [
             new(MetricKey.NumberOfSentMessages, "Number of Sent Messages"),
             new(MetricKey.NumberOfRelationships, "Number of Relationships"),
             new(MetricKey.NumberOfRelationshipTemplates, "Number of Relationship Templates"),
             new(MetricKey.NumberOfFiles, "Number of Files"),
             new(MetricKey.NumberOfTokens, "Number of Tokens"),
             new(MetricKey.UsedFileStorageSpace, "File Storage Capacity (in Megabytes)")
-        };
+        ];
     }
 
     public Task<Metric> Find(MetricKey key, CancellationToken cancellationToken, bool track = false)

@@ -1,10 +1,10 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
 using OpenIddict.Core;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
@@ -33,7 +33,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return oAuthClients;
     }
 
-    public async Task<OAuthClient> Find(string clientId, CancellationToken cancellationToken, bool track = false)
+    public async Task<OAuthClient?> Find(string clientId, CancellationToken cancellationToken, bool track = false)
     {
         if (_trackedApplications.TryGetValue(clientId, out var trackedApplication))
         {
@@ -62,6 +62,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
             DisplayName = client.DisplayName,
             DefaultTier = client.DefaultTier,
             CreatedAt = client.CreatedAt,
+            MaxIdentities = client.MaxIdentities,
             Permissions = GetPermissions()
         };
 
@@ -137,7 +138,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         }
     }
 
-    private void Track(CustomOpenIddictEntityFrameworkCoreApplication application)
+    private void Track(CustomOpenIddictEntityFrameworkCoreApplication? application)
     {
         if (application != null)
         {

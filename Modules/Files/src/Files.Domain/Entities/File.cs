@@ -1,14 +1,26 @@
-﻿using System.Linq.Expressions;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
+using System.Linq.Expressions;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Files.Domain.Entities;
 
 public class File
 {
-#pragma warning disable CS8618
-    private File() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private File()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        CreatedBy = null!;
+        CreatedByDevice = null!;
+        ModifiedBy = null!;
+        ModifiedByDevice = null!;
+        Owner = null!;
+        OwnerSignature = null!;
+        CipherHash = null!;
+        Content = null!;
+        EncryptedProperties = null!;
+    }
 
     public File(IdentityAddress createdBy, DeviceId createdByDevice, IdentityAddress owner, byte[] ownerSignature, byte[] cipherHash, byte[] content, long cipherSize, DateTime expiresAt, byte[] encryptedProperties)
     {
@@ -45,7 +57,7 @@ public class File
     public IdentityAddress? DeletedBy { get; set; }
     public DeviceId? DeletedByDevice { get; set; }
 
-    public IdentityAddress? Owner { get; set; }
+    public IdentityAddress Owner { get; set; }
     public byte[] OwnerSignature { get; set; }
 
     public long CipherSize { get; set; }

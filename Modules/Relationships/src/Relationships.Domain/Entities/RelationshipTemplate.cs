@@ -1,16 +1,21 @@
-﻿using Backbone.Modules.Relationships.Domain.Errors;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
-using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Entities;
 
 public class RelationshipTemplate
 {
-#pragma warning disable CS8618
-    private RelationshipTemplate() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private RelationshipTemplate()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        CreatedBy = null!;
+        CreatedByDevice = null!;
+    }
 
     public RelationshipTemplate(IdentityAddress createdBy, DeviceId createdByDevice, int? maxNumberOfAllocations, DateTime? expiresAt, byte[] content)
     {
@@ -37,7 +42,7 @@ public class RelationshipTemplate
     public DateTime CreatedAt { get; set; }
     public DateTime? DeletedAt { get; set; }
 
-    public List<RelationshipTemplateAllocation> Allocations { get; set; } = new();
+    public List<RelationshipTemplateAllocation> Allocations { get; set; } = [];
 
     public void AllocateFor(IdentityAddress identity, DeviceId device)
     {

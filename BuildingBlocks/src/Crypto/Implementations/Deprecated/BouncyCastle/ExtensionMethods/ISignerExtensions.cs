@@ -1,7 +1,7 @@
-﻿using Org.BouncyCastle.Crypto;
+using Org.BouncyCastle.Crypto;
 using Org.BouncyCastle.Crypto.Parameters;
 
-namespace Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle.ExtensionMethods;
+namespace Backbone.Crypto.Implementations.Deprecated.BouncyCastle.ExtensionMethods;
 
 // ReSharper disable once InconsistentNaming
 internal static class ISignerExtensions

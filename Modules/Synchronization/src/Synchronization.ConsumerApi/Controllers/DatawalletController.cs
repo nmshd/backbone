@@ -1,19 +1,19 @@
-﻿using Backbone.Modules.Synchronization.Application;
+using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Mvc;
+using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Synchronization.Application;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetDatawallet;
 using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
-using Enmeshed.BuildingBlocks.API;
-using Enmeshed.BuildingBlocks.API.Mvc;
-using Enmeshed.BuildingBlocks.API.Mvc.ControllerAttributes;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Pagination;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using ApplicationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
+using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Synchronization.ConsumerApi.Controllers;
 
@@ -22,7 +22,6 @@ namespace Backbone.Modules.Synchronization.ConsumerApi.Controllers;
 public class DatawalletController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;
-
 
     public DatawalletController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
     {
@@ -42,7 +41,9 @@ public class DatawalletController : ApiControllerBase
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetModificationsResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetModifications([FromQuery] PaginationFilter paginationFilter,
         [FromQuery] int? localIndex,
-        [FromHeader(Name = "X-Supported-Datawallet-Version")] ushort supportedDatawalletVersion, CancellationToken cancellationToken)
+        [FromHeader(Name = "X-Supported-Datawallet-Version")]
+        ushort supportedDatawalletVersion,
+        CancellationToken cancellationToken)
     {
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
             throw new ApplicationException(
@@ -61,7 +62,8 @@ public class DatawalletController : ApiControllerBase
         StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> PushModifications(PushDatawalletModificationsRequestBody request,
-        [FromHeader(Name = "X-Supported-Datawallet-Version")] ushort supportedDatawalletVersion, CancellationToken cancellationToken)
+        [FromHeader(Name = "X-Supported-Datawallet-Version")]
+        ushort supportedDatawalletVersion, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new PushDatawalletModificationsCommand(request.Modifications,
             request.LocalIndex, supportedDatawalletVersion), cancellationToken);
@@ -71,6 +73,6 @@ public class DatawalletController : ApiControllerBase
 
 public class PushDatawalletModificationsRequestBody
 {
-    public long? LocalIndex { get; set; }
-    public PushDatawalletModificationItem[] Modifications { get; set; }
+    public required long LocalIndex { get; set; }
+    public required PushDatawalletModificationItem[] Modifications { get; set; }
 }

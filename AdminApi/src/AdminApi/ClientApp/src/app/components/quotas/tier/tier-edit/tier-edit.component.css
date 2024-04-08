@@ -1,0 +1,140 @@
+.action-buttons {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.action-buttons button {
+    margin: 5px;
+}
+
+.disabled-container {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    position: absolute;
+    margin-top: -60px;
+    width: 100%;
+    height: 100%;
+}
+
+.form-card {
+    margin-top: 60px;
+    min-height: 150px;
+}
+
+.card-header {
+    border-radius: 3px;
+    padding: 15px;
+    background-color: #17428d;
+    position: relative;
+    z-index: 1;
+    margin: 15px 15px -50px 15px;
+}
+
+.header-title {
+    color: #fff;
+    margin-bottom: 0px;
+}
+
+.header-description {
+    color: #fff;
+}
+
+.form-details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    min-width: 150px;
+    max-width: 500px;
+    width: 100%;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.status-button {
+    pointer-events: none !important;
+}
+
+.tier-accordion {
+    margin: 0px 0px 0px 5px !important;
+}
+
+.expansion-panel-header {
+    background: #17428d !important;
+}
+
+.expansion-panel-header:hover {
+    background: #11337a !important;
+}
+.expansion-panel-header.mat-expansion-panel-header.mat-expanded {
+    border-radius: 4px 4px 0px 0px;
+}
+
+.panel-header-title {
+    color: white !important;
+}
+
+.panel-header-desc {
+    color: rgba(255, 255, 255, 0.54) !important;
+}
+
+:host ::ng-deep .expansion-panel-header > .mat-expansion-indicator::after {
+    color: white !important;
+}
+
+.mat-column-metricName,
+.mat-column-max,
+.mat-column-period {
+    width: 25%;
+    word-break: break-all;
+}
+
+.no-data {
+    padding: 25px;
+}
+
+@media screen and (max-width: 960px) {
+    .mat-mdc-table .mat-mdc-header-row {
+        display: none;
+    }
+
+    .mat-mdc-table .mat-mdc-row {
+        display: flex;
+        flex-wrap: wrap;
+        height: auto;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .mat-mdc-table .mat-mdc-cell {
+        width: 100%;
+        border-bottom: 0px solid #ddd;
+        font-size: 1em;
+        min-height: 30px;
+        margin-bottom: 4%;
+        word-break: break-all;
+        white-space: pre-wrap;
+    }
+
+    .mat-mdc-table .mat-mdc-cell:before {
+        content: attr(data-label);
+        float: left;
+        font-weight: 500;
+    }
+
+    .mat-mdc-table .mat-mdc-cell:first-child {
+        margin-top: 25px;
+    }
+
+    .mat-mdc-table .mat-mdc-row:last-child {
+        border-bottom: 0px;
+    }
+}

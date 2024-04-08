@@ -1,17 +1,17 @@
-﻿using AutoMapper;
+using AutoMapper;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 
 namespace Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 
 public class ExternalEventDTO : IHaveCustomMapping
 {
-    public ExternalEventId Id { get; set; }
-    public string Type { get; set; }
-    public long Index { get; set; }
-    public DateTime CreatedAt { get; set; }
-    public byte SyncErrorCount { get; set; }
-    public object Payload { get; set; }
+    public required ExternalEventId Id { get; set; }
+    public required string Type { get; set; }
+    public required long Index { get; set; }
+    public required DateTime CreatedAt { get; set; }
+    public required byte SyncErrorCount { get; set; }
+    public required object Payload { get; set; }
 
     public void CreateMappings(Profile configuration)
     {

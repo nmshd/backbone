@@ -1,4 +1,4 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 
 namespace Backbone.Modules.Messages.Application;
 

@@ -17,7 +17,7 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.2")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -41,6 +41,7 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.Property<string>("RelationshipTemplateId")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
@@ -58,13 +59,9 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedAt");
-
                     b.HasIndex("From");
 
                     b.HasIndex("RelationshipTemplateId");
-
-                    b.HasIndex("Status");
 
                     b.HasIndex("To");
 
@@ -82,7 +79,8 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(34)
+                        .HasColumnType("character varying(34)");
 
                     b.Property<string>("RelationshipId")
                         .IsRequired()
@@ -99,13 +97,7 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedAt");
-
                     b.HasIndex("RelationshipId");
-
-                    b.HasIndex("Status");
-
-                    b.HasIndex("Type");
 
                     b.ToTable("RelationshipChanges", (string)null);
 
@@ -119,6 +111,10 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
+
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("bytea")
+                        .HasColumnName("Req_Content");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -142,12 +138,6 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedAt");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("CreatedByDevice");
-
                     b.ToTable("RelationshipChanges", (string)null);
                 });
 
@@ -156,6 +146,10 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .HasColumnType("character varying(20)");
+
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("bytea")
+                        .HasColumnName("Res_Content");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -179,11 +173,10 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedAt");
+                    b.HasIndex("CreatedAt", "CreatedBy", "CreatedByDevice")
+                        .HasAnnotation("SqlServer:Include", new[] { "Content" });
 
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("CreatedByDevice");
+                    NpgsqlIndexBuilderExtensions.IncludeProperties(b.HasIndex("CreatedAt", "CreatedBy", "CreatedByDevice"), new[] { "Content" });
 
                     b.ToTable("RelationshipChanges", (string)null);
                 });
@@ -195,6 +188,9 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
+
+                    b.Property<byte[]>("Content")
+                        .HasColumnType("bytea");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -224,31 +220,26 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("DeletedAt");
-
-                    b.HasIndex("ExpiresAt");
-
                     b.ToTable("RelationshipTemplates");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplateAllocation", b =>
                 {
-                    b.Property<string>("RelationshipTemplateId")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("character(20)")
-                        .IsFixedLength();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("AllocatedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("AllocatedBy")
+                        .IsRequired()
                         .HasMaxLength(36)
                         .IsUnicode(false)
                         .HasColumnType("character(36)")
                         .IsFixedLength();
-
-                    b.Property<DateTime>("AllocatedAt")
-                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("AllocatedByDevice")
                         .IsRequired()
@@ -257,7 +248,16 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
-                    b.HasKey("RelationshipTemplateId", "AllocatedBy");
+                    b.Property<string>("RelationshipTemplateId")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RelationshipTemplateId", "AllocatedBy");
 
                     b.ToTable("RelationshipTemplateAllocations", (string)null);
                 });
@@ -282,9 +282,13 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.Relationship", b =>
                 {
-                    b.HasOne("Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplate", null)
+                    b.HasOne("Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplate", "RelationshipTemplate")
                         .WithMany("Relationships")
-                        .HasForeignKey("RelationshipTemplateId");
+                        .HasForeignKey("RelationshipTemplateId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("RelationshipTemplate");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipChange", b =>

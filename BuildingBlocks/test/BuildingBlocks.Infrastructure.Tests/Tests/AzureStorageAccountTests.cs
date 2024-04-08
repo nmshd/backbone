@@ -1,12 +1,12 @@
-﻿using System.Diagnostics;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
+using System.Diagnostics;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.Tests;
+namespace Backbone.BuildingBlocks.Infrastructure.Tests.Tests;
 
 [Collection("AzureBlobStorageTests")]
 public class AzureStorageAccountTests
@@ -38,7 +38,7 @@ public class AzureStorageAccountTests
 
     private static void CloseAzuriteContainer()
     {
-        var processInfo = new ProcessStartInfo("docker", $"stop azurite-test-container")
+        var processInfo = new ProcessStartInfo("docker", "stop azurite-test-container")
         {
             CreateNoWindow = true,
             UseShellExecute = false,
@@ -71,7 +71,7 @@ public class AzureStorageAccountTests
         });
 
         var serviceProvider = services.BuildServiceProvider();
-        return serviceProvider.GetService<IBlobStorage>();
+        return serviceProvider.GetRequiredService<IBlobStorage>();
     }
 
     [Fact(Skip = "Fails because emulator container can't be started")]
@@ -79,7 +79,7 @@ public class AzureStorageAccountTests
     {
         var azureBlobStorage = ProvisionAzureStorageTests();
 
-        var addBlobName = "AzureSaveAsyncAndFindAsync";
+        const string addBlobName = "AzureSaveAsyncAndFindAsync";
         var addBlobContent = "AzureSaveAsyncAndFindAsync"u8.ToArray();
 
         azureBlobStorage.Add(CONTAINER_NAME, addBlobName, addBlobContent);

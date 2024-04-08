@@ -1,7 +1,7 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Http;
 
-namespace Enmeshed.BuildingBlocks.API.Mvc.Middleware;
+namespace Backbone.BuildingBlocks.API.Mvc.Middleware;
 
 public class ResponseDurationMiddleware
 {

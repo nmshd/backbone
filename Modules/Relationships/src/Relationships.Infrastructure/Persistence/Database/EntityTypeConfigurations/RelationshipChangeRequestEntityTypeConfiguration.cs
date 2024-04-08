@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,12 +10,6 @@ public class RelationshipChangeRequestEntityTypeConfiguration : IEntityTypeConfi
     {
         builder.ToTable("RelationshipChanges");
 
-        builder.Ignore(x => x.Content);
-
-        builder.HasIndex(x => x.CreatedAt);
-        builder.HasIndex(x => x.CreatedBy);
-        builder.HasIndex(x => x.CreatedByDevice);
-
         builder.Property(x => x.CreatedBy)
             .HasColumnName("Req_CreatedBy");
 
@@ -24,5 +18,8 @@ public class RelationshipChangeRequestEntityTypeConfiguration : IEntityTypeConfi
 
         builder.Property(x => x.CreatedAt)
             .HasColumnName("Req_CreatedAt");
+
+        builder.Property(x => x.Content)
+            .HasColumnName("Req_Content");
     }
 }

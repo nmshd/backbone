@@ -1,12 +1,12 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
 namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
 
 public class RelationshipChangeCompletedIntegrationEvent : IntegrationEvent
 {
-    public string ChangeId { get; set; }
-    public string RelationshipId { get; set; }
-    public string ChangeCreatedBy { get; set; }
-    public string ChangeRecipient { get; set; }
-    public string ChangeResult { get; set; }
+    public required string ChangeId { get; set; }
+    public required string RelationshipId { get; set; }
+    public required string ChangeCreatedBy { get; set; }
+    public required string ChangeRecipient { get; set; }
+    public required string ChangeResult { get; set; }
 }

@@ -1,6 +1,6 @@
-﻿namespace Backbone.Modules.Files.Application.Files.Queries.GetFileContent;
+namespace Backbone.Modules.Files.Application.Files.Queries.GetFileContent;
 
 public class GetFileContentResponse
 {
-    public byte[] FileContent { get; set; }
+    public required byte[] FileContent { get; set; }
 }

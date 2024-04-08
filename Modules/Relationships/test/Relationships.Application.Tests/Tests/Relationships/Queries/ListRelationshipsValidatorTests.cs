@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
 using Backbone.Modules.Relationships.Domain.Ids;
-using Enmeshed.BuildingBlocks.Application.Pagination;
 using FluentAssertions;
 using FluentValidation.TestHelper;
 using Xunit;

@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Messages.Application.Messages.DTOs;
-using Enmeshed.BuildingBlocks.Application.Pagination;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Messages.Application.Messages.DTOs;
 
 namespace Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
 

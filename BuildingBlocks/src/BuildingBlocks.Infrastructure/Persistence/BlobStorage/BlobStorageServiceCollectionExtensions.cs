@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
-using Enmeshed.Tooling.Extensions;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
+using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
+namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 
 public static class BlobStorageServiceCollectionExtensions
 {
@@ -23,7 +23,7 @@ public static class BlobStorageServiceCollectionExtensions
         if (options.CloudProvider == AZURE_CLOUD_PROVIDER)
             services.AddAzureStorageAccount(azureStorageAccountOptions =>
             {
-                azureStorageAccountOptions.ConnectionString = options.ConnectionInfo;
+                azureStorageAccountOptions.ConnectionString = options.ConnectionInfo!;
             });
         else if (options.CloudProvider == GOOGLE_CLOUD_PROVIDER)
             services.AddGoogleCloudStorage(googleCloudStorageOptions =>
@@ -31,7 +31,7 @@ public static class BlobStorageServiceCollectionExtensions
                 googleCloudStorageOptions.GcpAuthJson = options.ConnectionInfo;
                 googleCloudStorageOptions.BucketName = options.Container;
             });
-        else if (options.CloudProvider.IsEmpty())
+        else if (options.CloudProvider.IsNullOrEmpty())
             throw new NotSupportedException("No cloud provider was specified.");
         else
             throw new NotSupportedException(
@@ -41,7 +41,9 @@ public static class BlobStorageServiceCollectionExtensions
 
 public class BlobStorageOptions
 {
-    public string ConnectionInfo { get; set; } = string.Empty;
-    public string Container { get; set; } = string.Empty;
-    public string CloudProvider { get; set; } = string.Empty;
+    public string CloudProvider { get; set; } = null!;
+
+    public string Container { get; set; } = null!;
+
+    public string? ConnectionInfo { get; set; } = null;
 }

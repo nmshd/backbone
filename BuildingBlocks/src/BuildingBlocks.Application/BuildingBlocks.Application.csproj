@@ -1,25 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<RootNamespace>Enmeshed.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-	</PropertyGroup>
-
 	<ItemGroup>
-		<PackageReference Include="ByteSize" Version="2.1.1" />
-		<PackageReference Include="FluentValidation" Version="11.8.0" />
-		<PackageReference Include="MediatR" Version="12.1.1" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+		<PackageReference Include="FluentValidation" Version="11.9.0" />
+		<PackageReference Include="MediatR" Version="12.2.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3"/>
 	</ItemGroup>
 
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\..\Common\src\Common.Infrastructure\Common.Infrastructure.csproj" />
 		<ProjectReference Include="..\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
-		<ProjectReference Include="..\Tooling\Tooling.csproj" />
 	</ItemGroup>
 
 </Project>

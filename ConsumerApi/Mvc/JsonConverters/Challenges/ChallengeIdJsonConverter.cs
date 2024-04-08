@@ -1,9 +1,9 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Challenges.Domain.Ids;
-using Enmeshed.BuildingBlocks.Domain;
 
-namespace ConsumerApi.Mvc.JsonConverters.Challenges;
+namespace Backbone.ConsumerApi.Mvc.JsonConverters.Challenges;
 
 public class ChallengeIdJsonConverter : JsonConverter<ChallengeId>
 {
@@ -14,8 +14,7 @@ public class ChallengeIdJsonConverter : JsonConverter<ChallengeId>
 
     public override ChallengeId Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var id = reader.GetString();
-
+        var id = reader.GetString() ?? throw new JsonException("The id cannot be null.");
         try
         {
             return ChallengeId.Parse(id);

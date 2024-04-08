@@ -1,8 +1,7 @@
-﻿using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
@@ -23,11 +22,6 @@ public static class MessagesQueryableExtensions
     public static IQueryable<Message> WithIdsIn(this IQueryable<Message> query, IEnumerable<MessageId> ids)
     {
         return query.Where(m => ids.Contains(m.Id));
-    }
-
-    public static IQueryable<Message> DoNotSendBeforePropertyIsNotInTheFuture(this IQueryable<Message> query)
-    {
-        return query.Where(m => !m.DoNotSendBefore.HasValue || m.DoNotSendBefore <= SystemTime.UtcNow);
     }
 
     public static IQueryable<Message> WithASpecificRecipientWhoDidNotReceiveTheMessage(this IQueryable<Message> query, IdentityAddress recipient)

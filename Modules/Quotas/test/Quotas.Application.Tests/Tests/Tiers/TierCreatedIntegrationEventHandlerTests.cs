@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
+using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using FakeItEasy;
@@ -14,7 +14,7 @@ public class TierCreatedIntegrationEventHandlerTests
     {
         // Arrange
         var id = new TierId("TIRFxoL0U24aUqZDSAWc");
-        var name = "Basic";
+        const string name = "Basic";
         var mockTierRepository = new AddMockTiersRepository();
         var handler = CreateHandler(mockTierRepository);
 
@@ -23,7 +23,7 @@ public class TierCreatedIntegrationEventHandlerTests
 
         // Assert
         mockTierRepository.WasCalled.Should().BeTrue();
-        mockTierRepository.WasCalledWith.Id.Should().Be(id);
+        mockTierRepository.WasCalledWith!.Id.Should().Be(id);
         mockTierRepository.WasCalledWith.Name.Should().Be(name);
     }
 

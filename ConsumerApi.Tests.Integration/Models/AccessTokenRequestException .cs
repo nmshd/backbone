@@ -1,6 +1,6 @@
-﻿using System.Net;
+using System.Net;
 
-namespace ConsumerApi.Tests.Integration.Models;
+namespace Backbone.ConsumerApi.Tests.Integration.Models;
 
 public class AccessTokenRequestException : Exception
 {

@@ -1,7 +1,7 @@
-﻿using Azure.Messaging.ServiceBus;
+using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
+namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
 public interface IServiceBusPersisterConnection : IDisposable
 {

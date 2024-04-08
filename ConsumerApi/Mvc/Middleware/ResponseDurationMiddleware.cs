@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
+using System.Diagnostics;
 
-namespace ConsumerApi.Mvc.Middleware;
+namespace Backbone.ConsumerApi.Mvc.Middleware;
 
 public class ResponseDurationMiddleware
 {

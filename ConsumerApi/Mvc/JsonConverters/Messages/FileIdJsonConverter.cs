@@ -1,9 +1,9 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Messages.Domain.Ids;
-using Enmeshed.BuildingBlocks.Domain;
 
-namespace ConsumerApi.Mvc.JsonConverters.Messages;
+namespace Backbone.ConsumerApi.Mvc.JsonConverters.Messages;
 
 public class FileIdJsonConverter : JsonConverter<FileId>
 {
@@ -14,8 +14,7 @@ public class FileIdJsonConverter : JsonConverter<FileId>
 
     public override FileId Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var id = reader.GetString();
-
+        var id = reader.GetString() ?? throw new JsonException("The id cannot be null.");
         try
         {
             return FileId.Parse(id);

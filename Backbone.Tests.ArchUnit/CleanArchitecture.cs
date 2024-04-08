@@ -3,7 +3,7 @@ using ArchUnitNET.Domain;
 using ArchUnitNET.xUnit;
 using static ArchUnitNET.Fluent.ArchRuleDefinition;
 
-namespace Backbone.Tests.ArchUnit;
+namespace Backbone.Backbone.Tests.ArchUnit;
 
 public class CleanArchitecture
 {

@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.BuildingBlocks.Application.Pagination;
+namespace Backbone.BuildingBlocks.Application.Pagination;
 
 public class PaginationFilter
 {

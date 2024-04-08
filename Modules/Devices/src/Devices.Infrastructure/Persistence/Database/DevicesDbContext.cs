@@ -1,15 +1,16 @@
-﻿using System.Data;
+using System.Data;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -20,7 +21,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
 public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbContext
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly IServiceProvider? _serviceProvider;
     private const int MAX_RETRY_COUNT = 50000;
     private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
     private const string SQLSERVER = "Microsoft.EntityFrameworkCore.SqlServer";
@@ -37,15 +38,15 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         _serviceProvider = serviceProvider;
     }
 
-    public DbSet<Identity> Identities { get; set; }
+    public DbSet<Identity> Identities { get; set; } = null!;
 
-    public DbSet<Device> Devices { get; set; }
+    public DbSet<Device> Devices { get; set; } = null!;
 
-    public DbSet<Challenge> Challenges { get; set; }
+    public DbSet<Challenge> Challenges { get; set; } = null!;
 
-    public DbSet<Tier> Tiers { get; set; }
+    public DbSet<Tier> Tiers { get; set; } = null!;
 
-    public DbSet<PnsRegistration> PnsRegistrations { get; set; }
+    public DbSet<PnsRegistration> PnsRegistrations { get; set; } = null!;
 
     public IQueryable<T> SetReadOnly<T>() where T : class
     {
@@ -60,17 +61,17 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
             optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
     }
 
-    public async Task RunInTransaction(Func<Task> action, List<int> errorNumbersToRetry,
+    public async Task RunInTransaction(Func<Task> action, List<int>? errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-        ExecutionStrategy? executionStrategy;
+        ExecutionStrategy executionStrategy;
         switch (Database.ProviderName)
         {
             case SQLSERVER:
                 executionStrategy = new SqlServerRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorNumbersToRetry);
                 break;
             case POSTGRES:
-                var errorCodesToRetry = errorNumbersToRetry != null ? errorNumbersToRetry.ConvertAll(x => x.ToString()) : new List<string>();
+                var errorCodesToRetry = errorNumbersToRetry != null ? errorNumbersToRetry.ConvertAll(x => x.ToString()) : [];
                 executionStrategy = new NpgsqlRetryingExecutionStrategy(this, MAX_RETRY_COUNT, MAX_RETRY_DELAY, errorCodesToRetry);
                 break;
             default:
@@ -90,10 +91,11 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         await RunInTransaction(action, null, isolationLevel);
     }
 
-    public async Task<T> RunInTransaction<T>(Func<Task<T>> action, List<int> errorNumbersToRetry,
+    public async Task<T> RunInTransaction<T>(Func<Task<T>> action, List<int>? errorNumbersToRetry,
         IsolationLevel isolationLevel = IsolationLevel.ReadCommitted)
     {
-        var response = default(T);
+        // the '!' is safe here because the default value is only returned after the action is executed, which is setting the response
+        var response = default(T)!;
 
         await RunInTransaction(async () => { response = await action(); }, errorNumbersToRetry, isolationLevel);
 
@@ -119,16 +121,16 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     {
         var query = PnsRegistrations.FromSqlRaw(
             Database.IsNpgsql()
-                ? $""" 
-                    SELECT "AppId" 
-                    FROM "Devices"."PnsRegistrations" 
-                    WHERE "Handle" LIKE '{platform}%'
-                  """
-                : $""" 
-                    SELECT "AppId" 
-                    FROM [Devices].[PnsRegistrations] 
-                    WHERE Handle LIKE '{platform}%'
-                  """);
+                ? $"""
+                     SELECT "AppId"
+                     FROM "Devices"."PnsRegistrations"
+                     WHERE "Handle" LIKE '{platform}%'
+                   """
+                : $"""
+                     SELECT "AppId"
+                     FROM [Devices].[PnsRegistrations]
+                     WHERE Handle LIKE '{platform}%'
+                   """);
 
         return query
             .Where(x => !supportedAppIds.Contains(x.AppId))
@@ -145,12 +147,18 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
             .HaveMaxLength(IdentityAddress.MAX_LENGTH).HaveConversion<IdentityAddressValueConverter>();
         configurationBuilder.Properties<DeviceId>().AreUnicode(false).AreFixedLength()
             .HaveMaxLength(DeviceId.MAX_LENGTH).HaveConversion<DeviceIdValueConverter>();
+        configurationBuilder.Properties<DevicePushIdentifier>().AreUnicode(false).AreFixedLength()
+            .HaveMaxLength(DevicePushIdentifier.MAX_LENGTH).HaveConversion<DevicePushIdentifierEntityFrameworkValueConverter>();
         configurationBuilder.Properties<Username>().AreUnicode(false).AreFixedLength()
             .HaveMaxLength(Username.MAX_LENGTH).HaveConversion<UsernameValueConverter>();
         configurationBuilder.Properties<TierId>().AreUnicode(false).AreFixedLength()
             .HaveMaxLength(TierId.MAX_LENGTH).HaveConversion<TierIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<TierName>().AreUnicode().AreFixedLength(false)
             .HaveMaxLength(TierName.MAX_LENGTH).HaveConversion<TierNameEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<IdentityDeletionProcessId>().AreUnicode(false).AreFixedLength()
+            .HaveMaxLength(IdentityDeletionProcessId.MAX_LENGTH).HaveConversion<IdentityDeletionProcessIdEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<IdentityDeletionProcessAuditLogEntryId>().AreUnicode(false).AreFixedLength()
+            .HaveMaxLength(IdentityDeletionProcessAuditLogEntryId.MAX_LENGTH).HaveConversion<IdentityDeletionProcessAuditLogEntryIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<PnsHandle>().AreUnicode().AreFixedLength(false)
             .HaveMaxLength(200).HaveConversion<PnsHandleEntityFrameworkValueConverter>();
 

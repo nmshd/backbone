@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -15,6 +15,9 @@ public class CustomOpenIddictEntityFrameworkCoreApplicationEntityTypeConfigurati
 
         builder
             .Property(x => x.CreatedAt);
+
+        builder
+            .Property(x => x.MaxIdentities);
 
         builder
             .HasOne<Tier>().WithMany().HasForeignKey(x => x.DefaultTier)

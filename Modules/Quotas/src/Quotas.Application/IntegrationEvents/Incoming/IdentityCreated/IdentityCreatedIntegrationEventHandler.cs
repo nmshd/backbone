@@ -1,8 +1,9 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
@@ -28,7 +29,7 @@ public class IdentityCreatedIntegrationEventHandler : IIntegrationEventHandler<I
 
         var identity = new Identity(integrationEvent.Address, new TierId(integrationEvent.Tier));
 
-        var tier = await _tiersRepository.Find(identity.TierId, CancellationToken.None, track: true);
+        var tier = await _tiersRepository.Find(identity.TierId, CancellationToken.None, track: true) ?? throw new NotFoundException(nameof(Tier));
 
         foreach (var tierQuotaDefinition in tier.Quotas)
         {

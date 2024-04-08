@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity;
 
-namespace Enmeshed.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
+namespace Backbone.BuildingBlocks.API.AspNetCoreIdentityCustomizations;
 
 public class CustomLookupNormalizer : ILookupNormalizer
 {

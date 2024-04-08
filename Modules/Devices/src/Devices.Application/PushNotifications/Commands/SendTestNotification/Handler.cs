@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTestNotification;
@@ -8,17 +8,17 @@ namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTe
 public class Handler : IRequestHandler<SendTestNotificationCommand, Unit>
 {
     private readonly IdentityAddress _activeIdentity;
-    private readonly IPushService _pushService;
+    private readonly IPushNotificationSender _pushSenderService;
 
-    public Handler(IUserContext userContext, IPushService pushService)
+    public Handler(IUserContext userContext, IPushNotificationSender pushSenderService)
     {
-        _pushService = pushService;
+        _pushSenderService = pushSenderService;
         _activeIdentity = userContext.GetAddress();
     }
 
     public async Task<Unit> Handle(SendTestNotificationCommand request, CancellationToken cancellationToken)
     {
-        await _pushService.SendNotification(_activeIdentity, request.Data, cancellationToken);
+        await _pushSenderService.SendNotification(_activeIdentity, request.Data, cancellationToken);
         return Unit.Value;
     }
 }

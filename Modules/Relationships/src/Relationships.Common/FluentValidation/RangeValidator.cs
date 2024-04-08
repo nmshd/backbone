@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using FluentValidation.Validators;
 
 namespace Backbone.Modules.Relationships.Common.FluentValidation;
@@ -19,9 +19,9 @@ public class RangeValidator<T, TProperty, TRangeContent> : PropertyValidator<T, 
     }
 }
 
-public static class NumberOfBytesValidatorRuleBuilderExtensions
+public static class RangeValidatorRuleBuilderExtensions
 {
-    public static IRuleBuilderOptions<TObject, TProperty> IsValidRange<TObject, TProperty, TRangeContent>(this IRuleBuilder<TObject, TProperty> ruleBuilder) where TProperty : Range<TRangeContent>
+    public static IRuleBuilderOptions<TObject, TProperty> IsValidRange<TObject, TProperty, TRangeContent>(this IRuleBuilder<TObject, TProperty> ruleBuilder) where TProperty : Range<TRangeContent>?
     {
         return ruleBuilder
             .SetValidator(new RangeValidator<TObject, TProperty, TRangeContent>());

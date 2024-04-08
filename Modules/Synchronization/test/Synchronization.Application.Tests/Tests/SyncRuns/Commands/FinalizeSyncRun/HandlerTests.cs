@@ -1,17 +1,14 @@
-﻿using Backbone.Modules.Synchronization.Application.AutoMapper;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
-using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
-using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.FinalizeSyncRun;
@@ -23,7 +20,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
     public HandlerTests()
     {
-        _arrangeContext.SaveEntity(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(1), _activeIdentity));
+        _arrangeContext.SaveEntity(new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(1), _activeIdentity));
     }
 
     [Fact]
@@ -156,7 +153,18 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         var handler = CreateHandler(_activeIdentity, _activeDevice);
 
         // Act
-        var datawalletModifications = new List<PushDatawalletModificationItem> { new() { Type = DatawalletModificationDTO.DatawalletModificationType.Create, Collection = "someArbitraryCollection", EncryptedPayload = new byte[] { 0 }, ObjectIdentifier = "someArbitraryObjectIdentitfier", PayloadCategory = "someArbitraryObjectProperty" } };
+        var datawalletModifications = new List<PushDatawalletModificationItem>
+        {
+            new()
+            {
+                Type = DatawalletModificationDTO.DatawalletModificationType.Create,
+                Collection = "someArbitraryCollection",
+                EncryptedPayload = [0],
+                ObjectIdentifier = "someArbitraryObjectIdentifier",
+                PayloadCategory = "someArbitraryObjectProperty",
+                DatawalletVersion = 1
+            }
+        };
 
         await handler.Handle(new FinalizeExternalEventSyncSyncRunCommand(syncRun.Id, datawalletModifications), CancellationToken.None);
 
@@ -165,7 +173,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
     }
 
     [Fact]
-    public async Task Successful_item_results_dont_delete_sync_run_reference()
+    public async Task Successful_item_results_do_not_delete_sync_run_reference()
     {
         // Arrange
         var syncRun = SyncRunBuilder
@@ -246,14 +254,11 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         A.CallTo(() => userContext.GetAddress()).Returns(activeIdentity);
         A.CallTo(() => userContext.GetDeviceId()).Returns(activeDevice);
 
-        var blobStorage = A.Fake<IBlobStorage>();
-        var blobOptions = Options.Create(new BlobOptions { RootFolder = "not-relevant" });
-
         var mapper = AutoMapperProfile.CreateMapper();
 
         var eventBus = A.Fake<IEventBus>();
 
-        return new Handler(_actContext, blobStorage, blobOptions, userContext, mapper, eventBus);
+        return new Handler(_actContext, userContext, mapper, eventBus);
     }
 
     #endregion

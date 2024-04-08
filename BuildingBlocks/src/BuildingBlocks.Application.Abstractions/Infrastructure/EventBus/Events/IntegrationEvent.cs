@@ -1,6 +1,6 @@
-﻿using Enmeshed.Tooling;
+using Backbone.Tooling;
 
-namespace Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
 public class IntegrationEvent
 {

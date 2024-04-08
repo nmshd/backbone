@@ -1,13 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
-		<Nullable>enable</Nullable>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<RootNamespace>Enmeshed.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-	</PropertyGroup>
-
-	<PropertyGroup>
 		<PackageId>Enmeshed.Crypto</PackageId>
 		<PackageProjectUrl>https://enmeshed.eu</PackageProjectUrl>
 		<PackageTags>Enmeshed</PackageTags>

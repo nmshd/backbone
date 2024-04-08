@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 namespace Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
@@ -8,6 +8,6 @@ public interface IIdentitiesRepository
     Task<IEnumerable<Identity>> FindWithTier(TierId tierId, CancellationToken cancellationToken, bool track = false);
     Task Update(IEnumerable<Identity> identities, CancellationToken cancellationToken);
     Task Update(Identity identity, CancellationToken cancellationToken);
-    Task<Identity> Find(string address, CancellationToken cancellationToken, bool track = false);
+    Task<Identity?> Find(string address, CancellationToken cancellationToken, bool track = false);
     Task<IEnumerable<Identity>> FindByAddresses(IReadOnlyCollection<string> identityAddresses, CancellationToken cancellationToken, bool track = false);
 }

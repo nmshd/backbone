@@ -1,19 +1,11 @@
-﻿using Backbone.Modules.Devices.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
 
 public static class DeviceQueryableExtensions
 {
-    public static async Task<Device> FirstWithId(this IQueryable<Device> query, DeviceId id, CancellationToken cancellationToken)
-    {
-        var device = await query.WithId(id).FirstOrDefaultAsync(cancellationToken);
-
-        return device ?? throw new NotFoundException(nameof(Device));
-    }
-
     public static IQueryable<Device> WithId(this IQueryable<Device> query, DeviceId id)
     {
         return query.Where(d => d.Id == id);

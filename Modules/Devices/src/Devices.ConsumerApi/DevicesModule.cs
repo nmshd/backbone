@@ -1,17 +1,17 @@
-﻿using Backbone.Modules.Devices.Application;
+using Backbone.BuildingBlocks.API;
+using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Crypto.Abstractions;
+using Backbone.Crypto.Implementations;
+using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
-using Enmeshed.BuildingBlocks.API;
-using Enmeshed.BuildingBlocks.API.Extensions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.Crypto.Abstractions;
-using Enmeshed.Crypto.Implementations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using IServiceCollectionExtensions = Backbone.Modules.Devices.Infrastructure.PushNotifications.IServiceCollectionExtensions;
 
 namespace Backbone.Modules.Devices.ConsumerApi;
 
@@ -30,11 +30,9 @@ public class DevicesModule : AbstractModule
 
         services.AddDatabase(options =>
         {
-            options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
             options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
+            options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
         });
-
-        services.AddPushNotifications(parsedConfiguration.Infrastructure.PushNotifications);
 
         services.AddSingleton<ISignatureHelper, SignatureHelper>(_ => SignatureHelper.CreateEd25519WithRawKeyFormat());
 
@@ -49,7 +47,7 @@ public class DevicesModule : AbstractModule
     public override void PostStartupValidation(IServiceProvider serviceProvider)
     {
         var configuration = serviceProvider.GetRequiredService<IOptions<Configuration>>();
-        if (configuration.Value.Infrastructure.PushNotifications.Provider != Infrastructure.PushNotifications.IServiceCollectionExtensions.PROVIDER_DIRECT)
+        if (configuration.Value.Infrastructure.PushNotifications.Provider != IServiceCollectionExtensions.PROVIDER_DIRECT)
             return;
 
         var fcmOptions = serviceProvider.GetRequiredService<IOptions<DirectPnsCommunicationOptions.FcmOptions>>().Value;

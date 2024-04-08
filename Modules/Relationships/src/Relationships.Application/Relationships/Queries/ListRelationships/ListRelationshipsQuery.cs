@@ -1,15 +1,15 @@
-﻿using Backbone.Modules.Relationships.Domain.Ids;
-using Enmeshed.BuildingBlocks.Application.Pagination;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Relationships.Domain.Ids;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
 
 public class ListRelationshipsQuery : IRequest<ListRelationshipsResponse>
 {
-    public ListRelationshipsQuery(PaginationFilter paginationFilter, IEnumerable<RelationshipId> ids)
+    public ListRelationshipsQuery(PaginationFilter paginationFilter, IEnumerable<RelationshipId>? ids)
     {
         PaginationFilter = paginationFilter;
-        Ids = ids == null ? null : new List<RelationshipId>(ids);
+        Ids = ids == null ? [] : ids.ToList();
     }
 
     public PaginationFilter PaginationFilter { get; set; }

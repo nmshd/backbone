@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Domain.Ids;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.ValueConverters;
@@ -7,9 +7,9 @@ public class MessageIdEntityFrameworkValueConverter : ValueConverter<MessageId, 
 {
     public MessageIdEntityFrameworkValueConverter() : this(null) { }
 
-    public MessageIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
+    public MessageIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id == null ? null : id.StringValue,
+            id => id.StringValue,
             value => MessageId.Parse(value),
             mappingHints
         )

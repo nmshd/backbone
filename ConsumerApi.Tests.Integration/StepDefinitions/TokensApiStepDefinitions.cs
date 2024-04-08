@@ -1,19 +1,20 @@
 using System.Net;
-using ConsumerApi.Tests.Integration.API;
-using ConsumerApi.Tests.Integration.Configuration;
-using ConsumerApi.Tests.Integration.Extensions;
-using ConsumerApi.Tests.Integration.Models;
+using Backbone.ConsumerApi.Tests.Integration.API;
+using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.ConsumerApi.Tests.Integration.Models;
+using Backbone.Crypto.Abstractions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using TechTalk.SpecFlow.Assist;
 
-namespace ConsumerApi.Tests.Integration.StepDefinitions;
+namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "POST Token")]
 [Scope(Feature = "GET Token")]
 [Scope(Feature = "GET Tokens")]
-public class TokensApiStepDefinitions : BaseStepDefinitions
+internal class TokensApiStepDefinitions : BaseStepDefinitions
 {
     private readonly TokensApi _tokensApi;
     private string _tokenId;
@@ -26,16 +27,17 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
     private static readonly string TOMORROW_AS_STRING = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
     private static readonly string YESTERDAY_AS_STRING = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
 
-    public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, TokensApi tokensApi) : base(httpConfiguration)
+    public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, TokensApi tokensApi, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) :
+        base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
     {
         _tokensApi = tokensApi;
         _tokenId = string.Empty;
         _peerTokenId = string.Empty;
-        _givenOwnTokens = new List<CreateTokenResponse>();
-        _responseTokens = new List<Token>();
+        _givenOwnTokens = [];
+        _responseTokens = [];
     }
 
-    [Given(@"an own Token t")]
+    [Given("an own Token t")]
     public async Task GivenAnOwnTokenT()
     {
         var createTokenRequest = new CreateTokenRequest
@@ -51,14 +53,14 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         requestConfiguration.ContentType = "application/json";
 
         var response = await _tokensApi.CreateToken(requestConfiguration);
-        response.AssertStatusCodeIsSuccess();
+        response.IsSuccessStatusCode.Should().BeTrue();
 
         var token = response.Content.Result!;
         _tokenId = token.Id;
         _tokenId.Should().NotBeNullOrEmpty();
     }
 
-    [Given(@"a peer Token p")]
+    [Given("a peer Token p")]
     public async Task GivenAPeerTokenP()
     {
         var createTokenRequest = new CreateTokenRequest
@@ -76,14 +78,14 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         requestConfiguration.ContentType = "application/json";
 
         var response = await _tokensApi.CreateToken(requestConfiguration);
-        response.AssertStatusCodeIsSuccess();
+        response.IsSuccessStatusCode.Should().BeTrue();
 
         var token = response.Content.Result!;
         _peerTokenId = token.Id;
         _peerTokenId.Should().NotBeNullOrEmpty();
     }
 
-    [Given(@"the user created multiple Tokens")]
+    [Given("the user created multiple Tokens")]
     public async Task GivenTheUserCreatedMultipleTokens()
     {
         for (var i = 0; i < 2; i++)
@@ -109,13 +111,13 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         }
     }
 
-    [When(@"a GET request is sent to the Tokens endpoint with a list of ids of own Tokens")]
+    [When("a GET request is sent to the Tokens endpoint with a list of ids of own Tokens")]
     public async Task WhenAGETRequestIsSentToTheTokensEndpointWithAListOfIdsOfOwnTokens()
     {
         var tokenIds = _givenOwnTokens.Select(t => t.Id);
 
         _tokensResponse = await _tokensApi.GetTokensByIds(_requestConfiguration, tokenIds);
-        _tokensResponse.AssertHasValue();
+        _tokensResponse.Should().NotBeNull();
 
         var tokens = _tokensResponse.Content.Result!.ToArray();
         tokens.Should().HaveCount(_givenOwnTokens.Count);
@@ -123,7 +125,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         _responseTokens.AddRange(tokens);
     }
 
-    [When(@"a POST request is sent to the Tokens endpoint with")]
+    [When("a POST request is sent to the Tokens endpoint with")]
     public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWith(Table table)
     {
         var requestConfiguration = table.CreateInstance<RequestConfiguration>();
@@ -145,7 +147,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         _createTokenResponse = await _tokensApi.CreateToken(requestConfiguration);
     }
 
-    [When(@"a POST request is sent to the Tokens endpoint with no request content")]
+    [When("a POST request is sent to the Tokens endpoint with no request content")]
     public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWithNoRequestContent()
     {
         _requestConfiguration.Content = null;
@@ -171,7 +173,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         _tokenResponse = await _tokensApi.GetTokenById(_requestConfiguration, id);
     }
 
-    [When(@"a POST request is sent to the Tokens endpoint with '([^']*)', '([^']*)'")]
+    [When("a POST request is sent to the Tokens endpoint with '([^']*)', '([^']*)'")]
     public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWith(string content, string expiresAt)
     {
         var createTokenRequest = new CreateTokenRequest
@@ -201,7 +203,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
         _responseTokens.AddRange(tokens);
     }
 
-    [Then(@"the response contains both Tokens")]
+    [Then("the response contains both Tokens")]
     public void ThenTheResponseOnlyContainsTheOwnToken()
     {
         _responseTokens.Should().HaveCount(2)
@@ -210,7 +212,7 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
     }
 
 
-    [Then(@"the response contains all Tokens with the given ids")]
+    [Then("the response contains all Tokens with the given ids")]
     public void ThenTheResponseContainsAllTokensWithTheGivenIds()
     {
         _responseTokens.Select(t => t.Id)
@@ -219,21 +221,21 @@ public class TokensApiStepDefinitions : BaseStepDefinitions
             .And.BeEquivalentTo(_givenOwnTokens.Select(t => t.Id), options => options.WithoutStrictOrdering());
     }
 
-    [Then(@"the response contains a CreateTokenResponse")]
+    [Then("the response contains a CreateTokenResponse")]
     public void ThenTheResponseContainsACreateTokenResponse()
     {
-        _createTokenResponse!.AssertHasValue();
-        _createTokenResponse!.AssertStatusCodeIsSuccess();
-        _createTokenResponse!.AssertContentTypeIs("application/json");
+        _createTokenResponse!.Should().NotBeNull();
+        _createTokenResponse!.IsSuccessStatusCode.Should().BeTrue();
+        _createTokenResponse!.ContentType.Should().Be("application/json");
         _createTokenResponse!.AssertContentCompliesWithSchema();
     }
 
-    [Then(@"the response contains a Token")]
+    [Then("the response contains a Token")]
     public void ThenTheResponseContainsAToken()
     {
-        _tokenResponse!.AssertHasValue();
-        _tokenResponse!.AssertStatusCodeIsSuccess();
-        _tokenResponse!.AssertContentTypeIs("application/json");
+        _tokenResponse!.Should().NotBeNull();
+        _tokenResponse!.IsSuccessStatusCode.Should().BeTrue();
+        _tokenResponse!.ContentType.Should().Be("application/json");
         _tokenResponse!.AssertContentCompliesWithSchema();
     }
 

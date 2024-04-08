@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Enmeshed.BuildingBlocks.Application.FluentValidation;
+using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using FluentValidation;
 
 namespace Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;

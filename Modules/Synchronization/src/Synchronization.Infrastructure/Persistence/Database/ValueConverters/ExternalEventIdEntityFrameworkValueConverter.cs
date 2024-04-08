@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
@@ -9,9 +9,9 @@ public class ExternalEventIdEntityFrameworkValueConverter : ValueConverter<Exter
 
     public ExternalEventIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id == null ? null : id.StringValue,
+            id => id.StringValue,
             value => ExternalEventId.Parse(value),
-            mappingHints?.With(new ConverterMappingHints(ExternalEventId.MAX_LENGTH))
+            mappingHints.With(new ConverterMappingHints(ExternalEventId.MAX_LENGTH))
         )
     { }
 }

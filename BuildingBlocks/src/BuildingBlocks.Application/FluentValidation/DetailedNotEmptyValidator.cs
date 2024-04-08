@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using FluentValidation;
 
-namespace Enmeshed.BuildingBlocks.Application.FluentValidation;
+namespace Backbone.BuildingBlocks.Application.FluentValidation;
 
 public static class DetailedNotEmptyValidatorRuleBuilderExtensions
 {

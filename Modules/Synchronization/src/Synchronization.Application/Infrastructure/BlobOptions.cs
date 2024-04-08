@@ -1,6 +1,6 @@
-﻿namespace Backbone.Modules.Synchronization.Application.Infrastructure;
+namespace Backbone.Modules.Synchronization.Application.Infrastructure;
 
 public class BlobOptions
 {
-    public string RootFolder { get; set; }
+    public string? RootFolder { get; set; }
 }

@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
@@ -33,8 +33,10 @@ public record ExhaustionDate(DateTime Value) : IComparable<ExhaustionDate>
         return left.Value > right.Value;
     }
 
-    public int CompareTo(ExhaustionDate other)
+    public int CompareTo(ExhaustionDate? other)
     {
+        if (ReferenceEquals(this, other)) return 0;
+        if (ReferenceEquals(null, other)) return 1;
         return Value.CompareTo(other.Value);
     }
 }

@@ -1,11 +1,11 @@
-﻿using System.ComponentModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
-using Enmeshed.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain;
 using SimpleBase;
 
-namespace Enmeshed.DevelopmentKit.Identity.ValueObjects;
+namespace Backbone.DevelopmentKit.Identity.ValueObjects;
 
 [Serializable]
 [TypeConverter(typeof(IdentityAddressTypeConverter))]
@@ -89,12 +89,12 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
 
     public class IdentityAddressTypeConverter : TypeConverter
     {
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
             return sourceType == typeof(string) || base.CanConvertFrom(context, sourceType);
         }
 
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
             var stringValue = value as string;
 
@@ -108,9 +108,9 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
 
     #region Operators
 
-    public static implicit operator string(IdentityAddress deviceId)
+    public static implicit operator string(IdentityAddress identityAddress)
     {
-        return deviceId.StringValue;
+        return identityAddress.StringValue;
     }
 
     public static implicit operator IdentityAddress(string stringValue)

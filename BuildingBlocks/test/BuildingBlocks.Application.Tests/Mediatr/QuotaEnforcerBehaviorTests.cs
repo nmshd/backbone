@@ -1,15 +1,15 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Attributes;
-using Enmeshed.BuildingBlocks.Application.MediatR;
-using Enmeshed.BuildingBlocks.Application.QuotaCheck;
-using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.UnitTestTools.Behaviors;
-using Enmeshed.UnitTestTools.Extensions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Attributes;
+using Backbone.BuildingBlocks.Application.MediatR;
+using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.UnitTestTools.Behaviors;
+using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using MediatR;
 using Xunit;
 
-namespace Enmeshed.BuildingBlocks.Application.Tests.Mediatr;
+namespace Backbone.BuildingBlocks.Application.Tests.Mediatr;
 
 public class QuotaEnforcerBehaviorTests
 {
@@ -21,7 +21,7 @@ public class QuotaEnforcerBehaviorTests
         var nextMock = new NextMock<Unit>();
 
         // Act
-        Func<Task> acting = async () => await behavior.Handle(
+        var acting = async () => await behavior.Handle(
             new TestCommand(),
             nextMock.Value,
             CancellationToken.None);
@@ -64,8 +64,7 @@ public class QuotaEnforcerBehaviorTests
         var exhaustionDate2 = DateTime.UtcNow.AddDays(10);
         var exhaustedMetricStatus1 = new MetricStatus(new MetricKey("exhausted1"), exhaustionDate1);
         var exhaustedMetricStatus2 = new MetricStatus(new MetricKey("exhausted2"), exhaustionDate2);
-        var behavior = CreateQuotaEnforcerBehavior(exhaustedMetricStatuses: new[]
-            { exhaustedMetricStatus1, exhaustedMetricStatus2 }
+        var behavior = CreateQuotaEnforcerBehavior(exhaustedMetricStatuses: [exhaustedMetricStatus1, exhaustedMetricStatus2]
         );
 
         // Act
@@ -113,6 +112,4 @@ internal class QuotaCheckerStub : IQuotaChecker
 /// all the metrics available in the repository unless where specified.
 /// </summary>
 [ApplyQuotasForMetrics("DoesNotApplyToTests")]
-internal class TestCommand : IRequest
-{
-}
+internal class TestCommand : IRequest;

@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,6 +10,7 @@ public class RelationshipTemplateAllocationEntityTypeConfiguration : IEntityType
     {
         builder.ToTable(nameof(RelationshipTemplateAllocation) + "s");
 
-        builder.HasKey(x => new { x.RelationshipTemplateId, x.AllocatedBy });
+        builder.HasKey(x => x.Id);
+        builder.HasIndex(x => new { x.RelationshipTemplateId, x.AllocatedBy });
     }
 }

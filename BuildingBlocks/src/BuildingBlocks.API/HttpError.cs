@@ -1,6 +1,6 @@
-﻿using Enmeshed.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain;
 
-namespace Enmeshed.BuildingBlocks.API;
+namespace Backbone.BuildingBlocks.API;
 
 //[JsonConverter(typeof(HttpErrorConverter))]
 public class HttpError
@@ -36,7 +36,7 @@ public class HttpError
 
 public class HttpErrorProd : HttpError
 {
-    public HttpErrorProd(string code, string message, string docs, dynamic? data = null) : base(code, message, docs, (object)data)
+    public HttpErrorProd(string code, string message, string docs, dynamic? data = null) : base(code, message, docs, (object?)data)
     {
     }
 }
@@ -44,7 +44,7 @@ public class HttpErrorProd : HttpError
 public class HttpErrorDev : HttpError
 {
     internal HttpErrorDev(string code, string message, string docs, IEnumerable<string> stacktrace, string details, dynamic? data = null)
-        : base(code, message, docs, (object)data)
+        : base(code, message, docs, (object?)data)
     {
         Stacktrace = stacktrace;
         Details = details;
@@ -88,10 +88,41 @@ public struct HttpErrorId
     private const string PREFIX = "ERR";
 
     private static readonly char[] VALID_CHARS =
-    {
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U',
-        'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9'
-    };
+    [
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
+        'W',
+        'X',
+        'Y',
+        'Z',
+        '1',
+        '2',
+        '3',
+        '4',
+        '5',
+        '6',
+        '7',
+        '8',
+        '9'
+    ];
 
     private HttpErrorId(string stringValue)
     {
@@ -110,8 +141,6 @@ public struct HttpErrorId
 
     public static bool IsValid(string stringValue)
     {
-        if (stringValue == null) return false;
-
         var hasPrefix = stringValue.StartsWith(PREFIX);
         var lengthIsValid = stringValue.Length <= MAX_LENGTH;
         var hasOnlyValidChars = stringValue.ContainsOnly(VALID_CHARS);

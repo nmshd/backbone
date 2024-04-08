@@ -1,17 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
-		<RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
-	</PropertyGroup>
-
 	<ItemGroup>
-		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
-		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.12" />
-		<!-- CAUTION: Do not upgrade 'Npgsql.EntityFrameworkCore.PostgreSQL' to 7.0.11, because there is an error regarding __EFMigrationHistory tables introduces with the fix of the following GitHub issue: https://github.com/npgsql/efcore.pg/issues/2787 -->
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[7.0.4]" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3"/>
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -20,4 +12,5 @@
 		<ProjectReference Include="..\Messages.Application\Messages.Application.csproj" />
 		<ProjectReference Include="..\Messages.Domain\Messages.Domain.csproj" />
 	</ItemGroup>
+
 </Project>

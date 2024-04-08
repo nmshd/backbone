@@ -1,9 +1,9 @@
-﻿using Dapper;
-using Enmeshed.Common.Infrastructure.Persistence.Context;
-using Enmeshed.Common.Infrastructure.Persistence.Repository;
+using Backbone.Common.Infrastructure.Persistence.Context;
+using Backbone.Common.Infrastructure.Persistence.Repository;
+using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Enmeshed.Common.Infrastructure;
+namespace Backbone.Common.Infrastructure;
 public static class IServiceCollectionExtension
 {
     private const string SQLSERVER = "SqlServer";

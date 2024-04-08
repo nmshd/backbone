@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,11 +10,9 @@ public class RelationshipChangeResponseEntityTypeConfiguration : IEntityTypeConf
     {
         builder.ToTable("RelationshipChanges");
 
-        builder.Ignore(x => x.Content);
-
-        builder.HasIndex(x => x.CreatedAt);
-        builder.HasIndex(x => x.CreatedBy);
-        builder.HasIndex(x => x.CreatedByDevice);
+        var indexBuilder = builder.HasIndex(x => new { x.CreatedAt, x.CreatedBy, x.CreatedByDevice });
+        NpgsqlIndexBuilderExtensions.IncludeProperties(indexBuilder, x => x.Content!);
+        SqlServerIndexBuilderExtensions.IncludeProperties(indexBuilder, x => x.Content);
 
         builder.Property(x => x.CreatedBy)
             .HasColumnName("Res_CreatedBy");
@@ -24,5 +22,8 @@ public class RelationshipChangeResponseEntityTypeConfiguration : IEntityTypeConf
 
         builder.Property(x => x.CreatedAt)
             .HasColumnName("Res_CreatedAt");
+
+        builder.Property(x => x.Content)
+            .HasColumnName("Res_Content");
     }
 }

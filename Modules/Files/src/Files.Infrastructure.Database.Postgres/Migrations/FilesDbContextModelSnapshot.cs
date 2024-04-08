@@ -17,7 +17,7 @@ namespace Files.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -94,6 +94,7 @@ namespace Files.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.Property<string>("Owner")
+                        .IsRequired()
                         .HasMaxLength(36)
                         .IsUnicode(false)
                         .HasColumnType("character(36)")
@@ -104,8 +105,6 @@ namespace Files.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("bytea");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
 
                     b.ToTable("FileMetadata", (string)null);
                 });

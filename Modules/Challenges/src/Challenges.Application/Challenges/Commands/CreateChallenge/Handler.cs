@@ -1,8 +1,8 @@
-﻿using AutoMapper;
+using AutoMapper;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Challenges.Application.Challenges.DTOs;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using MediatR;
 
 namespace Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;

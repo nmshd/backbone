@@ -1,9 +1,9 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Enmeshed.BuildingBlocks.Domain;
 
-namespace ConsumerApi.Mvc.JsonConverters.Synchronization;
+namespace Backbone.ConsumerApi.Mvc.JsonConverters.Synchronization;
 
 public class SyncErrorIdJsonConverter : JsonConverter<SyncErrorId>
 {
@@ -14,8 +14,7 @@ public class SyncErrorIdJsonConverter : JsonConverter<SyncErrorId>
 
     public override SyncErrorId Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        var id = reader.GetString();
-
+        var id = reader.GetString() ?? throw new JsonException("The id cannot be null.");
         try
         {
             return SyncErrorId.Parse(id);

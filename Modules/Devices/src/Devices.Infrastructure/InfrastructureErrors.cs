@@ -1,4 +1,4 @@
-﻿using Enmeshed.BuildingBlocks.Infrastructure.Exceptions;
+using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 
 namespace Backbone.Modules.Devices.Infrastructure;
 public static class InfrastructureErrors

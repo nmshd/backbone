@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.BuildingBlocks.Domain;
+namespace Backbone.BuildingBlocks.Domain;
 public record MetricKey(string Value)
 {
     public string Value { get; } = Value;

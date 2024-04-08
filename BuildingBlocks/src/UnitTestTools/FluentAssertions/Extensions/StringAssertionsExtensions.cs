@@ -1,9 +1,9 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
 
-namespace Enmeshed.UnitTestTools.FluentAssertions.Extensions;
+namespace Backbone.UnitTestTools.FluentAssertions.Extensions;
 public static class StringAssertionsExtensions
 {
     public static AndConstraint<DateTimeAssertions> Be(this DateTimeAssertions it, string dateTimeString)
@@ -18,7 +18,7 @@ public static class StringAssertionsExtensions
             JsonDocument.Parse(it.Subject);
             Execute.Assertion.Given(() => it);
         }
-        catch (Exception _)
+        catch (Exception)
         {
             Execute.Assertion.FailWith("Invalid Json");
         }

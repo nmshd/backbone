@@ -1,10 +1,10 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.DatawalletModificationCreated;
 
 public class DatawalletModifiedIntegrationEvent : IntegrationEvent
 {
-    public IdentityAddress Identity { get; set; }
-    public DeviceId ModifiedByDevice { get; set; }
+    public required IdentityAddress Identity { get; set; }
+    public required DeviceId ModifiedByDevice { get; set; }
 }

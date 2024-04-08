@@ -1,6 +1,6 @@
-﻿using Enmeshed.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain;
 
-namespace Enmeshed.BuildingBlocks.Application.QuotaCheck;
+namespace Backbone.BuildingBlocks.Application.QuotaCheck;
 public interface IQuotaChecker
 {
     Task<CheckQuotaResult> CheckQuotaExhaustion(IEnumerable<MetricKey> metricKeys);

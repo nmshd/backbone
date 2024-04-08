@@ -1,8 +1,8 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 using NeoSmart.Utils;
 
-namespace Enmeshed.Tooling.JsonConverters;
+namespace Backbone.Tooling.JsonConverters;
 
 public class UrlSafeBase64ToByteArrayJsonConverter : JsonConverter<byte[]>
 {

@@ -1,7 +1,7 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus;
+namespace Backbone.BuildingBlocks.Infrastructure.EventBus;
 
 public class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManager
 {
@@ -60,7 +60,7 @@ public class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManage
     {
         var eventName = GetEventKey(eventType);
 
-        if (!HasSubscriptionsForEvent(eventName)) _handlers.Add(eventName, new List<SubscriptionInfo>());
+        if (!HasSubscriptionsForEvent(eventName)) _handlers.Add(eventName, []);
 
         if (_handlers[eventName].Any(s => s.HandlerType == handlerType))
             throw new ArgumentException(

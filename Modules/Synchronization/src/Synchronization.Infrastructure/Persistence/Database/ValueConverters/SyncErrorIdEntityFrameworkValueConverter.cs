@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
@@ -9,9 +9,9 @@ public class SyncErrorIdEntityFrameworkValueConverter : ValueConverter<SyncError
 
     public SyncErrorIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id == null ? null : id.StringValue,
+            id => id.StringValue,
             value => SyncErrorId.Parse(value),
-            mappingHints?.With(new ConverterMappingHints(SyncErrorId.MAX_LENGTH))
+            mappingHints.With(new ConverterMappingHints(SyncErrorId.MAX_LENGTH))
         )
     { }
 }

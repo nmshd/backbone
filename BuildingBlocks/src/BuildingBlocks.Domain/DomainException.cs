@@ -1,6 +1,6 @@
-﻿using Enmeshed.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.Errors;
 
-namespace Enmeshed.BuildingBlocks.Domain;
+namespace Backbone.BuildingBlocks.Domain;
 
 public class DomainException : Exception
 {

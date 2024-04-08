@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.Errors;
 using FluentValidation;
 using FluentValidation.Results;
 
-namespace Enmeshed.BuildingBlocks.Application.FluentValidation;
+namespace Backbone.BuildingBlocks.Application.FluentValidation;
 
 public static class IRuleBuilderExtensions
 {
@@ -13,7 +13,7 @@ public static class IRuleBuilderExtensions
         {
             var domainError = validator(v);
             if (domainError != null)
-                context.AddFailure(new ValidationFailure(context.PropertyName, domainError.Message, v) { ErrorCode = domainError.Code });
+                context.AddFailure(new ValidationFailure(context.PropertyPath, domainError.Message, v) { ErrorCode = domainError.Code });
         });
     }
 }

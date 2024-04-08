@@ -1,11 +1,11 @@
-﻿using Backbone.Modules.Challenges.Application.AutoMapper;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.MediatR;
+using Backbone.Modules.Challenges.Application.AutoMapper;
 using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.MediatR;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using ValidationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ValidationException;
+using ValidationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ValidationException;
 
 namespace Backbone.Modules.Challenges.Application.Extensions;
 

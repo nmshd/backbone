@@ -1,10 +1,16 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public abstract class Quota
 {
-    protected Quota() { }
+    // ReSharper disable once UnusedMember.Local
+    protected Quota()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        ApplyTo = null!;
+    }
 
     protected Quota(string applyTo)
     {

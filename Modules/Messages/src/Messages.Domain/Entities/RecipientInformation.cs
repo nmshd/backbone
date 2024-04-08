@@ -1,24 +1,30 @@
-﻿using Backbone.Modules.Messages.Domain.Ids;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 
 public class RecipientInformation
 {
-#pragma warning disable CS8618
-    private RecipientInformation() { }
-#pragma warning restore CS8618
+    // ReSharper disable once UnusedMember.Local
+    private RecipientInformation()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Address = null!;
+        EncryptedKey = null!;
+        RelationshipId = null!;
+        MessageId = null!;
+    }
 
-#pragma warning disable CS8618
     public RecipientInformation(IdentityAddress address, RelationshipId relationshipId, byte[] encryptedKey)
-#pragma warning restore CS8618
     {
         Address = address;
         RelationshipId = relationshipId;
         EncryptedKey = encryptedKey;
+        MessageId = null!; // we just assign null to satisfy the compiler; it will be set by EF Core
     }
 
+    public int Id { get; }
     public IdentityAddress Address { get; }
     public byte[] EncryptedKey { get; }
     public DateTime? ReceivedAt { get; private set; }
@@ -28,10 +34,9 @@ public class RecipientInformation
 
     public void FetchedMessage(DeviceId fetchedByDevice)
     {
-        if (!ReceivedAt.HasValue)
-        {
-            ReceivedAt = SystemTime.UtcNow;
-            ReceivedByDevice = fetchedByDevice;
-        }
+        if (ReceivedAt.HasValue) return;
+
+        ReceivedAt = SystemTime.UtcNow;
+        ReceivedByDevice = fetchedByDevice;
     }
 }

@@ -1,18 +1,15 @@
-﻿using System.Text.Json;
 using AutoMapper;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.BuildingBlocks.Application.Extensions;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
@@ -21,25 +18,21 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 {
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
-    private readonly IBlobStorage _blobStorage;
-    private readonly BlobOptions _blobOptions;
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
 
-    private PushDatawalletModificationsCommand _request;
+    private PushDatawalletModificationsCommand _request = null!;
     private CancellationToken _cancellationToken;
-    private DatawalletVersion _supportedDatawalletVersion;
-    private Datawallet _datawallet;
-    private DatawalletModification[] _modifications;
-    private PushDatawalletModificationsResponse _response;
+    private DatawalletVersion _supportedDatawalletVersion = null!;
+    private Datawallet? _datawallet;
+    private DatawalletModification[] _modifications = null!;
+    private PushDatawalletModificationsResponse _response = null!;
 
-    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IBlobStorage blobStorage, IOptions<BlobOptions> blobOptions, IEventBus eventBus)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus)
     {
         _dbContext = dbContext;
         _mapper = mapper;
-        _blobStorage = blobStorage;
-        _blobOptions = blobOptions.Value;
         _eventBus = eventBus;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
@@ -84,7 +77,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
     private void EnsureSufficientSupportedDatawalletVersion()
     {
-        if (_supportedDatawalletVersion < _datawallet.Version)
+        if (_supportedDatawalletVersion < _datawallet!.Version)
             throw new OperationFailedException(ApplicationErrors.Datawallet.InsufficientSupportedDatawalletVersion());
     }
 
@@ -94,18 +87,18 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
         var newModifications = _request.Modifications.Select(m => CreateModification(m, blobName));
 
-        _dbContext.Set<Datawallet>().Update(_datawallet);
+        _dbContext.Set<Datawallet>().Update(_datawallet!);
 
         var modificationsArray = newModifications.ToArray();
 
-        await Save(modificationsArray, blobName);
+        await Save(modificationsArray);
 
         _modifications = modificationsArray;
     }
 
     private DatawalletModification CreateModification(PushDatawalletModificationItem modificationDto, string blobReference)
     {
-        return _datawallet.AddModification(
+        return _datawallet!.AddModification(
             _mapper.Map<DatawalletModificationType>(modificationDto.Type),
             new DatawalletVersion(modificationDto.DatawalletVersion),
             modificationDto.Collection,
@@ -119,7 +112,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
     private void EnsureDeviceIsUpToDate()
     {
-        if (_datawallet.LatestModification != null && _datawallet.LatestModification.Index != _request.LocalIndex)
+        if (_datawallet!.LatestModification != null && _datawallet.LatestModification.Index != _request.LocalIndex)
             throw new OperationFailedException(ApplicationErrors.Datawallet.DatawalletNotUpToDate(_request.LocalIndex, _datawallet.LatestModification.Index));
     }
 
@@ -129,19 +122,9 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         _response = new PushDatawalletModificationsResponse { Modifications = responseItems, NewIndex = responseItems.Max(i => i.Index) };
     }
 
-    private async Task Save(DatawalletModification[] modifications, string blobName)
+    private async Task Save(DatawalletModification[] modifications)
     {
-        await _dbContext.Set<DatawalletModification>().AddRangeAsync(modifications, _cancellationToken);
-
-        var payloads = modifications
-            .Where(newModification => newModification.EncryptedPayload != null)
-            .ToDictionary(m => m.Index, m => m.EncryptedPayload);
-
-        var blobContent = JsonSerializer.SerializeToUtf8Bytes(payloads);
-
-        _blobStorage.Add(_blobOptions.RootFolder, blobName, blobContent);
-
-        await _blobStorage.SaveAsync();
+        await _dbContext.Set<DatawalletModification>().AddRangeAsync(modifications);
 
         try
         {

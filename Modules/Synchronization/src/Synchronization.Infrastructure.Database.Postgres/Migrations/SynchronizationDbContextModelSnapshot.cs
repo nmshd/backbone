@@ -17,7 +17,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.10")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -96,6 +96,9 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("integer");
 
+                    b.Property<byte[]>("EncryptedPayload")
+                        .HasColumnType("bytea");
+
                     b.Property<long>("Index")
                         .HasColumnType("bigint");
 
@@ -112,8 +115,6 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
 
                     b.HasIndex("DatawalletId");
 
@@ -252,8 +253,6 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
 
                     b.HasIndex("CreatedBy", "FinalizedAt");
 

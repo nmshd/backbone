@@ -1,16 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
-    <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
-  </PropertyGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
-    <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
     <ProjectReference Include="..\Devices.Application\Devices.Application.csproj" />
     <ProjectReference Include="..\Devices.Domain\Devices.Domain.csproj" />
     <ProjectReference Include="..\Devices.Infrastructure.Database.Postgres\Devices.Infrastructure.Database.Postgres.csproj" />
@@ -19,6 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="7.0.1" />
+    <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="8.0.2" />
   </ItemGroup>
 </Project>

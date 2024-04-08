@@ -1,11 +1,12 @@
-﻿using Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.UnitTestTools.Extensions;
+using Backbone.Modules.Quotas.Domain.Metrics;
+using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
@@ -21,18 +22,18 @@ public class HandlerTests
         var metric = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
         var identity = new Identity("some-identity-address", new TierId("SomeTierId"));
 
-        var max = 5;
-        var period = QuotaPeriod.Month;
+        const int max = 5;
+        const QuotaPeriod period = QuotaPeriod.Month;
 
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(metric.Key, max, period));
         identity.CreateIndividualQuota(metric.Key, max, period);
 
         var stubMetricsRepository = new FindAllWithKeysMetricsStubRepository(new List<Metric> { metric });
 
-        var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns(identity);
+        var stubIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => stubIdentitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
-        var handler = CreateHandler(identitiesRepository, stubMetricsRepository);
+        var handler = CreateHandler(stubIdentitiesRepository, stubMetricsRepository);
 
         // Act
         var result = await handler.Handle(new GetIdentityQuery(identity.Address), CancellationToken.None);
@@ -58,11 +59,10 @@ public class HandlerTests
     public void Fails_when_no_identity_found()
     {
         // Arrange
-        var metricsRepository = A.Fake<IMetricsRepository>();
-        var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns((Identity)null);
+        var stubIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => stubIdentitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns((Identity?)null);
 
-        var handler = CreateHandler(identitiesRepository, metricsRepository);
+        var handler = CreateHandler(stubIdentitiesRepository);
 
         // Act
         Func<Task> acting = async () => await handler.Handle(new GetIdentityQuery("some-inexistent-identity-address"), CancellationToken.None);
@@ -73,8 +73,15 @@ public class HandlerTests
         exception.Code.Should().Be("error.platform.recordNotFound");
     }
 
-    private Handler CreateHandler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)
     {
-        return new Handler(identitiesRepository, metricsRepository);
+        var dummyMetricsRepository = A.Dummy<IMetricsRepository>();
+        return CreateHandler(identitiesRepository, dummyMetricsRepository);
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IMetricsRepository metricsRepository)
+    {
+        var dummyMetricCalculatorFactory = A.Dummy<MetricCalculatorFactory>();
+        return new Handler(identitiesRepository, metricsRepository, dummyMetricCalculatorFactory);
     }
 }

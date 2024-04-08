@@ -1,12 +1,12 @@
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
 using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
-using Enmeshed.Tooling;
+using Backbone.Tooling;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
@@ -39,7 +39,7 @@ public class HandlerTests
         _actContext = CreateDbContext();
         _assertionContext = CreateDbContext();
 
-        _arrangeContext.SaveEntity(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet(new Backbone.Modules.Synchronization.Domain.Entities.Datawallet.DatawalletVersion(DATAWALLET_VERSION), _activeIdentity));
+        _arrangeContext.SaveEntity(new Domain.Entities.Datawallet(new Domain.Entities.Datawallet.DatawalletVersion(DATAWALLET_VERSION), _activeIdentity));
     }
 
     [Fact]
@@ -62,7 +62,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Starting_two_sync_runs_parallely_leads_to_error_for_one_call()
+    public async Task Starting_two_sync_runs_parallelly_leads_to_error_for_one_call()
     {
         // Arrange
         var externalEvent = ExternalEventBuilder.Build().WithOwner(_activeIdentity).Create();
@@ -253,7 +253,7 @@ public class HandlerTests
         return handler;
     }
 
-    private Handler CreateHandler(IdentityAddress activeIdentity, DeviceId createdByDevice, SynchronizationDbContext dbContext = null)
+    private Handler CreateHandler(IdentityAddress activeIdentity, DeviceId createdByDevice, SynchronizationDbContext? dbContext = null)
     {
         var userContext = A.Fake<IUserContext>();
         A.CallTo(() => userContext.GetAddress()).Returns(activeIdentity);

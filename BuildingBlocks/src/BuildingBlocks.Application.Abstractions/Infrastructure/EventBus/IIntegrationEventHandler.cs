@@ -1,6 +1,6 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 
 public interface IIntegrationEventHandler<in TIntegrationEvent> : IIntegrationEventHandler
     where TIntegrationEvent : IntegrationEvent
@@ -8,6 +8,4 @@ public interface IIntegrationEventHandler<in TIntegrationEvent> : IIntegrationEv
     Task Handle(TIntegrationEvent @event);
 }
 
-public interface IIntegrationEventHandler
-{
-}
+public interface IIntegrationEventHandler;

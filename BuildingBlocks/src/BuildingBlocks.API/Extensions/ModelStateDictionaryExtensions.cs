@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace Enmeshed.BuildingBlocks.API.Extensions;
+namespace Backbone.BuildingBlocks.API.Extensions;
 
 public static class ModelStateDictionaryExtensions
 {

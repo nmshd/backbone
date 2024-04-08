@@ -1,9 +1,9 @@
-﻿using System.Reflection;
+using System.Reflection;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Devices.Application.AutoMapper;
 using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.MediatR;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 

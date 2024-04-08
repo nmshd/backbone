@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using FluentAssertions;
 using Xunit;
@@ -12,8 +12,8 @@ public class IndividualQuotaTests
     {
         // Arrange
         var metricKey = MetricKey.NumberOfSentMessages;
-        var max = 10;
-        var period = QuotaPeriod.Month;
+        const int max = 10;
+        const QuotaPeriod period = QuotaPeriod.Month;
 
         // Act
         var individualQuota = new IndividualQuota(metricKey, max, period, "applyTo");

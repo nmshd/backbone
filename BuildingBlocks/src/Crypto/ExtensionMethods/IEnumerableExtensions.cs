@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.Crypto.ExtensionMethods;
+namespace Backbone.Crypto.ExtensionMethods;
 
 public static class IEnumerableExtensions
 {

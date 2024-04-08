@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
@@ -9,8 +9,6 @@ public class FileEntityTypeConfiguration : IEntityTypeConfiguration<File>
     public void Configure(EntityTypeBuilder<File> builder)
     {
         builder.ToTable("FileMetadata");
-
-        builder.HasIndex(m => m.CreatedBy);
 
         builder.Property(m => m.CipherHash).IsRequired();
 

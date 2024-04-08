@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
-namespace ConsumerApi.Extensions;
+namespace Backbone.ConsumerApi.Extensions;
 
 public static class ModelStateDictionaryExtensions
 {

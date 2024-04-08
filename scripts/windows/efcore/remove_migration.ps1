@@ -1,12 +1,12 @@
 Param(
-    [parameter(Mandatory)][ValidateSet("AdminUi", "Challenges", "Devices", "Files", "Messages", "Quotas", "Relationships", "Synchronization", "Tokens")] $moduleName,
+    [parameter(Mandatory)][ValidateSet("AdminApi", "Challenges", "Devices", "Files", "Messages", "Quotas", "Relationships", "Synchronization", "Tokens")] $moduleName,
     [parameter(Mandatory)][ValidateSet("SqlServer", "Postgres", "")] $provider
 )
 
 $environment="dbmigrations-" + $provider.ToLower()
 $repoRoot = git rev-parse --show-toplevel
 $dbContextName = "${moduleName}DbContext"
-$adminUiProject = "$repoRoot\AdminUi\src\AdminUi"
+$adminApiProject = "$repoRoot\AdminApi\src\AdminApi"
 $consumerApiProject = "$repoRoot\ConsumerApi"
 
 function RemoveMigration {    
@@ -15,11 +15,11 @@ function RemoveMigration {
     )
 
     switch($moduleName){
-        "AdminUi" {
+        "AdminApi" {
             New-Item env:"${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
 
-            $migrationProject = "$repoRoot\AdminUi\src\AdminUi.Infrastructure.Database.$provider"
-            $startupProject = $adminUiProject
+            $migrationProject = "$repoRoot\AdminApi\src\AdminApi.Infrastructure.Database.$provider"
+            $startupProject = $adminApiProject
         }
         Default {
             New-Item env:"Modules__${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
@@ -33,8 +33,6 @@ function RemoveMigration {
 
     Write-Host "Executing '$cmd'..."
     Invoke-Expression $cmd
-
-    & $PSScriptRoot/compile_models.ps1 $moduleName $provider
 }
 
 switch ($provider) {

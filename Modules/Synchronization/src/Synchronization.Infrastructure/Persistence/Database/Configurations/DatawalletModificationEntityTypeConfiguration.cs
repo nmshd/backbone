@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Modules.Synchronization.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,7 +9,6 @@ public class DatawalletModificationEntityTypeConfiguration : IEntityTypeConfigur
     public void Configure(EntityTypeBuilder<DatawalletModification> builder)
     {
         builder.HasIndex(p => new { p.CreatedBy, p.Index }).IsUnique();
-        builder.HasIndex(p => p.CreatedBy);
 
         builder.HasKey(x => x.Id);
 
@@ -23,7 +22,6 @@ public class DatawalletModificationEntityTypeConfiguration : IEntityTypeConfigur
         builder.Property(x => x.PayloadCategory).HasMaxLength(50);
         builder.Property(x => x.Type);
         builder.Property(x => x.BlobReference).HasMaxLength(32).IsUnicode(false).IsFixedLength(true);
-
-        builder.Ignore(x => x.EncryptedPayload);
+        builder.Property(x => x.EncryptedPayload);
     }
 }

@@ -1,17 +1,19 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using CSharpFunctionalExtensions;
-using Enmeshed.BuildingBlocks.Domain.Errors;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 public class Tier
 {
+    public static readonly Tier QUEUED_FOR_DELETION = new(new TierId("TIR00000000000000001"), "Queued For Deletion");
+
     public Tier(TierId id, string name)
     {
         Id = id;
         Name = name;
-        Quotas = new();
+        Quotas = [];
     }
 
     public TierId Id { get; }
@@ -20,9 +22,49 @@ public class Tier
 
     public Result<TierQuotaDefinition, DomainError> CreateQuota(MetricKey metricKey, int max, QuotaPeriod period)
     {
-        if (max <= 0)
-            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.MaxValueCannotBeLowerOrEqualToZero());
+        if (IsQueuedForDeletionTier())
+            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.CannotCreateOrDeleteQuotaForQueuedForDeletionTier());
 
+        if (max < 0)
+            return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.MaxValueCannotBeLowerThanZero());
+
+        return AddTierQuotaDefinition(metricKey, max, period);
+    }
+
+    public Result<TierQuotaDefinitionId, DomainError> DeleteQuota(string tierQuotaDefinitionId)
+    {
+        if (IsQueuedForDeletionTier())
+            return Result.Failure<TierQuotaDefinitionId, DomainError>(DomainErrors.CannotCreateOrDeleteQuotaForQueuedForDeletionTier());
+
+        var quotaDefinition = Quotas.FirstOrDefault(q => q.Id == tierQuotaDefinitionId);
+
+        if (quotaDefinition == null)
+            return Result.Failure<TierQuotaDefinitionId, DomainError>(GenericDomainErrors.NotFound(nameof(TierQuotaDefinition)));
+
+        Quotas.Remove(quotaDefinition);
+
+        return Result.Success<TierQuotaDefinitionId, DomainError>(quotaDefinition.Id);
+    }
+
+    public IEnumerable<TierQuotaDefinition> AddQuotaForAllMetricsOnQueuedForDeletion(IEnumerable<Metric> metrics)
+    {
+        if (!IsQueuedForDeletionTier())
+            throw new InvalidOperationException("Method can only be called for the 'Queued for Deletion' tier");
+
+        var missingMetrics = metrics.Where(metric => Quotas.All(q => q.MetricKey.Value != metric.Key.Value));
+
+        var addedQuotas = new List<TierQuotaDefinition>();
+        foreach (var metric in missingMetrics)
+        {
+            var result = AddTierQuotaDefinition(metric.Key, 0, QuotaPeriod.Total);
+            addedQuotas.Add(result.Value);
+        }
+
+        return addedQuotas;
+    }
+
+    private Result<TierQuotaDefinition, DomainError> AddTierQuotaDefinition(MetricKey metricKey, int max, QuotaPeriod period)
+    {
         if (TierQuotaAlreadyExists(metricKey, period))
             return Result.Failure<TierQuotaDefinition, DomainError>(DomainErrors.DuplicateQuota());
 
@@ -32,16 +74,9 @@ public class Tier
         return Result.Success<TierQuotaDefinition, DomainError>(quotaDefinition);
     }
 
-    public Result<TierQuotaDefinitionId, DomainError> DeleteQuota(string tierQuotaDefinitionId)
+    private bool IsQueuedForDeletionTier()
     {
-        var quotaDefinition = Quotas.FirstOrDefault(q => q.Id == tierQuotaDefinitionId);
-
-        if (quotaDefinition == null)
-            return Result.Failure<TierQuotaDefinitionId, DomainError>(GenericDomainErrors.NotFound(nameof(TierQuotaDefinition)));
-
-        Quotas.Remove(quotaDefinition);
-
-        return Result.Success<TierQuotaDefinitionId, DomainError>(quotaDefinition.Id);
+        return Id == QUEUED_FOR_DELETION.Id;
     }
 
     private bool TierQuotaAlreadyExists(MetricKey metricKey, QuotaPeriod period)

@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,20 +10,15 @@ public class RelationshipChangeEntityTypeConfiguration : IEntityTypeConfiguratio
     {
         builder.ToTable("RelationshipChanges");
 
-        builder.HasIndex(x => x.Status);
-        builder.HasIndex(x => x.Type);
-        builder.HasIndex(x => x.CreatedAt);
-
         builder.Ignore(x => x.IsCompleted);
         builder.Ignore(x => x.Request);
         builder.Ignore(x => x.Response);
 
-        builder.Ignore("Req_Content");
-        builder.Ignore("Res_Content");
-
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.RelationshipId);
+        builder.Property(x => x.CreatedAt);
+        builder.Property(x => x.Type);
 
         builder.HasOne(x => x.Relationship).WithMany(x => x.Changes);
 

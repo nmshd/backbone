@@ -1,8 +1,8 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using FluentValidation;
 using FluentValidation.Validators;
 
-namespace Enmeshed.BuildingBlocks.Application.FluentValidation;
+namespace Backbone.BuildingBlocks.Application.FluentValidation;
 
 public class UniqueCollectionValidator<T, TElement, TPropertyKey> : PropertyValidator<T, IEnumerable<TElement>>
 {
@@ -19,7 +19,7 @@ public class UniqueCollectionValidator<T, TElement, TPropertyKey> : PropertyVali
     {
         if (value == null) return true;
 
-        if (value is not IEnumerable<TElement> enumerable)
+        if (value is not { } enumerable)
             throw new ArgumentException("PropertyValue must implement IEnumerable<T>.");
 
         var uniqueItemValues = new HashSet<object?>();

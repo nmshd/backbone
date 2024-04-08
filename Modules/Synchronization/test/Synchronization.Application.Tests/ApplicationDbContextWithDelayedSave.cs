@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using FakeItEasy;
 using Microsoft.EntityFrameworkCore;
 

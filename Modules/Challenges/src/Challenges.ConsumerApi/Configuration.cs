@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Challenges.Application;
 
 namespace Backbone.Modules.Challenges.ConsumerApi;
@@ -22,9 +22,9 @@ public class SqlDatabase
     [Required]
     [MinLength(1)]
     [RegularExpression("SqlServer|Postgres")]
-    public string Provider { get; set; } = string.Empty;
+    public string Provider { get; set; } = null!;
 
     [Required]
     [MinLength(1)]
-    public string ConnectionString { get; set; } = string.Empty;
+    public string ConnectionString { get; set; } = null!;
 }

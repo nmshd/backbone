@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates;
+using Backbone.Modules.Quotas.Domain.Aggregates;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
 public static class CreatedAtQueryableExtensions

@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Devices.DTOs.Validators;
-using Enmeshed.BuildingBlocks.Application.FluentValidation;
+using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.Modules.Devices.Application.Devices.DTOs.Validators;
 using FluentValidation;
 
 namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;

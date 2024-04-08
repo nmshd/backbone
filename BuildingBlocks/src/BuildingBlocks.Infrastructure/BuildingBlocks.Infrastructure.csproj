@@ -1,28 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <ImplicitUsings>enable</ImplicitUsings>
-        <RootNamespace>Enmeshed.$(MSBuildProjectName.Replace(" ", "_"))</RootNamespace>
-    </PropertyGroup>
-
     <ItemGroup>
-        <PackageReference Include="Autofac" Version="7.1.0" />
-        <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.16.2" />
-        <PackageReference Include="Azure.Storage.Blobs" Version="12.18.0" />
-        <PackageReference Include="Google.Cloud.PubSub.V1" Version="3.7.0" />
-        <PackageReference Include="Google.Cloud.Storage.V1" Version="4.6.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.12" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="7.0.12" />
+        <PackageReference Include="Autofac" Version="8.0.0" />
+        <PackageReference Include="Azure.Messaging.ServiceBus" Version="7.17.4"/>
+        <PackageReference Include="Azure.Storage.Blobs" Version="12.19.1" />
+        <PackageReference Include="Google.Cloud.PubSub.V1" Version="3.12.0"/>
+        <PackageReference Include="Google.Cloud.Storage.V1" Version="4.10.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="8.0.3"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.3"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.3"/>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-        <!-- CAUTION: Do not upgrade 'Npgsql.EntityFrameworkCore.PostgreSQL' to 7.0.11, because there is an error regarding __EFMigrationHistory tables introduces with the fix of the following GitHub issue: https://github.com/npgsql/efcore.pg/issues/2787 -->
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="[7.0.4]" />
-        <PackageReference Include="Polly" Version="8.0.0" />
-        <PackageReference Include="RabbitMQ.Client" Version="6.6.0" />
+        <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
+        <PackageReference Include="Polly" Version="8.3.1"/>
+        <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
         <PackageReference Include="System.Interactive.Async" Version="6.0.1" />
     </ItemGroup>
 

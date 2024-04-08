@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Messages.Application.AutoMapper;
+using Backbone.BuildingBlocks.Application.MediatR;
+using Backbone.Modules.Messages.Application.AutoMapper;
 using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
-using Enmeshed.BuildingBlocks.Application.MediatR;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 

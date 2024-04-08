@@ -1,12 +1,12 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using System.Reflection;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
-using Enmeshed.BuildingBlocks.Application.Attributes;
-using Enmeshed.BuildingBlocks.Application.QuotaCheck;
-using Enmeshed.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Attributes;
+using Backbone.BuildingBlocks.Application.QuotaCheck;
+using Backbone.BuildingBlocks.Domain;
 using MediatR;
 
-namespace Enmeshed.BuildingBlocks.Application.MediatR;
+namespace Backbone.BuildingBlocks.Application.MediatR;
 public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     private readonly IQuotaChecker _quotaChecker;

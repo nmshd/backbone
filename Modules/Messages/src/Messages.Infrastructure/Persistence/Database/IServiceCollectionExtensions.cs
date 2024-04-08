@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database;
@@ -13,7 +14,7 @@ public static class IServiceCollectionExtensions
     public static void AddDatabase(this IServiceCollection services, Action<DbOptions> setupOptions)
     {
         var options = new DbOptions();
-        setupOptions?.Invoke(options);
+        setupOptions.Invoke(options);
 
         services.AddDatabase(options);
     }
@@ -31,7 +32,7 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        }).UseModel(CompiledModels.SqlServer.MessagesDbContextModel.Instance);
+                        });
                         break;
                     case POSTGRES:
                         dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
@@ -39,7 +40,9 @@ public static class IServiceCollectionExtensions
                             sqlOptions.CommandTimeout(20);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
-                        }).UseModel(CompiledModels.Postgres.MessagesDbContextModel.Instance);
+                            sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName,
+                                "Messages"); //TODO: Remove this once the issue with package 'Npgsql.EntityFrameworkCore.PostgreSQL' is fixed https://github.com/npgsql/efcore.pg/issues/2878
+                        });
                         break;
                     default:
                         throw new Exception($"Unsupported database provider: {options.Provider}");
@@ -50,8 +53,8 @@ public static class IServiceCollectionExtensions
 
 public class DbOptions
 {
-    public string Provider { get; set; }
-    public string DbConnectionString { get; set; }
+    public string Provider { get; set; } = null!;
+    public string DbConnectionString { get; set; } = null!;
     public RetryOptions RetryOptions { get; set; } = new();
 }
 

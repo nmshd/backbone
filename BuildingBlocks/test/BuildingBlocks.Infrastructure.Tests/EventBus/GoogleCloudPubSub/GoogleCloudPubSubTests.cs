@@ -1,11 +1,11 @@
-﻿using Autofac;
+using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using Backbone.BuildingBlocks.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
+using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestIntegrationEventHandlers;
+using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestIntegrationEvents;
+using Backbone.Tooling.Extensions;
 using Divergic.Logging.Xunit;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
-using Enmeshed.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestIntegrationEventHandlers;
-using Enmeshed.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestIntegrationEvents;
-using Enmeshed.Tooling.Extensions;
 using FluentAssertions;
 using FluentAssertions.Extensions;
 using Google.Api.Gax;
@@ -16,7 +16,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub;
+namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub;
 
 public class GoogleCloudPubSubTests : IDisposable
 {
@@ -144,7 +144,7 @@ public class EventBusFactory : IDisposable
 
     public const string CONNECTION_INFO = "";
 
-    private readonly List<Instance> _instances = new();
+    private readonly List<Instance> _instances = [];
 
     public EventBusFactory(ITestOutputHelper output)
     {

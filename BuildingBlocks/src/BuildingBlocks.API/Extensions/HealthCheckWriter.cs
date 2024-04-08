@@ -1,9 +1,9 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace Enmeshed.BuildingBlocks.API.Extensions;
+namespace Backbone.BuildingBlocks.API.Extensions;
 
 public static class HealthCheckWriter
 {
@@ -34,7 +34,7 @@ public static class HealthCheckWriter
                     jsonWriter.WritePropertyName(item.Key);
 
                     JsonSerializer.Serialize(jsonWriter, item.Value,
-                        item.Value?.GetType() ?? typeof(object));
+                        item.Value.GetType());
                 }
 
                 jsonWriter.WriteEndObject();

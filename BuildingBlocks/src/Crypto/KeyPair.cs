@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.Crypto;
+namespace Backbone.Crypto;
 
 public class KeyPair
 {

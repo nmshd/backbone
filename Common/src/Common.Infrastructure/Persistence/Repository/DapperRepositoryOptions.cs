@@ -1,4 +1,4 @@
-namespace Enmeshed.Common.Infrastructure.Persistence.Repository;
+namespace Backbone.Common.Infrastructure.Persistence.Repository;
 
 public class DapperRepositoryOptions
 {

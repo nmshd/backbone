@@ -1,7 +1,7 @@
-﻿using Org.BouncyCastle.Crypto.Modes;
+using Org.BouncyCastle.Crypto.Modes;
 using Org.BouncyCastle.Crypto.Parameters;
 
-namespace Enmeshed.Crypto.Implementations.Deprecated.BouncyCastle.ExtensionMethods;
+namespace Backbone.Crypto.Implementations.Deprecated.BouncyCastle.ExtensionMethods;
 
 public static class GcmBlockCipherExtensions
 {

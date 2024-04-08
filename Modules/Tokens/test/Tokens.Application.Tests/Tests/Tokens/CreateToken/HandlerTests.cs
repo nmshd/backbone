@@ -1,12 +1,12 @@
-﻿using AutoMapper;
+using AutoMapper;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Application.IntegrationEvents;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using Backbone.Modules.Tokens.Domain.Entities;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using FakeItEasy;
 using FluentAssertions.Execution;
 using Xunit;
@@ -33,7 +33,7 @@ public class HandlerTests
         var command = new CreateTokenCommand
         {
             ExpiresAt = DateTime.UtcNow,
-            Content = new byte[] { 1, 1, 1, 1, 1, 1, 1, 1 }
+            Content = [1, 1, 1, 1, 1, 1, 1, 1]
         };
 
         var tokenRepository = A.Fake<ITokensRepository>();

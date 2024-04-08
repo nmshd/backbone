@@ -1,9 +1,7 @@
-﻿using Microsoft.Data.Sqlite;
+using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
-namespace Enmeshed.UnitTestTools.TestDoubles.Fakes;
+namespace Backbone.UnitTestTools.TestDoubles.Fakes;
 
 public static class FakeDbContextFactory
 {
@@ -17,15 +15,15 @@ public static class FakeDbContextFactory
             .UseSqlite(connection)
             .Options;
 
-        object[] args = { options };
+        object[] args = [options];
 
-        var context = (TContext)Activator.CreateInstance(typeof(TContext), args);
+        var context = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
         context.Database.EnsureCreated();
         context.Dispose();
 
-        var arrangeContext = (TContext)Activator.CreateInstance(typeof(TContext), args);
-        var assertionContext = (TContext)Activator.CreateInstance(typeof(TContext), args);
-        var actContext = (TContext)Activator.CreateInstance(typeof(TContext), args);
+        var arrangeContext = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
+        var assertionContext = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
+        var actContext = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
 
         return (arrangeContext, assertionContext, actContext);
     }

@@ -1,7 +1,7 @@
-﻿using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database.ValueConverters;
-using Enmeshed.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
@@ -14,9 +14,9 @@ public class RelationshipsDbContext : AbstractDbContextBase
 
     public RelationshipsDbContext(DbContextOptions<RelationshipsDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
 
-    public DbSet<Relationship> Relationships { get; set; }
-    public DbSet<RelationshipChange> RelationshipChanges { get; set; }
-    public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; }
+    public DbSet<Relationship> Relationships { get; set; } = null!;
+    public DbSet<RelationshipChange> RelationshipChanges { get; set; } = null!;
+    public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; } = null!;
 
     // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     // {

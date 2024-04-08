@@ -1,4 +1,4 @@
-﻿namespace Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 
 public interface IBlobStorage
 {

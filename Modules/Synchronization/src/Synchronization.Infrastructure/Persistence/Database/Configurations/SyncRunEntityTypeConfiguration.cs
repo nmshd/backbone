@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,7 +10,6 @@ public class SyncRunEntityTypeConfiguration : IEntityTypeConfiguration<SyncRun>
     {
         builder.HasIndex(x => new { x.CreatedBy, x.Index }).IsUnique();
         builder.HasIndex(x => new { x.CreatedBy, x.FinalizedAt });
-        builder.HasIndex(x => x.CreatedBy);
 
         builder.Ignore(x => x.IsFinalized);
 
@@ -20,6 +19,5 @@ public class SyncRunEntityTypeConfiguration : IEntityTypeConfiguration<SyncRun>
         builder.Property(x => x.EventCount);
         builder.Property(x => x.CreatedBy);
         builder.Property(x => x.CreatedByDevice);
-
     }
 }

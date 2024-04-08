@@ -1,0 +1,17 @@
+<div class="layout-wrapper" [ngClass]="{ 'login-layout': (isLoggedIn$ | async) === false }">
+    <app-topbar *ngIf="isLoggedIn$ | async"></app-topbar>
+    <mat-sidenav-container *ngIf="isLoggedIn$ | async" (backdropClick)="closeSidebar()" autosize>
+        <mat-sidenav #sidebar [opened]="isSidebarOpen()" [mode]="isMobile() ? 'over' : 'side'">
+            <app-sidebar></app-sidebar>
+        </mat-sidenav>
+        <mat-sidenav-content class="layout-main-container">
+            <div class="layout-content">
+                <app-breadcrumb></app-breadcrumb>
+                <router-outlet (activate)="changeOfRoute()"></router-outlet>
+            </div>
+        </mat-sidenav-content>
+    </mat-sidenav-container>
+    <div *ngIf="(isLoggedIn$ | async) === false">
+        <router-outlet></router-outlet>
+    </div>
+</div>

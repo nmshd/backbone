@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Files.Application.AutoMapper;
+using Backbone.BuildingBlocks.Application.MediatR;
+using Backbone.Modules.Files.Application.AutoMapper;
 using Backbone.Modules.Files.Application.Files.Commands.CreateFile;
-using Enmeshed.BuildingBlocks.Application.MediatR;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 

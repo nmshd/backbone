@@ -1,10 +1,10 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.Json;
-using Enmeshed.Tooling.JsonConverters;
+using Backbone.Tooling.JsonConverters;
 using FluentAssertions;
 using Xunit;
 
-namespace Enmeshed.Tooling.Tests.Tests;
+namespace Backbone.Tooling.Tests.Tests;
 
 public class UrlSafeBase64ToByteArrayJsonConverterTests
 {
@@ -14,7 +14,7 @@ public class UrlSafeBase64ToByteArrayJsonConverterTests
         const string jsonString = "{\"Bytes\":\"LS0tKysjIyM8PDw-Pi0oKS8iKSQlJiY_IQ\"}";
 
         var result = JsonSerializer.Deserialize<Test>(jsonString,
-            new JsonSerializerOptions { Converters = { new UrlSafeBase64ToByteArrayJsonConverter() } });
+            new JsonSerializerOptions { Converters = { new UrlSafeBase64ToByteArrayJsonConverter() } })!;
 
         var utf8 = Encoding.UTF8.GetString(result.Bytes);
 
@@ -40,5 +40,5 @@ public class UrlSafeBase64ToByteArrayJsonConverterTests
 
 public class Test
 {
-    public byte[] Bytes { get; set; }
+    public required byte[] Bytes { get; set; }
 }

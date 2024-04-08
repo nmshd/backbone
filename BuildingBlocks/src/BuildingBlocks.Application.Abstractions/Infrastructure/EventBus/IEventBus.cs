@@ -1,6 +1,6 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 
 public interface IEventBus
 {

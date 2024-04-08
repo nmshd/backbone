@@ -1,12 +1,12 @@
-﻿using Backbone.Modules.Files.Application.Infrastructure.Persistence;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Files.Application.Infrastructure.Persistence;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Files.Domain.Entities;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database.QueryableExtensions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Extensions;
-using Enmeshed.BuildingBlocks.Application.Pagination;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using File = Backbone.Modules.Files.Domain.Entities.File;
@@ -38,7 +38,7 @@ public class FilesRepository : IFilesRepository
 
     }
 
-    public async Task<File> Find(FileId fileId, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
+    public async Task<File?> Find(FileId fileId, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
     {
         var file = await (track ? _files : _readOnlyFiles)
             .WithId(fileId)

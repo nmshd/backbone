@@ -1,6 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
-namespace ConsumerApi.Tests.Integration.Configuration;
+namespace Backbone.ConsumerApi.Tests.Integration.Configuration;
 
 public class HttpConfiguration
 {

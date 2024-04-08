@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 namespace Backbone.Modules.Synchronization.Application;
 
@@ -48,7 +48,7 @@ public static class ApplicationErrors
             return new ApplicationError("error.platform.validation.syncRun.cannotReadExternalEventsOfASyncRunStartedByAnotherDevice", "This sync was started by another device. Only that device can read the corresponding external events.");
         }
 
-        public static ApplicationError CannotStartSyncRunWhenAnotherSyncRunIsRunning(SyncRunId idOfRunningSyncRun = null)
+        public static ApplicationError CannotStartSyncRunWhenAnotherSyncRunIsRunning(SyncRunId? idOfRunningSyncRun = null)
         {
             var idString = idOfRunningSyncRun == null ? "" : $" (ID: {idOfRunningSyncRun})";
             return new ApplicationError("error.platform.validation.syncRun.cannotStartSyncRunWhenAnotherSyncRunIsRunning", $"Another sync run is currently active{idString}. There can only be one active sync run at a time. Try again in a few seconds.");

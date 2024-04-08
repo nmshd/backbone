@@ -1,10 +1,8 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExtensions;
-using Enmeshed.BuildingBlocks.Application.Extensions;
-using Enmeshed.BuildingBlocks.Domain;
-using Enmeshed.BuildingBlocks.Domain.Errors;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
@@ -32,11 +30,11 @@ public class TiersRepository : ITiersRepository
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<Tier> Find(string id, CancellationToken cancellationToken, bool track = false)
+    public async Task<Tier?> Find(string id, CancellationToken cancellationToken, bool track = false)
     {
         var tier = await (track ? _tiers : _readOnlyTiers)
             .IncludeAll(_dbContext)
-            .FirstWithId(id, cancellationToken);
+            .FirstOrDefaultAsync(m => m.Id == id, cancellationToken);
 
         return tier;
     }
@@ -57,7 +55,19 @@ public class TiersRepository : ITiersRepository
 
     public async Task Update(Tier tier, CancellationToken cancellationToken)
     {
+        RemoveOrphanedTierQuotaDefinitions();
         _tiers.Update(tier);
         await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    private void RemoveOrphanedTierQuotaDefinitions()
+    {
+        var removedQuotas = _dbContext.ChangeTracker
+            .Entries<TierQuotaDefinition>()
+            .Where(e => e.State == EntityState.Modified)
+            .Where(e => _dbContext.Entry(e.Entity).Property("TierId").CurrentValue == null)
+            .Select(e => e.Entity);
+
+        _dbContext.RemoveRange(removedQuotas);
     }
 }

@@ -1,9 +1,9 @@
-﻿using Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using FluentValidation;
 using MediatR;
-using ValidationException = Enmeshed.BuildingBlocks.Application.Abstractions.Exceptions.ValidationException;
+using ValidationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ValidationException;
 
-namespace Enmeshed.BuildingBlocks.Application.MediatR;
+namespace Backbone.BuildingBlocks.Application.MediatR;
 
 public class RequestValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
     where TRequest : IRequest<TResponse>

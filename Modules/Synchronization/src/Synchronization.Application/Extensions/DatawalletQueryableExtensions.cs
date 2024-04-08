@@ -1,12 +1,12 @@
-﻿using Backbone.Modules.Synchronization.Domain.Entities;
-using Enmeshed.DevelopmentKit.Identity.ValueObjects;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Synchronization.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Synchronization.Application.Extensions;
 
 public static class DatawalletQueryableExtensions
 {
-    public static async Task<Datawallet> OfOwner(this IQueryable<Datawallet> query, IdentityAddress owner, CancellationToken cancellationToken)
+    public static async Task<Datawallet?> OfOwner(this IQueryable<Datawallet> query, IdentityAddress owner, CancellationToken cancellationToken)
     {
         return await query.FirstOrDefaultAsync(e => e.Owner == owner, cancellationToken);
     }

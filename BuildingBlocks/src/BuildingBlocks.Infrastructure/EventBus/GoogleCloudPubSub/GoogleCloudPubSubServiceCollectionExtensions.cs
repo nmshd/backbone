@@ -1,9 +1,9 @@
-﻿using Autofac;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Autofac;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
+namespace Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
 public static class GoogleCloudPubSubServiceCollectionExtensions
 {
@@ -32,9 +32,7 @@ public static class GoogleCloudPubSubServiceCollectionExtensions
 
 public class GoogleCloudPubSubOptions : BasicBusOptions
 {
-#pragma warning disable CS8618
-    public string ProjectId { get; set; }
-    public string TopicName { get; set; }
-    public string ConnectionInfo { get; set; }
-#pragma warning restore CS8618
+    public string ProjectId { get; set; } = null!;
+    public string TopicName { get; set; } = null!;
+    public string ConnectionInfo { get; set; } = null!;
 }

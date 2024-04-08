@@ -1,10 +1,10 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Linq.Expressions;
-using Enmeshed.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Enmeshed.BuildingBlocks.Application.Pagination;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Application.Pagination;
 using Microsoft.EntityFrameworkCore;
 
-namespace Enmeshed.BuildingBlocks.Application.Extensions;
+namespace Backbone.BuildingBlocks.Application.Extensions;
 
 public static class IQueryablePaginationExtensions
 {

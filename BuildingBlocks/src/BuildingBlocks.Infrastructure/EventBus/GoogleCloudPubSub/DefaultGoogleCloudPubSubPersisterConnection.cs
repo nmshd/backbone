@@ -1,9 +1,9 @@
-﻿using Enmeshed.Tooling.Extensions;
+using Backbone.Tooling.Extensions;
 using Google.Api.Gax;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.PubSub.V1;
 
-namespace Enmeshed.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
+namespace Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
 public class DefaultGoogleCloudPubSubPersisterConnection : IGoogleCloudPubSubPersisterConnection
 {
