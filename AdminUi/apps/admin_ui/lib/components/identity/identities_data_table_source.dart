@@ -1,18 +1,24 @@
+import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 
 class IdentityDataTableSource extends DataTableSource {
   List<IdentityOverview> data = [];
+  Pagination? pagination;
   int sortColumnIndex = 0;
   bool sortAscending = true;
 
   void setData(
     List<IdentityOverview> identities,
+    Pagination pagination,
     int columnIndex, {
     required bool columnAscending,
   }) {
     data = identities;
+    this.pagination = pagination;
+    notifyListeners();
+
     sortColumnIndex = columnIndex;
     sortAscending = columnAscending;
     sort();
@@ -89,7 +95,7 @@ class IdentityDataTableSource extends DataTableSource {
   bool get isRowCountApproximate => false;
 
   @override
-  int get rowCount => data.length;
+  int get rowCount => pagination?.totalRecords ?? 0;
 
   @override
   int get selectedRowCount => 0;
