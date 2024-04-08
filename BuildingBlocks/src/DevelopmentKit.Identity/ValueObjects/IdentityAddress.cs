@@ -53,7 +53,7 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
         try
         {
             var matches = Regex.Matches(stringValue, pattern, RegexOptions.IgnoreCase);
-            
+
             var concatenation = Base58.Bitcoin.Decode(matches.First().Groups[2].Value).ToArray();
 
             var hashedPublicKey = concatenation[..20];
@@ -65,7 +65,7 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
 
             return lengthIsValid && checksumIsValid;
         }
-        catch (Exception ex) when (ex is ArgumentNullException or ArgumentException )
+        catch (Exception ex) when (ex is ArgumentNullException or ArgumentException)
         {
             return false;
         }

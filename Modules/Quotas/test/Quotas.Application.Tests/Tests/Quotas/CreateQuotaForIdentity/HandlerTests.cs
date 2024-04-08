@@ -27,7 +27,7 @@ public class HandlerTests
         const int max = 5;
         const QuotaPeriod period = QuotaPeriod.Month;
         var metricKey = MetricKey.NumberOfSentMessages.Value;
-        
+
         var tierId = new TierId("TIRsomeTierId1111111");
         var identity = new Identity(TestDataGenerator.CreateRandomIdentityAddress(), tierId);
         var command = new CreateQuotaForIdentityCommand(identity.Address, metricKey, max, period);
