@@ -107,6 +107,7 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                     column: x => x.RoleId,
+                    principalSchema: "Devices",
                     principalTable: "AspNetRoles",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
@@ -132,6 +133,7 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_Devices_Identities_IdentityAddress",
                     column: x => x.IdentityAddress,
+                    principalSchema: "Devices",
                     principalTable: "Identities",
                     principalColumn: "Address",
                     onDelete: ReferentialAction.Cascade);
@@ -188,6 +190,7 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_AspNetUsers_Devices_DeviceId",
                     column: x => x.DeviceId,
+                    principalSchema: "Devices",
                     principalTable: "Devices",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
@@ -246,6 +249,7 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                     column: x => x.UserId,
+                    principalSchema: "Devices",
                     principalTable: "AspNetUsers",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
@@ -268,6 +272,7 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                     column: x => x.UserId,
+                    principalSchema: "Devices",
                     principalTable: "AspNetUsers",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
@@ -288,12 +293,14 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                     column: x => x.RoleId,
+                    principalSchema: "Devices",
                     principalTable: "AspNetRoles",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
                 table.ForeignKey(
                     name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                     column: x => x.UserId,
+                    principalSchema: "Devices",
                     principalTable: "AspNetUsers",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
@@ -316,6 +323,7 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                     column: x => x.UserId,
+                    principalSchema: "Devices",
                     principalTable: "AspNetUsers",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);

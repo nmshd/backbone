@@ -68,6 +68,7 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_RelationshipTemplateAllocations_RelationshipTemplates_Relat~",
                     column: x => x.RelationshipTemplateId,
+                    principalSchema: "Relationships",
                     principalTable: "RelationshipTemplates",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
@@ -98,6 +99,7 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_RelationshipChanges_Relationships_RelationshipId",
                     column: x => x.RelationshipId,
+                    principalSchema: "Relationships",
                     principalTable: "Relationships",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);

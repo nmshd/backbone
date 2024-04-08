@@ -104,12 +104,14 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_SyncErrors_ExternalEvents_ExternalEventId",
                     column: x => x.ExternalEventId,
+                    principalSchema: "Synchronization",
                     principalTable: "ExternalEvents",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
                 table.ForeignKey(
                     name: "FK_SyncErrors_SyncRuns_SyncRunId",
                     column: x => x.SyncRunId,
+                    principalSchema: "Synchronization",
                     principalTable: "SyncRuns",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);

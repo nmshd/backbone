@@ -34,6 +34,7 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_Attachments_Messages_MessageId",
                     column: x => x.MessageId,
+                    principalSchema: "Messages",
                     principalTable: "Messages",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
@@ -58,6 +59,7 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_RecipientInformation_Messages_MessageId",
                     column: x => x.MessageId,
+                    principalSchema: "Messages",
                     principalTable: "Messages",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);

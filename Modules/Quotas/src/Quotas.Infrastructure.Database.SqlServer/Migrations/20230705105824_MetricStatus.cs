@@ -30,6 +30,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                     table.ForeignKey(
                         name: "FK_MetricStatus_Identities_Owner",
                         column: x => x.Owner,
+                        principalSchema: "Quotas",
                         principalTable: "Identities",
                         principalColumn: "Address",
                         onDelete: ReferentialAction.Cascade);

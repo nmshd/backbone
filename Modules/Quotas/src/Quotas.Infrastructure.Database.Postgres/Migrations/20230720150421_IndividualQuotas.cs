@@ -96,6 +96,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_IndividualQuotas_Identities_ApplyTo",
                         column: x => x.ApplyTo,
+                        principalSchema: "Quotas",
                         principalTable: "Identities",
                         principalColumn: "Address",
                         onDelete: ReferentialAction.Cascade);
