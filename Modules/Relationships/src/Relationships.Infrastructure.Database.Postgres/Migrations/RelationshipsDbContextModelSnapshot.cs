@@ -59,13 +59,9 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedAt");
-
                     b.HasIndex("From");
 
                     b.HasIndex("RelationshipTemplateId");
-
-                    b.HasIndex("Status");
 
                     b.HasIndex("To");
 
@@ -101,13 +97,7 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedAt");
-
                     b.HasIndex("RelationshipId");
-
-                    b.HasIndex("Status");
-
-                    b.HasIndex("Type");
 
                     b.ToTable("RelationshipChanges", (string)null);
 
@@ -148,12 +138,6 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedAt");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("CreatedByDevice");
-
                     b.ToTable("RelationshipChanges", (string)null);
                 });
 
@@ -188,12 +172,6 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedAt");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("CreatedByDevice");
 
                     b.HasIndex("CreatedAt", "CreatedBy", "CreatedByDevice")
                         .HasAnnotation("SqlServer:Include", new[] { "Content" });
@@ -241,12 +219,6 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("DeletedAt");
-
-                    b.HasIndex("ExpiresAt");
 
                     b.ToTable("RelationshipTemplates");
                 });
