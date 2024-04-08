@@ -1,0 +1,16 @@
+meta {
+  name: Get Deletion Process
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{BaseUrl}}/Identities/{{IdentityAddress}}/DeletionProcesses/{{DeletionProcessId}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  IdentityAddress: id1CsU6VwBMgBA4TLc61nj895ZD1mPjbddNW
+  DeletionProcessId: IDPHEZQYas1NdHto2GU7
+}

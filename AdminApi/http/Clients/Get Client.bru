@@ -1,0 +1,15 @@
+meta {
+  name: Get Client
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{BaseUrl}}/Clients/{{ClientId}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  ClientId: test
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Create Client
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{BaseUrl}}/Clients
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "clientId": "brunotest",
+    "clientSecret": "bruno",
+    "displayName": "Bruno",
+    "defaultTier": "Basic",
+    "maxIdentities": null
+  }
+}

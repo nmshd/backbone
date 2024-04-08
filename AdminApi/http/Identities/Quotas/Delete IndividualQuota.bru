@@ -1,0 +1,16 @@
+meta {
+  name: Delete IndividualQuota
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{BaseUrl}}/Identities/{{IdentityAddress}}/Quotas/{{QuotaId}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  IdentityAddress: id1B2yn5zSt368qeU3KG8ir4qkpCzcmANyuB
+  QuotaId: QUOtvRrYbum70XEiQpbb
+}

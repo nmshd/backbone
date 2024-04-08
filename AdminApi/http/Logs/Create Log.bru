@@ -1,0 +1,23 @@
+meta {
+  name: Create Log
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{BaseUrl}}/Logs
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "category": "Test",
+    "logLevel": "Warning",
+    "messageTemplate": "{a} und {b} grüßen dich",
+    "arguments": [
+      "Alice und Bob",
+      "der Dritte"
+    ]
+  }
+}

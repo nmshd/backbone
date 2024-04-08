@@ -1,0 +1,16 @@
+meta {
+  name: Delete Tier Quota
+  type: http
+  seq: 2
+}
+
+delete {
+  url: {{BaseUrl}}/Tiers/{{TierId}}/Quotas/{{QuotaId}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  TierId: TIRvHkb7sfC4ut80RZmC
+  QuotaId: TQDKHI6ltCW76cAHbOrs
+}

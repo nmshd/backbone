@@ -1,0 +1,15 @@
+meta {
+  name: Start Deletion Process
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{BaseUrl}}/Identities/{{IdentityAddress}}/DeletionProcesses
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  IdentityAddress: id1CsU6VwBMgBA4TLc61nj895ZD1mPjbddNW
+}

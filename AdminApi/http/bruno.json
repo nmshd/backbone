@@ -1,0 +1,13 @@
+{
+  "version": "1",
+  "name": "AdminApi",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ],
+  "presets": {
+    "requestType": "http",
+    "requestUrl": "{{BaseUrl}}"
+  }
+}

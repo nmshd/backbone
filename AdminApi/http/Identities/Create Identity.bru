@@ -1,0 +1,21 @@
+meta {
+  name: Create Identity
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{BaseUrl}}/Identities
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "ClientId": "sdktest",
+    "ClientSecret" : "sdk",
+    "DevicePassword" : "test",
+    "IdentityVersion" : 1,
+    "IdentityPublicKey" : "eyJhbGciOiAzLCJwdWIiOiAiQUFBQSJ9"
+  }
+}

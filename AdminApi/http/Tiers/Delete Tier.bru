@@ -1,0 +1,15 @@
+meta {
+  name: Delete Tier
+  type: http
+  seq: 4
+}
+
+delete {
+  url: {{BaseUrl}}/Tiers/{{TierId}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  TierId: TIRvHkb7sfC4ut80RZmC
+}
