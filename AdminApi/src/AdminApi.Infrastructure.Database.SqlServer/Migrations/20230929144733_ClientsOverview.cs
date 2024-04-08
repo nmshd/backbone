@@ -11,7 +11,7 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""
-                CREATE VIEW ClientOverviews AS
+                CREATE VIEW AdminUi.ClientOverviews AS
                     SELECT
                         CLIENTS.ClientId,
                         CLIENTS.DisplayName,

@@ -13,7 +13,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.Sql(""" DROP VIEW "ClientOverviews" """);
 
             migrationBuilder.Sql("""
-                CREATE VIEW "ClientOverviews" AS
+                CREATE VIEW "AdminUi"."ClientOverviews" AS
                     SELECT
                         CLIENTS."ClientId" AS "ClientId",
                         CLIENTS."DisplayName" AS "DisplayName",
