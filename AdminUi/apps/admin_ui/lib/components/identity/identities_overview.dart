@@ -110,15 +110,20 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   }
 
   Future<void> loadIdentities({IdentityOverviewFilter? filter}) async {
+    print('loadIdentities called with page $_currentPage and filter $filter');
+
     final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(
           filter: filter,
           pageNumber: _currentPage,
           pageSize: _rowsPerPage,
         );
+
+    if (!mounted) return; // Check if the widget is still in the widget tree
+
     setState(() {
       identities = response.data;
       pagination = response.pagination;
-      dataSource.setData(identities, pagination, 0, columnAscending: true);
+      dataSource.setData(identities, pagination, _columnIndex, columnAscending: _columnAscending);
     });
   }
 }
