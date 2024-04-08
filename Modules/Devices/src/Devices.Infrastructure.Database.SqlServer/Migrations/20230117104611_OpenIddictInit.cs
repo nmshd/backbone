@@ -10,6 +10,7 @@ public partial class OpenIddictInit : Migration
     {
         migrationBuilder.CreateTable(
             name: "OpenIddictApplications",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -29,10 +30,12 @@ public partial class OpenIddictInit : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_OpenIddictApplications", x => x.Id);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "OpenIddictScopes",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -48,10 +51,12 @@ public partial class OpenIddictInit : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_OpenIddictScopes", x => x.Id);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "OpenIddictAuthorizations",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -72,10 +77,12 @@ public partial class OpenIddictInit : Migration
                     column: x => x.ApplicationId,
                     principalTable: "OpenIddictApplications",
                     principalColumn: "Id");
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "OpenIddictTokens",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -105,7 +112,8 @@ public partial class OpenIddictInit : Migration
                     column: x => x.AuthorizationId,
                     principalTable: "OpenIddictAuthorizations",
                     principalColumn: "Id");
-            });
+            }
+        );
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictApplications_ClientId",

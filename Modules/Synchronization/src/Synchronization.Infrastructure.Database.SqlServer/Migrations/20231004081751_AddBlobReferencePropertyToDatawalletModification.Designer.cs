@@ -50,7 +50,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.HasIndex("Owner")
                         .IsUnique();
 
-                    b.ToTable("Datawallets". "Synchronization");
+                    b.ToTable("Datawallets", "Synchronization");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.DatawalletModification", b =>
@@ -124,7 +124,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.HasIndex("CreatedBy", "Index")
                         .IsUnique();
 
-                    b.ToTable("DatawalletModifications". "Synchronization");
+                    b.ToTable("DatawalletModifications", "Synchronization");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", b =>
@@ -175,7 +175,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
                     b.HasIndex("Owner", "SyncRunId");
 
-                    b.ToTable("ExternalEvents". "Synchronization");
+                    b.ToTable("ExternalEvents", "Synchronization");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncError", b =>
@@ -212,7 +212,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.HasIndex("SyncRunId", "ExternalEventId")
                         .IsUnique();
 
-                    b.ToTable("SyncErrors". "Synchronization");
+                    b.ToTable("SyncErrors", "Synchronization");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", b =>
@@ -264,7 +264,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.HasIndex("CreatedBy", "Index")
                         .IsUnique();
 
-                    b.ToTable("SyncRuns". "Synchronization");
+                    b.ToTable("SyncRuns", "Synchronization");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.DatawalletModification", b =>

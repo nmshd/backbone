@@ -46,7 +46,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Tiers". "Devices");
+                    b.ToTable("Tiers", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
@@ -168,7 +168,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("IdentityAddress");
 
-                    b.ToTable("Devices". "Devices");
+                    b.ToTable("Devices", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
@@ -201,7 +201,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Address");
 
-                    b.ToTable("Identities". "Devices");
+                    b.ToTable("Identities", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.PnsRegistration", b =>
@@ -234,7 +234,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("DeviceId");
 
-                    b.ToTable("PnsRegistrations". "Devices");
+                    b.ToTable("PnsRegistrations", "Devices");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

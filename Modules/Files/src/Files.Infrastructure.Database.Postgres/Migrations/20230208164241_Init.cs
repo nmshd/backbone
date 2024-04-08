@@ -13,6 +13,7 @@ public partial class Init : Migration
     {
         migrationBuilder.CreateTable(
             name: "FileMetadata",
+            schema: "Files",
             columns: table => new
             {
                 Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -35,7 +36,8 @@ public partial class Init : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_FileMetadata", x => x.Id);
-            });
+            }
+        );
 
         migrationBuilder.CreateIndex(
             name: "IX_FileMetadata_CreatedBy",

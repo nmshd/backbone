@@ -13,6 +13,7 @@ public partial class Init : Migration
     {
         migrationBuilder.CreateTable(
             name: "Datawallets",
+            schema: "Synchronization",
             columns: table => new
             {
                 Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -22,10 +23,12 @@ public partial class Init : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_Datawallets", x => x.Id);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "SyncRuns",
+            schema: "Synchronization",
             columns: table => new
             {
                 Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -41,10 +44,12 @@ public partial class Init : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_SyncRuns", x => x.Id);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "DatawalletModifications",
+            schema: "Synchronization",
             columns: table => new
             {
                 Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -67,10 +72,12 @@ public partial class Init : Migration
                     column: x => x.DatawalletId,
                     principalTable: "Datawallets",
                     principalColumn: "Id");
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "ExternalEvents",
+            schema: "Synchronization",
             columns: table => new
             {
                 Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -90,10 +97,12 @@ public partial class Init : Migration
                     column: x => x.SyncRunId,
                     principalTable: "SyncRuns",
                     principalColumn: "Id");
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "SyncErrors",
+            schema: "Synchronization",
             columns: table => new
             {
                 Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -116,7 +125,8 @@ public partial class Init : Migration
                     principalTable: "SyncRuns",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateIndex(
             name: "IX_DatawalletModifications_CreatedBy",

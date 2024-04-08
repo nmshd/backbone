@@ -44,6 +44,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.CreateTable(
                 name: "IdentityDeletionProcesses",
+                schema: "Devices",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -68,10 +69,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         column: x => x.IdentityAddress,
                         principalTable: "Identities",
                         principalColumn: "Address");
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "IdentityDeletionProcessAuditLog",
+                schema: "Devices",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -91,7 +94,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         column: x => x.IdentityDeletionProcessId,
                         principalTable: "IdentityDeletionProcesses",
                         principalColumn: "Id");
-                });
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityDeletionProcessAuditLog_IdentityDeletionProcessId",

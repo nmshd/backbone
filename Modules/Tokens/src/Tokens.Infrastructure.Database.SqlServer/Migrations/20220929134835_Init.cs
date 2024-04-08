@@ -9,6 +9,7 @@ public partial class Init : Migration
     {
         migrationBuilder.CreateTable(
             name: "Tokens",
+            schema: "Tokens",
             columns: table => new
             {
                 Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),

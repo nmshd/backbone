@@ -13,6 +13,7 @@ public partial class Init : Migration
     {
         migrationBuilder.CreateTable(
             name: "Challenges",
+            schema: "Challenges",
             columns: table => new
             {
                 Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),

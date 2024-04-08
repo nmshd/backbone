@@ -67,7 +67,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("DeviceId");
 
-                    b.ToTable("PnsRegistrations". "Devices");
+                    b.ToTable("PnsRegistrations", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", b =>
@@ -100,7 +100,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Tiers". "Devices");
+                    b.ToTable("Tiers", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Challenge", b =>
@@ -219,7 +219,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("IdentityAddress");
 
-                    b.ToTable("Devices". "Devices");
+                    b.ToTable("Devices", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
@@ -269,7 +269,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("TierId");
 
-                    b.ToTable("Identities". "Devices");
+                    b.ToTable("Identities", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", b =>

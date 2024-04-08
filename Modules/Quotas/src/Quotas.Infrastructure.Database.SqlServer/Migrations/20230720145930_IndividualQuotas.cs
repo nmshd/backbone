@@ -81,6 +81,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.CreateTable(
                 name: "IndividualQuotas",
+                schema: "Quotas",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -98,7 +99,8 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                         principalTable: "Identities",
                         principalColumn: "Address",
                         onDelete: ReferentialAction.Cascade);
-                });
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_IndividualQuotas_ApplyTo",

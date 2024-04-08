@@ -111,7 +111,7 @@ namespace Files.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("FileMetadata". "Files");
+                    b.ToTable("FileMetadata", "Files");
                 });
 #pragma warning restore 612, 618
         }

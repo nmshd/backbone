@@ -65,7 +65,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("TierId");
 
-                    b.ToTable("Identities". "Quotas");
+                    b.ToTable("Identities", "Quotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.IndividualQuota", b =>
@@ -97,7 +97,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("ApplyTo");
 
-                    b.ToTable("IndividualQuotas". "Quotas");
+                    b.ToTable("IndividualQuotas", "Quotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.MetricStatus", b =>
@@ -144,7 +144,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("_definitionId");
 
-                    b.ToTable("TierQuotas". "Quotas");
+                    b.ToTable("TierQuotas", "Quotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Messages.Message", b =>
@@ -184,7 +184,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tiers". "Quotas");
+                    b.ToTable("Tiers", "Quotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.TierQuotaDefinition", b =>
@@ -217,7 +217,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("TierId");
 
-                    b.ToTable("TierQuotaDefinitions". "Quotas");
+                    b.ToTable("TierQuotaDefinitions", "Quotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", b =>

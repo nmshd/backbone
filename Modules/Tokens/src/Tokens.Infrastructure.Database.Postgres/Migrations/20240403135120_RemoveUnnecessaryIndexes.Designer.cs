@@ -59,7 +59,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tokens". "Tokens");
+                    b.ToTable("Tokens", "Tokens");
                 });
 #pragma warning restore 612, 618
         }

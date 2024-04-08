@@ -17,6 +17,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.CreateTable(
                 name: "MetricStatus",
+                schema: "Quotas",
                 columns: table => new
                 {
                     MetricKey = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
@@ -32,7 +33,8 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                         principalTable: "Identities",
                         principalColumn: "Address",
                         onDelete: ReferentialAction.Cascade);
-                });
+                }
+            );
         }
 
         /// <inheritdoc />

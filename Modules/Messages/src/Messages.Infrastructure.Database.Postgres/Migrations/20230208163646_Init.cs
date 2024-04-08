@@ -12,6 +12,7 @@ public partial class Init : Migration
     {
         migrationBuilder.CreateTable(
             name: "Messages",
+            schema: "Messages",
             columns: table => new
             {
                 Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -23,10 +24,12 @@ public partial class Init : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_Messages", x => x.Id);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "Attachments",
+            schema: "Messages",
             columns: table => new
             {
                 Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -41,10 +44,12 @@ public partial class Init : Migration
                     principalTable: "Messages",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "RecipientInformation",
+            schema: "Messages",
             columns: table => new
             {
                 Address = table.Column<string>(type: "character(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: false),
@@ -70,7 +75,8 @@ public partial class Init : Migration
                     principalTable: "Relationships",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateIndex(
             name: "IX_Attachments_MessageId",

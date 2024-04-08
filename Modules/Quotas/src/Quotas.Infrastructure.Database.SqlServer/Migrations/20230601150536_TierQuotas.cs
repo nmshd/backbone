@@ -13,6 +13,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.CreateTable(
                 name: "TierQuotaDefinitions",
+                schema: "Quotas",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -29,10 +30,12 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                         column: x => x.TierId,
                         principalTable: "Tiers",
                         principalColumn: "Id");
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "TierQuotas",
+                schema: "Quotas",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -53,7 +56,8 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                         column: x => x.DefinitionId,
                         principalTable: "TierQuotaDefinitions",
                         principalColumn: "Id");
-                });
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_TierQuotaDefinitions_TierId",

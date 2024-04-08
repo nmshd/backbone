@@ -61,7 +61,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Tokens". "Tokens");
+                    b.ToTable("Tokens", "Tokens");
                 });
 #pragma warning restore 612, 618
         }

@@ -44,7 +44,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("TierId");
 
-                    b.ToTable("Identities". "Quotas");
+                    b.ToTable("Identities", "Quotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.Tier", b =>
@@ -63,7 +63,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tiers". "Quotas");
+                    b.ToTable("Tiers", "Quotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Entities.Identity", b =>

@@ -81,7 +81,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Messages". "Messages");
+                    b.ToTable("Messages", "Messages");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.RecipientInformation", b =>
@@ -126,7 +126,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("RelationshipId");
 
-                    b.ToTable("RecipientInformation". "Messages");
+                    b.ToTable("RecipientInformation", "Messages");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.Relationship", b =>

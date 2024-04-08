@@ -12,6 +12,7 @@ public partial class TierInit : Migration
     {
         migrationBuilder.CreateTable(
             name: "Tier",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -20,7 +21,8 @@ public partial class TierInit : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_Tier", x => x.Id);
-            });
+            }
+        );
     }
 
     /// <inheritdoc />

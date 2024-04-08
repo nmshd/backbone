@@ -48,7 +48,7 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.SqlServer.Migratio
 
                     b.HasKey("Id");
 
-                    b.ToTable("Challenges". "Challenges");
+                    b.ToTable("Challenges", "Challenges");
                 });
 #pragma warning restore 612, 618
         }

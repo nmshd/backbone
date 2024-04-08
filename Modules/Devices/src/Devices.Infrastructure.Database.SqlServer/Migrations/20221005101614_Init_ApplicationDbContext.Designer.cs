@@ -140,7 +140,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("IdentityAddress");
 
-                    b.ToTable("Devices". "Devices");
+                    b.ToTable("Devices", "Devices");
                 });
 
             modelBuilder.Entity("Devices.Domain.Entities.Identity", b =>
@@ -167,7 +167,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Address");
 
-                    b.ToTable("Identities". "Devices");
+                    b.ToTable("Identities", "Devices");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

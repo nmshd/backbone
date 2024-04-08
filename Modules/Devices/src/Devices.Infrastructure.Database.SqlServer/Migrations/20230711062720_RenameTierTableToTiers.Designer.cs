@@ -46,7 +46,7 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Tiers". "Devices");
+                    b.ToTable("Tiers", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
@@ -169,7 +169,7 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("IdentityAddress");
 
-                    b.ToTable("Devices". "Devices");
+                    b.ToTable("Devices", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
@@ -204,7 +204,7 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("TierId");
 
-                    b.ToTable("Identities". "Devices");
+                    b.ToTable("Identities", "Devices");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

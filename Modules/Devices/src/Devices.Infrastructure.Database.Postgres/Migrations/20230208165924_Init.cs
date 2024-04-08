@@ -13,6 +13,7 @@ public partial class Init : Migration
     {
         migrationBuilder.CreateTable(
             name: "AspNetRoles",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "text", nullable: false),
@@ -23,10 +24,12 @@ public partial class Init : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_AspNetRoles", x => x.Id);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "Identities",
+            schema: "Devices",
             columns: table => new
             {
                 Address = table.Column<string>(type: "character(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: false),
@@ -38,10 +41,12 @@ public partial class Init : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_Identities", x => x.Address);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "OpenIddictApplications",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "text", nullable: false),
@@ -61,10 +66,12 @@ public partial class Init : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_OpenIddictApplications", x => x.Id);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "OpenIddictScopes",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "text", nullable: false),
@@ -80,10 +87,12 @@ public partial class Init : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_OpenIddictScopes", x => x.Id);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "AspNetRoleClaims",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<int>(type: "integer", nullable: false)
@@ -101,10 +110,12 @@ public partial class Init : Migration
                     principalTable: "AspNetRoles",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "Devices",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -124,10 +135,12 @@ public partial class Init : Migration
                     principalTable: "Identities",
                     principalColumn: "Address",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "OpenIddictAuthorizations",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "text", nullable: false),
@@ -148,10 +161,12 @@ public partial class Init : Migration
                     column: x => x.ApplicationId,
                     principalTable: "OpenIddictApplications",
                     principalColumn: "Id");
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "AspNetUsers",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "text", nullable: false),
@@ -176,10 +191,12 @@ public partial class Init : Migration
                     principalTable: "Devices",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "OpenIddictTokens",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "text", nullable: false),
@@ -209,10 +226,12 @@ public partial class Init : Migration
                     column: x => x.AuthorizationId,
                     principalTable: "OpenIddictAuthorizations",
                     principalColumn: "Id");
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "AspNetUserClaims",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<int>(type: "integer", nullable: false)
@@ -230,10 +249,12 @@ public partial class Init : Migration
                     principalTable: "AspNetUsers",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "AspNetUserLogins",
+            schema: "Devices",
             columns: table => new
             {
                 LoginProvider = table.Column<string>(type: "text", nullable: false),
@@ -250,10 +271,12 @@ public partial class Init : Migration
                     principalTable: "AspNetUsers",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "AspNetUserRoles",
+            schema: "Devices",
             columns: table => new
             {
                 UserId = table.Column<string>(type: "text", nullable: false),
@@ -274,10 +297,12 @@ public partial class Init : Migration
                     principalTable: "AspNetUsers",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "AspNetUserTokens",
+            schema: "Devices",
             columns: table => new
             {
                 UserId = table.Column<string>(type: "text", nullable: false),
@@ -294,7 +319,8 @@ public partial class Init : Migration
                     principalTable: "AspNetUsers",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetRoleClaims_RoleId",

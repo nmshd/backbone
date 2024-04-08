@@ -169,7 +169,7 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("IdentityAddress");
 
-                    b.ToTable("Devices". "Devices");
+                    b.ToTable("Devices", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
@@ -204,7 +204,7 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("TierId");
 
-                    b.ToTable("Identities". "Devices");
+                    b.ToTable("Identities", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.PnsRegistration", b =>
@@ -234,7 +234,7 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("DeviceId");
 
-                    b.ToTable("PnsRegistrations". "Devices");
+                    b.ToTable("PnsRegistrations", "Devices");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
