@@ -83,7 +83,8 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 services.BuildServiceProvider().GetRequiredService<IOptions<IdentityDeletionJobConfiguration>>().Value;
 #pragma warning restore ASP0000
 
-            var worker = Type.GetType(parsedConfiguration.Worker) ?? throw new ArgumentException($"The specified worker could not be recognized, or no worker was set.");
+            var worker = Assembly.GetExecutingAssembly().DefinedTypes.FirstOrDefault(t => t.Name == parsedConfiguration.Worker) ??
+                         throw new ArgumentException($"The specified worker could not be recognized, or no worker was set.");
             services.AddTransient(typeof(IHostedService), worker);
 
             services
@@ -119,5 +120,5 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 .WithDefaultDestructurers()
                 .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() })
             )
-    );
+        );
 }

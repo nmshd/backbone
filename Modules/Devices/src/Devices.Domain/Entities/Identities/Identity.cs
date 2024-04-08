@@ -158,7 +158,7 @@ public class Identity
 
         deletionProcess.CancelAsOwner(Address, canceledByDeviceId);
 
-        TierId = TierIdBeforeDeletion ?? throw new DomainException(DomainErrors.CannotCancelDeletionProcess());
+        TierId = TierIdBeforeDeletion ?? throw new Exception($"Error when trying to cancel deletion process: '{nameof(TierIdBeforeDeletion)}' is null.");
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
 
