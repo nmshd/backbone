@@ -16,7 +16,7 @@ using Xunit;
 
 namespace Backbone.Job.IdentityDeletion.Tests.Tests;
 
-public class ActualIdentityDeletionWorkerTests
+public class ActualDeletionWorkerTests
 {
     [Fact]
     public async Task Proxies_triggering_the_deletion_processes_to_command_handler()
@@ -90,7 +90,7 @@ public class ActualIdentityDeletionWorkerTests
         A.CallTo(() => mediator.Send(A<TriggerRipeDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(commandResponse);
     }
 
-    private static ActualIdentityDeletionWorker CreateWorker(IMediator mediator,
+    private static ActualDeletionWorker CreateWorker(IMediator mediator,
         List<IIdentityDeleter>? identityDeleters = null,
         IEventBus? eventBus = null,
         IPushNotificationSender? pushNotificationSender = null)
@@ -99,7 +99,7 @@ public class ActualIdentityDeletionWorkerTests
         identityDeleters ??= [A.Dummy<IIdentityDeleter>()];
         eventBus ??= A.Dummy<IEventBus>();
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
-        var logger = A.Dummy<ILogger<ActualIdentityDeletionWorker>>();
-        return new ActualIdentityDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, eventBus, logger);
+        var logger = A.Dummy<ILogger<ActualDeletionWorker>>();
+        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, eventBus, logger);
     }
 }

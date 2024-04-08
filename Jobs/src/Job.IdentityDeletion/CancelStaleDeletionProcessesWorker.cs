@@ -4,15 +4,15 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Backbone.Job.IdentityDeletion;
 
-public class CancelIdentityDeletionProcessWorker : IHostedService
+public class CancelStaleDeletionProcessesWorker : IHostedService
 {
     private readonly IHostApplicationLifetime _host;
-    private readonly ILogger<CancelIdentityDeletionProcessWorker> _logger;
+    private readonly ILogger<CancelStaleDeletionProcessesWorker> _logger;
     private readonly IMediator _mediator;
 
-    public CancelIdentityDeletionProcessWorker(IHostApplicationLifetime host,
+    public CancelStaleDeletionProcessesWorker(IHostApplicationLifetime host,
         IMediator mediator,
-        ILogger<CancelIdentityDeletionProcessWorker> logger)
+        ILogger<CancelStaleDeletionProcessesWorker> logger)
     {
         _host = host;
         _mediator = mediator;
