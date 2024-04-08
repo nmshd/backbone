@@ -110,15 +110,13 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   }
 
   Future<void> loadIdentities({IdentityOverviewFilter? filter}) async {
-    print('loadIdentities called with page $_currentPage and filter $filter');
-
     final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(
           filter: filter,
           pageNumber: _currentPage,
           pageSize: _rowsPerPage,
         );
 
-    if (!mounted) return; // Check if the widget is still in the widget tree
+    if (!mounted) return;
 
     setState(() {
       identities = response.data;
