@@ -1,0 +1,12 @@
+{
+    "profiles": {
+        "Job.IdentityDeletion.CancelProcess": {
+            "commandName": "Project",
+            "commandLineArgs": "--Worker Backbone.Job.IdentityDeletion.CancelIdentityDeletionProcessWorker"
+        },
+        "Job.IdentityDeletion.ActualDeletion": {
+            "commandName": "Project",
+            "commandLineArgs": "--Worker Backbone.Job.IdentityDeletion.ActualIdentityDeletionWorker"
+        }
+    }
+}
