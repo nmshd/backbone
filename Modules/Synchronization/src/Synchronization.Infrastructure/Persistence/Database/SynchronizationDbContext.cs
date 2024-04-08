@@ -55,6 +55,8 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
     {
         base.OnModelCreating(builder);
 
+        builder.HasDefaultSchema("Synchronization");
+
         builder.ApplyConfigurationsFromAssembly(typeof(SynchronizationDbContext).Assembly);
     }
 
