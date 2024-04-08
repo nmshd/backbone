@@ -63,19 +63,13 @@ class IdentityDataTableSource extends DataTableSource {
       final identity = data[localIndex];
       return DataRow.byIndex(
         index: localIndex,
-        onLongPress: () {
-          // Navigator.of(context).push(MaterialPageRoute(
-          //   builder: (context) => IdentityDetails(identity: identity),
-          // ));
-        },
+        onLongPress: () {},
         cells: [
           DataCell(Text(identity.address)),
           DataCell(
             Center(
               child: GestureDetector(
-                onTap: () {
-                  // TODO(stamenione): Navigate to the tier details screen
-                },
+                onTap: () {},
                 child: Text(identity.tier.name),
               ),
             ),
