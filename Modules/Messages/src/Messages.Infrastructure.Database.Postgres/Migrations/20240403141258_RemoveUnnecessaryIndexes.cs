@@ -20,6 +20,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_CreatedAt",
+                schema: "Messages"
                 table: "Messages",
                 column: "CreatedAt");
         }

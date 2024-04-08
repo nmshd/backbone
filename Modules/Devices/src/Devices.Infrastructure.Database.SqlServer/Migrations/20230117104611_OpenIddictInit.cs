@@ -75,6 +75,7 @@ public partial class OpenIddictInit : Migration
                 table.ForeignKey(
                     name: "FK_OpenIddictAuthorizations_OpenIddictApplications_ApplicationId",
                     column: x => x.ApplicationId,
+                    principalSchema: "Devices",
                     principalTable: "OpenIddictApplications",
                     principalColumn: "Id");
             }
@@ -105,11 +106,13 @@ public partial class OpenIddictInit : Migration
                 table.ForeignKey(
                     name: "FK_OpenIddictTokens_OpenIddictApplications_ApplicationId",
                     column: x => x.ApplicationId,
+                    principalSchema: "Devices",
                     principalTable: "OpenIddictApplications",
                     principalColumn: "Id");
                 table.ForeignKey(
                     name: "FK_OpenIddictTokens_OpenIddictAuthorizations_AuthorizationId",
                     column: x => x.AuthorizationId,
+                    principalSchema: "Devices",
                     principalTable: "OpenIddictAuthorizations",
                     principalColumn: "Id");
             }
@@ -117,6 +120,7 @@ public partial class OpenIddictInit : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictApplications_ClientId",
+            schema: "Devices"
             table: "OpenIddictApplications",
             column: "ClientId",
             unique: true,
@@ -129,6 +133,7 @@ public partial class OpenIddictInit : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictScopes_Name",
+            schema: "Devices"
             table: "OpenIddictScopes",
             column: "Name",
             unique: true,
@@ -141,11 +146,13 @@ public partial class OpenIddictInit : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictTokens_AuthorizationId",
+            schema: "Devices"
             table: "OpenIddictTokens",
             column: "AuthorizationId");
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictTokens_ReferenceId",
+            schema: "Devices"
             table: "OpenIddictTokens",
             column: "ReferenceId",
             unique: true,

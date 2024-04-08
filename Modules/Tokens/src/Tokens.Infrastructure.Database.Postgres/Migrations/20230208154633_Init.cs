@@ -30,6 +30,7 @@ public partial class Init : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_Tokens_CreatedBy",
+            schema: "Tokens"
             table: "Tokens",
             column: "CreatedBy");
     }

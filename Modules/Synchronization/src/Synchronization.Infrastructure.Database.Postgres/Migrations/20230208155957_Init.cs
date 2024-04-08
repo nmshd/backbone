@@ -70,6 +70,7 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_DatawalletModifications_Datawallets_DatawalletId",
                     column: x => x.DatawalletId,
+                    principalSchema: "Synchronization",
                     principalTable: "Datawallets",
                     principalColumn: "Id");
             }
@@ -95,6 +96,7 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_ExternalEvents_SyncRuns_SyncRunId",
                     column: x => x.SyncRunId,
+                    principalSchema: "Synchronization",
                     principalTable: "SyncRuns",
                     principalColumn: "Id");
             }

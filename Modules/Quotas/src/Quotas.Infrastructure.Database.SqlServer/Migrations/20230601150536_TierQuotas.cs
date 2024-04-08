@@ -28,6 +28,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                     table.ForeignKey(
                         name: "FK_TierQuotaDefinitions_Tiers_TierId",
                         column: x => x.TierId,
+                        principalSchema: "Quotas",
                         principalTable: "Tiers",
                         principalColumn: "Id");
                 }
@@ -49,11 +50,13 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                     table.ForeignKey(
                         name: "FK_TierQuotas_Identities_ApplyTo",
                         column: x => x.ApplyTo,
+                        principalSchema: "Quotas",
                         principalTable: "Identities",
                         principalColumn: "Address");
                     table.ForeignKey(
                         name: "FK_TierQuotas_TierQuotaDefinitions_DefinitionId",
                         column: x => x.DefinitionId,
+                        principalSchema: "Quotas",
                         principalTable: "TierQuotaDefinitions",
                         principalColumn: "Id");
                 }
@@ -61,16 +64,19 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_TierQuotaDefinitions_TierId",
+                schema: "Quotas"
                 table: "TierQuotaDefinitions",
                 column: "TierId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TierQuotas_ApplyTo",
+                schema: "Quotas"
                 table: "TierQuotas",
                 column: "ApplyTo");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TierQuotas_DefinitionId",
+                schema: "Quotas"
                 table: "TierQuotas",
                 column: "DefinitionId");
         }

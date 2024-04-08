@@ -67,6 +67,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     table.ForeignKey(
                         name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
                         column: x => x.IdentityAddress,
+                        principalSchema: "Devices",
                         principalTable: "Identities",
                         principalColumn: "Address");
                 }
@@ -92,6 +93,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     table.ForeignKey(
                         name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_IdentityDeletionProcessId",
                         column: x => x.IdentityDeletionProcessId,
+                        principalSchema: "Devices",
                         principalTable: "IdentityDeletionProcesses",
                         principalColumn: "Id");
                 }
@@ -99,11 +101,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityDeletionProcessAuditLog_IdentityDeletionProcessId",
+                schema: "Devices"
                 table: "IdentityDeletionProcessAuditLog",
                 column: "IdentityDeletionProcessId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityDeletionProcesses_IdentityAddress",
+                schema: "Devices"
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress");
         }

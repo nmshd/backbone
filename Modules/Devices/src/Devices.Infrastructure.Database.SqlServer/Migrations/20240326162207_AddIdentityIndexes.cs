@@ -12,11 +12,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.CreateIndex(
                 name: "IX_Identities_ClientId",
+                schema: "Devices"
                 table: "Identities",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Identities_TierId",
+                schema: "Devices"
                 table: "Identities",
                 column: "TierId");
         }

@@ -47,6 +47,7 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_Relationships_RelationshipTemplates_RelationshipTemplateId",
                     column: x => x.RelationshipTemplateId,
+                    principalSchema: "Relationships",
                     principalTable: "RelationshipTemplates",
                     principalColumn: "Id");
             }
@@ -108,91 +109,109 @@ public partial class Init : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_RelationshipChanges_CreatedAt",
+            schema: "Relationships"
             table: "RelationshipChanges",
             column: "CreatedAt");
 
         migrationBuilder.CreateIndex(
             name: "IX_RelationshipChanges_RelationshipId",
+            schema: "Relationships"
             table: "RelationshipChanges",
             column: "RelationshipId");
 
         migrationBuilder.CreateIndex(
             name: "IX_RelationshipChanges_Req_CreatedAt",
+            schema: "Relationships"
             table: "RelationshipChanges",
             column: "Req_CreatedAt");
 
         migrationBuilder.CreateIndex(
             name: "IX_RelationshipChanges_Req_CreatedBy",
+            schema: "Relationships"
             table: "RelationshipChanges",
             column: "Req_CreatedBy");
 
         migrationBuilder.CreateIndex(
             name: "IX_RelationshipChanges_Req_CreatedByDevice",
+            schema: "Relationships"
             table: "RelationshipChanges",
             column: "Req_CreatedByDevice");
 
         migrationBuilder.CreateIndex(
             name: "IX_RelationshipChanges_Res_CreatedAt",
+            schema: "Relationships"
             table: "RelationshipChanges",
             column: "Res_CreatedAt");
 
         migrationBuilder.CreateIndex(
             name: "IX_RelationshipChanges_Res_CreatedBy",
+            schema: "Relationships"
             table: "RelationshipChanges",
             column: "Res_CreatedBy");
 
         migrationBuilder.CreateIndex(
             name: "IX_RelationshipChanges_Res_CreatedByDevice",
+            schema: "Relationships"
             table: "RelationshipChanges",
             column: "Res_CreatedByDevice");
 
         migrationBuilder.CreateIndex(
             name: "IX_RelationshipChanges_Status",
+            schema: "Relationships"
             table: "RelationshipChanges",
             column: "Status");
 
         migrationBuilder.CreateIndex(
             name: "IX_RelationshipChanges_Type",
+            schema: "Relationships"
             table: "RelationshipChanges",
             column: "Type");
 
         migrationBuilder.CreateIndex(
             name: "IX_Relationships_CreatedAt",
+            schema: "Relationships"
             table: "Relationships",
             column: "CreatedAt");
 
         migrationBuilder.CreateIndex(
             name: "IX_Relationships_From",
+            schema: "Relationships"
             table: "Relationships",
             column: "From");
 
         migrationBuilder.CreateIndex(
             name: "IX_Relationships_RelationshipTemplateId",
+            schema: "Relationships"
             table: "Relationships",
             column: "RelationshipTemplateId");
 
         migrationBuilder.CreateIndex(
             name: "IX_Relationships_Status",
+            schema: "Relationships"
             table: "Relationships",
             column: "Status");
 
         migrationBuilder.CreateIndex(
             name: "IX_Relationships_To",
+            schema: "Relationships"
             table: "Relationships",
             column: "To");
 
         migrationBuilder.CreateIndex(
             name: "IX_RelationshipTemplates_CreatedBy",
+            schema: "Relationships"
             table: "RelationshipTemplates",
             column: "CreatedBy");
 
         migrationBuilder.CreateIndex(
             name: "IX_RelationshipTemplates_DeletedAt",
+            schema: "Relationships"
             table: "RelationshipTemplates",
             column: "DeletedAt");
 
         migrationBuilder.CreateIndex(
             name: "IX_RelationshipTemplates_ExpiresAt",
+            schema: "Relationships"
             table: "RelationshipTemplates",
             column: "ExpiresAt");
 

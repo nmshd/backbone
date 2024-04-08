@@ -32,6 +32,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictApplications_DefaultTier",
+                schema: "Devices"
                 table: "OpenIddictApplications",
                 column: "DefaultTier");
 

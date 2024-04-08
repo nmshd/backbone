@@ -161,6 +161,7 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_OpenIddictAuthorizations_OpenIddictApplications_Application~",
                     column: x => x.ApplicationId,
+                    principalSchema: "Devices",
                     principalTable: "OpenIddictApplications",
                     principalColumn: "Id");
             }
@@ -222,11 +223,13 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_OpenIddictTokens_OpenIddictApplications_ApplicationId",
                     column: x => x.ApplicationId,
+                    principalSchema: "Devices",
                     principalTable: "OpenIddictApplications",
                     principalColumn: "Id");
                 table.ForeignKey(
                     name: "FK_OpenIddictTokens_OpenIddictAuthorizations_AuthorizationId",
                     column: x => x.AuthorizationId,
+                    principalSchema: "Devices",
                     principalTable: "OpenIddictAuthorizations",
                     principalColumn: "Id");
             }
@@ -332,49 +335,58 @@ public partial class Init : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetRoleClaims_RoleId",
+            schema: "Devices"
             table: "AspNetRoleClaims",
             column: "RoleId");
 
         migrationBuilder.CreateIndex(
             name: "RoleNameIndex",
+            schema: "Devices"
             table: "AspNetRoles",
             column: "NormalizedName",
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUserClaims_UserId",
+            schema: "Devices"
             table: "AspNetUserClaims",
             column: "UserId");
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUserLogins_UserId",
+            schema: "Devices"
             table: "AspNetUserLogins",
             column: "UserId");
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUserRoles_RoleId",
+            schema: "Devices"
             table: "AspNetUserRoles",
             column: "RoleId");
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUsers_DeviceId",
+            schema: "Devices"
             table: "AspNetUsers",
             column: "DeviceId",
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "UserNameIndex",
+            schema: "Devices"
             table: "AspNetUsers",
             column: "NormalizedUserName",
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_Devices_IdentityAddress",
+            schema: "Devices"
             table: "Devices",
             column: "IdentityAddress");
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictApplications_ClientId",
+            schema: "Devices"
             table: "OpenIddictApplications",
             column: "ClientId",
             unique: true);
@@ -386,6 +398,7 @@ public partial class Init : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictScopes_Name",
+            schema: "Devices"
             table: "OpenIddictScopes",
             column: "Name",
             unique: true);
@@ -397,11 +410,13 @@ public partial class Init : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictTokens_AuthorizationId",
+            schema: "Devices"
             table: "OpenIddictTokens",
             column: "AuthorizationId");
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictTokens_ReferenceId",
+            schema: "Devices"
             table: "OpenIddictTokens",
             column: "ReferenceId",
             unique: true);

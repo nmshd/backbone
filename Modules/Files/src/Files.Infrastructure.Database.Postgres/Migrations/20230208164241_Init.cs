@@ -41,6 +41,7 @@ public partial class Init : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_FileMetadata_CreatedBy",
+            schema: "Files"
             table: "FileMetadata",
             column: "CreatedBy");
     }

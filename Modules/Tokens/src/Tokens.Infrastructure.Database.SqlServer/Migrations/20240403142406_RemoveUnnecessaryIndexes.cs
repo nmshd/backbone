@@ -20,6 +20,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.CreateIndex(
                 name: "IX_Tokens_CreatedBy",
+                schema: "Tokens"
                 table: "Tokens",
                 column: "CreatedBy");
         }

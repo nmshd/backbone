@@ -21,12 +21,14 @@ public partial class IdentitiesBasicTier : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_Tier_Name",
+            schema: "Devices"
             table: "Tier",
             column: "Name",
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_Identities_TierId",
+            schema: "Devices"
             table: "Identities",
             column: "TierId");
 

@@ -12,6 +12,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.CreateIndex(
                 name: "IX_MetricStatuses_MetricKey",
+                schema: "Quotas"
                 table: "MetricStatuses",
                 column: "MetricKey")
                 .Annotation("SqlServer:Include", new[] { "IsExhaustedUntil" });

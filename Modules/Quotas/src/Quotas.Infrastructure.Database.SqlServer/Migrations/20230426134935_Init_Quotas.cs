@@ -38,6 +38,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                     table.ForeignKey(
                         name: "FK_Identities_Tiers_TierId",
                         column: x => x.TierId,
+                        principalSchema: "Quotas",
                         principalTable: "Tiers",
                         principalColumn: "Id");
                 }
@@ -45,6 +46,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Identities_TierId",
+                schema: "Quotas"
                 table: "Identities",
                 column: "TierId");
         }
