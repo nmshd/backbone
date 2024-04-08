@@ -105,7 +105,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_IndividualQuotas_ApplyTo",
-                schema: "Quotas"
+                schema: "Quotas",
                 table: "IndividualQuotas",
                 column: "ApplyTo");
 

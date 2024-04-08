@@ -12,7 +12,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.CreateIndex(
                 name: "IX_MetricStatuses_MetricKey",
-                schema: "Quotas"
+                schema: "Quotas",
                 table: "MetricStatuses",
                 column: "MetricKey")
                 .Annotation("Npgsql:IndexInclude", new[] { "IsExhaustedUntil" });

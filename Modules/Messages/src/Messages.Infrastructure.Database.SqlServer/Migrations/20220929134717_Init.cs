@@ -75,43 +75,43 @@ public partial class Init : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_Attachments_MessageId",
-            schema: "Messages"
+            schema: "Messages",
             table: "Attachments",
             column: "MessageId");
 
         migrationBuilder.CreateIndex(
             name: "IX_Messages_CreatedAt",
-            schema: "Messages"
+            schema: "Messages",
             table: "Messages",
             column: "CreatedAt");
 
         migrationBuilder.CreateIndex(
             name: "IX_Messages_CreatedBy",
-            schema: "Messages"
+            schema: "Messages",
             table: "Messages",
             column: "CreatedBy");
 
         migrationBuilder.CreateIndex(
             name: "IX_Messages_DoNotSendBefore",
-            schema: "Messages"
+            schema: "Messages",
             table: "Messages",
             column: "DoNotSendBefore");
 
         migrationBuilder.CreateIndex(
             name: "IX_RecipientInformation_MessageId",
-            schema: "Messages"
+            schema: "Messages",
             table: "RecipientInformation",
             column: "MessageId");
 
         migrationBuilder.CreateIndex(
             name: "IX_RecipientInformation_ReceivedAt",
-            schema: "Messages"
+            schema: "Messages",
             table: "RecipientInformation",
             column: "ReceivedAt");
 
         migrationBuilder.CreateIndex(
             name: "IX_RecipientInformation_RelationshipId",
-            schema: "Messages"
+            schema: "Messages",
             table: "RecipientInformation",
             column: "RelationshipId");
     }

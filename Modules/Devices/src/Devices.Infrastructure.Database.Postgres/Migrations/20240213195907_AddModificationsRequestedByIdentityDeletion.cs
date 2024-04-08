@@ -101,13 +101,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityDeletionProcessAuditLog_IdentityDeletionProcessId",
-                schema: "Devices"
+                schema: "Devices",
                 table: "IdentityDeletionProcessAuditLog",
                 column: "IdentityDeletionProcessId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityDeletionProcesses_IdentityAddress",
-                schema: "Devices"
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress");
         }

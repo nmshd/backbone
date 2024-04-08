@@ -20,7 +20,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.CreateIndex(
                 name: "IX_Tokens_CreatedBy",
-                schema: "Tokens"
+                schema: "Tokens",
                 table: "Tokens",
                 column: "CreatedBy");
         }

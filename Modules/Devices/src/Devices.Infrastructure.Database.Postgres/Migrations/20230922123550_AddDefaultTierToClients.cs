@@ -32,7 +32,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictApplications_DefaultTier",
-                schema: "Devices"
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 column: "DefaultTier");
 

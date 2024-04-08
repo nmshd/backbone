@@ -46,7 +46,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Identities_TierId",
-                schema: "Quotas"
+                schema: "Quotas",
                 table: "Identities",
                 column: "TierId");
         }

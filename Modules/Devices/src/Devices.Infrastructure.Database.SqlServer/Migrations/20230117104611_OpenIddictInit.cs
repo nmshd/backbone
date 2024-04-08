@@ -120,7 +120,7 @@ public partial class OpenIddictInit : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictApplications_ClientId",
-            schema: "Devices"
+            schema: "Devices",
             table: "OpenIddictApplications",
             column: "ClientId",
             unique: true,
@@ -133,7 +133,7 @@ public partial class OpenIddictInit : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictScopes_Name",
-            schema: "Devices"
+            schema: "Devices",
             table: "OpenIddictScopes",
             column: "Name",
             unique: true,
@@ -146,13 +146,13 @@ public partial class OpenIddictInit : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictTokens_AuthorizationId",
-            schema: "Devices"
+            schema: "Devices",
             table: "OpenIddictTokens",
             column: "AuthorizationId");
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictTokens_ReferenceId",
-            schema: "Devices"
+            schema: "Devices",
             table: "OpenIddictTokens",
             column: "ReferenceId",
             unique: true,

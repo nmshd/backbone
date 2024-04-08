@@ -216,13 +216,13 @@ public partial class Init_ApplicationDbContext : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetRoleClaims_RoleId",
-            schema: "Devices"
+            schema: "Devices",
             table: "AspNetRoleClaims",
             column: "RoleId");
 
         migrationBuilder.CreateIndex(
             name: "RoleNameIndex",
-            schema: "Devices"
+            schema: "Devices",
             table: "AspNetRoles",
             column: "NormalizedName",
             unique: true,
@@ -230,32 +230,32 @@ public partial class Init_ApplicationDbContext : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUserClaims_UserId",
-            schema: "Devices"
+            schema: "Devices",
             table: "AspNetUserClaims",
             column: "UserId");
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUserLogins_UserId",
-            schema: "Devices"
+            schema: "Devices",
             table: "AspNetUserLogins",
             column: "UserId");
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUserRoles_RoleId",
-            schema: "Devices"
+            schema: "Devices",
             table: "AspNetUserRoles",
             column: "RoleId");
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUsers_DeviceId",
-            schema: "Devices"
+            schema: "Devices",
             table: "AspNetUsers",
             column: "DeviceId",
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "UserNameIndex",
-            schema: "Devices"
+            schema: "Devices",
             table: "AspNetUsers",
             column: "NormalizedUserName",
             unique: true,
@@ -263,7 +263,7 @@ public partial class Init_ApplicationDbContext : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_Devices_IdentityAddress",
-            schema: "Devices"
+            schema: "Devices",
             table: "Devices",
             column: "IdentityAddress");
     }

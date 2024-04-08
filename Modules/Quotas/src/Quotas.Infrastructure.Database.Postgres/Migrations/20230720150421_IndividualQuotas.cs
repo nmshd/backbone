@@ -105,7 +105,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_IndividualQuotas_ApplyTo",
-                schema: "Quotas"
+                schema: "Quotas",
                 table: "IndividualQuotas",
                 column: "ApplyTo");
 

@@ -20,7 +20,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_CreatedAt",
-                schema: "Messages"
+                schema: "Messages",
                 table: "Messages",
                 column: "CreatedAt");
         }

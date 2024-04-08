@@ -31,7 +31,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_DoNotSendBefore",
-                schema: "Messages"
+                schema: "Messages",
                 table: "Messages",
                 column: "DoNotSendBefore");
         }

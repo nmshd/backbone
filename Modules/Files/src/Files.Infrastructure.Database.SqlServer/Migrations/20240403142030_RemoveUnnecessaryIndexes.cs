@@ -20,7 +20,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.CreateIndex(
                 name: "IX_FileMetadata_CreatedBy",
-                schema: "Files"
+                schema: "Files",
                 table: "FileMetadata",
                 column: "CreatedBy");
         }

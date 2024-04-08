@@ -64,19 +64,19 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_TierQuotaDefinitions_TierId",
-                schema: "Quotas"
+                schema: "Quotas",
                 table: "TierQuotaDefinitions",
                 column: "TierId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TierQuotas_ApplyTo",
-                schema: "Quotas"
+                schema: "Quotas",
                 table: "TierQuotas",
                 column: "ApplyTo");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TierQuotas_DefinitionId",
-                schema: "Quotas"
+                schema: "Quotas",
                 table: "TierQuotas",
                 column: "DefinitionId");
         }

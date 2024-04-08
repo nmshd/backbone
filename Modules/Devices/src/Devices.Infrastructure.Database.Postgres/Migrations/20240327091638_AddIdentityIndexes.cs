@@ -12,13 +12,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.CreateIndex(
                 name: "IX_Identities_ClientId",
-                schema: "Devices"
+                schema: "Devices",
                 table: "Identities",
                 column: "ClientId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Identities_TierId",
-                schema: "Devices"
+                schema: "Devices",
                 table: "Identities",
                 column: "TierId");
         }

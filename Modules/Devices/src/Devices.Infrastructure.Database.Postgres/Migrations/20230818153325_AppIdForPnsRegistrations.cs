@@ -36,7 +36,7 @@ public partial class AppIdForPnsRegistrations : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_Identities_TierId",
-            schema: "Devices"
+            schema: "Devices",
             table: "Identities",
             column: "TierId");
 
