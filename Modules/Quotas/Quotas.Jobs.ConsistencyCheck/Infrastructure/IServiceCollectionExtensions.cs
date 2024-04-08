@@ -1,5 +1,5 @@
-﻿using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Persistence.Repository;
-using Enmeshed.Common.Infrastructure.Persistence.Repository;
+﻿using Backbone.Common.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure.Persistence.Repository;
 
 namespace Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Infrastructure;
 public static class IServiceCollectionExtensions

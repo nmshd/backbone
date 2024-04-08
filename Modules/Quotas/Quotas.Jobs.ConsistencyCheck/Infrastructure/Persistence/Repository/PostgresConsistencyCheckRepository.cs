@@ -1,6 +1,6 @@
-﻿using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Domain;
+﻿using Backbone.Common.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Quotas.Jobs.ConsistencyCheck.Domain;
 using Dapper;
-using Enmeshed.Common.Infrastructure.Persistence.Repository;
 using Microsoft.Extensions.Options;
 using Npgsql;
 
