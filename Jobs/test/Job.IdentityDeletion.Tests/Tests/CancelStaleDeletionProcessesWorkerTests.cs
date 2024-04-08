@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Backbone.Job.IdentityDeletion.Tests.Tests
 {
-    public class CancelIdentityDeletionProcessWorkerTests
+    public class CancelStaleDeletionProcessesWorkerTests
     {
         [Fact]
         public async void Happy_path()
@@ -24,14 +24,14 @@ namespace Backbone.Job.IdentityDeletion.Tests.Tests
             A.CallTo(() => mockMediator.Send(A<CancelStaleIdentityDeletionProcessesCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         }
 
-        private static CancelIdentityDeletionProcessWorker CreateWorker(IMediator? mediator = null)
+        private static CancelStaleDeletionProcessesWorker CreateWorker(IMediator? mediator = null)
         {
             mediator ??= A.Fake<IMediator>();
 
-            return new CancelIdentityDeletionProcessWorker(
+            return new CancelStaleDeletionProcessesWorker(
                 A.Dummy<IHostApplicationLifetime>(),
                 mediator,
-                A.Dummy<ILogger<CancelIdentityDeletionProcessWorker>>());
+                A.Dummy<ILogger<CancelStaleDeletionProcessesWorker>>());
         }
     }
 }
