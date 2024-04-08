@@ -16,6 +16,7 @@ class IdentitiesOverview extends StatefulWidget {
 }
 
 class _IdentitiesOverviewState extends State<IdentitiesOverview> {
+  late PaginatorController _paginatorController;
   late ScrollController _scrollController;
   late IdentityDataTableSource dataSource;
 
@@ -25,11 +26,13 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   bool _columnAscending = true;
 
   int _rowsPerPage = 5;
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _paginatorController = PaginatorController();
     dataSource = IdentityDataTableSource();
     loadIdentities();
   }
@@ -37,6 +40,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _paginatorController.dispose();
     super.dispose();
   }
 
@@ -70,7 +74,12 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
                 scrollController: _scrollController,
                 isVerticalScrollBarVisible: true,
                 renderEmptyRowsInTheEnd: false,
+                controller: _paginatorController,
                 availableRowsPerPage: const [5, 10, 25, 50, 100],
+                onPageChanged: (newPage) {
+                  _currentPage = newPage;
+                  loadIdentities(pageNumber: newPage, pageSize: _rowsPerPage);
+                },
                 columns: <DataColumn2>[
                   DataColumn2(label: const Text('Address'), onSort: _sort, size: ColumnSize.L),
                   DataColumn2(label: const Text('Tier'), onSort: _sort, size: ColumnSize.S),
@@ -93,6 +102,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
     setState(() {
       _rowsPerPage = newValue ?? _rowsPerPage;
     });
+    loadIdentities(pageNumber: _currentPage, pageSize: _rowsPerPage);
   }
 
   void _sort(int columnIndex, bool ascending) {
@@ -103,12 +113,18 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
     });
   }
 
-  Future<void> loadIdentities({IdentityOverviewFilter? filter}) async {
-    final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(filter: filter);
+  Future<void> loadIdentities({IdentityOverviewFilter? filter, int pageNumber = 0, int pageSize = 5}) async {
+    final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(
+          filter: filter,
+          pageNumber: pageNumber,
+          pageSize: pageSize,
+        );
 
-    setState(() {
-      identities = response.data;
-      dataSource.setData(identities, 0, columnAscending: true);
-    });
+    if (response.hasData) {
+      setState(() {
+        identities = response.data;
+        dataSource.setData(identities, _columnIndex, columnAscending: _columnAscending);
+      });
+    }
   }
 }

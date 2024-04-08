@@ -61,9 +61,10 @@ class _DateFilterState extends State<DateFilter> {
                       '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
                       style: const TextStyle(fontSize: 14),
                     ),
+                    Gaps.w8,
                     const Icon(Icons.calendar_today),
                     if (isDateSelected) ...[
-                      const SizedBox(width: 8),
+                      Gaps.w8,
                       GestureDetector(
                         onTap: clearDate,
                         child: const Icon(Icons.clear, size: 20),

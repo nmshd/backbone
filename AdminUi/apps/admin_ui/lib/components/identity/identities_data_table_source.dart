@@ -59,7 +59,9 @@ class IdentityDataTableSource extends DataTableSource {
     return DataRow2.byIndex(
       index: index,
       onLongPress: () {
-        // TODO(stamenione): Navigate to the identity details screen
+        // Navigator.of(context).push(MaterialPageRoute(
+        //   builder: (context) => IdentityDetails(identity: identity),
+        // ));
       },
       cells: [
         DataCell(Text(identity.address)),
