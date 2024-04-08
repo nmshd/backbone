@@ -72,7 +72,7 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("To");
 
-                    b.ToTable("Relationships");
+                    b.ToTable("Relationships". "Relationships");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipChange", b =>
@@ -234,7 +234,7 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("ExpiresAt");
 
-                    b.ToTable("RelationshipTemplates");
+                    b.ToTable("RelationshipTemplates". "Relationships");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplateAllocation", b =>

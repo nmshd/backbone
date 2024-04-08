@@ -83,7 +83,7 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("DoNotSendBefore");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages". "Messages");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.RecipientInformation", b =>
@@ -128,7 +128,7 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("RelationshipId");
 
-                    b.ToTable("RecipientInformation");
+                    b.ToTable("RecipientInformation". "Messages");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.Relationship", b =>
