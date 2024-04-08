@@ -10,6 +10,7 @@ using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetIdentity;
+
 public class HandlerTests
 {
     [Fact]
@@ -27,7 +28,7 @@ public class HandlerTests
         result.ClientId.Should().Be(identity.ClientId);
         result.Address.Should().Be(identity.Address);
         result.PublicKey.Should().BeEquivalentTo(identity.PublicKey);
-        result.TierId.Should().BeEquivalentTo(identity.TierId!);
+        result.TierId.Should().BeEquivalentTo(identity.TierId);
         result.IdentityVersion.Should().Be(1);
     }
 

@@ -59,13 +59,9 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedAt");
-
                     b.HasIndex("From");
 
                     b.HasIndex("RelationshipTemplateId");
-
-                    b.HasIndex("Status");
 
                     b.HasIndex("To");
 
@@ -101,13 +97,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedAt");
-
                     b.HasIndex("RelationshipId");
-
-                    b.HasIndex("Status");
-
-                    b.HasIndex("Type");
 
                     b.ToTable("RelationshipChanges", (string)null);
 
@@ -148,12 +138,6 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedAt");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("CreatedByDevice");
-
                     b.ToTable("RelationshipChanges", (string)null);
                 });
 
@@ -189,11 +173,10 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedAt");
+                    b.HasIndex("CreatedAt", "CreatedBy", "CreatedByDevice")
+                        .HasAnnotation("Npgsql:IndexInclude", new[] { "Content" });
 
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("CreatedByDevice");
+                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("CreatedAt", "CreatedBy", "CreatedByDevice"), new[] { "Content" });
 
                     b.ToTable("RelationshipChanges", (string)null);
                 });
@@ -236,12 +219,6 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedBy");
-
-                    b.HasIndex("DeletedAt");
-
-                    b.HasIndex("ExpiresAt");
 
                     b.ToTable("RelationshipTemplates");
                 });

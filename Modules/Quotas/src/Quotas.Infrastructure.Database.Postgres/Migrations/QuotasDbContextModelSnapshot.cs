@@ -115,6 +115,11 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Owner", "MetricKey");
 
+                    b.HasIndex("MetricKey")
+                        .HasAnnotation("SqlServer:Include", new[] { "IsExhaustedUntil" });
+
+                    NpgsqlIndexBuilderExtensions.IncludeProperties(b.HasIndex("MetricKey"), new[] { "IsExhaustedUntil" });
+
                     b.ToTable("MetricStatuses", (string)null);
                 });
 

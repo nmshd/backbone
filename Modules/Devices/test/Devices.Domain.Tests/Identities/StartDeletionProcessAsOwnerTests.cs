@@ -11,6 +11,11 @@ namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
 public class StartDeletionProcessAsOwnerTests : IDisposable
 {
+    public void Dispose()
+    {
+        Hasher.Reset();
+    }
+
     [Fact]
     public void Start_deletion_process()
     {
@@ -27,7 +32,7 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
 
         // Assert
         activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
-        activeIdentity.TierId!.Value.Should().Be(Tier.QUEUED_FOR_DELETION.Id.Value);
+        activeIdentity.TierId.Value.Should().Be(Tier.QUEUED_FOR_DELETION.Id.Value);
         activeIdentity.Status.Should().Be(IdentityStatus.ToBeDeleted);
 
         AssertDeletionProcessWasStarted(activeIdentity);
@@ -106,10 +111,5 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
     {
         var address = IdentityAddress.Create(Array.Empty<byte>(), "id1", "url");
         return new Identity("", address, Array.Empty<byte>(), TierId.Generate(), 1);
-    }
-
-    public void Dispose()
-    {
-        Hasher.Reset();
     }
 }

@@ -55,8 +55,6 @@ namespace Tokens.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
-
                     b.ToTable("Tokens");
                 });
 #pragma warning restore 612, 618
