@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
@@ -10,4 +11,5 @@ public interface IPnsRegistrationsRepository
     Task<IEnumerable<PnsRegistration>> FindWithAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false);
     Task<PnsRegistration?> FindByDeviceId(DeviceId deviceId, CancellationToken cancellationToken, bool track = false);
     Task Delete(List<DeviceId> deviceIds, CancellationToken cancellationToken);
+    Task Delete(Expression<Func<PnsRegistration, bool>> filter, CancellationToken cancellationToken);
 }

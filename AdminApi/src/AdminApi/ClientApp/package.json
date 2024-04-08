@@ -58,6 +58,7 @@
         "typescript": "~5.4.3"
     },
     "overrides": {
-        "autoprefixer": "10.4.5"
+        "autoprefixer": "10.4.5",
+        "vite": "5.1.7"
     }
 }
