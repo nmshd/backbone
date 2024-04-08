@@ -20,6 +20,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   late IdentityDataTableSource dataSource;
 
   List<IdentityOverview> identities = [];
+  late Pagination pagination;
 
   int _columnIndex = 0;
   bool _columnAscending = true;
@@ -99,7 +100,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
     setState(() {
       _columnIndex = columnIndex;
       _columnAscending = ascending;
-      dataSource.setData(identities, _columnIndex, columnAscending: _columnAscending);
+      dataSource.setData(identities, pagination, _columnIndex, columnAscending: _columnAscending);
     });
   }
 
@@ -108,7 +109,8 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
 
     setState(() {
       identities = response.data;
-      dataSource.setData(identities, 0, columnAscending: true);
+      pagination = response.pagination;
+      dataSource.setData(identities, pagination, 0, columnAscending: true);
     });
   }
 }
