@@ -23,7 +23,7 @@ public class Handler : IRequestHandler<AnonymizeMessagesOfIdentityCommand>
     {
         var messages = await _messagesRepository.Find(Message.WasCreatedBy(request.IdentityAddress), cancellationToken);
 
-        var newIdentityAddress = IdentityAddress.Create(Encoding.Unicode.GetBytes(DELETED_IDENTITY_STRING), _applicationOptions.AddressPrefix);
+        var newIdentityAddress = IdentityAddress.Create(Encoding.Unicode.GetBytes(DELETED_IDENTITY_STRING), _applicationOptions.InstanceUrl);
 
         foreach (var message in messages)
         {
