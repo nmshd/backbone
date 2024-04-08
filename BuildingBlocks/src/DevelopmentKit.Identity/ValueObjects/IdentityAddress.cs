@@ -50,13 +50,10 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
         var lengthIsValid = stringValue.Length <= MAX_LENGTH;
 
         const string pattern = @"^did\:web\:(.+?)\:dids\:(.+)$";
-        var matches = Regex.Matches(stringValue, pattern, RegexOptions.IgnoreCase);
-        if (matches.Count != 2)
-        {
-            return false;
-        }
         try
         {
+            var matches = Regex.Matches(stringValue, pattern, RegexOptions.IgnoreCase);
+            
             var concatenation = Base58.Bitcoin.Decode(matches.First().Groups[2].Value).ToArray();
 
             var hashedPublicKey = concatenation[..20];
@@ -68,7 +65,7 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
 
             return lengthIsValid && checksumIsValid;
         }
-        catch (IndexOutOfRangeException)
+        catch (Exception ex) when (ex is ArgumentNullException or ArgumentException )
         {
             return false;
         }

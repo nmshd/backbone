@@ -33,7 +33,7 @@ public class ApnsMessageBuilderTests
 
         // Act
         var request = new ApnsMessageBuilder("someAppBundleIdentifier", "https://api.development.push.apple.com/3/device/someDeviceId", "someValidJwt")
-            .AddContent(new NotificationContent(IdentityAddress.Parse("did:web:prod.enmesh.eu:dids:id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"), new { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(IdentityAddress.Parse("did:web:prod.enmesh.eu:dids:MTkcyw1T29xwRqHjSsAMrY4HvjHFALPfJ"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"), new { SomeProperty = "someValue" }))
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
             .SetNotificationId(1)
             .Build();
@@ -43,7 +43,7 @@ public class ApnsMessageBuilderTests
         requestBody.Should().Be(FormatJson(@"{
             'notId': 1,
             'content': {
-                'accRef': 'did:web:prod.enmesh.eu:dids:id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
+                'accRef': 'did:web:prod.enmesh.eu:dids:MTkcyw1T29xwRqHjSsAMrY4HvjHFALPfJ',
                 'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
                 'eventName': 'dynamic',
                 'sentAt': '2021-01-01T00:00:00.000Z',

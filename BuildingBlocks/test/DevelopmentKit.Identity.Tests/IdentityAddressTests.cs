@@ -7,17 +7,17 @@ namespace Backbone.DevelopmentKit.Identity.Tests;
 public class IdentityAddressTests
 {
     [Theory]
-    [InlineData("fj0o9eOiPRswTZL6j9lE9TRvpDDnPRMF0gJeahz/W2c=", "did:web:prod.enmeshed.eu:dids:QF24Gk2DfqCywRS7NpeH5iu7D4xvu6qv1")]
-    [InlineData("jRxGfZtQ8a90TmKCGk+dhuX1CBjgoXuldhNPwrjpWsw=", "did:web:prod.enmeshed.eu:dids:HwY1TuyVBp3CmY3h18yTt1CKyu5qwB9wj")]
-    [InlineData("PEODpwvi7KxIVa4qeUXia9apMFvPMktdDHiDitlfbjE=", "did:web:prod.enmeshed.eu:dids:LMp4k1XwxZ3WFXdAn9y12tv1ofe5so4kM")]
-    [InlineData("mJGmNbxiVZAPToRuk9O3NvdfsWl6V+7wzIc+/57bU08=", "did:web:prod.enmeshed.eu:dids:McegXycvRoiJppS2LG25phn3jNveckFUL")]
-    [InlineData("l68K/zdNp1VLoswcHAqN6QUFwCMU6Yvzf7XiW2m1hRY=", "did:web:prod.enmeshed.eu:dids:93k6K5cJr94WJEWYb6Kei8zp5CGPyrQLS")]
-    [InlineData("Gl8XTo8qFuUM+ksXixwp4g/jf3H/hU1F8ETuYaHCM5I=", "did:web:prod.enmeshed.eu:dids:BLrHAgDpimtLcGJGssMSm7bJHsvVe7CN")]
-    [InlineData("rIS4kAzHXT7GgCA6Qm1ANlwM3x12QMSkeprHb6tjPyc=", "did:web:prod.enmeshed.eu:dids:NjGvLfWPrQ34PXWRBNiTfXv9DFiDQHExx")]
-    [InlineData("hg/cbeBvfNrMiJ0dW1AtWC4IQwG4gkuhzG2+z6bAoRU=", "did:web:prod.enmeshed.eu:dids:Gda4aTXiBX9Pyc8UnmLaG44cX46umjnea")]
-    [InlineData("kId+qWen/lKeTdyxcIQhkzvvvTU8wIJECfWUWbmRQRY=", "did:web:prod.enmeshed.eu:dids:7RDEphijMPFGLbhqLWWgJfatBANMruC8f")]
-    [InlineData("NcqlzTEpSlKX9gmNBv41EjPRHpaNYwt0bxqh1bgyJzA=", "did:web:prod.enmeshed.eu:dids:9meHs4Di7JYNXoRPx9bFD6FUcpHFo3mBi")]
-    [InlineData("49fWA+kzWNdCFdo92imTiQ4vUUJsPPLNlcB9udC4ooE=", "did:web:prod.enmeshed.eu:dids:c711BBi4yqV9wrLBVKxRSNFayfAm3Eib")]
+    [InlineData("fj0o9eOiPRswTZL6j9lE9TRvpDDnPRMF0gJeahz/W2c=", "did:web:prod.enmeshed.eu:dids:DdxuctYSJmWu7LHx73GF3EULbrVKf7p9u")]
+    [InlineData("jRxGfZtQ8a90TmKCGk+dhuX1CBjgoXuldhNPwrjpWsw=", "did:web:prod.enmeshed.eu:dids:5zVGACUqWzohe9gmsHFTwFPFUPFqoZeKo")]
+    [InlineData("PEODpwvi7KxIVa4qeUXia9apMFvPMktdDHiDitlfbjE=", "did:web:prod.enmeshed.eu:dids:4CzeVnFPPJh2u5MEcfe4ENEnubMoSDK6z")]
+    [InlineData("mJGmNbxiVZAPToRuk9O3NvdfsWl6V+7wzIc+/57bU08=", "did:web:prod.enmeshed.eu:dids:Kkce9CYCVRYVxm8aXjwRHPW2WGp4GgGaE")]
+    [InlineData("l68K/zdNp1VLoswcHAqN6QUFwCMU6Yvzf7XiW2m1hRY=", "did:web:prod.enmeshed.eu:dids:Pv6RRdoY48HrZKrUtmbhby3PtQXaAjJyK")]
+    [InlineData("Gl8XTo8qFuUM+ksXixwp4g/jf3H/hU1F8ETuYaHCM5I=", "did:web:prod.enmeshed.eu:dids:8XovpZKTVYWjvaeZniPQJDitwJwpcA3oH")]
+    [InlineData("rIS4kAzHXT7GgCA6Qm1ANlwM3x12QMSkeprHb6tjPyc=", "did:web:prod.enmeshed.eu:dids:A8kDLHmFmoidbHvSAuuSLNgmao8F3V3CL")]
+    [InlineData("hg/cbeBvfNrMiJ0dW1AtWC4IQwG4gkuhzG2+z6bAoRU=", "did:web:prod.enmeshed.eu:dids:PyvoZbDu2GSxvvvziiJF4iHUK6pzqtU25")]
+    [InlineData("kId+qWen/lKeTdyxcIQhkzvvvTU8wIJECfWUWbmRQRY=", "did:web:prod.enmeshed.eu:dids:6p64qm2VdqwADRPpp1vs5Tvz8gyM8fMTe")]
+    [InlineData("NcqlzTEpSlKX9gmNBv41EjPRHpaNYwt0bxqh1bgyJzA=", "did:web:prod.enmeshed.eu:dids:MTkcyw1T29xwRqHjSsAMrY4HvjHFALPfJ")]
+    [InlineData("49fWA+kzWNdCFdo92imTiQ4vUUJsPPLNlcB9udC4ooE=", "did:web:prod.enmeshed.eu:dids:H4Qxm4Q2yA7yzNMAM3cB52T6AdYmRUdzo")]
     public void AddressIsCreatedCorrectly2(string publicKey, string expectedAddress)
     {
         var address = IdentityAddress.Create(Convert.FromBase64String(publicKey), "prod.enmeshed.eu");
@@ -53,15 +53,6 @@ public class IdentityAddressTests
     }
 
     [Fact]
-    public void AddressesWithInvalidRealmAreDeclined()
-    {
-        var testData = TestData.WithInvalidRealm();
-        var isValid = IdentityAddress.IsValid(testData.Address);
-
-        isValid.Should().BeFalse();
-    }
-
-    [Fact]
     public void AddressesWithInvalidChecksumAreDeclined()
     {
         var testData = TestData.WithInvalidChecksum();
@@ -94,19 +85,7 @@ internal class TestData
     {
         return new TestData
         {
-            Address = "did:web:prod.enmeshed.eu:dids:id18uSgVGTSNqECvt1DJM3bZg6U8p6RSjott",
-            PublicKey = Convert.FromBase64String("tB9KFp/YqHrom3m5qUuZsd6l30DkaNjN14SxRw7YZuI="),
-            Checksum = "jott",
-            MainPart = "8uSgVGTSNqECvt1DJM3bZg6U8p6RS",
-            InstanceUrl = "prod.enmeshed.eu"
-        };
-    }
-
-    public static TestData WithInvalidRealm()
-    {
-        return new TestData
-        {
-            Address = "did:web:prod.enmeshed.eu:dids:id08uSgVGTSNqECvt1DJM3bZg6U8p6RSjott",
+            Address = "did:web:prod.enmeshed.eu:dids:CjRABNgfk4bhiu1CkceD5VgRhSsYbE4g8",
             PublicKey = Convert.FromBase64String("tB9KFp/YqHrom3m5qUuZsd6l30DkaNjN14SxRw7YZuI="),
             Checksum = "jott",
             MainPart = "8uSgVGTSNqECvt1DJM3bZg6U8p6RS",
