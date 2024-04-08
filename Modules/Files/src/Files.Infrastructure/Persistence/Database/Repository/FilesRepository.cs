@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
@@ -36,6 +37,19 @@ public class FilesRepository : IFilesRepository
         await _blobStorage.SaveAsync();
         await _dbContext.SaveChangesAsync(cancellationToken);
 
+    }
+
+    public async Task DeleteFilesOfIdentity(Expression<Func<File, bool>> filter, CancellationToken cancellationToken)
+    {
+        var files = _files.Where(filter);
+        foreach (var file in files)
+        {
+            _blobStorage.Remove(_blobOptions.RootFolder, file.Id);
+        }
+
+        _files.RemoveRange(files);
+        await _blobStorage.SaveAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<File?> Find(FileId fileId, CancellationToken cancellationToken, bool track = false, bool fillContent = true)

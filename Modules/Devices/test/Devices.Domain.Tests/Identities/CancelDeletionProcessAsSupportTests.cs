@@ -53,7 +53,7 @@ public class CancelDeletionProcessAsSupportTests
         var acting = () => identity.CancelDeletionProcessAsSupport(identity.DeletionProcesses[0].Id);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessMustBeInStatusApproved");
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
