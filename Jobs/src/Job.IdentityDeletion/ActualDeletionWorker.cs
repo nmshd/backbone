@@ -12,21 +12,21 @@ using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastr
 
 namespace Backbone.Job.IdentityDeletion;
 
-public class ActualIdentityDeletionWorker : IHostedService
+public class ActualDeletionWorker : IHostedService
 {
     private readonly IEventBus _eventBus;
     private readonly IHostApplicationLifetime _host;
     private readonly IEnumerable<IIdentityDeleter> _identityDeleters;
     private readonly IMediator _mediator;
     private readonly IPushNotificationSender _pushNotificationSender;
-    private readonly ILogger<ActualIdentityDeletionWorker> _logger;
+    private readonly ILogger<ActualDeletionWorker> _logger;
 
-    public ActualIdentityDeletionWorker(IHostApplicationLifetime host,
+    public ActualDeletionWorker(IHostApplicationLifetime host,
         IEnumerable<IIdentityDeleter> identityDeleters,
         IMediator mediator,
         IPushNotificationSender pushNotificationSender,
         IEventBus eventBus,
-        ILogger<ActualIdentityDeletionWorker> logger)
+        ILogger<ActualDeletionWorker> logger)
     {
         _host = host;
         _identityDeleters = identityDeleters;
