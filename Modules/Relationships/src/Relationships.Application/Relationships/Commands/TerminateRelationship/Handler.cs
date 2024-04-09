@@ -6,7 +6,6 @@ using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.TerminateRelationship;
 public class Handler : IRequestHandler<TerminateRelationshipCommand, TerminateRelationshipResponse>
@@ -28,12 +27,15 @@ public class Handler : IRequestHandler<TerminateRelationshipCommand, TerminateRe
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
         var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
-
+        
         relationship.Terminate(_activeIdentity, _activeDevice);
 
         await _relationshipsRepository.Update(relationship);
 
+        var partnerIdentity = relationship.To == _activeIdentity ? relationship.From : relationship.To;
+
         _eventBus.Publish(new RelationshipStatusChangedIntegrationEvent(relationship));
+        _eventBus.Publish(new RelationshipTerminatedIntegrationEvent(relationship, partnerIdentity));
 
         return new TerminateRelationshipResponse(relationship);
     }
