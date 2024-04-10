@@ -31,7 +31,8 @@ public static class DomainErrors
 
     public static DomainError CannotChangeTierQueuedForDeletion()
     {
-        return new DomainError("error.platform.validation.device.queuedForDeletionTierCannotBeManuallyAssignedOrUnassigned", "The Identity's Tier cannot be be changed from or to the 'Queued for Deletion' Tier.");
+        return new DomainError("error.platform.validation.device.queuedForDeletionTierCannotBeManuallyAssignedOrUnassigned",
+            "The Identity's Tier cannot be be changed from or to the 'Queued for Deletion' Tier.");
     }
 
     public static DomainError CannotDeleteUsedTier(string reason = "")
@@ -48,7 +49,14 @@ public static class DomainErrors
 
     public static DomainError DeletionProcessMustBeInStatus(DeletionProcessStatus deletionProcessStatus)
     {
-        return new DomainError($"error.platform.validation.device.deletionProcessMustBeInStatus{deletionProcessStatus}", $"The deletion process must be in status '{deletionProcessStatus}'.");
+        return new DomainError("error.platform.validation.device.deletionProcessIsNotInRequiredStatus",
+            $"The deletion process must be in status '{deletionProcessStatus}' for the operation to continue, but it was in another status.");
+    }
+
+    public static DomainError GracePeriodHasNotYetExpired()
+    {
+        return new DomainError("error.platform.validation.device.gracePeriodHasNotYetExpired",
+            "The deletion via this deletion process cannot be started because the grace period has not yet expired.");
     }
 
     public static DomainError DeletionProcessMustBePastDueApproval()
