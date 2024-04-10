@@ -1,4 +1,4 @@
-﻿FROM mcr.microsoft.com/dotnet/runtime:8.0 AS base
+﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine3.18 AS base
 WORKDIR /app
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
@@ -28,12 +28,12 @@ RUN dotnet restore -r linux-x64 "Jobs/src/Job.IdentityDeletion/Job.IdentityDelet
 COPY . .
 
 WORKDIR "/src/Jobs/src/Job.IdentityDeletion"
-RUN dotnet build "Job.IdentityDeletion.csproj" --configuration Release -r linux-x64 --output /app/build --no-restore
+RUN dotnet build "Job.IdentityDeletion.csproj" --configuration Release --output /app/build --no-restore
 
 FROM build AS publish
-RUN dotnet publish -c Release --output /app/publish -r linux-x64 --self-contained true --no-restore "Job.IdentityDeletion.csproj" 
+RUN dotnet publish -c Release --output /app/publish --no-restore "Job.IdentityDeletion.csproj" 
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["/app/Backbone.Job.IdentityDeletion"]
+ENTRYPOINT ["dotnet", "Backbone.Job.IdentityDeletion.dll"]
