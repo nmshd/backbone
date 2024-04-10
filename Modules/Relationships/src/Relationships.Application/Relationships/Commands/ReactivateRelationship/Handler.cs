@@ -30,7 +30,10 @@ public class Handler : IRequestHandler<ReactivateRelationshipCommand, Reactivate
 
         await _relationshipsRepository.Update(relationship);
 
+        var partnerIdentity = relationship.To == _activeIdentity ? relationship.From : relationship.To;
+
         _eventBus.Publish(new RelationshipStatusChangedIntegrationEvent(relationship));
+        _eventBus.Publish(new RelationshipReactivatedIntegrationEvent(relationship, partnerIdentity));
 
         return new ReactivateRelationshipResponse(relationship);
     }
