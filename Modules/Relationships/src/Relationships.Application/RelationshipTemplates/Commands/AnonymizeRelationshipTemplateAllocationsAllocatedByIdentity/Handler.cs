@@ -7,7 +7,7 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Comma
 public class Handler : IRequestHandler<AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand>
 {
     private const string DELETED_IDENTITY_STRING = "deleted identity";
-    private IRelationshipTemplatesRepository _relationshipTemplatesRepository;
+    private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
 
     public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
