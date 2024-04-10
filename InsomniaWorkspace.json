@@ -55,7 +55,7 @@
             "name": "/api/v1/Relationships (USRb)",
             "description": "",
             "method": "POST",
-            "body": { "mimeType": "application/json", "text": "{\n  \"relationshipTemplateId\": \"RLTDCZMO7oVjwm1PH7h5\",\n  \"content\": \"ZXhhbXBsZQ==\"\n}" },
+            "body": { "mimeType": "application/json", "text": "{\n  \"relationshipTemplateId\": \"RLTDCZMO7oVjwm1PH7h5\",\n  \"creationContent\": \"ZXhhbXBsZQ==\"\n}" },
             "parameters": [],
             "headers": [{ "name": "Content-Type", "disabled": false, "value": "application/json" }],
             "authentication": {

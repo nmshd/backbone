@@ -78,7 +78,7 @@ paths:
                   type: string
                   example: "RLT_________________"
                   nullable: false
-                content:
+                creationContent:
                   type: string
                   format: byte
                   nullable: false
@@ -319,7 +319,7 @@ components:
       type: string
       enum:
         - Pending
-        - Accepted
+        - Active
         - Rejected
         - Revoked
       example: "Pending|Accepted|Rejected|Revoked"
