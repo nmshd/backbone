@@ -7,6 +7,7 @@ using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FluentAssertions;
 using Xunit;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Extensions;
 
@@ -51,8 +52,8 @@ public class RelationshipTemplateQueryableExtensionsTests
     public void NotExpiredFor_DoesNotFilterOutTemplatesWithoutExpiryDate()
     {
         // Arrange
-        var templateCreator = TestDataGenerator.CreateRandomIdentityAddress();
-        var requestCreator = TestDataGenerator.CreateRandomIdentityAddress();
+        var templateCreator = CreateRandomIdentityAddress();
+        var requestCreator = CreateRandomIdentityAddress();
 
         var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, null, TestDataGenerator.CreateRandomBytes());
         var relationship = new Relationship(template, requestCreator, DeviceId.New(), TestDataGenerator.CreateRandomBytes(), []);
@@ -61,7 +62,7 @@ public class RelationshipTemplateQueryableExtensionsTests
         _arrangeContext.Relationships.Add(relationship);
         _arrangeContext.SaveChanges();
 
-        var accessor = TestDataGenerator.CreateRandomIdentityAddress();
+        var accessor = CreateRandomIdentityAddress();
 
 
         // Act
@@ -80,8 +81,8 @@ public class RelationshipTemplateQueryableExtensionsTests
     public void NotExpiredFor_FiltersOutExpiredTemplatesForNonParticipants()
     {
         // Arrange
-        var templateCreator = TestDataGenerator.CreateRandomIdentityAddress();
-        var requestCreator = TestDataGenerator.CreateRandomIdentityAddress();
+        var templateCreator = CreateRandomIdentityAddress();
+        var requestCreator = CreateRandomIdentityAddress();
 
         var template = new RelationshipTemplate(templateCreator, DeviceId.New(), 1, YESTERDAY, TestDataGenerator.CreateRandomBytes());
         var relationship = new Relationship(template, requestCreator, DeviceId.New(), TestDataGenerator.CreateRandomBytes(), []);
@@ -91,7 +92,7 @@ public class RelationshipTemplateQueryableExtensionsTests
         _arrangeContext.Relationships.Add(relationship);
         _arrangeContext.SaveChanges();
 
-        var accessor = TestDataGenerator.CreateRandomIdentityAddress();
+        var accessor = CreateRandomIdentityAddress();
 
 
         // Act
