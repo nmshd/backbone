@@ -42,7 +42,7 @@ public static class DomainErrors
 
     public static DomainError NoOpenReactivationRequest(string targetIdentity)
     {
-        return new DomainError("error.platform.validation.relationshipRequest.noOpenReactivationRequest", 
+        return new DomainError("error.platform.validation.relationshipRequest.noOpenReactivationRequest",
             $"There is no open reactivation request for '{targetIdentity}'.");
     }
 
