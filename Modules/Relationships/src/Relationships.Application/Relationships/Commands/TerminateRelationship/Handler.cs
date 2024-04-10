@@ -27,7 +27,7 @@ public class Handler : IRequestHandler<TerminateRelationshipCommand, TerminateRe
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
         var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
-        
+
         relationship.Terminate(_activeIdentity, _activeDevice);
 
         await _relationshipsRepository.Update(relationship);

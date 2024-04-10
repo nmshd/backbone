@@ -23,7 +23,7 @@ public static class ApplicationErrors
             var terminatedRelationshipString = string.IsNullOrEmpty(terminatedRelationship) ? "a terminated relationship" : terminatedRelationship;
 
             return new ApplicationError(
-                "error.platform.validation.relationshipRequest.cannotCreateRelationshipWhileTerminatedRelationshipExists", 
+                "error.platform.validation.relationshipRequest.cannotCreateRelationshipWhileTerminatedRelationshipExists",
                 $"Cannot create relationship while terminated relationship {terminatedRelationshipString} exists.");
         }
     }

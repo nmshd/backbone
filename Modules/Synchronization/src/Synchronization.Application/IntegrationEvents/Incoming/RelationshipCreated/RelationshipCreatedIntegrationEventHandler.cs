@@ -24,7 +24,7 @@ public class RelationshipCreatedIntegrationEventHandler : IIntegrationEventHandl
         try
         {
             // ReSharper disable once RedundantAnonymousTypePropertyName
-            var payload = new { RelationshipId = @event.RelationshipId };
+            var payload = new { @event.RelationshipId };
             var externalEvent = await _dbContext.CreateExternalEvent(@event.To, ExternalEventType.RelationshipCreated, payload);
             _eventBus.Publish(new ExternalEventCreatedIntegrationEvent(externalEvent));
         }

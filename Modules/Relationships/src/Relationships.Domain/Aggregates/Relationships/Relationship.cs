@@ -151,7 +151,7 @@ public class Relationship
             RelationshipStatus.Terminated,
             activeIdentity,
             activeDevice
-        ); 
+        );
         AuditLog.Add(auditLogEntry);
     }
 
