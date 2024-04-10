@@ -139,6 +139,60 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
+    public void RevokeReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureStatus(RelationshipStatus.Terminated);
+        EnsureOpenReactivationRequestExists(activeIdentity);
+        EnsureReactivationOfOwnRelationshipIsTriggered(activeIdentity);
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.RevocationOfReactivation,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Terminated,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
+    private void EnsureOpenReactivationRequestExists(IdentityAddress target)
+    {
+        if (AuditLog.Last().Reason != RelationshipAuditLogEntryReason.Reactivation)
+            throw new DomainException(DomainErrors.NoOpenReactivationRequest(target));
+    }
+
+    private void EnsureReactivationOfOwnRelationshipIsTriggered(IdentityAddress target)
+    {
+        if (AuditLog.Last().CreatedBy != target)
+            throw new DomainException(DomainErrors.ReactivationCanOnlyBeRevokedByInitiator(target));
+    }
+
+    public void XXXFakeTerminate(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        Status = RelationshipStatus.Terminated;
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.Termination,
+            RelationshipStatus.Active,
+            RelationshipStatus.Terminated,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
+    public void XXXFakeReactivate(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.Reactivation,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Terminated,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
     #region Expressions
 
     public static Expression<Func<Relationship, bool>> HasParticipant(string identity)
