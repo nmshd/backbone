@@ -34,18 +34,13 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         await _templates.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task Delete(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
-    {
-        await _templates.Where(filter).ExecuteDeleteAsync(cancellationToken);
-    }
-
-    public async Task<RelationshipTemplate> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
+    public async Task<RelationshipTemplate?> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
     {
         var template = await (track ? _templates : _readOnlyTemplates)
-                    .Include(r => r.Allocations)
-                    .NotExpiredFor(identityAddress)
-                    .NotDeleted()
-                    .FirstWithId(id, cancellationToken);
+            .Include(r => r.Allocations)
+            .NotExpiredFor(identityAddress)
+            .NotDeleted()
+            .FirstWithIdOrDefault(id, cancellationToken);
 
         return template;
     }
@@ -68,16 +63,5 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
     {
         _templates.Update(template);
         await _dbContext.SaveChangesAsync();
-    }
-
-    public async Task<RelationshipTemplate?> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
-    {
-        var template = await (track ? _templates : _readOnlyTemplates)
-            .Include(r => r.Allocations)
-            .NotExpiredFor(identityAddress)
-            .NotDeleted()
-            .FirstWithIdOrDefault(id, cancellationToken);
-
-        return template;
     }
 }
