@@ -19,10 +19,14 @@ public static class TestData
         return new RelationshipTemplate(createdBy, TestDataGenerator.CreateRandomDeviceId(), 1, null, []);
     }
 
-    public static Relationship CreateActiveRelationship()
+    public static Relationship CreateActiveRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
     {
-        var relationship = new Relationship(CreateRelationshipTemplate(), TestDataGenerator.CreateRandomIdentityAddress(), TestDataGenerator.CreateRandomDeviceId(), null, []);
-        relationship.Accept(TestDataGenerator.CreateRandomIdentityAddress(), TestDataGenerator.CreateRandomDeviceId());
+        from ??= TestDataGenerator.CreateRandomIdentityAddress();
+        to ??= TestDataGenerator.CreateRandomIdentityAddress();
+
+        var relationship = new Relationship(CreateRelationshipTemplate(createdBy: to), from, TestDataGenerator.CreateRandomDeviceId(), null, []);
+        relationship.Accept(to, TestDataGenerator.CreateRandomDeviceId());
+
         return relationship;
     }
 }

@@ -40,4 +40,18 @@ public static class TestData
         relationship.Revoke(IDENTITY_1, DEVICE_1);
         return relationship;
     }
+
+    public static Relationship CreateTerminatedRelationship()
+    {
+        var relationship = CreateActiveRelationship();
+        relationship.XXXFakeTerminate(IDENTITY_1, DEVICE_1);
+        return relationship;
+    }
+
+    public static Relationship CreateTerminatedRelationshipWithReactivationRequest()
+    {
+        var relationship = CreateTerminatedRelationship();
+        relationship.XXXFakeReactivate(IDENTITY_1, DEVICE_1);
+        return relationship;
+    }
 }
