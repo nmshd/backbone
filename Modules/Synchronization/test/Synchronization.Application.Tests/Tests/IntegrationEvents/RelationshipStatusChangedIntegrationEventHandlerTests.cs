@@ -25,7 +25,6 @@ public class RelationshipStatusChangedIntegrationEventHandlerTests
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
-        // ReSharper disable once RedundantAnonymousTypePropertyName
         var externalEvent = new ExternalEvent(ExternalEventType.RelationshipStatusChanged, relationshipTo, 1,
             new { @event.RelationshipId });
 
@@ -59,7 +58,6 @@ public class RelationshipStatusChangedIntegrationEventHandlerTests
         var fakeDbContext = A.Fake<ISynchronizationDbContext>();
         var mockEventBus = A.Fake<IEventBus>();
 
-        // ReSharper disable once RedundantAnonymousTypePropertyName
         var externalEvent = new ExternalEvent(ExternalEventType.IdentityDeletionProcessStarted, IdentityAddress.Parse(relationshipTo), 1,
             new { @event.RelationshipId });
 

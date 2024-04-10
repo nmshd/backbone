@@ -17,7 +17,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.1")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -73,6 +73,16 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
+
+                    b.Property<bool>("CanBeManuallyAssigned")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("CanBeUsedAsDefaultForClient")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -237,6 +247,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("integer");
 
                     b.Property<string>("TierId")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
@@ -249,6 +260,10 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.HasKey("Address");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("TierId");
 
                     b.ToTable("Identities");
                 });
@@ -289,6 +304,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DeletionStartedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("GracePeriodEndsAt")
@@ -750,14 +768,16 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                 {
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", null)
                         .WithMany("DeletionProcesses")
-                        .HasForeignKey("IdentityAddress");
+                        .HasForeignKey("IdentityAddress")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcessAuditLogEntry", b =>
                 {
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", null)
                         .WithMany("AuditLog")
-                        .HasForeignKey("IdentityDeletionProcessId");
+                        .HasForeignKey("IdentityDeletionProcessId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>

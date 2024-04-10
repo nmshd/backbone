@@ -21,10 +21,11 @@ public class RelationshipStatusChangedIntegrationEventHandler : IIntegrationEven
 
     public async Task Handle(RelationshipStatusChangedIntegrationEvent @event)
     {
+#pragma warning disable IDE0037
+        var payload = new { RelationshipId = @event.RelationshipId };
+#pragma warning restore IDE0037
         try
         {
-            // ReSharper disable once RedundantAnonymousTypePropertyName
-            var payload = new { @event.RelationshipId };
             var externalEvent = await _dbContext.CreateExternalEvent(@event.Peer, ExternalEventType.RelationshipStatusChanged, payload);
             _eventBus.Publish(new ExternalEventCreatedIntegrationEvent(externalEvent));
         }

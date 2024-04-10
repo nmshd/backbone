@@ -1,5 +1,3 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-
 namespace Backbone.Modules.Relationships.Application;
 
 public static class ApplicationErrors

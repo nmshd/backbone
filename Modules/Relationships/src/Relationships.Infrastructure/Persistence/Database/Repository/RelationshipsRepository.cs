@@ -1,13 +1,14 @@
 using System.Linq.Expressions;
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Domain;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,11 +19,13 @@ public class RelationshipsRepository : IRelationshipsRepository
     private readonly DbSet<Relationship> _relationships;
     private readonly IQueryable<Relationship> _readOnlyRelationships;
     private readonly RelationshipsDbContext _dbContext;
+    private readonly DbSet<RelationshipTemplateAllocation> _relationshipTemplateAllocations;
 
     public RelationshipsRepository(RelationshipsDbContext dbContext)
     {
         _relationships = dbContext.Relationships;
         _readOnlyRelationships = dbContext.Relationships.AsNoTracking();
+        _relationshipTemplateAllocations = dbContext.RelationshipTemplateAllocations;
         _dbContext = dbContext;
     }
 
@@ -68,7 +71,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         catch (DbUpdateException ex)
         {
             if (ex.InnerException != null && ex.InnerException.Message.Contains(ConstraintNames.ONLY_ONE_ACTIVE_RELATIONSHIP_BETWEEN_TWO_IDENTITIES))
-                throw new OperationFailedException(ApplicationErrors.Relationship.RelationshipToTargetAlreadyExists(relationship.To));
+                throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(relationship.To));
 
             throw;
         }
@@ -83,8 +86,25 @@ public class RelationshipsRepository : IRelationshipsRepository
             .AnyAsync(cancellationToken);
     }
 
+    public async Task DeleteRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
+    {
+        await _relationships.Where(filter).ExecuteDeleteAsync(cancellationToken);
+    }
+
     public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
     {
         return await _relationships.Where(filter).ToListAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<RelationshipTemplateAllocation>> FindRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter,
+        CancellationToken cancellationToken)
+    {
+        return await _relationshipTemplateAllocations.Where(filter).ToListAsync(cancellationToken);
+    }
+
+    public async Task UpdateRelationshipTemplateAllocations(List<RelationshipTemplateAllocation> templateAllocations, CancellationToken cancellationToken)
+    {
+        _relationshipTemplateAllocations.UpdateRange(templateAllocations);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

@@ -20,10 +20,12 @@ public static class TestData
         return new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, []);
     }
 
-    public static Relationship CreateActiveRelationship()
+    public static Relationship CreateActiveRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
     {
-        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, []);
-        relationship.Accept(IDENTITY_2, DEVICE_2);
+        to ??= IDENTITY_2;
+        var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
+        var relationship = new Relationship(template, from ?? IDENTITY_1, DEVICE_1, null, []);
+        relationship.Accept(to, DEVICE_2);
         return relationship;
     }
 
