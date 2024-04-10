@@ -1,5 +1,5 @@
 using Backbone.BuildingBlocks.Application.CQRS.BaseClasses;
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 
