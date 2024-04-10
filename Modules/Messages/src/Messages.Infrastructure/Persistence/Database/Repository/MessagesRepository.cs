@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
@@ -63,15 +64,22 @@ public class MessagesRepository : IMessagesRepository
         return messages;
     }
 
+    public async Task Update(IEnumerable<Message> messages)
+    {
+        _dbContext.UpdateRange(messages);
+        await _dbContext.SaveChangesAsync();
+    }
+
     public async Task Update(Message message)
     {
         _messages.Update(message);
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task Update(IEnumerable<Message> messages)
+    public async Task<IEnumerable<Message>> Find(Expression<Func<Message, bool>> expression, CancellationToken cancellationToken)
     {
-        _dbContext.UpdateRange(messages);
-        await _dbContext.SaveChangesAsync();
+        return await _messages.IncludeAll(_dbContext)
+            .Where(expression)
+            .ToListAsync(cancellationToken);
     }
 }

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
@@ -8,6 +9,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
+using Backbone.Tooling;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,18 +20,18 @@ public class IdentitiesRepository : IIdentitiesRepository
     private readonly DbSet<Identity> _identities;
     private readonly IQueryable<Identity> _readonlyIdentities;
     private readonly DevicesDbContext _dbContext;
-    private readonly UserManager<ApplicationUser> _userManager;
     private readonly DbSet<Device> _devices;
     private readonly IQueryable<Device> _readonlyDevices;
+    private readonly UserManager<ApplicationUser> _userManager;
 
     public IdentitiesRepository(DevicesDbContext dbContext, UserManager<ApplicationUser> userManager)
     {
         _identities = dbContext.Identities;
         _readonlyIdentities = dbContext.Identities.AsNoTracking();
         _dbContext = dbContext;
-        _userManager = userManager;
         _devices = dbContext.Devices;
         _readonlyDevices = dbContext.Devices.AsNoTracking();
+        _userManager = userManager;
     }
 
     public async Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
@@ -105,5 +107,18 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         _identities.Update(identity);
         await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _identities : _readonlyIdentities)
+            .IncludeAll(_dbContext)
+            .Where(filter)
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
+    {
+        await _identities.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 }
