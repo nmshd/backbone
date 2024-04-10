@@ -6,6 +6,14 @@ using Backbone.Infrastructure.EventBus;
 using Backbone.Job.IdentityDeletion;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdentityDeletionProcesses;
 using Backbone.Modules.Devices.ConsumerApi;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
+using Backbone.Modules.Challenges.ConsumerApi;
+using Backbone.Modules.Files.ConsumerApi;
+using Backbone.Modules.Messages.ConsumerApi;
+using Backbone.Modules.Quotas.ConsumerApi;
+using Backbone.Modules.Relationships.ConsumerApi;
+using Backbone.Modules.Synchronization.ConsumerApi;
+using Backbone.Modules.Tokens.ConsumerApi;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -13,6 +21,8 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
+using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
+
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -38,8 +48,9 @@ catch (Exception ex)
 }
 finally
 {
-    Log.CloseAndFlush();
+    await Log.CloseAndFlushAsync();
 }
+
 
 static IHostBuilder CreateHostBuilder(string[] args)
 {
@@ -66,7 +77,26 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureServices((hostContext, services) =>
         {
             var configuration = hostContext.Configuration;
-            services.AddHostedService<CancelIdentityDeletionProcessWorker>();
+            services.ConfigureAndValidate<IdentityDeletionJobConfiguration>(configuration.Bind);
+
+#pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
+            var parsedConfiguration =
+                services.BuildServiceProvider().GetRequiredService<IOptions<IdentityDeletionJobConfiguration>>().Value;
+#pragma warning restore ASP0000
+
+            var worker = Assembly.GetExecutingAssembly().DefinedTypes.FirstOrDefault(t => t.Name == parsedConfiguration.Worker) ??
+                         throw new ArgumentException($"The specified worker could not be recognized, or no worker was set.");
+            services.AddTransient(typeof(IHostedService), worker);
+
+            services
+                .AddModule<DevicesModule>(configuration)
+                .AddModule<RelationshipsModule>(configuration)
+                .AddModule<ChallengesModule>(configuration)
+                .AddModule<FilesModule>(configuration)
+                .AddModule<MessagesModule>(configuration)
+                .AddModule<QuotasModule>(configuration)
+                .AddModule<SynchronizationModule>(configuration)
+                .AddModule<TokensModule>(configuration);
 
             services.AddMediatR(c => c
                 .RegisterServicesFromAssemblyContaining<CancelStaleIdentityDeletionProcessesCommand>());
@@ -78,14 +108,13 @@ static IHostBuilder CreateHostBuilder(string[] args)
 
             services.AddCustomIdentity(hostContext.HostingEnvironment);
 
-            services.ConfigureAndValidate<DeletionProcessJobConfiguration>(configuration.Bind);
-
-#pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
-            var parsedConfiguration =
-                services.BuildServiceProvider().GetRequiredService<IOptions<DeletionProcessJobConfiguration>>().Value;
-#pragma warning restore ASP0000
+            services.RegisterIdentityDeleters();
 
             services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
+
+            var devicesConfiguration = new DevicesConfiguration();
+            configuration.GetSection("Modules:Devices").Bind(devicesConfiguration);
+            services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration
@@ -95,7 +124,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
             .Enrich.WithProperty("service", "jobs.identitydeletion")
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
-                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
-        )
-        .UseServiceProviderFactory(new AutofacServiceProviderFactory());
+                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() })
+            )
+        );
 }
