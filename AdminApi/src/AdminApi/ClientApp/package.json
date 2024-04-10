@@ -9,7 +9,7 @@
         "build:ssr": "ng run AdminUi:server:dev",
         "watch": "ng build --watch --configuration development",
         "test": "ng test",
-        "lint": "eslint"
+        "lint": "eslint --ext ts ./src"
     },
     "private": true,
     "dependencies": {
@@ -47,7 +47,6 @@
         "@types/jasminewd2": "~2.0.13",
         "@types/node": "^20.12.5",
         "eslint": "^8.57.0",
-        "eslint-plugin-jest": "^28.2.0",
         "jasmine-core": "~5.1.2",
         "karma": "~6.4.3",
         "karma-chrome-launcher": "~3.2.0",
