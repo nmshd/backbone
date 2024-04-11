@@ -7,7 +7,7 @@ using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipReactivationRevoked;
-public class RelationshipReactivationRevokedIntegrationEventHandler
+public class RelationshipReactivationRevokedIntegrationEventHandler : IIntegrationEventHandler<RelationshipReactivationRevokedIntegrationEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;

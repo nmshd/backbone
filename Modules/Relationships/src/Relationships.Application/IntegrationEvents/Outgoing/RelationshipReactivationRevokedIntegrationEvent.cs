@@ -9,9 +9,11 @@ public class RelationshipReactivationRevokedIntegrationEvent : IntegrationEvent
         base($"{relationship.Id}/Reactivation/Revoked/{relationship.AuditLog.Last().CreatedAt}")
     {
         RelationshipId = relationship.Id;
+        CreatedAt = relationship.AuditLog.Last().CreatedAt;
         Partner = partner.StringValue;
     }
 
     public string RelationshipId { get; }
+    public DateTime CreatedAt { get;  }
     public string Partner { get; }
 }
