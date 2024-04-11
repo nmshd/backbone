@@ -160,18 +160,18 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    public void Reactivate(IdentityAddress activeIdentity, DeviceId activeDevice)
+    public void ReactivationRequest(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureStatus(RelationshipStatus.Terminated);
         // TODO: Ensure it can reactivate only own relationship.
         // TODO: Ensure there is not already an open reactivation.
 
-        Status = RelationshipStatus.Reactivated;
+        Status = RelationshipStatus.ReactivationRequested;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
             RelationshipAuditLogEntryReason.ReactivationRequested,
             RelationshipStatus.Terminated,
-            RelationshipStatus.Reactivated,
+            RelationshipStatus.ReactivationRequested,
             activeIdentity,
             activeDevice
         );

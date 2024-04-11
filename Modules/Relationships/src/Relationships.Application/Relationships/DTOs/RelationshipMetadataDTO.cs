@@ -51,7 +51,7 @@ public static class RelationshipStatusExtensions
             RelationshipStatus.Rejected => "Rejected",
             RelationshipStatus.Revoked => "Revoked",
             RelationshipStatus.Terminated => "Terminated",
-            RelationshipStatus.Reactivated => "Reactivated",
+            RelationshipStatus.ReactivationRequested => "ReactivationRequested",
             _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
         };
     }

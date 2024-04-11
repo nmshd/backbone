@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.ReactivateRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.ReactivateRelationshipRequest;
 using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.UnitTestTools.Data;
@@ -9,7 +9,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.ReactivateRelationship;
+namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.ReactivateRelationshipRequest;
 public class HandlerTests
 {
     [Fact]
@@ -30,14 +30,14 @@ public class HandlerTests
         var handler = CreateHandler(fakeUserContext, fakeRelationshipsRepository);
 
         // Act
-        var response = await handler.Handle(new ReactivateRelationshipCommand
+        var response = await handler.Handle(new ReactivateRelationshipRequestCommand
         {
             RelationshipId = relationship.Id
         }, CancellationToken.None);
 
         // Assert
         response.Id.Should().NotBeNull();
-        response.Status.Should().Be(RelationshipStatus.Reactivated);
+        response.Status.Should().Be(RelationshipStatus.ReactivationRequested);
         response.AuditLog.Should().HaveCount(4);
     }
 
@@ -59,7 +59,7 @@ public class HandlerTests
         var handler = CreateHandler(fakeUserContext, mockRelationshipsRepository);
 
         // Act
-        await handler.Handle(new ReactivateRelationshipCommand
+        await handler.Handle(new ReactivateRelationshipRequestCommand
         {
             RelationshipId = relationship.Id
         }, CancellationToken.None);
@@ -67,7 +67,7 @@ public class HandlerTests
         // Assert
         A.CallTo(
                 () => mockRelationshipsRepository.Update(
-                    A<Relationship>.That.Matches(r => r.Id == relationship.Id && r.Status == RelationshipStatus.Reactivated))
+                    A<Relationship>.That.Matches(r => r.Id == relationship.Id && r.Status == RelationshipStatus.ReactivationRequested))
             )
             .MustHaveHappenedOnceExactly();
     }

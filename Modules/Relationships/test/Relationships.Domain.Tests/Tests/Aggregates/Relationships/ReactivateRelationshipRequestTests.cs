@@ -7,30 +7,30 @@ using Xunit;
 using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relationships;
-public class ReactivateRelationshipTests
+public class ReactivateRelationshipRequestTests
 {
     [Fact]
-    public void Reactivate_relationship_transitions_relationship_to_status_reactivated()
+    public void Requesting_relationship_reactivation_transitions_relationship_to_status_reactivation_requested()
     {
         // Arrange
         var relationship = CreateTerminatedRelationship();
 
         // Act
-        relationship.Reactivate(IDENTITY_2, DEVICE_2);
+        relationship.ReactivationRequest(IDENTITY_2, DEVICE_2);
 
         // Assert
-        relationship.Status.Should().Be(RelationshipStatus.Reactivated);
+        relationship.Status.Should().Be(RelationshipStatus.ReactivationRequested);
     }
 
     [Fact]
-    public void Reactivating_relationship_creates_an_audit_log_entry()
+    public void Requesting_relationship_reactivation_creates_an_audit_log_entry()
     {
         // Arrange
         SystemTime.Set("2000-01-01");
         var relationship = CreateTerminatedRelationship();
 
         // Act
-        relationship.Reactivate(IDENTITY_2, DEVICE_2);
+        relationship.ReactivationRequest(IDENTITY_2, DEVICE_2);
 
         // Assert
         relationship.AuditLog.Should().HaveCount(4);
@@ -40,20 +40,20 @@ public class ReactivateRelationshipTests
         auditLogEntry.Id.Should().NotBeNull();
         auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.ReactivationRequested);
         auditLogEntry.OldStatus.Should().Be(RelationshipStatus.Terminated);
-        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.Reactivated);
+        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.ReactivationRequested);
         auditLogEntry.CreatedBy.Should().Be(IDENTITY_2);
         auditLogEntry.CreatedByDevice.Should().Be(DEVICE_2);
         auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
     }
 
     [Fact]
-    public void Can_only_reactivate_relationship_when_relationship_is_in_status_terminated()
+    public void Can_only_request_relationship_reactivation_when_relationship_is_in_status_terminated()
     {
         // Arrange
         var relationship = CreatePendingRelationship();
 
         // Act
-        var acting = () => relationship.Reactivate(IDENTITY_2, DEVICE_2);
+        var acting = () => relationship.ReactivationRequest(IDENTITY_2, DEVICE_2);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
@@ -68,10 +68,10 @@ public class ReactivateRelationshipTests
         // Arrange
         var relationship = CreateTerminatedRelationship();
 
-        relationship.Reactivate(IDENTITY_2, DEVICE_2);
+        relationship.ReactivationRequest(IDENTITY_2, DEVICE_2);
 
         // Act
-        var acting = () => relationship.Reactivate(IDENTITY_2, DEVICE_2);
+        var acting = () => relationship.ReactivationRequest(IDENTITY_2, DEVICE_2);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
