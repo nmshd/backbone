@@ -14,6 +14,6 @@ public class RelationshipReactivationRevokedIntegrationEvent : IntegrationEvent
     }
 
     public string RelationshipId { get; }
-    public DateTime CreatedAt { get;  }
+    public DateTime CreatedAt { get; }
     public string Partner { get; }
 }

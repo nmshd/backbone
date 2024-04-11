@@ -3,8 +3,8 @@
 namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipReactivationRevoked;
 public class RelationshipReactivationRevokedIntegrationEvent : IntegrationEvent
 {
-    public RelationshipReactivationRevokedIntegrationEvent(string relationshipId, DateTime createdAt, string partner) : 
-        
+    public RelationshipReactivationRevokedIntegrationEvent(string relationshipId, DateTime createdAt, string partner) :
+
         base($"{relationshipId}/Reactivation/Revoked/{createdAt}")
     {
         RelationshipId = relationshipId;
