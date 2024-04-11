@@ -20,11 +20,11 @@ public static class ApplicationErrors
 
         public static ApplicationError CannotCreateRelationshipWhileTerminatedRelationshipExists(string terminatedRelationship = "")
         {
-            var terminatedRelationshipString = string.IsNullOrEmpty(terminatedRelationship) ? "a terminated relationship" : terminatedRelationship;
+            var terminatedRelationshipString = $"a terminated relationship {(string.IsNullOrEmpty(terminatedRelationship) ? "" : terminatedRelationship)}";
 
             return new ApplicationError(
                 "error.platform.validation.relationshipRequest.cannotCreateRelationshipWhileTerminatedRelationshipExists",
-                $"Cannot create relationship while terminated relationship {terminatedRelationshipString} exists.");
+                $"Cannot create relationship while {terminatedRelationshipString} exists.");
         }
     }
 }

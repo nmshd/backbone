@@ -83,10 +83,9 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
     private void EnsureNoTerminatedRelationshipExists(List<Relationship> relationships)
     {
         foreach (var relationship in relationships)
-        {
             if (relationship.Status == RelationshipStatus.Terminated)
-                throw new OperationFailedException(ApplicationErrors.Relationship.CannotCreateRelationshipWhileTerminatedRelationshipExists(relationship.Id.ToString()));
-        }
+                throw new OperationFailedException(ApplicationErrors.Relationship
+                    .CannotCreateRelationshipWhileTerminatedRelationshipExists(relationship.Id.ToString()));
     }
 
     private void PublishIntegrationEvent()

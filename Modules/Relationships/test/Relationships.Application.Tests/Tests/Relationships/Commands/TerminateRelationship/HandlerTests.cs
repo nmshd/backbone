@@ -24,7 +24,8 @@ public class HandlerTests
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         var relationship = TestData.CreateActiveRelationship(from: activeIdentity);
-        A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
+        A.CallTo(() => fakeRelationshipsRepository
+            .FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
@@ -53,7 +54,8 @@ public class HandlerTests
 
         var mockRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         var relationship = TestData.CreateActiveRelationship(from: activeIdentity);
-        A.CallTo(() => mockRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
+        A.CallTo(() => mockRelationshipsRepository
+            .FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);

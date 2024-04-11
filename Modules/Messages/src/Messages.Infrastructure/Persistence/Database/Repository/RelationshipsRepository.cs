@@ -29,6 +29,6 @@ public class RelationshipsRepository : IRelationshipsRepository
         return _dbContext.Relationships
             .AsNoTracking()
             .Where(r => r.Id == id)
-            .FirstOrDefaultAsync();
+            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
     }
 }

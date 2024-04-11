@@ -7,7 +7,7 @@ using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipTerminated;
-public class RelationshipTerminatedIntegrationEventHandler
+public class RelationshipTerminatedIntegrationEventHandler : IIntegrationEventHandler<RelationshipTerminatedIntegrationEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
