@@ -44,5 +44,5 @@ module.exports = {
         // Don't minimize, as it's not used in the browser
         minimize: false
     },
-    target: "node18"
+    target: "node"
 };

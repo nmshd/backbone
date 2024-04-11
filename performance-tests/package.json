@@ -25,6 +25,7 @@
         "@nmshd/transport": "^2.3.3",
         "@types/luxon": "^3.4.2",
         "luxon": "^3.4.4",
+        "p-limit": "^4.0.0",
         "typescript-logging": "^2.1.0"
     }
 }

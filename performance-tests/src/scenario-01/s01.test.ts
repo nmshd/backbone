@@ -1,12 +1,13 @@
 import { SimpleLoggerFactory } from "@js-soft/simple-logger";
 import { SyncRunType, TransportLoggerFactory } from "@nmshd/transport";
+import pLimit from "p-limit";
 import { LogLevel } from "typescript-logging";
 import { BackboneClient } from "../BackboneClient";
 import { generateDataWalletModifications, randomIntFromInterval } from "../utils";
 
 TransportLoggerFactory.init(new SimpleLoggerFactory(LogLevel.Fatal));
 
-(async () => {
+let main = async () => {
     const config = {
         baseUrl: "http://localhost:8081",
         platformClientId: "test",
@@ -32,6 +33,21 @@ TransportLoggerFactory.init(new SimpleLoggerFactory(LogLevel.Fatal));
         (await backboneClient2.sync.getDatawalletModifications({ localIndex: -100 })).value.collect();
         (await backboneClient3.sync.getDatawalletModifications({ localIndex: -100 })).value.collect();
 
+        console.log("finished run");
         // TODO: implement k6 checks for the received changes
     }
+};
+(async () => {
+    const limit = pLimit(10); // only 10 at once
+
+    let calls: Promise<void>[] = [];
+    for (let i = 0; i < 8; i++) {
+        calls.push(limit(() => main()));
+    }
+    setInterval(() => {
+        console.log(limit.activeCount, limit.pendingCount);
+    }, 500);
+
+    let res = await Promise.all(calls).then(() => console.log("done"));
+    console.log(res);
 })();
