@@ -5,7 +5,7 @@ using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 namespace Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
 public class RelationshipTerminatedIntegrationEvent : IntegrationEvent
 {
-    public RelationshipTerminatedIntegrationEvent(Relationship relationship, IdentityAddress partner) : 
+    public RelationshipTerminatedIntegrationEvent(Relationship relationship, IdentityAddress partner) :
         base($"{relationship.Id}/Terminated/{relationship.AuditLog.Last().CreatedAt}")
     {
         RelationshipId = relationship.Id;

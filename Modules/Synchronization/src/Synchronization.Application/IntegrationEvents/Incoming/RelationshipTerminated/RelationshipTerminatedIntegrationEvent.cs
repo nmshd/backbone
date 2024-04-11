@@ -3,7 +3,7 @@
 namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipTerminated;
 public class RelationshipTerminatedIntegrationEvent : IntegrationEvent
 {
-    public RelationshipTerminatedIntegrationEvent(string relationshipId, DateTime createdAt, string partner) : 
+    public RelationshipTerminatedIntegrationEvent(string relationshipId, DateTime createdAt, string partner) :
         base($"{relationshipId}/Terminated/{createdAt}")
     {
         RelationshipId = relationshipId;
