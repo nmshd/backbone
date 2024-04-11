@@ -7,5 +7,5 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Crea
 public class CreateRelationshipCommand : IRequest<CreateRelationshipResponse>
 {
     public required string RelationshipTemplateId { get; set; }
-    public byte[]? Content { get; set; }
+    public byte[]? CreationContent { get; set; }
 }

@@ -69,7 +69,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
             _template,
             _activeIdentity,
             _activeDevice,
-            _request.Content,
+            _request.CreationContent,
             existingRelationships.ToList()
         );
 
