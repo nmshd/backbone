@@ -319,7 +319,7 @@ components:
       type: string
       enum:
         - Pending
-        - Accepted
+        - Active
         - Rejected
         - Revoked
       example: "Pending|Accepted|Rejected|Revoked"

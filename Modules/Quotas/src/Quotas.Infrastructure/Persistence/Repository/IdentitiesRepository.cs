@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
@@ -24,6 +25,11 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         await _identitiesDbSet.AddAsync(identity, cancellationToken);
         await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
+    {
+        await _identitiesDbSet.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 
     public async Task<Identity?> Find(string address, CancellationToken cancellationToken, bool track = false)
