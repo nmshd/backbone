@@ -81,8 +81,8 @@ jobs:
       #- name: Run Tests
       #  run: python .ci/integrationTest.py build
       
-      - name: Run local registry
-        run: docker run -d -p 6000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:6000
+#      - name: Run local registry
+#        run: docker run -d -p 6000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:6000
       
       - name: Build Consumer Api
         uses: docker/build-push-action@v5
@@ -91,8 +91,9 @@ jobs:
           file: ConsumerApi/Dockerfile
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          tags: localhost:6000/consumer-api
-          outputs: type=registry,dest=localhost:6000/consumer-api
+          tags: consumer-api
+          load: true
+          #outputs: type=registry,dest=localhost:6000/consumer-api
           
       - name: Build Admin Api
         uses: docker/build-push-action@v5
@@ -101,8 +102,9 @@ jobs:
           file: AdminApi/src/AdminApi/Dockerfile
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          tags: localhost:6000/admin-ui
-          outputs: type=registry,dest=localhost:6000/admin-ui  
+          tags: admin-ui
+          load: true
+          #outputs: type=registry,dest=localhost:6000/admin-ui  
 
       - name: Build Seed Client
         uses: docker/build-push-action@v5
@@ -111,8 +113,9 @@ jobs:
           file: Modules/Devices/src/Devices.AdminCli/Dockerfile
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          tags: localhost:6000/seed-client
-          outputs: type=registry,dest=localhost:6000/seed-client
+          tags: seed-client
+          load: true
+          #outputs: type=registry,dest=localhost:6000/seed-client
       
       - name: Run integration tests
         run: ./.ci/integrationTest.postgres.sh
