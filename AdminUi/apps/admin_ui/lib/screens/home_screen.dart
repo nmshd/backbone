@@ -33,8 +33,21 @@ class _HomeScreenState extends State<HomeScreen> {
           },
         ),
         actions: [
-          IconButton(icon: const Icon(Icons.logout), onPressed: _logout),
-          Gaps.w8,
+          SizedBox(
+            height: 35,
+            width: 120,
+            child: OutlinedButton(
+              onPressed: _logout,
+              child: const Row(
+                children: [
+                  Icon(Icons.logout, size: 18),
+                  Gaps.w4,
+                  Text('Logout', style: TextStyle(fontSize: 12.5)),
+                ],
+              ),
+            ),
+          ),
+          Gaps.w40,
         ],
       ),
       body: Row(
