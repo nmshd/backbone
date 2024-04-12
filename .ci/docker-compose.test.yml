@@ -4,17 +4,17 @@ services:
     container_name: consumer-api-test
     hostname: consumer-api
     image: consumer-api
-    build:
-      context: ..
-      dockerfile: ConsumerApi/Dockerfile
-      cache_from:
-        #- type=local,src=/tmp/.buildx-cache
-        - type=registry,ref=localhost:6000/consumer-api
-      cache_to:
-        #- type=local,dest=/tmp/.buildx-cache-new,mode=min
-        - type=inline
-      args:
-        DOCKER_BUILDKIT: 1
+#    build:
+#      context: ..
+#      dockerfile: ConsumerApi/Dockerfile
+#      cache_from:
+#        #- type=local,src=/tmp/.buildx-cache
+#        - type=registry,ref=localhost:6000/consumer-api
+#      cache_to:
+#        #- type=local,dest=/tmp/.buildx-cache-new,mode=min
+#        - type=inline
+#      args:
+#        DOCKER_BUILDKIT: 1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:

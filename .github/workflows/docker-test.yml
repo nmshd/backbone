@@ -39,14 +39,14 @@ jobs:
       #    restore-keys: |
       #      ${{ runner.os }}-buildx-
 
-      - id: cache
-        name: Cache Docker
-        uses: actions/cache@v3
-        with:
-          path: /tmp/docker-registry
-          key: ${{ runner.os }}-registry-${{ hashFiles('**/Dockerfile', './.ci/docker-compose.test*.yml') }}
-          restore-keys: |
-            ${{ runner.os }}-registry-
+#      - id: cache
+#        name: Cache Docker
+#        uses: actions/cache@v3
+#        with:
+#          path: /tmp/docker-registry
+#          key: ${{ runner.os }}-registry-${{ hashFiles('**/Dockerfile', './.ci/docker-compose.test*.yml') }}
+#          restore-keys: |
+#            ${{ runner.os }}-registry-
       
       #- name: Cache npm dependencies
       #  uses: actions/cache@v3
@@ -81,22 +81,33 @@ jobs:
       #- name: Run Tests
       #  run: python .ci/integrationTest.py build
       
-      - name: Run local registry
-        run: docker run -d -p 6000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:6000
+#      - name: Run local registry
+#        run: docker run -d -p 6000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:6000
+      
+      - name: Build Consumer Api
+        uses: docker/build-push-action@v5
+        with: 
+          context: .
+          file: ConsumerApi/Dockerfile
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          tags: consumer-api
+          
 
       - name: Run integration tests
         run: ./.ci/integrationTest.postgres.sh
         
-      - name: Push ConsumerAPI to local registry
-        run: docker tag consumer-api localhost:6000/consumer-api && docker push localhost:6000/consumer-api || true
+#      - name: Push ConsumerAPI to local registry
+#        run: docker tag consumer-api localhost:6000/consumer-api && docker push localhost:6000/consumer-api || true
         #if: steps.cache.outputs.cache-hit != 'true'
         
-      - name: Push AdminUI to local registry
-        run: docker tag admin-ui localhost:6000/admin-ui && docker push localhost:6000/admin-ui || true
+#      - name: Push AdminUI to local registry
+#        run: docker tag admin-ui localhost:6000/admin-ui && docker push localhost:6000/admin-ui || true
         #if: steps.cache.outputs.cache-hit != 'true'
         
-      - name: Push Seed Client to local registry
-        run: docker tag seed-client localhost:6000/seed-client && docker push localhost:6000/seed-client || true
+#      - name: Push Seed Client to local registry
+#        run: docker tag seed-client localhost:6000/seed-client && docker push localhost:6000/seed-client || true
         #if: steps.cache.outputs.cache-hit != 'true'
         
       - name: Save Docker Logs
