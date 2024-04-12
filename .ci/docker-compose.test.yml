@@ -36,17 +36,17 @@ services:
     container_name: admin-ui-test
     hostname: admin-ui
     image: admin-ui
-    build:
-      context: ..
-      dockerfile: AdminApi/src/AdminApi/Dockerfile
-      cache_from:
-        #- type=local,src=/tmp/.buildx-cache
-        - type=registry,ref=localhost:6000/test-adminui
-      cache_to:
-        #- type=local,dest=/tmp/.buildx-cache-new,mode=min
-        - type=inline
-      args:
-        DOCKER_BUILDKIT: 1
+#    build:
+#      context: ..
+#      dockerfile: AdminApi/src/AdminApi/Dockerfile
+#      cache_from:
+#        #- type=local,src=/tmp/.buildx-cache
+#        - type=registry,ref=localhost:6000/test-adminui
+#      cache_to:
+#        #- type=local,dest=/tmp/.buildx-cache-new,mode=min
+#        - type=inline
+#      args:
+#        DOCKER_BUILDKIT: 1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
@@ -84,17 +84,17 @@ services:
   seed-client:
     container_name: seed-client-test
     image: seed-client
-    build:
-      context: ..
-      dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
-      cache_from:
-        #- type=local,src=/tmp/.buildx-cache
-        - type=registry,ref=localhost:6000/seed-client
-      cache_to:
-        #- type=local,dest=/tmp/.buildx-cache-new,mode=min
-        - type=inline
-      args:
-        DOCKER_BUILDKIT: 1
+#    build:
+#      context: ..
+#      dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
+#      cache_from:
+#        #- type=local,src=/tmp/.buildx-cache
+#        - type=registry,ref=localhost:6000/seed-client
+#      cache_to:
+#        #- type=local,dest=/tmp/.buildx-cache-new,mode=min
+#        - type=inline
+#      args:
+#        DOCKER_BUILDKIT: 1
     depends_on:
       consumer-api:
         condition: service_healthy
