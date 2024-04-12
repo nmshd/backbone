@@ -92,7 +92,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: localhost:6000/consumer-api
-          output: type=registry,dest=localhost:6000/consumer-api
+          outputs: type=registry,dest=localhost:6000/consumer-api
           
       - name: Build Admin Api
         uses: docker/build-push-action@v5
@@ -102,7 +102,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: localhost:6000/admin-ui
-          output: type=registry,dest=localhost:6000/admin-ui  
+          outputs: type=registry,dest=localhost:6000/admin-ui  
 
       - name: Build Seed Client
         uses: docker/build-push-action@v5
@@ -112,7 +112,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: localhost:6000/seed-client
-          output: type=registry,dest=localhost:6000/seed-client
+          outputs: type=registry,dest=localhost:6000/seed-client
       
       - name: Run integration tests
         run: ./.ci/integrationTest.postgres.sh
