@@ -15,4 +15,12 @@ public interface IRelationshipTemplatesRepository
     Task Add(RelationshipTemplate template, CancellationToken cancellationToken);
     Task Update(RelationshipTemplate template);
     Task Delete(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken);
+
+    #region RelationshipTemplateAllocations
+
+    Task<IEnumerable<RelationshipTemplateAllocation>> FindRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter, CancellationToken cancellationToken);
+    Task UpdateRelationshipTemplateAllocations(List<RelationshipTemplateAllocation> templateAllocations, CancellationToken cancellationToken);
+
+    #endregion RelationshipTemplateAllocations
+
 }
