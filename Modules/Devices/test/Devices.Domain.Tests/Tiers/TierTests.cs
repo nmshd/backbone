@@ -14,6 +14,8 @@ public class TierTests
 
         tier.Id.Should().NotBeNull();
         tier.Name.Should().Be(tierName);
+        tier.CanBeUsedAsDefaultForClient.Should().BeTrue();
+        tier.CanBeManuallyAssigned.Should().BeTrue();
     }
 
     [Fact]
@@ -67,6 +69,5 @@ public class TierTests
         // Assert
         error!.Code.Should().Be("error.platform.validation.device.usedTierCannotBeDeleted");
         error.Message.Should().Contain("The Tier is used as the default Tier by one or more clients.");
-
     }
 }

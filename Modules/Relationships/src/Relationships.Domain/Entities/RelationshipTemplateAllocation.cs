@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Tooling;
@@ -16,7 +17,20 @@ public class RelationshipTemplateAllocation
 
     public int Id { get; }
     public RelationshipTemplateId RelationshipTemplateId { get; set; }
-    public IdentityAddress AllocatedBy { get; set; }
+    public IdentityAddress AllocatedBy { get; private set; }
     public DateTime AllocatedAt { get; set; }
     public DeviceId AllocatedByDevice { get; set; }
+
+    public bool ReplaceIdentityAddress(IdentityAddress oldIdentityAddress, IdentityAddress newIdentityAddress)
+    {
+        if (AllocatedBy != oldIdentityAddress) return false;
+
+        AllocatedBy = newIdentityAddress;
+        return true;
+    }
+
+    public static Expression<Func<RelationshipTemplateAllocation, bool>> WasAllocatedBy(IdentityAddress allocatedBy)
+    {
+        return x => x.AllocatedBy == allocatedBy.ToString();
+    }
 }

@@ -74,6 +74,16 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
+                    b.Property<bool>("CanBeManuallyAssigned")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
+                    b.Property<bool>("CanBeUsedAsDefaultForClient")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
@@ -238,6 +248,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("TierId")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
@@ -250,6 +261,10 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsFixedLength();
 
                     b.HasKey("Address");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("TierId");
 
                     b.ToTable("Identities");
                 });
@@ -290,6 +305,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsFixedLength();
 
                     b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DeletionStartedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("GracePeriodEndsAt")
@@ -755,14 +773,16 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 {
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", null)
                         .WithMany("DeletionProcesses")
-                        .HasForeignKey("IdentityAddress");
+                        .HasForeignKey("IdentityAddress")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcessAuditLogEntry", b =>
                 {
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcess", null)
                         .WithMany("AuditLog")
-                        .HasForeignKey("IdentityDeletionProcessId");
+                        .HasForeignKey("IdentityDeletionProcessId")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>

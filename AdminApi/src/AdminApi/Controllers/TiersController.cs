@@ -21,18 +21,18 @@ namespace Backbone.AdminApi.Controllers;
 [Authorize("ApiKey")]
 public class TiersController : ApiControllerBase
 {
-    private readonly AdminUiDbContext _adminUiDbContext;
+    private readonly AdminApiDbContext _adminApiDbContext;
 
-    public TiersController(IMediator mediator, AdminUiDbContext adminUiDbContext) : base(mediator)
+    public TiersController(IMediator mediator, AdminApiDbContext adminApiDbContext) : base(mediator)
     {
-        _adminUiDbContext = adminUiDbContext;
+        _adminApiDbContext = adminApiDbContext;
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<List<TierOverview>>), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetTiers(CancellationToken cancellationToken)
     {
-        var tiers = await _adminUiDbContext.TierOverviews.ToListAsync(cancellationToken);
+        var tiers = await _adminApiDbContext.TierOverviews.ToListAsync(cancellationToken);
         return Ok(tiers);
     }
 
