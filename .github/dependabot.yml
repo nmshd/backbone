@@ -41,8 +41,7 @@ updates:
       - "tnotheis"
     ignore:
       - dependency-name: "eslint"
-        versions:
-          - ">= 9" # Ignore this until https://github.com/typescript-eslint/typescript-eslint/issues/8211 is fixed
+        update-types: ["version-update:semver-major"] # Ignore this until https://github.com/typescript-eslint/typescript-eslint/issues/8211 is fixed
     labels:
       - "dependencies"
 
