@@ -1,13 +1,10 @@
 {
-  "version": "1",
-  "name": "ConsumerApi",
-  "type": "collection",
-  "ignore": [
-    "node_modules",
-    ".git"
-  ],
-  "presets": {
-    "requestType": "http",
-    "requestUrl": "{{BaseUrl}}"
-  }
+    "version": "1",
+    "name": "ConsumerApi",
+    "type": "collection",
+    "ignore": ["node_modules", ".git"],
+    "presets": {
+        "requestType": "http",
+        "requestUrl": "{{baseUrl}}"
+    }
 }
