@@ -93,6 +93,12 @@ public class Relationship
             throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse());
     }
 
+    private void EnsureRelationshipReactivationRequestIsAddressedToSelf(IdentityAddress activeIdentity)
+    {
+        if (To != activeIdentity)
+            throw new DomainException(DomainErrors.CannotRejectRelationshipReactivationRequestAddressedToSomeoneElse());
+    }
+
     private void EnsureRelationshipRequestIsCreatedBySelf(IdentityAddress activeIdentity)
     {
         if (From != activeIdentity)
@@ -110,6 +116,26 @@ public class Relationship
             RelationshipAuditLogEntryReason.RejectionOfCreation,
             RelationshipStatus.Pending,
             RelationshipStatus.Rejected,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
+    public void Test_SetStatusAsTerminated() // todo: Nikola2 remove, only used as a test
+    {
+        Status = RelationshipStatus.Terminated;
+    }
+    public void RejectReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureRelationshipReactivationRequestIsAddressedToSelf(activeIdentity);
+
+        EnsureStatus(RelationshipStatus.Terminated);
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.RejectionOfReactivation,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Terminated,
             activeIdentity,
             activeDevice
         );
