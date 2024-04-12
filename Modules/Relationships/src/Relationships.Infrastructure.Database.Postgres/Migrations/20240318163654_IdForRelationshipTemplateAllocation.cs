@@ -25,6 +25,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
             migrationBuilder.AlterColumn<string>(
                 name: "Discriminator",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 type: "character varying(34)",
                 maxLength: 34,
@@ -60,6 +61,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
             migrationBuilder.AlterColumn<string>(
                 name: "Discriminator",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 type: "text",
                 nullable: false,

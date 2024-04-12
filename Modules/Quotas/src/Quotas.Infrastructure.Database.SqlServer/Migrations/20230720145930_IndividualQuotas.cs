@@ -21,6 +21,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
+                schema: "Quotas",
                 table: "Tiers",
                 type: "nvarchar(30)",
                 maxLength: 30,
@@ -33,6 +34,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas",
                 type: "char(36)",
                 nullable: false,
@@ -43,6 +45,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "MetricKey",
+                schema: "Quotas",
                 table: "TierQuotaDefinitions",
                 type: "nvarchar(50)",
                 maxLength: 50,
@@ -65,6 +68,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "TierId",
+                schema: "Quotas",
                 table: "Identities",
                 type: "char(20)",
                 unicode: false,
@@ -142,6 +146,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
+                schema: "Quotas",
                 table: "Tiers",
                 type: "nvarchar(30)",
                 maxLength: 30,
@@ -152,6 +157,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas",
                 type: "char(36)",
                 nullable: true,
@@ -160,6 +166,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "MetricKey",
+                schema: "Quotas",
                 table: "TierQuotaDefinitions",
                 type: "nvarchar(50)",
                 maxLength: 50,
@@ -178,6 +185,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "TierId",
+                schema: "Quotas",
                 table: "Identities",
                 type: "char(20)",
                 unicode: false,

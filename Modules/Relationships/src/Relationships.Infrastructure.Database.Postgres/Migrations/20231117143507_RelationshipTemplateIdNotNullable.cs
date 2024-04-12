@@ -16,6 +16,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
             migrationBuilder.AlterColumn<string>(
                 name: "RelationshipTemplateId",
+                schema: "Relationships",
                 table: "Relationships",
                 type: "character(20)",
                 unicode: false,
@@ -48,6 +49,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
             migrationBuilder.AlterColumn<string>(
                 name: "RelationshipTemplateId",
+                schema: "Relationships",
                 table: "Relationships",
                 type: "character(20)",
                 unicode: false,

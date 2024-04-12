@@ -24,6 +24,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AlterColumn<string>(
                 name: "Discriminator",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 type: "nvarchar(34)",
                 maxLength: 34,
@@ -59,6 +60,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AlterColumn<string>(
                 name: "Discriminator",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 type: "nvarchar(max)",
                 nullable: false,

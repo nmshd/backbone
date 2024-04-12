@@ -12,6 +12,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "AppId",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "nvarchar(max)",
                 nullable: false,
@@ -72,6 +73,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "AppId",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "nvarchar(max)",
                 nullable: true,

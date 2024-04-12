@@ -12,6 +12,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "AppId",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "text",
                 nullable: false,
@@ -68,6 +69,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "AppId",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "text",
                 nullable: true,
