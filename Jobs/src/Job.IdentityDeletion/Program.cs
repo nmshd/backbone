@@ -98,11 +98,6 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 .AddModule<SynchronizationModule>(configuration)
                 .AddModule<TokensModule>(configuration);
 
-            services.AddMediatR(c => c
-                .RegisterServicesFromAssemblyContaining<CancelStaleIdentityDeletionProcessesCommand>());
-
-            services.AddModule<DevicesModule>(configuration);
-
             services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
             services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
 
