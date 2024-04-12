@@ -72,39 +72,40 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AnimatedBuilder(
-              animation: _controller,
-              builder: (context, child) {
-                return Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: SizedBox(
-                    width: _widthAnimation.value,
-                    height: 235,
-                    child: Drawer(
-                      elevation: 0,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: ListView(
-                              children: [
-                                buildHeaderSection('Functionalities'),
-                                if (_widthAnimation.value == maxWidth)
-                                  const Padding(
-                                    padding: EdgeInsets.only(left: 8, right: 8),
-                                    child: Divider(),
-                                  ),
-                                buildNavigationTile(context, 'Identities', Icons.account_circle_sharp, isSelected: true),
-                                buildNavigationTile(context, 'Tiers', Icons.cable, index: 1),
-                                buildNavigationTile(context, 'Clients', Icons.layers, index: 2),
-                              ],
-                            ),
+            animation: _controller,
+            builder: (context, child) {
+              return Padding(
+                padding: const EdgeInsets.all(8),
+                child: SizedBox(
+                  width: _widthAnimation.value,
+                  height: 235,
+                  child: Drawer(
+                    elevation: 0,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: ListView(
+                            children: [
+                              buildHeaderSection('Functionalities'),
+                              if (_widthAnimation.value == maxWidth)
+                                const Padding(
+                                  padding: EdgeInsets.only(left: 8, right: 8),
+                                  child: Divider(),
+                                ),
+                              buildNavigationTile(context, 'Identities', Icons.account_circle_sharp, isSelected: true),
+                              buildNavigationTile(context, 'Tiers', Icons.cable, index: 1),
+                              buildNavigationTile(context, 'Clients', Icons.layers, index: 2),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
-                );
-              }),
+                ),
+              );
+            },
+          ),
           Expanded(child: widget.child),
         ],
       ),
