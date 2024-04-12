@@ -37,11 +37,6 @@ final _router = GoRouter(
       routes: [
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
-          path: '/dashboard',
-          pageBuilder: (context, state) => const NoTransitionPage(child: Dashboard()),
-        ),
-        GoRoute(
-          parentNavigatorKey: _shellNavigatorKey,
           path: '/identities',
           pageBuilder: (context, state) => const NoTransitionPage(child: Identities()),
         ),
