@@ -32,9 +32,7 @@
                         <span matListItemTitle>Tier</span>
                         <span matListItemLine
                             ><mat-chip-listbox aria-label="Tier selection" selectable="false">
-                                <mat-chip-option *ngFor="let t of tiers" [selected]="t == updatedTier" (click)="updatedTier = t" [color]="t.name == 'Basic' ? 'accent' : ''"
-                                    >{{ t.name }}
-                                </mat-chip-option>
+                                <mat-chip-option *ngFor="let t of tiers" [selected]="t == updatedTier" (click)="updatedTier = t" [disabled]="isTierDisabled(t)">{{ t.name }} </mat-chip-option>
                             </mat-chip-listbox>
                         </span>
                     </mat-list-item>
@@ -215,6 +213,7 @@
     </mat-accordion>
     <div class="action-buttons">
         <button mat-raised-button [disabled]="!hasPendingChanges()" (click)="saveIdentity()" color="primary">Save</button>
+        <button mat-raised-button color="warn" (click)="openStartDeletionProcessDialog()">Start Deletion Process</button>
         <button mat-raised-button routerLink="/identities">Cancel</button>
     </div>
 </div>

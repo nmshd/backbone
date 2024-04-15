@@ -1,4 +1,6 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Challenges;
+﻿using Backbone.BuildingBlocks.SDK;
+using Backbone.BuildingBlocks.SDK.Endpoints.Common;
+using Backbone.ConsumerApi.Sdk.Endpoints.Challenges;
 using Backbone.ConsumerApi.Sdk.Endpoints.Common;
 using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices;
@@ -16,7 +18,7 @@ namespace Backbone.ConsumerApi.Sdk;
 
 public class Client
 {
-    public Client(Configuration configuration) : this(new HttpClient { BaseAddress = new Uri(Path.Combine(configuration.BaseUrl, "api", configuration.ApiVersion)) }, configuration)
+    public Client(Configuration configuration) : this(new HttpClient { BaseAddress = UriUtils.CreateUriFromParts(configuration.BaseUrl, "api", configuration.ApiVersion) }, configuration)
     {
     }
 

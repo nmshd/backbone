@@ -1,6 +1,6 @@
 {
     "type": "module",
     "devDependencies": {
-        "zx": "^7.2.0"
+        "zx": "^8.0.0"
     }
 }

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
@@ -70,6 +71,11 @@ public class TokensRepository : ITokensRepository
     {
         await _tokensDbSet.AddAsync(token);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task DeleteTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken)
+    {
+        await _tokensDbSet.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 
     #endregion

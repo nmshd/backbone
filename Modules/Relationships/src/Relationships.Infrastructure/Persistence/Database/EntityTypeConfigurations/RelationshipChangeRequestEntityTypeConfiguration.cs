@@ -10,10 +10,6 @@ public class RelationshipChangeRequestEntityTypeConfiguration : IEntityTypeConfi
     {
         builder.ToTable("RelationshipChanges");
 
-        builder.HasIndex(x => x.CreatedAt);
-        builder.HasIndex(x => x.CreatedBy);
-        builder.HasIndex(x => x.CreatedByDevice);
-
         builder.Property(x => x.CreatedBy)
             .HasColumnName("Req_CreatedBy");
 
