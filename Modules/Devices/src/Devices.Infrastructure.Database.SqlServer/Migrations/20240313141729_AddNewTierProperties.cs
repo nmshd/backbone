@@ -18,7 +18,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 nullable: false,
                 defaultValue: true);
 
-            migrationBuilder.UpdateData("Tiers", "Id", "TIR00000000000000001", "CanBeManuallyAssigned", false);
+            migrationBuilder.UpdateData("Tiers", "Id", "TIR00000000000000001", "CanBeManuallyAssigned", false, "Devices");
 
             migrationBuilder.AddColumn<bool>(
                 name: "CanBeUsedAsDefaultForClient",
@@ -28,7 +28,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 nullable: false,
                 defaultValue: true);
 
-            migrationBuilder.UpdateData("Tiers", "Id", "TIR00000000000000001", "CanBeUsedAsDefaultForClient", false);
+            migrationBuilder.UpdateData("Tiers", "Id", "TIR00000000000000001", "CanBeUsedAsDefaultForClient", false, "Devices");
         }
 
         /// <inheritdoc />
