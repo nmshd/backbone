@@ -12,7 +12,6 @@ using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
 
@@ -138,18 +137,13 @@ public class RelationshipsRepository : IRelationshipsRepository
             .AnyAsync(cancellationToken);
     }
 
+    public async Task DeleteRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
+    {
+        await _relationships.Where(filter).ExecuteDeleteAsync(cancellationToken);
+    }
+
     public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
     {
         return await _relationships.Where(filter).ToListAsync(cancellationToken);
     }
-}
-
-internal static partial class RelationshipRepositoryLogs
-{
-    [LoggerMessage(
-        EventId = 664861,
-        EventName = "Relationships.RelationshipsRepository.ErrorTryingToSaveRelationshipChange",
-        Level = LogLevel.Error,
-        Message = "There was an error while trying to save the content of the RelationshipChange with the id '{id}'. The name of the blob was '{name}'.")]
-    public static partial void ErrorTryingToSaveRelationshipChange(this ILogger logger, RelationshipChangeId id, string name);
 }

@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
@@ -33,7 +34,7 @@ public class Message : IIdentifiable<MessageId>
     public MessageId Id { get; }
 
     public DateTime CreatedAt { get; }
-    public IdentityAddress CreatedBy { get; }
+    public IdentityAddress CreatedBy { get; private set; }
     public DeviceId CreatedByDevice { get; }
 
     public byte[] Body { get; private set; }
@@ -49,5 +50,22 @@ public class Message : IIdentifiable<MessageId>
         }
 
         Body = bytes;
+    }
+
+    public void ReplaceIdentityAddress(IdentityAddress oldIdentityAddress, IdentityAddress newIdentityAddress)
+    {
+        if (CreatedBy == oldIdentityAddress)
+        {
+            CreatedBy = newIdentityAddress;
+        }
+
+        var recipient = Recipients.FirstOrDefault(r => r.Address == oldIdentityAddress);
+
+        recipient?.UpdateAddress(newIdentityAddress);
+    }
+
+    public static Expression<Func<Message, bool>> WasCreatedBy(IdentityAddress identityAddress)
+    {
+        return i => i.CreatedBy == identityAddress.ToString();
     }
 }

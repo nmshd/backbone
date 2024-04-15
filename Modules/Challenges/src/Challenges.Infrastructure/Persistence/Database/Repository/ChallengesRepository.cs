@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using Backbone.Modules.Challenges.Application.Extensions;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Domain.Entities;
@@ -29,6 +30,11 @@ public class ChallengesRepository : IChallengesRepository
 
     public async Task<int> DeleteExpiredChallenges(CancellationToken cancellationToken)
     {
-        return await _challenges.Where(Challenge.CanBeCleanedUp).ExecuteDeleteAsync(cancellationToken: cancellationToken);
+        return await _challenges.Where(Challenge.CanBeCleanedUp).ExecuteDeleteAsync(cancellationToken);
+    }
+
+    public async Task Delete(Expression<Func<Challenge, bool>> filter, CancellationToken cancellationToken)
+    {
+        await _challenges.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 }

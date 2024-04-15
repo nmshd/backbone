@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Job.IdentityDeletion.CancelStaleDeletionProcesses": {
+      "commandName": "Project",
+      "commandLineArgs": "--Worker CancelStaleDeletionProcessesWorker"
+    },
+    "Job.IdentityDeletion.ActualDeletion": {
+      "commandName": "Project",
+      "commandLineArgs": "--Worker ActualDeletionWorker"
+    }
+  }
+}
