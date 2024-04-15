@@ -163,8 +163,6 @@ public class Relationship
     public void ReactivationRequest(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureStatus(RelationshipStatus.Terminated);
-        // TODO: Ensure it can reactivate only own relationship.
-        // TODO: Ensure there is not already an open reactivation.
 
         Status = RelationshipStatus.ReactivationRequested;
 
