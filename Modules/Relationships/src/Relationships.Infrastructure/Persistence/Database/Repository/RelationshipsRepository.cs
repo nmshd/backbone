@@ -16,6 +16,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Rep
 public class RelationshipsRepository : IRelationshipsRepository
 {
     private readonly DbSet<Relationship> _relationships;
+    private readonly DbSet<RelationshipTemplateAllocation> _relationshipTemplateAllocations;
     private readonly IQueryable<Relationship> _readOnlyRelationships;
     private readonly RelationshipsDbContext _dbContext;
 
