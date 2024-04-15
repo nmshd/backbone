@@ -7,16 +7,16 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Comma
 public class Handler : IRequestHandler<AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand>
 {
     private const string DELETED_IDENTITY_STRING = "deleted identity";
-    private readonly IRelationshipsRepository _relationshipsRepository;
+    private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
 
-    public Handler(IRelationshipsRepository relationshipsRepository)
+    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
-        _relationshipsRepository = relationshipsRepository;
+        _relationshipTemplatesRepository = relationshipTemplatesRepository;
     }
 
     public async Task Handle(AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand request, CancellationToken cancellationToken)
     {
-        var allocations = await _relationshipsRepository.FindRelationshipTemplateAllocations(RelationshipTemplateAllocation.WasAllocatedBy(request.IdentityAddress), cancellationToken);
+        var allocations = await _relationshipTemplatesRepository.FindRelationshipTemplateAllocations(RelationshipTemplateAllocation.WasAllocatedBy(request.IdentityAddress), cancellationToken);
         var updatedAllocations = new List<RelationshipTemplateAllocation>();
 
         foreach (var allocation in allocations)
@@ -25,6 +25,6 @@ public class Handler : IRequestHandler<AnonymizeRelationshipTemplateAllocationsA
                 updatedAllocations.Add(allocation);
         }
 
-        await _relationshipsRepository.UpdateRelationshipTemplateAllocations(updatedAllocations, cancellationToken);
+        await _relationshipTemplatesRepository.UpdateRelationshipTemplateAllocations(updatedAllocations, cancellationToken);
     }
 }

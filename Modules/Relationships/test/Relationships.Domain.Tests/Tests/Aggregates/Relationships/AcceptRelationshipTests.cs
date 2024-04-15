@@ -18,10 +18,11 @@ public class AcceptRelationshipTests
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Accept(IDENTITY_2, DEVICE_2);
+        relationship.Accept(IDENTITY_2, DEVICE_2, [0]);
 
         // Assert
         relationship.Status.Should().Be(RelationshipStatus.Active);
+        relationship.AcceptanceContent.Should().BeEquivalentTo([0]);
     }
 
     [Fact]
@@ -33,7 +34,7 @@ public class AcceptRelationshipTests
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Accept(IDENTITY_2, DEVICE_2);
+        relationship.Accept(IDENTITY_2, DEVICE_2, []);
 
         // Assert
         relationship.AuditLog.Should().HaveCount(2);
@@ -56,7 +57,7 @@ public class AcceptRelationshipTests
         var relationship = CreateActiveRelationship();
 
         // Act
-        var acting = () => relationship.Accept(IDENTITY_2, DEVICE_2);
+        var acting = () => relationship.Accept(IDENTITY_2, DEVICE_2, []);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
@@ -72,7 +73,7 @@ public class AcceptRelationshipTests
         var relationship = CreatePendingRelationship();
 
         // Act
-        var acting = () => relationship.Accept(IDENTITY_1, DEVICE_1);
+        var acting = () => relationship.Accept(IDENTITY_1, DEVICE_1, []);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
@@ -86,7 +87,7 @@ public class AcceptRelationshipTests
         var foreignAddress = IdentityAddress.ParseUnsafe("some-other-identity");
 
         // Act
-        var acting = () => relationship.Accept(foreignAddress, DeviceId.New());
+        var acting = () => relationship.Accept(foreignAddress, DeviceId.New(), []);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");

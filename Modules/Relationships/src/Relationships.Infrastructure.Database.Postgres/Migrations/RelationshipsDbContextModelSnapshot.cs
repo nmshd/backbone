@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrations
+namespace Relationships.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(RelationshipsDbContext))]
     partial class RelationshipsDbContextModelSnapshot : ModelSnapshot
@@ -110,6 +110,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
+
+                    b.Property<byte[]>("AcceptanceContent")
+                        .HasColumnType("bytea");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");

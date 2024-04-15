@@ -14,12 +14,14 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
 {
     private readonly DbSet<RelationshipTemplate> _templates;
     private readonly IQueryable<RelationshipTemplate> _readOnlyTemplates;
+    private readonly DbSet<RelationshipTemplateAllocation> _relationshipTemplateAllocations;
     private readonly RelationshipsDbContext _dbContext;
 
     public RelationshipTemplatesRepository(RelationshipsDbContext dbContext)
     {
         _templates = dbContext.RelationshipTemplates;
         _readOnlyTemplates = dbContext.RelationshipTemplates.AsNoTracking();
+        _relationshipTemplateAllocations = dbContext.RelationshipTemplateAllocations;
         _dbContext = dbContext;
     }
 
@@ -63,5 +65,17 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
     {
         _templates.Update(template);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task<IEnumerable<RelationshipTemplateAllocation>> FindRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter,
+        CancellationToken cancellationToken)
+    {
+        return await _relationshipTemplateAllocations.Where(filter).ToListAsync(cancellationToken);
+    }
+
+    public async Task UpdateRelationshipTemplateAllocations(List<RelationshipTemplateAllocation> templateAllocations, CancellationToken cancellationToken)
+    {
+        _relationshipTemplateAllocations.UpdateRange(templateAllocations);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }
