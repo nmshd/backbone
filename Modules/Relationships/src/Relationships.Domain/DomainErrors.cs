@@ -35,10 +35,10 @@ public static class DomainErrors
             $"The relationship has to be in status '{expectedStatus}' to perform this action.");
     }
 
-    public static DomainError RelationshipIsInIncorrectStatus(RelationshipStatus expectedStatus)
+    public static DomainError RelationshipIsInIncorrectStatus(RelationshipStatus undesiredStatus)
     {
         return new DomainError("error.platform.validation.relationshipRequest.relationshipIsInIncorrectStatus",
-            $"The relationship cannot to be in status '{expectedStatus}' to perform this action.");
+            $"The relationship cannot to be in status '{undesiredStatus}' to perform this action.");
     }
 
     public static DomainError RelationshipToTargetAlreadyExists(string targetIdentity)

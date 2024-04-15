@@ -25,6 +25,9 @@ public class Relationship
         EnsureTargetIsNotSelf(relationshipTemplate, activeIdentity);
         EnsureNoActiveRelationshipToTargetExists(relationshipTemplate.CreatedBy, existingRelationships);
 
+        var listOfAllowedStatuses = new List<RelationshipStatus> { RelationshipStatus.Pending, RelationshipStatus.Active, RelationshipStatus.Rejected, RelationshipStatus.Revoked };
+        EnsureStatus(listOfAllowedStatuses, existingRelationships);
+
         Id = RelationshipId.New();
         RelationshipTemplateId = relationshipTemplate.Id;
         RelationshipTemplate = relationshipTemplate;
@@ -124,6 +127,13 @@ public class Relationship
             throw new DomainException(DomainErrors.RelationshipIsNotInCorrectStatus(status));
     }
 
+    private void EnsureStatus(List<RelationshipStatus> statuses, List<Relationship> existingRelationships)
+    {
+        foreach (var relationship in existingRelationships)
+            if (!statuses.Contains(relationship.Status))
+                throw new DomainException(DomainErrors.RelationshipIsInIncorrectStatus(Status));
+    }
+
     public void Revoke(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureStatus(RelationshipStatus.Pending);
@@ -155,12 +165,6 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
-    }
-
-    public void EnsureNotStatus(RelationshipStatus status)
-    {
-        if (Status == status)
-            throw new DomainException(DomainErrors.RelationshipIsInIncorrectStatus(status));
     }
 
     #region Expressions

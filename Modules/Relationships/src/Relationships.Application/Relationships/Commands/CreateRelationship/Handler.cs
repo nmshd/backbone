@@ -65,17 +65,12 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
             _cancellationToken
         );
 
-        var relationships = existingRelationships.ToList();
-
-        foreach (var relationship in relationships)
-            relationship.EnsureNotStatus(RelationshipStatus.Terminated);
-
         _relationship = new Relationship(
             _template,
             _activeIdentity,
             _activeDevice,
             _request.CreationContent,
-            relationships
+            existingRelationships.ToList()
         );
 
         await _relationshipsRepository.Add(_relationship, _cancellationToken);

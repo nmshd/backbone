@@ -30,7 +30,6 @@ public class Handler : IRequestHandler<TerminateRelationshipCommand, TerminateRe
         relationship.Terminate(_activeIdentity, _activeDevice);
 
         await _relationshipsRepository.Update(relationship);
-        _ = relationship.To == _activeIdentity ? relationship.From : relationship.To;
 
         _eventBus.Publish(new RelationshipStatusChangedIntegrationEvent(relationship));
 
