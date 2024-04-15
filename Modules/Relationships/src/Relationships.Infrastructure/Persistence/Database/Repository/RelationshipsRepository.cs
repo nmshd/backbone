@@ -18,7 +18,6 @@ public class RelationshipsRepository : IRelationshipsRepository
     private readonly DbSet<Relationship> _relationships;
     private readonly IQueryable<Relationship> _readOnlyRelationships;
     private readonly RelationshipsDbContext _dbContext;
-    private readonly DbSet<RelationshipTemplateAllocation> _relationshipTemplateAllocations;
 
     public RelationshipsRepository(RelationshipsDbContext dbContext)
     {
@@ -93,17 +92,5 @@ public class RelationshipsRepository : IRelationshipsRepository
     public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
     {
         return await _relationships.Where(filter).ToListAsync(cancellationToken);
-    }
-
-    public async Task<IEnumerable<RelationshipTemplateAllocation>> FindRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter,
-        CancellationToken cancellationToken)
-    {
-        return await _relationshipTemplateAllocations.Where(filter).ToListAsync(cancellationToken);
-    }
-
-    public async Task UpdateRelationshipTemplateAllocations(List<RelationshipTemplateAllocation> templateAllocations, CancellationToken cancellationToken)
-    {
-        _relationshipTemplateAllocations.UpdateRange(templateAllocations);
-        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 }

@@ -26,7 +26,6 @@ public class RelationshipTemplateAllocation
 
         AllocatedBy = newIdentityAddress;
         return true;
-
     }
 
     public static Expression<Func<RelationshipTemplateAllocation, bool>> WasAllocatedBy(IdentityAddress allocatedBy)
