@@ -28,10 +28,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropIndex(
                 name: "IX_Identities_ClientId",
+                schema: "Devices",
                 table: "Identities");
 
             migrationBuilder.DropIndex(
                 name: "IX_Identities_TierId",
+                schema: "Devices",
                 table: "Identities");
         }
     }

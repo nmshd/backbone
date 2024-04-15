@@ -22,6 +22,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
         {
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipChanges_Res_CreatedAt_Res_CreatedBy_Res_Created~",
+                schema: "Relationships",
                 table: "RelationshipChanges");
         }
     }

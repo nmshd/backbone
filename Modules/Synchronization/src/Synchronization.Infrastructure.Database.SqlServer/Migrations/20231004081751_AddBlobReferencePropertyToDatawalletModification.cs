@@ -26,6 +26,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
             migrationBuilder.DropColumn(
                 name: "BlobReference",
+                schema: "Synchronization",
                 table: "DatawalletModifications");
         }
     }

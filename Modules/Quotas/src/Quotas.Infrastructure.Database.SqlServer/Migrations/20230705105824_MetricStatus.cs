@@ -13,6 +13,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "IsExhaustedUntil",
+                schema: "Quotas",
                 table: "TierQuotas");
 
             migrationBuilder.CreateTable(

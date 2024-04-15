@@ -13,10 +13,12 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Identities_Tiers_TierId",
+                schema: "Quotas",
                 table: "Identities");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_TierQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas");
 
             migrationBuilder.AlterColumn<string>(
@@ -135,10 +137,12 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Identities_Tiers_TierId",
+                schema: "Quotas",
                 table: "Identities");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_TierQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas");
 
             migrationBuilder.DropTable(

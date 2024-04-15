@@ -32,10 +32,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "RejectedAt",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses");
 
             migrationBuilder.DropColumn(
                 name: "RejectedByDevice",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses");
         }
     }

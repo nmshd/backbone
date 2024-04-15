@@ -13,6 +13,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
         {
             migrationBuilder.DropPrimaryKey(
                 name: "PK_RelationshipTemplateAllocations",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations");
 
             migrationBuilder.AddColumn<int>(
@@ -49,14 +50,17 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
         {
             migrationBuilder.DropPrimaryKey(
                 name: "PK_RelationshipTemplateAllocations",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations");
 
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipTemplateAllocations_RelationshipTemplateId_Allo~",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations");
 
             migrationBuilder.DropColumn(
                 name: "Id",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations");
 
             migrationBuilder.AlterColumn<string>(

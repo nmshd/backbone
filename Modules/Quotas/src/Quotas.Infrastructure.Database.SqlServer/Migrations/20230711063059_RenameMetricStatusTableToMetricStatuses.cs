@@ -12,10 +12,12 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_MetricStatus_Identities_Owner",
+                schema: "Quotas",
                 table: "MetricStatus");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_MetricStatus",
+                schema: "Quotas",
                 table: "MetricStatus");
 
             migrationBuilder.RenameTable(
@@ -41,10 +43,12 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_MetricStatuses_Identities_Owner",
+                schema: "Quotas",
                 table: "MetricStatuses");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_MetricStatuses",
+                schema: "Quotas",
                 table: "MetricStatuses");
 
             migrationBuilder.RenameTable(

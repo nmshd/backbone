@@ -22,6 +22,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
             migrationBuilder.DropColumn(
                 name: "EncryptedPayload",
+                schema: "Synchronization",
                 table: "DatawalletModifications");
         }
     }

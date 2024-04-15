@@ -32,10 +32,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "CancelledAt",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses");
 
             migrationBuilder.DropColumn(
                 name: "CancelledByDevice",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses");
         }
     }

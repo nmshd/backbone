@@ -26,6 +26,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "DevicePushIdentifier",
+                schema: "Devices",
                 table: "PnsRegistrations");
         }
     }

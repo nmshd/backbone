@@ -23,6 +23,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropIndex(
                 name: "IX_MetricStatuses_MetricKey",
+                schema: "Quotas",
                 table: "MetricStatuses");
         }
     }

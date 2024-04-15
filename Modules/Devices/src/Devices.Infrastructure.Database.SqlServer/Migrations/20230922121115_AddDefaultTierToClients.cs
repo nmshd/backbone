@@ -61,14 +61,17 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_OpenIddictApplications_Tiers_DefaultTier",
+                schema: "Devices",
                 table: "OpenIddictApplications");
 
             migrationBuilder.DropIndex(
                 name: "IX_OpenIddictApplications_DefaultTier",
+                schema: "Devices",
                 table: "OpenIddictApplications");
 
             migrationBuilder.DropColumn(
                 name: "DefaultTier",
+                schema: "Devices",
                 table: "OpenIddictApplications");
 
             migrationBuilder.AlterColumn<string>(

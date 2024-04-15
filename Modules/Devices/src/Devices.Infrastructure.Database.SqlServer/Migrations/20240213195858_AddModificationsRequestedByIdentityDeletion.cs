@@ -123,14 +123,17 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.DropColumn(
                 name: "DeletionGracePeriodEndsAt",
+                schema: "Devices",
                 table: "Identities");
 
             migrationBuilder.DropColumn(
                 name: "Status",
+                schema: "Devices",
                 table: "Identities");
 
             migrationBuilder.DropColumn(
                 name: "TierIdBeforeDeletion",
+                schema: "Devices",
                 table: "Identities");
 
             migrationBuilder.AlterColumn<int>(

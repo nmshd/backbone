@@ -24,6 +24,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "CreatedAt",
+                schema: "Devices",
                 table: "OpenIddictApplications");
         }
     }

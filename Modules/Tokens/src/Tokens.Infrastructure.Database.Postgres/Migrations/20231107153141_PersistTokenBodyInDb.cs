@@ -22,6 +22,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Content",
+                schema: "Tokens",
                 table: "Tokens");
         }
     }

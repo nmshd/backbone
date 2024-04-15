@@ -23,6 +23,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Environment",
+                schema: "Devices",
                 table: "PnsRegistrations");
         }
     }

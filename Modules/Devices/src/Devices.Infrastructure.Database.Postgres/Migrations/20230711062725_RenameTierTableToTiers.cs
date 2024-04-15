@@ -12,10 +12,12 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Identities_Tier_TierId",
+                schema: "Devices",
                 table: "Identities");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_Tier",
+                schema: "Devices",
                 table: "Tier");
 
             migrationBuilder.RenameTable(
@@ -24,6 +26,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.RenameIndex(
                 name: "IX_Tier_Name",
+                schema: "Devices",
                 table: "Tiers",
                 newName: "IX_Tiers_Name");
 
@@ -45,10 +48,12 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Identities_Tiers_TierId",
+                schema: "Devices",
                 table: "Identities");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_Tiers",
+                schema: "Devices",
                 table: "Tiers");
 
             migrationBuilder.RenameTable(
@@ -57,6 +62,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.RenameIndex(
                 name: "IX_Tiers_Name",
+                schema: "Devices",
                 table: "Tier",
                 newName: "IX_Tier_Name");
 

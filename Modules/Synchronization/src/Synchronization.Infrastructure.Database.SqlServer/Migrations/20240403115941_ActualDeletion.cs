@@ -12,6 +12,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_DatawalletModifications_Datawallets_DatawalletId",
+                schema: "Synchronization",
                 table: "DatawalletModifications");
 
             migrationBuilder.AddForeignKey(
@@ -28,6 +29,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_DatawalletModifications_Datawallets_DatawalletId",
+                schema: "Synchronization",
                 table: "DatawalletModifications");
 
             migrationBuilder.AddForeignKey(

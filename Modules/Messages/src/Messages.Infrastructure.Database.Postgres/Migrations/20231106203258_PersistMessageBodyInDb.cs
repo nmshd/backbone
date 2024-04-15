@@ -22,6 +22,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Body",
+                schema: "Messages",
                 table: "Messages");
 
             migrationBuilder.EnsureSchema(

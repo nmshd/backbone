@@ -23,6 +23,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Environment",
+                schema: "Devices",
                 table: "PnsRegistrations");
         }
     }

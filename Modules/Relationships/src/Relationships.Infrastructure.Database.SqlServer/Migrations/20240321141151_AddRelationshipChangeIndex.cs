@@ -22,6 +22,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         {
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipChanges_Res_CreatedAt_Res_CreatedBy_Res_CreatedByDevice",
+                schema: "Relationships",
                 table: "RelationshipChanges");
         }
     }

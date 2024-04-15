@@ -12,10 +12,12 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
         {
             migrationBuilder.DropIndex(
                 name: "IX_SyncRuns_CreatedBy",
+                schema: "Synchronization",
                 table: "SyncRuns");
 
             migrationBuilder.DropIndex(
                 name: "IX_DatawalletModifications_CreatedBy",
+                schema: "Synchronization",
                 table: "DatawalletModifications");
         }
 

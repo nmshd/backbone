@@ -26,6 +26,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
         {
             migrationBuilder.DropColumn(
                 name: "BlobReference",
+                schema: "Synchronization",
                 table: "DatawalletModifications");
         }
     }

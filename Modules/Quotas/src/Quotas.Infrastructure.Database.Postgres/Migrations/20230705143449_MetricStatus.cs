@@ -13,6 +13,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "IsExhaustedUntil",
+                schema: "Quotas",
                 table: "TierQuotas");
 
             migrationBuilder.CreateTable(

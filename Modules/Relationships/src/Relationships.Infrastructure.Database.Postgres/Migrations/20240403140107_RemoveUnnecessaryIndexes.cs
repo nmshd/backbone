@@ -12,58 +12,72 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
         {
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipTemplates_CreatedBy",
+                schema: "Relationships",
                 table: "RelationshipTemplates");
 
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipTemplates_DeletedAt",
+                schema: "Relationships",
                 table: "RelationshipTemplates");
 
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipTemplates_ExpiresAt",
+                schema: "Relationships",
                 table: "RelationshipTemplates");
 
             migrationBuilder.DropIndex(
                 name: "IX_Relationships_CreatedAt",
+                schema: "Relationships",
                 table: "Relationships");
 
             migrationBuilder.DropIndex(
                 name: "IX_Relationships_Status",
+                schema: "Relationships",
                 table: "Relationships");
 
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipChanges_CreatedAt",
+                schema: "Relationships",
                 table: "RelationshipChanges");
 
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipChanges_Req_CreatedAt",
+                schema: "Relationships",
                 table: "RelationshipChanges");
 
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipChanges_Req_CreatedBy",
+                schema: "Relationships",
                 table: "RelationshipChanges");
 
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipChanges_Req_CreatedByDevice",
+                schema: "Relationships",
                 table: "RelationshipChanges");
 
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipChanges_Res_CreatedAt",
+                schema: "Relationships",
                 table: "RelationshipChanges");
 
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipChanges_Res_CreatedBy",
+                schema: "Relationships",
                 table: "RelationshipChanges");
 
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipChanges_Res_CreatedByDevice",
+                schema: "Relationships",
                 table: "RelationshipChanges");
 
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipChanges_Status",
+                schema: "Relationships",
                 table: "RelationshipChanges");
 
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipChanges_Type",
+                schema: "Relationships",
                 table: "RelationshipChanges");
         }
 

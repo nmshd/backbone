@@ -13,6 +13,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropPrimaryKey(
                 name: "PK_RecipientInformation",
+                schema: "Messages",
                 table: "RecipientInformation");
 
             migrationBuilder.AddColumn<int>(
@@ -39,14 +40,17 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropPrimaryKey(
                 name: "PK_RecipientInformation",
+                schema: "Messages",
                 table: "RecipientInformation");
 
             migrationBuilder.DropIndex(
                 name: "IX_RecipientInformation_Address_MessageId",
+                schema: "Messages",
                 table: "RecipientInformation");
 
             migrationBuilder.DropColumn(
                 name: "Id",
+                schema: "Messages",
                 table: "RecipientInformation");
 
             migrationBuilder.AddPrimaryKey(

@@ -12,6 +12,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropIndex(
                 name: "IX_Tokens_CreatedBy",
+                schema: "Tokens",
                 table: "Tokens");
         }
 

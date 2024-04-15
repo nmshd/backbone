@@ -13,10 +13,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_I~",
+                schema: "Devices",
                 table: "IdentityDeletionProcessAuditLog");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses");
 
             migrationBuilder.AddColumn<DateTime>(
@@ -48,14 +50,17 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_I~",
+                schema: "Devices",
                 table: "IdentityDeletionProcessAuditLog");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses");
 
             migrationBuilder.DropColumn(
                 name: "DeletionStartedAt",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses");
 
             migrationBuilder.AddForeignKey(

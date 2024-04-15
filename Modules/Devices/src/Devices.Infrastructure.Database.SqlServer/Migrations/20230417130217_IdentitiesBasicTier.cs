@@ -48,18 +48,22 @@ public partial class IdentitiesBasicTier : Migration
     {
         migrationBuilder.DropForeignKey(
             name: "FK_Identities_Tier_TierId",
+            schema: "Devices",
             table: "Identities");
 
         migrationBuilder.DropIndex(
             name: "IX_Tier_Name",
+            schema: "Devices",
             table: "Tier");
 
         migrationBuilder.DropIndex(
             name: "IX_Identities_TierId",
+            schema: "Devices",
             table: "Identities");
 
         migrationBuilder.DropColumn(
             name: "TierId",
+            schema: "Devices",
             table: "Identities");
     }
 }

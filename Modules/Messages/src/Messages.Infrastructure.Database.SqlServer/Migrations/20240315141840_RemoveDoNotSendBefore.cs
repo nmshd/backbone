@@ -13,10 +13,12 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropIndex(
                 name: "IX_Messages_DoNotSendBefore",
+                schema: "Messages",
                 table: "Messages");
 
             migrationBuilder.DropColumn(
                 name: "DoNotSendBefore",
+                schema: "Messages",
                 table: "Messages");
         }
 

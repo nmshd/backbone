@@ -12,14 +12,17 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Identities_Tiers_TierId",
+                schema: "Quotas",
                 table: "Identities");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_TierQuotaDefinitions_Tiers_TierId",
+                schema: "Quotas",
                 table: "TierQuotaDefinitions");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_TierQuotas_TierQuotaDefinitions_DefinitionId",
+                schema: "Quotas",
                 table: "TierQuotas");
 
             migrationBuilder.AddForeignKey(
@@ -51,14 +54,17 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Identities_Tiers_TierId",
+                schema: "Quotas",
                 table: "Identities");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_TierQuotaDefinitions_Tiers_TierId",
+                schema: "Quotas",
                 table: "TierQuotaDefinitions");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_TierQuotas_TierQuotaDefinitions_DefinitionId",
+                schema: "Quotas",
                 table: "TierQuotas");
 
             migrationBuilder.AddForeignKey(

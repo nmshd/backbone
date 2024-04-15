@@ -12,6 +12,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Relationships_RelationshipTemplates_RelationshipTemplateId",
+                schema: "Relationships",
                 table: "Relationships");
 
             migrationBuilder.AlterColumn<string>(
@@ -45,6 +46,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Relationships_RelationshipTemplates_RelationshipTemplateId",
+                schema: "Relationships",
                 table: "Relationships");
 
             migrationBuilder.AlterColumn<string>(

@@ -34,10 +34,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "CanBeManuallyAssigned",
+                schema: "Devices",
                 table: "Tiers");
 
             migrationBuilder.DropColumn(
                 name: "CanBeUsedAsDefaultForClient",
+                schema: "Devices",
                 table: "Tiers");
         }
     }

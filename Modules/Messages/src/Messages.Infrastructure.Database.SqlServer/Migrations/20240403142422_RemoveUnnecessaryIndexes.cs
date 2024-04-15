@@ -12,6 +12,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropIndex(
                 name: "IX_Messages_CreatedAt",
+                schema: "Messages",
                 table: "Messages");
         }
 

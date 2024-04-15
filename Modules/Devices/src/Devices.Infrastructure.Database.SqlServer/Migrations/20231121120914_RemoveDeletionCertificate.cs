@@ -12,6 +12,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "DeletionCertificate",
+                schema: "Devices",
                 table: "Devices");
         }
 

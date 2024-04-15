@@ -34,14 +34,17 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         {
             migrationBuilder.DropColumn(
                 name: "Content",
+                schema: "Relationships",
                 table: "RelationshipTemplates");
 
             migrationBuilder.DropColumn(
                 name: "Req_Content",
+                schema: "Relationships",
                 table: "RelationshipChanges");
 
             migrationBuilder.DropColumn(
                 name: "Res_Content",
+                schema: "Relationships",
                 table: "RelationshipChanges");
         }
     }

@@ -22,6 +22,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "MaxIdentities",
+                schema: "Devices",
                 table: "OpenIddictApplications");
         }
     }
