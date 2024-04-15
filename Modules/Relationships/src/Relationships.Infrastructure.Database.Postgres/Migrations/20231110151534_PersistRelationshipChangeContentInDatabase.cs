@@ -12,18 +12,21 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
         {
             migrationBuilder.AddColumn<byte[]>(
                 name: "Content",
+                schema: "Relationships",
                 table: "RelationshipTemplates",
                 type: "bytea",
                 nullable: true);
 
             migrationBuilder.AddColumn<byte[]>(
                 name: "Req_Content",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 type: "bytea",
                 nullable: true);
 
             migrationBuilder.AddColumn<byte[]>(
                 name: "Res_Content",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 type: "bytea",
                 nullable: true);

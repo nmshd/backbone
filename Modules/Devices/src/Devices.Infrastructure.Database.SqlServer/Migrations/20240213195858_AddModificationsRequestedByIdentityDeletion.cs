@@ -13,6 +13,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<int>(
                 name: "Environment",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "int",
                 nullable: false,
@@ -22,12 +23,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "DeletionGracePeriodEndsAt",
+                schema: "Devices",
                 table: "Identities",
                 type: "datetime2",
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "Status",
+                schema: "Devices",
                 table: "Identities",
                 type: "int",
                 nullable: false,
@@ -35,6 +38,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "TierIdBeforeDeletion",
+                schema: "Devices",
                 table: "Identities",
                 type: "char(20)",
                 unicode: false,
@@ -138,6 +142,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<int>(
                 name: "Environment",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "int",
                 nullable: false,

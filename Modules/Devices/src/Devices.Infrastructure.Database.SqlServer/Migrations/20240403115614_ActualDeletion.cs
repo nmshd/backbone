@@ -23,6 +23,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "DeletionStartedAt",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 type: "datetime2",
                 nullable: false,
@@ -30,6 +31,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_IdentityDeletionProcessId",
+                schema: "Devices",
                 table: "IdentityDeletionProcessAuditLog",
                 column: "IdentityDeletionProcessId",
                 principalTable: "IdentityDeletionProcesses",
@@ -38,6 +40,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress",
                 principalTable: "Identities",
@@ -65,6 +68,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_IdentityDeletionProcessId",
+                schema: "Devices",
                 table: "IdentityDeletionProcessAuditLog",
                 column: "IdentityDeletionProcessId",
                 principalTable: "IdentityDeletionProcesses",
@@ -72,6 +76,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress",
                 principalTable: "Identities",

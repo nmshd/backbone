@@ -12,6 +12,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
         {
             migrationBuilder.AddColumn<byte[]>(
                 name: "EncryptedPayload",
+                schema: "Synchronization",
                 table: "DatawalletModifications",
                 type: "bytea",
                 nullable: true);

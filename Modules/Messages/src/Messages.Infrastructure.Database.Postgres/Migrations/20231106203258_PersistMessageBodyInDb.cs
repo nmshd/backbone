@@ -12,6 +12,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AddColumn<byte[]>(
                 name: "Body",
+                schema: "Messages",
                 table: "Messages",
                 type: "bytea",
                 nullable: true);

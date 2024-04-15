@@ -12,6 +12,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
         {
             migrationBuilder.AddColumn<string>(
                 name: "BlobReference",
+                schema: "Synchronization",
                 table: "DatawalletModifications",
                 type: "character(32)",
                 unicode: false,

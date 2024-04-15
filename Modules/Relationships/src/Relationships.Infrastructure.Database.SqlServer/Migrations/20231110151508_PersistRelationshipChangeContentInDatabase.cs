@@ -12,18 +12,21 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         {
             migrationBuilder.AddColumn<byte[]>(
                 name: "Content",
+                schema: "Relationships",
                 table: "RelationshipTemplates",
                 type: "varbinary(max)",
                 nullable: true);
 
             migrationBuilder.AddColumn<byte[]>(
                 name: "Req_Content",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 type: "varbinary(max)",
                 nullable: true);
 
             migrationBuilder.AddColumn<byte[]>(
                 name: "Res_Content",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 type: "varbinary(max)",
                 nullable: true);

@@ -13,6 +13,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AddColumn<DateTime>(
                 name: "CreatedAt",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 type: "timestamp with time zone",
                 nullable: false,

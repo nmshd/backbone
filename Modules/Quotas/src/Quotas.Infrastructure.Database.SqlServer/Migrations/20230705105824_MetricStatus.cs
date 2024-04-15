@@ -47,6 +47,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "IsExhaustedUntil",
+                schema: "Quotas",
                 table: "TierQuotas",
                 type: "datetime2",
                 nullable: true);

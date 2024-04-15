@@ -18,6 +18,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "ApplicationType",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 type: "character varying(50)",
                 maxLength: 50,
@@ -25,12 +26,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "JsonWebKeySet",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 type: "text",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "Settings",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 type: "text",
                 nullable: true);

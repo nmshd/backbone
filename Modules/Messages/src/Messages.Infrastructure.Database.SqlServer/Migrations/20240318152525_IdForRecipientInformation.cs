@@ -17,6 +17,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddColumn<int>(
                 name: "Id",
+                schema: "Messages",
                 table: "RecipientInformation",
                 type: "int",
                 nullable: false,
@@ -25,6 +26,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_RecipientInformation",
+                schema: "Messages",
                 table: "RecipientInformation",
                 column: "Id");
 
@@ -54,6 +56,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_RecipientInformation",
+                schema: "Messages",
                 table: "RecipientInformation",
                 columns: new[] { "Address", "MessageId" });
         }

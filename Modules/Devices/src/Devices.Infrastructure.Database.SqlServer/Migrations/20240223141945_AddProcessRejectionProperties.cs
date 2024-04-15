@@ -13,12 +13,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AddColumn<DateTime>(
                 name: "RejectedAt",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 type: "datetime2",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "RejectedByDevice",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 type: "char(20)",
                 unicode: false,

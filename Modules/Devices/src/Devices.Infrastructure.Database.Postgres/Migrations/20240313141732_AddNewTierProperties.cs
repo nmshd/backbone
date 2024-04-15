@@ -12,6 +12,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AddColumn<bool>(
                 name: "CanBeManuallyAssigned",
+                schema: "Devices",
                 table: "Tiers",
                 type: "boolean",
                 nullable: false,
@@ -21,6 +22,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddColumn<bool>(
                 name: "CanBeUsedAsDefaultForClient",
+                schema: "Devices",
                 table: "Tiers",
                 type: "boolean",
                 nullable: false,

@@ -23,6 +23,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "DefaultTier",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 type: "character(20)",
                 unicode: false,
@@ -45,6 +46,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_OpenIddictApplications_Tiers_DefaultTier",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 column: "DefaultTier",
                 principalTable: "Tiers",

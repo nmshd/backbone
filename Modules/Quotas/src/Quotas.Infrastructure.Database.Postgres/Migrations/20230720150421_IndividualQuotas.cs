@@ -60,6 +60,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "IsExhaustedUntil",
+                schema: "Quotas",
                 table: "MetricStatuses",
                 type: "timestamp with time zone",
                 nullable: false,
@@ -117,6 +118,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Identities_Tiers_TierId",
+                schema: "Quotas",
                 table: "Identities",
                 column: "TierId",
                 principalTable: "Tiers",
@@ -125,6 +127,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_TierQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas",
                 column: "ApplyTo",
                 principalTable: "Identities",
@@ -181,6 +184,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "IsExhaustedUntil",
+                schema: "Quotas",
                 table: "MetricStatuses",
                 type: "timestamp with time zone",
                 nullable: true,
@@ -204,6 +208,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Identities_Tiers_TierId",
+                schema: "Quotas",
                 table: "Identities",
                 column: "TierId",
                 principalTable: "Tiers",
@@ -211,6 +216,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_TierQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas",
                 column: "ApplyTo",
                 principalTable: "Identities",

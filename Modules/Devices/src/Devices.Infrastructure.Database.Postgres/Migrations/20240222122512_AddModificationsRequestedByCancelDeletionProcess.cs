@@ -13,12 +13,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AddColumn<DateTime>(
                 name: "CancelledAt",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 type: "timestamp with time zone",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "CancelledByDevice",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 type: "character(20)",
                 unicode: false,

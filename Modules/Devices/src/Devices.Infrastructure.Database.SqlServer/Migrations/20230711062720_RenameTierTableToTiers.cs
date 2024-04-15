@@ -32,11 +32,13 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Tiers",
+                schema: "Devices",
                 table: "Tiers",
                 column: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Identities_Tiers_TierId",
+                schema: "Devices",
                 table: "Identities",
                 column: "TierId",
                 principalTable: "Tiers",
@@ -68,11 +70,13 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Tier",
+                schema: "Devices",
                 table: "Tier",
                 column: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Identities_Tier_TierId",
+                schema: "Devices",
                 table: "Identities",
                 column: "TierId",
                 principalTable: "Tier",

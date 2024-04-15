@@ -34,6 +34,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Relationships_RelationshipTemplates_RelationshipTemplateId",
+                schema: "Relationships",
                 table: "Relationships",
                 column: "RelationshipTemplateId",
                 principalTable: "RelationshipTemplates",
@@ -66,6 +67,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Relationships_RelationshipTemplates_RelationshipTemplateId",
+                schema: "Relationships",
                 table: "Relationships",
                 column: "RelationshipTemplateId",
                 principalTable: "RelationshipTemplates",

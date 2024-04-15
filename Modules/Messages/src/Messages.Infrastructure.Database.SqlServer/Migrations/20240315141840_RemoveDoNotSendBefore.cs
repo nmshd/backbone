@@ -27,6 +27,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AddColumn<DateTime>(
                 name: "DoNotSendBefore",
+                schema: "Messages",
                 table: "Messages",
                 type: "datetime2",
                 nullable: true);

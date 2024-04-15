@@ -21,6 +21,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AddColumn<byte[]>(
                 name: "DeletionCertificate",
+                schema: "Devices",
                 table: "Devices",
                 type: "varbinary(max)",
                 nullable: true);

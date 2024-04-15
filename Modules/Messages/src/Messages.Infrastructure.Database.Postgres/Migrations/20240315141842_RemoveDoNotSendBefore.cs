@@ -27,6 +27,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AddColumn<DateTime>(
                 name: "DoNotSendBefore",
+                schema: "Messages",
                 table: "Messages",
                 type: "timestamp with time zone",
                 nullable: true);

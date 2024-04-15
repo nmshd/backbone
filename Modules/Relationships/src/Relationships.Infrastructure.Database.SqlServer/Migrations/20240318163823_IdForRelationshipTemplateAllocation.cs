@@ -17,6 +17,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AddColumn<int>(
                 name: "Id",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations",
                 type: "int",
                 nullable: false,
@@ -35,6 +36,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_RelationshipTemplateAllocations",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations",
                 column: "Id");
 
@@ -74,6 +76,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_RelationshipTemplateAllocations",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations",
                 columns: new[] { "RelationshipTemplateId", "AllocatedBy" });
         }

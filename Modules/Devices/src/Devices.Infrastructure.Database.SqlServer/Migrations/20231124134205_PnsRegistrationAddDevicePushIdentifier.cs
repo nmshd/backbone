@@ -12,6 +12,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AddColumn<string>(
                 name: "DevicePushIdentifier",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "char(20)",
                 unicode: false,

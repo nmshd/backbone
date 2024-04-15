@@ -27,6 +27,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Identities_Tiers_TierId",
+                schema: "Quotas",
                 table: "Identities",
                 column: "TierId",
                 principalTable: "Tiers",
@@ -34,6 +35,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_TierQuotaDefinitions_Tiers_TierId",
+                schema: "Quotas",
                 table: "TierQuotaDefinitions",
                 column: "TierId",
                 principalTable: "Tiers",
@@ -42,6 +44,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_TierQuotas_TierQuotaDefinitions_DefinitionId",
+                schema: "Quotas",
                 table: "TierQuotas",
                 column: "DefinitionId",
                 principalTable: "TierQuotaDefinitions",
@@ -69,6 +72,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Identities_Tiers_TierId",
+                schema: "Quotas",
                 table: "Identities",
                 column: "TierId",
                 principalTable: "Tiers",
@@ -77,6 +81,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_TierQuotaDefinitions_Tiers_TierId",
+                schema: "Quotas",
                 table: "TierQuotaDefinitions",
                 column: "TierId",
                 principalTable: "Tiers",
@@ -84,6 +89,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_TierQuotas_TierQuotaDefinitions_DefinitionId",
+                schema: "Quotas",
                 table: "TierQuotas",
                 column: "DefinitionId",
                 principalTable: "TierQuotaDefinitions",

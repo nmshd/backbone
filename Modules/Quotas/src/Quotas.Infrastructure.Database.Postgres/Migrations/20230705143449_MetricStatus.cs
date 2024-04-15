@@ -47,6 +47,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "IsExhaustedUntil",
+                schema: "Quotas",
                 table: "TierQuotas",
                 type: "timestamp with time zone",
                 nullable: true);

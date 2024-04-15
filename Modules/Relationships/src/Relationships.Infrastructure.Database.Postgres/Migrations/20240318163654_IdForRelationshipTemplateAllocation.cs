@@ -18,6 +18,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
             migrationBuilder.AddColumn<int>(
                 name: "Id",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations",
                 type: "integer",
                 nullable: false,
@@ -36,6 +37,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_RelationshipTemplateAllocations",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations",
                 column: "Id");
 
@@ -75,6 +77,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_RelationshipTemplateAllocations",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations",
                 columns: new[] { "RelationshipTemplateId", "AllocatedBy" });
         }

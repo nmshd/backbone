@@ -23,6 +23,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "DeletionStartedAt",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 type: "timestamp with time zone",
                 nullable: false,
@@ -30,6 +31,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_I~",
+                schema: "Devices",
                 table: "IdentityDeletionProcessAuditLog",
                 column: "IdentityDeletionProcessId",
                 principalTable: "IdentityDeletionProcesses",
@@ -38,6 +40,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress",
                 principalTable: "Identities",
@@ -65,6 +68,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_I~",
+                schema: "Devices",
                 table: "IdentityDeletionProcessAuditLog",
                 column: "IdentityDeletionProcessId",
                 principalTable: "IdentityDeletionProcesses",
@@ -72,6 +76,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress",
                 principalTable: "Identities",

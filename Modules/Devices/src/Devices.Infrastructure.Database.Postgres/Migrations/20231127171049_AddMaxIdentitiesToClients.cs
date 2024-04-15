@@ -12,6 +12,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AddColumn<int>(
                 name: "MaxIdentities",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 type: "integer",
                 nullable: true);

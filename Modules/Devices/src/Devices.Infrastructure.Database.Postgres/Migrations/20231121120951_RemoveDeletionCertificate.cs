@@ -21,6 +21,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AddColumn<byte[]>(
                 name: "DeletionCertificate",
+                schema: "Devices",
                 table: "Devices",
                 type: "bytea",
                 nullable: true);

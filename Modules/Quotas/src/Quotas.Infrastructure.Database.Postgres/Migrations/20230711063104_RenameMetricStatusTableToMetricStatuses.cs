@@ -26,11 +26,13 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_MetricStatuses",
+                schema: "Quotas",
                 table: "MetricStatuses",
                 columns: new[] { "Owner", "MetricKey" });
 
             migrationBuilder.AddForeignKey(
                 name: "FK_MetricStatuses_Identities_Owner",
+                schema: "Quotas",
                 table: "MetricStatuses",
                 column: "Owner",
                 principalTable: "Identities",
@@ -57,11 +59,13 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_MetricStatus",
+                schema: "Quotas",
                 table: "MetricStatus",
                 columns: new[] { "Owner", "MetricKey" });
 
             migrationBuilder.AddForeignKey(
                 name: "FK_MetricStatus_Identities_Owner",
+                schema: "Quotas",
                 table: "MetricStatus",
                 column: "Owner",
                 principalTable: "Identities",

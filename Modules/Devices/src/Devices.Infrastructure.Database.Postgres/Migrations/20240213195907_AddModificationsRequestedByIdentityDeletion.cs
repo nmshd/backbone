@@ -13,6 +13,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AlterColumn<int>(
                 name: "Environment",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "integer",
                 nullable: false,
@@ -22,12 +23,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "DeletionGracePeriodEndsAt",
+                schema: "Devices",
                 table: "Identities",
                 type: "timestamp with time zone",
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "Status",
+                schema: "Devices",
                 table: "Identities",
                 type: "integer",
                 nullable: false,
@@ -35,6 +38,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "TierIdBeforeDeletion",
+                schema: "Devices",
                 table: "Identities",
                 type: "character(20)",
                 unicode: false,
@@ -138,6 +142,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<int>(
                 name: "Environment",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "integer",
                 nullable: false,
