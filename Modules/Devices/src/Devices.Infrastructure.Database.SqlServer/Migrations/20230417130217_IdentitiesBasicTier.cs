@@ -12,6 +12,7 @@ public partial class IdentitiesBasicTier : Migration
     {
         migrationBuilder.AddColumn<string>(
             name: "TierId",
+            schema: "Devices",
             table: "Identities",
             type: "char(20)",
             unicode: false,
@@ -34,6 +35,7 @@ public partial class IdentitiesBasicTier : Migration
 
         migrationBuilder.AddForeignKey(
             name: "FK_Identities_Tier_TierId",
+            schema: "Devices",
             table: "Identities",
             column: "TierId",
             principalTable: "Tier",

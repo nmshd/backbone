@@ -122,65 +122,77 @@ public partial class Init : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_DatawalletModifications_CreatedBy",
+            schema: "Synchronization",
             table: "DatawalletModifications",
             column: "CreatedBy");
 
         migrationBuilder.CreateIndex(
             name: "IX_DatawalletModifications_CreatedBy_Index",
+            schema: "Synchronization",
             table: "DatawalletModifications",
             columns: new[] { "CreatedBy", "Index" },
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_DatawalletModifications_DatawalletId",
+            schema: "Synchronization",
             table: "DatawalletModifications",
             column: "DatawalletId");
 
         migrationBuilder.CreateIndex(
             name: "IX_Datawallets_Owner",
+            schema: "Synchronization",
             table: "Datawallets",
             column: "Owner",
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_ExternalEvents_Owner_Index",
+            schema: "Synchronization",
             table: "ExternalEvents",
             columns: new[] { "Owner", "Index" },
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_ExternalEvents_Owner_SyncRunId",
+            schema: "Synchronization",
             table: "ExternalEvents",
             columns: new[] { "Owner", "SyncRunId" });
 
         migrationBuilder.CreateIndex(
             name: "IX_ExternalEvents_SyncRunId",
+            schema: "Synchronization",
             table: "ExternalEvents",
             column: "SyncRunId");
 
         migrationBuilder.CreateIndex(
             name: "IX_SyncErrors_ExternalEventId",
+            schema: "Synchronization",
             table: "SyncErrors",
             column: "ExternalEventId");
 
         migrationBuilder.CreateIndex(
             name: "IX_SyncErrors_SyncRunId_ExternalEventId",
+            schema: "Synchronization",
             table: "SyncErrors",
             columns: new[] { "SyncRunId", "ExternalEventId" },
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_SyncRuns_CreatedBy",
+            schema: "Synchronization",
             table: "SyncRuns",
             column: "CreatedBy");
 
         migrationBuilder.CreateIndex(
             name: "IX_SyncRuns_CreatedBy_FinalizedAt",
+            schema: "Synchronization",
             table: "SyncRuns",
             columns: new[] { "CreatedBy", "FinalizedAt" });
 
         migrationBuilder.CreateIndex(
             name: "IX_SyncRuns_CreatedBy_Index",
+            schema: "Synchronization",
             table: "SyncRuns",
             columns: new[] { "CreatedBy", "Index" },
             unique: true);

@@ -22,6 +22,7 @@ public partial class AppIdForPnsRegistrations : Migration
 
         migrationBuilder.AddColumn<string>(
             name: "AppId",
+            schema: "Devices",
             table: "PnsRegistrations",
             type: "text",
             nullable: false);
@@ -42,6 +43,7 @@ public partial class AppIdForPnsRegistrations : Migration
 
         migrationBuilder.AddForeignKey(
             name: "FK_Identities_Tiers_TierId",
+            schema: "Devices",
             table: "Identities",
             column: "TierId",
             principalTable: "Tiers",

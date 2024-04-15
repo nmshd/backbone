@@ -393,6 +393,7 @@ public partial class Init : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictAuthorizations_ApplicationId_Status_Subject_Type",
+            schema: "Devices",
             table: "OpenIddictAuthorizations",
             columns: new[] { "ApplicationId", "Status", "Subject", "Type" });
 
@@ -405,6 +406,7 @@ public partial class Init : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictTokens_ApplicationId_Status_Subject_Type",
+            schema: "Devices",
             table: "OpenIddictTokens",
             columns: new[] { "ApplicationId", "Status", "Subject", "Type" });
 
