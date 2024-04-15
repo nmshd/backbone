@@ -1,15 +1,15 @@
 meta {
-  name: Cancel Deletion Process
+  name: /Identities/Self/DeletionProcesses/{DeletionProcessId}/Cancel
   type: http
   seq: 7
 }
 
 put {
-  url: {{baseUrl}}/Identities/Self/DeletionProcesses/{{DeletionProcessId}}/Cancel?DeletionProcessId=IDPsVw1dFyzmdfc3Xd2Q
+  url: {{baseUrl}}/Identities/Self/DeletionProcesses/{{DeletionProcessId}}/Cancel
   body: none
   auth: inherit
 }
 
-query {
+vars:pre-request {
   DeletionProcessId: IDPsVw1dFyzmdfc3Xd2Q
 }
