@@ -22,6 +22,7 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.RenameTable(
                 name: "Tier",
+                schema: "Devices",
                 newName: "Tiers");
 
             migrationBuilder.RenameIndex(
@@ -60,6 +61,7 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.RenameTable(
                 name: "Tiers",
+                schema: "Devices",
                 newName: "Tier");
 
             migrationBuilder.RenameIndex(

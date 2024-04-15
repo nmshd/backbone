@@ -22,6 +22,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.RenameTable(
                 name: "MetricStatus",
+                schema: "Quotas",
                 newName: "MetricStatuses");
 
             migrationBuilder.AddPrimaryKey(
@@ -55,6 +56,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.RenameTable(
                 name: "MetricStatuses",
+                schema: "Quotas",
                 newName: "MetricStatus");
 
             migrationBuilder.AddPrimaryKey(
