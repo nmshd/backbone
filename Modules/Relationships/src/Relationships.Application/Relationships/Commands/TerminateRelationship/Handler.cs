@@ -34,7 +34,6 @@ public class Handler : IRequestHandler<TerminateRelationshipCommand, TerminateRe
         var peer = relationship.To == _activeIdentity ? relationship.From : relationship.To;
 
         _eventBus.Publish(new RelationshipStatusChangedIntegrationEvent(relationship));
-        _eventBus.Publish(new RelationshipTerminatedIntegrationEvent(relationship, peer));
 
         return new TerminateRelationshipResponse(relationship);
     }

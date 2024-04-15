@@ -157,10 +157,10 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    public void EnsureNotTerminated()
+    public void EnsureNotStatus(RelationshipStatus status)
     {
-        if (Status == RelationshipStatus.Terminated)
-            throw new DomainException(DomainErrors.CannotCreateRelationshipWhileTerminatedRelationshipExists(Id));
+        if (Status == status)
+            throw new DomainException(DomainErrors.RelationshipIsInIncorrectStatus(status));
     }
 
     #region Expressions

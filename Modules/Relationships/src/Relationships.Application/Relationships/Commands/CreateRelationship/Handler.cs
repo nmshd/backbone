@@ -68,7 +68,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         var relationships = existingRelationships.ToList();
 
         foreach (var relationship in relationships)
-            relationship.EnsureNotTerminated();
+            relationship.EnsureNotStatus(RelationshipStatus.Terminated);
 
         _relationship = new Relationship(
             _template,

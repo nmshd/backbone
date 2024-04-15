@@ -4,7 +4,6 @@ using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.Id
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipCreated;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipStatusChanged;
-using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipTerminated;
 
 namespace Backbone.Modules.Synchronization.Application.Extensions;
 
@@ -30,6 +29,5 @@ public static class IEventBusExtensions
     {
         eventBus.Subscribe<RelationshipCreatedIntegrationEvent, RelationshipCreatedIntegrationEventHandler>();
         eventBus.Subscribe<RelationshipStatusChangedIntegrationEvent, RelationshipStatusChangedIntegrationEventHandler>();
-        eventBus.Subscribe<RelationshipTerminatedIntegrationEvent, RelationshipTerminatedIntegrationEventHandler>();
     }
 }
