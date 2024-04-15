@@ -14,6 +14,7 @@ public class RelationshipDTO : IMapTo<Relationship>
     public required IdentityAddress To { get; set; }
 
     public required byte[]? CreationContent { get; set; }
+    public required byte[]? AcceptanceContent { get; set; }
 
     public required DateTime CreatedAt { get; set; }
 
