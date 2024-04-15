@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 
@@ -24,6 +25,15 @@ public class Relationship
     public DateTime CreatedAt { get; }
 
     public RelationshipStatus Status { get; }
+
+    public void EnsureSendingMessagesIsAllowed(int numberOfUnreceivedMessagesFromActiveIdentity, int maxNumberOfUnreceivedMessagesFromOneSender)
+    {
+        if (Status != RelationshipStatus.Active)
+            throw new DomainException(DomainErrors.RelationshipToRecipientNotActive(To));
+
+        if (numberOfUnreceivedMessagesFromActiveIdentity >= maxNumberOfUnreceivedMessagesFromOneSender)
+            throw new DomainException(DomainErrors.MaxNumberOfUnreceivedMessagesReached(To));
+    }
 }
 
 public enum RelationshipStatus

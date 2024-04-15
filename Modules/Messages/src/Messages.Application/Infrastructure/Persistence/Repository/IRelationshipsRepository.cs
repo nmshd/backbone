@@ -7,5 +7,5 @@ namespace Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repos
 public interface IRelationshipsRepository
 {
     Task<RelationshipId?> GetIdOfRelationshipBetweenSenderAndRecipient(IdentityAddress identityA, IdentityAddress identityB);
-    Task<Relationship?> FindRelationship(RelationshipId id, CancellationToken cancellationToken, bool track = false);
+    Task<Relationship?> FindRelationship(IdentityAddress identityA, IdentityAddress identityB, CancellationToken cancellationToken);
 }

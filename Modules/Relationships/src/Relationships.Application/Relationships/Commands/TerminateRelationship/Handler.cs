@@ -3,7 +3,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using MediatR;
 
@@ -32,10 +31,10 @@ public class Handler : IRequestHandler<TerminateRelationshipCommand, TerminateRe
 
         await _relationshipsRepository.Update(relationship);
 
-        var partnerIdentity = relationship.To == _activeIdentity ? relationship.From : relationship.To;
+        var peer = relationship.To == _activeIdentity ? relationship.From : relationship.To;
 
         _eventBus.Publish(new RelationshipStatusChangedIntegrationEvent(relationship));
-        _eventBus.Publish(new RelationshipTerminatedIntegrationEvent(relationship, partnerIdentity));
+        _eventBus.Publish(new RelationshipTerminatedIntegrationEvent(relationship, peer));
 
         return new TerminateRelationshipResponse(relationship);
     }

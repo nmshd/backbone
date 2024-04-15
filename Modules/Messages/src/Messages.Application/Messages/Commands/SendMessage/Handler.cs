@@ -67,15 +67,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 
         foreach (var recipientDto in request.Recipients)
         {
-            var idOfRelationshipBetweenSenderAndRecipient = await _relationshipsRepository.GetIdOfRelationshipBetweenSenderAndRecipient(sender, recipientDto.Address);
-
-            if (idOfRelationshipBetweenSenderAndRecipient == null)
-            {
-                _logger.LogInformation("Sending message aborted. There is no relationship between sender ({sender}) and recipient ({recipient}).", sender, recipientDto.Address);
-                throw new OperationFailedException(ApplicationErrors.NoRelationshipToRecipientExists(recipientDto.Address));
-            }
-
-            var relationshipBetweenSenderAndRecipient = await _relationshipsRepository.FindRelationship(idOfRelationshipBetweenSenderAndRecipient, cancellationToken);
+            var relationshipBetweenSenderAndRecipient = await _relationshipsRepository.FindRelationship(sender, recipientDto.Address, cancellationToken);
 
             if (relationshipBetweenSenderAndRecipient == null)
             {
@@ -83,24 +75,14 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
                 throw new OperationFailedException(ApplicationErrors.NoRelationshipToRecipientExists(recipientDto.Address));
             }
 
-            if (relationshipBetweenSenderAndRecipient.Status != RelationshipStatus.Active)
-            {
-                _logger.LogInformation("Sending message aborted. Relationship between sender ({sender}) and recipient ({recipient}) is not active.", sender, recipientDto.Address);
-                throw new OperationFailedException(ApplicationErrors.RelationshipToRecipientNotActive(recipientDto.Address));
-            }
-
             var numberOfUnreceivedMessagesFromActiveIdentity = await _messagesRepository.CountUnreceivedMessagesFromSenderToRecipient(sender, recipientDto.Address, cancellationToken);
+            var maxNumberOfUnreceivedMessagesFromOneSender = _options.MaxNumberOfUnreceivedMessagesFromOneSender;
 
-            if (numberOfUnreceivedMessagesFromActiveIdentity >= _options.MaxNumberOfUnreceivedMessagesFromOneSender)
-            {
-                _logger.LogInformation(
-                    "Sending message aborted. Recipient '{recipient}' already has '{numberOfUnreceivedMessagesFromActiveIdentity}' unreceived messages from sender '{sender}', which is more than the maximum ({maxNumberOfUnreceivedMessagesFromOneSender}).",
-                    recipientDto.Address, numberOfUnreceivedMessagesFromActiveIdentity, sender, _options.MaxNumberOfUnreceivedMessagesFromOneSender);
+            relationshipBetweenSenderAndRecipient.EnsureSendingMessagesIsAllowed(
+                numberOfUnreceivedMessagesFromActiveIdentity, 
+                maxNumberOfUnreceivedMessagesFromOneSender);
 
-                throw new OperationFailedException(ApplicationErrors.MaxNumberOfUnreceivedMessagesReached(recipientDto.Address));
-            }
-
-            var recipient = new RecipientInformation(recipientDto.Address, idOfRelationshipBetweenSenderAndRecipient, recipientDto.EncryptedKey);
+            var recipient = new RecipientInformation(recipientDto.Address, relationshipBetweenSenderAndRecipient.Id, recipientDto.EncryptedKey);
 
             recipients.Add(recipient);
         }

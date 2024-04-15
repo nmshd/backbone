@@ -24,11 +24,11 @@ public class RelationshipsRepository : IRelationshipsRepository
             .FirstOrDefaultAsync();
     }
 
-    public Task<Relationship?> FindRelationship(RelationshipId id, CancellationToken cancellationToken, bool track = false)
+    public Task<Relationship?> FindRelationship(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
     {
         return _dbContext.Relationships
             .AsNoTracking()
-            .Where(r => r.Id == id)
-            .FirstOrDefaultAsync(cancellationToken: cancellationToken);
+            .WithParticipants(sender, recipient)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

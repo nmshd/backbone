@@ -113,6 +113,40 @@ public class HandlerTests
             .MustHaveHappenedOnceExactly();
     }
 
+    [Fact]
+    public async Task Publishes_RelationshipTerminatedIntegrationEvent()
+    {
+        // Arrange
+        var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
+
+        var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
+        var relationship = TestData.CreateActiveRelationship(to: activeIdentity);
+        A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
+
+        var fakeUserContext = A.Fake<IUserContext>();
+        A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
+
+        var mockEventBus = A.Fake<IEventBus>();
+
+        var handler = CreateHandler(fakeUserContext, fakeRelationshipsRepository, mockEventBus);
+
+        // Act
+        await handler.Handle(new TerminateRelationshipCommand
+        {
+            RelationshipId = relationship.Id
+        }, CancellationToken.None);
+
+        // Assert
+        A.CallTo(
+                () => mockEventBus.Publish(A<RelationshipTerminatedIntegrationEvent>.That.Matches(e =>
+                    e.RelationshipId == relationship.Id &&
+                    e.Peer == relationship.From)
+                ))
+            .MustHaveHappenedOnceExactly();
+    }
+
     private static Handler CreateHandler(IUserContext userContext, IRelationshipsRepository relationshipsRepository, IEventBus? eventBus = null)
     {
         eventBus ??= A.Fake<IEventBus>();

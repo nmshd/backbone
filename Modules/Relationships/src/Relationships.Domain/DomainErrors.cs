@@ -37,6 +37,16 @@ public static class DomainErrors
 
     public static DomainError RelationshipToTargetAlreadyExists(string targetIdentity)
     {
-        return new DomainError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists", $"A relationship to '{targetIdentity}' already exists.");
+        return new DomainError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists", 
+            $"A relationship to '{targetIdentity}' already exists.");
+    }
+
+    public static DomainError CannotCreateRelationshipWhileTerminatedRelationshipExists(string terminatedRelationship = "")
+    {
+        var terminatedRelationshipString = $"a terminated relationship {(string.IsNullOrEmpty(terminatedRelationship) ? "" : terminatedRelationship)}";
+
+        return new DomainError(
+            "error.platform.validation.relationshipRequest.cannotCreateRelationshipWhileTerminatedRelationshipExists",
+            $"Cannot create relationship while {terminatedRelationshipString} exists.");
     }
 }

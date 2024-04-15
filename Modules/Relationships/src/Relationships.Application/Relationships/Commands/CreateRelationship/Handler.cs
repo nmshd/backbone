@@ -67,7 +67,8 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
 
         var relationships = existingRelationships.ToList();
 
-        EnsureNoTerminatedRelationshipExists(relationships);
+        foreach (var relationship in relationships)
+            relationship.EnsureNotTerminated();
 
         _relationship = new Relationship(
             _template,
@@ -78,14 +79,6 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         );
 
         await _relationshipsRepository.Add(_relationship, _cancellationToken);
-    }
-
-    private void EnsureNoTerminatedRelationshipExists(List<Relationship> relationships)
-    {
-        foreach (var relationship in relationships)
-            if (relationship.Status == RelationshipStatus.Terminated)
-                throw new OperationFailedException(ApplicationErrors.Relationship
-                    .CannotCreateRelationshipWhileTerminatedRelationshipExists(relationship.Id.ToString()));
     }
 
     private void PublishIntegrationEvent()

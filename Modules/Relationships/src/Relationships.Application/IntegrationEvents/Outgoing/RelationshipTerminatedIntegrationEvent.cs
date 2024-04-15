@@ -5,15 +5,15 @@ using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 namespace Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
 public class RelationshipTerminatedIntegrationEvent : IntegrationEvent
 {
-    public RelationshipTerminatedIntegrationEvent(Relationship relationship, IdentityAddress partner) :
+    public RelationshipTerminatedIntegrationEvent(Relationship relationship, IdentityAddress peer) :
         base($"{relationship.Id}/Terminated/{relationship.AuditLog.Last().CreatedAt}")
     {
         RelationshipId = relationship.Id;
-        Partner = partner.StringValue;
+        Peer = peer.StringValue;
         CreatedAt = relationship.AuditLog.Last().CreatedAt;
     }
 
     public string RelationshipId { get; }
     public DateTime CreatedAt;
-    public string Partner { get; }
+    public string Peer { get; }
 }

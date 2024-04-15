@@ -157,6 +157,12 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
+    public void EnsureNotTerminated()
+    {
+        if (Status == RelationshipStatus.Terminated)
+            throw new DomainException(DomainErrors.CannotCreateRelationshipWhileTerminatedRelationshipExists(Id));
+    }
+
     #region Expressions
 
     public static Expression<Func<Relationship, bool>> HasParticipant(string identity)
