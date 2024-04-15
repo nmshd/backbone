@@ -1,0 +1,24 @@
+meta {
+  name: /Messages
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/Messages
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "recipients": [
+      {
+        "address": "id1CsU6VwBMgBA4TLc61nj895ZD1mPjbddNW",
+        "encryptedKey": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+      }
+    ],
+    "body": "AAAA",
+    "attachments": []
+  }
+}

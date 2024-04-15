@@ -1,0 +1,22 @@
+meta {
+  name: /Relationships/{RelationshipId}/Changes/{ChangeId}/Accept
+  type: http
+  seq: 8
+}
+
+put {
+  url: {{baseUrl}}/Relationships/{{RelationshipId}}/Changes/{{ChangeId}}/Accept
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "content": "Test"
+  }
+}
+
+vars:pre-request {
+  RelationshipId: test
+  ChangeId: test
+}
