@@ -148,7 +148,8 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                 schema: "Quotas",
                 table: "TierQuotas");
 
-            migrationBuilder.DropTable(
+            migrationBuilder.RenameTable(
+                schema: "Quotas",
                 name: "IndividualQuotas");
 
             migrationBuilder.AlterColumn<string>(

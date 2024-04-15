@@ -38,7 +38,8 @@ public partial class Init : Migration
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Tokens",
             name: "Tokens");
     }
 }

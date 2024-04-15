@@ -29,7 +29,8 @@ public partial class Init : Migration
 
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Tokens",
             name: "Tokens");
     }
 }

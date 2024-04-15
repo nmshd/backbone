@@ -84,10 +84,12 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
+            migrationBuilder.RenameTable(
+                schema: "Quotas",
                 name: "TierQuotas");
 
-            migrationBuilder.DropTable(
+            migrationBuilder.RenameTable(
+                schema: "Quotas",
                 name: "TierQuotaDefinitions");
         }
     }

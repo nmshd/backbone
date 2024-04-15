@@ -270,31 +270,40 @@ public partial class Init_ApplicationDbContext : Migration
 
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Devices",
             name: "AspNetRoleClaims");
 
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Devices",
             name: "AspNetUserClaims");
 
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Devices",
             name: "AspNetUserLogins");
 
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Devices",
             name: "AspNetUserRoles");
 
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Devices",
             name: "AspNetUserTokens");
 
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Devices",
             name: "AspNetRoles");
 
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Devices",
             name: "AspNetUsers");
 
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Devices",
             name: "Devices");
 
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Devices",
             name: "Identities");
     }
 }

@@ -31,7 +31,8 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
+            migrationBuilder.RenameTable(
+                schema: "Devices",
                 name: "PnsRegistrations");
         }
     }

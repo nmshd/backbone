@@ -28,7 +28,8 @@ public partial class TierInit : Migration
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Devices",
             name: "Tier");
     }
 }

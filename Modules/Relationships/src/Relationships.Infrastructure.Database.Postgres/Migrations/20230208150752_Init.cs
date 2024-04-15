@@ -223,16 +223,20 @@ public partial class Init : Migration
     {
         migrationBuilder.DeleteCheckConstraintForAtMostOneRelationshipBetweenTwoIdentities();
 
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Relationships",
             name: "RelationshipChanges");
 
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Relationships",
             name: "RelationshipTemplateAllocations");
 
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Relationships",
             name: "Relationships");
 
-        migrationBuilder.DropTable(
+        migrationBuilder.RenameTable(
+            schema: "Relationships",
             name: "RelationshipTemplates");
     }
 }

@@ -42,7 +42,8 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
+            migrationBuilder.RenameTable(
+                schema: "Quotas",
                 name: "MetricStatus");
 
             migrationBuilder.AddColumn<DateTime>(
