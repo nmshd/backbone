@@ -1,0 +1,19 @@
+meta {
+  name: /RelationshipTemplates
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/RelationshipTemplates
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "maxNumberOfRelationships": 999,
+    "maxNumberOfAllocations": 1,
+    "content": "AAAA"
+  }
+}

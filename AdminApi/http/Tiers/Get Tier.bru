@@ -1,0 +1,15 @@
+meta {
+  name: /Tiers/{TierId}
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/Tiers/{{TierId}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  TierId: TIRysp6NxeWFxjSL2iHs
+}
