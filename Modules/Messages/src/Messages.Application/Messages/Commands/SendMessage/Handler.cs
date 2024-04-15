@@ -79,7 +79,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
             var maxNumberOfUnreceivedMessagesFromOneSender = _options.MaxNumberOfUnreceivedMessagesFromOneSender;
 
             relationshipBetweenSenderAndRecipient.EnsureSendingMessagesIsAllowed(
-                numberOfUnreceivedMessagesFromActiveIdentity, 
+                numberOfUnreceivedMessagesFromActiveIdentity,
                 maxNumberOfUnreceivedMessagesFromOneSender);
 
             var recipient = new RecipientInformation(recipientDto.Address, relationshipBetweenSenderAndRecipient.Id, recipientDto.EncryptedKey);

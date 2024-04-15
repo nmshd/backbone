@@ -43,7 +43,7 @@ public static class DomainErrors
 
     public static DomainError RelationshipToTargetAlreadyExists(string targetIdentity)
     {
-        return new DomainError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists", 
+        return new DomainError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists",
             $"A relationship to '{targetIdentity}' already exists.");
     }
 }

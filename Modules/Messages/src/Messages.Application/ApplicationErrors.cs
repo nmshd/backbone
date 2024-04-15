@@ -9,7 +9,7 @@ public static class ApplicationErrors
         var recipientText = string.IsNullOrEmpty(recipient) ? "one of the recipients" : recipient;
 
         return new ApplicationError(
-            "error.platform.validation.message.noRelationshipToRecipientExists", 
+            "error.platform.validation.message.noRelationshipToRecipientExists",
             $"Cannot send message to {recipientText} because there is no relationship to it.");
     }
 }
