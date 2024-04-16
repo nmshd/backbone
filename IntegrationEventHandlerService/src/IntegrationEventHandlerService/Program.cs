@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
-using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.Infrastructure.EventBus;
 using Backbone.IntegrationEventHandlerService;
 using Backbone.Modules.Challenges.ConsumerApi;
@@ -13,7 +12,6 @@ using Backbone.Modules.Quotas.ConsumerApi;
 using Backbone.Modules.Relationships.ConsumerApi;
 using Backbone.Modules.Synchronization.ConsumerApi;
 using Backbone.Modules.Tokens.ConsumerApi;
-using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -97,9 +95,6 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 .AddModule<QuotasModule>(configuration)
                 .AddModule<SynchronizationModule>(configuration)
                 .AddModule<TokensModule>(configuration);
-
-            services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
-            services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
 
             services.AddCustomIdentity(hostContext.HostingEnvironment);
 
