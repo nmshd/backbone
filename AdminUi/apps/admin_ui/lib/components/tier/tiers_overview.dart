@@ -89,7 +89,7 @@ class _TiersOverviewListState extends State<TiersOverviewList> {
                     onPressed: () {
                       _showAddTierDialog(context: context);
                     },
-                  )
+                  ),
                 ],
               ),
             ),
