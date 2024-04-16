@@ -29,7 +29,7 @@ class Tiers extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const TierOverviewList();
+    return const TiersOverviewList();
   }
 }
 
