@@ -22,166 +22,7 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.Relationship", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("character(20)")
-                        .IsFixedLength();
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("From")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
-
-                    b.Property<string>("RelationshipTemplateId")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("character(20)")
-                        .IsFixedLength();
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("To")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("From");
-
-                    b.HasIndex("RelationshipTemplateId");
-
-                    b.HasIndex("To");
-
-                    b.ToTable("Relationships");
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipChange", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(34)
-                        .HasColumnType("character varying(34)");
-
-                    b.Property<string>("RelationshipId")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("character(20)")
-                        .IsFixedLength();
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RelationshipId");
-
-                    b.ToTable("RelationshipChanges", (string)null);
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("RelationshipChange");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipChangeRequest", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<byte[]>("Content")
-                        .HasColumnType("bytea")
-                        .HasColumnName("Req_Content");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("Req_CreatedAt");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .HasColumnName("Req_CreatedBy")
-                        .IsFixedLength();
-
-                    b.Property<string>("CreatedByDevice")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("character(20)")
-                        .HasColumnName("Req_CreatedByDevice")
-                        .IsFixedLength();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("RelationshipChanges", (string)null);
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipChangeResponse", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasMaxLength(20)
-                        .HasColumnType("character varying(20)");
-
-                    b.Property<byte[]>("Content")
-                        .HasColumnType("bytea")
-                        .HasColumnName("Res_Content");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("Res_CreatedAt");
-
-                    b.Property<string>("CreatedBy")
-                        .IsRequired()
-                        .HasMaxLength(36)
-                        .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .HasColumnName("Res_CreatedBy")
-                        .IsFixedLength();
-
-                    b.Property<string>("CreatedByDevice")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("character(20)")
-                        .HasColumnName("Res_CreatedByDevice")
-                        .IsFixedLength();
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CreatedAt", "CreatedBy", "CreatedByDevice")
-                        .HasAnnotation("SqlServer:Include", new[] { "Content" });
-
-                    NpgsqlIndexBuilderExtensions.IncludeProperties(b.HasIndex("CreatedAt", "CreatedBy", "CreatedByDevice"), new[] { "Content" });
-
-                    b.ToTable("RelationshipChanges", (string)null);
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplate", b =>
+            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
@@ -223,7 +64,7 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("RelationshipTemplates");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplateAllocation", b =>
+            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplateAllocation", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -262,27 +103,117 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("RelationshipTemplateAllocations", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipCreationChange", b =>
+            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship", b =>
                 {
-                    b.HasBaseType("Backbone.Modules.Relationships.Domain.Entities.RelationshipChange");
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
 
-                    b.ToTable("RelationshipChanges", (string)null);
+                    b.Property<byte[]>("AcceptanceContent")
+                        .HasColumnType("bytea");
 
-                    b.HasDiscriminator().HasValue("RelationshipCreationChange");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<byte[]>("CreationContent")
+                        .HasColumnType("bytea");
+
+                    b.Property<string>("From")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("character(36)")
+                        .IsFixedLength();
+
+                    b.Property<string>("RelationshipTemplateId")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("To")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("character(36)")
+                        .IsFixedLength();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("From");
+
+                    b.HasIndex("RelationshipTemplateId");
+
+                    b.HasIndex("To");
+
+                    b.ToTable("Relationships");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipTerminationChange", b =>
+            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.RelationshipAuditLogEntry", b =>
                 {
-                    b.HasBaseType("Backbone.Modules.Relationships.Domain.Entities.RelationshipChange");
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
 
-                    b.ToTable("RelationshipChanges", (string)null);
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone");
 
-                    b.HasDiscriminator().HasValue("RelationshipTerminationChange");
+                    b.Property<string>("CreatedBy")
+                        .IsRequired()
+                        .HasMaxLength(36)
+                        .IsUnicode(false)
+                        .HasColumnType("character(36)")
+                        .IsFixedLength();
+
+                    b.Property<string>("CreatedByDevice")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<int>("NewStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("OldStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Reason")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("RelationshipId")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RelationshipId");
+
+                    b.ToTable("RelationshipAuditLog", (string)null);
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.Relationship", b =>
+            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplateAllocation", b =>
                 {
-                    b.HasOne("Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplate", "RelationshipTemplate")
+                    b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", null)
+                        .WithMany("Allocations")
+                        .HasForeignKey("RelationshipTemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship", b =>
+                {
+                    b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", "RelationshipTemplate")
                         .WithMany("Relationships")
                         .HasForeignKey("RelationshipTemplateId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -291,62 +222,23 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
                     b.Navigation("RelationshipTemplate");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipChange", b =>
+            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.RelationshipAuditLogEntry", b =>
                 {
-                    b.HasOne("Backbone.Modules.Relationships.Domain.Entities.Relationship", "Relationship")
-                        .WithMany("Changes")
-                        .HasForeignKey("RelationshipId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Relationship");
+                    b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship", null)
+                        .WithMany("AuditLog")
+                        .HasForeignKey("RelationshipId");
                 });
 
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipChangeRequest", b =>
-                {
-                    b.HasOne("Backbone.Modules.Relationships.Domain.Entities.RelationshipChange", null)
-                        .WithOne("Request")
-                        .HasForeignKey("Backbone.Modules.Relationships.Domain.Entities.RelationshipChangeRequest", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipChangeResponse", b =>
-                {
-                    b.HasOne("Backbone.Modules.Relationships.Domain.Entities.RelationshipChange", null)
-                        .WithOne("Response")
-                        .HasForeignKey("Backbone.Modules.Relationships.Domain.Entities.RelationshipChangeResponse", "Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplateAllocation", b =>
-                {
-                    b.HasOne("Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplate", null)
-                        .WithMany("Allocations")
-                        .HasForeignKey("RelationshipTemplateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.Relationship", b =>
-                {
-                    b.Navigation("Changes");
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipChange", b =>
-                {
-                    b.Navigation("Request")
-                        .IsRequired();
-
-                    b.Navigation("Response");
-                });
-
-            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplate", b =>
+            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", b =>
                 {
                     b.Navigation("Allocations");
 
                     b.Navigation("Relationships");
+                });
+
+            modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship", b =>
+                {
+                    b.Navigation("AuditLog");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,8 +3,8 @@ using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.FileUploade
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.MessageCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipChangeCompleted;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipChangeCreated;
+using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipCreated;
+using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipStatusChanged;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipTemplateCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierDeleted;
@@ -31,8 +31,8 @@ public static class IEventBusExtensions
         eventBus.Subscribe<MessageCreatedIntegrationEvent, MessageCreatedIntegrationEventHandler>();
         eventBus.Subscribe<TierQuotaDefinitionDeletedIntegrationEvent, TierQuotaDefinitionDeletedIntegrationEventHandler>();
         eventBus.Subscribe<FileUploadedIntegrationEvent, FileUploadedIntegrationEventHandler>();
-        eventBus.Subscribe<RelationshipChangeCompletedIntegrationEvent, RelationshipChangeCompletedIntegrationEventHandler>();
-        eventBus.Subscribe<RelationshipChangeCreatedIntegrationEvent, RelationshipChangeCreatedIntegrationEventHandler>();
+        eventBus.Subscribe<RelationshipCreatedIntegrationEvent, RelationshipCreatedIntegrationEventHandler>();
+        eventBus.Subscribe<RelationshipStatusChangedIntegrationEvent, RelationshipStatusChangedIntegrationEventHandler>();
         eventBus.Subscribe<RelationshipTemplateCreatedIntegrationEvent, RelationshipTemplateCreatedIntegrationEventHandler>();
         eventBus.Subscribe<TokenCreatedIntegrationEvent, TokenCreatedIntegrationEventHandler>();
         eventBus.Subscribe<TierOfIdentityChangedIntegrationEvent, TierOfIdentityChangedIntegrationEventHandler>();
