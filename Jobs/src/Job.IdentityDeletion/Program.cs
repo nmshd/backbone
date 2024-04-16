@@ -5,6 +5,7 @@ using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Job.IdentityDeletion;
 using Backbone.Modules.Challenges.ConsumerApi;
+using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdentityDeletionProcesses;
 using Backbone.Modules.Devices.ConsumerApi;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Files.ConsumerApi;
