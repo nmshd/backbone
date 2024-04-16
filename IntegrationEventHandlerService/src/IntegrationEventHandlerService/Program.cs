@@ -14,6 +14,8 @@ using Backbone.Modules.Relationships.ConsumerApi;
 using Backbone.Modules.Synchronization.ConsumerApi;
 using Backbone.Modules.Tokens.ConsumerApi;
 using FluentValidation.AspNetCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -84,9 +86,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 services.BuildServiceProvider().GetRequiredService<IOptions<IntegrationEventServiceConfiguration>>().Value;
 #pragma warning restore ASP0000
 
-            var worker = Assembly.GetExecutingAssembly().DefinedTypes.FirstOrDefault(t => t.Name == parsedConfiguration.Worker) ??
-                         throw new ArgumentException($"The specified worker could not be recognized, or no worker was set.");
-            services.AddTransient(typeof(IHostedService), worker);
+            services.AddTransient<IHostedService, IntegrationEventHandlerService>();
 
             services
                 .AddModule<DevicesModule>(configuration)
@@ -102,8 +102,6 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
 
             services.AddCustomIdentity(hostContext.HostingEnvironment);
-
-            services.RegisterIdentityDeleters();
 
             services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 
