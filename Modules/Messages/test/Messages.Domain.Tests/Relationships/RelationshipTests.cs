@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Backbone.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
@@ -13,23 +12,40 @@ public class RelationshipTests
     [Fact]
     public void Relationship_must_be_active_to_allow_sending_messages()
     {
+        // Arrange
         var relationship = CreateRelationship(RelationshipStatus.Pending);
 
-        var acting = () => relationship.EnsureSendingMessagesIsAllowed(5, 5);
+        // Act
+        var acting = () => relationship.EnsureSendingMessagesIsAllowed(0, 5);
 
-        //relationship.Should().NotBe(null);
+        // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.message.relationshipToRecipientNotActive");
     }
 
     [Fact]
-    public void Max_number_of_unrecieved_messages_cannot_be_reached_to_allow_sending_messages()
+    public void Max_number_of_unreceived_messages_must_not_be_reached()
     {
+        // Arrange
         var relationship = CreateRelationship();
 
+        // Act
         var acting = () => relationship.EnsureSendingMessagesIsAllowed(5, 5);
 
-        //relationship.Should().NotBe(null);
+        // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.message.maxNumberOfUnreceivedMessagesReached");
+    }
+
+    [Fact]
+    public void Relationship_cannot_be_terminated_to_allow_sending_messages()
+    {
+        // Arrange
+        var relationship = CreateRelationship(RelationshipStatus.Terminated);
+
+        // Act
+        var acting = () => relationship.EnsureSendingMessagesIsAllowed(0, 5);
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.message.relationshipToRecipientNotActive");
     }
 
     #region helpers
@@ -41,30 +57,13 @@ public class RelationshipTests
 
     private static Relationship CreateRelationship(string? relationshipId = null, IdentityAddress? from = null, IdentityAddress? to = null, DateTime? createdAt = null, RelationshipStatus? status = null)
     {
-        var type = typeof(Relationship);
-        var constructor = type.GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, Type.EmptyTypes, null);
-        var relationship = (Relationship)constructor!.Invoke(parameters: []);
-
         relationshipId ??= "REL00000000000000000";
         from ??= TestDataGenerator.CreateRandomIdentityAddress();
         to ??= TestDataGenerator.CreateRandomIdentityAddress();
         createdAt ??= DateTime.UtcNow;
         status ??= RelationshipStatus.Active;
 
-        SetBackingField(relationship, "Id", RelationshipId.Parse(relationshipId));
-        SetBackingField(relationship, "From", from);
-        SetBackingField(relationship, "To", to);
-        SetBackingField(relationship, "CreatedAt", createdAt);
-        SetBackingField(relationship, "Status", status);
-
-        return relationship;
-    }
-
-    private static void SetBackingField(object obj, string propertyName, object value)
-    {
-        var field = obj.GetType().GetField($"<{propertyName}>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic) ??
-                    throw new InvalidOperationException($"BackingField for {propertyName} not found on {obj.GetType().Name}.");
-        field.SetValue(obj, value);
+        return Relationship.LoadForTesting(RelationshipId.Parse(relationshipId), from, to, createdAt.Value, status.Value);
     }
     #endregion
 }

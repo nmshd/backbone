@@ -25,8 +25,8 @@ public class Relationship
         EnsureTargetIsNotSelf(relationshipTemplate, activeIdentity);
         EnsureNoActiveRelationshipToTargetExists(relationshipTemplate.CreatedBy, existingRelationships);
 
-        var listOfAllowedStatuses = new List<RelationshipStatus> { RelationshipStatus.Pending, RelationshipStatus.Active, RelationshipStatus.Rejected, RelationshipStatus.Revoked };
-        EnsureStatus(listOfAllowedStatuses, existingRelationships);
+        var listOfStatusesRelationshipCanBeInWhenCreatingNewRelationship = new List<RelationshipStatus> { RelationshipStatus.Rejected, RelationshipStatus.Revoked };
+        EnsureStatus(listOfStatusesRelationshipCanBeInWhenCreatingNewRelationship, existingRelationships);
 
         Id = RelationshipId.New();
         RelationshipTemplateId = relationshipTemplate.Id;
@@ -131,7 +131,7 @@ public class Relationship
     {
         foreach (var relationship in existingRelationships)
             if (!statuses.Contains(relationship.Status))
-                throw new DomainException(DomainErrors.RelationshipIsInIncorrectStatus(Status));
+                throw new DomainException(DomainErrors.RelationshipIsNotInAnyOfCorrectStatuses(statuses));
     }
 
     public void Revoke(IdentityAddress activeIdentity, DeviceId activeDevice)
