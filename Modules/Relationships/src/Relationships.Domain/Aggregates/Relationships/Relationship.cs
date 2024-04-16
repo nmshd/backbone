@@ -155,10 +155,10 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    private void EnsureOpenReactivationRequestExists(IdentityAddress target)
+    private void EnsureOpenReactivationRequestExists(IdentityAddress activeIdentity)
     {
-        if (AuditLog.Last().Reason != RelationshipAuditLogEntryReason.Reactivation || AuditLog.Last().CreatedBy != target)
-            throw new DomainException(DomainErrors.NoOpenReactivationRequest(target));
+        if (AuditLog.Last().Reason != RelationshipAuditLogEntryReason.Reactivation || AuditLog.Last().CreatedBy != activeIdentity)
+            throw new DomainException(DomainErrors.NoOpenReactivationRequest(activeIdentity));
     }
 
     public void XXXFakeTerminate(IdentityAddress activeIdentity, DeviceId activeDevice)

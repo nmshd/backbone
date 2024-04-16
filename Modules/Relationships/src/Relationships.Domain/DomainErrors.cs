@@ -40,9 +40,9 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists", $"A relationship to '{targetIdentity}' already exists.");
     }
 
-    public static DomainError NoOpenReactivationRequest(string targetIdentity)
+    public static DomainError NoOpenReactivationRequest(string activeIdentity)
     {
         return new DomainError("error.platform.validation.relationshipRequest.noOpenReactivationRequest",
-            $"There is no open reactivation request for '{targetIdentity}', and only '{targetIdentity}' can revoke a relationship reactivation.");
+            $"There is no open reactivation request for '{activeIdentity}', and only '{activeIdentity}' can revoke a relationship reactivation.");
     }
 }
