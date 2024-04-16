@@ -3,8 +3,8 @@ using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.FileUploade
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.MessageCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipReactivationRequestCreated;
+using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipStatusChanged;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipTemplateCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
