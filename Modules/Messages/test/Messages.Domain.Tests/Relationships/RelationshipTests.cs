@@ -62,7 +62,7 @@ public class RelationshipTests
 
     private static void SetBackingField(object obj, string propertyName, object value)
     {
-        var field = obj.GetType().GetField($"<{propertyName}>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic) ?? 
+        var field = obj.GetType().GetField($"<{propertyName}>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic) ??
                     throw new InvalidOperationException($"BackingField for {propertyName} not found on {obj.GetType().Name}.");
         field.SetValue(obj, value);
     }
