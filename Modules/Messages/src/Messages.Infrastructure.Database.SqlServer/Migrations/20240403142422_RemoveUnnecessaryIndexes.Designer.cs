@@ -44,7 +44,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("MessageId");
 
-                    b.ToTable("Attachments", (string)null);
+                    b.ToTable("Attachments", "Messages");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.Message", b =>

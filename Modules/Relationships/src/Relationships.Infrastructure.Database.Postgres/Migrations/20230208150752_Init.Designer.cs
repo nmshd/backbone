@@ -111,7 +111,7 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("Type");
 
-                    b.ToTable("RelationshipChanges", (string)null);
+                    b.ToTable("RelationshipChanges", "Relationships");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("RelationshipChange");
 
@@ -152,7 +152,7 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("CreatedByDevice");
 
-                    b.ToTable("RelationshipChanges", (string)null);
+                    b.ToTable("RelationshipChanges", "Relationships");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipChangeResponse", b =>
@@ -189,7 +189,7 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("CreatedByDevice");
 
-                    b.ToTable("RelationshipChanges", (string)null);
+                    b.ToTable("RelationshipChanges", "Relationships");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipTemplate", b =>
@@ -263,14 +263,14 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("RelationshipTemplateId", "AllocatedBy");
 
-                    b.ToTable("RelationshipTemplateAllocations", (string)null);
+                    b.ToTable("RelationshipTemplateAllocations", "Relationships");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Entities.RelationshipCreationChange", b =>
                 {
                     b.HasBaseType("Backbone.Modules.Relationships.Domain.Entities.RelationshipChange");
 
-                    b.ToTable("RelationshipChanges", (string)null);
+                    b.ToTable("RelationshipChanges", "Relationships");
 
                     b.HasDiscriminator().HasValue("RelationshipCreationChange");
                 });
@@ -279,7 +279,7 @@ namespace Relationships.Infrastructure.Database.Postgres.Migrations
                 {
                     b.HasBaseType("Backbone.Modules.Relationships.Domain.Entities.RelationshipChange");
 
-                    b.ToTable("RelationshipChanges", (string)null);
+                    b.ToTable("RelationshipChanges", "Relationships");
 
                     b.HasDiscriminator().HasValue("RelationshipTerminationChange");
                 });

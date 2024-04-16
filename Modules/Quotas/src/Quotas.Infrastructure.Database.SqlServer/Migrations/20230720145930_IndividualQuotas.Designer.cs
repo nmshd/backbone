@@ -116,7 +116,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Owner", "MetricKey");
 
-                    b.ToTable("MetricStatuses", (string)null);
+                    b.ToTable("MetricStatuses", "Quotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.TierQuota", b =>

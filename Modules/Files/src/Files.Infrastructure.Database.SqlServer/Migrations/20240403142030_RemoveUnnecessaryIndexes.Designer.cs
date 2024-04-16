@@ -110,7 +110,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FileMetadata", (string)null);
+                    b.ToTable("FileMetadata", "Files");
                 });
 #pragma warning restore 612, 618
         }

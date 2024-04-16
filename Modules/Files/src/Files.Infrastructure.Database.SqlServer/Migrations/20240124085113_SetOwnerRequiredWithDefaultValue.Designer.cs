@@ -112,7 +112,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("FileMetadata", (string)null);
+                    b.ToTable("FileMetadata", "Files");
                 });
 #pragma warning restore 612, 618
         }
