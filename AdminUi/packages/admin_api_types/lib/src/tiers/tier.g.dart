@@ -22,8 +22,7 @@ TierDetails _$TierDetailsFromJson(Map<String, dynamic> json) => TierDetails(
       quotas: (json['quotas'] as List<dynamic>).map(Quota.fromJson).toList(),
     );
 
-Map<String, dynamic> _$TierDetailsToJson(TierDetails instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$TierDetailsToJson(TierDetails instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'quotas': instance.quotas,
@@ -37,8 +36,7 @@ TierOverview _$TierOverviewFromJson(Map<String, dynamic> json) => TierOverview(
       canBeManuallyAssigned: json['canBeManuallyAssigned'] as bool,
     );
 
-Map<String, dynamic> _$TierOverviewToJson(TierOverview instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$TierOverviewToJson(TierOverview instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'numberOfIdentities': instance.numberOfIdentities,
