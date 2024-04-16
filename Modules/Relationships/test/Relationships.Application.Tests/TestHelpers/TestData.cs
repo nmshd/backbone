@@ -34,7 +34,7 @@ public static class TestData
         var relationshipTemplate = CreateRelationshipTemplate(identity1);
         var relationship = new Relationship(relationshipTemplate, identity2, TestDataGenerator.CreateRandomDeviceId(), null, []);
 
-        relationship.Accept(identity1, TestDataGenerator.CreateRandomDeviceId());
+        relationship.Accept(identity1, TestDataGenerator.CreateRandomDeviceId(), []);
         relationship.Terminate(identity1, TestDataGenerator.CreateRandomDeviceId());
 
         return relationship;
