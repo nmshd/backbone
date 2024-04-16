@@ -1,0 +1,23 @@
+meta {
+  name: /Tiers/{TierId}/Quotas
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/Tiers/{{TierId}}/Quotas
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "max": 100,
+    "metricKey": "NumberOfSentMessages",
+    "period": "Hour"
+  }
+}
+
+vars:pre-request {
+  TierId: TIRvHkb7sfC4ut80RZmC
+}

@@ -1,0 +1,16 @@
+meta {
+  name: /Devices
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/Devices
+  body: none
+  auth: inherit
+}
+
+query {
+  ~PageNumber: 1
+  ~PageSize: 1
+}
