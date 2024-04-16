@@ -1,0 +1,19 @@
+meta {
+  name: /Devices/Self/PushNotifications
+  type: http
+  seq: 1
+}
+
+put {
+  url: {{baseUrl}}/Devices/Self/PushNotifications
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "platform": "apns",
+    "Handle": "asdsdaasdasdasds",
+    "AppId": "de.bildungsraum.wallet.experimental"
+  }
+}

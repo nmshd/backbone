@@ -1,0 +1,22 @@
+meta {
+  name: /SyncRuns
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/SyncRuns
+  body: json
+  auth: inherit
+}
+
+headers {
+  X-Supported-Datawallet-Version: 2
+}
+
+body:json {
+  {
+    "type": "ExternalEventSync",
+    "duration": 30
+  }
+}
