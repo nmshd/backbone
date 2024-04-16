@@ -22,7 +22,7 @@ public static class TestData
     public static Relationship CreateActiveRelationship()
     {
         var relationship = new Relationship(CreateRelationshipTemplate(), TestDataGenerator.CreateRandomIdentityAddress(), TestDataGenerator.CreateRandomDeviceId(), null, []);
-        relationship.Accept(TestDataGenerator.CreateRandomIdentityAddress(), TestDataGenerator.CreateRandomDeviceId());
+        relationship.Accept(TestDataGenerator.CreateRandomIdentityAddress(), TestDataGenerator.CreateRandomDeviceId(), []);
         return relationship;
     }
 

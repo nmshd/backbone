@@ -25,7 +25,7 @@ public static class TestData
         to ??= IDENTITY_2;
         var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
         var relationship = new Relationship(template, from ?? IDENTITY_1, DEVICE_1, null, []);
-        relationship.Accept(to, DEVICE_2);
+        relationship.Accept(to, DEVICE_2, []);
         return relationship;
     }
 
