@@ -108,6 +108,6 @@ public class CreateRelationshipTests
         var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipIsInIncorrectStatus");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipIsNotInAnyOfCorrectStatuses");
     }
 }

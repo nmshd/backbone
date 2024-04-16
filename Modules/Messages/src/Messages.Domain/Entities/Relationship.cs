@@ -17,14 +17,23 @@ public class Relationship
         Status = default;
     }
 
-    public RelationshipId Id { get; internal set; }
+    private Relationship(RelationshipId id, IdentityAddress from, IdentityAddress to, DateTime createdAt, RelationshipStatus status)
+    {
+        Id = id;
+        From = from;
+        To = to;
+        CreatedAt = createdAt;
+        Status = status;
+    }
 
-    public IdentityAddress From { get; internal set; }
-    public IdentityAddress To { get; internal set; }
+    public RelationshipId Id { get; }
 
-    public DateTime CreatedAt { get; internal set; }
+    public IdentityAddress From { get; }
+    public IdentityAddress To { get; }
 
-    public RelationshipStatus Status { get; internal set; }
+    public DateTime CreatedAt { get; }
+
+    public RelationshipStatus Status { get; }
 
     public void EnsureSendingMessagesIsAllowed(int numberOfUnreceivedMessagesFromActiveIdentity, int maxNumberOfUnreceivedMessagesFromOneSender)
     {
@@ -37,14 +46,7 @@ public class Relationship
 
     public static Relationship LoadForTesting(RelationshipId id, IdentityAddress from, IdentityAddress to, DateTime createdAt, RelationshipStatus status)
     {
-        return new Relationship
-        {
-            Id = id,
-            From = from,
-            To = to,
-            CreatedAt = createdAt,
-            Status = status
-        };
+        return new Relationship(id, from, to, createdAt, status);
     }
 }
 
