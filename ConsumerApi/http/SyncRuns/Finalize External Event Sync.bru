@@ -1,0 +1,32 @@
+meta {
+  name: /SyncRuns/{SyncRunId}/FinalizeExternalEventSync
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/SyncRuns/{{SyncRunId}}/FinalizeExternalEventSync
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "externalEventResults": [{
+      "externalEventId": "SYIhtwfR5QH7ct2aX7eM",
+      "errorCode": null
+    }],
+    "datawalletModifications": [{
+      "objectIdentifier": "Y",
+      "payloadCategory": "x",
+      "collection": "x",
+      "type": "Create",
+      "encryptedPayload": "aaaa",
+      "datawalletVersion": 2
+    }]
+  }
+}
+
+vars:pre-request {
+  SyncRunId: test
+}
