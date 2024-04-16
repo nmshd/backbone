@@ -1,0 +1,15 @@
+meta {
+  name: /Identities/Self/DeletionProcesses/{DeletionProcessId}/Cancel
+  type: http
+  seq: 7
+}
+
+put {
+  url: {{baseUrl}}/Identities/Self/DeletionProcesses/{{DeletionProcessId}}/Cancel
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  DeletionProcessId: IDPsVw1dFyzmdfc3Xd2Q
+}

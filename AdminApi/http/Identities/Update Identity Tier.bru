@@ -1,0 +1,21 @@
+meta {
+  name: /Identities/{IdentityAddress}
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/Identities/{{IdentityAddress}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "tierId": "test"
+  }
+}
+
+vars:pre-request {
+  IdentityAddress: id1CsU6VwBMgBA4TLc61nj895ZD1mPjbddNW
+}

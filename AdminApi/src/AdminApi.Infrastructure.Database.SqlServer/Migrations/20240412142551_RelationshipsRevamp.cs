@@ -11,21 +11,26 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""
-                 CREATE OR REPLACE VIEW RelationshipOverviews AS
+                 CREATE OR ALTER VIEW RelationshipOverviews AS
                      SELECT
-                         [RELATIONSHIPS].[From] AS [From],
-                         [RELATIONSHIPS].[To] AS [To],
-                         [RELATIONSHIPS].[RelationshipTemplateId] AS [RelationshipTemplateId],
-                         [RELATIONSHIPS].[Status] AS [Status],
-                         [RELATIONSHIPS].[CreatedAt] AS [CreatedAt],
-                         [AUDITLOG].[CreatedAt] AS [AnsweredAt],
-                         [RELATIONSHIPS].[CreatedByDevice] AS [CreatedByDevice],
-                         [AUDITLOG].[CreatedByDevice] AS [AnsweredByDevice]
-                     FROM
-                         [Relationships].[Relationships] AS RELATIONSHIPS
-                     LEFT JOIN
-                         [Relationships].[RelationshipAuditLog] AS AUDITLOG ON [RELATIONSHIPS].[Id] = [AUDITLOG].[RelationshipId]
-                     WHERE // TODO (Daniel Almeida): finish the query
+                        [RELATIONSHIPS].[From] AS [From],
+                        [RELATIONSHIPS].[To] AS [To],
+                        [RELATIONSHIPS].[RelationshipTemplateId] AS [RelationshipTemplateId],
+                        [RELATIONSHIPS].[Status] AS [Status],
+                        [AUDITLOG1].[CreatedAt] AS [CreatedAt],
+                        [AUDITLOG1].[CreatedByDevice] AS [CreatedByDevice],
+                        [AUDITLOG2].[CreatedAt] AS [AnsweredAt],
+                        [AUDITLOG2].[CreatedByDevice] AS [AnsweredByDevice]
+                    FROM
+                        [Relationships].[Relationships] AS RELATIONSHIPS
+                    LEFT JOIN 
+                        [Relationships].[RelationshipAuditLog] AS AUDITLOG1 
+                    ON 
+                        [RELATIONSHIPS].[Id] = [AUDITLOG1].[RelationshipId] AND [AUDITLOG1].[Reason] = 0
+                    LEFT JOIN 
+                        [Relationships].[RelationshipAuditLog] AS AUDITLOG2 
+                    ON 
+                        [RELATIONSHIPS].[Id] = [AUDITLOG2].[RelationshipId] AND [AUDITLOG2].[Reason] = 1
             """);
         }
 
@@ -33,7 +38,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""
-                 CREATE OR REPLACE VIEW RelationshipOverviews AS
+                 CREATE OR ALTER VIEW RelationshipOverviews AS
                      SELECT
                          [RELATIONSHIPS].[From] AS [From],
                          [RELATIONSHIPS].[To] AS [To],
