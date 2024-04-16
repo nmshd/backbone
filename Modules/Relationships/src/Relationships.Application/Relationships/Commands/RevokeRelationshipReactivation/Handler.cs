@@ -31,9 +31,9 @@ public class Handler : IRequestHandler<RevokeRelationshipReactivationCommand, Re
 
         await _relationshipsRepository.Update(relationship);
 
-        var partnerIdentity = relationship.To == _activeIdentity ? relationship.From : relationship.To;
+        var peer = relationship.To == _activeIdentity ? relationship.From : relationship.To;
 
-        _eventBus.Publish(new RelationshipReactivationCompletedIntegrationEvent(relationship, partnerIdentity));
+        _eventBus.Publish(new RelationshipReactivationCompletedIntegrationEvent(relationship, peer));
 
         return new RevokeRelationshipReactivationResponse(relationship);
     }

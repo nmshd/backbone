@@ -47,4 +47,19 @@ public class RevokeRelationshipReactivationTests
             "error.platform.validation.relationshipRequest.noOpenReactivationRequest"
         );
     }
+
+    [Fact]
+    public void Can_only_revoke_reactivation_of_relationship_when_reactivation_has_been_requested_by_self()
+    {
+        // Arrange
+        var relationship = CreateTerminatedRelationship();
+
+        // Act
+        var acting = () => relationship.RevokeReactivation(IDENTITY_2, DEVICE_1);
+
+        // Assert
+        acting.Should().Throw<DomainException>().WithError(
+            "error.platform.validation.relationshipRequest.noOpenReactivationRequest"
+        );
+    }
 }

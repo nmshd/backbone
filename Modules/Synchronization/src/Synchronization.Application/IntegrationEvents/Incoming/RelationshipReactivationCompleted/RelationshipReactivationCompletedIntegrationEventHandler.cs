@@ -22,10 +22,10 @@ public class RelationshipReactivationCompletedIntegrationEventHandler : IIntegra
 
     public async Task Handle(RelationshipReactivationCompletedIntegrationEvent integrationEvent)
     {
-        await CreateExternalEvents(integrationEvent);
+        await CreateExternalEvent(integrationEvent);
     }
 
-    private async Task CreateExternalEvents(RelationshipReactivationCompletedIntegrationEvent @event)
+    private async Task CreateExternalEvent(RelationshipReactivationCompletedIntegrationEvent @event)
     {
 #pragma warning disable IDE0037
         var payload = new { Id = @event.RelationshipId };
@@ -33,7 +33,7 @@ public class RelationshipReactivationCompletedIntegrationEventHandler : IIntegra
         try
         {
             var externalEvent = await _dbContext.CreateExternalEvent(
-                IdentityAddress.Parse(@event.Partner), ExternalEventType.RelationshipReactivationCompleted, payload);
+                IdentityAddress.Parse(@event.Peer), ExternalEventType.RelationshipReactivationCompleted, payload);
             _eventBus.Publish(new ExternalEventCreatedIntegrationEvent(externalEvent));
         }
         catch (Exception ex)

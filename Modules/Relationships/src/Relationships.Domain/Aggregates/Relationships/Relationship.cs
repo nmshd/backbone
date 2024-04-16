@@ -143,9 +143,7 @@ public class Relationship
 
     public void RevokeReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
-        EnsureStatus(RelationshipStatus.Terminated);
         EnsureOpenReactivationRequestExists(activeIdentity);
-        EnsureReactivationOfOwnRelationshipIsTriggered(activeIdentity);
 
         var auditLogEntry = new RelationshipAuditLogEntry(
             RelationshipAuditLogEntryReason.RevocationOfReactivation,
@@ -159,14 +157,8 @@ public class Relationship
 
     private void EnsureOpenReactivationRequestExists(IdentityAddress target)
     {
-        if (AuditLog.Last().Reason != RelationshipAuditLogEntryReason.Reactivation)
+        if (AuditLog.Last().Reason != RelationshipAuditLogEntryReason.Reactivation || AuditLog.Last().CreatedBy != target)
             throw new DomainException(DomainErrors.NoOpenReactivationRequest(target));
-    }
-
-    private void EnsureReactivationOfOwnRelationshipIsTriggered(IdentityAddress target)
-    {
-        if (AuditLog.Last().CreatedBy != target)
-            throw new DomainException(DomainErrors.ReactivationCanOnlyBeRevokedByInitiator(target));
     }
 
     public void XXXFakeTerminate(IdentityAddress activeIdentity, DeviceId activeDevice)

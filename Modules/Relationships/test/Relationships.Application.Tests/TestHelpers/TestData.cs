@@ -29,4 +29,15 @@ public static class TestData
 
         return relationship;
     }
+
+    public static Relationship CreateRelationshipWithOpenReactivationRequest(IdentityAddress activeIdentity, DeviceId activeDevice, IdentityAddress? to = null)
+    {
+        to ??= TestDataGenerator.CreateRandomIdentityAddress();
+
+        var relationship = CreateActiveRelationship(activeIdentity, to);
+        relationship.XXXFakeTerminate(activeIdentity, activeDevice);
+        relationship.XXXFakeReactivate(activeIdentity, activeDevice);
+
+        return relationship;
+    }
 }

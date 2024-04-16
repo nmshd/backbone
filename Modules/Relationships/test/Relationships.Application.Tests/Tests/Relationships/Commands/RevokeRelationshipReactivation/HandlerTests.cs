@@ -2,12 +2,12 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipReactivation;
-using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
+using static Backbone.Modules.Relationships.Application.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.RevokeRelationshipReactivation;
 public class HandlerTests
@@ -19,9 +19,7 @@ public class HandlerTests
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
-        var relationship = TestData.CreateActiveRelationship(from: activeIdentity);
-        relationship.XXXFakeTerminate(activeIdentity, activeDevice);
-        relationship.XXXFakeReactivate(activeIdentity, activeDevice);
+        var relationship = CreateRelationshipWithOpenReactivationRequest(activeIdentity, activeDevice);
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
@@ -51,9 +49,7 @@ public class HandlerTests
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
-        var relationship = TestData.CreateActiveRelationship(from: activeIdentity);
-        relationship.XXXFakeTerminate(activeIdentity, activeDevice);
-        relationship.XXXFakeReactivate(activeIdentity, activeDevice);
+        var relationship = CreateRelationshipWithOpenReactivationRequest(activeIdentity, activeDevice);
 
         var mockRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         A.CallTo(() => mockRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
