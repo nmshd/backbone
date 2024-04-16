@@ -171,7 +171,7 @@ class _TiersOverviewListState extends State<TiersOverviewList> {
                               loadTiers();
                               Navigator.of(dialogContext).pop();
                               setState(() => isLoading = true);
-                              _showErrorSnackbar('Tier was created successfully.');
+                              _showSuccessSnackbar('Tier was created successfully.');
                             } else {
                               setStateDialog(() => errorMessage = response.error.message);
                             }
@@ -204,7 +204,7 @@ class _TiersOverviewListState extends State<TiersOverviewList> {
     return response;
   }
 
-  void _showErrorSnackbar(String message) {
+  void _showSuccessSnackbar(String message) {
     final snackBar = SnackBar(
       content: Text(
         message,
