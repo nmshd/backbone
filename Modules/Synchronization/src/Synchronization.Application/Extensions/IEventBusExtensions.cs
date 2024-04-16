@@ -3,7 +3,7 @@ using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.Id
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipCreated;
-using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipReactivationRevoked;
+using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipReactivationCompleted;
 using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipStatusChanged;
 
 namespace Backbone.Modules.Synchronization.Application.Extensions;
@@ -30,6 +30,6 @@ public static class IEventBusExtensions
     {
         eventBus.Subscribe<RelationshipCreatedIntegrationEvent, RelationshipCreatedIntegrationEventHandler>();
         eventBus.Subscribe<RelationshipStatusChangedIntegrationEvent, RelationshipStatusChangedIntegrationEventHandler>();
-        eventBus.Subscribe<RelationshipReactivationRevokedIntegrationEvent, RelationshipReactivationRevokedIntegrationEventHandler>();
+        eventBus.Subscribe<RelationshipReactivationCompletedIntegrationEvent, RelationshipReactivationCompletedIntegrationEventHandler>();
     }
 }

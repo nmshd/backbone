@@ -33,7 +33,7 @@ public class Handler : IRequestHandler<RevokeRelationshipReactivationCommand, Re
 
         var partnerIdentity = relationship.To == _activeIdentity ? relationship.From : relationship.To;
 
-        _eventBus.Publish(new RelationshipReactivationRevokedIntegrationEvent(relationship, partnerIdentity));
+        _eventBus.Publish(new RelationshipReactivationCompletedIntegrationEvent(relationship, partnerIdentity));
 
         return new RevokeRelationshipReactivationResponse(relationship);
     }

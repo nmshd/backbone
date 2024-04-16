@@ -6,26 +6,26 @@ using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipReactivationRevoked;
-public class RelationshipReactivationRevokedIntegrationEventHandler : IIntegrationEventHandler<RelationshipReactivationRevokedIntegrationEvent>
+namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipReactivationCompleted;
+public class RelationshipReactivationCompletedIntegrationEventHandler : IIntegrationEventHandler<RelationshipReactivationCompletedIntegrationEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly ILogger<MessageCreatedIntegrationEventHandler> _logger;
 
-    public RelationshipReactivationRevokedIntegrationEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<MessageCreatedIntegrationEventHandler> logger)
+    public RelationshipReactivationCompletedIntegrationEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<MessageCreatedIntegrationEventHandler> logger)
     {
         _dbContext = dbContext;
         _eventBus = eventBus;
         _logger = logger;
     }
 
-    public async Task Handle(RelationshipReactivationRevokedIntegrationEvent integrationEvent)
+    public async Task Handle(RelationshipReactivationCompletedIntegrationEvent integrationEvent)
     {
         await CreateExternalEvents(integrationEvent);
     }
 
-    private async Task CreateExternalEvents(RelationshipReactivationRevokedIntegrationEvent @event)
+    private async Task CreateExternalEvents(RelationshipReactivationCompletedIntegrationEvent @event)
     {
 #pragma warning disable IDE0037
         var payload = new { Id = @event.RelationshipId };
@@ -33,7 +33,7 @@ public class RelationshipReactivationRevokedIntegrationEventHandler : IIntegrati
         try
         {
             var externalEvent = await _dbContext.CreateExternalEvent(
-                IdentityAddress.Parse(@event.Partner), ExternalEventType.RelationshipReactivationRevoked, payload);
+                IdentityAddress.Parse(@event.Partner), ExternalEventType.RelationshipReactivationCompleted, payload);
             _eventBus.Publish(new ExternalEventCreatedIntegrationEvent(externalEvent));
         }
         catch (Exception ex)

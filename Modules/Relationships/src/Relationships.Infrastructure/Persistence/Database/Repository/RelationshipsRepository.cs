@@ -8,7 +8,6 @@ using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
-using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,7 +15,6 @@ namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Rep
 public class RelationshipsRepository : IRelationshipsRepository
 {
     private readonly DbSet<Relationship> _relationships;
-    private readonly DbSet<RelationshipTemplateAllocation> _relationshipTemplateAllocations;
     private readonly IQueryable<Relationship> _readOnlyRelationships;
     private readonly RelationshipsDbContext _dbContext;
 

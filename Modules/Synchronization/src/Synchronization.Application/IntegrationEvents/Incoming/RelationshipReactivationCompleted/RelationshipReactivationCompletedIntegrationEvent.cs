@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
-namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipReactivationRevoked;
-public class RelationshipReactivationRevokedIntegrationEvent : IntegrationEvent
+namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipReactivationCompleted;
+public class RelationshipReactivationCompletedIntegrationEvent : IntegrationEvent
 {
-    public RelationshipReactivationRevokedIntegrationEvent(string relationshipId, DateTime createdAt, string partner) :
+    public RelationshipReactivationCompletedIntegrationEvent(string relationshipId, DateTime createdAt, string partner) :
 
         base($"{relationshipId}/Reactivation/Revoked/{createdAt}")
     {
