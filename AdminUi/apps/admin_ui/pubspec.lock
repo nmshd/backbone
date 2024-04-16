@@ -103,6 +103,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  data_table_2:
+    dependency: "direct main"
+    description:
+      name: data_table_2
+      sha256: e403de6d9a58dddf27700114b614ea8ea5aa8442d7fbdfbe8b3d11b0512e7a49
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.12"
   dio:
     dependency: transitive
     description:
