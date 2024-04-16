@@ -130,7 +130,7 @@ class _TiersOverviewListState extends State<TiersOverviewList> {
   }
 
   void _showAddTierDialog({required BuildContext context}) {
-    showDialog(
+    showDialog<void>(
       context: context,
       builder: (BuildContext dialogContext) {
         return StatefulBuilder(
