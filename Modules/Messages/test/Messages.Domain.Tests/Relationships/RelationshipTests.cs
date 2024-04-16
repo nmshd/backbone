@@ -33,10 +33,6 @@ public class RelationshipTests
     }
 
     #region helpers
-    private static Relationship CreateRelationship()
-    {
-        return CreateRelationship(null, null, null, null, null);
-    }
 
     private static Relationship CreateRelationship(RelationshipStatus status)
     {
@@ -66,11 +62,8 @@ public class RelationshipTests
 
     private static void SetBackingField(object obj, string propertyName, object value)
     {
-        var field = obj.GetType().GetField($"<{propertyName}>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic);
-        
-        if (field == null)
-            throw new InvalidOperationException($"BackingField for {propertyName} not found on {obj.GetType().Name}.");
-
+        var field = obj.GetType().GetField($"<{propertyName}>k__BackingField", BindingFlags.Instance | BindingFlags.NonPublic) ?? 
+                    throw new InvalidOperationException($"BackingField for {propertyName} not found on {obj.GetType().Name}.");
         field.SetValue(obj, value);
     }
     #endregion
