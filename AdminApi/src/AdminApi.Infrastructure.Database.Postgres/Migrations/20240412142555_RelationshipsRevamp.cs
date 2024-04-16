@@ -13,17 +13,19 @@ namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.Sql("""
                  CREATE OR REPLACE VIEW "RelationshipOverviews" AS
                      SELECT
-                         "Relationships"."From" AS "From",
-                         "Relationships"."To" AS "To",
-                         "Relationships"."RelationshipTemplateId" AS "RelationshipTemplateId",
-                         "Relationships"."Status" AS "Status",
-                         "Relationships"."CreatedAt" AS "CreatedAt",
-                         "AuditLog"."CreatedAt" AS "AnsweredAt",
-                         "Relationships"."CreatedByDevice" AS "CreatedByDevice",
-                         "AuditLog"."CreatedByDevice" AS "AnsweredByDevice"
-                     FROM "Relationships"."Relationships" AS "Relationships"
-                     LEFT JOIN "Relationships"."RelationshipAuditLog" AS "AuditLog" ON "Relationships"."Id" = "AuditLog"."RelationshipId"
-                     WHERE // TODO (Daniel Almeida): finish the query
+                        "Relationships"."From" AS "From",
+                        "Relationships"."To" AS "To",
+                        "Relationships"."RelationshipTemplateId" AS "RelationshipTemplateId",
+                        "Relationships"."Status" AS "Status",
+                        "AuditLog1"."CreatedAt" AS "CreatedAt",
+                        "AuditLog1"."CreatedByDevice" AS "CreatedByDevice",
+                        "AuditLog2"."CreatedAt" AS "AnsweredAt",
+                        "AuditLog2"."CreatedByDevice" AS "AnsweredByDevice"
+                    FROM "Relationships"."Relationships" AS "Relationships"
+                    LEFT JOIN "Relationships"."RelationshipAuditLog" AS "AuditLog1"
+            	        ON "Relationships"."Id" = "AuditLog1"."RelationshipId" AND "AuditLog1"."Reason" = 0
+                    LEFT JOIN "Relationships"."RelationshipAuditLog" AS "AuditLog2"
+            	        ON "Relationships"."Id" = "AuditLog2"."RelationshipId" AND "AuditLog2"."Reason" = 1
             """);
         }
 
