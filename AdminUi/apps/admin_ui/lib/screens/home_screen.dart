@@ -78,18 +78,12 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
                 padding: const EdgeInsets.only(top: 8, right: 8, bottom: 8),
                 child: SizedBox(
                   width: _widthAnimation.value,
-                  height: 200,
+                  height: 165,
                   child: NavigationDrawer(
                     elevation: 0,
                     backgroundColor: Theme.of(context).colorScheme.outline.withAlpha(60),
                     children: [
                       Gaps.h8,
-                      buildHeaderSection('Functionalities'),
-                      if (_widthAnimation.value == maxWidth)
-                        const Padding(
-                          padding: EdgeInsets.only(left: 8, right: 8),
-                          child: Divider(),
-                        ),
                       buildNavigationTile(context, 'Identities', Icons.account_circle_sharp, isSelected: true),
                       buildNavigationTile(context, 'Tiers', Icons.cable, index: 1),
                       buildNavigationTile(context, 'Clients', Icons.layers, index: 2),
@@ -140,24 +134,6 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     await GetIt.I.unregisterIfRegistered<AdminApiClient>();
 
     if (mounted) context.go('/login');
-  }
-
-  Widget buildHeaderSection(String title) {
-    return _widthAnimation.value == maxWidth
-        ? Padding(
-            padding: const EdgeInsets.only(left: 12),
-            child: Text(
-              title,
-              style: const TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          )
-        : Padding(
-            padding: const EdgeInsets.symmetric(vertical: 18),
-            child: Container(),
-          );
   }
 
   Widget buildNavigationTile(BuildContext context, String title, IconData icon, {int index = 0, bool isSelected = false}) {
