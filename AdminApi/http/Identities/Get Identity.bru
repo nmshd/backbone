@@ -1,0 +1,15 @@
+meta {
+  name: /Identities/{IdentityAddress}
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/Identities/{{IdentityAddress}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  IdentityAddress: id1CsU6VwBMgBA4TLc61nj895ZD1mPjbddNW
+}

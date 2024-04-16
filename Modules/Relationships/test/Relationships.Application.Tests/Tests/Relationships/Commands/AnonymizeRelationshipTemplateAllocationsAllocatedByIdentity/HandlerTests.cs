@@ -16,7 +16,7 @@ public class HandlerTests
     public async Task Persists_updated_allocations()
     {
         // Arrange
-        var mockRepository = A.Fake<IRelationshipsRepository>();
+        var mockRepository = A.Fake<IRelationshipTemplatesRepository>();
 
         var oldIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var relationshipTemplateAllocations = new List<RelationshipTemplateAllocation> { new(RelationshipTemplateId.New(), oldIdentityAddress, DeviceId.New()) };
@@ -41,7 +41,7 @@ public class HandlerTests
     public async Task Does_not_persist_allocations_that_were_not_updated()
     {
         // Arrange
-        var mockRepository = A.Fake<IRelationshipsRepository>();
+        var mockRepository = A.Fake<IRelationshipTemplatesRepository>();
 
         var oldIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var anotherIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
