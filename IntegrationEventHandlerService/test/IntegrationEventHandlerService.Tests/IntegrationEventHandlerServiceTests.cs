@@ -12,10 +12,10 @@ public class IntegrationEventHandlerServiceTests
         // Arrange
         var mockEventBus = A.Fake<IEventBus>();
 
-        var integrationEventService = CreateService(mockEventBus);
+        var integrationEventHandlerService = CreateService(mockEventBus);
 
         // Act
-        await integrationEventService.StartAsync(CancellationToken.None);
+        await integrationEventHandlerService.StartAsync(CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockEventBus.StartConsuming()).MustHaveHappenedOnceExactly();
