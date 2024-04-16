@@ -4,14 +4,14 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-class TierOverviewList extends StatefulWidget {
-  const TierOverviewList({super.key});
+class TiersOverviewList extends StatefulWidget {
+  const TiersOverviewList({super.key});
 
   @override
-  State<TierOverviewList> createState() => _TierOverviewListState();
+  State<TiersOverviewList> createState() => _TiersOverviewListState();
 }
 
-class _TierOverviewListState extends State<TierOverviewList> {
+class _TiersOverviewListState extends State<TiersOverviewList> {
   final TextEditingController _tierNameController = TextEditingController();
 
   late ScrollController _scrollController;

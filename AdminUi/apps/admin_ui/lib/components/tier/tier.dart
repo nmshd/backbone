@@ -1,1 +1,1 @@
-export 'tier_overview.dart';
+export 'tiers_overview.dart';
