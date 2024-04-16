@@ -1,0 +1,78 @@
+meta {
+  name: /Datawallet/Modifications
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/Datawallet/Modifications
+  body: json
+  auth: inherit
+}
+
+headers {
+  x-supported-datawallet-version: 1
+}
+
+body:json {
+  {
+    "localIndex": 16,
+    "modifications": [{
+      "objectIdentifier": "A",
+      "payloadCategory": "x",
+      "collection": "x",
+      "type": "Delete",
+      "encryptedPayload": "aaaa",
+      "datawalletVersion": 1
+    },{
+      "objectIdentifier": "B",
+      "payloadCategory": "x",
+      "collection": "x",
+      "type": "Delete",
+      "encryptedPayload": "bbbb",
+      "datawalletVersion": 1
+    },{
+      "objectIdentifier": "C",
+      "payloadCategory": "x",
+      "collection": "x",
+      "type": "Delete",
+      "encryptedPayload": "cccc",
+      "datawalletVersion": 1
+    },{
+      "objectIdentifier": "D",
+      "payloadCategory": "x",
+      "collection": "x",
+      "type": "Delete",
+      "encryptedPayload": "dddd",
+      "datawalletVersion": 1
+    },{
+      "objectIdentifier": "E",
+      "payloadCategory": "x",
+      "collection": "x",
+      "type": "Delete",
+      "encryptedPayload": "eeee",
+      "datawalletVersion": 1
+    },{
+      "objectIdentifier": "F",
+      "payloadCategory": "x",
+      "collection": "x",
+      "type": "Delete",
+      "encryptedPayload": "ffff",
+      "datawalletVersion": 1
+    },{
+      "objectIdentifier": "G",
+      "payloadCategory": "x",
+      "collection": "x",
+      "type": "Delete",
+      "encryptedPayload": "gggg",
+      "datawalletVersion": 1
+    },{
+      "objectIdentifier": "H",
+      "payloadCategory": "x",
+      "collection": "x",
+      "type": "Delete",
+      "encryptedPayload": "hhhh",
+      "datawalletVersion": 1
+    }]
+  }
+}

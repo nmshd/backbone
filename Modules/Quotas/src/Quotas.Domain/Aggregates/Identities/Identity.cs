@@ -1,5 +1,7 @@
+using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using CSharpFunctionalExtensions;
@@ -164,4 +166,12 @@ public class Identity
 
         await UpdateAllMetricStatuses(metricCalculatorFactory, cancellationToken);
     }
+
+    #region Selectors
+    public static Expression<Func<Identity, bool>> HasAddress(IdentityAddress identityAddress)
+    {
+        return i => i.Address == identityAddress.ToString();
+    }
+
+    #endregion
 }

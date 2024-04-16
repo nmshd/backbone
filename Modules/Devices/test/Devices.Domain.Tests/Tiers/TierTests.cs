@@ -69,6 +69,5 @@ public class TierTests
         // Assert
         error!.Code.Should().Be("error.platform.validation.device.usedTierCannotBeDeleted");
         error.Message.Should().Contain("The Tier is used as the default Tier by one or more clients.");
-
     }
 }
