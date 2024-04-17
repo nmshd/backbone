@@ -6,7 +6,7 @@ namespace Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
 public class RelationshipReactivationCompletedIntegrationEvent : IntegrationEvent
 {
     public RelationshipReactivationCompletedIntegrationEvent(Relationship relationship, IdentityAddress peer) :
-        base($"{relationship.Id}/Reactivation/Revoked/{relationship.AuditLog.Last().CreatedAt}")
+        base($"{relationship.Id}/Reactivation/Completed/{relationship.AuditLog.Last().CreatedAt}")
     {
         RelationshipId = relationship.Id;
         Peer = peer.StringValue;
