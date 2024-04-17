@@ -20,7 +20,7 @@ class _TiersOverviewListState extends State<TiersOverviewList> {
 
   bool _isLoading = false;
 
-  double _boxWidth = 700;
+  final double _boxWidth = 700;
 
   @override
   void initState() {
