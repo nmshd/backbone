@@ -7,7 +7,7 @@ public static class DomainErrors
 {
     public static DomainError UnsupportedMetricKey()
     {
-        return new DomainError("error.platform.quotas.unsupportedMetricKey", $"The given metric key is not supported. The supported metric keys are: [{string.Join(", ", MetricKey.GetSupportedMetricKeyValues())}].");
+        return new DomainError("error.platform.quotas.unsupportedMetricKey", $"The given metric key is not supported. The supported metric keys are: [{string.Join(", ", MetricKey.GetSupportedMetricKeys().Select(k => k.Value))}].");
     }
 
     public static DomainError MaxValueCannotBeLowerThanZero()

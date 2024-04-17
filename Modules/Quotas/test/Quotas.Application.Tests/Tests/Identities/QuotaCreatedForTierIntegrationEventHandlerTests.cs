@@ -63,7 +63,7 @@ public class QuotaCreatedForTierIntegrationEventHandlerTests
         // Assert
         A.CallTo(() => metricStatusesService.RecalculateMetricStatuses(
             A<List<string>>.That.Matches(x => x.Count == identities.Count),
-            A<List<string>>.That.Contains(tierQuotaDefinition.MetricKey.Value),
+            A<List<MetricKey>>.That.Contains(tierQuotaDefinition.MetricKey),
             A<CancellationToken>._)
         ).MustHaveHappened();
     }

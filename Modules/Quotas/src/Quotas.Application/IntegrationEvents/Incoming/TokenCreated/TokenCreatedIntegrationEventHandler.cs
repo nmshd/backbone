@@ -16,7 +16,7 @@ public class TokenCreatedIntegrationEventHandler : IIntegrationEventHandler<Toke
     public async Task Handle(TokenCreatedIntegrationEvent @event)
     {
         var identities = new List<string> { @event.CreatedBy };
-        var metrics = new List<string> { MetricKey.NumberOfTokens.Value };
+        var metrics = new List<MetricKey> { MetricKey.NumberOfTokens };
 
         await _metricStatusesService.RecalculateMetricStatuses(identities, metrics, CancellationToken.None);
     }

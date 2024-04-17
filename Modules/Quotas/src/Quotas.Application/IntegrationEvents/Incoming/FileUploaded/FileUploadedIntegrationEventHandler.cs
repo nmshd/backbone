@@ -16,7 +16,7 @@ public class FileUploadedIntegrationEventHandler : IIntegrationEventHandler<File
     public async Task Handle(FileUploadedIntegrationEvent @event)
     {
         var identities = new List<string> { @event.Uploader };
-        var metrics = new List<string> { MetricKey.NumberOfFiles.Value, MetricKey.UsedFileStorageSpace.Value };
+        var metrics = new List<MetricKey> { MetricKey.NumberOfFiles, MetricKey.UsedFileStorageSpace };
 
         await _metricStatusesService.RecalculateMetricStatuses(identities, metrics, CancellationToken.None);
     }

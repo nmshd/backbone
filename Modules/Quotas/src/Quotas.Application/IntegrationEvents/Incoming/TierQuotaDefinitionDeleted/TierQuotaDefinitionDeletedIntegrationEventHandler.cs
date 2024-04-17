@@ -32,7 +32,7 @@ public class TierQuotaDefinitionDeletedIntegrationEventHandler : IIntegrationEve
 
         await _metricStatusesService.RecalculateMetricStatuses(
             identitiesWithTier.Select(i => i.Address).ToList(),
-            MetricKey.GetSupportedMetricKeyValues().ToList(),
+            MetricKey.GetSupportedMetricKeys().ToList(),
             CancellationToken.None
         );
     }
