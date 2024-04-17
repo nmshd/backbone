@@ -71,13 +71,6 @@ public class Relationship
             throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
     }
 
-
-    private static void EnsureNoTerminatedRelationshipToTargetExists(IdentityAddress target, List<Relationship> existingRelationships)
-    {
-        if (existingRelationships.Any(r => r.Status == RelationshipStatus.Terminated))
-            throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
-    }
-
     public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? acceptanceContent)
     {
         EnsureStatus(RelationshipStatus.Pending);
