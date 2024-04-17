@@ -32,14 +32,8 @@ public static class TestData
 
     public static Relationship CreateTerminatedRelationship()
     {
-        var identity1 = TestDataGenerator.CreateRandomIdentityAddress();
-        var identity2 = TestDataGenerator.CreateRandomIdentityAddress();
-
-        var relationshipTemplate = CreateRelationshipTemplate(identity1);
-        var relationship = new Relationship(relationshipTemplate, identity2, TestDataGenerator.CreateRandomDeviceId(), null, []);
-
-        relationship.Accept(identity1, TestDataGenerator.CreateRandomDeviceId(), []);
-        relationship.Terminate(identity1, TestDataGenerator.CreateRandomDeviceId());
+        var relationship = CreateActiveRelationship();
+        relationship.Terminate(relationship.From, TestDataGenerator.CreateRandomDeviceId());
 
         return relationship;
     }
