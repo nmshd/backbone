@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
 
-class Identities extends StatefulWidget {
+class Identities extends StatelessWidget {
   const Identities({super.key});
 
-  @override
-  State<Identities> createState() => _IdentitiesState();
-}
-
-class _IdentitiesState extends State<Identities> {
   @override
   Widget build(BuildContext context) {
     return const Placeholder();
