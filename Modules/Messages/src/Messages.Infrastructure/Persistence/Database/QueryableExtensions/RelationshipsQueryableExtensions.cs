@@ -9,9 +9,4 @@ public static class RelationshipsQueryableExtensions
     {
         return query.Where(r => r.From == participant1 && r.To == participant2 || r.From == participant2 && r.To == participant1);
     }
-
-    public static IQueryable<Relationship> Active(this IQueryable<Relationship> query)
-    {
-        return query.Where(r => r.Status == RelationshipStatus.Active);
-    }
 }
