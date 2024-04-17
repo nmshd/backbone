@@ -22,10 +22,8 @@ public class IntegrationEventHandlerServiceTests
 
     }
 
-    private static IntegrationEventHandlerService CreateService(IEventBus? eventBus = null)
+    private static IntegrationEventHandlerService CreateService(IEventBus eventBus)
     {
-        eventBus ??= A.Fake<IEventBus>();
-
         return new IntegrationEventHandlerService(
             eventBus,
             A.Dummy<IEnumerable<AbstractModule>>());

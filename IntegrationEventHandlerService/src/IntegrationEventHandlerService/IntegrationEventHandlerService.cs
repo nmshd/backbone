@@ -1,6 +1,5 @@
 ﻿using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Microsoft.Extensions.Hosting;
 
 namespace Backbone.IntegrationEventHandlerService;
 public class IntegrationEventHandlerService : IHostedService
@@ -16,23 +15,27 @@ public class IntegrationEventHandlerService : IHostedService
 
     public Task StartAsync(CancellationToken cancellationToken)
     {
-        StartProcessing();
+        SubscribeToEvents();
+        StartConsuming();
 
         return Task.CompletedTask;
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
-    }
-
-    private void StartProcessing()
+    private void StartConsuming()
     {
         foreach (var module in _modules)
         {
             module.ConfigureEventBus(_eventBus);
         }
+    }
 
+    private void SubscribeToEvents()
+    {
         _eventBus.StartConsuming();
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
     }
 }
