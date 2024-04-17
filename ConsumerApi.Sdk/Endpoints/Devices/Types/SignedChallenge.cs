@@ -1,5 +1,5 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Common;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
+using Backbone.ConsumerApi.Sdk.Endpoints.Common.Crypto;
 using Backbone.Crypto;
 using Newtonsoft.Json;
 

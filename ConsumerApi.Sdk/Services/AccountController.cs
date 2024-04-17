@@ -1,7 +1,6 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Common;
+﻿using Backbone.ConsumerApi.Sdk.Endpoints.Common.Crypto;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
-using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
 using Newtonsoft.Json;
@@ -20,7 +19,6 @@ public class AccountController(Client client)
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
 
         var identityKeyPair = signatureHelper.CreateKeyPair();
-        var devicePwd1 = PasswordHelper.GeneratePassword(45, 50);
 
         var challenge = await client.Challenges.CreateChallengeUnauthenticated();
         if (challenge.Result?.Id is null)
@@ -31,20 +29,18 @@ public class AccountController(Client client)
         var challengeSignature = signatureHelper.CreateSignature(identityKeyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
         var signedChallenge = new SignedChallenge(serializedChallenge, challengeSignature);
 
-        var publicKeyPayload = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new CryptoSignaturePublicKey
-        {
-            alg = CryptoExchangeAlgorithm.ECDH_X25519,
-            pub = identityKeyPair.PublicKey.Base64Representation
-        })).Base64Representation;
-
         var createIdentityPayload = new CreateIdentityRequest
         {
             ClientId = CLIENT_ID,
             ClientSecret = CLIENT_SECRET,
             IdentityVersion = 1,
             SignedChallenge = signedChallenge,
-            IdentityPublicKey = publicKeyPayload,
-            DevicePassword = devicePwd1
+            IdentityPublicKey = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new CryptoSignaturePublicKey
+            {
+                alg = CryptoExchangeAlgorithm.ECDH_X25519,
+                pub = identityKeyPair.PublicKey.Base64Representation
+            })).Base64Representation,
+            DevicePassword = PasswordHelper.GeneratePassword(45, 50)
         };
 
         var createIdentityResponse = (await client.Identities.CreateIdentity(createIdentityPayload)).Result;
@@ -57,7 +53,7 @@ public class AccountController(Client client)
             Challenge = challenge.Result.Id,
             PrivateKey = identityKeyPair.PrivateKey.Base64Representation,
             PublicKey = identityKeyPair.PublicKey.Base64Representation,
-            DevicePassword = devicePwd1,
+            DevicePassword = createIdentityPayload.DevicePassword,
             SignedChallenge = challengeSignature.Base64Representation,
             CreatedAt = createIdentityResponse.CreatedAt,
             Address = createIdentityResponse.Address,
