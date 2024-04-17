@@ -2,7 +2,8 @@ using System.Net.Sockets;
 using System.Text;
 using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -61,7 +62,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _consumerChannel.BasicConsume(_queueName, false, _consumer);
     }
 
-    public void Publish(IntegrationEvent @event)
+    public void Publish(DomainEvent @event)
     {
         if (!_persistentConnection.IsConnected) _persistentConnection.TryConnect();
 
@@ -106,8 +107,8 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     }
 
     public void Subscribe<T, TH>()
-        where T : IntegrationEvent
-        where TH : IIntegrationEventHandler<T>
+        where T : DomainEvent
+        where TH : IDomainEventHandler<T>
     {
         var eventName = _subsManager.GetEventKey<T>();
         DoInternalSubscription(eventName);
@@ -210,11 +211,11 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 {
                     await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
 
-                    if (scope.ResolveOptional(subscription.HandlerType) is not IIntegrationEventHandler handler)
+                    if (scope.ResolveOptional(subscription.HandlerType) is not IDomainEventHandler handler)
                         throw new Exception(
                             "Integration event handler could not be resolved from dependency container or it does not implement IIntegrationEventHandler.");
 
-                    var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
+                    var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
 
                     await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [integrationEvent])!;
                 });

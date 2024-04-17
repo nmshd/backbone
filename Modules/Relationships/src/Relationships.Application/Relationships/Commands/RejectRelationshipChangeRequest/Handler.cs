@@ -2,7 +2,7 @@ using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Entities;
 using MediatR;
 
@@ -40,7 +40,7 @@ public class Handler : IRequestHandler<RejectRelationshipChangeRequestCommand, R
 
     private void PublishIntegrationEvent(RelationshipChange change)
     {
-        var evt = new RelationshipChangeCompletedIntegrationEvent(change);
+        var evt = new RelationshipChangeCompletedDomainEvent(change);
         _eventBus.Publish(evt);
     }
 }

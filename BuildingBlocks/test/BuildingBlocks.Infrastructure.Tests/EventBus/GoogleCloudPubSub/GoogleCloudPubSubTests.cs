@@ -31,9 +31,9 @@ public class GoogleCloudPubSubTests : IDisposable
     {
         _factory.Dispose();
 
-        TestEvent1IntegrationEventHandler1.Instances.Clear();
-        TestEvent1IntegrationEventHandler2.Instances.Clear();
-        TestEvent2IntegrationEventHandler.Instances.Clear();
+        TestEvent1DomainEventHandler1.Instances.Clear();
+        TestEvent1DomainEventHandler2.Instances.Clear();
+        TestEvent2DomainEventHandler.Instances.Clear();
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
@@ -44,11 +44,11 @@ public class GoogleCloudPubSubTests : IDisposable
         var subscriber = _factory.CreateEventBus();
         var publisher = _factory.CreateEventBus();
 
-        subscriber.Subscribe<TestEvent1IntegrationEvent, TestEvent1IntegrationEventHandler1>();
+        subscriber.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
 
-        publisher.Publish(new TestEvent1IntegrationEvent());
+        publisher.Publish(new TestEvent1DomainEvent());
 
-        TestEvent1IntegrationEventHandler1.ShouldEventuallyHaveOneTriggeredInstance();
+        TestEvent1DomainEventHandler1.ShouldEventuallyHaveOneTriggeredInstance();
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
@@ -59,13 +59,13 @@ public class GoogleCloudPubSubTests : IDisposable
         var subscriber = _factory.CreateEventBus();
         var publisher = _factory.CreateEventBus();
 
-        subscriber.Subscribe<TestEvent1IntegrationEvent, TestEvent1IntegrationEventHandler1>();
-        subscriber.Subscribe<TestEvent1IntegrationEvent, TestEvent1IntegrationEventHandler2>();
+        subscriber.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
+        subscriber.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler2>();
 
-        publisher.Publish(new TestEvent1IntegrationEvent());
+        publisher.Publish(new TestEvent1DomainEvent());
 
-        TestEvent1IntegrationEventHandler1.ShouldEventuallyHaveOneTriggeredInstance();
-        TestEvent1IntegrationEventHandler2.ShouldEventuallyHaveOneTriggeredInstance();
+        TestEvent1DomainEventHandler1.ShouldEventuallyHaveOneTriggeredInstance();
+        TestEvent1DomainEventHandler2.ShouldEventuallyHaveOneTriggeredInstance();
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
@@ -77,13 +77,13 @@ public class GoogleCloudPubSubTests : IDisposable
         var subscriber2 = _factory.CreateEventBus("subscription2");
         var publisher = _factory.CreateEventBus();
 
-        subscriber1.Subscribe<TestEvent1IntegrationEvent, TestEvent1IntegrationEventHandler1>();
-        subscriber2.Subscribe<TestEvent1IntegrationEvent, TestEvent1IntegrationEventHandler2>();
+        subscriber1.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
+        subscriber2.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler2>();
 
-        publisher.Publish(new TestEvent1IntegrationEvent());
+        publisher.Publish(new TestEvent1DomainEvent());
 
-        TestEvent1IntegrationEventHandler1.ShouldEventuallyHaveOneTriggeredInstance();
-        TestEvent1IntegrationEventHandler2.ShouldEventuallyHaveOneTriggeredInstance();
+        TestEvent1DomainEventHandler1.ShouldEventuallyHaveOneTriggeredInstance();
+        TestEvent1DomainEventHandler2.ShouldEventuallyHaveOneTriggeredInstance();
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
@@ -95,17 +95,17 @@ public class GoogleCloudPubSubTests : IDisposable
         var subscriber1B = _factory.CreateEventBus("subscription1");
         var publisher = _factory.CreateEventBus();
 
-        subscriber1A.Subscribe<TestEvent1IntegrationEvent, TestEvent1IntegrationEventHandler1>();
-        subscriber1B.Subscribe<TestEvent1IntegrationEvent, TestEvent1IntegrationEventHandler2>();
+        subscriber1A.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
+        subscriber1B.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler2>();
 
-        publisher.Publish(new TestEvent1IntegrationEvent());
+        publisher.Publish(new TestEvent1DomainEvent());
 
         await Task.Delay(5.Seconds()); // wait some time to make sure all subscribers were notified
 
         var numberOfTriggeredInstancesOfHandler1 =
-            TestEvent1IntegrationEventHandler1.Instances.Count(i => i.Triggered);
+            TestEvent1DomainEventHandler1.Instances.Count(i => i.Triggered);
         var numberOfTriggeredInstancesOfHandler2 =
-            TestEvent1IntegrationEventHandler2.Instances.Count(i => i.Triggered);
+            TestEvent1DomainEventHandler2.Instances.Count(i => i.Triggered);
 
         var totalNumberOfTriggeredInstances =
             numberOfTriggeredInstancesOfHandler1 + numberOfTriggeredInstancesOfHandler2;
@@ -121,19 +121,21 @@ public class GoogleCloudPubSubTests : IDisposable
         var subscriber1 = _factory.CreateEventBus();
         var publisher = _factory.CreateEventBus();
 
-        subscriber1.Subscribe<TestEvent1IntegrationEvent, TestEvent1IntegrationEventHandler1>();
-        subscriber1.Subscribe<TestEvent2IntegrationEvent, TestEvent2IntegrationEventHandler>();
+        subscriber1.Subscribe<TestEvent1DomainEvent, TestEvent1DomainEventHandler1>();
+        subscriber1.Subscribe<TestEvent2DomainEvent, TestEvent2DomainEventHandler>();
 
-        publisher.Publish(new TestEvent1IntegrationEvent());
+        publisher.Publish(new TestEvent1DomainEvent());
 
-        TestEvent1IntegrationEventHandler1.ShouldEventuallyHaveOneTriggeredInstance();
-        TestEvent1IntegrationEventHandler2.ShouldNotHaveAnyTriggeredInstance();
+        TestEvent1DomainEventHandler1.ShouldEventuallyHaveOneTriggeredInstance();
+        TestEvent1DomainEventHandler2.ShouldNotHaveAnyTriggeredInstance();
     }
 }
 
 public class EventBusFactory : IDisposable
 {
-    public record Instance(AutofacServiceProvider AutofacServiceProviders, EventBusGoogleCloudPubSub EventBusClient,
+    public record Instance(
+        AutofacServiceProvider AutofacServiceProviders,
+        EventBusGoogleCloudPubSub EventBusClient,
         DefaultGoogleCloudPubSubPersisterConnection PersisterConnection);
 
     public const string PROJECT_ID = "nbp-nmshd-bkb";
@@ -154,8 +156,8 @@ public class EventBusFactory : IDisposable
     public EventBusGoogleCloudPubSub CreateEventBus(string subscriptionNamePrefix = SUBSCRIPTION_NAME_PREFIX)
     {
         var builder = new ContainerBuilder();
-        builder.RegisterType<TestEvent1IntegrationEventHandler1>();
-        builder.RegisterType<TestEvent1IntegrationEventHandler2>();
+        builder.RegisterType<TestEvent1DomainEventHandler1>();
+        builder.RegisterType<TestEvent1DomainEventHandler2>();
 
         var autofacServiceProvider = new AutofacServiceProvider(builder.Build());
         var lifeTimeScope = autofacServiceProvider.GetRequiredService<ILifetimeScope>();
@@ -198,22 +200,22 @@ public class EventBusFactory : IDisposable
         CleanupSubscription(
             subscriberServiceApiClient,
             SubscriptionName.FromProjectSubscription(PROJECT_ID, "subscription1-TestEvent1")
-            );
+        );
 
         CleanupSubscription(
             subscriberServiceApiClient,
             SubscriptionName.FromProjectSubscription(PROJECT_ID, "subscription1-TestEvent2")
-            );
+        );
 
         CleanupSubscription(
             subscriberServiceApiClient,
             SubscriptionName.FromProjectSubscription(PROJECT_ID, "subscription2-TestEvent1")
-            );
+        );
 
         CleanupSubscription(
             subscriberServiceApiClient,
             SubscriptionName.FromProjectSubscription(PROJECT_ID, "subscription2-TestEvent2")
-            );
+        );
     }
 
     public void CleanupSubscription(SubscriberServiceApiClient subscriberServiceApiClient, SubscriptionName subscriptionName)

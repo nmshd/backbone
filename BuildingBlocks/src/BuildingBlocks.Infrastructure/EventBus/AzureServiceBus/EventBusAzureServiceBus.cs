@@ -3,7 +3,8 @@ using Autofac;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -49,7 +50,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         _processor.CloseAsync().GetAwaiter().GetResult();
     }
 
-    public async void Publish(IntegrationEvent @event)
+    public async void Publish(DomainEvent @event)
     {
         var eventName = @event.GetType().Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
         var jsonMessage = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
@@ -74,8 +75,8 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
     }
 
     public void Subscribe<T, TH>()
-        where T : IntegrationEvent
-        where TH : IIntegrationEventHandler<T>
+        where T : DomainEvent
+        where TH : IDomainEventHandler<T>
     {
         var eventName = typeof(T).Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
 
@@ -150,12 +151,12 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         foreach (var subscription in subscriptions)
         {
             var eventType = subscription.EventType;
-            var integrationEvent = (IntegrationEvent)JsonConvert.DeserializeObject(message, eventType,
+            var integrationEvent = (DomainEvent)JsonConvert.DeserializeObject(message, eventType,
                 new JsonSerializerSettings
                 {
                     ContractResolver = new ContractResolverWithPrivates()
                 })!;
-            var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
+            var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
 
             try
             {
@@ -166,7 +167,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
                 {
                     await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
 
-                    if (scope.ResolveOptional(subscription.HandlerType) is not IIntegrationEventHandler handler)
+                    if (scope.ResolveOptional(subscription.HandlerType) is not IDomainEventHandler handler)
                         throw new Exception(
                             "Integration event handler could not be resolved from dependency container or it does not implement IIntegrationEventHandler.");
 

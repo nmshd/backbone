@@ -40,9 +40,9 @@ public static class IServiceCollectionExtensions
     private static IEnumerable<Type> GetAllIntegrationEventHandlers()
     {
         var integrationEventHandlerTypes = from t in Assembly.GetExecutingAssembly().GetTypes()
-                                           from i in t.GetInterfaces()
-                                           where t.IsClass && !t.IsAbstract && i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IIntegrationEventHandler<>)
-                                           select t;
+            from i in t.GetInterfaces()
+            where t.IsClass && !t.IsAbstract && i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>)
+            select t;
 
         return integrationEventHandlerTypes;
     }

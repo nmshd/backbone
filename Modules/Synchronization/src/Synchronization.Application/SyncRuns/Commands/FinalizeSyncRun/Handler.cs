@@ -150,6 +150,6 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
     private void PublishDatawalletModifiedIntegrationEvent()
     {
-        _eventBus.Publish(new DatawalletModifiedIntegrationEvent(_activeIdentity, _activeDevice));
+        _eventBus.Publish(new DatawalletModifiedDomainEvent(_activeIdentity, _activeDevice));
     }
 }

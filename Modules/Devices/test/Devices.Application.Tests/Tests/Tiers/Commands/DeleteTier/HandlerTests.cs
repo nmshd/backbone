@@ -1,9 +1,9 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
@@ -37,7 +37,7 @@ public class HandlerTests
         await _handler.Handle(new DeleteTierCommand(tier.Id), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => _eventBus.Publish(A<TierDeletedIntegrationEvent>._)).MustHaveHappened();
+        A.CallTo(() => _eventBus.Publish(A<TierDeletedDomainEvent>._)).MustHaveHappened();
         A.CallTo(() => _tiersRepository.Remove(tier)).MustHaveHappenedOnceExactly();
     }
 

@@ -2,7 +2,7 @@ using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Tokens.Application.IntegrationEvents;
+using Backbone.Modules.Tokens.Domain.DomainEvents;
 using Backbone.Modules.Tokens.Domain.Entities;
 using MediatR;
 
@@ -36,7 +36,7 @@ public class Handler : IRequestHandler<CreateTokenCommand, CreateTokenResponse>
 
     private void PublishIntegrationEvent(Token newToken)
     {
-        var evt = new TokenCreatedIntegrationEvent(newToken);
+        var evt = new TokenCreatedDomainEvent(newToken);
         _eventBus.Publish(evt);
     }
 }

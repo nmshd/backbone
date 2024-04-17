@@ -141,6 +141,6 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
     private void PublishIntegrationEvent()
     {
-        _eventBus.Publish(new DatawalletModifiedIntegrationEvent(_activeIdentity, _activeDevice));
+        _eventBus.Publish(new DatawalletModifiedDomainEvent(_activeIdentity, _activeDevice));
     }
 }

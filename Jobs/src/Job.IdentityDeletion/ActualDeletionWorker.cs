@@ -4,7 +4,7 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using CSharpFunctionalExtensions;
 using MediatR;
@@ -85,7 +85,7 @@ public class ActualDeletionWorker : IHostedService
 
         foreach (var relationship in relationships)
         {
-            _eventBus.Publish(new PeerIdentityDeletedIntegrationEvent(relationship.Id, identityAddress));
+            _eventBus.Publish(new PeerIdentityDeletedDomainEvent(relationship.Id, identityAddress));
         }
     }
 

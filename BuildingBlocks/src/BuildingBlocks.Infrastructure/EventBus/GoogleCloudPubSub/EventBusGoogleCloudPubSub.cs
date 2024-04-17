@@ -1,7 +1,8 @@
 using System.Text.RegularExpressions;
 using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
@@ -44,7 +45,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         _connection.Dispose();
     }
 
-    public async void Publish(IntegrationEvent @event)
+    public async void Publish(DomainEvent @event)
     {
         var eventName = @event.GetType().Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
 
@@ -69,8 +70,8 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     }
 
     public void Subscribe<T, TH>()
-        where T : IntegrationEvent
-        where TH : IIntegrationEventHandler<T>
+        where T : DomainEvent
+        where TH : IDomainEventHandler<T>
     {
         var eventName = RemoveIntegrationEventSuffix(typeof(T).Name);
 
@@ -124,7 +125,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
                 new JsonSerializerSettings
                 {
                     ContractResolver = new ContractResolverWithPrivates()
-                }) as IntegrationEvent)!;
+                }) as DomainEvent)!;
 
             var policy = EventBusRetryPolicyFactory.Create(
                 _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex));
@@ -133,7 +134,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
             {
                 await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
 
-                if (scope.ResolveOptional(subscription.HandlerType) is not IIntegrationEventHandler handler)
+                if (scope.ResolveOptional(subscription.HandlerType) is not IDomainEventHandler handler)
                     throw new Exception(
                         "Integration event handler could not be resolved from dependency container or it does not implement IIntegrationEventHandler.");
 

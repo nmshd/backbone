@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
 using FluentAssertions;
@@ -86,13 +86,13 @@ public class HandlerTests
 
         // Assert
         A.CallTo(() => mockEventBus.Publish(
-            A<TierOfIdentityChangedIntegrationEvent>.That.Matches(e =>
+            A<TierOfIdentityChangedDomainEvent>.That.Matches(e =>
                 e.IdentityAddress == activeIdentity.Address &&
                 e.OldTierId == "TIR00000000000000001"))
         ).MustHaveHappenedOnceExactly();
 
         A.CallTo(() => mockEventBus.Publish(
-            A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(e =>
+            A<IdentityDeletionProcessStatusChangedDomainEvent>.That.Matches(e =>
                 e.Address == activeIdentity.Address &&
                 e.DeletionProcessId == response.Id))
         ).MustHaveHappenedOnceExactly();
