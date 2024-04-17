@@ -15,10 +15,10 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                  ALTER TABLE [Relationships].[RelationshipChanges] DROP CONSTRAINT [FK_RelationshipChanges_Relationships_RelationshipId]
                  GO
                  
+                 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[AdminUi].[RelationshipOverviews]') AND type in (N'V'))
                  DROP VIEW [AdminUi].[RelationshipOverviews]
                  GO
                  
-                 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Relationships].[RelationshipChanges]') AND type in (N'U'))
                  DROP TABLE [Relationships].[RelationshipChanges]
                  GO
             """);
