@@ -1,11 +1,9 @@
 using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
-using Backbone.Modules.Synchronization.Application.Identities;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -39,7 +37,8 @@ public static class IServiceCollectionExtensions
 
     private static IEnumerable<Type> GetAllIntegrationEventHandlers()
     {
-        var integrationEventHandlerTypes = from t in Assembly.GetExecutingAssembly().GetTypes()
+        var integrationEventHandlerTypes =
+            from t in Assembly.GetExecutingAssembly().GetTypes()
             from i in t.GetInterfaces()
             where t.IsClass && !t.IsAbstract && i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>)
             select t;
