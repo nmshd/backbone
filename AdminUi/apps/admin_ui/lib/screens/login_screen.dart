@@ -106,6 +106,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     await GetIt.I.unregisterIfRegistered<AdminApiClient>();
     GetIt.I.registerSingleton(await AdminApiClient.create(baseUrl: baseUrl, apiKey: apiKey));
-    if (mounted) context.go('/dashboard');
+    if (mounted) context.go('/identities');
   }
 }
