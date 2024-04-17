@@ -256,6 +256,7 @@ DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Relationships TO challenges, sync
 DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Files TO challenges, synchronization, devices, messages, tokens, relationships, quotas
 DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Quotas TO challenges, synchronization, devices, messages, tokens, relationships, files
 
+GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::AdminUi TO relationships /* we temporarily grant this permission because it is required by relationships in order to delete the AdminUi.RelationshipOverviews view*/
 GRANT SELECT, REFERENCES ON SCHEMA::Relationships TO messages
 GRANT SELECT, REFERENCES ON SCHEMA::Challenges TO devices
 GRANT SELECT ON SCHEMA::Messages TO quotas
