@@ -3,12 +3,12 @@
 namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipReactivated;
 public class RelationshipReactivatedIntegrationEvent : IntegrationEvent
 {
-    public RelationshipReactivatedIntegrationEvent(string relationshipId, string partner) : base($"{relationshipId}/Reactivate")
+    public RelationshipReactivatedIntegrationEvent(string relationshipId, string peer) : base($"{relationshipId}/Reactivate")
     {
         RelationshipId = relationshipId;
-        Partner = partner;
+        Peer = peer;
     }
 
     public string RelationshipId { get; }
-    public string Partner { get; }
+    public string Peer { get; }
 }
