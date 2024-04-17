@@ -11,8 +11,16 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "RelationshipChanges");
+            migrationBuilder.Sql("""
+                 ALTER TABLE [Relationships].[RelationshipChanges] DROP CONSTRAINT [FK_RelationshipChanges_Relationships_RelationshipId]
+                 GO
+                 
+                 DROP VIEW [AdminUi].[RelationshipOverviews]
+                 GO
+                 
+                 DROP TABLE [Relationships].[RelationshipChanges]
+                 GO
+            """);
 
             migrationBuilder.AddColumn<byte[]>(
                 name: "AcceptanceContent",

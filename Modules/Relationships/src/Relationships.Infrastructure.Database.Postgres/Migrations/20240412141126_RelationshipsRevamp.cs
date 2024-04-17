@@ -11,8 +11,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "RelationshipChanges");
+            migrationBuilder.Sql("DROP TABLE \"Relationships\".\"RelationshipChanges\" CASCADE");
 
             migrationBuilder.AddColumn<byte[]>(
                 name: "AcceptanceContent",
