@@ -15,19 +15,19 @@ class _TiersOverviewListState extends State<TiersOverviewList> {
   final TextEditingController _tierNameController = TextEditingController();
 
   late ScrollController _scrollController;
-  late List<TierOverview> tier;
-  late String errorMessage;
+  late List<TierOverview> _tiers;
+  late String _errorMessage;
 
-  bool isLoading = false;
+  bool _isLoading = false;
 
-  double boxWidth = 700;
+  double _boxWidth = 700;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    errorMessage = '';
-    tier = [];
+    _errorMessage = '';
+    _tiers = [];
     loadTiers();
   }
 
@@ -45,7 +45,7 @@ class _TiersOverviewListState extends State<TiersOverviewList> {
         children: [
           Container(
             height: 100,
-            width: boxWidth,
+            width: _boxWidth,
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.primary,
               boxShadow: const [
@@ -75,7 +75,7 @@ class _TiersOverviewListState extends State<TiersOverviewList> {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 8),
             child: SizedBox(
-              width: boxWidth,
+              width: _boxWidth,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -94,13 +94,13 @@ class _TiersOverviewListState extends State<TiersOverviewList> {
               ),
             ),
           ),
-          if (isLoading) const CircularProgressIndicator(),
-          if (!isLoading)
+          if (_isLoading) const CircularProgressIndicator(),
+          if (!_isLoading)
             Expanded(
               child: Card(
                 elevation: 1,
                 child: SizedBox(
-                  width: boxWidth,
+                  width: _boxWidth,
                   child: DataTable2(
                     isVerticalScrollBarVisible: true,
                     scrollController: _scrollController,
@@ -109,7 +109,7 @@ class _TiersOverviewListState extends State<TiersOverviewList> {
                       DataColumn2(label: Text('Name'), size: ColumnSize.L),
                       DataColumn2(label: Text('Number of Identities'), size: ColumnSize.L),
                     ],
-                    rows: tier
+                    rows: _tiers
                         .map(
                           (tier) => DataRow2(
                             onLongPress: () {},
@@ -147,11 +147,11 @@ class _TiersOverviewListState extends State<TiersOverviewList> {
                         labelText: 'Name',
                       ),
                     ),
-                    if (errorMessage.isNotEmpty)
+                    if (_errorMessage.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(top: 8),
                         child: Text(
-                          errorMessage,
+                          _errorMessage,
                           style: TextStyle(color: Theme.of(context).colorScheme.error),
                         ),
                       ),
@@ -170,16 +170,16 @@ class _TiersOverviewListState extends State<TiersOverviewList> {
                             if (response.hasData) {
                               loadTiers();
                               Navigator.of(dialogContext).pop();
-                              setState(() => isLoading = true);
+                              setState(() => _isLoading = true);
                               _showSuccessSnackbar('Tier was created successfully.');
                             } else {
-                              setStateDialog(() => errorMessage = response.error.message);
+                              setStateDialog(() => _errorMessage = response.error.message);
                             }
                           });
                         }
-                      }).whenComplete(() => isLoading = false);
+                      }).whenComplete(() => _isLoading = false);
                     } else {
-                      setStateDialog(() => errorMessage = 'Name cannot be empty.');
+                      setStateDialog(() => _errorMessage = 'Name cannot be empty.');
                     }
                   },
                 ),
@@ -187,7 +187,7 @@ class _TiersOverviewListState extends State<TiersOverviewList> {
                   child: const Text('Cancel'),
                   onPressed: () {
                     _tierNameController.text = '';
-                    errorMessage = '';
+                    _errorMessage = '';
                     Navigator.of(dialogContext).pop();
                   },
                 ),
@@ -220,7 +220,7 @@ class _TiersOverviewListState extends State<TiersOverviewList> {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
 
     setState(() {
-      tier = response.data;
+      _tiers = response.data;
     });
   }
 }
