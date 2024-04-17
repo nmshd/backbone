@@ -16,30 +16,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
+class _HomeScreenState extends State<HomeScreen> {
   bool extended = false;
-
-  late AnimationController _controller;
-  late Animation<double> _widthAnimation;
-  final maxWidth = 300.0;
-  final minWidth = 64.0;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      reverseDuration: const Duration(milliseconds: 300),
-      vsync: this,
-    )..addStatusListener((status) {
-        if (status == AnimationStatus.completed) {
-          extended = true;
-        } else if (status == AnimationStatus.dismissed) {
-          extended = false;
-        }
-      });
-    _widthAnimation = Tween<double>(begin: minWidth, end: maxWidth).animate(_controller);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +26,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         title: const AppTitle(),
         leading: IconButton(
           icon: const Icon(Icons.menu),
-          onPressed: toggleDrawer,
+          onPressed: () {
+            setState(() {
+              extended = !extended;
+            });
+          },
         ),
         actions: [
           SizedBox(
@@ -69,27 +51,25 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
         ],
       ),
       body: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AnimatedBuilder(
-            animation: _controller,
-            builder: (context, child) {
-              return Padding(
-                padding: const EdgeInsets.only(top: 8, right: 8, bottom: 8),
-                child: SizedBox(
-                  width: _widthAnimation.value,
-                  height: 165,
-                  child: NavigationDrawer(
-                    elevation: 0,
-                    backgroundColor: Theme.of(context).colorScheme.outline.withAlpha(60),
-                    children: [
-                      Gaps.h8,
-                      buildNavigationTile(context, 'Identities', Icons.account_circle_sharp, isSelected: true),
-                      buildNavigationTile(context, 'Tiers', Icons.cable, index: 1),
-                      buildNavigationTile(context, 'Clients', Icons.layers, index: 2),
-                    ],
-                  ),
-                ),
+          NavigationRail(
+            extended: extended,
+            destinations: const [
+              NavigationRailDestination(icon: Icon(Icons.account_circle_sharp), label: Text('Identities')),
+              NavigationRailDestination(icon: Icon(Icons.cable), label: Text('Tiers')),
+              NavigationRailDestination(icon: Icon(Icons.layers), label: Text('Clients')),
+            ],
+            selectedIndex: _selectedIndex,
+            onDestinationSelected: (int index) {
+              if (index == _selectedIndex) return;
+
+              context.go(
+                switch (index) {
+                  0 => '/identities',
+                  1 => '/tiers',
+                  2 => '/clients',
+                  _ => throw Exception(),
+                },
               );
             },
           ),
@@ -107,80 +87,11 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
     throw Exception();
   }
 
-  void navigate(int index) {
-    switch (index) {
-      case 0:
-        context.go('/identities');
-      case 1:
-        context.go('/tiers');
-      case 2:
-        context.go('/clients');
-      default:
-        throw Exception('Invalid index');
-    }
-  }
-
-  void toggleDrawer() {
-    if (extended) {
-      _controller.reverse();
-    } else {
-      _controller.forward();
-    }
-  }
-
   Future<void> _logout() async {
     final sp = await SharedPreferences.getInstance();
     await sp.remove('api_key');
     await GetIt.I.unregisterIfRegistered<AdminApiClient>();
 
     if (mounted) context.go('/login');
-  }
-
-  Widget buildNavigationTile(BuildContext context, String title, IconData icon, {int index = 0, bool isSelected = false}) {
-    final isSelected = _selectedIndex == index;
-
-    final borderRadius = _widthAnimation.value > minWidth ? BorderRadius.circular(40) : BorderRadius.circular(100);
-
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-      child: InkWell(
-        onTap: () => navigate(index),
-        splashColor: Theme.of(context).colorScheme.secondaryContainer.withOpacity(0.3),
-        borderRadius: borderRadius,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: isSelected ? Theme.of(context).colorScheme.secondaryContainer : Colors.transparent,
-            borderRadius: borderRadius,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Icon(
-                    icon,
-                    size: 30,
-                    color: isSelected ? Theme.of(context).colorScheme.onSecondaryContainer : Theme.of(context).colorScheme.onSecondaryContainer,
-                  ),
-                ),
-                if (_widthAnimation.value == maxWidth) ...[
-                  Gaps.w16,
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: isSelected ? Theme.of(context).colorScheme.onSecondaryContainer : Theme.of(context).colorScheme.onSurface,
-                      fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                    ),
-                  ),
-                ] else
-                  Container(),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
   }
 }
