@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 
@@ -16,6 +17,15 @@ public class Relationship
         Status = default;
     }
 
+    private Relationship(RelationshipId id, IdentityAddress from, IdentityAddress to, DateTime createdAt, RelationshipStatus status)
+    {
+        Id = id;
+        From = from;
+        To = to;
+        CreatedAt = createdAt;
+        Status = status;
+    }
+
     public RelationshipId Id { get; }
 
     public IdentityAddress From { get; }
@@ -24,6 +34,20 @@ public class Relationship
     public DateTime CreatedAt { get; }
 
     public RelationshipStatus Status { get; }
+
+    public void EnsureSendingMessagesIsAllowed(int numberOfUnreceivedMessagesFromActiveIdentity, int maxNumberOfUnreceivedMessagesFromOneSender)
+    {
+        if (Status != RelationshipStatus.Active)
+            throw new DomainException(DomainErrors.RelationshipToRecipientNotActive(To));
+
+        if (numberOfUnreceivedMessagesFromActiveIdentity >= maxNumberOfUnreceivedMessagesFromOneSender)
+            throw new DomainException(DomainErrors.MaxNumberOfUnreceivedMessagesReached(To));
+    }
+
+    public static Relationship LoadForTesting(RelationshipId id, IdentityAddress from, IdentityAddress to, DateTime createdAt, RelationshipStatus status)
+    {
+        return new Relationship(id, from, to, createdAt, status);
+    }
 }
 
 public enum RelationshipStatus
@@ -32,6 +56,5 @@ public enum RelationshipStatus
     Active = 20,
     Rejected = 30,
     Revoked = 40,
-    Terminating = 50,
-    Terminated = 60
+    Terminated = 50
 }
