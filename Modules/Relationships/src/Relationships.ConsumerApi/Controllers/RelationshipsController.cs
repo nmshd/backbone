@@ -8,6 +8,7 @@ using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRe
 using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.TerminateRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.GetRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
@@ -96,6 +97,16 @@ public class RelationshipsController : ApiControllerBase
     {
         var response = await _mediator.Send(new RevokeRelationshipCommand { RelationshipId = id }, cancellationToken);
         return Ok(response);
+    }
+
+    [HttpPut("{id}/Terminate")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<TerminateRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> TerminateRelationship([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new TerminateRelationshipCommand() { RelationshipId = id }, cancellationToken);
+        return NoContent();
     }
 }
 
