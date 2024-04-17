@@ -28,11 +28,11 @@ public class RelationshipReactivatedEventHandler
     private async Task CreateExternalEvents(RelationshipReactivatedIntegrationEvent @event)
     {
 #pragma warning disable IDE0037
-        var payload = new { Id = @event.RelationshipId };
+        var payload = new { RelationshipId = @event.RelationshipId };
 #pragma warning restore IDE0037
         try
         {
-            var externalEvent = await _dbContext.CreateExternalEvent(IdentityAddress.Parse(@event.Partner), ExternalEventType.RelationshipReactivationRequested, payload);
+            var externalEvent = await _dbContext.CreateExternalEvent(IdentityAddress.Parse(@event.Peer), ExternalEventType.RelationshipReactivationRequested, payload);
             _eventBus.Publish(new ExternalEventCreatedIntegrationEvent(externalEvent));
         }
         catch (Exception ex)
