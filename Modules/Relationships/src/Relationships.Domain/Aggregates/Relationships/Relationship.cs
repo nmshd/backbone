@@ -23,10 +23,7 @@ public class Relationship
     public Relationship(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationContent, List<Relationship> existingRelationships)
     {
         EnsureTargetIsNotSelf(relationshipTemplate, activeIdentity);
-        EnsureNoActiveRelationshipToTargetExists(relationshipTemplate.CreatedBy, existingRelationships);
-
-        var listOfStatusesRelationshipCanBeInWhenCreatingNewRelationship = new List<RelationshipStatus> { RelationshipStatus.Rejected, RelationshipStatus.Revoked };
-        EnsureStatus(listOfStatusesRelationshipCanBeInWhenCreatingNewRelationship, existingRelationships);
+        EnsureNoOtherRelationshipToPeerExists(relationshipTemplate.CreatedBy, existingRelationships);
 
         Id = RelationshipId.New();
         RelationshipTemplateId = relationshipTemplate.Id;
@@ -68,9 +65,9 @@ public class Relationship
             throw new DomainException(DomainErrors.CannotSendRelationshipRequestToYourself());
     }
 
-    private static void EnsureNoActiveRelationshipToTargetExists(IdentityAddress target, List<Relationship> existingRelationships)
+    private static void EnsureNoOtherRelationshipToPeerExists(IdentityAddress target, IEnumerable<Relationship> existingRelationshipsToPeer)
     {
-        if (existingRelationships.Any(r => r.Status == RelationshipStatus.Active))
+        if (existingRelationshipsToPeer.Any(r => r.Status is RelationshipStatus.Active or RelationshipStatus.Pending or RelationshipStatus.Terminated))
             throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
     }
 
@@ -125,13 +122,6 @@ public class Relationship
     {
         if (Status != status)
             throw new DomainException(DomainErrors.RelationshipIsNotInCorrectStatus(status));
-    }
-
-    private void EnsureStatus(List<RelationshipStatus> statuses, List<Relationship> existingRelationships)
-    {
-        foreach (var relationship in existingRelationships)
-            if (!statuses.Contains(relationship.Status))
-                throw new DomainException(DomainErrors.RelationshipIsNotInAnyOfCorrectStatuses(statuses));
     }
 
     public void Revoke(IdentityAddress activeIdentity, DeviceId activeDevice)

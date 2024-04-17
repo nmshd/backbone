@@ -35,16 +35,9 @@ public static class DomainErrors
             $"The relationship has to be in status '{expectedStatus}' to perform this action.");
     }
 
-    public static DomainError RelationshipIsNotInAnyOfCorrectStatuses(List<RelationshipStatus> expectedStatuses)
-    {
-        var expectedStatusesString = string.Join(", ", expectedStatuses);
-        return new DomainError("error.platform.validation.relationshipRequest.relationshipIsNotInAnyOfCorrectStatuses",
-            $"The relationship has to be in one of the following statuses to perform this action: '{expectedStatusesString}'.");
-    }
-
     public static DomainError RelationshipToTargetAlreadyExists(string targetIdentity)
     {
         return new DomainError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists",
-            $"A relationship to '{targetIdentity}' already exists.");
+            $"A relationship to '{targetIdentity}' already exists. If the relationship is terminated, you can reactivate it.");
     }
 }
