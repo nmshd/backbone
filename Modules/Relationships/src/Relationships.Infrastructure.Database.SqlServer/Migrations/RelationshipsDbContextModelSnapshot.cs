@@ -8,15 +8,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Relationships.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(RelationshipsDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    partial class RelationshipsDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("Relationships")
                 .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -61,7 +62,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RelationshipTemplates");
+                    b.ToTable("RelationshipTemplates", "Relationships");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplateAllocation", b =>
@@ -100,7 +101,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("RelationshipTemplateId", "AllocatedBy");
 
-                    b.ToTable("RelationshipTemplateAllocations", (string)null);
+                    b.ToTable("RelationshipTemplateAllocations", "Relationships");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship", b =>
@@ -152,7 +153,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("To");
 
-                    b.ToTable("Relationships");
+                    b.ToTable("Relationships", "Relationships");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.RelationshipAuditLogEntry", b =>
@@ -199,7 +200,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("RelationshipId");
 
-                    b.ToTable("RelationshipAuditLog", (string)null);
+                    b.ToTable("RelationshipAuditLog", "Relationships");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplateAllocation", b =>

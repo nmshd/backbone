@@ -8,7 +8,7 @@ public class TierOverviewEntityTypeConfiguration : IEntityTypeConfiguration<Tier
 {
     public void Configure(EntityTypeBuilder<TierOverview> builder)
     {
-        builder.ToView("TierOverviews");
+        builder.ToView("TierOverviews", "AdminUi");
         builder.HasNoKey();
     }
 }

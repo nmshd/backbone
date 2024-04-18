@@ -12,6 +12,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
+                schema: "Devices",
                 table: "Tier",
                 type: "character varying(30)",
                 maxLength: 30,
@@ -28,6 +29,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
+                schema: "Devices",
                 table: "Tier",
                 type: "character(30)",
                 unicode: false,
