@@ -24,12 +24,6 @@ public class RelationshipsDbContext : AbstractDbContextBase
     public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; } = null!;
     public DbSet<RelationshipTemplateAllocation> RelationshipTemplateAllocations { get; set; } = null!;
 
-    // protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    // {
-    //     base.OnConfiguring(optionsBuilder);
-    //     optionsBuilder.UseSqlServer();
-    // }
-
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         base.ConfigureConventions(configurationBuilder);
@@ -44,6 +38,8 @@ public class RelationshipsDbContext : AbstractDbContextBase
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.HasDefaultSchema("Relationships");
 
         builder.ApplyConfigurationsFromAssembly(typeof(RelationshipsDbContext).Assembly);
     }

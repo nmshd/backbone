@@ -12,6 +12,7 @@ public partial class IdentitiesBasicTier : Migration
     {
         migrationBuilder.AddColumn<string>(
             name: "TierId",
+            schema: "Devices",
             table: "Identities",
             type: "character(20)",
             unicode: false,
@@ -21,19 +22,23 @@ public partial class IdentitiesBasicTier : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_Tier_Name",
+            schema: "Devices",
             table: "Tier",
             column: "Name",
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_Identities_TierId",
+            schema: "Devices",
             table: "Identities",
             column: "TierId");
 
         migrationBuilder.AddForeignKey(
             name: "FK_Identities_Tier_TierId",
+            schema: "Devices",
             table: "Identities",
             column: "TierId",
+            principalSchema: "Devices",
             principalTable: "Tier",
             principalColumn: "Id",
             onDelete: ReferentialAction.Restrict);
@@ -44,18 +49,22 @@ public partial class IdentitiesBasicTier : Migration
     {
         migrationBuilder.DropForeignKey(
             name: "FK_Identities_Tier_TierId",
+            schema: "Devices",
             table: "Identities");
 
         migrationBuilder.DropIndex(
             name: "IX_Tier_Name",
+            schema: "Devices",
             table: "Tier");
 
         migrationBuilder.DropIndex(
             name: "IX_Identities_TierId",
+            schema: "Devices",
             table: "Identities");
 
         migrationBuilder.DropColumn(
             name: "TierId",
+            schema: "Devices",
             table: "Identities");
     }
 }

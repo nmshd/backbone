@@ -19,7 +19,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
                    WHERE  table_schema = 'Relationships'
                    AND    table_name = 'RelationshipChanges'
                 ) THEN
-                   CREATE VIEW "RelationshipOverviews" AS
+                   CREATE VIEW "AdminUi"."RelationshipOverviews" AS
         		        SELECT
         			        "Relationships"."From" AS "From",
         			        "Relationships"."To" AS "To",
@@ -47,7 +47,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(""" DROP VIEW "RelationshipOverviews" """);
+            migrationBuilder.Sql(""" DROP VIEW "AdminUi"."RelationshipOverviews" """);
         }
     }
 }

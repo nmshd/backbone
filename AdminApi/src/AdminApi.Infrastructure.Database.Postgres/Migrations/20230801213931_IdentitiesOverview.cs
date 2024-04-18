@@ -11,7 +11,7 @@ public partial class IdentitiesOverview : Migration
     protected override void Up(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.Sql("""
-            CREATE OR REPLACE VIEW "IdentityOverviews" AS
+            CREATE OR REPLACE VIEW "AdminUi"."IdentityOverviews" AS
                 SELECT IDENTITIES."Address",
                 IDENTITIES."CreatedAt",
                 USERS."LastLoginAt",
@@ -38,6 +38,6 @@ public partial class IdentitiesOverview : Migration
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.Sql(""" DROP VIEW "IdentityOverviews" """);
+        migrationBuilder.Sql(""" DROP VIEW "AdminUi"."IdentityOverviews" """);
     }
 }
