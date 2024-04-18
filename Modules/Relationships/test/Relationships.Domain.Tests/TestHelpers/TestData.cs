@@ -52,6 +52,7 @@ public static class TestData
         relationship.Terminate(IDENTITY_1, DEVICE_1);
         return relationship;
     }
+    
     public static Relationship CreateTerminatedRelationshipWithReactivationRequest()
     {
         var relationship = CreateTerminatedRelationship();
