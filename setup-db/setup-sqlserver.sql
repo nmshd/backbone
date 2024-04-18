@@ -155,7 +155,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'challenges')
 BEGIN
-	CREATE USER challenges FOR LOGIN challenges	WITH DEFAULT_SCHEMA = Challenges
+	CREATE USER challenges FOR LOGIN challenges
 	PRINT 'User "challenges" created' ;
 END
 
@@ -163,7 +163,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'devices')
 BEGIN
-	CREATE USER devices FOR LOGIN devices WITH DEFAULT_SCHEMA = Devices
+	CREATE USER devices FOR LOGIN devices
 	PRINT 'User "devices" created' ;
 END
 
@@ -171,7 +171,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'messages')
 BEGIN
-	CREATE USER messages FOR LOGIN messages	WITH DEFAULT_SCHEMA = Messages
+	CREATE USER messages FOR LOGIN messages
 	PRINT 'User "messages" created' ;
 END
 
@@ -179,7 +179,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'synchronization')
 BEGIN
-	CREATE USER synchronization FOR LOGIN synchronization	WITH DEFAULT_SCHEMA = Synchronization
+	CREATE USER synchronization FOR LOGIN synchronization
 	PRINT 'User "synchronization" created' ;
 END
 
@@ -187,7 +187,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'tokens')
 BEGIN
-	CREATE USER tokens FOR LOGIN tokens	WITH DEFAULT_SCHEMA = Tokens
+	CREATE USER tokens FOR LOGIN tokens
 	PRINT 'User "tokens" created' ;
 END
 
@@ -195,7 +195,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'files')
 BEGIN
-	CREATE USER files FOR LOGIN files	WITH DEFAULT_SCHEMA = Files
+	CREATE USER files FOR LOGIN files
 	PRINT 'User "files" created' ;
 END
 
@@ -203,7 +203,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'relationships')
 BEGIN
-	CREATE USER relationships FOR LOGIN relationships	WITH DEFAULT_SCHEMA = Relationships
+	CREATE USER relationships FOR LOGIN relationships
 	PRINT 'User "relationships" created' ;
 END
 
@@ -212,7 +212,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'quotas')
 BEGIN
-	CREATE USER quotas FOR LOGIN quotas	WITH DEFAULT_SCHEMA = Quotas
+	CREATE USER quotas FOR LOGIN quotas
 	PRINT 'User "Quotas" created' ;
 END
 
@@ -220,7 +220,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'adminUi')
 BEGIN
-	CREATE USER adminUi FOR LOGIN adminUi WITH DEFAULT_SCHEMA = AdminUi
+	CREATE USER adminUi FOR LOGIN adminUi
 	PRINT 'User "adminUi" created' ;
 END
 
