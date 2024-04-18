@@ -54,10 +54,10 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
         {
             var matches = Regex.Matches(stringValue, pattern, RegexOptions.IgnoreCase).First().Groups;
 
-            var givenChecksum = Convert.FromHexString(matches[3].Value).Single();
-            var correctChecksum = Convert.FromHexString(CalculateChecksum(stringValue[..^2])).Single();
+            var givenChecksum = matches[3].Value;
+            var calculatedChecksum = CalculateChecksum(stringValue[..^2]);
 
-            var checksumIsValid = givenChecksum == correctChecksum;
+            var checksumIsValid = givenChecksum == calculatedChecksum;
 
             return lengthIsValid && checksumIsValid;
         }
