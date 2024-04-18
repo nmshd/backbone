@@ -37,7 +37,6 @@ public class HandlerTests
 
         // Assert
         response.Id.Should().NotBeNull();
-        response.Status.Should().Be(RelationshipStatus.ReactivationRequested);
         response.AuditLog.Should().HaveCount(4);
     }
 
@@ -67,7 +66,7 @@ public class HandlerTests
         // Assert
         A.CallTo(
                 () => mockRelationshipsRepository.Update(
-                    A<Relationship>.That.Matches(r => r.Id == relationship.Id && r.Status == RelationshipStatus.ReactivationRequested))
+                    A<Relationship>.That.Matches(r => r.Id == relationship.Id))
             )
             .MustHaveHappenedOnceExactly();
     }

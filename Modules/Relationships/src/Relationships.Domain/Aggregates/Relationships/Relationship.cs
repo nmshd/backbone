@@ -155,9 +155,20 @@ public class Relationship
         );
         AuditLog.Add(auditLogEntry);
     }
+    private void EnsureThereIsNotAlreadyAnOpenReactivationRequest()
+    {
+        var auditLogEntry = AuditLog.Last();
+
+        if (auditLogEntry.OldStatus == RelationshipStatus.Terminated &&
+              auditLogEntry.NewStatus == RelationshipStatus.Terminated &&
+              auditLogEntry.Reason == RelationshipAuditLogEntryReason.ReactivationRequested)
+            throw new DomainException(DomainErrors.CannotReactivateAnAlreadyReactivatedRelationship());
+    }
 
     public void Reactivate(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
+        EnsureThereIsNotAlreadyAnOpenReactivationRequest();
+
         EnsureStatus(RelationshipStatus.Terminated);
 
         var auditLogEntry = new RelationshipAuditLogEntry(
