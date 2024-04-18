@@ -7,7 +7,7 @@ using Xunit;
 using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relationships;
-public class RejectReactivationRelationshipTests
+public class RejectRelationshipReactivationTests
 {
     [Fact]
     public void RejectReactivation_leaves_relationship_in_status_terminated()

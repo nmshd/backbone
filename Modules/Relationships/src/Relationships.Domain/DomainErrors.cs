@@ -39,7 +39,6 @@ public static class DomainErrors
     {
         return new DomainError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists",
             $"A relationship to '{targetIdentity}' already exists. If the relationship is terminated, you can reactivate it.");
-        return new DomainError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists", $"A relationship to '{targetIdentity}' already exists.");
     }
 
     public static DomainError CannotRejectRelationshipReactivationRequestAddressedToSomeoneElse()

@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 
 namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipReactivationCompleted;
-internal class RelationshipReactivationCompletedIntegrationEvent : IntegrationEvent
+public class RelationshipReactivationCompletedIntegrationEvent : IntegrationEvent
 {
-    public RelationshipReactivationCompletedIntegrationEvent(string relationshipId, string peer) : base($"{relationshipId}/RelationshipReactivation/Completed")
+    public RelationshipReactivationCompletedIntegrationEvent(string relationshipId, string peer) : base($"{relationshipId}/ReactivationCompleted")
     {
         RelationshipId = relationshipId;
         Peer = peer;
