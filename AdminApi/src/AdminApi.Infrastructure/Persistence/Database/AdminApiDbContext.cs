@@ -30,6 +30,8 @@ public class AdminApiDbContext : AbstractDbContextBase
     {
         base.OnModelCreating(builder);
 
+        builder.HasDefaultSchema("AdminUi");
+
         builder.ApplyConfigurationsFromAssembly(typeof(AdminApiDbContext).Assembly);
     }
 }

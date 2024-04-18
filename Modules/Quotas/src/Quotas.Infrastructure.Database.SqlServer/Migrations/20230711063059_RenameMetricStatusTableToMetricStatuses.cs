@@ -12,25 +12,32 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_MetricStatus_Identities_Owner",
+                schema: "Quotas",
                 table: "MetricStatus");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_MetricStatus",
+                schema: "Quotas",
                 table: "MetricStatus");
 
             migrationBuilder.RenameTable(
                 name: "MetricStatus",
-                newName: "MetricStatuses");
+                schema: "Quotas",
+                newName: "MetricStatuses",
+                newSchema: "Quotas");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_MetricStatuses",
+                schema: "Quotas",
                 table: "MetricStatuses",
                 columns: new[] { "Owner", "MetricKey" });
 
             migrationBuilder.AddForeignKey(
                 name: "FK_MetricStatuses_Identities_Owner",
+                schema: "Quotas",
                 table: "MetricStatuses",
                 column: "Owner",
+                principalSchema: "Quotas",
                 principalTable: "Identities",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
@@ -41,25 +48,32 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_MetricStatuses_Identities_Owner",
+                schema: "Quotas",
                 table: "MetricStatuses");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_MetricStatuses",
+                schema: "Quotas",
                 table: "MetricStatuses");
 
             migrationBuilder.RenameTable(
                 name: "MetricStatuses",
-                newName: "MetricStatus");
+                schema: "Quotas",
+                newName: "MetricStatus",
+                newSchema: "Quotas");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_MetricStatus",
+                schema: "Quotas",
                 table: "MetricStatus",
                 columns: new[] { "Owner", "MetricKey" });
 
             migrationBuilder.AddForeignKey(
                 name: "FK_MetricStatus_Identities_Owner",
+                schema: "Quotas",
                 table: "MetricStatus",
                 column: "Owner",
+                principalSchema: "Quotas",
                 principalTable: "Identities",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);

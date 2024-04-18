@@ -11,7 +11,7 @@ public partial class Fix_IdentitiesOverview_View : Migration
     protected override void Up(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.Sql("""
-                CREATE OR REPLACE VIEW "IdentityOverviews" AS
+                CREATE OR REPLACE VIEW "AdminUi"."IdentityOverviews" AS
                     SELECT 
                         IDENTITIES."Address",
         	            IDENTITIES."CreatedAt",
@@ -48,7 +48,7 @@ public partial class Fix_IdentitiesOverview_View : Migration
     protected override void Down(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.Sql("""
-            CREATE OR REPLACE VIEW "IdentityOverviews" AS
+            CREATE OR REPLACE VIEW "AdminUi"."IdentityOverviews" AS
                 SELECT IDENTITIES."Address",
                 IDENTITIES."CreatedAt",
                 USERS."LastLoginAt",

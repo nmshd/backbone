@@ -8,7 +8,7 @@ namespace Backbone.Common.Infrastructure.Persistence.Repository;
 
 public class PostgresMetricStatusesRepository : IMetricStatusesRepository
 {
-    private const string QUERY = """SELECT * FROM "MetricStatuses" WHERE "Owner" = @identityAddress AND "MetricKey" = ANY(@keys)""";
+    private const string QUERY = """SELECT * FROM "Quotas"."MetricStatuses" WHERE "Owner" = @identityAddress AND "MetricKey" = ANY(@keys)""";
 
     private readonly MetricStatusesRepositoryOptions _options;
 
