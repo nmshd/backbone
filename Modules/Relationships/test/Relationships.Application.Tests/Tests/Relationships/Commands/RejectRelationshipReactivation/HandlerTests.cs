@@ -18,7 +18,7 @@ public class HandlerTests
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        
+
         var relationship = TestData.CreatePendingRelationship(to: activeIdentity);
         relationship.Test_SetStatusAsTerminated(); // todo: Nikola2 - remove when the other thing is implemented
 

@@ -15,7 +15,7 @@ public class RejectReactivationRelationshipTests
         // Arrange
         var relationship = CreateActiveRelationship();
         relationship.Test_SetStatusAsTerminated();
-        
+
         var auditLogEntry = new RelationshipAuditLogEntry(
             RelationshipAuditLogEntryReason.Reactivation,
             RelationshipStatus.Terminated,

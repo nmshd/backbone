@@ -5,7 +5,7 @@ using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 namespace Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
 internal class RelationshipReactivationCompletedIntegrationEvent : IntegrationEvent
 {
-    public RelationshipReactivationCompletedIntegrationEvent(Relationship relationship, IdentityAddress peer) 
+    public RelationshipReactivationCompletedIntegrationEvent(Relationship relationship, IdentityAddress peer)
         : base($"{relationship.Id}/Reactivation/Completed/{relationship.AuditLog.Last().CreatedAt}")
     {
         RelationshipId = relationship;
