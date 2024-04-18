@@ -10,6 +10,7 @@ public partial class Init_ApplicationDbContext : Migration
     {
         migrationBuilder.CreateTable(
             name: "AspNetRoles",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -17,10 +18,12 @@ public partial class Init_ApplicationDbContext : Migration
                 NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                 ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
             },
-            constraints: table => { table.PrimaryKey("PK_AspNetRoles", x => x.Id); });
+            constraints: table => { table.PrimaryKey("PK_AspNetRoles", x => x.Id); }
+        );
 
         migrationBuilder.CreateTable(
             name: "Identities",
+            schema: "Devices",
             columns: table => new
             {
                 Address = table.Column<string>(type: "char(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: false),
@@ -29,10 +32,12 @@ public partial class Init_ApplicationDbContext : Migration
                 CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                 IdentityVersion = table.Column<byte>(type: "tinyint", nullable: false)
             },
-            constraints: table => { table.PrimaryKey("PK_Identities", x => x.Address); });
+            constraints: table => { table.PrimaryKey("PK_Identities", x => x.Address); }
+        );
 
         migrationBuilder.CreateTable(
             name: "AspNetRoleClaims",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<int>(type: "int", nullable: false)
@@ -47,13 +52,16 @@ public partial class Init_ApplicationDbContext : Migration
                 table.ForeignKey(
                     name: "FK_AspNetRoleClaims_AspNetRoles_RoleId",
                     column: x => x.RoleId,
+                    principalSchema: "Devices",
                     principalTable: "AspNetRoles",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "Devices",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -70,13 +78,16 @@ public partial class Init_ApplicationDbContext : Migration
                 table.ForeignKey(
                     name: "FK_Devices_Identities_IdentityAddress",
                     column: x => x.IdentityAddress,
+                    principalSchema: "Devices",
                     principalTable: "Identities",
                     principalColumn: "Address",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "AspNetUsers",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -98,13 +109,16 @@ public partial class Init_ApplicationDbContext : Migration
                 table.ForeignKey(
                     name: "FK_AspNetUsers_Devices_DeviceId",
                     column: x => x.DeviceId,
+                    principalSchema: "Devices",
                     principalTable: "Devices",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "AspNetUserClaims",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<int>(type: "int", nullable: false)
@@ -119,13 +133,16 @@ public partial class Init_ApplicationDbContext : Migration
                 table.ForeignKey(
                     name: "FK_AspNetUserClaims_AspNetUsers_UserId",
                     column: x => x.UserId,
+                    principalSchema: "Devices",
                     principalTable: "AspNetUsers",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "AspNetUserLogins",
+            schema: "Devices",
             columns: table => new
             {
                 LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -139,13 +156,16 @@ public partial class Init_ApplicationDbContext : Migration
                 table.ForeignKey(
                     name: "FK_AspNetUserLogins_AspNetUsers_UserId",
                     column: x => x.UserId,
+                    principalSchema: "Devices",
                     principalTable: "AspNetUsers",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "AspNetUserRoles",
+            schema: "Devices",
             columns: table => new
             {
                 UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -157,19 +177,23 @@ public partial class Init_ApplicationDbContext : Migration
                 table.ForeignKey(
                     name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
                     column: x => x.RoleId,
+                    principalSchema: "Devices",
                     principalTable: "AspNetRoles",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
                 table.ForeignKey(
                     name: "FK_AspNetUserRoles_AspNetUsers_UserId",
                     column: x => x.UserId,
+                    principalSchema: "Devices",
                     principalTable: "AspNetUsers",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "AspNetUserTokens",
+            schema: "Devices",
             columns: table => new
             {
                 UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -183,18 +207,22 @@ public partial class Init_ApplicationDbContext : Migration
                 table.ForeignKey(
                     name: "FK_AspNetUserTokens_AspNetUsers_UserId",
                     column: x => x.UserId,
+                    principalSchema: "Devices",
                     principalTable: "AspNetUsers",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetRoleClaims_RoleId",
+            schema: "Devices",
             table: "AspNetRoleClaims",
             column: "RoleId");
 
         migrationBuilder.CreateIndex(
             name: "RoleNameIndex",
+            schema: "Devices",
             table: "AspNetRoles",
             column: "NormalizedName",
             unique: true,
@@ -202,27 +230,32 @@ public partial class Init_ApplicationDbContext : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUserClaims_UserId",
+            schema: "Devices",
             table: "AspNetUserClaims",
             column: "UserId");
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUserLogins_UserId",
+            schema: "Devices",
             table: "AspNetUserLogins",
             column: "UserId");
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUserRoles_RoleId",
+            schema: "Devices",
             table: "AspNetUserRoles",
             column: "RoleId");
 
         migrationBuilder.CreateIndex(
             name: "IX_AspNetUsers_DeviceId",
+            schema: "Devices",
             table: "AspNetUsers",
             column: "DeviceId",
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "UserNameIndex",
+            schema: "Devices",
             table: "AspNetUsers",
             column: "NormalizedUserName",
             unique: true,
@@ -230,6 +263,7 @@ public partial class Init_ApplicationDbContext : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_Devices_IdentityAddress",
+            schema: "Devices",
             table: "Devices",
             column: "IdentityAddress");
     }
@@ -237,30 +271,39 @@ public partial class Init_ApplicationDbContext : Migration
     protected override void Down(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.DropTable(
+            schema: "Devices",
             name: "AspNetRoleClaims");
 
         migrationBuilder.DropTable(
+            schema: "Devices",
             name: "AspNetUserClaims");
 
         migrationBuilder.DropTable(
+            schema: "Devices",
             name: "AspNetUserLogins");
 
         migrationBuilder.DropTable(
+            schema: "Devices",
             name: "AspNetUserRoles");
 
         migrationBuilder.DropTable(
+            schema: "Devices",
             name: "AspNetUserTokens");
 
         migrationBuilder.DropTable(
+            schema: "Devices",
             name: "AspNetRoles");
 
         migrationBuilder.DropTable(
+            schema: "Devices",
             name: "AspNetUsers");
 
         migrationBuilder.DropTable(
+            schema: "Devices",
             name: "Devices");
 
         migrationBuilder.DropTable(
+            schema: "Devices",
             name: "Identities");
     }
 }

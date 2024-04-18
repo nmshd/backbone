@@ -12,6 +12,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
+                schema: "Files",
                 table: "FileMetadata",
                 type: "character(36)",
                 unicode: false,
@@ -32,6 +33,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
+                schema: "Files",
                 table: "FileMetadata",
                 type: "character(36)",
                 unicode: false,

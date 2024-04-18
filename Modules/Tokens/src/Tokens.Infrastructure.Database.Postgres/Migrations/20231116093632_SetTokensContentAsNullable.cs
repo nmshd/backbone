@@ -12,6 +12,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AlterColumn<byte[]>(
                 name: "Content",
+                schema: "Tokens",
                 table: "Tokens",
                 type: "bytea",
                 nullable: true,
@@ -24,6 +25,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AlterColumn<byte[]>(
                 name: "Content",
+                schema: "Tokens",
                 table: "Tokens",
                 type: "bytea",
                 nullable: false,
