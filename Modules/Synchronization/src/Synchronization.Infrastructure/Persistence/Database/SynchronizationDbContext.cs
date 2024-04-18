@@ -38,28 +38,6 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
     public DbSet<SyncRun> SyncRuns { get; set; } = null!;
     public DbSet<SyncError> SyncErrors { get; set; } = null!;
 
-    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
-    {
-        base.ConfigureConventions(configurationBuilder);
-
-        configurationBuilder.Properties<DatawalletId>().AreUnicode(false).AreFixedLength().HaveMaxLength(DatawalletId.MAX_LENGTH).HaveConversion<DatawalletIdEntityFrameworkValueConverter>();
-        configurationBuilder.Properties<Datawallet.DatawalletVersion>().AreUnicode(false).HaveConversion<DatawalletVersionEntityFrameworkValueConverter>();
-        configurationBuilder.Properties<DatawalletModificationId>().AreUnicode(false).AreFixedLength().HaveMaxLength(DatawalletModificationId.MAX_LENGTH)
-            .HaveConversion<DatawalletModificationIdEntityFrameworkValueConverter>();
-        configurationBuilder.Properties<SyncRunId>().AreUnicode(false).AreFixedLength().HaveMaxLength(SyncRunId.MAX_LENGTH).HaveConversion<SyncRunIdEntityFrameworkValueConverter>();
-        configurationBuilder.Properties<ExternalEventId>().AreUnicode(false).AreFixedLength().HaveMaxLength(ExternalEventId.MAX_LENGTH).HaveConversion<ExternalEventIdEntityFrameworkValueConverter>();
-        configurationBuilder.Properties<SyncErrorId>().AreUnicode(false).AreFixedLength().HaveMaxLength(SyncErrorId.MAX_LENGTH).HaveConversion<SyncErrorIdEntityFrameworkValueConverter>();
-    }
-
-    protected override void OnModelCreating(ModelBuilder builder)
-    {
-        base.OnModelCreating(builder);
-
-        builder.HasDefaultSchema("Synchronization");
-
-        builder.ApplyConfigurationsFromAssembly(typeof(SynchronizationDbContext).Assembly);
-    }
-
     public async Task<DbPaginationResult<DatawalletModification>> GetDatawalletModifications(IdentityAddress activeIdentity, long? localIndex, PaginationFilter paginationFilter,
         CancellationToken cancellationToken)
     {
@@ -83,7 +61,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
                 .OrderAndPaginate(m => m.Index, paginationFilter, cancellationToken)
             : await DatawalletModifications
                 .FromSqlInterpolated(
-                    $"SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY ObjectIdentifier, Type, PayloadCategory ORDER BY [Index] DESC) AS rank FROM [DatawalletModifications] m1 WHERE CreatedBy = {activeIdentityParam} AND [Index] > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1")
+                    $"SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY ObjectIdentifier, Type, PayloadCategory ORDER BY [Index] DESC) AS rank FROM [Synchronization].[DatawalletModifications] m1 WHERE CreatedBy = {activeIdentityParam} AND [Index] > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1")
                 .AsNoTracking()
                 .OrderAndPaginate(m => m.Index, paginationFilter, cancellationToken);
 
@@ -105,20 +83,6 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
             .AsNoTracking()
             .OfOwner(owner, cancellationToken);
         return datawallet;
-    }
-
-    private async Task<long> GetNextExternalEventIndexForIdentity(IdentityAddress identity)
-    {
-        var latestIndex = await ExternalEvents
-            .WithOwner(identity)
-            .OrderByDescending(s => s.Index)
-            .Select(s => (long?)s.Index)
-            .FirstOrDefaultAsync();
-
-        if (latestIndex == null)
-            return 0;
-
-        return latestIndex.Value + 1;
     }
 
     public async Task<ExternalEvent> CreateExternalEvent(IdentityAddress owner, ExternalEventType type, object payload)
@@ -207,5 +171,41 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
             .OrderAndPaginate(x => x.Index, paginationFilter, cancellationToken);
 
         return query;
+    }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        base.ConfigureConventions(configurationBuilder);
+
+        configurationBuilder.Properties<DatawalletId>().AreUnicode(false).AreFixedLength().HaveMaxLength(DatawalletId.MAX_LENGTH).HaveConversion<DatawalletIdEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<Datawallet.DatawalletVersion>().AreUnicode(false).HaveConversion<DatawalletVersionEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<DatawalletModificationId>().AreUnicode(false).AreFixedLength().HaveMaxLength(DatawalletModificationId.MAX_LENGTH)
+            .HaveConversion<DatawalletModificationIdEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<SyncRunId>().AreUnicode(false).AreFixedLength().HaveMaxLength(SyncRunId.MAX_LENGTH).HaveConversion<SyncRunIdEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<ExternalEventId>().AreUnicode(false).AreFixedLength().HaveMaxLength(ExternalEventId.MAX_LENGTH).HaveConversion<ExternalEventIdEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<SyncErrorId>().AreUnicode(false).AreFixedLength().HaveMaxLength(SyncErrorId.MAX_LENGTH).HaveConversion<SyncErrorIdEntityFrameworkValueConverter>();
+    }
+
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+
+        builder.HasDefaultSchema("Synchronization");
+
+        builder.ApplyConfigurationsFromAssembly(typeof(SynchronizationDbContext).Assembly);
+    }
+
+    private async Task<long> GetNextExternalEventIndexForIdentity(IdentityAddress identity)
+    {
+        var latestIndex = await ExternalEvents
+            .WithOwner(identity)
+            .OrderByDescending(s => s.Index)
+            .Select(s => (long?)s.Index)
+            .FirstOrDefaultAsync();
+
+        if (latestIndex == null)
+            return 0;
+
+        return latestIndex.Value + 1;
     }
 }
