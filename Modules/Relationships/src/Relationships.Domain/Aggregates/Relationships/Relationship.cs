@@ -156,21 +156,20 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    public void ReactivationRequest(IdentityAddress activeIdentity, DeviceId activeDevice)
+    public void Reactivate(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureStatus(RelationshipStatus.Terminated);
-
-        Status = RelationshipStatus.ReactivationRequested;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
             RelationshipAuditLogEntryReason.ReactivationRequested,
             RelationshipStatus.Terminated,
-            RelationshipStatus.ReactivationRequested,
+            RelationshipStatus.Terminated,
             activeIdentity,
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
     }
+
     #region Expressions
 
     public static Expression<Func<Relationship, bool>> HasParticipant(string identity)

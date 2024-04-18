@@ -10,27 +10,27 @@ namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relations
 public class RelationshipReactivationRequestTests
 {
     [Fact]
-    public void Requesting_relationship_reactivation_transitions_relationship_to_status_reactivation_requested()
+    public void Relationship_reactivation_request_does_not_change_relationship_status()
     {
         // Arrange
         var relationship = CreateTerminatedRelationship();
 
         // Act
-        relationship.ReactivationRequest(IDENTITY_2, DEVICE_2);
+        relationship.Reactivate(IDENTITY_2, DEVICE_2);
 
         // Assert
-        relationship.Status.Should().Be(RelationshipStatus.ReactivationRequested);
+        relationship.Status.Should().Be(RelationshipStatus.Terminated);
     }
 
     [Fact]
-    public void Requesting_relationship_reactivation_creates_an_audit_log_entry()
+    public void Relationship_reactivation_request_creates_an_audit_log_entry()
     {
         // Arrange
         SystemTime.Set("2000-01-01");
         var relationship = CreateTerminatedRelationship();
 
         // Act
-        relationship.ReactivationRequest(IDENTITY_2, DEVICE_2);
+        relationship.Reactivate(IDENTITY_2, DEVICE_2);
 
         // Assert
         relationship.AuditLog.Should().HaveCount(4);
@@ -40,7 +40,7 @@ public class RelationshipReactivationRequestTests
         auditLogEntry.Id.Should().NotBeNull();
         auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.ReactivationRequested);
         auditLogEntry.OldStatus.Should().Be(RelationshipStatus.Terminated);
-        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.ReactivationRequested);
+        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.Terminated);
         auditLogEntry.CreatedBy.Should().Be(IDENTITY_2);
         auditLogEntry.CreatedByDevice.Should().Be(DEVICE_2);
         auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
@@ -53,7 +53,7 @@ public class RelationshipReactivationRequestTests
         var relationship = CreatePendingRelationship();
 
         // Act
-        var acting = () => relationship.ReactivationRequest(IDENTITY_2, DEVICE_2);
+        var acting = () => relationship.Reactivate(IDENTITY_2, DEVICE_2);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
@@ -68,10 +68,10 @@ public class RelationshipReactivationRequestTests
         // Arrange
         var relationship = CreateTerminatedRelationship();
 
-        relationship.ReactivationRequest(IDENTITY_2, DEVICE_2);
+        relationship.Reactivate(IDENTITY_2, DEVICE_2);
 
         // Act
-        var acting = () => relationship.ReactivationRequest(IDENTITY_2, DEVICE_2);
+        var acting = () => relationship.Reactivate(IDENTITY_2, DEVICE_2);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
@@ -79,6 +79,4 @@ public class RelationshipReactivationRequestTests
             nameof(RelationshipStatus.Terminated)
         );
     }
-
-    // TODO: Cannot reactivate foreign relationships
 }

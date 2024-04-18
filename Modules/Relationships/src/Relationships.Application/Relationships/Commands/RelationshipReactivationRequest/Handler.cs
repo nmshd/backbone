@@ -26,13 +26,12 @@ public class Handler : IRequestHandler<RelationshipReactivationRequestCommand, R
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
         var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
 
-        relationship.ReactivationRequest(_activeIdentity, _activeDevice);
+        relationship.Reactivate(_activeIdentity, _activeDevice);
 
         await _relationshipsRepository.Update(relationship);
 
         var peer = relationship.To == _activeIdentity ? relationship.From : relationship.To;
 
-        _eventBus.Publish(new RelationshipStatusChangedIntegrationEvent(relationship));
         _eventBus.Publish(new RelationshipReactivationRequestedIntegrationEvent(relationship, peer));
 
         return new RelationshipReactivationRequestResponse(relationship);
