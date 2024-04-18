@@ -70,7 +70,7 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
     public static IdentityAddress Create(byte[] publicKey, string instanceUrl)
     {
         var hashedPublicKey = SHA256.HashData(SHA512.HashData(publicKey))[..10];
-        
+
         var identitySpecificPart = Hex(hashedPublicKey);
 
         var mainPhrase = $"did:e:{instanceUrl}:dids:{identitySpecificPart}";
