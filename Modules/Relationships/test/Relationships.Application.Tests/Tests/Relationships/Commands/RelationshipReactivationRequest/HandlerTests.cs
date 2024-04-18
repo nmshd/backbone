@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.ReactivateRelationshipRequest;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RelationshipReactivationRequest;
 using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.UnitTestTools.Data;
@@ -9,7 +9,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.ReactivateRelationshipRequest;
+namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.RelationshipReactivationRequest;
 public class HandlerTests
 {
     [Fact]
@@ -30,7 +30,7 @@ public class HandlerTests
         var handler = CreateHandler(fakeUserContext, fakeRelationshipsRepository);
 
         // Act
-        var response = await handler.Handle(new ReactivateRelationshipRequestCommand
+        var response = await handler.Handle(new RelationshipReactivationRequestCommand
         {
             RelationshipId = relationship.Id
         }, CancellationToken.None);
@@ -59,7 +59,7 @@ public class HandlerTests
         var handler = CreateHandler(fakeUserContext, mockRelationshipsRepository);
 
         // Act
-        await handler.Handle(new ReactivateRelationshipRequestCommand
+        await handler.Handle(new RelationshipReactivationRequestCommand
         {
             RelationshipId = relationship.Id
         }, CancellationToken.None);

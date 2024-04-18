@@ -7,7 +7,7 @@ using Xunit;
 using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relationships;
-public class ReactivateRelationshipRequestTests
+public class RelationshipReactivationRequestTests
 {
     [Fact]
     public void Requesting_relationship_reactivation_transitions_relationship_to_status_reactivation_requested()
