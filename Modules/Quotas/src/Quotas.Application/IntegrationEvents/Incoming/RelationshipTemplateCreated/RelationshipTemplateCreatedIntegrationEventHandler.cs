@@ -16,7 +16,7 @@ public class RelationshipTemplateCreatedIntegrationEventHandler : IIntegrationEv
     public async Task Handle(RelationshipTemplateCreatedIntegrationEvent @event)
     {
         var identities = new List<string> { @event.CreatedBy };
-        var metrics = new List<string> { MetricKey.NumberOfRelationshipTemplates.Value };
+        var metrics = new List<MetricKey> { MetricKey.NumberOfRelationshipTemplates };
 
         await _metricStatusesService.RecalculateMetricStatuses(identities, metrics, CancellationToken.None);
     }

@@ -16,7 +16,7 @@ public class RelationshipStatusChangedIntegrationEventHandler : IIntegrationEven
     public async Task Handle(RelationshipStatusChangedIntegrationEvent @event)
     {
         var identities = new List<string> { @event.Initiator, @event.Peer };
-        var metrics = new List<string> { MetricKey.NumberOfRelationships.Value };
+        var metrics = new List<MetricKey> { MetricKey.NumberOfRelationships };
 
         await _metricStatusesService.RecalculateMetricStatuses(identities, metrics, CancellationToken.None);
     }

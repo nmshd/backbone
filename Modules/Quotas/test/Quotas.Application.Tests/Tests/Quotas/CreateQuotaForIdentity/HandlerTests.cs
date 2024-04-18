@@ -93,9 +93,9 @@ public class HandlerTests
     public async Task Updates_metric_statuses_after_creating_quota_for_identity()
     {
         // Arrange
-        var metricKey = MetricKey.NumberOfSentMessages.Value;
+        var metricKey = MetricKey.NumberOfSentMessages;
         var identityAddress = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
-        var command = new CreateQuotaForIdentityCommand(identityAddress, metricKey, 5, QuotaPeriod.Month);
+        var command = new CreateQuotaForIdentityCommand(identityAddress, metricKey.Value, 5, QuotaPeriod.Month);
         var identity = new Identity("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", new TierId("TIRsomeTierId1111111"));
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -110,7 +110,7 @@ public class HandlerTests
         // Assert
         A.CallTo(() => metricStatusesService.RecalculateMetricStatuses(
             A<List<string>>.That.Matches(x => x.Contains(identityAddress.StringValue)),
-            A<List<string>>.That.Contains(metricKey),
+            A<List<MetricKey>>.That.Contains(metricKey),
             A<CancellationToken>._)
         ).MustHaveHappened();
     }
