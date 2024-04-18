@@ -28,7 +28,7 @@ public class RelationshipReactivationCompletedIntegrationEventHandler : IIntegra
     private async Task CreateExternalEvent(RelationshipReactivationCompletedIntegrationEvent @event)
     {
 #pragma warning disable IDE0037
-        var payload = new { Id = @event.RelationshipId };
+        var payload = new { RelationshipId = @event.RelationshipId };
 #pragma warning restore IDE0037
         try
         {
