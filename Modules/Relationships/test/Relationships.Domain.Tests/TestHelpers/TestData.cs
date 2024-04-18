@@ -43,13 +43,15 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateTerminatedRelationship()
+    public static Relationship CreateTerminatedRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
     {
-        var relationship = CreateActiveRelationship();
-        relationship.XXXFakeTerminate(IDENTITY_1, DEVICE_1);
+        to ??= IDENTITY_2;
+        var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
+        var relationship = new Relationship(template, from ?? IDENTITY_1, DEVICE_1, null, []);
+        relationship.Accept(to, DEVICE_2, []);
+        relationship.Terminate(IDENTITY_1, DEVICE_1);
         return relationship;
     }
-
     public static Relationship CreateTerminatedRelationshipWithReactivationRequest()
     {
         var relationship = CreateTerminatedRelationship();

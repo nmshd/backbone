@@ -23,7 +23,7 @@ public class Relationship
     public Relationship(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationContent, List<Relationship> existingRelationships)
     {
         EnsureTargetIsNotSelf(relationshipTemplate, activeIdentity);
-        EnsureNoActiveRelationshipToTargetExists(relationshipTemplate.CreatedBy, existingRelationships);
+        EnsureNoOtherRelationshipToPeerExists(relationshipTemplate.CreatedBy, existingRelationships);
 
         Id = RelationshipId.New();
         RelationshipTemplateId = relationshipTemplate.Id;
@@ -65,9 +65,9 @@ public class Relationship
             throw new DomainException(DomainErrors.CannotSendRelationshipRequestToYourself());
     }
 
-    private static void EnsureNoActiveRelationshipToTargetExists(IdentityAddress target, List<Relationship> existingRelationships)
+    private static void EnsureNoOtherRelationshipToPeerExists(IdentityAddress target, IEnumerable<Relationship> existingRelationshipsToPeer)
     {
-        if (existingRelationships.Any(r => r.Status == RelationshipStatus.Active))
+        if (existingRelationshipsToPeer.Any(r => r.Status is RelationshipStatus.Active or RelationshipStatus.Pending or RelationshipStatus.Terminated))
             throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
     }
 
@@ -161,8 +161,10 @@ public class Relationship
             throw new DomainException(DomainErrors.NoOpenReactivationRequest(activeIdentity));
     }
 
-    public void XXXFakeTerminate(IdentityAddress activeIdentity, DeviceId activeDevice)
+    public void Terminate(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
+        EnsureStatus(RelationshipStatus.Active);
+
         Status = RelationshipStatus.Terminated;
 
         var auditLogEntry = new RelationshipAuditLogEntry(

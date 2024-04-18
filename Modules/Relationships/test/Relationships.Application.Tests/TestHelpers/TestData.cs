@@ -35,7 +35,7 @@ public static class TestData
         to ??= TestDataGenerator.CreateRandomIdentityAddress();
 
         var relationship = CreateActiveRelationship(activeIdentity, to);
-        relationship.XXXFakeTerminate(activeIdentity, activeDevice);
+        relationship.Terminate(activeIdentity, activeDevice);
         relationship.XXXFakeReactivate(activeIdentity, activeDevice);
 
         return relationship;
