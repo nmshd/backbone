@@ -1,5 +1,7 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipReactivation;
 using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -17,8 +19,8 @@ public class HandlerTests
         // Arrange
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
-        var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
 
+        var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         var relationship = TestData.CreatePendingRelationship(to: activeIdentity);
         relationship.Test_SetStatusAsTerminated(); // todo: Nikola2 - remove when the other thing is implemented
 
@@ -28,7 +30,7 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
 
-        var handler = new Handler(fakeRelationshipsRepository, fakeUserContext);
+        var handler = new Handler(fakeRelationshipsRepository, fakeUserContext, A.Fake<IEventBus>());
 
         var auditLogEntry = new RelationshipAuditLogEntry(
             RelationshipAuditLogEntryReason.Reactivation,
@@ -49,5 +51,40 @@ public class HandlerTests
         response.Id.Should().NotBeNull();
         response.Status.Should().Be(RelationshipStatus.Terminated);
         response.AuditLog.Should().HaveCount(3);
+    }
+
+    [Fact]
+    public async Task Publishes_RelationshipReactivationCompletedIntegrationEvent()
+    {
+        // Arrange
+        var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
+
+        var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
+        var relationship = TestData.CreatePendingRelationship(to: activeIdentity);
+        relationship.Test_SetStatusAsTerminated(); // todo:Nikola2 change this
+        A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
+
+        var fakeUserContext = A.Fake<IUserContext>();
+        A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
+
+        var mockEventBus = A.Fake<IEventBus>();
+
+        var handler = new Handler(fakeRelationshipsRepository, fakeUserContext, mockEventBus);
+
+        // Act
+        await handler.Handle(new RejectRelationshipReactivationCommand
+        {
+            RelationshipId = relationship.Id
+        }, CancellationToken.None);
+
+        // Assert
+        A.CallTo(
+                () => mockEventBus.Publish(A<RelationshipReactivationCompletedIntegrationEvent>.That.Matches(e =>
+                    e.RelationshipId.Id == relationship.Id && // todo:Nikola2 recheck this naming and things...
+                    e.Peer == relationship.To)
+                ))
+            .MustHaveHappenedOnceExactly();
     }
 }
