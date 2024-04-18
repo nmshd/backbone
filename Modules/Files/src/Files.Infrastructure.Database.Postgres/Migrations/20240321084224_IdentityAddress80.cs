@@ -2,17 +2,17 @@
 
 #nullable disable
 
-namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityAddress100 : Migration
+    public partial class IdentityAddress80 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "CreatedBy",
-                table: "RelationshipTemplates",
+                name: "Owner",
+                table: "FileMetadata",
                 type: "character(100)",
                 unicode: false,
                 fixedLength: true,
@@ -25,8 +25,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 oldMaxLength: 36);
 
             migrationBuilder.AlterColumn<string>(
-                name: "AllocatedBy",
-                table: "RelationshipTemplateAllocations",
+                name: "ModifiedBy",
+                table: "FileMetadata",
                 type: "character(100)",
                 unicode: false,
                 fixedLength: true,
@@ -39,36 +39,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 oldMaxLength: 36);
 
             migrationBuilder.AlterColumn<string>(
-                name: "To",
-                table: "Relationships",
-                type: "character(100)",
-                unicode: false,
-                fixedLength: true,
-                maxLength: 100,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character(36)",
-                oldUnicode: false,
-                oldFixedLength: true,
-                oldMaxLength: 36);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "From",
-                table: "Relationships",
-                type: "character(100)",
-                unicode: false,
-                fixedLength: true,
-                maxLength: 100,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character(36)",
-                oldUnicode: false,
-                oldFixedLength: true,
-                oldMaxLength: 36);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Res_CreatedBy",
-                table: "RelationshipChanges",
+                name: "DeletedBy",
+                table: "FileMetadata",
                 type: "character(100)",
                 unicode: false,
                 fixedLength: true,
@@ -82,8 +54,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
-                name: "Req_CreatedBy",
-                table: "RelationshipChanges",
+                name: "CreatedBy",
+                table: "FileMetadata",
                 type: "character(100)",
                 unicode: false,
                 fixedLength: true,
@@ -100,8 +72,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
-                name: "CreatedBy",
-                table: "RelationshipTemplates",
+                name: "Owner",
+                table: "FileMetadata",
                 type: "character(36)",
                 unicode: false,
                 fixedLength: true,
@@ -114,8 +86,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 oldMaxLength: 100);
 
             migrationBuilder.AlterColumn<string>(
-                name: "AllocatedBy",
-                table: "RelationshipTemplateAllocations",
+                name: "ModifiedBy",
+                table: "FileMetadata",
                 type: "character(36)",
                 unicode: false,
                 fixedLength: true,
@@ -128,36 +100,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 oldMaxLength: 100);
 
             migrationBuilder.AlterColumn<string>(
-                name: "To",
-                table: "Relationships",
-                type: "character(36)",
-                unicode: false,
-                fixedLength: true,
-                maxLength: 36,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character(100)",
-                oldUnicode: false,
-                oldFixedLength: true,
-                oldMaxLength: 100);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "From",
-                table: "Relationships",
-                type: "character(36)",
-                unicode: false,
-                fixedLength: true,
-                maxLength: 36,
-                nullable: false,
-                oldClrType: typeof(string),
-                oldType: "character(100)",
-                oldUnicode: false,
-                oldFixedLength: true,
-                oldMaxLength: 100);
-
-            migrationBuilder.AlterColumn<string>(
-                name: "Res_CreatedBy",
-                table: "RelationshipChanges",
+                name: "DeletedBy",
+                table: "FileMetadata",
                 type: "character(36)",
                 unicode: false,
                 fixedLength: true,
@@ -171,8 +115,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 oldNullable: true);
 
             migrationBuilder.AlterColumn<string>(
-                name: "Req_CreatedBy",
-                table: "RelationshipChanges",
+                name: "CreatedBy",
+                table: "FileMetadata",
                 type: "character(36)",
                 unicode: false,
                 fixedLength: true,

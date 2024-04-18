@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(RelationshipsDbContext))]
-    [Migration("20240321084056_IdentityAddress100")]
-    partial class IdentityAddress100
+    [Migration("20240321084056_IdentityAddress80")]
+    partial class IdentityAddress80
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

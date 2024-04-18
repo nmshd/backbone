@@ -2,28 +2,27 @@
 
 #nullable disable
 
-namespace Backbone.Modules.Challenges.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityAddress100 : Migration
+    public partial class IdentityAddress80 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
-                table: "Challenges",
-                type: "char(100)",
+                table: "Tokens",
+                type: "character(100)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
-                nullable: true,
+                nullable: false,
                 oldClrType: typeof(string),
-                oldType: "char(36)",
+                oldType: "character(36)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 36,
-                oldNullable: true);
+                oldMaxLength: 36);
         }
 
         /// <inheritdoc />
@@ -31,18 +30,17 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.SqlServer.Migratio
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
-                table: "Challenges",
-                type: "char(36)",
+                table: "Tokens",
+                type: "character(36)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 36,
-                nullable: true,
+                nullable: false,
                 oldClrType: typeof(string),
-                oldType: "char(100)",
+                oldType: "character(100)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 100,
-                oldNullable: true);
+                oldMaxLength: 100);
         }
     }
 }

@@ -55,7 +55,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<DateTime>("UpdatedAt")
@@ -209,7 +209,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -224,7 +224,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("Address")
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("ClientId")
@@ -325,7 +325,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("IdentityAddress")
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<DateTime?>("RejectedAt")

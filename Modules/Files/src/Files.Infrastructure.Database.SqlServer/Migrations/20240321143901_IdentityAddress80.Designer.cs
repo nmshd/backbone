@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(FilesDbContext))]
-    [Migration("20240321143901_IdentityAddress100")]
-    partial class IdentityAddress100
+    [Migration("20240321143901_IdentityAddress80")]
+    partial class IdentityAddress80
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -47,7 +47,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
@@ -63,7 +63,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("DeletedByDevice")
@@ -86,7 +86,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("ModifiedByDevice")
@@ -100,7 +100,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<byte[]>("OwnerSignature")

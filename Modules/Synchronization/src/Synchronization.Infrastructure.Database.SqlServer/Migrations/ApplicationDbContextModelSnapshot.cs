@@ -34,7 +34,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<ushort>("Version")
@@ -76,7 +76,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
@@ -142,7 +142,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("Payload")
@@ -227,7 +227,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")

@@ -27,7 +27,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "IdentityAddress",
                 table: "PnsRegistrations",
-                type: "char(100)",
+                type: "char(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -41,7 +41,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "IdentityAddress",
                 table: "IdentityDeletionProcesses",
-                type: "char(100)",
+                type: "char(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -56,7 +56,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
                 table: "Identities",
-                type: "char(100)",
+                type: "char(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -70,7 +70,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "IdentityAddress",
                 table: "Devices",
-                type: "char(100)",
+                type: "char(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -132,7 +132,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "char(100)",
+                oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
@@ -146,7 +146,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 maxLength: 36,
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "char(100)",
+                oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100,
@@ -161,7 +161,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "char(100)",
+                oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
@@ -175,7 +175,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "char(100)",
+                oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);

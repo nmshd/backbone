@@ -2,27 +2,28 @@
 
 #nullable disable
 
-namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Challenges.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityAddress100 : Migration
+    public partial class IdentityAddress80 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
-                table: "Tokens",
+                table: "Challenges",
                 type: "character(100)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
-                nullable: false,
+                nullable: true,
                 oldClrType: typeof(string),
                 oldType: "character(36)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 36);
+                oldMaxLength: 36,
+                oldNullable: true);
         }
 
         /// <inheritdoc />
@@ -30,17 +31,18 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
-                table: "Tokens",
+                table: "Challenges",
                 type: "character(36)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 36,
-                nullable: false,
+                nullable: true,
                 oldClrType: typeof(string),
                 oldType: "character(100)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 100);
+                oldMaxLength: 100,
+                oldNullable: true);
         }
     }
 }

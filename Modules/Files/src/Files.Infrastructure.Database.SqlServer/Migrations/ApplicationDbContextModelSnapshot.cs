@@ -44,7 +44,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
@@ -60,7 +60,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("DeletedByDevice")
@@ -83,7 +83,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("ModifiedByDevice")
@@ -97,7 +97,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<byte[]>("OwnerSignature")

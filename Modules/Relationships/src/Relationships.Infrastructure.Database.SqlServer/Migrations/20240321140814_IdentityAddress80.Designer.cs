@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(RelationshipsDbContext))]
-    [Migration("20240321140814_IdentityAddress100")]
-    partial class IdentityAddress100
+    [Migration("20240321140814_IdentityAddress80")]
+    partial class IdentityAddress80
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -40,7 +40,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("RelationshipTemplateId")
@@ -57,7 +57,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -137,7 +137,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .HasColumnName("Req_CreatedBy")
                         .IsFixedLength();
 
@@ -178,7 +178,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .HasColumnName("Res_CreatedBy")
                         .IsFixedLength();
 
@@ -219,7 +219,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
@@ -264,7 +264,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("AllocatedByDevice")

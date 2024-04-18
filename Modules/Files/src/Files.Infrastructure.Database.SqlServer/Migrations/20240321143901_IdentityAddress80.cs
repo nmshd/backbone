@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityAddress100 : Migration
+    public partial class IdentityAddress80 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -13,13 +13,13 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
                 table: "FileMetadata",
-                type: "character(100)",
+                type: "char(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(36)",
+                oldType: "char(36)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 36);
@@ -27,13 +27,13 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "ModifiedBy",
                 table: "FileMetadata",
-                type: "character(100)",
+                type: "char(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(36)",
+                oldType: "char(36)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 36);
@@ -41,13 +41,13 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "DeletedBy",
                 table: "FileMetadata",
-                type: "character(100)",
+                type: "char(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "character(36)",
+                oldType: "char(36)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 36,
@@ -56,13 +56,13 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
                 table: "FileMetadata",
-                type: "character(100)",
+                type: "char(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(36)",
+                oldType: "char(36)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 36);
@@ -74,13 +74,13 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
                 table: "FileMetadata",
-                type: "character(36)",
+                type: "char(36)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
@@ -88,13 +88,13 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "ModifiedBy",
                 table: "FileMetadata",
-                type: "character(36)",
+                type: "char(36)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
@@ -102,13 +102,13 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "DeletedBy",
                 table: "FileMetadata",
-                type: "character(36)",
+                type: "char(36)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 36,
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100,
@@ -117,13 +117,13 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
                 table: "FileMetadata",
-                type: "character(36)",
+                type: "char(36)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);

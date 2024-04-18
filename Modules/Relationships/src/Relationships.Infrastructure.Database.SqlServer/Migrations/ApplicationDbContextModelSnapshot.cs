@@ -37,7 +37,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("RelationshipTemplateId")
@@ -54,7 +54,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -124,7 +124,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .HasColumnName("Req_CreatedBy")
                         .IsFixedLength();
 
@@ -159,7 +159,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .HasColumnName("Res_CreatedBy")
                         .IsFixedLength();
 
@@ -199,7 +199,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
@@ -238,7 +238,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("char(100)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("AllocatedByDevice")

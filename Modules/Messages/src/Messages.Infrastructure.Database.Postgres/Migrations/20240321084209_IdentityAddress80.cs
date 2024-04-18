@@ -5,7 +5,7 @@
 namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityAddress100 : Migration
+    public partial class IdentityAddress80 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

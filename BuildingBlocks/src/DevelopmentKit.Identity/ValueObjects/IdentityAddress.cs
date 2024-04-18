@@ -13,7 +13,7 @@ namespace Backbone.DevelopmentKit.Identity.ValueObjects;
 [TypeConverter(typeof(IdentityAddressTypeConverter))]
 public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, IComparable<IdentityAddress>
 {
-    public const int MAX_LENGTH = 100;
+    public const int MAX_LENGTH = 80;
 
     private IdentityAddress(string stringValue)
     {

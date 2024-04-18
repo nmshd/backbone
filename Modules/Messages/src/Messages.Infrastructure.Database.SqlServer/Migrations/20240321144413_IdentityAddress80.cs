@@ -5,7 +5,7 @@
 namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityAddress100 : Migration
+    public partial class IdentityAddress80 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -13,7 +13,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
                 table: "RecipientInformation",
-                type: "char(100)",
+                type: "char(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -27,7 +27,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
                 table: "Messages",
-                type: "char(100)",
+                type: "char(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -51,7 +51,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "char(100)",
+                oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
@@ -65,7 +65,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "char(100)",
+                oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
