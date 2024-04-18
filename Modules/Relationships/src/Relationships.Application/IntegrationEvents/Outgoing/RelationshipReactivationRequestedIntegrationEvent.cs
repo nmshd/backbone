@@ -3,9 +3,9 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
 namespace Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
-public class RelationshipReactivationRequestIntegrationEvent : IntegrationEvent
+public class RelationshipReactivationRequestedIntegrationEvent : IntegrationEvent
 {
-    public RelationshipReactivationRequestIntegrationEvent(Relationship relationship, IdentityAddress peer) : base($"{relationship.Id}/Reactivate")
+    public RelationshipReactivationRequestedIntegrationEvent(Relationship relationship, IdentityAddress peer) : base($"{relationship.Id}/Reactivate")
     {
         RelationshipId = relationship.Id;
         Peer = peer.StringValue;

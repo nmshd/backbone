@@ -2,17 +2,17 @@
 using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
-namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipReactivationRequestCreated;
-public class RelationshipReactivationRequestIntegrationEventHandler : IIntegrationEventHandler<RelationshipReactivationRequestIntegrationEvent>
+namespace Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipReactivationRequested;
+public class RelationshipReactivationRequestedIntegrationEventHandler : IIntegrationEventHandler<RelationshipReactivationRequestedIntegrationEvent>
 {
     private readonly IMetricStatusesService _metricStatusesService;
 
-    public RelationshipReactivationRequestIntegrationEventHandler(IMetricStatusesService metricStatusesService)
+    public RelationshipReactivationRequestedIntegrationEventHandler(IMetricStatusesService metricStatusesService)
     {
         _metricStatusesService = metricStatusesService;
     }
 
-    public async Task Handle(RelationshipReactivationRequestIntegrationEvent integrationEvent)
+    public async Task Handle(RelationshipReactivationRequestedIntegrationEvent integrationEvent)
     {
         var identities = new List<string> { integrationEvent.CreatedBy };
         var metrics = new List<string> { MetricKey.NumberOfRelationships.Value };

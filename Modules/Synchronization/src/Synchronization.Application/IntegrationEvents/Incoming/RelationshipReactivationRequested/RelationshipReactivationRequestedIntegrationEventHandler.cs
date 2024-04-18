@@ -6,26 +6,26 @@ using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipReactivated;
-public class RelationshipReactivatedEventHandler
+namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipReactivationRequested;
+public class RelationshipReactivationRequestedIntegrationEventHandler
 {
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly ILogger<MessageCreatedIntegrationEventHandler> _logger;
 
-    public RelationshipReactivatedEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<MessageCreatedIntegrationEventHandler> logger)
+    public RelationshipReactivationRequestedIntegrationEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<MessageCreatedIntegrationEventHandler> logger)
     {
         _dbContext = dbContext;
         _eventBus = eventBus;
         _logger = logger;
     }
 
-    public async Task Handle(RelationshipReactivatedIntegrationEvent integrationEvent)
+    public async Task Handle(RelationshipReactivationRequestedIntegrationEvent integrationEvent)
     {
         await CreateExternalEvents(integrationEvent);
     }
 
-    private async Task CreateExternalEvents(RelationshipReactivatedIntegrationEvent @event)
+    private async Task CreateExternalEvents(RelationshipReactivationRequestedIntegrationEvent @event)
     {
 #pragma warning disable IDE0037
         var payload = new { RelationshipId = @event.RelationshipId };

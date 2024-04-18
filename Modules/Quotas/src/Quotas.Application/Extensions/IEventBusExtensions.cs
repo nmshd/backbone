@@ -4,7 +4,7 @@ using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCre
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.MessageCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.QuotaCreatedForTier;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipCreated;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipReactivationRequestCreated;
+using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipReactivationRequested;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipStatusChanged;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.RelationshipTemplateCreated;
 using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.TierCreated;
@@ -37,6 +37,6 @@ public static class IEventBusExtensions
         eventBus.Subscribe<RelationshipTemplateCreatedIntegrationEvent, RelationshipTemplateCreatedIntegrationEventHandler>();
         eventBus.Subscribe<TokenCreatedIntegrationEvent, TokenCreatedIntegrationEventHandler>();
         eventBus.Subscribe<TierOfIdentityChangedIntegrationEvent, TierOfIdentityChangedIntegrationEventHandler>();
-        eventBus.Subscribe<RelationshipReactivationRequestIntegrationEvent, RelationshipReactivationRequestIntegrationEventHandler>();
+        eventBus.Subscribe<RelationshipReactivationRequestedIntegrationEvent, RelationshipReactivationRequestedIntegrationEventHandler>();
     }
 }
