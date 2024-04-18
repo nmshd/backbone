@@ -13,6 +13,7 @@ public partial class Init : Migration
     {
         migrationBuilder.CreateTable(
             name: "Tokens",
+            schema: "Tokens",
             columns: table => new
             {
                 Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -24,10 +25,12 @@ public partial class Init : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_Tokens", x => x.Id);
-            });
+            }
+        );
 
         migrationBuilder.CreateIndex(
             name: "IX_Tokens_CreatedBy",
+            schema: "Tokens",
             table: "Tokens",
             column: "CreatedBy");
     }
@@ -36,6 +39,7 @@ public partial class Init : Migration
     protected override void Down(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.DropTable(
+            schema: "Tokens",
             name: "Tokens");
     }
 }

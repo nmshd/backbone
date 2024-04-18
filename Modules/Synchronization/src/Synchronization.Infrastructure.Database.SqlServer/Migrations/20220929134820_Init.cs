@@ -9,6 +9,7 @@ public partial class Init : Migration
     {
         migrationBuilder.CreateTable(
             name: "Datawallets",
+            schema: "Synchronization",
             columns: table => new
             {
                 Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -19,6 +20,7 @@ public partial class Init : Migration
 
         migrationBuilder.CreateTable(
             name: "SyncRuns",
+            schema: "Synchronization",
             columns: table => new
             {
                 Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -35,6 +37,7 @@ public partial class Init : Migration
 
         migrationBuilder.CreateTable(
             name: "DatawalletModifications",
+            schema: "Synchronization",
             columns: table => new
             {
                 Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -55,12 +58,15 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_DatawalletModifications_Datawallets_DatawalletId",
                     column: x => x.DatawalletId,
+                    principalSchema: "Synchronization",
                     principalTable: "Datawallets",
                     principalColumn: "Id");
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "ExternalEvents",
+            schema: "Synchronization",
             columns: table => new
             {
                 Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -78,12 +84,15 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_ExternalEvents_SyncRuns_SyncRunId",
                     column: x => x.SyncRunId,
+                    principalSchema: "Synchronization",
                     principalTable: "SyncRuns",
                     principalColumn: "Id");
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "SyncErrors",
+            schema: "Synchronization",
             columns: table => new
             {
                 Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -97,78 +106,93 @@ public partial class Init : Migration
                 table.ForeignKey(
                     name: "FK_SyncErrors_ExternalEvents_ExternalEventId",
                     column: x => x.ExternalEventId,
+                    principalSchema: "Synchronization",
                     principalTable: "ExternalEvents",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
                 table.ForeignKey(
                     name: "FK_SyncErrors_SyncRuns_SyncRunId",
                     column: x => x.SyncRunId,
+                    principalSchema: "Synchronization",
                     principalTable: "SyncRuns",
                     principalColumn: "Id",
                     onDelete: ReferentialAction.Cascade);
-            });
+            }
+        );
 
         migrationBuilder.CreateIndex(
             name: "IX_DatawalletModifications_CreatedBy",
+            schema: "Synchronization",
             table: "DatawalletModifications",
             column: "CreatedBy");
 
         migrationBuilder.CreateIndex(
             name: "IX_DatawalletModifications_CreatedBy_Index",
+            schema: "Synchronization",
             table: "DatawalletModifications",
             columns: new[] { "CreatedBy", "Index" },
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_DatawalletModifications_DatawalletId",
+            schema: "Synchronization",
             table: "DatawalletModifications",
             column: "DatawalletId");
 
         migrationBuilder.CreateIndex(
             name: "IX_Datawallets_Owner",
+            schema: "Synchronization",
             table: "Datawallets",
             column: "Owner",
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_ExternalEvents_Owner_Index",
+            schema: "Synchronization",
             table: "ExternalEvents",
             columns: new[] { "Owner", "Index" },
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_ExternalEvents_Owner_SyncRunId",
+            schema: "Synchronization",
             table: "ExternalEvents",
             columns: new[] { "Owner", "SyncRunId" });
 
         migrationBuilder.CreateIndex(
             name: "IX_ExternalEvents_SyncRunId",
+            schema: "Synchronization",
             table: "ExternalEvents",
             column: "SyncRunId");
 
         migrationBuilder.CreateIndex(
             name: "IX_SyncErrors_ExternalEventId",
+            schema: "Synchronization",
             table: "SyncErrors",
             column: "ExternalEventId");
 
         migrationBuilder.CreateIndex(
             name: "IX_SyncErrors_SyncRunId_ExternalEventId",
+            schema: "Synchronization",
             table: "SyncErrors",
             columns: new[] { "SyncRunId", "ExternalEventId" },
             unique: true);
 
         migrationBuilder.CreateIndex(
             name: "IX_SyncRuns_CreatedBy",
+            schema: "Synchronization",
             table: "SyncRuns",
             column: "CreatedBy");
 
         migrationBuilder.CreateIndex(
             name: "IX_SyncRuns_CreatedBy_FinalizedAt",
+            schema: "Synchronization",
             table: "SyncRuns",
             columns: new[] { "CreatedBy", "FinalizedAt" });
 
         migrationBuilder.CreateIndex(
             name: "IX_SyncRuns_CreatedBy_Index",
+            schema: "Synchronization",
             table: "SyncRuns",
             columns: new[] { "CreatedBy", "Index" },
             unique: true);
@@ -177,18 +201,23 @@ public partial class Init : Migration
     protected override void Down(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.DropTable(
+            schema: "Synchronization",
             name: "DatawalletModifications");
 
         migrationBuilder.DropTable(
+            schema: "Synchronization",
             name: "SyncErrors");
 
         migrationBuilder.DropTable(
+            schema: "Synchronization",
             name: "Datawallets");
 
         migrationBuilder.DropTable(
+            schema: "Synchronization",
             name: "ExternalEvents");
 
         migrationBuilder.DropTable(
+            schema: "Synchronization",
             name: "SyncRuns");
     }
 }
