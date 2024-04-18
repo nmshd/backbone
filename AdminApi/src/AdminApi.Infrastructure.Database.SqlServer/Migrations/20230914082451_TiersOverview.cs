@@ -11,7 +11,7 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""
-                CREATE OR ALTER VIEW TierOverviews AS
+                CREATE OR ALTER VIEW AdminUi.TierOverviews AS
                     SELECT
         	            TIERS.Id,
         	            TIERS.Name,
@@ -26,7 +26,7 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(""" DROP VIEW TierOverviews """);
+            migrationBuilder.Sql(""" DROP VIEW AdminUi.TierOverviews """);
         }
     }
 }

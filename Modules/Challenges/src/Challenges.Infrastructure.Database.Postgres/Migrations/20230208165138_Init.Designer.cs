@@ -18,6 +18,7 @@ namespace Challenges.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("Challenges")
                 .HasAnnotation("ProductVersion", "7.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -48,7 +49,7 @@ namespace Challenges.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Challenges");
+                    b.ToTable("Challenges", "Challenges");
                 });
 #pragma warning restore 612, 618
         }
