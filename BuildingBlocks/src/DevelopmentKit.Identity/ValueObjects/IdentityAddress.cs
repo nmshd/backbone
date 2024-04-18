@@ -5,7 +5,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Backbone.BuildingBlocks.Domain;
 using SimpleBase;
-using static System.Security.Cryptography.SHA256;
+
 
 namespace Backbone.DevelopmentKit.Identity.ValueObjects;
 
@@ -49,23 +49,19 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
 
         var lengthIsValid = stringValue.Length <= MAX_LENGTH;
 
-        const string pattern = @"^did\:web\:(.+?)\:dids\:(.+)$";
+        const string pattern = @"^did\:e\:(.+?)\:dids\:(.+)(.{2})$";
         try
         {
-            var matches = Regex.Matches(stringValue, pattern, RegexOptions.IgnoreCase);
+            var matches = Regex.Matches(stringValue, pattern, RegexOptions.IgnoreCase).First().Groups;
 
-            var concatenation = Base58.Bitcoin.Decode(matches.First().Groups[2].Value).ToArray();
+            var givenChecksum = Convert.FromHexString(matches[3].Value).Single();
+            var correctChecksum = Convert.FromHexString(CalculateChecksum(stringValue[..^2])).Single();
 
-            var hashedPublicKey = concatenation[..20];
-            var givenChecksum = concatenation[20..];
-
-            var correctChecksum = CalculateChecksum(hashedPublicKey);
-
-            var checksumIsValid = givenChecksum.SequenceEqual(correctChecksum);
+            var checksumIsValid = givenChecksum == correctChecksum;
 
             return lengthIsValid && checksumIsValid;
         }
-        catch (Exception ex) when (ex is ArgumentNullException or ArgumentException)
+        catch (Exception ex) when (ex is ArgumentNullException or ArgumentException or FormatException or InvalidOperationException)
         {
             return false;
         }
@@ -73,15 +69,22 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
 
     public static IdentityAddress Create(byte[] publicKey, string instanceUrl)
     {
-        var hashedPublicKey = HashData(HashData(publicKey))[..20];
-        var checksum = CalculateChecksum(hashedPublicKey);
-        var concatenation = hashedPublicKey.Concat(checksum).ToArray();
-        var address = Base58.Bitcoin.Encode(concatenation);
+        var hashedPublicKey = SHA256.HashData(SHA512.HashData(publicKey))[..10];
+        
+        var identitySpecificPart = Hex(hashedPublicKey);
 
-        return new IdentityAddress($"did:web:{instanceUrl}:dids:{address}");
+        var mainPhrase = $"did:e:{instanceUrl}:dids:{identitySpecificPart}";
+        var checksum = CalculateChecksum(mainPhrase);
+
+        return new IdentityAddress((mainPhrase + checksum).ToLower());
     }
 
-    private static byte[] CalculateChecksum(byte[] hashedPublicKey) => HashData(HashData(hashedPublicKey))[..4];
+    private static string CalculateChecksum(string phrase) => Hex(SHA256.HashData(Encoding.ASCII.GetBytes(phrase)))[..2];
+
+    private static string Hex(byte[] hashedPublicKey)
+    {
+        return Convert.ToHexString(hashedPublicKey).ToLower();
+    }
 
     public override string ToString()
     {
