@@ -53,19 +53,27 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         else
             activeIdentityParam = new SqliteParameter("createdBy", activeIdentity.StringValue);
 
-        var paginationResult = Database.IsNpgsql()
-            ? await DatawalletModifications
-                .FromSqlInterpolated(
-                    $"""SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY "ObjectIdentifier", "Type", "PayloadCategory" ORDER BY "Index" DESC) AS rank FROM "Synchronization"."DatawalletModifications" m1 WHERE "CreatedBy" = {activeIdentityParam} AND "Index" > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1""")
-                .AsNoTracking()
-                .OrderAndPaginate(m => m.Index, paginationFilter, cancellationToken)
-            : await DatawalletModifications
-                .FromSqlInterpolated(
-                    $"SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY ObjectIdentifier, Type, PayloadCategory ORDER BY [Index] DESC) AS rank FROM [Synchronization].[DatawalletModifications] m1 WHERE CreatedBy = {activeIdentityParam} AND [Index] > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1")
-                .AsNoTracking()
-                .OrderAndPaginate(m => m.Index, paginationFilter, cancellationToken);
+        IQueryable<DatawalletModification> query;
 
-        return paginationResult;
+        if (Database.IsNpgsql())
+        {
+            query = DatawalletModifications.FromSqlInterpolated(
+                $"""SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY "ObjectIdentifier", "Type", "PayloadCategory" ORDER BY "Index" DESC) AS rank FROM "Synchronization"."DatawalletModifications" m1 WHERE "CreatedBy" = {activeIdentityParam} AND "Index" > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1""");
+        }
+        else if (Database.IsSqlServer())
+        {
+            query = DatawalletModifications.FromSqlInterpolated(
+                $"SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY ObjectIdentifier, Type, PayloadCategory ORDER BY [Index] DESC) AS rank FROM [Synchronization].[DatawalletModifications] m1 WHERE CreatedBy = {activeIdentityParam} AND [Index] > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1");
+        }
+        else // Sqlite
+        {
+            query = DatawalletModifications.FromSqlInterpolated(
+                $"SELECT * FROM(SELECT *, ROW_NUMBER() OVER(PARTITION BY ObjectIdentifier, Type, PayloadCategory ORDER BY [Index] DESC) AS rank FROM [DatawalletModifications] m1 WHERE CreatedBy = {activeIdentityParam} AND [Index] > {localIndex ?? -1}) AS ignoreDuplicates WHERE rank = 1");
+        }
+
+        return await query
+            .AsNoTracking()
+            .OrderAndPaginate(m => m.Index, paginationFilter, cancellationToken);
     }
 
     public async Task<Datawallet?> GetDatawalletForInsertion(IdentityAddress owner, CancellationToken cancellationToken)
