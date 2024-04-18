@@ -12,6 +12,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AddColumn<byte[]>(
                 name: "Body",
+                schema: "Messages",
                 table: "Messages",
                 type: "varbinary(max)",
                 nullable: true);
@@ -22,6 +23,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Body",
+                schema: "Messages",
                 table: "Messages");
 
             migrationBuilder.EnsureSchema(
