@@ -9,6 +9,7 @@ public partial class Init : Migration
     {
         migrationBuilder.CreateTable(
             name: "FileMetadata",
+            schema: "Files",
             columns: table => new
             {
                 Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -32,6 +33,7 @@ public partial class Init : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_FileMetadata_CreatedBy",
+            schema: "Files",
             table: "FileMetadata",
             column: "CreatedBy");
     }
@@ -39,6 +41,7 @@ public partial class Init : Migration
     protected override void Down(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.DropTable(
+            schema: "Files",
             name: "FileMetadata");
     }
 }

@@ -12,6 +12,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<byte[]>(
                 name: "Content",
+                schema: "Tokens",
                 table: "Tokens",
                 type: "varbinary(max)",
                 nullable: true,
@@ -24,6 +25,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<byte[]>(
                 name: "Content",
+                schema: "Tokens",
                 table: "Tokens",
                 type: "varbinary(max)",
                 nullable: false,

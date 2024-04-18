@@ -12,10 +12,12 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Relationships_RelationshipTemplates_RelationshipTemplateId",
+                schema: "Relationships",
                 table: "Relationships");
 
             migrationBuilder.AlterColumn<string>(
                 name: "RelationshipTemplateId",
+                schema: "Relationships",
                 table: "Relationships",
                 type: "char(20)",
                 unicode: false,
@@ -32,8 +34,10 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Relationships_RelationshipTemplates_RelationshipTemplateId",
+                schema: "Relationships",
                 table: "Relationships",
                 column: "RelationshipTemplateId",
+                principalSchema: "Relationships",
                 principalTable: "RelationshipTemplates",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -44,10 +48,12 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Relationships_RelationshipTemplates_RelationshipTemplateId",
+                schema: "Relationships",
                 table: "Relationships");
 
             migrationBuilder.AlterColumn<string>(
                 name: "RelationshipTemplateId",
+                schema: "Relationships",
                 table: "Relationships",
                 type: "char(20)",
                 unicode: false,
@@ -62,8 +68,10 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Relationships_RelationshipTemplates_RelationshipTemplateId",
+                schema: "Relationships",
                 table: "Relationships",
                 column: "RelationshipTemplateId",
+                principalSchema: "Relationships",
                 principalTable: "RelationshipTemplates",
                 principalColumn: "Id");
         }
