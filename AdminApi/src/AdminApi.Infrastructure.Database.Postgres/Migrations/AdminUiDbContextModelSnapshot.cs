@@ -17,6 +17,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("AdminUi")
                 .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -44,7 +45,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("ClientOverviews", (string)null);
+                    b.ToView("ClientOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.IdentityOverview", b =>
@@ -74,7 +75,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("IdentityOverviews", (string)null);
+                    b.ToView("IdentityOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.RelationshipOverview", b =>
@@ -109,7 +110,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("RelationshipOverviews", (string)null);
+                    b.ToView("RelationshipOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.TierOverview", b =>
@@ -132,7 +133,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("TierOverviews", (string)null);
+                    b.ToView("TierOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.ClientOverview", b =>
@@ -156,7 +157,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                             b1.ToTable((string)null);
 
-                            b1.ToView("ClientOverviews");
+                            b1.ToView("ClientOverviews", "AdminUi");
 
                             b1.WithOwner()
                                 .HasForeignKey("ClientOverviewClientId");
@@ -187,7 +188,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                             b1.ToTable((string)null);
 
-                            b1.ToView("IdentityOverviews");
+                            b1.ToView("IdentityOverviews", "AdminUi");
 
                             b1.WithOwner()
                                 .HasForeignKey("IdentityOverviewAddress");

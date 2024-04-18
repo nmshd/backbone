@@ -8,17 +8,25 @@ namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 
 public class ChallengesDbContext : AbstractDbContextBase
 {
-    public ChallengesDbContext() { }
+    public ChallengesDbContext()
+    {
+    }
 
-    public ChallengesDbContext(DbContextOptions<ChallengesDbContext> options) : base(options) { }
+    public ChallengesDbContext(DbContextOptions<ChallengesDbContext> options) : base(options)
+    {
+    }
 
-    public ChallengesDbContext(DbContextOptions<ChallengesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
+    public ChallengesDbContext(DbContextOptions<ChallengesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    {
+    }
 
     public virtual DbSet<Challenge> Challenges { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.HasDefaultSchema("Challenges");
 
         builder.ApplyConfigurationsFromAssembly(typeof(ChallengesDbContext).Assembly);
     }
