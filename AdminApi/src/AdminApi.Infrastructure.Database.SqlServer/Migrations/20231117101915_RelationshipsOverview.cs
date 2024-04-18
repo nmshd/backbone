@@ -13,7 +13,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.Sql("""
                 IF EXISTS (SELECT * FROM information_schema.tables WHERE  table_schema = 'Relationships' AND table_name = 'RelationshipChanges')
                 BEGIN
-                   EXECUTE('CREATE OR ALTER VIEW RelationshipOverviews AS
+                   EXECUTE('CREATE OR ALTER VIEW AdminUi.RelationshipOverviews AS
                        SELECT
                            [RELATIONSHIPS].[From] AS [From],
                            [RELATIONSHIPS].[To] AS [To],
@@ -38,7 +38,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(""" DROP VIEW RelationshipOverviews """);
+            migrationBuilder.Sql(""" DROP VIEW AdminUi.RelationshipOverviews """);
         }
     }
 }

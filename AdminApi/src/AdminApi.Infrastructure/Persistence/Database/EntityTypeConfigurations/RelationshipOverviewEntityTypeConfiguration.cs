@@ -7,7 +7,7 @@ public class RelationshipOverviewEntityTypeConfiguration : IEntityTypeConfigurat
 {
     public void Configure(EntityTypeBuilder<RelationshipOverview> builder)
     {
-        builder.ToView("RelationshipOverviews");
+        builder.ToView("RelationshipOverviews", "AdminUi");
         builder.HasNoKey();
     }
 }

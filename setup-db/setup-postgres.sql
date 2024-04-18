@@ -128,16 +128,6 @@ BEGIN
 END
 $$;
 
-ALTER USER challenges SET search_path TO "Challenges";
-ALTER USER devices SET search_path TO "Devices";
-ALTER USER files SET search_path TO "Files";
-ALTER USER messages SET search_path TO "Messages";
-ALTER USER relationships SET search_path TO "Relationships";
-ALTER USER synchronization SET search_path TO "Synchronization";
-ALTER USER tokens SET search_path TO "Tokens";
-ALTER USER quotas SET search_path TO "Quotas";
-ALTER USER "adminUi" SET search_path TO "AdminUi";
-
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Authorizations +++++++++++++++++++++++++++++++++++++++++++++++++*/
 
 /*GRANT CREATE ON SCHEMA Challenges, Devices, Messages, Synchronization, Tokens, Relationships, Files TO challenges, devices, messages, synchronization, tokens, relationships, files, Quotas;
