@@ -12,21 +12,25 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                schema: "Relationships",
                 name: "RelationshipChanges");
 
             migrationBuilder.AddColumn<byte[]>(
                 name: "AcceptanceContent",
+                schema: "Relationships",
                 table: "Relationships",
                 type: "bytea",
                 nullable: true);
 
             migrationBuilder.AddColumn<byte[]>(
                 name: "CreationContent",
+                schema: "Relationships",
                 table: "Relationships",
                 type: "bytea",
                 nullable: true);
 
             migrationBuilder.CreateTable(
+                schema: "Relationships",
                 name: "RelationshipAuditLog",
                 columns: table => new
                 {
@@ -45,12 +49,14 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                     table.ForeignKey(
                         name: "FK_RelationshipAuditLog_Relationships_RelationshipId",
                         column: x => x.RelationshipId,
+                        principalSchema: "Relationships",
                         principalTable: "Relationships",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_RelationshipAuditLog_RelationshipId",
+                schema: "Relationships",
                 table: "RelationshipAuditLog",
                 column: "RelationshipId");
         }
@@ -59,17 +65,21 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                schema: "Relationships",
                 name: "RelationshipAuditLog");
 
             migrationBuilder.DropColumn(
                 name: "AcceptanceContent",
+                schema: "Relationships",
                 table: "Relationships");
 
             migrationBuilder.DropColumn(
                 name: "CreationContent",
+                schema: "Relationships",
                 table: "Relationships");
 
             migrationBuilder.CreateTable(
+                schema: "Relationships",
                 name: "RelationshipChanges",
                 columns: table => new
                 {
@@ -94,6 +104,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                     table.ForeignKey(
                         name: "FK_RelationshipChanges_Relationships_RelationshipId",
                         column: x => x.RelationshipId,
+                        principalSchema: "Relationships",
                         principalTable: "Relationships",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -101,11 +112,13 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
             migrationBuilder.CreateIndex(
                 name: "IX_RelationshipChanges_RelationshipId",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 column: "RelationshipId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RelationshipChanges_Res_CreatedAt_Res_CreatedBy_Res_Created~",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 columns: new[] { "Res_CreatedAt", "Res_CreatedBy", "Res_CreatedByDevice" })
                 .Annotation("Npgsql:IndexInclude", new[] { "Res_Content" });

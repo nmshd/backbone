@@ -20,6 +20,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("Relationships")
                 .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -64,7 +65,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.HasKey("Id");
 
-                    b.ToTable("RelationshipTemplates");
+                    b.ToTable("RelationshipTemplates", "Relationships");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplateAllocation", b =>
@@ -103,7 +104,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.HasIndex("RelationshipTemplateId", "AllocatedBy");
 
-                    b.ToTable("RelationshipTemplateAllocations", (string)null);
+                    b.ToTable("RelationshipTemplateAllocations", "Relationships");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship", b =>
@@ -155,7 +156,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.HasIndex("To");
 
-                    b.ToTable("Relationships");
+                    b.ToTable("Relationships", "Relationships");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.RelationshipAuditLogEntry", b =>
@@ -202,7 +203,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.HasIndex("RelationshipId");
 
-                    b.ToTable("RelationshipAuditLog", (string)null);
+                    b.ToTable("RelationshipAuditLog", "Relationships");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplateAllocation", b =>
