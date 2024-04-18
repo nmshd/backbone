@@ -97,6 +97,16 @@ public class RelationshipsController : ApiControllerBase
         var response = await _mediator.Send(new RevokeRelationshipCommand { RelationshipId = id }, cancellationToken);
         return Ok(response);
     }
+
+    [HttpPut("{id}/Reactivate/Reject")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RejectRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RejectReactivationOfRelationship([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new RejectRelationshipCommand { RelationshipId = id }, cancellationToken);
+        return Ok(response);
+    }
 }
 
 public class AcceptRelationshipRequest
