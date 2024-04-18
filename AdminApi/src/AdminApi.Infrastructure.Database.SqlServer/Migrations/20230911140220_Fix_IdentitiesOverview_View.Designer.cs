@@ -60,7 +60,7 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("IdentityOverviews", (string)null);
+                    b.ToView("IdentityOverviews", "AdminUi");
                 });
 #pragma warning restore 612, 618
         }

@@ -84,11 +84,11 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameTable(
+            migrationBuilder.DropTable(
                 schema: "Quotas",
                 name: "TierQuotas");
 
-            migrationBuilder.RenameTable(
+            migrationBuilder.DropTable(
                 schema: "Quotas",
                 name: "TierQuotaDefinitions");
         }

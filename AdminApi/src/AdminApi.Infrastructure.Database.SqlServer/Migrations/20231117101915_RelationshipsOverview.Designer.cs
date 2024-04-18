@@ -45,7 +45,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("ClientOverviews", (string)null);
+                    b.ToView("ClientOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.IdentityOverview", b =>
@@ -75,7 +75,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("IdentityOverviews", (string)null);
+                    b.ToView("IdentityOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.RelationshipOverview", b =>
@@ -110,7 +110,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("RelationshipOverviews", (string)null);
+                    b.ToView("RelationshipOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.TierOverview", b =>
@@ -127,7 +127,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("TierOverviews", (string)null);
+                    b.ToView("TierOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("Backbone.AdminUi.Infrastructure.DTOs.ClientOverview", b =>
@@ -151,7 +151,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
 
                             b1.ToTable((string)null);
 
-                            b1.ToView("ClientOverviews");
+                            b1.ToView("ClientOverviews", "AdminUi");
 
                             b1.WithOwner()
                                 .HasForeignKey("ClientOverviewClientId");
@@ -182,7 +182,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
 
                             b1.ToTable((string)null);
 
-                            b1.ToView("IdentityOverviews");
+                            b1.ToView("IdentityOverviews", "AdminUi");
 
                             b1.WithOwner()
                                 .HasForeignKey("IdentityOverviewAddress");

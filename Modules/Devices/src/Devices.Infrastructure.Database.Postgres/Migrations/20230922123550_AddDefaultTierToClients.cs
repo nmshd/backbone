@@ -49,6 +49,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 schema: "Devices",
                 table: "OpenIddictApplications",
                 column: "DefaultTier",
+                principalSchema: "Devices",
                 principalTable: "Tiers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);

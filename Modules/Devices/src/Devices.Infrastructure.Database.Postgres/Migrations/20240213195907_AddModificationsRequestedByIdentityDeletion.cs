@@ -119,11 +119,11 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.RenameTable(
+            migrationBuilder.DropTable(
                 schema: "Devices",
                 name: "IdentityDeletionProcessAuditLog");
 
-            migrationBuilder.RenameTable(
+            migrationBuilder.DropTable(
                 schema: "Devices",
                 name: "IdentityDeletionProcesses");
 

@@ -38,6 +38,7 @@ public partial class IdentitiesBasicTier : Migration
             schema: "Devices",
             table: "Identities",
             column: "TierId",
+            principalSchema: "Devices",
             principalTable: "Tier",
             principalColumn: "Id",
             onDelete: ReferentialAction.Restrict);

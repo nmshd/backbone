@@ -45,7 +45,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("ClientOverviews", (string)null);
+                    b.ToView("ClientOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("AdminUi.Infrastructure.DTOs.IdentityOverview", b =>
@@ -75,7 +75,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("IdentityOverviews", (string)null);
+                    b.ToView("IdentityOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("AdminUi.Infrastructure.DTOs.TierOverview", b =>
@@ -92,7 +92,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("TierOverviews", (string)null);
+                    b.ToView("TierOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("AdminUi.Infrastructure.DTOs.ClientOverview", b =>
@@ -116,7 +116,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                             b1.ToTable((string)null);
 
-                            b1.ToView("ClientOverviews");
+                            b1.ToView("ClientOverviews", "AdminUi");
 
                             b1.WithOwner()
                                 .HasForeignKey("ClientOverviewClientId");
@@ -147,7 +147,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                             b1.ToTable((string)null);
 
-                            b1.ToView("IdentityOverviews");
+                            b1.ToView("IdentityOverviews", "AdminUi");
 
                             b1.WithOwner()
                                 .HasForeignKey("IdentityOverviewAddress");

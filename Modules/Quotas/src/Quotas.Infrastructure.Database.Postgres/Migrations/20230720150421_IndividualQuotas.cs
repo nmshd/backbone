@@ -121,6 +121,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                 schema: "Quotas",
                 table: "Identities",
                 column: "TierId",
+                principalSchema: "Quotas",
                 principalTable: "Tiers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -130,6 +131,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                 schema: "Quotas",
                 table: "TierQuotas",
                 column: "ApplyTo",
+                principalSchema: "Quotas",
                 principalTable: "Identities",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
@@ -148,7 +150,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                 schema: "Quotas",
                 table: "TierQuotas");
 
-            migrationBuilder.RenameTable(
+            migrationBuilder.DropTable(
                 schema: "Quotas",
                 name: "IndividualQuotas");
 
@@ -212,6 +214,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                 schema: "Quotas",
                 table: "Identities",
                 column: "TierId",
+                principalSchema: "Quotas",
                 principalTable: "Tiers",
                 principalColumn: "Id");
 
@@ -220,6 +223,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                 schema: "Quotas",
                 table: "TierQuotas",
                 column: "ApplyTo",
+                principalSchema: "Quotas",
                 principalTable: "Identities",
                 principalColumn: "Address");
         }

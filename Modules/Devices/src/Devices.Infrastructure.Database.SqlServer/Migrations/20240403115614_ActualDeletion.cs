@@ -34,6 +34,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 schema: "Devices",
                 table: "IdentityDeletionProcessAuditLog",
                 column: "IdentityDeletionProcessId",
+                principalSchema: "Devices",
                 principalTable: "IdentityDeletionProcesses",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.SetNull);
@@ -43,6 +44,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress",
+                principalSchema: "Devices",
                 principalTable: "Identities",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
@@ -71,6 +73,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 schema: "Devices",
                 table: "IdentityDeletionProcessAuditLog",
                 column: "IdentityDeletionProcessId",
+                principalSchema: "Devices",
                 principalTable: "IdentityDeletionProcesses",
                 principalColumn: "Id");
 
@@ -79,6 +82,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress",
+                principalSchema: "Devices",
                 principalTable: "Identities",
                 principalColumn: "Address");
         }

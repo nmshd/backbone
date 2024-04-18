@@ -12,6 +12,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
         {
             migrationBuilder.CreateIndex(
                 name: "IX_RelationshipChanges_Res_CreatedAt_Res_CreatedBy_Res_Created~",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 columns: new[] { "Res_CreatedAt", "Res_CreatedBy", "Res_CreatedByDevice" })
                 .Annotation("Npgsql:IndexInclude", new[] { "Res_Content" });

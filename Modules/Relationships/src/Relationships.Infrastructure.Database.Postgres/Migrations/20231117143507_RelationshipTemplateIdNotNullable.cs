@@ -37,6 +37,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 schema: "Relationships",
                 table: "Relationships",
                 column: "RelationshipTemplateId",
+                principalSchema: "Relationships",
                 principalTable: "RelationshipTemplates",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -70,6 +71,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 schema: "Relationships",
                 table: "Relationships",
                 column: "RelationshipTemplateId",
+                principalSchema: "Relationships",
                 principalTable: "RelationshipTemplates",
                 principalColumn: "Id");
         }

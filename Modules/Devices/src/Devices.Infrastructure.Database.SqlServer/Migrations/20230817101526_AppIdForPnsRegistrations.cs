@@ -49,6 +49,7 @@ public partial class AppIdForPnsRegistrations : Migration
             schema: "Devices",
             table: "Identities",
             column: "TierId",
+            principalSchema: "Devices",
             principalTable: "Tiers",
             principalColumn: "Id");
     }

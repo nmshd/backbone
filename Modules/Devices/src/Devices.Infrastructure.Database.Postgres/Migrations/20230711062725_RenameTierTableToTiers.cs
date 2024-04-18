@@ -23,7 +23,8 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.RenameTable(
                 name: "Tier",
                 schema: "Devices",
-                newName: "Tiers");
+                newName: "Tiers",
+                newSchema: "Devices");
 
             migrationBuilder.RenameIndex(
                 name: "IX_Tier_Name",
@@ -42,6 +43,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                 schema: "Devices",
                 table: "Identities",
                 column: "TierId",
+                principalSchema: "Devices",
                 principalTable: "Tiers",
                 principalColumn: "Id");
         }
@@ -62,7 +64,8 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.RenameTable(
                 name: "Tiers",
                 schema: "Devices",
-                newName: "Tier");
+                newName: "Tier",
+                newSchema: "Devices");
 
             migrationBuilder.RenameIndex(
                 name: "IX_Tiers_Name",
@@ -81,6 +84,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                 schema: "Devices",
                 table: "Identities",
                 column: "TierId",
+                principalSchema: "Devices",
                 principalTable: "Tier",
                 principalColumn: "Id");
         }

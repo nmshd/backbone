@@ -42,6 +42,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.CreateIndex(
                 name: "IX_RelationshipTemplateAllocations_RelationshipTemplateId_AllocatedBy",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations",
                 columns: new[] { "RelationshipTemplateId", "AllocatedBy" });
         }

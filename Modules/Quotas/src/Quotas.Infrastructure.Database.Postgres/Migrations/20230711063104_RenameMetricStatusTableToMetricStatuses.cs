@@ -23,7 +23,8 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.RenameTable(
                 name: "MetricStatus",
                 schema: "Quotas",
-                newName: "MetricStatuses");
+                newName: "MetricStatuses",
+                newSchema: "Quotas");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_MetricStatuses",
@@ -36,6 +37,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                 schema: "Quotas",
                 table: "MetricStatuses",
                 column: "Owner",
+                principalSchema: "Quotas",
                 principalTable: "Identities",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
@@ -57,7 +59,8 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.RenameTable(
                 name: "MetricStatuses",
                 schema: "Quotas",
-                newName: "MetricStatus");
+                newName: "MetricStatus",
+                newSchema: "Quotas");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_MetricStatus",
@@ -70,6 +73,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                 schema: "Quotas",
                 table: "MetricStatus",
                 column: "Owner",
+                principalSchema: "Quotas",
                 principalTable: "Identities",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);

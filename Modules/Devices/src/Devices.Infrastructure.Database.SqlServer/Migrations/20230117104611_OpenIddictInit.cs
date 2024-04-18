@@ -164,19 +164,19 @@ public partial class OpenIddictInit : Migration
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "OpenIddictScopes");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "OpenIddictTokens");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "OpenIddictAuthorizations");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "OpenIddictApplications");
     }

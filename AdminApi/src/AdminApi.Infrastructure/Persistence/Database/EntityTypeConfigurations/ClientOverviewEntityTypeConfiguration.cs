@@ -7,7 +7,7 @@ public class ClientOverviewEntityTypeConfiguration : IEntityTypeConfiguration<Cl
 {
     public void Configure(EntityTypeBuilder<ClientOverview> builder)
     {
-        builder.ToView("ClientOverviews");
+        builder.ToView("ClientOverviews", "AdminUi");
         builder.OwnsOne(
             c => c.DefaultTier,
             dt =>

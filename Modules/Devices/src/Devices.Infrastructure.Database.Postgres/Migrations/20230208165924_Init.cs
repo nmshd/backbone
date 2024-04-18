@@ -427,55 +427,55 @@ public partial class Init : Migration
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "AspNetRoleClaims");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "AspNetUserClaims");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "AspNetUserLogins");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "AspNetUserRoles");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "AspNetUserTokens");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "OpenIddictScopes");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "OpenIddictTokens");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "AspNetRoles");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "AspNetUsers");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "OpenIddictAuthorizations");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "Devices");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "OpenIddictApplications");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Devices",
             name: "Identities");
     }

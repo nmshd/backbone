@@ -30,6 +30,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 schema: "Quotas",
                 table: "Identities",
                 column: "TierId",
+                principalSchema: "Quotas",
                 principalTable: "Tiers",
                 principalColumn: "Id");
 
@@ -38,6 +39,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 schema: "Quotas",
                 table: "TierQuotaDefinitions",
                 column: "TierId",
+                principalSchema: "Quotas",
                 principalTable: "Tiers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -47,6 +49,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 schema: "Quotas",
                 table: "TierQuotas",
                 column: "DefinitionId",
+                principalSchema: "Quotas",
                 principalTable: "TierQuotaDefinitions",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -75,6 +78,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 schema: "Quotas",
                 table: "Identities",
                 column: "TierId",
+                principalSchema: "Quotas",
                 principalTable: "Tiers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -84,6 +88,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 schema: "Quotas",
                 table: "TierQuotaDefinitions",
                 column: "TierId",
+                principalSchema: "Quotas",
                 principalTable: "Tiers",
                 principalColumn: "Id");
 
@@ -92,6 +97,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 schema: "Quotas",
                 table: "TierQuotas",
                 column: "DefinitionId",
+                principalSchema: "Quotas",
                 principalTable: "TierQuotaDefinitions",
                 principalColumn: "Id");
         }

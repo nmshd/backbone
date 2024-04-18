@@ -213,23 +213,23 @@ public partial class Init : Migration
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Synchronization",
             name: "DatawalletModifications");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Synchronization",
             name: "SyncErrors");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Synchronization",
             name: "Datawallets");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Synchronization",
             name: "ExternalEvents");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Synchronization",
             name: "SyncRuns");
     }

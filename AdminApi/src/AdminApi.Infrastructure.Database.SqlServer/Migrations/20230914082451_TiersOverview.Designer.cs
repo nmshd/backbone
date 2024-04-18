@@ -60,7 +60,7 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("IdentityOverviews", (string)null);
+                    b.ToView("IdentityOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("AdminUi.Infrastructure.DTOs.TierOverview", b =>
@@ -77,7 +77,7 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("TierOverviews", (string)null);
+                    b.ToView("TierOverviews", "AdminUi");
                 });
 #pragma warning restore 612, 618
         }

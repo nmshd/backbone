@@ -32,6 +32,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_RecipientInformation_Address_MessageId",
+                schema: "Messages",
                 table: "RecipientInformation",
                 columns: new[] { "Address", "MessageId" });
         }

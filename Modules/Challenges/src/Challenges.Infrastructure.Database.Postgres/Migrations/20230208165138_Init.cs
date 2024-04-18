@@ -30,7 +30,7 @@ public partial class Init : Migration
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Challenges",
             name: "Challenges");
     }

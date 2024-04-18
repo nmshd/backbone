@@ -38,6 +38,6 @@ public partial class IdentitiesOverview : Migration
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.Sql(""" DROP VIEW "IdentityOverviews" """);
+        migrationBuilder.Sql(""" DROP VIEW "AdminUi"."IdentityOverviews" """);
     }
 }

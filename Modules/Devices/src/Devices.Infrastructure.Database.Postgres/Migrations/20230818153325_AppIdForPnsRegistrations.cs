@@ -10,7 +10,7 @@ public partial class AppIdForPnsRegistrations : Migration
     /// <inheritdoc />
     protected override void Up(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.Sql(""" DELETE FROM "PnsRegistrations" """);
+        migrationBuilder.Sql(""" DELETE FROM "Devices"."PnsRegistrations" """);
 
         migrationBuilder.DropForeignKey(
             name: "FK_Identities_Tiers_TierId",
@@ -49,6 +49,7 @@ public partial class AppIdForPnsRegistrations : Migration
             schema: "Devices",
             table: "Identities",
             column: "TierId",
+            principalSchema: "Devices",
             principalTable: "Tiers",
             principalColumn: "Id");
     }

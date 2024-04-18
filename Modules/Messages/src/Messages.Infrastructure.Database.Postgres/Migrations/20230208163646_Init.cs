@@ -126,15 +126,15 @@ public partial class Init : Migration
     /// <inheritdoc />
     protected override void Down(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Messages",
             name: "Attachments");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Messages",
             name: "RecipientInformation");
 
-        migrationBuilder.RenameTable(
+        migrationBuilder.DropTable(
             schema: "Messages",
             name: "Messages");
     }

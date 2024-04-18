@@ -43,6 +43,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
             migrationBuilder.CreateIndex(
                 name: "IX_RelationshipTemplateAllocations_RelationshipTemplateId_Allo~",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations",
                 columns: new[] { "RelationshipTemplateId", "AllocatedBy" });
         }

@@ -20,6 +20,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 schema: "Synchronization",
                 table: "DatawalletModifications",
                 column: "DatawalletId",
+                principalSchema: "Synchronization",
                 principalTable: "Datawallets",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -38,6 +39,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 schema: "Synchronization",
                 table: "DatawalletModifications",
                 column: "DatawalletId",
+                principalSchema: "Synchronization",
                 principalTable: "Datawallets",
                 principalColumn: "Id");
         }

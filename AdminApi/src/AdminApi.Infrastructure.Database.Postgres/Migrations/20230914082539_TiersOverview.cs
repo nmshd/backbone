@@ -26,7 +26,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(""" DROP VIEW "TierOverviews" """);
+            migrationBuilder.Sql(""" DROP VIEW "AdminUi"."TierOverviews" """);
         }
     }
 }

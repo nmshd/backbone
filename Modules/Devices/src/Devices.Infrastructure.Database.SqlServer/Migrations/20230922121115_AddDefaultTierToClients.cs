@@ -53,6 +53,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 schema: "Devices",
                 table: "OpenIddictApplications",
                 column: "DefaultTier",
+                principalSchema: "Devices",
                 principalTable: "Tiers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);

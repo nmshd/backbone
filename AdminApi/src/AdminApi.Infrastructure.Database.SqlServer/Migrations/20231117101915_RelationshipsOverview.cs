@@ -35,7 +35,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.SqlServer.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(""" DROP VIEW RelationshipOverviews """);
+            migrationBuilder.Sql(""" DROP VIEW AdminUi.RelationshipOverviews """);
         }
     }
 }
