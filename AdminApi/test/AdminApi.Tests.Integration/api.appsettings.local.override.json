@@ -4,9 +4,9 @@
             "ConnectionInfo": "localhost"
         },
         "SqlDatabase": {
-            "Provider": "Postgres",
-            "ConnectionString": "User ID=adminUi;Password=Passw0rd;Server=localhost;Port=5432;Database=enmeshed;" // postgres
-            //"ConnectionString": "Server=localhost;Database=enmeshed;User Id=adminUi;Password=Passw0rd;TrustServerCertificate=True"
+            "Provider": "SqlServer",
+            //"ConnectionString": "User ID=adminUi;Password=Passw0rd;Server=localhost;Port=5432;Database=enmeshed;" // postgres
+            "ConnectionString": "Server=localhost;Database=enmeshed;User Id=adminUi;Password=Passw0rd;TrustServerCertificate=True"
         }
     },
     "Modules": {

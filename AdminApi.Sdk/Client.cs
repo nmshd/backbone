@@ -12,9 +12,12 @@ namespace Backbone.AdminApi.Sdk;
 
 public class Client
 {
-    public Client(Configuration config)
+    public Client(Configuration configuration) : this(new HttpClient { BaseAddress = new Uri(configuration.BaseUrl) }, configuration)
     {
-        var httpClient = new HttpClient { BaseAddress = new Uri(config.BaseUrl) };
+    }
+
+    public Client(HttpClient httpClient, Configuration config)
+    {
         var authenticator = new XsrfAndApiKeyAuthenticator(config.ApiKey, httpClient);
         var endpointClient = new EndpointClient(httpClient, authenticator, config.JsonSerializerOptions);
 

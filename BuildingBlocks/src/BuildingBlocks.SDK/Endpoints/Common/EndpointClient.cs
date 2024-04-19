@@ -29,46 +29,65 @@ public class EndpointClient
     }
 
     public async Task<ApiResponse<T>> Post<T>(string url, object? requestContent = null)
-        => await Request<T>(HttpMethod.Post, url)
+    {
+        return await Request<T>(HttpMethod.Post, url)
             .Authenticate()
             .WithJson(requestContent)
             .Execute();
+    }
 
     public async Task<ApiResponse<T>> PostUnauthenticated<T>(string url, object? requestContent = null)
-        => await Request<T>(HttpMethod.Post, url)
+    {
+        return await Request<T>(HttpMethod.Post, url)
             .WithJson(requestContent)
             .Execute();
+    }
 
     public async Task<ApiResponse<T>> Get<T>(string url, object? requestContent = null, PaginationFilter? pagination = null)
-        => await Request<T>(HttpMethod.Get, url)
+    {
+        return await Request<T>(HttpMethod.Get, url)
             .Authenticate()
             .WithPagination(pagination)
             .WithJson(requestContent)
             .Execute();
+    }
 
     public async Task<ApiResponse<T>> GetUnauthenticated<T>(string url, object? requestContent = null, PaginationFilter? pagination = null)
-        => await Request<T>(HttpMethod.Get, url)
+    {
+        return await Request<T>(HttpMethod.Get, url)
             .WithPagination(pagination)
             .WithJson(requestContent)
             .Execute();
+    }
 
     public async Task<ApiResponse<T>> Put<T>(string url, object? requestContent = null)
-        => await Request<T>(HttpMethod.Put, url)
+    {
+        return await Request<T>(HttpMethod.Put, url)
             .Authenticate()
             .WithJson(requestContent)
             .Execute();
+    }
 
-    public async Task<ApiResponse<T>> Patch<T>(string url, object? requestContent = null) => await Request<T>(HttpMethod.Patch, url)
-        .Authenticate()
-        .WithJson(requestContent)
-        .Execute();
+    public async Task<ApiResponse<T>> Patch<T>(string url, object? requestContent = null)
+    {
+        return await Request<T>(HttpMethod.Patch, url)
+            .Authenticate()
+            .WithJson(requestContent)
+            .Execute();
+    }
 
-    public async Task<ApiResponse<T>> Delete<T>(string url, object? requestContent = null) => await Request<T>(HttpMethod.Delete, url)
-        .Authenticate()
-        .WithJson(requestContent)
-        .Execute();
+    public async Task<ApiResponse<T>> Delete<T>(string url, object? requestContent = null)
+    {
+        return await Request<T>(HttpMethod.Delete, url)
+            .Authenticate()
+            .WithJson(requestContent)
+            .Execute();
+    }
 
-    public RequestBuilder<T> Request<T>(HttpMethod method, string url) => new(this, _jsonSerializerOptions, _authenticator, method, url);
+    public RequestBuilder<T> Request<T>(HttpMethod method, string url)
+    {
+        return new RequestBuilder<T>(this, _jsonSerializerOptions, _authenticator, method, url);
+    }
 
     private async Task<ApiResponse<T>> Execute<T>(HttpRequestMessage request)
     {
@@ -82,8 +101,13 @@ public class EndpointClient
             responseContent = new MemoryStream(Encoding.UTF8.GetBytes(EMPTY_RESULT));
         }
 
-        var deserializedResponseContent = JsonSerializer.Deserialize<ApiResponse<T>>(responseContent, _jsonSerializerOptions)!;
-        deserializedResponseContent.Status = statusCode;
+        var responseData = JsonSerializer.Deserialize<ResponseContent<T>>(responseContent, _jsonSerializerOptions);
+        var deserializedResponseContent = new ApiResponse<T>
+        {
+            Status = statusCode,
+            Result = responseData!,
+            RawContent = await response.Content.ReadAsStringAsync()
+        };
 
         return deserializedResponseContent;
     }
@@ -207,9 +231,15 @@ public class EndpointClient
             return this;
         }
 
-        public async Task<ApiResponse<T>> Execute() => await _client.Execute<T>(await CreateRequestMessage());
+        public async Task<ApiResponse<T>> Execute()
+        {
+            return await _client.Execute<T>(await CreateRequestMessage());
+        }
 
-        public async Task<RawApiResponse> ExecuteRaw() => await _client.ExecuteRaw(await CreateRequestMessage());
+        public async Task<RawApiResponse> ExecuteRaw()
+        {
+            return await _client.ExecuteRaw(await CreateRequestMessage());
+        }
 
         private async Task<HttpRequestMessage> CreateRequestMessage()
         {

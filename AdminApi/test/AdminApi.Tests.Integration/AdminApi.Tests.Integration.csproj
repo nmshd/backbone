@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-      <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.3"/>
+      <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.3" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="8.0.1" />
@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\AdminApi.Sdk\AdminApi.Sdk.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
     <ProjectReference Include="..\..\src\AdminApi\AdminApi.csproj" />
   </ItemGroup>
