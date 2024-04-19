@@ -140,6 +140,7 @@ public class Relationship
         );
         AuditLog.Add(auditLogEntry);
     }
+
     public void Terminate(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureStatus(RelationshipStatus.Active);
@@ -155,6 +156,7 @@ public class Relationship
         );
         AuditLog.Add(auditLogEntry);
     }
+
     private void EnsureThereIsNotAlreadyAnOpenReactivationRequest()
     {
         var auditLogEntry = AuditLog.Last();
