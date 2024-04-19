@@ -10,6 +10,7 @@ public partial class OpenIddictInit : Migration
     {
         migrationBuilder.CreateTable(
             name: "OpenIddictApplications",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -29,10 +30,12 @@ public partial class OpenIddictInit : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_OpenIddictApplications", x => x.Id);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "OpenIddictScopes",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -48,10 +51,12 @@ public partial class OpenIddictInit : Migration
             constraints: table =>
             {
                 table.PrimaryKey("PK_OpenIddictScopes", x => x.Id);
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "OpenIddictAuthorizations",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -70,12 +75,15 @@ public partial class OpenIddictInit : Migration
                 table.ForeignKey(
                     name: "FK_OpenIddictAuthorizations_OpenIddictApplications_ApplicationId",
                     column: x => x.ApplicationId,
+                    principalSchema: "Devices",
                     principalTable: "OpenIddictApplications",
                     principalColumn: "Id");
-            });
+            }
+        );
 
         migrationBuilder.CreateTable(
             name: "OpenIddictTokens",
+            schema: "Devices",
             columns: table => new
             {
                 Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -98,17 +106,21 @@ public partial class OpenIddictInit : Migration
                 table.ForeignKey(
                     name: "FK_OpenIddictTokens_OpenIddictApplications_ApplicationId",
                     column: x => x.ApplicationId,
+                    principalSchema: "Devices",
                     principalTable: "OpenIddictApplications",
                     principalColumn: "Id");
                 table.ForeignKey(
                     name: "FK_OpenIddictTokens_OpenIddictAuthorizations_AuthorizationId",
                     column: x => x.AuthorizationId,
+                    principalSchema: "Devices",
                     principalTable: "OpenIddictAuthorizations",
                     principalColumn: "Id");
-            });
+            }
+        );
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictApplications_ClientId",
+            schema: "Devices",
             table: "OpenIddictApplications",
             column: "ClientId",
             unique: true,
@@ -116,11 +128,13 @@ public partial class OpenIddictInit : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictAuthorizations_ApplicationId_Status_Subject_Type",
+            schema: "Devices",
             table: "OpenIddictAuthorizations",
             columns: new[] { "ApplicationId", "Status", "Subject", "Type" });
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictScopes_Name",
+            schema: "Devices",
             table: "OpenIddictScopes",
             column: "Name",
             unique: true,
@@ -128,16 +142,19 @@ public partial class OpenIddictInit : Migration
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictTokens_ApplicationId_Status_Subject_Type",
+            schema: "Devices",
             table: "OpenIddictTokens",
             columns: new[] { "ApplicationId", "Status", "Subject", "Type" });
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictTokens_AuthorizationId",
+            schema: "Devices",
             table: "OpenIddictTokens",
             column: "AuthorizationId");
 
         migrationBuilder.CreateIndex(
             name: "IX_OpenIddictTokens_ReferenceId",
+            schema: "Devices",
             table: "OpenIddictTokens",
             column: "ReferenceId",
             unique: true,
@@ -148,15 +165,19 @@ public partial class OpenIddictInit : Migration
     protected override void Down(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.DropTable(
+            schema: "Devices",
             name: "OpenIddictScopes");
 
         migrationBuilder.DropTable(
+            schema: "Devices",
             name: "OpenIddictTokens");
 
         migrationBuilder.DropTable(
+            schema: "Devices",
             name: "OpenIddictAuthorizations");
 
         migrationBuilder.DropTable(
+            schema: "Devices",
             name: "OpenIddictApplications");
     }
 }

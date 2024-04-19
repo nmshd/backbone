@@ -20,6 +20,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("Devices")
                 .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -56,7 +57,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("DeviceId");
 
-                    b.ToTable("PnsRegistrations");
+                    b.ToTable("PnsRegistrations", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Aggregates.Tier.Tier", b =>
@@ -79,7 +80,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.HasIndex("Name")
                         .IsUnique();
 
-                    b.ToTable("Tiers");
+                    b.ToTable("Tiers", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
@@ -139,7 +140,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers", (string)null);
+                    b.ToTable("AspNetUsers", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Challenge", b =>
@@ -202,7 +203,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("IdentityAddress");
 
-                    b.ToTable("Devices");
+                    b.ToTable("Devices", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identity", b =>
@@ -235,7 +236,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Address");
 
-                    b.ToTable("Identities");
+                    b.ToTable("Identities", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreApplication", b =>
@@ -303,7 +304,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("DefaultTier");
 
-                    b.ToTable("OpenIddictApplications", (string)null);
+                    b.ToTable("OpenIddictApplications", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreAuthorization", b =>
@@ -345,7 +346,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("ApplicationId", "Status", "Subject", "Type");
 
-                    b.ToTable("OpenIddictAuthorizations", (string)null);
+                    b.ToTable("OpenIddictAuthorizations", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreScope", b =>
@@ -387,7 +388,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsUnique()
                         .HasFilter("[Name] IS NOT NULL");
 
-                    b.ToTable("OpenIddictScopes", (string)null);
+                    b.ToTable("OpenIddictScopes", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Infrastructure.OpenIddict.CustomOpenIddictEntityFrameworkCoreToken", b =>
@@ -448,7 +449,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("ApplicationId", "Status", "Subject", "Type");
 
-                    b.ToTable("OpenIddictTokens", (string)null);
+                    b.ToTable("OpenIddictTokens", "Devices");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -475,7 +476,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles", (string)null);
+                    b.ToTable("AspNetRoles", "Devices");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -500,7 +501,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims", (string)null);
+                    b.ToTable("AspNetRoleClaims", "Devices");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
@@ -525,7 +526,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims", (string)null);
+                    b.ToTable("AspNetUserClaims", "Devices");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -547,7 +548,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins", (string)null);
+                    b.ToTable("AspNetUserLogins", "Devices");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -562,7 +563,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles", (string)null);
+                    b.ToTable("AspNetUserRoles", "Devices");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -581,7 +582,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens", (string)null);
+                    b.ToTable("AspNetUserTokens", "Devices");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.ApplicationUser", b =>
