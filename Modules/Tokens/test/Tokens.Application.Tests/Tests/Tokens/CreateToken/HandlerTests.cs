@@ -1,17 +1,19 @@
 using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Tokens.Application.IntegrationEvents;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
+using Backbone.Modules.Tokens.Domain.DomainEvents;
 using Backbone.Modules.Tokens.Domain.Entities;
 using FakeItEasy;
 using FluentAssertions.Execution;
 using Xunit;
 
 namespace Backbone.Modules.Tokens.Application.Tests.Tests.Tokens.CreateToken;
+
 public class HandlerTests
 {
     private readonly IUserContext _userContext;
@@ -27,7 +29,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Triggers_TokenCreatedIntegrationEvent()
+    public async void Triggers_TokenCreatedDomainEvent()
     {
         // Arrange
         var command = new CreateTokenCommand
@@ -47,7 +49,7 @@ public class HandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => _eventBus.Publish(A<IntegrationEvent>.That.IsInstanceOf(typeof(TokenCreatedIntegrationEvent)))).MustHaveHappened();
+        A.CallTo(() => _eventBus.Publish(A<DomainEvent>.That.IsInstanceOf(typeof(TokenCreatedDomainEvent)))).MustHaveHappened();
     }
 
     private Handler CreateHandler(ITokensRepository tokens)
