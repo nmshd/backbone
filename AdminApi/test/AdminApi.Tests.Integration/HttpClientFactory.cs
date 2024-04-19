@@ -17,6 +17,6 @@ internal class HttpClientFactory
         var baseAddress = Environment.GetEnvironmentVariable("ADMIN_API_BASE_ADDRESS");
         return baseAddress.IsNullOrEmpty()
             ? _factory.CreateClient(new WebApplicationFactoryClientOptions { BaseAddress = new Uri("http://localhost/api/v1/") })
-            : new HttpClient { BaseAddress = new Uri(baseAddress) };
+            : new HttpClient { BaseAddress = new Uri(baseAddress + "/api/v1/") };
     }
 }
