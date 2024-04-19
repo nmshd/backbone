@@ -3,10 +3,10 @@ name: Publish Event Handler Service Container Image
 on:
   push:
     tags:
-      - "ehs/*"
+      - "eh/*"
 
 jobs:
-  publish-ehs-container-image:
+  publish-eh-container-image:
     name: Publish Event Handler Service Container Image
     runs-on: ubuntu-latest
     permissions:
@@ -40,7 +40,7 @@ jobs:
           driver: cloud
           endpoint: "jssoft/js-soft"
       - name: Build and Push Container Image
-        run: ./.ci/ehs/buildContainerImage.js
+        run: ./.ci/eh/buildContainerImage.js
         env:
           TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
           PUSH: 1

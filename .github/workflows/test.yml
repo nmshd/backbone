@@ -205,7 +205,7 @@ jobs:
           TAG: test
           PLATFORMS: linux/amd64
 
-  build-ehs-container-image:
+  build-eh-container-image:
     name: Build Event Handler Service Container Image
     runs-on: ubuntu-latest
     steps:
@@ -216,7 +216,7 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       - name: Build image
-        run: ./.ci/ehs/buildContainerImage.js
+        run: ./.ci/eh/buildContainerImage.js
         env:
           TAG: test
           PLATFORMS: linux/amd64
