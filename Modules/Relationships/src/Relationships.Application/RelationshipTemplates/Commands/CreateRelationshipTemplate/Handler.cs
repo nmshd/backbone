@@ -34,12 +34,12 @@ public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, Create
 
         await _relationshipTemplatesRepository.Add(template, cancellationToken);
 
-        PublishIntegrationEvent(template);
+        PublishDomainEvent(template);
 
         return _mapper.Map<CreateRelationshipTemplateResponse>(template);
     }
 
-    private void PublishIntegrationEvent(RelationshipTemplate template)
+    private void PublishDomainEvent(RelationshipTemplate template)
     {
         var evt = new RelationshipTemplateCreatedDomainEvent(template);
         _eventBus.Publish(evt);

@@ -53,7 +53,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Publishes_IntegrationEvent_for_cancelled_deletion_process()
+    public async Task Publishes_DomainEvent_for_cancelled_deletion_process()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2020-01-31"));

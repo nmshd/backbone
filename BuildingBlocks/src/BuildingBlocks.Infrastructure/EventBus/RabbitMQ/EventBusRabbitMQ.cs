@@ -74,11 +74,11 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         var eventName = @event.GetType().Name;
 
-        _logger.LogInformation("Creating RabbitMQ channel to publish event: '{EventId}' ({EventName})", @event.IntegrationEventId, eventName);
+        _logger.LogInformation("Creating RabbitMQ channel to publish event: '{EventId}' ({EventName})", @event.DomainEventId, eventName);
 
         _persistentConnection.CreateModel().ExchangeDeclare(BROKER_NAME, "direct");
 
-        _logger.LogInformation("Declaring RabbitMQ exchange to publish event: '{EventId}'", @event.IntegrationEventId);
+        _logger.LogInformation("Declaring RabbitMQ exchange to publish event: '{EventId}'", @event.DomainEventId);
 
         var message = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
         {
@@ -89,12 +89,12 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         policy.Execute(() =>
         {
-            _logger.LogDebug("Publishing event to RabbitMQ: '{EventId}'", @event.IntegrationEventId);
+            _logger.LogDebug("Publishing event to RabbitMQ: '{EventId}'", @event.DomainEventId);
 
             using var channel = _persistentConnection.CreateModel();
             var properties = channel.CreateBasicProperties();
             properties.DeliveryMode = 2; // persistent
-            properties.MessageId = @event.IntegrationEventId;
+            properties.MessageId = @event.DomainEventId;
 
             channel.BasicPublish(BROKER_NAME,
                 eventName,
@@ -102,7 +102,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 properties,
                 body);
 
-            _logger.PublishedIntegrationEvent(@event.IntegrationEventId);
+            _logger.PublishedDomainEvent(@event.DomainEventId);
         });
     }
 
@@ -171,7 +171,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             {
                 channel.BasicReject(eventArgs.DeliveryTag, true);
 
-                _logger.ErrorWhileProcessingIntegrationEvent(eventName, ex);
+                _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
             }
         };
 
@@ -199,7 +199,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
                 if (eventType == null) throw new Exception($"Unsupported event type '${eventType}' received.");
 
-                var integrationEvent = JsonConvert.DeserializeObject(message, eventType,
+                var domainEvent = JsonConvert.DeserializeObject(message, eventType,
                     new JsonSerializerSettings
                     {
                         ContractResolver = new ContractResolverWithPrivates()
@@ -213,11 +213,11 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
                     if (scope.ResolveOptional(subscription.HandlerType) is not IDomainEventHandler handler)
                         throw new Exception(
-                            "Integration event handler could not be resolved from dependency container or it does not implement IIntegrationEventHandler.");
+                            "Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
 
                     var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
 
-                    await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [integrationEvent])!;
+                    await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
                 });
             }
         }
@@ -239,17 +239,17 @@ internal static partial class EventBusRabbitMQLogs
 
     [LoggerMessage(
         EventId = 585231,
-        EventName = "EventBusRabbitMQ.PublishedIntegrationEvent",
+        EventName = "EventBusRabbitMQ.PublishedDomainEvent",
         Level = LogLevel.Debug,
-        Message = "Successfully published event with id '{integrationEventId}'.")]
-    public static partial void PublishedIntegrationEvent(this ILogger logger, string integrationEventId);
+        Message = "Successfully published event with id '{domainEventId}'.")]
+    public static partial void PublishedDomainEvent(this ILogger logger, string domainEventId);
 
     [LoggerMessage(
         EventId = 702822,
-        EventName = "EventBusRabbitMQ.ErrorWhileProcessingIntegrationEvent",
+        EventName = "EventBusRabbitMQ.ErrorWhileProcessingDomainEvent",
         Level = LogLevel.Error,
-        Message = "An error occurred while processing the integration event of type '{eventName}'.")]
-    public static partial void ErrorWhileProcessingIntegrationEvent(this ILogger logger, string eventName, Exception exception);
+        Message = "An error occurred while processing the domain event of type '{eventName}'.")]
+    public static partial void ErrorWhileProcessingDomainEvent(this ILogger logger, string eventName, Exception exception);
 
     [LoggerMessage(
         EventId = 980768,

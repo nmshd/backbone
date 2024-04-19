@@ -27,7 +27,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Triggers_RelationshipTemplateCreatedIntegrationEvent()
+    public async void Triggers_RelationshipTemplateCreatedDomainEvent()
     {
         // Arrange
         var command = new CreateRelationshipTemplateCommand

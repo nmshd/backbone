@@ -6,7 +6,7 @@ using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -50,7 +50,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         EnsureSufficientSupportedDatawalletVersion();
         EnsureDeviceIsUpToDate();
         await CreateModifications();
-        PublishIntegrationEvent();
+        PublishDomainEvent();
         BuildResponse();
 
         return _response;
@@ -139,7 +139,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         }
     }
 
-    private void PublishIntegrationEvent()
+    private void PublishDomainEvent()
     {
         _eventBus.Publish(new DatawalletModifiedDomainEvent(_activeIdentity, _activeDevice));
     }

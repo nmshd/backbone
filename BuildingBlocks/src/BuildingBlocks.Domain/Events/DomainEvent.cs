@@ -8,15 +8,15 @@ public class DomainEvent
     {
     }
 
-    public DomainEvent(string integrationEventId)
+    public DomainEvent(string domainEventId)
     {
-        if (integrationEventId.Length is 0 or > 128)
-            throw new ArgumentException($"{nameof(integrationEventId)} must be between 1 and 128 characters long.");
+        if (domainEventId.Length is 0 or > 128)
+            throw new ArgumentException($"{nameof(domainEventId)} must be between 1 and 128 characters long.");
 
-        IntegrationEventId = integrationEventId;
+        DomainEventId = domainEventId;
         CreationDate = SystemTime.UtcNow;
     }
 
-    public string IntegrationEventId { get; set; }
+    public string DomainEventId { get; set; }
     public DateTime CreationDate { get; set; }
 }

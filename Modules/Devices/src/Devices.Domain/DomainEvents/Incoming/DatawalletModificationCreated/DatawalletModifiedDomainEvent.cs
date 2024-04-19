@@ -2,7 +2,7 @@ using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 
-namespace Backbone.Modules.Devices.Application.IntegrationEvents.Incoming.DatawalletModificationCreated;
+namespace Backbone.Modules.Devices.Application.DomainEvents.Incoming.DatawalletModificationCreated;
 
 public class DatawalletModifiedDomainEvent : DomainEvent
 {

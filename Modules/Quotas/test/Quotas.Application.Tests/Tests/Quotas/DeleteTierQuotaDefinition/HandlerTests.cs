@@ -28,7 +28,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Triggers_TierQuotaDefinitionDeletedIntegrationEvent()
+    public async Task Triggers_TierQuotaDefinitionDeletedDomainEvent()
     {
         // Arrange
         var tierId = new TierId("SomeTierId");

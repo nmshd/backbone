@@ -29,7 +29,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Triggers_TokenCreatedIntegrationEvent()
+    public async void Triggers_TokenCreatedDomainEvent()
     {
         // Arrange
         var command = new CreateTokenCommand

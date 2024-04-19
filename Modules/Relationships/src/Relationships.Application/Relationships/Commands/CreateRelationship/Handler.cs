@@ -42,7 +42,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         await ReadTemplateFromDb();
         await EnsureRelationshipCanBeEstablished();
         await CreateAndSaveRelationship();
-        PublishIntegrationEvent();
+        PublishDomainEvent();
 
         return CreateResponse();
     }
@@ -83,7 +83,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         await _relationshipsRepository.Add(_relationship, _cancellationToken);
     }
 
-    private void PublishIntegrationEvent()
+    private void PublishDomainEvent()
     {
         var change = _relationship.Changes.First(); // there is always one change, because the relationship was just created
         var evt = new RelationshipChangeCreatedDomainEvent(change);

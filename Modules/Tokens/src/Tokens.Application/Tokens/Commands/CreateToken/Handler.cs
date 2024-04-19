@@ -29,12 +29,12 @@ public class Handler : IRequestHandler<CreateTokenCommand, CreateTokenResponse>
 
         await _tokensRepository.Add(newTokenEntity);
 
-        PublishIntegrationEvent(newTokenEntity);
+        PublishDomainEvent(newTokenEntity);
 
         return _mapper.Map<CreateTokenResponse>(newTokenEntity);
     }
 
-    private void PublishIntegrationEvent(Token newToken)
+    private void PublishDomainEvent(Token newToken)
     {
         var evt = new TokenCreatedDomainEvent(newToken);
         _eventBus.Publish(evt);

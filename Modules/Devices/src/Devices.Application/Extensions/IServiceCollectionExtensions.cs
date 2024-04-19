@@ -28,20 +28,20 @@ public static class IServiceCollectionExtensions
 
     private static void AddEventHandlers(IServiceCollection services)
     {
-        foreach (var eventHandler in GetAllIntegrationEventHandlers())
+        foreach (var eventHandler in GetAllDomainEventHandlers())
         {
             services.AddTransient(eventHandler);
         }
     }
 
-    private static IEnumerable<Type> GetAllIntegrationEventHandlers()
+    private static IEnumerable<Type> GetAllDomainEventHandlers()
     {
-        var integrationEventHandlerTypes =
+        var domainEventHandlerTypes =
             from t in Assembly.GetExecutingAssembly().GetTypes()
             from i in t.GetInterfaces()
             where t.IsClass && !t.IsAbstract && i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>)
             select t;
 
-        return integrationEventHandlerTypes;
+        return domainEventHandlerTypes;
     }
 }

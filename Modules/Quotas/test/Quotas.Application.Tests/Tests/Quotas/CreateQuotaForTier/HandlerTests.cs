@@ -61,7 +61,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Triggers_QuotaCreatedForTierIntegrationEvent()
+    public async Task Triggers_QuotaCreatedForTierDomainEvent()
     {
         // Arrange
         var tierId = new TierId("TIRsomeTierId1111111");

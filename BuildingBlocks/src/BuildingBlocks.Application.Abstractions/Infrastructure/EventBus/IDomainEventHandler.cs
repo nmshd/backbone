@@ -3,10 +3,10 @@ using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 
-public interface IDomainEventHandler<in TIntegrationEvent> : IDomainEventHandler
-    where TIntegrationEvent : DomainEvent
+public interface IDomainEventHandler<in TDomainEvent> : IDomainEventHandler
+    where TDomainEvent : DomainEvent
 {
-    Task Handle(TIntegrationEvent @event);
+    Task Handle(TDomainEvent @event);
 }
 
 public interface IDomainEventHandler;

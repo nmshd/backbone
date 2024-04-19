@@ -1,5 +1,5 @@
+using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.IdentityCreated;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Incoming.IdentityCreated;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;

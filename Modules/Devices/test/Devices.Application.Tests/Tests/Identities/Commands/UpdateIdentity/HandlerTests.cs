@@ -46,7 +46,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Publishes_TierOfIdentityChangedIntegrationEvent()
+    public async void Publishes_TierOfIdentityChangedDomainEvent()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();

@@ -24,7 +24,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Deletes_the_tier_from_the_database_and_publishes_TierDeletedIntegrationEvent()
+    public async Task Deletes_the_tier_from_the_database_and_publishes_TierDeletedDomainEvent()
     {
         // Arrange
         var tier = new Tier(TierName.Create("tier-name").Value);

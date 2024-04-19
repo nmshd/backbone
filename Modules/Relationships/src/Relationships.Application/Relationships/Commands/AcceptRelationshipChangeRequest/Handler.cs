@@ -31,14 +31,14 @@ public class Handler : IRequestHandler<AcceptRelationshipChangeRequestCommand, A
 
         await _relationshipsRepository.Update(relationship);
 
-        PublishIntegrationEvent(change);
+        PublishDomainEvent(change);
 
         var response = _mapper.Map<AcceptRelationshipChangeRequestResponse>(relationship);
 
         return response;
     }
 
-    private void PublishIntegrationEvent(RelationshipChange change)
+    private void PublishDomainEvent(RelationshipChange change)
     {
         var evt = new RelationshipChangeCompletedDomainEvent(change);
         _eventBus.Publish(evt);
