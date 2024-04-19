@@ -51,7 +51,7 @@ internal class ChallengesApiStepDefinitions
             ClientSecret = _baseConfig.Authentication.ClientSecret,
 
         }) as Sdk.Configuration;
-        
+
         _sdk = new Client(_httpClient, authenticatedConfig!);
     }
 
