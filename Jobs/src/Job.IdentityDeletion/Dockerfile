@@ -78,6 +78,7 @@ RUN dotnet publish -c Release --output /app/publish --no-restore "Job.IdentityDe
 
 FROM base AS final
 
+RUN apt install libicu
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 
 WORKDIR /app
