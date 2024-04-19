@@ -79,7 +79,7 @@ RUN dotnet publish -c Release -o /app/publish --no-restore "EventHandlerService.
 
 FROM base AS final
 
-RUN apt install libicu
+RUN apk add icu-libs
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 
 WORKDIR /app
