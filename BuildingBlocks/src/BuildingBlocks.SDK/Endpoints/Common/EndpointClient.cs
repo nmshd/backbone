@@ -84,6 +84,14 @@ public class EndpointClient
 
         var deserializedResponseContent = JsonSerializer.Deserialize<ApiResponse<T>>(responseContent, _jsonSerializerOptions)!;
         deserializedResponseContent.Status = statusCode;
+        try
+        {
+            deserializedResponseContent.ContentType = response.Content.Headers.GetValues("Content-Type").First();
+        }
+        catch (InvalidOperationException)
+        {
+            deserializedResponseContent.ContentType = null;
+        }
 
         return deserializedResponseContent;
     }

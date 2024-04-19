@@ -29,7 +29,7 @@ internal class BaseStepDefinitions
                 Username = "USRa",
                 Password = "a"
             },
-            ContentType = "application/json"
+            ContentType = "application/json",
         };
 
         _signatureHelper = signatureHelper;

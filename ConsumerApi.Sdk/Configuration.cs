@@ -16,4 +16,15 @@ public class Configuration
         public required string Username { get; init; }
         public required string Password { get; init; }
     }
+
+    public object CloneWith(AuthenticationConfiguration newAuthentication)
+    {
+        return new Configuration()
+        {
+            Authentication = newAuthentication,
+            JsonSerializerOptions = JsonSerializerOptions,
+            BaseUrl = null!,
+            ApiVersion = null!
+        };
+    }
 }

@@ -8,13 +8,12 @@ using Newtonsoft.Json;
 namespace Backbone.ConsumerApi.Sdk.Services;
 public class AccountController(Client client)
 {
-    private const string CLIENT_ID = "test";
-    private const string CLIENT_SECRET = "test";
+    /// <summary>
+    /// A list of all received ResponseRepresentations for identities.
+    /// </summary>
+    public List<ResponseRepresentation> ReceivedResponseRepresentations = [];
 
-    public List<RequestRepresentation> Reps = [];
-
-
-    public async Task<bool> CreateIdentity()
+    public async Task<ResponseRepresentation?> CreateIdentity(string clientId, string clientSecret)
     {
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
 
@@ -22,7 +21,7 @@ public class AccountController(Client client)
 
         var challenge = await client.Challenges.CreateChallengeUnauthenticated();
         if (challenge.Result?.Id is null)
-            return false;
+            return null;
 
         var serializedChallenge = JsonConvert.SerializeObject(challenge.Result);
 
@@ -31,8 +30,8 @@ public class AccountController(Client client)
 
         var createIdentityPayload = new CreateIdentityRequest
         {
-            ClientId = CLIENT_ID,
-            ClientSecret = CLIENT_SECRET,
+            ClientId = clientId,
+            ClientSecret = clientSecret,
             IdentityVersion = 1,
             SignedChallenge = signedChallenge,
             IdentityPublicKey = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new CryptoSignaturePublicKey
@@ -46,9 +45,9 @@ public class AccountController(Client client)
         var createIdentityResponse = (await client.Identities.CreateIdentity(createIdentityPayload)).Result;
 
         if (createIdentityResponse is null)
-            return false;
+            return null;
 
-        Reps.Add(new RequestRepresentation
+        var responseRepresentation = new ResponseRepresentation
         {
             Challenge = challenge.Result.Id,
             PrivateKey = identityKeyPair.PrivateKey.Base64Representation,
@@ -59,13 +58,15 @@ public class AccountController(Client client)
             Address = createIdentityResponse.Address,
             DeviceId = createIdentityResponse.Device.Id,
             DeviceUsername = createIdentityResponse.Device.Username
-        });
+        };
 
-        return true;
+        ReceivedResponseRepresentations.Add(responseRepresentation);
+
+        return responseRepresentation;
     }
 }
 
-public class RequestRepresentation
+public class ResponseRepresentation
 {
     public required string PrivateKey;
     public required string PublicKey;
