@@ -82,8 +82,10 @@ public class EndpointClient
             responseContent = new MemoryStream(Encoding.UTF8.GetBytes(EMPTY_RESULT));
         }
 
-        var deserializedResponseContent = JsonSerializer.Deserialize<ApiResponse<T>>(responseContent, _jsonSerializerOptions)!;
+        var deserializedResponseContent = statusCode is HttpStatusCode.OK or HttpStatusCode.Created ? JsonSerializer.Deserialize<ApiResponse<T>>(responseContent, _jsonSerializerOptions)! : new ApiResponse<T>();
+
         deserializedResponseContent.Status = statusCode;
+
         try
         {
             deserializedResponseContent.ContentType = response.Content.Headers.GetValues("Content-Type").First();
