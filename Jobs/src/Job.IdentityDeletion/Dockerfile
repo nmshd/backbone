@@ -77,6 +77,9 @@ FROM build AS publish
 RUN dotnet publish -c Release --output /app/publish --no-restore "Job.IdentityDeletion.csproj" 
 
 FROM base AS final
+
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
+
 WORKDIR /app
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Backbone.Job.IdentityDeletion.dll"]
