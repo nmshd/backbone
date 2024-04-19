@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<StartDeletionProcessAsSupportCommand, Sta
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        _eventBus.Publish(new IdentityDeletionProcessStartedIntegrationEvent(identity.Address, deletionProcess.Id));
+        _eventBus.Publish(new IdentityDeletionProcessStartedDomainEvent(identity.Address, deletionProcess.Id));
 
         return new StartDeletionProcessAsSupportResponse(deletionProcess);
     }
