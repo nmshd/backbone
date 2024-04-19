@@ -2,9 +2,9 @@ using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using FakeItEasy;
 
-namespace Backbone.IntegrationEventHandlerService.Tests;
+namespace Backbone.EventHandlerService.Tests;
 
-public class IntegrationEventHandlerServiceTests
+public class EventHandlerServiceTests
 {
     [Fact]
     public async void HappyPath()
@@ -12,19 +12,18 @@ public class IntegrationEventHandlerServiceTests
         // Arrange
         var mockEventBus = A.Fake<IEventBus>();
 
-        var integrationEventHandlerService = CreateService(mockEventBus);
+        var eventHandlerService = CreateService(mockEventBus);
 
         // Act
-        await integrationEventHandlerService.StartAsync(CancellationToken.None);
+        await eventHandlerService.StartAsync(CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockEventBus.StartConsuming()).MustHaveHappenedOnceExactly();
-
     }
 
-    private static IntegrationEventHandlerService CreateService(IEventBus eventBus)
+    private static EventHandlerService CreateService(IEventBus eventBus)
     {
-        return new IntegrationEventHandlerService(
+        return new EventHandlerService(
             eventBus,
             A.Dummy<IEnumerable<AbstractModule>>());
     }

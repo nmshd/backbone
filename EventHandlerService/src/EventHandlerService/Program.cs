@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.EventHandlerService;
 using Backbone.Infrastructure.EventBus;
-using Backbone.IntegrationEventHandlerService;
 using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Devices.ConsumerApi;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
@@ -74,14 +74,14 @@ static IHostBuilder CreateHostBuilder(string[] args)
         .ConfigureServices((hostContext, services) =>
         {
             var configuration = hostContext.Configuration;
-            services.ConfigureAndValidate<IntegrationEventServiceConfiguration>(configuration.Bind);
+            services.ConfigureAndValidate<EventServiceConfiguration>(configuration.Bind);
 
 #pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
             var parsedConfiguration =
-                services.BuildServiceProvider().GetRequiredService<IOptions<IntegrationEventServiceConfiguration>>().Value;
+                services.BuildServiceProvider().GetRequiredService<IOptions<EventServiceConfiguration>>().Value;
 #pragma warning restore ASP0000
 
-            services.AddTransient<IHostedService, IntegrationEventHandlerService>();
+            services.AddTransient<IHostedService, EventHandlerService>();
 
             services
                 .AddModule<DevicesModule>(configuration)

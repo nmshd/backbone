@@ -287,15 +287,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Infrastructure.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Domain.Tests", "Modules\Messages\test\Messages.Domain.Tests\Messages.Domain.Tests.csproj", "{83A86879-670B-4F22-8835-EE1D0AB49AA9}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationEventHandlerService", "IntegrationEventHandlerService", "{11FE034C-FA73-4766-99DB-D2C606018934}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventHandlerService", "EventHandlerService", "{11FE034C-FA73-4766-99DB-D2C606018934}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D54A9259-7708-45C1-B8D9-448B97F43B80}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2429FCAB-2058-4403-94DA-DA26B1655A7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationEventHandlerService", "IntegrationEventHandlerService\src\IntegrationEventHandlerService\IntegrationEventHandlerService.csproj", "{B4664E79-77A5-41AE-8480-C449ED5B2576}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHandlerService", "EventHandlerService\src\EventHandlerService\EventHandlerService.csproj", "{B4664E79-77A5-41AE-8480-C449ED5B2576}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IntegrationEventHandlerService.Tests", "IntegrationEventHandlerService\test\IntegrationEventHandlerService.Tests\IntegrationEventHandlerService.Tests.csproj", "{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHandlerService.Tests", "EventHandlerService\test\EventHandlerService.Tests\EventHandlerService.Tests.csproj", "{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

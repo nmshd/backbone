@@ -1,13 +1,14 @@
 ﻿using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 
-namespace Backbone.IntegrationEventHandlerService;
-public class IntegrationEventHandlerService : IHostedService
+namespace Backbone.EventHandlerService;
+
+public class EventHandlerService : IHostedService
 {
     private readonly IEventBus _eventBus;
     private readonly IEnumerable<AbstractModule> _modules;
 
-    public IntegrationEventHandlerService(IEventBus eventBus, IEnumerable<AbstractModule> modules)
+    public EventHandlerService(IEventBus eventBus, IEnumerable<AbstractModule> modules)
     {
         _eventBus = eventBus;
         _modules = modules;
@@ -18,6 +19,11 @@ public class IntegrationEventHandlerService : IHostedService
         SubscribeToEvents();
         StartConsuming();
 
+        return Task.CompletedTask;
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
         return Task.CompletedTask;
     }
 
@@ -32,10 +38,5 @@ public class IntegrationEventHandlerService : IHostedService
     private void SubscribeToEvents()
     {
         _eventBus.StartConsuming();
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
     }
 }

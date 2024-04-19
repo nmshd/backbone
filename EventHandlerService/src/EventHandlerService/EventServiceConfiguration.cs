@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Backbone.Infrastructure.EventBus;
 
-namespace Backbone.IntegrationEventHandlerService;
-public class IntegrationEventServiceConfiguration
+namespace Backbone.EventHandlerService;
+
+public class EventServiceConfiguration
 {
     [Required]
     public InfrastructureConfiguration Infrastructure { get; set; } = new();
