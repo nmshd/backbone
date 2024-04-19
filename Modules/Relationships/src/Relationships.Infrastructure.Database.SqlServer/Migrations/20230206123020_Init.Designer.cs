@@ -19,6 +19,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("Relationships")
                 .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -70,7 +71,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                 b.HasIndex("To");
 
-                b.ToTable("Relationships");
+                b.ToTable("Relationships", "Relationships");
             });
 
             modelBuilder.Entity("Relationships.Domain.Entities.RelationshipChange", b =>
@@ -109,7 +110,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                 b.HasIndex("Type");
 
-                b.ToTable("RelationshipChanges", (string)null);
+                b.ToTable("RelationshipChanges", "Relationships");
 
                 b.HasDiscriminator<string>("Discriminator").HasValue("RelationshipChange");
             });
@@ -148,7 +149,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                 b.HasIndex("CreatedByDevice");
 
-                b.ToTable("RelationshipChanges", (string)null);
+                b.ToTable("RelationshipChanges", "Relationships");
             });
 
             modelBuilder.Entity("Relationships.Domain.Entities.RelationshipChangeResponse", b =>
@@ -185,7 +186,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                 b.HasIndex("CreatedByDevice");
 
-                b.ToTable("RelationshipChanges", (string)null);
+                b.ToTable("RelationshipChanges", "Relationships");
             });
 
             modelBuilder.Entity("Relationships.Domain.Entities.RelationshipTemplate", b =>
@@ -230,7 +231,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                 b.HasIndex("ExpiresAt");
 
-                b.ToTable("RelationshipTemplates");
+                b.ToTable("RelationshipTemplates", "Relationships");
             });
 
             modelBuilder.Entity("Relationships.Domain.Entities.RelationshipTemplateAllocation", b =>
@@ -259,14 +260,14 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
 
                 b.HasKey("RelationshipTemplateId", "AllocatedBy");
 
-                b.ToTable("RelationshipTemplateAllocations", (string)null);
+                b.ToTable("RelationshipTemplateAllocations", "Relationships");
             });
 
             modelBuilder.Entity("Relationships.Domain.Entities.RelationshipCreationChange", b =>
             {
                 b.HasBaseType("Relationships.Domain.Entities.RelationshipChange");
 
-                b.ToTable("RelationshipChanges", (string)null);
+                b.ToTable("RelationshipChanges", "Relationships");
 
                 b.HasDiscriminator().HasValue("RelationshipCreationChange");
             });
@@ -275,7 +276,7 @@ namespace Relationships.Infrastructure.Database.SqlServer.Migrations
             {
                 b.HasBaseType("Relationships.Domain.Entities.RelationshipChange");
 
-                b.ToTable("RelationshipChanges", (string)null);
+                b.ToTable("RelationshipChanges", "Relationships");
 
                 b.HasDiscriminator().HasValue("RelationshipTerminationChange");
             });

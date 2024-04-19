@@ -13,14 +13,17 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Identities_Tiers_TierId",
+                schema: "Quotas",
                 table: "Identities");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_TierQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
+                schema: "Quotas",
                 table: "Tiers",
                 type: "character varying(30)",
                 maxLength: 30,
@@ -33,6 +36,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas",
                 type: "character(36)",
                 nullable: false,
@@ -43,6 +47,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "MetricKey",
+                schema: "Quotas",
                 table: "TierQuotaDefinitions",
                 type: "character varying(50)",
                 maxLength: 50,
@@ -55,6 +60,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "IsExhaustedUntil",
+                schema: "Quotas",
                 table: "MetricStatuses",
                 type: "timestamp with time zone",
                 nullable: false,
@@ -65,6 +71,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "TierId",
+                schema: "Quotas",
                 table: "Identities",
                 type: "character(20)",
                 unicode: false,
@@ -81,6 +88,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.CreateTable(
                 name: "IndividualQuotas",
+                schema: "Quotas",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -95,28 +103,35 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_IndividualQuotas_Identities_ApplyTo",
                         column: x => x.ApplyTo,
+                        principalSchema: "Quotas",
                         principalTable: "Identities",
                         principalColumn: "Address",
                         onDelete: ReferentialAction.Cascade);
-                });
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_IndividualQuotas_ApplyTo",
+                schema: "Quotas",
                 table: "IndividualQuotas",
                 column: "ApplyTo");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Identities_Tiers_TierId",
+                schema: "Quotas",
                 table: "Identities",
                 column: "TierId",
+                principalSchema: "Quotas",
                 principalTable: "Tiers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_TierQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas",
                 column: "ApplyTo",
+                principalSchema: "Quotas",
                 principalTable: "Identities",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
@@ -127,17 +142,21 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_Identities_Tiers_TierId",
+                schema: "Quotas",
                 table: "Identities");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_TierQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas");
 
             migrationBuilder.DropTable(
+                schema: "Quotas",
                 name: "IndividualQuotas");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
+                schema: "Quotas",
                 table: "Tiers",
                 type: "character varying(30)",
                 maxLength: 30,
@@ -148,6 +167,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas",
                 type: "character(36)",
                 nullable: true,
@@ -156,6 +176,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "MetricKey",
+                schema: "Quotas",
                 table: "TierQuotaDefinitions",
                 type: "character varying(50)",
                 maxLength: 50,
@@ -166,6 +187,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<DateTime>(
                 name: "IsExhaustedUntil",
+                schema: "Quotas",
                 table: "MetricStatuses",
                 type: "timestamp with time zone",
                 nullable: true,
@@ -174,6 +196,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "TierId",
+                schema: "Quotas",
                 table: "Identities",
                 type: "character(20)",
                 unicode: false,
@@ -188,15 +211,19 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Identities_Tiers_TierId",
+                schema: "Quotas",
                 table: "Identities",
                 column: "TierId",
+                principalSchema: "Quotas",
                 principalTable: "Tiers",
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_TierQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas",
                 column: "ApplyTo",
+                principalSchema: "Quotas",
                 principalTable: "Identities",
                 principalColumn: "Address");
         }
