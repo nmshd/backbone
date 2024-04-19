@@ -16,13 +16,13 @@ public class ExternalEventDTO : IHaveCustomMapping
     public void CreateMappings(Profile configuration)
     {
         configuration.CreateMap<ExternalEventType, string>().ConvertUsing((externalEventType, _) => externalEventType switch
-            {
-                ExternalEventType.MessageDelivered => "MessageDelivered",
-                ExternalEventType.MessageReceived => "MessageReceived",
-                ExternalEventType.RelationshipChangeCreated => "RelationshipChangeCreated",
-                ExternalEventType.RelationshipChangeCompleted => "RelationshipChangeCompleted",
-                _ => throw new ArgumentOutOfRangeException(nameof(externalEventType), externalEventType, null)
-            });
+        {
+            ExternalEventType.MessageDelivered => "MessageDelivered",
+            ExternalEventType.MessageReceived => "MessageReceived",
+            ExternalEventType.RelationshipChangeCreated => "RelationshipChangeCreated",
+            ExternalEventType.RelationshipChangeCompleted => "RelationshipChangeCompleted",
+            _ => throw new ArgumentOutOfRangeException(nameof(externalEventType), externalEventType, null)
+        });
         configuration.CreateMap<ExternalEvent, ExternalEventDTO>();
     }
 }

@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Tiers.Commands.SeedQueuedForDeletionTier;
@@ -34,6 +34,6 @@ public class Handler : IRequestHandler<SeedQueuedForDeletionTierCommand>
         await _tiersRepository.Update(queuedForDeletionTier, CancellationToken.None);
 
         foreach (var quota in addedQuotas.ToList())
-            _eventBus.Publish(new QuotaCreatedForTierIntegrationEvent(queuedForDeletionTier.Id, quota.Id));
+            _eventBus.Publish(new QuotaCreatedForTierDomainEvent(queuedForDeletionTier.Id, quota.Id));
     }
 }

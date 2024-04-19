@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
@@ -34,7 +34,7 @@ public class Handler : IRequestHandler<CancelStaleIdentityDeletionProcessesComma
 
             await _identityRepository.Update(identity, cancellationToken);
 
-            _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, deletionProcess.Value.Id));
+            _eventBus.Publish(new IdentityDeletionProcessStatusChangedDomainEvent(identity.Address, deletionProcess.Value.Id));
         }
 
         return new CancelStaleIdentityDeletionProcessesResponse(idsOfCancelledDeletionProcesses);
