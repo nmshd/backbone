@@ -8,10 +8,10 @@ public class RelationshipReactivationCompletedIntegrationEvent : IntegrationEven
     public RelationshipReactivationCompletedIntegrationEvent(Relationship relationship, IdentityAddress peer)
         : base($"{relationship.Id}/ReactivationCompleted/{relationship.AuditLog.Last().CreatedAt}")
     {
-        RelationshipId = relationship;
-        Peer = peer;
+        RelationshipId = relationship.Id;
+        Peer = peer.StringValue;
     }
 
-    public Relationship RelationshipId { get; }
-    public IdentityAddress Peer { get; set; }
+    public string RelationshipId { get; }
+    public string Peer { get; set; }
 }

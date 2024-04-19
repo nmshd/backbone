@@ -82,7 +82,7 @@ public class HandlerTests
         // Assert
         A.CallTo(
                 () => mockEventBus.Publish(A<RelationshipReactivationCompletedIntegrationEvent>.That.Matches(e =>
-                    e.RelationshipId.Id == relationship.Id && // todo:Nikola2 recheck this naming and things...
+                    e.RelationshipId == relationship.Id &&
                     e.Peer == relationship.To)
                 ))
             .MustHaveHappenedOnceExactly();
