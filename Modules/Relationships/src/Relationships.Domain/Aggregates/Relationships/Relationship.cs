@@ -159,7 +159,7 @@ public class Relationship
 
     public void Reactivate(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
-        EnsureThereIsNotAlreadyAnOpenReactivationRequest();
+        EnsureThereIsNoOpenReactivationRequest();
 
         EnsureStatus(RelationshipStatus.Terminated);
 
@@ -173,7 +173,7 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    private void EnsureThereIsNotAlreadyAnOpenReactivationRequest()
+    private void EnsureThereIsNoOpenReactivationRequest()
     {
         var auditLogEntry = AuditLog.Last();
 
