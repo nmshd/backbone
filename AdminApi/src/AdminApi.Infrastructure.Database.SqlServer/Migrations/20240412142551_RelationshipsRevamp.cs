@@ -11,7 +11,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""
-                 CREATE OR ALTER VIEW RelationshipOverviews AS
+                 CREATE OR ALTER VIEW [AdminUi].[RelationshipOverviews] AS
                      SELECT
                         [RELATIONSHIPS].[From] AS [From],
                         [RELATIONSHIPS].[To] AS [To],
@@ -38,7 +38,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""
-                 CREATE OR ALTER VIEW RelationshipOverviews AS
+                 CREATE OR ALTER VIEW [AdminUi].[RelationshipOverviews] AS
                      SELECT
                          [RELATIONSHIPS].[From] AS [From],
                          [RELATIONSHIPS].[To] AS [To],
