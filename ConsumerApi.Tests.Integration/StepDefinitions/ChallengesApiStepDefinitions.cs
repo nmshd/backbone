@@ -16,12 +16,11 @@ internal class ChallengesApiStepDefinitions
     private readonly Sdk.Configuration _baseConfig;
     private readonly HttpClient _httpClient;
 
-    public ChallengesApiStepDefinitions()
+    public ChallengesApiStepDefinitions(HttpClientFactory factory)
     {
         _challengeId = string.Empty;
 
-        var webApplicationFactory = new CustomWebApplicationFactory<Program>();
-        _httpClient = webApplicationFactory.CreateClient();
+        _httpClient = factory.CreateClient();
         _httpClient.BaseAddress = new Uri("http://localhost:5000/api/v1/");
         _baseConfig = new Sdk.Configuration
         {
