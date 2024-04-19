@@ -12,6 +12,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "TierId",
+                schema: "Devices",
                 table: "Identities",
                 type: "char(20)",
                 unicode: false,
@@ -32,6 +33,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "TierId",
+                schema: "Devices",
                 table: "Identities",
                 type: "char(20)",
                 unicode: false,
