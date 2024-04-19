@@ -11,7 +11,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""
-                 CREATE OR REPLACE VIEW "RelationshipOverviews" AS
+                 CREATE OR REPLACE VIEW "AdminUi"."RelationshipOverviews" AS
                      SELECT
                         "Relationships"."From" AS "From",
                         "Relationships"."To" AS "To",
@@ -33,7 +33,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""
-                 CREATE OR REPLACE VIEW "RelationshipOverviews" AS
+                 CREATE OR REPLACE VIEW "AdminUi"."RelationshipOverviews" AS
                      SELECT
                          "Relationships"."From" AS "From",
                          "Relationships"."To" AS "To",

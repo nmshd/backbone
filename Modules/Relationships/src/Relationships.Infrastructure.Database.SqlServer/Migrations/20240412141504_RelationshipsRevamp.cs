@@ -30,6 +30,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                 nullable: true);
 
             migrationBuilder.CreateTable(
+                schema: "Relationships",
                 name: "RelationshipAuditLog",
                 columns: table => new
                 {
