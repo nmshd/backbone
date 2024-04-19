@@ -13,7 +13,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
 public class EventBusAzureServiceBus : IEventBus, IDisposable
 {
-    private const string INTEGRATION_EVENT_SUFFIX = "DomainEvent";
+    private const string DOMAIN_EVENT_SUFFIX = "DomainEvent";
     private const string TOPIC_NAME = "default";
     private const string AUTOFAC_SCOPE_NAME = "event_bus";
     private readonly ILifetimeScope _autofac;
@@ -52,7 +52,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
 
     public async void Publish(DomainEvent @event)
     {
-        var eventName = @event.GetType().Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
+        var eventName = @event.GetType().Name.Replace(DOMAIN_EVENT_SUFFIX, "");
         var jsonMessage = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
         {
             ContractResolver = new ContractResolverWithPrivates()
@@ -78,7 +78,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         where T : DomainEvent
         where TH : IDomainEventHandler<T>
     {
-        var eventName = typeof(T).Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
+        var eventName = typeof(T).Name.Replace(DOMAIN_EVENT_SUFFIX, "");
 
         var containsKey = _subscriptionManager.HasSubscriptionsForEvent<T>();
         if (!containsKey)
@@ -115,7 +115,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         _processor.ProcessMessageAsync +=
             async args =>
             {
-                var eventName = $"{args.Message.Subject}{INTEGRATION_EVENT_SUFFIX}";
+                var eventName = $"{args.Message.Subject}{DOMAIN_EVENT_SUFFIX}";
                 var messageData = args.Message.Body.ToString();
 
                 // Complete the message so that it is not received again.

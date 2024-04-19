@@ -43,7 +43,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Publishes_integration_events()
+    public async Task Publishes_domain_events()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(DateTime.Parse("2000-01-01"));

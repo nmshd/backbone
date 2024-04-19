@@ -11,7 +11,7 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.DomainEvents.TierDelet
 public class TierDeletedDomainEventHandlerTests
 {
     [Fact]
-    public async Task Deletes_tier_after_consuming_integration_event()
+    public async Task Deletes_tier_after_consuming_domain_event()
     {
         // Arrange
         var tiersRepository = A.Fake<ITiersRepository>();

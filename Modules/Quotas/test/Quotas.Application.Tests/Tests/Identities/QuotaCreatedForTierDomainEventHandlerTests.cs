@@ -15,7 +15,7 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
 public class QuotaCreatedForTierDomainEventHandlerTests
 {
     [Fact]
-    public async void Creates_tier_quota_after_consuming_integration_event()
+    public async void Creates_tier_quota_after_consuming_domain_event()
     {
         // Arrange
         var tierId = new TierId("TIRFxoL0U24aUqZDSAWc");

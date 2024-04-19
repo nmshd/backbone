@@ -18,7 +18,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         public const string EVENT_NAME = "Subject";
     }
 
-    private const string INTEGRATION_EVENT_SUFFIX = "DomainEvent";
+    private const string DOMAIN_EVENT_SUFFIX = "DomainEvent";
     private const string AUTOFAC_SCOPE_NAME = "event_bus";
 
     private readonly ILifetimeScope _autofac;
@@ -47,7 +47,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
     public async void Publish(DomainEvent @event)
     {
-        var eventName = @event.GetType().Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
+        var eventName = @event.GetType().Name.Replace(DOMAIN_EVENT_SUFFIX, "");
 
         var jsonMessage = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
         {
@@ -87,13 +87,13 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
     private static string RemoveDomainEventSuffix(string typeName)
     {
-        return Regex.Replace(typeName, $"^(.+){INTEGRATION_EVENT_SUFFIX}$", "$1");
+        return Regex.Replace(typeName, $"^(.+){DOMAIN_EVENT_SUFFIX}$", "$1");
     }
 
     private async Task<SubscriberClient.Reply> OnIncomingEvent(PubsubMessage @event, CancellationToken _)
     {
         var eventNameFromAttributes =
-            $"{@event.Attributes[PubSubMessageAttributes.EVENT_NAME]}{INTEGRATION_EVENT_SUFFIX}";
+            $"{@event.Attributes[PubSubMessageAttributes.EVENT_NAME]}{DOMAIN_EVENT_SUFFIX}";
         var eventData = @event.Data.ToStringUtf8();
 
         try
