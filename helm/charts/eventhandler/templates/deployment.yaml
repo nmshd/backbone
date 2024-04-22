@@ -1,0 +1,77 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "global.name" . }}
+  labels:
+    {{- include "global.labels" . | nindent 4 }}
+    app: {{ include "global.name" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "global.name" . }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "global.name" . }}
+    spec:
+      {{- with .Values.podSecurityContext }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- end }}
+      {{- with .Values.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: settings-override
+          configMap:
+            name: configuration
+      containers:
+        - name: {{ include "global.name" . }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 8 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{- default .Chart.AppVersion .Values.image.tagOverride }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          volumeMounts:
+            - name: settings-override
+              mountPath: /app/appsettings.override.json
+              subPath: appsettings.override.json
+              readOnly: true
+          env:
+            {{- if .Values.global.useBuiltInEventbus }}
+            - name: infrastructure__eventBus__vendor
+              value: RabbitMQ
+            - name: infrastructure__eventBus__connectionInfo
+              value: "rabbitmq"
+            - name: infrastructure__eventBus__rabbitMQUsername
+              value: "admin"
+            - name: infrastructure__eventBus__rabbitMQPassword
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-password
+                  key: "VALUE" 
+            {{- end }}
+            {{- with .Values.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
