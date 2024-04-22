@@ -17,6 +17,6 @@ public class RelationshipEntityTypeConfiguration : IEntityTypeConfiguration<Rela
         builder.Property(x => x.CreatedAt);
 
         builder.Property(x => x.CreationContent);
-        builder.Property(x => x.AcceptanceContent);
+        builder.Property(x => x.CreationResponseContent);
     }
 }

@@ -54,7 +54,7 @@ public class Relationship
 
     public RelationshipStatus Status { get; private set; }
     public byte[]? CreationContent { get; }
-    public byte[]? AcceptanceContent { get; private set; }
+    public byte[]? CreationResponseContent { get; private set; }
     public List<RelationshipAuditLogEntry> AuditLog { get; }
 
     public IdentityAddress LastModifiedBy => AuditLog.Last().CreatedBy;
@@ -71,13 +71,13 @@ public class Relationship
             throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
     }
 
-    public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? acceptanceContent)
+    public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
     {
         EnsureStatus(RelationshipStatus.Pending);
         EnsureRelationshipRequestIsAddressedToSelf(activeIdentity);
 
         Status = RelationshipStatus.Active;
-        AcceptanceContent = acceptanceContent;
+        CreationResponseContent = creationResponseContent;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
             RelationshipAuditLogEntryReason.AcceptanceOfCreation,
