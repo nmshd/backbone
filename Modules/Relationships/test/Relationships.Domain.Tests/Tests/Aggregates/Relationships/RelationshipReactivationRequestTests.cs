@@ -75,6 +75,6 @@ public class RelationshipReactivationRequestTests
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
-            "error.platform.validation.relationshipRequest.cannotReactivateAnAlreadyReactivatedRelationship");
+            "error.platform.validation.relationshipRequest.cannotReactivateAnAlreadyRequestedReactivation");
     }
 }

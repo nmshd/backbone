@@ -178,7 +178,7 @@ public class Relationship
         var auditLogEntry = AuditLog.Last();
 
         if (auditLogEntry.Reason == RelationshipAuditLogEntryReason.ReactivationRequested)
-            throw new DomainException(DomainErrors.CannotReactivateAnAlreadyReactivatedRelationship());
+            throw new DomainException(DomainErrors.CannotReactivateAnAlreadyRequestedReactivation());
     }
 
     #region Expressions
