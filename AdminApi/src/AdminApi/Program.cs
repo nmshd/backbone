@@ -15,6 +15,7 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
@@ -79,7 +80,8 @@ static WebApplication CreateApp(string[] args)
     var app = builder.Build();
     Configure(app);
 
-    app.MigrateDbContext<AdminApiDbContext>();
+    if (app.Environment.IsLocal() || app.Environment.IsDevelopment())
+        app.MigrateDbContext<AdminApiDbContext>();
 
     return app;
 }
@@ -175,7 +177,7 @@ static void Configure(WebApplication app)
         app.UseSwagger().UseSwaggerUI();
 
     if (app.Environment.IsDevelopment())
-        Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+        IdentityModelEventSource.ShowPII = true;
 
     app.UseCors();
 

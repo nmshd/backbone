@@ -99,16 +99,19 @@ static WebApplication CreateApp(string[] args)
     var app = builder.Build();
     Configure(app);
 
-    app
-        .MigrateDbContext<ChallengesDbContext>()
-        .MigrateDbContext<DevicesDbContext>()
-        .MigrateDbContext<FilesDbContext>()
-        .MigrateDbContext<RelationshipsDbContext>()
-        .MigrateDbContext<QuotasDbContext>()
-        .MigrateDbContext<MessagesDbContext>()
-        .MigrateDbContext<SynchronizationDbContext>()
-        .MigrateDbContext<TokensDbContext>()
-        .MigrateDbContext<QuotasDbContext>();
+    if (app.Environment.IsLocal() || app.Environment.IsDevelopment())
+    {
+        app
+            .MigrateDbContext<ChallengesDbContext>()
+            .MigrateDbContext<DevicesDbContext>()
+            .MigrateDbContext<FilesDbContext>()
+            .MigrateDbContext<RelationshipsDbContext>()
+            .MigrateDbContext<QuotasDbContext>()
+            .MigrateDbContext<MessagesDbContext>()
+            .MigrateDbContext<SynchronizationDbContext>()
+            .MigrateDbContext<TokensDbContext>()
+            .MigrateDbContext<QuotasDbContext>();
+    }
 
     app
         .SeedDbContext<DevicesDbContext, DevicesDbContextSeeder>()
