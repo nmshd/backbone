@@ -6,6 +6,7 @@ using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.TerminateRelationship;
@@ -106,6 +107,16 @@ public class RelationshipsController : ApiControllerBase
     public async Task<IActionResult> TerminateRelationship([FromRoute] string id, CancellationToken cancellationToken)
     {
         await _mediator.Send(new TerminateRelationshipCommand() { RelationshipId = id }, cancellationToken);
+        return NoContent();
+    }
+
+    [HttpPut("{id}/Decompose")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<TerminateRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DecomposeRelationship([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new DecomposeRelationshipCommand() { RelationshipId = id }, cancellationToken);
         return NoContent();
     }
 }
