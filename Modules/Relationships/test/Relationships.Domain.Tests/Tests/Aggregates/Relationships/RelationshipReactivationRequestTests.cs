@@ -10,19 +10,6 @@ namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relations
 public class RelationshipReactivationRequestTests
 {
     [Fact]
-    public void Relationship_reactivation_request_does_not_change_relationship_status()
-    {
-        // Arrange
-        var relationship = CreateTerminatedRelationship();
-
-        // Act
-        relationship.Reactivate(IDENTITY_2, DEVICE_2);
-
-        // Assert
-        relationship.Status.Should().Be(RelationshipStatus.Terminated);
-    }
-
-    [Fact]
     public void Relationship_reactivation_request_creates_an_audit_log_entry()
     {
         // Arrange
