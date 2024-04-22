@@ -73,6 +73,14 @@ public class HandlerTests
 
         var handler = new Handler(fakeRelationshipsRepository, fakeUserContext, mockEventBus);
 
+        relationship.AuditLog.Add(new RelationshipAuditLogEntry( // remove after RequestRelationsipReactivation is implemented
+            RelationshipAuditLogEntryReason.Reactivation,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Terminated,
+            TestDataGenerator.CreateRandomIdentityAddress(),
+            TestDataGenerator.CreateRandomDeviceId()
+        ));
+
         // Act
         await handler.Handle(new RejectRelationshipReactivationCommand
         {
