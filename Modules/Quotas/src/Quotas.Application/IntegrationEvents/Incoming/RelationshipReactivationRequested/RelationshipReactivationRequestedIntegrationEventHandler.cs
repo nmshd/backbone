@@ -14,9 +14,6 @@ public class RelationshipReactivationRequestedIntegrationEventHandler : IIntegra
 
     public async Task Handle(RelationshipReactivationRequestedIntegrationEvent integrationEvent)
     {
-        var identities = new List<string> { integrationEvent.CreatedBy };
-        var metrics = new List<MetricKey> { MetricKey.NumberOfRelationships };
-
-        await _metricStatusesService.RecalculateMetricStatuses(identities, metrics, CancellationToken.None);
+        await _metricStatusesService.RecalculateMetricStatuses([integrationEvent.RequestingIdentity], [MetricKey.NumberOfRelationships], CancellationToken.None);
     }
 }

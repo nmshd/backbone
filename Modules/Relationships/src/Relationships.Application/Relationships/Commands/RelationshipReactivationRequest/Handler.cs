@@ -32,7 +32,7 @@ public class Handler : IRequestHandler<RequestRelationshipReactivationCommand, R
 
         var peer = relationship.To == _activeIdentity ? relationship.From : relationship.To;
 
-        _eventBus.Publish(new RelationshipReactivationRequestedIntegrationEvent(relationship, peer));
+        _eventBus.Publish(new RelationshipReactivationRequestedIntegrationEvent(relationship, _activeIdentity, peer));
 
         return new RelationshipReactivationRequestResponse(relationship);
     }
