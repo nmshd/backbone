@@ -22,7 +22,7 @@ public class HandlerTests
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         var relationship = TestData.CreatePendingRelationship(to: activeIdentity);
-        relationship.Test_SetStatusAsTerminated(); // todo: Nikola2 - remove when the other thing is implemented
+        relationship.Test_SetStatusAsTerminated(); // remove when RequestRelationshipReactivation is implemented
 
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
@@ -62,7 +62,7 @@ public class HandlerTests
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         var relationship = TestData.CreatePendingRelationship(to: activeIdentity);
-        relationship.Test_SetStatusAsTerminated(); // todo:Nikola2 change this
+        relationship.Test_SetStatusAsTerminated(); // remove when RequestRelationshipReactivation is implemented
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
