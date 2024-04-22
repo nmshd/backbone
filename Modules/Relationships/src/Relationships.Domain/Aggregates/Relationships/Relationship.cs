@@ -101,11 +101,12 @@ public class Relationship
             throw new DomainException(DomainErrors.CannotRevokeRelationshipRequestNotCreatedByYourself());
     }
 
-    public void Reject(IdentityAddress activeIdentity, DeviceId activeDevice)
+    public void Reject(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
     {
         EnsureStatus(RelationshipStatus.Pending);
         EnsureRelationshipRequestIsAddressedToSelf(activeIdentity);
 
+        CreationResponseContent = creationResponseContent;
         Status = RelationshipStatus.Rejected;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
@@ -124,11 +125,12 @@ public class Relationship
             throw new DomainException(DomainErrors.RelationshipIsNotInCorrectStatus(status));
     }
 
-    public void Revoke(IdentityAddress activeIdentity, DeviceId activeDevice)
+    public void Revoke(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
     {
         EnsureStatus(RelationshipStatus.Pending);
         EnsureRelationshipRequestIsCreatedBySelf(activeIdentity);
 
+        CreationResponseContent = creationResponseContent;
         Status = RelationshipStatus.Revoked;
 
         var auditLogEntry = new RelationshipAuditLogEntry(

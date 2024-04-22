@@ -13,6 +13,7 @@ public class RelationshipMetadataDTO
         From = relationship.From;
         To = relationship.To;
         CreatedAt = relationship.CreatedAt;
+        CreationResponseContent = relationship.CreationResponseContent;
         Status = relationship.Status;
         AuditLog = relationship.AuditLog.Select(a => new RelationshipAuditLogEntryDTO(a)).ToList();
     }
@@ -25,6 +26,7 @@ public class RelationshipMetadataDTO
 
     public DateTime CreatedAt { get; set; }
 
+    public byte[]? CreationResponseContent { get; set; }
     public RelationshipStatus Status { get; set; }
 
     public List<RelationshipAuditLogEntryDTO> AuditLog { get; set; }

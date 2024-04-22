@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<RejectRelationshipCommand, RejectRelation
         var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true) ??
                            throw new NotFoundException(nameof(Relationship));
 
-        relationship.Reject(_activeIdentity, _activeDevice);
+        relationship.Reject(_activeIdentity, _activeDevice, request.CreationResponseContent);
 
         await _relationshipsRepository.Update(relationship);
 
