@@ -23,6 +23,7 @@ public class ExternalEventDTO : IHaveCustomMapping
             ExternalEventType.RelationshipStatusChanged => "RelationshipStatusChanged",
             ExternalEventType.IdentityDeletionProcessStatusChanged => "IdentityDeletionProcessStatusChanged",
             ExternalEventType.IdentityDeletionProcessStarted => "IdentityDeletionProcessStarted",
+            ExternalEventType.RelationshipDecomposedByPeer => "RelationshipDecomposedByPeer",
             _ => throw new ArgumentOutOfRangeException(nameof(externalEventType), externalEventType, null)
         });
         configuration.CreateMap<ExternalEvent, ExternalEventDTO>();
