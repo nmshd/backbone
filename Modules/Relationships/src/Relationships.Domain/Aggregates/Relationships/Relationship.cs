@@ -157,6 +157,22 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
+    public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureStatus(RelationshipStatus.Terminated);
+
+        Status = RelationshipStatus.DeletionProposed;
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.Decomposed,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.DeletionProposed,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
     #region Expressions
 
     public static Expression<Func<Relationship, bool>> HasParticipant(string identity)
