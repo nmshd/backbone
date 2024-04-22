@@ -50,7 +50,7 @@ public class RelationshipReactivationRequestTests
     }
 
     [Fact]
-    public void Cannot_reactivate_relationship_that_is_already_reactivated()
+    public void Cannot_Reactivate_An_Already_Requested_Reactivation()
     {
         // Arrange
         var relationship = CreateTerminatedRelationship();
