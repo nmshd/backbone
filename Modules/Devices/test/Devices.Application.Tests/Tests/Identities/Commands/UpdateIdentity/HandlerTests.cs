@@ -4,8 +4,8 @@ using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
@@ -14,6 +14,7 @@ using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.UpdateIdentity;
+
 public class HandlerTests
 {
     [Fact]
@@ -45,7 +46,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Publishes_TierOfIdentityChangedIntegrationEvent()
+    public async void Publishes_TierOfIdentityChangedDomainEvent()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -67,7 +68,7 @@ public class HandlerTests
         await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => eventBus.Publish(A<TierOfIdentityChangedIntegrationEvent>._)).MustHaveHappened();
+        A.CallTo(() => eventBus.Publish(A<TierOfIdentityChangedDomainEvent>._)).MustHaveHappened();
     }
 
     [Fact]
@@ -148,7 +149,7 @@ public class HandlerTests
         // Assert
         acting.Should().AwaitThrowAsync<DomainException>();
         A.CallTo(() => identitiesRepository.Update(A<Identity>._, A<CancellationToken>._)).MustNotHaveHappened();
-        A.CallTo(() => eventBus.Publish(A<TierOfIdentityChangedIntegrationEvent>._)).MustNotHaveHappened();
+        A.CallTo(() => eventBus.Publish(A<TierOfIdentityChangedDomainEvent>._)).MustNotHaveHappened();
     }
 
     private static UpdateIdentityCommand BuildRequest(Tier newTier, Identity identity)
