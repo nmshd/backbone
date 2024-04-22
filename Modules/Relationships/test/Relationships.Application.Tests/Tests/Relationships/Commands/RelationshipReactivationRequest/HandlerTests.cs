@@ -30,7 +30,7 @@ public class HandlerTests
         var handler = CreateHandler(fakeUserContext, fakeRelationshipsRepository);
 
         // Act
-        var response = await handler.Handle(new RelationshipReactivationRequestCommand
+        var response = await handler.Handle(new RequestRelationshipReactivationCommand
         {
             RelationshipId = relationship.Id
         }, CancellationToken.None);
@@ -58,7 +58,7 @@ public class HandlerTests
         var handler = CreateHandler(fakeUserContext, mockRelationshipsRepository);
 
         // Act
-        await handler.Handle(new RelationshipReactivationRequestCommand
+        await handler.Handle(new RequestRelationshipReactivationCommand
         {
             RelationshipId = relationship.Id
         }, CancellationToken.None);

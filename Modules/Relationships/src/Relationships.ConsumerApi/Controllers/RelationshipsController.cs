@@ -116,7 +116,7 @@ public class RelationshipsController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RelationshipReactivationRequest([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new RelationshipReactivationRequestCommand { RelationshipId = id }, cancellationToken);
+        var response = await _mediator.Send(new RequestRelationshipReactivationCommand { RelationshipId = id }, cancellationToken);
         return Ok(response);
     }
 }
