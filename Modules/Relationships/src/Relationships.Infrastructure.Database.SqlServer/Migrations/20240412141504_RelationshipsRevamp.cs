@@ -11,31 +11,26 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("""
-                 ALTER TABLE [Relationships].[RelationshipChanges] DROP CONSTRAINT [FK_RelationshipChanges_Relationships_RelationshipId]
-                 GO
-                 
-                 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[AdminUi].[RelationshipOverviews]') AND type in (N'V'))
-                 DROP VIEW [AdminUi].[RelationshipOverviews]
-                 GO
-                 
-                 DROP TABLE [Relationships].[RelationshipChanges]
-                 GO
-            """);
+            migrationBuilder.DropTable(
+                schema: "Relationships",
+                name: "RelationshipChanges");
 
             migrationBuilder.AddColumn<byte[]>(
                 name: "AcceptanceContent",
+                schema: "Relationships",
                 table: "Relationships",
                 type: "varbinary(max)",
                 nullable: true);
 
             migrationBuilder.AddColumn<byte[]>(
                 name: "CreationContent",
+                schema: "Relationships",
                 table: "Relationships",
                 type: "varbinary(max)",
                 nullable: true);
 
             migrationBuilder.CreateTable(
+                schema: "Relationships",
                 name: "RelationshipAuditLog",
                 columns: table => new
                 {
@@ -54,12 +49,14 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                     table.ForeignKey(
                         name: "FK_RelationshipAuditLog_Relationships_RelationshipId",
                         column: x => x.RelationshipId,
+                        principalSchema: "Relationships",
                         principalTable: "Relationships",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_RelationshipAuditLog_RelationshipId",
+                schema: "Relationships",
                 table: "RelationshipAuditLog",
                 column: "RelationshipId");
         }
@@ -68,17 +65,21 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                schema: "Relationships",
                 name: "RelationshipAuditLog");
 
             migrationBuilder.DropColumn(
                 name: "AcceptanceContent",
+                schema: "Relationships",
                 table: "Relationships");
 
             migrationBuilder.DropColumn(
                 name: "CreationContent",
+                schema: "Relationships",
                 table: "Relationships");
 
             migrationBuilder.CreateTable(
+                schema: "Relationships",
                 name: "RelationshipChanges",
                 columns: table => new
                 {
@@ -103,6 +104,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                     table.ForeignKey(
                         name: "FK_RelationshipChanges_Relationships_RelationshipId",
                         column: x => x.RelationshipId,
+                        principalSchema: "Relationships",
                         principalTable: "Relationships",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -110,11 +112,13 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.CreateIndex(
                 name: "IX_RelationshipChanges_RelationshipId",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 column: "RelationshipId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RelationshipChanges_Res_CreatedAt_Res_CreatedBy_Res_CreatedByDevice",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 columns: new[] { "Res_CreatedAt", "Res_CreatedBy", "Res_CreatedByDevice" })
                 .Annotation("SqlServer:Include", new[] { "Res_Content" });
