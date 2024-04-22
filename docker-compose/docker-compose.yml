@@ -11,7 +11,7 @@ services:
     volumes:
       - azure-storage-emulator-volume:/data
 
-  # ms-sql-server:  
+  # ms-sql-server:
   #   container_name: bkb-mssql_server
   #   hostname: ms-sql-server
   #   image: mcr.microsoft.com/mssql/server:2019-latest
