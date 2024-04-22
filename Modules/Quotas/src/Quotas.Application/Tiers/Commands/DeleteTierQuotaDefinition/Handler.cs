@@ -2,12 +2,13 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
+
 public class Handler : IRequestHandler<DeleteTierQuotaDefinitionCommand>
 {
     private readonly ITiersRepository _tiersRepository;
@@ -33,7 +34,7 @@ public class Handler : IRequestHandler<DeleteTierQuotaDefinitionCommand>
 
         _logger.DeletedTierQuotaDefinition(request.TierQuotaDefinitionId, tier.Id);
 
-        _eventBus.Publish(new TierQuotaDefinitionDeletedIntegrationEvent(tier.Id, request.TierQuotaDefinitionId));
+        _eventBus.Publish(new TierQuotaDefinitionDeletedDomainEvent(tier.Id, request.TierQuotaDefinitionId));
     }
 }
 

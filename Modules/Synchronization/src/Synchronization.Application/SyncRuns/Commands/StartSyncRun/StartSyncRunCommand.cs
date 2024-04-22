@@ -6,7 +6,9 @@ namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSy
 
 public class StartSyncRunCommand : IRequest<StartSyncRunResponse>
 {
-    public StartSyncRunCommand(SyncRunDTO.SyncRunType type, ushort supportedDatawalletVersion) : this(type, null, supportedDatawalletVersion) { }
+    public StartSyncRunCommand(SyncRunDTO.SyncRunType type, ushort supportedDatawalletVersion) : this(type, null, supportedDatawalletVersion)
+    {
+    }
 
     [JsonConstructor]
     public StartSyncRunCommand(SyncRunDTO.SyncRunType type, ushort? duration, ushort supportedDatawalletVersion)
