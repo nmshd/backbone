@@ -41,11 +41,19 @@ public class RejectRelationshipReactivationTests
         var relationship = CreateActiveRelationship();
         relationship.Test_SetStatusAsTerminated();
 
+        relationship.AuditLog.Add(new RelationshipAuditLogEntry( // remove after RequestRelationsipReactivation is implemented
+            RelationshipAuditLogEntryReason.Reactivation,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Terminated,
+            IDENTITY_1,
+            DEVICE_1
+        ));
+
         // Act
         relationship.RejectReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
-        relationship.AuditLog.Should().HaveCount(3);
+        relationship.AuditLog.Should().HaveCount(4);
 
         var auditLogEntry = relationship.AuditLog.Last();
 
@@ -70,22 +78,21 @@ public class RejectRelationshipReactivationTests
 
         // Assert
         acting.Should().Throw<DomainException>()
-            .WithError("error.platform.validation.relationshipRequest.cannotRejectRelationshipReactivationRequestAddressedToSomeoneElse");
+            .WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipReactivationRequestAddressedToSomeoneElse");
     }
 
     [Fact]
-    public void Can_only_reject_reactivation_when_relationship_is_in_status_terminated()
+    public void Can_only_reject_reactivation_when_reactivation_request_has_been_made()
     {
         // Arrange
-        var relationship = CreateActiveRelationship();
+        var relationship = CreateTerminatedRelationship();
 
         // Act
         var acting = () => relationship.RejectReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
-            "error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus",
-            nameof(RelationshipStatus.Terminated)
+            "error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRevivalIfNoRequestToDoSoHasBeenMade"
         );
     }
 }

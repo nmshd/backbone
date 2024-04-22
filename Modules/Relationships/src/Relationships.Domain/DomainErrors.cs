@@ -41,9 +41,15 @@ public static class DomainErrors
             $"A relationship to '{targetIdentity}' already exists. If the relationship is terminated, you can reactivate it.");
     }
 
-    public static DomainError CannotRejectRelationshipReactivationRequestAddressedToSomeoneElse()
+    public static DomainError CannotAcceptOrRejectRelationshipReactivationRequestAddressedToSomeoneElse()
     {
-        return new DomainError("error.platform.validation.relationshipRequest.cannotRejectRelationshipReactivationRequestAddressedToSomeoneElse",
-            "You cannot reject a relationship reactivation request that is addressed to someone else.");
+        return new DomainError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipReactivationRequestAddressedToSomeoneElse",
+            "You cannot accept or reject a relationship reactivation request that is addressed to someone else.");
+    }
+
+    public static DomainError CannotAcceptOrRejectRelationshipRevivalIfNoRequestToDoSoHasBeenMade()
+    {
+        return new DomainError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRevivalIfNoRequestToDoSoHasBeenMade",
+            "You cannot accept or reject a relationship reactivation if no request to do so has been made.");
     }
 }

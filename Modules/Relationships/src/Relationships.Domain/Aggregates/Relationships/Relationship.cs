@@ -98,7 +98,15 @@ public class Relationship
     private void EnsureRelationshipReactivationRequestIsAddressedToSelf(IdentityAddress activeIdentity)
     {
         if (To != activeIdentity)
-            throw new DomainException(DomainErrors.CannotRejectRelationshipReactivationRequestAddressedToSomeoneElse());
+            throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipReactivationRequestAddressedToSomeoneElse());
+    }
+
+    private void EnsureOpenRevivalRequestExists()
+    {
+        if (AuditLog.Last().Reason != RelationshipAuditLogEntryReason.Reactivation)
+        {
+            throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipRevivalIfNoRequestToDoSoHasBeenMade());
+        }
     }
 
     private void EnsureRelationshipRequestIsCreatedBySelf(IdentityAddress activeIdentity)
@@ -124,15 +132,14 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    public void Test_SetStatusAsTerminated() // todo: Nikola2 remove, only used as a test
+    public void Test_SetStatusAsTerminated() // remove after RequestRelationshipReactivation is implemented
     {
         Status = RelationshipStatus.Terminated;
     }
     public void RejectReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureRelationshipReactivationRequestIsAddressedToSelf(activeIdentity);
-
-        EnsureStatus(RelationshipStatus.Terminated);
+        EnsureOpenRevivalRequestExists();
 
         var auditLogEntry = new RelationshipAuditLogEntry(
             RelationshipAuditLogEntryReason.RejectionOfReactivation,
