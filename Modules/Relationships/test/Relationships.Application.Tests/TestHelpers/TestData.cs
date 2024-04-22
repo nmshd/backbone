@@ -29,4 +29,15 @@ public static class TestData
 
         return relationship;
     }
+
+    public static Relationship CreateTerminatedRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
+    {
+        from ??= TestDataGenerator.CreateRandomIdentityAddress();
+        to ??= TestDataGenerator.CreateRandomIdentityAddress();
+
+        var relationship = CreateActiveRelationship(from, to);
+        relationship.Terminate(relationship.From, TestDataGenerator.CreateRandomDeviceId());
+
+        return relationship;
+    }
 }
