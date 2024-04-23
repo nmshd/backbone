@@ -15,6 +15,7 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
@@ -65,7 +66,7 @@ static WebApplication CreateApp(string[] args)
     builder.Host
         .UseSerilog((context, configuration) => configuration
             .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
-            .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
+            .Enrich.WithCorrelationId("X-Correlation-Id", true)
             .Enrich.WithDemystifiedStackTraces()
             .Enrich.FromLogContext()
             .Enrich.WithProperty("service", "adminui")
@@ -106,6 +107,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
         .AddDevices(parsedConfiguration.Modules.Devices)
         .AddQuotas(parsedConfiguration.Modules.Quotas)
+        .AddChallenges(parsedConfiguration.Modules.Challenges)
         .AddHealthChecks();
 
     if (parsedConfiguration.SwaggerUi.Enabled)
@@ -134,14 +136,14 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
     var env = webApplicationBuilder.Environment;
 
     webApplicationBuilder.Configuration
-        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
-        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
-        .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
+        .AddJsonFile("appsettings.json", true, false)
+        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, false)
+        .AddJsonFile("appsettings.override.json", true, true);
 
     if (env.IsDevelopment())
     {
         var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-        webApplicationBuilder.Configuration.AddUserSecrets(appAssembly, optional: true);
+        webApplicationBuilder.Configuration.AddUserSecrets(appAssembly, true);
     }
 
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
@@ -175,7 +177,7 @@ static void Configure(WebApplication app)
         app.UseSwagger().UseSwaggerUI();
 
     if (app.Environment.IsDevelopment())
-        Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+        IdentityModelEventSource.ShowPII = true;
 
     app.UseCors();
 

@@ -1,4 +1,5 @@
-﻿using Backbone.AdminApi.Sdk.Endpoints.Common.Crypto;
+﻿using Backbone.AdminApi.Sdk.Endpoints.Challenges.Types;
+using Backbone.AdminApi.Sdk.Endpoints.Common.Crypto;
 using Backbone.AdminApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.AdminApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
@@ -16,16 +17,21 @@ public class AccountController(Client client)
 
         var identityKeyPair = signatureHelper.CreateKeyPair();
 
+        var challenge = await client.Challenges.CreateChallenge();
+        if (challenge.Result?.Result?.Id is null)
+            return null;
+
+        var serializedChallenge = JsonConvert.SerializeObject(challenge.Result.Result);
+
+        var challengeSignature = signatureHelper.CreateSignature(identityKeyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
+        var signedChallenge = new SignedChallenge(serializedChallenge, challengeSignature);
+
         var createIdentityPayload = new CreateIdentityRequest
         {
             ClientId = clientId,
             ClientSecret = clientSecret,
             IdentityVersion = 1,
-            SignedChallenge = new CreateIdentityRequestSignedChallenge
-            {
-                Challenge = "string.Empty",
-                Signature = "some-dummy-signature"
-            },
+            SignedChallenge = signedChallenge,
             IdentityPublicKey = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new CryptoSignaturePublicKey
             {
                 alg = CryptoExchangeAlgorithm.ECDH_X25519,

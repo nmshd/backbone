@@ -78,7 +78,7 @@ public class IdentitiesController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateIdentity([FromRoute] string identityAddress, [FromBody] UpdateIdentityRequest request, CancellationToken cancellationToken)
     {
-        var command = new UpdateIdentityCommand() { Address = identityAddress, TierId = request.TierId };
+        var command = new UpdateIdentityCommand { Address = identityAddress, TierId = request.TierId };
         await _mediator.Send(command, cancellationToken);
         return NoContent();
     }
@@ -96,10 +96,9 @@ public class IdentitiesController : ApiControllerBase
             IdentityVersion = request.IdentityVersion,
             SignedChallenge = new SignedChallengeDTO
             {
-                Challenge = "-",
-                Signature = [0]
-            },
-            ShouldValidateChallenge = false
+                Challenge = request.SignedChallenge.Challenge,
+                Signature = request.SignedChallenge.Signature
+            }
         };
 
         var response = await _mediator.Send(command, cancellationToken);
@@ -177,4 +176,5 @@ public class CreateIdentityRequest
     public required byte[] IdentityPublicKey { get; set; }
     public required string DevicePassword { get; set; }
     public required byte IdentityVersion { get; set; }
+    public required SignedChallengeDTO SignedChallenge { get; set; }
 }

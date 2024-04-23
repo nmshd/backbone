@@ -1,4 +1,5 @@
 ﻿using Backbone.AdminApi.Sdk.Endpoints.ApiKeyValidation;
+using Backbone.AdminApi.Sdk.Endpoints.Challenges;
 using Backbone.AdminApi.Sdk.Endpoints.Clients;
 using Backbone.AdminApi.Sdk.Endpoints.Common;
 using Backbone.AdminApi.Sdk.Endpoints.Identities;
@@ -28,6 +29,7 @@ public class Client
         Metrics = new MetricsEndpoint(endpointClient);
         Relationships = new RelationshipsEndpoint(endpointClient);
         Tiers = new TiersEndpoint(endpointClient);
+        Challenges = new ChallengesEndpoint(endpointClient);
     }
 
     public ApiKeyValidationEndpoint ApiKeyValidation { get; }
@@ -37,4 +39,5 @@ public class Client
     public MetricsEndpoint Metrics { get; }
     public RelationshipsEndpoint Relationships { get; }
     public TiersEndpoint Tiers { get; }
+    public ChallengesEndpoint Challenges { get; }
 }

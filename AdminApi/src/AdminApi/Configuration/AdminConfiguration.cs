@@ -40,16 +40,19 @@ public class AdminConfiguration
     {
         [Required]
         public EventBusConfiguration EventBus { get; set; } = new();
+
         public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
     }
 
     public class ModulesConfiguration
     {
-
         [Required]
         public DevicesConfiguration Devices { get; set; } = new();
 
         [Required]
         public QuotasConfiguration Quotas { get; set; } = new();
+
+        [Required]
+        public ChallengesConfiguration Challenges { get; set; } = new();
     }
 }

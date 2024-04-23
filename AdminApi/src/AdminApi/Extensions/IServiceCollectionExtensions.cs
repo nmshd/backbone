@@ -6,6 +6,8 @@ using Backbone.AdminApi.Filters;
 using Backbone.AdminApi.Infrastructure.DTOs;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using FluentValidation;
@@ -20,10 +22,7 @@ public static class IServiceCollectionExtensions
 {
     public static IServiceCollection AddCustomFluentValidation(this IServiceCollection services)
     {
-        services.AddFluentValidationAutoValidation(config =>
-        {
-            config.DisableDataAnnotationsValidation = true;
-        });
+        services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
 
         ValidatorOptions.Global.DisplayNameResolver = (_, member, _) =>
             member != null ? char.ToLowerInvariant(member.Name[0]) + member.Name[1..] : null;
@@ -136,11 +135,11 @@ public static class IServiceCollectionExtensions
                     services.AddHealthChecks().AddSqlServer(
                         connectionString,
                         name: moduleName
-                        );
+                    );
                     break;
                 case "Postgres":
                     services.AddHealthChecks().AddNpgSql(
-                        connectionString: connectionString,
+                        connectionString,
                         name: moduleName);
                     break;
                 default:
@@ -149,6 +148,8 @@ public static class IServiceCollectionExtensions
         }
 
         services.AddHttpContextAccessor();
+
+        services.AddTransient<IUserContext, AspNetCoreUserContext>();
 
         return services;
     }
