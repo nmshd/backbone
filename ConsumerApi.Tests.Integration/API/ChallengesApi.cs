@@ -10,9 +10,4 @@ internal class ChallengesApi : BaseApi
     {
         return await Post<Challenge>("/Challenges", requestConfiguration);
     }
-
-    internal async Task<HttpResponse<Challenge>> GetChallengeById(RequestConfiguration requestConfiguration, string id)
-    {
-        return await Get<Challenge>($"/Challenges/{id}", requestConfiguration);
-    }
 }
