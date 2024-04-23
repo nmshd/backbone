@@ -1,7 +1,7 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+﻿using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipDecomposed;
-public class RelationshipDecomposedIntegrationEvent : IntegrationEvent
+public class RelationshipDecomposedIntegrationEvent : DomainEvent
 {
     public RelationshipDecomposedIntegrationEvent(string relationshipId, string peer) : base($"{relationshipId}/Decompose")
     {

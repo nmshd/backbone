@@ -1,8 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.MessageCreated;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.MessageCreated;
-using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
@@ -12,9 +12,9 @@ public class RelationshipDecomposedIntegrationEventHandler
 {
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
-    private readonly ILogger<MessageCreatedIntegrationEventHandler> _logger;
+    private readonly ILogger<MessageCreatedDomainEventHandler> _logger;
 
-    public RelationshipDecomposedIntegrationEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<MessageCreatedIntegrationEventHandler> logger)
+    public RelationshipDecomposedIntegrationEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<MessageCreatedDomainEventHandler> logger)
     {
         _dbContext = dbContext;
         _eventBus = eventBus;
@@ -34,7 +34,7 @@ public class RelationshipDecomposedIntegrationEventHandler
         try
         {
             var externalEvent = await _dbContext.CreateExternalEvent(IdentityAddress.Parse(@event.Peer), ExternalEventType.RelationshipDecomposedByPeer, payload);
-            _eventBus.Publish(new ExternalEventCreatedIntegrationEvent(externalEvent));
+            _eventBus.Publish(new ExternalEventCreatedDomainEvent(externalEvent));
         }
         catch (Exception ex)
         {
