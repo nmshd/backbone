@@ -1,9 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
 using Newtonsoft.Json.Serialization;
 
-namespace Backbone.BuildingBlocks.SDK.Endpoints.Common.Validators;
+namespace Backbone.AdminApi.Tests.Integration.Support;
 
 public class JsonValidators
 {
