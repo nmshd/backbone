@@ -35,7 +35,7 @@ spec:
           {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{- default .Chart.AppVersion .Values.image.tagOverride }}"
+          image: "{{ .Values.image.repository }}:{{- default .Values.global.chartVersion .Values.image.tagOverride }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             - name: Database__Provider
