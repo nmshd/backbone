@@ -3,8 +3,8 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
@@ -47,7 +47,7 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
 
         _logger.CreatedQuotaForTier(tier.Id, tier.Name, result.Value.Id);
 
-        _eventBus.Publish(new QuotaCreatedForTierIntegrationEvent(tier.Id, result.Value.Id));
+        _eventBus.Publish(new QuotaCreatedForTierDomainEvent(tier.Id, result.Value.Id));
 
         var response = new TierQuotaDefinitionDTO(result.Value.Id, new MetricDTO(metric), result.Value.Max, result.Value.Period);
         return response;

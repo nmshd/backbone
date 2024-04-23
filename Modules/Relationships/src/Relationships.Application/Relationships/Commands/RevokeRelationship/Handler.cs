@@ -2,8 +2,8 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationship;
@@ -32,7 +32,7 @@ public class Handler : IRequestHandler<RevokeRelationshipCommand, RevokeRelation
 
         await _relationshipsRepository.Update(relationship);
 
-        _eventBus.Publish(new RelationshipStatusChangedIntegrationEvent(relationship));
+        _eventBus.Publish(new RelationshipStatusChangedDomainEvent(relationship));
 
         return new RevokeRelationshipResponse(relationship);
     }

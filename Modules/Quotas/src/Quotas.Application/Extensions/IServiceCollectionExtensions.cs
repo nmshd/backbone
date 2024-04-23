@@ -28,7 +28,7 @@ public static class IServiceCollectionExtensions
 
     private static void AddEventHandlers(this IServiceCollection services)
     {
-        foreach (var eventHandler in GetAllIntegrationEventHandlers())
+        foreach (var eventHandler in GetAllDomainEventHandlers())
         {
             services.AddTransient(eventHandler);
         }
@@ -38,7 +38,7 @@ public static class IServiceCollectionExtensions
     {
         var lookupType = typeof(IMetricCalculator);
         var types = Assembly.GetExecutingAssembly().GetTypes().Where(
-                t => lookupType.IsAssignableFrom(t) && !t.IsInterface);
+            t => lookupType.IsAssignableFrom(t) && !t.IsInterface);
 
         foreach (var type in types)
         {
@@ -46,14 +46,14 @@ public static class IServiceCollectionExtensions
         }
     }
 
-    private static IEnumerable<Type> GetAllIntegrationEventHandlers()
+    private static IEnumerable<Type> GetAllDomainEventHandlers()
     {
-        var integrationEventHandlerTypes = from t in Assembly.GetExecutingAssembly().GetTypes()
-                                           from i in t.GetInterfaces()
-                                           where t.IsClass && !t.IsAbstract && i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IIntegrationEventHandler<>)
-                                           select t;
+        var domainEventHandlerTypes =
+            from t in Assembly.GetExecutingAssembly().GetTypes()
+            from i in t.GetInterfaces()
+            where t.IsClass && !t.IsAbstract && i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>)
+            select t;
 
-        return integrationEventHandlerTypes;
+        return domainEventHandlerTypes;
     }
 }
-

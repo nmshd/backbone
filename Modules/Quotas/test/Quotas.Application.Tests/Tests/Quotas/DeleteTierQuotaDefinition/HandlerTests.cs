@@ -1,13 +1,13 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
 using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Quotas.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Quotas.Application.Tests.Extensions;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -16,6 +16,7 @@ using Xunit;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.DeleteTierQuotaDefinition;
+
 public class HandlerTests
 {
     private readonly IEventBus _eventBus;
@@ -27,7 +28,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Triggers_TierQuotaDefinitionDeletedIntegrationEvent()
+    public async Task Triggers_TierQuotaDefinitionDeletedDomainEvent()
     {
         // Arrange
         var tierId = new TierId("SomeTierId");
@@ -46,7 +47,7 @@ public class HandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => _eventBus.Publish(A<IntegrationEvent>.That.IsInstanceOf(typeof(TierQuotaDefinitionDeletedIntegrationEvent)))).MustHaveHappenedOnceExactly();
+        A.CallTo(() => _eventBus.Publish(A<DomainEvent>.That.IsInstanceOf(typeof(TierQuotaDefinitionDeletedDomainEvent)))).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -153,5 +154,3 @@ public class HandlerTests
         return new Handler(tiersRepository, logger, _eventBus);
     }
 }
-
-
