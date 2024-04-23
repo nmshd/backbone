@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
     <PropertyGroup>
-        <OutputType>Exe</OutputType>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -51,16 +51,5 @@
         <ProjectReference Include="..\Modules\Tokens\src\Tokens.Infrastructure.Database.Postgres\Tokens.Infrastructure.Database.Postgres.csproj"/>
         <ProjectReference Include="..\Modules\Tokens\src\Tokens.Infrastructure.Database.SqlServer\Tokens.Infrastructure.Database.SqlServer.csproj"/>
         <ProjectReference Include="..\Modules\Tokens\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Remove="appsettings.override.json"/>
-        <Content Include="appsettings.override.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-        <None Remove="appsettings.json"/>
-        <Content Include="appsettings.json">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
     </ItemGroup>
 </Project>
