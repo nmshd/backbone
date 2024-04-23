@@ -2,7 +2,7 @@ using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Files.Application.IntegrationEvents.Out;
+using Backbone.Modules.Files.Domain.DomainEvents.Out;
 using MediatR;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
@@ -42,7 +42,7 @@ public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
             cancellationToken
         );
 
-        _eventBus.Publish(new FileUploadedIntegrationEvent(file));
+        _eventBus.Publish(new FileUploadedDomainEvent(file));
 
         var response = _mapper.Map<CreateFileResponse>(file);
 
