@@ -138,8 +138,8 @@ public class Relationship
     }
     public void RejectReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
-        EnsureRelationshipReactivationRequestIsAddressedToSelf(activeIdentity);
         EnsureOpenRevivalRequestExists();
+        EnsureRelationshipReactivationRequestIsAddressedToSelf(activeIdentity);
 
         var auditLogEntry = new RelationshipAuditLogEntry(
             RelationshipAuditLogEntryReason.RejectionOfReactivation,
