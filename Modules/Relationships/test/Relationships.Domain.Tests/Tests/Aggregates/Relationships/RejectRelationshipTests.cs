@@ -18,7 +18,7 @@ public class RejectRelationshipTests
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Reject(IDENTITY_2, DEVICE_2);
+        relationship.Reject(IDENTITY_2, DEVICE_2, null);
 
         // Assert
         relationship.Status.Should().Be(RelationshipStatus.Rejected);
@@ -33,7 +33,7 @@ public class RejectRelationshipTests
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Reject(IDENTITY_2, DEVICE_2);
+        relationship.Reject(IDENTITY_2, DEVICE_2, null);
 
         // Assert
         relationship.AuditLog.Should().HaveCount(2);
@@ -56,7 +56,7 @@ public class RejectRelationshipTests
         var relationship = CreateActiveRelationship();
 
         // Act
-        var acting = () => relationship.Reject(IDENTITY_2, DEVICE_2);
+        var acting = () => relationship.Reject(IDENTITY_2, DEVICE_2, null);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
@@ -72,7 +72,7 @@ public class RejectRelationshipTests
         var relationship = CreatePendingRelationship();
 
         // Act
-        var acting = () => relationship.Reject(IDENTITY_1, DEVICE_1);
+        var acting = () => relationship.Reject(IDENTITY_1, DEVICE_1, null);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
@@ -86,7 +86,7 @@ public class RejectRelationshipTests
         var foreignAddress = IdentityAddress.ParseUnsafe("some-other-identity");
 
         // Act
-        var acting = () => relationship.Reject(foreignAddress, DeviceId.New());
+        var acting = () => relationship.Reject(foreignAddress, DeviceId.New(), null);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
