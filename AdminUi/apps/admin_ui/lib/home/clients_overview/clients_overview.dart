@@ -18,6 +18,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   late ScrollController _scrollController;
 
   late List<Clients> _clients;
+  late List<Clients> _originalClients;
   late Map<String, bool> _selectedClients;
 
   late List<Tiers> _defaultTiers;
@@ -27,6 +28,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     super.initState();
     _scrollController = ScrollController();
     _clients = [];
+    _originalClients = [];
     _selectedClients = {};
     _defaultTiers = [];
     loadClients();
@@ -47,7 +49,12 @@ class _ClientsOverviewState extends State<ClientsOverview> {
             child: Column(
               children: [
                 ClientsFilter(
-                  onFilterChanged: () {},
+                  loadedClients: _originalClients,
+                  onFilterChanged: (filteredClients) {
+                    setState(() {
+                      _clients = filteredClients;
+                    });
+                  },
                 ),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -183,10 +190,22 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   }
 
   Future<void> loadClients() async {
-    final response = await GetIt.I.get<AdminApiClient>().clients.getClients();
-    setState(() {
-      _clients = response.data;
-    });
+    try {
+      final response = await GetIt.I.get<AdminApiClient>().clients.getClients();
+      if (mounted) {
+        setState(() {
+          _originalClients = response.data;
+          _clients = response.data;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _originalClients = [];
+          _clients = [];
+        });
+      }
+    }
   }
 
   Future<void> loadTiers() async {
