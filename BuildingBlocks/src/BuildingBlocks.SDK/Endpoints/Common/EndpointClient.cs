@@ -16,6 +16,9 @@ public class EndpointClient
                                         }
                                         """;
 
+    private const string ODATA_SEARCH = "value";
+    private const string ODATA_REPLACE = "result";
+
     private readonly IAuthenticator _authenticator;
 
     private readonly HttpClient _httpClient;
@@ -89,7 +92,7 @@ public class EndpointClient
         return new RequestBuilder<T>(this, _jsonSerializerOptions, _authenticator, method, url);
     }
 
-    private async Task<ApiResponse<T>> Execute<T>(HttpRequestMessage request)
+    private async Task<ApiResponse<T>> Execute<T>(HttpRequestMessage request, bool useOData)
     {
         var response = await _httpClient.SendAsync(request);
         var responseContent = await response.Content.ReadAsStreamAsync();
@@ -99,6 +102,15 @@ public class EndpointClient
         {
             responseContent.Close();
             responseContent = new MemoryStream(Encoding.UTF8.GetBytes(EMPTY_RESULT));
+        }
+        else if (useOData) //Replace "value" in OData response with "result" for it to be read as an ApiResponse
+        {
+            var str = await response.Content.ReadAsStringAsync();
+            var index = str.IndexOf(ODATA_SEARCH);
+            if (index > 0) str = str[..index] + ODATA_REPLACE + str[(index + ODATA_SEARCH.Length)..];
+
+            responseContent.Close();
+            responseContent = new MemoryStream(Encoding.UTF8.GetBytes(str));
         }
 
         var responseData = JsonSerializer.Deserialize<ResponseContent<T>>(responseContent, _jsonSerializerOptions);
@@ -128,16 +140,17 @@ public class EndpointClient
 
     public class RequestBuilder<T>
     {
+        private readonly IAuthenticator _authenticator;
         private readonly EndpointClient _client;
         private readonly NameValueCollection _extraHeaders = [];
         private readonly JsonSerializerOptions _jsonSerializerOptions;
-        private readonly IAuthenticator _authenticator;
         private readonly HttpMethod _method;
         private readonly NameValueCollection _queryParameters = [];
 
         private readonly string _url;
         private bool _authenticated;
         private HttpContent _content;
+        private bool _useOData;
 
         public RequestBuilder(EndpointClient client, JsonSerializerOptions jsonSerializerOptions, IAuthenticator authenticator, HttpMethod method, string url)
         {
@@ -148,12 +161,19 @@ public class EndpointClient
             _url = url;
             _method = method;
             _authenticated = false;
+            _useOData = false;
             _content = JsonContent.Create((object?)null);
         }
 
         public RequestBuilder<T> Authenticate(bool authenticate = true)
         {
             _authenticated = authenticate;
+            return this;
+        }
+
+        public RequestBuilder<T> UseOData(bool useOData = true)
+        {
+            _useOData = useOData;
             return this;
         }
 
@@ -231,10 +251,7 @@ public class EndpointClient
             return this;
         }
 
-        public async Task<ApiResponse<T>> Execute()
-        {
-            return await _client.Execute<T>(await CreateRequestMessage());
-        }
+        public async Task<ApiResponse<T>> Execute() => await _client.Execute<T>(await CreateRequestMessage(), _useOData);
 
         public async Task<RawApiResponse> ExecuteRaw()
         {
