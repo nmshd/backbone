@@ -1,6 +1,6 @@
 [
   {
-    "Name": "Admin UI \u002B Consumer API",
+    "Name": "Backbone (Full)",
     "Projects": [
       {
         "Name": "ConsumerApi\\ConsumerApi.csproj",
@@ -14,6 +14,11 @@
       },
       {
         "Name": "AdminApi\\src\\AdminApi\\AdminApi.csproj",
+        "Action": "Start",
+        "DebugTarget": ""
+      },
+      {
+        "Name": "EventHandlerService\\src\\EventHandlerService\\EventHandlerService.csproj",
         "Action": "Start",
         "DebugTarget": ""
       }

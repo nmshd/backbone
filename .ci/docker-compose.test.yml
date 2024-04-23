@@ -44,6 +44,22 @@ services:
       - source: Config
         target: app/appsettings.override.json
 
+  event-handler-service:
+    container_name: event-handler-service-test
+    build:
+      context: ..
+      dockerfile: EventHandlerService/src/EventHandlerService/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      database:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+    configs:
+      - source: Config
+        target: app/appsettings.override.json
+
   ### infrastructure ###
 
   azure-storage-emulator:
