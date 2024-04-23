@@ -2,12 +2,10 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.MessageCreated;
-using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipCreated;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipStatusChanged;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.MessageCreated;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipCreated;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipStatusChanged;
 
 namespace Backbone.Modules.Synchronization.Application.Extensions;
