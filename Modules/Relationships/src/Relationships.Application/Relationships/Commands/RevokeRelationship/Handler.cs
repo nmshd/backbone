@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<RevokeRelationshipCommand, RevokeRelation
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
         var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
 
-        relationship.Revoke(_activeIdentity, _activeDevice);
+        relationship.Revoke(_activeIdentity, _activeDevice, request.CreationResponseContent);
 
         await _relationshipsRepository.Update(relationship);
 

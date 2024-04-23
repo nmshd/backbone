@@ -112,13 +112,13 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
-                    b.Property<byte[]>("AcceptanceContent")
-                        .HasColumnType("varbinary(max)");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<byte[]>("CreationContent")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<byte[]>("CreationResponseContent")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<string>("From")

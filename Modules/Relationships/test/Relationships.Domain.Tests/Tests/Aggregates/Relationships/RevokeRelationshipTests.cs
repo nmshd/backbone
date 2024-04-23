@@ -18,7 +18,7 @@ public class RevokeRelationshipTests
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Revoke(IDENTITY_1, DEVICE_1);
+        relationship.Revoke(IDENTITY_1, DEVICE_1, null);
 
         // Assert
         relationship.Status.Should().Be(RelationshipStatus.Revoked);
@@ -33,7 +33,7 @@ public class RevokeRelationshipTests
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Revoke(IDENTITY_1, DEVICE_1);
+        relationship.Revoke(IDENTITY_1, DEVICE_1, null);
 
         // Assert
         relationship.AuditLog.Should().HaveCount(2);
@@ -56,7 +56,7 @@ public class RevokeRelationshipTests
         var relationship = CreateActiveRelationship();
 
         // Act
-        var acting = () => relationship.Revoke(IDENTITY_2, DEVICE_2);
+        var acting = () => relationship.Revoke(IDENTITY_2, DEVICE_2, null);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
@@ -72,7 +72,7 @@ public class RevokeRelationshipTests
         var relationship = CreatePendingRelationship();
 
         // Act
-        var acting = () => relationship.Revoke(IDENTITY_2, DEVICE_2);
+        var acting = () => relationship.Revoke(IDENTITY_2, DEVICE_2, null);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotRevokeRelationshipRequestNotCreatedByYourself");
@@ -86,7 +86,7 @@ public class RevokeRelationshipTests
         var foreignAddress = IdentityAddress.ParseUnsafe("some-other-identity");
 
         // Act
-        var acting = () => relationship.Revoke(foreignAddress, DeviceId.New());
+        var acting = () => relationship.Revoke(foreignAddress, DeviceId.New(), null);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotRevokeRelationshipRequestNotCreatedByYourself");
