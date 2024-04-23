@@ -31,6 +31,10 @@ public class Executor
     {
         _logger.LogInformation("Starting migrations...");
 
+        // vor Migrationen merken, welcher DB Context auf welcher Migration war
+        // try catch um alle Migrationen
+        // im catch Rollback zu gemerkter Migration
+        
         await MigrateDbContext<ChallengesDbContext>(_serviceProvider);
         await MigrateDbContext<DevicesDbContext>(_serviceProvider);
         await MigrateDbContext<FilesDbContext>(_serviceProvider);
@@ -63,7 +67,7 @@ public class Executor
                 ]);
 
             var migrator = context.GetInfrastructure().GetRequiredService<IMigrator>();
-
+            
             await retry.Execute(() => migrator.MigrateAsync(targetMigration));
 
             logger.LogInformation("Migrated database associated with context '{context}' to target migration '{targetMigration}'", typeof(TContext).Name, targetMigration);

@@ -236,6 +236,44 @@ eventhandler:
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: ""
 
+databasemigrator:
+  nameOverride: ""
+
+  image:
+    repository: "ghcr.io/nmshd/backbone-database-migrator"
+    tagOverride: ""
+    pullPolicy: "IfNotPresent"
+    imagePullSecrets: []
+
+  # resources - the resources for the Event Handler container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
+      cpu: "200m"
+      memory: "512Mi"
+
+  # securityContext - securityContext for the Consumer API container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
+  securityContext: {}
+
+  # podSecurityContext - securityContext for the pods deployed by the Deployment (see https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+  podSecurityContext: {}
+
+  podAnnotations: {}
+
+  # env - environment variables for the Event Handler container (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
+  env: []
+
+  # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+  nodeSelector: {}
+
+  # the tolerations for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+  tolerations: []
+
+  # the affinity for the pods deployed by the Deployment (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity)
+  affinity: {}
+
 admincli:
   nameOverride: ""
 
