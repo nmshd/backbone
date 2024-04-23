@@ -26,7 +26,6 @@ public class RelationshipMetadataDTO
 
     public DateTime CreatedAt { get; set; }
 
-    public byte[]? CreationResponseContent { get; set; }
     public RelationshipStatus Status { get; set; }
 
     public List<RelationshipAuditLogEntryDTO> AuditLog { get; set; }
