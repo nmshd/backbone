@@ -13,7 +13,6 @@ public class RelationshipMetadataDTO
         From = relationship.From;
         To = relationship.To;
         CreatedAt = relationship.CreatedAt;
-        CreationResponseContent = relationship.CreationResponseContent;
         Status = relationship.Status;
         AuditLog = relationship.AuditLog.Select(a => new RelationshipAuditLogEntryDTO(a)).ToList();
     }
