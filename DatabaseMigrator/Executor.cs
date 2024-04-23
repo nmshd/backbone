@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
@@ -10,8 +11,6 @@ using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Npgsql;
 using Polly;
 
@@ -40,6 +39,7 @@ public class Executor
         await MigrateDbContext<RelationshipsDbContext>(_serviceProvider);
         await MigrateDbContext<SynchronizationDbContext>(_serviceProvider);
         await MigrateDbContext<TokensDbContext>(_serviceProvider);
+        await MigrateDbContext<AdminApiDbContext>(_serviceProvider);
 
         _logger.LogInformation("Migrations successfully applied");
     }

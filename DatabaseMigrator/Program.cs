@@ -1,9 +1,6 @@
 ﻿using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.DatabaseMigrator;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Exceptions;
@@ -116,6 +113,12 @@ static IHostBuilder CreateHostBuilder(string[] args)
             {
                 options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
                 options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+            });
+
+            Backbone.AdminApi.Infrastructure.Persistence.IServiceCollectionExtensions.AddDatabase(services, options =>
+            {
+                options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
+                options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
             });
 
             #endregion
