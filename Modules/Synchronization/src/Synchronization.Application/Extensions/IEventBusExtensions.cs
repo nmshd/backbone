@@ -32,7 +32,6 @@ public static class IEventBusExtensions
 
     private static void SubscribeToRelationshipsEvents(IEventBus eventBus)
     {
-        eventBus.Subscribe<RelationshipCreatedDomainEvent, RelationshipCreatedDomainEventHandler>();
         eventBus.Subscribe<RelationshipStatusChangedDomainEvent, RelationshipStatusChangedDomainEventHandler>();
     }
 }

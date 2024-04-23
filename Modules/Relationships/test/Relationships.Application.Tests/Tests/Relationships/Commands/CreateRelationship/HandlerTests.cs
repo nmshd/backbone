@@ -7,6 +7,7 @@ using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repo
 using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
@@ -153,7 +154,7 @@ public class HandlerTests
         }, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockEventBus.Publish(A<RelationshipCreatedDomainEvent>.That.Matches(e => e.From == activeIdentity, relationshipTemplate.CreatedBy))).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockEventBus.Publish(A<RelationshipStatusChangedDomainEvent>.That.Matches(e => e.Initiator == activeIdentity, relationshipTemplate.CreatedBy))).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IRelationshipTemplatesRepository relationshipTemplatesRepository)
