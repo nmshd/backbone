@@ -16,6 +16,9 @@ dependencies:
   - name: consumerapi
     version: "*"
     repository: file://charts/consumerapi
+  - name: eventhandler
+    version: "*"
+    repository: file://charts/eventhandler
 
 icon: https://raw.githubusercontent.com/nmshd/nmshd.github.io/main/assets/images/Logo.svg
 home: https://enmeshed.eu
