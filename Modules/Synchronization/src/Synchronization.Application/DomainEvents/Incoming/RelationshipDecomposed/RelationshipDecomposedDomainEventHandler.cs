@@ -3,30 +3,31 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipDecomposed;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Synchronization.Application.IntegrationEvents.Incoming.RelationshipDecomposed;
+namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipDecomposed;
 
-public class RelationshipDecomposedIntegrationEventHandler
+public class RelationshipDecomposedDomainEventHandler
 {
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly ILogger<MessageCreatedDomainEventHandler> _logger;
 
-    public RelationshipDecomposedIntegrationEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<MessageCreatedDomainEventHandler> logger)
+    public RelationshipDecomposedDomainEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<MessageCreatedDomainEventHandler> logger)
     {
         _dbContext = dbContext;
         _eventBus = eventBus;
         _logger = logger;
     }
 
-    public async Task Handle(RelationshipDecomposedIntegrationEvent integrationEvent)
+    public async Task Handle(RelationshipDecomposedDomainEvent integrationEvent)
     {
         await CreateExternalEvents(integrationEvent);
     }
 
-    private async Task CreateExternalEvents(RelationshipDecomposedIntegrationEvent @event)
+    private async Task CreateExternalEvents(RelationshipDecomposedDomainEvent @event)
     {
 #pragma warning disable IDE0037
         var payload = new { RelationshipId = @event.RelationshipId };

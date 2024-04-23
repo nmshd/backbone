@@ -2,10 +2,10 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-namespace Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
-public class RelationshipDecomposedIntegrationEvent : DomainEvent
+namespace Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+public class RelationshipDecomposedDomainEvent : DomainEvent
 {
-    public RelationshipDecomposedIntegrationEvent(Relationship relationship, IdentityAddress peer) : base($"{relationship.Id}/Decompose/{relationship.AuditLog.Last().CreatedAt}")
+    public RelationshipDecomposedDomainEvent(Relationship relationship, IdentityAddress peer) : base($"{relationship.Id}/Decompose/{relationship.AuditLog.Last().CreatedAt}")
     {
         RelationshipId = relationship.Id;
         Peer = peer.StringValue;
