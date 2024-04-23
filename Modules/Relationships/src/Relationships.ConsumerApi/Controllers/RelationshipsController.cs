@@ -76,7 +76,7 @@ public class RelationshipsController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AcceptRelationship([FromRoute] string id, [FromBody] AcceptRelationshipRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new AcceptRelationshipCommand { RelationshipId = id, AcceptanceContent = request.AcceptanceContent }, cancellationToken);
+        var response = await _mediator.Send(new AcceptRelationshipCommand { RelationshipId = id, CreationResponseContent = request.Content }, cancellationToken);
         return Ok(response);
     }
 
@@ -84,9 +84,9 @@ public class RelationshipsController : ApiControllerBase
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RejectRelationshipResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> RejectRelationship([FromRoute] string id, CancellationToken cancellationToken)
+    public async Task<IActionResult> RejectRelationship([FromRoute] string id, [FromBody] RejectRelationshipRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new RejectRelationshipCommand { RelationshipId = id }, cancellationToken);
+        var response = await _mediator.Send(new RejectRelationshipCommand { RelationshipId = id, CreationResponseContent = request.Content }, cancellationToken);
         return Ok(response);
     }
 
@@ -94,9 +94,9 @@ public class RelationshipsController : ApiControllerBase
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RevokeRelationshipResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> RevokeRelationship([FromRoute] string id, CancellationToken cancellationToken)
+    public async Task<IActionResult> RevokeRelationship([FromRoute] string id, [FromBody] RevokeRelationshipRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new RevokeRelationshipCommand { RelationshipId = id }, cancellationToken);
+        var response = await _mediator.Send(new RevokeRelationshipCommand { RelationshipId = id, CreationResponseContent = request.Content }, cancellationToken);
         return Ok(response);
     }
 
@@ -123,5 +123,15 @@ public class RelationshipsController : ApiControllerBase
 
 public class AcceptRelationshipRequest
 {
-    public byte[]? AcceptanceContent { get; set; }
+    public byte[]? Content { get; set; } = Array.Empty<byte>();
+}
+
+public class RejectRelationshipRequest
+{
+    public byte[]? Content { get; set; } = Array.Empty<byte>();
+}
+
+public class RevokeRelationshipRequest
+{
+    public byte[]? Content { get; set; } = Array.Empty<byte>();
 }
