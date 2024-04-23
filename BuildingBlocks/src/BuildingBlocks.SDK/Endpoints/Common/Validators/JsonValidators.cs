@@ -3,7 +3,7 @@ using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Schema.Generation;
 using Newtonsoft.Json.Serialization;
 
-namespace Backbone.AdminApi.Tests.Integration.Support;
+namespace Backbone.BuildingBlocks.SDK.Endpoints.Common.Validators;
 
 public class JsonValidators
 {
