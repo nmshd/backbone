@@ -6,4 +6,4 @@ type: application
 
 version: "1.0.0"
 
-appVersion: "v2.2.3"
+appVersion: "__appVersion__"
