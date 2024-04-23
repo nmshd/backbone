@@ -3,8 +3,8 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipReactivation;
@@ -32,7 +32,7 @@ public class Handler : IRequestHandler<RejectRelationshipReactivationCommand, Re
 
         relationship.RejectReactivation(_activeIdentity, _activeDevice);
 
-        _eventBus.Publish(new RelationshipReactivationCompletedIntegrationEvent(relationship, _activeIdentity));
+        _eventBus.Publish(new RelationshipReactivationCompletedDomainEvent(relationship, _activeIdentity));
 
         return new RejectRelationshipReactivationResponse(relationship);
     }

@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.DomainEvents;
-public class RelationshipReactivationCompletedIntegrationEventHandlerTests
+public class RelationshipReactivationCompletedDomainEventHandlerTests
 {
     [Fact]
     public async Task Creates_an_external_event()

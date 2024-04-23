@@ -1,11 +1,11 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+﻿using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-namespace Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
-public class RelationshipReactivationCompletedIntegrationEvent : IntegrationEvent
+namespace Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+public class RelationshipReactivationCompletedDomainEvent : DomainEvent
 {
-    public RelationshipReactivationCompletedIntegrationEvent(Relationship relationship, IdentityAddress peer)
+    public RelationshipReactivationCompletedDomainEvent(Relationship relationship, IdentityAddress peer)
         : base($"{relationship.Id}/ReactivationCompleted/{relationship.AuditLog.Last().CreatedAt}")
     {
         RelationshipId = relationship.Id;
