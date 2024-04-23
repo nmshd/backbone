@@ -1,11 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.TerminateRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 using FluentAssertions;
@@ -78,7 +78,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Publishes_RelationshipStatusChangedIntegrationEvent()
+    public async Task Publishes_RelationshipStatusChangedDomainEvent()
     {
         // Arrange
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
@@ -104,7 +104,7 @@ public class HandlerTests
 
         // Assert
         A.CallTo(
-                () => mockEventBus.Publish(A<RelationshipStatusChangedIntegrationEvent>.That.Matches(e =>
+                () => mockEventBus.Publish(A<RelationshipStatusChangedDomainEvent>.That.Matches(e =>
                     e.RelationshipId == relationship.Id &&
                     e.Status == RelationshipStatus.Terminated.ToDtoString() &&
                     e.Initiator == activeIdentity &&

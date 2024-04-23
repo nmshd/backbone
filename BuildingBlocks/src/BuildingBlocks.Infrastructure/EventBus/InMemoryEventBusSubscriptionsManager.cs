@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus;
 
@@ -18,13 +19,13 @@ public class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManage
     }
 
     public void AddSubscription<T, TH>()
-        where T : IntegrationEvent
-        where TH : IIntegrationEventHandler<T>
+        where T : DomainEvent
+        where TH : IDomainEventHandler<T>
     {
         DoAddSubscription(typeof(TH), typeof(T));
     }
 
-    public IEnumerable<SubscriptionInfo> GetHandlersForEvent<T>() where T : IntegrationEvent
+    public IEnumerable<SubscriptionInfo> GetHandlersForEvent<T>() where T : DomainEvent
     {
         var key = GetEventKey<T>();
         return GetHandlersForEvent(key);
@@ -35,7 +36,7 @@ public class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManage
         return _handlers[eventName];
     }
 
-    public bool HasSubscriptionsForEvent<T>() where T : IntegrationEvent
+    public bool HasSubscriptionsForEvent<T>() where T : DomainEvent
     {
         var key = GetEventKey<T>();
         return HasSubscriptionsForEvent(key);
