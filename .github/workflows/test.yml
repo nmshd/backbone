@@ -205,6 +205,22 @@ jobs:
           TAG: test
           PLATFORMS: linux/amd64
 
+  build-eh-container-image:
+    name: Build Event Handler Service Container Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build image
+        run: ./.ci/eh/buildContainerImage.js
+        env:
+          TAG: test
+          PLATFORMS: linux/amd64
+
   build-aui-container-image:
     name: Build Admin UI Container Image
     runs-on: ubuntu-latest
