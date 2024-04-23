@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<AcceptRelationshipCommand, AcceptRelation
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
         var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
 
-        relationship.Accept(_activeIdentity, _activeDevice, request.AcceptanceContent);
+        relationship.Accept(_activeIdentity, _activeDevice, request.CreationResponseContent);
 
         await _relationshipsRepository.Update(relationship);
 
