@@ -41,7 +41,7 @@ public class RejectRelationshipReactivationTests
         var relationship = CreateActiveRelationship();
         relationship.Test_SetStatusAsTerminated();
 
-        relationship.AuditLog.Add(new RelationshipAuditLogEntry( // remove after RequestRelationsipReactivation is implemented
+        relationship.AuditLog.Add(new RelationshipAuditLogEntry( // remove after RequestRelationshipReactivation is implemented
             RelationshipAuditLogEntryReason.Reactivation,
             RelationshipStatus.Terminated,
             RelationshipStatus.Terminated,
@@ -87,6 +87,14 @@ public class RejectRelationshipReactivationTests
         // Arrange
         var relationship = CreateActiveRelationship();
         relationship.Test_SetStatusAsTerminated();
+
+        relationship.AuditLog.Add(new RelationshipAuditLogEntry( // remove after RequestRelationshipReactivation is implemented
+            RelationshipAuditLogEntryReason.Reactivation,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Terminated,
+            IDENTITY_1,
+            DEVICE_1
+        ));
 
         // Act
         var acting = () => relationship.RejectReactivation(IDENTITY_1, DEVICE_1);
