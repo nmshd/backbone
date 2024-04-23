@@ -1,22 +1,59 @@
-import { SimpleLoggerFactory } from "@js-soft/simple-logger";
-import { SyncRunType, TransportLoggerFactory } from "@nmshd/transport";
-import { LogLevel } from "typescript-logging";
-import { BackboneClient } from "../BackboneClient";
+import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 
-TransportLoggerFactory.init(new SimpleLoggerFactory(LogLevel.Fatal));
+export const options = {
+    iterations: 1
+};
 
-// maybe we should somehow honour the 1s rule when implementing k6.
-(async () => {
-    const config = {
-        baseUrl: "http://localhost:8081",
-        platformClientId: "test",
-        platformClientSecret: "test"
+// const enmeshedOptions = {
+//     platformClientId: "test",
+//     platformClientSecret: "test"
+// };
+
+const session = new Httpx({
+    baseURL: "http://localhost:8081/api/v1/",
+    headers: {
+        // "User-Agent": "My custom user agent",
+        // "Content-Type": "application/x-www-form-urlencoded"
+    },
+    timeout: 20000 // 20s timeout.
+});
+
+const cryptoSession = new Httpx({
+    baseURL: "http://localhost:3000/",
+    timeout: 2000,
+    group: "crypto"
+});
+
+export default async function () {
+    const challenge = session.post("Challenges").json("result") as ChallengeResponse;
+    const keyPair = cryptoSession.get("keypair").json();
+    const signedChallenge = cryptoSession.post("sign", JSON.stringify({ keyPair, challenge }), { headers: { "Content-Type": "application/json" } }).json();
+
+    const createIdentityRequest: CreateIdentityRequest = {
+        ClientId: "test",
+        ClientSecret: "test",
+        SignedChallenge: signedChallenge,
+        IdentityPublicKey: keyPair.publicKey,
+        DevicePassword: "randomPassword",
+        IdentityVersion: 1
     };
+    const createdIdentity = session.post("Identities", JSON.stringify(createIdentityRequest));
 
-    const backboneClient1 = await BackboneClient.initWithNewIdentity(config);
+    console.log(createdIdentity);
+}
 
-    let syncRes = await backboneClient1.sync.startSyncRun({ type: SyncRunType.DatawalletVersionUpgrade, duration: 20 });
+interface ChallengeResponse {
+    id: string;
+    expiresAt: string;
+    createdBy: string;
+    createdByDevice: string;
+}
 
-    // unsure whether we should call this or not.
-    await backboneClient1.sync.finalizeDatawalletVersionUpgrade(syncRes.value.syncRun?.id!, { newDatawalletVersion: 1, datawalletModifications: [] });
-})();
+interface CreateIdentityRequest {
+    ClientId: string;
+    ClientSecret: string;
+    IdentityPublicKey: any;
+    DevicePassword: string;
+    IdentityVersion: number;
+    SignedChallenge: any;
+}
