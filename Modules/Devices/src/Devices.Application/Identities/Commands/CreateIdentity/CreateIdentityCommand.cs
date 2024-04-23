@@ -10,5 +10,4 @@ public class CreateIdentityCommand : IRequest<CreateIdentityResponse>
     public required string DevicePassword { get; set; }
     public required byte IdentityVersion { get; set; }
     public required SignedChallengeDTO SignedChallenge { get; set; }
-    public bool ShouldValidateChallenge { get; set; } = true; // Used to avoid challenge validation when creating Identities through the AdminApi for Integration testing purposes.
 }
