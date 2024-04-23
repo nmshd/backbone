@@ -6,9 +6,9 @@ import 'endpoint.dart';
 class TiersEndpoint extends Endpoint {
   TiersEndpoint(super.dio);
 
-  Future<ApiResponse<List<Tier>>> getTiers() => get(
+  Future<ApiResponse<List<Tiers>>> getTiers() => get(
         '/api/v1/Tiers',
-        transformer: (e) => (e as List).map(Tier.fromJson).toList(),
+        transformer: (e) => (e as List).map(Tiers.fromJson).toList(),
       );
 
   Future<ApiResponse<Tier>> createTier({

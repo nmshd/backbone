@@ -7,6 +7,7 @@ class Client {
   final String clientId;
   final String displayName;
   final String defaultTier;
+  final String clientSecret;
   final String createdAt;
   final int? maxIdentities;
   final int? numberOfIdentities;
@@ -15,9 +16,10 @@ class Client {
     required this.clientId,
     required this.displayName,
     required this.defaultTier,
+    required this.clientSecret,
     required this.createdAt,
-    required this.maxIdentities,
-    required this.numberOfIdentities,
+    this.maxIdentities,
+    this.numberOfIdentities,
   });
 
   factory Client.fromJson(dynamic json) => _$ClientFromJson(json as Map<String, dynamic>);
@@ -29,7 +31,7 @@ class Clients {
   final String clientId;
   final String displayName;
   final ClientDefaultTier defaultTier;
-  final String createdAt;
+  final DateTime createdAt;
   final int? maxIdentities;
   final int? numberOfIdentities;
 
