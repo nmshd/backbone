@@ -12,49 +12,49 @@ spec:
       app: {{ include "global.name" . }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.admincli.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         app: {{ include "global.name" . }}
     spec:
-      {{- with .Values.podSecurityContext }}
+      {{- with .Values.admincli.podSecurityContext }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.admincli.podSecurityContext | nindent 8 }}
       {{- end }}
-      {{- with .Values.image.imagePullSecrets }}
+      {{- with .Values.admincli.image.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
         - name: {{ include "global.name" . }}
-          {{- with .Values.securityContext }}
+          {{- with .Values.admincli.securityContext }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 8 }}
+            {{- toYaml .Values.admincli.securityContext | nindent 8 }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{- default .Chart.AppVersion .Values.image.tagOverride }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+            {{- toYaml .Values.admincli.resources | nindent 12 }}
+          image: "{{ .Values.admincli.image.repository }}:{{- default .Chart.AppVersion .Values.admincli.image.tagOverride }}"
+          imagePullPolicy: {{ .Values.admincli.image.pullPolicy }}
           env:
             - name: Database__Provider
               value: {{ .Values.global.configuration.modules.devices.infrastructure.sqlDatabase.provider }}
-            {{- with .Values.env }}
+            {{- with .Values.admincli.env }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
           tty: true
           command:
             - /bin/bash
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.admincli.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.admincli.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.admincli.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

@@ -6,12 +6,12 @@ metadata:
     {{- include "global.labels" . | nindent 4 }}
     app: {{ include "global.name" . }}
 spec:
-  replicas: {{ .Values.replicas }}
+  replicas: {{ .Values.consumerapi.replicas }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: {{ .Values.maxSurge }}
-      maxUnavailable: {{ .Values.maxUnavailable }}
+      maxSurge: {{ .Values.consumerapi.maxSurge }}
+      maxUnavailable: {{ .Values.consumerapi.maxUnavailable }}
   selector:
     matchLabels:
       app: {{ include "global.name" . }}
@@ -19,7 +19,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ .Values.global.configuration | toString | sha256sum }}
-        {{- with .Values.podAnnotations }}
+        {{- with .Values.consumerapi.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
       labels:
@@ -29,15 +29,15 @@ spec:
       {{- with .Values.global.serviceAccount.name}}
       serviceAccountName: {{ . }}
       {{- end }}
-      {{- with .Values.podSecurityContext }}
+      {{- with .Values.consumerapi.podSecurityContext }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.consumerapi.podSecurityContext | nindent 8 }}
       {{- end }}
-      {{- with .Values.image.imagePullSecrets }}
+      {{- with .Values.consumerapi.image.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.consumerapi.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -47,14 +47,14 @@ spec:
             name: configuration
       containers:
         - name: {{ include "global.name" . }}
-          {{- with .Values.securityContext }}
+          {{- with .Values.consumerapi.securityContext }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 8 }}
+            {{- toYaml .Values.consumerapi.securityContext | nindent 8 }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{- default .Chart.AppVersion .Values.image.tagOverride }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+            {{- toYaml .Values.consumerapi.resources | nindent 12 }}
+          image: "{{ .Values.consumerapi.image.repository }}:{{- default .Chart.AppVersion .Values.consumerapi.image.tagOverride }}"
+          imagePullPolicy: {{ .Values.consumerapi.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 8080
@@ -78,34 +78,34 @@ spec:
                   name: rabbitmq-password
                   key: "VALUE" 
             {{- end }}
-            {{- with .Values.env }}
+            {{- with .Values.consumerapi.env }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
           livenessProbe:
             httpGet:
               path: /health
               port: 8080
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.consumerapi.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.consumerapi.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.consumerapi.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.consumerapi.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
               path: /health
               port: 8080
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
-      {{- with .Values.nodeSelector }}
+            initialDelaySeconds: {{ .Values.consumerapi.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.consumerapi.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.consumerapi.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.consumerapi.readinessProbe.failureThreshold }}
+      {{- with .Values.consumerapi.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.consumerapi.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.consumerapi.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
