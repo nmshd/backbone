@@ -190,7 +190,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             Gaps.w16,
             NumberFilter(
               operators: operators,
-              label: 'Datawallet',
+              label: 'Datawallet Version',
               onNumberSelected: (String operator, String enteredValue) {
                 _dataWalletVersion = enteredValue;
                 _datawalletVersionOperator = operator;
