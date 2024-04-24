@@ -28,6 +28,11 @@ services:
       Database__Provider: SqlServer
       Database__ConnectionString: "Server=sqlserver;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
 
+  database-migrator:
+    environment:
+      Infrastructure__SqlDatabase__Provider: SqlServer
+      Infrastructure__SqlDatabase__ConnectionString: "Server=sqlserver;Database=enmeshed;User Id=sa;Password=Passw0rd;TrustServerCertificate=True"
+
 configs:
   Config:
     file: appsettings.override.sqlserver.json
