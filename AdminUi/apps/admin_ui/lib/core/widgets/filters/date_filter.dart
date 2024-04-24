@@ -10,7 +10,7 @@ class DateFilter extends StatefulWidget {
     super.key,
   });
 
-  final void Function(DateTime selectedDate, String operator, {bool isDateSelected}) onDateSelected;
+  final void Function(DateTime? selectedDate, String operator) onDateSelected;
   final List<String> operators;
   final String label;
 
@@ -20,8 +20,7 @@ class DateFilter extends StatefulWidget {
 
 class _DateFilterState extends State<DateFilter> {
   late String operator = '=';
-  late DateTime selectedDate = DateTime.now();
-  late bool isDateSelected = false;
+  DateTime? selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +47,7 @@ class _DateFilterState extends State<DateFilter> {
             ),
             Gaps.w8,
             InkWell(
-              onTap: selectANewDate,
+              onTap: _selectANewDate,
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -59,15 +58,15 @@ class _DateFilterState extends State<DateFilter> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
+                      selectedDate != null ? '${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}' : 'Select date',
                       style: const TextStyle(fontSize: 14),
                     ),
                     Gaps.w8,
                     const Icon(Icons.calendar_today),
-                    if (isDateSelected) ...[
+                    if (selectedDate != null) ...[
                       Gaps.w8,
                       GestureDetector(
-                        onTap: clearDate,
+                        onTap: _clearDate,
                         child: const Icon(Icons.clear, size: 20),
                       ),
                     ],
@@ -81,27 +80,24 @@ class _DateFilterState extends State<DateFilter> {
     );
   }
 
-  void clearDate() {
+  void _clearDate() {
     setState(() {
-      selectedDate = DateTime.now();
-      isDateSelected = false;
+      selectedDate = null;
     });
-    widget.onDateSelected(selectedDate, operator, isDateSelected: isDateSelected);
+    widget.onDateSelected(selectedDate, operator);
   }
 
-  Future<void> selectANewDate() async {
+  Future<void> _selectANewDate() async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      initialDate: selectedDate ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
     if (picked != null) {
       setState(() {
         selectedDate = picked;
-        isDateSelected = true;
-
-        widget.onDateSelected(selectedDate, operator, isDateSelected: isDateSelected);
+        widget.onDateSelected(selectedDate, operator);
       });
     }
   }
