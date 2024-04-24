@@ -3,6 +3,7 @@ import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:logger/logger.dart';
 
 class IdentityDataTableSource extends AsyncDataTableSource {
   List<IdentityOverview> data = [];
@@ -49,37 +50,6 @@ class IdentityDataTableSource extends AsyncDataTableSource {
   }
 
   @override
-  DataRow? getRow(int index) {
-    final localIndex = index % data.length;
-
-    if (localIndex < data.length) {
-      final identity = data[localIndex];
-      return DataRow.byIndex(
-        index: localIndex,
-        onLongPress: () {},
-        cells: [
-          DataCell(Text(identity.address)),
-          DataCell(
-            Center(
-              child: GestureDetector(
-                onTap: () {},
-                child: Text(identity.tier.name),
-              ),
-            ),
-          ),
-          DataCell(Center(child: Text(identity.createdWithClient))),
-          DataCell(Center(child: Text(identity.numberOfDevices.toString()))),
-          DataCell(Center(child: Text(identity.createdAt.toString().substring(0, 10)))),
-          DataCell(Center(child: Text(identity.lastLoginAt != null ? identity.lastLoginAt.toString().substring(0, 10) : ''))),
-          DataCell(Center(child: Text(identity.datawalletVersion != null ? identity.datawalletVersion.toString() : ''))),
-          DataCell(Center(child: Text(identity.identityVersion.toString()))),
-        ],
-      );
-    }
-    return null;
-  }
-
-  @override
   bool get isRowCountApproximate => false;
 
   @override
@@ -98,18 +68,19 @@ class IdentityDataTableSource extends AsyncDataTableSource {
             pageSize: count,
           );
 
-      final rows = response.data
+      final rows = response.data.indexed
           .map(
-            (identity) => DataRow(
+            (identity) => DataRow.byIndex(
+              index: pageNumber * count + identity.$1,
               cells: [
-                DataCell(Text(identity.address)),
-                DataCell(Text(identity.tier.name)),
-                DataCell(Text(identity.createdWithClient)),
-                DataCell(Text(identity.numberOfDevices.toString())),
-                DataCell(Text(identity.createdAt.toString().substring(0, 10))),
-                DataCell(Text(identity.lastLoginAt?.toString().substring(0, 10) ?? '')),
-                DataCell(Text(identity.datawalletVersion?.toString() ?? '')),
-                DataCell(Text(identity.identityVersion.toString())),
+                DataCell(Text(identity.$2.address)),
+                DataCell(Text(identity.$2.tier.name)),
+                DataCell(Text(identity.$2.createdWithClient)),
+                DataCell(Text(identity.$2.numberOfDevices.toString())),
+                DataCell(Text(identity.$2.createdAt.toString().substring(0, 10))),
+                DataCell(Text(identity.$2.lastLoginAt?.toString().substring(0, 10) ?? '')),
+                DataCell(Text(identity.$2.datawalletVersion?.toString() ?? '')),
+                DataCell(Text(identity.$2.identityVersion.toString())),
               ],
             ),
           )
@@ -117,6 +88,8 @@ class IdentityDataTableSource extends AsyncDataTableSource {
 
       return AsyncRowsResponse(response.pagination.totalRecords, rows);
     } catch (e) {
+      GetIt.I.get<Logger>().e('Failed to load data: $e');
+
       throw Exception('Failed to load data: $e');
     }
   }
