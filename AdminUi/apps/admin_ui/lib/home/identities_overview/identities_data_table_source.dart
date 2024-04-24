@@ -11,6 +11,8 @@ class IdentityDataTableSource extends AsyncDataTableSource {
   int sortColumnIndex = 0;
   bool sortAscending = true;
 
+  IdentityOverviewFilter? filter;
+
   void setData(
     List<IdentityOverview> identities,
     Pagination pagination,
@@ -63,10 +65,8 @@ class IdentityDataTableSource extends AsyncDataTableSource {
     final pageNumber = (startIndex ~/ count) + 1;
 
     try {
-      final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(
-            pageNumber: pageNumber,
-            pageSize: count,
-          );
+      final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(pageNumber: pageNumber, pageSize: count, filter: filter);
+      pagination = response.pagination;
 
       final rows = response.data.indexed
           .map(

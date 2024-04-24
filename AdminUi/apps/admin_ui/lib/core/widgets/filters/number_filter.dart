@@ -33,12 +33,14 @@ class _NumberFilterState extends State<NumberFilter> {
           '${widget.label}:',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
+        Gaps.h8,
         Row(
           children: [
             DropdownButton<String>(
               value: operator,
               onChanged: (newValue) {
                 setState(() => operator = newValue!);
+                widget.onNumberSelected(operator, enteredValue);
               },
               items: widget.operators.map((operator) {
                 return DropdownMenuItem<String>(
@@ -50,7 +52,6 @@ class _NumberFilterState extends State<NumberFilter> {
             Gaps.w16,
             SizedBox(
               width: 120,
-              height: 40,
               child: TextField(
                 controller: controller,
                 onChanged: (value) {
@@ -59,13 +60,9 @@ class _NumberFilterState extends State<NumberFilter> {
                     widget.onNumberSelected(operator, enteredValue);
                   });
                 },
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                ),
+                decoration: const InputDecoration(border: OutlineInputBorder()),
                 style: const TextStyle(fontSize: 12),
-                inputFormatters: <TextInputFormatter>[
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
+                inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
                 keyboardType: TextInputType.number,
               ),
             ),

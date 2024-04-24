@@ -89,15 +89,15 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             InputField(
-              title: 'Address',
+              label: 'Address',
               onEnteredText: (String enteredText) {
                 _enteredIdentityAddress = enteredText;
 
@@ -105,48 +105,24 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               },
             ),
             Gaps.w16,
-            SizedBox(
-              width: 250,
-              child: MultiSelectDropDown(
-                hint: 'Tiers',
-                searchLabel: 'Search Tiers',
-                searchEnabled: true,
-                controller: _tierController,
-                options: _tierController.options,
-                fieldBackgroundColor: Theme.of(context).colorScheme.background,
-                searchBackgroundColor: Theme.of(context).colorScheme.background,
-                dropdownBackgroundColor: Theme.of(context).colorScheme.background,
-                selectedOptionBackgroundColor: Theme.of(context).colorScheme.background,
-                selectedOptionTextColor: Theme.of(context).colorScheme.onBackground,
-                optionsBackgroundColor: Theme.of(context).colorScheme.background,
-                optionTextStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
-                  _selectedTiers = selectedOptions.map((item) => item.value as String).toList();
-                  sendFilters();
-                },
-              ),
+            MultiSelectFilter(
+              label: 'Tiers',
+              searchLabel: 'Search Tiers',
+              controller: _tierController,
+              onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
+                _selectedTiers = selectedOptions.map((item) => item.value as String).toList();
+                sendFilters();
+              },
             ),
             Gaps.w16,
-            SizedBox(
-              width: 200,
-              child: MultiSelectDropDown(
-                hint: 'Clients',
-                searchLabel: 'Search Clients',
-                searchEnabled: true,
-                controller: _clientController,
-                options: _clientController.options,
-                fieldBackgroundColor: Theme.of(context).colorScheme.background,
-                searchBackgroundColor: Theme.of(context).colorScheme.background,
-                dropdownBackgroundColor: Theme.of(context).colorScheme.background,
-                selectedOptionBackgroundColor: Theme.of(context).colorScheme.background,
-                selectedOptionTextColor: Theme.of(context).colorScheme.onBackground,
-                optionsBackgroundColor: Theme.of(context).colorScheme.background,
-                optionTextStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
-                  _selectedClients = selectedOptions.map((item) => item.value as String).toList();
-                  sendFilters();
-                },
-              ),
+            MultiSelectFilter(
+              label: 'Clients',
+              searchLabel: 'Search Clients',
+              controller: _clientController,
+              onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
+                _selectedClients = selectedOptions.map((item) => item.value as String).toList();
+                sendFilters();
+              },
             ),
             Gaps.w16,
             NumberFilter(

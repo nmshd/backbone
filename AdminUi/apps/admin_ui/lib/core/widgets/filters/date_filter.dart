@@ -32,6 +32,7 @@ class _DateFilterState extends State<DateFilter> {
           '${widget.label}:',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
+        Gaps.h8,
         Row(
           children: [
             DropdownButton<String>(
