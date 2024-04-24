@@ -30,7 +30,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
         var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + TestDataGenerator.GenerateString(12) });
         response.IsSuccess.Should().BeTrue();
 
-        _tierId = response.Result!.Result!.Id;
+        _tierId = response.Result!.Id;
 
         // allow the event queue to trigger the creation of this tier on the Quotas module
         Thread.Sleep(2000);
@@ -49,7 +49,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
         });
         response.IsSuccess.Should().BeTrue();
 
-        _tierQuotaDefinitionId = response.Result!.Result!.Id;
+        _tierQuotaDefinitionId = response.Result!.Id;
 
         // allow the event queue to trigger the creation of this tier quota definition on the Quotas module
         Thread.Sleep(2000);
@@ -111,14 +111,14 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     {
         if (_createTierQuotaResponse != null)
         {
-            _createTierQuotaResponse!.Result!.Error.Should().NotBeNull();
-            _createTierQuotaResponse.Result.Error!.Code.Should().Be(errorCode);
+            _createTierQuotaResponse!.Error.Should().NotBeNull();
+            _createTierQuotaResponse.Error!.Code.Should().Be(errorCode);
         }
 
         if (_deleteResponse != null)
         {
-            _deleteResponse!.Result!.Error.Should().NotBeNull();
-            _deleteResponse.Result.Error!.Code.Should().Be(errorCode);
+            _deleteResponse!.Error.Should().NotBeNull();
+            _deleteResponse.Error!.Code.Should().Be(errorCode);
             ;
         }
     }

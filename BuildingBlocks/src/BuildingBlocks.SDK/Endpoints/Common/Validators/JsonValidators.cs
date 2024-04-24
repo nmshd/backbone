@@ -1,7 +1,8 @@
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
-using Newtonsoft.Json.Schema.Generation;
-using Newtonsoft.Json.Serialization;
+using NJsonSchema.NewtonsoftJson.Generation;
+using JsonSchemaGenerator = NJsonSchema.Generation.JsonSchemaGenerator;
 
 namespace Backbone.BuildingBlocks.SDK.Endpoints.Common.Validators;
 
@@ -17,14 +18,29 @@ public class JsonValidators
             return parsedJson.IsValid(schema, out errors);
         }
 
-        var generator = new JSchemaGenerator
-        {
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
-        };
+        var settings = new NewtonsoftJsonSchemaGeneratorSettings();
+
+        var generator = new JsonSchemaGenerator(settings);
+
         var schemaJson = generator.Generate(typeof(T));
-        schema = JSchema.Parse(schemaJson.ToString());
+
+        var generatedSchema = schemaJson.ToJson();
+
+        schema = JSchema.Parse(generatedSchema);
+
+        schema.AllowAdditionalProperties = true;
+
         CACHED_SCHEMAS.Add(typeof(T), schema);
-        var responseJson = JObject.Parse(json);
-        return responseJson.IsValid(schema, out errors);
+
+        try
+        {
+            var responseJson = JObject.Parse(json);
+            return responseJson.IsValid(schema, out errors);
+        }
+        catch (JsonReaderException _)
+        {
+            var responseJson = JArray.Parse(json);
+            return responseJson.IsValid(schema, out errors);
+        }
     }
 }

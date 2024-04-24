@@ -25,7 +25,7 @@ internal class TierDetailsStepDefinitions : BaseStepDefinitions
     {
         var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + TestDataGenerator.GenerateString(12) });
         response.IsSuccess.Should().BeTrue();
-        _tierId = response.Result!.Result!.Id;
+        _tierId = response.Result!.Id;
 
         // allow the event queue to trigger the creation of this tier on the Quotas module
         Thread.Sleep(2000);
@@ -35,14 +35,13 @@ internal class TierDetailsStepDefinitions : BaseStepDefinitions
     public async Task WhenAGETRequestIsSentToTheTiersIdEndpoint()
     {
         _tierDetailsResponse = await _client.Tiers.GetTier(_tierId);
-        _tierDetailsResponse.IsSuccess.Should().BeTrue();
     }
 
     [Then("the response contains Tier t")]
     public void ThenTheResponseContainsATier()
     {
-        _tierDetailsResponse!.Result!.Result.Should().NotBeNull();
-        _tierDetailsResponse!.Result.Result!.Id.Should().Be(_tierId);
+        _tierDetailsResponse!.Result!.Should().NotBeNull();
+        _tierDetailsResponse!.Result!.Id.Should().Be(_tierId);
         _tierDetailsResponse.AssertContentCompliesWithSchema();
     }
 

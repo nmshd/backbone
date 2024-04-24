@@ -49,7 +49,7 @@ internal class LogsStepDefinitions : BaseStepDefinitions
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _postResponse!.Result!.Error.Should().NotBeNull();
-        _postResponse!.Result!.Error!.Code.Should().Be(errorCode);
+        _postResponse!.Error.Should().NotBeNull();
+        _postResponse.Error!.Code.Should().Be(errorCode);
     }
 }

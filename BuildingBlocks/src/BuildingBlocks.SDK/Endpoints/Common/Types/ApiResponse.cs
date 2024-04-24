@@ -17,7 +17,7 @@ public class ApiResponse<TResult>
     [MemberNotNullWhen(true, nameof(Pagination))]
     public bool IsPaginated => Pagination != null;
 
-    public ResponseContent<TResult>? Result { get; set; }
+    public TResult? Result { get; set; }
     public ApiError? Error { get; set; }
     public PaginationData? Pagination { get; set; }
     public HttpStatusCode Status { get; set; }

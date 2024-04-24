@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.Json;
 using System.Web;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Backbone.BuildingBlocks.SDK.Endpoints.Common;
 
@@ -22,21 +24,18 @@ public class EndpointClient
                                        }
                                        """;
 
-    private const string ODATA_SEARCH = "value";
-    private const string ODATA_REPLACE = "result";
-
     private readonly IAuthenticator _authenticator;
 
     private readonly HttpClient _httpClient;
     private readonly JsonSerializerOptions _jsonSerializerOptions;
-    private readonly HttpClient? _oDataClient;
+    private readonly string _apiVersion;
 
-    public EndpointClient(HttpClient httpClient, IAuthenticator authenticator, JsonSerializerOptions jsonSerializerOptions, HttpClient? oDataClient = null)
+    public EndpointClient(HttpClient httpClient, IAuthenticator authenticator, JsonSerializerOptions jsonSerializerOptions, string apiVersion)
     {
         _httpClient = httpClient;
         _authenticator = authenticator;
         _jsonSerializerOptions = jsonSerializerOptions;
-        _oDataClient = oDataClient;
+        _apiVersion = apiVersion;
     }
 
     public async Task<ApiResponse<T>> Post<T>(string url, object? requestContent = null)
@@ -97,7 +96,7 @@ public class EndpointClient
 
     public RequestBuilder<T> Request<T>(HttpMethod method, string url)
     {
-        return new RequestBuilder<T>(this, _jsonSerializerOptions, _authenticator, method, url);
+        return new RequestBuilder<T>(this, _jsonSerializerOptions, _authenticator, method, url, _apiVersion);
     }
 
     private async Task<ApiResponse<T>> Execute<T>(HttpRequestMessage request)
@@ -105,7 +104,6 @@ public class EndpointClient
         var response = await _httpClient.SendAsync(request);
         var responseContent = await response.Content.ReadAsStreamAsync();
         var statusCode = response.StatusCode;
-        var rawResponse = await response.Content.ReadAsStringAsync();
 
         if (statusCode == HttpStatusCode.NoContent || responseContent.Length == 0)
         {
@@ -113,22 +111,16 @@ public class EndpointClient
             responseContent = new MemoryStream(Encoding.UTF8.GetBytes(EMPTY_RESULT));
         }
 
-        var responseData = JsonSerializer.Deserialize<ResponseContent<T>>(responseContent, _jsonSerializerOptions);
-        var deserializedResponseContent = new ApiResponse<T>
-        {
-            Status = statusCode,
-            Result = responseData!,
-            RawContent = rawResponse
-        };
+        var deserializedResponseContent = JsonSerializer.Deserialize<ApiResponse<T>>(responseContent, _jsonSerializerOptions);
+        deserializedResponseContent!.Status = statusCode;
+        deserializedResponseContent.RawContent = JsonConvert.SerializeObject(deserializedResponseContent.Result);
 
         return deserializedResponseContent;
     }
 
     private async Task<ApiResponse<T>> ExecuteOData<T>(HttpRequestMessage request)
     {
-        if (_oDataClient == null) throw new ArgumentException("No OData client is provided");
-
-        var response = await _oDataClient.SendAsync(request);
+        var response = await _httpClient.SendAsync(request);
         var responseContent = await response.Content.ReadAsStreamAsync();
         var statusCode = response.StatusCode;
 
@@ -166,15 +158,17 @@ public class EndpointClient
         private readonly NameValueCollection _queryParameters = [];
 
         private readonly string _url;
+        private readonly string? _apiVersion;
         private bool _authenticated;
         private HttpContent _content;
 
-        public RequestBuilder(EndpointClient client, JsonSerializerOptions jsonSerializerOptions, IAuthenticator authenticator, HttpMethod method, string url)
+        public RequestBuilder(EndpointClient client, JsonSerializerOptions jsonSerializerOptions, IAuthenticator authenticator, HttpMethod method, string url, string apiVersion)
         {
             _client = client;
             _jsonSerializerOptions = jsonSerializerOptions;
             _authenticator = authenticator;
 
+            _apiVersion = apiVersion;
             _url = url;
             _method = method;
             _authenticated = false;
@@ -261,18 +255,26 @@ public class EndpointClient
             return this;
         }
 
-        public async Task<ApiResponse<T>> Execute() => await _client.Execute<T>(await CreateRequestMessage());
+        public async Task<ApiResponse<T>> Execute()
+        {
+            return await _client.Execute<T>(await CreateRequestMessage());
+        }
 
-        public async Task<ApiResponse<T>> ExecuteOData() => await _client.ExecuteOData<T>(await CreateRequestMessage());
+        public async Task<ApiResponse<T>> ExecuteOData()
+        {
+            return await _client.ExecuteOData<T>(await CreateRequestMessage(true));
+        }
 
         public async Task<RawApiResponse> ExecuteRaw()
         {
             return await _client.ExecuteRaw(await CreateRequestMessage());
         }
 
-        private async Task<HttpRequestMessage> CreateRequestMessage()
+        private async Task<HttpRequestMessage> CreateRequestMessage(bool isOData = false)
         {
-            var request = new HttpRequestMessage(_method, EncodeParametersInUrl())
+            var requestUri = isOData ? $"odata/{EncodeParametersInUrl()}" : $"api/{_apiVersion}/{EncodeParametersInUrl()}";
+
+            var request = new HttpRequestMessage(_method, requestUri)
             {
                 Content = _content
             };

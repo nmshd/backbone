@@ -12,6 +12,6 @@ internal class BaseStepDefinitions
     public BaseStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options)
     {
         _options = options.Value;
-        _client = new Client(factory.CreateClient(), new Sdk.Configuration { ApiKey = _options.ApiKey, BaseUrl = _options.BaseUrl });
+        _client = new Client(factory.CreateClient(), new Sdk.Configuration { ApiKey = _options.ApiKey, BaseUrl = _options.BaseUrl, ApiVersion = _options.ApiVersion });
     }
 }

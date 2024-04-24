@@ -43,7 +43,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         });
         response.IsSuccess.Should().BeTrue();
 
-        _quotaId = response.Result!.Result!.Id;
+        _quotaId = response.Result!.Id;
     }
 
     [When("a DELETE request is sent to the /Identities/{i.address}/Quotas/{q.id} endpoint")]
@@ -93,7 +93,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     [Then("the response contains an IndividualQuota")]
     public void ThenTheResponseContainsAnIndividualQuota()
     {
-        _response!.Result!.Result.Should().NotBeNull();
+        _response!.Result!.Should().NotBeNull();
         _response!.AssertContentCompliesWithSchema();
     }
 
@@ -102,14 +102,14 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     {
         if (_response != null)
         {
-            _response!.Result!.Error.Should().NotBeNull();
-            _response.Result.Error!.Code.Should().Be(errorCode);
+            _response!.Error.Should().NotBeNull();
+            _response.Error!.Code.Should().Be(errorCode);
         }
 
         if (_deleteResponse != null)
         {
-            _deleteResponse.Result!.Error.Should().NotBeNull();
-            _deleteResponse.Result.Error!.Code.Should().Be(errorCode);
+            _deleteResponse.Error.Should().NotBeNull();
+            _deleteResponse.Error!.Code.Should().Be(errorCode);
         }
     }
 
@@ -119,7 +119,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         var createIdentityResponse = await accountController.CreateIdentity(_options.ClientId, _options.ClientSecret) ?? throw new InvalidOperationException();
         createIdentityResponse.IsSuccess.Should().BeTrue();
 
-        _identityAddress = createIdentityResponse.Result!.Result!.Address;
+        _identityAddress = createIdentityResponse.Result!.Address;
 
         // allow the event queue to trigger the creation of this Identity on the Quotas module
         Thread.Sleep(2000);

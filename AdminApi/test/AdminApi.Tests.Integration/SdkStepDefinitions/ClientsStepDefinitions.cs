@@ -43,7 +43,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         var response = await _client.Tiers.ListTiers();
         response.IsSuccess.Should().BeTrue();
 
-        var basicTier = response.Result!.Result!.SingleOrDefault(t => t.Name == "Basic");
+        var basicTier = response.Result!.SingleOrDefault(t => t.Name == "Basic");
         return basicTier != null ? basicTier.Id : await CreateTier();
     }
 
@@ -55,7 +55,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         // allow the event queue to trigger the creation of this tier on the Quotas module
         Thread.Sleep(2000);
 
-        return response.Result!.Result!.Id;
+        return response.Result!.Id;
     }
 
     [Given("a Client c")]
@@ -74,7 +74,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         });
         response.IsSuccess.Should().BeTrue();
 
-        _clientId = response.Result!.Result!.ClientId;
+        _clientId = response.Result!.ClientId;
     }
 
     [Given("a non-existent Client c")]
@@ -87,37 +87,31 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     public async Task WhenADeleteRequestIsSentToTheClientsEndpoint()
     {
         _deleteResponse = await _client.Clients.DeleteClient(_clientId);
-        _deleteResponse.IsSuccess.Should().BeTrue();
     }
 
     [When("a GET request is sent to the /Clients endpoint")]
     public async Task WhenAGetRequestIsSentToTheClientsEndpoint()
     {
         _getClientsResponse = await _client.Clients.GetAllClients();
-        _getClientsResponse.IsSuccess.Should().BeTrue();
     }
 
     [When("a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint with a new secret")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointWithASecret()
     {
         _clientSecret = "new-client-secret";
-
         _changeClientSecretResponse = await _client.Clients.ChangeClientSecret(_clientId, new ChangeClientSecretRequest { NewSecret = _clientSecret });
-        _changeClientSecretResponse.IsSuccess.Should().BeTrue();
     }
 
     [When("a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint without passing a secret")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointWithoutASecret()
     {
         _changeClientSecretResponse = await _client.Clients.ChangeClientSecret(_clientId, new ChangeClientSecretRequest { NewSecret = string.Empty });
-        _changeClientSecretResponse.IsSuccess.Should().BeTrue();
     }
 
     [When("a PATCH request is sent to the /Clients/{clientId}/ChangeSecret endpoint")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointForAnInexistentClient()
     {
         _changeClientSecretResponse = await _client.Clients.ChangeClientSecret("inexistentClientId", new ChangeClientSecretRequest { NewSecret = "new-client-secret" });
-        _changeClientSecretResponse.IsSuccess.Should().BeTrue();
     }
 
     [When("a PUT request is sent to the /Clients/{c.ClientId} endpoint")]
@@ -131,7 +125,6 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
             DefaultTier = _updatedTierId,
             MaxIdentities = _updatedMaxIdentities
         });
-        _updateClientResponse.IsSuccess.Should().BeTrue();
     }
 
     [When("a PUT request is sent to the /Clients/{c.ClientId} endpoint with a null value for maxIdentities")]
@@ -152,7 +145,6 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
             DefaultTier = "inexistent-tier-id",
             MaxIdentities = _maxIdentities
         });
-        _updateClientResponse.IsSuccess.Should().BeTrue();
     }
 
     [When("a PUT request is sent to the /Clients/{c.clientId} endpoint with a non-existing clientId")]
@@ -163,7 +155,6 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
             DefaultTier = "new-tier-id",
             MaxIdentities = _maxIdentities
         });
-        _updateClientResponse.IsSuccess.Should().BeTrue();
     }
 
     [Then("the response contains a paginated list of Clients")]
@@ -200,8 +191,8 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         var response = await _client.Clients.GetClient(_clientId);
 
         response.IsSuccess.Should().BeTrue();
-        response.Result!.Result!.DefaultTier.Should().Be(_updatedTierId);
-        response.Result.Result!.MaxIdentities.Should().Be(_updatedMaxIdentities);
+        response.Result!.DefaultTier.Should().Be(_updatedTierId);
+        response.Result.MaxIdentities.Should().Be(_updatedMaxIdentities);
     }
 
     [Then("the Client in the Backend has a null value for maxIdentities")]
@@ -210,7 +201,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         var response = await _client.Clients.GetClient(_clientId);
 
         response.IsSuccess.Should().BeTrue();
-        response.Result!.Result!.MaxIdentities.Should().BeNull();
+        response.Result!.MaxIdentities.Should().BeNull();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
@@ -234,27 +225,26 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     {
         if (_getClientsResponse != null)
         {
-            _getClientsResponse!.Result!.Error.Should().NotBeNull();
-            _getClientsResponse.Result.Error!.Code.Should().Be(errorCode);
+            _getClientsResponse!.Error.Should().NotBeNull();
+            _getClientsResponse.Error!.Code.Should().Be(errorCode);
         }
 
         if (_changeClientSecretResponse != null)
         {
-            _changeClientSecretResponse!.Result!.Error.Should().NotBeNull();
-            _changeClientSecretResponse.Result.Error!.Code.Should().Be(errorCode);
+            _changeClientSecretResponse!.Error.Should().NotBeNull();
+            _changeClientSecretResponse.Error!.Code.Should().Be(errorCode);
         }
 
         if (_deleteResponse != null)
         {
-            _deleteResponse.Result.Should().NotBeNull();
-            _deleteResponse.Result!.Error.Should().NotBeNull();
-            _deleteResponse.Result!.Error!.Code.Should().Be(errorCode);
+            _deleteResponse.Error.Should().NotBeNull();
+            _deleteResponse.Error!.Code.Should().Be(errorCode);
         }
 
         if (_updateClientResponse != null)
         {
-            _updateClientResponse!.Result!.Error.Should().NotBeNull();
-            _updateClientResponse.Result.Error!.Code.Should().Be(errorCode);
+            _updateClientResponse.Error.Should().NotBeNull();
+            _updateClientResponse.Error!.Code.Should().Be(errorCode);
         }
     }
 }

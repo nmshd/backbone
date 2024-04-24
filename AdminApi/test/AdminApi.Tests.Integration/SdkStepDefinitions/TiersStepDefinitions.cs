@@ -33,8 +33,8 @@ internal class TiersStepDefinitions : BaseStepDefinitions
         var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + TestDataGenerator.GenerateString(12) });
         response.IsSuccess.Should().BeTrue();
 
-        _existingTierName = response.Result!.Result!.Name;
-        _existingTierId = response.Result.Result!.Id;
+        _existingTierName = response.Result!.Name;
+        _existingTierId = response.Result.Id;
     }
 
     [Given("the Tier T has one associated identity")]
@@ -49,7 +49,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
         var response = await _client.Tiers.ListTiers();
         response.IsSuccess.Should().BeTrue();
 
-        var basicTier = response.Result!.Result!.Single(t => t.Name == "Basic");
+        var basicTier = response.Result!.Single(t => t.Name == "Basic");
         _existingTierName = basicTier.Name;
         _existingTierId = basicTier.Id;
     }
@@ -114,7 +114,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _tierResponse!.Result!.Error.Should().NotBeNull();
-        _tierResponse.Result.Error!.Code.Should().Be(errorCode);
+        _tierResponse!.Error.Should().NotBeNull();
+        _tierResponse.Error!.Code.Should().Be(errorCode);
     }
 }

@@ -34,7 +34,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
         });
         response.IsSuccess.Should().BeTrue();
 
-        _tierId = response.Result!.Result!.Id;
+        _tierId = response.Result!.Id;
 
         // allow the event queue to trigger the creation of this tier on the Quotas module
         Thread.Sleep(2000);
@@ -53,7 +53,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
         });
         response.IsSuccess.Should().BeTrue();
 
-        _clientId = response.Result!.Result!.ClientId;
+        _clientId = response.Result!.ClientId;
     }
 
     [When("a GET request is sent to the /Clients/{c.clientId} endpoint")]
@@ -65,10 +65,10 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
     [Then("the response contains Client c")]
     public void ThenTheResponseContainsAClient()
     {
-        _response!.Result!.Result.Should().NotBeNull();
-        _response!.Result!.Result!.ClientId.Should().Be(_clientId);
-        _response!.Result!.Result!.DefaultTier.Should().Be(_tierId);
-        _response!.Result!.Result!.MaxIdentities.Should().Be(_maxIdentities);
+        _response!.Result!.Should().NotBeNull();
+        _response!.Result!.ClientId.Should().Be(_clientId);
+        _response!.Result!.DefaultTier.Should().Be(_tierId);
+        _response!.Result!.MaxIdentities.Should().Be(_maxIdentities);
         _response!.AssertContentCompliesWithSchema();
     }
 

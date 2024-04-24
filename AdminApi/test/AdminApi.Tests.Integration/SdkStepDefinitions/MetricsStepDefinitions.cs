@@ -26,7 +26,7 @@ internal class MetricsStepDefinitions : BaseStepDefinitions
     [Then("the response contains a list of Metrics")]
     public void ThenTheResponseContainsAListOfMetrics()
     {
-        _metricsResponse!.Result!.Result.Should().NotBeNullOrEmpty();
+        _metricsResponse!.Result!.Should().NotBeNullOrEmpty();
         _metricsResponse.AssertContentCompliesWithSchema();
     }
 

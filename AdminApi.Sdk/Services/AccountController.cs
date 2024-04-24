@@ -18,10 +18,10 @@ public class AccountController(Client client)
         var identityKeyPair = signatureHelper.CreateKeyPair();
 
         var challenge = await client.Challenges.CreateChallenge();
-        if (challenge.Result?.Result?.Id is null)
+        if (challenge.Result?.Id is null)
             return null;
 
-        var serializedChallenge = JsonConvert.SerializeObject(challenge.Result.Result);
+        var serializedChallenge = JsonConvert.SerializeObject(challenge.Result);
 
         var challengeSignature = signatureHelper.CreateSignature(identityKeyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
         var signedChallenge = new SignedChallenge(serializedChallenge, challengeSignature);

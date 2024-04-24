@@ -30,19 +30,19 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _createIdentityResponse = await accountController.CreateIdentity(_options.ClientId, _options.ClientSecret) ?? throw new InvalidOperationException();
         _createIdentityResponse.IsSuccess.Should().BeTrue();
 
-        _existingIdentity = _createIdentityResponse.Result!.Result!.Address;
+        _existingIdentity = _createIdentityResponse.Result!.Address;
     }
 
     [Given("an active deletion process for Identity i exists")]
     public async Task GivenAnActiveDeletionProcessForIdentityAExists()
     {
-        await _client.Identities.StartDeletionProcess(_createIdentityResponse!.Result!.Result!.Address);
+        await _client.Identities.StartDeletionProcess(_createIdentityResponse!.Result!.Address);
     }
 
     [When("a POST request is sent to the /Identities/{i.id}/DeletionProcesses endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesIdDeletionProcessesEndpoint()
     {
-        _identityDeletionProcessResponse = await _client.Identities.StartDeletionProcess(_createIdentityResponse!.Result!.Result!.Address);
+        _identityDeletionProcessResponse = await _client.Identities.StartDeletionProcess(_createIdentityResponse!.Result!.Address);
     }
 
     [When("a GET request is sent to the /Identities endpoint")]
@@ -66,21 +66,21 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Then("the response contains a list of Identities")]
     public void ThenTheResponseContainsAListOfIdentities()
     {
-        _identityOverviewsResponse!.Result!.Result.Should().NotBeNull();
+        _identityOverviewsResponse!.Result!.Should().NotBeNull();
         _identityOverviewsResponse!.AssertContentCompliesWithSchema();
     }
 
     [Then("the response contains a Deletion Process")]
     public void ThenTheResponseContainsADeletionProcess()
     {
-        _identityDeletionProcessResponse!.Result!.Result.Should().NotBeNull();
+        _identityDeletionProcessResponse!.Result!.Should().NotBeNull();
         _identityDeletionProcessResponse!.AssertContentCompliesWithSchema();
     }
 
     [Then("the response contains Identity i")]
     public void ThenTheResponseContainsAnIdentity()
     {
-        _identityResponse!.Result!.Result.Should().NotBeNull();
+        _identityResponse!.Result!.Should().NotBeNull();
         _identityResponse!.AssertContentCompliesWithSchema();
     }
 
@@ -102,14 +102,14 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     {
         if (_identityResponse != null)
         {
-            _identityResponse!.Result!.Error.Should().NotBeNull();
-            _identityResponse.Result!.Error!.Code.Should().Be(errorCode);
+            _identityResponse!.Result!.Should().NotBeNull();
+            _identityResponse.Error!.Code.Should().Be(errorCode);
         }
 
         if (_identityDeletionProcessResponse != null)
         {
-            _identityDeletionProcessResponse!.Result!.Error.Should().NotBeNull();
-            _identityDeletionProcessResponse.Result!.Error!.Code.Should().Be(errorCode);
+            _identityDeletionProcessResponse!.Error.Should().NotBeNull();
+            _identityDeletionProcessResponse.Error!.Code.Should().Be(errorCode);
         }
     }
 }

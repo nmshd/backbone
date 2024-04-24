@@ -8,6 +8,9 @@ public class HttpClientOptions
     public string BaseUrl { get; set; } = "";
 
     [Required]
+    public string ApiVersion { get; set; } = "";
+
+    [Required]
     public string ApiKey { get; set; } = "";
 
     [Required]
