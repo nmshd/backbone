@@ -8,14 +8,12 @@ class MultiSelectFilter extends StatelessWidget {
   final String searchLabel;
   final MultiSelectController<String> controller;
   final void Function(List<ValueItem<String>> selectedOptions) onOptionSelected;
-  // final void Function(int index, ValueItem<String> option) onOptionRemoved;
 
   const MultiSelectFilter({
     required this.label,
     required this.searchLabel,
     required this.controller,
     required this.onOptionSelected,
-    // required this.onOptionRemoved,
     super.key,
   });
 
@@ -45,7 +43,6 @@ class MultiSelectFilter extends StatelessWidget {
             optionsBackgroundColor: Theme.of(context).colorScheme.background,
             optionTextStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
             onOptionSelected: onOptionSelected,
-            // onOptionRemoved: onOptionRemoved,
           ),
         ),
       ],
