@@ -13,18 +13,18 @@ spec:
       app: {{ include "global.name" . }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.databasemigrator.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         app: {{ include "global.name" . }}
     spec:
-      {{- with .Values.podSecurityContext }}
+      {{- with .Values.databasemigrator.podSecurityContext }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.databasemigrator.podSecurityContext | nindent 8 }}
       {{- end }}
-      {{- with .Values.image.imagePullSecrets }}
+      {{- with .Values.databasemigrator.image.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -34,32 +34,32 @@ spec:
             name: configuration
       containers:
         - name: {{ include "global.name" . }}
-          {{- with .Values.securityContext }}
+          {{- with .Values.databasemigrator.securityContext }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 8 }}
+            {{- toYaml .Values.databasemigrator.securityContext | nindent 8 }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{- default .Chart.AppVersion .Values.image.tagOverride }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+            {{- toYaml .Values.databasemigrator.resources | nindent 12 }}
+          image: "{{ .Values.databasemigrator.image.repository }}:{{- default .Chart.AppVersion .Values.databasemigrator.image.tagOverride }}"
+          imagePullPolicy: {{ .Values.databasemigrator.image.pullPolicy }}
           volumeMounts:
             - name: settings-override
               mountPath: /app/appsettings.override.json
               subPath: appsettings.override.json
               readOnly: true
           env:
-            {{- with .Values.env }}
+            {{- with .Values.databasemigrator.env }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.databasemigrator.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.databasemigrator.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.databasemigrator.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
