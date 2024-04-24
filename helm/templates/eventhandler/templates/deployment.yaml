@@ -17,18 +17,18 @@ spec:
       app: {{ include "global.name" . }}
   template:
     metadata:
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.eventhandler.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         app: {{ include "global.name" . }}
     spec:
-      {{- with .Values.podSecurityContext }}
+      {{- with .Values.eventhandler.podSecurityContext }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.eventhandler.podSecurityContext | nindent 8 }}
       {{- end }}
-      {{- with .Values.image.imagePullSecrets }}
+      {{- with .Values.eventhandler.image.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -38,14 +38,14 @@ spec:
             name: configuration
       containers:
         - name: {{ include "global.name" . }}
-          {{- with .Values.securityContext }}
+          {{- with .Values.eventhandler.securityContext }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 8 }}
+            {{- toYaml .Values.eventhandler.securityContext | nindent 8 }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{- default .Chart.AppVersion .Values.image.tagOverride }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+            {{- toYaml .Values.eventhandler.resources | nindent 12 }}
+          image: "{{ .Values.eventhandler.image.repository }}:{{- default .Chart.AppVersion .Values.eventhandler.image.tagOverride }}"
+          imagePullPolicy: {{ .Values.eventhandler.image.pullPolicy }}
           volumeMounts:
             - name: settings-override
               mountPath: /app/appsettings.override.json
@@ -65,18 +65,18 @@ spec:
                   name: rabbitmq-password
                   key: "VALUE" 
             {{- end }}
-            {{- with .Values.env }}
+            {{- with .Values.eventhandler.env }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.eventhandler.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.eventhandler.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.eventhandler.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

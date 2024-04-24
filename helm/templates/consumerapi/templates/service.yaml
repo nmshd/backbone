@@ -9,14 +9,14 @@ metadata:
   annotations:
     cloud.google.com/backend-config: '{"default": "{{ include "global.name" . }}"}'
   {{- end }}
-  {{- if eq .Values.service.type "LoadBalancer" }}
+  {{- if eq .Values.consumerapi.service.type "LoadBalancer" }}
   annotations:
-    service.beta.kubernetes.io/azure-load-balancer-resource-group: {{ .Values.service.loadBalancer.azureResourceGroup }}
+    service.beta.kubernetes.io/azure-load-balancer-resource-group: {{ .Values.consumerapi.service.loadBalancer.azureResourceGroup }}
   {{- end }}
 spec:
-  type: {{ .Values.service.type }}
-  {{- if eq .Values.service.type "LoadBalancer" }}
-  loadBalancerIP: {{ .Values.service.loadBalancer.ip }}
+  type: {{ .Values.consumerapi.service.type }}
+  {{- if eq .Values.consumerapi.service.type "LoadBalancer" }}
+  loadBalancerIP: {{ .Values.consumerapi.service.loadBalancer.ip }}
   {{- end }}
   ports:
     - port: 8080
