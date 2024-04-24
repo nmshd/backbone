@@ -19,8 +19,8 @@ class DateFilter extends StatefulWidget {
 }
 
 class _DateFilterState extends State<DateFilter> {
-  late String operator = '=';
-  DateTime? selectedDate;
+  String _operator = '=';
+  DateTime? _selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +34,9 @@ class _DateFilterState extends State<DateFilter> {
         Row(
           children: [
             DropdownButton<String>(
-              value: operator,
+              value: _operator,
               onChanged: (newValue) {
-                setState(() => operator = newValue!);
+                setState(() => _operator = newValue!);
               },
               items: widget.operators.map((operator) {
                 return DropdownMenuItem<String>(
@@ -58,12 +58,12 @@ class _DateFilterState extends State<DateFilter> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      selectedDate != null ? '${selectedDate!.year}-${selectedDate!.month}-${selectedDate!.day}' : 'Select date',
+                      _selectedDate != null ? '${_selectedDate!.year}-${_selectedDate!.month}-${_selectedDate!.day}' : 'Select date',
                       style: const TextStyle(fontSize: 14),
                     ),
                     Gaps.w8,
                     const Icon(Icons.calendar_today),
-                    if (selectedDate != null) ...[
+                    if (_selectedDate != null) ...[
                       Gaps.w8,
                       GestureDetector(
                         onTap: _clearDate,
@@ -82,22 +82,22 @@ class _DateFilterState extends State<DateFilter> {
 
   void _clearDate() {
     setState(() {
-      selectedDate = null;
+      _selectedDate = null;
     });
-    widget.onDateSelected(selectedDate, operator);
+    widget.onDateSelected(_selectedDate, _operator);
   }
 
   Future<void> _selectANewDate() async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate ?? DateTime.now(),
+      initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
     if (picked != null) {
       setState(() {
-        selectedDate = picked;
-        widget.onDateSelected(selectedDate, operator);
+        _selectedDate = picked;
+        widget.onDateSelected(_selectedDate, _operator);
       });
     }
   }
