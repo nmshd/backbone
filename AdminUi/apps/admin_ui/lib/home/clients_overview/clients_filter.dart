@@ -23,7 +23,7 @@ class _ClientsFilterState extends State<ClientsFilter> {
   late ScrollController _scrollController;
   IdentityOverviewFilter filter = IdentityOverviewFilter();
 
-  late MultiSelectController<dynamic> _tierController;
+  late MultiSelectController<String> _tierController;
 
   late String _enteredClientId;
   late String _enteredDisplayName;
@@ -83,26 +83,14 @@ class _ClientsFilterState extends State<ClientsFilter> {
               },
             ),
             Gaps.w16,
-            SizedBox(
-              width: 250,
-              child: MultiSelectDropDown(
-                hint: 'Tiers',
-                searchLabel: 'Search Tiers',
-                searchEnabled: true,
-                controller: _tierController,
-                options: _tierController.options,
-                fieldBackgroundColor: Theme.of(context).colorScheme.background,
-                searchBackgroundColor: Theme.of(context).colorScheme.background,
-                dropdownBackgroundColor: Theme.of(context).colorScheme.background,
-                selectedOptionBackgroundColor: Theme.of(context).colorScheme.background,
-                selectedOptionTextColor: Theme.of(context).colorScheme.onBackground,
-                optionsBackgroundColor: Theme.of(context).colorScheme.background,
-                optionTextStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
-                  _selectedTiers = selectedOptions.map((item) => item.value as String).toList();
-                  sendFilters();
-                },
-              ),
+            MultiSelectFilter(
+              label: 'Tiers',
+              searchLabel: 'Search Tiers',
+              controller: _tierController,
+              onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
+                _selectedTiers = selectedOptions.map((item) => item.value as String).toList();
+                sendFilters();
+              },
             ),
             Gaps.w16,
             NumberFilter(
