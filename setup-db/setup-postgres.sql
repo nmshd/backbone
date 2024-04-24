@@ -130,17 +130,25 @@ $$;
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Authorizations +++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-/*GRANT CREATE ON SCHEMA Challenges, Devices, Messages, Synchronization, Tokens, Relationships, Files TO challenges, devices, messages, synchronization, tokens, relationships, files, Quotas;
-GRANT CREATE ON SCHEMA Relationships TO relationships;*/
+GRANT USAGE ON SCHEMA "Challenges" TO challenges;
+GRANT USAGE ON SCHEMA "Devices" TO devices;
+GRANT USAGE ON SCHEMA "Files" TO files;
+GRANT USAGE ON SCHEMA "Messages" TO messages;
+GRANT USAGE ON SCHEMA "Quotas" TO quotas;
+GRANT USAGE ON SCHEMA "Relationships" TO relationships;
+GRANT USAGE ON SCHEMA "Synchronization" TO synchronization;
+GRANT USAGE ON SCHEMA "Tokens" TO tokens;
+GRANT USAGE ON SCHEMA "AdminUi" TO "adminUi";
 
-REVOKE USAGE, CREATE ON SCHEMA "Challenges" FROM synchronization, devices, messages, tokens, relationships, files, quotas;
-REVOKE USAGE, CREATE ON SCHEMA "Synchronization" FROM challenges, devices, messages, tokens, relationships, files, quotas;
-REVOKE USAGE, CREATE ON SCHEMA "Messages" FROM challenges, synchronization, devices, tokens, relationships, files, quotas;
-REVOKE USAGE, CREATE ON SCHEMA "Devices" FROM challenges, synchronization, messages, tokens, relationships, files, quotas;
-REVOKE USAGE, CREATE ON SCHEMA "Tokens" FROM challenges, synchronization, devices, messages, relationships, files, quotas;
-REVOKE USAGE, CREATE ON SCHEMA "Relationships" FROM challenges, synchronization, devices, messages, tokens, files, quotas;
-REVOKE USAGE, CREATE ON SCHEMA "Files" FROM challenges, synchronization, devices, messages, tokens, relationships, quotas;
-REVOKE USAGE, CREATE ON SCHEMA "Quotas" FROM challenges, synchronization, devices, messages, tokens, relationships, files;
+ALTER DEFAULT PRIVILEGES IN SCHEMA "Challenges" GRANT ALL ON TABLES TO challenges;
+ALTER DEFAULT PRIVILEGES IN SCHEMA "Devices" GRANT ALL ON TABLES TO devices;
+ALTER DEFAULT PRIVILEGES IN SCHEMA "Files" GRANT ALL ON TABLES TO files;
+ALTER DEFAULT PRIVILEGES IN SCHEMA "Messages" GRANT ALL ON TABLES TO messages;
+ALTER DEFAULT PRIVILEGES IN SCHEMA "Quotas" GRANT ALL ON TABLES TO quotas;
+ALTER DEFAULT PRIVILEGES IN SCHEMA "Relationships" GRANT ALL ON TABLES TO relationships;
+ALTER DEFAULT PRIVILEGES IN SCHEMA "Synchronization" GRANT ALL ON TABLES TO synchronization;
+ALTER DEFAULT PRIVILEGES IN SCHEMA "Tokens" GRANT ALL ON TABLES TO tokens;
+ALTER DEFAULT PRIVILEGES IN SCHEMA "AdminUi" GRANT ALL ON TABLES TO "adminUi";
 
 GRANT USAGE ON SCHEMA "Relationships" TO messages;
 GRANT SELECT, REFERENCES, TRIGGER, TRUNCATE ON ALL TABLES IN SCHEMA "Relationships" TO messages;
@@ -282,13 +290,3 @@ GRANT relationships TO "nmshdAdmin";
 GRANT files TO "nmshdAdmin";
 GRANT quotas TO "nmshdAdmin";
 GRANT "adminUi" TO "nmshdAdmin";
-
-ALTER SCHEMA "Challenges" OWNER TO challenges;
-ALTER SCHEMA "Devices" OWNER TO devices;
-ALTER SCHEMA "Messages" OWNER TO messages;
-ALTER SCHEMA "Synchronization" OWNER TO synchronization;
-ALTER SCHEMA "Tokens" OWNER TO tokens;
-ALTER SCHEMA "Relationships" OWNER TO relationships;
-ALTER SCHEMA "Files" OWNER TO files;
-ALTER SCHEMA "Quotas" OWNER TO quotas;
-ALTER SCHEMA "AdminUi" OWNER TO "adminUi";
