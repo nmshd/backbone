@@ -28,7 +28,7 @@ class IdentitiesEndpoint extends Endpoint {
       );
 
   Future<ApiResponse<List<IdentityOverview>>> getIdentities({
-    required String orderBy,
+    String orderBy = 'address asc',
     IdentityOverviewFilter? filter,
     int pageNumber = 0,
     int pageSize = 10,
