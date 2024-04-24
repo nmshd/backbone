@@ -46,9 +46,9 @@ class _NumberFilterState extends State<NumberFilter> {
                 );
               }).toList(),
             ),
-            Gaps.w8,
+            Gaps.w16,
             SizedBox(
-              width: 40,
+              width: 120,
               height: 40,
               child: TextField(
                 controller: controller,
