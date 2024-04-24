@@ -11,15 +11,12 @@ class InputField extends StatefulWidget {
 }
 
 class _InputFieldState extends State<InputField> {
-  final _searchAddressController = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       width: 180,
       height: 70,
       child: TextField(
-        controller: _searchAddressController,
         onChanged: (value) {
           setState(() => widget.onEnteredText(value));
         },
