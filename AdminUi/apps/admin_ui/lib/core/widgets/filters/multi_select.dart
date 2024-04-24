@@ -6,8 +6,8 @@ import '/core/core.dart';
 class MultiSelectFilter extends StatelessWidget {
   final String label;
   final String searchLabel;
-  final MultiSelectController<dynamic> controller;
-  final void Function(List<ValueItem<dynamic>> selectedOptions) onOptionSelected;
+  final MultiSelectController<String> controller;
+  final void Function(List<ValueItem<String>> selectedOptions) onOptionSelected;
 
   const MultiSelectFilter({
     required this.label,

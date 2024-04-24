@@ -21,8 +21,8 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
   late ScrollController _scrollController;
   IdentityOverviewFilter filter = IdentityOverviewFilter();
 
-  late MultiSelectController<dynamic> _tierController;
-  late MultiSelectController<dynamic> _clientController;
+  late MultiSelectController<String> _tierController;
+  late MultiSelectController<String> _clientController;
 
   late String _enteredIdentityAddress;
   late List<String> _selectedTiers;
@@ -102,8 +102,8 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               label: 'Tiers',
               searchLabel: 'Search Tiers',
               controller: _tierController,
-              onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
-                _selectedTiers = selectedOptions.map((item) => item.value as String).toList();
+              onOptionSelected: (List<ValueItem<String>> selectedOptions) {
+                _selectedTiers = selectedOptions.map((item) => item.value!).toList();
                 sendFilters();
               },
             ),
@@ -112,8 +112,8 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               label: 'Clients',
               searchLabel: 'Search Clients',
               controller: _clientController,
-              onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
-                _selectedClients = selectedOptions.map((item) => item.value as String).toList();
+              onOptionSelected: (List<ValueItem<String>> selectedOptions) {
+                _selectedClients = selectedOptions.map((item) => item.value!).toList();
                 sendFilters();
               },
             ),
