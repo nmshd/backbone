@@ -10,7 +10,7 @@ metadata:
     cloud.google.com/backend-config: '{"default": "{{ include "global.name" . }}"}'
   {{- end }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.adminui.service.type }}
   ports:
     - port: 8080
       targetPort: 8080
