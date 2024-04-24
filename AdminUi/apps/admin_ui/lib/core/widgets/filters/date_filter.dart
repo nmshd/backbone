@@ -10,7 +10,7 @@ class DateFilter extends StatefulWidget {
     super.key,
   });
 
-  final void Function(DateTime selectedDate, String operator, {bool isDateSelected}) onDateSelected;
+  final void Function(DateTime? selectedDate, String operator) onDateSelected;
   final List<String> operators;
   final String label;
 
@@ -19,9 +19,8 @@ class DateFilter extends StatefulWidget {
 }
 
 class _DateFilterState extends State<DateFilter> {
-  late String operator = '=';
-  late DateTime selectedDate = DateTime.now();
-  late bool isDateSelected = false;
+  String _operator = '=';
+  DateTime? _selectedDate;
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +35,9 @@ class _DateFilterState extends State<DateFilter> {
         Row(
           children: [
             DropdownButton<String>(
-              value: operator,
+              value: _operator,
               onChanged: (newValue) {
-                setState(() => operator = newValue!);
+                setState(() => _operator = newValue!);
               },
               items: widget.operators.map((operator) {
                 return DropdownMenuItem<String>(
@@ -49,7 +48,7 @@ class _DateFilterState extends State<DateFilter> {
             ),
             Gaps.w8,
             InkWell(
-              onTap: selectANewDate,
+              onTap: _selectANewDate,
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -60,15 +59,15 @@ class _DateFilterState extends State<DateFilter> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '${selectedDate.year}-${selectedDate.month}-${selectedDate.day}',
+                      _selectedDate != null ? '${_selectedDate!.year}-${_selectedDate!.month}-${_selectedDate!.day}' : 'Select date',
                       style: const TextStyle(fontSize: 14),
                     ),
                     Gaps.w8,
                     const Icon(Icons.calendar_today),
-                    if (isDateSelected) ...[
+                    if (_selectedDate != null) ...[
                       Gaps.w8,
                       GestureDetector(
-                        onTap: clearDate,
+                        onTap: _clearDate,
                         child: const Icon(Icons.clear, size: 20),
                       ),
                     ],
@@ -82,27 +81,24 @@ class _DateFilterState extends State<DateFilter> {
     );
   }
 
-  void clearDate() {
+  void _clearDate() {
     setState(() {
-      selectedDate = DateTime.now();
-      isDateSelected = false;
+      _selectedDate = null;
     });
-    widget.onDateSelected(selectedDate, operator, isDateSelected: isDateSelected);
+    widget.onDateSelected(_selectedDate, _operator);
   }
 
-  Future<void> selectANewDate() async {
+  Future<void> _selectANewDate() async {
     final picked = await showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
     if (picked != null) {
       setState(() {
-        selectedDate = picked;
-        isDateSelected = true;
-
-        widget.onDateSelected(selectedDate, operator, isDateSelected: isDateSelected);
+        _selectedDate = picked;
+        widget.onDateSelected(_selectedDate, _operator);
       });
     }
   }
