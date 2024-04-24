@@ -120,7 +120,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Publishes_RelationshipCreatedDomainEvent()
+    public async Task Publishes_RelationshipStatusChangedDomainEvent()
     {
         // Arrange
         SystemTime.Set("2020-01-01");
