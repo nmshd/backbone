@@ -1,0 +1,17 @@
+{{- if eq .Values.global.provider "GoogleCloud" }}
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  labels:
+    {{- include "global.labels" . | nindent 4 }}
+  name: {{ include "global.name" . }}
+spec:
+  healthCheck:
+    checkIntervalSec: {{ .Values.consumerapi.backendConfig.healthCheck.checkIntervalSec }}
+    timeoutSec: {{ .Values.consumerapi.backendConfig.healthCheck.timeoutSec }}
+    healthyThreshold: {{ .Values.consumerapi.backendConfig.healthCheck.healthyThreshold }}
+    unhealthyThreshold: {{ .Values.consumerapi.backendConfig.healthCheck.unhealthyThreshold }}
+    type: HTTP
+    requestPath: /health
+    port: 8080
+{{- end }}
