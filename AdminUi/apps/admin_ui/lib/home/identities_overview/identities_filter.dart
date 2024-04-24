@@ -18,7 +18,6 @@ class IdentitiesFilter extends StatefulWidget {
 }
 
 class _IdentitiesFilterState extends State<IdentitiesFilter> {
-  late ScrollController _scrollController;
   IdentityOverviewFilter filter = IdentityOverviewFilter();
 
   late MultiSelectController<String> _tierController;
@@ -52,7 +51,6 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
     super.initState();
     _tierController = MultiSelectController();
     _clientController = MultiSelectController();
-    _scrollController = ScrollController();
     _enteredIdentityAddress = '';
     _selectedTiers = [];
     _selectedClients = [];
@@ -76,7 +74,6 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
   void dispose() {
     _tierController.dispose();
     _clientController.dispose();
-    _scrollController.dispose();
     super.dispose();
   }
 
