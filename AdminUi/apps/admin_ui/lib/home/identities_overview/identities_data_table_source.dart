@@ -11,7 +11,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
 
   IdentityOverviewFilter? filter;
 
-  void setData(int columnIndex, {required bool columnAscending}) {
+  void sort(int columnIndex, {required bool columnAscending}) {
     _sortColumnIndex = columnIndex;
     _sortAscending = columnAscending;
     notifyListeners();
