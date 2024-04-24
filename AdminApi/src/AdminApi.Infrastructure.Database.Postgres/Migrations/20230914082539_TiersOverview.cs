@@ -11,7 +11,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""
-                CREATE OR REPLACE VIEW "TierOverviews" AS
+                CREATE OR REPLACE VIEW "AdminUi"."TierOverviews" AS
                     SELECT
                         TIERS."Id" AS "Id",
                         TIERS."Name" AS "Name",
@@ -26,7 +26,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(""" DROP VIEW "TierOverviews" """);
+            migrationBuilder.Sql(""" DROP VIEW "AdminUi"."TierOverviews" """);
         }
     }
 }

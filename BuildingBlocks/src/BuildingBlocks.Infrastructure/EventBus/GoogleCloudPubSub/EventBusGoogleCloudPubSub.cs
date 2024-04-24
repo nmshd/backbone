@@ -1,7 +1,8 @@
 using System.Text.RegularExpressions;
 using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
@@ -17,7 +18,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         public const string EVENT_NAME = "Subject";
     }
 
-    private const string INTEGRATION_EVENT_SUFFIX = "IntegrationEvent";
+    private const string DOMAIN_EVENT_SUFFIX = "DomainEvent";
     private const string AUTOFAC_SCOPE_NAME = "event_bus";
 
     private readonly ILifetimeScope _autofac;
@@ -44,9 +45,9 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         _connection.Dispose();
     }
 
-    public async void Publish(IntegrationEvent @event)
+    public async void Publish(DomainEvent @event)
     {
-        var eventName = @event.GetType().Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
+        var eventName = @event.GetType().Name.Replace(DOMAIN_EVENT_SUFFIX, "");
 
         var jsonMessage = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
         {
@@ -69,10 +70,10 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     }
 
     public void Subscribe<T, TH>()
-        where T : IntegrationEvent
-        where TH : IIntegrationEventHandler<T>
+        where T : DomainEvent
+        where TH : IDomainEventHandler<T>
     {
-        var eventName = RemoveIntegrationEventSuffix(typeof(T).Name);
+        var eventName = RemoveDomainEventSuffix(typeof(T).Name);
 
         _logger.LogInformation("Subscribing to event '{EventName}' with {EventHandler}", eventName, typeof(TH).Name);
 
@@ -84,15 +85,15 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         _connection.SubscriberClient.StartAsync(OnIncomingEvent);
     }
 
-    private static string RemoveIntegrationEventSuffix(string typeName)
+    private static string RemoveDomainEventSuffix(string typeName)
     {
-        return Regex.Replace(typeName, $"^(.+){INTEGRATION_EVENT_SUFFIX}$", "$1");
+        return Regex.Replace(typeName, $"^(.+){DOMAIN_EVENT_SUFFIX}$", "$1");
     }
 
     private async Task<SubscriberClient.Reply> OnIncomingEvent(PubsubMessage @event, CancellationToken _)
     {
         var eventNameFromAttributes =
-            $"{@event.Attributes[PubSubMessageAttributes.EVENT_NAME]}{INTEGRATION_EVENT_SUFFIX}";
+            $"{@event.Attributes[PubSubMessageAttributes.EVENT_NAME]}{DOMAIN_EVENT_SUFFIX}";
         var eventData = @event.Data.ToStringUtf8();
 
         try
@@ -120,11 +121,11 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         var subscriptions = _subscriptionManager.GetHandlersForEvent(eventName);
         foreach (var subscription in subscriptions)
         {
-            var integrationEvent = (JsonConvert.DeserializeObject(message, subscription.EventType,
+            var domainEvent = (JsonConvert.DeserializeObject(message, subscription.EventType,
                 new JsonSerializerSettings
                 {
                     ContractResolver = new ContractResolverWithPrivates()
-                }) as IntegrationEvent)!;
+                }) as DomainEvent)!;
 
             var policy = EventBusRetryPolicyFactory.Create(
                 _handlerRetryBehavior, (ex, _) => _logger.ErrorWhileExecutingEventHandlerType(eventName, ex));
@@ -133,13 +134,13 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
             {
                 await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
 
-                if (scope.ResolveOptional(subscription.HandlerType) is not IIntegrationEventHandler handler)
+                if (scope.ResolveOptional(subscription.HandlerType) is not IDomainEventHandler handler)
                     throw new Exception(
-                        "Integration event handler could not be resolved from dependency container or it does not implement IIntegrationEventHandler.");
+                        "Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
 
                 var handleMethod = handler.GetType().GetMethod("Handle");
 
-                await (Task)handleMethod!.Invoke(handler, [integrationEvent])!;
+                await (Task)handleMethod!.Invoke(handler, [domainEvent])!;
 
                 return Task.CompletedTask;
             });
@@ -151,9 +152,9 @@ internal static partial class EventBusGoogleCloudPubSubLogs
 {
     [LoggerMessage(
         EventId = 830408,
-        EventName = "EventBusGoogleCloudPubSub.SendingIntegrationEvent",
+        EventName = "EventBusGoogleCloudPubSub.SendingDomainEvent",
         Level = LogLevel.Debug,
-        Message = "Successfully sent integration event with id '{messageId}'.")]
+        Message = "Successfully sent domain event with id '{messageId}'.")]
     public static partial void EventWasNotProcessed(this ILogger logger, string messageId);
 
     [LoggerMessage(

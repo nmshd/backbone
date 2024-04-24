@@ -13,6 +13,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.CreateTable(
                 name: "TierQuotaDefinitions",
+                schema: "Quotas",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -27,12 +28,15 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_TierQuotaDefinitions_Tiers_TierId",
                         column: x => x.TierId,
+                        principalSchema: "Quotas",
                         principalTable: "Tiers",
                         principalColumn: "Id");
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "TierQuotas",
+                schema: "Quotas",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -46,27 +50,33 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_TierQuotas_Identities_ApplyTo",
                         column: x => x.ApplyTo,
+                        principalSchema: "Quotas",
                         principalTable: "Identities",
                         principalColumn: "Address");
                     table.ForeignKey(
                         name: "FK_TierQuotas_TierQuotaDefinitions_DefinitionId",
                         column: x => x.DefinitionId,
+                        principalSchema: "Quotas",
                         principalTable: "TierQuotaDefinitions",
                         principalColumn: "Id");
-                });
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_TierQuotaDefinitions_TierId",
+                schema: "Quotas",
                 table: "TierQuotaDefinitions",
                 column: "TierId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TierQuotas_ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas",
                 column: "ApplyTo");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TierQuotas_DefinitionId",
+                schema: "Quotas",
                 table: "TierQuotas",
                 column: "DefinitionId");
         }
@@ -75,9 +85,11 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                schema: "Quotas",
                 name: "TierQuotas");
 
             migrationBuilder.DropTable(
+                schema: "Quotas",
                 name: "TierQuotaDefinitions");
         }
     }
