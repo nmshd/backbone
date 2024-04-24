@@ -1,10 +1,11 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
-import 'package:admin_ui/home/identities_overview/identities_data_table_source.dart';
-import 'package:admin_ui/home/identities_overview/identities_filter.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+
+import 'identities_data_table_source.dart';
+import 'identities_filter.dart';
 
 class IdentitiesOverview extends StatefulWidget {
   const IdentitiesOverview({

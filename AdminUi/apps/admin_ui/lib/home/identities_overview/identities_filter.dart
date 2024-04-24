@@ -1,9 +1,9 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
-import 'package:admin_ui/components/shared/shared.dart';
-import 'package:admin_ui/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
+
+import '/core/core.dart';
 
 class IdentitiesFilter extends StatefulWidget {
   const IdentitiesFilter({
