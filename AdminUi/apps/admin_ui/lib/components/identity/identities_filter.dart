@@ -113,6 +113,13 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
                 searchEnabled: true,
                 controller: _tierController,
                 options: _tierController.options,
+                fieldBackgroundColor: Theme.of(context).colorScheme.background,
+                searchBackgroundColor: Theme.of(context).colorScheme.background,
+                dropdownBackgroundColor: Theme.of(context).colorScheme.background,
+                selectedOptionBackgroundColor: Theme.of(context).colorScheme.background,
+                selectedOptionTextColor: Theme.of(context).colorScheme.onBackground,
+                optionsBackgroundColor: Theme.of(context).colorScheme.background,
+                optionTextStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                 onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
                   _selectedTiers = selectedOptions.map((item) => item.value as String).toList();
                   sendFilters();
@@ -128,6 +135,13 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
                 searchEnabled: true,
                 controller: _clientController,
                 options: _clientController.options,
+                fieldBackgroundColor: Theme.of(context).colorScheme.background,
+                searchBackgroundColor: Theme.of(context).colorScheme.background,
+                dropdownBackgroundColor: Theme.of(context).colorScheme.background,
+                selectedOptionBackgroundColor: Theme.of(context).colorScheme.background,
+                selectedOptionTextColor: Theme.of(context).colorScheme.onBackground,
+                optionsBackgroundColor: Theme.of(context).colorScheme.background,
+                optionTextStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                 onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
                   _selectedClients = selectedOptions.map((item) => item.value as String).toList();
                   sendFilters();
