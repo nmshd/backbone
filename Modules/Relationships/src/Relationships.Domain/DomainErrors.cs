@@ -40,4 +40,16 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists",
             $"A relationship to '{targetIdentity}' already exists. If the relationship is terminated, you can reactivate it.");
     }
+
+    public static DomainError RequestingIdentityDoesNotBelongToRelationship()
+    {
+        return new DomainError("error.platform.validation.relationshipRequest.requestingIdentityDoesNotBelongToRelationship",
+            $"Requesting identity does not belong to the relationship.");
+    }
+
+    public static DomainError RelationshipAlreadyDecomposed()
+    {
+        return new DomainError("error.platform.validation.relationshipRequest.relationshipAlreadyDecomposed",
+            $"Relationship has already been decomposed.");
+    }
 }

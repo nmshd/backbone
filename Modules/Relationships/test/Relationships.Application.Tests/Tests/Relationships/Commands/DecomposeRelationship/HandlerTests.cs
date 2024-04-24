@@ -23,7 +23,7 @@ public class HandlerTests
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreateTerminatedRelationship();
+        var relationship = TestData.CreateTerminatedRelationship(activeIdentity);
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();

@@ -59,6 +59,9 @@ public class Relationship
 
     public IdentityAddress LastModifiedBy => AuditLog.Last().CreatedBy;
 
+    public bool FromHasDecomposed { get; private set; }
+    public bool ToHasDecomposed { get; private set; }
+
     private static void EnsureTargetIsNotSelf(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity)
     {
         if (activeIdentity == relationshipTemplate.CreatedBy)
@@ -161,7 +164,15 @@ public class Relationship
 
     public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
+        EnsureDecompositionStatus();
         EnsureStatus(RelationshipStatus.Terminated);
+        EnsureRequestingIdentityBelongsToRelationship(activeIdentity);
+
+        if (From == activeIdentity)
+            FromHasDecomposed = true;
+
+        if (To == activeIdentity)
+            ToHasDecomposed = true;
 
         Status = RelationshipStatus.DeletionProposed;
 
@@ -173,6 +184,18 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+    }
+
+    private void EnsureRequestingIdentityBelongsToRelationship(IdentityAddress activeIdentity)
+    {
+        if (From != activeIdentity && To != activeIdentity)
+            throw new DomainException(DomainErrors.RequestingIdentityDoesNotBelongToRelationship());
+    }
+
+    private void EnsureDecompositionStatus()
+    {
+        if (FromHasDecomposed || ToHasDecomposed)
+            throw new DomainException(DomainErrors.RelationshipAlreadyDecomposed());
     }
 
     #region Expressions
