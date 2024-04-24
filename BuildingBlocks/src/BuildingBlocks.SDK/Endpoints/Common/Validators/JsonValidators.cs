@@ -37,7 +37,7 @@ public class JsonValidators
             var responseJson = JObject.Parse(json);
             return responseJson.IsValid(schema, out errors);
         }
-        catch (JsonReaderException _)
+        catch (JsonReaderException)
         {
             var responseJson = JArray.Parse(json);
             return responseJson.IsValid(schema, out errors);
