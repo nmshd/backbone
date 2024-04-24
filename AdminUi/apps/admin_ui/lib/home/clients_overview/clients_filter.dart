@@ -121,11 +121,8 @@ class _ClientsFilterState extends State<ClientsFilter> {
               label: 'Created At',
               onDateSelected: (DateTime? selectedDate, String operator) {
                 setState(() {
-                  if (selectedDate != null) {
-                    _selectedCreatedAt = selectedDate;
-                  }
+                  _selectedCreatedAt = selectedDate;
                   _selectedCreatedAtOperator = operator;
-
                   sendFilters();
                 });
               },
