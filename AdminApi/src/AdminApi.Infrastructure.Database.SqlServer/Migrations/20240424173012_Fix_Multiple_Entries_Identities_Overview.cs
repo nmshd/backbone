@@ -41,7 +41,6 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
                          LEFT JOIN Synchronization.Datawallets DATAWALLETS ON DATAWALLETS.Owner = IDENTITIES.Address
                          LEFT JOIN Devices.Tiers TIERS ON TIERS.Id = IDENTITIES.TierId
              """);
-            
         }
 
         /// <inheritdoc />
