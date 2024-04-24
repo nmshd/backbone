@@ -6,4 +6,4 @@ type: application
 
 version: "1.0.0"
 
-appVersion: "${version}"
+appVersion: "__appVersion__"
