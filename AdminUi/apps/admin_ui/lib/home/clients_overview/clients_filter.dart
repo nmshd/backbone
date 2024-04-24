@@ -66,7 +66,7 @@ class _ClientsFilterState extends State<ClientsFilter> {
           mainAxisSize: MainAxisSize.min,
           children: [
             InputField(
-              title: 'Address',
+              label: 'Address',
               onEnteredText: (String enteredText) {
                 _enteredClientId = enteredText;
 
@@ -75,7 +75,7 @@ class _ClientsFilterState extends State<ClientsFilter> {
             ),
             Gaps.w16,
             InputField(
-              title: 'Display Name',
+              label: 'Display Name',
               onEnteredText: (String enteredText) {
                 _enteredDisplayName = enteredText;
 
