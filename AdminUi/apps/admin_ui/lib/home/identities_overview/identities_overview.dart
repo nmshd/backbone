@@ -19,8 +19,8 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   late ScrollController _scrollController;
   late IdentityDataTableSource _dataSource;
 
-  final int _columnIndex = 0;
-  final bool _columnAscending = true;
+  int _columnIndex = 0;
+  bool _columnAscending = true;
 
   int _rowsPerPage = 5;
 
@@ -29,7 +29,6 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
     super.initState();
     _scrollController = ScrollController();
     _dataSource = IdentityDataTableSource();
-    // _loadIdentities();
   }
 
   @override
@@ -84,15 +83,15 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
                     ],
                   ),
                 ),
-                columns: const <DataColumn2>[
-                  DataColumn2(label: Text('Address'), size: ColumnSize.L),
-                  DataColumn2(label: Text('Tier'), size: ColumnSize.S),
-                  DataColumn2(label: Text('Created with Client')),
-                  DataColumn2(label: Text('Number of Devices')),
-                  DataColumn2(label: Text('Created at'), size: ColumnSize.S),
-                  DataColumn2(label: Text('Last Login at'), size: ColumnSize.S),
-                  DataColumn2(label: Text('Datawallet version')),
-                  DataColumn2(label: Text('Identity Version')),
+                columns: <DataColumn2>[
+                  DataColumn2(label: const Text('Address'), size: ColumnSize.L, onSort: _sort),
+                  const DataColumn2(label: Text('Tier'), size: ColumnSize.S),
+                  DataColumn2(label: const Text('Created with Client'), onSort: _sort),
+                  DataColumn2(label: const Text('Number of Devices'), onSort: _sort),
+                  DataColumn2(label: const Text('Created at'), size: ColumnSize.S, onSort: _sort),
+                  DataColumn2(label: const Text('Last Login at'), size: ColumnSize.S, onSort: _sort),
+                  DataColumn2(label: const Text('Datawallet version'), onSort: _sort),
+                  DataColumn2(label: const Text('Identity Version'), onSort: _sort),
                 ],
               ),
             ),
@@ -107,23 +106,13 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
     _dataSource.refreshDatasource();
   }
 
-  // void _sort(int columnIndex, bool ascending) {
-  //   _columnIndex = columnIndex;
-  //   _columnAscending = ascending;
-  //   _dataSource
-  //     ..setData(_identities, _pagination, _columnIndex, columnAscending: _columnAscending)
-  //     ..refreshDatasource();
-  // }
-
-  // Future<void> _loadIdentities({IdentityOverviewFilter? filter}) async {
-  //   final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(filter: filter, pageNumber: _currentPage, pageSize: _rowsPerPage);
-
-  //   if (!mounted) return;
-
-  //   _identities = response.data;
-  //   _pagination = response.pagination;
-  //   _dataSource
-  //     ..setData(_identities, _pagination, _columnIndex, columnAscending: _columnAscending)
-  //     ..refreshDatasource();
-  // }
+  void _sort(int columnIndex, bool ascending) {
+    setState(() {
+      _columnIndex = columnIndex;
+      _columnAscending = ascending;
+    });
+    _dataSource
+      ..setData(_columnIndex, columnAscending: _columnAscending)
+      ..refreshDatasource();
+  }
 }

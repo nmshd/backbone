@@ -98,6 +98,7 @@ abstract class Endpoint {
   Future<ApiResponse<T>> getOData<T>(
     String path, {
     required T Function(dynamic) transformer,
+    required String orderBy,
     required int pageNumber,
     required int pageSize,
     Map<String, dynamic>? query,
@@ -108,6 +109,7 @@ abstract class Endpoint {
         r'$top': '$pageSize',
         r'$skip': '$pageNumber',
         r'$count': 'true',
+        r'$orderBy': orderBy,
         ...query ?? {},
       },
       options: Options(headers: {'Accept': 'application/json'}),
