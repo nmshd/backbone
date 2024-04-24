@@ -52,7 +52,7 @@ final _router = GoRouter(
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/clients',
-          pageBuilder: (context, state) => const NoTransitionPage(child: Clients()),
+          pageBuilder: (context, state) => const NoTransitionPage(child: ClientsOverview()),
         ),
       ],
       builder: (context, state, child) => HomeScreen(

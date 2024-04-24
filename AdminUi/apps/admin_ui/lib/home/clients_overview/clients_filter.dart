@@ -1,7 +1,6 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
-import 'package:admin_ui/components/shared/shared.dart';
-import 'package:admin_ui/core/constants.dart';
+import 'package:admin_ui/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
@@ -29,12 +28,10 @@ class _ClientsFilterState extends State<ClientsFilter> {
   late String _enteredClientId;
   late String _enteredDisplayName;
   late List<String> _selectedTiers;
-  late DateTime _selectedCreatedAt;
+  DateTime? _selectedCreatedAt;
   late String _selectedCreatedAtOperator;
   late String _numberOfIdentitiesOperator;
   late String _numberOfIdentities;
-
-  late bool isCreatedAtSelected;
 
   final operators = <String>['=', '<', '>', '<=', '>='];
 
@@ -46,11 +43,9 @@ class _ClientsFilterState extends State<ClientsFilter> {
     _enteredClientId = '';
     _enteredDisplayName = '';
     _selectedTiers = [];
-    _selectedCreatedAt = DateTime.now();
     _selectedCreatedAtOperator = '=';
     _numberOfIdentitiesOperator = '=';
     _numberOfIdentities = '';
-    isCreatedAtSelected = false;
     loadTiers();
   }
 
@@ -124,11 +119,12 @@ class _ClientsFilterState extends State<ClientsFilter> {
             DateFilter(
               operators: operators,
               label: 'Created At',
-              onDateSelected: (DateTime selectedDate, String operator, {bool isDateSelected = false}) {
+              onDateSelected: (DateTime? selectedDate, String operator) {
                 setState(() {
-                  _selectedCreatedAt = selectedDate;
+                  if (selectedDate != null) {
+                    _selectedCreatedAt = selectedDate;
+                  }
                   _selectedCreatedAtOperator = operator;
-                  isCreatedAtSelected = isDateSelected;
 
                   sendFilters();
                 });
@@ -155,8 +151,8 @@ class _ClientsFilterState extends State<ClientsFilter> {
       filteredList = filteredList.where((client) => _selectedTiers.contains(client.defaultTier.id)).toList();
     }
 
-    if (isCreatedAtSelected) {
-      filteredList = filteredList.where((client) => applyDateFilter(client.createdAt, _selectedCreatedAt, _selectedCreatedAtOperator)).toList();
+    if (_selectedCreatedAt != null) {
+      filteredList = filteredList.where((client) => applyDateFilter(client.createdAt, _selectedCreatedAt!, _selectedCreatedAtOperator)).toList();
     }
 
     if (_numberOfIdentities.isNotEmpty) {
