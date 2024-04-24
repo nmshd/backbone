@@ -62,7 +62,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
 
   @override
   Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
-    final pageNumber = (startIndex ~/ count) + 1;
+    final pageNumber = startIndex ~/ count;
 
     try {
       final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(pageNumber: pageNumber, pageSize: count, filter: filter);
