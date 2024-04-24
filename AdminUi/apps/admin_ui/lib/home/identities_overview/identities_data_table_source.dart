@@ -1,8 +1,10 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
-class IdentityDataTableSource extends DataTableSource {
+class IdentityDataTableSource extends AsyncDataTableSource {
   List<IdentityOverview> data = [];
   Pagination? pagination;
   int sortColumnIndex = 0;
@@ -85,4 +87,33 @@ class IdentityDataTableSource extends DataTableSource {
 
   @override
   int get selectedRowCount => 0;
+
+  @override
+  Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
+    final pageNumber = (startIndex ~/ count) + 1;
+
+    try {
+      final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(
+            pageNumber: pageNumber,
+            pageSize: count,
+          );
+
+      final rows = response.data
+          .map((identity) => DataRow(cells: [
+                DataCell(Text(identity.address)),
+                DataCell(Text(identity.tier.name)),
+                DataCell(Text(identity.createdWithClient)),
+                DataCell(Text(identity.numberOfDevices.toString())),
+                DataCell(Text(identity.createdAt.toString().substring(0, 10))),
+                DataCell(Text(identity.lastLoginAt?.toString().substring(0, 10) ?? '')),
+                DataCell(Text(identity.datawalletVersion?.toString() ?? '')),
+                DataCell(Text(identity.identityVersion.toString())),
+              ]))
+          .toList();
+
+      return AsyncRowsResponse(response.pagination.totalRecords, rows);
+    } catch (e) {
+      throw Exception('Failed to load data: $e');
+    }
+  }
 }
