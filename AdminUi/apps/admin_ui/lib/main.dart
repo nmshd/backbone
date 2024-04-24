@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logger/logger.dart';
 
 import 'core/theme/theme.dart';
 import 'home/home.dart';
@@ -8,6 +10,8 @@ import 'setup/setup_desktop.dart' if (dart.library.html) 'setup/setup_web.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  GetIt.I.registerSingleton(Logger());
 
   await setup();
 
