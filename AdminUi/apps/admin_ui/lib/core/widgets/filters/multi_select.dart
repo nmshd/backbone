@@ -28,7 +28,7 @@ class MultiSelectFilter extends StatelessWidget {
         ),
         Gaps.h8,
         SizedBox(
-          width: 200,
+          width: 250,
           child: MultiSelectDropDown(
             hint: '',
             searchLabel: searchLabel,

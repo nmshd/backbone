@@ -18,7 +18,6 @@ class IdentitiesFilter extends StatefulWidget {
 }
 
 class _IdentitiesFilterState extends State<IdentitiesFilter> {
-  late ScrollController _scrollController;
   IdentityOverviewFilter filter = IdentityOverviewFilter();
 
   late MultiSelectController<String> _tierController;
@@ -39,20 +38,19 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
   late String _identityVersion;
 
   final operators = <String>['=', '<', '>', '<=', '>='];
-  final List<_Operator> comparableOperators = [
-    _Operator(operator: FilterOperator.equal, value: '='),
-    _Operator(operator: FilterOperator.lessThan, value: '<'),
-    _Operator(operator: FilterOperator.greaterThan, value: '>'),
-    _Operator(operator: FilterOperator.lessThanOrEqual, value: '<='),
-    _Operator(operator: FilterOperator.greaterThanOrEqual, value: '>='),
-  ];
+  final Map<String, FilterOperator> operatorMap = {
+    '=': FilterOperator.equal,
+    '<': FilterOperator.lessThan,
+    '>': FilterOperator.greaterThan,
+    '<=': FilterOperator.lessThanOrEqual,
+    '>=': FilterOperator.greaterThanOrEqual,
+  };
 
   @override
   void initState() {
     super.initState();
     _tierController = MultiSelectController();
     _clientController = MultiSelectController();
-    _scrollController = ScrollController();
     _enteredIdentityAddress = '';
     _selectedTiers = [];
     _selectedClients = [];
@@ -76,7 +74,6 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
   void dispose() {
     _tierController.dispose();
     _clientController.dispose();
-    _scrollController.dispose();
     super.dispose();
   }
 
@@ -181,12 +178,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
   }
 
   FilterOperator? findCorrectOperator(String operator) {
-    for (final o in comparableOperators) {
-      if (o.value == operator) {
-        return o.operator;
-      }
-    }
-    return null;
+    return operatorMap[operator];
   }
 
   void sendFilters() {
@@ -226,9 +218,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
       filter = filter.copyWith(identityVersion: identityVersionValue);
     }
 
-    setState(() {
-      widget.onFilterChanged(filter: filter);
-    });
+    widget.onFilterChanged(filter: filter);
   }
 
   Future<void> loadTiers() async {
@@ -242,11 +232,4 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
     final clientItems = response.data.map((client) => ValueItem(label: client.displayName, value: client.clientId)).toList();
     setState(() => _clientController.setOptions(clientItems));
   }
-}
-
-class _Operator {
-  FilterOperator operator;
-  String value;
-
-  _Operator({required this.operator, required this.value});
 }

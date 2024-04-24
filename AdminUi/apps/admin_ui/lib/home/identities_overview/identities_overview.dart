@@ -7,9 +7,7 @@ import 'identities_data_table_source.dart';
 import 'identities_filter.dart';
 
 class IdentitiesOverview extends StatefulWidget {
-  const IdentitiesOverview({
-    super.key,
-  });
+  const IdentitiesOverview({super.key});
 
   @override
   State<IdentitiesOverview> createState() => _IdentitiesOverviewState();
@@ -112,7 +110,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
       _columnAscending = ascending;
     });
     _dataSource
-      ..setData(_columnIndex, columnAscending: _columnAscending)
+      ..sort(_columnIndex, columnAscending: _columnAscending)
       ..refreshDatasource();
   }
 }
