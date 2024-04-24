@@ -6,12 +6,12 @@ metadata:
     {{- include "global.labels" . | nindent 4 }}
     app: {{ include "global.name" . }}
 spec:
-  replicas: {{ .Values.replicas }}
+  replicas: {{ .Values.adminui.replicas }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: {{ .Values.maxSurge }}
-      maxUnavailable: {{ .Values.maxUnavailable }}
+      maxSurge: {{ .Values.adminui.maxSurge }}
+      maxUnavailable: {{ .Values.adminui.maxUnavailable }}
   selector:
     matchLabels:
       app: {{ include "global.name" . }}
@@ -19,7 +19,7 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ .Values.global.configuration | toString | sha256sum }}
-        {{- with .Values.podAnnotations }}
+        {{- with .Values.adminui.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
       labels:
@@ -29,15 +29,15 @@ spec:
       {{- with .Values.global.serviceAccount.name}}
       serviceAccountName: {{ . }}
       {{- end }}
-      {{- with .Values.podSecurityContext }}
+      {{- with .Values.adminui.podSecurityContext }}
       securityContext:
-        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.adminui.podSecurityContext | nindent 8 }}
       {{- end }}
-      {{- with .Values.image.imagePullSecrets }}
+      {{- with .Values.adminui.image.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.podAnnotations }}
+      {{- with .Values.adminui.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -47,14 +47,14 @@ spec:
             name: configuration
       containers:
         - name: {{ include "global.name" . }}
-          {{- with .Values.securityContext }}
+          {{- with .Values.adminui.securityContext }}
           securityContext:
-            {{- toYaml .Values.securityContext | nindent 8 }}
+            {{- toYaml .Values.adminui.securityContext | nindent 8 }}
           {{- end }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
-          image: "{{ .Values.image.repository }}:{{- default .Chart.AppVersion .Values.image.tagOverride }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+            {{- toYaml .Values.adminui.resources | nindent 12 }}
+          image: "{{ .Values.adminui.image.repository }}:{{- default .Chart.AppVersion .Values.adminui.image.tagOverride }}"
+          imagePullPolicy: {{ .Values.adminui.image.pullPolicy }}
           ports:
             - name: http
               containerPort: 8080
@@ -63,18 +63,18 @@ spec:
             httpGet:
               path: /health
               port: 8080
-            initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.adminui.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.adminui.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.adminui.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.adminui.livenessProbe.failureThreshold }}
           readinessProbe:
             httpGet:
               path: /health
               port: 8080
-            initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
-            failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
+            initialDelaySeconds: {{ .Values.adminui.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.adminui.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.adminui.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.adminui.readinessProbe.failureThreshold }}
           volumeMounts:
             - name: settings-override
               mountPath: /app/appsettings.override.json
@@ -94,18 +94,18 @@ spec:
                   name: rabbitmq-password
                   key: "VALUE" 
             {{- end }}
-            {{- with .Values.env }}
+            {{- with .Values.adminui.env }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
-      {{- with .Values.nodeSelector }}
+      {{- with .Values.adminui.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.affinity }}
+      {{- with .Values.adminui.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- with .Values.adminui.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
