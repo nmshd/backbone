@@ -11,6 +11,7 @@ public class Configuration
     }
 
     public required string BaseUrl { get; set; }
+    public required string ODataUrl { get; set; }
     public required string ApiKey { get; set; }
     public JsonSerializerOptions JsonSerializerOptions { get; set; } = new() { PropertyNameCaseInsensitive = true };
 }

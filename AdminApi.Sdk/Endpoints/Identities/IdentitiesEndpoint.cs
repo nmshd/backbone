@@ -14,10 +14,9 @@ public class IdentitiesEndpoint(EndpointClient client) : Endpoint(client)
     public async Task<ApiResponse<EmptyResponse>> DeleteIndividualQuota(string address, string quotaId)
         => await _client.Delete<EmptyResponse>($"Identities/{address}/Quotas/{quotaId}");
 
-    public async Task<ApiResponse<ListIdentitiesResponse>> ListIdentities() => await _client.Request<ListIdentitiesResponse>(HttpMethod.Get, "../../odata/Identities")
+    public async Task<ApiResponse<ListIdentitiesResponse>> ListIdentities() => await _client.Request<ListIdentitiesResponse>(HttpMethod.Get, "Identities")
         .Authenticate()
-        .UseOData()
-        .Execute();
+        .ExecuteOData();
 
     public async Task<ApiResponse<GetIdentityResponse>> GetIdentity(string address) => await _client.Get<GetIdentityResponse>($"Identities/{address}");
 

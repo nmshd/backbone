@@ -16,6 +16,12 @@ public class EndpointClient
                                         }
                                         """;
 
+    private const string EMPTY_VALUE = """
+                                       {
+                                           "value": {}
+                                       }
+                                       """;
+
     private const string ODATA_SEARCH = "value";
     private const string ODATA_REPLACE = "result";
 
@@ -23,12 +29,14 @@ public class EndpointClient
 
     private readonly HttpClient _httpClient;
     private readonly JsonSerializerOptions _jsonSerializerOptions;
+    private readonly HttpClient? _oDataClient;
 
-    public EndpointClient(HttpClient httpClient, IAuthenticator authenticator, JsonSerializerOptions jsonSerializerOptions)
+    public EndpointClient(HttpClient httpClient, IAuthenticator authenticator, JsonSerializerOptions jsonSerializerOptions, HttpClient? oDataClient = null)
     {
         _httpClient = httpClient;
         _authenticator = authenticator;
         _jsonSerializerOptions = jsonSerializerOptions;
+        _oDataClient = oDataClient;
     }
 
     public async Task<ApiResponse<T>> Post<T>(string url, object? requestContent = null)
@@ -92,7 +100,7 @@ public class EndpointClient
         return new RequestBuilder<T>(this, _jsonSerializerOptions, _authenticator, method, url);
     }
 
-    private async Task<ApiResponse<T>> Execute<T>(HttpRequestMessage request, bool useOData)
+    private async Task<ApiResponse<T>> Execute<T>(HttpRequestMessage request)
     {
         var response = await _httpClient.SendAsync(request);
         var responseContent = await response.Content.ReadAsStreamAsync();
@@ -104,14 +112,6 @@ public class EndpointClient
             responseContent.Close();
             responseContent = new MemoryStream(Encoding.UTF8.GetBytes(EMPTY_RESULT));
         }
-        else if (useOData) //Replace "value" in OData response with "result" for it to be read as an ApiResponse
-        {
-            var index = rawResponse.IndexOf(ODATA_SEARCH, StringComparison.Ordinal);
-            if (index > 0) rawResponse = rawResponse[..index] + ODATA_REPLACE + rawResponse[(index + ODATA_SEARCH.Length)..];
-
-            responseContent.Close();
-            responseContent = new MemoryStream(Encoding.UTF8.GetBytes(rawResponse));
-        }
 
         var responseData = JsonSerializer.Deserialize<ResponseContent<T>>(responseContent, _jsonSerializerOptions);
         var deserializedResponseContent = new ApiResponse<T>
@@ -122,6 +122,24 @@ public class EndpointClient
         };
 
         return deserializedResponseContent;
+    }
+
+    private async Task<ApiResponse<T>> ExecuteOData<T>(HttpRequestMessage request)
+    {
+        if (_oDataClient == null) throw new ArgumentException("No OData client is provided");
+
+        var response = await _oDataClient.SendAsync(request);
+        var responseContent = await response.Content.ReadAsStreamAsync();
+        var statusCode = response.StatusCode;
+
+        if (statusCode == HttpStatusCode.NoContent || responseContent.Length == 0)
+        {
+            responseContent.Close();
+            responseContent = new MemoryStream(Encoding.UTF8.GetBytes(EMPTY_VALUE));
+        }
+
+        var deserializedResponseContent = JsonSerializer.Deserialize<ODataResponse<T>>(responseContent, _jsonSerializerOptions)!;
+        return deserializedResponseContent.ToApiResponse(statusCode);
     }
 
     private async Task<RawApiResponse> ExecuteRaw(HttpRequestMessage request)
@@ -150,7 +168,6 @@ public class EndpointClient
         private readonly string _url;
         private bool _authenticated;
         private HttpContent _content;
-        private bool _useOData;
 
         public RequestBuilder(EndpointClient client, JsonSerializerOptions jsonSerializerOptions, IAuthenticator authenticator, HttpMethod method, string url)
         {
@@ -161,19 +178,12 @@ public class EndpointClient
             _url = url;
             _method = method;
             _authenticated = false;
-            _useOData = false;
             _content = JsonContent.Create((object?)null);
         }
 
         public RequestBuilder<T> Authenticate(bool authenticate = true)
         {
             _authenticated = authenticate;
-            return this;
-        }
-
-        public RequestBuilder<T> UseOData(bool useOData = true)
-        {
-            _useOData = useOData;
             return this;
         }
 
@@ -251,10 +261,9 @@ public class EndpointClient
             return this;
         }
 
-        public async Task<ApiResponse<T>> Execute()
-        {
-            return await _client.Execute<T>(await CreateRequestMessage(), _useOData);
-        }
+        public async Task<ApiResponse<T>> Execute() => await _client.Execute<T>(await CreateRequestMessage());
+
+        public async Task<ApiResponse<T>> ExecuteOData() => await _client.ExecuteOData<T>(await CreateRequestMessage());
 
         public async Task<RawApiResponse> ExecuteRaw()
         {
