@@ -22,9 +22,6 @@ public class EndpointClient
                                        }
                                        """;
 
-    private const string ODATA_SEARCH = "value";
-    private const string ODATA_REPLACE = "result";
-
     private readonly IAuthenticator _authenticator;
 
     private readonly HttpClient _httpClient;
