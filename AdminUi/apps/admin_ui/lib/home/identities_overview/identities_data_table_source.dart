@@ -99,7 +99,9 @@ class IdentityDataTableSource extends AsyncDataTableSource {
           );
 
       final rows = response.data
-          .map((identity) => DataRow(cells: [
+          .map(
+            (identity) => DataRow(
+              cells: [
                 DataCell(Text(identity.address)),
                 DataCell(Text(identity.tier.name)),
                 DataCell(Text(identity.createdWithClient)),
@@ -108,7 +110,9 @@ class IdentityDataTableSource extends AsyncDataTableSource {
                 DataCell(Text(identity.lastLoginAt?.toString().substring(0, 10) ?? '')),
                 DataCell(Text(identity.datawalletVersion?.toString() ?? '')),
                 DataCell(Text(identity.identityVersion.toString())),
-              ]))
+              ],
+            ),
+          )
           .toList();
 
       return AsyncRowsResponse(response.pagination.totalRecords, rows);
