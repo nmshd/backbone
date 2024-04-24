@@ -1,6 +1,7 @@
-import 'package:admin_ui/core/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Importing services.dart for TextInputFormatters
+import 'package:flutter/services.dart';
+
+import '/core/constants.dart';
 
 class NumberFilter extends StatefulWidget {
   const NumberFilter({
@@ -46,9 +47,9 @@ class _NumberFilterState extends State<NumberFilter> {
                 );
               }).toList(),
             ),
-            Gaps.w8,
+            Gaps.w16,
             SizedBox(
-              width: 40,
+              width: 120,
               height: 40,
               child: TextField(
                 controller: controller,

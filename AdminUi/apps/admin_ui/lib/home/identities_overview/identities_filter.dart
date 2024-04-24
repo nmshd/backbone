@@ -1,9 +1,9 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
-import 'package:admin_ui/components/shared/shared.dart';
-import 'package:admin_ui/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
+
+import '/core/core.dart';
 
 class IdentitiesFilter extends StatefulWidget {
   const IdentitiesFilter({
@@ -113,6 +113,13 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
                 searchEnabled: true,
                 controller: _tierController,
                 options: _tierController.options,
+                fieldBackgroundColor: Theme.of(context).colorScheme.background,
+                searchBackgroundColor: Theme.of(context).colorScheme.background,
+                dropdownBackgroundColor: Theme.of(context).colorScheme.background,
+                selectedOptionBackgroundColor: Theme.of(context).colorScheme.background,
+                selectedOptionTextColor: Theme.of(context).colorScheme.onBackground,
+                optionsBackgroundColor: Theme.of(context).colorScheme.background,
+                optionTextStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                 onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
                   _selectedTiers = selectedOptions.map((item) => item.value as String).toList();
                   sendFilters();
@@ -128,6 +135,13 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
                 searchEnabled: true,
                 controller: _clientController,
                 options: _clientController.options,
+                fieldBackgroundColor: Theme.of(context).colorScheme.background,
+                searchBackgroundColor: Theme.of(context).colorScheme.background,
+                dropdownBackgroundColor: Theme.of(context).colorScheme.background,
+                selectedOptionBackgroundColor: Theme.of(context).colorScheme.background,
+                selectedOptionTextColor: Theme.of(context).colorScheme.onBackground,
+                optionsBackgroundColor: Theme.of(context).colorScheme.background,
+                optionTextStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
                 onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
                   _selectedClients = selectedOptions.map((item) => item.value as String).toList();
                   sendFilters();
@@ -176,7 +190,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             Gaps.w16,
             NumberFilter(
               operators: operators,
-              label: 'Datawallet',
+              label: 'Datawallet Version',
               onNumberSelected: (String operator, String enteredValue) {
                 _dataWalletVersion = enteredValue;
                 _datawalletVersionOperator = operator;
@@ -214,40 +228,40 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
     filter = IdentityOverviewFilter();
 
     if (_enteredIdentityAddress.isNotEmpty) {
-      filter = filter.copyWith(receivedAddress: _enteredIdentityAddress);
+      filter = filter.copyWith(address: _enteredIdentityAddress);
     }
 
     if (_selectedTiers.isNotEmpty) {
-      filter = filter.copyWith(receivedTiers: _selectedTiers);
+      filter = filter.copyWith(tiers: _selectedTiers);
     }
 
     if (_selectedClients.isNotEmpty) {
-      filter = filter.copyWith(receivedClients: _selectedClients);
+      filter = filter.copyWith(clients: _selectedClients);
     }
 
     if (_selectedCreatedAtOperator.isNotEmpty && _selectedCreatedAt.toString().isNotEmpty && isCreatedAtSelected) {
       final createdAtValue = FilterOperatorValue(findCorrectOperator(_selectedCreatedAtOperator)!, _selectedCreatedAt.toString().substring(0, 10));
-      filter = filter.copyWith(receivedCreatedAt: createdAtValue);
+      filter = filter.copyWith(createdAt: createdAtValue);
     }
     if (_selectedLastLoginAtOperator.isNotEmpty && _selectedLastLoginAt.toString().isNotEmpty && isLastLoginAtSelected) {
       final lastLoginAtValue =
           FilterOperatorValue(findCorrectOperator(_selectedLastLoginAtOperator)!, _selectedLastLoginAt.toString().substring(0, 10));
-      filter = filter.copyWith(receivedLastLoginAt: lastLoginAtValue);
+      filter = filter.copyWith(lastLoginAt: lastLoginAtValue);
     }
 
     if (_numberOfDevices.isNotEmpty) {
       final numberOfDevicesValue = FilterOperatorValue(findCorrectOperator(_numberOfDevicesOperator)!, _numberOfDevices);
-      filter = filter.copyWith(receivedNumberOfDevices: numberOfDevicesValue);
+      filter = filter.copyWith(numberOfDevices: numberOfDevicesValue);
     }
 
     if (_dataWalletVersion.isNotEmpty) {
       final datawalletVersionValue = FilterOperatorValue(findCorrectOperator(_datawalletVersionOperator)!, _dataWalletVersion);
-      filter = filter.copyWith(receivedDatawalletVersion: datawalletVersionValue);
+      filter = filter.copyWith(datawalletVersion: datawalletVersionValue);
     }
 
     if (_identityVersion.isNotEmpty) {
       final identityVersionValue = FilterOperatorValue(findCorrectOperator(_identityVersionOperator)!, _identityVersion);
-      filter = filter.copyWith(receivedIdentityVersion: identityVersionValue);
+      filter = filter.copyWith(identityVersion: identityVersionValue);
     }
 
     setState(() {
