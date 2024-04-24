@@ -1,4 +1,4 @@
-import 'package:admin_ui/components/components.dart';
+import 'package:admin_ui/home/identities_overview/identity.dart';
 import 'package:flutter/material.dart';
 
 class Identities extends StatelessWidget {
