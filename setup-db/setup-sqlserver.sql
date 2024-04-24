@@ -226,20 +226,6 @@ END
 
 GO
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++ Schema Owners ++++++++++++++++++++++++++++++++++++++++++++++++++*/
-PRINT 'Start changing schema owners' ;
-ALTER AUTHORIZATION ON SCHEMA::Challenges TO challenges
-ALTER AUTHORIZATION ON SCHEMA::Devices TO devices
-ALTER AUTHORIZATION ON SCHEMA::Messages TO messages
-ALTER AUTHORIZATION ON SCHEMA::Synchronization TO synchronization
-ALTER AUTHORIZATION ON SCHEMA::Tokens TO tokens
-ALTER AUTHORIZATION ON SCHEMA::Relationships TO relationships
-ALTER AUTHORIZATION ON SCHEMA::Files TO files
-ALTER AUTHORIZATION ON SCHEMA::Quotas TO quotas
-ALTER AUTHORIZATION ON SCHEMA::AdminUi TO adminUi
-PRINT 'Finished changing schema owners' ;
-GO
-
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Authorizations +++++++++++++++++++++++++++++++++++++++++++++++++*/
 PRINT 'Start changing authorizations' ;
 
