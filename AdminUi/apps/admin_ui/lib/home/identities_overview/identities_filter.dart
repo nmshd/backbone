@@ -134,11 +134,8 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               label: 'Created At',
               onDateSelected: (DateTime? selectedDate, String operator) {
                 setState(() {
-                  if (selectedDate != null) {
-                    _selectedCreatedAt = selectedDate;
-                  }
+                  _selectedCreatedAt = selectedDate;
                   _selectedCreatedAtOperator = operator;
-
                   sendFilters();
                 });
               },
@@ -149,9 +146,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               label: 'Last Login At',
               onDateSelected: (DateTime? selectedDate, String operator) {
                 setState(() {
-                  if (selectedDate != null) {
-                    _selectedLastLoginAt = selectedDate;
-                  }
+                  _selectedLastLoginAt = selectedDate;
                   _selectedLastLoginAtOperator = operator;
                   sendFilters();
                 });
@@ -207,11 +202,12 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
       filter = filter.copyWith(clients: _selectedClients);
     }
 
-    if (_selectedCreatedAt != null && _selectedCreatedAtOperator.isNotEmpty) {
+    if (_selectedCreatedAt != null) {
       final createdAtValue = FilterOperatorValue(findCorrectOperator(_selectedCreatedAtOperator)!, _selectedCreatedAt.toString().substring(0, 10));
       filter = filter.copyWith(createdAt: createdAtValue);
     }
-    if (_selectedLastLoginAt != null && _selectedLastLoginAtOperator.isNotEmpty) {
+
+    if (_selectedLastLoginAt != null) {
       final lastLoginAtValue =
           FilterOperatorValue(findCorrectOperator(_selectedLastLoginAtOperator)!, _selectedLastLoginAt.toString().substring(0, 10));
       filter = filter.copyWith(lastLoginAt: lastLoginAtValue);
