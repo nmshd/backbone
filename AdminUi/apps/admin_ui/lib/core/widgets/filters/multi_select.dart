@@ -30,6 +30,7 @@ class MultiSelectFilter extends StatelessWidget {
         SizedBox(
           width: 200,
           child: MultiSelectDropDown(
+            hint: '',
             searchLabel: searchLabel,
             searchEnabled: true,
             controller: controller,
