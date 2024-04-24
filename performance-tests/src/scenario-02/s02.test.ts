@@ -1,4 +1,5 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
+import { b64encode } from "k6/encoding";
 
 export const options = {
     iterations: 1
@@ -21,23 +22,30 @@ const session = new Httpx({
 const cryptoSession = new Httpx({
     baseURL: "http://localhost:3000/",
     timeout: 2000,
-    group: "crypto"
+    group: "crypto",
+    tags: ["crypto"]
 });
 
 export default async function () {
-    const challenge = session.post("Challenges").json("result") as ChallengeResponse;
+    const receivedChallenge = session.post("Challenges").json("result") as ChallengeResponse;
+    const challenge = JSON.stringify({
+        expiresAt: receivedChallenge.expiresAt,
+        id: receivedChallenge.id,
+        type: "Identity"
+    });
     const keyPair = cryptoSession.get("keypair").json();
     const signedChallenge = cryptoSession.post("sign", JSON.stringify({ keyPair, challenge }), { headers: { "Content-Type": "application/json" } }).json();
 
     const createIdentityRequest: CreateIdentityRequest = {
         ClientId: "test",
         ClientSecret: "test",
-        SignedChallenge: signedChallenge,
-        IdentityPublicKey: keyPair.publicKey,
+        SignedChallenge: { challenge, signature: b64encode(JSON.stringify(signedChallenge)) },
+        IdentityPublicKey: b64encode(JSON.stringify(keyPair.pub)),
         DevicePassword: "randomPassword",
         IdentityVersion: 1
     };
-    const createdIdentity = session.post("Identities", JSON.stringify(createIdentityRequest));
+    console.error(createIdentityRequest);
+    const createdIdentity = session.post("Identities", JSON.stringify(createIdentityRequest), { headers: { "Content-Type": "application/json" } });
 
     console.log(createdIdentity);
 }

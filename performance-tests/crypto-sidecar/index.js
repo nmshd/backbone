@@ -23,7 +23,8 @@ app.use(async function (ctx, next) {
 app.use(async function (ctx, next) {
     if (ctx.method !== "POST" || ctx.path !== "/sign") return await next();
     const body = ctx.request.body;
-    const challenge = new crypto.CoreBuffer(body.challenge.id);
+    console.log(body.challenge);
+    const challenge = crypto.CoreBuffer.fromUtf8(body.challenge);
     const privateKey = body.keyPair.prv;
 
     const cspk = crypto.CryptoSignaturePrivateKey.fromJSON({ privateKey: privateKey.prv, algorithm: privateKey.alg });
@@ -31,6 +32,7 @@ app.use(async function (ctx, next) {
     const signedChallenge = await crypto.CryptoSignatures.sign(challenge, cspk);
 
     ctx.body = signedChallenge.toJSON();
+    console.warn(ctx.body);
     ctx.status = 200;
 });
 
