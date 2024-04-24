@@ -61,7 +61,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
               onFilterChanged: loadIdentities,
             ),
             Expanded(
-              child: PaginatedDataTable2(
+              child: AsyncPaginatedDataTable2(
                 rowsPerPage: _rowsPerPage,
                 onRowsPerPageChanged: _setRowsPerPage,
                 sortColumnIndex: _columnIndex,
@@ -84,8 +84,8 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
                   DataColumn2(label: const Text('Number of Devices'), onSort: _sort),
                   DataColumn2(label: const Text('Created at'), onSort: _sort, size: ColumnSize.S),
                   DataColumn2(label: const Text('Last Login at'), onSort: _sort, size: ColumnSize.S),
-                  DataColumn2(label: const Text('Datawallet version'), onSort: _sort, size: ColumnSize.S),
-                  DataColumn2(label: const Text('Identity Version'), onSort: _sort, size: ColumnSize.S),
+                  DataColumn2(label: const Text('Datawallet version'), onSort: _sort),
+                  DataColumn2(label: const Text('Identity Version'), onSort: _sort),
                 ],
               ),
             ),
