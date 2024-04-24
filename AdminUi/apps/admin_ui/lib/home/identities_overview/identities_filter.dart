@@ -226,9 +226,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
       filter = filter.copyWith(identityVersion: identityVersionValue);
     }
 
-    setState(() {
-      widget.onFilterChanged(filter: filter);
-    });
+    widget.onFilterChanged(filter: filter);
   }
 
   Future<void> loadTiers() async {
