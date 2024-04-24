@@ -12,7 +12,7 @@ namespace Backbone.AdminApi.Tests.Integration.SdkStepDefinitions;
 [Scope(Feature = "POST Identities/{id}/DeletionProcess")]
 internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
-    //private ODataResponse<List<IdentityOverviewDTO>>? _identityOverviewsResponse;
+    private ApiResponse<ListIdentitiesResponse>? _identityOverviewsResponse;
     private ApiResponse<GetIdentityResponse>? _identityResponse;
     private ApiResponse<CreateIdentityResponse>? _createIdentityResponse;
     private ApiResponse<StartDeletionProcessAsSupportResponse>? _identityDeletionProcessResponse;
@@ -48,7 +48,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [When("a GET request is sent to the /Identities endpoint")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesOverviewEndpoint()
     {
-        //_identityOverviewsResponse = await _client.Identities.GetIdentityOverviews();
+        _identityOverviewsResponse = await _client.Identities.ListIdentities();
     }
 
     [When("a GET request is sent to the /Identities/{i.address} endpoint")]
@@ -66,8 +66,8 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Then("the response contains a list of Identities")]
     public void ThenTheResponseContainsAListOfIdentities()
     {
-        //_identityOverviewsResponse!.Result!.Result.Should().NotBeNull();
-        //_identityOverviewsResponse!.AssertContentCompliesWithSchema();
+        _identityOverviewsResponse!.Result!.Result.Should().NotBeNull();
+        _identityOverviewsResponse!.AssertContentCompliesWithSchema();
     }
 
     [Then("the response contains a Deletion Process")]
@@ -90,8 +90,8 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         if (_identityResponse != null)
             ((int)_identityResponse!.Status).Should().Be(expectedStatusCode);
 
-        //if (_identityOverviewsResponse != null)
-        //    ((int)_postResponse!.Status).Should().Be(expectedStatusCode);
+        if (_identityOverviewsResponse != null)
+            ((int)_identityOverviewsResponse!.Status).Should().Be(expectedStatusCode);
 
         if (_identityDeletionProcessResponse != null)
             ((int)_identityDeletionProcessResponse!.Status).Should().Be(expectedStatusCode);

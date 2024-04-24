@@ -97,6 +97,7 @@ public class EndpointClient
         var response = await _httpClient.SendAsync(request);
         var responseContent = await response.Content.ReadAsStreamAsync();
         var statusCode = response.StatusCode;
+        var rawResponse = await response.Content.ReadAsStringAsync();
 
         if (statusCode == HttpStatusCode.NoContent || responseContent.Length == 0)
         {
@@ -105,12 +106,11 @@ public class EndpointClient
         }
         else if (useOData) //Replace "value" in OData response with "result" for it to be read as an ApiResponse
         {
-            var str = await response.Content.ReadAsStringAsync();
-            var index = str.IndexOf(ODATA_SEARCH);
-            if (index > 0) str = str[..index] + ODATA_REPLACE + str[(index + ODATA_SEARCH.Length)..];
+            var index = rawResponse.IndexOf(ODATA_SEARCH, StringComparison.Ordinal);
+            if (index > 0) rawResponse = rawResponse[..index] + ODATA_REPLACE + rawResponse[(index + ODATA_SEARCH.Length)..];
 
             responseContent.Close();
-            responseContent = new MemoryStream(Encoding.UTF8.GetBytes(str));
+            responseContent = new MemoryStream(Encoding.UTF8.GetBytes(rawResponse));
         }
 
         var responseData = JsonSerializer.Deserialize<ResponseContent<T>>(responseContent, _jsonSerializerOptions);
@@ -118,7 +118,7 @@ public class EndpointClient
         {
             Status = statusCode,
             Result = responseData!,
-            RawContent = await response.Content.ReadAsStringAsync()
+            RawContent = rawResponse
         };
 
         return deserializedResponseContent;
@@ -251,7 +251,10 @@ public class EndpointClient
             return this;
         }
 
-        public async Task<ApiResponse<T>> Execute() => await _client.Execute<T>(await CreateRequestMessage(), _useOData);
+        public async Task<ApiResponse<T>> Execute()
+        {
+            return await _client.Execute<T>(await CreateRequestMessage(), _useOData);
+        }
 
         public async Task<RawApiResponse> ExecuteRaw()
         {
