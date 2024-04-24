@@ -53,28 +53,42 @@ interface CreateIdentityRequest {
     SignedChallenge: any;
 }
 function CreateIdentity() {
-    const receivedChallenge = session.post("Challenges").json("result") as ChallengeResponse;
-    const challenge = JSON.stringify({
-        expiresAt: receivedChallenge.expiresAt,
-        id: receivedChallenge.id,
-        type: "Identity"
-    });
+    const challenge = getChallenge();
 
     const keyPair = cryptoSession.get("keypair").json();
 
     const signedChallenge = SignChallenge(keyPair, challenge);
+
+    const password = GeneratePassword();
 
     const createIdentityRequest: CreateIdentityRequest = {
         ClientId: "test",
         ClientSecret: "test",
         SignedChallenge: { challenge, signature: b64encode(JSON.stringify(signedChallenge)) },
         IdentityPublicKey: b64encode(JSON.stringify(keyPair.pub)),
-        DevicePassword: "randomPassword",
+        DevicePassword: password,
         IdentityVersion: 1
     };
+
     const createdIdentityResponse = session.post("Identities", JSON.stringify(createIdentityRequest), { headers: { "Content-Type": "application/json" } }) as Response;
     return createdIdentityResponse;
 }
+
+function getChallenge() {
+    const receivedChallenge = session.post("Challenges").json("result") as ChallengeResponse;
+
+    const challenge = JSON.stringify({
+        expiresAt: receivedChallenge.expiresAt,
+        id: receivedChallenge.id,
+        type: "Identity"
+    });
+    return challenge;
+}
+
+function GeneratePassword() {
+    return (cryptoSession.get("password") as Response).body?.toString()!;
+}
+
 function SignChallenge(keyPair: any, challenge: string) {
     return cryptoSession.post("sign", JSON.stringify({ keyPair, challenge }), { headers: { "Content-Type": "application/json" } }).json();
 }
