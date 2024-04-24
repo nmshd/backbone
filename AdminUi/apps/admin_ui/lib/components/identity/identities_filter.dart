@@ -214,40 +214,40 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
     filter = IdentityOverviewFilter();
 
     if (_enteredIdentityAddress.isNotEmpty) {
-      filter = filter.copyWith(receivedAddress: _enteredIdentityAddress);
+      filter = filter.copyWith(address: _enteredIdentityAddress);
     }
 
     if (_selectedTiers.isNotEmpty) {
-      filter = filter.copyWith(receivedTiers: _selectedTiers);
+      filter = filter.copyWith(tiers: _selectedTiers);
     }
 
     if (_selectedClients.isNotEmpty) {
-      filter = filter.copyWith(receivedClients: _selectedClients);
+      filter = filter.copyWith(clients: _selectedClients);
     }
 
     if (_selectedCreatedAtOperator.isNotEmpty && _selectedCreatedAt.toString().isNotEmpty && isCreatedAtSelected) {
       final createdAtValue = FilterOperatorValue(findCorrectOperator(_selectedCreatedAtOperator)!, _selectedCreatedAt.toString().substring(0, 10));
-      filter = filter.copyWith(receivedCreatedAt: createdAtValue);
+      filter = filter.copyWith(createdAt: createdAtValue);
     }
     if (_selectedLastLoginAtOperator.isNotEmpty && _selectedLastLoginAt.toString().isNotEmpty && isLastLoginAtSelected) {
       final lastLoginAtValue =
           FilterOperatorValue(findCorrectOperator(_selectedLastLoginAtOperator)!, _selectedLastLoginAt.toString().substring(0, 10));
-      filter = filter.copyWith(receivedLastLoginAt: lastLoginAtValue);
+      filter = filter.copyWith(lastLoginAt: lastLoginAtValue);
     }
 
     if (_numberOfDevices.isNotEmpty) {
       final numberOfDevicesValue = FilterOperatorValue(findCorrectOperator(_numberOfDevicesOperator)!, _numberOfDevices);
-      filter = filter.copyWith(receivedNumberOfDevices: numberOfDevicesValue);
+      filter = filter.copyWith(numberOfDevices: numberOfDevicesValue);
     }
 
     if (_dataWalletVersion.isNotEmpty) {
       final datawalletVersionValue = FilterOperatorValue(findCorrectOperator(_datawalletVersionOperator)!, _dataWalletVersion);
-      filter = filter.copyWith(receivedDatawalletVersion: datawalletVersionValue);
+      filter = filter.copyWith(datawalletVersion: datawalletVersionValue);
     }
 
     if (_identityVersion.isNotEmpty) {
       final identityVersionValue = FilterOperatorValue(findCorrectOperator(_identityVersionOperator)!, _identityVersion);
-      filter = filter.copyWith(receivedIdentityVersion: identityVersionValue);
+      filter = filter.copyWith(identityVersion: identityVersionValue);
     }
 
     setState(() {
