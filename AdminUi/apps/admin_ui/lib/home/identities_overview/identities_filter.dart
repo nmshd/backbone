@@ -21,15 +21,15 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
   late ScrollController _scrollController;
   IdentityOverviewFilter filter = IdentityOverviewFilter();
 
-  late MultiSelectController<dynamic> _tierController;
-  late MultiSelectController<dynamic> _clientController;
+  late MultiSelectController<String> _tierController;
+  late MultiSelectController<String> _clientController;
 
   late String _enteredIdentityAddress;
   late List<String> _selectedTiers;
   late List<String> _selectedClients;
-  late DateTime _selectedCreatedAt;
+  DateTime? _selectedCreatedAt;
   late String _selectedCreatedAtOperator;
-  late DateTime _selectedLastLoginAt;
+  DateTime? _selectedLastLoginAt;
   late String _selectedLastLoginAtOperator;
   late String _numberOfDevicesOperator;
   late String _numberOfDevices;
@@ -37,9 +37,6 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
   late String _dataWalletVersion;
   late String _identityVersionOperator;
   late String _identityVersion;
-
-  late bool isCreatedAtSelected;
-  late bool isLastLoginAtSelected;
 
   final operators = <String>['=', '<', '>', '<=', '>='];
   final List<_Operator> comparableOperators = [
@@ -59,8 +56,6 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
     _enteredIdentityAddress = '';
     _selectedTiers = [];
     _selectedClients = [];
-    _selectedCreatedAt = DateTime.now();
-    _selectedLastLoginAt = DateTime.now();
     _selectedCreatedAtOperator = '=';
     _selectedLastLoginAtOperator = '=';
     _numberOfDevicesOperator = '=';
@@ -69,8 +64,6 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
     _dataWalletVersion = '';
     _identityVersionOperator = '=';
     _identityVersion = '';
-    isCreatedAtSelected = false;
-    isLastLoginAtSelected = false;
     loadTiers().then((_) {
       setState(() {});
     });
@@ -89,15 +82,15 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 5),
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             InputField(
-              title: 'Address',
+              label: 'Address',
               onEnteredText: (String enteredText) {
                 _enteredIdentityAddress = enteredText;
 
@@ -105,48 +98,24 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               },
             ),
             Gaps.w16,
-            SizedBox(
-              width: 250,
-              child: MultiSelectDropDown(
-                hint: 'Tiers',
-                searchLabel: 'Search Tiers',
-                searchEnabled: true,
-                controller: _tierController,
-                options: _tierController.options,
-                fieldBackgroundColor: Theme.of(context).colorScheme.background,
-                searchBackgroundColor: Theme.of(context).colorScheme.background,
-                dropdownBackgroundColor: Theme.of(context).colorScheme.background,
-                selectedOptionBackgroundColor: Theme.of(context).colorScheme.background,
-                selectedOptionTextColor: Theme.of(context).colorScheme.onBackground,
-                optionsBackgroundColor: Theme.of(context).colorScheme.background,
-                optionTextStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
-                  _selectedTiers = selectedOptions.map((item) => item.value as String).toList();
-                  sendFilters();
-                },
-              ),
+            MultiSelectFilter(
+              label: 'Tiers',
+              searchLabel: 'Search Tiers',
+              controller: _tierController,
+              onOptionSelected: (List<ValueItem<String>> selectedOptions) {
+                _selectedTiers = selectedOptions.map((item) => item.value!).toList();
+                sendFilters();
+              },
             ),
             Gaps.w16,
-            SizedBox(
-              width: 200,
-              child: MultiSelectDropDown(
-                hint: 'Clients',
-                searchLabel: 'Search Clients',
-                searchEnabled: true,
-                controller: _clientController,
-                options: _clientController.options,
-                fieldBackgroundColor: Theme.of(context).colorScheme.background,
-                searchBackgroundColor: Theme.of(context).colorScheme.background,
-                dropdownBackgroundColor: Theme.of(context).colorScheme.background,
-                selectedOptionBackgroundColor: Theme.of(context).colorScheme.background,
-                selectedOptionTextColor: Theme.of(context).colorScheme.onBackground,
-                optionsBackgroundColor: Theme.of(context).colorScheme.background,
-                optionTextStyle: TextStyle(color: Theme.of(context).colorScheme.onBackground),
-                onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
-                  _selectedClients = selectedOptions.map((item) => item.value as String).toList();
-                  sendFilters();
-                },
-              ),
+            MultiSelectFilter(
+              label: 'Clients',
+              searchLabel: 'Search Clients',
+              controller: _clientController,
+              onOptionSelected: (List<ValueItem<String>> selectedOptions) {
+                _selectedClients = selectedOptions.map((item) => item.value!).toList();
+                sendFilters();
+              },
             ),
             Gaps.w16,
             NumberFilter(
@@ -163,12 +132,10 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             DateFilter(
               operators: operators,
               label: 'Created At',
-              onDateSelected: (DateTime selectedDate, String operator, {bool isDateSelected = false}) {
+              onDateSelected: (DateTime? selectedDate, String operator) {
                 setState(() {
                   _selectedCreatedAt = selectedDate;
                   _selectedCreatedAtOperator = operator;
-                  isCreatedAtSelected = isDateSelected;
-
                   sendFilters();
                 });
               },
@@ -177,12 +144,10 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             DateFilter(
               operators: operators,
               label: 'Last Login At',
-              onDateSelected: (DateTime selectedDate, String operator, {bool isDateSelected = false}) {
+              onDateSelected: (DateTime? selectedDate, String operator) {
                 setState(() {
                   _selectedLastLoginAt = selectedDate;
                   _selectedLastLoginAtOperator = operator;
-                  isLastLoginAtSelected = isDateSelected;
-
                   sendFilters();
                 });
               },
@@ -230,20 +195,19 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
     if (_enteredIdentityAddress.isNotEmpty) {
       filter = filter.copyWith(address: _enteredIdentityAddress);
     }
-
     if (_selectedTiers.isNotEmpty) {
       filter = filter.copyWith(tiers: _selectedTiers);
     }
-
     if (_selectedClients.isNotEmpty) {
       filter = filter.copyWith(clients: _selectedClients);
     }
 
-    if (_selectedCreatedAtOperator.isNotEmpty && _selectedCreatedAt.toString().isNotEmpty && isCreatedAtSelected) {
+    if (_selectedCreatedAt != null) {
       final createdAtValue = FilterOperatorValue(findCorrectOperator(_selectedCreatedAtOperator)!, _selectedCreatedAt.toString().substring(0, 10));
       filter = filter.copyWith(createdAt: createdAtValue);
     }
-    if (_selectedLastLoginAtOperator.isNotEmpty && _selectedLastLoginAt.toString().isNotEmpty && isLastLoginAtSelected) {
+
+    if (_selectedLastLoginAt != null) {
       final lastLoginAtValue =
           FilterOperatorValue(findCorrectOperator(_selectedLastLoginAtOperator)!, _selectedLastLoginAt.toString().substring(0, 10));
       filter = filter.copyWith(lastLoginAt: lastLoginAtValue);
@@ -253,12 +217,10 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
       final numberOfDevicesValue = FilterOperatorValue(findCorrectOperator(_numberOfDevicesOperator)!, _numberOfDevices);
       filter = filter.copyWith(numberOfDevices: numberOfDevicesValue);
     }
-
     if (_dataWalletVersion.isNotEmpty) {
       final datawalletVersionValue = FilterOperatorValue(findCorrectOperator(_datawalletVersionOperator)!, _dataWalletVersion);
       filter = filter.copyWith(datawalletVersion: datawalletVersionValue);
     }
-
     if (_identityVersion.isNotEmpty) {
       final identityVersionValue = FilterOperatorValue(findCorrectOperator(_identityVersionOperator)!, _identityVersion);
       filter = filter.copyWith(identityVersion: identityVersionValue);
