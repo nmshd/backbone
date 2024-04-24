@@ -39,13 +39,13 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
   late String _identityVersion;
 
   final operators = <String>['=', '<', '>', '<=', '>='];
-  final List<_Operator> comparableOperators = [
-    _Operator(operator: FilterOperator.equal, value: '='),
-    _Operator(operator: FilterOperator.lessThan, value: '<'),
-    _Operator(operator: FilterOperator.greaterThan, value: '>'),
-    _Operator(operator: FilterOperator.lessThanOrEqual, value: '<='),
-    _Operator(operator: FilterOperator.greaterThanOrEqual, value: '>='),
-  ];
+  final Map<String, FilterOperator> operatorMap = {
+    '=': FilterOperator.equal,
+    '<': FilterOperator.lessThan,
+    '>': FilterOperator.greaterThan,
+    '<=': FilterOperator.lessThanOrEqual,
+    '>=': FilterOperator.greaterThanOrEqual,
+  };
 
   @override
   void initState() {
@@ -181,12 +181,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
   }
 
   FilterOperator? findCorrectOperator(String operator) {
-    for (final o in comparableOperators) {
-      if (o.value == operator) {
-        return o.operator;
-      }
-    }
-    return null;
+    return operatorMap[operator];
   }
 
   void sendFilters() {
@@ -240,11 +235,4 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
     final clientItems = response.data.map((client) => ValueItem(label: client.displayName, value: client.clientId)).toList();
     setState(() => _clientController.setOptions(clientItems));
   }
-}
-
-class _Operator {
-  FilterOperator operator;
-  String value;
-
-  _Operator({required this.operator, required this.value});
 }
