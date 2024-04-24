@@ -33,26 +33,17 @@ class IdentityDataTableSource extends DataTableSource {
   }
 
   Comparable<Object> _getDisplayValue(IdentityOverview identity) {
-    switch (sortColumnIndex) {
-      case 0:
-        return identity.address;
-      case 1:
-        return identity.tier.name;
-      case 2:
-        return identity.createdWithClient;
-      case 3:
-        return identity.numberOfDevices;
-      case 4:
-        return identity.createdAt;
-      case 5:
-        return identity.lastLoginAt.toString();
-      case 6:
-        return identity.datawalletVersion.toString();
-      case 7:
-        return identity.identityVersion;
-      default:
-        throw Exception('Invalid column index');
-    }
+    return switch (sortColumnIndex) {
+      0 => identity.address as Comparable<Object>,
+      1 => identity.tier.name as Comparable<Object>,
+      2 => identity.createdWithClient as Comparable<Object>,
+      3 => identity.numberOfDevices as Comparable<Object>,
+      4 => identity.createdAt as Comparable<Object>,
+      5 => identity.lastLoginAt.toString() as Comparable<Object>,
+      6 => identity.datawalletVersion.toString() as Comparable<Object>,
+      7 => identity.identityVersion as Comparable<Object>,
+      _ => throw Exception('Invalid column index')
+    };
   }
 
   @override
