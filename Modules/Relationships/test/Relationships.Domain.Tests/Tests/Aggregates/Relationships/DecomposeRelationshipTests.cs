@@ -66,6 +66,7 @@ public class DecomposeRelationshipTests
     {
         // Arrange
         var relationship = CreateTerminatedRelationship();
+
         relationship.Decompose(IDENTITY_2, DEVICE_2);
 
         // Act

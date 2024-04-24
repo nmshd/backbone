@@ -164,7 +164,7 @@ public class Relationship
 
     public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
-        EnsureDecompositionStatus();
+        EnsureRelationshipNotDecomposed();
         EnsureStatus(RelationshipStatus.Terminated);
         EnsureRequestingIdentityBelongsToRelationship(activeIdentity);
 
@@ -186,16 +186,16 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
+    private void EnsureRelationshipNotDecomposed()
+    {
+        if (FromHasDecomposed || ToHasDecomposed)
+            throw new DomainException(DomainErrors.RelationshipAlreadyDecomposed());
+    }
+
     private void EnsureRequestingIdentityBelongsToRelationship(IdentityAddress activeIdentity)
     {
         if (From != activeIdentity && To != activeIdentity)
             throw new DomainException(DomainErrors.RequestingIdentityDoesNotBelongToRelationship());
-    }
-
-    private void EnsureDecompositionStatus()
-    {
-        if (FromHasDecomposed || ToHasDecomposed)
-            throw new DomainException(DomainErrors.RelationshipAlreadyDecomposed());
     }
 
     #region Expressions
