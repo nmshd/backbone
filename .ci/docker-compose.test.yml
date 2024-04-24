@@ -68,6 +68,9 @@ services:
         condition: service_started
       seed-database:
         condition: service_completed_successfully
+    configs:
+      - source: Config
+        target: app/appsettings.override.json
 
   ### infrastructure ###
 
