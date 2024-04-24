@@ -62,7 +62,22 @@ public class DecomposeRelationshipTests
     }
 
     [Fact]
-    public void Same_identity_can_only_decompose_once()
+    public void Identity_From_can_only_decompose_once()
+    {
+        // Arrange
+        var relationship = CreateTerminatedRelationship();
+
+        relationship.Decompose(IDENTITY_1, DEVICE_1);
+
+        // Act
+        var acting = () => relationship.Decompose(IDENTITY_1, DEVICE_1);
+
+        // Assert
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipAlreadyDecomposed");
+    }
+
+    [Fact]
+    public void Identity_To_can_only_decompose_once()
     {
         // Arrange
         var relationship = CreateTerminatedRelationship();
