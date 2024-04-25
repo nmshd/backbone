@@ -79,17 +79,6 @@ enum FilterOperator {
   final String userFriendlyOperator;
 
   const FilterOperator(this.userFriendlyOperator);
-
-  static FilterOperator from(String userFriendlyOperator) {
-    return switch (userFriendlyOperator) {
-      '=' => FilterOperator.equal,
-      '<' => FilterOperator.lessThan,
-      '>' => FilterOperator.greaterThan,
-      '<=' => FilterOperator.lessThanOrEqual,
-      '>=' => FilterOperator.greaterThanOrEqual,
-      _ => throw Exception('Unknown operator: $userFriendlyOperator'),
-    };
-  }
 }
 
 class IdentityOverviewFilter {
