@@ -24,9 +24,6 @@ services:
     environment:
       - PGPASSWORD=Passw0rd
     command: psql -h postgres -U postgres -d enmeshed -f /app/setup-db/setup-postgres.sql
-    depends_on:
-      database:
-        condition: service_healthy
 
   seed-client:
     environment:

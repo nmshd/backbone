@@ -10,6 +10,11 @@ services:
       - MSSQL_SA_PASSWORD=Passw0rd
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
+    healthcheck:
+      test: ["CMD", "sqlcmd", "-S", "localhost", "-U", "sa", "-P", "Passw0rd", "-Q", "SELECT 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
     ports:
       - 1433:1433
 
@@ -18,9 +23,6 @@ services:
   seed-database:
     image: mcr.microsoft.com/mssql-tools
     command: bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S sqlserver -U SA -P Passw0rd -i /app/setup-db/setup-sqlserver.sql "
-    depends_on:
-      database:
-        condition: service_started
 
   seed-client:
     environment:

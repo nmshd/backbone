@@ -92,6 +92,9 @@ services:
   seed-database:
     volumes:
       - ../setup-db:/app/setup-db
+    depends_on:
+      database:
+        condition: service_healthy
 
   seed-client:
     container_name: seed-client-test
