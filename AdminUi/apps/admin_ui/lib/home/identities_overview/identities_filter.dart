@@ -65,7 +65,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             InputField(
               label: 'Address',
               onEnteredText: (String enteredText) {
-                filter = filter.copyWith(address: enteredText.isEmpty ? const Optional(null) : Optional(enteredText));
+                filter = filter.copyWith(address: enteredText.isEmpty ? const Optional.absent() : Optional(enteredText));
                 widget.onFilterChanged(filter: filter);
               },
             ),
