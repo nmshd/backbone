@@ -110,7 +110,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
       _columnAscending = ascending;
     });
     _dataSource
-      ..sort(_columnIndex, columnAscending: _columnAscending)
+      ..sort(columnIndex: _columnIndex, columnAscending: _columnAscending)
       ..refreshDatasource();
   }
 }

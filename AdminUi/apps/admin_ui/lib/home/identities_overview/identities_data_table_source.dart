@@ -12,7 +12,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
 
   IdentityOverviewFilter? filter;
 
-  void sort(int columnIndex, {required bool columnAscending}) {
+  void sort({required int columnIndex, required bool columnAscending}) {
     _sortColumnIndex = columnIndex;
     _sortAscending = columnAscending;
     notifyListeners();
