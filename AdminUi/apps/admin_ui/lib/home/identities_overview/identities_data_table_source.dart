@@ -70,7 +70,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
                 DataCell(Text(identity.$2.createdWithClient)),
                 DataCell(Text(identity.$2.numberOfDevices.toString())),
                 DataCell(Text(DateFormat('yyyy-MM-dd').format(identity.$2.createdAt))),
-                DataCell(Text(DateFormat('yyyy-MM-dd').format(identity.$2.lastLoginAt!))),
+                DataCell(Text(identity.$2.lastLoginAt != null ? DateFormat('yyyy-MM-dd').format(identity.$2.lastLoginAt!) : '')),
                 DataCell(Text(identity.$2.datawalletVersion?.toString() ?? '')),
                 DataCell(Text(identity.$2.identityVersion.toString())),
               ],
