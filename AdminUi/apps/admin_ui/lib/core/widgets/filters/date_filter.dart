@@ -1,25 +1,20 @@
+import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
 
 import '/core/constants.dart';
 
 class DateFilter extends StatefulWidget {
-  const DateFilter({
-    required this.operators,
-    required this.onDateSelected,
-    required this.label,
-    super.key,
-  });
-
-  final void Function(DateTime? selectedDate, String operator) onDateSelected;
-  final List<String> operators;
+  final void Function(FilterOperator operator, DateTime? selectedDate) onDateSelected;
   final String label;
+
+  const DateFilter({required this.onDateSelected, required this.label, super.key});
 
   @override
   State<DateFilter> createState() => _DateFilterState();
 }
 
 class _DateFilterState extends State<DateFilter> {
-  String _operator = '=';
+  FilterOperator _operator = FilterOperator.equal;
   DateTime? _selectedDate;
 
   @override
@@ -34,15 +29,15 @@ class _DateFilterState extends State<DateFilter> {
         Gaps.h8,
         Row(
           children: [
-            DropdownButton<String>(
+            DropdownButton<FilterOperator>(
               value: _operator,
               onChanged: (newValue) {
                 setState(() => _operator = newValue!);
               },
-              items: widget.operators.map((operator) {
-                return DropdownMenuItem<String>(
+              items: FilterOperator.values.map((operator) {
+                return DropdownMenuItem<FilterOperator>(
                   value: operator,
-                  child: Text(operator),
+                  child: Text(operator.userFriendlyOperator),
                 );
               }).toList(),
             ),
@@ -85,7 +80,7 @@ class _DateFilterState extends State<DateFilter> {
     setState(() {
       _selectedDate = null;
     });
-    widget.onDateSelected(_selectedDate, _operator);
+    widget.onDateSelected(_operator, _selectedDate);
   }
 
   Future<void> _selectANewDate() async {
@@ -98,7 +93,7 @@ class _DateFilterState extends State<DateFilter> {
     if (picked != null) {
       setState(() {
         _selectedDate = picked;
-        widget.onDateSelected(_selectedDate, _operator);
+        widget.onDateSelected(_operator, _selectedDate);
       });
     }
   }

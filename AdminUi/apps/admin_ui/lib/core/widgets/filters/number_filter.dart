@@ -1,28 +1,26 @@
+import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '/core/constants.dart';
 
 class NumberFilter extends StatefulWidget {
+  final void Function(FilterOperator operator, String enteredValue) onNumberSelected;
+  final String label;
+
   const NumberFilter({
-    required this.operators,
     required this.onNumberSelected,
     required this.label,
     super.key,
   });
-
-  final List<String> operators;
-  final void Function(String operator, String enteredValue) onNumberSelected;
-  final String label;
 
   @override
   State<NumberFilter> createState() => _NumberFilterState();
 }
 
 class _NumberFilterState extends State<NumberFilter> {
-  late TextEditingController controller = TextEditingController();
-  late String operator = '=';
-  late String enteredValue = '';
+  late FilterOperator _operator = FilterOperator.equal;
+  late String _value = '';
 
   @override
   Widget build(BuildContext context) {
@@ -36,16 +34,16 @@ class _NumberFilterState extends State<NumberFilter> {
         Gaps.h8,
         Row(
           children: [
-            DropdownButton<String>(
-              value: operator,
+            DropdownButton<FilterOperator>(
+              value: _operator,
               onChanged: (newValue) {
-                setState(() => operator = newValue!);
-                widget.onNumberSelected(operator, enteredValue);
+                setState(() => _operator = newValue!);
+                widget.onNumberSelected(_operator, _value);
               },
-              items: widget.operators.map((operator) {
-                return DropdownMenuItem<String>(
-                  value: operator,
-                  child: Text(operator),
+              items: FilterOperator.values.map((e) {
+                return DropdownMenuItem<FilterOperator>(
+                  value: e,
+                  child: Text(e.userFriendlyOperator),
                 );
               }).toList(),
             ),
@@ -53,11 +51,10 @@ class _NumberFilterState extends State<NumberFilter> {
             SizedBox(
               width: 120,
               child: TextField(
-                controller: controller,
                 onChanged: (value) {
                   setState(() {
-                    enteredValue = value;
-                    widget.onNumberSelected(operator, enteredValue);
+                    _value = value;
+                    widget.onNumberSelected(_operator, _value);
                   });
                 },
                 decoration: const InputDecoration(border: OutlineInputBorder()),
