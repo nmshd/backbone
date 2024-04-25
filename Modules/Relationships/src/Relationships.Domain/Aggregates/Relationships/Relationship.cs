@@ -159,6 +159,37 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
+    public void AcceptReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureOpenRevivalRequestExists();
+        EnsureRelationshipReactivationRequestIsAddressedToSelf(activeIdentity);
+
+        Status = RelationshipStatus.Active;
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.AcceptanceOfReactivation,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Active,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
+    private void EnsureOpenRevivalRequestExists()
+    {
+        if (AuditLog.Last().Reason != RelationshipAuditLogEntryReason.Reactivation)
+        {
+            throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipRevivalIfNoRequestToDoSoHasBeenMade());
+        }
+    }
+
+    private void EnsureRelationshipReactivationRequestIsAddressedToSelf(IdentityAddress activeIdentity)
+    {
+        if (To != activeIdentity)
+            throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipReactivationRequestAddressedToSomeoneElse());
+    }
+
     #region Expressions
 
     public static Expression<Func<Relationship, bool>> HasParticipant(string identity)
