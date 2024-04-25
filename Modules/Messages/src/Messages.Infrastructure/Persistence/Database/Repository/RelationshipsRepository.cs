@@ -6,6 +6,7 @@ using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExt
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
+
 public class RelationshipsRepository : IRelationshipsRepository
 {
     private readonly MessagesDbContext _dbContext;
@@ -24,11 +25,12 @@ public class RelationshipsRepository : IRelationshipsRepository
             .FirstOrDefaultAsync();
     }
 
-    public Task<Relationship?> FindRelationship(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
+    public Task<Relationship?> FindYoungestRelationship(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
     {
         return _dbContext.Relationships
             .AsNoTracking()
             .WithParticipants(sender, recipient)
+            .OrderByDescending(r => r.CreatedAt)
             .FirstOrDefaultAsync(cancellationToken);
     }
 }

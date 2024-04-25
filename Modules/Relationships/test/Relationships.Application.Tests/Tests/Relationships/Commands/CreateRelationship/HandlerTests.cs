@@ -2,11 +2,11 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Application.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
@@ -120,7 +120,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Publishes_RelationshipCreatedDomainEvent()
+    public async Task Publishes_RelationshipStatusChangedDomainEvent()
     {
         // Arrange
         SystemTime.Set("2020-01-01");
@@ -153,7 +153,7 @@ public class HandlerTests
         }, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockEventBus.Publish(A<RelationshipCreatedDomainEvent>.That.Matches(e => e.From == activeIdentity, relationshipTemplate.CreatedBy))).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockEventBus.Publish(A<RelationshipStatusChangedDomainEvent>.That.Matches(e => e.Initiator == activeIdentity, relationshipTemplate.CreatedBy))).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IRelationshipTemplatesRepository relationshipTemplatesRepository)

@@ -152,6 +152,9 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("char(36)")
                         .IsFixedLength();
 
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
                     b.Property<string>("To")
                         .IsRequired()
                         .HasMaxLength(36)
