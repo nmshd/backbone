@@ -1,6 +1,7 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 
 import '/core/core.dart';
@@ -23,20 +24,6 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
   late MultiSelectController<String> _tierController;
   late MultiSelectController<String> _clientController;
 
-  late String _enteredIdentityAddress;
-  late List<String> _selectedTiers;
-  late List<String> _selectedClients;
-  DateTime? _selectedCreatedAt;
-  late String _selectedCreatedAtOperator;
-  DateTime? _selectedLastLoginAt;
-  late String _selectedLastLoginAtOperator;
-  late String _numberOfDevicesOperator;
-  late String _numberOfDevices;
-  late String _datawalletVersionOperator;
-  late String _dataWalletVersion;
-  late String _identityVersionOperator;
-  late String _identityVersion;
-
   final operators = <String>['=', '<', '>', '<=', '>='];
   final Map<String, FilterOperator> operatorMap = {
     '=': FilterOperator.equal,
@@ -51,17 +38,6 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
     super.initState();
     _tierController = MultiSelectController();
     _clientController = MultiSelectController();
-    _enteredIdentityAddress = '';
-    _selectedTiers = [];
-    _selectedClients = [];
-    _selectedCreatedAtOperator = '=';
-    _selectedLastLoginAtOperator = '=';
-    _numberOfDevicesOperator = '=';
-    _numberOfDevices = '';
-    _datawalletVersionOperator = '=';
-    _dataWalletVersion = '';
-    _identityVersionOperator = '=';
-    _identityVersion = '';
     loadTiers().then((_) {
       setState(() {});
     });
@@ -89,9 +65,8 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             InputField(
               label: 'Address',
               onEnteredText: (String enteredText) {
-                _enteredIdentityAddress = enteredText;
-
-                sendFilters();
+                filter = filter.copyWith(address: enteredText.isEmpty ? const Optional(null) : Optional(enteredText));
+                widget.onFilterChanged(filter: filter);
               },
             ),
             Gaps.w16,
@@ -100,8 +75,9 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               searchLabel: 'Search Tiers',
               controller: _tierController,
               onOptionSelected: (List<ValueItem<String>> selectedOptions) {
-                _selectedTiers = selectedOptions.map((item) => item.value!).toList();
-                sendFilters();
+                final selectedTiers = selectedOptions.map((item) => item.value!).toList();
+                filter = filter.copyWith(tiers: selectedTiers.isEmpty ? const Optional.absent() : Optional(selectedTiers));
+                widget.onFilterChanged(filter: filter);
               },
             ),
             Gaps.w16,
@@ -110,8 +86,9 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               searchLabel: 'Search Clients',
               controller: _clientController,
               onOptionSelected: (List<ValueItem<String>> selectedOptions) {
-                _selectedClients = selectedOptions.map((item) => item.value!).toList();
-                sendFilters();
+                final selectedClients = selectedOptions.map((item) => item.value!).toList();
+                filter = filter.copyWith(clients: selectedClients.isEmpty ? const Optional.absent() : Optional(selectedClients));
+                widget.onFilterChanged(filter: filter);
               },
             ),
             Gaps.w16,
@@ -119,10 +96,9 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               operators: operators,
               label: 'Number of Devices',
               onNumberSelected: (String operator, String enteredValue) {
-                _numberOfDevices = enteredValue;
-                _numberOfDevicesOperator = operator;
-
-                sendFilters();
+                final numberOfDevices = FilterOperatorValue(findCorrectOperator(operator)!, enteredValue);
+                filter = filter.copyWith(numberOfDevices: numberOfDevices.value.isEmpty ? const Optional.absent() : Optional(numberOfDevices));
+                widget.onFilterChanged(filter: filter);
               },
             ),
             Gaps.w16,
@@ -130,11 +106,12 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               operators: operators,
               label: 'Created At',
               onDateSelected: (DateTime? selectedDate, String operator) {
-                setState(() {
-                  _selectedCreatedAt = selectedDate;
-                  _selectedCreatedAtOperator = operator;
-                  sendFilters();
-                });
+                final createdAt = FilterOperatorValue(
+                  findCorrectOperator(operator)!,
+                  selectedDate != null ? DateFormat('yyyy-MM-dd').format(selectedDate) : '',
+                );
+                filter = filter.copyWith(createdAt: createdAt.value.isEmpty ? const Optional.absent() : Optional(createdAt));
+                widget.onFilterChanged(filter: filter);
               },
             ),
             Gaps.w16,
@@ -142,11 +119,12 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               operators: operators,
               label: 'Last Login At',
               onDateSelected: (DateTime? selectedDate, String operator) {
-                setState(() {
-                  _selectedLastLoginAt = selectedDate;
-                  _selectedLastLoginAtOperator = operator;
-                  sendFilters();
-                });
+                final lastLoginAt = FilterOperatorValue(
+                  findCorrectOperator(operator)!,
+                  selectedDate != null ? DateFormat('yyyy-MM-dd').format(selectedDate) : '',
+                );
+                filter = filter.copyWith(lastLoginAt: lastLoginAt.value.isEmpty ? const Optional.absent() : Optional(lastLoginAt));
+                widget.onFilterChanged(filter: filter);
               },
             ),
             Gaps.w16,
@@ -154,10 +132,11 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               operators: operators,
               label: 'Datawallet Version',
               onNumberSelected: (String operator, String enteredValue) {
-                _dataWalletVersion = enteredValue;
-                _datawalletVersionOperator = operator;
-
-                sendFilters();
+                final datawalletVersion = FilterOperatorValue(findCorrectOperator(operator)!, enteredValue);
+                filter = filter.copyWith(
+                  datawalletVersion: datawalletVersion.value.isEmpty ? const Optional.absent() : Optional(datawalletVersion),
+                );
+                widget.onFilterChanged(filter: filter);
               },
             ),
             Gaps.w16,
@@ -165,10 +144,11 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               operators: operators,
               label: 'Identity Version',
               onNumberSelected: (String operator, String enteredValue) {
-                _identityVersion = enteredValue;
-                _identityVersionOperator = operator;
-
-                sendFilters();
+                final identityVersion = FilterOperatorValue(findCorrectOperator(operator)!, enteredValue);
+                filter = filter.copyWith(
+                  identityVersion: identityVersion.value.isEmpty ? const Optional.absent() : Optional(identityVersion),
+                );
+                widget.onFilterChanged(filter: filter);
               },
             ),
           ],
@@ -179,46 +159,6 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
 
   FilterOperator? findCorrectOperator(String operator) {
     return operatorMap[operator];
-  }
-
-  void sendFilters() {
-    filter = IdentityOverviewFilter();
-
-    if (_enteredIdentityAddress.isNotEmpty) {
-      filter = filter.copyWith(address: _enteredIdentityAddress);
-    }
-    if (_selectedTiers.isNotEmpty) {
-      filter = filter.copyWith(tiers: _selectedTiers);
-    }
-    if (_selectedClients.isNotEmpty) {
-      filter = filter.copyWith(clients: _selectedClients);
-    }
-
-    if (_selectedCreatedAt != null) {
-      final createdAtValue = FilterOperatorValue(findCorrectOperator(_selectedCreatedAtOperator)!, _selectedCreatedAt.toString().substring(0, 10));
-      filter = filter.copyWith(createdAt: createdAtValue);
-    }
-
-    if (_selectedLastLoginAt != null) {
-      final lastLoginAtValue =
-          FilterOperatorValue(findCorrectOperator(_selectedLastLoginAtOperator)!, _selectedLastLoginAt.toString().substring(0, 10));
-      filter = filter.copyWith(lastLoginAt: lastLoginAtValue);
-    }
-
-    if (_numberOfDevices.isNotEmpty) {
-      final numberOfDevicesValue = FilterOperatorValue(findCorrectOperator(_numberOfDevicesOperator)!, _numberOfDevices);
-      filter = filter.copyWith(numberOfDevices: numberOfDevicesValue);
-    }
-    if (_dataWalletVersion.isNotEmpty) {
-      final datawalletVersionValue = FilterOperatorValue(findCorrectOperator(_datawalletVersionOperator)!, _dataWalletVersion);
-      filter = filter.copyWith(datawalletVersion: datawalletVersionValue);
-    }
-    if (_identityVersion.isNotEmpty) {
-      final identityVersionValue = FilterOperatorValue(findCorrectOperator(_identityVersionOperator)!, _identityVersion);
-      filter = filter.copyWith(identityVersion: identityVersionValue);
-    }
-
-    widget.onFilterChanged(filter: filter);
   }
 
   Future<void> loadTiers() async {

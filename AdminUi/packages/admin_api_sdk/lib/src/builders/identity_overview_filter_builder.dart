@@ -99,26 +99,33 @@ class IdentityOverviewFilter {
   });
 
   IdentityOverviewFilter copyWith({
-    String? address,
-    List<String>? tiers,
-    List<String>? clients,
-    FilterOperatorValue? createdAt,
-    FilterOperatorValue? lastLoginAt,
-    FilterOperatorValue? numberOfDevices,
-    FilterOperatorValue? datawalletVersion,
-    FilterOperatorValue? identityVersion,
+    Optional<String?>? address,
+    Optional<List<String>?>? tiers,
+    Optional<List<String>?>? clients,
+    Optional<FilterOperatorValue?>? createdAt,
+    Optional<FilterOperatorValue?>? lastLoginAt,
+    Optional<FilterOperatorValue?>? numberOfDevices,
+    Optional<FilterOperatorValue?>? datawalletVersion,
+    Optional<FilterOperatorValue?>? identityVersion,
   }) {
     return IdentityOverviewFilter(
-      address: address ?? this.address,
-      tiers: tiers ?? this.tiers,
-      clients: clients ?? this.clients,
-      createdAt: createdAt ?? this.createdAt,
-      lastLoginAt: lastLoginAt ?? this.lastLoginAt,
-      numberOfDevices: numberOfDevices ?? this.numberOfDevices,
-      datawalletVersion: datawalletVersion ?? this.datawalletVersion,
-      identityVersion: identityVersion ?? this.identityVersion,
+      address: (address != null) ? address.value : this.address,
+      tiers: (tiers != null) ? tiers.value : this.tiers,
+      clients: (clients != null) ? clients.value : this.clients,
+      createdAt: (createdAt != null) ? createdAt.value : this.createdAt,
+      lastLoginAt: (lastLoginAt != null) ? lastLoginAt.value : this.lastLoginAt,
+      numberOfDevices: (numberOfDevices != null) ? numberOfDevices.value : this.numberOfDevices,
+      datawalletVersion: (datawalletVersion != null) ? datawalletVersion.value : this.datawalletVersion,
+      identityVersion: (identityVersion != null) ? identityVersion.value : this.identityVersion,
     );
   }
+}
+
+class Optional<T> {
+  final T? value;
+
+  const Optional(this.value);
+  const Optional.absent() : value = null;
 }
 
 class FilterOperatorValue {
