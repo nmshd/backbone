@@ -152,6 +152,9 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(36)")
                         .IsFixedLength();
 
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
                     b.Property<string>("To")
                         .IsRequired()
                         .HasMaxLength(36)
