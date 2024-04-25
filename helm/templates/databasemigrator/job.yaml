@@ -9,9 +9,6 @@ metadata:
     "helm.sh/hook": pre-install,pre-upgrade
     "helm.sh/hook-weight": "1"
 spec:
-  # selector:
-  #   matchLabels:
-  #     app: {{ .Values.databasemigrator.name }}
   template:
     metadata:
       {{- with .Values.databasemigrator.podAnnotations }}
