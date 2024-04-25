@@ -1,5 +1,5 @@
 consumerapi:
-  nameOverride: ""
+  name: "consumerapi"
   replicas: 1
   maxSurge: 2
   maxUnavailable: 0
@@ -99,7 +99,7 @@ consumerapi:
       unhealthyThreshold: 2
 
 adminui:
-  nameOverride: ""
+  name: "adminui"
   replicas: 1
   maxSurge: 2
   maxUnavailable: 0
@@ -189,7 +189,7 @@ adminui:
       unhealthyThreshold: 2
 
 eventhandler:
-  nameOverride: ""
+  name: "eventhandler"
   replicas: 1
   maxSurge: 2
   maxUnavailable: 0
@@ -237,7 +237,7 @@ eventhandler:
     targetMemoryUtilizationPercentage: ""
 
 databasemigrator:
-  nameOverride: ""
+  name: "databasemigrator"
 
   image:
     repository: "ghcr.io/nmshd/backbone-database-migrator"
@@ -275,7 +275,7 @@ databasemigrator:
   affinity: {}
 
 admincli:
-  nameOverride: ""
+  name: "admincli"
 
   configuration:
     Database:

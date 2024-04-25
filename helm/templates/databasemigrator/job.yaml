@@ -1,16 +1,16 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ include "global.name" . }}
+  name: {{ .Values.databasemigrator.name }}
   labels:
     {{- include "global.labels" . | nindent 4 }}
-    app: {{ include "global.name" . }}
+    app: {{ .Values.databasemigrator.name }}
   annotations:
     "helm.sh/hook": pre-install,pre-upgrade
 spec:
-  selector:
-    matchLabels:
-      app: {{ include "global.name" . }}
+  # selector:
+  #   matchLabels:
+  #     app: {{ .Values.databasemigrator.name }}
   template:
     metadata:
       {{- with .Values.databasemigrator.podAnnotations }}
@@ -18,8 +18,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ include "global.name" . }}
+        app: {{ .Values.databasemigrator.name }}
     spec:
+      restartPolicy: Never
       {{- with .Values.databasemigrator.podSecurityContext }}
       securityContext:
         {{- toYaml .Values.databasemigrator.podSecurityContext | nindent 8 }}
@@ -33,7 +34,7 @@ spec:
           configMap:
             name: configuration
       containers:
-        - name: {{ include "global.name" . }}
+        - name: {{ .Values.databasemigrator.name }}
           {{- with .Values.databasemigrator.securityContext }}
           securityContext:
             {{- toYaml .Values.databasemigrator.securityContext | nindent 8 }}
