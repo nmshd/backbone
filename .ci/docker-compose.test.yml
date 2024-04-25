@@ -11,7 +11,7 @@ services:
     ports:
       - "5000:8080"
     depends_on:
-      database-migrator:
+      seed-client:
         condition: service_completed_successfully
       rabbitmq:
         condition: service_started
@@ -48,8 +48,8 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
-      database:
-        condition: service_started
+      database-migrator:
+        condition: service_completed_successfully
       rabbitmq:
         condition: service_started
     configs:
@@ -63,11 +63,6 @@ services:
       dockerfile: DatabaseMigrator/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-    depends_on:
-      database:
-        condition: service_started
-      seed-database:
-        condition: service_completed_successfully
     configs:
       - source: Config
         target: app/appsettings.override.json
@@ -91,14 +86,18 @@ services:
 
   ### seeds ###
 
+  seed-database:
+    volumes:
+      - ../setup-db:/app/setup-db
+
   seed-client:
     container_name: seed-client-test
     build:
       context: ..
       dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
     depends_on:
-      consumer-api:
-        condition: service_healthy
+      database-migrator:
+        condition: service_completed_successfully
     command: backbone client create --clientId test --clientSecret test --defaultTier Basic
 
 networks:
