@@ -32,14 +32,14 @@ public static class TestData
     public static Relationship CreateRejectedRelationship()
     {
         var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, []);
-        relationship.Reject(IDENTITY_2, DEVICE_2);
+        relationship.Reject(IDENTITY_2, DEVICE_2, null);
         return relationship;
     }
 
     public static Relationship CreateRevokedRelationship()
     {
         var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, []);
-        relationship.Revoke(IDENTITY_1, DEVICE_1);
+        relationship.Revoke(IDENTITY_1, DEVICE_1, null);
         return relationship;
     }
 

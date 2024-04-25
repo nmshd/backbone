@@ -6,17 +6,6 @@ type: application
 # version is set by the .ci/helm/pushChart.sh script
 version: 0.0.0
 
-dependencies:
-  - name: admincli
-    version: "*"
-    repository: file://charts/admincli
-  - name: adminui
-    version: "*"
-    repository: file://charts/adminui
-  - name: consumerapi
-    version: "*"
-    repository: file://charts/consumerapi
-
 icon: https://raw.githubusercontent.com/nmshd/nmshd.github.io/main/assets/images/Logo.svg
 home: https://enmeshed.eu
 sources:

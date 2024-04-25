@@ -1,0 +1,25 @@
+{{- if .Values.consumerapi.httpRoute.enabled }}
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: HTTPRoute
+metadata:
+  name: {{ include "global.name" . }}
+  labels:
+    {{- include "global.labels" . | nindent 4 }}
+spec:
+  parentRefs:
+    - name: {{ .Values.consumerapi.httpRoute.parentRefName }}
+      namespace: {{ .Values.consumerapi.httpRoute.parentRefNamespace }}
+      sectionName: {{ .Values.consumerapi.httpRoute.parentRefSectionName }}
+  {{- with .Values.consumerapi.httpRoute.hostnames }}
+  hostnames:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
+      backendRefs:
+        - name: {{ include "global.name" . }}
+          port: 8080
+{{- end }}

@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "global.name" . }}
+  labels:
+    {{- include "global.labels" . | nindent 4 }}
+    app: {{ include "global.name" . }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "global.name" . }}
+  template:
+    metadata:
+      {{- with .Values.admincli.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ include "global.name" . }}
+    spec:
+      {{- with .Values.admincli.podSecurityContext }}
+      securityContext:
+        {{- toYaml .Values.admincli.podSecurityContext | nindent 8 }}
+      {{- end }}
+      {{- with .Values.admincli.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ include "global.name" . }}
+          {{- with .Values.admincli.securityContext }}
+          securityContext:
+            {{- toYaml .Values.admincli.securityContext | nindent 8 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.admincli.resources | nindent 12 }}
+          image: "{{ .Values.admincli.image.repository }}:{{- default .Chart.AppVersion .Values.admincli.image.tagOverride }}"
+          imagePullPolicy: {{ .Values.admincli.image.pullPolicy }}
+          env:
+            - name: Database__Provider
+              value: {{ .Values.global.configuration.modules.devices.infrastructure.sqlDatabase.provider }}
+            {{- with .Values.admincli.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          tty: true
+          command:
+            - /bin/bash
+      {{- with .Values.admincli.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.admincli.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.admincli.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -112,13 +112,13 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
-                    b.Property<byte[]>("AcceptanceContent")
-                        .HasColumnType("bytea");
-
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<byte[]>("CreationContent")
+                        .HasColumnType("bytea");
+
+                    b.Property<byte[]>("CreationResponseContent")
                         .HasColumnType("bytea");
 
                     b.Property<string>("From")
