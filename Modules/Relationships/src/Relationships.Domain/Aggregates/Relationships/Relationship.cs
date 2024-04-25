@@ -94,7 +94,7 @@ public class Relationship
         if (To != activeIdentity)
             throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse());
     }
-    
+
     private void EnsureRelationshipRequestIsCreatedBySelf(IdentityAddress activeIdentity)
     {
         if (From != activeIdentity)
