@@ -62,6 +62,7 @@ jobs:
     name: Run Integration Tests (on SQL Server)
     runs-on: ubuntu-latest
     steps:
+      - run: docker compose version
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install script dependencies
