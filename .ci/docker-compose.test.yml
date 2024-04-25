@@ -61,6 +61,9 @@ services:
     build:
       context: ..
       dockerfile: DatabaseMigrator/Dockerfile
+    depends_on:
+      seed-database:
+        condition: service_completed_successfully
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     configs:
