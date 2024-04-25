@@ -2,6 +2,7 @@ import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
 class IdentityDataTableSource extends AsyncDataTableSource {
@@ -68,8 +69,8 @@ class IdentityDataTableSource extends AsyncDataTableSource {
                 DataCell(Text(identity.$2.tier.name)),
                 DataCell(Text(identity.$2.createdWithClient)),
                 DataCell(Text(identity.$2.numberOfDevices.toString())),
-                DataCell(Text(identity.$2.createdAt.toString().substring(0, 10))),
-                DataCell(Text(identity.$2.lastLoginAt?.toString().substring(0, 10) ?? '')),
+                DataCell(Text(DateFormat('yyyy-MM-dd').format(identity.$2.createdAt))),
+                DataCell(Text(DateFormat('yyyy-MM-dd').format(identity.$2.createdAt))),
                 DataCell(Text(identity.$2.datawalletVersion?.toString() ?? '')),
                 DataCell(Text(identity.$2.identityVersion.toString())),
               ],
