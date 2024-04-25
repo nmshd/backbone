@@ -11,8 +11,6 @@ services:
     ports:
       - "5000:8080"
     depends_on:
-      seed-client:
-        condition: service_completed_successfully
       rabbitmq:
         condition: service_started
       azure-storage-emulator:
