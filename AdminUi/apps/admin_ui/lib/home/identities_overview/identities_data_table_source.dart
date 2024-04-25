@@ -32,9 +32,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
   }
 
   String _getODataOrderBy() {
-    final fieldName = _getFieldNameByIndex(_sortColumnIndex);
-    final direction = _sortAscending ? 'asc' : 'desc';
-    return '$fieldName $direction';
+    return '${_getFieldNameByIndex(_sortColumnIndex)} ${_sortAscending ? 'asc' : 'desc'}';
   }
 
   @override
