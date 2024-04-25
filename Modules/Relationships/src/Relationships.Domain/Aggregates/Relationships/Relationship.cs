@@ -94,21 +94,7 @@ public class Relationship
         if (To != activeIdentity)
             throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse());
     }
-
-    private void EnsureRelationshipReactivationRequestIsAddressedToSelf(IdentityAddress activeIdentity)
-    {
-        if (To != activeIdentity)
-            throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipReactivationRequestAddressedToSomeoneElse());
-    }
-
-    private void EnsureOpenRevivalRequestExists()
-    {
-        if (AuditLog.Last().Reason != RelationshipAuditLogEntryReason.Reactivation)
-        {
-            throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipRevivalIfNoRequestToDoSoHasBeenMade());
-        }
-    }
-
+    
     private void EnsureRelationshipRequestIsCreatedBySelf(IdentityAddress activeIdentity)
     {
         if (From != activeIdentity)
@@ -127,21 +113,6 @@ public class Relationship
             RelationshipAuditLogEntryReason.RejectionOfCreation,
             RelationshipStatus.Pending,
             RelationshipStatus.Rejected,
-            activeIdentity,
-            activeDevice
-        );
-        AuditLog.Add(auditLogEntry);
-    }
-
-    public void RejectReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
-    {
-        EnsureOpenRevivalRequestExists();
-        EnsureRelationshipReactivationRequestIsAddressedToSelf(activeIdentity);
-
-        var auditLogEntry = new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.RejectionOfReactivation,
-            RelationshipStatus.Terminated,
-            RelationshipStatus.Terminated,
             activeIdentity,
             activeDevice
         );
@@ -186,6 +157,35 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+    }
+
+    public void RejectReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureOpenRevivalRequestExists();
+        EnsureRevivalRequestIsAddressedToSelf(activeIdentity);
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.RejectionOfReactivation,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Terminated,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
+    private void EnsureOpenRevivalRequestExists()
+    {
+        if (AuditLog.Last().Reason != RelationshipAuditLogEntryReason.Reactivation)
+        {
+            throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipRevivalIfNoRequestToDoSoHasBeenMade());
+        }
+    }
+
+    private void EnsureRevivalRequestIsAddressedToSelf(IdentityAddress activeIdentity)
+    {
+        if (To != activeIdentity)
+            throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipReactivationRequestAddressedToSomeoneElse());
     }
 
     #region Expressions
