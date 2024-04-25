@@ -102,8 +102,8 @@ services:
       context: ..
       dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
     depends_on:
-      database-migrator:
-        condition: service_completed_successfully
+      consumer-api:
+        condition: service_healthy
     command: backbone client create --clientId test --clientSecret test --defaultTier Basic
 
 networks:
