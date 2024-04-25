@@ -21,8 +21,7 @@ public class HandlerTests
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreatePendingRelationship(to: activeIdentity);
-        relationship.Test_SetStatusAsTerminated(); // remove when RequestRelationshipReactivation is implemented
+        var relationship = TestData.CreateTerminatedRelationshipWithPendingReactivationRequest(activeIdentity);
 
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
@@ -31,14 +30,6 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
 
         var handler = new Handler(fakeRelationshipsRepository, fakeUserContext, A.Fake<IEventBus>());
-
-        relationship.AuditLog.Add(new RelationshipAuditLogEntry( // remove after RequestRelationshipReactivation is implemented
-            RelationshipAuditLogEntryReason.Reactivation,
-            RelationshipStatus.Terminated,
-            RelationshipStatus.Terminated,
-            TestDataGenerator.CreateRandomIdentityAddress(),
-            TestDataGenerator.CreateRandomDeviceId()
-        ));
 
         // Act
         var response = await handler.Handle(new RejectRelationshipReactivationCommand
@@ -49,7 +40,7 @@ public class HandlerTests
         // Assert
         response.Id.Should().NotBeNull();
         response.Status.Should().Be(RelationshipStatus.Terminated);
-        response.AuditLog.Should().HaveCount(3);
+        response.AuditLog.Should().HaveCount(5); // AuditLog(Creation->Acceptance->Termination->Reactivation->Rejection)
     }
 
     [Fact]
@@ -60,8 +51,7 @@ public class HandlerTests
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreatePendingRelationship(to: activeIdentity);
-        relationship.Test_SetStatusAsTerminated(); // remove when RequestRelationshipReactivation is implemented
+        var relationship = TestData.CreateTerminatedRelationshipWithPendingReactivationRequest(activeIdentity);
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
@@ -71,14 +61,6 @@ public class HandlerTests
         var mockEventBus = A.Fake<IEventBus>();
 
         var handler = new Handler(fakeRelationshipsRepository, fakeUserContext, mockEventBus);
-
-        relationship.AuditLog.Add(new RelationshipAuditLogEntry( // remove after RequestRelationshipReactivation is implemented
-            RelationshipAuditLogEntryReason.Reactivation,
-            RelationshipStatus.Terminated,
-            RelationshipStatus.Terminated,
-            TestDataGenerator.CreateRandomIdentityAddress(),
-            TestDataGenerator.CreateRandomDeviceId()
-        ));
 
         // Act
         await handler.Handle(new RejectRelationshipReactivationCommand

@@ -132,10 +132,6 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    public void Test_SetStatusAsTerminated() // remove after RequestRelationshipReactivation is implemented
-    {
-        Status = RelationshipStatus.Terminated;
-    }
     public void RejectReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureOpenRevivalRequestExists();

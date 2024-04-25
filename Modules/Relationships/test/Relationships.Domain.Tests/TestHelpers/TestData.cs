@@ -52,4 +52,20 @@ public static class TestData
         relationship.Terminate(IDENTITY_1, DEVICE_1);
         return relationship;
     }
+
+    public static Relationship CreateTerminatedRelationshipWithPendingReactivationRequest()
+    {
+        var relationship = CreateTerminatedRelationship();
+
+        // replace with RequestRelationshipReactivation when implemented
+        relationship.AuditLog.Add(new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.Reactivation,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Terminated,
+            IDENTITY_1,
+            DEVICE_1
+        ));
+
+        return relationship;
+    }
 }

@@ -13,17 +13,7 @@ public class RejectRelationshipReactivationTests
     public void RejectReactivation_leaves_relationship_in_status_terminated()
     {
         // Arrange
-        var relationship = CreateActiveRelationship();
-        relationship.Test_SetStatusAsTerminated();
-
-        var auditLogEntry = new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.Reactivation,
-            RelationshipStatus.Terminated,
-            RelationshipStatus.Terminated,
-            IDENTITY_1,
-            DEVICE_1
-        );
-        relationship.AuditLog.Add(auditLogEntry);
+        var relationship = CreateTerminatedRelationshipWithPendingReactivationRequest();
 
         // Act
         relationship.RejectReactivation(IDENTITY_2, DEVICE_2);
@@ -38,22 +28,13 @@ public class RejectRelationshipReactivationTests
         // Arrange
         SystemTime.Set("2000-01-01");
 
-        var relationship = CreateActiveRelationship();
-        relationship.Test_SetStatusAsTerminated();
-
-        relationship.AuditLog.Add(new RelationshipAuditLogEntry( // remove after RequestRelationshipReactivation is implemented
-            RelationshipAuditLogEntryReason.Reactivation,
-            RelationshipStatus.Terminated,
-            RelationshipStatus.Terminated,
-            IDENTITY_1,
-            DEVICE_1
-        ));
+        var relationship = CreateTerminatedRelationshipWithPendingReactivationRequest();
 
         // Act
         relationship.RejectReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
-        relationship.AuditLog.Should().HaveCount(4);
+        relationship.AuditLog.Should().HaveCount(5); // AuditLog(Creation->Acceptance->Termination->Reactivation->Rejection)
 
         var auditLogEntry = relationship.AuditLog.Last();
 
@@ -85,16 +66,7 @@ public class RejectRelationshipReactivationTests
     public void Can_only_reject_relationship_reactivation_request_addressed_to_self()
     {
         // Arrange
-        var relationship = CreateActiveRelationship();
-        relationship.Test_SetStatusAsTerminated();
-
-        relationship.AuditLog.Add(new RelationshipAuditLogEntry( // remove after RequestRelationshipReactivation is implemented
-            RelationshipAuditLogEntryReason.Reactivation,
-            RelationshipStatus.Terminated,
-            RelationshipStatus.Terminated,
-            IDENTITY_1,
-            DEVICE_1
-        ));
+        var relationship = CreateTerminatedRelationshipWithPendingReactivationRequest();
 
         // Act
         var acting = () => relationship.RejectReactivation(IDENTITY_1, DEVICE_1);

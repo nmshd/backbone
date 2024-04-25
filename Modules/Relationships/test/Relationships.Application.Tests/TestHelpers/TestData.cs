@@ -29,4 +29,23 @@ public static class TestData
 
         return relationship;
     }
+
+    public static Relationship CreateTerminatedRelationshipWithPendingReactivationRequest(IdentityAddress activeIdentity)
+    {
+        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
+
+        var relationship = CreateActiveRelationship(to: activeIdentity);
+        relationship.Terminate(activeIdentity, activeDevice);
+
+        // replace with RequestRelationshipReactivation when implemented
+        relationship.AuditLog.Add(new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.Reactivation,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Terminated,
+            activeIdentity,
+            activeDevice
+        ));
+
+        return relationship;
+    }
 }
