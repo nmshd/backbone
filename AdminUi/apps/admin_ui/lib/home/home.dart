@@ -1,5 +1,6 @@
-import 'package:admin_ui/components/components.dart';
 import 'package:flutter/material.dart';
+
+export 'tiers_overview/tiers_overview.dart';
 
 class Identities extends StatelessWidget {
   const Identities({super.key});
@@ -7,15 +8,6 @@ class Identities extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Placeholder();
-  }
-}
-
-class Tiers extends StatelessWidget {
-  const Tiers({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const TiersOverviewList();
   }
 }
 
