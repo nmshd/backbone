@@ -10,7 +10,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
   int _sortColumnIndex = 0;
   bool _sortAscending = true;
 
-  IdentityOverviewFilter? filter;
+  IdentityOverviewFilter? _filter;
 
   void sort({required int columnIndex, required bool columnAscending}) {
     _sortColumnIndex = columnIndex;
@@ -53,7 +53,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
       final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(
             pageNumber: pageNumber,
             pageSize: count,
-            filter: filter,
+            filter: _filter,
             orderBy: orderBy,
           );
       _pagination = response.pagination;
