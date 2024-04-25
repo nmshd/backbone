@@ -18,18 +18,16 @@ class IdentityDataTableSource extends AsyncDataTableSource {
     notifyListeners();
   }
 
-  String _getFieldNameByIndex(int index) {
-    return switch (index) {
-      0 => 'address',
-      2 => 'createdWithClient',
-      3 => 'numberOfDevices',
-      4 => 'createdAt',
-      5 => 'lastLoginAt',
-      6 => 'datawalletVersion',
-      7 => 'identityVersion',
-      _ => throw Exception('Invalid column index')
-    };
-  }
+  String _getFieldNameByIndex(int index) => switch (index) {
+        0 => 'address',
+        2 => 'createdWithClient',
+        3 => 'numberOfDevices',
+        4 => 'createdAt',
+        5 => 'lastLoginAt',
+        6 => 'datawalletVersion',
+        7 => 'identityVersion',
+        _ => throw Exception('Invalid column index')
+      };
 
   String _getODataOrderBy() {
     return '${_getFieldNameByIndex(_sortColumnIndex)} ${_sortAscending ? 'asc' : 'desc'}';
