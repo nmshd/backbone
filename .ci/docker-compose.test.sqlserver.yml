@@ -17,11 +17,10 @@ services:
 
   seed-database:
     image: mcr.microsoft.com/mssql-tools
-    volumes:
-      - ../setup-db:/app/setup-db
     command: bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S sqlserver -U SA -P Passw0rd -i /app/setup-db/setup-sqlserver.sql "
     depends_on:
-      - database
+      database:
+        condition: service_started
 
   seed-client:
     environment:
