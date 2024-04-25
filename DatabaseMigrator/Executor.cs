@@ -69,9 +69,9 @@ public class Executor
         await using var context = _serviceProvider.GetDbContext<TContext>();
 
         if (targetMigration == null)
-            _logger.MigratingDbContext(typeof(TContext).Name);
+            _logger.MigratingDbContextToLatestMigration(typeof(TContext).Name);
         else
-            _logger.MigratingDbContext(typeof(TContext).Name, targetMigration);
+            _logger.MigratingDbContextToTargetMigration(typeof(TContext).Name, targetMigration);
 
         var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
         if (!pendingMigrations.Any())
@@ -86,9 +86,9 @@ public class Executor
         catch (Exception ex)
         {
             if (targetMigration == null)
-                _logger.ErrorWhileApplyingMigration(ex, typeof(TContext).Name);
+                _logger.ErrorWhileApplyingMigrationToLatestMigration(ex, typeof(TContext).Name);
             else
-                _logger.ErrorWhileApplyingMigration(ex, typeof(TContext).Name, targetMigration);
+                _logger.ErrorWhileApplyingMigrationToTargetMigration(ex, typeof(TContext).Name, targetMigration);
             throw;
         }
         finally
@@ -97,9 +97,9 @@ public class Executor
         }
 
         if (targetMigration == null)
-            _logger.SuccessfullyMigratedDbContext(typeof(TContext).Name);
+            _logger.SuccessfullyMigratedDbContextToLatestMigration(typeof(TContext).Name);
         else
-            _logger.SuccessfullyMigratedDbContext(typeof(TContext).Name, targetMigration);
+            _logger.SuccessfullyMigratedDbContextToTargetMigration(typeof(TContext).Name, targetMigration);
     }
 
     private async Task RollbackAlreadyMigratedDbContexts()
@@ -186,47 +186,47 @@ internal static partial class ExecutorLogs
 
     [LoggerMessage(
         EventId = 561103,
-        EventName = "DatabaseMigrator.Executor.MigratingDbContext",
+        EventName = "DatabaseMigrator.Executor.MigratingDbContextToLatestMigration",
         Level = LogLevel.Information,
         Message = "Migrating database associated with context '{context}' to the latest migration...")]
-    public static partial void MigratingDbContext(this ILogger logger, string context);
+    public static partial void MigratingDbContextToLatestMigration(this ILogger logger, string context);
 
     [LoggerMessage(
         EventId = 561104,
-        EventName = "DatabaseMigrator.Executor.MigratingDbContext",
+        EventName = "DatabaseMigrator.Executor.MigratingDbContextToTargetMigration",
         Level = LogLevel.Information,
         Message = "Migrating database associated with context '{context}' to target migration '{targetMigration}'...")]
-    public static partial void MigratingDbContext(this ILogger logger, string context, string targetMigration);
+    public static partial void MigratingDbContextToTargetMigration(this ILogger logger, string context, string targetMigration);
 
     [LoggerMessage(
         EventId = 561105,
-        EventName = "DatabaseMigrator.Executor.SuccessfullyMigratedDbContext",
+        EventName = "DatabaseMigrator.Executor.SuccessfullyMigratedDbContextToLatestMigration",
         Level = LogLevel.Information,
         Message = "Migrating database associated with context '{context}' to the latest migration...")]
-    public static partial void SuccessfullyMigratedDbContext(this ILogger logger, string context);
+    public static partial void SuccessfullyMigratedDbContextToLatestMigration(this ILogger logger, string context);
 
     [LoggerMessage(
         EventId = 561106,
-        EventName = "DatabaseMigrator.Executor.SuccessfullyMigratedDbContext",
+        EventName = "DatabaseMigrator.Executor.SuccessfullyMigratedDbContextToTargetMigration",
         Level = LogLevel.Information,
         Message = "Migrating database associated with context '{context}' to target migration '{targetMigration}'...")]
-    public static partial void SuccessfullyMigratedDbContext(this ILogger logger, string context, string targetMigration);
-
-    [LoggerMessage(
-        EventId = 561107,
-        EventName = "DatabaseMigrator.Executor.ErrorWhileApplyingMigration",
-        Level = LogLevel.Critical,
-        Message =
-            "An error occurred while migrating the database associated with context '{context}' to target migration '{targetMigration}'")]
-    public static partial void ErrorWhileApplyingMigration(this ILogger logger, Exception ex, string context, string targetMigration);
+    public static partial void SuccessfullyMigratedDbContextToTargetMigration(this ILogger logger, string context, string targetMigration);
 
     [LoggerMessage(
         EventId = 561108,
-        EventName = "DatabaseMigrator.Executor.ErrorWhileApplyingMigration",
+        EventName = "DatabaseMigrator.Executor.ErrorWhileApplyingMigrationToLatestMigration",
         Level = LogLevel.Critical,
         Message =
             "An error occurred while migrating the database associated with context '{context}' to the latest migration'")]
-    public static partial void ErrorWhileApplyingMigration(this ILogger logger, Exception ex, string context);
+    public static partial void ErrorWhileApplyingMigrationToLatestMigration(this ILogger logger, Exception ex, string context);
+
+    [LoggerMessage(
+        EventId = 561107,
+        EventName = "DatabaseMigrator.Executor.ErrorWhileApplyingMigrationToTargetMigration",
+        Level = LogLevel.Critical,
+        Message =
+            "An error occurred while migrating the database associated with context '{context}' to target migration '{targetMigration}'")]
+    public static partial void ErrorWhileApplyingMigrationToTargetMigration(this ILogger logger, Exception ex, string context, string targetMigration);
 
     [LoggerMessage(
         EventId = 561109,
