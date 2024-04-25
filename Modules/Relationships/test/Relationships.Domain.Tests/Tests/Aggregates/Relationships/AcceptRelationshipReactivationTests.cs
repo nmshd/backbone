@@ -1,10 +1,10 @@
-﻿using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
-using Xunit;
-using FluentAssertions;
+﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
-using Backbone.Tooling;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Relationships.Domain.Tests.Extensions;
+using Backbone.Tooling;
+using FluentAssertions;
+using Xunit;
+using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relationships;
 public class AcceptRelationshipReactivationTests
