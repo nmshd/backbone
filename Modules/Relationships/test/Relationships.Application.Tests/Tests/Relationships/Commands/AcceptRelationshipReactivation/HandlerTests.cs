@@ -2,7 +2,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationshipReactivation;
-using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
@@ -101,11 +100,9 @@ public class HandlerTests
 
         // Assert
         A.CallTo(
-                () => mockEventBus.Publish(A<RelationshipStatusChangedDomainEvent>.That.Matches(e =>
+                () => mockEventBus.Publish(A<RelationshipReactivationCompletedDomainEvent>.That.Matches(e =>
                     e.RelationshipId == relationship.Id &&
-                    e.Status == RelationshipStatus.Active.ToDtoString() &&
-                    e.Initiator == activeIdentity &&
-                    e.Peer == relationship.From)
+                    e.Peer == activeIdentity)
                 ))
             .MustHaveHappenedOnceExactly();
     }

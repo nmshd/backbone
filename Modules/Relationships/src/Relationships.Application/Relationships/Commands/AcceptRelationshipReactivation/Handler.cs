@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<AcceptRelationshipReactivationCommand, Ac
 
         await _relationshipsRepository.Update(relationship);
 
-        _eventBus.Publish(new RelationshipStatusChangedDomainEvent(relationship));
+        _eventBus.Publish(new RelationshipReactivationCompletedDomainEvent(relationship, _activeIdentity));
 
         return new AcceptRelationshipReactivationResponse(relationship);
     }
