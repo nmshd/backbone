@@ -19,7 +19,6 @@ public class ExternalEventDTO : IHaveCustomMapping
         {
             ExternalEventType.MessageDelivered => "MessageDelivered",
             ExternalEventType.MessageReceived => "MessageReceived",
-            ExternalEventType.RelationshipCreated => "RelationshipCreated",
             ExternalEventType.RelationshipStatusChanged => "RelationshipStatusChanged",
             ExternalEventType.IdentityDeletionProcessStatusChanged => "IdentityDeletionProcessStatusChanged",
             ExternalEventType.IdentityDeletionProcessStarted => "IdentityDeletionProcessStarted",
