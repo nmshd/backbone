@@ -29,7 +29,7 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
 
-        var handler = new Handler(fakeRelationshipsRepository, fakeUserContext, A.Fake<IEventBus>());
+        var handler = CreateHandler(fakeRelationshipsRepository, fakeUserContext);
 
         // Act
         var response = await handler.Handle(new RejectRelationshipReactivationCommand
@@ -60,7 +60,7 @@ public class HandlerTests
 
         var mockEventBus = A.Fake<IEventBus>();
 
-        var handler = new Handler(fakeRelationshipsRepository, fakeUserContext, mockEventBus);
+        var handler = CreateHandler(fakeRelationshipsRepository, fakeUserContext, mockEventBus);
 
         // Act
         await handler.Handle(new RejectRelationshipReactivationCommand
@@ -75,5 +75,42 @@ public class HandlerTests
                     e.Peer == relationship.To)
                 ))
             .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task Saves_the_updated_relationship()
+    {
+        // Arrange
+        var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
+
+        var mockRelationshipsRepository = A.Fake<IRelationshipsRepository>();
+        var relationship = TestData.CreateTerminatedRelationshipWithPendingReactivationRequest(activeIdentity);
+        A.CallTo(() => mockRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
+
+        var fakeUserContext = A.Fake<IUserContext>();
+        A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
+
+        var handler = CreateHandler(mockRelationshipsRepository, fakeUserContext);
+
+        // Act
+        await handler.Handle(new RejectRelationshipReactivationCommand
+        {
+            RelationshipId = relationship.Id
+        }, CancellationToken.None);
+
+        // Assert
+        A.CallTo(
+                () => mockRelationshipsRepository.Update(
+                    A<Relationship>.That.Matches(r => r.Id == relationship.Id && r.Status == RelationshipStatus.Terminated))
+            )
+            .MustHaveHappenedOnceExactly();
+    }
+
+    private static Handler CreateHandler(IRelationshipsRepository relationshipsRepository, IUserContext userContext, IEventBus? eventBus = null)
+    {
+        eventBus ??= A.Fake<IEventBus>();
+        return new Handler(relationshipsRepository, userContext, eventBus);
     }
 }

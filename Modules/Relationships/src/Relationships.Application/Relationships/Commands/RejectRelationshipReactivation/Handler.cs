@@ -32,6 +32,8 @@ public class Handler : IRequestHandler<RejectRelationshipReactivationCommand, Re
 
         relationship.RejectReactivation(_activeIdentity, _activeDevice);
 
+        await _relationshipsRepository.Update(relationship);
+
         _eventBus.Publish(new RelationshipReactivationCompletedDomainEvent(relationship, _activeIdentity));
 
         return new RejectRelationshipReactivationResponse(relationship);
