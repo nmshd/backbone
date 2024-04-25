@@ -24,8 +24,6 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
   final MultiSelectController<String> _tierController = MultiSelectController();
   final MultiSelectController<String> _clientController = MultiSelectController();
 
-  final operators = <String>['=', '<', '>', '<=', '>='];
-
   @override
   void initState() {
     super.initState();
