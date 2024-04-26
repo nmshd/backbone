@@ -1,5 +1,6 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '/core/constants.dart';
 
@@ -57,7 +58,7 @@ class _DateFilterState extends State<DateFilter> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      _selectedDate != null ? '${_selectedDate!.year}-${_selectedDate!.month}-${_selectedDate!.day}' : 'Select date',
+                      _selectedDate != null ? DateFormat('yyyy-MM-dd').format(_selectedDate!) : 'Select date',
                       style: const TextStyle(fontSize: 14),
                     ),
                     Gaps.w8,
