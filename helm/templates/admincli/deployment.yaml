@@ -1,15 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "global.name" . }}
+  name: {{ .Values.admincli.name }}
   labels:
     {{- include "global.labels" . | nindent 4 }}
-    app: {{ include "global.name" . }}
+    app: {{ .Values.admincli.name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{ include "global.name" . }}
+      app: {{ .Values.admincli.name }}
   template:
     metadata:
       {{- with .Values.admincli.podAnnotations }}
@@ -17,7 +17,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ include "global.name" . }}
+        app: {{ .Values.admincli.name }}
     spec:
       {{- with .Values.admincli.podSecurityContext }}
       securityContext:
@@ -28,7 +28,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       containers:
-        - name: {{ include "global.name" . }}
+        - name: {{ .Values.admincli.name }}
           {{- with .Values.admincli.securityContext }}
           securityContext:
             {{- toYaml .Values.admincli.securityContext | nindent 8 }}
