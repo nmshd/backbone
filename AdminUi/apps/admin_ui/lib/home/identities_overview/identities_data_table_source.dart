@@ -23,23 +23,6 @@ class IdentityDataTableSource extends AsyncDataTableSource {
     notifyListeners();
   }
 
-  String _getODataOrderBy() {
-    final columnName = _getFieldNameByIndex(_sortingSettings.sortColumnIndex);
-    final sortingDirection = _sortingSettings.sortAscending ? 'asc' : 'desc';
-    return '$columnName $sortingDirection';
-  }
-
-  String _getFieldNameByIndex(int index) => switch (index) {
-        0 => 'address',
-        2 => 'createdWithClient',
-        3 => 'numberOfDevices',
-        4 => 'createdAt',
-        5 => 'lastLoginAt',
-        6 => 'datawalletVersion',
-        7 => 'identityVersion',
-        _ => throw Exception('Invalid column index')
-      };
-
   @override
   bool get isRowCountApproximate => false;
 
@@ -88,4 +71,21 @@ class IdentityDataTableSource extends AsyncDataTableSource {
       throw Exception('Failed to load data: $e');
     }
   }
+
+  String _getODataOrderBy() {
+    final columnName = _getFieldNameByIndex(_sortingSettings.sortColumnIndex);
+    final sortingDirection = _sortingSettings.sortAscending ? 'asc' : 'desc';
+    return '$columnName $sortingDirection';
+  }
+
+  String _getFieldNameByIndex(int index) => switch (index) {
+        0 => 'address',
+        2 => 'createdWithClient',
+        3 => 'numberOfDevices',
+        4 => 'createdAt',
+        5 => 'lastLoginAt',
+        6 => 'datawalletVersion',
+        7 => 'identityVersion',
+        _ => throw Exception('Invalid column index')
+      };
 }

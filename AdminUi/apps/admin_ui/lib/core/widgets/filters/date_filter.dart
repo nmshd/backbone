@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '/core/constants.dart';
+import 'to_filter_operator_dropdown_menu_item.dart';
 
 class DateFilter extends StatefulWidget {
   final void Function(FilterOperator operator, DateTime? selectedDate) onFilterSelected;
@@ -33,15 +34,11 @@ class _DateFilterState extends State<DateFilter> {
             DropdownButton<FilterOperator>(
               value: _operator,
               onChanged: (selectedOperator) {
-                if (selectedOperator!.userFriendlyOperator.isEmpty) return;
-                widget.onFilterSelected(_operator = selectedOperator, _selectedDate);
+                if (selectedOperator == null) return;
+                setState(() => _operator = selectedOperator);
+                widget.onFilterSelected(selectedOperator, _selectedDate);
               },
-              items: FilterOperator.values.map((operator) {
-                return DropdownMenuItem<FilterOperator>(
-                  value: operator,
-                  child: Text(operator.userFriendlyOperator),
-                );
-              }).toList(),
+              items: FilterOperator.values.toDropdownMenuItems(),
             ),
             Gaps.w8,
             InkWell(

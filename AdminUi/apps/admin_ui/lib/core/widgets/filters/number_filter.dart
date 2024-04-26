@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '/core/constants.dart';
+import 'to_filter_operator_dropdown_menu_item.dart';
 
 class NumberFilter extends StatefulWidget {
   final void Function(FilterOperator operator, String enteredValue) onNumberSelected;
@@ -37,17 +38,11 @@ class _NumberFilterState extends State<NumberFilter> {
             DropdownButton<FilterOperator>(
               value: _operator,
               onChanged: (selectedOperator) {
-                setState(() {
-                  if (selectedOperator == null) return;
-                });
-                widget.onNumberSelected(_operator, _value);
+                if (selectedOperator == null) return;
+                setState(() => _operator = selectedOperator);
+                widget.onNumberSelected(selectedOperator, _value);
               },
-              items: FilterOperator.values.map((e) {
-                return DropdownMenuItem<FilterOperator>(
-                  value: e,
-                  child: Text(e.userFriendlyOperator),
-                );
-              }).toList(),
+              items: FilterOperator.values.toDropdownMenuItems(),
             ),
             Gaps.w16,
             SizedBox(
@@ -55,7 +50,7 @@ class _NumberFilterState extends State<NumberFilter> {
               child: TextField(
                 onChanged: (enteredValue) {
                   _value = enteredValue;
-                  widget.onNumberSelected(_operator, _value);
+                  widget.onNumberSelected(_operator, enteredValue);
                 },
                 decoration: const InputDecoration(border: OutlineInputBorder()),
                 style: const TextStyle(fontSize: 12),
