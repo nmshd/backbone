@@ -5,6 +5,7 @@ public class Relationship : ICreatedAt
     public required string From { get; set; }
     public required string To { get; set; }
     public required RelationshipStatus Status { get; set; }
+    public required List<RelationshipAuditLogEntry> AuditLog { get; set; }
     public required DateTime CreatedAt { get; set; }
 }
 public enum RelationshipStatus
