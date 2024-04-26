@@ -11,6 +11,13 @@ class IdentityDataTableSource extends AsyncDataTableSource {
 
   IdentityOverviewFilter? _filter;
 
+  set filter(IdentityOverviewFilter? newFilter) {
+    if (_filter != newFilter) {
+      _filter = newFilter;
+      notifyListeners();
+    }
+  }
+
   void sort({required int sortColumnIndex, required bool sortColumnAscending}) {
     _sortingSettings = (sortColumnIndex: sortColumnIndex, sortAscending: sortColumnAscending);
     notifyListeners();
@@ -32,13 +39,6 @@ class IdentityDataTableSource extends AsyncDataTableSource {
         7 => 'identityVersion',
         _ => throw Exception('Invalid column index')
       };
-
-  set filter(IdentityOverviewFilter? newFilter) {
-    if (_filter != newFilter) {
-      _filter = newFilter;
-      notifyListeners();
-    }
-  }
 
   @override
   bool get isRowCountApproximate => false;
