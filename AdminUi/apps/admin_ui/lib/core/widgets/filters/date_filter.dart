@@ -96,6 +96,6 @@ class _DateFilterState extends State<DateFilter> {
     if (picked == null) return;
 
     setState(() => _selectedDate = picked);
-    widget.onFilterSelected(_operator, _selectedDate);
+    widget.onFilterSelected(_operator, picked);
   }
 }
