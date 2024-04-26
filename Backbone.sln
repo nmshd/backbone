@@ -297,6 +297,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHandlerService", "Even
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHandlerService.Tests", "EventHandlerService\test\EventHandlerService.Tests\EventHandlerService.Tests.csproj", "{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrator", "DatabaseMigrator\DatabaseMigrator.csproj", "{143EAC38-A2D0-4F74-88F1-3EF27413A8C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -715,6 +717,10 @@ Global
 		{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{143EAC38-A2D0-4F74-88F1-3EF27413A8C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{143EAC38-A2D0-4F74-88F1-3EF27413A8C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{143EAC38-A2D0-4F74-88F1-3EF27413A8C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{143EAC38-A2D0-4F74-88F1-3EF27413A8C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
