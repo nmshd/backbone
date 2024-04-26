@@ -53,10 +53,8 @@ class _NumberFilterState extends State<NumberFilter> {
             SizedBox(
               width: 120,
               child: TextField(
-                onChanged: (value) {
-                  setState(() {
-                    _value = value;
-                  });
+                onChanged: (enteredValue) {
+                  _value = enteredValue;
                   widget.onNumberSelected(_operator, _value);
                 },
                 decoration: const InputDecoration(border: OutlineInputBorder()),
