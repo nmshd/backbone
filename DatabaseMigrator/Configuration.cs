@@ -21,4 +21,7 @@ public class SqlDatabaseConfiguration
 
     [Required]
     public string ConnectionString { get; set; } = null!;
+
+    [Range(1, Int32.MaxValue)]
+    public int CommandTimeout { get; set; } = 300;
 }
