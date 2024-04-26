@@ -4,8 +4,8 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
-namespace Backbone.Modules.Devices.Application.Identities.Queries.GetRegisteredIdentityDetails;
-public class Handler : IRequestHandler<GetRegisteredIdentityDetailsQuery, GetRegisteredIdentityDetailsResponse>
+namespace Backbone.Modules.Devices.Application.Identities.Queries.GetOwnIdentity;
+public class Handler : IRequestHandler<GetOwnIdentityQuery, GetOwnIdentityResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IUserContext _userContext;
@@ -16,10 +16,10 @@ public class Handler : IRequestHandler<GetRegisteredIdentityDetailsQuery, GetReg
         _userContext = userContext;
     }
 
-    public async Task<GetRegisteredIdentityDetailsResponse> Handle(GetRegisteredIdentityDetailsQuery request, CancellationToken cancellationToken)
+    public async Task<GetOwnIdentityResponse> Handle(GetOwnIdentityQuery request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken) ?? throw new NotFoundException(nameof(Identity));
 
-        return new GetRegisteredIdentityDetailsResponse(identity);
+        return new GetOwnIdentityResponse(identity);
     }
 }

@@ -2,9 +2,9 @@
 using DateTime = System.DateTime;
 
 namespace Backbone.Modules.Devices.Application.DTOs;
-public class RegisteredIdentityDetailsDTO
+public class OwnIdentityDTO
 {
-    public RegisteredIdentityDetailsDTO(Identity identity)
+    public OwnIdentityDTO(Identity identity)
     {
         Address = identity.Address.ToString();
         CreatedAt = identity.CreatedAt;
