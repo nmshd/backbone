@@ -37,7 +37,11 @@ class _NumberFilterState extends State<NumberFilter> {
             DropdownButton<FilterOperator>(
               value: _operator,
               onChanged: (newValue) {
-                setState(() => _operator = newValue!);
+                setState(() {
+                  if (newValue!.userFriendlyOperator.isNotEmpty) {
+                    _operator = newValue;
+                  }
+                });
                 widget.onNumberSelected(_operator, _value);
               },
               items: FilterOperator.values.map((e) {
