@@ -98,7 +98,7 @@ static WebApplication CreateApp(string[] args)
     var app = builder.Build();
     Configure(app);
 
-    if (app.Configuration.GetValue<bool>("RunMigrations"))
+    if ((app.Environment.IsLocal() || app.Environment.IsDevelopment()) && app.Configuration.GetValue<bool>("RunMigrations"))
     {
         app
             .MigrateDbContext<ChallengesDbContext>()
