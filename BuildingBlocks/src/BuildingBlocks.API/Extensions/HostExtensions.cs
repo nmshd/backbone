@@ -5,7 +5,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Npgsql;
 using Polly;
-using Polly.Retry;
 
 namespace Backbone.BuildingBlocks.API.Extensions;
 
