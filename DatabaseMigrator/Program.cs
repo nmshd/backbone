@@ -71,54 +71,63 @@ static IHostBuilder CreateHostBuilder(string[] args)
             {
                 options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
                 options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
             });
 
             Backbone.Modules.Devices.Infrastructure.Persistence.IServiceCollectionExtensions.AddDatabase(services, options =>
             {
                 options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
                 options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
             });
 
             Backbone.Modules.Files.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
             {
                 options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
                 options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
             });
 
             Backbone.Modules.Messages.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
             {
                 options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
                 options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
             });
 
             Backbone.Modules.Quotas.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
             {
                 options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
                 options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
             });
 
             Backbone.Modules.Relationships.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
             {
                 options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
                 options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
             });
 
             Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
             {
                 options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
                 options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
             });
 
             Backbone.Modules.Tokens.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
             {
                 options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
                 options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
             });
 
             Backbone.AdminApi.Infrastructure.Persistence.IServiceCollectionExtensions.AddDatabase(services, options =>
             {
                 options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
                 options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
             });
 
             #endregion
