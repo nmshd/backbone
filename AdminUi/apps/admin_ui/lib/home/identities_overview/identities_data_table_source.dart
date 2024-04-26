@@ -17,7 +17,9 @@ class IdentityDataTableSource extends AsyncDataTableSource {
   }
 
   String _getODataOrderBy() {
-    return '${_getFieldNameByIndex(_sortingSettings.sortColumnIndex)} ${_sortingSettings.sortAscending ? 'asc' : 'desc'}';
+    final columnName = _getFieldNameByIndex(_sortingSettings.sortColumnIndex);
+    final sortingDirection = _sortingSettings.sortAscending ? 'asc' : 'desc';
+    return '$columnName $sortingDirection';
   }
 
   String _getFieldNameByIndex(int index) => switch (index) {
