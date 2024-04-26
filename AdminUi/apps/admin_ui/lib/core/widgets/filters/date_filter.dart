@@ -32,9 +32,10 @@ class _DateFilterState extends State<DateFilter> {
             DropdownButton<FilterOperator>(
               value: _operator,
               onChanged: (newValue) {
-                if (newValue!.userFriendlyOperator.isNotEmpty) {
-                  widget.onFilterSelected(_operator = newValue, _selectedDate);
+                if (newValue!.userFriendlyOperator.isEmpty) {
+                  return;
                 }
+                widget.onFilterSelected(_operator = newValue, _selectedDate);
               },
               items: FilterOperator.values.map((operator) {
                 return DropdownMenuItem<FilterOperator>(
