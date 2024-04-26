@@ -90,7 +90,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             Gaps.w16,
             DateFilter(
               label: 'Created At',
-              onDateSelected: (FilterOperator operator, DateTime? selectedDate) {
+              onFilterSelected: (FilterOperator operator, DateTime? selectedDate) {
                 final createdAt = FilterOperatorValue(operator, selectedDate != null ? DateFormat('yyyy-MM-dd').format(selectedDate) : '');
                 _filter = _filter.copyWith(createdAt: createdAt.value.isEmpty ? const Optional.absent() : Optional(createdAt));
                 widget.onFilterChanged(filter: _filter);
@@ -99,7 +99,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             Gaps.w16,
             DateFilter(
               label: 'Last Login At',
-              onDateSelected: (FilterOperator operator, DateTime? selectedDate) {
+              onFilterSelected: (FilterOperator operator, DateTime? selectedDate) {
                 final lastLoginAt = FilterOperatorValue(operator, selectedDate != null ? DateFormat('yyyy-MM-dd').format(selectedDate) : '');
                 _filter = _filter.copyWith(lastLoginAt: lastLoginAt.value.isEmpty ? const Optional.absent() : Optional(lastLoginAt));
                 widget.onFilterChanged(filter: _filter);

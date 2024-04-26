@@ -4,10 +4,10 @@ import 'package:flutter/material.dart';
 import '/core/constants.dart';
 
 class DateFilter extends StatefulWidget {
-  final void Function(FilterOperator operator, DateTime? selectedDate) onDateSelected;
+  final void Function(FilterOperator operator, DateTime? selectedDate) onFilterSelected;
   final String label;
 
-  const DateFilter({required this.onDateSelected, required this.label, super.key});
+  const DateFilter({required this.onFilterSelected, required this.label, super.key});
 
   @override
   State<DateFilter> createState() => _DateFilterState();
@@ -32,7 +32,9 @@ class _DateFilterState extends State<DateFilter> {
             DropdownButton<FilterOperator>(
               value: _operator,
               onChanged: (newValue) {
-                setState(() => _operator = newValue!);
+                if (newValue!.userFriendlyOperator.isNotEmpty) {
+                  widget.onFilterSelected(_operator = newValue, _selectedDate);
+                }
               },
               items: FilterOperator.values.map((operator) {
                 return DropdownMenuItem<FilterOperator>(
@@ -78,7 +80,7 @@ class _DateFilterState extends State<DateFilter> {
 
   void _clearDate() {
     setState(() => _selectedDate = null);
-    widget.onDateSelected(_operator, _selectedDate);
+    widget.onFilterSelected(_operator, _selectedDate);
   }
 
   Future<void> _selectNewDate() async {
@@ -92,6 +94,6 @@ class _DateFilterState extends State<DateFilter> {
     if (picked == null) return;
 
     setState(() => _selectedDate = picked);
-    widget.onDateSelected(_operator, _selectedDate);
+    widget.onFilterSelected(_operator, _selectedDate);
   }
 }
