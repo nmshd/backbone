@@ -122,7 +122,7 @@ public class IdentitiesController : ApiControllerBase
 
     [HttpGet("Self")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetOwnIdentityResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetRegisteredIdentityDetails(CancellationToken cancellationToken)
+    public async Task<IActionResult> GetOwnIdentity(CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetOwnIdentityQuery(), cancellationToken);
         return Ok(response);
