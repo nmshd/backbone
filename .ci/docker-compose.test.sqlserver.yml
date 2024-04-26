@@ -11,7 +11,7 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
     healthcheck:
-      test: ["CMD", "sleep", "10"]
+      test: ["CMD", "sleep", "1"]
       interval: 1s
       timeout: 1s
       retries: 1
