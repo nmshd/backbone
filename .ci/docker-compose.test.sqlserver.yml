@@ -11,10 +11,10 @@ services:
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
     healthcheck:
-      test: ["CMD", "sqlcmd", "-S", "localhost", "-U", "sa", "-P", "Passw0rd", "-Q", "SELECT 1"]
-      interval: 5s
-      timeout: 5s
-      retries: 5
+      test: ["sleep", "10"]
+      interval: 1s
+      timeout: 1s
+      retries: 1
     ports:
       - 1433:1433
 
