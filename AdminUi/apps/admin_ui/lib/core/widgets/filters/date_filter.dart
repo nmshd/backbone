@@ -43,7 +43,7 @@ class _DateFilterState extends State<DateFilter> {
             ),
             Gaps.w8,
             InkWell(
-              onTap: _selectANewDate,
+              onTap: _selectNewDate,
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -83,7 +83,7 @@ class _DateFilterState extends State<DateFilter> {
     widget.onDateSelected(_operator, _selectedDate);
   }
 
-  Future<void> _selectANewDate() async {
+  Future<void> _selectNewDate() async {
     final picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate ?? DateTime.now(),
