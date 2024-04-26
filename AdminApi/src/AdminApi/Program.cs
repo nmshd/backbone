@@ -80,7 +80,8 @@ static WebApplication CreateApp(string[] args)
     var app = builder.Build();
     Configure(app);
 
-    app.MigrateDbContext<AdminApiDbContext>();
+    if ((app.Environment.IsLocal() || app.Environment.IsDevelopment()) && app.Configuration.GetValue<bool>("RunMigrations"))
+        app.MigrateDbContext<AdminApiDbContext>();
 
     return app;
 }
