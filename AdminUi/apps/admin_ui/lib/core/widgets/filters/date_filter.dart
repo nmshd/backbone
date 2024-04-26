@@ -90,11 +90,12 @@ class _DateFilterState extends State<DateFilter> {
       firstDate: DateTime(2000),
       lastDate: DateTime.now().add(const Duration(days: 1)),
     );
-    if (picked != null) {
-      setState(() {
-        _selectedDate = picked;
-        widget.onDateSelected(_operator, _selectedDate);
-      });
-    }
+
+    if (picked == null) return;
+
+    setState(() {
+      _selectedDate = picked;
+      widget.onDateSelected(_operator, _selectedDate);
+    });
   }
 }
