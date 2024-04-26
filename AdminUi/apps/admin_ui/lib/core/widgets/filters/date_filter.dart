@@ -88,7 +88,7 @@ class _DateFilterState extends State<DateFilter> {
       context: context,
       initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
+      lastDate: DateTime.now().add(const Duration(days: 1)),
     );
     if (picked != null) {
       setState(() {
