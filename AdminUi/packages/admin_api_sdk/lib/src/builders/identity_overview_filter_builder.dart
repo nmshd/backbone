@@ -69,12 +69,16 @@ class IdentityOverviewFilterBuilder {
 }
 
 enum FilterOperator {
-  equal,
-  notEqual,
-  greaterThan,
-  greaterThanOrEqual,
-  lessThan,
-  lessThanOrEqual,
+  equal('='),
+  notEqual('!='),
+  greaterThan('>'),
+  greaterThanOrEqual('>='),
+  lessThan('<'),
+  lessThanOrEqual('<=');
+
+  final String userFriendlyOperator;
+
+  const FilterOperator(this.userFriendlyOperator);
 }
 
 class IdentityOverviewFilter {
@@ -97,6 +101,35 @@ class IdentityOverviewFilter {
     this.datawalletVersion,
     this.identityVersion,
   });
+
+  IdentityOverviewFilter copyWith({
+    Optional<String?>? address,
+    Optional<List<String>?>? tiers,
+    Optional<List<String>?>? clients,
+    Optional<FilterOperatorValue?>? createdAt,
+    Optional<FilterOperatorValue?>? lastLoginAt,
+    Optional<FilterOperatorValue?>? numberOfDevices,
+    Optional<FilterOperatorValue?>? datawalletVersion,
+    Optional<FilterOperatorValue?>? identityVersion,
+  }) {
+    return IdentityOverviewFilter(
+      address: (address != null) ? address.value : this.address,
+      tiers: (tiers != null) ? tiers.value : this.tiers,
+      clients: (clients != null) ? clients.value : this.clients,
+      createdAt: (createdAt != null) ? createdAt.value : this.createdAt,
+      lastLoginAt: (lastLoginAt != null) ? lastLoginAt.value : this.lastLoginAt,
+      numberOfDevices: (numberOfDevices != null) ? numberOfDevices.value : this.numberOfDevices,
+      datawalletVersion: (datawalletVersion != null) ? datawalletVersion.value : this.datawalletVersion,
+      identityVersion: (identityVersion != null) ? identityVersion.value : this.identityVersion,
+    );
+  }
+}
+
+class Optional<T> {
+  final T? value;
+
+  const Optional(this.value);
+  const Optional.absent() : value = null;
 }
 
 class FilterOperatorValue {

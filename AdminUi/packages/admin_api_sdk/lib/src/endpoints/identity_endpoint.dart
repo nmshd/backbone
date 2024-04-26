@@ -28,6 +28,7 @@ class IdentitiesEndpoint extends Endpoint {
       );
 
   Future<ApiResponse<List<IdentityOverview>>> getIdentities({
+    String orderBy = 'address asc',
     IdentityOverviewFilter? filter,
     int pageNumber = 0,
     int pageSize = 10,
@@ -38,9 +39,14 @@ class IdentitiesEndpoint extends Endpoint {
       queryParameters[r'$filter'] = IdentityOverviewFilterBuilder(filter).build();
     }
 
+    if (queryParameters[r'$filter'] == '') {
+      queryParameters.remove(r'$filter');
+    }
+
     return getOData(
       '/odata/Identities',
       query: queryParameters,
+      orderBy: orderBy,
       transformer: (e) => (e as List).map(IdentityOverview.fromJson).toList(),
       pageNumber: pageNumber,
       pageSize: pageSize,
