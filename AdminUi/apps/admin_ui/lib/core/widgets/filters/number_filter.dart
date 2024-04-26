@@ -58,8 +58,8 @@ class _NumberFilterState extends State<NumberFilter> {
                 onChanged: (value) {
                   setState(() {
                     _value = value;
-                    widget.onNumberSelected(_operator, _value);
                   });
+                  widget.onNumberSelected(_operator, _value);
                 },
                 decoration: const InputDecoration(border: OutlineInputBorder()),
                 style: const TextStyle(fontSize: 12),
