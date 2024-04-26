@@ -16,6 +16,10 @@ class IdentityDataTableSource extends AsyncDataTableSource {
     notifyListeners();
   }
 
+  String _getODataOrderBy() {
+    return '${_getFieldNameByIndex(_sortingSettings.sortColumnIndex)} ${_sortingSettings.sortAscending ? 'asc' : 'desc'}';
+  }
+
   String _getFieldNameByIndex(int index) => switch (index) {
         0 => 'address',
         2 => 'createdWithClient',
@@ -26,10 +30,6 @@ class IdentityDataTableSource extends AsyncDataTableSource {
         7 => 'identityVersion',
         _ => throw Exception('Invalid column index')
       };
-
-  String _getODataOrderBy() {
-    return '${_getFieldNameByIndex(_sortingSettings.sortColumnIndex)} ${_sortingSettings.sortAscending ? 'asc' : 'desc'}';
-  }
 
   set filter(IdentityOverviewFilter? newFilter) {
     if (_filter != newFilter) {
