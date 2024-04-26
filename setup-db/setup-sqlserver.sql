@@ -229,14 +229,15 @@ GO
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Authorizations +++++++++++++++++++++++++++++++++++++++++++++++++*/
 PRINT 'Start changing authorizations' ;
 
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Challenges TO synchronization, devices, messages, tokens, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Synchronization TO challenges, devices, messages, tokens, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Messages TO challenges, synchronization, devices, tokens, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Devices TO challenges, synchronization, messages, tokens, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Tokens TO challenges, synchronization, devices, messages, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Relationships TO challenges, synchronization, devices, messages, tokens, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Files TO challenges, synchronization, devices, messages, tokens, relationships, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Quotas TO challenges, synchronization, devices, messages, tokens, relationships, files
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Challenges TO challenges;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Devices TO devices;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Files TO files;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Messages TO messages;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Quotas TO quotas;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Relationships TO relationships;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Synchronization TO synchronization;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Tokens TO tokens;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::AdminUi TO adminUi;
 
 GRANT SELECT, REFERENCES ON SCHEMA::Relationships TO messages
 GRANT SELECT, REFERENCES ON SCHEMA::Challenges TO devices
