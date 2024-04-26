@@ -82,7 +82,7 @@ class _DateFilterState extends State<DateFilter> {
 
   void _clearDate() {
     setState(() => _selectedDate = null);
-    widget.onFilterSelected(_operator, _selectedDate);
+    widget.onFilterSelected(_operator, null);
   }
 
   Future<void> _selectNewDate() async {
