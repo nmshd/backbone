@@ -11,24 +11,13 @@ class TiersEndpoint extends Endpoint {
         transformer: (e) => (e as List).map(TierOverview.fromJson).toList(),
       );
 
-  Future<ApiResponse<Tier>> createTier({
-    required String name,
-  }) =>
-      post(
+  Future<ApiResponse<Tier>> createTier({required String name}) => post(
         '/api/v1/Tiers',
-        data: {
-          'name': name,
-        },
+        data: {'name': name},
         transformer: Tier.fromJson,
       );
 
-  Future<ApiResponse<TierDetails>> getTier(
-    String tierId,
-  ) =>
-      get(
-        '/api/v1/Tiers/$tierId',
-        transformer: TierDetails.fromJson,
-      );
+  Future<ApiResponse<TierDetails>> getTier(String tierId) => get('/api/v1/Tiers/$tierId', transformer: TierDetails.fromJson);
 
   Future<ApiResponse<void>> deleteTier(String tierId) => delete(
         '/api/v1/Tiers/$tierId',
