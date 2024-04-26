@@ -14,7 +14,6 @@ class TiersOverview extends StatefulWidget {
 class _TiersOverviewState extends State<TiersOverview> {
   final TextEditingController _tierNameController = TextEditingController();
 
-  late ScrollController _scrollController;
   late List<TierOverview> _tiers;
   late String _errorMessage;
 
@@ -25,7 +24,6 @@ class _TiersOverviewState extends State<TiersOverview> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
     _errorMessage = '';
     _tiers = [];
     loadTiers();
@@ -103,7 +101,6 @@ class _TiersOverviewState extends State<TiersOverview> {
                   width: _boxWidth,
                   child: DataTable2(
                     isVerticalScrollBarVisible: true,
-                    scrollController: _scrollController,
                     showCheckboxColumn: false,
                     columns: const [
                       DataColumn2(label: Text('Name'), size: ColumnSize.L),
