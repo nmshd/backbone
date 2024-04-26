@@ -133,12 +133,12 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
   Future<void> _loadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
     final tierItems = response.data.map((tier) => ValueItem(label: tier.name, value: tier.id)).toList();
-    setState(() => _tierController.setOptions(tierItems));
+    _tierController.setOptions(tierItems);
   }
 
   Future<void> _loadClients() async {
     final response = await GetIt.I.get<AdminApiClient>().clients.getClients();
     final clientItems = response.data.map((client) => ValueItem(label: client.displayName, value: client.clientId)).toList();
-    setState(() => _clientController.setOptions(clientItems));
+    _clientController.setOptions(clientItems);
   }
 }
