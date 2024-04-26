@@ -77,9 +77,7 @@ class _DateFilterState extends State<DateFilter> {
   }
 
   void _clearDate() {
-    setState(() {
-      _selectedDate = null;
-    });
+    setState(() => _selectedDate = null);
     widget.onDateSelected(_operator, _selectedDate);
   }
 
@@ -93,9 +91,7 @@ class _DateFilterState extends State<DateFilter> {
 
     if (picked == null) return;
 
-    setState(() {
-      _selectedDate = picked;
-      widget.onDateSelected(_operator, _selectedDate);
-    });
+    setState(() => _selectedDate = picked);
+    widget.onDateSelected(_operator, _selectedDate);
   }
 }
