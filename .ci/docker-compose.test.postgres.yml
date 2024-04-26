@@ -21,19 +21,19 @@ services:
 
   seed-database:
     image: postgres
-    volumes:
-      - ../setup-db:/app/setup-db
     environment:
       - PGPASSWORD=Passw0rd
     command: psql -h postgres -U postgres -d enmeshed -f /app/setup-db/setup-postgres.sql
-    depends_on:
-      database:
-        condition: service_healthy
 
   seed-client:
     environment:
       Database__Provider: Postgres
       Database__ConnectionString: "Server=postgres;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432"
+
+  database-migrator:
+    environment:
+      Infrastructure__SqlDatabase__Provider: Postgres
+      Infrastructure__SqlDatabase__ConnectionString: "Server=postgres;Database=enmeshed;User Id=postgres;Password=Passw0rd;Port=5432"
 
 configs:
   Config:
