@@ -226,35 +226,18 @@ END
 
 GO
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++ Schema Owners ++++++++++++++++++++++++++++++++++++++++++++++++++*/
-PRINT 'Start changing schema owners' ;
-ALTER AUTHORIZATION ON SCHEMA::Challenges TO challenges
-ALTER AUTHORIZATION ON SCHEMA::Devices TO devices
-ALTER AUTHORIZATION ON SCHEMA::Messages TO messages
-ALTER AUTHORIZATION ON SCHEMA::Synchronization TO synchronization
-ALTER AUTHORIZATION ON SCHEMA::Tokens TO tokens
-ALTER AUTHORIZATION ON SCHEMA::Relationships TO relationships
-ALTER AUTHORIZATION ON SCHEMA::Files TO files
-ALTER AUTHORIZATION ON SCHEMA::Quotas TO quotas
-ALTER AUTHORIZATION ON SCHEMA::AdminUi TO adminUi
-PRINT 'Finished changing schema owners' ;
-GO
-
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Authorizations +++++++++++++++++++++++++++++++++++++++++++++++++*/
 PRINT 'Start changing authorizations' ;
 
-GRANT CREATE TABLE TO challenges, devices, messages, synchronization, tokens, relationships, files, quotas, adminUi
-GRANT CREATE FUNCTION TO relationships
-GO
-
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Challenges TO synchronization, devices, messages, tokens, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Synchronization TO challenges, devices, messages, tokens, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Messages TO challenges, synchronization, devices, tokens, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Devices TO challenges, synchronization, messages, tokens, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Tokens TO challenges, synchronization, devices, messages, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Relationships TO challenges, synchronization, devices, messages, tokens, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Files TO challenges, synchronization, devices, messages, tokens, relationships, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Quotas TO challenges, synchronization, devices, messages, tokens, relationships, files
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Challenges TO challenges;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Devices TO devices;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Files TO files;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Messages TO messages;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Quotas TO quotas;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Relationships TO relationships;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Synchronization TO synchronization;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Tokens TO tokens;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::AdminUi TO adminUi;
 
 GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::AdminUi TO relationships /* we temporarily grant this permission because it is required by relationships in order to delete the AdminUi.RelationshipOverviews view*/
 GRANT SELECT, REFERENCES ON SCHEMA::Relationships TO messages
