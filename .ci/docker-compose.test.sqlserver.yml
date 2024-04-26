@@ -10,6 +10,11 @@ services:
       - MSSQL_SA_PASSWORD=Passw0rd
       - ACCEPT_EULA=Y
       - MSSQL_PID=Express
+    healthcheck:
+      test: ["CMD", "echo"]
+      interval: 1s
+      timeout: 1s
+      retries: 1
     ports:
       - 1433:1433
 
@@ -17,16 +22,17 @@ services:
 
   seed-database:
     image: mcr.microsoft.com/mssql-tools
-    volumes:
-      - ../setup-db:/app/setup-db
     command: bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S sqlserver -U SA -P Passw0rd -i /app/setup-db/setup-sqlserver.sql "
-    depends_on:
-      - database
 
   seed-client:
     environment:
       Database__Provider: SqlServer
       Database__ConnectionString: "Server=sqlserver;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
+
+  database-migrator:
+    environment:
+      Infrastructure__SqlDatabase__Provider: SqlServer
+      Infrastructure__SqlDatabase__ConnectionString: "Server=sqlserver;Database=enmeshed;User Id=sa;Password=Passw0rd;TrustServerCertificate=True"
 
 configs:
   Config:
