@@ -7,12 +7,12 @@ import 'package:logger/logger.dart';
 
 class IdentityDataTableSource extends AsyncDataTableSource {
   Pagination? _pagination;
-  var _sortingSettings = (columnIndex: 0, ascending: true);
+  var _sortingSettings = (sortColumnIndex: 0, sortAscending: true);
 
   IdentityOverviewFilter? filter;
 
-  void sort({required int columnIndex, required bool columnAscending}) {
-    _sortingSettings = (columnIndex: columnIndex, ascending: columnAscending);
+  void sort({required int sortColumnIndex, required bool sortColumnAscending}) {
+    _sortingSettings = (sortColumnIndex: sortColumnIndex, sortAscending: sortColumnAscending);
     notifyListeners();
   }
 
@@ -28,7 +28,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
       };
 
   String _getODataOrderBy() {
-    return '${_getFieldNameByIndex(_sortingSettings.columnIndex)} ${_sortingSettings.ascending ? 'asc' : 'desc'}';
+    return '${_getFieldNameByIndex(_sortingSettings.sortColumnIndex)} ${_sortingSettings.sortAscending ? 'asc' : 'desc'}';
   }
 
   @override

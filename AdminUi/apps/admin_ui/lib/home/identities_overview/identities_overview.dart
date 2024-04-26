@@ -17,8 +17,8 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   late ScrollController _scrollController;
   late IdentityDataTableSource _dataSource;
 
-  int _columnIndex = 0;
-  bool _columnAscending = true;
+  int _sortColumnIndex = 0;
+  bool _sortColumnAscending = true;
 
   int _rowsPerPage = 5;
 
@@ -62,8 +62,8 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
               child: AsyncPaginatedDataTable2(
                 rowsPerPage: _rowsPerPage,
                 onRowsPerPageChanged: _setRowsPerPage,
-                sortColumnIndex: _columnIndex,
-                sortAscending: _columnAscending,
+                sortColumnIndex: _sortColumnIndex,
+                sortAscending: _sortColumnAscending,
                 showFirstLastButtons: true,
                 columnSpacing: 5,
                 source: _dataSource,
@@ -106,11 +106,11 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
 
   void _sort(int columnIndex, bool ascending) {
     setState(() {
-      _columnIndex = columnIndex;
-      _columnAscending = ascending;
+      _sortColumnIndex = columnIndex;
+      _sortColumnAscending = ascending;
     });
     _dataSource
-      ..sort(columnIndex: _columnIndex, columnAscending: _columnAscending)
+      ..sort(sortColumnIndex: _sortColumnIndex, sortColumnAscending: _sortColumnAscending)
       ..refreshDatasource();
   }
 }
