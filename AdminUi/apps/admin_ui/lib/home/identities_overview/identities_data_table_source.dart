@@ -9,7 +9,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
   Pagination? _pagination;
   var _sortingSettings = (sortColumnIndex: 0, sortAscending: true);
 
-  IdentityOverviewFilter? filter;
+  IdentityOverviewFilter? _filter;
 
   void sort({required int sortColumnIndex, required bool sortColumnAscending}) {
     _sortingSettings = (sortColumnIndex: sortColumnIndex, sortAscending: sortColumnAscending);
@@ -31,6 +31,13 @@ class IdentityDataTableSource extends AsyncDataTableSource {
     return '${_getFieldNameByIndex(_sortingSettings.sortColumnIndex)} ${_sortingSettings.sortAscending ? 'asc' : 'desc'}';
   }
 
+  set filter(IdentityOverviewFilter? newFilter) {
+    if (_filter != newFilter) {
+      _filter = newFilter;
+      notifyListeners();
+    }
+  }
+
   @override
   bool get isRowCountApproximate => false;
 
@@ -49,7 +56,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
       final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(
             pageNumber: pageNumber,
             pageSize: count,
-            filter: filter,
+            filter: _filter,
             orderBy: orderBy,
           );
       _pagination = response.pagination;
