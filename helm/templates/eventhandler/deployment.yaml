@@ -1,15 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "global.name" . }}
+  name: {{ .Values.eventhandler.name }}
   labels:
     {{- include "global.labels" . | nindent 4 }}
-    app: {{ include "global.name" . }}
+    app: {{ .Values.eventhandler.name }}
 spec:
   replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ .Values.maxSurge }}
+      maxUnavailable: {{ .Values.maxUnavailable }}
   selector:
     matchLabels:
-      app: {{ include "global.name" . }}
+      app: {{ .Values.eventhandler.name }}
   template:
     metadata:
       {{- with .Values.eventhandler.podAnnotations }}
@@ -17,7 +22,7 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        app: {{ include "global.name" . }}
+        app: {{ .Values.eventhandler.name }}
     spec:
       {{- with .Values.eventhandler.podSecurityContext }}
       securityContext:
@@ -32,7 +37,7 @@ spec:
           configMap:
             name: configuration
       containers:
-        - name: {{ include "global.name" . }}
+        - name: {{ .Values.eventhandler.name }}
           {{- with .Values.eventhandler.securityContext }}
           securityContext:
             {{- toYaml .Values.eventhandler.securityContext | nindent 8 }}

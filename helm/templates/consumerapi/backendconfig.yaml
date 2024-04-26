@@ -4,7 +4,7 @@ kind: BackendConfig
 metadata:
   labels:
     {{- include "global.labels" . | nindent 4 }}
-  name: {{ include "global.name" . }}
+  name: {{ .Values.consumerapi.name }}
 spec:
   healthCheck:
     checkIntervalSec: {{ .Values.consumerapi.backendConfig.healthCheck.checkIntervalSec }}
