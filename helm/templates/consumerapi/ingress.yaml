@@ -2,10 +2,10 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "global.name" . }}
+  name: {{ .Values.consumerapi.name }}
   labels:
     {{- include "global.labels" . | nindent 4 }}
-    app: {{ include "global.name" . }}
+    app: {{ .Values.consumerapi.name }}
   annotations:
     kubernetes.io/ingress.class: azure/application-gateway
     appgw.ingress.kubernetes.io/appgw-ssl-certificate: {{ .Values.consumerapi.ingress.certName }}
@@ -20,7 +20,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "global.name" . }}
+                name: {{ .Values.consumerapi.name }}
                 port:
                   number: 8080   
 {{- end }}
