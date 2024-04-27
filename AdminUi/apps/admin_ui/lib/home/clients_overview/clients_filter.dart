@@ -94,25 +94,21 @@ class _ClientsFilterState extends State<ClientsFilter> {
             ),
             Gaps.w16,
             NumberFilter(
-              operators: operators,
-              label: 'Number of Identities',
-              onNumberSelected: (String operator, String enteredValue) {
+              label: 'Number of Devices',
+              onNumberSelected: (FilterOperator operator, String enteredValue) {
                 _numberOfIdentities = enteredValue;
-                _numberOfIdentitiesOperator = operator;
+                _numberOfIdentitiesOperator = operator.name;
 
                 sendFilters();
               },
             ),
             Gaps.w16,
             DateFilter(
-              operators: operators,
               label: 'Created At',
-              onDateSelected: (DateTime? selectedDate, String operator) {
-                setState(() {
-                  _selectedCreatedAt = selectedDate;
-                  _selectedCreatedAtOperator = operator;
-                  sendFilters();
-                });
+              onFilterSelected: (FilterOperator operator, DateTime? selectedDate) {
+                _selectedCreatedAt = selectedDate;
+                _selectedCreatedAtOperator = operator.name;
+                sendFilters();
               },
             ),
           ],
