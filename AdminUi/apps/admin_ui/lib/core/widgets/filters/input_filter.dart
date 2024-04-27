@@ -2,33 +2,26 @@ import 'package:flutter/material.dart';
 
 import '/core/core.dart';
 
-class InputField extends StatefulWidget {
-  const InputField({required this.onEnteredText, required this.label, super.key});
-
+class InputField extends StatelessWidget {
   final void Function(String enteredText) onEnteredText;
   final String label;
 
-  @override
-  State<InputField> createState() => _InputFieldState();
-}
+  const InputField({required this.onEnteredText, required this.label, super.key});
 
-class _InputFieldState extends State<InputField> {
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${widget.label}:',
+          '$label:',
           style: const TextStyle(fontWeight: FontWeight.bold),
         ),
         Gaps.h8,
         SizedBox(
           width: 180,
           child: TextField(
-            onChanged: (value) {
-              setState(() => widget.onEnteredText(value));
-            },
+            onChanged: onEnteredText,
             decoration: const InputDecoration(border: OutlineInputBorder()),
           ),
         ),

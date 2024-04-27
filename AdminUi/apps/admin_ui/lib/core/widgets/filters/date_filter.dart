@@ -1,25 +1,22 @@
+import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '/core/constants.dart';
+import 'to_filter_operator_dropdown_menu_item.dart';
 
 class DateFilter extends StatefulWidget {
-  const DateFilter({
-    required this.operators,
-    required this.onDateSelected,
-    required this.label,
-    super.key,
-  });
-
-  final void Function(DateTime? selectedDate, String operator) onDateSelected;
-  final List<String> operators;
+  final void Function(FilterOperator operator, DateTime? selectedDate) onFilterSelected;
   final String label;
+
+  const DateFilter({required this.onFilterSelected, required this.label, super.key});
 
   @override
   State<DateFilter> createState() => _DateFilterState();
 }
 
 class _DateFilterState extends State<DateFilter> {
-  String _operator = '=';
+  FilterOperator _operator = FilterOperator.equal;
   DateTime? _selectedDate;
 
   @override
@@ -34,21 +31,18 @@ class _DateFilterState extends State<DateFilter> {
         Gaps.h8,
         Row(
           children: [
-            DropdownButton<String>(
+            DropdownButton<FilterOperator>(
               value: _operator,
-              onChanged: (newValue) {
-                setState(() => _operator = newValue!);
+              onChanged: (selectedOperator) {
+                if (selectedOperator == null) return;
+                setState(() => _operator = selectedOperator);
+                widget.onFilterSelected(selectedOperator, _selectedDate);
               },
-              items: widget.operators.map((operator) {
-                return DropdownMenuItem<String>(
-                  value: operator,
-                  child: Text(operator),
-                );
-              }).toList(),
+              items: FilterOperator.values.toDropdownMenuItems(),
             ),
             Gaps.w8,
             InkWell(
-              onTap: _selectANewDate,
+              onTap: _selectNewDate,
               child: Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
@@ -59,7 +53,7 @@ class _DateFilterState extends State<DateFilter> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      _selectedDate != null ? '${_selectedDate!.year}-${_selectedDate!.month}-${_selectedDate!.day}' : 'Select date',
+                      _selectedDate != null ? DateFormat('yyyy-MM-dd').format(_selectedDate!) : 'Select date',
                       style: const TextStyle(fontSize: 14),
                     ),
                     Gaps.w8,
@@ -82,24 +76,21 @@ class _DateFilterState extends State<DateFilter> {
   }
 
   void _clearDate() {
-    setState(() {
-      _selectedDate = null;
-    });
-    widget.onDateSelected(_selectedDate, _operator);
+    setState(() => _selectedDate = null);
+    widget.onFilterSelected(_operator, null);
   }
 
-  Future<void> _selectANewDate() async {
+  Future<void> _selectNewDate() async {
     final picked = await showDatePicker(
       context: context,
       initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime(2000),
-      lastDate: DateTime(2101),
+      lastDate: DateTime.now().add(const Duration(days: 1)),
     );
-    if (picked != null) {
-      setState(() {
-        _selectedDate = picked;
-        widget.onDateSelected(_selectedDate, _operator);
-      });
-    }
+
+    if (picked == null) return;
+
+    setState(() => _selectedDate = picked);
+    widget.onFilterSelected(_operator, picked);
   }
 }

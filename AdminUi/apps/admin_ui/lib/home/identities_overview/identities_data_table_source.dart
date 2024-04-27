@@ -2,38 +2,25 @@ import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
 class IdentityDataTableSource extends AsyncDataTableSource {
   Pagination? _pagination;
-  int _sortColumnIndex = 0;
-  bool _sortAscending = true;
+  var _sortingSettings = (sortColumnIndex: 0, sortAscending: true);
 
-  IdentityOverviewFilter? filter;
+  IdentityOverviewFilter? _filter;
 
-  void sort(int columnIndex, {required bool columnAscending}) {
-    _sortColumnIndex = columnIndex;
-    _sortAscending = columnAscending;
+  set filter(IdentityOverviewFilter? newFilter) {
+    if (_filter != newFilter) {
+      _filter = newFilter;
+      notifyListeners();
+    }
+  }
+
+  void sort({required int sortColumnIndex, required bool sortColumnAscending}) {
+    _sortingSettings = (sortColumnIndex: sortColumnIndex, sortAscending: sortColumnAscending);
     notifyListeners();
-  }
-
-  String _getFieldNameByIndex(int index) {
-    return switch (index) {
-      0 => 'address',
-      2 => 'createdWithClient',
-      3 => 'numberOfDevices',
-      4 => 'createdAt',
-      5 => 'lastLoginAt',
-      6 => 'datawalletVersion',
-      7 => 'identityVersion',
-      _ => throw Exception('Invalid column index')
-    };
-  }
-
-  String _getODataOrderBy() {
-    final fieldName = _getFieldNameByIndex(_sortColumnIndex);
-    final direction = _sortAscending ? 'asc' : 'desc';
-    return '$fieldName $direction';
   }
 
   @override
@@ -54,7 +41,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
       final response = await GetIt.I.get<AdminApiClient>().identities.getIdentities(
             pageNumber: pageNumber,
             pageSize: count,
-            filter: filter,
+            filter: _filter,
             orderBy: orderBy,
           );
       _pagination = response.pagination;
@@ -68,8 +55,8 @@ class IdentityDataTableSource extends AsyncDataTableSource {
                 DataCell(Text(identity.$2.tier.name)),
                 DataCell(Text(identity.$2.createdWithClient)),
                 DataCell(Text(identity.$2.numberOfDevices.toString())),
-                DataCell(Text(identity.$2.createdAt.toString().substring(0, 10))),
-                DataCell(Text(identity.$2.lastLoginAt?.toString().substring(0, 10) ?? '')),
+                DataCell(Text(DateFormat('yyyy-MM-dd').format(identity.$2.createdAt))),
+                DataCell(Text(identity.$2.lastLoginAt != null ? DateFormat('yyyy-MM-dd').format(identity.$2.lastLoginAt!) : '')),
                 DataCell(Text(identity.$2.datawalletVersion?.toString() ?? '')),
                 DataCell(Text(identity.$2.identityVersion.toString())),
               ],
@@ -84,4 +71,21 @@ class IdentityDataTableSource extends AsyncDataTableSource {
       throw Exception('Failed to load data: $e');
     }
   }
+
+  String _getODataOrderBy() {
+    final columnName = _getFieldNameByIndex(_sortingSettings.sortColumnIndex);
+    final sortingDirection = _sortingSettings.sortAscending ? 'asc' : 'desc';
+    return '$columnName $sortingDirection';
+  }
+
+  String _getFieldNameByIndex(int index) => switch (index) {
+        0 => 'address',
+        2 => 'createdWithClient',
+        3 => 'numberOfDevices',
+        4 => 'createdAt',
+        5 => 'lastLoginAt',
+        6 => 'datawalletVersion',
+        7 => 'identityVersion',
+        _ => throw Exception('Invalid column index')
+      };
 }
