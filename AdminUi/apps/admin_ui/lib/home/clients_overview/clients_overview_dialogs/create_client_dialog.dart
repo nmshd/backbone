@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
 class CreateClientDialog extends StatefulWidget {
-  final List<Tiers> defaultTiers;
+  final List<TierOverview> defaultTiers;
   final void Function() loadClients;
 
   const CreateClientDialog({required this.defaultTiers, required this.loadClients, super.key});

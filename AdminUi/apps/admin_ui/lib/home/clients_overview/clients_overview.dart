@@ -21,7 +21,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   late List<Clients> _originalClients;
   late Map<String, bool> _selectedClients;
 
-  late List<Tiers> _defaultTiers;
+  late List<TierOverview> _defaultTiers;
 
   @override
   void initState() {
