@@ -13,9 +13,9 @@ public class RelationshipDecomposedDomainEventHandler
 {
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
-    private readonly ILogger<MessageCreatedDomainEventHandler> _logger;
+    private readonly ILogger<RelationshipDecomposedDomainEventHandler> _logger;
 
-    public RelationshipDecomposedDomainEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<MessageCreatedDomainEventHandler> logger)
+    public RelationshipDecomposedDomainEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<RelationshipDecomposedDomainEventHandler> logger)
     {
         _dbContext = dbContext;
         _eventBus = eventBus;
