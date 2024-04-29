@@ -19,15 +19,35 @@ class Tier {
 }
 
 @JsonSerializable()
-class TierOverview {
+class TierDetails {
   final String id;
   final String name;
   final List<Quota> quotas;
 
-  TierOverview({
+  TierDetails({
     required this.id,
     required this.name,
     required this.quotas,
+  });
+
+  factory TierDetails.fromJson(dynamic json) => _$TierDetailsFromJson(json as Map<String, dynamic>);
+  Map<String, dynamic> toJson() => _$TierDetailsToJson(this);
+}
+
+@JsonSerializable()
+class TierOverview {
+  final String id;
+  final String name;
+  final int numberOfIdentities;
+  final bool canBeUsedAsDefaultForClient;
+  final bool canBeManuallyAssigned;
+
+  TierOverview({
+    required this.id,
+    required this.name,
+    required this.numberOfIdentities,
+    required this.canBeUsedAsDefaultForClient,
+    required this.canBeManuallyAssigned,
   });
 
   factory TierOverview.fromJson(dynamic json) => _$TierOverviewFromJson(json as Map<String, dynamic>);
