@@ -100,4 +100,23 @@ public class AbstractDbContextBase : DbContext, IDbContext
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();
     }
+
+    public override int SaveChanges()
+    {
+        var entities = ChangeTracker
+            .Entries()
+            .Where(x => x.Entity is Entity)
+            .Select(x => (Entity)x.Entity)
+            .ToList();
+
+        var result = base.SaveChanges();
+
+        foreach (var e in entities)
+        {
+            _eventBus.Publish(e.DomainEvents);
+            e.ClearDomainEvents();
+        }
+
+        return result;
+    }
 }
