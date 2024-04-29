@@ -31,7 +31,7 @@ public class IdentityAddressTests
         var testData = TestData.Valid();
         var address = IdentityAddress.Create(testData.PublicKey, testData.Realm);
 
-        address.Should().Be(testData.Address);
+        address.Value.Should().Be(testData.Address);
     }
 
     [Fact]
@@ -40,7 +40,7 @@ public class IdentityAddressTests
         var testData = TestData.Valid();
         var address = IdentityAddress.Create(testData.PublicKey, testData.Realm);
 
-        address.Should().Be(testData.Address);
+        address.Value.Should().Be(testData.Address);
     }
 
     [Fact]
