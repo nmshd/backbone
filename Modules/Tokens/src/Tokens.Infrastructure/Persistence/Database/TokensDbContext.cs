@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database.ValueConverters;
@@ -11,11 +12,11 @@ public class TokensDbContext : AbstractDbContextBase
     {
     }
 
-    public TokensDbContext(DbContextOptions<TokensDbContext> options) : base(options)
+    public TokensDbContext(DbContextOptions<TokensDbContext> options, IEventBus eventBus) : base(options, eventBus)
     {
     }
 
-    public TokensDbContext(DbContextOptions<TokensDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    public TokensDbContext(DbContextOptions<TokensDbContext> options, IServiceProvider serviceProvider, IEventBus eventBus) : base(options, eventBus, serviceProvider)
     {
     }
 

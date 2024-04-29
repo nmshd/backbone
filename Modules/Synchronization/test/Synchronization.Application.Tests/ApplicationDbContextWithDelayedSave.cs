@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using FakeItEasy;
 using Microsoft.EntityFrameworkCore;
@@ -8,7 +9,7 @@ public class ApplicationDbContextWithDelayedSave : SynchronizationDbContext
 {
     private readonly TimeSpan _delay;
 
-    public ApplicationDbContextWithDelayedSave(DbContextOptions<SynchronizationDbContext> options, TimeSpan delay) : base(options, A.Fake<IServiceProvider>())
+    public ApplicationDbContextWithDelayedSave(DbContextOptions<SynchronizationDbContext> options, TimeSpan delay, IEventBus eventBus) : base(options, A.Fake<IServiceProvider>(), eventBus)
     {
         _delay = delay;
     }

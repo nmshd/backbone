@@ -1,5 +1,6 @@
 using System.Data;
 using System.Data.Common;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
@@ -24,11 +25,11 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
     {
     }
 
-    public SynchronizationDbContext(DbContextOptions<SynchronizationDbContext> options) : base(options)
+    public SynchronizationDbContext(DbContextOptions<SynchronizationDbContext> options, IEventBus eventBus) : base(options, eventBus)
     {
     }
 
-    public SynchronizationDbContext(DbContextOptions<SynchronizationDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    public SynchronizationDbContext(DbContextOptions<SynchronizationDbContext> options, IServiceProvider serviceProvider, IEventBus eventBus) : base(options, eventBus, serviceProvider)
     {
     }
 

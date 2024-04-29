@@ -1,5 +1,7 @@
 using System.Data;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling.Extensions;
@@ -12,32 +14,26 @@ namespace Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 
 public class AbstractDbContextBase : DbContext, IDbContext
 {
-    private readonly IServiceProvider? _serviceProvider;
     private const int MAX_RETRY_COUNT = 50000;
-    private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
     private const string SQLSERVER = "Microsoft.EntityFrameworkCore.SqlServer";
     private const string POSTGRES = "Npgsql.EntityFrameworkCore.PostgreSQL";
+    private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
+    private readonly IEventBus _eventBus;
+    private readonly IServiceProvider? _serviceProvider;
 
     protected AbstractDbContextBase()
     {
     }
 
-    protected AbstractDbContextBase(DbContextOptions options, IServiceProvider? serviceProvider = null) : base(options)
+    protected AbstractDbContextBase(DbContextOptions options, IEventBus eventBus, IServiceProvider? serviceProvider = null) : base(options)
     {
         _serviceProvider = serviceProvider;
+        _eventBus = eventBus;
     }
 
     public IQueryable<T> SetReadOnly<T>() where T : class
     {
         return Set<T>().AsNoTracking();
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        if (EnvironmentVariables.DEBUG_PERFORMANCE && _serviceProvider != null)
-            optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
     }
 
     public async Task RunInTransaction(Func<Task> action, List<int>? errorNumbersToRetry,
@@ -83,6 +79,14 @@ public class AbstractDbContextBase : DbContext, IDbContext
     public async Task<T> RunInTransaction<T>(Func<Task<T>> func, IsolationLevel isolationLevel)
     {
         return await RunInTransaction(func, null, isolationLevel);
+    }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+
+        if (EnvironmentVariables.DEBUG_PERFORMANCE && _serviceProvider != null)
+            optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)

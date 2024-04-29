@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.AutoMapper;
@@ -18,20 +19,22 @@ namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Comm
 public class HandlerTests
 {
     private const int DATAWALLET_VERSION = 1;
-    private readonly IdentityAddress _activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+    private readonly SynchronizationDbContext _actContext;
     private readonly DeviceId _activeDevice = TestDataGenerator.CreateRandomDeviceId();
-    private readonly DbContextOptions<SynchronizationDbContext> _dbOptions;
+    private readonly IdentityAddress _activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
     private readonly SynchronizationDbContext _arrangeContext;
     private readonly SynchronizationDbContext _assertionContext;
-    private readonly SynchronizationDbContext _actContext;
+    private readonly DbContextOptions<SynchronizationDbContext> _dbOptions;
+    private readonly IEventBus _eventBus;
 
     public HandlerTests()
     {
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
         _dbOptions = new DbContextOptionsBuilder<SynchronizationDbContext>().UseSqlite(connection).Options;
+        _eventBus = A.Fake<IEventBus>();
 
-        var setupContext = new SynchronizationDbContext(_dbOptions);
+        var setupContext = new SynchronizationDbContext(_dbOptions, _eventBus);
         setupContext.Database.EnsureCreated();
         setupContext.Dispose();
 
@@ -233,7 +236,7 @@ public class HandlerTests
 
     private SynchronizationDbContext CreateDbContext()
     {
-        return new SynchronizationDbContext(_dbOptions);
+        return new SynchronizationDbContext(_dbOptions, _eventBus);
     }
 
     private Handler CreateHandlerWithDelayedSave(TimeSpan delay)
@@ -243,7 +246,7 @@ public class HandlerTests
 
     private ApplicationDbContextWithDelayedSave CreateDbContextWithDelayedSave(TimeSpan delay)
     {
-        return new ApplicationDbContextWithDelayedSave(_dbOptions, delay);
+        return new ApplicationDbContextWithDelayedSave(_dbOptions, delay, _eventBus);
     }
 
     private Handler CreateHandler(IdentityAddress activeIdentity)
