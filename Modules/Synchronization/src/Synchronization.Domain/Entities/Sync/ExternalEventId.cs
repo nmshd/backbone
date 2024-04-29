@@ -2,7 +2,6 @@ using System.ComponentModel;
 using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
-using StronglyTypedIdHelpers = Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes.StronglyTypedIdHelpers;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
