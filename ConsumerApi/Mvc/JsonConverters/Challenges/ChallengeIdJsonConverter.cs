@@ -27,6 +27,6 @@ public class ChallengeIdJsonConverter : JsonConverter<ChallengeId>
 
     public override void Write(Utf8JsonWriter writer, ChallengeId value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value);
+        writer.WriteStringValue(value.Value);
     }
 }

@@ -11,7 +11,7 @@ public class SyncErrorIdEntityFrameworkValueConverter : ValueConverter<SyncError
 
     public SyncErrorIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id,
+            id => id.Value,
             value => SyncErrorId.Parse(value),
             mappingHints.With(new ConverterMappingHints(SyncErrorId.MAX_LENGTH))
         )

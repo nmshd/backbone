@@ -11,7 +11,7 @@ internal class DevicePushIdentifierEntityFrameworkValueConverter : ValueConverte
 
     public DevicePushIdentifierEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            dpi => dpi,
+            dpi => dpi.Value,
             value => DevicePushIdentifier.Parse(value),
             mappingHints)
     {

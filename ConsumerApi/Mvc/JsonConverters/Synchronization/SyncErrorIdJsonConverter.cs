@@ -27,6 +27,6 @@ public class SyncErrorIdJsonConverter : JsonConverter<SyncErrorId>
 
     public override void Write(Utf8JsonWriter writer, SyncErrorId value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value);
+        writer.WriteStringValue(value.Value);
     }
 }

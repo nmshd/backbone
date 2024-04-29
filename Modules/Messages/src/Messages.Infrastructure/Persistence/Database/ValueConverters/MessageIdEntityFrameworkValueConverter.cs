@@ -11,7 +11,7 @@ public class MessageIdEntityFrameworkValueConverter : ValueConverter<MessageId, 
 
     public MessageIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id,
+            id => id.Value,
             value => MessageId.Parse(value),
             mappingHints
         )

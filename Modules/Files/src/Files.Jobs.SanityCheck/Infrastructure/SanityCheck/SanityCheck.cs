@@ -44,7 +44,7 @@ public class SanityCheck
 
     private IEnumerable<FileId> GetOrphanedDatabaseIds()
     {
-        Func<FileId, bool> noCorrespondingBlobIdExists = databaseId => _blobIds.All(blobId => blobId != databaseId);
+        Func<FileId, bool> noCorrespondingBlobIdExists = databaseId => _blobIds.All(blobId => blobId != databaseId.Value);
         return _databaseIds.Where(noCorrespondingBlobIdExists);
     }
 
@@ -58,7 +58,7 @@ public class SanityCheck
 
     private IEnumerable<string> GetOrphanedBlobIds()
     {
-        Func<string, bool> noCorrespondingDatabaseIdExists = blobId => _databaseIds.All(databaseId => databaseId != blobId);
+        Func<string, bool> noCorrespondingDatabaseIdExists = blobId => _databaseIds.All(databaseId => databaseId.Value != blobId);
         return _blobIds.Where(noCorrespondingDatabaseIdExists);
     }
 }

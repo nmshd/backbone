@@ -11,7 +11,7 @@ public class FileIdEntityFrameworkValueConverter : ValueConverter<FileId, string
 
     public FileIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id,
+            id => id.Value,
             value => FileId.Parse(value),
             mappingHints
         )

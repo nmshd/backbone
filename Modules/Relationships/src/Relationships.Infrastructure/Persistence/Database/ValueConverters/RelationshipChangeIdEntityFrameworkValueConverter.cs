@@ -11,7 +11,7 @@ public class RelationshipChangeIdEntityFrameworkValueConverter : ValueConverter<
 
     public RelationshipChangeIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id,
+            id => id.Value,
             value => RelationshipChangeId.Parse(value),
             mappingHints
         )

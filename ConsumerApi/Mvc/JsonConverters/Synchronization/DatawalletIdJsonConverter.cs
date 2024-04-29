@@ -27,6 +27,6 @@ public class DatawalletIdJsonConverter : JsonConverter<DatawalletId>
 
     public override void Write(Utf8JsonWriter writer, DatawalletId value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value);
+        writer.WriteStringValue(value.Value);
     }
 }

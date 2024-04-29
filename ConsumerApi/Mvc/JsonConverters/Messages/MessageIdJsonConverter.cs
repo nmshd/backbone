@@ -27,6 +27,6 @@ public class MessageIdJsonConverter : JsonConverter<MessageId>
 
     public override void Write(Utf8JsonWriter writer, MessageId value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value);
+        writer.WriteStringValue(value.Value);
     }
 }

@@ -11,7 +11,7 @@ public class ExternalEventIdEntityFrameworkValueConverter : ValueConverter<Exter
 
     public ExternalEventIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id,
+            id => id.Value,
             value => ExternalEventId.Parse(value),
             mappingHints.With(new ConverterMappingHints(ExternalEventId.MAX_LENGTH))
         )

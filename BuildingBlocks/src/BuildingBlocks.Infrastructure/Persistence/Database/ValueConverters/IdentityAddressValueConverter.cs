@@ -11,7 +11,7 @@ public class IdentityAddressValueConverter : ValueConverter<IdentityAddress, str
 
     public IdentityAddressValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id,
+            id => id.Value,
             value => IdentityAddress.ParseUnsafe(value.Trim()),
             mappingHints
         )

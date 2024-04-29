@@ -32,6 +32,6 @@ public class IdentityAddressJsonConverter : JsonConverter<IdentityAddress?>
         if (value == null)
             writer.WriteNullValue();
         else
-            writer.WriteStringValue(value);
+            writer.WriteStringValue(value.Value);
     }
 }

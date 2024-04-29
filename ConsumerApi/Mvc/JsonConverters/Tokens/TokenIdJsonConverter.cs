@@ -27,6 +27,6 @@ public class TokenIdJsonConverter : JsonConverter<TokenId>
 
     public override void Write(Utf8JsonWriter writer, TokenId value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value);
+        writer.WriteStringValue(value.Value);
     }
 }

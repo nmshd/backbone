@@ -11,7 +11,7 @@ public class DatawalletIdEntityFrameworkValueConverter : ValueConverter<Datawall
 
     public DatawalletIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id,
+            id => id.Value,
             value => DatawalletId.Parse(value),
             mappingHints.With(new ConverterMappingHints(DatawalletId.MAX_LENGTH))
         )

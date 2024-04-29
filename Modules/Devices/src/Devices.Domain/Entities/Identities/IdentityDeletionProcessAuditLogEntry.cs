@@ -54,7 +54,7 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
             "The deletion process was started by support. It is now waiting for approval.",
-            Hasher.HashUtf8(identityAddress),
+            Hasher.HashUtf8(identityAddress.Value),
             null,
             null,
             DeletionProcessStatus.WaitingForApproval
@@ -66,7 +66,7 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
             "The deletion process was approved.",
-            Hasher.HashUtf8(identityAddress),
+            Hasher.HashUtf8(identityAddress.Value),
             Hasher.HashUtf8(deviceId),
             DeletionProcessStatus.WaitingForApproval,
             DeletionProcessStatus.Approved
@@ -78,7 +78,7 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
             "The deletion process was rejected.",
-            Hasher.HashUtf8(identityAddress),
+            Hasher.HashUtf8(identityAddress.Value),
             Hasher.HashUtf8(deviceId),
             DeletionProcessStatus.WaitingForApproval,
             DeletionProcessStatus.Rejected
@@ -90,7 +90,7 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
             "The deletion process was cancelled by the owner of the identity.",
-            Hasher.HashUtf8(identityAddress),
+            Hasher.HashUtf8(identityAddress.Value),
             Hasher.HashUtf8(deviceId),
             DeletionProcessStatus.Approved,
             DeletionProcessStatus.Cancelled
@@ -102,7 +102,7 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
             "The deletion process was cancelled by a support employee.",
-            Hasher.HashUtf8(identityAddress),
+            Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.Approved,
             DeletionProcessStatus.Cancelled
@@ -114,7 +114,7 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
             "The deletion process was cancelled automatically, because it wasn't approved by the owner within the approval period.",
-            Hasher.HashUtf8(identityAddress),
+            Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.WaitingForApproval,
             DeletionProcessStatus.Cancelled
@@ -126,7 +126,7 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
             "The first approval reminder notification has been sent.",
-            Hasher.HashUtf8(identityAddress),
+            Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.WaitingForApproval,
             DeletionProcessStatus.WaitingForApproval
@@ -137,7 +137,7 @@ public class IdentityDeletionProcessAuditLogEntry
     {
         return new IdentityDeletionProcessAuditLogEntry(processId,
             "The second approval reminder notification has been sent.",
-            Hasher.HashUtf8(identityAddress),
+            Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.WaitingForApproval,
             DeletionProcessStatus.WaitingForApproval
@@ -149,7 +149,7 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
             "The third approval reminder notification has been sent.",
-            Hasher.HashUtf8(identityAddress),
+            Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.WaitingForApproval,
             DeletionProcessStatus.WaitingForApproval
@@ -161,7 +161,7 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
             "The first grace period reminder notification has been sent.",
-            Hasher.HashUtf8(identityAddress),
+            Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.Approved,
             DeletionProcessStatus.Approved
@@ -173,7 +173,7 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
             "The second grace period reminder notification has been sent.",
-            Hasher.HashUtf8(identityAddress),
+            Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.Approved,
             DeletionProcessStatus.Approved
@@ -185,7 +185,7 @@ public class IdentityDeletionProcessAuditLogEntry
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
             "The third grace period reminder notification has been sent.",
-            Hasher.HashUtf8(identityAddress),
+            Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.Approved,
             DeletionProcessStatus.Approved

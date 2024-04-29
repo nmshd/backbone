@@ -11,7 +11,7 @@ public class UsernameValueConverter : ValueConverter<Username, string>
 
     public UsernameValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id,
+            id => id.Value,
             value => Username.Parse(value),
             mappingHints
         )

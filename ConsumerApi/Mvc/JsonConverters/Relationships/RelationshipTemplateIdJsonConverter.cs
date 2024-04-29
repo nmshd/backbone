@@ -28,6 +28,6 @@ public class RelationshipTemplateIdJsonConverter : JsonConverter<RelationshipTem
 
     public override void Write(Utf8JsonWriter writer, RelationshipTemplateId value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value);
+        writer.WriteStringValue(value.Value);
     }
 }

@@ -11,7 +11,7 @@ public class DeviceIdValueConverter : ValueConverter<DeviceId, string>
 
     public DeviceIdValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id,
+            id => id.Value,
             value => DeviceId.Parse(value),
             mappingHints
         )
