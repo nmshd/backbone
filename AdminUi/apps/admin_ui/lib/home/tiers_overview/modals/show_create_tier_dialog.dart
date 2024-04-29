@@ -73,7 +73,6 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
                               textAlign: TextAlign.left,
                             )
                           : null,
-                      // helperText: '',
                     ),
                   ),
                 ],
