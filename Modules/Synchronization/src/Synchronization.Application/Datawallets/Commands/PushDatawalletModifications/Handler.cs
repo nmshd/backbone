@@ -50,7 +50,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         EnsureSufficientSupportedDatawalletVersion();
         EnsureDeviceIsUpToDate();
         await CreateModifications();
-        PublishDomainEvent();
+        //PublishDomainEvent();
         BuildResponse();
 
         return _response;

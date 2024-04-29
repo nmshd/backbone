@@ -47,6 +47,9 @@ public class Datawallet : Entity<DatawalletId>
         var newModification = new DatawalletModification(this, datawalletVersionOfModification, indexOfNewModification, type, collection, objectIdentifier, payloadCategory, encryptedPayload,
             createdByDevice, blobReference);
         Modifications.Add(newModification);
+
+        RaiseDomainEvent(new DatawalletModifiedDomainEvent(Owner, createdByDevice));
+
         return newModification;
     }
 
