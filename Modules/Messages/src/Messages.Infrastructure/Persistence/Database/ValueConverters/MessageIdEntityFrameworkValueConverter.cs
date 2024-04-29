@@ -5,13 +5,16 @@ namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.ValueCon
 
 public class MessageIdEntityFrameworkValueConverter : ValueConverter<MessageId, string>
 {
-    public MessageIdEntityFrameworkValueConverter() : this(null) { }
+    public MessageIdEntityFrameworkValueConverter() : this(null)
+    {
+    }
 
     public MessageIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id.StringValue,
+            id => id,
             value => MessageId.Parse(value),
             mappingHints
         )
-    { }
+    {
+    }
 }

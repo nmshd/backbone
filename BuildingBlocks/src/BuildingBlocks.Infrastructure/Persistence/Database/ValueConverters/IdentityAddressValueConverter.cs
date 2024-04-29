@@ -11,13 +11,14 @@ public class IdentityAddressValueConverter : ValueConverter<IdentityAddress, str
 
     public IdentityAddressValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id.StringValue,
+            id => id,
             value => IdentityAddress.ParseUnsafe(value.Trim()),
             mappingHints
         )
     {
     }
 }
+
 public class NullableIdentityAddressValueConverter : ValueConverter<IdentityAddress?, string?>
 {
     public NullableIdentityAddressValueConverter() : this(null)
@@ -26,7 +27,7 @@ public class NullableIdentityAddressValueConverter : ValueConverter<IdentityAddr
 
     public NullableIdentityAddressValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id == null ? null : id.StringValue,
+            id => id == null ? null : id.Value,
             value => value == null ? null : IdentityAddress.ParseUnsafe(value.Trim()),
             mappingHints
         )

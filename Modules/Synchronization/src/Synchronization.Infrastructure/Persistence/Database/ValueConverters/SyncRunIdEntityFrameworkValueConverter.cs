@@ -5,13 +5,16 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.V
 
 public class SyncRunIdEntityFrameworkValueConverter : ValueConverter<SyncRunId, string>
 {
-    public SyncRunIdEntityFrameworkValueConverter() : this(new ConverterMappingHints(SyncRunId.MAX_LENGTH)) { }
+    public SyncRunIdEntityFrameworkValueConverter() : this(new ConverterMappingHints(SyncRunId.MAX_LENGTH))
+    {
+    }
 
     public SyncRunIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id.StringValue,
+            id => id,
             value => SyncRunId.Parse(value),
             mappingHints.With(new ConverterMappingHints(SyncRunId.MAX_LENGTH))
         )
-    { }
+    {
+    }
 }

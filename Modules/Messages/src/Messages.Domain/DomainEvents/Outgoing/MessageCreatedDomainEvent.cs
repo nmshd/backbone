@@ -9,7 +9,7 @@ public class MessageCreatedDomainEvent : DomainEvent
     {
         Id = message.Id;
         Recipients = message.Recipients.Select(r => r.Address.ToString());
-        CreatedBy = message.CreatedBy.StringValue;
+        CreatedBy = message.CreatedBy;
     }
 
     public string Id { get; }

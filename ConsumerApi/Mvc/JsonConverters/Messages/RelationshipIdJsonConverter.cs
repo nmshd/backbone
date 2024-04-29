@@ -27,6 +27,6 @@ public class RelationshipIdJsonConverter : JsonConverter<RelationshipId>
 
     public override void Write(Utf8JsonWriter writer, RelationshipId value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.StringValue);
+        writer.WriteStringValue(value);
     }
 }

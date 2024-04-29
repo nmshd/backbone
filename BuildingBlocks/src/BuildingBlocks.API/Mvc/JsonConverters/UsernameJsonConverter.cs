@@ -31,6 +31,6 @@ public class UsernameJsonConverter : JsonConverter<Username?>
         if (value == null)
             writer.WriteNullValue();
         else
-            writer.WriteStringValue(value.StringValue);
+            writer.WriteStringValue(value);
     }
 }

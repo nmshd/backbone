@@ -5,13 +5,16 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.V
 
 public class ExternalEventIdEntityFrameworkValueConverter : ValueConverter<ExternalEventId, string>
 {
-    public ExternalEventIdEntityFrameworkValueConverter() : this(new ConverterMappingHints(ExternalEventId.MAX_LENGTH)) { }
+    public ExternalEventIdEntityFrameworkValueConverter() : this(new ConverterMappingHints(ExternalEventId.MAX_LENGTH))
+    {
+    }
 
     public ExternalEventIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id.StringValue,
+            id => id,
             value => ExternalEventId.Parse(value),
             mappingHints.With(new ConverterMappingHints(ExternalEventId.MAX_LENGTH))
         )
-    { }
+    {
+    }
 }

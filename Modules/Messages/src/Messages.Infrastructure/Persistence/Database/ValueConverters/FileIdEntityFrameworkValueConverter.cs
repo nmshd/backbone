@@ -5,13 +5,16 @@ namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.ValueCon
 
 public class FileIdEntityFrameworkValueConverter : ValueConverter<FileId, string>
 {
-    public FileIdEntityFrameworkValueConverter() : this(null) { }
+    public FileIdEntityFrameworkValueConverter() : this(null)
+    {
+    }
 
     public FileIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id.StringValue,
+            id => id,
             value => FileId.Parse(value),
             mappingHints
         )
-    { }
+    {
+    }
 }

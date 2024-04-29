@@ -27,6 +27,6 @@ public class SyncRunIdJsonConverter : JsonConverter<SyncRunId>
 
     public override void Write(Utf8JsonWriter writer, SyncRunId value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.StringValue);
+        writer.WriteStringValue(value);
     }
 }

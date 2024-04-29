@@ -5,13 +5,16 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.V
 
 public class SyncErrorIdEntityFrameworkValueConverter : ValueConverter<SyncErrorId, string>
 {
-    public SyncErrorIdEntityFrameworkValueConverter() : this(new ConverterMappingHints(SyncErrorId.MAX_LENGTH)) { }
+    public SyncErrorIdEntityFrameworkValueConverter() : this(new ConverterMappingHints(SyncErrorId.MAX_LENGTH))
+    {
+    }
 
     public SyncErrorIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id.StringValue,
+            id => id,
             value => SyncErrorId.Parse(value),
             mappingHints.With(new ConverterMappingHints(SyncErrorId.MAX_LENGTH))
         )
-    { }
+    {
+    }
 }

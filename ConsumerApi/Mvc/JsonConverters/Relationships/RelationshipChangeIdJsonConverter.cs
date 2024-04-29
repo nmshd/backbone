@@ -28,6 +28,6 @@ public class RelationshipChangeIdJsonConverter : JsonConverter<RelationshipChang
 
     public override void Write(Utf8JsonWriter writer, RelationshipChangeId value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.StringValue);
+        writer.WriteStringValue(value);
     }
 }

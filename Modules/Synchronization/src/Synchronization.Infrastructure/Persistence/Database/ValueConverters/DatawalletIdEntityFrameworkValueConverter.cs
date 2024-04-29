@@ -5,13 +5,16 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.V
 
 public class DatawalletIdEntityFrameworkValueConverter : ValueConverter<DatawalletId, string>
 {
-    public DatawalletIdEntityFrameworkValueConverter() : this(new ConverterMappingHints(DatawalletId.MAX_LENGTH)) { }
+    public DatawalletIdEntityFrameworkValueConverter() : this(new ConverterMappingHints(DatawalletId.MAX_LENGTH))
+    {
+    }
 
     public DatawalletIdEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
-            id => id.StringValue,
+            id => id,
             value => DatawalletId.Parse(value),
             mappingHints.With(new ConverterMappingHints(DatawalletId.MAX_LENGTH))
         )
-    { }
+    {
+    }
 }

@@ -22,7 +22,7 @@ public class IdentityAddressTests
     {
         var address = IdentityAddress.Create(Convert.FromBase64String(publicKey), "id1");
 
-        address.StringValue.Should().Be(expectedAddress);
+        address.Value.Should().Be(expectedAddress);
     }
 
     [Fact]
