@@ -19,7 +19,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         var relationshipsCount = await _relationshipsReadonly
             .CreatedInInterval(createdAtFrom, createdAtTo)
             .Where(r => r.Status == RelationshipStatus.Pending && r.From == createdBy ||
-                r.Status == RelationshipStatus.Active && (r.From == createdBy || r.To == createdBy) || 
+                r.Status == RelationshipStatus.Active && (r.From == createdBy || r.To == createdBy) ||
                 r.Status == RelationshipStatus.Terminated && r.AuditLog.Last().Reason == RelationshipAuditLogEntryReason.Reactivation)
             .CountAsync(cancellationToken);
         return (uint)relationshipsCount;
