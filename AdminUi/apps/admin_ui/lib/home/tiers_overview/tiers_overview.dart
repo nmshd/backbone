@@ -4,6 +4,8 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import 'modals/show_create_tier_dialog.dart';
+
 class TiersOverview extends StatefulWidget {
   const TiersOverview({super.key});
 
@@ -12,27 +14,15 @@ class TiersOverview extends StatefulWidget {
 }
 
 class _TiersOverviewState extends State<TiersOverview> {
-  final TextEditingController _tierNameController = TextEditingController();
-
-  late List<TierOverview> _tiers;
-  late String _errorMessage;
-
-  bool _isLoading = false;
+  List<TierOverview>? _tiers;
 
   final double _boxWidth = 700;
 
   @override
   void initState() {
     super.initState();
-    _errorMessage = '';
-    _tiers = [];
-    loadTiers();
-  }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _tierNameController.dispose();
+    _reloadTiers();
   }
 
   @override
@@ -92,8 +82,9 @@ class _TiersOverviewState extends State<TiersOverview> {
               ),
             ),
           ),
-          if (_isLoading) const CircularProgressIndicator(),
-          if (!_isLoading)
+          if (_tiers == null)
+            const Center(child: CircularProgressIndicator())
+          else
             Expanded(
               child: Card(
                 elevation: 1,
@@ -106,7 +97,7 @@ class _TiersOverviewState extends State<TiersOverview> {
                       DataColumn2(label: Text('Name'), size: ColumnSize.L),
                       DataColumn2(label: Text('Number of Identities'), size: ColumnSize.L),
                     ],
-                    rows: _tiers
+                    rows: _tiers!
                         .map(
                           (tier) => DataRow2(
                             onLongPress: () {},
@@ -126,94 +117,14 @@ class _TiersOverviewState extends State<TiersOverview> {
     );
   }
 
-  void _showAddTierDialog({required BuildContext context}) {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext dialogContext) {
-        return StatefulBuilder(
-          builder: (context, setStateDialog) {
-            return AlertDialog(
-              title: const Text('Create Tier'),
-              content: SingleChildScrollView(
-                child: ListBody(
-                  children: <Widget>[
-                    const Text('Please fill the form below to create your Tier'),
-                    TextField(
-                      controller: _tierNameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Name',
-                      ),
-                    ),
-                    if (_errorMessage.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child: Text(
-                          _errorMessage,
-                          style: TextStyle(color: Theme.of(context).colorScheme.error),
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-              actions: <Widget>[
-                TextButton(
-                  child: const Text('Add'),
-                  onPressed: () {
-                    final name = _tierNameController.text;
-                    if (name.isNotEmpty) {
-                      createTier(name).then((response) {
-                        if (mounted) {
-                          setState(() {
-                            if (response.hasData) {
-                              loadTiers();
-                              Navigator.of(dialogContext).pop();
-                              setState(() => _isLoading = true);
-                              _showSuccessSnackbar('Tier was created successfully.');
-                            } else {
-                              setStateDialog(() => _errorMessage = response.error.message);
-                            }
-                          });
-                        }
-                      }).whenComplete(() => _isLoading = false);
-                    } else {
-                      setStateDialog(() => _errorMessage = 'Name cannot be empty.');
-                    }
-                  },
-                ),
-                TextButton(
-                  child: const Text('Cancel'),
-                  onPressed: () {
-                    _tierNameController.text = '';
-                    _errorMessage = '';
-                    Navigator.of(dialogContext).pop();
-                  },
-                ),
-              ],
-            );
-          },
-        );
-      },
-    );
+  Future<void> _showAddTierDialog({required BuildContext context}) async {
+    final tier = await showCreateTierDialog(context: context);
+    if (tier == null) return;
+
+    await _reloadTiers();
   }
 
-  Future<ApiResponse<Tier>> createTier(String name) async {
-    final response = await GetIt.I.get<AdminApiClient>().tiers.createTier(name: name);
-    return response;
-  }
-
-  void _showSuccessSnackbar(String message) {
-    final snackBar = SnackBar(
-      content: Text(
-        message,
-        style: const TextStyle(color: Colors.white),
-      ),
-      backgroundColor: Colors.green,
-      duration: const Duration(seconds: 3),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  Future<void> loadTiers() async {
+  Future<void> _reloadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
 
     setState(() {
