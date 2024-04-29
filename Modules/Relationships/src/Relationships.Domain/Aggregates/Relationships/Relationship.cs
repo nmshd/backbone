@@ -159,6 +159,38 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
+    public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureOpenDecomposeRequestExists();
+        EnsureDecomposeRequestIsAddressedToSelf(activeIdentity);
+
+        Status = RelationshipStatus.ReadyForDeletion;
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.Decomposed,
+            RelationshipStatus.DeletionProposed,
+            RelationshipStatus.ReadyForDeletion,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
+    private void EnsureOpenDecomposeRequestExists()
+    {
+        var lastAuditLog = AuditLog.Last();
+
+        if (lastAuditLog.Reason != RelationshipAuditLogEntryReason.Decomposed && lastAuditLog.NewStatus != RelationshipStatus.DeletionProposed)
+        {
+            throw new DomainException(DomainErrors.CannotDecomposeRelationshipIfNoRequestWasMade());
+        }
+    }
+    private void EnsureDecomposeRequestIsAddressedToSelf(IdentityAddress activeIdentity)
+    {
+        if (To != activeIdentity)
+            throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipDecomposeRequestAddressedToSomeoneElse());
+    }
+
     #region Expressions
 
     public static Expression<Func<Relationship, bool>> HasParticipant(string identity)

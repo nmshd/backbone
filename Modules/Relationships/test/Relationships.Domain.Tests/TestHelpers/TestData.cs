@@ -52,4 +52,20 @@ public static class TestData
         relationship.Terminate(IDENTITY_1, DEVICE_1);
         return relationship;
     }
+
+    public static Relationship CreateRelationshipWithDecomposeRequest(IdentityAddress? from = null, IdentityAddress? to = null)
+    {
+        var relationship = CreateActiveRelationship(from, to);
+
+        // replace with DecomposeRequest when implemented
+        relationship.AuditLog.Add(new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.Decomposed,
+            RelationshipStatus.Active,
+            RelationshipStatus.DeletionProposed,
+            IDENTITY_1,
+            DEVICE_1
+        ));
+
+        return relationship;
+    }
 }

@@ -40,4 +40,16 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists",
             $"A relationship to '{targetIdentity}' already exists. If the relationship is terminated, you can reactivate it.");
     }
+
+    public static DomainError CannotDecomposeRelationshipIfNoRequestWasMade()
+    {
+        return new DomainError("error.platform.validation.decompose.cannotDecomposeRelationshipIfNoRequestWasMade",
+            $"Decompose request does not exist.");
+    }
+
+    internal static DomainError CannotAcceptOrRejectRelationshipDecomposeRequestAddressedToSomeoneElse()
+    {
+        return new DomainError("error.platform.validation.decompose.cannotAcceptOrRejectRelationshipDecomposeRequestAddressedToSomeoneElse",
+            $"You cannot accept or reject a relationship decompose request that is addressed to someone else.");
+    }
 }
