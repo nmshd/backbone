@@ -1,10 +1,17 @@
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
-public class SyncRun
+public class SyncRun : Entity<SyncRunId>
 {
+    public enum SyncRunType
+    {
+        ExternalEventSync = 0,
+        DatawalletVersionUpgrade = 1
+    }
+
     private readonly List<SyncError> _errors = [];
     private readonly List<ExternalEvent> _externalEvents = [];
 
@@ -12,14 +19,12 @@ public class SyncRun
     private SyncRun()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
-        Id = null!;
         CreatedBy = null!;
         CreatedByDevice = null!;
     }
 
-    public SyncRun(long index, ushort duration, IdentityAddress createdBy, DeviceId createdByDevice, IEnumerable<ExternalEvent> items, SyncRunType type)
+    public SyncRun(long index, ushort duration, IdentityAddress createdBy, DeviceId createdByDevice, IEnumerable<ExternalEvent> items, SyncRunType type) : base(SyncRunId.New())
     {
-        Id = SyncRunId.New();
         ExpiresAt = SystemTime.UtcNow.AddSeconds(duration);
         CreatedAt = SystemTime.UtcNow;
         Index = index;
@@ -30,7 +35,6 @@ public class SyncRun
         EventCount = _externalEvents.Count;
     }
 
-    public SyncRunId Id { get; }
     public SyncRunType Type { get; set; }
     public DateTime ExpiresAt { get; internal set; }
     public long Index { get; }
@@ -110,12 +114,6 @@ public class SyncRun
         {
             ItemSyncFailed(item, "syncRunCanceled");
         }
-    }
-
-    public enum SyncRunType
-    {
-        ExternalEventSync = 0,
-        DatawalletVersionUpgrade = 1
     }
 }
 
