@@ -21,12 +21,15 @@ class IdentitiesFilter extends StatefulWidget {
 class _IdentitiesFilterState extends State<IdentitiesFilter> {
   IdentityOverviewFilter _filter = IdentityOverviewFilter();
 
-  final MultiSelectController<String> _tierController = MultiSelectController();
-  final MultiSelectController<String> _clientController = MultiSelectController();
+  late MultiSelectController<String> _tierController;
+  late MultiSelectController<String> _clientController;
 
   @override
   void initState() {
     super.initState();
+
+    _tierController = MultiSelectController();
+    _clientController = MultiSelectController();
 
     _loadTiers();
     _loadClients();
