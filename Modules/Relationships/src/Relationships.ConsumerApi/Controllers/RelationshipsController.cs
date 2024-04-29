@@ -111,7 +111,7 @@ public class RelationshipsController : ApiControllerBase
     }
 
     [HttpPut("{id}/Decompose")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<TerminateRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<DecomposeRelationshipResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DecomposeRelationship([FromRoute] string id, CancellationToken cancellationToken)
