@@ -1,10 +1,10 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "global.name" . }}
+  name: {{ .Values.adminui.name }}
   labels:
     {{- include "global.labels" . | nindent 4 }}
-    app: {{ include "global.name" . }}
+    app: {{ .Values.adminui.name }}
 spec:
   replicas: {{ .Values.adminui.replicas }}
   strategy:
@@ -14,7 +14,7 @@ spec:
       maxUnavailable: {{ .Values.adminui.maxUnavailable }}
   selector:
     matchLabels:
-      app: {{ include "global.name" . }}
+      app: {{ .Values.adminui.name }}
   template:
     metadata:
       annotations:
@@ -24,7 +24,7 @@ spec:
         {{- end }}
       labels:
         {{- include "global.labels" . | nindent 8 }}
-        app: {{ include "global.name" . }}
+        app: {{ .Values.adminui.name }}
     spec:
       {{- with .Values.global.serviceAccount.name}}
       serviceAccountName: {{ . }}
@@ -46,7 +46,7 @@ spec:
           configMap:
             name: configuration
       containers:
-        - name: {{ include "global.name" . }}
+        - name: {{ .Values.adminui.name }}
           {{- with .Values.adminui.securityContext }}
           securityContext:
             {{- toYaml .Values.adminui.securityContext | nindent 8 }}
