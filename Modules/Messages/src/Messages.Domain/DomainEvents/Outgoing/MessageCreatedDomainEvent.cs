@@ -7,9 +7,9 @@ public class MessageCreatedDomainEvent : DomainEvent
 {
     public MessageCreatedDomainEvent(Message message) : base($"{message.Id}/Created")
     {
-        Id = message.Id;
+        Id = message.Id.Value;
         Recipients = message.Recipients.Select(r => r.Address.ToString());
-        CreatedBy = message.CreatedBy.StringValue;
+        CreatedBy = message.CreatedBy.Value;
     }
 
     public string Id { get; }

@@ -8,8 +8,8 @@ public class SanityCheck
 {
     private readonly IDataSource _dataSource;
     private readonly IReporter _reporter;
-    private List<FileId> _databaseIds;
     private List<string> _blobIds;
+    private List<FileId> _databaseIds;
 
     public SanityCheck(IDataSource dataSource, IReporter reporter)
     {
@@ -44,7 +44,7 @@ public class SanityCheck
 
     private IEnumerable<FileId> GetOrphanedDatabaseIds()
     {
-        Func<FileId, bool> noCorrespondingBlobIdExists = databaseId => _blobIds.All(blobId => blobId != databaseId.StringValue);
+        Func<FileId, bool> noCorrespondingBlobIdExists = databaseId => _blobIds.All(blobId => blobId != databaseId.Value);
         return _databaseIds.Where(noCorrespondingBlobIdExists);
     }
 
@@ -58,7 +58,7 @@ public class SanityCheck
 
     private IEnumerable<string> GetOrphanedBlobIds()
     {
-        Func<string, bool> noCorrespondingDatabaseIdExists = blobId => _databaseIds.All(databaseId => databaseId.StringValue != blobId);
+        Func<string, bool> noCorrespondingDatabaseIdExists = blobId => _databaseIds.All(databaseId => databaseId.Value != blobId);
         return _blobIds.Where(noCorrespondingDatabaseIdExists);
     }
 }
