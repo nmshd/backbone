@@ -25,7 +25,7 @@ public class Client
     public Client(HttpClient httpClient, Configuration configuration)
     {
         var authenticator = new OAuthAuthenticator(configuration.Authentication, httpClient);
-        var endpointClient = new EndpointClient(httpClient, authenticator, configuration.JsonSerializerOptions);
+        var endpointClient = new EndpointClient(httpClient, authenticator, configuration.JsonSerializerOptions, configuration.ApiVersion);
 
         Challenges = new ChallengesEndpoint(endpointClient);
         Datawallet = new DatawalletEndpoint(endpointClient);
