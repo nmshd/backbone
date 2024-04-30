@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipDecomposed;
 
-public class RelationshipDecomposedDomainEventHandler
+public class RelationshipDecomposedDomainEventHandler : IDomainEventHandler<RelationshipDecomposedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
