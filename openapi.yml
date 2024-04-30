@@ -392,12 +392,8 @@ paths:
           schema:
             type: string
       responses:
-        "200":
+        "204":
           description: Success
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationshipMetadata"
         "400":
           description: >
             Bad Request<br><br>
