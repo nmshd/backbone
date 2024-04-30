@@ -210,6 +210,206 @@ paths:
               schema:
                 "$ref": "#/components/schemas/HttpResponseEnvelopeError"
 
+  "/api/v1/Relationships/{id}/Terminate":
+    put:
+      tags:
+        - Relationships
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationshipMetadata"
+        "400":
+          description: >
+            Bad Request<br><br>
+            Can contain one of the following error codes:
+              - `error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus`
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+
+  "/api/v1/Relationships/{id}/Reactivate":
+    put:
+      tags:
+        - Relationships
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationshipMetadata"
+        "400":
+          description: >
+            Bad Request<br><br>
+            Can contain one of the following error codes:
+              - TODO
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+
+  "/api/v1/Relationships/{id}/Reactivate/Accept":
+    put:
+      tags:
+        - Relationships
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationshipMetadata"
+        "400":
+          description: >
+            Bad Request<br><br>
+            Can contain one of the following error codes:
+              - TODO
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+
+  "/api/v1/Relationships/{id}/Reactivate/Reject":
+    put:
+      tags:
+        - Relationships
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationshipMetadata"
+        "400":
+          description: >
+            Bad Request<br><br>
+            Can contain one of the following error codes:
+              - TODO
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+
+  "/api/v1/Relationships/{id}/Reactivate/Revoke":
+    put:
+      tags:
+        - Relationships
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeRelationshipMetadata"
+        "400":
+          description: >
+            Bad Request<br><br>
+            Can contain one of the following error codes:
+              - TODO
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+
+  "/api/v1/Relationships/{id}/Decompose":
+    put:
+      tags:
+        - Relationships
+      parameters:
+        - name: id
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Success
+        "400":
+          description: >
+            Bad Request<br><br>
+            Can contain one of the following error codes:
+              - TODO
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+        "404":
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/HttpResponseEnvelopeError"
+
 components:
   securitySchemes:
     oauth:
@@ -300,12 +500,18 @@ components:
           example: "DVC_________________"
         reason:
           type: string
-          example: "Creation|AcceptanceOfCreation|RejectionOfCreation|RevocationOfCreation"
+          example: "Creation|AcceptanceOfCreation|RejectionOfCreation|RevocationOfCreation|Termination|Reactivation|AcceptanceOfReactivation|RejectionOfReactivation|RevocationOfReactivation|Decomposition"
           enum:
             - Creation
             - AcceptanceOfCreation
             - RejectionOfCreation
             - RevocationOfCreation
+            - Termination
+            - Reactivation
+            - AcceptanceOfReactivation
+            - RejectionOfReactivation
+            - RevocationOfReactivation
+            - Decomposition
         oldStatus:
           allOf:
             - $ref: "#/components/schemas/RelationshipStatus"
@@ -322,7 +528,9 @@ components:
         - Active
         - Rejected
         - Revoked
-      example: "Pending|Accepted|Rejected|Revoked"
+        - Terminated
+        - DeletionProposed
+      example: "Pending|Accepted|Rejected|Revoked|Terminated|DeletionProposed"
 
     HttpResponseEnvelopeError:
       type: object
