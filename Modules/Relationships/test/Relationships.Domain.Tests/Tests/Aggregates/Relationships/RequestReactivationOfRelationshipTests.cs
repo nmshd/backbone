@@ -7,17 +7,17 @@ using Xunit;
 using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relationships;
-public class RelationshipReactivationRequestTests
+public class RequestReactivationOfRelationshipTests
 {
     [Fact]
-    public void Relationship_reactivation_request_creates_an_audit_log_entry()
+    public void Requesting_reactivation_creates_an_audit_log_entry()
     {
         // Arrange
         SystemTime.Set("2000-01-01");
         var relationship = CreateTerminatedRelationship();
 
         // Act
-        relationship.Reactivate(IDENTITY_2, DEVICE_2);
+        relationship.RequestReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
         relationship.AuditLog.Should().HaveCount(4);
@@ -40,7 +40,7 @@ public class RelationshipReactivationRequestTests
         var relationship = CreatePendingRelationship();
 
         // Act
-        var acting = () => relationship.Reactivate(IDENTITY_2, DEVICE_2);
+        var acting = () => relationship.RequestReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
@@ -50,18 +50,18 @@ public class RelationshipReactivationRequestTests
     }
 
     [Fact]
-    public void Cannot_Reactivate_An_Already_Requested_Reactivation()
+    public void Cannot_request_reactivation_when_there_is_an_open_reactivation_request()
     {
         // Arrange
         var relationship = CreateTerminatedRelationship();
 
-        relationship.Reactivate(IDENTITY_2, DEVICE_2);
+        relationship.RequestReactivation(IDENTITY_2, DEVICE_2);
 
         // Act
-        var acting = () => relationship.Reactivate(IDENTITY_2, DEVICE_2);
+        var acting = () => relationship.RequestReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
-            "error.platform.validation.relationshipRequest.cannotReactivateAnAlreadyRequestedReactivation");
+            "error.platform.validation.relationshipRequest.cannotRequestReactivationWhenThereIsAnOpenReactivationRequest");
     }
 }

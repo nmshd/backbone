@@ -7,7 +7,7 @@ using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RelationshipReactivationRequest;
-public class Handler : IRequestHandler<RequestRelationshipReactivationCommand, RelationshipReactivationRequestResponse>
+public class Handler : IRequestHandler<RequestRelationshipReactivationCommand, RequestRelationshipReactivationResponse>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IEventBus _eventBus;
@@ -21,12 +21,12 @@ public class Handler : IRequestHandler<RequestRelationshipReactivationCommand, R
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
-    public async Task<RelationshipReactivationRequestResponse> Handle(RequestRelationshipReactivationCommand request, CancellationToken cancellationToken)
+    public async Task<RequestRelationshipReactivationResponse> Handle(RequestRelationshipReactivationCommand request, CancellationToken cancellationToken)
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
         var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
 
-        relationship.Reactivate(_activeIdentity, _activeDevice);
+        relationship.RequestReactivation(_activeIdentity, _activeDevice);
 
         await _relationshipsRepository.Update(relationship);
 
@@ -34,6 +34,6 @@ public class Handler : IRequestHandler<RequestRelationshipReactivationCommand, R
 
         _eventBus.Publish(new RelationshipReactivationRequestedDomainEvent(relationship, _activeIdentity, peer));
 
-        return new RelationshipReactivationRequestResponse(relationship);
+        return new RequestRelationshipReactivationResponse(relationship);
     }
 }

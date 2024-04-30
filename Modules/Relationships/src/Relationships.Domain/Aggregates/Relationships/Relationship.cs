@@ -159,7 +159,7 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    public void Reactivate(IdentityAddress activeIdentity, DeviceId activeDevice)
+    public void RequestReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureThereIsNoOpenReactivationRequest();
 
@@ -180,7 +180,7 @@ public class Relationship
         var auditLogEntry = AuditLog.Last();
 
         if (auditLogEntry.Reason == RelationshipAuditLogEntryReason.ReactivationRequested)
-            throw new DomainException(DomainErrors.CannotReactivateAnAlreadyRequestedReactivation());
+            throw new DomainException(DomainErrors.CannotRequestReactivationWhenThereIsAnOpenReactivationRequest());
     }
 
     #region Expressions

@@ -111,7 +111,7 @@ public class RelationshipsController : ApiControllerBase
     }
 
     [HttpPut("{id}/Reactivate")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipReactivationRequestResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RequestRelationshipReactivationResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> RelationshipReactivationRequest([FromRoute] string id, CancellationToken cancellationToken)
