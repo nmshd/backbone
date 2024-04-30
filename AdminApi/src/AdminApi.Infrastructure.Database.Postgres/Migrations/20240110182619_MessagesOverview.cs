@@ -11,7 +11,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""
-                CREATE VIEW "MessageOverviews" AS
+                CREATE VIEW "AdminUi"."MessageOverviews" AS
                     SELECT
         	            "Messages"."Id" AS "MessageId",
         	            "Messages"."CreatedBy" AS "SenderAddress",
@@ -32,7 +32,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(""" DROP VIEW "MessageOverviews" """);
+            migrationBuilder.Sql(""" DROP VIEW "AdminUi"."MessageOverviews" """);
         }
     }
 }
