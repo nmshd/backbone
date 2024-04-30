@@ -10,7 +10,7 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities;
 public class IdentityDeleterTests
 {
     [Fact]
-    public async void Deleter_calls_correct_command()
+    public async Task Deleter_calls_correct_command()
     {
         // Arrange
         var mockMediator = A.Fake<IMediator>();
