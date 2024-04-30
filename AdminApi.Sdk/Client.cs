@@ -1,4 +1,5 @@
 ﻿using Backbone.AdminApi.Sdk.Endpoints.ApiKeyValidation;
+using Backbone.AdminApi.Sdk.Endpoints.Challenges;
 using Backbone.AdminApi.Sdk.Endpoints.Clients;
 using Backbone.AdminApi.Sdk.Endpoints.Common;
 using Backbone.AdminApi.Sdk.Endpoints.Identities;
@@ -12,12 +13,14 @@ namespace Backbone.AdminApi.Sdk;
 
 public class Client
 {
-    public Client(Configuration config)
+    public Client(Configuration configuration) : this(new HttpClient { BaseAddress = new Uri(configuration.BaseUrl) }, configuration)
     {
-        var httpClient = new HttpClient { BaseAddress = new Uri(config.BaseUrl) };
-        var oDataClient = new HttpClient { BaseAddress = new Uri(config.ODataUrl) };
-        var authenticator = new XsrfAndApiKeyAuthenticator(config.ApiKey, httpClient);
-        var endpointClient = new EndpointClient(httpClient, authenticator, config.JsonSerializerOptions, oDataClient);
+    }
+
+    public Client(HttpClient httpClient, Configuration config)
+    {
+        var authenticator = new XsrfAndApiKeyAuthenticator(config.ApiKey, httpClient, config.ApiVersion);
+        var endpointClient = new EndpointClient(httpClient, authenticator, config.JsonSerializerOptions, config.ApiVersion);
 
         ApiKeyValidation = new ApiKeyValidationEndpoint(endpointClient);
         Clients = new ClientsEndpoint(endpointClient);
@@ -26,6 +29,7 @@ public class Client
         Metrics = new MetricsEndpoint(endpointClient);
         Relationships = new RelationshipsEndpoint(endpointClient);
         Tiers = new TiersEndpoint(endpointClient);
+        Challenges = new ChallengesEndpoint(endpointClient);
     }
 
     public ApiKeyValidationEndpoint ApiKeyValidation { get; }
@@ -35,4 +39,5 @@ public class Client
     public MetricsEndpoint Metrics { get; }
     public RelationshipsEndpoint Relationships { get; }
     public TiersEndpoint Tiers { get; }
+    public ChallengesEndpoint Challenges { get; }
 }

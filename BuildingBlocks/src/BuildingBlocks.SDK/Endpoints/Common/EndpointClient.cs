@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.Json;
 using System.Web;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Backbone.BuildingBlocks.SDK.Endpoints.Common;
 
@@ -26,57 +28,76 @@ public class EndpointClient
 
     private readonly HttpClient _httpClient;
     private readonly JsonSerializerOptions _jsonSerializerOptions;
-    private readonly HttpClient? _oDataClient;
+    private readonly string _apiVersion;
 
-    public EndpointClient(HttpClient httpClient, IAuthenticator authenticator, JsonSerializerOptions jsonSerializerOptions, HttpClient? oDataClient = null)
+    public EndpointClient(HttpClient httpClient, IAuthenticator authenticator, JsonSerializerOptions jsonSerializerOptions, string apiVersion)
     {
         _httpClient = httpClient;
         _authenticator = authenticator;
         _jsonSerializerOptions = jsonSerializerOptions;
-        _oDataClient = oDataClient;
+        _apiVersion = apiVersion;
     }
 
     public async Task<ApiResponse<T>> Post<T>(string url, object? requestContent = null)
-        => await Request<T>(HttpMethod.Post, url)
+    {
+        return await Request<T>(HttpMethod.Post, url)
             .Authenticate()
             .WithJson(requestContent)
             .Execute();
+    }
 
     public async Task<ApiResponse<T>> PostUnauthenticated<T>(string url, object? requestContent = null)
-        => await Request<T>(HttpMethod.Post, url)
+    {
+        return await Request<T>(HttpMethod.Post, url)
             .WithJson(requestContent)
             .Execute();
+    }
 
     public async Task<ApiResponse<T>> Get<T>(string url, object? requestContent = null, PaginationFilter? pagination = null)
-        => await Request<T>(HttpMethod.Get, url)
+    {
+        return await Request<T>(HttpMethod.Get, url)
             .Authenticate()
             .WithPagination(pagination)
             .WithJson(requestContent)
             .Execute();
+    }
 
     public async Task<ApiResponse<T>> GetUnauthenticated<T>(string url, object? requestContent = null, PaginationFilter? pagination = null)
-        => await Request<T>(HttpMethod.Get, url)
+    {
+        return await Request<T>(HttpMethod.Get, url)
             .WithPagination(pagination)
             .WithJson(requestContent)
             .Execute();
+    }
 
     public async Task<ApiResponse<T>> Put<T>(string url, object? requestContent = null)
-        => await Request<T>(HttpMethod.Put, url)
+    {
+        return await Request<T>(HttpMethod.Put, url)
             .Authenticate()
             .WithJson(requestContent)
             .Execute();
+    }
 
-    public async Task<ApiResponse<T>> Patch<T>(string url, object? requestContent = null) => await Request<T>(HttpMethod.Patch, url)
-        .Authenticate()
-        .WithJson(requestContent)
-        .Execute();
+    public async Task<ApiResponse<T>> Patch<T>(string url, object? requestContent = null)
+    {
+        return await Request<T>(HttpMethod.Patch, url)
+            .Authenticate()
+            .WithJson(requestContent)
+            .Execute();
+    }
 
-    public async Task<ApiResponse<T>> Delete<T>(string url, object? requestContent = null) => await Request<T>(HttpMethod.Delete, url)
-        .Authenticate()
-        .WithJson(requestContent)
-        .Execute();
+    public async Task<ApiResponse<T>> Delete<T>(string url, object? requestContent = null)
+    {
+        return await Request<T>(HttpMethod.Delete, url)
+            .Authenticate()
+            .WithJson(requestContent)
+            .Execute();
+    }
 
-    public RequestBuilder<T> Request<T>(HttpMethod method, string url) => new(this, _jsonSerializerOptions, _authenticator, method, url);
+    public RequestBuilder<T> Request<T>(HttpMethod method, string url)
+    {
+        return new RequestBuilder<T>(this, _jsonSerializerOptions, _authenticator, method, url, _apiVersion);
+    }
 
     private async Task<ApiResponse<T>> Execute<T>(HttpRequestMessage request)
     {
@@ -90,17 +111,16 @@ public class EndpointClient
             responseContent = new MemoryStream(Encoding.UTF8.GetBytes(EMPTY_RESULT));
         }
 
-        var deserializedResponseContent = JsonSerializer.Deserialize<ApiResponse<T>>(responseContent, _jsonSerializerOptions)!;
-        deserializedResponseContent.Status = statusCode;
+        var deserializedResponseContent = JsonSerializer.Deserialize<ApiResponse<T>>(responseContent, _jsonSerializerOptions);
+        deserializedResponseContent!.Status = statusCode;
+        deserializedResponseContent.RawContent = JsonConvert.SerializeObject(deserializedResponseContent.Result);
 
         return deserializedResponseContent;
     }
 
     private async Task<ApiResponse<T>> ExecuteOData<T>(HttpRequestMessage request)
     {
-        if (_oDataClient == null) throw new ArgumentException("No OData client is provided");
-
-        var response = await _oDataClient.SendAsync(request);
+        var response = await _httpClient.SendAsync(request);
         var responseContent = await response.Content.ReadAsStreamAsync();
         var statusCode = response.StatusCode;
 
@@ -138,15 +158,17 @@ public class EndpointClient
         private readonly NameValueCollection _queryParameters = [];
 
         private readonly string _url;
+        private readonly string? _apiVersion;
         private bool _authenticated;
         private HttpContent _content;
 
-        public RequestBuilder(EndpointClient client, JsonSerializerOptions jsonSerializerOptions, IAuthenticator authenticator, HttpMethod method, string url)
+        public RequestBuilder(EndpointClient client, JsonSerializerOptions jsonSerializerOptions, IAuthenticator authenticator, HttpMethod method, string url, string apiVersion)
         {
             _client = client;
             _jsonSerializerOptions = jsonSerializerOptions;
             _authenticator = authenticator;
 
+            _apiVersion = apiVersion;
             _url = url;
             _method = method;
             _authenticated = false;
@@ -233,15 +255,26 @@ public class EndpointClient
             return this;
         }
 
-        public async Task<ApiResponse<T>> Execute() => await _client.Execute<T>(await CreateRequestMessage());
-
-        public async Task<ApiResponse<T>> ExecuteOData() => await _client.ExecuteOData<T>(await CreateRequestMessage());
-
-        public async Task<RawApiResponse> ExecuteRaw() => await _client.ExecuteRaw(await CreateRequestMessage());
-
-        private async Task<HttpRequestMessage> CreateRequestMessage()
+        public async Task<ApiResponse<T>> Execute()
         {
-            var request = new HttpRequestMessage(_method, EncodeParametersInUrl())
+            return await _client.Execute<T>(await CreateRequestMessage());
+        }
+
+        public async Task<ApiResponse<T>> ExecuteOData()
+        {
+            return await _client.ExecuteOData<T>(await CreateRequestMessage(true));
+        }
+
+        public async Task<RawApiResponse> ExecuteRaw()
+        {
+            return await _client.ExecuteRaw(await CreateRequestMessage());
+        }
+
+        private async Task<HttpRequestMessage> CreateRequestMessage(bool isOData = false)
+        {
+            var requestUri = isOData ? $"odata/{EncodeParametersInUrl()}" : $"api/{_apiVersion}/{EncodeParametersInUrl()}";
+
+            var request = new HttpRequestMessage(_method, requestUri)
             {
                 Content = _content
             };
