@@ -106,8 +106,8 @@ public class RelationshipsController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> TerminateRelationship([FromRoute] string id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new TerminateRelationshipCommand() { RelationshipId = id }, cancellationToken);
-        return NoContent();
+        var response = await _mediator.Send(new TerminateRelationshipCommand() { RelationshipId = id }, cancellationToken);
+        return Ok(response);
     }
 
     [HttpPut("{id}/Decompose")]
@@ -117,7 +117,7 @@ public class RelationshipsController : ApiControllerBase
     public async Task<IActionResult> DecomposeRelationship([FromRoute] string id, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new DecomposeRelationshipCommand() { RelationshipId = id }, cancellationToken);
-        return Ok(response); // or does it need content at all ???
+        return Ok(response);
     }
 }
 

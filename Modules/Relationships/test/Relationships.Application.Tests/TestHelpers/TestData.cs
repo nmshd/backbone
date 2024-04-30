@@ -29,4 +29,20 @@ public static class TestData
 
         return relationship;
     }
+
+    public static Relationship CreateRelationshipWithDecomposeRequest(IdentityAddress? from = null, IdentityAddress? to = null)
+    {
+        var relationship = CreateActiveRelationship(from, to);
+
+        // replace with DecomposeRequest when implemented
+        relationship.AuditLog.Add(new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.Decomposed,
+            RelationshipStatus.Active,
+            RelationshipStatus.DeletionProposed,
+            from,
+            TestDataGenerator.CreateRandomDeviceId()
+        ));
+
+        return relationship;
+    }
 }

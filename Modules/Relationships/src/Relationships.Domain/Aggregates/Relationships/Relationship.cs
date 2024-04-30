@@ -161,8 +161,8 @@ public class Relationship
 
     public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
-        EnsureOpenDecomposeRequestExists();
-        EnsureDecomposeRequestIsAddressedToSelf(activeIdentity);
+        EnsureOpenDecomposeExists();
+        EnsureActiveIdentityDidNotDecomposeYet(activeIdentity);
 
         Status = RelationshipStatus.ReadyForDeletion;
 
@@ -176,7 +176,7 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    private void EnsureOpenDecomposeRequestExists()
+    private void EnsureOpenDecomposeExists() // todo: 
     {
         var lastAuditLog = AuditLog.Last();
 
@@ -185,7 +185,8 @@ public class Relationship
             throw new DomainException(DomainErrors.CannotDecomposeRelationshipIfNoRequestWasMade());
         }
     }
-    private void EnsureDecomposeRequestIsAddressedToSelf(IdentityAddress activeIdentity)
+
+    private void EnsureActiveIdentityDidNotDecomposeYet(IdentityAddress activeIdentity)
     {
         if (To != activeIdentity)
             throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipDecomposeRequestAddressedToSomeoneElse());
