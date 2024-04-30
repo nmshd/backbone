@@ -27,22 +27,12 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
                     GROUP BY
         	            [MESSAGES].[Id], [MESSAGES].[CreatedBy], [MESSAGES].[CreatedByDevice], [MESSAGES].[CreatedAt]
         """);
-
-            migrationBuilder.Sql("""
-		        CREATE VIEW MessageRecipients AS
-		            SELECT
-			            [RECIPIENTS].[Address] AS [Address],
-			            [RECIPIENTS].[MessageId] AS [MessageId]
-		            FROM
-			            [Messages].[RecipientInformation] AS RECIPIENTS
-		""");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql(""" DROP VIEW "MessageOverviews" """);
-            migrationBuilder.Sql(""" DROP VIEW "MessageRecipients" """);
         }
     }
 }

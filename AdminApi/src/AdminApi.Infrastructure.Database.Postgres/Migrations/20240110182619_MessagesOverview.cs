@@ -27,22 +27,12 @@ namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
                     GROUP BY
         	            "Messages"."Id", "Messages"."CreatedBy", "Messages"."CreatedByDevice", "Messages"."CreatedAt"
         """);
-
-            migrationBuilder.Sql("""
-					CREATE VIEW "MessageRecipients" AS
-						SELECT
-							"Recipients"."Address" AS "Address",
-							"Recipients"."MessageId" AS "MessageId"
-						FROM
-							"Messages"."RecipientInformation" AS "Recipients"
-		""");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql(""" DROP VIEW "MessageOverviews" """);
-            migrationBuilder.Sql(""" DROP VIEW "MessageRecipients" """);
         }
     }
 }
