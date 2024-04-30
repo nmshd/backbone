@@ -41,7 +41,7 @@ public class DevicesModule : AbstractModule
 
     public override void ConfigureEventBus(IEventBus eventBus)
     {
-        eventBus.AddDevicesIntegrationEventSubscriptions();
+        eventBus.AddDevicesDomainEventSubscriptions();
     }
 
     public override void PostStartupValidation(IServiceProvider serviceProvider)

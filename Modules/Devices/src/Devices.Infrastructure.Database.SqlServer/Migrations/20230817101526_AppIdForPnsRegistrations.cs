@@ -14,14 +14,17 @@ public partial class AppIdForPnsRegistrations : Migration
 
         migrationBuilder.DropForeignKey(
             name: "FK_Identities_Tiers_TierId",
+            schema: "Devices",
             table: "Identities");
 
         migrationBuilder.DropIndex(
             name: "IX_Identities_TierId",
+            schema: "Devices",
             table: "Identities");
 
         migrationBuilder.AddColumn<string>(
             name: "AppId",
+            schema: "Devices",
             table: "PnsRegistrations",
             type: "nvarchar(max)",
             nullable: false);
@@ -32,17 +35,21 @@ public partial class AppIdForPnsRegistrations : Migration
     {
         migrationBuilder.DropColumn(
             name: "AppId",
+            schema: "Devices",
             table: "PnsRegistrations");
 
         migrationBuilder.CreateIndex(
             name: "IX_Identities_TierId",
+            schema: "Devices",
             table: "Identities",
             column: "TierId");
 
         migrationBuilder.AddForeignKey(
             name: "FK_Identities_Tiers_TierId",
+            schema: "Devices",
             table: "Identities",
             column: "TierId",
+            principalSchema: "Devices",
             principalTable: "Tiers",
             principalColumn: "Id");
     }
