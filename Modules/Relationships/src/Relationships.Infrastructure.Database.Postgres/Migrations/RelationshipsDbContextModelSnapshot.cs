@@ -128,6 +128,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .HasColumnType("character(36)")
                         .IsFixedLength();
 
+                    b.Property<bool>("FromHasDecomposed")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("RelationshipTemplateId")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -144,6 +147,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .IsUnicode(false)
                         .HasColumnType("character(36)")
                         .IsFixedLength();
+
+                    b.Property<bool>("ToHasDecomposed")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
