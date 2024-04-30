@@ -6,6 +6,7 @@ using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExten
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
+
 public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
 {
     private readonly IQueryable<RelationshipTemplate> _readOnlyTemplates;
@@ -19,7 +20,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
     {
         var relationshipTemplatesCount = await _readOnlyTemplates
             .CreatedInInterval(createdAtFrom, createdAtTo)
-            .CountAsync(t => t.CreatedBy == createdBy.StringValue, cancellationToken);
+            .CountAsync(t => t.CreatedBy == createdBy.Value, cancellationToken);
         return (uint)relationshipTemplatesCount;
     }
 }
