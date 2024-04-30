@@ -40,7 +40,7 @@ spec:
         - name: {{ .Values.eventhandler.name }}
           {{- with .Values.eventhandler.securityContext }}
           securityContext:
-            {{- toYaml .Values.eventhandler.securityContext | nindent 8 }}
+            {{- toYaml . | nindent 8 }}
           {{- end }}
           resources:
             {{- toYaml .Values.eventhandler.resources | nindent 12 }}

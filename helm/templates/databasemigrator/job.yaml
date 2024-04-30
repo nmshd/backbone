@@ -36,7 +36,7 @@ spec:
         - name: {{ .Values.databasemigrator.name }}
           {{- with .Values.databasemigrator.securityContext }}
           securityContext:
-            {{- toYaml .Values.databasemigrator.securityContext | nindent 8 }}
+            {{- toYaml . | nindent 8 }}
           {{- end }}
           resources:
             {{- toYaml .Values.databasemigrator.resources | nindent 12 }}
