@@ -8,7 +8,7 @@ public class MessageOverviewEntityTypeConfiguration : IEntityTypeConfiguration<M
 {
     public void Configure(EntityTypeBuilder<MessageOverview> builder)
     {
-        builder.ToView("MessageOverviews");
+        builder.ToView("MessageOverviews", "AdminUi");
         builder
             .HasMany(m => m.Recipients)
             .WithOne()
