@@ -156,7 +156,7 @@ public class HandlerTests
     {
         return new UpdateIdentityCommand
         {
-            Address = identity.Address.StringValue,
+            Address = identity.Address,
             TierId = newTier.Id.Value
         };
     }

@@ -5,13 +5,16 @@ namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Val
 
 public class RelationshipTemplateIdEntityFrameworkValueConverter : ValueConverter<RelationshipTemplateId, string>
 {
-    public RelationshipTemplateIdEntityFrameworkValueConverter() : this(null) { }
+    public RelationshipTemplateIdEntityFrameworkValueConverter() : this(null)
+    {
+    }
 
     public RelationshipTemplateIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id.StringValue,
+            id => id.Value,
             value => RelationshipTemplateId.Parse(value),
             mappingHints
         )
-    { }
+    {
+    }
 }

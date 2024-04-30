@@ -27,6 +27,6 @@ public class FileIdJsonConverter : JsonConverter<FileId>
 
     public override void Write(Utf8JsonWriter writer, FileId value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.StringValue);
+        writer.WriteStringValue(value.Value);
     }
 }
