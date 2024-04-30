@@ -6,8 +6,4 @@
         <ProjectReference Include="..\Quotas.Domain\Quotas.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="IntegrationEvents\Incoming\" />
-    </ItemGroup>
-
 </Project>
