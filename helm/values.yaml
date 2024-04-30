@@ -321,6 +321,9 @@ sendidentitydeletionreminders:
   name: "sendidentitydeletionreminders"
 
   schedule: "0 3 * * *"
+  successfulJobsHistoryLimit: 20
+  failedJobsHistoryLimit: 10
+  backoffLimit: 5
 
   image:
     repository: "ghcr.io/nmshd/backbone-identity-deletion-jobs"
