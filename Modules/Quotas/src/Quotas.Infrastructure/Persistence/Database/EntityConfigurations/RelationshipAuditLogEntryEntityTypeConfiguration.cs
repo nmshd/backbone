@@ -7,8 +7,9 @@ public class RelationshipAuditLogEntryEntityTypeConfiguration : IEntityTypeConfi
 {
     public void Configure(EntityTypeBuilder<RelationshipAuditLogEntry> builder)
     {
-        builder.ToTable(nameof(RelationshipAuditLogEntry), "RelationshipAuditLog", x => x.ExcludeFromMigrations());
+        builder.ToTable("RelationshipAuditLog", "Relationships", x => x.ExcludeFromMigrations());
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Reason);
+        builder.Property(x => x.CreatedAt);
     }
 }

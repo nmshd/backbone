@@ -21,7 +21,7 @@ public class RelationshipsRepository : IRelationshipsRepository
             .Where(r => r.Status == RelationshipStatus.Pending && r.From == createdBy ||
                 r.Status == RelationshipStatus.Active && (r.From == createdBy || r.To == createdBy) ||
                 r.Status == RelationshipStatus.Terminated &&
-                r.AuditLog.Last().Reason == RelationshipAuditLogEntryReason.Reactivation && (r.From == createdBy || r.To == createdBy))
+                r.AuditLog.OrderBy(a => a.CreatedAt).Last().Reason == RelationshipAuditLogEntryReason.Reactivation && (r.From == createdBy || r.To == createdBy))
             .CountAsync(cancellationToken);
         return (uint)relationshipsCount;
     }

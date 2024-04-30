@@ -11,6 +11,7 @@ public class RelationshipAuditLogEntry
 
     public string Id { get; set; }
     public RelationshipAuditLogEntryReason Reason { get; set; }
+    public DateTime CreatedAt { get; set; }
 }
 
 public enum RelationshipAuditLogEntryReason
