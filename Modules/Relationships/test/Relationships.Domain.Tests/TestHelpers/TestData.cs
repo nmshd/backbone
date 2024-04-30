@@ -59,7 +59,7 @@ public static class TestData
 
         // replace with DecomposeRequest when implemented
         relationship.AuditLog.Add(new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.Decomposed,
+            RelationshipAuditLogEntryReason.Decomposition,
             RelationshipStatus.Active,
             RelationshipStatus.DeletionProposed,
             IDENTITY_1,

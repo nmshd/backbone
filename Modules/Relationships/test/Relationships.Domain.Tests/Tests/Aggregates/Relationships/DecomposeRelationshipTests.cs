@@ -39,7 +39,7 @@ public class DecomposeRelationshipTests
         var auditLogEntry = relationship.AuditLog.Last();
 
         auditLogEntry.Id.Should().NotBeNull();
-        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.Decomposed);
+        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.Decomposition);
         auditLogEntry.OldStatus.Should().Be(RelationshipStatus.DeletionProposed);
         auditLogEntry.NewStatus.Should().Be(RelationshipStatus.ReadyForDeletion);
         auditLogEntry.CreatedBy.Should().Be(IDENTITY_2);

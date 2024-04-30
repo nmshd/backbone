@@ -167,7 +167,7 @@ public class Relationship
         Status = RelationshipStatus.ReadyForDeletion;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.Decomposed,
+            RelationshipAuditLogEntryReason.Decomposition,
             RelationshipStatus.DeletionProposed,
             RelationshipStatus.ReadyForDeletion,
             activeIdentity,
@@ -180,7 +180,7 @@ public class Relationship
     {
         var lastAuditLog = AuditLog.Last();
 
-        if (lastAuditLog.Reason != RelationshipAuditLogEntryReason.Decomposed && lastAuditLog.NewStatus != RelationshipStatus.DeletionProposed)
+        if (lastAuditLog.Reason != RelationshipAuditLogEntryReason.Decomposition && lastAuditLog.NewStatus != RelationshipStatus.DeletionProposed)
         {
             throw new DomainException(DomainErrors.CannotDecomposeRelationshipIfNoRequestWasMade());
         }
