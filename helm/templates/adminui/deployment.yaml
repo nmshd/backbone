@@ -31,7 +31,7 @@ spec:
       {{- end }}
       {{- with .Values.adminui.podSecurityContext }}
       securityContext:
-        {{- toYaml .Values.adminui.podSecurityContext | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.adminui.image.imagePullSecrets }}
       imagePullSecrets:
