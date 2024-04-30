@@ -10,7 +10,7 @@ using CSharpFunctionalExtensions;
 using MediatR;
 using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
 
-namespace Backbone.Job.IdentityDeletion;
+namespace Backbone.Job.IdentityDeletion.Workers;
 
 public class ActualDeletionWorker : IHostedService
 {
