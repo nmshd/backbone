@@ -11,7 +11,7 @@ namespace Backbone.Job.IdentityDeletion.Tests.Tests
     public class CancelStaleDeletionProcessesWorkerTests
     {
         [Fact]
-        public async void Happy_path()
+        public async Task Happy_path()
         {
             // Arrange
             var mockMediator = A.Fake<IMediator>();
