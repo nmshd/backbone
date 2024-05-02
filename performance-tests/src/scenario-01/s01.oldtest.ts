@@ -91,20 +91,21 @@ const createTasks = (totalSteps: number, totalTime: number): Map<number, LimitFu
     return ret;
 };
 
-(async () => {
-    // const limit = pLimit(5);
+// (async () => {
+//     // const limit = pLimit(5);
 
-    // let calls: Promise<void>[] = [];
-    // for (let i = 0; i < 30; i++) {
-    //     calls.push(limit(() => main()));
-    // }
-    // let a = setInterval(() => {
-    //     console.log(limit.activeCount, limit.pendingCount);
-    // }, 500);
+//     // let calls: Promise<void>[] = [];
+//     // for (let i = 0; i < 30; i++) {
+//     //     calls.push(limit(() => main()));
+//     // }
+//     // let a = setInterval(() => {
+//     //     console.log(limit.activeCount, limit.pendingCount);
+//     // }, 500);
 
-    // await Promise.all(calls).then(() => console.log("done"));
-    // clearTimeout(a);
-    let a = createTasks(50, 600);
+//     // await Promise.all(calls).then(() => console.log("done"));
+//     // clearTimeout(a);
+//     let a = createTasks(50, 600);
 
-    console.log(a);
-})();
+//     console.log(a);
+// })();
+main();
