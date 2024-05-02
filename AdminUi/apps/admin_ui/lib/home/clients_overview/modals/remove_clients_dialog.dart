@@ -29,25 +29,28 @@ class _RemoveClientsDialogState extends State<_RemoveClientsDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      title: const Text('Confirm Deletion'),
-      content: _deleting
-          // TODO: make prettier / add text
-          ? const CircularProgressIndicator()
-          : Text(
-              'Are you sure you want to delete the selected ${widget.selectedClients.length > 1 ? 'clients' : 'client'}?',
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-            ),
-      actions: <Widget>[
-        OutlinedButton(
-          onPressed: _deleting ? null : () => context.pop(),
-          child: const Text('Cancel'),
-        ),
-        TextButton(
-          onPressed: _deleting ? null : _deleteSelectedClients,
-          child: Text('Yes', style: TextStyle(color: Theme.of(context).colorScheme.error)),
-        ),
-      ],
+    return PopScope(
+      canPop: !_deleting,
+      child: AlertDialog(
+        title: const Text('Confirm Deletion'),
+        content: _deleting
+            // TODO: make prettier / add text
+            ? const CircularProgressIndicator()
+            : Text(
+                'Are you sure you want to delete the selected ${widget.selectedClients.length > 1 ? 'clients' : 'client'}?',
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              ),
+        actions: <Widget>[
+          OutlinedButton(
+            onPressed: _deleting ? null : () => context.pop(),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: _deleting ? null : _deleteSelectedClients,
+            child: Text('Yes', style: TextStyle(color: Theme.of(context).colorScheme.error)),
+          ),
+        ],
+      ),
     );
   }
 

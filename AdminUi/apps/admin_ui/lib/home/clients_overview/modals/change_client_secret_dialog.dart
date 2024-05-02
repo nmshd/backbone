@@ -54,73 +54,76 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      content: SizedBox(
-        width: 500,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              'Change Client Secret',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            Gaps.h16,
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 385,
-                    child: TextField(
-                      controller: _newClientSecretController,
-                      focusNode: _focusNode,
-                      readOnly: _saveSucceeded,
-                      obscureText: _isClientSecretVisible,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Client Secret',
-                        helperText: 'A Client Secret will be generated if this field is left blank.',
+    return PopScope(
+      canPop: !_saving,
+      child: AlertDialog(
+        content: SizedBox(
+          width: 500,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Change Client Secret',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+              ),
+              Gaps.h16,
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: 385,
+                      child: TextField(
+                        controller: _newClientSecretController,
+                        focusNode: _focusNode,
+                        readOnly: _saveSucceeded,
+                        obscureText: _isClientSecretVisible,
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Client Secret',
+                          helperText: 'A Client Secret will be generated if this field is left blank.',
+                        ),
                       ),
                     ),
-                  ),
-                  const Spacer(),
-                  IconButton(
-                    icon: Icon(_isClientSecretVisible ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () => setState(() => _isClientSecretVisible = !_isClientSecretVisible),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.copy),
-                    tooltip: 'Copy to clipboard.',
-                    onPressed: _newClientSecretController.text.isNotEmpty
-                        ? () => Clipboard.setData(ClipboardData(text: _newClientSecretController.text))
-                        : null,
-                  ),
-                ],
-              ),
-            ),
-            if (_saveClientSecretMessage.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Text(
-                  _saveClientSecretMessage,
-                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                    const Spacer(),
+                    IconButton(
+                      icon: Icon(_isClientSecretVisible ? Icons.visibility_off : Icons.visibility),
+                      onPressed: () => setState(() => _isClientSecretVisible = !_isClientSecretVisible),
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.copy),
+                      tooltip: 'Copy to clipboard.',
+                      onPressed: _newClientSecretController.text.isNotEmpty
+                          ? () => Clipboard.setData(ClipboardData(text: _newClientSecretController.text))
+                          : null,
+                    ),
+                  ],
                 ),
               ),
-            if (_errorMessage.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8),
-                child: Text(
-                  _errorMessage,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
+              if (_saveClientSecretMessage.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text(
+                    _saveClientSecretMessage,
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                  ),
                 ),
-              ),
-          ],
+              if (_errorMessage.isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text(
+                    _errorMessage,
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  ),
+                ),
+            ],
+          ),
         ),
+        actions: [
+          OutlinedButton(onPressed: _saving ? null : () => context.pop(), child: Text(_saveSucceeded ? 'Close' : 'Cancel')),
+          if (!_saveSucceeded) FilledButton(onPressed: _saving ? null : _changeClientSecret, child: const Text('Save')),
+        ],
       ),
-      actions: [
-        OutlinedButton(onPressed: _saving ? null : () => context.pop(), child: Text(_saveSucceeded ? 'Close' : 'Cancel')),
-        if (!_saveSucceeded) FilledButton(onPressed: _saving ? null : _changeClientSecret, child: const Text('Save')),
-      ],
     );
   }
 

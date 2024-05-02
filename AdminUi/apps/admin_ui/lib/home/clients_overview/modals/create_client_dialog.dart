@@ -53,120 +53,123 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      content: SizedBox(
-        width: 500,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              'Create Client',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-            ),
-            Gaps.h16,
-            TextField(
-              controller: _clientIdController,
-              readOnly: _saveSucceeded,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Client ID',
-                helperText: 'A Client ID will be generated if this field is left blank.',
+    return PopScope(
+      canPop: !_saving,
+      child: AlertDialog(
+        content: SizedBox(
+          width: 500,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Create Client',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
               ),
-            ),
-            Gaps.h16,
-            TextField(
-              controller: _displayNameController,
-              readOnly: _saveSucceeded,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Display Name',
-                helperText: 'Client ID will be used as a Display Name if no value is provided.',
+              Gaps.h16,
+              TextField(
+                controller: _clientIdController,
+                readOnly: _saveSucceeded,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Client ID',
+                  helperText: 'A Client ID will be generated if this field is left blank.',
+                ),
               ),
-            ),
-            Gaps.h16,
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 385,
-                  child: TextField(
-                    controller: _clientSecretController,
-                    readOnly: _saveSucceeded,
-                    obscureText: _isClientSecretVisible,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      labelText: 'Client Secret',
-                      helperText: 'A Client Secret will be generated if this field is left blank.',
+              Gaps.h16,
+              TextField(
+                controller: _displayNameController,
+                readOnly: _saveSucceeded,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Display Name',
+                  helperText: 'Client ID will be used as a Display Name if no value is provided.',
+                ),
+              ),
+              Gaps.h16,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: 385,
+                    child: TextField(
+                      controller: _clientSecretController,
+                      readOnly: _saveSucceeded,
+                      obscureText: _isClientSecretVisible,
+                      decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
+                        labelText: 'Client Secret',
+                        helperText: 'A Client Secret will be generated if this field is left blank.',
+                      ),
                     ),
                   ),
+                  const Spacer(),
+                  IconButton(
+                    icon: Icon(_isClientSecretVisible ? Icons.visibility_off : Icons.visibility),
+                    onPressed: () => setState(() => _isClientSecretVisible = !_isClientSecretVisible),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.copy),
+                    tooltip: 'Copy to clipboard.',
+                    onPressed:
+                        _clientSecretController.text.isNotEmpty ? () => Clipboard.setData(ClipboardData(text: _clientSecretController.text)) : null,
+                  ),
+                ],
+              ),
+              Gaps.h16,
+              if (_saveClientSecretMessage.isNotEmpty)
+                Text(
+                  _saveClientSecretMessage,
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
-                const Spacer(),
-                IconButton(
-                  icon: Icon(_isClientSecretVisible ? Icons.visibility_off : Icons.visibility),
-                  onPressed: () => setState(() => _isClientSecretVisible = !_isClientSecretVisible),
+              Gaps.h16,
+              TextField(
+                controller: _maxIdentitiesController,
+                readOnly: _saveSucceeded,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Max Identities',
+                  helperText: 'The maximum number of Identities that can be created with this Client.'
+                      '\nNo Identity limit will be assigned if this field is left blank.',
                 ),
-                IconButton(
-                  icon: const Icon(Icons.copy),
-                  tooltip: 'Copy to clipboard.',
-                  onPressed:
-                      _clientSecretController.text.isNotEmpty ? () => Clipboard.setData(ClipboardData(text: _clientSecretController.text)) : null,
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.number,
+              ),
+              Gaps.h16,
+              DropdownButtonFormField<String>(
+                isExpanded: true,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Default Tier*',
+                ),
+                value: _chosenDefaultTier,
+                onChanged: _saveSucceeded ? null : (tier) => setState(() => _chosenDefaultTier = tier),
+                items: widget.defaultTiers.map((tier) {
+                  return DropdownMenuItem<String>(
+                    value: tier.id,
+                    child: Text(tier.name),
+                  );
+                }).toList(),
+              ),
+              if (_errorMessage.isNotEmpty) ...[
+                Gaps.h16,
+                Text(
+                  _errorMessage,
+                  style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
               ],
-            ),
-            Gaps.h16,
-            if (_saveClientSecretMessage.isNotEmpty)
-              Text(
-                _saveClientSecretMessage,
-                style: TextStyle(color: Theme.of(context).colorScheme.primary),
-              ),
-            Gaps.h16,
-            TextField(
-              controller: _maxIdentitiesController,
-              readOnly: _saveSucceeded,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Max Identities',
-                helperText: 'The maximum number of Identities that can be created with this Client.'
-                    '\nNo Identity limit will be assigned if this field is left blank.',
-              ),
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              keyboardType: TextInputType.number,
-            ),
-            Gaps.h16,
-            DropdownButtonFormField<String>(
-              isExpanded: true,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Default Tier*',
-              ),
-              value: _chosenDefaultTier,
-              onChanged: _saveSucceeded ? null : (tier) => setState(() => _chosenDefaultTier = tier),
-              items: widget.defaultTiers.map((tier) {
-                return DropdownMenuItem<String>(
-                  value: tier.id,
-                  child: Text(tier.name),
-                );
-              }).toList(),
-            ),
-            if (_errorMessage.isNotEmpty) ...[
-              Gaps.h16,
-              Text(
-                _errorMessage,
-                style: TextStyle(color: Theme.of(context).colorScheme.error),
-              ),
             ],
-          ],
-        ),
-      ),
-      actions: [
-        OutlinedButton(onPressed: _saving ? null : () => context.pop(), child: Text(_saveSucceeded ? 'Close' : 'Cancel')),
-        if (!_saveSucceeded)
-          FilledButton(
-            onPressed: _chosenDefaultTier != null && !_saveSucceeded && !_saving ? _createClient : null,
-            child: const Text('Save'),
           ),
-      ],
+        ),
+        actions: [
+          OutlinedButton(onPressed: _saving ? null : () => context.pop(), child: Text(_saveSucceeded ? 'Close' : 'Cancel')),
+          if (!_saveSucceeded)
+            FilledButton(
+              onPressed: _chosenDefaultTier != null && !_saveSucceeded && !_saving ? _createClient : null,
+              child: const Text('Save'),
+            ),
+        ],
+      ),
     );
   }
 
