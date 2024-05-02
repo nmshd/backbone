@@ -2,7 +2,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
@@ -36,8 +36,8 @@ public class Handler : IRequestHandler<CancelDeletionAsSupportCommand, CancelDel
         await _identitiesRepository.Update(identity, cancellationToken);
         var newTierId = identity.TierId;
 
-        _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTierId, newTierId));
-        _eventBus.Publish(new IdentityDeletionProcessStatusChangedIntegrationEvent(identity.Address, deletionProcess.Id));
+        _eventBus.Publish(new TierOfIdentityChangedDomainEvent(identity, oldTierId, newTierId));
+        _eventBus.Publish(new IdentityDeletionProcessStatusChangedDomainEvent(identity.Address, deletionProcess.Id));
 
         return new CancelDeletionAsSupportResponse(deletionProcess);
     }

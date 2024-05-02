@@ -2,7 +2,6 @@ using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Common.Infrastructure;
@@ -99,16 +98,19 @@ static WebApplication CreateApp(string[] args)
     var app = builder.Build();
     Configure(app);
 
-    app
-        .MigrateDbContext<ChallengesDbContext>()
-        .MigrateDbContext<DevicesDbContext>()
-        .MigrateDbContext<FilesDbContext>()
-        .MigrateDbContext<RelationshipsDbContext>()
-        .MigrateDbContext<QuotasDbContext>()
-        .MigrateDbContext<MessagesDbContext>()
-        .MigrateDbContext<SynchronizationDbContext>()
-        .MigrateDbContext<TokensDbContext>()
-        .MigrateDbContext<QuotasDbContext>();
+    if ((app.Environment.IsLocal() || app.Environment.IsDevelopment()) && app.Configuration.GetValue<bool>("RunMigrations"))
+    {
+        app
+            .MigrateDbContext<ChallengesDbContext>()
+            .MigrateDbContext<DevicesDbContext>()
+            .MigrateDbContext<FilesDbContext>()
+            .MigrateDbContext<RelationshipsDbContext>()
+            .MigrateDbContext<QuotasDbContext>()
+            .MigrateDbContext<MessagesDbContext>()
+            .MigrateDbContext<SynchronizationDbContext>()
+            .MigrateDbContext<TokensDbContext>()
+            .MigrateDbContext<QuotasDbContext>();
+    }
 
     app
         .SeedDbContext<DevicesDbContext, DevicesDbContextSeeder>()
@@ -218,16 +220,6 @@ static void Configure(WebApplication app)
     });
 
     app.UseResponseCaching();
-
-    var eventBus = app.Services.GetRequiredService<IEventBus>();
-    var modules = app.Services.GetRequiredService<IEnumerable<AbstractModule>>();
-
-    foreach (var module in modules)
-    {
-        module.ConfigureEventBus(eventBus);
-    }
-
-    eventBus.StartConsuming();
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)

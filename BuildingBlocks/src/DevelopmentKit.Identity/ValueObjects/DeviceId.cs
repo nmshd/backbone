@@ -1,13 +1,13 @@
 using System.ComponentModel;
 using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.DevelopmentKit.Identity.ValueObjects;
 
 [Serializable]
 [TypeConverter(typeof(DeviceIdTypeConverter))]
-public class DeviceId : StronglyTypedId
+public record DeviceId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
 

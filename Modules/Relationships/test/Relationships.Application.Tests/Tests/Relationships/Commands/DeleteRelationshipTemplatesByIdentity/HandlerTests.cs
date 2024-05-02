@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.DeleteRelationshipTemplatesOfIdentity;
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using FakeItEasy;
 using Xunit;
 

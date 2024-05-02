@@ -1,15 +1,13 @@
 using System.Linq.Expressions;
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Common;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,53 +16,14 @@ namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Rep
 public class RelationshipsRepository : IRelationshipsRepository
 {
     private readonly DbSet<Relationship> _relationships;
-    private readonly DbSet<RelationshipChange> _changes;
     private readonly IQueryable<Relationship> _readOnlyRelationships;
-    private readonly IQueryable<RelationshipChange> _readOnlyChanges;
     private readonly RelationshipsDbContext _dbContext;
 
     public RelationshipsRepository(RelationshipsDbContext dbContext)
     {
         _relationships = dbContext.Relationships;
         _readOnlyRelationships = dbContext.Relationships.AsNoTracking();
-        _changes = dbContext.RelationshipChanges;
-        _readOnlyChanges = dbContext.RelationshipChanges.AsNoTracking();
         _dbContext = dbContext;
-    }
-
-    public async Task<DbPaginationResult<RelationshipChange>> FindChangesWithIds(IEnumerable<RelationshipChangeId> ids,
-        RelationshipChangeType? relationshipChangeType, RelationshipChangeStatus? relationshipChangeStatus,
-        OptionalDateRange? modifiedAt, OptionalDateRange? createdAt, OptionalDateRange? completedAt,
-        IdentityAddress? createdBy, IdentityAddress? completedBy, IdentityAddress activeIdentity,
-        PaginationFilter paginationFilter, CancellationToken cancellationToken, bool onlyPeerChanges = false, bool track = false)
-    {
-        var query = (track ? _changes : _readOnlyChanges)
-            .AsQueryable()
-            .IncludeAll(_dbContext)
-            .WithRelationshipParticipant(activeIdentity);
-
-        if (relationshipChangeType.HasValue)
-            query = query.WithType(relationshipChangeType.Value);
-        if (relationshipChangeStatus.HasValue)
-            query = query.WithStatus(relationshipChangeStatus.Value);
-        if (modifiedAt != null)
-            query = query.ModifiedAt(modifiedAt);
-        if (createdAt != null)
-            query = query.CreatedAt(createdAt);
-        if (completedAt != null)
-            query = query.CompletedAt(completedAt);
-        if (createdBy != null)
-            query = query.CreatedBy(createdBy);
-        if (completedBy != null)
-            query = query.CompletedBy(completedBy);
-        if (ids.Any())
-            query = query.WithIdIn(ids);
-        if (onlyPeerChanges)
-            query = query.OnlyPeerChanges(activeIdentity);
-
-        var changes = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
-
-        return changes;
     }
 
     public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress,
@@ -76,18 +35,6 @@ public class RelationshipsRepository : IRelationshipsRepository
             .FirstWithId(id, cancellationToken);
 
         return relationship;
-    }
-
-    public async Task<RelationshipChange?> FindRelationshipChange(RelationshipChangeId id,
-        IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
-    {
-        var change = await (track ? _changes : _readOnlyChanges)
-            .IncludeAll(_dbContext)
-            .WithId(id)
-            .WithRelationshipParticipant(identityAddress)
-            .FirstOrDefaultAsync(cancellationToken);
-
-        return change;
     }
 
     public async Task<DbPaginationResult<Relationship>> FindRelationshipsWithIds(IEnumerable<RelationshipId> ids,
@@ -121,7 +68,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         catch (DbUpdateException ex)
         {
             if (ex.InnerException != null && ex.InnerException.Message.Contains(ConstraintNames.ONLY_ONE_ACTIVE_RELATIONSHIP_BETWEEN_TWO_IDENTITIES))
-                throw new OperationFailedException(ApplicationErrors.Relationship.RelationshipToTargetAlreadyExists(relationship.To));
+                throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(relationship.To));
 
             throw;
         }
@@ -132,8 +79,7 @@ public class RelationshipsRepository : IRelationshipsRepository
     {
         return await _readOnlyRelationships
             .BetweenParticipants(identityAddressA, identityAddressB)
-            .Where(r => r.Status != RelationshipStatus.Terminated && r.Status != RelationshipStatus.Rejected &&
-                        r.Status != RelationshipStatus.Revoked)
+            .Where(Relationship.CountsAsActive())
             .AnyAsync(cancellationToken);
     }
 

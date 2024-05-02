@@ -1,48 +1,57 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.DTOs;
 
-public class RelationshipMetadataDTO : IMapTo<Relationship>
+public class RelationshipMetadataDTO
 {
-    public required RelationshipId Id { get; set; }
-    public required RelationshipTemplateId RelationshipTemplateId { get; set; }
+    public RelationshipMetadataDTO(Relationship relationship)
+    {
+        Id = relationship.Id;
+        RelationshipTemplateId = relationship.RelationshipTemplateId;
+        From = relationship.From;
+        To = relationship.To;
+        CreatedAt = relationship.CreatedAt;
+        Status = relationship.Status;
+        AuditLog = relationship.AuditLog.Select(a => new RelationshipAuditLogEntryDTO(a)).ToList();
+    }
 
-    public required IdentityAddress From { get; set; }
-    public required IdentityAddress To { get; set; }
-    public required IEnumerable<RelationshipChangeMetadataDTO> Changes { get; set; }
+    public RelationshipId Id { get; set; }
+    public RelationshipTemplateId RelationshipTemplateId { get; set; }
 
-    public required DateTime CreatedAt { get; set; }
+    public IdentityAddress From { get; set; }
+    public IdentityAddress To { get; set; }
+
+    public DateTime CreatedAt { get; set; }
 
     public RelationshipStatus Status { get; set; }
+
+    public List<RelationshipAuditLogEntryDTO> AuditLog { get; set; }
 }
 
-public class RelationshipChangeMetadataDTO : IMapTo<RelationshipChange>
+public static class RelationshipStatusExtensions
 {
-    public required RelationshipChangeId Id { get; set; }
+    public static string ToDtoString(this RelationshipStatus status)
+    {
+        return status.ToDtoStringInternal();
+    }
 
-    public required RelationshipId RelationshipId { get; set; }
+    public static string? ToDtoString(this RelationshipStatus? status)
+    {
+        return status?.ToDtoStringInternal();
+    }
 
-    public required RelationshipChangeRequestMetadataDTO Request { get; set; }
-    public required RelationshipChangeResponseMetadataDTO? Response { get; set; }
-
-    public required RelationshipChangeType Type { get; set; }
-
-    public required RelationshipChangeStatus Status { get; set; }
-}
-
-public class RelationshipChangeRequestMetadataDTO : IMapTo<RelationshipChangeRequest>
-{
-    public required DateTime CreatedAt { get; set; }
-    public required IdentityAddress CreatedBy { get; set; }
-    public required DeviceId CreatedByDevice { get; set; }
-}
-
-public class RelationshipChangeResponseMetadataDTO : IMapTo<RelationshipChangeResponse>
-{
-    public required DateTime CreatedAt { get; set; }
-    public required IdentityAddress CreatedBy { get; set; }
-    public required DeviceId CreatedByDevice { get; set; }
+    private static string ToDtoStringInternal(this RelationshipStatus status)
+    {
+        return status switch
+        {
+            RelationshipStatus.Pending => "Pending",
+            RelationshipStatus.Active => "Active",
+            RelationshipStatus.Rejected => "Rejected",
+            RelationshipStatus.Revoked => "Revoked",
+            RelationshipStatus.Terminated => "Terminated",
+            _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
+        };
+    }
 }

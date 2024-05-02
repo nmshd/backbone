@@ -4,8 +4,8 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using MediatR;
@@ -62,7 +62,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        PublishDatawalletModifiedIntegrationEvent();
+        PublishDatawalletModifiedDomainEvent();
 
         var response = new FinalizeDatawalletVersionUpgradeSyncRunResponse
         {
@@ -70,7 +70,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
             DatawalletModifications = _mapper.Map<CreatedDatawalletModificationDTO[]>(newModifications)
         };
 
-        PublishDatawalletModifiedIntegrationEvent();
+        PublishDatawalletModifiedDomainEvent();
 
         return response;
     }
@@ -95,7 +95,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        PublishDatawalletModifiedIntegrationEvent();
+        PublishDatawalletModifiedDomainEvent();
 
         var response = new FinalizeExternalEventSyncSyncRunResponse
         {
@@ -104,7 +104,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         };
 
         if (newModifications.Count > 0)
-            PublishDatawalletModifiedIntegrationEvent();
+            PublishDatawalletModifiedDomainEvent();
 
         return response;
     }
@@ -148,8 +148,8 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         return newModifications;
     }
 
-    private void PublishDatawalletModifiedIntegrationEvent()
+    private void PublishDatawalletModifiedDomainEvent()
     {
-        _eventBus.Publish(new DatawalletModifiedIntegrationEvent(_activeIdentity, _activeDevice));
+        _eventBus.Publish(new DatawalletModifiedDomainEvent(_activeIdentity, _activeDevice));
     }
 }

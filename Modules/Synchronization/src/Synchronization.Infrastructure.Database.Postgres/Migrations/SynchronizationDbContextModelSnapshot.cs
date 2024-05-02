@@ -17,6 +17,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("Synchronization")
                 .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -46,7 +47,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                     b.HasIndex("Owner")
                         .IsUnique();
 
-                    b.ToTable("Datawallets");
+                    b.ToTable("Datawallets", "Synchronization");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.DatawalletModification", b =>
@@ -121,7 +122,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                     b.HasIndex("CreatedBy", "Index")
                         .IsUnique();
 
-                    b.ToTable("DatawalletModifications");
+                    b.ToTable("DatawalletModifications", "Synchronization");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", b =>
@@ -172,7 +173,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("Owner", "SyncRunId");
 
-                    b.ToTable("ExternalEvents");
+                    b.ToTable("ExternalEvents", "Synchronization");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncError", b =>
@@ -209,7 +210,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                     b.HasIndex("SyncRunId", "ExternalEventId")
                         .IsUnique();
 
-                    b.ToTable("SyncErrors");
+                    b.ToTable("SyncErrors", "Synchronization");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.SyncRun", b =>
@@ -259,7 +260,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                     b.HasIndex("CreatedBy", "Index")
                         .IsUnique();
 
-                    b.ToTable("SyncRuns");
+                    b.ToTable("SyncRuns", "Synchronization");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.DatawalletModification", b =>

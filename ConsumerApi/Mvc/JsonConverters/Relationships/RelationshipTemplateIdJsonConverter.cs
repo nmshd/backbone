@@ -1,7 +1,7 @@
-using System.Text.Json;
+﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
 namespace Backbone.ConsumerApi.Mvc.JsonConverters.Relationships;
 
@@ -28,6 +28,6 @@ public class RelationshipTemplateIdJsonConverter : JsonConverter<RelationshipTem
 
     public override void Write(Utf8JsonWriter writer, RelationshipTemplateId value, JsonSerializerOptions options)
     {
-        writer.WriteStringValue(value.StringValue);
+        writer.WriteStringValue(value.Value);
     }
 }

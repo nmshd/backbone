@@ -24,7 +24,7 @@ public class IdentityAddressTests
     {
         var address = IdentityAddress.Create(Convert.FromBase64String(publicKey), "prod.enmeshed.eu");
 
-        address.StringValue.Should().Be(expectedAddress);
+        address.Value.Should().Be(expectedAddress);
     }
 
     [Fact]
@@ -33,7 +33,7 @@ public class IdentityAddressTests
         var testData = TestData.Valid();
         var address = IdentityAddress.Create(testData.PublicKey, testData.InstanceUrl);
 
-        address.Should().Be(testData.Address);
+        address.Value.Should().Be(testData.Address);
     }
 
     [Fact]
@@ -42,7 +42,7 @@ public class IdentityAddressTests
         var testData = TestData.Valid();
         var address = IdentityAddress.Create(testData.PublicKey, testData.InstanceUrl);
 
-        address.Should().Be(testData.Address);
+        address.Value.Should().Be(testData.Address);
     }
 
     [Fact]

@@ -17,6 +17,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("Quotas")
                 .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -64,7 +65,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("TierId");
 
-                    b.ToTable("Identities");
+                    b.ToTable("Identities", "Quotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.IndividualQuota", b =>
@@ -96,7 +97,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("ApplyTo");
 
-                    b.ToTable("IndividualQuotas", (string)null);
+                    b.ToTable("IndividualQuotas", "Quotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.MetricStatus", b =>
@@ -120,7 +121,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("MetricKey"), new[] { "IsExhaustedUntil" });
 
-                    b.ToTable("MetricStatuses", (string)null);
+                    b.ToTable("MetricStatuses", "Quotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.TierQuota", b =>
@@ -148,7 +149,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("_definitionId");
 
-                    b.ToTable("TierQuotas", (string)null);
+                    b.ToTable("TierQuotas", "Quotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Messages.Message", b =>
@@ -230,7 +231,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tiers");
+                    b.ToTable("Tiers", "Quotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Tiers.TierQuotaDefinition", b =>
@@ -264,7 +265,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("TierId");
 
-                    b.ToTable("TierQuotaDefinitions", (string)null);
+                    b.ToTable("TierQuotaDefinitions", "Quotas");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Tokens.Token", b =>

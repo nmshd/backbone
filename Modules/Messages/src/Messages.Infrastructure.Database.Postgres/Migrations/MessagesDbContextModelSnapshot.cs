@@ -17,6 +17,7 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("Messages")
                 .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -40,7 +41,7 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("MessageId");
 
-                    b.ToTable("Attachments", (string)null);
+                    b.ToTable("Attachments", "Messages");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.Message", b =>
@@ -75,7 +76,7 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", "Messages");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.RecipientInformation", b =>
@@ -130,7 +131,7 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("Address", "MessageId");
 
-                    b.ToTable("RecipientInformation");
+                    b.ToTable("RecipientInformation", "Messages");
                 });
 
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.Relationship", b =>
@@ -150,6 +151,9 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character(100)")
                         .IsFixedLength();
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("To")
                         .IsRequired()

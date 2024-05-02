@@ -155,7 +155,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'challenges')
 BEGIN
-	CREATE USER challenges FOR LOGIN challenges	WITH DEFAULT_SCHEMA = Challenges
+	CREATE USER challenges FOR LOGIN challenges
 	PRINT 'User "challenges" created' ;
 END
 
@@ -163,7 +163,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'devices')
 BEGIN
-	CREATE USER devices FOR LOGIN devices WITH DEFAULT_SCHEMA = Devices
+	CREATE USER devices FOR LOGIN devices
 	PRINT 'User "devices" created' ;
 END
 
@@ -171,7 +171,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'messages')
 BEGIN
-	CREATE USER messages FOR LOGIN messages	WITH DEFAULT_SCHEMA = Messages
+	CREATE USER messages FOR LOGIN messages
 	PRINT 'User "messages" created' ;
 END
 
@@ -179,7 +179,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'synchronization')
 BEGIN
-	CREATE USER synchronization FOR LOGIN synchronization	WITH DEFAULT_SCHEMA = Synchronization
+	CREATE USER synchronization FOR LOGIN synchronization
 	PRINT 'User "synchronization" created' ;
 END
 
@@ -187,7 +187,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'tokens')
 BEGIN
-	CREATE USER tokens FOR LOGIN tokens	WITH DEFAULT_SCHEMA = Tokens
+	CREATE USER tokens FOR LOGIN tokens
 	PRINT 'User "tokens" created' ;
 END
 
@@ -195,7 +195,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'files')
 BEGIN
-	CREATE USER files FOR LOGIN files	WITH DEFAULT_SCHEMA = Files
+	CREATE USER files FOR LOGIN files
 	PRINT 'User "files" created' ;
 END
 
@@ -203,7 +203,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'relationships')
 BEGIN
-	CREATE USER relationships FOR LOGIN relationships	WITH DEFAULT_SCHEMA = Relationships
+	CREATE USER relationships FOR LOGIN relationships
 	PRINT 'User "relationships" created' ;
 END
 
@@ -212,7 +212,7 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'quotas')
 BEGIN
-	CREATE USER quotas FOR LOGIN quotas	WITH DEFAULT_SCHEMA = Quotas
+	CREATE USER quotas FOR LOGIN quotas
 	PRINT 'User "Quotas" created' ;
 END
 
@@ -220,41 +220,24 @@ IF NOT EXISTS (SELECT *
 FROM sys.database_principals
 WHERE name = 'adminUi')
 BEGIN
-	CREATE USER adminUi FOR LOGIN adminUi WITH DEFAULT_SCHEMA = AdminUi
+	CREATE USER adminUi FOR LOGIN adminUi
 	PRINT 'User "adminUi" created' ;
 END
 
 GO
 
-/*+++++++++++++++++++++++++++++++++++++++++++++++++ Schema Owners ++++++++++++++++++++++++++++++++++++++++++++++++++*/
-PRINT 'Start changing schema owners' ;
-ALTER AUTHORIZATION ON SCHEMA::Challenges TO challenges
-ALTER AUTHORIZATION ON SCHEMA::Devices TO devices
-ALTER AUTHORIZATION ON SCHEMA::Messages TO messages
-ALTER AUTHORIZATION ON SCHEMA::Synchronization TO synchronization
-ALTER AUTHORIZATION ON SCHEMA::Tokens TO tokens
-ALTER AUTHORIZATION ON SCHEMA::Relationships TO relationships
-ALTER AUTHORIZATION ON SCHEMA::Files TO files
-ALTER AUTHORIZATION ON SCHEMA::Quotas TO quotas
-ALTER AUTHORIZATION ON SCHEMA::AdminUi TO adminUi
-PRINT 'Finished changing schema owners' ;
-GO
-
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Authorizations +++++++++++++++++++++++++++++++++++++++++++++++++*/
 PRINT 'Start changing authorizations' ;
 
-GRANT CREATE TABLE TO challenges, devices, messages, synchronization, tokens, relationships, files, quotas, adminUi
-GRANT CREATE FUNCTION TO relationships
-GO
-
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Challenges TO synchronization, devices, messages, tokens, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Synchronization TO challenges, devices, messages, tokens, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Messages TO challenges, synchronization, devices, tokens, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Devices TO challenges, synchronization, messages, tokens, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Tokens TO challenges, synchronization, devices, messages, relationships, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Relationships TO challenges, synchronization, devices, messages, tokens, files, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Files TO challenges, synchronization, devices, messages, tokens, relationships, quotas
-DENY SELECT, INSERT, UPDATE, DELETE ON SCHEMA::Quotas TO challenges, synchronization, devices, messages, tokens, relationships, files
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Challenges TO challenges;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Devices TO devices;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Files TO files;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Messages TO messages;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Quotas TO quotas;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Relationships TO relationships;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Synchronization TO synchronization;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::Tokens TO tokens;
+GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SCHEMA::AdminUi TO adminUi;
 
 GRANT SELECT, REFERENCES ON SCHEMA::Relationships TO messages
 GRANT SELECT, REFERENCES ON SCHEMA::Challenges TO devices

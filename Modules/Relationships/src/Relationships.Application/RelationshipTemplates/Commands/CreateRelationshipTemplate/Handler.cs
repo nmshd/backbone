@@ -2,8 +2,8 @@ using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
@@ -34,14 +34,14 @@ public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, Create
 
         await _relationshipTemplatesRepository.Add(template, cancellationToken);
 
-        PublishIntegrationEvent(template);
+        PublishDomainEvent(template);
 
         return _mapper.Map<CreateRelationshipTemplateResponse>(template);
     }
 
-    private void PublishIntegrationEvent(RelationshipTemplate template)
+    private void PublishDomainEvent(RelationshipTemplate template)
     {
-        var evt = new RelationshipTemplateCreatedIntegrationEvent(template);
+        var evt = new RelationshipTemplateCreatedDomainEvent(template);
         _eventBus.Publish(evt);
     }
 }

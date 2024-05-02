@@ -19,7 +19,7 @@ internal class BaseApi
         _httpClient = factory.CreateClient();
 
         ServicePointManager.ServerCertificateValidationCallback +=
-                (_, _, _, _) => true;
+            (_, _, _, _) => true;
     }
 
     protected async Task<HttpResponse<T>> Get<T>(string endpoint, RequestConfiguration requestConfiguration)
@@ -130,19 +130,19 @@ internal class BaseApi
             { "username", authenticationParams.Username },
             { "password", authenticationParams.Password },
             { "client_id", authenticationParams.ClientId },
-            { "client_secret",  authenticationParams.ClientSecret }
+            { "client_secret", authenticationParams.ClientSecret }
         };
 
         var request = new HttpRequestMessage(HttpMethod.Post, "/connect/token") { Content = new FormUrlEncodedContent(form) };
         var httpResponse = await _httpClient.SendAsync(request);
 
+        var responseRawContent = await httpResponse.Content.ReadAsStringAsync();
         if (!httpResponse.IsSuccessStatusCode)
         {
-            var errorMessage = httpResponse.Content.ReadAsAsync<HttpError>()?.Result.Message ?? "Unknown error occurred when requesting an access token.";
+            var errorMessage = JsonSerializer.Deserialize<HttpError>(responseRawContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })?.Message!;
             throw new AccessTokenRequestException(httpResponse.StatusCode, errorMessage);
         }
 
-        var responseRawContent = await httpResponse.Content.ReadAsStringAsync();
         _accessTokenResponse = JsonSerializer.Deserialize<AccessTokenResponse>(responseRawContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true })!;
 
         return _accessTokenResponse;
