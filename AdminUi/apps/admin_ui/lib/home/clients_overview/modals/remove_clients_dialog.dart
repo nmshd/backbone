@@ -2,6 +2,7 @@ import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logger/logger.dart';
 
 import '/core/core.dart';
 
@@ -30,6 +31,7 @@ class _RemoveClientsDialogState extends State<_RemoveClientsDialog> {
   bool _deleting = false;
   bool _deletionSucceeded = false;
   String? _deletionError;
+  final _deletedClients = <String>[];
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class _RemoveClientsDialogState extends State<_RemoveClientsDialog> {
       child: AlertDialog(
         title: Text(widget.selectedClients.length == 1 ? 'Delete Client' : 'Delete Clients', textAlign: TextAlign.center),
         content: switch ((_deleting, _deletionSucceeded)) {
-          (_, true) => _RemoveClientsSucceeded(numberOfDeletedClients: widget.selectedClients.length),
+          (_, true) => _RemoveClientsSucceeded(numberOfDeletedClients: _deletedClients.length),
           (true, _) => const _RemoveClientsLoading(),
           (_, _) => Text(
               _deletionError ?? 'Are you sure you want to delete the selected ${widget.selectedClients.length > 1 ? 'clients' : 'client'}?',
@@ -64,12 +66,15 @@ class _RemoveClientsDialogState extends State<_RemoveClientsDialog> {
     setState(() => _deleting = true);
 
     try {
-      for (final clientId in widget.selectedClients) {
+      for (final clientId in widget.selectedClients.toList()) {
         await GetIt.I.get<AdminApiClient>().clients.deleteClient(clientId);
         widget.onClientsRemoved();
         widget.selectedClients.remove(clientId);
+        _deletedClients.add(clientId);
       }
     } catch (e) {
+      GetIt.I.get<Logger>().e('An error occurred while deleting the client(s). $e');
+
       setState(() {
         _deleting = false;
         _deletionSucceeded = false;
@@ -118,7 +123,7 @@ class _RemoveClientsSucceeded extends StatelessWidget {
         const Icon(Icons.check_circle, color: Colors.green, size: 48),
         Gaps.h8,
         Text(
-          'Successfully removed ${numberOfDeletedClients == 1 ? 'one client.' : '$numberOfDeletedClients clients.'}',
+          'Successfully deleted ${numberOfDeletedClients == 1 ? 'one client.' : '$numberOfDeletedClients clients.'}',
           style: TextStyle(color: Theme.of(context).colorScheme.primary),
         ),
       ],

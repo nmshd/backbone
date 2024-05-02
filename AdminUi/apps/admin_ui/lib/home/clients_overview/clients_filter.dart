@@ -38,34 +38,21 @@ class ClientsFilter {
     );
   }
 
-  List<Clients> apply(List<Clients> clients) {
-    var filteredList = clients;
+  List<Clients> apply(List<Clients> clients) => clients.where(matches).toList();
 
-    if (clientId != null) {
-      filteredList = filteredList.where((client) => client.clientId.contains(clientId!)).toList();
+  bool matches(Clients client) {
+    if (clientId != null && !client.clientId.contains(clientId!)) return false;
+    if (displayName != null && !client.displayName.contains(displayName!)) return false;
+    if (tiers != null && !tiers!.contains(client.defaultTier.id)) return false;
+    if (createdAt != null && !_applyDateFilter(client.createdAt, createdAt!.$2, createdAt!.$1)) return false;
+    if (numberOfIdentities != null && !_applyNumberFilter(client.numberOfIdentities ?? 0, numberOfIdentities!.$2, numberOfIdentities!.$1)) {
+      return false;
     }
 
-    if (displayName != null) {
-      filteredList = filteredList.where((client) => client.displayName.contains(displayName!)).toList();
-    }
-
-    if (tiers != null) {
-      filteredList = filteredList.where((client) => tiers!.contains(client.defaultTier.id)).toList();
-    }
-
-    if (createdAt != null) {
-      filteredList = filteredList.where((client) => applyDateFilter(client.createdAt, createdAt!.$2, createdAt!.$1)).toList();
-    }
-
-    if (numberOfIdentities != null) {
-      filteredList =
-          filteredList.where((client) => applyNumberFilter(client.numberOfIdentities ?? 0, numberOfIdentities!.$2, numberOfIdentities!.$1)).toList();
-    }
-
-    return filteredList;
+    return true;
   }
 
-  bool applyDateFilter(DateTime clientDate, DateTime filterDate, FilterOperator filterOperator) {
+  bool _applyDateFilter(DateTime clientDate, DateTime filterDate, FilterOperator filterOperator) {
     final clientDateAtMidnight = DateTime(clientDate.year, clientDate.month, clientDate.day);
     final filterDateAtMidnight = DateTime(filterDate.year, filterDate.month, filterDate.day);
 
@@ -81,7 +68,7 @@ class ClientsFilter {
     };
   }
 
-  bool applyNumberFilter(int clientNumber, int filterNumber, FilterOperator filterOperator) {
+  bool _applyNumberFilter(int clientNumber, int filterNumber, FilterOperator filterOperator) {
     return switch (filterOperator) {
       FilterOperator.equal => clientNumber == filterNumber,
       FilterOperator.lessThan => clientNumber < filterNumber,

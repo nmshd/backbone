@@ -19,7 +19,6 @@ class ClientsOverview extends StatefulWidget {
 class _ClientsOverviewState extends State<ClientsOverview> {
   ClientsFilter _filter = ClientsFilter.empty;
   List<Clients> _originalClients = [];
-  List<Clients> _filteredClients = [];
   final Set<String> _selectedClients = {};
   List<TierOverview> _defaultTiers = [];
 
@@ -44,12 +43,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
             height: double.infinity,
             child: Column(
               children: [
-                ClientsFilterRow(
-                  onFilterChanged: (filter) {
-                    _filter = filter;
-                    setState(() => _filteredClients = filter.apply(_originalClients));
-                  },
-                ),
+                ClientsFilterRow(onFilterChanged: (filter) => setState(() => _filter = filter)),
                 Gaps.h16,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -92,7 +86,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
 
                       setState(() {
                         if (selected) {
-                          _selectedClients.addAll(_filteredClients.map((client) => client.clientId));
+                          _selectedClients.addAll(_originalClients.where((e) => _filter.matches(e)).map((client) => client.clientId));
                         } else {
                           _selectedClients.clear();
                         }
@@ -106,7 +100,8 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                       DataColumn2(label: Text('Created At')),
                       DataColumn2(label: Text(''), size: ColumnSize.L),
                     ],
-                    rows: _filteredClients
+                    rows: _originalClients
+                        .where((e) => _filter.matches(e))
                         .map(
                           (client) => DataRow2(
                             selected: _selectedClients.contains(client.clientId),
@@ -154,18 +149,11 @@ class _ClientsOverviewState extends State<ClientsOverview> {
 
   Future<void> _reloadClients() async {
     final response = await GetIt.I.get<AdminApiClient>().clients.getClients();
-    if (mounted) {
-      setState(() {
-        _originalClients = response.data;
-        _filteredClients = _filter.apply(response.data);
-      });
-    }
+    if (mounted) setState(() => _originalClients = response.data);
   }
 
   Future<void> _loadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
-    setState(() {
-      _defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient == true).toList();
-    });
+    setState(() => _defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient == true).toList());
   }
 }
