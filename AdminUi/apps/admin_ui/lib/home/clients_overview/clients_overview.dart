@@ -1,11 +1,13 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:admin_ui/core/constants.dart';
-import 'package:admin_ui/home/clients_overview/clients_filter.dart';
-import 'package:admin_ui/home/clients_overview/clients_overview_dialogs/clients_overview_dialogs.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
+
+import 'clients_filter.dart';
+import 'modals/modals.dart';
 
 class ClientsOverview extends StatefulWidget {
   const ClientsOverview({super.key});
@@ -15,24 +17,18 @@ class ClientsOverview extends StatefulWidget {
 }
 
 class _ClientsOverviewState extends State<ClientsOverview> {
-  late ScrollController _scrollController;
-
-  late List<Clients> _clients;
-  late List<Clients> _originalClients;
-  late Map<String, bool> _selectedClients;
-
-  late List<TierOverview> _defaultTiers;
+  ClientsFilter _filter = ClientsFilter.empty;
+  List<Clients> _originalClients = [];
+  List<Clients> _filteredClients = [];
+  final Set<String> _selectedClients = {};
+  List<TierOverview> _defaultTiers = [];
 
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
-    _clients = [];
-    _originalClients = [];
-    _selectedClients = {};
-    _defaultTiers = [];
-    loadClients();
-    loadTiers();
+
+    _reloadClients();
+    _loadTiers();
   }
 
   @override
@@ -48,14 +44,13 @@ class _ClientsOverviewState extends State<ClientsOverview> {
             height: double.infinity,
             child: Column(
               children: [
-                ClientsFilter(
-                  loadedClients: _originalClients,
-                  onFilterChanged: (filteredClients) {
-                    setState(() {
-                      _clients = filteredClients;
-                    });
+                ClientsFilterRow(
+                  onFilterChanged: (filter) {
+                    _filter = filter;
+                    setState(() => _filteredClients = filter.apply(_originalClients));
                   },
                 ),
+                Gaps.h16,
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -70,26 +65,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                           return _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.error : null;
                         }),
                       ),
-                      onPressed: _selectedClients.isNotEmpty
-                          ? () {
-                              showDialog<void>(
-                                context: context,
-                                builder: (BuildContext dialogContext) {
-                                  return RemoveClientsDialog(
-                                    selectedClients: _selectedClients,
-                                    loadClients: loadClients,
-                                    onSuccess: (numberOfRemovedClients) {
-                                      if (numberOfRemovedClients == 1) {
-                                        _showSnackBar(context, 'Successfully removed $numberOfRemovedClients Client.');
-                                      } else {
-                                        _showSnackBar(context, 'Successfully removed $numberOfRemovedClients Clients.');
-                                      }
-                                    },
-                                  );
-                                },
-                              );
-                            }
-                          : null,
+                      onPressed: _selectedClients.isNotEmpty ? _removeSelectedClients : null,
                     ),
                     Gaps.w8,
                     IconButton(
@@ -102,27 +78,21 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                           return Theme.of(context).colorScheme.primary;
                         }),
                       ),
-                      onPressed: () {
-                        showDialog<void>(
-                          context: context,
-                          builder: (BuildContext context) => CreateClientDialog(defaultTiers: _defaultTiers, loadClients: loadClients),
-                        );
-                      },
+                      onPressed: () => showCreateClientDialog(context: context, defaultTiers: _defaultTiers),
                     ),
                   ],
                 ),
                 Expanded(
                   child: DataTable2(
                     isVerticalScrollBarVisible: true,
-                    scrollController: _scrollController,
                     onSelectAll: (selected) {
+                      if (selected == null) return;
+
                       setState(() {
-                        for (final client in _clients) {
-                          if (selected!) {
-                            _selectedClients[client.clientId] = selected;
-                          } else {
-                            _selectedClients.remove(client.clientId);
-                          }
+                        if (selected) {
+                          _selectedClients.addAll(_filteredClients.map((client) => client.clientId));
+                        } else {
+                          _selectedClients.clear();
                         }
                       });
                     },
@@ -134,14 +104,16 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                       DataColumn2(label: Text('Created At')),
                       DataColumn2(label: Text(''), size: ColumnSize.L),
                     ],
-                    rows: _clients
+                    rows: _filteredClients
                         .map(
                           (client) => DataRow2(
-                            selected: _selectedClients[client.clientId] ?? false,
+                            selected: _selectedClients.contains(client.clientId),
                             onSelectChanged: (selected) {
+                              if (selected == null) return;
+
                               setState(() {
-                                if (selected!) {
-                                  _selectedClients[client.clientId] = selected;
+                                if (selected) {
+                                  _selectedClients.add(client.clientId);
                                 } else {
                                   _selectedClients.remove(client.clientId);
                                 }
@@ -152,17 +124,11 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                               DataCell(Text(client.displayName)),
                               DataCell(Text(client.defaultTier.name)),
                               DataCell(Text('${client.numberOfIdentities}')),
-                              DataCell(Text(client.createdAt.toIso8601String().substring(0, 10))),
+                              DataCell(Text(DateFormat('yyyy-MM-dd').format(client.createdAt))),
                               DataCell(
                                 ElevatedButton(
                                   style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),
-                                  onPressed: () {
-                                    showDialog<void>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          ChangeClientSecretDialog(clientId: client.clientId, loadClients: loadClients),
-                                    );
-                                  },
+                                  onPressed: () => showChangeClientSecretDialog(context: context, clientId: client.clientId),
                                   child: Text(
                                     'Change Client Secret',
                                     style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
@@ -184,34 +150,30 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     );
   }
 
-  void _showSnackBar(BuildContext context, String message) {
-    final snackBar = SnackBar(content: Text(message));
-    ScaffoldMessenger.of(context).showSnackBar(snackBar);
-  }
-
-  Future<void> loadClients() async {
-    try {
-      final response = await GetIt.I.get<AdminApiClient>().clients.getClients();
-      if (mounted) {
-        setState(() {
-          _originalClients = response.data;
-          _clients = response.data;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _originalClients = [];
-          _clients = [];
-        });
-      }
+  Future<void> _reloadClients() async {
+    final response = await GetIt.I.get<AdminApiClient>().clients.getClients();
+    if (mounted) {
+      setState(() {
+        _originalClients = response.data;
+        _filteredClients = _filter.apply(response.data);
+      });
     }
   }
 
-  Future<void> loadTiers() async {
+  Future<void> _loadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
     setState(() {
       _defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient == true).toList();
     });
+  }
+
+  Future<void> _removeSelectedClients() async {
+    if (_selectedClients.isEmpty) return;
+
+    final removedClients = await showRemoveClientsDialog(context: context, selectedClients: _selectedClients);
+    if (removedClients && mounted) {
+      setState(_selectedClients.clear);
+      await _reloadClients();
+    }
   }
 }

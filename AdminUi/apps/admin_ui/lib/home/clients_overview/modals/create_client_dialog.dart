@@ -4,18 +4,25 @@ import 'package:admin_ui/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 
-class CreateClientDialog extends StatefulWidget {
-  final List<TierOverview> defaultTiers;
-  final void Function() loadClients;
-
-  const CreateClientDialog({required this.defaultTiers, required this.loadClients, super.key});
-
-  @override
-  State<CreateClientDialog> createState() => _CreateClientDialogState();
+Future<void> showCreateClientDialog({required BuildContext context, required List<TierOverview> defaultTiers}) async {
+  await showDialog<void>(
+    context: context,
+    builder: (BuildContext context) => _CreateClientDialog(defaultTiers: defaultTiers),
+  );
 }
 
-class _CreateClientDialogState extends State<CreateClientDialog> {
+class _CreateClientDialog extends StatefulWidget {
+  final List<TierOverview> defaultTiers;
+
+  const _CreateClientDialog({required this.defaultTiers});
+
+  @override
+  State<_CreateClientDialog> createState() => _CreateClientDialogState();
+}
+
+class _CreateClientDialogState extends State<_CreateClientDialog> {
   final TextEditingController _clientIdController = TextEditingController();
   final TextEditingController _displayNameController = TextEditingController();
   final TextEditingController _clientSecretController = TextEditingController();
@@ -27,6 +34,16 @@ class _CreateClientDialogState extends State<CreateClientDialog> {
 
   bool _isEnabled = true;
   bool _isPasswordVisible = true;
+
+  @override
+  void dispose() {
+    _clientIdController.dispose();
+    _displayNameController.dispose();
+    _clientSecretController.dispose();
+    _maxIdentitiesController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,16 +161,13 @@ class _CreateClientDialogState extends State<CreateClientDialog> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
-                  onPressed: _chosenDefaultTier.isNotEmpty && _isEnabled ? _createClient : null,
-                  child: const Text('Save'),
+                  onPressed: () => context.pop(),
+                  child: const Text('Cancel'),
                 ),
                 Gaps.w8,
                 ElevatedButton(
-                  onPressed: () {
-                    _clearAllFields();
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('Close'),
+                  onPressed: _chosenDefaultTier.isNotEmpty && _isEnabled ? _createClient : null,
+                  child: const Text('Save'),
                 ),
               ],
             ),
@@ -195,7 +209,6 @@ class _CreateClientDialogState extends State<CreateClientDialog> {
 
         _saveClientSecretMessage = 'Please save the Client Secret since it will be inaccessible after exiting.';
         _isEnabled = false;
-        widget.loadClients();
       });
     }
   }
