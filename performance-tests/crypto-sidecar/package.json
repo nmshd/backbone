@@ -1,16 +1,16 @@
 {
-  "name": "crypto-sidecar",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@nmshd/crypto": "^2.0.6",
-    "koa": "^2.15.3",
-    "koa-body": "^6.0.1"
-  }
+    "name": "crypto-sidecar",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "start": "node index.js",
+        "dev": "nodemon index.js"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "@nmshd/crypto": "^2.0.6",
+        "koa": "^2.15.3",
+        "koa-body": "^6.0.1"
+    }
 }

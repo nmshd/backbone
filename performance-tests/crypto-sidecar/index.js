@@ -4,6 +4,8 @@ const koaBody = require("koa-body").koaBody;
 
 const app = new Koa();
 
+const port = 3000;
+
 app.use(
     koaBody({
         jsonLimit: "1kb"
@@ -46,4 +48,6 @@ app.use(async function (ctx, next) {
     ctx.status = 200;
 });
 
-app.listen(3000);
+app.listen(port);
+
+console.log(`Sidecar server is listening on port ${port}`);
