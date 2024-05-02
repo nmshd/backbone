@@ -1,0 +1,80 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.sendidentitydeletionreminders.name }}
+spec:
+  schedule: "{{ .Values.sendidentitydeletionreminders.schedule }}"
+  successfulJobsHistoryLimit: {{ .Values.sendidentitydeletionreminders.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.sendidentitydeletionreminders.failedJobsHistoryLimit }}
+  jobTemplate:
+    metadata:
+      {{- with .Values.sendidentitydeletionreminders.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ .Values.sendidentitydeletionreminders.name }}
+    spec:
+      backoffLimit: {{ .Values.sendidentitydeletionreminders.backoffLimit }}
+      template:
+        spec:
+          restartPolicy: Never
+          {{- with .Values.sendidentitydeletionreminders.podSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.sendidentitydeletionreminders.image.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumes:
+            - name: settings-override
+              configMap:
+                name: configuration
+          containers:
+            - name: {{ .Values.sendidentitydeletionreminders.name }}
+              {{- with .Values.sendidentitydeletionreminders.securityContext }}
+              securityContext:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              resources:
+                {{- toYaml .Values.sendidentitydeletionreminders.resources | nindent 16 }}
+              image: "{{ .Values.sendidentitydeletionreminders.image.repository }}:{{- default .Chart.AppVersion .Values.sendidentitydeletionreminders.image.tagOverride }}"
+              imagePullPolicy: {{ .Values.sendidentitydeletionreminders.image.pullPolicy }}
+              volumeMounts:
+                - name: settings-override
+                  mountPath: /app/appsettings.override.json
+                  subPath: appsettings.override.json
+                  readOnly: true
+              args:
+                - --Worker
+                - SendGracePeriodAndApprovalRemindersWorker
+              env:
+                {{- if .Values.global.useBuiltInEventbus }}
+                - name: infrastructure__eventBus__vendor
+                  value: RabbitMQ
+                - name: infrastructure__eventBus__connectionInfo
+                  value: "rabbitmq"
+                - name: infrastructure__eventBus__rabbitMQUsername
+                  value: "admin"
+                - name: infrastructure__eventBus__rabbitMQPassword
+                  valueFrom:
+                    secretKeyRef:
+                      name: rabbitmq-password
+                      key: "VALUE" 
+                {{- end }}
+                {{- with .Values.sendidentitydeletionreminders.env }}
+                {{- toYaml . | nindent 16 }}
+                {{- end }}
+          {{- with .Values.sendidentitydeletionreminders.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.sendidentitydeletionreminders.affinity }}
+          affinity:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.sendidentitydeletionreminders.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
