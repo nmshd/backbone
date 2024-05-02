@@ -8,7 +8,7 @@ namespace Backbone.EventHandlerService.Tests;
 public class EventHandlerServiceTests
 {
     [Fact]
-    public async void HappyPath()
+    public async Task HappyPath()
     {
         // Arrange
         var mockEventBus = A.Fake<IEventBus>();
