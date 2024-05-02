@@ -98,6 +98,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 table: "TierQuotas",
                 column: "ApplyTo",
                 principalTable: "Identities",
+                principalSchema: "Quotas",
                 principalColumn: "Address");
 
             migrationBuilder.AddForeignKey(
@@ -106,6 +107,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 table: "MetricStatuses",
                 column: "Owner",
                 principalTable: "Identities",
+                principalSchema: "Quotas",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
 
@@ -115,6 +117,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 table: "IndividualQuotas",
                 column: "ApplyTo",
                 principalTable: "Identities",
+                principalSchema: "Quotas",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -124,8 +127,8 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropForeignKey(
                 schema: "Quotas",
-               name: "FK_TierQuotas_Identities_ApplyTo",
-               table: "TierQuotas");
+                name: "FK_TierQuotas_Identities_ApplyTo",
+                table: "TierQuotas");
 
             migrationBuilder.DropForeignKey(
                 schema: "Quotas",
@@ -211,6 +214,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 table: "TierQuotas",
                 column: "ApplyTo",
                 principalTable: "Identities",
+                principalSchema: "Quotas",
                 principalColumn: "Address");
 
             migrationBuilder.AddForeignKey(
@@ -219,6 +223,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 table: "MetricStatuses",
                 column: "Owner",
                 principalTable: "Identities",
+                principalSchema: "Quotas",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
 
@@ -228,6 +233,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 table: "IndividualQuotas",
                 column: "ApplyTo",
                 principalTable: "Identities",
+                principalSchema: "Quotas",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
         }

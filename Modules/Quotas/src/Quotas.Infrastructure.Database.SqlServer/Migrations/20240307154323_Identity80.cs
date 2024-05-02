@@ -98,6 +98,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
                 table: "TierQuotas",
                 column: "ApplyTo",
                 principalTable: "Identities",
+                principalSchema: "Quotas",
                 principalColumn: "Address");
 
             migrationBuilder.AddForeignKey(
@@ -106,6 +107,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
                 table: "MetricStatuses",
                 column: "Owner",
                 principalTable: "Identities",
+                principalSchema: "Quotas",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
 
@@ -115,6 +117,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
                 table: "IndividualQuotas",
                 column: "ApplyTo",
                 principalTable: "Identities",
+                principalSchema: "Quotas",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -209,6 +212,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
                 table: "TierQuotas",
                 column: "ApplyTo",
                 principalTable: "Identities",
+                principalSchema: "Quotas",
                 principalColumn: "Address");
 
             migrationBuilder.AddForeignKey(
@@ -217,6 +221,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
                 table: "MetricStatuses",
                 column: "Owner",
                 principalTable: "Identities",
+                principalSchema: "Quotas",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
 
@@ -226,6 +231,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
                 table: "IndividualQuotas",
                 column: "ApplyTo",
                 principalTable: "Identities",
+                principalSchema: "Quotas",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
         }

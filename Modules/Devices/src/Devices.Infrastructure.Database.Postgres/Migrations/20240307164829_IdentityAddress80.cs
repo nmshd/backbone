@@ -102,6 +102,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress",
                 principalTable: "Identities",
+                principalSchema: "Devices",
                 principalColumn: "Address");
 
             migrationBuilder.AddForeignKey(
@@ -110,6 +111,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 table: "Devices",
                 column: "IdentityAddress",
                 principalTable: "Identities",
+                principalSchema: "Devices",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
         }
@@ -209,6 +211,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress",
                 principalTable: "Identities",
+                principalSchema: "Devices",
                 principalColumn: "Address");
 
             migrationBuilder.AddForeignKey(
@@ -217,6 +220,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 table: "Devices",
                 column: "IdentityAddress",
                 principalTable: "Identities",
+                principalSchema: "Devices",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
         }
