@@ -12,6 +12,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
+                schema: "Files",
                 table: "FileMetadata",
                 type: "character(80)",
                 unicode: false,
@@ -26,6 +27,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "ModifiedBy",
+                schema: "Files",
                 table: "FileMetadata",
                 type: "character(80)",
                 unicode: false,
@@ -40,6 +42,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "DeletedBy",
+                schema: "Files",
                 table: "FileMetadata",
                 type: "character(80)",
                 unicode: false,
@@ -55,6 +58,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Files",
                 table: "FileMetadata",
                 type: "character(80)",
                 unicode: false,
@@ -73,6 +77,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
+                schema: "Files",
                 table: "FileMetadata",
                 type: "character(36)",
                 unicode: false,
@@ -87,6 +92,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "ModifiedBy",
+                schema: "Files",
                 table: "FileMetadata",
                 type: "character(36)",
                 unicode: false,
@@ -101,6 +107,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "DeletedBy",
+                schema: "Files",
                 table: "FileMetadata",
                 type: "character(36)",
                 unicode: false,
@@ -116,6 +123,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Files",
                 table: "FileMetadata",
                 type: "character(36)",
                 unicode: false,

@@ -12,6 +12,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Tokens",
                 table: "Tokens",
                 type: "char(80)",
                 unicode: false,
@@ -30,6 +31,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Tokens",
                 table: "Tokens",
                 type: "char(36)",
                 unicode: false,

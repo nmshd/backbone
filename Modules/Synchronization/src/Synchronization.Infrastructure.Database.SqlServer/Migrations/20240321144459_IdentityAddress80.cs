@@ -12,6 +12,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Synchronization",
                 table: "SyncRuns",
                 type: "char(80)",
                 unicode: false,
@@ -26,6 +27,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
+                schema: "Synchronization",
                 table: "ExternalEvents",
                 type: "char(80)",
                 unicode: false,
@@ -40,6 +42,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
+                schema: "Synchronization",
                 table: "Datawallets",
                 type: "char(80)",
                 unicode: false,
@@ -54,6 +57,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Synchronization",
                 table: "DatawalletModifications",
                 type: "char(80)",
                 unicode: false,
@@ -72,6 +76,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Synchronization",
                 table: "SyncRuns",
                 type: "char(36)",
                 unicode: false,
@@ -86,6 +91,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
+                schema: "Synchronization",
                 table: "ExternalEvents",
                 type: "char(36)",
                 unicode: false,
@@ -100,6 +106,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
+                schema: "Synchronization",
                 table: "Datawallets",
                 type: "char(36)",
                 unicode: false,
@@ -114,6 +121,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Synchronization",
                 table: "DatawalletModifications",
                 type: "char(36)",
                 unicode: false,

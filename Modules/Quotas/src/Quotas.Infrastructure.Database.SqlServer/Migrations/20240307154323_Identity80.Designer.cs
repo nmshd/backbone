@@ -20,6 +20,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("Quotas")
                 .HasAnnotation("ProductVersion", "8.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 

@@ -12,6 +12,7 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.Postgres.Migration
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Challenges",
                 table: "Challenges",
                 type: "character(80)",
                 unicode: false,
@@ -31,6 +32,7 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.Postgres.Migration
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Challenges",
                 table: "Challenges",
                 type: "character(36)",
                 unicode: false,

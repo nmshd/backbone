@@ -13,27 +13,33 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_TierQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_IndividualQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "IndividualQuotas");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_MetricStatuses_Identities_Owner",
+                schema: "Quotas",
                 table: "MetricStatuses");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_MetricStatuses",
+                schema: "Quotas",
                 table: "MetricStatuses");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_Identities",
+                schema: "Quotas",
                 table: "Identities");
 
             #region AlterColumns
             migrationBuilder.AlterColumn<string>(
                 name: "ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas",
                 type: "char(80)",
                 nullable: false,
@@ -42,6 +48,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
+                schema: "Quotas",
                 table: "MetricStatuses",
                 type: "char(80)",
                 nullable: false,
@@ -50,6 +57,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "ApplyTo",
+                schema: "Quotas",
                 table: "IndividualQuotas",
                 type: "char(80)",
                 nullable: false,
@@ -58,6 +66,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
+                schema: "Quotas",
                 table: "Identities",
                 type: "char(80)",
                 unicode: false,
@@ -73,16 +82,19 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Identities",
+                schema: "Quotas",
                 table: "Identities",
                 column: "Address");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_MetricStatuses",
+                schema: "Quotas",
                 table: "MetricStatuses",
                 columns: new[] { "Owner", "MetricKey" });
 
             migrationBuilder.AddForeignKey(
                 name: "FK_TierQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas",
                 column: "ApplyTo",
                 principalTable: "Identities",
@@ -90,6 +102,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_MetricStatuses_Identities_Owner",
+                schema: "Quotas",
                 table: "MetricStatuses",
                 column: "Owner",
                 principalTable: "Identities",
@@ -98,6 +111,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IndividualQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "IndividualQuotas",
                 column: "ApplyTo",
                 principalTable: "Identities",
@@ -110,27 +124,33 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_TierQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_IndividualQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "IndividualQuotas");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_MetricStatuses_Identities_Owner",
+                schema: "Quotas",
                 table: "MetricStatuses");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_MetricStatuses",
+                schema: "Quotas",
                 table: "MetricStatuses");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_Identities",
+                schema: "Quotas",
                 table: "Identities");
 
             #region AlterColumns
             migrationBuilder.AlterColumn<string>(
                 name: "ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas",
                 type: "char(36)",
                 nullable: false,
@@ -139,6 +159,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
+                schema: "Quotas",
                 table: "MetricStatuses",
                 type: "char(36)",
                 nullable: false,
@@ -147,6 +168,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "ApplyTo",
+                schema: "Quotas",
                 table: "IndividualQuotas",
                 type: "char(36)",
                 nullable: false,
@@ -155,6 +177,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
+                schema: "Quotas",
                 table: "Identities",
                 type: "char(36)",
                 unicode: false,
@@ -169,17 +192,20 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
             #endregion AlterColumns
 
             migrationBuilder.AddPrimaryKey(
-                           name: "PK_Identities",
-                           table: "Identities",
-                           column: "Address");
+                name: "PK_Identities",
+                schema: "Quotas",
+                table: "Identities",
+                column: "Address");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_MetricStatuses",
+                schema: "Quotas",
                 table: "MetricStatuses",
                 columns: new[] { "Owner", "MetricKey" });
 
             migrationBuilder.AddForeignKey(
                 name: "FK_TierQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "TierQuotas",
                 column: "ApplyTo",
                 principalTable: "Identities",
@@ -187,6 +213,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_MetricStatuses_Identities_Owner",
+                schema: "Quotas",
                 table: "MetricStatuses",
                 column: "Owner",
                 principalTable: "Identities",
@@ -195,6 +222,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IndividualQuotas_Identities_ApplyTo",
+                schema: "Quotas",
                 table: "IndividualQuotas",
                 column: "ApplyTo",
                 principalTable: "Identities",

@@ -12,20 +12,24 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Devices_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "Devices");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_Identities",
+                schema: "Devices",
                 table: "Identities");
 
             #region AlterColumns
 
             migrationBuilder.AlterColumn<string>(
                 name: "IdentityAddress",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "char(80)",
                 unicode: false,
@@ -40,6 +44,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 type: "char(80)",
                 unicode: false,
@@ -55,6 +60,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
+                schema: "Devices",
                 table: "Identities",
                 type: "char(80)",
                 unicode: false,
@@ -69,6 +75,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "IdentityAddress",
+                schema: "Devices",
                 table: "Devices",
                 type: "char(80)",
                 unicode: false,
@@ -85,11 +92,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Identities",
+                schema: "Devices",
                 table: "Identities",
                 column: "Address");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress",
                 principalTable: "Identities",
@@ -97,6 +106,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Devices_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "Devices",
                 column: "IdentityAddress",
                 principalTable: "Identities",
@@ -111,20 +121,24 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.DropForeignKey(
                name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
+               schema: "Devices",
                table: "IdentityDeletionProcesses");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Devices_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "Devices");
 
             migrationBuilder.DropPrimaryKey(
                             name: "PK_Identities",
+                            schema: "Devices",
                             table: "Identities");
 
             #region AlterColumns
 
             migrationBuilder.AlterColumn<string>(
                 name: "IdentityAddress",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "char(36)",
                 unicode: false,
@@ -139,6 +153,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 type: "char(36)",
                 unicode: false,
@@ -154,6 +169,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
+                schema: "Devices",
                 table: "Identities",
                 type: "char(36)",
                 unicode: false,
@@ -168,6 +184,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "IdentityAddress",
+                schema: "Devices",
                 table: "Devices",
                 type: "char(36)",
                 unicode: false,
@@ -184,11 +201,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddPrimaryKey(
                             name: "PK_Identities",
+                            schema: "Devices",
                             table: "Identities",
                             column: "Address");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress",
                 principalTable: "Identities",
@@ -196,6 +215,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Devices_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "Devices",
                 column: "IdentityAddress",
                 principalTable: "Identities",

@@ -12,6 +12,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Relationships",
                 table: "RelationshipTemplates",
                 type: "char(80)",
                 unicode: false,
@@ -26,6 +27,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AlterColumn<string>(
                 name: "AllocatedBy",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations",
                 type: "char(80)",
                 unicode: false,
@@ -40,6 +42,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AlterColumn<string>(
                 name: "To",
+                schema: "Relationships",
                 table: "Relationships",
                 type: "char(80)",
                 unicode: false,
@@ -54,6 +57,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AlterColumn<string>(
                 name: "From",
+                schema: "Relationships",
                 table: "Relationships",
                 type: "char(80)",
                 unicode: false,
@@ -68,6 +72,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AlterColumn<string>(
                 name: "Res_CreatedBy",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 type: "char(80)",
                 unicode: false,
@@ -83,6 +88,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AlterColumn<string>(
                 name: "Req_CreatedBy",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 type: "char(80)",
                 unicode: false,
@@ -101,6 +107,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Relationships",
                 table: "RelationshipTemplates",
                 type: "char(36)",
                 unicode: false,
@@ -115,6 +122,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AlterColumn<string>(
                 name: "AllocatedBy",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations",
                 type: "char(36)",
                 unicode: false,
@@ -129,6 +137,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AlterColumn<string>(
                 name: "To",
+                schema: "Relationships",
                 table: "Relationships",
                 type: "char(36)",
                 unicode: false,
@@ -143,6 +152,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AlterColumn<string>(
                 name: "From",
+                schema: "Relationships",
                 table: "Relationships",
                 type: "char(36)",
                 unicode: false,
@@ -157,6 +167,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AlterColumn<string>(
                 name: "Res_CreatedBy",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 type: "char(36)",
                 unicode: false,
@@ -172,6 +183,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AlterColumn<string>(
                 name: "Req_CreatedBy",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 type: "char(36)",
                 unicode: false,

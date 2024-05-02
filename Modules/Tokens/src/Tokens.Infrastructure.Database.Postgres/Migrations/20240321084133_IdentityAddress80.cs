@@ -12,6 +12,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Tokens",
                 table: "Tokens",
                 type: "character(80)",
                 unicode: false,
@@ -30,6 +31,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Tokens",
                 table: "Tokens",
                 type: "character(36)",
                 unicode: false,

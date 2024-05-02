@@ -11,27 +11,33 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
+                schema: "Quotas",
                 name: "FK_TierQuotas_Identities_ApplyTo",
                 table: "TierQuotas");
 
             migrationBuilder.DropForeignKey(
+                schema: "Quotas",
                 name: "FK_IndividualQuotas_Identities_ApplyTo",
                 table: "IndividualQuotas");
 
             migrationBuilder.DropForeignKey(
+                schema: "Quotas",
                 name: "FK_MetricStatuses_Identities_Owner",
                 table: "MetricStatuses");
 
             migrationBuilder.DropPrimaryKey(
+                schema: "Quotas",
                 name: "PK_MetricStatuses",
                 table: "MetricStatuses");
 
             migrationBuilder.DropPrimaryKey(
+                schema: "Quotas",
                 name: "PK_Identities",
                 table: "Identities");
 
             #region AlterColumns
             migrationBuilder.AlterColumn<string>(
+                schema: "Quotas",
                 name: "ApplyTo",
                 table: "TierQuotas",
                 type: "character(80)",
@@ -40,6 +46,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 oldType: "character(36)");
 
             migrationBuilder.AlterColumn<string>(
+                schema: "Quotas",
                 name: "Owner",
                 table: "MetricStatuses",
                 type: "character(80)",
@@ -48,6 +55,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 oldType: "character(36)");
 
             migrationBuilder.AlterColumn<string>(
+                schema: "Quotas",
                 name: "ApplyTo",
                 table: "IndividualQuotas",
                 type: "character(80)",
@@ -56,6 +64,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 oldType: "character(36)");
 
             migrationBuilder.AlterColumn<string>(
+                schema: "Quotas",
                 name: "Address",
                 table: "Identities",
                 type: "character(80)",
@@ -72,16 +81,19 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
             #endregion AlterColumns
 
             migrationBuilder.AddPrimaryKey(
+                schema: "Quotas",
                 name: "PK_Identities",
                 table: "Identities",
                 column: "Address");
 
             migrationBuilder.AddPrimaryKey(
+                schema: "Quotas",
                 name: "PK_MetricStatuses",
                 table: "MetricStatuses",
                 columns: new[] { "Owner", "MetricKey" });
 
             migrationBuilder.AddForeignKey(
+                schema: "Quotas",
                 name: "FK_TierQuotas_Identities_ApplyTo",
                 table: "TierQuotas",
                 column: "ApplyTo",
@@ -89,6 +101,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 principalColumn: "Address");
 
             migrationBuilder.AddForeignKey(
+                schema: "Quotas",
                 name: "FK_MetricStatuses_Identities_Owner",
                 table: "MetricStatuses",
                 column: "Owner",
@@ -97,6 +110,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
+                schema: "Quotas",
                 name: "FK_IndividualQuotas_Identities_ApplyTo",
                 table: "IndividualQuotas",
                 column: "ApplyTo",
@@ -109,28 +123,34 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
+                schema: "Quotas",
                name: "FK_TierQuotas_Identities_ApplyTo",
                table: "TierQuotas");
 
             migrationBuilder.DropForeignKey(
+                schema: "Quotas",
                 name: "FK_IndividualQuotas_Identities_ApplyTo",
                 table: "IndividualQuotas");
 
             migrationBuilder.DropForeignKey(
+                schema: "Quotas",
                 name: "FK_MetricStatuses_Identities_Owner",
                 table: "MetricStatuses");
 
             migrationBuilder.DropPrimaryKey(
+                schema: "Quotas",
                 name: "PK_MetricStatuses",
                 table: "MetricStatuses");
 
             migrationBuilder.DropPrimaryKey(
+                schema: "Quotas",
                 name: "PK_Identities",
                 table: "Identities");
 
             #region AlterColumns
 
             migrationBuilder.AlterColumn<string>(
+                schema: "Quotas",
                 name: "ApplyTo",
                 table: "TierQuotas",
                 type: "character(36)",
@@ -139,6 +159,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 oldType: "character(80)");
 
             migrationBuilder.AlterColumn<string>(
+                schema: "Quotas",
                 name: "Owner",
                 table: "MetricStatuses",
                 type: "character(36)",
@@ -147,6 +168,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 oldType: "character(80)");
 
             migrationBuilder.AlterColumn<string>(
+                schema: "Quotas",
                 name: "ApplyTo",
                 table: "IndividualQuotas",
                 type: "character(36)",
@@ -155,6 +177,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 oldType: "character(80)");
 
             migrationBuilder.AlterColumn<string>(
+                schema: "Quotas",
                 name: "Address",
                 table: "Identities",
                 type: "character(36)",
@@ -171,16 +194,19 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
             #endregion AlterColumns
 
             migrationBuilder.AddPrimaryKey(
+                schema: "Quotas",
                 name: "PK_Identities",
                 table: "Identities",
                 column: "Address");
 
             migrationBuilder.AddPrimaryKey(
+                schema: "Quotas",
                 name: "PK_MetricStatuses",
                 table: "MetricStatuses",
                 columns: new[] { "Owner", "MetricKey" });
 
             migrationBuilder.AddForeignKey(
+                schema: "Quotas",
                 name: "FK_TierQuotas_Identities_ApplyTo",
                 table: "TierQuotas",
                 column: "ApplyTo",
@@ -188,6 +214,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 principalColumn: "Address");
 
             migrationBuilder.AddForeignKey(
+                schema: "Quotas",
                 name: "FK_MetricStatuses_Identities_Owner",
                 table: "MetricStatuses",
                 column: "Owner",
@@ -196,6 +223,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
+                schema: "Quotas",
                 name: "FK_IndividualQuotas_Identities_ApplyTo",
                 table: "IndividualQuotas",
                 column: "ApplyTo",

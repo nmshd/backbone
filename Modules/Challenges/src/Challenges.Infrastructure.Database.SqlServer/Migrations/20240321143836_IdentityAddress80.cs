@@ -12,6 +12,7 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.SqlServer.Migratio
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Challenges",
                 table: "Challenges",
                 type: "char(80)",
                 unicode: false,
@@ -31,6 +32,7 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.SqlServer.Migratio
         {
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Challenges",
                 table: "Challenges",
                 type: "char(36)",
                 unicode: false,

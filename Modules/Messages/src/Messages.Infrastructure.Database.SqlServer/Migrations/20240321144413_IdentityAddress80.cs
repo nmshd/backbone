@@ -12,6 +12,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
+                schema: "Messages",
                 table: "RecipientInformation",
                 type: "char(80)",
                 unicode: false,
@@ -26,6 +27,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Messages",
                 table: "Messages",
                 type: "char(80)",
                 unicode: false,
@@ -44,6 +46,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
+                schema: "Messages",
                 table: "RecipientInformation",
                 type: "char(36)",
                 unicode: false,
@@ -58,6 +61,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
+                schema: "Messages",
                 table: "Messages",
                 type: "char(36)",
                 unicode: false,
