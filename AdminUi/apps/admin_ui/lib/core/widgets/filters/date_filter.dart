@@ -41,31 +41,18 @@ class _DateFilterState extends State<DateFilter> {
               items: FilterOperator.values.toDropdownMenuItems(),
             ),
             Gaps.w8,
-            InkWell(
-              onTap: _selectNewDate,
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8),
+            SizedBox(
+              width: 160,
+              child: TextField(
+                onTap: _selectNewDate,
+                readOnly: true,
+                controller: TextEditingController(
+                  text: _selectedDate != null ? DateFormat('yyyy-MM-dd').format(_selectedDate!) : '',
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      _selectedDate != null ? DateFormat('yyyy-MM-dd').format(_selectedDate!) : 'Select date',
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    Gaps.w8,
-                    const Icon(Icons.calendar_today),
-                    if (_selectedDate != null) ...[
-                      Gaps.w8,
-                      GestureDetector(
-                        onTap: _clearDate,
-                        child: const Icon(Icons.clear, size: 20),
-                      ),
-                    ],
-                  ],
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  suffixIcon:
+                      _selectedDate == null ? const Icon(Icons.calendar_today) : IconButton(onPressed: _clearDate, icon: const Icon(Icons.clear)),
                 ),
               ),
             ),
