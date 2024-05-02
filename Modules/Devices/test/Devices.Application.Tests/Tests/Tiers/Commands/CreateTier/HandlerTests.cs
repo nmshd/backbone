@@ -30,7 +30,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Creates_a_tier_when_properties_are_valid()
+    public async Task Creates_a_tier_when_properties_are_valid()
     {
         // Arrange
         var expectedTierName = TierName.Create("my-tier-name");
@@ -46,7 +46,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Fails_to_create_a_tier_when_tier_name_already_exists()
+    public async Task Fails_to_create_a_tier_when_tier_name_already_exists()
     {
         // Arrange
         A.CallTo(() => _tierRepository.ExistsWithName(A<TierName>._, CancellationToken.None)).Returns(Task.FromResult(true));

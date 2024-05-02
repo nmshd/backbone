@@ -5,13 +5,16 @@ namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database.ValueConve
 
 public class TokenIdEntityFrameworkValueConverter : ValueConverter<TokenId, string>
 {
-    public TokenIdEntityFrameworkValueConverter() : this(null) { }
+    public TokenIdEntityFrameworkValueConverter() : this(null)
+    {
+    }
 
     public TokenIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id.StringValue,
+            id => id,
             value => TokenId.Parse(value),
             mappingHints
         )
-    { }
+    {
+    }
 }
