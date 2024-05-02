@@ -4,13 +4,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import '../constants.dart';
 
 class AppTitle extends StatelessWidget {
-  const AppTitle({super.key});
+  final EdgeInsetsGeometry? padding;
+
+  const AppTitle({this.padding, super.key});
 
   @override
   Widget build(BuildContext context) {
     const textStyle = TextStyle(fontSize: 25);
 
-    return Row(
+    final row = Row(
       mainAxisSize: MainAxisSize.min,
       children: [
         SvgPicture.asset('assets/logo.svg', width: 30, height: 30),
@@ -25,5 +27,9 @@ class AppTitle extends StatelessWidget {
         ),
       ],
     );
+
+    if (padding == null) return row;
+
+    return Padding(padding: padding!, child: row);
   }
 }
