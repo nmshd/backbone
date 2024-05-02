@@ -8,7 +8,7 @@ class Client {
   final String displayName;
   final String defaultTier;
   final String clientSecret;
-  final String createdAt;
+  final DateTime createdAt;
   final int? maxIdentities;
   final int? numberOfIdentities;
 

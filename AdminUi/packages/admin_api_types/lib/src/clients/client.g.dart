@@ -11,7 +11,7 @@ Client _$ClientFromJson(Map<String, dynamic> json) => Client(
       displayName: json['displayName'] as String,
       defaultTier: json['defaultTier'] as String,
       clientSecret: json['clientSecret'] as String,
-      createdAt: json['createdAt'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
       maxIdentities: json['maxIdentities'] as int?,
       numberOfIdentities: json['numberOfIdentities'] as int?,
     );
@@ -21,7 +21,7 @@ Map<String, dynamic> _$ClientToJson(Client instance) => <String, dynamic>{
       'displayName': instance.displayName,
       'defaultTier': instance.defaultTier,
       'clientSecret': instance.clientSecret,
-      'createdAt': instance.createdAt,
+      'createdAt': instance.createdAt.toIso8601String(),
       'maxIdentities': instance.maxIdentities,
       'numberOfIdentities': instance.numberOfIdentities,
     };
