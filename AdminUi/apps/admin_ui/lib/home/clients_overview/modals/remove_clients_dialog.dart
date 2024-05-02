@@ -5,22 +5,22 @@ import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
 
-Future<bool> showRemoveClientsDialog({
+Future<void> showRemoveClientsDialog({
   required BuildContext context,
   required Set<String> selectedClients,
+  required VoidCallback onClientsRemoved,
 }) async {
-  final removedClients = await showDialog<bool>(
+  await showDialog<void>(
     context: context,
-    builder: (BuildContext context) => _RemoveClientsDialog(selectedClients: selectedClients),
+    builder: (BuildContext context) => _RemoveClientsDialog(selectedClients: selectedClients, onClientsRemoved: onClientsRemoved),
   );
-
-  return removedClients ?? false;
 }
 
 class _RemoveClientsDialog extends StatefulWidget {
   final Set<String> selectedClients;
+  final VoidCallback onClientsRemoved;
 
-  const _RemoveClientsDialog({required this.selectedClients});
+  const _RemoveClientsDialog({required this.selectedClients, required this.onClientsRemoved});
 
   @override
   State<_RemoveClientsDialog> createState() => _RemoveClientsDialogState();
@@ -29,6 +29,7 @@ class _RemoveClientsDialog extends StatefulWidget {
 class _RemoveClientsDialogState extends State<_RemoveClientsDialog> {
   bool _deleting = false;
   bool _deletionSucceeded = false;
+  String? _deletionError;
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +41,7 @@ class _RemoveClientsDialogState extends State<_RemoveClientsDialog> {
           (_, true) => _RemoveClientsSucceeded(numberOfDeletedClients: widget.selectedClients.length),
           (true, _) => const _RemoveClientsLoading(),
           (_, _) => Text(
-              'Are you sure you want to delete the selected ${widget.selectedClients.length > 1 ? 'clients' : 'client'}?',
+              _deletionError ?? 'Are you sure you want to delete the selected ${widget.selectedClients.length > 1 ? 'clients' : 'client'}?',
               style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
         },
@@ -62,10 +63,20 @@ class _RemoveClientsDialogState extends State<_RemoveClientsDialog> {
   Future<void> _deleteSelectedClients() async {
     setState(() => _deleting = true);
 
-    for (final clientId in widget.selectedClients) {
-      // TODO: error handling
-      // what if one fails after another one succeeded?
-      await GetIt.I.get<AdminApiClient>().clients.deleteClient(clientId);
+    try {
+      for (final clientId in widget.selectedClients) {
+        await GetIt.I.get<AdminApiClient>().clients.deleteClient(clientId);
+        widget.onClientsRemoved();
+        widget.selectedClients.remove(clientId);
+      }
+    } catch (e) {
+      setState(() {
+        _deleting = false;
+        _deletionSucceeded = false;
+        _deletionError = 'An error occurred while deleting the client(s). Please try again.';
+      });
+
+      return;
     }
 
     setState(() {

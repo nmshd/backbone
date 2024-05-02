@@ -65,7 +65,9 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                           return _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.error : null;
                         }),
                       ),
-                      onPressed: _selectedClients.isNotEmpty ? _removeSelectedClients : null,
+                      onPressed: _selectedClients.isNotEmpty
+                          ? () => showRemoveClientsDialog(context: context, selectedClients: _selectedClients, onClientsRemoved: _reloadClients)
+                          : null,
                     ),
                     Gaps.w8,
                     IconButton(
@@ -165,15 +167,5 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     setState(() {
       _defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient == true).toList();
     });
-  }
-
-  Future<void> _removeSelectedClients() async {
-    if (_selectedClients.isEmpty) return;
-
-    final removedClients = await showRemoveClientsDialog(context: context, selectedClients: _selectedClients);
-    if (removedClients && mounted) {
-      setState(_selectedClients.clear);
-      await _reloadClients();
-    }
   }
 }
