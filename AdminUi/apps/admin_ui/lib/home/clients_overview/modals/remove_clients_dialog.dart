@@ -66,6 +66,7 @@ class _RemoveClientsDialogState extends State<_RemoveClientsDialog> {
         content: Text(
           widget.selectedClients.length == 1 ? 'Successfully removed one client.' : 'Successfully removed ${widget.selectedClients.length} clients.',
         ),
+        showCloseIcon: true,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }

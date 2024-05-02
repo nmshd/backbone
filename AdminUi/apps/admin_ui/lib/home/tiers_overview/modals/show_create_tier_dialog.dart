@@ -125,6 +125,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
       ),
       backgroundColor: Colors.green,
       duration: Duration(seconds: 3),
+      showCloseIcon: true,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
