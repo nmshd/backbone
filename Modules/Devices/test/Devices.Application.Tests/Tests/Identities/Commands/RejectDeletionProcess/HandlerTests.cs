@@ -14,7 +14,7 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.R
 public class HandlerTests
 {
     [Fact]
-    public async void Happy_path()
+    public async Task Happy_path()
     {
         // Arrange
         var utcNow = DateTime.Parse("2000-01-01");

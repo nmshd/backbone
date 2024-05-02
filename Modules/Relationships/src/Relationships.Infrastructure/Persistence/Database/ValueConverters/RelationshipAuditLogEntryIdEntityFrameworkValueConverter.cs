@@ -11,7 +11,7 @@ public class RelationshipAuditLogEntryIdEntityFrameworkValueConverter : ValueCon
 
     public RelationshipAuditLogEntryIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id.StringValue,
+            id => id.Value,
             value => RelationshipAuditLogEntryId.Parse(value),
             mappingHints
         )
