@@ -115,11 +115,7 @@ jobs:
         with:
           repository: nmshd/runtime
           path: runtime
-<<<<<<< HEAD
-          ref: feature/backbone-specific-addresses
-=======
           ref: release/v5
->>>>>>> origin/release/v5
       - name: Run Consumer API
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml up -d
       - name: Install runtime dependencies
