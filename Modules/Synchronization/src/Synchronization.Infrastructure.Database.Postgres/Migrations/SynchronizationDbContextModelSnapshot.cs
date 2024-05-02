@@ -35,7 +35,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<ushort>("Version")
@@ -77,7 +77,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
@@ -143,7 +143,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("Payload")
@@ -228,7 +228,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")

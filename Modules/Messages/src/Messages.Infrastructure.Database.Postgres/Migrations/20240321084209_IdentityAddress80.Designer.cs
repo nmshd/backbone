@@ -64,7 +64,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
@@ -95,7 +95,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<byte[]>("EncryptedKey")
@@ -153,14 +153,14 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("To")
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.HasKey("Id");

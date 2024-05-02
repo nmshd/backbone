@@ -13,7 +13,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
                 table: "RelationshipTemplates",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -27,7 +27,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
             migrationBuilder.AlterColumn<string>(
                 name: "AllocatedBy",
                 table: "RelationshipTemplateAllocations",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -41,7 +41,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
             migrationBuilder.AlterColumn<string>(
                 name: "To",
                 table: "Relationships",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -55,7 +55,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
             migrationBuilder.AlterColumn<string>(
                 name: "From",
                 table: "Relationships",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -69,7 +69,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
             migrationBuilder.AlterColumn<string>(
                 name: "Res_CreatedBy",
                 table: "RelationshipChanges",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -84,7 +84,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
             migrationBuilder.AlterColumn<string>(
                 name: "Req_CreatedBy",
                 table: "RelationshipChanges",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -108,7 +108,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
@@ -122,7 +122,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
@@ -136,7 +136,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
@@ -150,7 +150,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
@@ -164,7 +164,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 maxLength: 36,
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100,
@@ -179,7 +179,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);

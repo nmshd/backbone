@@ -34,7 +34,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "ApplyTo",
                 table: "TierQuotas",
-                type: "character(100)",
+                type: "character(80)",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character(36)");
@@ -42,7 +42,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
                 table: "MetricStatuses",
-                type: "character(100)",
+                type: "character(80)",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character(36)");
@@ -50,7 +50,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "ApplyTo",
                 table: "IndividualQuotas",
-                type: "character(100)",
+                type: "character(80)",
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character(36)");
@@ -58,7 +58,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
                 table: "Identities",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -136,7 +136,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 type: "character(36)",
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)");
+                oldType: "character(80)");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
@@ -144,7 +144,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 type: "character(36)",
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)");
+                oldType: "character(80)");
 
             migrationBuilder.AlterColumn<string>(
                 name: "ApplyTo",
@@ -152,7 +152,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 type: "character(36)",
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)");
+                oldType: "character(80)");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
@@ -163,7 +163,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);

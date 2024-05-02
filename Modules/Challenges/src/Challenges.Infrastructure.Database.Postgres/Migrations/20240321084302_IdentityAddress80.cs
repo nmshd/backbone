@@ -13,7 +13,7 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.Postgres.Migration
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
                 table: "Challenges",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -38,7 +38,7 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.Postgres.Migration
                 maxLength: 36,
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100,

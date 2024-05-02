@@ -27,7 +27,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "IdentityAddress",
                 table: "PnsRegistrations",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -41,7 +41,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "IdentityAddress",
                 table: "IdentityDeletionProcesses",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -56,7 +56,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "Address",
                 table: "Identities",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -70,7 +70,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.AlterColumn<string>(
                 name: "IdentityAddress",
                 table: "Devices",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -130,7 +130,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
@@ -144,7 +144,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 maxLength: 36,
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100,
@@ -159,7 +159,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
@@ -173,7 +173,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);

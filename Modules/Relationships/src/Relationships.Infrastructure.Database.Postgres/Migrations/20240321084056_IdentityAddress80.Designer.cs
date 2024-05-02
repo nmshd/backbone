@@ -40,7 +40,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("RelationshipTemplateId")
@@ -57,7 +57,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -137,7 +137,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .HasColumnName("Req_CreatedBy")
                         .IsFixedLength();
 
@@ -178,7 +178,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .HasColumnName("Res_CreatedBy")
                         .IsFixedLength();
 
@@ -219,7 +219,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
@@ -264,7 +264,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("AllocatedByDevice")

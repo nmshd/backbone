@@ -13,7 +13,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
                 table: "SyncRuns",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -27,7 +27,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
                 table: "ExternalEvents",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -41,7 +41,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
                 table: "Datawallets",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -55,7 +55,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
                 table: "DatawalletModifications",
-                type: "character(100)",
+                type: "character(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 100,
@@ -79,7 +79,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
@@ -93,7 +93,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
@@ -107,7 +107,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);
@@ -121,7 +121,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 maxLength: 36,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(100)",
+                oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 100);

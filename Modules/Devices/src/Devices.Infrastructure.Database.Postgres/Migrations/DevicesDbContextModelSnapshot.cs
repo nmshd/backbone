@@ -56,7 +56,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<DateTime>("UpdatedAt")
@@ -209,7 +209,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -224,7 +224,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("Address")
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("ClientId")
@@ -325,7 +325,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("IdentityAddress")
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<DateTime?>("RejectedAt")

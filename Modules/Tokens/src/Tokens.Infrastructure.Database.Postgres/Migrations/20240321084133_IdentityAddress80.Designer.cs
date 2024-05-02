@@ -43,7 +43,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")

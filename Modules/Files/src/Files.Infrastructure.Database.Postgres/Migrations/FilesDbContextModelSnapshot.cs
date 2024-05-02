@@ -45,7 +45,7 @@ namespace Files.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
@@ -61,7 +61,7 @@ namespace Files.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("DeletedByDevice")
@@ -84,7 +84,7 @@ namespace Files.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("ModifiedByDevice")
@@ -98,7 +98,7 @@ namespace Files.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
-                        .HasColumnType("character(100)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<byte[]>("OwnerSignature")
