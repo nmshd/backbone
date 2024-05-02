@@ -39,61 +39,57 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Padding(
-          padding: EdgeInsets.only(left: 32),
-          child: Text('A list of existing Identities'),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IdentitiesFilter(
-              onFilterChanged: ({IdentityOverviewFilter? filter}) async {
-                _dataSource
-                  ..filter = filter
-                  ..refreshDatasource();
-              },
-            ),
-            Expanded(
-              child: AsyncPaginatedDataTable2(
-                rowsPerPage: _rowsPerPage,
-                onRowsPerPageChanged: _setRowsPerPage,
-                sortColumnIndex: _sortColumnIndex,
-                sortAscending: _sortColumnAscending,
-                showFirstLastButtons: true,
-                columnSpacing: 5,
-                source: _dataSource,
-                scrollController: _scrollController,
-                isVerticalScrollBarVisible: true,
-                renderEmptyRowsInTheEnd: false,
-                availableRowsPerPage: const [5, 10, 25, 50, 100],
-                errorBuilder: (error) => Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text('An error occurred loading the data.'),
-                      Gaps.h16,
-                      FilledButton(onPressed: () => _dataSource.refreshDatasource(), child: const Text('Retry')),
-                    ],
-                  ),
-                ),
-                columns: <DataColumn2>[
-                  DataColumn2(label: const Text('Address'), size: ColumnSize.L, onSort: _sort),
-                  const DataColumn2(label: Text('Tier'), size: ColumnSize.S),
-                  DataColumn2(label: const Text('Created with Client'), onSort: _sort),
-                  DataColumn2(label: const Text('Number of Devices'), onSort: _sort),
-                  DataColumn2(label: const Text('Created at'), size: ColumnSize.S, onSort: _sort),
-                  DataColumn2(label: const Text('Last Login at'), size: ColumnSize.S, onSort: _sort),
-                  DataColumn2(label: const Text('Datawallet version'), onSort: _sort),
-                  DataColumn2(label: const Text('Identity Version'), onSort: _sort),
-                ],
+      appBar: AppBar(title: const Text('A list of existing Identities')),
+      body: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IdentitiesFilter(
+                onFilterChanged: ({IdentityOverviewFilter? filter}) async {
+                  _dataSource
+                    ..filter = filter
+                    ..refreshDatasource();
+                },
               ),
-            ),
-          ],
+              Expanded(
+                child: AsyncPaginatedDataTable2(
+                  rowsPerPage: _rowsPerPage,
+                  onRowsPerPageChanged: _setRowsPerPage,
+                  sortColumnIndex: _sortColumnIndex,
+                  sortAscending: _sortColumnAscending,
+                  showFirstLastButtons: true,
+                  columnSpacing: 5,
+                  source: _dataSource,
+                  scrollController: _scrollController,
+                  isVerticalScrollBarVisible: true,
+                  renderEmptyRowsInTheEnd: false,
+                  availableRowsPerPage: const [5, 10, 25, 50, 100],
+                  errorBuilder: (error) => Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Text('An error occurred loading the data.'),
+                        Gaps.h16,
+                        FilledButton(onPressed: () => _dataSource.refreshDatasource(), child: const Text('Retry')),
+                      ],
+                    ),
+                  ),
+                  columns: <DataColumn2>[
+                    DataColumn2(label: const Text('Address'), size: ColumnSize.L, onSort: _sort),
+                    const DataColumn2(label: Text('Tier'), size: ColumnSize.S),
+                    DataColumn2(label: const Text('Created with Client'), onSort: _sort),
+                    DataColumn2(label: const Text('Number of Devices'), onSort: _sort),
+                    DataColumn2(label: const Text('Created at'), size: ColumnSize.S, onSort: _sort),
+                    DataColumn2(label: const Text('Last Login at'), size: ColumnSize.S, onSort: _sort),
+                    DataColumn2(label: const Text('Datawallet version'), onSort: _sort),
+                    DataColumn2(label: const Text('Identity Version'), onSort: _sort),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

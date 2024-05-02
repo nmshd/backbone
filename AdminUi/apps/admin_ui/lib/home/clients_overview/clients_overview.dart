@@ -33,114 +33,110 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('A list of existing Clients'),
-      ),
+      appBar: AppBar(title: const Text('A list of existing Clients')),
       body: Card(
         child: Padding(
           padding: const EdgeInsets.all(8),
-          child: SizedBox(
-            height: double.infinity,
-            child: Column(
-              children: [
-                ClientsFilterRow(onFilterChanged: (filter) => setState(() => _filter = filter)),
-                Gaps.h16,
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    IconButton(
-                      icon: Icon(
-                        Icons.delete,
-                        color: _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.resolveWith((states) {
-                          return _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.error : null;
-                        }),
-                      ),
-                      onPressed: _selectedClients.isNotEmpty
-                          ? () => showRemoveClientsDialog(context: context, selectedClients: _selectedClients, onClientsRemoved: _reloadClients)
-                          : null,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ClientsFilterRow(onFilterChanged: (filter) => setState(() => _filter = filter)),
+              Gaps.h16,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      Icons.delete,
+                      color: _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
                     ),
-                    Gaps.w8,
-                    IconButton(
-                      icon: Icon(
-                        Icons.add,
-                        color: Theme.of(context).colorScheme.onPrimary,
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.resolveWith((states) {
-                          return Theme.of(context).colorScheme.primary;
-                        }),
-                      ),
-                      onPressed: () => showCreateClientDialog(context: context, defaultTiers: _defaultTiers, onClientCreated: _reloadClients),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith((states) {
+                        return _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.error : null;
+                      }),
                     ),
+                    onPressed: _selectedClients.isNotEmpty
+                        ? () => showRemoveClientsDialog(context: context, selectedClients: _selectedClients, onClientsRemoved: _reloadClients)
+                        : null,
+                  ),
+                  Gaps.w8,
+                  IconButton(
+                    icon: Icon(
+                      Icons.add,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                    ),
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.resolveWith((states) {
+                        return Theme.of(context).colorScheme.primary;
+                      }),
+                    ),
+                    onPressed: () => showCreateClientDialog(context: context, defaultTiers: _defaultTiers, onClientCreated: _reloadClients),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: DataTable2(
+                  isVerticalScrollBarVisible: true,
+                  onSelectAll: (selected) {
+                    if (selected == null) return;
+
+                    setState(() {
+                      if (selected) {
+                        _selectedClients.addAll(_originalClients.where((e) => _filter.matches(e)).map((client) => client.clientId));
+                      } else {
+                        _selectedClients.clear();
+                      }
+                    });
+                  },
+                  columns: const <DataColumn2>[
+                    DataColumn2(label: Text('Client ID'), size: ColumnSize.L),
+                    DataColumn2(label: Text('Display Name'), size: ColumnSize.L),
+                    DataColumn2(label: Text('Default Tier')),
+                    DataColumn2(label: Text('Number of Identities'), size: ColumnSize.L),
+                    DataColumn2(label: Text('Created At')),
+                    DataColumn2(label: Text(''), size: ColumnSize.L),
                   ],
-                ),
-                Expanded(
-                  child: DataTable2(
-                    isVerticalScrollBarVisible: true,
-                    onSelectAll: (selected) {
-                      if (selected == null) return;
+                  rows: _originalClients
+                      .where((e) => _filter.matches(e))
+                      .map(
+                        (client) => DataRow2(
+                          selected: _selectedClients.contains(client.clientId),
+                          onSelectChanged: (selected) {
+                            if (selected == null) return;
 
-                      setState(() {
-                        if (selected) {
-                          _selectedClients.addAll(_originalClients.where((e) => _filter.matches(e)).map((client) => client.clientId));
-                        } else {
-                          _selectedClients.clear();
-                        }
-                      });
-                    },
-                    columns: const <DataColumn2>[
-                      DataColumn2(label: Text('Client ID'), size: ColumnSize.L),
-                      DataColumn2(label: Text('Display Name'), size: ColumnSize.L),
-                      DataColumn2(label: Text('Default Tier')),
-                      DataColumn2(label: Text('Number of Identities'), size: ColumnSize.L),
-                      DataColumn2(label: Text('Created At')),
-                      DataColumn2(label: Text(''), size: ColumnSize.L),
-                    ],
-                    rows: _originalClients
-                        .where((e) => _filter.matches(e))
-                        .map(
-                          (client) => DataRow2(
-                            selected: _selectedClients.contains(client.clientId),
-                            onSelectChanged: (selected) {
-                              if (selected == null) return;
-
-                              setState(() {
-                                if (selected) {
-                                  _selectedClients.add(client.clientId);
-                                } else {
-                                  _selectedClients.remove(client.clientId);
-                                }
-                              });
-                            },
-                            cells: [
-                              DataCell(Text(client.clientId)),
-                              DataCell(Text(client.displayName)),
-                              DataCell(Text(client.defaultTier.name)),
-                              DataCell(Text('${client.numberOfIdentities}')),
-                              DataCell(Text(DateFormat('yyyy-MM-dd').format(client.createdAt))),
-                              DataCell(
-                                ElevatedButton(
-                                  style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),
-                                  onPressed: () => showChangeClientSecretDialog(context: context, clientId: client.clientId),
-                                  child: Text(
-                                    'Change Client Secret',
-                                    style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-                                    textAlign: TextAlign.center,
-                                  ),
+                            setState(() {
+                              if (selected) {
+                                _selectedClients.add(client.clientId);
+                              } else {
+                                _selectedClients.remove(client.clientId);
+                              }
+                            });
+                          },
+                          cells: [
+                            DataCell(Text(client.clientId)),
+                            DataCell(Text(client.displayName)),
+                            DataCell(Text(client.defaultTier.name)),
+                            DataCell(Text('${client.numberOfIdentities}')),
+                            DataCell(Text(DateFormat('yyyy-MM-dd').format(client.createdAt))),
+                            DataCell(
+                              ElevatedButton(
+                                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),
+                                onPressed: () => showChangeClientSecretDialog(context: context, clientId: client.clientId),
+                                child: Text(
+                                  'Change Client Secret',
+                                  style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
-                            ],
-                          ),
-                        )
-                        .toList(),
-                  ),
+                            ),
+                          ],
+                        ),
+                      )
+                      .toList(),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
