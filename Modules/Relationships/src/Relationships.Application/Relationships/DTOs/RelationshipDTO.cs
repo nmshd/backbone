@@ -1,11 +1,10 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.DTOs;
 
-public class RelationshipDTO : IMapTo<Relationship>
+public class RelationshipDTO
 {
     public RelationshipDTO(Relationship relationship)
     {
