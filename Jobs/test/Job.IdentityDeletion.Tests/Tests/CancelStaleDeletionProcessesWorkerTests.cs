@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdentityDeletionProcesses;
+﻿using Backbone.Job.IdentityDeletion.Workers;
+using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdentityDeletionProcesses;
 using FakeItEasy;
 using MediatR;
 using Microsoft.Extensions.Hosting;
