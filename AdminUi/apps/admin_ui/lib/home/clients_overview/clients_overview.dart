@@ -78,7 +78,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                           return Theme.of(context).colorScheme.primary;
                         }),
                       ),
-                      onPressed: () => showCreateClientDialog(context: context, defaultTiers: _defaultTiers),
+                      onPressed: () => showCreateClientDialog(context: context, defaultTiers: _defaultTiers, onClientCreated: _reloadClients),
                     ),
                   ],
                 ),
