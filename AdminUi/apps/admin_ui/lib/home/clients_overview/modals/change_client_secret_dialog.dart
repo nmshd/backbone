@@ -24,14 +24,28 @@ class _ChangeClientSecretDialog extends StatefulWidget {
 }
 
 class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
-  final TextEditingController _newClientSecretController = TextEditingController();
+  final _newClientSecretController = TextEditingController();
 
   bool _isClientSecretVisible = true;
   bool _saving = false;
-  bool _saveFinished = false;
+  bool _saveSucceeded = false;
 
   String _errorMessage = '';
   String _saveClientSecretMessage = '';
+
+  @override
+  void initState() {
+    super.initState();
+
+    _newClientSecretController.addListener(() => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _newClientSecretController.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,9 +67,10 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                     width: 385,
                     child: TextField(
                       controller: _newClientSecretController,
-                      readOnly: _saveFinished,
+                      readOnly: _saveSucceeded,
                       obscureText: _isClientSecretVisible,
                       decoration: const InputDecoration(
+                        border: OutlineInputBorder(),
                         labelText: 'Client Secret',
                         helperText: 'A Client Secret will be generated if this field is left blank.',
                       ),
@@ -96,8 +111,8 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
         ),
       ),
       actions: [
-        OutlinedButton(onPressed: _saving ? null : () => context.pop(), child: Text(_saveFinished ? 'Cancel' : 'Close')),
-        if (_saveFinished) FilledButton(onPressed: _saving ? null : _changeClientSecret, child: const Text('Save')),
+        OutlinedButton(onPressed: _saving ? null : () => context.pop(), child: Text(_saveSucceeded ? 'Close' : 'Cancel')),
+        if (!_saveSucceeded) FilledButton(onPressed: _saving ? null : _changeClientSecret, child: const Text('Save')),
       ],
     );
   }
@@ -118,7 +133,7 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
     _newClientSecretController.text = response.data.clientSecret;
     setState(() {
       _saveClientSecretMessage = 'Please save the Client Secret since it will be inaccessible after exiting.';
-      _saveFinished = false;
+      _saveSucceeded = true;
       _saving = false;
     });
   }
