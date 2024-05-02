@@ -321,7 +321,7 @@ sendidentitydeletionreminders:
   name: "sendidentitydeletionreminders"
 
   schedule: "0 3 * * *"
-  successfulJobsHistoryLimit: 20
+  successfulJobsHistoryLimit: 0
   failedJobsHistoryLimit: 10
   backoffLimit: 5
 
