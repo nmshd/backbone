@@ -167,6 +167,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                                   child: Text(
                                     'Change Client Secret',
                                     style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                                    textAlign: TextAlign.center,
                                   ),
                                 ),
                               ),
