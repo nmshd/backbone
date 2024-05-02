@@ -1,13 +1,16 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
-import { check } from "k6";
+import { check, sleep } from "k6";
 import { b64encode } from "k6/encoding";
+import exec from "k6/execution";
 import { Response } from "k6/http";
+import { ConstantArrivalRateScenario, Options } from "k6/options";
+import { ChallengeRequestRepresentation, Sidecar } from "../libs/sidecar";
 
-export const options = {
+export const options: Options = {
     scenarios: {
         constant_request_rate: {
             executor: "constant-arrival-rate",
-            rate: 5,
+            rate: 8,
             timeUnit: "1s",
             duration: "1m",
             preAllocatedVUs: 20,
@@ -21,20 +24,49 @@ const session = new Httpx({
     timeout: 20000 // 20s timeout.
 });
 
-const cryptoSession = new Httpx({
-    baseURL: "http://localhost:3000/",
-    timeout: 2000,
-    group: "crypto",
-    tags: ["crypto"]
-});
+const testIdentities: Response[] = [];
 
 export default async function () {
-    const createdIdentityResponse = CreateIdentity();
+    const identity = testIdentities.shift();
 
-    check(createdIdentityResponse, {
-        "Identity was created": (r) => r.status === 201,
-        "response has Address": (r) => r.json("result.address") != undefined
-    });
+    while (true) {
+        const requestBody: StartSyncRunRequestBody = {
+            duration: 10,
+            type: SyncRunType.ExternalEventSync
+        };
+
+        // session.post("Identities", JSON.stringify(requestBody), {
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     }
+        // }) as Response;
+
+        sleep(1000);
+    }
+}
+
+export function setup() {
+    const mainScenario = exec.test.options.scenarios?.constant_request_rate as ConstantArrivalRateScenario;
+
+    for (let i = 0; i < (mainScenario.maxVUs ?? 100); i++) {
+        const createdIdentityResponse = CreateIdentity("test", "test");
+
+        check(createdIdentityResponse, {
+            "Identity was created": (r) => r.status === 201
+        });
+
+        const createdIdentityResponseValue = createdIdentityResponse.json("result") as unknown as CreateIdentityResponse;
+
+        check(createdIdentityResponseValue, {
+            "response has Address": (r) => r.address != undefined,
+            "response has device": (r) => r.device != undefined,
+            "device has Id": (r) => r.device.id != undefined
+        });
+
+        const token = ExchangeToken(createdIdentityResponse);
+
+        testIdentities.push(createdIdentityResponse);
+    }
 }
 
 interface ChallengeResponse {
@@ -52,19 +84,42 @@ interface CreateIdentityRequest {
     IdentityVersion: number;
     SignedChallenge: any;
 }
-function CreateIdentity() {
+
+interface StartSyncRunRequestBody {
+    type: SyncRunType;
+    duration: number;
+}
+
+interface CreateIdentityResponse {
+    address: string;
+    createdAt: string;
+    device: {
+        createdAt: string;
+        id: string;
+        username: string;
+    };
+}
+
+enum SyncRunType {
+    ExternalEventSync,
+    DatawalletVersionUpgrade
+}
+
+function CreateIdentity(ClientId: string, ClientSecret: string): Response {
+    const sidecar = new Sidecar();
+
     const challenge = getChallenge();
 
-    const keyPair = cryptoSession.get("keypair").json();
+    const keyPair = sidecar.GenerateKeyPair();
 
-    const signedChallenge = SignChallenge(keyPair, challenge);
+    const signedChallenge = sidecar.SignChallenge(keyPair, challenge);
 
-    const password = GeneratePassword();
+    const password = sidecar.GeneratePassword();
 
     const createIdentityRequest: CreateIdentityRequest = {
-        ClientId: "test",
-        ClientSecret: "test",
-        SignedChallenge: { challenge, signature: b64encode(JSON.stringify(signedChallenge)) },
+        ClientId,
+        ClientSecret,
+        SignedChallenge: { challenge: JSON.stringify(challenge), signature: b64encode(JSON.stringify(signedChallenge)) },
         IdentityPublicKey: b64encode(JSON.stringify(keyPair.pub)),
         DevicePassword: password,
         IdentityVersion: 1
@@ -74,21 +129,22 @@ function CreateIdentity() {
     return createdIdentityResponse;
 }
 
-function getChallenge() {
+function getChallenge(): ChallengeRequestRepresentation {
     const receivedChallenge = session.post("Challenges").json("result") as ChallengeResponse;
 
-    const challenge = JSON.stringify({
+    return {
         expiresAt: receivedChallenge.expiresAt,
         id: receivedChallenge.id,
         type: "Identity"
-    });
-    return challenge;
+    };
 }
-
-function GeneratePassword() {
-    return (cryptoSession.get("password") as Response).body?.toString()!;
-}
-
-function SignChallenge(keyPair: any, challenge: string) {
-    return cryptoSession.post("sign", JSON.stringify({ keyPair, challenge }), { headers: { "Content-Type": "application/json" } }).json();
+function ExchangeToken(createdIdentityResponse: Response) {
+    const payload = {
+        client_id: "test",
+        client_secret: "test",
+        grant_type: "password",
+        username: createdIdentityResponse.json()
+    };
+    const token = session.post("connect/token", JSON.stringify(payload), { headers: { "Content-Type": "application/json" } });
+    console.log(token);
 }
