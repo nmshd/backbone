@@ -84,7 +84,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
           ),
           FilledButton(
             onPressed: _isLoading ? null : () => _onSubmitted(_tierNameController.text),
-            child: const Text('Add'),
+            child: const Text('Create'),
           ),
         ],
       ),
