@@ -16,8 +16,23 @@ class DateFilter extends StatefulWidget {
 }
 
 class _DateFilterState extends State<DateFilter> {
+  late final TextEditingController _controller;
   FilterOperator _operator = FilterOperator.equal;
   DateTime? _selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +61,7 @@ class _DateFilterState extends State<DateFilter> {
               child: TextField(
                 onTap: _selectNewDate,
                 readOnly: true,
-                controller: TextEditingController(
-                  text: _selectedDate != null ? DateFormat('yyyy-MM-dd').format(_selectedDate!) : '',
-                ),
+                controller: _controller,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   suffixIcon:
@@ -64,6 +77,7 @@ class _DateFilterState extends State<DateFilter> {
 
   void _clearDate() {
     setState(() => _selectedDate = null);
+    _controller.text = '';
     widget.onFilterSelected(_operator, null);
   }
 
@@ -78,6 +92,7 @@ class _DateFilterState extends State<DateFilter> {
     if (picked == null) return;
 
     setState(() => _selectedDate = picked);
+    _controller.text = DateFormat('yyyy-MM-dd').format(picked);
     widget.onFilterSelected(_operator, picked);
   }
 }
