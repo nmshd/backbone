@@ -6,10 +6,10 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 			<PrivateAssets>all</PrivateAssets>
 		</PackageReference>
-		<PackageReference Include="FluentValidation" Version="11.9.0" />
+		<PackageReference Include="FluentValidation" Version="11.9.1" />
 		<PackageReference Include="MediatR" Version="12.2.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.3"/>
-		<PackageReference Include="xunit.assert" Version="2.7.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.4" />
+		<PackageReference Include="xunit.assert" Version="2.8.0" />
 	</ItemGroup>
 
 	<ItemGroup>

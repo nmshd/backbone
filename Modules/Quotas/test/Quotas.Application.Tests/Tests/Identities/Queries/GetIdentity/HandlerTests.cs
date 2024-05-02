@@ -16,7 +16,7 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities.Queries.Get
 public class HandlerTests
 {
     [Fact]
-    public async void Gets_identity_quotas_by_address()
+    public async Task Gets_identity_quotas_by_address()
     {
         // Arrange
         var metric = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
