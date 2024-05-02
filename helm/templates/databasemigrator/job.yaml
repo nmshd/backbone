@@ -22,7 +22,7 @@ spec:
       restartPolicy: Never
       {{- with .Values.databasemigrator.podSecurityContext }}
       securityContext:
-        {{- toYaml .Values.databasemigrator.podSecurityContext | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.databasemigrator.image.imagePullSecrets }}
       imagePullSecrets:
@@ -36,7 +36,7 @@ spec:
         - name: {{ .Values.databasemigrator.name }}
           {{- with .Values.databasemigrator.securityContext }}
           securityContext:
-            {{- toYaml .Values.databasemigrator.securityContext | nindent 8 }}
+            {{- toYaml . | nindent 8 }}
           {{- end }}
           resources:
             {{- toYaml .Values.databasemigrator.resources | nindent 12 }}
