@@ -56,16 +56,12 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
+        title: const Text('Create Client', textAlign: TextAlign.center),
         content: SizedBox(
           width: 500,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'Create Client',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-              Gaps.h16,
               TextField(
                 controller: _clientIdController,
                 readOnly: _saveSucceeded,

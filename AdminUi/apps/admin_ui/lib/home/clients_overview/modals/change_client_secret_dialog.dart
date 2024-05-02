@@ -4,8 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
-import '/core/core.dart';
-
 Future<void> showChangeClientSecretDialog({
   required BuildContext context,
   required String clientId,
@@ -57,16 +55,12 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
+        title: const Text('Change Client Secret', textAlign: TextAlign.center),
         content: SizedBox(
           width: 500,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'Change Client Secret',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-              ),
-              Gaps.h16,
               Padding(
                 padding: const EdgeInsets.all(8),
                 child: Row(
