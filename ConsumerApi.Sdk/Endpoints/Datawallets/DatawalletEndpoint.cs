@@ -11,7 +11,7 @@ public class DatawalletEndpoint(EndpointClient client) : Endpoint(client)
     public async Task<ApiResponse<Datawallet>> GetDatawallet() => await _client.Get<Datawallet>("Datawallet");
 
     public async Task<ApiResponse<GetDatawalletModificationsResponse>> GetDatawalletModifications(int localIndex, int supportedDatawalletVersion, PaginationFilter? pagination = null)
-        => await _client.Request<GetDatawalletModificationsResponse>(HttpMethod.Get, "Datawallet/Modifications")
+        => await _client.Request<GetDatawalletModificationsResponse>(HttpMethod.Get, $"api/{API_VERSION}/Datawallet/Modifications")
             .Authenticate()
             .WithPagination(pagination)
             .AddQueryParameter("localIndex", localIndex.ToString())
@@ -19,7 +19,7 @@ public class DatawalletEndpoint(EndpointClient client) : Endpoint(client)
             .Execute();
 
     public async Task<ApiResponse<PushDatawalletModificationsResponse>> PushDatawalletModifications(PushDatawalletModificationsRequest request, int supportedDatawalletVersion)
-        => await _client.Request<PushDatawalletModificationsResponse>(HttpMethod.Post, "Datawallet/Modifications")
+        => await _client.Request<PushDatawalletModificationsResponse>(HttpMethod.Post, $"api/{API_VERSION}/Datawallet/Modifications")
             .Authenticate()
             .WithJson(request)
             .AddExtraHeader("x-Supported-Datawallet-Version", supportedDatawalletVersion.ToString())
