@@ -60,7 +60,7 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -89,7 +89,7 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -147,7 +147,7 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("From")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -157,7 +157,7 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("To")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();

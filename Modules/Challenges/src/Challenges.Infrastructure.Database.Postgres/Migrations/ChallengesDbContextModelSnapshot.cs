@@ -32,7 +32,7 @@ namespace Challenges.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();

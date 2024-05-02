@@ -43,7 +43,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();
@@ -59,7 +59,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();
@@ -82,7 +82,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();
@@ -96,7 +96,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("Owner")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();

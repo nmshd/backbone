@@ -33,7 +33,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
                     b.Property<string>("Owner")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();
@@ -75,7 +75,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();
@@ -141,7 +141,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
                     b.Property<string>("Owner")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();
@@ -226,7 +226,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();

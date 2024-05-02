@@ -57,7 +57,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -200,7 +200,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -215,7 +215,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
                 {
                     b.Property<string>("Address")
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -308,7 +308,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("IdentityAddress")
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();

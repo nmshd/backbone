@@ -35,7 +35,7 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.Postgres.Migration
                         .IsFixedLength();
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();

@@ -63,7 +63,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();
@@ -94,7 +94,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();
@@ -152,14 +152,14 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("From")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("To")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();

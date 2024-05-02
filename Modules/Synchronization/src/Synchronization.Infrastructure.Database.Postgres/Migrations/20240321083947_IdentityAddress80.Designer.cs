@@ -36,7 +36,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
 
                     b.Property<string>("Owner")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -78,7 +78,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -146,7 +146,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
 
                     b.Property<string>("Owner")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -231,7 +231,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();

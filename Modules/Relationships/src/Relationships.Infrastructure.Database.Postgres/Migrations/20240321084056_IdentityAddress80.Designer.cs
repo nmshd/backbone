@@ -39,7 +39,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
                     b.Property<string>("From")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -56,7 +56,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
                     b.Property<string>("To")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -136,7 +136,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .HasColumnName("Req_CreatedBy")
@@ -177,7 +177,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .HasColumnName("Res_CreatedBy")
@@ -218,7 +218,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -263,7 +263,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
                     b.Property<string>("AllocatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();

@@ -57,7 +57,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();
@@ -201,7 +201,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();
@@ -216,7 +216,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
                 {
                     b.Property<string>("Address")
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();
@@ -309,7 +309,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("IdentityAddress")
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("char(80)")
                         .IsFixedLength();

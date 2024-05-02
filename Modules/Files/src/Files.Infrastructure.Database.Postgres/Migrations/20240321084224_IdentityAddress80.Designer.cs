@@ -46,7 +46,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -62,7 +62,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("DeletedBy")
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -85,7 +85,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -99,7 +99,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("Owner")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();

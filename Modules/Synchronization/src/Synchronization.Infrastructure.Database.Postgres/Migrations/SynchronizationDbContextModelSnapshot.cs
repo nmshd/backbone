@@ -33,7 +33,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("Owner")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -75,7 +75,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -141,7 +141,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("Owner")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
@@ -226,7 +226,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(100)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character(80)")
                         .IsFixedLength();
