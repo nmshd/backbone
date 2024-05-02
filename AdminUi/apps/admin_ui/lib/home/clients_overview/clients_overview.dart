@@ -147,7 +147,6 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                                 }
                               });
                             },
-                            onTap: () {},
                             cells: [
                               DataCell(Text(client.clientId)),
                               DataCell(Text(client.displayName)),
