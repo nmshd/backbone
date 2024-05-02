@@ -53,7 +53,6 @@ class _NumberFilterState extends State<NumberFilter> {
                   widget.onNumberSelected(_operator, enteredValue);
                 },
                 decoration: const InputDecoration(border: OutlineInputBorder()),
-                style: const TextStyle(fontSize: 12),
                 inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
                 keyboardType: TextInputType.number,
               ),
