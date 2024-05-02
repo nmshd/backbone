@@ -7,7 +7,6 @@ spec:
   successfulJobsHistoryLimit: {{ .Values.sendidentitydeletionreminders.successfulJobsHistoryLimit }}
   failedJobsHistoryLimit: {{ .Values.sendidentitydeletionreminders.failedJobsHistoryLimit }}
   jobTemplate:
-    backoffLimit: {{ .Values.sendidentitydeletionreminders.backoffLimit }}
     metadata:
       {{- with .Values.sendidentitydeletionreminders.podAnnotations }}
       annotations:
@@ -16,6 +15,7 @@ spec:
       labels:
         app: {{ .Values.sendidentitydeletionreminders.name }}
     spec:
+      backoffLimit: {{ .Values.sendidentitydeletionreminders.backoffLimit }}
       template:
         spec:
           restartPolicy: Never
