@@ -1,19 +1,21 @@
 using System.ComponentModel;
 using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 [Serializable]
 [TypeConverter(typeof(ExternalEventIdTypeConverter))]
-public class ExternalEventId : StronglyTypedId
+public record ExternalEventId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
     private const string PREFIX = "SYI";
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
-    private ExternalEventId(string stringValue) : base(stringValue) { }
+    private ExternalEventId(string stringValue) : base(stringValue)
+    {
+    }
 
     public static ExternalEventId Parse(string stringValue)
     {

@@ -17,7 +17,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Returns_an_empty_list_when_no_identities_exist()
+    public async Task Returns_an_empty_list_when_no_identities_exist()
     {
         // Arrange
         var identitiesList = new List<Identity>();
@@ -32,7 +32,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Returns_a_list_of_all_existing_identities()
+    public async Task Returns_a_list_of_all_existing_identities()
     {
         // Arrange
         var request = new PaginationFilter();
@@ -61,7 +61,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Returned_identities_have_all_properties_filled_as_expected()
+    public async Task Returned_identities_have_all_properties_filled_as_expected()
     {
         // Arrange
         var request = new PaginationFilter();

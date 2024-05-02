@@ -2,7 +2,7 @@
 using MediatR;
 using Microsoft.IdentityModel.Tokens;
 
-namespace Backbone.Job.IdentityDeletion;
+namespace Backbone.Job.IdentityDeletion.Workers;
 
 public class CancelStaleDeletionProcessesWorker : IHostedService
 {
