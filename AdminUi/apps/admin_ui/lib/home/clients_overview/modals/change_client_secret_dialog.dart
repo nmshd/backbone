@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
+import '/core/core.dart';
+
 Future<void> showChangeClientSecretDialog({
   required BuildContext context,
   required String clientId,
@@ -25,6 +27,7 @@ class _ChangeClientSecretDialog extends StatefulWidget {
 
 class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
   final _newClientSecretController = TextEditingController();
+  final _focusNode = FocusNode();
 
   bool _isClientSecretVisible = true;
   bool _saving = false;
@@ -38,11 +41,13 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
     super.initState();
 
     _newClientSecretController.addListener(() => setState(() {}));
+    _focusNode.requestFocus();
   }
 
   @override
   void dispose() {
     _newClientSecretController.dispose();
+    _focusNode.dispose();
 
     super.dispose();
   }
@@ -59,6 +64,7 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
               'Change Client Secret',
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
+            Gaps.h16,
             Padding(
               padding: const EdgeInsets.all(8),
               child: Row(
@@ -67,6 +73,7 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                     width: 385,
                     child: TextField(
                       controller: _newClientSecretController,
+                      focusNode: _focusNode,
                       readOnly: _saveSucceeded,
                       obscureText: _isClientSecretVisible,
                       decoration: const InputDecoration(
