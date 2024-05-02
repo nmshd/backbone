@@ -66,7 +66,7 @@ class _ClientsFilterState extends State<ClientsFilter> {
           mainAxisSize: MainAxisSize.min,
           children: [
             InputField(
-              label: 'Address',
+              label: 'Client ID',
               onEnteredText: (String enteredText) {
                 _enteredClientId = enteredText;
 
@@ -84,7 +84,7 @@ class _ClientsFilterState extends State<ClientsFilter> {
             ),
             Gaps.w16,
             MultiSelectFilter(
-              label: 'Tiers',
+              label: 'Default Tier',
               searchLabel: 'Search Tiers',
               controller: _tierController,
               onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
@@ -94,7 +94,7 @@ class _ClientsFilterState extends State<ClientsFilter> {
             ),
             Gaps.w16,
             NumberFilter(
-              label: 'Number of Devices',
+              label: 'Number of Identitites',
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 _numberOfIdentities = enteredValue;
                 _numberOfIdentitiesOperator = operator.name;
