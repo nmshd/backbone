@@ -50,12 +50,12 @@ class _RemoveClientsDialogState extends State<_RemoveClientsDialog> {
         actions: <Widget>[
           OutlinedButton(
             onPressed: _deleting ? null : () => context.pop(),
-            child: Text(_deletionSucceeded ? 'Close' : 'Cancel'),
+            child: Text(_deletionSucceeded ? context.l10n.close : context.l10n.cancel),
           ),
           if (!_deletionSucceeded)
             TextButton(
               onPressed: _deleting ? null : _deleteSelectedClients,
-              child: Text('Yes', style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              child: Text(context.l10n.yes, style: TextStyle(color: Theme.of(context).colorScheme.error)),
             ),
         ],
       ),
