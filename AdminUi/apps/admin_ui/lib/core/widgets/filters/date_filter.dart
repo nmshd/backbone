@@ -39,10 +39,7 @@ class _DateFilterState extends State<DateFilter> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '${widget.label}:',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
+        Text('${widget.label}:', style: const TextStyle(fontWeight: FontWeight.bold)),
         Gaps.h8,
         Row(
           children: [
