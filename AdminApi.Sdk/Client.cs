@@ -18,7 +18,7 @@ public class Client
     {
         var authenticator = new XsrfAndApiKeyAuthenticator(apiKey, httpClient);
 
-        var jsonSerializerOptions = new JsonSerializerOptions() { PropertyNameCaseInsensitive = true };
+        var jsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
         jsonSerializerOptions.Converters.Add(new UrlSafeBase64ToByteArrayJsonConverter());
 
         var endpointClient = new EndpointClient(httpClient, authenticator, jsonSerializerOptions);
