@@ -118,7 +118,13 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                             DataCell(Text(client.displayName)),
                             DataCell(Text(client.defaultTier.name)),
                             DataCell(Text('${client.numberOfIdentities}')),
-                            DataCell(Text(DateFormat('yyyy-MM-dd').format(client.createdAt))),
+                            DataCell(
+                              Tooltip(
+                                message:
+                                    '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(client.createdAt)} ${DateFormat.Hms().format(client.createdAt)}',
+                                child: Text(DateFormat.yMd(Localizations.localeOf(context).languageCode).format(client.createdAt)),
+                              ),
+                            ),
                             DataCell(
                               ElevatedButton(
                                 style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),

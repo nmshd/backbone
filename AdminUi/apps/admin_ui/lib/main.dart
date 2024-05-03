@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
@@ -81,6 +82,12 @@ class AdminUiApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
+      supportedLocales: const [Locale('en'), Locale('de')],
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
     );
   }
 }

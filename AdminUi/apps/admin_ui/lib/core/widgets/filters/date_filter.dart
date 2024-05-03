@@ -84,12 +84,13 @@ class _DateFilterState extends State<DateFilter> {
       initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime.now(),
+      locale: Localizations.localeOf(context),
     );
 
-    if (picked == null) return;
+    if (picked == null || !mounted) return;
 
     setState(() => _selectedDate = picked);
-    _controller.text = DateFormat('yyyy-MM-dd').format(picked);
+    _controller.text = DateFormat.yMd(Localizations.localeOf(context).languageCode).format(picked);
     widget.onFilterSelected(_operator, picked);
   }
 }

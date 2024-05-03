@@ -26,7 +26,13 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
-    _dataSource = IdentityDataTableSource();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _dataSource = IdentityDataTableSource(locale: Localizations.localeOf(context));
   }
 
   @override
