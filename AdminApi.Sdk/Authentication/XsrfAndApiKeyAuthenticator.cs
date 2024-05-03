@@ -40,7 +40,7 @@ public class XsrfAndApiKeyAuthenticator : IAuthenticator
     [MemberNotNull(nameof(_xsrfToken), nameof(_xsrfCookie))]
     private async Task RefreshToken()
     {
-        HttpRequestMessage request = new(HttpMethod.Get, "xsrf");
+        HttpRequestMessage request = new(HttpMethod.Get, "api/v1/xsrf");
         request.Headers.Add("X-API-KEY", _apiKey);
 
 #pragma warning disable CS8774 // This warning ("Member must have a non-null value when exiting") must currently be disabled. (see https://github.com/dotnet/csharplang/discussions/ for details)
