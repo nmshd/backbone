@@ -32,7 +32,7 @@ public class HandlerTests
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
         _dbOptions = new DbContextOptionsBuilder<SynchronizationDbContext>().UseSqlite(connection).Options;
-        _eventBus = A.Fake<IEventBus>();
+        _eventBus = A.Dummy<IEventBus>();
 
         var setupContext = new SynchronizationDbContext(_dbOptions, _eventBus);
         setupContext.Database.EnsureCreated();
