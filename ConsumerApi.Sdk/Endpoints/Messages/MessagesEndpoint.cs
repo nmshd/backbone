@@ -6,7 +6,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Responses;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Messages;
 
-public class MessagesEndpoint(EndpointClient client) : Endpoint(client)
+public class MessagesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
     public async Task<ApiResponse<ListMessagesResponse>> ListMessages(PaginationFilter? pagination = null)
         => await _client.Get<ListMessagesResponse>($"api/{API_VERSION}/Messages", null, pagination);

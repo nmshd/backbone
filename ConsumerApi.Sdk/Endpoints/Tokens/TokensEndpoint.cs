@@ -6,7 +6,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Tokens;
 
-public class TokensEndpoint(EndpointClient client) : Endpoint(client)
+public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
     public async Task<ApiResponse<CreateTokenResponse>> CreateToken(CreateTokenRequest request)
         => await _client.Post<CreateTokenResponse>($"api/{API_VERSION}/Tokens", request);

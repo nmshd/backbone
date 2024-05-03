@@ -4,7 +4,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Challenges;
 
-public class ChallengesEndpoint(EndpointClient client) : Endpoint(client)
+public class ChallengesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
     public async Task<ApiResponse<Challenge>> CreateChallenge() => await _client.Post<Challenge>($"api/{API_VERSION}/Challenges");
     public async Task<ApiResponse<Challenge>> CreateChallengeUnauthenticated() => await _client.PostUnauthenticated<Challenge>($"api/{API_VERSION}/Challenges");

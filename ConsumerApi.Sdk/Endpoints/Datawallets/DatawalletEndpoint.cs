@@ -6,7 +6,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Responses;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Datawallets;
 
-public class DatawalletEndpoint(EndpointClient client) : Endpoint(client)
+public class DatawalletEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
     public async Task<ApiResponse<Datawallet>> GetDatawallet() => await _client.Get<Datawallet>("Datawallet");
 

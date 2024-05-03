@@ -6,7 +6,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates;
 
-public class RelationshipTemplatesEndpoint(EndpointClient client) : Endpoint(client)
+public class RelationshipTemplatesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
     public async Task<ApiResponse<ListRelationshipTemplatesResponse>> ListTemplates(PaginationFilter? pagination = null)
         => await _client.Get<ListRelationshipTemplatesResponse>($"api/{API_VERSION}/RelationshipTemplates", null, pagination);

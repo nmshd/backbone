@@ -6,7 +6,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Responses;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Relationships;
 
-public class RelationshipsEndpoint(EndpointClient client) : Endpoint(client)
+public class RelationshipsEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
     public async Task<ApiResponse<Relationship>> GetRelationship(string id) => await _client.Get<Relationship>($"api/{API_VERSION}/Relationships/{id}");
 

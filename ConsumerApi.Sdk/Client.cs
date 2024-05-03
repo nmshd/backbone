@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.SDK.Crypto;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common;
+using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges;
-using Backbone.ConsumerApi.Sdk.Endpoints.Common;
 using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
@@ -24,17 +24,18 @@ namespace Backbone.ConsumerApi.Sdk;
 
 public class Client
 {
+    private readonly Configuration _configuration;
     private readonly HttpClient _httpClient;
-    private readonly KeyPair? _identityKeyPair;
 
-    private Client(HttpClient httpClient, Configuration configuration, KeyPair? identityKeyPair = null)
+    private Client(HttpClient httpClient, Configuration configuration, DeviceData? deviceData, IdentityData? identityData)
     {
-        var authenticator = new OAuthAuthenticator(configuration.Authentication, httpClient);
+        IAuthenticator authenticator = deviceData != null ? new OAuthAuthenticator(configuration.Authentication, httpClient) : new AnonymousAuthenticator();
         var endpointClient = new EndpointClient(httpClient, authenticator, configuration.JsonSerializerOptions);
 
-        Configuration = configuration;
+        _configuration = configuration;
         _httpClient = httpClient;
-        _identityKeyPair = identityKeyPair;
+        DeviceData = deviceData;
+        IdentityData = identityData;
 
         Challenges = new ChallengesEndpoint(endpointClient);
         Datawallet = new DatawalletEndpoint(endpointClient);
@@ -50,8 +51,10 @@ public class Client
         Tokens = new TokensEndpoint(endpointClient);
     }
 
-    public Configuration Configuration { get; }
+    public DeviceData? DeviceData { get; }
+    public IdentityData? IdentityData { get; }
 
+    // ReSharper disable UnusedAutoPropertyAccessor.Global
     public ChallengesEndpoint Challenges { get; }
     public DatawalletEndpoint Datawallet { get; }
     public DevicesEndpoint Devices { get; }
@@ -64,6 +67,7 @@ public class Client
     public RelationshipTemplatesEndpoint RelationshipTemplates { get; }
     public SyncRunsEndpoint SyncRuns { get; }
     public TokensEndpoint Tokens { get; }
+    // ReSharper restore UnusedAutoPropertyAccessor.Global
 
     public static Client CreateUnauthenticated(string baseUrl, ClientCredentials clientCredentials)
     {
@@ -79,67 +83,83 @@ public class Client
         {
             Authentication = new Configuration.AuthenticationConfiguration
             {
-                ClientId = clientCredentials.ClientId,
-                ClientSecret = clientCredentials.ClientSecret,
-                Username = "",
-                Password = ""
+                ClientCredentials = clientCredentials,
+                UserCredentials = null
             }
         };
 
-        return new Client(httpClient, configuration);
+        return new Client(httpClient, configuration, null, null);
     }
 
-    public static async Task<Client> CreateForNewIdentity(string baseUrl, ClientCredentials clientCredentials, string password = "Password")
+    public static Client CreateForExistingIdentity(string baseUrl, ClientCredentials clientCredentials, UserCredentials userCredentials)
     {
-        var httpClient = new HttpClient { BaseAddress = new Uri(baseUrl) };
-
-        return await CreateForNewIdentity(httpClient, clientCredentials);
+        return CreateForExistingIdentity(new HttpClient { BaseAddress = new Uri(baseUrl) }, clientCredentials, userCredentials);
     }
 
-    public static async Task<Client> CreateForNewIdentity(HttpClient httpClient, ClientCredentials clientCredentials, string password = "Password")
+    public static Client CreateForExistingIdentity(HttpClient httpClient, ClientCredentials clientCredentials, UserCredentials userCredentials)
     {
         if (httpClient.BaseAddress == null)
             throw new Exception("The base address of the HttpClient must be set.");
-
-        var identity = await CreateIdentity(httpClient, clientCredentials, password);
 
         var configuration = new Configuration
         {
             Authentication = new Configuration.AuthenticationConfiguration
             {
-                ClientId = clientCredentials.ClientId,
-                ClientSecret = clientCredentials.ClientSecret,
-                Username = identity.DeviceUsername,
-                Password = identity.DevicePassword
+                ClientCredentials = clientCredentials,
+                UserCredentials = userCredentials
             }
         };
 
-        var client = new Client(httpClient, configuration, identity.KeyPair);
+        var client = new Client(httpClient, configuration, new DeviceData { DeviceId = "", UserCredentials = userCredentials }, null);
 
         return client;
     }
 
-    private static async Task<ResponseRepresentation> CreateIdentity(HttpClient httpClient, ClientCredentials clientCredentials, string password)
+    public static async Task<Client> CreateForNewIdentity(string baseUrl, ClientCredentials clientCredentials, string password)
+    {
+        return await CreateForNewIdentity(new HttpClient { BaseAddress = new Uri(baseUrl) }, clientCredentials, password);
+    }
+
+    public static async Task<Client> CreateForNewIdentity(HttpClient httpClient, ClientCredentials clientCredentials, string password)
+    {
+        if (httpClient.BaseAddress == null)
+            throw new Exception("The base address of the HttpClient must be set.");
+
+        var (identityData, deviceData) = await CreateIdentity(httpClient, clientCredentials, password);
+
+        var configuration = new Configuration
+        {
+            Authentication = new Configuration.AuthenticationConfiguration
+            {
+                ClientCredentials = clientCredentials,
+                UserCredentials = deviceData.UserCredentials
+            }
+        };
+
+        var client = new Client(httpClient, configuration, deviceData, identityData);
+
+        return client;
+    }
+
+    private static async Task<(IdentityData identityData, DeviceData deviceData)> CreateIdentity(HttpClient httpClient, ClientCredentials clientCredentials, string password)
     {
         var temporaryConfiguration = new Configuration
         {
             Authentication = new Configuration.AuthenticationConfiguration
             {
-                ClientId = clientCredentials.ClientId,
-                ClientSecret = clientCredentials.ClientSecret,
-                Username = "",
-                Password = ""
+                ClientCredentials = clientCredentials,
+                UserCredentials = null
             }
         };
 
-        var client = new Client(httpClient, temporaryConfiguration);
+        var client = new Client(httpClient, temporaryConfiguration, null, null);
 
         var (keyPair, signedChallenge) = await CreateSignedChallenge(client);
 
         var createIdentityPayload = new CreateIdentityRequest
         {
-            ClientId = client.Configuration.Authentication.ClientId,
-            ClientSecret = client.Configuration.Authentication.ClientSecret,
+            ClientId = client._configuration.Authentication.ClientCredentials.ClientId,
+            ClientSecret = client._configuration.Authentication.ClientCredentials.ClientSecret,
             IdentityVersion = 1,
             SignedChallenge = signedChallenge,
             IdentityPublicKey = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new CryptoSignaturePublicKey
@@ -155,21 +175,26 @@ public class Client
         if (createIdentityResponse.IsError)
             throw new Exception($"There was an error when creating the identity. The error code was '{createIdentityResponse.Error.Code}'. The message was '{createIdentityResponse.Error.Message}'.");
 
-        var responseRepresentation = new ResponseRepresentation
+        var deviceData = new DeviceData
         {
-            KeyPair = keyPair,
-            DevicePassword = createIdentityPayload.DevicePassword,
-            CreatedAt = createIdentityResponse.Result.CreatedAt,
-            Address = createIdentityResponse.Result.Address,
             DeviceId = createIdentityResponse.Result.Device.Id,
-            DeviceUsername = createIdentityResponse.Result.Device.Username
+            UserCredentials = new UserCredentials(createIdentityResponse.Result.Device.Username, password)
         };
 
-        return responseRepresentation;
+        var identityData = new IdentityData
+        {
+            Address = createIdentityResponse.Result.Address,
+            KeyPair = keyPair
+        };
+
+        return (identityData, deviceData);
     }
 
-    public async Task<Client> OnboardNewDevice(string password = "Password")
+    public async Task<Client> OnboardNewDevice(string password)
     {
+        if (DeviceData == null)
+            throw new Exception("The device data is missing. This is probably because you're using an unauthenticated client. In order to onboard a new device, the client needs to be authenticated.");
+
         var (_, signedChallenge) = await CreateSignedChallenge(this);
 
         var createDeviceResponse = await Devices.RegisterDevice(new RegisterDeviceRequest
@@ -179,20 +204,24 @@ public class Client
         });
 
         if (createDeviceResponse.IsError)
-            throw new Exception($"There was an error when creating the device. The error code was {createDeviceResponse.Error.Code}. The message was {createDeviceResponse.Error.Message}.");
+            throw new Exception($"There was an error when creating the device. The error code was '{createDeviceResponse.Error.Code}'. The message was '{createDeviceResponse.Error.Message}'.");
 
         var configuration = new Configuration
         {
             Authentication = new Configuration.AuthenticationConfiguration
             {
-                ClientId = Configuration.Authentication.ClientId,
-                ClientSecret = Configuration.Authentication.ClientSecret,
-                Username = createDeviceResponse.Result.Username,
-                Password = password
+                ClientCredentials = _configuration.Authentication.ClientCredentials,
+                UserCredentials = new UserCredentials(createDeviceResponse.Result.Username, password)
             }
         };
 
-        var client = new Client(_httpClient, configuration, _identityKeyPair);
+        var newDeviceData = new DeviceData
+        {
+            DeviceId = createDeviceResponse.Result.Id,
+            UserCredentials = new UserCredentials(createDeviceResponse.Result.Username, password)
+        };
+
+        var client = new Client(_httpClient, configuration, newDeviceData, IdentityData);
 
         return client;
     }
@@ -201,12 +230,12 @@ public class Client
     {
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
 
-        var keyPair = client._identityKeyPair ?? signatureHelper.CreateKeyPair();
+        var keyPair = client.IdentityData?.KeyPair ?? signatureHelper.CreateKeyPair();
 
         var createChallengeResponse = await client.Challenges.CreateChallengeUnauthenticated();
         if (createChallengeResponse.IsError)
             throw new Exception(
-                $"There was an error when creating a challenge for the new identity. The error code was {createChallengeResponse.Error.Code}. The message was {createChallengeResponse.Error.Message}.");
+                $"There was an error when creating a challenge for the new identity. The error code was '{createChallengeResponse.Error.Code}'. The message was '{createChallengeResponse.Error.Message}'.");
 
         var serializedChallenge = JsonConvert.SerializeObject(createChallengeResponse.Result);
 
@@ -219,20 +248,4 @@ public class Client
         };
         return (keyPair, signedChallenge);
     }
-
-    public class ResponseRepresentation
-    {
-        public required KeyPair KeyPair;
-        public required string DevicePassword;
-        public required DateTime CreatedAt;
-        public required string Address;
-        public required string DeviceId;
-        public required string DeviceUsername;
-    }
-}
-
-public class ClientCredentials
-{
-    public required string ClientId { get; init; }
-    public required string ClientSecret { get; init; }
 }

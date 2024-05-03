@@ -6,7 +6,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Identities;
 
-public class IdentitiesEndpoint(EndpointClient client) : Endpoint(client)
+public class IdentitiesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
     public async Task<ApiResponse<CreateIdentityResponse>> CreateIdentity(CreateIdentityRequest request)
         => await _client.PostUnauthenticated<CreateIdentityResponse>($"api/{API_VERSION}/Identities", request);
