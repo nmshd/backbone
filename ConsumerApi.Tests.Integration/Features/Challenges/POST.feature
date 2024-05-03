@@ -5,7 +5,7 @@ User creates a Challenge
 
 Scenario: Creating a Challenge as an anonymous user
 	Given the user is unauthenticated
-	When a POST request is sent to the Challenges endpoint
+	When a POST request is sent to the Challenges endpoint without authentication
 	Then the response status code is 201 (Created)
 	And the response contains a Challenge
 	And the Challenge does not contain information about the creator
