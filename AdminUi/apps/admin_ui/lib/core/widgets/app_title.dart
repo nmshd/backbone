@@ -21,7 +21,7 @@ class AppTitle extends StatelessWidget {
           TextSpan(
             children: [
               TextSpan(text: 'enmeshed', style: textStyle.copyWith(fontWeight: FontWeight.bold)),
-              const TextSpan(text: ' Admin UI', style: textStyle),
+              const TextSpan(text: ' Backbone Admin UI', style: textStyle),
             ],
           ),
         ),
