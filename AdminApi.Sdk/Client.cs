@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
+using Backbone.AdminApi.Sdk.Authentication;
 using Backbone.AdminApi.Sdk.Endpoints.ApiKeyValidation;
 using Backbone.AdminApi.Sdk.Endpoints.Clients;
-using Backbone.AdminApi.Sdk.Endpoints.Common;
 using Backbone.AdminApi.Sdk.Endpoints.Identities;
 using Backbone.AdminApi.Sdk.Endpoints.Logs;
 using Backbone.AdminApi.Sdk.Endpoints.Metrics;

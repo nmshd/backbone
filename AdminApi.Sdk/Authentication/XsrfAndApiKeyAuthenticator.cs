@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common;
 
-namespace Backbone.AdminApi.Sdk.Endpoints.Common;
+namespace Backbone.AdminApi.Sdk.Authentication;
 
 public class XsrfAndApiKeyAuthenticator : IAuthenticator
 {
