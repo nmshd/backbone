@@ -31,8 +31,8 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
   bool _saving = false;
   bool _saveSucceeded = false;
 
-  String _errorMessage = '';
-  String _saveClientSecretMessage = '';
+  String? _errorMessage;
+  String? _saveClientSecretMessage;
 
   @override
   void initState() {
@@ -94,19 +94,19 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                   ],
                 ),
               ),
-              if (_saveClientSecretMessage.isNotEmpty)
+              if (_saveClientSecretMessage != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
-                    _saveClientSecretMessage,
+                    _saveClientSecretMessage!,
                     style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
-              if (_errorMessage.isNotEmpty)
+              if (_errorMessage != null)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
-                    _errorMessage,
+                    _errorMessage!,
                     style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                 ),

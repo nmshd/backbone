@@ -30,7 +30,7 @@ class _RemoveClientsDialog extends StatefulWidget {
 class _RemoveClientsDialogState extends State<_RemoveClientsDialog> {
   bool _deleting = false;
   bool _deletionSucceeded = false;
-  String? _deletionError;
+  String? _deletionErrorMessage;
   final _deletedClients = <String>[];
 
   @override
@@ -43,7 +43,7 @@ class _RemoveClientsDialogState extends State<_RemoveClientsDialog> {
           (_, true) => _RemoveClientsSucceeded(numberOfDeletedClients: _deletedClients.length),
           (true, _) => const _RemoveClientsLoading(),
           (_, _) => Text(
-              _deletionError ?? 'Are you sure you want to delete the selected ${widget.selectedClients.length > 1 ? 'clients' : 'client'}?',
+              _deletionErrorMessage ?? 'Are you sure you want to delete the selected ${widget.selectedClients.length > 1 ? 'clients' : 'client'}?',
               style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
         },
@@ -78,7 +78,7 @@ class _RemoveClientsDialogState extends State<_RemoveClientsDialog> {
       setState(() {
         _deleting = false;
         _deletionSucceeded = false;
-        _deletionError = 'An error occurred while deleting the client(s). Please try again.';
+        _deletionErrorMessage = 'An error occurred while deleting the client(s). Please try again.';
       });
 
       return;

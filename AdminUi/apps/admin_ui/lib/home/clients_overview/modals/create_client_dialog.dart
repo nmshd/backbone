@@ -38,8 +38,8 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
   bool _saving = false;
   bool _saveSucceeded = false;
 
-  String _errorMessage = '';
-  String _saveClientSecretMessage = '';
+  String? _errorMessage;
+  String? _saveClientSecretMessage;
 
   @override
   void dispose() {
@@ -113,9 +113,9 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 ],
               ),
               Gaps.h16,
-              if (_saveClientSecretMessage.isNotEmpty)
+              if (_saveClientSecretMessage != null)
                 Text(
-                  _saveClientSecretMessage,
+                  _saveClientSecretMessage!,
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               Gaps.h16,
@@ -147,10 +147,10 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                   );
                 }).toList(),
               ),
-              if (_errorMessage.isNotEmpty) ...[
+              if (_errorMessage != null) ...[
                 Gaps.h16,
                 Text(
-                  _errorMessage,
+                  _errorMessage!,
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
               ],
