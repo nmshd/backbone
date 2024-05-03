@@ -80,7 +80,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
         actions: <Widget>[
           OutlinedButton(
             onPressed: _isLoading ? null : () => context.pop(),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: _isLoading ? null : () => _onSubmitted(_tierNameController.text),
