@@ -23,15 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const AppTitle(),
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {
-            setState(() {
-              extended = !extended;
-            });
-          },
-        ),
+        title: const AppTitle(padding: EdgeInsets.only(left: 80)),
         actions: [
           SizedBox(
             height: 35,
@@ -53,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Row(
         children: [
           NavigationRail(
-            extended: extended,
+            labelType: NavigationRailLabelType.all,
             destinations: const [
               NavigationRailDestination(icon: Icon(Icons.account_circle_sharp), label: Text('Identities')),
               NavigationRailDestination(icon: Icon(Icons.cable), label: Text('Tiers')),
