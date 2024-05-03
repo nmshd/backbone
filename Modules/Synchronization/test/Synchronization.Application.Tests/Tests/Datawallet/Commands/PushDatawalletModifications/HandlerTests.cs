@@ -95,8 +95,6 @@ public class HandlerTests
 
         var mapper = AutoMapperProfile.CreateMapper();
 
-        var eventBus = A.Fake<IEventBus>();
-
-        return new Handler(dbContext, userContext, mapper, eventBus);
+        return new Handler(dbContext, userContext, mapper);
     }
 }

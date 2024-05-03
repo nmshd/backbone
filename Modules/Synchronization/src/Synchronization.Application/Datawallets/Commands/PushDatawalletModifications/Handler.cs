@@ -1,12 +1,10 @@
 using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -19,7 +17,6 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
     private CancellationToken _cancellationToken;
     private Datawallet? _datawallet;
@@ -29,11 +26,10 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private PushDatawalletModificationsResponse _response = null!;
     private DatawalletVersion _supportedDatawalletVersion = null!;
 
-    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper)
     {
         _dbContext = dbContext;
         _mapper = mapper;
-        _eventBus = eventBus;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
@@ -50,7 +46,6 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         EnsureSufficientSupportedDatawalletVersion();
         EnsureDeviceIsUpToDate();
         await CreateModifications();
-        //PublishDomainEvent();
         BuildResponse();
 
         return _response;
@@ -137,10 +132,5 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
             throw;
         }
-    }
-
-    private void PublishDomainEvent()
-    {
-        _eventBus.Publish(new DatawalletModifiedDomainEvent(_activeIdentity, _activeDevice));
     }
 }
