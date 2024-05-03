@@ -25,8 +25,6 @@ namespace Backbone.ConsumerApi.Sdk;
 public class Client
 {
     private readonly Configuration _configuration;
-    private readonly DeviceData? _deviceData;
-    private readonly IdentityData? _identityData;
     private readonly HttpClient _httpClient;
 
     private Client(HttpClient httpClient, Configuration configuration, DeviceData? deviceData, IdentityData? identityData)
@@ -36,8 +34,8 @@ public class Client
 
         _configuration = configuration;
         _httpClient = httpClient;
-        _deviceData = deviceData;
-        _identityData = identityData;
+        DeviceData = deviceData;
+        IdentityData = identityData;
 
         Challenges = new ChallengesEndpoint(endpointClient);
         Datawallet = new DatawalletEndpoint(endpointClient);
@@ -52,6 +50,9 @@ public class Client
         SyncRuns = new SyncRunsEndpoint(endpointClient);
         Tokens = new TokensEndpoint(endpointClient);
     }
+
+    public DeviceData? DeviceData { get; }
+    public IdentityData? IdentityData { get; }
 
     // ReSharper disable UnusedAutoPropertyAccessor.Global
     public ChallengesEndpoint Challenges { get; }
@@ -191,7 +192,7 @@ public class Client
 
     public async Task<Client> OnboardNewDevice(string password)
     {
-        if (_deviceData == null)
+        if (DeviceData == null)
             throw new Exception("The device data is missing. This is probably because you're using an unauthenticated client. In order to onboard a new device, the client needs to be authenticated.");
 
         var (_, signedChallenge) = await CreateSignedChallenge(this);
@@ -220,7 +221,7 @@ public class Client
             UserCredentials = new UserCredentials(createDeviceResponse.Result.Username, password)
         };
 
-        var client = new Client(_httpClient, configuration, newDeviceData, _identityData);
+        var client = new Client(_httpClient, configuration, newDeviceData, IdentityData);
 
         return client;
     }
@@ -229,7 +230,7 @@ public class Client
     {
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
 
-        var keyPair = client._identityData?.KeyPair ?? signatureHelper.CreateKeyPair();
+        var keyPair = client.IdentityData?.KeyPair ?? signatureHelper.CreateKeyPair();
 
         var createChallengeResponse = await client.Challenges.CreateChallengeUnauthenticated();
         if (createChallengeResponse.IsError)
@@ -246,17 +247,5 @@ public class Client
                 )).BytesRepresentation
         };
         return (keyPair, signedChallenge);
-    }
-
-    public record DeviceData
-    {
-        public required string DeviceId;
-        public required UserCredentials UserCredentials;
-    }
-
-    public record IdentityData
-    {
-        public required string Address;
-        public required KeyPair KeyPair;
     }
 }
