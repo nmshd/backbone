@@ -32,7 +32,7 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests
             A<object>._)
         ).Returns(externalEvent);
 
-        var handler = new IdentityDeletionProcessStartedDomainEventHandler(fakeDbContext, mockEventBus, A.Fake<ILogger<IdentityDeletionProcessStartedDomainEventHandler>>());
+        var handler = new IdentityDeletionProcessStartedDomainEventHandler(fakeDbContext, A.Fake<ILogger<IdentityDeletionProcessStartedDomainEventHandler>>());
 
         // Act
         await handler.Handle(identityDeletionProcessStartedDomainEvent);

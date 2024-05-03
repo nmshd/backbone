@@ -9,13 +9,11 @@ namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.Rel
 public class RelationshipChangeCreatedDomainEventHandler : IDomainEventHandler<RelationshipChangeCreatedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IEventBus _eventBus;
     private readonly ILogger<RelationshipChangeCreatedDomainEventHandler> _logger;
 
-    public RelationshipChangeCreatedDomainEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<RelationshipChangeCreatedDomainEventHandler> logger)
+    public RelationshipChangeCreatedDomainEventHandler(ISynchronizationDbContext dbContext, ILogger<RelationshipChangeCreatedDomainEventHandler> logger)
     {
         _dbContext = dbContext;
-        _eventBus = eventBus;
         _logger = logger;
     }
 

@@ -10,13 +10,11 @@ namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.Ide
 public class IdentityDeletionProcessStartedDomainEventHandler : IDomainEventHandler<IdentityDeletionProcessStartedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IEventBus _eventBus;
     private readonly ILogger<IdentityDeletionProcessStartedDomainEventHandler> _logger;
 
-    public IdentityDeletionProcessStartedDomainEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<IdentityDeletionProcessStartedDomainEventHandler> logger)
+    public IdentityDeletionProcessStartedDomainEventHandler(ISynchronizationDbContext dbContext, ILogger<IdentityDeletionProcessStartedDomainEventHandler> logger)
     {
         _dbContext = dbContext;
-        _eventBus = eventBus;
         _logger = logger;
     }
 

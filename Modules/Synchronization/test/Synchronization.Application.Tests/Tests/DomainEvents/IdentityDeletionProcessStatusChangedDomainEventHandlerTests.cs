@@ -32,7 +32,6 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandlerTests
         ).Returns(externalEvent);
 
         var handler = new IdentityDeletionProcessStatusChangedDomainEventHandler(mockDbContext,
-            A.Fake<IEventBus>(),
             A.Fake<ILogger<IdentityDeletionProcessStatusChangedDomainEventHandler>>());
 
         // Act
@@ -63,7 +62,6 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandlerTests
         ).Returns(externalEvent);
 
         var handler = new IdentityDeletionProcessStatusChangedDomainEventHandler(fakeDbContext,
-            mockEventBus,
             A.Fake<ILogger<IdentityDeletionProcessStatusChangedDomainEventHandler>>());
 
         // Act

@@ -1,7 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipChangeCompleted;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
@@ -10,13 +9,11 @@ namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.Rel
 public class RelationshipChangeCompletedDomainEventHandler : IDomainEventHandler<RelationshipChangeCompletedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IEventBus _eventBus;
     private readonly ILogger<RelationshipChangeCompletedDomainEventHandler> _logger;
 
-    public RelationshipChangeCompletedDomainEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<RelationshipChangeCompletedDomainEventHandler> logger)
+    public RelationshipChangeCompletedDomainEventHandler(ISynchronizationDbContext dbContext, ILogger<RelationshipChangeCompletedDomainEventHandler> logger)
     {
         _dbContext = dbContext;
-        _eventBus = eventBus;
         _logger = logger;
     }
 

@@ -2,7 +2,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.MessageCreated;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
@@ -11,13 +10,11 @@ namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.Mes
 public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreatedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IEventBus _eventBus;
     private readonly ILogger<MessageCreatedDomainEventHandler> _logger;
 
-    public MessageCreatedDomainEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<MessageCreatedDomainEventHandler> logger)
+    public MessageCreatedDomainEventHandler(ISynchronizationDbContext dbContext, ILogger<MessageCreatedDomainEventHandler> logger)
     {
         _dbContext = dbContext;
-        _eventBus = eventBus;
         _logger = logger;
     }
 
