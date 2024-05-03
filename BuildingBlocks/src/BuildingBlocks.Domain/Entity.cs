@@ -29,9 +29,6 @@ public abstract class Entity
         if (ReferenceEquals(this, other))
             return true;
 
-        if (GetRealType() != other.GetRealType())
-            return false;
-
         return Id.Equals(other.Id);
     }
 
@@ -53,17 +50,7 @@ public abstract class Entity
 
     public override int GetHashCode()
     {
-        return (GetRealType() + Id).GetHashCode();
-    }
-
-    private Type GetRealType()
-    {
-        var type = GetType();
-
-        if (type.ToString().Contains("Castle.Proxies"))
-            return type.BaseType ?? type;
-
-        return type;
+        return Id.GetHashCode();
     }
 }
 
