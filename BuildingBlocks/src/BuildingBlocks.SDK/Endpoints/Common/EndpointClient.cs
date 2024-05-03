@@ -28,14 +28,12 @@ public class EndpointClient
 
     private readonly HttpClient _httpClient;
     private readonly JsonSerializerOptions _jsonSerializerOptions;
-    private readonly string _apiVersion;
 
-    public EndpointClient(HttpClient httpClient, IAuthenticator authenticator, JsonSerializerOptions jsonSerializerOptions, string apiVersion)
+    public EndpointClient(HttpClient httpClient, IAuthenticator authenticator, JsonSerializerOptions jsonSerializerOptions)
     {
         _httpClient = httpClient;
         _authenticator = authenticator;
         _jsonSerializerOptions = jsonSerializerOptions;
-        _apiVersion = apiVersion;
     }
 
     public async Task<ApiResponse<T>> Post<T>(string url, object? requestContent = null)
@@ -96,7 +94,7 @@ public class EndpointClient
 
     public RequestBuilder<T> Request<T>(HttpMethod method, string url)
     {
-        return new RequestBuilder<T>(this, _jsonSerializerOptions, _authenticator, method, url, _apiVersion);
+        return new RequestBuilder<T>(this, _jsonSerializerOptions, _authenticator, method, url);
     }
 
     private async Task<ApiResponse<T>> Execute<T>(HttpRequestMessage request)
@@ -158,17 +156,15 @@ public class EndpointClient
         private readonly NameValueCollection _queryParameters = [];
 
         private readonly string _url;
-        private readonly string? _apiVersion;
         private bool _authenticated;
         private HttpContent _content;
 
-        public RequestBuilder(EndpointClient client, JsonSerializerOptions jsonSerializerOptions, IAuthenticator authenticator, HttpMethod method, string url, string apiVersion)
+        public RequestBuilder(EndpointClient client, JsonSerializerOptions jsonSerializerOptions, IAuthenticator authenticator, HttpMethod method, string url)
         {
             _client = client;
             _jsonSerializerOptions = jsonSerializerOptions;
             _authenticator = authenticator;
 
-            _apiVersion = apiVersion;
             _url = url;
             _method = method;
             _authenticated = false;
@@ -262,7 +258,7 @@ public class EndpointClient
 
         public async Task<ApiResponse<T>> ExecuteOData()
         {
-            return await _client.ExecuteOData<T>(await CreateRequestMessage(true));
+            return await _client.ExecuteOData<T>(await CreateRequestMessage());
         }
 
         public async Task<RawApiResponse> ExecuteRaw()
@@ -270,11 +266,9 @@ public class EndpointClient
             return await _client.ExecuteRaw(await CreateRequestMessage());
         }
 
-        private async Task<HttpRequestMessage> CreateRequestMessage(bool isOData = false)
+        private async Task<HttpRequestMessage> CreateRequestMessage()
         {
-            var requestUri = isOData ? $"odata/{EncodeParametersInUrl()}" : $"api/{_apiVersion}/{EncodeParametersInUrl()}";
-
-            var request = new HttpRequestMessage(_method, requestUri)
+            var request = new HttpRequestMessage(_method, EncodeParametersInUrl())
             {
                 Content = _content
             };
