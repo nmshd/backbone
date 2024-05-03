@@ -6,12 +6,6 @@ namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class SyncRun : Entity<SyncRunId>
 {
-    public enum SyncRunType
-    {
-        ExternalEventSync = 0,
-        DatawalletVersionUpgrade = 1
-    }
-
     private readonly List<SyncError> _errors = [];
     private readonly List<ExternalEvent> _externalEvents = [];
 
@@ -114,6 +108,12 @@ public class SyncRun : Entity<SyncRunId>
         {
             ItemSyncFailed(item, "syncRunCanceled");
         }
+    }
+
+    public enum SyncRunType
+    {
+        ExternalEventSync = 0,
+        DatawalletVersionUpgrade = 1
     }
 }
 

@@ -83,24 +83,6 @@ public class AbstractDbContextBase : DbContext, IDbContext
         return await RunInTransaction(func, null, isolationLevel);
     }
 
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
-    {
-        var entities = GetChangedEntities();
-        var result = base.SaveChangesAsync(cancellationToken);
-        PublishDomainEvents(entities);
-
-        return result;
-    }
-
-    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new())
-    {
-        var entities = GetChangedEntities();
-        var result = base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-        PublishDomainEvents(entities);
-
-        return result;
-    }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
@@ -134,6 +116,24 @@ public class AbstractDbContextBase : DbContext, IDbContext
     {
         var entities = GetChangedEntities();
         var result = base.SaveChanges(acceptAllChangesOnSuccess);
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChangesAsync(cancellationToken);
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new())
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
         PublishDomainEvents(entities);
 
         return result;
