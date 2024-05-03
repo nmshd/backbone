@@ -23,6 +23,8 @@ public class AbstractDbContextBase : DbContext, IDbContext
 
     protected AbstractDbContextBase()
     {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        _eventBus = null!;
     }
 
     protected AbstractDbContextBase(DbContextOptions options, IEventBus eventBus, IServiceProvider? serviceProvider = null) : base(options)
@@ -81,6 +83,24 @@ public class AbstractDbContextBase : DbContext, IDbContext
         return await RunInTransaction(func, null, isolationLevel);
     }
 
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChangesAsync(cancellationToken);
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new())
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
@@ -103,20 +123,34 @@ public class AbstractDbContextBase : DbContext, IDbContext
 
     public override int SaveChanges()
     {
-        var entities = ChangeTracker
-            .Entries()
-            .Where(x => x.Entity is Entity)
-            .Select(x => (Entity)x.Entity)
-            .ToList();
-
+        var entities = GetChangedEntities();
         var result = base.SaveChanges();
+        PublishDomainEvents(entities);
 
+        return result;
+    }
+
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChanges(acceptAllChangesOnSuccess);
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
+    private List<Entity> GetChangedEntities() => ChangeTracker
+        .Entries()
+        .Where(x => x.Entity is Entity)
+        .Select(x => (Entity)x.Entity)
+        .ToList();
+
+    private void PublishDomainEvents(List<Entity> entities)
+    {
         foreach (var e in entities)
         {
             _eventBus.Publish(e.DomainEvents);
             e.ClearDomainEvents();
         }
-
-        return result;
     }
 }
