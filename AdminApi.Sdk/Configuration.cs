@@ -10,7 +10,6 @@ public class Configuration
         JsonSerializerOptions.Converters.Add(new UrlSafeBase64ToByteArrayJsonConverter());
     }
 
-    public required string BaseUrl { get; set; }
     public required string ApiKey { get; set; }
     public JsonSerializerOptions JsonSerializerOptions { get; set; } = new() { PropertyNameCaseInsensitive = true };
 }

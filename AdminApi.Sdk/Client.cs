@@ -12,9 +12,8 @@ namespace Backbone.AdminApi.Sdk;
 
 public class Client
 {
-    public Client(Configuration config)
+    private Client(HttpClient httpClient, Configuration config)
     {
-        var httpClient = new HttpClient { BaseAddress = new Uri(config.BaseUrl) };
         var authenticator = new XsrfAndApiKeyAuthenticator(config.ApiKey, httpClient);
         var endpointClient = new EndpointClient(httpClient, authenticator, config.JsonSerializerOptions);
 
@@ -34,4 +33,17 @@ public class Client
     public MetricsEndpoint Metrics { get; }
     public RelationshipsEndpoint Relationships { get; }
     public TiersEndpoint Tiers { get; }
+
+    public static Client Create(string baseUrl, string apiKey)
+    {
+        return Create(new HttpClient { BaseAddress = new Uri(baseUrl) }, apiKey);
+    }
+
+    public static Client Create(HttpClient httpClient, string apiKey)
+    {
+        return new Client(httpClient, new Configuration
+        {
+            ApiKey = apiKey
+        });
+    }
 }
