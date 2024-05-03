@@ -1,3 +1,142 @@
+#=========================== Admin CLI ===========================
+
+admincli:
+  name: "admincli"
+
+  configuration:
+    Database:
+      # Provider - possible values: "Postgres"/"SqlServer"
+      Provider: "Postgres"
+
+  image:
+    repository: "ghcr.io/nmshd/backbone-admin-cli"
+    tagOverride: ""
+    pullPolicy: "IfNotPresent"
+    imagePullSecrets: []
+
+  # resources - the resources for the Admin CLI container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "128Mi"
+    limits:
+      cpu: "400m"
+      memory: "1Gi"
+
+  # securityContext - securityContext for the Consumer API container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
+  securityContext: {}
+
+  # podSecurityContext - securityContext for the pods deployed by the Deployment (see https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+  podSecurityContext: {}
+
+  podAnnotations: {}
+
+  # env - environment variables for the Admin CLI container (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
+  env: []
+
+  # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+  nodeSelector: {}
+
+  # the tolerations for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+  tolerations: []
+
+  # the affinity for the pods deployed by the Deployment (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity)
+  affinity: {}
+
+#=========================== Admin UI ===========================
+
+adminui:
+  name: "adminui"
+  replicas: 1
+  maxSurge: 2
+  maxUnavailable: 0
+
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+  readinessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+  service:
+    type: "ClusterIP"
+
+  image:
+    repository: "ghcr.io/nmshd/backbone-admin-ui"
+    tagOverride: ""
+    pullPolicy: "IfNotPresent"
+    imagePullSecrets: []
+
+  # resources - the resources for the Admin UI container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
+      cpu: "200m"
+      memory: "512Mi"
+
+  # securityContext - securityContext for the Consumer API container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
+  securityContext: {}
+
+  # podSecurityContext - securityContext for the pods deployed by the Deployment (see https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+  podSecurityContext: {}
+
+  podAnnotations: {}
+
+  # env - environment variables for the Admin UI container (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
+  env:
+    - name: Database__ConnectionString
+      valueFrom:
+        secretKeyRef:
+          name: "devices-sql-connectionstring"
+          key: VALUE
+
+  # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+  nodeSelector: {}
+
+  # the tolerations for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+  tolerations: []
+
+  # the affinity for the pods deployed by the Deployment (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity)
+  affinity: {}
+
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 100
+    targetCPUUtilizationPercentage: 80
+    targetMemoryUtilizationPercentage: ""
+
+  # httpRoute - the configuration of the HttpRoute for the Consumer API
+  httpRoute:
+    # enabled - whether to enable the HttpRoute for the Consumer API
+    enabled: false
+    # parentRefName - the name of the gateway this Route wants to be attached to
+    parentRefName: ""
+    # parentRefNamespace - # the namespace of the gateway this Route wants to be attached to
+    parentRefNamespace: ""
+    hostnames: []
+
+  # backendConfig - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `HttpRoute`s`
+  backendConfig:
+    healthCheck:
+      # checkIntervalSec - time from the start of one prober's check to the start of its next check
+      checkIntervalSec: 15
+      # timeoutSec - the amount of time that Google Cloud waits for a response to a probe
+      timeoutSec: 15
+      # healthyThreshold - the number of consecutive successful checks required to mark a backend as healthy
+      healthyThreshold: 1
+      # unhealthyThreshold - the number of consecutive failed checks required to mark a backend as unhealthy
+      unhealthyThreshold: 2
+
+#=========================== Consumer API ===========================
+
 consumerapi:
   name: "consumerapi"
   replicas: 1
@@ -98,34 +237,18 @@ consumerapi:
       # unhealthyThreshold - the number of consecutive failed checks required to mark a backend as unhealthy
       unhealthyThreshold: 2
 
-adminui:
-  name: "adminui"
-  replicas: 1
-  maxSurge: 2
-  maxUnavailable: 0
+#=========================== Database Migrator ===========================
 
-  livenessProbe:
-    initialDelaySeconds: 30
-    periodSeconds: 30
-    timeoutSeconds: 5
-    failureThreshold: 3
-
-  readinessProbe:
-    initialDelaySeconds: 30
-    periodSeconds: 30
-    timeoutSeconds: 5
-    failureThreshold: 3
-
-  service:
-    type: "ClusterIP"
+databasemigrator:
+  name: "databasemigrator"
 
   image:
-    repository: "ghcr.io/nmshd/backbone-admin-ui"
+    repository: "ghcr.io/nmshd/backbone-database-migrator"
     tagOverride: ""
     pullPolicy: "IfNotPresent"
     imagePullSecrets: []
 
-  # resources - the resources for the Admin UI container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+  # resources - the resources for the Event Handler container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
   resources:
     requests:
       cpu: "50m"
@@ -142,13 +265,8 @@ adminui:
 
   podAnnotations: {}
 
-  # env - environment variables for the Admin UI container (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
-  env:
-    - name: Database__ConnectionString
-      valueFrom:
-        secretKeyRef:
-          name: "devices-sql-connectionstring"
-          key: VALUE
+  # env - environment variables for the Event Handler container (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
+  env: []
 
   # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
   nodeSelector: {}
@@ -159,34 +277,7 @@ adminui:
   # the affinity for the pods deployed by the Deployment (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity)
   affinity: {}
 
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 100
-    targetCPUUtilizationPercentage: 80
-    targetMemoryUtilizationPercentage: ""
-
-  # httpRoute - the configuration of the HttpRoute for the Consumer API
-  httpRoute:
-    # enabled - whether to enable the HttpRoute for the Consumer API
-    enabled: false
-    # parentRefName - the name of the gateway this Route wants to be attached to
-    parentRefName: ""
-    # parentRefNamespace - # the namespace of the gateway this Route wants to be attached to
-    parentRefNamespace: ""
-    hostnames: []
-
-  # backendConfig - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `HttpRoute`s`
-  backendConfig:
-    healthCheck:
-      # checkIntervalSec - time from the start of one prober's check to the start of its next check
-      checkIntervalSec: 15
-      # timeoutSec - the amount of time that Google Cloud waits for a response to a probe
-      timeoutSec: 15
-      # healthyThreshold - the number of consecutive successful checks required to mark a backend as healthy
-      healthyThreshold: 1
-      # unhealthyThreshold - the number of consecutive failed checks required to mark a backend as unhealthy
-      unhealthyThreshold: 2
+#=========================== Event Handler ===========================
 
 eventhandler:
   name: "eventhandler"
@@ -236,11 +327,18 @@ eventhandler:
     targetCPUUtilizationPercentage: 80
     targetMemoryUtilizationPercentage: ""
 
-databasemigrator:
-  name: "databasemigrator"
+#=========================== Send Identity Deletion Reminders ===========================
+
+sendidentitydeletionreminders:
+  name: "sendidentitydeletionreminders"
+
+  schedule: "0 3 * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 10
+  backoffLimit: 5
 
   image:
-    repository: "ghcr.io/nmshd/backbone-database-migrator"
+    repository: "ghcr.io/nmshd/backbone-identity-deletion-jobs"
     tagOverride: ""
     pullPolicy: "IfNotPresent"
     imagePullSecrets: []
@@ -274,28 +372,30 @@ databasemigrator:
   # the affinity for the pods deployed by the Deployment (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity)
   affinity: {}
 
-admincli:
-  name: "admincli"
+#=========================== Cancel Stale Deletion Processes ===========================
 
-  configuration:
-    Database:
-      # Provider - possible values: "Postgres"/"SqlServer"
-      Provider: "Postgres"
+cancelstaledeletionprocesses:
+  name: "cancelstaledeletionprocesses"
+
+  schedule: "0 3 * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 10
+  backoffLimit: 5
 
   image:
-    repository: "ghcr.io/nmshd/backbone-admin-cli"
+    repository: "ghcr.io/nmshd/backbone-identity-deletion-jobs"
     tagOverride: ""
     pullPolicy: "IfNotPresent"
     imagePullSecrets: []
 
-  # resources - the resources for the Admin CLI container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+  # resources - the resources for the Event Handler container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
   resources:
     requests:
-      cpu: "200m"
-      memory: "128Mi"
+      cpu: "50m"
+      memory: "64Mi"
     limits:
-      cpu: "400m"
-      memory: "1Gi"
+      cpu: "200m"
+      memory: "512Mi"
 
   # securityContext - securityContext for the Consumer API container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
   securityContext: {}
@@ -305,7 +405,52 @@ admincli:
 
   podAnnotations: {}
 
-  # env - environment variables for the Admin CLI container (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
+  # env - environment variables for the Event Handler container (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
+  env: []
+
+  # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+  nodeSelector: {}
+
+  # the tolerations for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+  tolerations: []
+
+  # the affinity for the pods deployed by the Deployment (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity)
+  affinity: {}
+
+#=========================== Actual Identity Deletion ===========================
+
+actualidentitydeletion:
+  name: "actualidentitydeletion"
+
+  schedule: "0 3 * * *"
+  successfulJobsHistoryLimit: 0
+  failedJobsHistoryLimit: 10
+  backoffLimit: 5
+
+  image:
+    repository: "ghcr.io/nmshd/backbone-identity-deletion-jobs"
+    tagOverride: ""
+    pullPolicy: "IfNotPresent"
+    imagePullSecrets: []
+
+  # resources - the resources for the Event Handler container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+  resources:
+    requests:
+      cpu: "50m"
+      memory: "64Mi"
+    limits:
+      cpu: "200m"
+      memory: "512Mi"
+
+  # securityContext - securityContext for the Consumer API container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
+  securityContext: {}
+
+  # podSecurityContext - securityContext for the pods deployed by the Deployment (see https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+  podSecurityContext: {}
+
+  podAnnotations: {}
+
+  # env - environment variables for the Event Handler container (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
   env: []
 
   # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)

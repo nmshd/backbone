@@ -28,14 +28,12 @@ public class EndpointClient
 
     private readonly HttpClient _httpClient;
     private readonly JsonSerializerOptions _jsonSerializerOptions;
-    private readonly string _apiVersion;
 
-    public EndpointClient(HttpClient httpClient, IAuthenticator authenticator, JsonSerializerOptions jsonSerializerOptions, string apiVersion)
+    public EndpointClient(HttpClient httpClient, IAuthenticator authenticator, JsonSerializerOptions jsonSerializerOptions)
     {
         _httpClient = httpClient;
         _authenticator = authenticator;
         _jsonSerializerOptions = jsonSerializerOptions;
-        _apiVersion = apiVersion;
     }
 
     public async Task<ApiResponse<T>> Post<T>(string url, object? requestContent = null)
@@ -96,7 +94,7 @@ public class EndpointClient
 
     public RequestBuilder<T> Request<T>(HttpMethod method, string url)
     {
-        return new RequestBuilder<T>(this, _jsonSerializerOptions, _authenticator, method, url, _apiVersion);
+        return new RequestBuilder<T>(this, _jsonSerializerOptions, _authenticator, method, url);
     }
 
     private async Task<ApiResponse<T>> Execute<T>(HttpRequestMessage request)
@@ -256,6 +254,21 @@ public class EndpointClient
         }
 
         public async Task<ApiResponse<T>> Execute()
+        {
+            return await _client.Execute<T>(await CreateRequestMessage());
+        }
+
+        public async Task<ApiResponse<T>> ExecuteOData()
+        {
+            return await _client.ExecuteOData<T>(await CreateRequestMessage());
+        }
+
+        public async Task<RawApiResponse> ExecuteRaw()
+        {
+            return await _client.ExecuteRaw(await CreateRequestMessage());
+        }
+
+        private async Task<HttpRequestMessage> CreateRequestMessage()
         {
             return await _client.Execute<T>(await CreateRequestMessage());
         }

@@ -78,13 +78,13 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
                 ],
               ),
         actions: <Widget>[
-          TextButton(
+          OutlinedButton(
             onPressed: _isLoading ? null : () => context.pop(),
-            child: const Text('Cancel'),
+            child: Text(context.l10n.cancel),
           ),
-          TextButton(
+          FilledButton(
             onPressed: _isLoading ? null : () => _onSubmitted(_tierNameController.text),
-            child: const Text('Add'),
+            child: const Text('Create'),
           ),
         ],
       ),
@@ -125,6 +125,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
       ),
       backgroundColor: Colors.green,
       duration: Duration(seconds: 3),
+      showCloseIcon: true,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }

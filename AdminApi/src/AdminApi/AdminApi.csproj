@@ -9,13 +9,13 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OData" Version="8.2.5" />
-        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="8.0.3" />
+        <PackageReference Include="Microsoft.AspNetCore.SpaProxy" Version="8.0.4" />
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.4">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="5.4.0" />
+        <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="5.5.0" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
         <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.21.0" />
@@ -29,8 +29,8 @@
         <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="8.4.0" />
         <PackageReference Include="Serilog.Formatting.Compact" Version="2.0.0" />
-        <PackageReference Include="Serilog.Sinks.Http" Version="8.0.0" />
-        <PackageReference Include="Serilog.Sinks.Seq" Version="7.0.0" />
+        <PackageReference Include="Serilog.Sinks.Http" Version="9.0.0" />
+        <PackageReference Include="Serilog.Sinks.Seq" Version="7.0.0"/>
         <!-- CAUTION: Do not upgrade 'AspNetCore.HealthChecks.NpgSql' before the following issue is resolved: https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993 -->
         <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.1" />
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2" />

@@ -6,20 +6,20 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Tokens;
 
-public class TokensEndpoint(EndpointClient client) : Endpoint(client)
+public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
     public async Task<ApiResponse<CreateTokenResponse>> CreateToken(CreateTokenRequest request)
-        => await _client.Post<CreateTokenResponse>("Tokens", request);
+        => await _client.Post<CreateTokenResponse>($"api/{API_VERSION}/Tokens", request);
 
     public async Task<ApiResponse<ListTokensResponse>> ListTokens(PaginationFilter? pagination = null)
-        => await _client.Get<ListTokensResponse>("Tokens", null, pagination);
+        => await _client.Get<ListTokensResponse>($"api/{API_VERSION}/Tokens", null, pagination);
 
     public async Task<ApiResponse<ListTokensResponse>> ListTokens(IEnumerable<string> ids, PaginationFilter? pagination = null) => await _client
-        .Request<ListTokensResponse>(HttpMethod.Get, "Tokens")
+        .Request<ListTokensResponse>(HttpMethod.Get, $"api/{API_VERSION}/Tokens")
         .Authenticate()
         .WithPagination(pagination)
         .AddQueryParameter("ids", ids)
         .Execute();
 
-    public async Task<ApiResponse<Token>> GetToken(string id) => await _client.GetUnauthenticated<Token>($"Tokens/{id}");
+    public async Task<ApiResponse<Token>> GetToken(string id) => await _client.GetUnauthenticated<Token>($"api/{API_VERSION}/Tokens/{id}");
 }
