@@ -5,32 +5,37 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common;
 
-namespace Backbone.ConsumerApi.Sdk.Endpoints.Common;
+namespace Backbone.ConsumerApi.Sdk.Authentication;
 
 public class OAuthAuthenticator : IAuthenticator
 {
     private static readonly JsonSerializerOptions SERIALIZER_OPTIONS = new() { PropertyNameCaseInsensitive = true };
 
+    private readonly Configuration.AuthenticationConfiguration _config;
     private readonly HttpClient _httpClient;
     private readonly Dictionary<string, string> _jwtRequestData;
     private Jwt? _jwt;
 
     public OAuthAuthenticator(Configuration.AuthenticationConfiguration config, HttpClient httpClient)
     {
+        _config = config;
         _httpClient = httpClient;
 
         _jwtRequestData = new Dictionary<string, string>
         {
             { "grant_type", "password" },
-            { "username", config.Username },
-            { "password", config.Password },
-            { "client_id", config.ClientId },
-            { "client_secret", config.ClientSecret }
+            { "username", config.UserCredentials?.Username! },
+            { "password", config.UserCredentials?.Password! },
+            { "client_id", config.ClientCredentials.ClientId },
+            { "client_secret", config.ClientCredentials.ClientSecret }
         };
     }
 
     public async Task Authenticate(HttpRequestMessage request)
     {
+        if (_config.UserCredentials == null)
+            throw new InvalidOperationException("User credentials are required in order to authenticate this request.");
+
         request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", await GetJwt());
     }
 
