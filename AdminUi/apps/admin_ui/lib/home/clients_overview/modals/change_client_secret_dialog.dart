@@ -113,8 +113,8 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
           ),
         ),
         actions: [
-          OutlinedButton(onPressed: _saving ? null : () => context.pop(), child: Text(_saveSucceeded ? 'Close' : 'Cancel')),
-          if (!_saveSucceeded) FilledButton(onPressed: _saving ? null : _changeClientSecret, child: const Text('Save')),
+          OutlinedButton(onPressed: _saving ? null : () => context.pop(), child: Text(_saveSucceeded ? context.l10n.close : context.l10n.cancel)),
+          if (!_saveSucceeded) FilledButton(onPressed: _saving ? null : _changeClientSecret, child: Text(context.l10n.save)),
         ],
       ),
     );
