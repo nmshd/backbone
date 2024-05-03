@@ -14,7 +14,7 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.Ge
 public class HandlerTests
 {
     [Fact]
-    public async void Gets_identity_by_address()
+    public async Task Gets_identity_by_address()
     {
         // Arrange
         var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), [1, 1, 1, 1, 1], TestDataGenerator.CreateRandomTierId(), 1);

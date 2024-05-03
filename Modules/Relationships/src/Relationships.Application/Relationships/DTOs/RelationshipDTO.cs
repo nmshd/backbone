@@ -1,24 +1,36 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.DTOs;
 
-public class RelationshipDTO : IMapTo<Relationship>
+public class RelationshipDTO
 {
-    public required RelationshipId Id { get; set; }
-    public required RelationshipTemplateId RelationshipTemplateId { get; set; }
+    public RelationshipDTO(Relationship relationship)
+    {
+        Id = relationship.Id;
+        RelationshipTemplateId = relationship.RelationshipTemplateId;
+        From = relationship.From;
+        To = relationship.To;
+        CreatedAt = relationship.CreatedAt;
+        Status = relationship.Status;
+        CreationContent = relationship.CreationContent;
+        CreationResponseContent = relationship.CreationResponseContent;
+        AuditLog = relationship.AuditLog.Select(a => new RelationshipAuditLogEntryDTO(a)).ToList();
+    }
 
-    public required IdentityAddress From { get; set; }
-    public required IdentityAddress To { get; set; }
+    public RelationshipId Id { get; set; }
+    public RelationshipTemplateId RelationshipTemplateId { get; set; }
 
-    public required byte[]? CreationContent { get; set; }
-    public required byte[]? CreationResponseContent { get; set; }
+    public IdentityAddress From { get; set; }
+    public IdentityAddress To { get; set; }
 
-    public required DateTime CreatedAt { get; set; }
+    public byte[]? CreationContent { get; set; }
+    public byte[]? CreationResponseContent { get; set; }
 
-    public required RelationshipStatus Status { get; set; }
+    public DateTime CreatedAt { get; set; }
 
-    public required List<RelationshipAuditLogEntryDTO> AuditLog { get; set; }
+    public RelationshipStatus Status { get; set; }
+
+    public List<RelationshipAuditLogEntryDTO> AuditLog { get; set; }
 }

@@ -1,19 +1,21 @@
 using System.ComponentModel;
 using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.Modules.Tokens.Domain.Entities;
 
 [Serializable]
 [TypeConverter(typeof(TokenIdTypeConverter))]
-public class TokenId : StronglyTypedId
+public record TokenId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
     private const string PREFIX = "TOK";
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
-    private TokenId(string stringValue) : base(stringValue) { }
+    private TokenId(string stringValue) : base(stringValue)
+    {
+    }
 
     public static TokenId Parse(string stringValue)
     {
