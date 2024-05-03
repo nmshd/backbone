@@ -40,8 +40,7 @@ public class RelationshipChangeCompletedDomainEventHandler : IDomainEventHandler
                 _ => throw new ArgumentOutOfRangeException(nameof(domainEvent.ChangeResult), domainEvent, null)
             };
 
-            var externalEvent = await _dbContext.CreateExternalEvent(owner, ExternalEventType.RelationshipChangeCompleted, payload);
-            _eventBus.Publish(new ExternalEventCreatedDomainEvent(externalEvent));
+            await _dbContext.CreateExternalEvent(owner, ExternalEventType.RelationshipChangeCompleted, payload);
         }
         catch (Exception ex)
         {

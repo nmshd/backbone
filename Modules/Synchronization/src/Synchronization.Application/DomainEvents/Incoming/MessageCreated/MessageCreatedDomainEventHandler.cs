@@ -35,8 +35,7 @@ public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreat
 #pragma warning restore IDE0037
             try
             {
-                var externalEvent = await _dbContext.CreateExternalEvent(IdentityAddress.Parse(recipient), ExternalEventType.MessageReceived, payload);
-                _eventBus.Publish(new ExternalEventCreatedDomainEvent(externalEvent));
+                await _dbContext.CreateExternalEvent(IdentityAddress.Parse(recipient), ExternalEventType.MessageReceived, payload);
             }
             catch (Exception ex)
             {

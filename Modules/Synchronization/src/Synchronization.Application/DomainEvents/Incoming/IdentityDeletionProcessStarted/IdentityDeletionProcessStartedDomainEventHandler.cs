@@ -2,7 +2,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStarted;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
@@ -28,8 +27,7 @@ public class IdentityDeletionProcessStartedDomainEventHandler : IDomainEventHand
 #pragma warning restore IDE0037
         try
         {
-            var externalEvent = await _dbContext.CreateExternalEvent(IdentityAddress.Parse(domainEvent.Address), ExternalEventType.IdentityDeletionProcessStarted, payload);
-            _eventBus.Publish(new ExternalEventCreatedDomainEvent(externalEvent));
+            await _dbContext.CreateExternalEvent(IdentityAddress.Parse(domainEvent.Address), ExternalEventType.IdentityDeletionProcessStarted, payload);
         }
         catch (Exception ex)
         {

@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -23,6 +24,8 @@ public class ExternalEvent : Entity<ExternalEventId>
         Owner = owner;
         CreatedAt = SystemTime.UtcNow;
         Payload = payload;
+
+        RaiseDomainEvent(new ExternalEventCreatedDomainEvent(this));
     }
 
     public ExternalEventType Type { get; }
