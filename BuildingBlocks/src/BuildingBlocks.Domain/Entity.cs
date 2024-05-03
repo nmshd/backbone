@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Domain.Events;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.BuildingBlocks.Domain;
 
@@ -6,20 +7,9 @@ public abstract class Entity
 {
     private readonly List<DomainEvent> _domainEvents = [];
 
-    /*protected Entity()
-    {
-        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
-        Id = default!;
-    }
-
-    protected Entity(TId id)
-    {
-        Id = id;
-    }*/
-
     public IReadOnlyList<DomainEvent> DomainEvents => _domainEvents;
 
-    public abstract object Id { get; }
+    public abstract StronglyTypedId Id { get; }
 
     protected void RaiseDomainEvent(DomainEvent domainEvent)
     {
@@ -63,7 +53,7 @@ public abstract class Entity
 
     public override int GetHashCode()
     {
-        return (GetRealType() + Id.ToString()).GetHashCode();
+        return (GetRealType() + Id).GetHashCode();
     }
 
     private Type GetRealType()
@@ -77,12 +67,12 @@ public abstract class Entity
     }
 }
 
-public abstract class Entity<TId> : Entity where TId : class, IComparable<TId>
+public abstract class Entity<TId> : Entity where TId : StronglyTypedId
 {
     protected Entity()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
-        Id = default!;
+        Id = null!;
     }
 
     protected Entity(TId id)
