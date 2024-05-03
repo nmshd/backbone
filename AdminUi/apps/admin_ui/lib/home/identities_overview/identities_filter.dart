@@ -45,10 +45,10 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8),
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
