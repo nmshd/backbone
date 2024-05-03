@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
+import '/core/core.dart';
+
 Future<void> showChangeClientSecretDialog({
   required BuildContext context,
   required String clientId,
@@ -60,37 +62,35 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Row(
-                  children: [
-                    SizedBox(
-                      width: 385,
-                      child: TextField(
-                        controller: _newClientSecretController,
-                        focusNode: _focusNode,
-                        readOnly: _saveSucceeded,
-                        obscureText: _isClientSecretVisible,
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Client Secret',
-                          helperText: 'A Client Secret will be generated if this field is left blank.',
+              TextField(
+                controller: _newClientSecretController,
+                focusNode: _focusNode,
+                readOnly: _saveSucceeded,
+                obscureText: _isClientSecretVisible,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: 'Client Secret',
+                  helperText: 'A Client Secret will be generated if this field is left blank.',
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(_isClientSecretVisible ? Icons.visibility_off : Icons.visibility),
+                          onPressed: () => setState(() => _isClientSecretVisible = !_isClientSecretVisible),
                         ),
-                      ),
+                        Gaps.w4,
+                        IconButton(
+                          icon: const Icon(Icons.copy),
+                          tooltip: 'Copy to clipboard.',
+                          onPressed: _newClientSecretController.text.isNotEmpty
+                              ? () => Clipboard.setData(ClipboardData(text: _newClientSecretController.text))
+                              : null,
+                        ),
+                      ],
                     ),
-                    const Spacer(),
-                    IconButton(
-                      icon: Icon(_isClientSecretVisible ? Icons.visibility_off : Icons.visibility),
-                      onPressed: () => setState(() => _isClientSecretVisible = !_isClientSecretVisible),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.copy),
-                      tooltip: 'Copy to clipboard.',
-                      onPressed: _newClientSecretController.text.isNotEmpty
-                          ? () => Clipboard.setData(ClipboardData(text: _newClientSecretController.text))
-                          : null,
-                    ),
-                  ],
+                  ),
                 ),
               ),
               if (_saveSucceeded)

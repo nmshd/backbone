@@ -41,6 +41,13 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
   String? _errorMessage;
 
   @override
+  void initState() {
+    super.initState();
+
+    _clientSecretController.addListener(() => setState(() {}));
+  }
+
+  @override
   void dispose() {
     _clientIdController.dispose();
     _displayNameController.dispose();
@@ -70,7 +77,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                   helperText: 'A Client ID will be generated if this field is left blank.',
                 ),
               ),
-              Gaps.h16,
+              Gaps.h24,
               TextField(
                 controller: _displayNameController,
                 readOnly: _saveSucceeded,
@@ -80,44 +87,45 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                   helperText: 'Client ID will be used as a Display Name if no value is provided.',
                 ),
               ),
-              Gaps.h16,
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  SizedBox(
-                    width: 385,
-                    child: TextField(
-                      controller: _clientSecretController,
-                      readOnly: _saveSucceeded,
-                      obscureText: _isClientSecretVisible,
-                      decoration: const InputDecoration(
-                        border: OutlineInputBorder(),
-                        labelText: 'Client Secret',
-                        helperText: 'A Client Secret will be generated if this field is left blank.',
-                      ),
+              Gaps.h24,
+              TextField(
+                controller: _clientSecretController,
+                readOnly: _saveSucceeded,
+                obscureText: _isClientSecretVisible,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: 'Client Secret',
+                  helperText: 'A Client Secret will be generated if this field is left blank.',
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(_isClientSecretVisible ? Icons.visibility_off : Icons.visibility),
+                          onPressed: () => setState(() => _isClientSecretVisible = !_isClientSecretVisible),
+                        ),
+                        Gaps.w4,
+                        IconButton(
+                          icon: const Icon(Icons.copy),
+                          tooltip: 'Copy to clipboard.',
+                          onPressed: _clientSecretController.text.isNotEmpty
+                              ? () => Clipboard.setData(ClipboardData(text: _clientSecretController.text))
+                              : null,
+                        ),
+                      ],
                     ),
                   ),
-                  const Spacer(),
-                  IconButton(
-                    icon: Icon(_isClientSecretVisible ? Icons.visibility_off : Icons.visibility),
-                    onPressed: () => setState(() => _isClientSecretVisible = !_isClientSecretVisible),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.copy),
-                    tooltip: 'Copy to clipboard.',
-                    onPressed:
-                        _clientSecretController.text.isNotEmpty ? () => Clipboard.setData(ClipboardData(text: _clientSecretController.text)) : null,
-                  ),
-                ],
+                ),
               ),
-              Gaps.h16,
-              if (_saveSucceeded)
+              if (_saveSucceeded) ...[
+                Gaps.h16,
                 Text(
                   'Please save the Client Secret since it will be inaccessible after exiting.',
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
-              Gaps.h16,
+              ],
+              Gaps.h24,
               TextField(
                 controller: _maxIdentitiesController,
                 readOnly: _saveSucceeded,
@@ -130,7 +138,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 keyboardType: TextInputType.number,
               ),
-              Gaps.h16,
+              Gaps.h24,
               DropdownButtonFormField<String>(
                 isExpanded: true,
                 decoration: const InputDecoration(
