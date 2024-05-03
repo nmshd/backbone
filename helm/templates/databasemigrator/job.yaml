@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Values.databasemigrator.name }}
+  labels:
+    {{- include "global.labels" . | nindent 4 }}
+    app: {{ .Values.databasemigrator.name }}
+  annotations:
+    "helm.sh/hook": pre-install,pre-upgrade
+    "helm.sh/hook-weight": "1"
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  template:
+    metadata:
+      {{- with .Values.databasemigrator.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ .Values.databasemigrator.name }}
+    spec:
+      restartPolicy: Never
+      {{- with .Values.databasemigrator.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.databasemigrator.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: settings-override
+          configMap:
+            name: configuration-for-databasemigrator
+      containers:
+        - name: {{ .Values.databasemigrator.name }}
+          {{- with .Values.databasemigrator.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.databasemigrator.resources | nindent 12 }}
+          image: "{{ .Values.databasemigrator.image.repository }}:{{- default .Chart.AppVersion .Values.databasemigrator.image.tagOverride }}"
+          imagePullPolicy: {{ .Values.databasemigrator.image.pullPolicy }}
+          volumeMounts:
+            - name: settings-override
+              mountPath: /app/appsettings.override.json
+              subPath: appsettings.override.json
+              readOnly: true
+          env:
+            {{- with .Values.databasemigrator.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      {{- with .Values.databasemigrator.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.databasemigrator.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.databasemigrator.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

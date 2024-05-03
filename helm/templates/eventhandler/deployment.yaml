@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.eventhandler.name }}
+  labels:
+    {{- include "global.labels" . | nindent 4 }}
+    app: {{ .Values.eventhandler.name }}
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ .Values.maxSurge }}
+      maxUnavailable: {{ .Values.maxUnavailable }}
+  selector:
+    matchLabels:
+      app: {{ .Values.eventhandler.name }}
+  template:
+    metadata:
+      {{- with .Values.eventhandler.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ .Values.eventhandler.name }}
+    spec:
+      {{- with .Values.eventhandler.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.eventhandler.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: settings-override
+          configMap:
+            name: configuration
+      containers:
+        - name: {{ .Values.eventhandler.name }}
+          {{- with .Values.eventhandler.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.eventhandler.resources | nindent 12 }}
+          image: "{{ .Values.eventhandler.image.repository }}:{{- default .Chart.AppVersion .Values.eventhandler.image.tagOverride }}"
+          imagePullPolicy: {{ .Values.eventhandler.image.pullPolicy }}
+          volumeMounts:
+            - name: settings-override
+              mountPath: /app/appsettings.override.json
+              subPath: appsettings.override.json
+              readOnly: true
+          env:
+            {{- if .Values.global.useBuiltInEventbus }}
+            - name: infrastructure__eventBus__vendor
+              value: RabbitMQ
+            - name: infrastructure__eventBus__connectionInfo
+              value: "rabbitmq"
+            - name: infrastructure__eventBus__rabbitMQUsername
+              value: "admin"
+            - name: infrastructure__eventBus__rabbitMQPassword
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-password
+                  key: "VALUE" 
+            {{- end }}
+            {{- with .Values.eventhandler.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      {{- with .Values.eventhandler.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.eventhandler.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.eventhandler.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

@@ -221,6 +221,38 @@ jobs:
           TAG: test
           PLATFORMS: linux/amd64
 
+  build-dbm-container-image:
+    name: Build Database Migrator Container Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build image
+        run: ./.ci/dbm/buildContainerImage.js
+        env:
+          TAG: test
+          PLATFORMS: linux/amd64
+
+  build-idj-container-image:
+    name: Build Database Migrator Container Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build image
+        run: ./.ci/idj/buildContainerImage.js
+        env:
+          TAG: test
+          PLATFORMS: linux/amd64
+
   build-aui-container-image:
     name: Build Admin UI Container Image
     runs-on: ubuntu-latest

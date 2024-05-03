@@ -27,7 +27,7 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests
             new { identityDeletionProcessStartedDomainEvent.DeletionProcessId });
 
         A.CallTo(() => fakeDbContext.CreateExternalEvent(
-            A<IdentityAddress>.That.Matches(i => i.StringValue == identityAddress),
+            A<IdentityAddress>.That.Matches(i => i.Value == identityAddress),
             ExternalEventType.IdentityDeletionProcessStarted,
             A<object>._)
         ).Returns(externalEvent);

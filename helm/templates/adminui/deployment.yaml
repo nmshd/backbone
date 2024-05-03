@@ -1,0 +1,111 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.adminui.name }}
+  labels:
+    {{- include "global.labels" . | nindent 4 }}
+    app: {{ .Values.adminui.name }}
+spec:
+  replicas: {{ .Values.adminui.replicas }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: {{ .Values.adminui.maxSurge }}
+      maxUnavailable: {{ .Values.adminui.maxUnavailable }}
+  selector:
+    matchLabels:
+      app: {{ .Values.adminui.name }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ .Values.global.configuration | toString | sha256sum }}
+        {{- with .Values.adminui.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "global.labels" . | nindent 8 }}
+        app: {{ .Values.adminui.name }}
+    spec:
+      {{- with .Values.global.serviceAccount.name}}
+      serviceAccountName: {{ . }}
+      {{- end }}
+      {{- with .Values.adminui.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.adminui.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.adminui.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: settings-override
+          configMap:
+            name: configuration
+      containers:
+        - name: {{ .Values.adminui.name }}
+          {{- with .Values.adminui.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.adminui.resources | nindent 12 }}
+          image: "{{ .Values.adminui.image.repository }}:{{- default .Chart.AppVersion .Values.adminui.image.tagOverride }}"
+          imagePullPolicy: {{ .Values.adminui.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: {{ .Values.adminui.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.adminui.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.adminui.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.adminui.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: {{ .Values.adminui.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.adminui.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.adminui.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.adminui.readinessProbe.failureThreshold }}
+          volumeMounts:
+            - name: settings-override
+              mountPath: /app/appsettings.override.json
+              subPath: appsettings.override.json
+              readOnly: true
+          env:
+            {{- if .Values.global.useBuiltInEventbus }}
+            - name: infrastructure__eventBus__vendor
+              value: RabbitMQ
+            - name: infrastructure__eventBus__connectionInfo
+              value: "rabbitmq"
+            - name: infrastructure__eventBus__rabbitMQUsername
+              value: "admin"
+            - name: infrastructure__eventBus__rabbitMQPassword
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-password
+                  key: "VALUE" 
+            {{- end }}
+            {{- with .Values.adminui.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+      {{- with .Values.adminui.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.adminui.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.adminui.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
