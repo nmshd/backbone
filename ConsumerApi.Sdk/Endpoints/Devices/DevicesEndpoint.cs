@@ -6,7 +6,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Responses;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Devices;
 
-public class DevicesEndpoint(EndpointClient client) : Endpoint(client)
+public class DevicesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
     public async Task<ApiResponse<ListDevicesResponse>> ListDevices(PaginationFilter? pagination = null)
         => await _client.Get<ListDevicesResponse>($"api/{API_VERSION}/Devices", null, pagination);

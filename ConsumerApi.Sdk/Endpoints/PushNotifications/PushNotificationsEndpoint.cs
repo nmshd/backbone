@@ -5,7 +5,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Responses;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications;
 
-public class PushNotificationsEndpoint(EndpointClient client) : Endpoint(client)
+public class PushNotificationsEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
     public async Task<ApiResponse<UpdateDeviceRegistrationResponse>> RegisterForPushNotifications(UpdateDeviceRegistrationRequest request)
         => await _client.Put<UpdateDeviceRegistrationResponse>($"api/{API_VERSION}/Devices/Self/PushNotifications", request);

@@ -6,7 +6,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Responses;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Files;
 
-public class FilesEndpoint(EndpointClient client) : Endpoint(client)
+public class FilesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
     public async Task<ApiResponse<CreateFileResponse>> UploadFile(CreateFileRequest request) => await _client
         .Request<CreateFileResponse>(HttpMethod.Post, $"api/{API_VERSION}/Files")

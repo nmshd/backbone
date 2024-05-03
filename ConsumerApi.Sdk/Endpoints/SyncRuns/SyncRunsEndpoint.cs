@@ -6,7 +6,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Responses;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns;
 
-public class SyncRunsEndpoint(EndpointClient client) : Endpoint(client)
+public class SyncRunsEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
     public async Task<ApiResponse<StartSyncRunResponse>> StartSyncRun(StartSyncRunRequest request, ushort supportedDatawalletVersion) => await _client
         .Request<StartSyncRunResponse>(HttpMethod.Post, $"api/{API_VERSION}/SyncRuns")
