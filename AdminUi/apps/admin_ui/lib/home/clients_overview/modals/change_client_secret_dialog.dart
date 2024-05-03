@@ -32,7 +32,6 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
   bool _saveSucceeded = false;
 
   String? _errorMessage;
-  String? _saveClientSecretMessage;
 
   @override
   void initState() {
@@ -94,11 +93,11 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                   ],
                 ),
               ),
-              if (_saveClientSecretMessage != null)
+              if (_saveSucceeded)
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
-                    _saveClientSecretMessage!,
+                    'Please save the Client Secret since it will be inaccessible after exiting.',
                     style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
@@ -136,7 +135,6 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
 
     _newClientSecretController.text = response.data.clientSecret;
     setState(() {
-      _saveClientSecretMessage = 'Please save the Client Secret since it will be inaccessible after exiting.';
       _saveSucceeded = true;
       _saving = false;
     });

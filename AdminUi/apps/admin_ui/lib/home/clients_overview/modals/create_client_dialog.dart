@@ -39,7 +39,6 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
   bool _saveSucceeded = false;
 
   String? _errorMessage;
-  String? _saveClientSecretMessage;
 
   @override
   void dispose() {
@@ -113,9 +112,9 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 ],
               ),
               Gaps.h16,
-              if (_saveClientSecretMessage != null)
+              if (_saveSucceeded)
                 Text(
-                  _saveClientSecretMessage!,
+                  'Please save the Client Secret since it will be inaccessible after exiting.',
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               Gaps.h16,
@@ -194,9 +193,6 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
     _displayNameController.text = response.data.displayName;
     _clientSecretController.text = response.data.clientSecret;
 
-    setState(() {
-      _saveClientSecretMessage = 'Please save the Client Secret since it will be inaccessible after exiting.';
-      _saveSucceeded = true;
-    });
+    setState(() => _saveSucceeded = true);
   }
 }
