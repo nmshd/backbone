@@ -28,10 +28,7 @@ class _NumberFilterState extends State<NumberFilter> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '${widget.label}:',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
+        Text('${widget.label}:', style: const TextStyle(fontWeight: FontWeight.bold)),
         Gaps.h8,
         Row(
           children: [
@@ -53,7 +50,6 @@ class _NumberFilterState extends State<NumberFilter> {
                   widget.onNumberSelected(_operator, enteredValue);
                 },
                 decoration: const InputDecoration(border: OutlineInputBorder()),
-                style: const TextStyle(fontSize: 12),
                 inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
                 keyboardType: TextInputType.number,
               ),
