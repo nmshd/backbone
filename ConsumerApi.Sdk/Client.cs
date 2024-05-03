@@ -96,7 +96,7 @@ public class Client
         return CreateForExistingIdentity(new HttpClient { BaseAddress = new Uri(baseUrl) }, clientCredentials, userCredentials);
     }
 
-    private static Client CreateForExistingIdentity(HttpClient httpClient, ClientCredentials clientCredentials, UserCredentials userCredentials)
+    public static Client CreateForExistingIdentity(HttpClient httpClient, ClientCredentials clientCredentials, UserCredentials userCredentials)
     {
         if (httpClient.BaseAddress == null)
             throw new Exception("The base address of the HttpClient must be set.");
