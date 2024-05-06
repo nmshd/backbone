@@ -30,7 +30,7 @@
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="8.4.0" />
         <PackageReference Include="Serilog.Formatting.Compact" Version="2.0.0" />
         <PackageReference Include="Serilog.Sinks.Http" Version="9.0.0" />
-        <PackageReference Include="Serilog.Sinks.Seq" Version="7.0.0"/>
+        <PackageReference Include="Serilog.Sinks.Seq" Version="7.0.1"/>
         <!-- CAUTION: Do not upgrade 'AspNetCore.HealthChecks.NpgSql' before the following issue is resolved: https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks/issues/1993 -->
         <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.1"/>
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2"/>
