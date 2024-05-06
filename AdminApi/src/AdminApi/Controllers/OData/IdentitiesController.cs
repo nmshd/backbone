@@ -1,10 +1,12 @@
 using Backbone.AdminApi.Infrastructure.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.OData.Query;
 using Microsoft.AspNetCore.OData.Routing.Controllers;
 
 namespace Backbone.AdminApi.Controllers.OData;
 
+[Authorize("ApiKey")]
 public class IdentitiesController : ODataController
 {
     private readonly AdminApiDbContext _adminApiDbContext;
