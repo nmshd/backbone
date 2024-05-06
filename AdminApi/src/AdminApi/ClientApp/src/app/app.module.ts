@@ -50,6 +50,8 @@ import { IdentityDetailsRelationshipsComponent } from "./components/identity/ide
 import { IdentityDetailsComponent } from "./components/identity/identity-details/identity-details.component";
 import { IdentityListComponent } from "./components/identity/identity-list/identity-list.component";
 import { AssignQuotasDialogComponent } from "./components/quotas/assign-quotas-dialog/assign-quotas-dialog.component";
+import { IdentityDetailsMessageRecipientsDialogComponent } from "./components/quotas/identity/identity-details/identity-details-message-recipients-dialog/identity-details-message-recipients-dialog.component";
+import { IdentityDetailsMessagesComponent } from "./components/quotas/identity/identity-details/identity-details-messages/identity-details-messages.component";
 import { CreateTierDialogComponent } from "./components/quotas/tier/create-tier-dialog/create-tier-dialog.component";
 import { TierEditComponent } from "./components/quotas/tier/tier-edit/tier-edit.component";
 import { TierListComponent } from "./components/quotas/tier/tier-list/tier-list.component";
@@ -69,15 +71,22 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
     declarations: [
         AppComponent,
         DashboardComponent,
+        LoginComponent,
         PageNotFoundComponent,
         SidebarComponent,
         TopbarComponent,
         IdentityListComponent,
+        IdentitiesOverviewComponent,
         IdentityDetailsComponent,
+        IdentityDetailsRelationshipsComponent,
+        IdentityDetailsMessagesComponent,
+        IdentityDetailsMessageRecipientsDialogComponent,
         TierListComponent,
+        DeletionProcessesComponent,
         TierEditComponent,
         CreateTierDialogComponent,
         ClientListComponent,
+        ChangeSecretDialogComponent,
         ClientEditComponent,
         CreateClientDialogComponent,
         AssignQuotasDialogComponent,
@@ -88,7 +97,6 @@ import { XSRFInterceptor } from "./shared/interceptors/xsrf.interceptor";
         IdentityDetailsRelationshipsComponent,
         BreadcrumbComponent,
         DeletionProcessesComponent,
-        BreadcrumbComponent,
         DeletionProcessDetailsComponent,
         CancelDeletionProcessDialogComponent,
         StartDeletionProcessDialogComponent
