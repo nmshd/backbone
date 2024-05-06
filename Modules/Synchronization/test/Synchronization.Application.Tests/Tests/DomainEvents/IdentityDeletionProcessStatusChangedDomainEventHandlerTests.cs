@@ -70,7 +70,7 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandlerTests
 
         // Handle
         A.CallTo(() => fakeDbContext
-            .CreateExternalEvent(identityAddress, ExternalEventType.IdentityDeletionProcessStatusChanged, A<object>._)
+            .CreateExternalEvent(deletionProcessOwner, ExternalEventType.IdentityDeletionProcessStatusChanged, A<object>._)
         ).MustHaveHappenedOnceExactly();
 
         externalEvent.DomainEvents.Should().HaveCount(1);
@@ -89,7 +89,6 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandlerTests
         var identityDeletionProcessStatusChangedDomainEvent = new IdentityDeletionProcessStatusChangedDomainEvent(deletionProcessOwner, "someDeletionProcessId", deletionProcessOwner);
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
-        var mockEventBus = A.Fake<IEventBus>();
 
         var externalEvent = new ExternalEvent(ExternalEventType.IdentityDeletionProcessStatusChanged, IdentityAddress.Parse(deletionProcessOwner), 1,
             new { identityDeletionProcessStatusChangedDomainEvent.DeletionProcessId });
@@ -101,14 +100,12 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandlerTests
         ).Returns(externalEvent);
 
         var handler = new IdentityDeletionProcessStatusChangedDomainEventHandler(mockDbContext,
-            mockEventBus,
             A.Fake<ILogger<IdentityDeletionProcessStatusChangedDomainEventHandler>>());
 
         // Act
         await handler.Handle(identityDeletionProcessStatusChangedDomainEvent);
 
         // Assert
-        A.CallTo(() => mockDbContext.CreateExternalEvent(A<IdentityAddress>._, A<ExternalEventType>._, A<object>._)).MustNotHaveHappened();
-        A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionProcessStatusChangedDomainEvent>._)).MustNotHaveHappened();
+        A.CallTo(() => mockDbContext.CreateExternalEvent(deletionProcessOwner, ExternalEventType.IdentityDeletionProcessStatusChanged, A<object>._)).MustNotHaveHappened();
     }
 }
