@@ -195,6 +195,32 @@
                 <app-identity-details-relationships [identityAddress]="identityAddress"></app-identity-details-relationships>
             </ng-template>
         </mat-expansion-panel>
+        <mat-expansion-panel class="details-expansion-panel">
+            <mat-expansion-panel-header class="details-expansion-panel-header">
+                <mat-panel-title class="details-panel-header-title">
+                    {{ headerReceivedMessages }}
+                </mat-panel-title>
+                <mat-panel-description class="details-panel-header-desc">
+                    {{ headerReceivedMessagesDescription }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <app-identity-details-messages [identityAddress]="identityAddress" type="Incoming"></app-identity-details-messages>
+            </ng-template>
+        </mat-expansion-panel>
+        <mat-expansion-panel class="details-expansion-panel">
+            <mat-expansion-panel-header class="details-expansion-panel-header">
+                <mat-panel-title class="details-panel-header-title">
+                    {{ headerSentMessages }}
+                </mat-panel-title>
+                <mat-panel-description class="details-panel-header-desc">
+                    {{ headerSentMessagesDescription }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <app-identity-details-messages [identityAddress]="identityAddress" type="Outgoing"></app-identity-details-messages>
+            </ng-template>
+        </mat-expansion-panel>
     </mat-accordion>
     <mat-accordion class="identity-accordion">
         <mat-expansion-panel class="details-expansion-panel">
