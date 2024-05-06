@@ -30,6 +30,11 @@ export class IdentityDetailsComponent {
     public headerRelationships: string;
     public headerRelationshipsDescription: string;
 
+    public headerReceivedMessages: string;
+    public headerReceivedMessagesDescription: string;
+
+    public headerSentMessages: string;
+    public headerSentMessagesDescription: string;
     public headerDeletionProcesses: string;
     public headerDeletionProcessesDescription: string;
 
@@ -66,6 +71,10 @@ export class IdentityDetailsComponent {
         this.headerDevicesDescription = "View devices of this Identity.";
         this.headerRelationships = "Relationships";
         this.headerRelationshipsDescription = "View relationships of this Identity.";
+        this.headerReceivedMessages = "Received Messages";
+        this.headerReceivedMessagesDescription = "View messages received by this Identity.";
+        this.headerSentMessages = "Sent Messages";
+        this.headerSentMessagesDescription = "View messages sent by this Identity.";
         this.headerDeletionProcesses = "Deletion Processes";
         this.headerDeletionProcessesDescription = "View deletion processes of this Identity.";
         this.quotasTableDisplayedColumns = ["select", "metric", "source", "max", "period"];

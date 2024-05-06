@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <ItemGroup>
+	<ItemGroup>
 		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
 		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
 	</ItemGroup>
