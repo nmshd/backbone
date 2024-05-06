@@ -17,7 +17,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                 type: "character(80)",
                 unicode: false,
                 fixedLength: true,
-                maxLength: 100,
+                maxLength: 80,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character(36)",
@@ -32,7 +32,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                 type: "character(80)",
                 unicode: false,
                 fixedLength: true,
-                maxLength: 100,
+                maxLength: 80,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character(36)",
@@ -57,7 +57,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                 oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 100);
+                oldMaxLength: 80);
 
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
@@ -72,7 +72,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                 oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 100);
+                oldMaxLength: 80);
         }
     }
 }

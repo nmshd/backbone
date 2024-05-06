@@ -17,7 +17,7 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.SqlServer.Migratio
                 type: "char(80)",
                 unicode: false,
                 fixedLength: true,
-                maxLength: 100,
+                maxLength: 80,
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "char(36)",
@@ -43,7 +43,7 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.SqlServer.Migratio
                 oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 100,
+                oldMaxLength: 80,
                 oldNullable: true);
         }
     }

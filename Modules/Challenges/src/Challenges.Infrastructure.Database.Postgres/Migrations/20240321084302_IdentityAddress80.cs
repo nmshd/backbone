@@ -17,7 +17,7 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.Postgres.Migration
                 type: "character(80)",
                 unicode: false,
                 fixedLength: true,
-                maxLength: 100,
+                maxLength: 80,
                 nullable: true,
                 oldClrType: typeof(string),
                 oldType: "character(36)",
@@ -43,7 +43,7 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.Postgres.Migration
                 oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 100,
+                oldMaxLength: 80,
                 oldNullable: true);
         }
     }

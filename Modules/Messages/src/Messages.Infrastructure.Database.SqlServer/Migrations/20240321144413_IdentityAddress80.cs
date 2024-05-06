@@ -17,7 +17,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                 type: "char(80)",
                 unicode: false,
                 fixedLength: true,
-                maxLength: 100,
+                maxLength: 80,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "char(36)",
@@ -32,7 +32,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                 type: "char(80)",
                 unicode: false,
                 fixedLength: true,
-                maxLength: 100,
+                maxLength: 80,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "char(36)",
@@ -57,7 +57,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                 oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 100);
+                oldMaxLength: 80);
 
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
@@ -72,7 +72,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                 oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 100);
+                oldMaxLength: 80);
         }
     }
 }

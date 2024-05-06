@@ -17,7 +17,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 type: "character(80)",
                 unicode: false,
                 fixedLength: true,
-                maxLength: 100,
+                maxLength: 80,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character(36)",
@@ -32,7 +32,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 type: "character(80)",
                 unicode: false,
                 fixedLength: true,
-                maxLength: 100,
+                maxLength: 80,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character(36)",
@@ -47,7 +47,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 type: "character(80)",
                 unicode: false,
                 fixedLength: true,
-                maxLength: 100,
+                maxLength: 80,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character(36)",
@@ -62,7 +62,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 type: "character(80)",
                 unicode: false,
                 fixedLength: true,
-                maxLength: 100,
+                maxLength: 80,
                 nullable: false,
                 oldClrType: typeof(string),
                 oldType: "character(36)",
@@ -87,7 +87,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 100);
+                oldMaxLength: 80);
 
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
@@ -102,7 +102,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 100);
+                oldMaxLength: 80);
 
             migrationBuilder.AlterColumn<string>(
                 name: "Owner",
@@ -117,7 +117,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 100);
+                oldMaxLength: 80);
 
             migrationBuilder.AlterColumn<string>(
                 name: "CreatedBy",
@@ -132,7 +132,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                 oldType: "character(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
-                oldMaxLength: 100);
+                oldMaxLength: 80);
         }
     }
 }
