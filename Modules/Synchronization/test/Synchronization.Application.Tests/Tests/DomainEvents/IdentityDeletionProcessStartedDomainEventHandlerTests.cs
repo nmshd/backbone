@@ -6,6 +6,7 @@ using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDele
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FakeItEasy;
+using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
@@ -38,8 +39,15 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests
         await handler.Handle(identityDeletionProcessStartedDomainEvent);
 
         // Handle
-        A.CallTo(() => mockEventBus.Publish(
-            A<ExternalEventCreatedDomainEvent>.That.Matches(e => e.Owner == externalEvent.Owner && e.EventId == externalEvent.Id))
+        A.CallTo(() => fakeDbContext
+            .CreateExternalEvent(identityAddress, ExternalEventType.IdentityDeletionProcessStarted, A<object>._)
         ).MustHaveHappenedOnceExactly();
+
+        externalEvent.DomainEvents.Should().HaveCount(1);
+        externalEvent.DomainEvents[0].Should().BeOfType<ExternalEventCreatedDomainEvent>();
+
+        var createdDomainEvent = (ExternalEventCreatedDomainEvent)externalEvent.DomainEvents[0];
+        createdDomainEvent.EventId.Should().Be(externalEvent.Id.Value);
+        createdDomainEvent.Owner.Should().Be(externalEvent.Owner.Value);
     }
 }
