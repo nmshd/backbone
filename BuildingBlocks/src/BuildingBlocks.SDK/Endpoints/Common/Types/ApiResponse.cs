@@ -20,4 +20,5 @@ public class ApiResponse<TResult>
     public ApiError? Error { get; set; }
     public PaginationData? Pagination { get; set; }
     public HttpStatusCode Status { get; set; }
+    public string? RawContent { get; set; }
 }
