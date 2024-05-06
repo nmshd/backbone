@@ -21,6 +21,10 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandler : IDomainEve
 
     public async Task Handle(IdentityDeletionProcessStatusChangedDomainEvent @event)
     {
+        // No need to create an external event if the action that triggered the event was initiated by the owner of the deletion process (in that case it's not "external").
+        if (@event.Initiator == @event.Address)
+            return;
+
 #pragma warning disable IDE0037
         var payload = new { DeletionProcessId = @event.DeletionProcessId };
 #pragma warning restore IDE0037
