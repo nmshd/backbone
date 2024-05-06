@@ -23,17 +23,3 @@ public class ApiResponse<TResult>
     public HttpStatusCode Status { get; set; }
     public string? RawContent { get; set; }
 }
-
-public class ApiResponse
-{
-    public HttpStatusCode Status { get; set; }
-    public ApiError? Content { get; set; }
-}
-
-public class ResponseContent<TResult>
-{
-    public TResult? Result { get; set; }
-
-    [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-    public ApiError? Error { get; set; }
-}
