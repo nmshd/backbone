@@ -39,9 +39,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
+                        .HasColumnType("char(36)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
@@ -78,9 +78,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.Property<string>("AllocatedBy")
                         .IsRequired()
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
+                        .HasColumnType("char(36)")
                         .IsFixedLength();
 
                     b.Property<string>("AllocatedByDevice")

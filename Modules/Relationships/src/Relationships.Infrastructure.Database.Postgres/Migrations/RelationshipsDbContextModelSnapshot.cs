@@ -39,9 +39,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
+                        .HasColumnType("character(36)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
@@ -78,9 +78,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
                     b.Property<string>("AllocatedBy")
                         .IsRequired()
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
+                        .HasColumnType("character(36)")
                         .IsFixedLength();
 
                     b.Property<string>("AllocatedByDevice")
