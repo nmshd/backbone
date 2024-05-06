@@ -10,21 +10,21 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateIndex(
-                name: "IX_RelationshipChanges_Res_CreatedAt_Res_CreatedBy_Res_Created~",
-                schema: "Relationships",
-                table: "RelationshipChanges",
-                columns: new[] { "Res_CreatedAt", "Res_CreatedBy", "Res_CreatedByDevice" })
-                .Annotation("Npgsql:IndexInclude", new[] { "Res_Content" });
+            // migrationBuilder.CreateIndex(
+            //     name: "IX_RelationshipChanges_Res_CreatedAt_Res_CreatedBy_Res_Created~",
+            //     schema: "Relationships",
+            //     table: "RelationshipChanges",
+            //     columns: new[] { "Res_CreatedAt", "Res_CreatedBy", "Res_CreatedByDevice" })
+            //     .Annotation("Npgsql:IndexInclude", new[] { "Res_Content" });
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropIndex(
-                name: "IX_RelationshipChanges_Res_CreatedAt_Res_CreatedBy_Res_Created~",
-                schema: "Relationships",
-                table: "RelationshipChanges");
+            // migrationBuilder.DropIndex(
+            //     name: "IX_RelationshipChanges_Res_CreatedAt_Res_CreatedBy_Res_Created~",
+            //     schema: "Relationships",
+            //     table: "RelationshipChanges");
         }
     }
 }
