@@ -149,7 +149,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
         );
 }
 
-class DummyEventBus : IEventBus
+internal class DummyEventBus : IEventBus
 {
     public void Publish(DomainEvent @event)
     {
