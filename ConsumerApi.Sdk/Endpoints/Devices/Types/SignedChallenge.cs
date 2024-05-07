@@ -1,13 +1,10 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Backbone.ConsumerApi.Sdk.Endpoints.Common.Crypto;
+﻿using Backbone.ConsumerApi.Sdk.Endpoints.Common.Crypto;
 using Backbone.Crypto;
-using Newtonsoft.Json;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 
 public class SignedChallenge
 {
-    [SetsRequiredMembers]
     public SignedChallenge(string challenge, ConvertibleString signature)
     {
         Challenge = challenge;

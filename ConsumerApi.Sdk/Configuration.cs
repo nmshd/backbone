@@ -13,15 +13,4 @@ public class Configuration
         public required ClientCredentials ClientCredentials { get; set; }
         public required UserCredentials? UserCredentials { get; set; }
     }
-
-    public object CloneWith(AuthenticationConfiguration newAuthentication)
-    {
-        return new Configuration()
-        {
-            Authentication = newAuthentication,
-            JsonSerializerOptions = JsonSerializerOptions,
-            BaseUrl = null!,
-            ApiVersion = null!
-        };
-    }
 }
