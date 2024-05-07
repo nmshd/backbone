@@ -162,11 +162,11 @@ public class Client
             ClientSecret = client._configuration.Authentication.ClientCredentials.ClientSecret,
             IdentityVersion = 1,
             SignedChallenge = signedChallenge,
-            IdentityPublicKey = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new CryptoSignaturePublicKey
+            IdentityPublicKey = JsonConvert.SerializeObject(new CryptoSignaturePublicKey
             {
                 alg = CryptoExchangeAlgorithm.ECDH_X25519,
                 pub = keyPair.PublicKey.Base64Representation
-            })).BytesRepresentation,
+            }),
             DevicePassword = password
         };
 
@@ -240,13 +240,7 @@ public class Client
         var serializedChallenge = JsonConvert.SerializeObject(createChallengeResponse.Result);
 
         var challengeSignature = signatureHelper.CreateSignature(keyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
-        var signedChallenge = new SignedChallenge
-        {
-            Challenge = serializedChallenge,
-            Signature = ConvertibleString.FromUtf8(
-                JsonConvert.SerializeObject(new CryptoSignatureSignedChallenge { alg = CryptoHashAlgorithm.SHA512, sig = challengeSignature.BytesRepresentation }
-                )).BytesRepresentation
-        };
+        var signedChallenge = new SignedChallenge(serializedChallenge, challengeSignature);
         return (keyPair, signedChallenge);
     }
 }

@@ -1,7 +1,10 @@
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
+using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Services;
+using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -13,60 +16,27 @@ internal class ChallengesApiStepDefinitions
     private string _challengeId;
     private ApiResponse<Challenge>? _response;
     private Client _sdk;
-    private readonly Sdk.Configuration _baseConfig;
     private readonly HttpClient _httpClient;
+    private readonly ClientCredentials _clientCredentials;
 
-    public ChallengesApiStepDefinitions(HttpClientFactory factory)
+    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, HttpClientFactory factory)
     {
         _challengeId = string.Empty;
-
         _httpClient = factory.CreateClient();
-        _httpClient.BaseAddress = new Uri("http://localhost:5000/api/v1/");
-        _baseConfig = new Sdk.Configuration
-        {
-            BaseUrl = null!,
-            Authentication = new Sdk.Configuration.AuthenticationConfiguration
-            {
-                ClientId = "test",//httpConfiguration.Value.ClientCredentials.ClientId,
-                ClientSecret = "test",//.Value.ClientCredentials.ClientSecret,
-                Username = "",
-                Password = ""
-            }
-        };
-
-        _sdk = new Client(_httpClient, _baseConfig);
+        _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
+        _sdk = Client.CreateUnauthenticated(_httpClient, _clientCredentials);
     }
 
     [Given("the user is authenticated")]
     public async Task AuthenticatedUser()
     {
-        var accountController = new AccountController(_sdk);
-        var createdIdentity = await accountController.CreateIdentity(_baseConfig.Authentication.ClientId, _baseConfig.Authentication.ClientSecret) ?? throw new InvalidOperationException();
-        var authenticatedConfig = _baseConfig.CloneWith(new Sdk.Configuration.AuthenticationConfiguration
-        {
-            Username = createdIdentity.DeviceUsername,
-            Password = createdIdentity.DevicePassword,
-            ClientId = _baseConfig.Authentication.ClientId,
-            ClientSecret = _baseConfig.Authentication.ClientSecret,
-
-        }) as Sdk.Configuration;
-
-        _sdk = new Client(_httpClient, authenticatedConfig!);
+        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, PasswordHelper.GeneratePassword(20, 26));
     }
 
     [Given("the user is unauthenticated")]
     public void GivenTheUserIsUnauthenticated()
     {
-        var nonAuthenticatedConfig = _baseConfig.CloneWith(new Sdk.Configuration.AuthenticationConfiguration
-        {
-            Username = "",
-            Password = "",
-            ClientId = _baseConfig.Authentication.ClientId,
-            ClientSecret = _baseConfig.Authentication.ClientSecret,
-
-        }) as Sdk.Configuration;
-
-        _sdk = new Client(_httpClient, nonAuthenticatedConfig!);
+        _sdk = Client.CreateUnauthenticated(_httpClient, _clientCredentials);
     }
 
 
