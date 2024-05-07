@@ -20,7 +20,6 @@ public class AbstractDbContextBase : DbContext, IDbContext
     private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
     private readonly IEventBus _eventBus;
     private readonly IServiceProvider? _serviceProvider;
-    private readonly bool _publishDomainEvents;
 
     protected AbstractDbContextBase()
     {
@@ -28,10 +27,9 @@ public class AbstractDbContextBase : DbContext, IDbContext
         _eventBus = null!;
     }
 
-    protected AbstractDbContextBase(DbContextOptions options, IEventBus eventBus, IServiceProvider? serviceProvider = null, bool publishDomainEvents = false) : base(options)
+    protected AbstractDbContextBase(DbContextOptions options, IEventBus eventBus, IServiceProvider? serviceProvider = null) : base(options)
     {
         _serviceProvider = serviceProvider;
-        _publishDomainEvents = publishDomainEvents;
         _eventBus = eventBus;
     }
 
@@ -149,9 +147,6 @@ public class AbstractDbContextBase : DbContext, IDbContext
 
     private void PublishDomainEvents(List<Entity> entities)
     {
-        if (!_publishDomainEvents)
-            return;
-
         foreach (var e in entities)
         {
             _eventBus.Publish(e.DomainEvents);
