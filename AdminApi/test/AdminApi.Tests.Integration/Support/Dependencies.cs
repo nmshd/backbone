@@ -23,7 +23,6 @@ public static class Dependencies
         );
 
         services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory<Program>()));
-        services.AddSingleton<ISignatureHelper>(SignatureHelper.CreateEd25519WithRawKeyFormat());
 
         return services;
     }

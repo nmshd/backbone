@@ -2,7 +2,7 @@
 using Backbone.AdminApi.Tests.Integration.Configuration;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.AdminApi.Tests.Integration.SdkStepDefinitions;
+namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 
 internal class BaseStepDefinitions
 {
@@ -12,6 +12,6 @@ internal class BaseStepDefinitions
     public BaseStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options)
     {
         _options = options.Value;
-        _client = new Client(factory.CreateClient(), new Sdk.Configuration { ApiKey = _options.ApiKey, BaseUrl = _options.BaseUrl, ApiVersion = _options.ApiVersion });
+        _client = Client.Create(factory.CreateClient(), _options.ApiKey);
     }
 }

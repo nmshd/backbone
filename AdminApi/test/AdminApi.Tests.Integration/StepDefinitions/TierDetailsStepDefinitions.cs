@@ -6,7 +6,7 @@ using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.UnitTestTools.Data;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.AdminApi.Tests.Integration.SdkStepDefinitions;
+namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET Tier Details")]

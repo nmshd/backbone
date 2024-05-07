@@ -4,7 +4,7 @@ using Backbone.BuildingBlocks.SDK.Endpoints.Common.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.AdminApi.Tests.Integration.SdkStepDefinitions;
+namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET Metrics")]

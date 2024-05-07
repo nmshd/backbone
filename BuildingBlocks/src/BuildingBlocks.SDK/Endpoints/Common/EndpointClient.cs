@@ -156,17 +156,15 @@ public class EndpointClient
         private readonly NameValueCollection _queryParameters = [];
 
         private readonly string _url;
-        private readonly string? _apiVersion;
         private bool _authenticated;
         private HttpContent _content;
 
-        public RequestBuilder(EndpointClient client, JsonSerializerOptions jsonSerializerOptions, IAuthenticator authenticator, HttpMethod method, string url, string apiVersion)
+        public RequestBuilder(EndpointClient client, JsonSerializerOptions jsonSerializerOptions, IAuthenticator authenticator, HttpMethod method, string url)
         {
             _client = client;
             _jsonSerializerOptions = jsonSerializerOptions;
             _authenticator = authenticator;
 
-            _apiVersion = apiVersion;
             _url = url;
             _method = method;
             _authenticated = false;
@@ -260,21 +258,6 @@ public class EndpointClient
 
         public async Task<ApiResponse<T>> ExecuteOData()
         {
-            return await _client.ExecuteOData<T>(await CreateRequestMessage());
-        }
-
-        public async Task<RawApiResponse> ExecuteRaw()
-        {
-            return await _client.ExecuteRaw(await CreateRequestMessage());
-        }
-
-        private async Task<HttpRequestMessage> CreateRequestMessage()
-        {
-            return await _client.Execute<T>(await CreateRequestMessage());
-        }
-
-        public async Task<ApiResponse<T>> ExecuteOData()
-        {
             return await _client.ExecuteOData<T>(await CreateRequestMessage(true));
         }
 
@@ -285,7 +268,7 @@ public class EndpointClient
 
         private async Task<HttpRequestMessage> CreateRequestMessage(bool isOData = false)
         {
-            var requestUri = isOData ? $"odata/{EncodeParametersInUrl()}" : $"api/{_apiVersion}/{EncodeParametersInUrl()}";
+            var requestUri = isOData ? $"odata/{EncodeParametersInUrl()}" : $"api/v1/{EncodeParametersInUrl()}";
 
             var request = new HttpRequestMessage(_method, requestUri)
             {

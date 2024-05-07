@@ -3,7 +3,7 @@ using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.AdminApi.Tests.Integration.SdkStepDefinitions;
+namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "POST Log")]

@@ -9,13 +9,11 @@ public class XsrfAndApiKeyAuthenticator : IAuthenticator
     private string? _xsrfToken = null;
     private string? _xsrfCookie = null;
     private readonly HttpClient _client;
-    private readonly string _apiVersion;
 
-    public XsrfAndApiKeyAuthenticator(string apiKey, HttpClient client, string apiVersion)
+    public XsrfAndApiKeyAuthenticator(string apiKey, HttpClient client)
     {
         _apiKey = apiKey;
         _client = client;
-        _apiVersion = apiVersion;
     }
 
     public async Task Authenticate(HttpRequestMessage request)
