@@ -1,6 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.TestHelpers;
 
@@ -59,7 +60,9 @@ public static class TestData
         var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
         var relationship = new Relationship(template, from ?? IDENTITY_1, DEVICE_1, null, []);
         relationship.Accept(to, DEVICE_2, []);
+        SystemTime.Set(SystemTime.UtcNow.AddMinutes(1));
         relationship.Terminate(IDENTITY_1, DEVICE_1);
+        SystemTime.Set(SystemTime.UtcNow.AddMinutes(1));
         relationship.RequestReactivation(IDENTITY_1, DEVICE_1);
         return relationship;
     }
