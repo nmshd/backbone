@@ -1,10 +1,10 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.Configurations;
 
-public class SyncRunEntityTypeConfiguration : IEntityTypeConfiguration<SyncRun>
+public class SyncRunEntityTypeConfiguration : EntityEntityTypeConfiguration<SyncRun>
 {
     public void Configure(EntityTypeBuilder<SyncRun> builder)
     {

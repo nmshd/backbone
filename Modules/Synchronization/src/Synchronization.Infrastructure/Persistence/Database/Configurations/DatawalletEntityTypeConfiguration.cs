@@ -1,10 +1,11 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.Configurations;
 
-public class DatawalletEntityTypeConfiguration : IEntityTypeConfiguration<Datawallet>
+public class DatawalletEntityTypeConfiguration : EntityEntityTypeConfiguration<Datawallet>
 {
     public void Configure(EntityTypeBuilder<Datawallet> builder)
     {
