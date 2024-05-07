@@ -26,6 +26,8 @@ public class AdminApiDbContext : AbstractDbContextBase
 
     public DbSet<RelationshipOverview> RelationshipOverviews { get; set; } = null!;
 
+    public DbSet<MessageOverview> MessageOverviews { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
