@@ -165,8 +165,6 @@ public class Relationship
 
         EnsureStatus(RelationshipStatus.Terminated);
 
-        Status = RelationshipStatus.ReactivationRequested;
-
         var auditLogEntry = new RelationshipAuditLogEntry(
             RelationshipAuditLogEntryReason.ReactivationRequested,
             RelationshipStatus.Terminated,
