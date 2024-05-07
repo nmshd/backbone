@@ -9,7 +9,7 @@ public class RelationshipReactivationCompletedDomainEvent : DomainEvent
         : base($"{relationship.Id}/ReactivationCompleted/{relationship.AuditLog.Last().CreatedAt}")
     {
         RelationshipId = relationship.Id;
-        Peer = peer.StringValue;
+        Peer = peer;
     }
 
     public string RelationshipId { get; }
