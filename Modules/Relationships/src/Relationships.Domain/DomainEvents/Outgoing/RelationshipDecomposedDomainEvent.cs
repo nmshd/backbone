@@ -8,7 +8,7 @@ public class RelationshipDecomposedDomainEvent : DomainEvent
     public RelationshipDecomposedDomainEvent(Relationship relationship, IdentityAddress peer) : base($"{relationship.Id}/Decompose/{relationship.AuditLog.Last().CreatedAt}")
     {
         RelationshipId = relationship.Id;
-        Peer = peer.StringValue;
+        Peer = peer.Value;
     }
 
     public string RelationshipId { get; }
