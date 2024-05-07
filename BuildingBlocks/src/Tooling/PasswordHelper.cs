@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Backbone.ConsumerApi.Sdk.Services;
+namespace Tooling;
 
 public class PasswordHelper
 {

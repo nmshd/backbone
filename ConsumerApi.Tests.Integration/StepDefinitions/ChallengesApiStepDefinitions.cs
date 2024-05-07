@@ -2,9 +2,9 @@ using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
-using Backbone.ConsumerApi.Sdk.Services;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Microsoft.Extensions.Options;
+using Tooling;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
