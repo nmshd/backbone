@@ -6,8 +6,10 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.C
 
 public class SyncRunEntityTypeConfiguration : EntityEntityTypeConfiguration<SyncRun>
 {
-    public void Configure(EntityTypeBuilder<SyncRun> builder)
+    public override void Configure(EntityTypeBuilder<SyncRun> builder)
     {
+        base.Configure(builder);
+
         builder.HasIndex(x => new { x.CreatedBy, x.Index }).IsUnique();
         builder.HasIndex(x => new { x.CreatedBy, x.FinalizedAt });
 

@@ -7,8 +7,10 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.C
 
 public class DatawalletEntityTypeConfiguration : EntityEntityTypeConfiguration<Datawallet>
 {
-    public void Configure(EntityTypeBuilder<Datawallet> builder)
+    public override void Configure(EntityTypeBuilder<Datawallet> builder)
     {
+        base.Configure(builder);
+
         builder.HasIndex(p => p.Owner).IsUnique();
 
         builder.HasKey(x => x.Id);

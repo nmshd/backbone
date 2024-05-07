@@ -6,7 +6,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityType
 
 public class EntityEntityTypeConfiguration<TEntity> : IEntityTypeConfiguration<TEntity> where TEntity : Entity
 {
-    public void Configure(EntityTypeBuilder<TEntity> builder)
+    public virtual void Configure(EntityTypeBuilder<TEntity> builder)
     {
         builder.Ignore(e => e.DomainEvents);
     }

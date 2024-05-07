@@ -7,8 +7,10 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.C
 
 public class ExternalEventEntityTypeConfiguration : EntityEntityTypeConfiguration<ExternalEvent>
 {
-    public void Configure(EntityTypeBuilder<ExternalEvent> builder)
+    public override void Configure(EntityTypeBuilder<ExternalEvent> builder)
     {
+        base.Configure(builder);
+
         builder.HasIndex(x => new { x.Owner, x.Index }).IsUnique();
         builder.HasIndex(x => new { x.Owner, x.SyncRunId });
 
