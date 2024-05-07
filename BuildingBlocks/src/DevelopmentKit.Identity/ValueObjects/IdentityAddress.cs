@@ -47,22 +47,19 @@ public record IdentityAddress : StronglyTypedId
 
         var lengthIsValid = stringValue.Length <= MAX_LENGTH;
 
-        const string pattern = @"^did\:e\:(.+?)\:dids\:(.+)(.{2})$";
-        try
-        {
-            var matches = Regex.Matches(stringValue, pattern, RegexOptions.IgnoreCase).First().Groups;
+        const string pattern = @"^did\:e\:((?:[a-zA-Z]+\.)+[a-zA-Z]+)\:dids\:(.+)(.{2})$";
 
-            var givenChecksum = matches[3].Value;
-            var calculatedChecksum = CalculateChecksum(stringValue[..^2]);
+        var matches = Regex.Matches(stringValue, pattern, RegexOptions.IgnoreCase).First().Groups;
 
-            var checksumIsValid = givenChecksum == calculatedChecksum;
+        if (matches is null) return false;
 
-            return lengthIsValid && checksumIsValid;
-        }
-        catch (Exception ex) when (ex is ArgumentNullException or ArgumentException or FormatException or InvalidOperationException)
-        {
-            return false;
-        }
+        var givenChecksum = matches[3].Value;
+        var calculatedChecksum = CalculateChecksum(stringValue[..^2]);
+
+        var checksumIsValid = givenChecksum == calculatedChecksum;
+
+        return lengthIsValid && checksumIsValid;
+
     }
 
     public static IdentityAddress Create(byte[] publicKey, string instanceUrl)
