@@ -1,5 +1,6 @@
 ﻿using Backbone.ConsumerApi.Sdk.Endpoints.Common.Crypto;
 using Backbone.Crypto;
+using Newtonsoft.Json;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 
