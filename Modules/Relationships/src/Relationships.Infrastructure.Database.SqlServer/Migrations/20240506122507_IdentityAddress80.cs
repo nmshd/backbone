@@ -5,7 +5,7 @@
 namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
-    public partial class Identity80 : Migration
+    public partial class IdentityAddress80 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

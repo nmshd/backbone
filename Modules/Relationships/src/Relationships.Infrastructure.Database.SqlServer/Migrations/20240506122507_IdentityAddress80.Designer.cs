@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(RelationshipsDbContext))]
-    [Migration("20240506122507_Identity80")]
-    partial class Identity80
+    [Migration("20240506122507_IdentityAddress80")]
+    partial class IdentityAddress80
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
