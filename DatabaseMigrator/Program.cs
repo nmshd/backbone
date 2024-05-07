@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.DatabaseMigrator;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -64,6 +66,8 @@ static IHostBuilder CreateHostBuilder(string[] args)
             var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
 
             services.AddSingleton<Executor>();
+
+            services.AddSingleton<IEventBus, DummyEventBus>();
 
             # region Add db contexts
 
@@ -143,4 +147,19 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() })
             )
         );
+}
+
+class DummyEventBus : IEventBus
+{
+    public void Publish(DomainEvent @event)
+    {
+    }
+
+    public void StartConsuming()
+    {
+    }
+
+    public void Subscribe<T, TH>() where T : DomainEvent where TH : IDomainEventHandler<T>
+    {
+    }
 }
