@@ -162,11 +162,11 @@ public class Client
             ClientSecret = client._configuration.Authentication.ClientCredentials.ClientSecret,
             IdentityVersion = 1,
             SignedChallenge = signedChallenge,
-            IdentityPublicKey = JsonConvert.SerializeObject(new CryptoSignaturePublicKey
+            IdentityPublicKey = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new CryptoSignaturePublicKey
             {
                 alg = CryptoExchangeAlgorithm.ECDH_X25519,
                 pub = keyPair.PublicKey.Base64Representation
-            }),
+            })).Base64Representation,
             DevicePassword = password
         };
 
