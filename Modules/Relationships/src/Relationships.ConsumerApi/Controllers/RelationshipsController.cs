@@ -109,6 +109,7 @@ public class RelationshipsController : ApiControllerBase
         await _mediator.Send(new TerminateRelationshipCommand() { RelationshipId = id }, cancellationToken);
         return NoContent();
     }
+
     [HttpPut("{id}/Reactivate/Reject")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RejectRelationshipReactivationResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
