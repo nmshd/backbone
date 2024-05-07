@@ -18,7 +18,7 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.U
 public class HandlerTests
 {
     [Fact]
-    public async void Updates_the_identity_in_the_database()
+    public async Task Updates_the_identity_in_the_database()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -46,7 +46,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Publishes_TierOfIdentityChangedDomainEvent()
+    public async Task Publishes_TierOfIdentityChangedDomainEvent()
     {
         // Arrange
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -156,7 +156,7 @@ public class HandlerTests
     {
         return new UpdateIdentityCommand
         {
-            Address = identity.Address.StringValue,
+            Address = identity.Address,
             TierId = newTier.Id.Value
         };
     }

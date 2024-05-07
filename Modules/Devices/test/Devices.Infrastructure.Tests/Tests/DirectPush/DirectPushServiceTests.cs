@@ -12,7 +12,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 public class DirectPushServiceTests
 {
     [Fact]
-    public async void Update_of_a_registration_that_does_not_exist_yet()
+    public async Task Update_of_a_registration_that_does_not_exist_yet()
     {
         // Arrange
         var deviceId = CreateRandomDeviceId();
@@ -37,7 +37,7 @@ public class DirectPushServiceTests
     }
 
     [Fact]
-    public async void Update_existing_PnsRegistration_in_repository()
+    public async Task Update_existing_PnsRegistration_in_repository()
     {
         // Arrange
         var deviceId = CreateRandomDeviceId();
@@ -64,7 +64,7 @@ public class DirectPushServiceTests
     }
 
     [Fact]
-    public async void Delete_existing_PnsRegistration()
+    public async Task Delete_existing_PnsRegistration()
     {
         // Arrange
         var deviceId = CreateRandomDeviceId();
@@ -90,7 +90,7 @@ public class DirectPushServiceTests
     }
 
     [Fact]
-    public async void Trying_to_delete_non_existing_PnsRegistration_does_nothing()
+    public async Task Trying_to_delete_non_existing_PnsRegistration_does_nothing()
     {
         // Arrange
         var deviceId = CreateRandomDeviceId();

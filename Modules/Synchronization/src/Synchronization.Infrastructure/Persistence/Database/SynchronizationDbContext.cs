@@ -46,12 +46,12 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         DbParameter activeIdentityParam;
         if (Database.IsSqlServer())
             activeIdentityParam = new SqlParameter("createdBy", SqlDbType.Char, IdentityAddress.MAX_LENGTH, ParameterDirection.Input, false, 0, 0, "", DataRowVersion.Default,
-                activeIdentity.StringValue);
+                activeIdentity.Value);
         else if (Database.IsNpgsql())
             activeIdentityParam = new NpgsqlParameter("createdBy", NpgsqlDbType.Char, IdentityAddress.MAX_LENGTH, "", ParameterDirection.Input, false, 0, 0, DataRowVersion.Default,
-                activeIdentity.StringValue);
+                activeIdentity.Value);
         else
-            activeIdentityParam = new SqliteParameter("createdBy", activeIdentity.StringValue);
+            activeIdentityParam = new SqliteParameter("createdBy", activeIdentity.Value);
 
         IQueryable<DatawalletModification> query;
 

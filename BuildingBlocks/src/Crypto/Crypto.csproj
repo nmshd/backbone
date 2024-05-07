@@ -1,21 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<PackageId>Enmeshed.Crypto</PackageId>
-		<PackageProjectUrl>https://enmeshed.eu</PackageProjectUrl>
-		<PackageTags>Enmeshed</PackageTags>
-		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
 		<NoWarn>1701;1702</NoWarn>
 	</PropertyGroup>
 
 	<ItemGroup>
 		<PackageReference Include="BouncyCastle.NetCore" Version="2.2.1" />
-		<PackageReference Include="NSec.Cryptography" Version="22.4.0" />
+		<PackageReference Include="NSec.Cryptography" Version="24.4.0" />
 	</ItemGroup>
 
 </Project>
