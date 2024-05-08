@@ -139,7 +139,7 @@ class _QuotaListState extends State<_QuotaList> {
     final confirmed = await showConfirmationDialog(
       context: context,
       title: 'Remove Quotas',
-      message: 'Are you sure you want to remove the selected quotas?',
+      message: 'Are you sure you want to remove the selected quotas from the tier "${widget.tierDetails.name}"?',
     );
 
     if (!confirmed) return;
