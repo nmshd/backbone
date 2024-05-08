@@ -61,16 +61,8 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                         : null,
                   ),
                   Gaps.w8,
-                  IconButton(
-                    icon: Icon(
-                      Icons.add,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith((states) {
-                        return Theme.of(context).colorScheme.primary;
-                      }),
-                    ),
+                  IconButton.filled(
+                    icon: const Icon(Icons.add),
                     onPressed: () => showCreateClientDialog(context: context, defaultTiers: _defaultTiers, onClientCreated: _reloadClients),
                   ),
                 ],
