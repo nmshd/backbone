@@ -12,7 +12,7 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 internal class MessagesStepDefinitions : BaseStepDefinitions
 {
     private string _identityAddress;
-    private ApiResponse<List<MessageOverviewDTO>>? _messagesResponse;
+    private readonly ApiResponse<List<MessageOverviewDTO>>? _messagesResponse = null!;
 
     public MessagesStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
     {
