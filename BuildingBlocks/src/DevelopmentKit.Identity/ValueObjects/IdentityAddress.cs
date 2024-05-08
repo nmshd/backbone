@@ -1,3 +1,4 @@
+using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.Security.Cryptography;
@@ -47,13 +48,15 @@ public record IdentityAddress : StronglyTypedId
 
         var lengthIsValid = stringValue.Length <= MAX_LENGTH;
 
-        const string pattern = @"^did\:e\:((?:[a-zA-Z]+\.)+[a-zA-Z]+)\:dids\:(.+)(.{2})$";
+        const string pattern = @"^did\:e\:((?:[a-z]+\.)+[a-z]+)\:dids\:(.+)(.{2})$";
 
-        var matches = Regex.Matches(stringValue, pattern, RegexOptions.IgnoreCase).First().Groups;
+        var matches = Regex.Matches(stringValue, pattern, RegexOptions.IgnoreCase);
 
-        if (matches is null) return false;
+        if (matches.Count == 0) return false;
 
-        var givenChecksum = matches[3].Value;
+        var matchGroups = matches.First().Groups;
+
+        var givenChecksum = matchGroups[3].Value;
         var calculatedChecksum = CalculateChecksum(stringValue[..^2]);
 
         var checksumIsValid = givenChecksum == calculatedChecksum;

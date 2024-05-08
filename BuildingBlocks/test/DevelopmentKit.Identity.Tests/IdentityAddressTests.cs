@@ -27,6 +27,18 @@ public class IdentityAddressTests
         address.Value.Should().Be(expectedAddress);
     }
 
+    [Theory]
+    // ReSharper disable StringLiteralTypo
+    [InlineData("did:e:enmeshedeu:dids:06a391378e5df5c1399f77")]
+    [InlineData("did:e:prod.ENMESHED.eu:dids:fef1992c5e529adc413288")]
+    [InlineData("ID154565465468435134684648ffef1992ca5e529adc413288")]
+    [InlineData("dod:e:prod.enmeshed.eu:dids:ee5966a158f1dc4de5bd5c")]
+    // ReSharper enable StringLiteralTypo
+    public void IsValidReturnsFalseForInvalidAddress(string identityAddress)
+    {
+        IdentityAddress.IsValid(identityAddress).Should().BeFalse();
+    }
+
     [Fact]
     public void AddressIsCreatedCorrectly()
     {
