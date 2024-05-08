@@ -104,7 +104,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
               ),
               if (_errorMessage != null)
                 Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  padding: const EdgeInsets.only(top: 24),
                   child: Text(
                     _errorMessage!,
                     style: TextStyle(color: Theme.of(context).colorScheme.error),
