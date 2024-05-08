@@ -13,7 +13,7 @@ namespace Backbone.DevelopmentKit.Identity.ValueObjects;
 
 [Serializable]
 [TypeConverter(typeof(IdentityAddressTypeConverter))]
-public record IdentityAddress : StronglyTypedId
+public partial record IdentityAddress : StronglyTypedId
 {
     public const int MAX_LENGTH = 80;
 
@@ -50,7 +50,7 @@ public record IdentityAddress : StronglyTypedId
 
         const string pattern = @"^did\:e\:((?:[a-z]+\.)+[a-z]+)\:dids\:([0-9abcdef]+)([0-9abcdef]{2})$";
 
-        var matches = Regex.Matches(stringValue, pattern, RegexOptions.IgnoreCase);
+        var matches = IdentityAddressValidatorRegex().Matches(stringValue);
 
         if (matches.Count == 0) return false;
 
@@ -121,6 +121,9 @@ public record IdentityAddress : StronglyTypedId
     {
         return ParseUnsafe(stringValue);
     }
+
+    [GeneratedRegex(@"^did\:e\:((?:[a-z]+\.)+[a-z]+)\:dids\:([0-9abcdef]+)([0-9abcdef]{2})$", RegexOptions.IgnoreCase, "pt-PT")]
+    private static partial Regex IdentityAddressValidatorRegex();
 
     #endregion
 }
