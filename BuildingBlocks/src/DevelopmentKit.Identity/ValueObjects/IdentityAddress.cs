@@ -46,19 +46,23 @@ public partial record IdentityAddress : StronglyTypedId
     {
         if (stringValue == null) return false;
 
-        var lengthIsValid = stringValue.Length <= MAX_LENGTH;
+        if (stringValue.Length > MAX_LENGTH)
+            return false;
+
         var matches = IdentityAddressValidatorRegex().Matches(stringValue);
 
         if (matches.Count == 0) return false;
 
         var matchGroups = matches.First().Groups;
 
-        var givenChecksum = matchGroups[3].Value;
+        if (!matchGroups.TryGetValue("checksum", out var givenChecksum))
+            return false;
+        
         var calculatedChecksum = CalculateChecksum(stringValue[..^2]);
 
-        var checksumIsValid = givenChecksum == calculatedChecksum;
+        var checksumIsValid = givenChecksum.Value == calculatedChecksum;
 
-        return lengthIsValid && checksumIsValid;
+        return checksumIsValid;
 
     }
 
@@ -119,7 +123,7 @@ public partial record IdentityAddress : StronglyTypedId
         return ParseUnsafe(stringValue);
     }
 
-    [GeneratedRegex(@"^did\:e\:((?:[a-z]+\.)+[a-z]+)\:dids\:([0-9abcdef]+)([0-9abcdef]{2})$", RegexOptions.IgnoreCase, "pt-PT")]
+    [GeneratedRegex(@"^did\:e\:(?<instanceUrl>(?:[a-z0-9]+\.)+[a-z]{2,})\:dids\:(?<identitySpecificPart>[0-9abcdef]{20})(?<checksum>[0-9abcdef]{2})$", RegexOptions.IgnoreCase)]
     private static partial Regex IdentityAddressValidatorRegex();
 
     #endregion

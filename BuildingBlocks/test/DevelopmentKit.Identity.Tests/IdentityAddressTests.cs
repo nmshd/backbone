@@ -34,7 +34,8 @@ public class IdentityAddressTests
     [InlineData("ID154565465468435134684648ffef1992ca5e529adc413288")]
     [InlineData("dod:e:prod.enmeshed.eu:dids:ee5966a158f1dc4de5bd5c")]
     [InlineData("did:e:prod.enmeshed.eu:dids:nonhexchars11")]
-    [InlineData("did:e:prod.enmeshed.eu:dids:HexCharsWithCapitals11")]
+    [InlineData("did:e:prod.enmeshed.eu:dids:eCa432178Ca417a1311")] // capital letters
+    [InlineData("did:e:prod.enmeshed.eu:dids:ee5966a158f1dc4de5bd5cee5966a158f1dc4de5bd5c")]
     // ReSharper enable StringLiteralTypo
     public void IsValidReturnsFalseForInvalidAddress(string identityAddress)
     {
