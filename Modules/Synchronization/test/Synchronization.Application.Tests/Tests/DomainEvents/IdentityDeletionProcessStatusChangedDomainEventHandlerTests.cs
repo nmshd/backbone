@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStatusChanged;
@@ -39,37 +38,6 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandlerTests
         // Assert
         A.CallTo(() => mockDbContext.CreateExternalEvent(deletionProcessOwner, ExternalEventType.IdentityDeletionProcessStatusChanged, A<object>._))
             .MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
-    public async Task Publishes_a_domain_event_after_creating_an_external_event()
-    {
-        // Arrange
-        var deletionProcessOwner = TestDataGenerator.CreateRandomIdentityAddress();
-        var identityDeletionProcessStatusChangedDomainEvent = new IdentityDeletionProcessStatusChangedDomainEvent(deletionProcessOwner, "someDeletionProcessId", null);
-
-        var fakeDbContext = A.Fake<ISynchronizationDbContext>();
-        var mockEventBus = A.Fake<IEventBus>();
-
-        var externalEvent = new ExternalEvent(ExternalEventType.IdentityDeletionProcessStatusChanged, IdentityAddress.Parse(deletionProcessOwner), 1,
-            new { identityDeletionProcessStatusChangedDomainEvent.DeletionProcessId });
-
-        A.CallTo(() => fakeDbContext.CreateExternalEvent(
-            deletionProcessOwner,
-            ExternalEventType.IdentityDeletionProcessStatusChanged,
-            A<object>._)
-        ).Returns(externalEvent);
-
-        var handler = new IdentityDeletionProcessStatusChangedDomainEventHandler(fakeDbContext,
-            A.Fake<ILogger<IdentityDeletionProcessStatusChangedDomainEventHandler>>());
-
-        // Act
-        await handler.Handle(identityDeletionProcessStatusChangedDomainEvent);
-
-        // Handle
-        A.CallTo(() => fakeDbContext
-            .CreateExternalEvent(deletionProcessOwner, ExternalEventType.IdentityDeletionProcessStatusChanged, A<object>._)
-        ).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
