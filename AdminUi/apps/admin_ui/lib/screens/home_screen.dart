@@ -43,6 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
               NavigationRailDestination(icon: Icon(Icons.cable), label: Text('Tiers')),
               NavigationRailDestination(icon: Icon(Icons.layers), label: Text('Clients')),
             ],
+            trailing: IconButton(onPressed: () => openSettingsDialog(context), icon: const Icon(Icons.settings)),
             selectedIndex: _selectedIndex,
             onDestinationSelected: (int index) {
               if (index == _selectedIndex) return;
