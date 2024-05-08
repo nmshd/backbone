@@ -14,19 +14,12 @@ class IdentitiesOverview extends StatefulWidget {
 }
 
 class _IdentitiesOverviewState extends State<IdentitiesOverview> {
-  late ScrollController _scrollController;
   late IdentityDataTableSource _dataSource;
 
   int _sortColumnIndex = 0;
   bool _sortColumnAscending = true;
 
   int _rowsPerPage = 5;
-
-  @override
-  void initState() {
-    super.initState();
-    _scrollController = ScrollController();
-  }
 
   @override
   void didChangeDependencies() {
@@ -37,7 +30,6 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
     _dataSource.dispose();
     super.dispose();
   }
@@ -68,7 +60,6 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
                   showFirstLastButtons: true,
                   columnSpacing: 5,
                   source: _dataSource,
-                  scrollController: _scrollController,
                   isVerticalScrollBarVisible: true,
                   renderEmptyRowsInTheEnd: false,
                   availableRowsPerPage: const [5, 10, 25, 50, 100],
