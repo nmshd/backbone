@@ -31,7 +31,6 @@
     "Modules": {
         "Devices": {
             "Application": {
-                "AddressPrefix": "id1",
                 "Pagination": {
                     "DefaultPageSize": 50,
                     "MaxPageSize": 200
