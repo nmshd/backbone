@@ -14,6 +14,7 @@ public partial record IdentityAddress : StronglyTypedId
 {
     public const int MAX_LENGTH = 80;
     private const int CHECKSUM_LENGTH = 2;
+    private const string CHECKSUM_LENGTH_S = "2";
 
     private IdentityAddress(string stringValue) : base(stringValue)
     {
@@ -64,7 +65,6 @@ public partial record IdentityAddress : StronglyTypedId
         var checksumIsValid = givenChecksum.Value == calculatedChecksum;
 
         return checksumIsValid;
-
     }
 
     public static IdentityAddress Create(byte[] publicKey, string instanceUrl)
@@ -124,7 +124,7 @@ public partial record IdentityAddress : StronglyTypedId
         return ParseUnsafe(stringValue);
     }
 
-    [GeneratedRegex(@"^(?<addressWithoutChecksum>did\:e\:(?<instanceUrl>(?:[a-z0-9]+\.)+[a-z]{2,})\:dids\:(?<identitySpecificPart>[0-9abcdef]{20}))(?<checksum>[0-9abcdef]{2})$")]
+    [GeneratedRegex($@"^(?<addressWithoutChecksum>did:e:(?<instanceUrl>(?:[a-z0-9]+\.)+[a-z]{{2,}}):dids:(?<identitySpecificPart>[0-9abcdef]{{20}}))(?<checksum>[0-9abcdef]{{{CHECKSUM_LENGTH_S}}})$")]
     private static partial Regex IdentityAddressValidatorRegex();
 
     #endregion
