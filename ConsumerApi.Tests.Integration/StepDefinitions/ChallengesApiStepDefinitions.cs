@@ -62,6 +62,13 @@ internal class ChallengesApiStepDefinitions
         _response = await _sdk.Challenges.CreateChallenge();
     }
 
+    [When("an unauthenticated POST request is sent to the Challenges endpoint")]
+    public async Task WhenAnUnauthenticatedPOSTRequestIsSentToTheChallengesEndpoint()
+    {
+        _response = await _sdk.Challenges.CreateChallengeUnauthenticated();
+    }
+
+
     [When(@"a GET request is sent to the Challenges/{id} endpoint with ""?(.*?)""?")]
     public async Task WhenAGETRequestIsSentToTheChallengesIdEndpointWith(string id)
     {
