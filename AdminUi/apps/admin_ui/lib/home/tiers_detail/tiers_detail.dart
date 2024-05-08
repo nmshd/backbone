@@ -104,53 +104,59 @@ class _QuotaListState extends State<_QuotaList> {
       title: const Text('Quotas'),
       subtitle: const Text('View and assign quotas for this tier.'),
       children: [
-        if (widget.tierDetails.id != 'TIR00000000000000001')
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                IconButton(
-                  icon: Icon(
-                    Icons.delete,
-                    color: _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
-                  ),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith((states) {
-                      return _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.error : null;
-                    }),
-                  ),
-                  onPressed: _selectedQuotas.isNotEmpty ? _removeSelectedQuotas : null,
-                ),
-                Gaps.w8,
-                IconButton.filled(
-                  icon: const Icon(Icons.add),
-                  onPressed: () => showAddQuotaDialog(context: context, tierId: widget.tierDetails.id, onQuotaAdded: widget.onQuotasChanged),
-                ),
-              ],
-            ),
-          ),
-        SizedBox(
-          width: double.infinity,
-          child: DataTable(
-            columns: const [
-              DataColumn(label: Text('Metric')),
-              DataColumn(label: Text('Max')),
-              DataColumn(label: Text('Period')),
-            ],
-            rows: widget.tierDetails.quotas
-                .map(
-                  (quota) => DataRow2(
-                    cells: [
-                      DataCell(Text(quota.metric.displayName)),
-                      DataCell(Text(quota.max.toString())),
-                      DataCell(Text(quota.period)),
+        Card(
+          child: Column(
+            children: [
+              if (widget.tierDetails.id != 'TIR00000000000000001')
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      IconButton(
+                        icon: Icon(
+                          Icons.delete,
+                          color: _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
+                        ),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.resolveWith((states) {
+                            return _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.error : null;
+                          }),
+                        ),
+                        onPressed: _selectedQuotas.isNotEmpty ? _removeSelectedQuotas : null,
+                      ),
+                      Gaps.w8,
+                      IconButton.filled(
+                        icon: const Icon(Icons.add),
+                        onPressed: () => showAddQuotaDialog(context: context, tierId: widget.tierDetails.id, onQuotaAdded: widget.onQuotasChanged),
+                      ),
                     ],
-                    onSelectChanged: widget.tierDetails.id == 'TIR00000000000000001' ? null : (_) => _toggleSelection(quota.id),
-                    selected: _selectedQuotas.contains(quota.id),
                   ),
-                )
-                .toList(),
+                ),
+              SizedBox(
+                width: double.infinity,
+                child: DataTable(
+                  columns: const [
+                    DataColumn(label: Text('Metric')),
+                    DataColumn(label: Text('Max')),
+                    DataColumn(label: Text('Period')),
+                  ],
+                  rows: widget.tierDetails.quotas
+                      .map(
+                        (quota) => DataRow2(
+                          cells: [
+                            DataCell(Text(quota.metric.displayName)),
+                            DataCell(Text(quota.max.toString())),
+                            DataCell(Text(quota.period)),
+                          ],
+                          onSelectChanged: widget.tierDetails.id == 'TIR00000000000000001' ? null : (_) => _toggleSelection(quota.id),
+                          selected: _selectedQuotas.contains(quota.id),
+                        ),
+                      )
+                      .toList(),
+                ),
+              ),
+            ],
           ),
         ),
       ],
