@@ -32,9 +32,9 @@ namespace Backbone.Modules.Challenges.Infrastructure.Database.SqlServer.Migratio
                         .IsFixedLength();
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("char(36)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
