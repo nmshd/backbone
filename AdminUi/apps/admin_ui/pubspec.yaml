@@ -21,6 +21,7 @@ dependencies:
   logger: ^2.2.0
   multi_dropdown: ^2.1.4
   shared_preferences: ^2.2.2
+  watch_it: ^1.4.1
   window_size:
     git:
       url: https://github.com/google/flutter-desktop-embedding
