@@ -18,14 +18,5 @@
         "webpack-cli": "5.1.4",
         "webpack-glob-entries": "^1.0.1"
     },
-    "dependencies": {
-        "@js-soft/simple-logger": "^1.0.4",
-        "@js-soft/ts-serval": "^2.0.10",
-        "@nmshd/crypto": "^2.0.6",
-        "@nmshd/transport": "^2.3.3",
-        "@types/luxon": "^3.4.2",
-        "luxon": "^3.4.4",
-        "p-limit": "^4.0.0",
-        "typescript-logging": "^2.1.0"
-    }
+    "dependencies": {}
 }
