@@ -18,7 +18,7 @@ public static class FakeDbContextFactory
             .UseSqlite(connection)
             .Options;
 
-        object[] args = [options, A.Fake<IEventBus>()];
+        object[] args = [options, A.Dummy<IEventBus>()];
 
         var context = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
         context.Database.EnsureCreated();
