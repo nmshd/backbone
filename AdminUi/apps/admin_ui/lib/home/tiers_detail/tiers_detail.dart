@@ -62,7 +62,7 @@ class _QuotaList extends StatefulWidget {
 }
 
 class _QuotaListState extends State<_QuotaList> {
-  List<String> selectedQuotas = [];
+  final List<String> _selectedQuotas = [];
 
   @override
   Widget build(BuildContext context) {
@@ -80,14 +80,14 @@ class _QuotaListState extends State<_QuotaList> {
                 IconButton(
                   icon: Icon(
                     Icons.delete,
-                    color: selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
+                    color: _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
                   ),
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith((states) {
-                      return selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.error : null;
+                      return _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.error : null;
                     }),
                   ),
-                  onPressed: selectedQuotas.isNotEmpty ? _removeSelectedQuotas : null,
+                  onPressed: _selectedQuotas.isNotEmpty ? _removeSelectedQuotas : null,
                 ),
                 Gaps.w8,
                 IconButton.filled(
@@ -114,7 +114,7 @@ class _QuotaListState extends State<_QuotaList> {
                       DataCell(Text(quota.period)),
                     ],
                     onSelectChanged: widget.tierDetails.id == 'TIR00000000000000001' ? null : (_) => _toggleSelection(quota.id),
-                    selected: selectedQuotas.contains(quota.id),
+                    selected: _selectedQuotas.contains(quota.id),
                   ),
                 )
                 .toList(),
@@ -126,12 +126,12 @@ class _QuotaListState extends State<_QuotaList> {
 
   void _toggleSelection(String id) {
     setState(() {
-      if (selectedQuotas.contains(id)) {
-        selectedQuotas.remove(id);
+      if (_selectedQuotas.contains(id)) {
+        _selectedQuotas.remove(id);
         return;
       }
 
-      selectedQuotas.add(id);
+      _selectedQuotas.add(id);
     });
   }
 
@@ -144,11 +144,11 @@ class _QuotaListState extends State<_QuotaList> {
 
     if (!confirmed) return;
 
-    for (final quota in selectedQuotas) {
+    for (final quota in _selectedQuotas) {
       await GetIt.I.get<AdminApiClient>().quotas.deleteTierQuota(tierId: widget.tierDetails.id, tierQuotaDefinitionId: quota);
       widget.onQuotasChanged();
     }
 
-    selectedQuotas.clear();
+    _selectedQuotas.clear();
   }
 }
