@@ -268,9 +268,7 @@ public class EndpointClient
 
         private async Task<HttpRequestMessage> CreateRequestMessage(bool isOData = false)
         {
-            var requestUri = isOData ? $"odata/{EncodeParametersInUrl()}" : $"api/v1/{EncodeParametersInUrl()}";
-
-            var request = new HttpRequestMessage(_method, requestUri)
+            var request = new HttpRequestMessage(_method, EncodeParametersInUrl())
             {
                 Content = _content
             };
