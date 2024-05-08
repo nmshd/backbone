@@ -48,7 +48,7 @@ public record IdentityAddress : StronglyTypedId
 
         var lengthIsValid = stringValue.Length <= MAX_LENGTH;
 
-        const string pattern = @"^did\:e\:((?:[a-z]+\.)+[a-z]+)\:dids\:(.+)(.{2})$";
+        const string pattern = @"^did\:e\:((?:[a-z]+\.)+[a-z]+)\:dids\:([0-9abcdef]+)([0-9abcdef]{2})$";
 
         var matches = Regex.Matches(stringValue, pattern, RegexOptions.IgnoreCase);
 
@@ -79,9 +79,9 @@ public record IdentityAddress : StronglyTypedId
 
     private static string CalculateChecksum(string phrase) => Hex(SHA256.HashData(Encoding.ASCII.GetBytes(phrase)))[..2];
 
-    private static string Hex(byte[] hashedPublicKey)
+    private static string Hex(byte[] bytes)
     {
-        return Convert.ToHexString(hashedPublicKey).ToLower();
+        return Convert.ToHexString(bytes).ToLower();
     }
 
     public override string ToString()
