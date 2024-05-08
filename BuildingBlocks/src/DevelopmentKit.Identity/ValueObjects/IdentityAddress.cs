@@ -1,4 +1,3 @@
-using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.Security.Cryptography;
@@ -6,8 +5,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
-using SimpleBase;
-
 
 namespace Backbone.DevelopmentKit.Identity.ValueObjects;
 
@@ -16,6 +13,7 @@ namespace Backbone.DevelopmentKit.Identity.ValueObjects;
 public partial record IdentityAddress : StronglyTypedId
 {
     public const int MAX_LENGTH = 80;
+    private const int CHECKSUM_LENGTH = 2;
 
     private IdentityAddress(string stringValue) : base(stringValue)
     {
@@ -57,8 +55,11 @@ public partial record IdentityAddress : StronglyTypedId
 
         if (!matchGroups.TryGetValue("checksum", out var givenChecksum))
             return false;
-        
-        var calculatedChecksum = CalculateChecksum(stringValue[..^2]);
+
+        if (!matchGroups.TryGetValue("addressWithoutChecksum", out var addressWithoutChecksum))
+            return false;
+
+        var calculatedChecksum = CalculateChecksum(addressWithoutChecksum.Value);
 
         var checksumIsValid = givenChecksum.Value == calculatedChecksum;
 
@@ -78,7 +79,7 @@ public partial record IdentityAddress : StronglyTypedId
         return new IdentityAddress((mainPhrase + checksum).ToLower());
     }
 
-    private static string CalculateChecksum(string phrase) => Hex(SHA256.HashData(Encoding.ASCII.GetBytes(phrase)))[..2];
+    private static string CalculateChecksum(string phrase) => Hex(SHA256.HashData(Encoding.ASCII.GetBytes(phrase)))[..CHECKSUM_LENGTH];
 
     private static string Hex(byte[] bytes)
     {
@@ -123,7 +124,7 @@ public partial record IdentityAddress : StronglyTypedId
         return ParseUnsafe(stringValue);
     }
 
-    [GeneratedRegex(@"^did\:e\:(?<instanceUrl>(?:[a-z0-9]+\.)+[a-z]{2,})\:dids\:(?<identitySpecificPart>[0-9abcdef]{20})(?<checksum>[0-9abcdef]{2})$", RegexOptions.IgnoreCase)]
+    [GeneratedRegex(@"^(?<addressWithoutChecksum>did\:e\:(?<instanceUrl>(?:[a-z0-9]+\.)+[a-z]{2,})\:dids\:(?<identitySpecificPart>[0-9abcdef]{20}))(?<checksum>[0-9abcdef]{2})$")]
     private static partial Regex IdentityAddressValidatorRegex();
 
     #endregion
