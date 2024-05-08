@@ -13,6 +13,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<int>(
                 name: "Environment",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "int",
                 nullable: false,
@@ -22,12 +23,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "DeletionGracePeriodEndsAt",
+                schema: "Devices",
                 table: "Identities",
                 type: "datetime2",
                 nullable: true);
 
             migrationBuilder.AddColumn<int>(
                 name: "Status",
+                schema: "Devices",
                 table: "Identities",
                 type: "int",
                 nullable: false,
@@ -35,6 +38,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "TierIdBeforeDeletion",
+                schema: "Devices",
                 table: "Identities",
                 type: "char(20)",
                 unicode: false,
@@ -44,6 +48,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.CreateTable(
                 name: "IdentityDeletionProcesses",
+                schema: "Devices",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -66,12 +71,15 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     table.ForeignKey(
                         name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
                         column: x => x.IdentityAddress,
+                        principalSchema: "Devices",
                         principalTable: "Identities",
                         principalColumn: "Address");
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "IdentityDeletionProcessAuditLog",
+                schema: "Devices",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -89,17 +97,21 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     table.ForeignKey(
                         name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_IdentityDeletionProcessId",
                         column: x => x.IdentityDeletionProcessId,
+                        principalSchema: "Devices",
                         principalTable: "IdentityDeletionProcesses",
                         principalColumn: "Id");
-                });
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityDeletionProcessAuditLog_IdentityDeletionProcessId",
+                schema: "Devices",
                 table: "IdentityDeletionProcessAuditLog",
                 column: "IdentityDeletionProcessId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_IdentityDeletionProcesses_IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress");
         }
@@ -108,25 +120,31 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                schema: "Devices",
                 name: "IdentityDeletionProcessAuditLog");
 
             migrationBuilder.DropTable(
+                schema: "Devices",
                 name: "IdentityDeletionProcesses");
 
             migrationBuilder.DropColumn(
                 name: "DeletionGracePeriodEndsAt",
+                schema: "Devices",
                 table: "Identities");
 
             migrationBuilder.DropColumn(
                 name: "Status",
+                schema: "Devices",
                 table: "Identities");
 
             migrationBuilder.DropColumn(
                 name: "TierIdBeforeDeletion",
+                schema: "Devices",
                 table: "Identities");
 
             migrationBuilder.AlterColumn<int>(
                 name: "Environment",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "int",
                 nullable: false,

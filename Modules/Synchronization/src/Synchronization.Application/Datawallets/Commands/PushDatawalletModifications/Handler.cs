@@ -5,8 +5,8 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -21,13 +21,13 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
-
-    private PushDatawalletModificationsCommand _request = null!;
     private CancellationToken _cancellationToken;
-    private DatawalletVersion _supportedDatawalletVersion = null!;
     private Datawallet? _datawallet;
     private DatawalletModification[] _modifications = null!;
+
+    private PushDatawalletModificationsCommand _request = null!;
     private PushDatawalletModificationsResponse _response = null!;
+    private DatawalletVersion _supportedDatawalletVersion = null!;
 
     public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus)
     {
@@ -50,7 +50,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         EnsureSufficientSupportedDatawalletVersion();
         EnsureDeviceIsUpToDate();
         await CreateModifications();
-        PublishIntegrationEvent();
+        PublishDomainEvent();
         BuildResponse();
 
         return _response;
@@ -139,8 +139,8 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         }
     }
 
-    private void PublishIntegrationEvent()
+    private void PublishDomainEvent()
     {
-        _eventBus.Publish(new DatawalletModifiedIntegrationEvent(_activeIdentity, _activeDevice));
+        _eventBus.Publish(new DatawalletModifiedDomainEvent(_activeIdentity, _activeDevice));
     }
 }

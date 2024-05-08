@@ -12,6 +12,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "AppId",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "text",
                 nullable: false,
@@ -22,6 +23,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "DefaultTier",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 type: "character(20)",
                 unicode: false,
@@ -32,6 +34,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_OpenIddictApplications_DefaultTier",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 column: "DefaultTier");
 
@@ -43,8 +46,10 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_OpenIddictApplications_Tiers_DefaultTier",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 column: "DefaultTier",
+                principalSchema: "Devices",
                 principalTable: "Tiers",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
@@ -55,18 +60,22 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_OpenIddictApplications_Tiers_DefaultTier",
+                schema: "Devices",
                 table: "OpenIddictApplications");
 
             migrationBuilder.DropIndex(
                 name: "IX_OpenIddictApplications_DefaultTier",
+                schema: "Devices",
                 table: "OpenIddictApplications");
 
             migrationBuilder.DropColumn(
                 name: "DefaultTier",
+                schema: "Devices",
                 table: "OpenIddictApplications");
 
             migrationBuilder.AlterColumn<string>(
                 name: "AppId",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "text",
                 nullable: true,

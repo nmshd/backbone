@@ -1,7 +1,9 @@
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
-using Newtonsoft.Json.Schema.Generation;
 using Newtonsoft.Json.Serialization;
+using NJsonSchema.NewtonsoftJson.Generation;
+using JsonSchemaGenerator = NJsonSchema.Generation.JsonSchemaGenerator;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Support;
 
@@ -17,14 +19,28 @@ public class JsonValidators
             return parsedJson.IsValid(schema, out errors);
         }
 
-        var generator = new JSchemaGenerator
+        var settings = new NewtonsoftJsonSchemaGeneratorSettings
         {
-            ContractResolver = new CamelCasePropertyNamesContractResolver()
+            SerializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            }
         };
+
+        var generator = new JsonSchemaGenerator(settings);
+
         var schemaJson = generator.Generate(typeof(T));
-        schema = JSchema.Parse(schemaJson.ToString());
+
+        var generatedSchema = schemaJson.ToJson();
+
+        schema = JSchema.Parse(generatedSchema);
+
+        schema.AllowAdditionalProperties = true;
+
         CACHED_SCHEMAS.Add(typeof(T), schema);
+
         var responseJson = JObject.Parse(json);
+
         return responseJson.IsValid(schema, out errors);
     }
 }

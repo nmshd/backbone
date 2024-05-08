@@ -170,6 +170,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     {
         base.OnModelCreating(builder);
 
+        builder.HasDefaultSchema("Devices");
+
         builder.ApplyConfigurationsFromAssembly(typeof(DeviceEntityTypeConfiguration).Assembly);
     }
 }

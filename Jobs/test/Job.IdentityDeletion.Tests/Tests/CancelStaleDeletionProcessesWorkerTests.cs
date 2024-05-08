@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdentityDeletionProcesses;
+﻿using Backbone.Job.IdentityDeletion.Workers;
+using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdentityDeletionProcesses;
 using FakeItEasy;
 using MediatR;
 using Microsoft.Extensions.Hosting;
@@ -10,7 +11,7 @@ namespace Backbone.Job.IdentityDeletion.Tests.Tests
     public class CancelStaleDeletionProcessesWorkerTests
     {
         [Fact]
-        public async void Happy_path()
+        public async Task Happy_path()
         {
             // Arrange
             var mockMediator = A.Fake<IMediator>();

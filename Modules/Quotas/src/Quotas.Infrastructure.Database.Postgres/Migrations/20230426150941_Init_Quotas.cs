@@ -12,6 +12,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.CreateTable(
                 name: "Tiers",
+                schema: "Quotas",
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "character(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -20,10 +21,12 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Tiers", x => x.Id);
-                });
+                }
+            );
 
             migrationBuilder.CreateTable(
                 name: "Identities",
+                schema: "Quotas",
                 columns: table => new
                 {
                     Address = table.Column<string>(type: "character(36)", unicode: false, fixedLength: true, maxLength: 36, nullable: false),
@@ -35,12 +38,15 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                     table.ForeignKey(
                         name: "FK_Identities_Tiers_TierId",
                         column: x => x.TierId,
+                        principalSchema: "Quotas",
                         principalTable: "Tiers",
                         principalColumn: "Id");
-                });
+                }
+            );
 
             migrationBuilder.CreateIndex(
                 name: "IX_Identities_TierId",
+                schema: "Quotas",
                 table: "Identities",
                 column: "TierId");
         }
@@ -49,9 +55,11 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                schema: "Quotas",
                 name: "Identities");
 
             migrationBuilder.DropTable(
+                schema: "Quotas",
                 name: "Tiers");
         }
     }

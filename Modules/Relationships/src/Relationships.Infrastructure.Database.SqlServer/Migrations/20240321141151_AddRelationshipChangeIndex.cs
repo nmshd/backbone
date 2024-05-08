@@ -12,6 +12,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         {
             migrationBuilder.CreateIndex(
                 name: "IX_RelationshipChanges_Res_CreatedAt_Res_CreatedBy_Res_CreatedByDevice",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 columns: new[] { "Res_CreatedAt", "Res_CreatedBy", "Res_CreatedByDevice" })
                 .Annotation("SqlServer:Include", new[] { "Res_Content" });
@@ -22,6 +23,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         {
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipChanges_Res_CreatedAt_Res_CreatedBy_Res_CreatedByDevice",
+                schema: "Relationships",
                 table: "RelationshipChanges");
         }
     }

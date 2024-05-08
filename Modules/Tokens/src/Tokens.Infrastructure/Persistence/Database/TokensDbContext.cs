@@ -21,12 +21,6 @@ public class TokensDbContext : AbstractDbContextBase
 
     public virtual DbSet<Token> Tokens { get; set; } = null!;
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //{
-    //    base.OnConfiguring(optionsBuilder);
-    //    optionsBuilder.UseSqlServer();
-    //}
-
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         base.ConfigureConventions(configurationBuilder);
@@ -37,6 +31,8 @@ public class TokensDbContext : AbstractDbContextBase
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.HasDefaultSchema("Tokens");
 
         builder.ApplyConfigurationsFromAssembly(typeof(TokensDbContext).Assembly);
     }

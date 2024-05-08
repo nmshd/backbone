@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
@@ -21,7 +21,8 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
     private readonly ILogger<Handler> _logger;
     private readonly IEventBus _eventBus;
 
-    public Handler(ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, IIdentitiesRepository identitiesRepository, IOAuthClientsRepository oAuthClientsRepository)
+    public Handler(ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, IIdentitiesRepository identitiesRepository,
+        IOAuthClientsRepository oAuthClientsRepository)
     {
         _challengeValidator = challengeValidator;
         _logger = logger;
@@ -63,7 +64,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         _logger.CreatedIdentity(newIdentity.Address, user.DeviceId, user.UserName!);
 
-        _eventBus.Publish(new IdentityCreatedIntegrationEvent(newIdentity));
+        _eventBus.Publish(new IdentityCreatedDomainEvent(newIdentity));
 
         return new CreateIdentityResponse
         {

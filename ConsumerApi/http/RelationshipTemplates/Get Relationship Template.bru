@@ -1,0 +1,15 @@
+meta {
+  name: /RelationshipTemplates/{RelationshipTemplateId}
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/RelationshipTemplates/{{RelationshipTemplateId}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  RelationshipTemplateId: RLTdW3WlaBORnozO89RF
+}

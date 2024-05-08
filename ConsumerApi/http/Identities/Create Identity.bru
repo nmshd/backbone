@@ -1,0 +1,25 @@
+meta {
+  name: /Identities
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/Identities
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "clientId": "test",
+    "clientSecret": "test",
+    "identityPublicKey": "AABA",
+    "devicePassword": "a",
+    "identityVersion": 0,
+    "signedChallenge": {
+      "challenge": "test",
+      "signature": "AAAA"
+    }
+  }
+}

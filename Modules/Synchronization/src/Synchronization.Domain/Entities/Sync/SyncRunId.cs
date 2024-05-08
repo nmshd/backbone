@@ -1,19 +1,21 @@
 using System.ComponentModel;
 using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 [Serializable]
 [TypeConverter(typeof(SyncRunIdTypeConverter))]
-public class SyncRunId : StronglyTypedId
+public record SyncRunId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
     private const string PREFIX = "SYR";
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
-    private SyncRunId(string stringValue) : base(stringValue) { }
+    private SyncRunId(string stringValue) : base(stringValue)
+    {
+    }
 
     public static SyncRunId Parse(string stringValue)
     {

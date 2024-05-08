@@ -1,0 +1,15 @@
+meta {
+  name: /xsrf
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/xsrf
+  body: none
+  auth: none
+}
+
+vars:post-response {
+  XsrfHeader: res.body
+}

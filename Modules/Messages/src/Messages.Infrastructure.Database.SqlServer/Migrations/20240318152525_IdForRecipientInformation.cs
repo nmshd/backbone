@@ -12,10 +12,12 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropPrimaryKey(
                 name: "PK_RecipientInformation",
+                schema: "Messages",
                 table: "RecipientInformation");
 
             migrationBuilder.AddColumn<int>(
                 name: "Id",
+                schema: "Messages",
                 table: "RecipientInformation",
                 type: "int",
                 nullable: false,
@@ -24,11 +26,13 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_RecipientInformation",
+                schema: "Messages",
                 table: "RecipientInformation",
                 column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RecipientInformation_Address_MessageId",
+                schema: "Messages",
                 table: "RecipientInformation",
                 columns: new[] { "Address", "MessageId" });
         }
@@ -38,18 +42,22 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropPrimaryKey(
                 name: "PK_RecipientInformation",
+                schema: "Messages",
                 table: "RecipientInformation");
 
             migrationBuilder.DropIndex(
                 name: "IX_RecipientInformation_Address_MessageId",
+                schema: "Messages",
                 table: "RecipientInformation");
 
             migrationBuilder.DropColumn(
                 name: "Id",
+                schema: "Messages",
                 table: "RecipientInformation");
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_RecipientInformation",
+                schema: "Messages",
                 table: "RecipientInformation",
                 columns: new[] { "Address", "MessageId" });
         }

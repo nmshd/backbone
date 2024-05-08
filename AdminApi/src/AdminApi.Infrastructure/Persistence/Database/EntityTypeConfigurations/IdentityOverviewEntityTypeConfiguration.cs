@@ -8,7 +8,7 @@ public class IdentityOverviewEntityTypeConfiguration : IEntityTypeConfiguration<
 {
     public void Configure(EntityTypeBuilder<IdentityOverview> builder)
     {
-        builder.ToView("IdentityOverviews");
+        builder.ToView("IdentityOverviews", "AdminUi");
         builder.OwnsOne(
             c => c.Tier,
             dt =>
@@ -19,4 +19,3 @@ public class IdentityOverviewEntityTypeConfiguration : IEntityTypeConfiguration<
         builder.HasKey(c => c.Address);
     }
 }
-

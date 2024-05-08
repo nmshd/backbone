@@ -32,7 +32,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Combines_multiple_cacheChanged_modifications()
+    public async Task Combines_multiple_cacheChanged_modifications()
     {
         // Arrange
         var datawallet = CreateDatawalletForActiveIdentity();
@@ -55,7 +55,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Combines_multiple_update_modifications()
+    public async Task Combines_multiple_update_modifications()
     {
         // Arrange
         var datawallet = CreateDatawalletForActiveIdentity();
@@ -78,7 +78,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Does_not_combine_modifications_of_different_types()
+    public async Task Does_not_combine_modifications_of_different_types()
     {
         // Arrange
         var datawallet = CreateDatawalletForActiveIdentity();
@@ -100,7 +100,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Does_not_combine_modifications_with_different_ids()
+    public async Task Does_not_combine_modifications_with_different_ids()
     {
         // Arrange
         var datawallet = CreateDatawalletForActiveIdentity();
@@ -124,7 +124,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Does_not_combine_modifications_with_different_payload_categories()
+    public async Task Does_not_combine_modifications_with_different_payload_categories()
     {
         // Arrange
         var datawallet = CreateDatawalletForActiveIdentity();
@@ -148,7 +148,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Does_not_return_modifications_of_another_identity()
+    public async Task Does_not_return_modifications_of_another_identity()
     {
         // Arrange
         _arrangeContext.SaveEntity(CreateDatawalletForActiveIdentity());
@@ -166,7 +166,7 @@ public class HandlerTests
 
 
     [Fact]
-    public async void Handles_complex_case_correctly()
+    public async Task Handles_complex_case_correctly()
     {
         // Arrange
         var datawalletOfActiveIdentity = CreateDatawalletForActiveIdentity();
@@ -263,7 +263,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Only_returns_modifications_after_given_local_index()
+    public async Task Only_returns_modifications_after_given_local_index()
     {
         // Arrange
         var datawallet = CreateDatawalletForActiveIdentity();
@@ -285,7 +285,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Paginates_returned_results()
+    public async Task Paginates_returned_results()
     {
         // Arrange
         var datawallet = CreateDatawalletForActiveIdentity();
@@ -324,7 +324,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Returns_all_modifications_when_passing_no_local_index()
+    public async Task Returns_all_modifications_when_passing_no_local_index()
     {
         // Arrange
         var datawallet = CreateDatawalletForActiveIdentity();

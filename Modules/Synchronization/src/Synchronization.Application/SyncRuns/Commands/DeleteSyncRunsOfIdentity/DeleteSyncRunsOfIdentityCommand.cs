@@ -2,6 +2,7 @@
 using MediatR;
 
 namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.DeleteSyncRunsOfIdentity;
+
 public class DeleteSyncRunsOfIdentityCommand : IRequest
 {
     public DeleteSyncRunsOfIdentityCommand(IdentityAddress identityAddress)

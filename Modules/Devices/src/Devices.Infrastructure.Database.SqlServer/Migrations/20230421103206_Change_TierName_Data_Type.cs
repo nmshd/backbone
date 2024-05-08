@@ -12,6 +12,7 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
+                schema: "Devices",
                 table: "Tier",
                 type: "nvarchar(30)",
                 maxLength: 30,
@@ -28,6 +29,7 @@ namespace Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
+                schema: "Devices",
                 table: "Tier",
                 type: "char(30)",
                 unicode: false,

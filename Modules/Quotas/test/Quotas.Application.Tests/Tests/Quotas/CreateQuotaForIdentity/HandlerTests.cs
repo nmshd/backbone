@@ -109,7 +109,7 @@ public class HandlerTests
 
         // Assert
         A.CallTo(() => metricStatusesService.RecalculateMetricStatuses(
-            A<List<string>>.That.Matches(x => x.Contains(identityAddress.StringValue)),
+            A<List<string>>.That.Matches(x => x.Contains(identityAddress.Value)),
             A<List<string>>.That.Contains(metricKey),
             A<CancellationToken>._)
         ).MustHaveHappened();

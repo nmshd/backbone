@@ -14,7 +14,7 @@ namespace Backbone.BuildingBlocks.Application.Tests.Mediatr;
 public class QuotaEnforcerBehaviorTests
 {
     [Fact]
-    public async void Calls_next_when_no_metric_is_exhausted()
+    public async Task Calls_next_when_no_metric_is_exhausted()
     {
         // Arrange
         var behavior = CreateQuotaEnforcerBehavior();

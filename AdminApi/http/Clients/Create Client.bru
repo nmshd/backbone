@@ -1,0 +1,21 @@
+meta {
+  name: /Clients
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/Clients
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "clientId": "test",
+    "clientSecret": "test",
+    "displayName": "test",
+    "defaultTier": "Basic",
+    "maxIdentities": null
+  }
+}

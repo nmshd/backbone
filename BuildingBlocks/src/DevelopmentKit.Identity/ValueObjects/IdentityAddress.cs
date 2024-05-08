@@ -3,22 +3,20 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 using SimpleBase;
 
 namespace Backbone.DevelopmentKit.Identity.ValueObjects;
 
 [Serializable]
 [TypeConverter(typeof(IdentityAddressTypeConverter))]
-public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, IComparable<IdentityAddress>
+public record IdentityAddress : StronglyTypedId
 {
     public const int MAX_LENGTH = 36;
 
-    private IdentityAddress(string stringValue)
+    private IdentityAddress(string stringValue) : base(stringValue)
     {
-        StringValue = stringValue;
     }
-
-    public string StringValue { get; }
 
     public string ToString(string? format, IFormatProvider? formatProvider)
     {
@@ -82,7 +80,7 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
 
     public override string ToString()
     {
-        return StringValue;
+        return Value;
     }
 
     #region Converters
@@ -110,53 +108,12 @@ public class IdentityAddress : IFormattable, IEquatable<IdentityAddress>, ICompa
 
     public static implicit operator string(IdentityAddress identityAddress)
     {
-        return identityAddress.StringValue;
+        return identityAddress.Value;
     }
 
     public static implicit operator IdentityAddress(string stringValue)
     {
         return ParseUnsafe(stringValue);
-    }
-
-    #endregion
-
-    #region Equality members
-
-    public bool Equals(IdentityAddress? other)
-    {
-        if (ReferenceEquals(null, other)) return false;
-        if (ReferenceEquals(this, other)) return true;
-        return StringValue == other.StringValue;
-    }
-
-    public override bool Equals(object? obj)
-    {
-        if (ReferenceEquals(null, obj)) return false;
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj.GetType() != GetType()) return false;
-        return Equals((IdentityAddress)obj);
-    }
-
-    public override int GetHashCode()
-    {
-        return StringValue.GetHashCode();
-    }
-
-    public int CompareTo(IdentityAddress? other)
-    {
-        if (ReferenceEquals(this, other)) return 0;
-        if (ReferenceEquals(null, other)) return 1;
-        return string.Compare(StringValue, other.StringValue, StringComparison.Ordinal);
-    }
-
-    public static bool operator ==(IdentityAddress? left, IdentityAddress? right)
-    {
-        return Equals(left, right);
-    }
-
-    public static bool operator !=(IdentityAddress? left, IdentityAddress? right)
-    {
-        return !Equals(left, right);
     }
 
     #endregion

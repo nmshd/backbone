@@ -14,11 +14,17 @@ namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 
 public class QuotasDbContext : AbstractDbContextBase
 {
-    public QuotasDbContext() { }
+    public QuotasDbContext()
+    {
+    }
 
-    public QuotasDbContext(DbContextOptions<QuotasDbContext> options) : base(options) { }
+    public QuotasDbContext(DbContextOptions<QuotasDbContext> options) : base(options)
+    {
+    }
 
-    public QuotasDbContext(DbContextOptions<QuotasDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
+    public QuotasDbContext(DbContextOptions<QuotasDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    {
+    }
 
     public DbSet<Identity> Identities { get; set; } = null!;
 
@@ -37,6 +43,8 @@ public class QuotasDbContext : AbstractDbContextBase
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.HasDefaultSchema("Quotas");
 
         builder.ApplyConfigurationsFromAssembly(typeof(QuotasDbContext).Assembly);
     }

@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Entities;
 using MediatR;
 
@@ -42,7 +42,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         await ReadTemplateFromDb();
         await EnsureRelationshipCanBeEstablished();
         await CreateAndSaveRelationship();
-        PublishIntegrationEvent();
+        PublishDomainEvent();
 
         return CreateResponse();
     }
@@ -83,10 +83,10 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         await _relationshipsRepository.Add(_relationship, _cancellationToken);
     }
 
-    private void PublishIntegrationEvent()
+    private void PublishDomainEvent()
     {
         var change = _relationship.Changes.First(); // there is always one change, because the relationship was just created
-        var evt = new RelationshipChangeCreatedIntegrationEvent(change);
+        var evt = new RelationshipChangeCreatedDomainEvent(change);
         _eventBus.Publish(evt);
     }
 

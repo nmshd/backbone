@@ -12,6 +12,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.AddColumn<string>(
                 name: "DevicePushIdentifier",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "character(20)",
                 unicode: false,
@@ -26,6 +27,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "DevicePushIdentifier",
+                schema: "Devices",
                 table: "PnsRegistrations");
         }
     }

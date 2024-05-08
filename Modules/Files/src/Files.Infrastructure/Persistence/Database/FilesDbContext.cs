@@ -9,11 +9,17 @@ namespace Backbone.Modules.Files.Infrastructure.Persistence.Database;
 
 public class FilesDbContext : AbstractDbContextBase, IFilesDbContext
 {
-    public FilesDbContext() { }
+    public FilesDbContext()
+    {
+    }
 
-    public FilesDbContext(DbContextOptions<FilesDbContext> options) : base(options) { }
+    public FilesDbContext(DbContextOptions<FilesDbContext> options) : base(options)
+    {
+    }
 
-    public FilesDbContext(DbContextOptions<FilesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
+    public FilesDbContext(DbContextOptions<FilesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    {
+    }
 
     public DbSet<File> FileMetadata { get; set; } = null!;
 
@@ -33,6 +39,8 @@ public class FilesDbContext : AbstractDbContextBase, IFilesDbContext
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.HasDefaultSchema("Files");
 
         builder.ApplyConfigurationsFromAssembly(typeof(FilesDbContext).Assembly);
     }

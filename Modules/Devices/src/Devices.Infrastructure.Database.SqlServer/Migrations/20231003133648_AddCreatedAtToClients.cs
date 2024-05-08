@@ -13,6 +13,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AddColumn<DateTime>(
                 name: "CreatedAt",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 type: "datetime2",
                 nullable: false,
@@ -24,6 +25,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "CreatedAt",
+                schema: "Devices",
                 table: "OpenIddictApplications");
         }
     }

@@ -18,6 +18,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("Messages")
                 .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -41,7 +42,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("MessageId");
 
-                    b.ToTable("Attachments", (string)null);
+                    b.ToTable("Attachments", "Messages");
                 });
 
             modelBuilder.Entity("Messages.Domain.Entities.Message", b =>
@@ -80,7 +81,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("DoNotSendBefore");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", "Messages");
                 });
 
             modelBuilder.Entity("Messages.Domain.Entities.RecipientInformation", b =>
@@ -125,7 +126,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("RelationshipId");
 
-                    b.ToTable("RecipientInformation");
+                    b.ToTable("RecipientInformation", "Messages");
                 });
 
             modelBuilder.Entity("Messages.Domain.Entities.Relationship", b =>

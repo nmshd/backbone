@@ -12,6 +12,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
             migrationBuilder.AddColumn<byte[]>(
                 name: "EncryptedPayload",
+                schema: "Synchronization",
                 table: "DatawalletModifications",
                 type: "varbinary(max)",
                 nullable: true);
@@ -22,6 +23,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
             migrationBuilder.DropColumn(
                 name: "EncryptedPayload",
+                schema: "Synchronization",
                 table: "DatawalletModifications");
         }
     }

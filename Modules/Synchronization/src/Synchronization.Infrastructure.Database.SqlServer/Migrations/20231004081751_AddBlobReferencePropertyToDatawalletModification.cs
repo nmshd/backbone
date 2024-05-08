@@ -12,6 +12,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
             migrationBuilder.AddColumn<string>(
                 name: "BlobReference",
+                schema: "Synchronization",
                 table: "DatawalletModifications",
                 type: "char(32)",
                 unicode: false,
@@ -26,6 +27,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
             migrationBuilder.DropColumn(
                 name: "BlobReference",
+                schema: "Synchronization",
                 table: "DatawalletModifications");
         }
     }

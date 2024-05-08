@@ -1,0 +1,15 @@
+meta {
+  name: /Clients/{ClientId}
+  type: http
+  seq: 6
+}
+
+delete {
+  url: {{baseUrl}}/Clients/{{ClientId}}
+  body: none
+  auth: none
+}
+
+vars:pre-request {
+  ClientId: brunotest
+}

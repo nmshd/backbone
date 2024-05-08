@@ -12,6 +12,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AddColumn<int>(
                 name: "MaxIdentities",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 type: "int",
                 nullable: true);
@@ -22,6 +23,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "MaxIdentities",
+                schema: "Devices",
                 table: "OpenIddictApplications");
         }
     }

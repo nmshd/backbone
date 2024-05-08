@@ -23,29 +23,33 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const AppTitle(),
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {
-            setState(() {
-              extended = !extended;
-            });
-          },
-        ),
+        title: const AppTitle(padding: EdgeInsets.only(left: 80)),
         actions: [
-          IconButton(icon: const Icon(Icons.logout), onPressed: _logout),
-          Gaps.w8,
+          SizedBox(
+            height: 35,
+            width: 120,
+            child: OutlinedButton(
+              onPressed: _logout,
+              child: const Row(
+                children: [
+                  Icon(Icons.logout, size: 18),
+                  Gaps.w4,
+                  Text('Logout', style: TextStyle(fontSize: 12.5)),
+                ],
+              ),
+            ),
+          ),
+          Gaps.w40,
         ],
       ),
       body: Row(
         children: [
           NavigationRail(
-            extended: extended,
+            labelType: NavigationRailLabelType.all,
             destinations: const [
-              NavigationRailDestination(icon: Icon(Icons.apps), label: Text('Dashboard')),
-              NavigationRailDestination(icon: Icon(Icons.badge), label: Text('Identities')),
-              NavigationRailDestination(icon: Icon(Icons.clear_all), label: Text('Tiers')),
-              NavigationRailDestination(icon: Icon(Icons.person), label: Text('Clients')),
+              NavigationRailDestination(icon: Icon(Icons.account_circle_sharp), label: Text('Identities')),
+              NavigationRailDestination(icon: Icon(Icons.cable), label: Text('Tiers')),
+              NavigationRailDestination(icon: Icon(Icons.layers), label: Text('Clients')),
             ],
             selectedIndex: _selectedIndex,
             onDestinationSelected: (int index) {
@@ -53,10 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
               context.go(
                 switch (index) {
-                  0 => '/dashboard',
-                  1 => '/identities',
-                  2 => '/tiers',
-                  3 => '/clients',
+                  0 => '/identities',
+                  1 => '/tiers',
+                  2 => '/clients',
                   _ => throw Exception(),
                 },
               );
@@ -69,10 +72,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   int get _selectedIndex {
-    if (widget.location.startsWith('/dashboard')) return 0;
-    if (widget.location.startsWith('/identities')) return 1;
-    if (widget.location.startsWith('/tiers')) return 2;
-    if (widget.location.startsWith('/clients')) return 3;
+    if (widget.location.startsWith('/identities')) return 0;
+    if (widget.location.startsWith('/tiers')) return 1;
+    if (widget.location.startsWith('/clients')) return 2;
 
     throw Exception();
   }

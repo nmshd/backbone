@@ -9,6 +9,7 @@ public partial class Init : Migration
     {
         migrationBuilder.CreateTable(
             name: "Challenges",
+            schema: "Challenges",
             columns: table => new
             {
                 Id = table.Column<string>(type: "char(20)", unicode: false, fixedLength: true, maxLength: 20, nullable: false),
@@ -22,6 +23,7 @@ public partial class Init : Migration
     protected override void Down(MigrationBuilder migrationBuilder)
     {
         migrationBuilder.DropTable(
+            schema: "Challenges",
             name: "Challenges");
     }
 }

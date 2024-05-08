@@ -1,0 +1,15 @@
+meta {
+  name: /SyncRuns/{SyncRunId}
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/SyncRuns/{{SyncRunId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  SyncRunId: test
+}

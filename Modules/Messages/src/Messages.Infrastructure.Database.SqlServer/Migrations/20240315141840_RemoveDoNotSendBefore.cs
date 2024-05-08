@@ -13,10 +13,12 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropIndex(
                 name: "IX_Messages_DoNotSendBefore",
+                schema: "Messages",
                 table: "Messages");
 
             migrationBuilder.DropColumn(
                 name: "DoNotSendBefore",
+                schema: "Messages",
                 table: "Messages");
         }
 
@@ -25,12 +27,14 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AddColumn<DateTime>(
                 name: "DoNotSendBefore",
+                schema: "Messages",
                 table: "Messages",
                 type: "datetime2",
                 nullable: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_DoNotSendBefore",
+                schema: "Messages",
                 table: "Messages",
                 column: "DoNotSendBefore");
         }

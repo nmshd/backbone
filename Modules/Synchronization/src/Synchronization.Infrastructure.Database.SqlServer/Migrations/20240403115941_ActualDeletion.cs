@@ -12,12 +12,15 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_DatawalletModifications_Datawallets_DatawalletId",
+                schema: "Synchronization",
                 table: "DatawalletModifications");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_DatawalletModifications_Datawallets_DatawalletId",
+                schema: "Synchronization",
                 table: "DatawalletModifications",
                 column: "DatawalletId",
+                principalSchema: "Synchronization",
                 principalTable: "Datawallets",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
@@ -28,12 +31,15 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_DatawalletModifications_Datawallets_DatawalletId",
+                schema: "Synchronization",
                 table: "DatawalletModifications");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_DatawalletModifications_Datawallets_DatawalletId",
+                schema: "Synchronization",
                 table: "DatawalletModifications",
                 column: "DatawalletId",
+                principalSchema: "Synchronization",
                 principalTable: "Datawallets",
                 principalColumn: "Id");
         }

@@ -1,19 +1,21 @@
 using System.ComponentModel;
 using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.Modules.Relationships.Domain.Ids;
 
 [Serializable]
 [TypeConverter(typeof(RelationshipChangeIdTypeConverter))]
-public class RelationshipChangeId : StronglyTypedId
+public record RelationshipChangeId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
     private const string PREFIX = "RCH";
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
-    private RelationshipChangeId(string stringValue) : base(stringValue) { }
+    private RelationshipChangeId(string stringValue) : base(stringValue)
+    {
+    }
 
     public static RelationshipChangeId Parse(string stringValue)
     {

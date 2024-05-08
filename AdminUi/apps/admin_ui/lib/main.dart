@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logger/logger.dart';
 
 import 'core/theme/theme.dart';
 import 'home/home.dart';
@@ -8,6 +11,8 @@ import 'setup/setup_desktop.dart' if (dart.library.html) 'setup/setup_web.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  GetIt.I.registerSingleton(Logger());
 
   await setup();
 
@@ -37,23 +42,18 @@ final _router = GoRouter(
       routes: [
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
-          path: '/dashboard',
-          pageBuilder: (context, state) => const NoTransitionPage(child: Dashboard()),
-        ),
-        GoRoute(
-          parentNavigatorKey: _shellNavigatorKey,
           path: '/identities',
-          pageBuilder: (context, state) => const NoTransitionPage(child: Identities()),
+          pageBuilder: (context, state) => const NoTransitionPage(child: IdentitiesOverview()),
         ),
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/tiers',
-          pageBuilder: (context, state) => const NoTransitionPage(child: Tiers()),
+          pageBuilder: (context, state) => const NoTransitionPage(child: TiersOverview()),
         ),
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/clients',
-          pageBuilder: (context, state) => const NoTransitionPage(child: Clients()),
+          pageBuilder: (context, state) => const NoTransitionPage(child: ClientsOverview()),
         ),
       ],
       builder: (context, state, child) => HomeScreen(
@@ -82,6 +82,8 @@ class AdminUiApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }

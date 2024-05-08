@@ -1,19 +1,21 @@
 using System.ComponentModel;
 using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.Modules.Files.Domain.Entities;
 
 [Serializable]
 [TypeConverter(typeof(FileIdTypeConverter))]
-public class FileId : StronglyTypedId
+public record FileId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
     private const string PREFIX = "FIL";
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
-    private FileId(string stringValue) : base(stringValue) { }
+    private FileId(string stringValue) : base(stringValue)
+    {
+    }
 
     public static FileId Parse(string stringValue)
     {

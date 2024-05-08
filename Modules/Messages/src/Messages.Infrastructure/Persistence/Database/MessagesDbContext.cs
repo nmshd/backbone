@@ -8,11 +8,17 @@ namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 
 public class MessagesDbContext : AbstractDbContextBase
 {
-    public MessagesDbContext() { }
+    public MessagesDbContext()
+    {
+    }
 
-    public MessagesDbContext(DbContextOptions<MessagesDbContext> options) : base(options) { }
+    public MessagesDbContext(DbContextOptions<MessagesDbContext> options) : base(options)
+    {
+    }
 
-    public MessagesDbContext(DbContextOptions<MessagesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider) { }
+    public MessagesDbContext(DbContextOptions<MessagesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    {
+    }
 
     public virtual DbSet<Message> Messages { get; set; } = null!;
     public virtual DbSet<RecipientInformation> RecipientInformation { get; set; } = null!;
@@ -30,6 +36,8 @@ public class MessagesDbContext : AbstractDbContextBase
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.HasDefaultSchema("Messages");
 
         builder.ApplyConfigurationsFromAssembly(typeof(MessagesDbContext).Assembly);
     }

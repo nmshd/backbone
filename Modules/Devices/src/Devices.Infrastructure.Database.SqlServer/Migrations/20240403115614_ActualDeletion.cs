@@ -13,14 +13,17 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_IdentityDeletionProcessId",
+                schema: "Devices",
                 table: "IdentityDeletionProcessAuditLog");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses");
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "DeletionStartedAt",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 type: "datetime2",
                 nullable: false,
@@ -28,16 +31,20 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_IdentityDeletionProcessId",
+                schema: "Devices",
                 table: "IdentityDeletionProcessAuditLog",
                 column: "IdentityDeletionProcessId",
+                principalSchema: "Devices",
                 principalTable: "IdentityDeletionProcesses",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.SetNull);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress",
+                principalSchema: "Devices",
                 principalTable: "Identities",
                 principalColumn: "Address",
                 onDelete: ReferentialAction.Cascade);
@@ -48,27 +55,34 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropForeignKey(
                 name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_IdentityDeletionProcessId",
+                schema: "Devices",
                 table: "IdentityDeletionProcessAuditLog");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses");
 
             migrationBuilder.DropColumn(
                 name: "DeletionStartedAt",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityDeletionProcessAuditLog_IdentityDeletionProcesses_IdentityDeletionProcessId",
+                schema: "Devices",
                 table: "IdentityDeletionProcessAuditLog",
                 column: "IdentityDeletionProcessId",
+                principalSchema: "Devices",
                 principalTable: "IdentityDeletionProcesses",
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_IdentityDeletionProcesses_Identities_IdentityAddress",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 column: "IdentityAddress",
+                principalSchema: "Devices",
                 principalTable: "Identities",
                 principalColumn: "Address");
         }

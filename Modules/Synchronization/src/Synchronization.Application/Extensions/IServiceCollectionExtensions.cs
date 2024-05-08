@@ -1,11 +1,9 @@
 using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
-using Backbone.Modules.Synchronization.Application.Identities;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,20 +29,21 @@ public static class IServiceCollectionExtensions
 
     private static void AddEventHandlers(this IServiceCollection services)
     {
-        foreach (var eventHandler in GetAllIntegrationEventHandlers())
+        foreach (var eventHandler in GetAllDomainEventHandlers())
         {
             services.AddTransient(eventHandler);
         }
     }
 
-    private static IEnumerable<Type> GetAllIntegrationEventHandlers()
+    private static IEnumerable<Type> GetAllDomainEventHandlers()
     {
-        var integrationEventHandlerTypes = from t in Assembly.GetExecutingAssembly().GetTypes()
-                                           from i in t.GetInterfaces()
-                                           where t.IsClass && !t.IsAbstract && i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IIntegrationEventHandler<>)
-                                           select t;
+        var domainEventHandlerTypes =
+            from t in Assembly.GetExecutingAssembly().GetTypes()
+            from i in t.GetInterfaces()
+            where t.IsClass && !t.IsAbstract && i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>)
+            select t;
 
-        return integrationEventHandlerTypes;
+        return domainEventHandlerTypes;
     }
 }
 
