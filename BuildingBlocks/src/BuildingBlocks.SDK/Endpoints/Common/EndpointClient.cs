@@ -258,7 +258,7 @@ public class EndpointClient
 
         public async Task<ApiResponse<T>> ExecuteOData()
         {
-            return await _client.ExecuteOData<T>(await CreateRequestMessage(true));
+            return await _client.ExecuteOData<T>(await CreateRequestMessage());
         }
 
         public async Task<RawApiResponse> ExecuteRaw()
@@ -266,7 +266,7 @@ public class EndpointClient
             return await _client.ExecuteRaw(await CreateRequestMessage());
         }
 
-        private async Task<HttpRequestMessage> CreateRequestMessage(bool isOData = false)
+        private async Task<HttpRequestMessage> CreateRequestMessage()
         {
             var request = new HttpRequestMessage(_method, EncodeParametersInUrl())
             {
