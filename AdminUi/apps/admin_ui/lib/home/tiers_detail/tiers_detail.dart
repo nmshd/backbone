@@ -34,10 +34,40 @@ class _TiersDetailState extends State<TiersDetail> {
     return Scrollbar(
       child: SingleChildScrollView(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text('Tier Detail'),
-            Text('Tier ID: ${tierDetails.id}'),
-            Text('Tier Name: ${tierDetails.name}'),
+            Row(
+              children: [
+                const BackButton(),
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(text: 'Tier ID: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
+                              TextSpan(text: tierDetails.id, style: Theme.of(context).textTheme.bodyLarge),
+                            ],
+                          ),
+                        ),
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(text: 'Tier Name: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
+                              TextSpan(text: tierDetails.name, style: Theme.of(context).textTheme.bodyLarge),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Gaps.h8,
             _QuotaList(tierDetails, _reload),
           ],
         ),
