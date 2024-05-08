@@ -41,10 +41,12 @@ public class RelationshipsRepositoryTests
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var count = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var firstParticipantCount = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var secondParticipantCount = await repository.Count(IDENTITY_2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
 
         // Assert
-        count.Should().Be(2);
+        firstParticipantCount.Should().Be(2);
+        secondParticipantCount.Should().Be(0);
     }
 
     [Fact]
@@ -63,10 +65,12 @@ public class RelationshipsRepositoryTests
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var count = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var firstParticipantCount = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var secondParticipantCount = await repository.Count(IDENTITY_2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
 
         // Assert
-        count.Should().Be(2);
+        firstParticipantCount.Should().Be(2);
+        secondParticipantCount.Should().Be(2);
     }
 
     [Fact]
@@ -84,19 +88,21 @@ public class RelationshipsRepositoryTests
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var count = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var firstParticipantCount = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var secondParticipantCount = await repository.Count(IDENTITY_2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
 
         // Assert
-        count.Should().Be(0);
+        firstParticipantCount.Should().Be(0);
+        secondParticipantCount.Should().Be(0);
     }
 
     [Fact]
-    public async Task Counts_relationships_where_reactivation_is_requested()
+    public async Task Counts_relationships_where_reactivation_is_requested_by_first_participant()
     {
         // Arrange
         var relationships = new List<Relationship>()
         {
-            CreateRelationshipWithRequestedReactivation()
+            CreateRelationshipWithRequestedReactivation(IDENTITY_1)
         };
         await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
         await _relationshipsArrangeContext.SaveChangesAsync();
@@ -105,9 +111,34 @@ public class RelationshipsRepositoryTests
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var count = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var firstParticipantCount = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var secondParticipantCount = await repository.Count(IDENTITY_2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
 
         // Assert
-        count.Should().Be(1);
+        firstParticipantCount.Should().Be(1);
+        secondParticipantCount.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task Counts_relationships_where_reactivation_is_requested_by_second_participant()
+    {
+        // Arrange
+        var relationships = new List<Relationship>()
+        {
+            CreateRelationshipWithRequestedReactivation(IDENTITY_2)
+        };
+        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
+        await _relationshipsArrangeContext.SaveChangesAsync();
+
+        var repository = new RelationshipsRepository(_actContext);
+        const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
+
+        // Act
+        var firstParticipantCount = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var secondParticipantCount = await repository.Count(IDENTITY_2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+
+        // Assert
+        firstParticipantCount.Should().Be(0);
+        secondParticipantCount.Should().Be(1);
     }
 }

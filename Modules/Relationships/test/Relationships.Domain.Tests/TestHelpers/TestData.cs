@@ -54,16 +54,11 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateRelationshipWithRequestedReactivation(IdentityAddress? from = null, IdentityAddress? to = null)
+    public static Relationship CreateRelationshipWithRequestedReactivation(IdentityAddress initiator)
     {
-        to ??= IDENTITY_2;
-        var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
-        var relationship = new Relationship(template, from ?? IDENTITY_1, DEVICE_1, null, []);
-        relationship.Accept(to, DEVICE_2, []);
+        var relationship = CreateTerminatedRelationship();
         SystemTime.Set(SystemTime.UtcNow.AddMinutes(1));
-        relationship.Terminate(IDENTITY_1, DEVICE_1);
-        SystemTime.Set(SystemTime.UtcNow.AddMinutes(1));
-        relationship.RequestReactivation(IDENTITY_1, DEVICE_1);
+        relationship.RequestReactivation(initiator, DEVICE_1);
         return relationship;
     }
 }
