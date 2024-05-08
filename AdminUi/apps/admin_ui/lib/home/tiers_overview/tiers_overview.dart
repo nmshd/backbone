@@ -67,16 +67,10 @@ class _TiersOverviewState extends State<TiersOverview> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  IconButton(
+                  IconButton.filled(
                     icon: const Icon(Icons.add),
                     color: Theme.of(context).colorScheme.onPrimary,
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
-                      foregroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.onPrimary),
-                    ),
-                    onPressed: () {
-                      _showAddTierDialog(context: context);
-                    },
+                    onPressed: () => _showAddTierDialog(context: context),
                   ),
                 ],
               ),
@@ -87,7 +81,6 @@ class _TiersOverviewState extends State<TiersOverview> {
           else
             Expanded(
               child: Card(
-                elevation: 1,
                 child: SizedBox(
                   width: _boxWidth,
                   child: DataTable2(
