@@ -3,6 +3,7 @@ import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 
 import 'modals/show_create_tier_dialog.dart';
 
@@ -93,7 +94,7 @@ class _TiersOverviewState extends State<TiersOverview> {
                     rows: _tiers!
                         .map(
                           (tier) => DataRow2(
-                            onLongPress: () {},
+                            onTap: () => context.go('/tiers/${tier.id}'),
                             cells: [
                               DataCell(Text(tier.name)),
                               DataCell(Text('${tier.numberOfIdentities}')),
