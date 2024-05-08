@@ -55,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             selectedIndex: _selectedIndex,
-            onDestinationSelected: (int index) {
+            onDestinationSelected: (index) {
               context.go(
                 switch (index) {
                   0 => '/identities',
