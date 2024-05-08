@@ -4,6 +4,8 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '../identities_overview/identities_data_table_source.dart';
+import '../identities_overview/identities_filter.dart';
 import '/core/core.dart';
 import 'modals/modals.dart';
 
@@ -69,6 +71,7 @@ class _TiersDetailState extends State<TiersDetail> {
             ),
             Gaps.h8,
             _QuotaList(tierDetails, _reload),
+            _IdentitiesList(tierDetails),
           ],
         ),
       ),
@@ -180,5 +183,106 @@ class _QuotaListState extends State<_QuotaList> {
     }
 
     _selectedQuotas.clear();
+  }
+}
+
+class _IdentitiesList extends StatefulWidget {
+  final TierDetails tierDetails;
+
+  const _IdentitiesList(this.tierDetails);
+
+  @override
+  State<_IdentitiesList> createState() => _IdentitiesListState();
+}
+
+class _IdentitiesListState extends State<_IdentitiesList> {
+  late IdentityDataTableSource _dataSource;
+
+  int _sortColumnIndex = 0;
+
+  bool _sortColumnAscending = true;
+
+  int _rowsPerPage = 5;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _dataSource = IdentityDataTableSource(locale: Localizations.localeOf(context));
+  }
+
+  @override
+  void dispose() {
+    _dataSource.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      initiallyExpanded: true,
+      title: const Text('Identities'),
+      subtitle: const Text('View Identities associated with this Tier.'),
+      children: [
+        IdentitiesFilter(
+          fixedTierId: widget.tierDetails.id,
+          onFilterChanged: ({IdentityOverviewFilter? filter}) async {
+            _dataSource
+              ..filter = filter
+              ..refreshDatasource();
+          },
+        ),
+        SizedBox(
+          height: 500,
+          child: AsyncPaginatedDataTable2(
+            rowsPerPage: _rowsPerPage,
+            onRowsPerPageChanged: _setRowsPerPage,
+            sortColumnIndex: _sortColumnIndex,
+            sortAscending: _sortColumnAscending,
+            showFirstLastButtons: true,
+            columnSpacing: 5,
+            source: _dataSource,
+            isVerticalScrollBarVisible: true,
+            renderEmptyRowsInTheEnd: false,
+            availableRowsPerPage: const [5, 10, 25, 50, 100],
+            errorBuilder: (error) => Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Text('An error occurred loading the data.'),
+                  Gaps.h16,
+                  FilledButton(onPressed: _dataSource.refreshDatasource, child: const Text('Retry')),
+                ],
+              ),
+            ),
+            columns: <DataColumn2>[
+              DataColumn2(label: const Text('Address'), size: ColumnSize.L, onSort: _sort),
+              const DataColumn2(label: Text('Tier'), size: ColumnSize.S),
+              DataColumn2(label: const Text('Created with Client'), onSort: _sort),
+              DataColumn2(label: const Text('Number of Devices'), onSort: _sort),
+              DataColumn2(label: const Text('Created at'), size: ColumnSize.S, onSort: _sort),
+              DataColumn2(label: const Text('Last Login at'), size: ColumnSize.S, onSort: _sort),
+              DataColumn2(label: const Text('Datawallet version'), onSort: _sort),
+              DataColumn2(label: const Text('Identity Version'), onSort: _sort),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _setRowsPerPage(int? newValue) {
+    _rowsPerPage = newValue ?? _rowsPerPage;
+    _dataSource.refreshDatasource();
+  }
+
+  void _sort(int columnIndex, bool ascending) {
+    setState(() {
+      _sortColumnIndex = columnIndex;
+      _sortColumnAscending = ascending;
+    });
+    _dataSource
+      ..sort(sortColumnIndex: _sortColumnIndex, sortColumnAscending: _sortColumnAscending)
+      ..refreshDatasource();
   }
 }
