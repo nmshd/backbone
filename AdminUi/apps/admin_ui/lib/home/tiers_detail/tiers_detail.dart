@@ -184,11 +184,29 @@ class _QuotaListState extends State<_QuotaList> {
     if (!confirmed) return;
 
     for (final quota in _selectedQuotas) {
-      await GetIt.I.get<AdminApiClient>().quotas.deleteTierQuota(tierId: widget.tierDetails.id, tierQuotaDefinitionId: quota);
+      final result = await GetIt.I.get<AdminApiClient>().quotas.deleteTierQuota(tierId: widget.tierDetails.id, tierQuotaDefinitionId: quota);
+      if (result.hasError && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An error occurred while deleting the quota(s). Please try again.'),
+            showCloseIcon: true,
+          ),
+        );
+        return;
+      }
+
       widget.onQuotasChanged();
     }
 
     _selectedQuotas.clear();
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Selected quotas have been removed.'),
+          showCloseIcon: true,
+        ),
+      );
+    }
   }
 }
 

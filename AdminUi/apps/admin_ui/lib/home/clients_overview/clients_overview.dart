@@ -56,9 +56,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                         return _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.error : null;
                       }),
                     ),
-                    onPressed: _selectedClients.isNotEmpty
-                        ? () => showRemoveClientsDialog(context: context, selectedClients: _selectedClients, onClientsRemoved: _reloadClients)
-                        : null,
+                    onPressed: _selectedClients.isNotEmpty ? _removeSelectedClients : null,
                   ),
                   Gaps.w8,
                   IconButton.filled(
@@ -149,5 +147,41 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   Future<void> _loadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
     setState(() => _defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient == true).toList());
+  }
+
+  Future<void> _removeSelectedClients() async {
+    final confirmed = await showConfirmationDialog(
+      context: context,
+      title: 'Remove Clients',
+      message: 'Are you sure you want to remove the selected clients?',
+    );
+
+    if (!confirmed) return;
+
+    for (final clientId in _selectedClients) {
+      final result = await GetIt.I.get<AdminApiClient>().clients.deleteClient(clientId);
+      if (result.hasError && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An error occurred while deleting the client(s). Please try again.'),
+            showCloseIcon: true,
+          ),
+        );
+        return;
+      }
+
+      await _reloadClients();
+    }
+
+    _selectedClients.clear();
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Selected clients have been removed.'),
+          showCloseIcon: true,
+        ),
+      );
+    }
   }
 }
