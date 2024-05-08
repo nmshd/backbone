@@ -29,7 +29,7 @@ public class RelationshipsRepositoryTests
     }
 
     [Fact]
-    public async Task Count_pending_relationships()
+    public async Task Counts_pending_relationships()
     {
         // Arrange
         var relationships = new List<Relationship>()
@@ -51,7 +51,7 @@ public class RelationshipsRepositoryTests
     }
 
     [Fact]
-    public async Task Count_active_relationships()
+    public async Task Counts_active_relationships()
     {
         // Arrange
         var relationships = new List<Relationship>()
@@ -96,7 +96,7 @@ public class RelationshipsRepositoryTests
     }
 
     [Fact]
-    public async Task Count_relationships_where_reactivation_is_requested()
+    public async Task Counts_relationships_where_reactivation_is_requested()
     {
         // Arrange
         var relationships = new List<Relationship>()
