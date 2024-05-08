@@ -3,7 +3,6 @@ using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
-using Backbone.Tooling;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -55,7 +54,6 @@ public class RelationshipsRepositoryTests
         var relationships = new List<Relationship>()
         {
             CreateActiveRelationship(),
-            CreateActiveRelationship(),
             CreateActiveRelationship()
         };
         await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
@@ -68,7 +66,7 @@ public class RelationshipsRepositoryTests
         var count = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
 
         // Assert
-        count.Should().Be(3);
+        count.Should().Be(2);
     }
 
     [Fact]
@@ -78,7 +76,6 @@ public class RelationshipsRepositoryTests
         var relationships = new List<Relationship>()
         {
             CreateTerminatedRelationship()
-
         };
         await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
         await _relationshipsArrangeContext.SaveChangesAsync();
