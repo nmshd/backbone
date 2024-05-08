@@ -25,19 +25,11 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const AppTitle(padding: EdgeInsets.only(left: 80)),
         actions: [
-          SizedBox(
-            height: 35,
-            width: 120,
-            child: OutlinedButton(
-              onPressed: _logout,
-              child: const Row(
-                children: [
-                  Icon(Icons.logout, size: 18),
-                  Gaps.w4,
-                  Text('Logout', style: TextStyle(fontSize: 12.5)),
-                ],
-              ),
-            ),
+          OutlinedButton.icon(
+            style: OutlinedButton.styleFrom(minimumSize: const Size(120, 35)),
+            onPressed: _logout,
+            icon: const Icon(Icons.logout, size: 18),
+            label: const Text('Logout', style: TextStyle(fontSize: 12.5)),
           ),
           Gaps.w40,
         ],
