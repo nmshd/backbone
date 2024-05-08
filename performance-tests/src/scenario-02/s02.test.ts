@@ -198,10 +198,6 @@ interface StartSyncRunResponse {
     status: StartSyncRunStatus;
     syncRun: BackboneSyncRun | null;
 }
-interface StartSyncRunRequest {
-    type: SyncRunType;
-    duration?: number;
-}
 
 declare enum StartSyncRunStatus {
     Created = "Created",
