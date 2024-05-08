@@ -59,9 +59,9 @@ public partial record IdentityAddress : StronglyTypedId
         if (!matchGroups.TryGetValue("addressWithoutChecksum", out var addressWithoutChecksum))
             return false;
 
-        var calculatedChecksum = CalculateChecksum(addressWithoutChecksum.Value);
+        var expectedChecksum = CalculateChecksum(addressWithoutChecksum.Value);
 
-        var checksumIsValid = givenChecksum.Value == calculatedChecksum;
+        var checksumIsValid = givenChecksum.Value == expectedChecksum;
 
         return checksumIsValid;
 
