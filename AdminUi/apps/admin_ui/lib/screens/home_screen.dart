@@ -44,24 +44,30 @@ class _HomeScreenState extends State<HomeScreen> {
               NavigationRailDestination(icon: Icon(Icons.account_circle_sharp), label: Text('Identities')),
               NavigationRailDestination(icon: Icon(Icons.cable), label: Text('Tiers')),
               NavigationRailDestination(icon: Icon(Icons.layers), label: Text('Clients')),
-              NavigationRailDestination(icon: Icon(Icons.settings), label: Text('Settings')),
             ],
+            trailing: Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: IconButton(onPressed: () => openSettingsDialog(context), icon: const Icon(Icons.settings)),
+                ),
+              ),
+            ),
             selectedIndex: _selectedIndex,
             onDestinationSelected: (int index) {
               if (index == _selectedIndex) return;
 
-              switch (index) {
-                case 0:
-                  return context.go('/identities');
-                case 1:
-                  return context.go('/tiers');
-                case 2:
-                  return context.go('/clients');
-                case 3:
-                  return unawaited(openSettingsDialog(context));
-                default:
-                  throw Exception();
-              }
+              if (index == 3) return unawaited(openSettingsDialog(context));
+
+              context.go(
+                switch (index) {
+                  0 => '/identities',
+                  1 => '/tiers',
+                  2 => '/clients',
+                  _ => throw Exception(),
+                },
+              );
             },
           ),
           Expanded(child: widget.child),
