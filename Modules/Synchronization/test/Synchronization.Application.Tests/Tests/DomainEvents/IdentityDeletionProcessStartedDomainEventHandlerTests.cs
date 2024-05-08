@@ -38,7 +38,7 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests
         // Act
         await handler.Handle(identityDeletionProcessStartedDomainEvent);
 
-        // Handle
+        // Assert
         A.CallTo(() => fakeDbContext
             .CreateExternalEvent(identityAddress, ExternalEventType.IdentityDeletionProcessStarted, A<object>._)
         ).MustHaveHappenedOnceExactly();
