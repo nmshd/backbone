@@ -39,9 +39,9 @@ namespace Tokens.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
