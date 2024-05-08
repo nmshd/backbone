@@ -116,6 +116,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     private async Task CreateIdentity()
     {
         var accountController = new AccountController(_client);
+
         var createIdentityResponse = await accountController.CreateIdentity(_options.ClientId, _options.ClientSecret) ?? throw new InvalidOperationException();
         createIdentityResponse.IsSuccess.Should().BeTrue();
 
