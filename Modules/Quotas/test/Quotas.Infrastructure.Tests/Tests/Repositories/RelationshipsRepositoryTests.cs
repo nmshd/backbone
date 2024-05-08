@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -7,12 +8,15 @@ using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
-
 using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Tests.Tests.Repositories;
+
 public class RelationshipsRepositoryTests
 {
+    private static readonly IdentityAddress I1 = IdentityAddress.Create([2, 2, 2], "enmeshed.eu");
+    private static readonly IdentityAddress I2 = IdentityAddress.Create([1, 1, 1], "enmeshed.eu");
+
     private readonly RelationshipsDbContext _relationshipsArrangeContext;
     private readonly QuotasDbContext _actContext;
 
@@ -26,13 +30,13 @@ public class RelationshipsRepositoryTests
     }
 
     [Fact]
-    public async Task Counts_pending_relationships()
+    public async Task Pending_relationships_count_for_from_only()
     {
         // Arrange
-        var relationships = new List<Relationship>()
+        var relationships = new List<Relationship>
         {
-            CreatePendingRelationship(),
-            CreatePendingRelationship()
+            CreatePendingRelationship(I1, I2),
+            CreatePendingRelationship(I2, I1)
         };
         await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
         await _relationshipsArrangeContext.SaveChangesAsync();
@@ -41,22 +45,22 @@ public class RelationshipsRepositoryTests
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var firstParticipantCount = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
-        var secondParticipantCount = await repository.Count(IDENTITY_2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
 
         // Assert
-        firstParticipantCount.Should().Be(2);
-        secondParticipantCount.Should().Be(0);
+        countForI1.Should().Be(1);
+        countForI2.Should().Be(1);
     }
 
     [Fact]
-    public async Task Counts_active_relationships()
+    public async Task Active_relationships_count_for_both_participants()
     {
         // Arrange
-        var relationships = new List<Relationship>()
+        var relationships = new List<Relationship>
         {
-            CreateActiveRelationship(),
-            CreateActiveRelationship()
+            CreateActiveRelationship(I1, I2),
+            CreateActiveRelationship(I2, I1)
         };
         await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
         await _relationshipsArrangeContext.SaveChangesAsync();
@@ -65,21 +69,22 @@ public class RelationshipsRepositoryTests
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var firstParticipantCount = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
-        var secondParticipantCount = await repository.Count(IDENTITY_2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
 
         // Assert
-        firstParticipantCount.Should().Be(2);
-        secondParticipantCount.Should().Be(2);
+        countForI1.Should().Be(2);
+        countForI2.Should().Be(2);
     }
 
     [Fact]
-    public async Task Does_not_count_terminated_relationships()
+    public async Task Terminated_relationships_dont_count_for_any_participant()
     {
         // Arrange
-        var relationships = new List<Relationship>()
+        var relationships = new List<Relationship>
         {
-            CreateTerminatedRelationship()
+            CreateTerminatedRelationship(I1, I2),
+            CreateTerminatedRelationship(I2, I1)
         };
         await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
         await _relationshipsArrangeContext.SaveChangesAsync();
@@ -88,21 +93,22 @@ public class RelationshipsRepositoryTests
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var firstParticipantCount = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
-        var secondParticipantCount = await repository.Count(IDENTITY_2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
 
         // Assert
-        firstParticipantCount.Should().Be(0);
-        secondParticipantCount.Should().Be(0);
+        countForI1.Should().Be(0);
+        countForI2.Should().Be(0);
     }
 
     [Fact]
-    public async Task Counts_relationships_where_reactivation_is_requested_by_first_participant()
+    public async Task Relationship_with_requested_reactivation_only_counts_for_for_requesting_participant()
     {
         // Arrange
-        var relationships = new List<Relationship>()
+        var relationships = new List<Relationship>
         {
-            CreateRelationshipWithRequestedReactivation(IDENTITY_1)
+            CreateRelationshipWithRequestedReactivation(from: I1, to: I2, reactivationRequestedBy: I1),
+            CreateRelationshipWithRequestedReactivation(from: I2, to: I1, reactivationRequestedBy: I2)
         };
         await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
         await _relationshipsArrangeContext.SaveChangesAsync();
@@ -111,34 +117,11 @@ public class RelationshipsRepositoryTests
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var firstParticipantCount = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
-        var secondParticipantCount = await repository.Count(IDENTITY_2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
 
         // Assert
-        firstParticipantCount.Should().Be(1);
-        secondParticipantCount.Should().Be(0);
-    }
-
-    [Fact]
-    public async Task Counts_relationships_where_reactivation_is_requested_by_second_participant()
-    {
-        // Arrange
-        var relationships = new List<Relationship>()
-        {
-            CreateRelationshipWithRequestedReactivation(IDENTITY_2)
-        };
-        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
-        await _relationshipsArrangeContext.SaveChangesAsync();
-
-        var repository = new RelationshipsRepository(_actContext);
-        const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
-
-        // Act
-        var firstParticipantCount = await repository.Count(IDENTITY_1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
-        var secondParticipantCount = await repository.Count(IDENTITY_2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
-
-        // Assert
-        firstParticipantCount.Should().Be(0);
-        secondParticipantCount.Should().Be(1);
+        countForI1.Should().Be(1);
+        countForI2.Should().Be(1);
     }
 }

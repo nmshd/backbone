@@ -1,7 +1,6 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
-using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.TestHelpers;
 
@@ -16,9 +15,12 @@ public static class TestData
     public static readonly RelationshipTemplate RELATIONSHIP_TEMPLATE_OF_1 = new(IDENTITY_1, DEVICE_1, 1, null, []);
     public static readonly RelationshipTemplate RELATIONSHIP_TEMPLATE_OF_2 = new(IDENTITY_2, DEVICE_2, 1, null, []);
 
-    public static Relationship CreatePendingRelationship()
+    public static Relationship CreatePendingRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
     {
-        return new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, []);
+        to ??= IDENTITY_2;
+        from ??= IDENTITY_1;
+        var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
+        return new Relationship(template, from, DEVICE_1, [], []);
     }
 
     public static Relationship CreateActiveRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
@@ -54,11 +56,10 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateRelationshipWithRequestedReactivation(IdentityAddress initiator)
+    public static Relationship CreateRelationshipWithRequestedReactivation(IdentityAddress from, IdentityAddress to, IdentityAddress reactivationRequestedBy)
     {
-        var relationship = CreateTerminatedRelationship();
-        SystemTime.Set(SystemTime.UtcNow.AddMinutes(1));
-        relationship.RequestReactivation(initiator, DEVICE_1);
+        var relationship = CreateTerminatedRelationship(from, to);
+        relationship.RequestReactivation(reactivationRequestedBy, DEVICE_1);
         return relationship;
     }
 }
