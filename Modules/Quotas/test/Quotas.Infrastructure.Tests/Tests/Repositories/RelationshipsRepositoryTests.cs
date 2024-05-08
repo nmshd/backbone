@@ -24,8 +24,6 @@ public class RelationshipsRepositoryTests
         var connection = FakeDbContextFactory.CreateDbConnection();
         (_relationshipsArrangeContext, _, _) = FakeDbContextFactory.CreateDbContexts<RelationshipsDbContext>(connection);
         (_, _, _actContext) = FakeDbContextFactory.CreateDbContexts<QuotasDbContext>(connection);
-
-        SystemTime.Set(DateTime.UtcNow);
     }
 
     [Fact]
