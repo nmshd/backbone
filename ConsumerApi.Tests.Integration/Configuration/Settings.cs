@@ -8,9 +8,6 @@ public class HttpConfiguration
     public string BaseUrl { get; set; } = string.Empty;
 
     [Required]
-    public string ApiVersion { get; set; } = string.Empty;
-
-    [Required]
     public ClientCredentialsConfiguration ClientCredentials { get; set; } = new();
 }
 
