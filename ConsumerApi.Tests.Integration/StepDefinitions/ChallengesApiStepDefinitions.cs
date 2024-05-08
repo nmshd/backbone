@@ -16,6 +16,7 @@ internal class ChallengesApiStepDefinitions
     private string _challengeId;
     private ApiResponse<Challenge>? _response;
     private Client _sdk;
+    private bool _isAuthenticated;
     private readonly HttpClient _httpClient;
     private readonly ClientCredentials _clientCredentials;
 
@@ -25,28 +26,31 @@ internal class ChallengesApiStepDefinitions
         _httpClient = factory.CreateClient();
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
         _sdk = Client.CreateUnauthenticated(_httpClient, _clientCredentials);
+        _isAuthenticated = false;
     }
 
     [Given("the user is authenticated")]
     public async Task AuthenticatedUser()
     {
         _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, PasswordHelper.GeneratePassword(20, 26));
+        _isAuthenticated = true;
     }
 
     [Given("the user is unauthenticated")]
     public void GivenTheUserIsUnauthenticated()
     {
         _sdk = Client.CreateUnauthenticated(_httpClient, _clientCredentials);
+        _isAuthenticated = false;
     }
 
 
     [Given("a Challenge c")]
     public async Task GivenAChallengeC()
     {
-        var challengeResponse = await _sdk.Challenges.CreateChallenge();
+        var challengeResponse = !_isAuthenticated ? await _sdk.Challenges.CreateChallengeUnauthenticated() : await _sdk.Challenges.CreateChallenge();
         challengeResponse.IsSuccess.Should().BeTrue();
-
         _challengeId = challengeResponse.Result!.Id;
+
         _challengeId.Should().NotBeNullOrEmpty();
     }
 
@@ -59,15 +63,8 @@ internal class ChallengesApiStepDefinitions
     [When("a POST request is sent to the Challenges endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheChallengesEndpoint()
     {
-        _response = await _sdk.Challenges.CreateChallenge();
+        _response = _isAuthenticated ? await _sdk.Challenges.CreateChallenge() : await _sdk.Challenges.CreateChallengeUnauthenticated();
     }
-
-    [When("an unauthenticated POST request is sent to the Challenges endpoint")]
-    public async Task WhenAnUnauthenticatedPOSTRequestIsSentToTheChallengesEndpoint()
-    {
-        _response = await _sdk.Challenges.CreateChallengeUnauthenticated();
-    }
-
 
     [When(@"a GET request is sent to the Challenges/{id} endpoint with ""?(.*?)""?")]
     public async Task WhenAGETRequestIsSentToTheChallengesIdEndpointWith(string id)
@@ -81,7 +78,7 @@ internal class ChallengesApiStepDefinitions
                 id = "CHLjVPS6h1082AuBVBaR";
                 break;
         }
-        _response = await _sdk.Challenges.GetChallenge(id);
+        _response = _isAuthenticated ? await _sdk.Challenges.GetChallenge(id) : await _sdk.Challenges.GetChallengeUnauthenticated(id);
     }
 
     [Then("the response contains a Challenge")]

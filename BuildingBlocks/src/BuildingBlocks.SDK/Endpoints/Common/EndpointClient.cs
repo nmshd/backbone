@@ -109,7 +109,19 @@ public class EndpointClient
             responseContent = new MemoryStream(Encoding.UTF8.GetBytes(EMPTY_RESULT));
         }
 
-        var deserializedResponseContent = JsonSerializer.Deserialize<ApiResponse<T>>(responseContent, _jsonSerializerOptions);
+        ApiResponse<T>? deserializedResponseContent;
+        try
+        {
+            deserializedResponseContent = JsonSerializer.Deserialize<ApiResponse<T>>(responseContent, _jsonSerializerOptions);
+        }
+        catch (System.Text.Json.JsonException)
+        {
+            deserializedResponseContent = new ApiResponse<T>
+            {
+                Result = default
+            };
+        }
+
         deserializedResponseContent!.Status = statusCode;
         deserializedResponseContent.RawContent = JsonConvert.SerializeObject(deserializedResponseContent.Result);
 
