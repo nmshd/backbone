@@ -51,6 +51,13 @@ final _router = GoRouter(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/tiers',
           pageBuilder: (context, state) => const NoTransitionPage(child: TiersOverview()),
+          routes: [
+            GoRoute(
+              parentNavigatorKey: _shellNavigatorKey,
+              path: ':id',
+              pageBuilder: (context, state) => NoTransitionPage(child: TiersDetail(tierId: state.pathParameters['id']!)),
+            ),
+          ],
         ),
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,

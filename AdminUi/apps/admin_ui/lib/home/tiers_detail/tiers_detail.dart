@@ -1,0 +1,154 @@
+import 'package:admin_api_sdk/admin_api_sdk.dart';
+import 'package:admin_api_types/admin_api_types.dart';
+import 'package:data_table_2/data_table_2.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+
+import '/core/core.dart';
+import 'modals/modals.dart';
+
+class TiersDetail extends StatefulWidget {
+  final String tierId;
+
+  const TiersDetail({required this.tierId, super.key});
+
+  @override
+  State<TiersDetail> createState() => _TiersDetailState();
+}
+
+class _TiersDetailState extends State<TiersDetail> {
+  TierDetails? _tierDetails;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _reload();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (_tierDetails == null) return const Center(child: CircularProgressIndicator());
+
+    final tierDetails = _tierDetails!;
+    return Scrollbar(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Text('Tier Detail'),
+            Text('Tier ID: ${tierDetails.id}'),
+            Text('Tier Name: ${tierDetails.name}'),
+            _QuotaList(tierDetails, _reload),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Future<void> _reload() async {
+    final tierDetails = await GetIt.I.get<AdminApiClient>().tiers.getTier(widget.tierId);
+    if (mounted) setState(() => _tierDetails = tierDetails.data);
+  }
+}
+
+class _QuotaList extends StatefulWidget {
+  final TierDetails tierDetails;
+  final VoidCallback onQuotasChanged;
+
+  const _QuotaList(this.tierDetails, this.onQuotasChanged);
+
+  @override
+  State<_QuotaList> createState() => _QuotaListState();
+}
+
+class _QuotaListState extends State<_QuotaList> {
+  List<String> selectedQuotas = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return ExpansionTile(
+      initiallyExpanded: true,
+      title: const Text('Quotas'),
+      subtitle: const Text('View and assign quotas for this tier.'),
+      children: [
+        if (widget.tierDetails.id != 'TIR00000000000000001')
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                IconButton(
+                  icon: Icon(
+                    Icons.delete,
+                    color: selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
+                  ),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith((states) {
+                      return selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.error : null;
+                    }),
+                  ),
+                  onPressed: selectedQuotas.isNotEmpty ? _removeSelectedQuotas : null,
+                ),
+                Gaps.w8,
+                IconButton.filled(
+                  icon: const Icon(Icons.add),
+                  onPressed: () => showAddQuotaDialog(context: context, tierId: widget.tierDetails.id, onQuotaAdded: widget.onQuotasChanged),
+                ),
+              ],
+            ),
+          ),
+        SizedBox(
+          width: double.infinity,
+          child: DataTable(
+            columns: const [
+              DataColumn(label: Text('Metric')),
+              DataColumn(label: Text('Max')),
+              DataColumn(label: Text('Period')),
+            ],
+            rows: widget.tierDetails.quotas
+                .map(
+                  (quota) => DataRow2(
+                    cells: [
+                      DataCell(Text(quota.metric.displayName)),
+                      DataCell(Text(quota.max.toString())),
+                      DataCell(Text(quota.period)),
+                    ],
+                    onSelectChanged: widget.tierDetails.id == 'TIR00000000000000001' ? null : (_) => _toggleSelection(quota.id),
+                    selected: selectedQuotas.contains(quota.id),
+                  ),
+                )
+                .toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+  void _toggleSelection(String id) {
+    setState(() {
+      if (selectedQuotas.contains(id)) {
+        selectedQuotas.remove(id);
+        return;
+      }
+
+      selectedQuotas.add(id);
+    });
+  }
+
+  Future<void> _removeSelectedQuotas() async {
+    final confirmed = await showConfirmationDialog(
+      context: context,
+      title: 'Remove Quotas',
+      message: 'Are you sure you want to remove the selected quotas?',
+    );
+
+    if (!confirmed) return;
+
+    for (final quota in selectedQuotas) {
+      await GetIt.I.get<AdminApiClient>().quotas.deleteTierQuota(tierId: widget.tierDetails.id, tierQuotaDefinitionId: quota);
+      widget.onQuotasChanged();
+    }
+
+    selectedQuotas.clear();
+  }
+}
