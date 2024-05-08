@@ -47,9 +47,6 @@ public partial record IdentityAddress : StronglyTypedId
         if (stringValue == null) return false;
 
         var lengthIsValid = stringValue.Length <= MAX_LENGTH;
-
-        const string pattern = @"^did\:e\:((?:[a-z]+\.)+[a-z]+)\:dids\:([0-9abcdef]+)([0-9abcdef]{2})$";
-
         var matches = IdentityAddressValidatorRegex().Matches(stringValue);
 
         if (matches.Count == 0) return false;
