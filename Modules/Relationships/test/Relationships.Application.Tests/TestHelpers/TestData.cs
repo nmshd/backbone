@@ -29,4 +29,12 @@ public static class TestData
 
         return relationship;
     }
+
+    public static Relationship CreateTerminatedRelationship()
+    {
+        var relationship = CreateActiveRelationship();
+        relationship.Terminate(relationship.From, TestDataGenerator.CreateRandomDeviceId());
+
+        return relationship;
+    }
 }

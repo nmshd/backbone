@@ -159,6 +159,30 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
+    public void RequestReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureThereIsNoOpenReactivationRequest();
+
+        EnsureStatus(RelationshipStatus.Terminated);
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.ReactivationRequested,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Terminated,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
+    private void EnsureThereIsNoOpenReactivationRequest()
+    {
+        var auditLogEntry = AuditLog.OrderBy(a => a.CreatedAt).Last();
+
+        if (auditLogEntry.Reason == RelationshipAuditLogEntryReason.ReactivationRequested)
+            throw new DomainException(DomainErrors.CannotRequestReactivationWhenThereIsAnOpenReactivationRequest());
+    }
+
     #region Expressions
 
     public static Expression<Func<Relationship, bool>> HasParticipant(string identity)

@@ -58,7 +58,10 @@ public enum ExternalEventType
 {
     MessageReceived = 0,
     MessageDelivered = 1,
-    RelationshipStatusChanged = 2,
-    IdentityDeletionProcessStarted = 3,
-    IdentityDeletionProcessStatusChanged = 4
+    RelationshipCreated = 2,
+    RelationshipStatusChanged = 3,
+    IdentityDeletionProcessStarted = 4,
+    IdentityDeletionProcessStatusChanged = 5,
+    RelationshipTerminated = 6,
+    RelationshipReactivationRequested = 7
 }
