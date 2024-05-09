@@ -11,5 +11,6 @@ public class RelationshipAuditLogEntryEntityTypeConfiguration : IEntityTypeConfi
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Reason);
         builder.Property(x => x.CreatedAt);
+        builder.Property(x => x.CreatedBy);
     }
 }

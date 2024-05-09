@@ -41,6 +41,12 @@ public static class DomainErrors
             $"A relationship to '{targetIdentity}' already exists. If the relationship is terminated, you can reactivate it.");
     }
 
+    public static DomainError CannotRequestReactivationWhenThereIsAnOpenReactivationRequest()
+    {
+        return new DomainError("error.platform.validation.relationshipRequest.cannotRequestReactivationWhenThereIsAnOpenReactivationRequest",
+            $"You cannot request reactivation when there is an open reactivation request.");
+    }
+
     public static DomainError RequestingIdentityDoesNotBelongToRelationship()
     {
         return new DomainError("error.platform.validation.relationshipRequest.requestingIdentityDoesNotBelongToRelationship",

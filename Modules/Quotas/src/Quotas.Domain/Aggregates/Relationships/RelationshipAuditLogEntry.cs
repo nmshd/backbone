@@ -12,6 +12,7 @@ public class RelationshipAuditLogEntry
     public string Id { get; set; }
     public RelationshipAuditLogEntryReason Reason { get; set; }
     public DateTime CreatedAt { get; set; }
+    public string? CreatedBy { get; internal set; }
 }
 
 public enum RelationshipAuditLogEntryReason
@@ -21,7 +22,7 @@ public enum RelationshipAuditLogEntryReason
     RejectionOfCreation = 2,
     RevocationOfCreation = 3,
     Termination = 4,
-    Reactivation = 5,
+    ReactivationRequested = 5,
     AcceptanceOfReactivation = 6,
     RejectionOfReactivation = 7,
     RevocationOfReactivation = 8

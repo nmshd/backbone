@@ -17,11 +17,13 @@ public class RelationshipsRepository : IRelationshipsRepository
     public async Task<uint> Count(string createdBy, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken)
     {
         var relationshipsCount = await _relationshipsReadonly
+            .Include(r => r.AuditLog)
             .CreatedInInterval(createdAtFrom, createdAtTo)
             .Where(r => r.Status == RelationshipStatus.Pending && r.From == createdBy ||
                 r.Status == RelationshipStatus.Active && (r.From == createdBy || r.To == createdBy) ||
                 r.Status == RelationshipStatus.Terminated &&
-                r.AuditLog.OrderBy(a => a.CreatedAt).Last().Reason == RelationshipAuditLogEntryReason.Reactivation && (r.From == createdBy || r.To == createdBy))
+                r.AuditLog.OrderBy(a => a.CreatedAt).Last().Reason == RelationshipAuditLogEntryReason.ReactivationRequested &&
+                r.AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy == createdBy)
             .CountAsync(cancellationToken);
         return (uint)relationshipsCount;
     }
