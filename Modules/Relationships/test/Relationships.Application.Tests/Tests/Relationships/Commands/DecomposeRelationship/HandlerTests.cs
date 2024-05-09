@@ -13,6 +13,7 @@ using Xunit;
 using Handler = Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeRelationship.Handler;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.DecomposeRelationship;
+
 public class HandlerTests
 {
     [Fact]
