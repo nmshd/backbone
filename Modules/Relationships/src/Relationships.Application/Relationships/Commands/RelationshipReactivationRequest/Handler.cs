@@ -7,6 +7,7 @@ using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RelationshipReactivationRequest;
+
 public class Handler : IRequestHandler<RequestRelationshipReactivationCommand, RequestRelationshipReactivationResponse>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
