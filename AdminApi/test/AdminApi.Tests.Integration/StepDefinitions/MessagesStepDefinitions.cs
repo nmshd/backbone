@@ -1,6 +1,6 @@
-﻿using Backbone.AdminApi.Sdk.Services;
+﻿using Backbone.AdminApi.Sdk.Endpoints.Messages.Types.Responses;
+using Backbone.AdminApi.Sdk.Services;
 using Backbone.AdminApi.Tests.Integration.Configuration;
-using Backbone.AdminApi.Tests.Integration.Models;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Microsoft.Extensions.Options;
@@ -12,7 +12,7 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 internal class MessagesStepDefinitions : BaseStepDefinitions
 {
     private string _identityAddress;
-    private readonly ApiResponse<List<MessageOverviewDTO>>? _messagesResponse = null!;
+    private ApiResponse<ListMessagesResponse>? _messagesResponse;
 
     public MessagesStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
     {
@@ -28,7 +28,7 @@ internal class MessagesStepDefinitions : BaseStepDefinitions
     [When(@"a GET request is sent to the /Messages endpoint with type '(.*)' and participant i.Address")]
     public async Task WhenAGetRequestIsSentToTheMessagesEndpoint(string type)
     {
-        //_messagesResponse = await _client.Messages.GetMessagesWithParticipant(_identityAddress, type);
+        _messagesResponse = await _client.Messages.GetMessagesWithParticipant(_identityAddress, type);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
