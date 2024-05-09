@@ -8,6 +8,7 @@ using Xunit;
 using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relationships;
+
 public class DecomposeRelationshipTests
 {
     [Fact]
@@ -28,7 +29,6 @@ public class DecomposeRelationshipTests
     {
         // Arrange
         SystemTime.Set("2000-01-01");
-
         var relationship = CreateTerminatedRelationship();
 
         // Act
@@ -49,24 +49,25 @@ public class DecomposeRelationshipTests
     }
 
     [Fact]
-    public void Only_identity_that_belong_to_relationship_can_decompose_a_relationship()
+    public void Only_the_identity_belonging_to_the_relationship_can_decompose_it()
     {
         // Arrange
         var relationship = CreateTerminatedRelationship();
+        var randomIdentity = IdentityAddress.Create([4, 4, 4], "id4");
+        var randomDeviceId = DeviceId.New();
 
         // Act
-        var acting = () => relationship.Decompose(IdentityAddress.Create([4, 4, 4], "id4"), DEVICE_2);
+        var acting = () => relationship.Decompose(randomIdentity, randomDeviceId);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.requestingIdentityDoesNotBelongToRelationship");
     }
 
     [Fact]
-    public void Identity_From_can_only_decompose_once()
+    public void Identity_from_can_only_decompose_once()
     {
         // Arrange
         var relationship = CreateTerminatedRelationship();
-
         relationship.Decompose(IDENTITY_1, DEVICE_1);
 
         // Act
@@ -77,11 +78,10 @@ public class DecomposeRelationshipTests
     }
 
     [Fact]
-    public void Identity_To_can_only_decompose_once()
+    public void Identity_to_can_only_decompose_once()
     {
         // Arrange
         var relationship = CreateTerminatedRelationship();
-
         relationship.Decompose(IDENTITY_2, DEVICE_2);
 
         // Act
