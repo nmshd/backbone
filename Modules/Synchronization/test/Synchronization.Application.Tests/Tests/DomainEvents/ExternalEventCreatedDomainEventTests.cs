@@ -11,8 +11,8 @@ public class ExternalEventCreatedDomainEventTests
     [Fact]
     public void Raises_a_domain_event_on_initialization()
     {
-        var identity = TestDataGenerator.CreateRandomIdentityAddress();
-        var externalEvent = new ExternalEvent(ExternalEventType.IdentityDeletionProcessStatusChanged, IdentityAddress.Parse(identity), 1, new { });
+        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var externalEvent = new ExternalEvent(ExternalEventType.IdentityDeletionProcessStatusChanged, identityAddress, 1, new { });
 
         externalEvent.DomainEvents.Should().HaveCount(1);
         externalEvent.DomainEvents[0].Should().BeOfType<ExternalEventCreatedDomainEvent>();
