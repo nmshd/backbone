@@ -14,7 +14,7 @@ public class RevokeRelationshipReactivationTests
     {
         // Arrange
         SystemTime.Set("2000-01-01");
-        var relationship = CreateTerminatedRelationshipWithReactivationRequest();
+        var relationship = CreateRelationshipWithRequestedReactivation(IDENTITY_1, IDENTITY_2, IDENTITY_1);
 
         // Act
         relationship.RevokeReactivation(IDENTITY_1, DEVICE_1);
@@ -22,7 +22,7 @@ public class RevokeRelationshipReactivationTests
         // Assert
         relationship.AuditLog.Should().HaveCount(5);
 
-        var auditLogEntry = relationship.AuditLog.Last();
+        var auditLogEntry = relationship.AuditLog.OrderBy(a => a.CreatedAt).Last();
 
         auditLogEntry.Id.Should().NotBeNull();
         auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.RevocationOfReactivation);
@@ -44,7 +44,7 @@ public class RevokeRelationshipReactivationTests
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
-            "error.platform.validation.relationshipRequest.noOpenReactivationRequest"
+            "error.platform.validation.relationshipRequest.noRevocableReactivationRequestExists"
         );
     }
 
@@ -59,7 +59,7 @@ public class RevokeRelationshipReactivationTests
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
-            "error.platform.validation.relationshipRequest.noOpenReactivationRequest"
+            "error.platform.validation.relationshipRequest.noRevocableReactivationRequestExists"
         );
     }
 }

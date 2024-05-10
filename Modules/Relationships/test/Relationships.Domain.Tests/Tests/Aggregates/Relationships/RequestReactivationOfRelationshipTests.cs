@@ -22,7 +22,7 @@ public class RequestReactivationOfRelationshipTests
         // Assert
         relationship.AuditLog.Should().HaveCount(4);
 
-        var auditLogEntry = relationship.AuditLog.Last();
+        var auditLogEntry = relationship.AuditLog.OrderBy(a => a.CreatedAt).Last();
 
         auditLogEntry.Id.Should().NotBeNull();
         auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.ReactivationRequested);

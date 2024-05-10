@@ -57,7 +57,7 @@ public class Relationship
     public byte[]? CreationResponseContent { get; private set; }
     public List<RelationshipAuditLogEntry> AuditLog { get; }
 
-    public IdentityAddress LastModifiedBy => AuditLog.Last().CreatedBy;
+    public IdentityAddress LastModifiedBy => AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy;
 
     private static void EnsureTargetIsNotSelf(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity)
     {
