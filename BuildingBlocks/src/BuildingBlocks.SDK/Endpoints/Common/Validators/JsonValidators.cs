@@ -14,8 +14,16 @@ public class JsonValidators
     {
         if (CACHED_SCHEMAS.TryGetValue(typeof(T), out var schema))
         {
-            var parsedJson = JObject.Parse(json);
-            return parsedJson.IsValid(schema, out errors);
+            try
+            {
+                var parsedJson = JObject.Parse(json);
+                return parsedJson.IsValid(schema, out errors);
+            }
+            catch (JsonReaderException)
+            {
+                var parsedJson = JArray.Parse(json);
+                return parsedJson.IsValid(schema, out errors);
+            }
         }
 
         var settings = new NewtonsoftJsonSchemaGeneratorSettings();
