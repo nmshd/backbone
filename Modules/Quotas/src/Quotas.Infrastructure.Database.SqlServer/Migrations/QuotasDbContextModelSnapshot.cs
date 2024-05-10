@@ -49,9 +49,9 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", b =>
                 {
                     b.Property<string>("Address")
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("char(36)")
+                        .HasColumnType("char(80)")
                         .IsFixedLength();
 
                     b.Property<string>("TierId")
@@ -78,7 +78,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("ApplyTo")
                         .IsRequired()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(80)");
 
                     b.Property<int>("Max")
                         .HasColumnType("int");
@@ -103,7 +103,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.MetricStatus", b =>
                 {
                     b.Property<string>("Owner")
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(80)");
 
                     b.Property<string>("MetricKey")
                         .HasMaxLength(50)
@@ -134,7 +134,7 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("ApplyTo")
                         .IsRequired()
-                        .HasColumnType("char(36)");
+                        .HasColumnType("char(80)");
 
                     b.Property<string>("_definitionId")
                         .HasMaxLength(20)

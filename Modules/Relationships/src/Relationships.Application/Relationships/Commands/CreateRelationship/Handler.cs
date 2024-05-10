@@ -3,9 +3,9 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
@@ -43,7 +43,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
 
         await ReadTemplateFromDb();
         await CreateAndSaveRelationship();
-        PublishIntegrationEvent();
+        PublishDomainEvent();
 
         return new CreateRelationshipResponse(_relationship);
     }
@@ -76,8 +76,8 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         await _relationshipsRepository.Add(_relationship, _cancellationToken);
     }
 
-    private void PublishIntegrationEvent()
+    private void PublishDomainEvent()
     {
-        _eventBus.Publish(new RelationshipCreatedIntegrationEvent(_relationship));
+        _eventBus.Publish(new RelationshipStatusChangedDomainEvent(_relationship));
     }
 }

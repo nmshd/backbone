@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdentityDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using FakeItEasy;
@@ -53,7 +53,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Publishes_IntegrationEvent_for_cancelled_deletion_process()
+    public async Task Publishes_DomainEvent_for_cancelled_deletion_process()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2020-01-31"));
@@ -74,12 +74,12 @@ public class HandlerTests
         await handler.Handle(new CancelStaleIdentityDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(i =>
+        A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionProcessStatusChangedDomainEvent>.That.Matches(i =>
                 i.Address == identity1.Address &&
                 i.DeletionProcessId == identity1.DeletionProcesses[0].Id)))
             .MustHaveHappenedOnceExactly();
 
-        A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionProcessStatusChangedIntegrationEvent>.That.Matches(i =>
+        A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionProcessStatusChangedDomainEvent>.That.Matches(i =>
                 i.Address == identity2.Address &&
                 i.DeletionProcessId == identity2.DeletionProcesses[0].Id)))
             .MustHaveHappenedOnceExactly();

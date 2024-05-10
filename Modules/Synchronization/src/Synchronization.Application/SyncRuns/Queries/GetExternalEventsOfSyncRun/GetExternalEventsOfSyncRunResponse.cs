@@ -5,5 +5,7 @@ namespace Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetExter
 
 public class GetExternalEventsOfSyncRunResponse : PagedResponse<ExternalEventDTO>
 {
-    public GetExternalEventsOfSyncRunResponse(IEnumerable<ExternalEventDTO> events, PaginationFilter previousPaginationFilter, int totalRecords) : base(events, previousPaginationFilter, totalRecords) { }
+    public GetExternalEventsOfSyncRunResponse(IEnumerable<ExternalEventDTO> events, PaginationFilter previousPaginationFilter, int totalRecords) : base(events, previousPaginationFilter, totalRecords)
+    {
+    }
 }

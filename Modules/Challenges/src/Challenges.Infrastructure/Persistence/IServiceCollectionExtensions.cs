@@ -27,7 +27,7 @@ public static class IServiceCollectionExtensions
                     case SQLSERVER:
                         dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
                         {
-                            sqlOptions.CommandTimeout(20);
+                            sqlOptions.CommandTimeout(options.CommandTimeout);
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                             sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Challenges");
@@ -36,7 +36,7 @@ public static class IServiceCollectionExtensions
                     case POSTGRES:
                         dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
                         {
-                            sqlOptions.CommandTimeout(20);
+                            sqlOptions.CommandTimeout(options.CommandTimeout);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
                             sqlOptions.EnableRetryOnFailure(options.RetryOptions.MaxRetryCount, TimeSpan.FromSeconds(options.RetryOptions.MaxRetryDelayInSeconds), null);
                             sqlOptions.MigrationsHistoryTable(HistoryRepository.DefaultTableName, "Challenges");
@@ -54,6 +54,7 @@ public static class IServiceCollectionExtensions
     {
         public string Provider { get; set; } = null!;
         public string DbConnectionString { get; set; } = null!;
+        public int CommandTimeout { get; set; } = 20;
         public RetryOptions RetryOptions { get; set; } = new();
     }
 

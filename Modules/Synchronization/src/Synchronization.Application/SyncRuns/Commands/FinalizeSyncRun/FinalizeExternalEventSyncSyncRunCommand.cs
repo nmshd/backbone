@@ -8,11 +8,17 @@ namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.Finaliz
 
 public class FinalizeExternalEventSyncSyncRunCommand : IRequest<FinalizeExternalEventSyncSyncRunResponse>
 {
-    public FinalizeExternalEventSyncSyncRunCommand(SyncRunId syncRunId) : this(syncRunId, [], []) { }
+    public FinalizeExternalEventSyncSyncRunCommand(SyncRunId syncRunId) : this(syncRunId, [], [])
+    {
+    }
 
-    public FinalizeExternalEventSyncSyncRunCommand(SyncRunId syncRunId, List<ExternalEventResult> externalEventResults) : this(syncRunId, externalEventResults, []) { }
+    public FinalizeExternalEventSyncSyncRunCommand(SyncRunId syncRunId, List<ExternalEventResult> externalEventResults) : this(syncRunId, externalEventResults, [])
+    {
+    }
 
-    public FinalizeExternalEventSyncSyncRunCommand(SyncRunId syncRunId, List<PushDatawalletModificationItem> datawalletModifications) : this(syncRunId, [], datawalletModifications) { }
+    public FinalizeExternalEventSyncSyncRunCommand(SyncRunId syncRunId, List<PushDatawalletModificationItem> datawalletModifications) : this(syncRunId, [], datawalletModifications)
+    {
+    }
 
     [JsonConstructor]
     public FinalizeExternalEventSyncSyncRunCommand(SyncRunId syncRunId, List<ExternalEventResult> externalEventResults, List<PushDatawalletModificationItem> datawalletModifications)
@@ -28,7 +34,9 @@ public class FinalizeExternalEventSyncSyncRunCommand : IRequest<FinalizeExternal
 
     public class ExternalEventResult : IMapTo<Domain.Entities.Sync.ExternalEventResult>
     {
-        public ExternalEventResult(ExternalEventId externalEventId) : this(externalEventId, null) { }
+        public ExternalEventResult(ExternalEventId externalEventId) : this(externalEventId, null)
+        {
+        }
 
         [JsonConstructor]
         public ExternalEventResult(ExternalEventId externalEventId, string? errorCode)

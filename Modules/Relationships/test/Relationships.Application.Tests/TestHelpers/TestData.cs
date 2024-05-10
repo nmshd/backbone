@@ -30,13 +30,10 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateRelationshipWithOpenReactivationRequest(IdentityAddress activeIdentity, DeviceId activeDevice, IdentityAddress? to = null)
+    public static Relationship CreateTerminatedRelationship()
     {
-        to ??= TestDataGenerator.CreateRandomIdentityAddress();
-
-        var relationship = CreateActiveRelationship(activeIdentity, to);
-        relationship.Terminate(activeIdentity, activeDevice);
-        relationship.XXXFakeReactivate(activeIdentity, activeDevice);
+        var relationship = CreateActiveRelationship();
+        relationship.Terminate(relationship.From, TestDataGenerator.CreateRandomDeviceId());
 
         return relationship;
     }

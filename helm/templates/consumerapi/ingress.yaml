@@ -1,0 +1,26 @@
+{{- if .Values.consumerapi.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.consumerapi.name }}
+  labels:
+    {{- include "global.labels" . | nindent 4 }}
+    app: {{ .Values.consumerapi.name }}
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+    appgw.ingress.kubernetes.io/appgw-ssl-certificate: {{ .Values.consumerapi.ingress.certName }}
+    appgw.ingress.kubernetes.io/connection-draining: "true"
+    appgw.ingress.kubernetes.io/connection-draining-timeout: "30"
+spec:
+  rules:
+    - host: {{ .Values.consumerapi.ingress.host }}
+      http:
+        paths:
+          - path: "/*"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.consumerapi.name }}
+                port:
+                  number: 8080   
+{{- end }}

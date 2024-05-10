@@ -54,7 +54,7 @@ public class Relationship
 
     public RelationshipStatus Status { get; private set; }
     public byte[]? CreationContent { get; }
-    public byte[]? AcceptanceContent { get; private set; }
+    public byte[]? CreationResponseContent { get; private set; }
     public List<RelationshipAuditLogEntry> AuditLog { get; }
 
     public IdentityAddress LastModifiedBy => AuditLog.Last().CreatedBy;
@@ -71,13 +71,13 @@ public class Relationship
             throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
     }
 
-    public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? acceptanceContent)
+    public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
     {
         EnsureStatus(RelationshipStatus.Pending);
         EnsureRelationshipRequestIsAddressedToSelf(activeIdentity);
 
         Status = RelationshipStatus.Active;
-        AcceptanceContent = acceptanceContent;
+        CreationResponseContent = creationResponseContent;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
             RelationshipAuditLogEntryReason.AcceptanceOfCreation,
@@ -101,11 +101,12 @@ public class Relationship
             throw new DomainException(DomainErrors.CannotRevokeRelationshipRequestNotCreatedByYourself());
     }
 
-    public void Reject(IdentityAddress activeIdentity, DeviceId activeDevice)
+    public void Reject(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
     {
         EnsureStatus(RelationshipStatus.Pending);
         EnsureRelationshipRequestIsAddressedToSelf(activeIdentity);
 
+        CreationResponseContent = creationResponseContent;
         Status = RelationshipStatus.Rejected;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
@@ -124,11 +125,12 @@ public class Relationship
             throw new DomainException(DomainErrors.RelationshipIsNotInCorrectStatus(status));
     }
 
-    public void Revoke(IdentityAddress activeIdentity, DeviceId activeDevice)
+    public void Revoke(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
     {
         EnsureStatus(RelationshipStatus.Pending);
         EnsureRelationshipRequestIsCreatedBySelf(activeIdentity);
 
+        CreationResponseContent = creationResponseContent;
         Status = RelationshipStatus.Revoked;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
@@ -157,7 +159,7 @@ public class Relationship
 
     private void EnsureOpenReactivationRequestExists(IdentityAddress activeIdentity)
     {
-        if (AuditLog.Last().Reason != RelationshipAuditLogEntryReason.Reactivation || AuditLog.Last().CreatedBy != activeIdentity)
+        if (AuditLog.Last().Reason != RelationshipAuditLogEntryReason.ReactivationRequested || AuditLog.Last().CreatedBy != activeIdentity)
             throw new DomainException(DomainErrors.NoOpenReactivationRequest(activeIdentity));
     }
 
@@ -177,16 +179,28 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    public void XXXFakeReactivate(IdentityAddress activeIdentity, DeviceId activeDevice)
+    public void RequestReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
+        EnsureThereIsNoOpenReactivationRequest();
+
+        EnsureStatus(RelationshipStatus.Terminated);
+
         var auditLogEntry = new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.Reactivation,
+            RelationshipAuditLogEntryReason.ReactivationRequested,
             RelationshipStatus.Terminated,
             RelationshipStatus.Terminated,
             activeIdentity,
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+    }
+
+    private void EnsureThereIsNoOpenReactivationRequest()
+    {
+        var auditLogEntry = AuditLog.OrderBy(a => a.CreatedAt).Last();
+
+        if (auditLogEntry.Reason == RelationshipAuditLogEntryReason.ReactivationRequested)
+            throw new DomainException(DomainErrors.CannotRequestReactivationWhenThereIsAnOpenReactivationRequest());
     }
 
     #region Expressions

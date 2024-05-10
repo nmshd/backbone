@@ -46,4 +46,10 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.relationshipRequest.noOpenReactivationRequest",
             $"There is no open reactivation request for '{activeIdentity}', and only '{activeIdentity}' can revoke a relationship reactivation.");
     }
+    
+    public static DomainError CannotRequestReactivationWhenThereIsAnOpenReactivationRequest()
+    {
+        return new DomainError("error.platform.validation.relationshipRequest.cannotRequestReactivationWhenThereIsAnOpenReactivationRequest",
+            $"You cannot request reactivation when there is an open reactivation request.");
+    }
 }

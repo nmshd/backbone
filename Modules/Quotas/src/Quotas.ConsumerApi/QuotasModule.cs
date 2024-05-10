@@ -36,6 +36,6 @@ public class QuotasModule : AbstractModule
 
     public override void ConfigureEventBus(IEventBus eventBus)
     {
-        eventBus.AddQuotasIntegrationEventSubscriptions();
+        eventBus.AddQuotasDomainEventSubscriptions();
     }
 }

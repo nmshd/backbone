@@ -5,5 +5,5 @@ namespace Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repos
 
 public interface IRelationshipsRepository
 {
-    Task<Relationship?> FindRelationship(IdentityAddress identityA, IdentityAddress identityB, CancellationToken cancellationToken);
+    Task<Relationship?> FindYoungestRelationship(IdentityAddress identityA, IdentityAddress identityB, CancellationToken cancellationToken);
 }

@@ -5,4 +5,5 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Reje
 public class RejectRelationshipCommand : IRequest<RejectRelationshipResponse>
 {
     public required string RelationshipId { get; set; }
+    public byte[]? CreationResponseContent { get; set; }
 }

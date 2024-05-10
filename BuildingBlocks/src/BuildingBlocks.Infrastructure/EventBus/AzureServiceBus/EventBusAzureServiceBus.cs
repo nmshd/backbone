@@ -3,7 +3,8 @@ using Autofac;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus.Events;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -12,7 +13,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
 public class EventBusAzureServiceBus : IEventBus, IDisposable
 {
-    private const string INTEGRATION_EVENT_SUFFIX = "IntegrationEvent";
+    private const string DOMAIN_EVENT_SUFFIX = "DomainEvent";
     private const string TOPIC_NAME = "default";
     private const string AUTOFAC_SCOPE_NAME = "event_bus";
     private readonly ILifetimeScope _autofac;
@@ -49,9 +50,9 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         _processor.CloseAsync().GetAwaiter().GetResult();
     }
 
-    public async void Publish(IntegrationEvent @event)
+    public async void Publish(DomainEvent @event)
     {
-        var eventName = @event.GetType().Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
+        var eventName = @event.GetType().Name.Replace(DOMAIN_EVENT_SUFFIX, "");
         var jsonMessage = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
         {
             ContractResolver = new ContractResolverWithPrivates()
@@ -60,24 +61,24 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
 
         var message = new ServiceBusMessage
         {
-            MessageId = @event.IntegrationEventId,
+            MessageId = @event.DomainEventId,
             Body = new BinaryData(body),
             Subject = eventName
         };
 
-        _logger.SendingIntegrationEvent(message.MessageId);
+        _logger.SendingDomainEvent(message.MessageId);
 
         await _logger.TraceTime(async () =>
             await _sender.SendMessageAsync(message), nameof(_sender.SendMessageAsync));
 
-        _logger.LogDebug("Successfully sent integration event with id '{MessageId}'.", message.MessageId);
+        _logger.LogDebug("Successfully sent domain event with id '{MessageId}'.", message.MessageId);
     }
 
     public void Subscribe<T, TH>()
-        where T : IntegrationEvent
-        where TH : IIntegrationEventHandler<T>
+        where T : DomainEvent
+        where TH : IDomainEventHandler<T>
     {
-        var eventName = typeof(T).Name.Replace(INTEGRATION_EVENT_SUFFIX, "");
+        var eventName = typeof(T).Name.Replace(DOMAIN_EVENT_SUFFIX, "");
 
         var containsKey = _subscriptionManager.HasSubscriptionsForEvent<T>();
         if (!containsKey)
@@ -114,7 +115,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         _processor.ProcessMessageAsync +=
             async args =>
             {
-                var eventName = $"{args.Message.Subject}{INTEGRATION_EVENT_SUFFIX}";
+                var eventName = $"{args.Message.Subject}{DOMAIN_EVENT_SUFFIX}";
                 var messageData = args.Message.Body.ToString();
 
                 // Complete the message so that it is not received again.
@@ -150,12 +151,12 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         foreach (var subscription in subscriptions)
         {
             var eventType = subscription.EventType;
-            var integrationEvent = (IntegrationEvent)JsonConvert.DeserializeObject(message, eventType,
+            var domainEvent = (DomainEvent)JsonConvert.DeserializeObject(message, eventType,
                 new JsonSerializerSettings
                 {
                     ContractResolver = new ContractResolverWithPrivates()
                 })!;
-            var concreteType = typeof(IIntegrationEventHandler<>).MakeGenericType(eventType);
+            var concreteType = typeof(IDomainEventHandler<>).MakeGenericType(eventType);
 
             try
             {
@@ -166,16 +167,16 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
                 {
                     await using var scope = _autofac.BeginLifetimeScope(AUTOFAC_SCOPE_NAME);
 
-                    if (scope.ResolveOptional(subscription.HandlerType) is not IIntegrationEventHandler handler)
+                    if (scope.ResolveOptional(subscription.HandlerType) is not IDomainEventHandler handler)
                         throw new Exception(
-                            "Integration event handler could not be resolved from dependency container or it does not implement IIntegrationEventHandler.");
+                            "Domain event handler could not be resolved from dependency container or it does not implement IDomainEventHandler.");
 
-                    await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [integrationEvent])!;
+                    await (Task)concreteType.GetMethod("Handle")!.Invoke(handler, [domainEvent])!;
                 });
             }
             catch (Exception ex)
             {
-                _logger.ErrorWhileProcessingIntegrationEvent(integrationEvent.IntegrationEventId, ex);
+                _logger.ErrorWhileProcessingDomainEvent(domainEvent.DomainEventId, ex);
                 return false;
             }
         }
@@ -188,10 +189,10 @@ internal static partial class EventBusAzureServiceBusLogs
 {
     [LoggerMessage(
         EventId = 302940,
-        EventName = "EventBusAzureServiceBus.SendingIntegrationEvent",
+        EventName = "EventBusAzureServiceBus.SendingDomainEvent",
         Level = LogLevel.Debug,
-        Message = "Sending integration event with id '{messageId}'...")]
-    public static partial void SendingIntegrationEvent(this ILogger logger, string messageId);
+        Message = "Sending domain event with id '{messageId}'...")]
+    public static partial void SendingDomainEvent(this ILogger logger, string messageId);
 
     [LoggerMessage(
         EventId = 630568,
@@ -223,8 +224,8 @@ internal static partial class EventBusAzureServiceBusLogs
 
     [LoggerMessage(
         EventId = 146670,
-        EventName = "EventBusAzureServiceBus.ErrorWhileProcessingIntegrationEvent",
+        EventName = "EventBusAzureServiceBus.ErrorWhileProcessingDomainEvent",
         Level = LogLevel.Error,
-        Message = "An error occurred while processing the integration event with id '{integrationEventId}'.")]
-    public static partial void ErrorWhileProcessingIntegrationEvent(this ILogger logger, string integrationEventId, Exception ex);
+        Message = "An error occurred while processing the domain event with id '{domainEventId}'.")]
+    public static partial void ErrorWhileProcessingDomainEvent(this ILogger logger, string domainEventId, Exception ex);
 }

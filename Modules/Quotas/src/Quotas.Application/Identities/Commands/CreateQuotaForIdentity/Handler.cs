@@ -42,7 +42,7 @@ public class Handler : IRequestHandler<CreateQuotaForIdentityCommand, Individual
         _logger.CreatedQuotaForIdentities(identity.Address, individualQuota.Id);
 
         var identityAddresses = new List<string> { identity.Address };
-        var metrics = new List<string> { metric.Key.Value };
+        var metrics = new List<MetricKey> { metric.Key };
         await _metricStatusesService.RecalculateMetricStatuses(identityAddresses, metrics, cancellationToken);
 
         var response = new IndividualQuotaDTO(individualQuota.Id, new MetricDTO(metric), individualQuota.Max, individualQuota.Period);

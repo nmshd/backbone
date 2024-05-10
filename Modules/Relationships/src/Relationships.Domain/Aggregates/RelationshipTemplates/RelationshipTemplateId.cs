@@ -1,13 +1,13 @@
 using System.ComponentModel;
 using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
 [Serializable]
 [TypeConverter(typeof(RelationshipTemplateIdTypeConverter))]
-public class RelationshipTemplateId : StronglyTypedId
+public record RelationshipTemplateId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
     private const string PREFIX = "RLT";

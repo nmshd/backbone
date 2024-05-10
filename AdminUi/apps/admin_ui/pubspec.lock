@@ -103,6 +103,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.3"
+  data_table_2:
+    dependency: "direct main"
+    description:
+      name: data_table_2
+      sha256: e403de6d9a58dddf27700114b614ea8ea5aa8442d7fbdfbe8b3d11b0512e7a49
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.5.12"
   dio:
     dependency: transitive
     description:
@@ -148,6 +156,11 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.13.1"
+  flutter_localizations:
+    dependency: "direct main"
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   flutter_svg:
     dependency: "direct main"
     description:
@@ -166,6 +179,14 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  functional_listener:
+    dependency: transitive
+    description:
+      name: functional_listener
+      sha256: "026d1bd4f66367f11d9ec9f1f1ddb42b89e4484b356972c76d983266cf82f33f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.3.1"
   get_it:
     dependency: "direct main"
     description:
@@ -206,6 +227,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.7"
+  intl:
+    dependency: "direct main"
+    description:
+      name: intl
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.1"
   js:
     dependency: transitive
     description:
@@ -246,6 +275,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  logger:
+    dependency: "direct main"
+    description:
+      name: logger
+      sha256: "8c94b8c219e7e50194efc8771cd0e9f10807d8d3e219af473d89b06cc2ee4e04"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.0"
   logging:
     dependency: transitive
     description:
@@ -278,6 +315,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.11.0"
+  multi_dropdown:
+    dependency: "direct main"
+    description:
+      name: multi_dropdown
+      sha256: b63ff339fcc875d667f8688c8ef62853545b580dd2b6fe78b73339783268afd8
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.4"
   path:
     dependency: transitive
     description:
@@ -515,6 +560,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "13.0.0"
+  watch_it:
+    dependency: "direct main"
+    description:
+      name: watch_it
+      sha256: "9dc3f552d31f6ae121b0de794ab3cdea5d93627fe69337876ebe4b41bfc3729d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.1"
   web:
     dependency: transitive
     description:

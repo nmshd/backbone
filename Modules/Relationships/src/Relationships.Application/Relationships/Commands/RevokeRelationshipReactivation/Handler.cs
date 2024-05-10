@@ -2,8 +2,8 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipReactivation;
@@ -33,7 +33,7 @@ public class Handler : IRequestHandler<RevokeRelationshipReactivationCommand, Re
 
         var peer = relationship.To == _activeIdentity ? relationship.From : relationship.To;
 
-        _eventBus.Publish(new RelationshipReactivationCompletedIntegrationEvent(relationship, peer));
+        _eventBus.Publish(new RelationshipReactivationCompletedDomainEvent(relationship, peer));
 
         return new RevokeRelationshipReactivationResponse(relationship);
     }

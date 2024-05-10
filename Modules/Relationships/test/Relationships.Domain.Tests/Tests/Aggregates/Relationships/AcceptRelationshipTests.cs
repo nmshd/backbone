@@ -22,7 +22,7 @@ public class AcceptRelationshipTests
 
         // Assert
         relationship.Status.Should().Be(RelationshipStatus.Active);
-        relationship.AcceptanceContent.Should().BeEquivalentTo([0]);
+        relationship.CreationResponseContent.Should().BeEquivalentTo([0]);
     }
 
     [Fact]

@@ -54,9 +54,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<DateTime>("UpdatedAt")
@@ -207,9 +207,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -222,9 +222,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
                 {
                     b.Property<string>("Address")
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<string>("ClientId")
@@ -323,9 +323,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("IdentityAddress")
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
+                        .HasColumnType("character(80)")
                         .IsFixedLength();
 
                     b.Property<DateTime?>("RejectedAt")

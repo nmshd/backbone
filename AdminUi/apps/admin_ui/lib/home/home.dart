@@ -1,28 +1,3 @@
-import 'package:flutter/material.dart';
-
-class Identities extends StatelessWidget {
-  const Identities({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
-class Tiers extends StatelessWidget {
-  const Tiers({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
-
-class Clients extends StatelessWidget {
-  const Clients({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
+export 'clients_overview/clients_overview.dart';
+export 'identities_overview/identities_overview.dart';
+export 'tiers_overview/tiers_overview.dart';

@@ -5,5 +5,5 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Acce
 public class AcceptRelationshipCommand : IRequest<AcceptRelationshipResponse>
 {
     public required string RelationshipId { get; set; }
-    public byte[]? AcceptanceContent { get; set; }
+    public byte[]? CreationResponseContent { get; set; }
 }

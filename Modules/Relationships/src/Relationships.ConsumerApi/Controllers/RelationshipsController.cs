@@ -7,6 +7,7 @@ using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RelationshipReactivationRequest;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipReactivation;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.TerminateRelationship;
@@ -76,7 +77,7 @@ public class RelationshipsController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AcceptRelationship([FromRoute] string id, [FromBody] AcceptRelationshipRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new AcceptRelationshipCommand { RelationshipId = id, AcceptanceContent = request.AcceptanceContent }, cancellationToken);
+        var response = await _mediator.Send(new AcceptRelationshipCommand { RelationshipId = id, CreationResponseContent = request.CreationResponseContent }, cancellationToken);
         return Ok(response);
     }
 
@@ -84,9 +85,9 @@ public class RelationshipsController : ApiControllerBase
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RejectRelationshipResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> RejectRelationship([FromRoute] string id, CancellationToken cancellationToken)
+    public async Task<IActionResult> RejectRelationship([FromRoute] string id, [FromBody] RejectRelationshipRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new RejectRelationshipCommand { RelationshipId = id }, cancellationToken);
+        var response = await _mediator.Send(new RejectRelationshipCommand { RelationshipId = id, CreationResponseContent = request.CreationResponseContent }, cancellationToken);
         return Ok(response);
     }
 
@@ -94,9 +95,9 @@ public class RelationshipsController : ApiControllerBase
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RevokeRelationshipResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> RevokeRelationship([FromRoute] string id, CancellationToken cancellationToken)
+    public async Task<IActionResult> RevokeRelationship([FromRoute] string id, [FromBody] RevokeRelationshipRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new RevokeRelationshipCommand { RelationshipId = id }, cancellationToken);
+        var response = await _mediator.Send(new RevokeRelationshipCommand { RelationshipId = id, CreationResponseContent = request.CreationResponseContent }, cancellationToken);
         return Ok(response);
     }
 
@@ -119,9 +120,29 @@ public class RelationshipsController : ApiControllerBase
         await _mediator.Send(new TerminateRelationshipCommand() { RelationshipId = id }, cancellationToken);
         return NoContent();
     }
+
+    [HttpPut("{id}/Reactivate")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RequestRelationshipReactivationResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RelationshipReactivationRequest([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new RequestRelationshipReactivationCommand { RelationshipId = id }, cancellationToken);
+        return Ok(response);
+    }
 }
 
 public class AcceptRelationshipRequest
 {
-    public byte[]? AcceptanceContent { get; set; }
+    public byte[]? CreationResponseContent { get; set; } = Array.Empty<byte>();
+}
+
+public class RejectRelationshipRequest
+{
+    public byte[]? CreationResponseContent { get; set; } = Array.Empty<byte>();
+}
+
+public class RevokeRelationshipRequest
+{
+    public byte[]? CreationResponseContent { get; set; } = Array.Empty<byte>();
 }

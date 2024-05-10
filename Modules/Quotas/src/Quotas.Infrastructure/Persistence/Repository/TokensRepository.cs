@@ -6,6 +6,7 @@ using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExten
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
+
 public class TokensRepository : ITokensRepository
 {
     private readonly IQueryable<Token> _tokensReadOnly;
@@ -19,7 +20,7 @@ public class TokensRepository : ITokensRepository
     {
         var tokensCount = await _tokensReadOnly
             .CreatedInInterval(createdAtFrom, createdAtTo)
-            .CountAsync(t => t.CreatedBy == createdBy.StringValue, cancellationToken);
+            .CountAsync(t => t.CreatedBy == createdBy.Value, cancellationToken);
         return (uint)tokensCount;
     }
 }

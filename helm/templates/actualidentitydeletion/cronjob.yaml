@@ -1,0 +1,80 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ .Values.actualidentitydeletion.name }}
+spec:
+  schedule: "{{ .Values.actualidentitydeletion.schedule }}"
+  successfulJobsHistoryLimit: {{ .Values.actualidentitydeletion.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .Values.actualidentitydeletion.failedJobsHistoryLimit }}
+  jobTemplate:
+    metadata:
+      {{- with .Values.actualidentitydeletion.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        app: {{ .Values.actualidentitydeletion.name }}
+    spec:
+      backoffLimit: {{ .Values.actualidentitydeletion.backoffLimit }}
+      template:
+        spec:
+          restartPolicy: Never
+          {{- with .Values.actualidentitydeletion.podSecurityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.actualidentitydeletion.image.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          volumes:
+            - name: settings-override
+              configMap:
+                name: configuration
+          containers:
+            - name: {{ .Values.actualidentitydeletion.name }}
+              {{- with .Values.actualidentitydeletion.securityContext }}
+              securityContext:
+                {{- toYaml . | nindent 16 }}
+              {{- end }}
+              resources:
+                {{- toYaml .Values.actualidentitydeletion.resources | nindent 16 }}
+              image: "{{ .Values.actualidentitydeletion.image.repository }}:{{- default .Chart.AppVersion .Values.actualidentitydeletion.image.tagOverride }}"
+              imagePullPolicy: {{ .Values.actualidentitydeletion.image.pullPolicy }}
+              volumeMounts:
+                - name: settings-override
+                  mountPath: /app/appsettings.override.json
+                  subPath: appsettings.override.json
+                  readOnly: true
+              args:
+                - --Worker
+                - ActualDeletionWorker
+              env:
+                {{- if .Values.global.useBuiltInEventbus }}
+                - name: infrastructure__eventBus__vendor
+                  value: RabbitMQ
+                - name: infrastructure__eventBus__connectionInfo
+                  value: "rabbitmq"
+                - name: infrastructure__eventBus__rabbitMQUsername
+                  value: "admin"
+                - name: infrastructure__eventBus__rabbitMQPassword
+                  valueFrom:
+                    secretKeyRef:
+                      name: rabbitmq-password
+                      key: "VALUE" 
+                {{- end }}
+                {{- with .Values.actualidentitydeletion.env }}
+                {{- toYaml . | nindent 16 }}
+                {{- end }}
+          {{- with .Values.actualidentitydeletion.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.actualidentitydeletion.affinity }}
+          affinity:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          {{- with .Values.actualidentitydeletion.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
