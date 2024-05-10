@@ -19,7 +19,7 @@ public class HandlerTests
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
-        var relationship = CreateRelationshipWithOpenReactivationRequest(activeIdentity, activeDevice);
+        var relationship = CreateRelationshipWithRequestedReactivation(activeIdentity, activeDevice);
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
@@ -49,7 +49,7 @@ public class HandlerTests
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
-        var relationship = CreateRelationshipWithOpenReactivationRequest(activeIdentity, activeDevice);
+        var relationship = CreateRelationshipWithRequestedReactivation(activeIdentity, activeDevice);
 
         var mockRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         A.CallTo(() => mockRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
