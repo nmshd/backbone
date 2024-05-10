@@ -9,6 +9,7 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@js-soft/ts-serval": "^2.0.10",
         "@nmshd/crypto": "^2.0.6",
         "koa": "^2.15.3",
         "koa-body": "^6.0.1"
