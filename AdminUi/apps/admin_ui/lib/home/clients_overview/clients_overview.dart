@@ -68,6 +68,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
               Expanded(
                 child: DataTable2(
                   isVerticalScrollBarVisible: true,
+                  empty: const Text('No clients found.'),
                   onSelectAll: (selected) {
                     if (selected == null) return;
 

@@ -63,6 +63,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
                   isVerticalScrollBarVisible: true,
                   renderEmptyRowsInTheEnd: false,
                   availableRowsPerPage: const [5, 10, 25, 50, 100],
+                  empty: const Text('No identities found.'),
                   errorBuilder: (error) => Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,

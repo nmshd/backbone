@@ -87,6 +87,7 @@ class _TiersOverviewState extends State<TiersOverview> {
                   child: DataTable2(
                     isVerticalScrollBarVisible: true,
                     showCheckboxColumn: false,
+                    empty: const Text('No tiers found.'),
                     columns: const [
                       DataColumn2(label: Text('Name'), size: ColumnSize.L),
                       DataColumn2(label: Text('Number of Identities'), size: ColumnSize.L),
