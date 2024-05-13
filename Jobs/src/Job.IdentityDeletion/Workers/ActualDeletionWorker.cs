@@ -4,11 +4,11 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using CSharpFunctionalExtensions;
 using MediatR;
-using DeletionStartsNotification = Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess.DeletionStartsNotification;
 
 namespace Backbone.Job.IdentityDeletion.Workers;
 
@@ -76,7 +76,7 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task NotifyIdentityAboutStartingDeletion(CancellationToken cancellationToken, IdentityAddress identityAddress)
     {
-        await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsNotification(), cancellationToken);
+        await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsPushNotification(), cancellationToken);
     }
 
     private async Task NotifyRelationshipsAboutStartingDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
