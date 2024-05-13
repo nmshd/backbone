@@ -47,7 +47,7 @@ public static class TestData
 
         // replace with RequestRelationshipReactivation when implemented
         relationship.AuditLog.Add(new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.Reactivation,
+            RelationshipAuditLogEntryReason.ReactivationRequested,
             RelationshipStatus.Terminated,
             RelationshipStatus.Terminated,
             activeIdentity,
