@@ -1,9 +1,9 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
-using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.UnitTestTools.BaseClasses;
 
-public abstract class RequestHandlerTestsBase<TDbContext> : AbstractTestsBase where TDbContext : DbContext
+public abstract class RequestHandlerTestsBase<TDbContext> : AbstractTestsBase where TDbContext : AbstractDbContextBase
 {
     protected readonly TDbContext _actContext;
     protected readonly TDbContext _arrangeContext;
