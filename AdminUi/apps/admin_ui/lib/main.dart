@@ -43,10 +43,16 @@ final _router = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       routes: [
         GoRoute(
-          parentNavigatorKey: _shellNavigatorKey,
-          path: '/identities',
-          pageBuilder: (context, state) => const NoTransitionPage(child: IdentitiesOverview()),
-        ),
+            parentNavigatorKey: _shellNavigatorKey,
+            path: '/identities',
+            pageBuilder: (context, state) => const NoTransitionPage(child: IdentitiesOverview()),
+            routes: [
+              GoRoute(
+                parentNavigatorKey: _shellNavigatorKey,
+                path: ':address',
+                pageBuilder: (context, state) => NoTransitionPage(child: IdentityDetails(address: state.pathParameters['address']!)),
+              ),
+            ]),
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/tiers',

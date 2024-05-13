@@ -1,6 +1,7 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
 import 'identities_data_table_source.dart';
@@ -32,7 +33,12 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _dataSource = IdentityDataTableSource(locale: Localizations.localeOf(context));
+    _dataSource = IdentityDataTableSource(
+      locale: Localizations.localeOf(context),
+      navigateTo: (String address) {
+        context.go('/identities/$address');
+      },
+    );
   }
 
   @override
