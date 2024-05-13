@@ -115,7 +115,9 @@ jobs:
         with:
           repository: nmshd/runtime
           path: runtime
-      - name: Run Consumer API
+      - name: Build Consumer API and Admin API
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml build -d --parallel
+      - name: Run Consumer API & Admin API
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml up -d
       - name: Install runtime dependencies
         working-directory: ./runtime
