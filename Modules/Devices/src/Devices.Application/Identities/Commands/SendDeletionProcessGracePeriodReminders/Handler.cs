@@ -62,7 +62,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
 
     private async Task SendReminder3(Identity identity, int daysToDeletion, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodNotification(daysToDeletion), cancellationToken);
+        await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodPushNotification(daysToDeletion), cancellationToken);
         identity.DeletionGracePeriodReminder3Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
         _logger.Reminder3Sent(identity.Address, deletionProcessId);
@@ -70,14 +70,15 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
 
     private async Task SendReminder2(Identity identity, int daysToDeletion, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodNotification(daysToDeletion), cancellationToken);
+        await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodPushNotification(daysToDeletion), cancellationToken);
         identity.DeletionGracePeriodReminder2Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
         _logger.Reminder2Sent(identity.Address, deletionProcessId);
     }
+
     private async Task SendReminder1(Identity identity, int daysToDeletion, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodNotification(daysToDeletion), cancellationToken);
+        await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodPushNotification(daysToDeletion), cancellationToken);
         identity.DeletionGracePeriodReminder1Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
         _logger.Reminder1Sent(identity.Address, deletionProcessId);
