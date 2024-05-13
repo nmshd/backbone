@@ -112,13 +112,13 @@ public class RelationshipsController : ApiControllerBase
     }
 
     [HttpPut("{id}/Terminate")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<TerminateRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> TerminateRelationship([FromRoute] string id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new TerminateRelationshipCommand() { RelationshipId = id }, cancellationToken);
-        return NoContent();
+        var relationship = await _mediator.Send(new TerminateRelationshipCommand() { RelationshipId = id }, cancellationToken);
+        return Ok(relationship);
     }
 
     [HttpPut("{id}/Reactivate")]
