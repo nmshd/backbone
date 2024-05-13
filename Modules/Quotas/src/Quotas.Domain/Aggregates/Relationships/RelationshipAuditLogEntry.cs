@@ -7,10 +7,12 @@ public class RelationshipAuditLogEntry
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
+        CreatedBy = null!;
     }
 
     public string Id { get; set; }
     public RelationshipAuditLogEntryReason Reason { get; set; }
+    public string CreatedBy { get; set; }
     public DateTime CreatedAt { get; set; }
 }
 
