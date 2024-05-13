@@ -120,7 +120,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
           ),
           FilledButton(
             onPressed: _isValid && !_saving ? _addQuota : null,
-            child: Text(context.l10n.save),
+            child: const Text('Add'),
           ),
         ],
       ),
