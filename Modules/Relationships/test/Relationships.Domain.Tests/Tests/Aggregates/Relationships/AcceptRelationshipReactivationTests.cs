@@ -13,7 +13,7 @@ public class AcceptRelationshipReactivationTests
     public void Accepting_reactivation_transitions_relationship_to_status_active()
     {
         // Arrange
-        var relationship = CreateTerminatedRelationshipWithPendingReactivationRequest();
+        var relationship = CreateRelationshipWithRequestedReactivation();
 
         // Act
         relationship.AcceptReactivation(IDENTITY_2, DEVICE_2);
@@ -28,7 +28,7 @@ public class AcceptRelationshipReactivationTests
         // Arrange
         SystemTime.Set("2000-01-01");
 
-        var relationship = CreateTerminatedRelationshipWithPendingReactivationRequest();
+        var relationship = CreateRelationshipWithRequestedReactivation();
 
         // Act
         relationship.AcceptReactivation(IDENTITY_2, DEVICE_2);
@@ -66,7 +66,7 @@ public class AcceptRelationshipReactivationTests
     public void Can_only_accept_relationship_reactivation_request_addressed_to_self()
     {
         // Arrange
-        var relationship = CreateTerminatedRelationshipWithPendingReactivationRequest();
+        var relationship = CreateRelationshipWithRequestedReactivation();
 
         // Act
         var acting = () => relationship.AcceptReactivation(IDENTITY_1, DEVICE_1);

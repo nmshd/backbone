@@ -21,7 +21,7 @@ public class HandlerTests
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreateTerminatedRelationshipWithPendingReactivationRequest(activeIdentity);
+        var relationship = TestData.CreateRelationshipWithRequestedReactivation(activeIdentity);
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
@@ -50,7 +50,7 @@ public class HandlerTests
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
         var mockRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreateTerminatedRelationshipWithPendingReactivationRequest(activeIdentity);
+        var relationship = TestData.CreateRelationshipWithRequestedReactivation(activeIdentity);
         A.CallTo(() => mockRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
@@ -81,7 +81,7 @@ public class HandlerTests
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreateTerminatedRelationshipWithPendingReactivationRequest(activeIdentity);
+        var relationship = TestData.CreateRelationshipWithRequestedReactivation(activeIdentity);
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
