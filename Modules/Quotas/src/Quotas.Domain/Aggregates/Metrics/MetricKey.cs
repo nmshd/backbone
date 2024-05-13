@@ -39,8 +39,8 @@ public record MetricKey
         return Result.Success<MetricKey, DomainError>(new MetricKey(value));
     }
 
-    public static string[] GetSupportedMetricKeyValues()
+    public static MetricKey[] GetSupportedMetricKeys()
     {
-        return SUPPORTED_METRIC_KEY_VALUES;
+        return SUPPORTED_METRIC_KEYS;
     }
 }
