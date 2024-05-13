@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.EntityConfigurations;
-internal class RelationshipAuditLogEntryEntityTypeConfiguration : IEntityTypeConfiguration<RelationshipAuditLogEntry>
+public class RelationshipAuditLogEntryEntityTypeConfiguration : IEntityTypeConfiguration<RelationshipAuditLogEntry>
 {
     public void Configure(EntityTypeBuilder<RelationshipAuditLogEntry> builder)
     {
