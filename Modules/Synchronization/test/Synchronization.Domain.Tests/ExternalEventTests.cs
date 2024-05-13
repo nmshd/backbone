@@ -4,7 +4,7 @@ using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Synchronization.Application.Tests.Tests.DomainEvents;
+namespace Backbone.Modules.Synchronization.Domain.Tests;
 
 public class ExternalEventTests
 {
