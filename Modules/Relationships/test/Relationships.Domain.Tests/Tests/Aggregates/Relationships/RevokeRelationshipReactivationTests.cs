@@ -52,7 +52,7 @@ public class RevokeRelationshipReactivationTests
     public void Can_only_revoke_reactivation_of_relationship_when_reactivation_has_been_requested_by_self()
     {
         // Arrange
-        var relationship = CreateTerminatedRelationship();
+        var relationship = CreateRelationshipWithRequestedReactivation(IDENTITY_1, IDENTITY_2, IDENTITY_1);
 
         // Act
         var acting = () => relationship.RevokeReactivation(IDENTITY_2, DEVICE_1);
