@@ -63,18 +63,10 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateTerminatedRelationshipWithPendingReactivationRequest()
+    public static Relationship CreateRelationshipWithRequestedReactivation()
     {
         var relationship = CreateTerminatedRelationship();
-
-        // replace with RequestRelationshipReactivation when implemented
-        relationship.AuditLog.Add(new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.ReactivationRequested,
-            RelationshipStatus.Terminated,
-            RelationshipStatus.Terminated,
-            IDENTITY_1,
-            DEVICE_1
-        ));
+        relationship.RequestReactivation(IDENTITY_1, DEVICE_1);
 
         return relationship;
     }

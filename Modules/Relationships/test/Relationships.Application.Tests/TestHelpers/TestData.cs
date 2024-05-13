@@ -44,15 +44,7 @@ public static class TestData
 
         var relationship = CreateActiveRelationship(to: activeIdentity);
         relationship.Terminate(activeIdentity, activeDevice);
-
-        // replace with RequestRelationshipReactivation when implemented
-        relationship.AuditLog.Add(new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.ReactivationRequested,
-            RelationshipStatus.Terminated,
-            RelationshipStatus.Terminated,
-            activeIdentity,
-            activeDevice
-        ));
+        relationship.RequestReactivation(activeIdentity, activeDevice);
 
         return relationship;
     }

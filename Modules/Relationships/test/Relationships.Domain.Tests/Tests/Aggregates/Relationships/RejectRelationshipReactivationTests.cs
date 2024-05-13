@@ -13,7 +13,7 @@ public class RejectRelationshipReactivationTests
     public void RejectReactivation_leaves_relationship_in_status_terminated()
     {
         // Arrange
-        var relationship = CreateTerminatedRelationshipWithPendingReactivationRequest();
+        var relationship = CreateRelationshipWithRequestedReactivation();
 
         // Act
         relationship.RejectReactivation(IDENTITY_2, DEVICE_2);
@@ -28,7 +28,7 @@ public class RejectRelationshipReactivationTests
         // Arrange
         SystemTime.Set("2000-01-01");
 
-        var relationship = CreateTerminatedRelationshipWithPendingReactivationRequest();
+        var relationship = CreateRelationshipWithRequestedReactivation();
 
         // Act
         relationship.RejectReactivation(IDENTITY_2, DEVICE_2);
@@ -66,7 +66,7 @@ public class RejectRelationshipReactivationTests
     public void Can_only_reject_relationship_reactivation_request_addressed_to_self()
     {
         // Arrange
-        var relationship = CreateTerminatedRelationshipWithPendingReactivationRequest();
+        var relationship = CreateRelationshipWithRequestedReactivation();
 
         // Act
         var acting = () => relationship.RejectReactivation(IDENTITY_1, DEVICE_1);
