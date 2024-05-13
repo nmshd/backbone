@@ -1,25 +1,23 @@
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
-public class TierQuotaDefinition
+public class TierQuotaDefinition : Entity<TierQuotaDefinitionId>
 {
     private TierQuotaDefinition()
     {
-        Id = null!;
         MetricKey = null!;
     }
 
-    public TierQuotaDefinition(MetricKey metricKey, int max, QuotaPeriod period)
+    public TierQuotaDefinition(MetricKey metricKey, int max, QuotaPeriod period) : base(TierQuotaDefinitionId.Generate())
     {
-        Id = TierQuotaDefinitionId.Generate();
         MetricKey = metricKey;
         Max = max;
         Period = period;
     }
 
-    public TierQuotaDefinitionId Id { get; }
     public MetricKey MetricKey { get; }
     public int Max { get; }
     public QuotaPeriod Period { get; }

@@ -18,7 +18,7 @@ public class QuotaCreatedForTierDomainEventHandlerTests
     public async Task Creates_tier_quota_after_consuming_domain_event()
     {
         // Arrange
-        var tierId = new TierId("TIRFxoL0U24aUqZDSAWc");
+        var tierId = TierId.Parse("TIRFxoL0U24aUqZDSAWc");
 
         var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
         var tierQuotaDefinitionsRepository = new FindTierQuotaDefinitionsStubRepository(tierQuotaDefinition);
@@ -44,7 +44,7 @@ public class QuotaCreatedForTierDomainEventHandlerTests
     public async Task Updates_metric_statuses_after_creating_tier_quota()
     {
         // Arrange
-        var tierId = new TierId("TIRFxoL0U24aUqZDSAWc");
+        var tierId = TierId.Parse("TIRFxoL0U24aUqZDSAWc");
 
         var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
         var tierQuotaDefinitionsRepository = new FindTierQuotaDefinitionsStubRepository(tierQuotaDefinition);

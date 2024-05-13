@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
@@ -31,7 +30,7 @@ public class HandlerTests
     public async Task Creates_quota_for_tier()
     {
         // Arrange
-        var tierId = new TierId("TIRsomeTierId1111111");
+        var tierId = TierId.Parse("TIRsomeTierId1111111");
         const int max = 5;
         const QuotaPeriod period = QuotaPeriod.Month;
         var metricKey = MetricKey.NumberOfSentMessages.Value;
@@ -64,7 +63,7 @@ public class HandlerTests
     public async Task Triggers_QuotaCreatedForTierDomainEvent()
     {
         // Arrange
-        var tierId = new TierId("TIRsomeTierId1111111");
+        var tierId = TierId.Parse("TIRsomeTierId1111111");
         var metricKey = MetricKey.NumberOfSentMessages.Value;
         var command = new CreateQuotaForTierCommand(tierId, metricKey, 5, QuotaPeriod.Month);
         var tier = new Tier(tierId, "some-tier-name");

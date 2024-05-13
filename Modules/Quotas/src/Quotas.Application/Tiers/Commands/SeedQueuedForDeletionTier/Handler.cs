@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<SeedQueuedForDeletionTierCommand>
 
         if (queuedForDeletionTier == null)
         {
-            queuedForDeletionTier = new Tier(new TierId(Tier.QUEUED_FOR_DELETION.Id), Tier.QUEUED_FOR_DELETION.Name);
+            queuedForDeletionTier = new Tier(Tier.QUEUED_FOR_DELETION.Id, Tier.QUEUED_FOR_DELETION.Name);
             await _tiersRepository.Add(queuedForDeletionTier, CancellationToken.None);
         }
 

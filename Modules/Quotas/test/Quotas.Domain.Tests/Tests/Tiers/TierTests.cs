@@ -14,10 +14,10 @@ public class TierTests
     public void Can_create_tier_with_valid_properties()
     {
         // Act
-        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        var tier = new Tier(TierId.Parse("TIRsomeTierId1111111"), "some tier");
 
         // Assert
-        tier.Id.Should().Be(new TierId("SomeTierId"));
+        tier.Id.Should().Be(TierId.Parse("TIRsomeTierId1111111"));
         tier.Name.Should().Be("some tier");
     }
 
@@ -25,7 +25,7 @@ public class TierTests
     public void Can_create_quota_on_tier()
     {
         // Arrange
-        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        var tier = new Tier(TierId.New(), "some tier");
 
         // Act
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
@@ -50,7 +50,7 @@ public class TierTests
     public void Can_delete_quota_on_tier()
     {
         // Arrange
-        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        var tier = new Tier(TierId.New(), "some tier");
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
 
         // Act
@@ -83,7 +83,7 @@ public class TierTests
     public void Does_only_delete_quota_with_given_id()
     {
         // Arrange
-        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        var tier = new Tier(TierId.New(), "some tier");
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Week);
 
@@ -102,7 +102,7 @@ public class TierTests
     public void Trying_to_delete_inexistent_quota_fails()
     {
         // Arrange
-        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        var tier = new Tier(TierId.New(), "some tier");
 
         // Act
         var result = tier.DeleteQuota("SomeInexistentTierQuotaDefinitionId");
@@ -117,7 +117,7 @@ public class TierTests
     {
         // Arrange
         var metricKey = MetricKey.NumberOfSentMessages;
-        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        var tier = new Tier(TierId.New(), "some tier");
         tier.CreateQuota(metricKey, 5, QuotaPeriod.Hour);
 
         // Act
@@ -136,7 +136,7 @@ public class TierTests
         {
             new(MetricKey.NumberOfRelationships, "Number of Relationships")
         };
-        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        var tier = new Tier(TierId.New(), "some tier");
 
         // Act
         Action act = () => tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics);
@@ -186,7 +186,6 @@ public class TierTests
         tier.Quotas.Should().HaveCount(2);
     }
 }
-
 
 file static class TierExtensions
 {

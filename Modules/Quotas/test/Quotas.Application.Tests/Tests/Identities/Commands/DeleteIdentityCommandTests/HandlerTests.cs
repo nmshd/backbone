@@ -8,12 +8,13 @@ using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities.Commands.DeleteIdentityCommandTests;
+
 public class HandlerTests
 {
     [Fact]
     public async Task Handler_calls_deletion_method_on_repository()
     {
-        var identity = new Identity(CreateRandomIdentityAddress(), new TierId("tier-id"));
+        var identity = new Identity(CreateRandomIdentityAddress(), TierId.New());
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var handler = CreateHandler(mockIdentitiesRepository);
 

@@ -31,7 +31,7 @@ public class HandlerTests
     public async Task Triggers_TierQuotaDefinitionDeletedDomainEvent()
     {
         // Arrange
-        var tierId = new TierId("SomeTierId");
+        var tierId = TierId.New();
         var tier = new Tier(tierId, "some-tier-name");
 
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
@@ -54,7 +54,7 @@ public class HandlerTests
     public async Task Deletes_tier_quota_definition()
     {
         // Arrange
-        var tierId = new TierId("SomeTierId");
+        var tierId = TierId.New();
         var tier = new Tier(tierId, "some-tier-name");
 
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
@@ -81,7 +81,7 @@ public class HandlerTests
     public async Task Deletes_tier_quota_definition_with_multiple_quotas()
     {
         // Arrange
-        var tierId = new TierId("SomeTierId");
+        var tierId = TierId.New();
         var tier = new Tier(tierId, "some-tier-name");
 
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
@@ -110,7 +110,7 @@ public class HandlerTests
     public async Task Fails_to_delete_tier_quota_definition_for_missing_tier()
     {
         // Arrange
-        var tierId = new TierId("SomeTierId");
+        var tierId = TierId.New();
 
         var command = new DeleteTierQuotaDefinitionCommand(tierId, "SomeTierQuotaDefinitionId");
 
@@ -130,7 +130,7 @@ public class HandlerTests
     public async Task Fails_to_delete_tier_quota_definition_for_missing_quota()
     {
         // Arrange
-        var tierId = new TierId("SomeTierId");
+        var tierId = TierId.New();
         var tier = new Tier(tierId, "some-tier-name");
 
         var command = new DeleteTierQuotaDefinitionCommand(tier.Id, "SomeTierQuotaDefinitionId");

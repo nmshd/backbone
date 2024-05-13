@@ -27,7 +27,7 @@ public class HandlerTests
         const QuotaPeriod period = QuotaPeriod.Month;
         var metricKey = MetricKey.NumberOfSentMessages.Value;
         var identityAddress = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
-        var tierId = new TierId("TIRsomeTierId1111111");
+        var tierId = TierId.Parse("TIRsomeTierId1111111");
         var command = new CreateQuotaForIdentityCommand(identityAddress, metricKey, max, period);
         var identity = new Identity("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", tierId);
 
@@ -96,7 +96,7 @@ public class HandlerTests
         var metricKey = MetricKey.NumberOfSentMessages.Value;
         var identityAddress = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
         var command = new CreateQuotaForIdentityCommand(identityAddress, metricKey, 5, QuotaPeriod.Month);
-        var identity = new Identity("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", new TierId("TIRsomeTierId1111111"));
+        var identity = new Identity("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", TierId.Parse("TIRsomeTierId1111111"));
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Find(identityAddress, A<CancellationToken>._, A<bool>._)).Returns(identity);

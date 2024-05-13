@@ -27,7 +27,7 @@ public class QuotaCreatedForTierDomainEventHandler : IDomainEventHandler<QuotaCr
     {
         _logger.LogTrace("Handling QuotaCreatedForTierDomainEvent...");
 
-        var identitiesWithTier = await _identitiesRepository.FindWithTier(new TierId(@event.TierId), CancellationToken.None, true);
+        var identitiesWithTier = await _identitiesRepository.FindWithTier(TierId.Parse(@event.TierId), CancellationToken.None, true);
 
         if (!identitiesWithTier.Any())
         {
