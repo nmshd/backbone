@@ -20,12 +20,22 @@ class TiersDetail extends StatefulWidget {
 
 class _TiersDetailState extends State<TiersDetail> {
   TierDetails? _tierDetails;
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
 
+    _scrollController = ScrollController();
+
     _reload();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+
+    super.dispose();
   }
 
   @override
@@ -34,7 +44,9 @@ class _TiersDetailState extends State<TiersDetail> {
 
     final tierDetails = _tierDetails!;
     return Scrollbar(
+      controller: _scrollController,
       child: SingleChildScrollView(
+        controller: _scrollController,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
