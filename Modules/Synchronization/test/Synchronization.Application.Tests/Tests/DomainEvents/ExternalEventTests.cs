@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.DomainEvents;
 
-public class ExternalEventCreatedDomainEventTests
+public class ExternalEventTests
 {
     [Fact]
     public void Raises_a_domain_event_on_initialization()
