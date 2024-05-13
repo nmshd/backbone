@@ -1,5 +1,7 @@
 using System.Data;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling.Extensions;
@@ -12,32 +14,28 @@ namespace Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 
 public class AbstractDbContextBase : DbContext, IDbContext
 {
-    private readonly IServiceProvider? _serviceProvider;
     private const int MAX_RETRY_COUNT = 50000;
-    private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
     private const string SQLSERVER = "Microsoft.EntityFrameworkCore.SqlServer";
     private const string POSTGRES = "Npgsql.EntityFrameworkCore.PostgreSQL";
+    private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
+    private readonly IEventBus _eventBus;
+    private readonly IServiceProvider? _serviceProvider;
 
     protected AbstractDbContextBase()
     {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        _eventBus = null!;
     }
 
-    protected AbstractDbContextBase(DbContextOptions options, IServiceProvider? serviceProvider = null) : base(options)
+    protected AbstractDbContextBase(DbContextOptions options, IEventBus eventBus, IServiceProvider? serviceProvider = null) : base(options)
     {
         _serviceProvider = serviceProvider;
+        _eventBus = eventBus;
     }
 
     public IQueryable<T> SetReadOnly<T>() where T : class
     {
         return Set<T>().AsNoTracking();
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-
-        if (EnvironmentVariables.DEBUG_PERFORMANCE && _serviceProvider != null)
-            optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
     }
 
     public async Task RunInTransaction(Func<Task> action, List<int>? errorNumbersToRetry,
@@ -85,6 +83,14 @@ public class AbstractDbContextBase : DbContext, IDbContext
         return await RunInTransaction(func, null, isolationLevel);
     }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        base.OnConfiguring(optionsBuilder);
+
+        if (EnvironmentVariables.DEBUG_PERFORMANCE && _serviceProvider != null)
+            optionsBuilder.AddInterceptors(_serviceProvider.GetRequiredService<SaveChangesTimeInterceptor>());
+    }
+
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         base.ConfigureConventions(configurationBuilder);
@@ -95,5 +101,56 @@ public class AbstractDbContextBase : DbContext, IDbContext
 
         configurationBuilder.Properties<DateTime>().HaveConversion<DateTimeValueConverter>();
         configurationBuilder.Properties<DateTime?>().HaveConversion<NullableDateTimeValueConverter>();
+    }
+
+    public override int SaveChanges()
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChanges();
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChanges(acceptAllChangesOnSuccess);
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChangesAsync(cancellationToken);
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new())
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
+    private List<Entity> GetChangedEntities() => ChangeTracker
+        .Entries()
+        .Where(x => x.Entity is Entity)
+        .Select(x => (Entity)x.Entity)
+        .ToList();
+
+    private void PublishDomainEvents(List<Entity> entities)
+    {
+        foreach (var e in entities)
+        {
+            _eventBus.Publish(e.DomainEvents);
+            e.ClearDomainEvents();
+        }
     }
 }
