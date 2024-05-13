@@ -9,7 +9,7 @@ using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
-public class Identity
+public class Identity : BuildingBlocks.Domain.Entity<IdentityAddress>
 {
     private readonly List<TierQuota> _tierQuotas;
     private readonly List<IndividualQuota> _individualQuotas;
@@ -24,20 +24,19 @@ public class Identity
         _tierQuotas = null!;
         _individualQuotas = null!;
         _metricStatuses = null!;
-        Address = null!;
         TierId = null!;
     }
 
-    public Identity(string address, TierId tierId)
+    public Identity(IdentityAddress address, TierId tierId) : base(address)
     {
-        Address = address;
         TierId = tierId;
         _tierQuotas = [];
         _individualQuotas = [];
         _metricStatuses = [];
     }
 
-    public string Address { get; }
+    public string Address => Id;
+
     public TierId TierId { get; private set; }
 
     public IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses.AsReadOnly();
@@ -168,6 +167,7 @@ public class Identity
     }
 
     #region Selectors
+
     public static Expression<Func<Identity, bool>> HasAddress(IdentityAddress identityAddress)
     {
         return i => i.Address == identityAddress.ToString();

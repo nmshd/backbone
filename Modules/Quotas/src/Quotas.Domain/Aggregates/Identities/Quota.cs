@@ -1,24 +1,22 @@
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.BuildingBlocks.Domain;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
-public abstract class Quota
+public abstract class Quota : Entity<QuotaId>
 {
     // ReSharper disable once UnusedMember.Local
     protected Quota()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
-        Id = null!;
         ApplyTo = null!;
     }
 
-    protected Quota(string applyTo)
+    protected Quota(string applyTo) : base(QuotaId.New())
     {
-        Id = QuotaId.New();
         ApplyTo = applyTo;
     }
 
-    public QuotaId Id { get; }
     public string ApplyTo { get; }
     public abstract int Weight { get; }
     public abstract MetricKey MetricKey { get; }

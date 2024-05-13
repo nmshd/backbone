@@ -5,18 +5,16 @@ using CSharpFunctionalExtensions;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
-public class Tier
+public class Tier : BuildingBlocks.Domain.Entity<TierId>
 {
-    public static readonly Tier QUEUED_FOR_DELETION = new(new TierId("TIR00000000000000001"), "Queued For Deletion");
+    public static readonly Tier QUEUED_FOR_DELETION = new(TierId.Parse("TIR00000000000000001"), "Queued For Deletion");
 
-    public Tier(TierId id, string name)
+    public Tier(TierId id, string name) : base(id)
     {
-        Id = id;
         Name = name;
         Quotas = [];
     }
 
-    public TierId Id { get; }
     public string Name { get; }
     public List<TierQuotaDefinition> Quotas { get; }
 
