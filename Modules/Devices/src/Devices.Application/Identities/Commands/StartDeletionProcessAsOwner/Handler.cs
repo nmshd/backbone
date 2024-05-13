@@ -1,9 +1,12 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Tooling.Extensions;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
@@ -13,12 +16,14 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IUserContext _userContext;
     private readonly IEventBus _eventBus;
+    private readonly IPushNotificationSender _notificationSender;
 
-    public Handler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus eventBus)
+    public Handler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus eventBus, IPushNotificationSender notificationSender)
     {
         _identitiesRepository = identitiesRepository;
         _userContext = userContext;
         _eventBus = eventBus;
+        _notificationSender = notificationSender;
     }
 
     public async Task<StartDeletionProcessAsOwnerResponse> Handle(StartDeletionProcessAsOwnerCommand request, CancellationToken cancellationToken)
@@ -32,6 +37,8 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
         _eventBus.Publish(new TierOfIdentityChangedDomainEvent(identity, oldTierId, newTierId));
 
         await _identitiesRepository.Update(identity, cancellationToken);
+
+        await _notificationSender.SendNotification(identity.Address, new DeletionProcessApprovedNotification(deletionProcess.GracePeriodEndsAt?.DaysUntilDate() ?? 0), cancellationToken);
 
         return new StartDeletionProcessAsOwnerResponse(deletionProcess);
     }
