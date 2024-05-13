@@ -2,13 +2,14 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.TerminateRelationship;
 
-public class Handler : IRequestHandler<TerminateRelationshipCommand, TerminateRelationshipResponse>
+public class Handler : IRequestHandler<TerminateRelationshipCommand, RelationshipDTO>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IEventBus _eventBus;
@@ -23,7 +24,7 @@ public class Handler : IRequestHandler<TerminateRelationshipCommand, TerminateRe
         _activeDevice = userContext.GetDeviceId();
     }
 
-    public async Task<TerminateRelationshipResponse> Handle(TerminateRelationshipCommand request, CancellationToken cancellationToken)
+    public async Task<RelationshipDTO> Handle(TerminateRelationshipCommand request, CancellationToken cancellationToken)
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
         var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
@@ -34,6 +35,6 @@ public class Handler : IRequestHandler<TerminateRelationshipCommand, TerminateRe
 
         _eventBus.Publish(new RelationshipStatusChangedDomainEvent(relationship));
 
-        return new TerminateRelationshipResponse(relationship);
+        return new RelationshipDTO(relationship);
     }
 }
