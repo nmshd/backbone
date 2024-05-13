@@ -202,7 +202,7 @@ public class Relationship
 
     private void EnsureOpenRevivalRequestExists()
     {
-        if (AuditLog.Last().Reason != RelationshipAuditLogEntryReason.Reactivation)
+        if (AuditLog.Last().Reason != RelationshipAuditLogEntryReason.ReactivationRequested)
         {
             throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipRevivalIfNoRequestToDoSoHasBeenMade());
         }
