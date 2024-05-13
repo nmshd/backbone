@@ -10,7 +10,7 @@ namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relations
 public class RevokeRelationshipReactivationTests
 {
     [Fact]
-    public void Terminating_relationship_creates_an_audit_log_entry()
+    public void Revoking_relationship_reactivation_request_creates_an_audit_log_entry()
     {
         // Arrange
         SystemTime.Set("2000-01-01");

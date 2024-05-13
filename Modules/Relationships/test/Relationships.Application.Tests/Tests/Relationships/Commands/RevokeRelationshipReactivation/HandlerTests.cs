@@ -17,16 +17,14 @@ public class HandlerTests
     {
         // Arrange
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
-
-        var relationship = CreateRelationshipWithRequestedReactivation(activeIdentity, activeDevice);
+        var relationship = CreateRelationshipWithRequestedReactivation(activeIdentity);
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
-        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(TestDataGenerator.CreateRandomDeviceId());
 
         var handler = CreateHandler(fakeUserContext, fakeRelationshipsRepository);
 
@@ -47,16 +45,14 @@ public class HandlerTests
     {
         // Arrange
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
-
-        var relationship = CreateRelationshipWithRequestedReactivation(activeIdentity, activeDevice);
+        var relationship = CreateRelationshipWithRequestedReactivation(activeIdentity);
 
         var mockRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         A.CallTo(() => mockRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
-        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(TestDataGenerator.CreateRandomDeviceId());
 
         var handler = CreateHandler(fakeUserContext, mockRelationshipsRepository);
 

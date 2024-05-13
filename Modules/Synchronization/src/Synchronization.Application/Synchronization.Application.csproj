@@ -15,8 +15,4 @@
 		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
 		<ProjectReference Include="..\Synchronization.Domain\Synchronization.Domain.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="IntegrationEvents\Incoming\RelationshipReactivationCompleted\" />
-	</ItemGroup>
 </Project>

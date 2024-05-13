@@ -38,13 +38,22 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateRelationshipWithRequestedReactivation(IdentityAddress activeIdentity, DeviceId activeDevice, IdentityAddress? to = null)
+    public static Relationship CreateTerminatedRelationship(IdentityAddress activeIdentity, IdentityAddress? to = null)
     {
         to ??= TestDataGenerator.CreateRandomIdentityAddress();
 
         var relationship = CreateActiveRelationship(activeIdentity, to);
-        relationship.Terminate(activeIdentity, activeDevice);
-        relationship.RequestReactivation(activeIdentity, activeDevice);
+        relationship.Terminate(relationship.From, TestDataGenerator.CreateRandomDeviceId());
+
+        return relationship;
+    }
+
+    public static Relationship CreateRelationshipWithRequestedReactivation(IdentityAddress activeIdentity, IdentityAddress? to = null)
+    {
+        to ??= TestDataGenerator.CreateRandomIdentityAddress();
+
+        var relationship = CreateTerminatedRelationship(activeIdentity, to);
+        relationship.RequestReactivation(activeIdentity, TestDataGenerator.CreateRandomDeviceId());
 
         return relationship;
     }

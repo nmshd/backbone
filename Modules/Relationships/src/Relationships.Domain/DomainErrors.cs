@@ -44,7 +44,7 @@ public static class DomainErrors
     public static DomainError NoRevocableReactivationRequestExists(string activeIdentity)
     {
         return new DomainError("error.platform.validation.relationshipRequest.noRevocableReactivationRequestExists",
-            $"There is no open reactivation request for '{activeIdentity}', and only '{activeIdentity}' can revoke a relationship reactivation.");
+            $"There is no pending reactivation request or you are not allowed to revoke it. A reactivation request can only be revoked by the identity that requested it.");
     }
 
     public static DomainError CannotRequestReactivationWhenThereIsAnOpenReactivationRequest()
