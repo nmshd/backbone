@@ -4,6 +4,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeletionProcess;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
@@ -36,7 +37,9 @@ public class HandlerTests
         A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity);
 
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
+        var pushNotificationSender = A.Dummy<IPushNotificationSender>();
+
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, pushNotificationSender: pushNotificationSender);
 
         // Act
         var response = await handler.Handle(new ApproveDeletionProcessCommand(deletionProcess.Id), CancellationToken.None);
@@ -51,6 +54,8 @@ public class HandlerTests
                 && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.ApprovedByDevice == device.Id
             ), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
+
+        A.CallTo(() => pushNotificationSender.SendNotification(identity.Address, A<DeletionProcessApprovedNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
 
         response.Id.Should().Be(deletionProcess.Id);
         response.ApprovedAt.Should().Be(utcNow);
