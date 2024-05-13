@@ -3,7 +3,6 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Tiers;
@@ -191,7 +190,8 @@ file static class TierExtensions
 {
     public static Tier Clone(this Tier tier)
     {
-        var serialized = JsonConvert.SerializeObject(tier);
-        return JsonConvert.DeserializeObject<Tier>(serialized)!;
+        var newTier = new Tier(tier.Id, tier.Name);
+        newTier.Quotas.AddRange(tier.Quotas);
+        return newTier;
     }
 }
