@@ -1,9 +1,11 @@
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
-public class ExternalEvent
+public class ExternalEvent : Entity<ExternalEventId>
 {
     private readonly List<SyncError> _errors = [];
 
@@ -11,22 +13,21 @@ public class ExternalEvent
     private ExternalEvent()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
-        Id = null!;
         Owner = null!;
         Payload = null!;
     }
 
-    public ExternalEvent(ExternalEventType type, IdentityAddress owner, long index, object payload)
+    public ExternalEvent(ExternalEventType type, IdentityAddress owner, long index, object payload) : base(ExternalEventId.New())
     {
-        Id = ExternalEventId.New();
         Type = type;
         Index = index;
         Owner = owner;
         CreatedAt = SystemTime.UtcNow;
         Payload = payload;
+
+        RaiseDomainEvent(new ExternalEventCreatedDomainEvent(this));
     }
 
-    public ExternalEventId Id { get; }
     public ExternalEventType Type { get; }
     public long Index { get; }
 
