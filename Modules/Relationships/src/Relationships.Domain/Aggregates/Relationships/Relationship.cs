@@ -198,7 +198,7 @@ public class Relationship
 
     private void EnsureRevocableReactivationRequestExistsFor(IdentityAddress activeIdentity)
     {
-        if (AuditLog.OrderBy(a => a.CreatedAt).Last().Reason != RelationshipAuditLogEntryReason.ReactivationRequested || 
+        if (AuditLog.OrderBy(a => a.CreatedAt).Last().Reason != RelationshipAuditLogEntryReason.ReactivationRequested ||
             AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy != activeIdentity)
             throw new DomainException(DomainErrors.NoRevocableReactivationRequestExists(activeIdentity));
     }
