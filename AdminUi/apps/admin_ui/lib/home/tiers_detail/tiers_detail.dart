@@ -65,7 +65,7 @@ class _TiersDetailState extends State<TiersDetail> {
                           Text.rich(
                             TextSpan(
                               children: [
-                                TextSpan(text: 'Tier ID: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
+                                TextSpan(text: 'ID: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
                                 TextSpan(text: tierDetails.id, style: Theme.of(context).textTheme.bodyLarge),
                               ],
                             ),
@@ -73,7 +73,7 @@ class _TiersDetailState extends State<TiersDetail> {
                           Text.rich(
                             TextSpan(
                               children: [
-                                TextSpan(text: 'Tier Name: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
+                                TextSpan(text: 'Name: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
                                 TextSpan(text: tierDetails.name, style: Theme.of(context).textTheme.bodyLarge),
                               ],
                             ),
