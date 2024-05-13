@@ -75,8 +75,9 @@ export default async function (testIdentities: IdentityWithToken[]) {
         "SyncRun was finalized": (r) => r.status === 200
     });
 
+    
     check(finalizeDatawalletVersionUpgradeResponseValue, {
-        "response has newDatawalletVersion": (r) => r.newDatawalletVersion != undefined
+        "response has an array of Modifications": (r) => Array.isArray(r.datawalletModifications)
     });
 
     sleep(1);
@@ -162,7 +163,7 @@ interface IdentityWithToken {
 }
 
 interface FinalizeDatawalletVersionUpgradeResponse {
-    newDatawalletVersion: number;
+    newDatawalletModificationIndex: number;
     datawalletModifications: {
         id: string;
         index: number;
