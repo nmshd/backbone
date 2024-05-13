@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -50,32 +52,34 @@ class _TiersDetailState extends State<TiersDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            if (Platform.isMacOS || Platform.isWindows) const BackButton(),
             Row(
               children: [
-                const BackButton(),
-                Card(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(text: 'Tier ID: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
-                              TextSpan(text: tierDetails.id, style: Theme.of(context).textTheme.bodyLarge),
-                            ],
+                Expanded(
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(text: 'Tier ID: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
+                                TextSpan(text: tierDetails.id, style: Theme.of(context).textTheme.bodyLarge),
+                              ],
+                            ),
                           ),
-                        ),
-                        Text.rich(
-                          TextSpan(
-                            children: [
-                              TextSpan(text: 'Tier Name: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
-                              TextSpan(text: tierDetails.name, style: Theme.of(context).textTheme.bodyLarge),
-                            ],
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(text: 'Tier Name: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
+                                TextSpan(text: tierDetails.name, style: Theme.of(context).textTheme.bodyLarge),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
