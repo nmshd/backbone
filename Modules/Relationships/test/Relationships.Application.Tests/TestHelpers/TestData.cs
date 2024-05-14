@@ -56,7 +56,7 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateTerminatedRelationshipWithPendingReactivationRequest(IdentityAddress activeIdentity)
+    public static Relationship CreateRelationshipWithRequestedReactivation(IdentityAddress activeIdentity)
     {
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
