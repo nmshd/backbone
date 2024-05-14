@@ -119,7 +119,6 @@ class _QuotaListState extends State<_QuotaList> {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        initiallyExpanded: true,
         title: const Text('Quotas'),
         subtitle: const Text('View and assign quotas for this tier.'),
         children: [
@@ -266,7 +265,6 @@ class _IdentitiesListState extends State<_IdentitiesList> {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        initiallyExpanded: true,
         title: const Text('Identities'),
         subtitle: const Text('View Identities associated with this Tier.'),
         children: [
