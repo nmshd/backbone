@@ -4,7 +4,6 @@ using Backbone.AdminApi.Sdk.Endpoints.Tiers.Types.Requests;
 using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
 using Backbone.UnitTestTools.Data;
 using Microsoft.Extensions.Options;
 
