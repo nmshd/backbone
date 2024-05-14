@@ -4,7 +4,7 @@ import { b64encode } from "k6/encoding";
 import exec from "k6/execution";
 import { Response } from "k6/http";
 import { ConstantArrivalRateScenario, Options } from "k6/options";
-import { ChallengeRequestRepresentation, Sidecar } from "../libs/sidecar";
+import { ChallengeRequestRepresentation, CryptoHelper } from "../libs/crypto-helper";
 
 export const options: Options = {
     scenarios: {
@@ -206,7 +206,7 @@ declare enum StartSyncRunStatus {
 }
 
 function CreateIdentity(ClientId: string, ClientSecret: string): { httpResponse: Response; generatedPassword: string } {
-    const sidecar = new Sidecar();
+    const sidecar = new CryptoHelper();
 
     const challenge = getChallenge();
 

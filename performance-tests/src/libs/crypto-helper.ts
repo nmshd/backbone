@@ -1,7 +1,7 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 
-export class Sidecar {
-    private static instance: Sidecar | null = null;
+export class CryptoHelper {
+    private static instance: CryptoHelper | null = null;
 
     session = new Httpx({
         baseURL: "http://localhost:3000/",
@@ -10,17 +10,21 @@ export class Sidecar {
     });
 
     constructor() {
-        if (Sidecar.instance === null) {
-            Sidecar.instance = this;
+        if (CryptoHelper.instance === null) {
+            CryptoHelper.instance = this;
         }
-        return Sidecar.instance;
+        return CryptoHelper.instance;
     }
 
-    public GenerateKeyPair = (): KeyPair => this.session.get("keypair").json();
+    public GenerateKeyPair(): KeyPair {
+        return this.session.get("keypair").json();
+    }
 
-    public GeneratePassword = (): string => (this.session.get("password") as Response).body?.toString()!;
+    public GeneratePassword(): string {
+        return (this.session.get("password") as Response).body?.toString()!;
+    }
 
-    public SignChallenge = (keyPair: KeyPair, challenge: ChallengeRequestRepresentation) => {
+    public SignChallenge(keyPair: KeyPair, challenge: ChallengeRequestRepresentation) {
         return this.session
             .post(
                 "sign",
@@ -33,7 +37,7 @@ export class Sidecar {
                 }
             )
             .json();
-    };
+    }
 }
 
 interface KeyPair {

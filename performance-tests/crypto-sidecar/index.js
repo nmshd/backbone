@@ -20,15 +20,12 @@ app.use(async (ctx, next) => {
 });
 
 router.get("/keypair", async (ctx) => {
-    ctx.body = JSON.stringify(await crypto.CryptoSignatures.generateKeypair());
+    ctx.body = (await crypto.CryptoSignatures.generateKeypair()).toJSON();
     ctx.status = 200;
     ctx.type = "application/json";
 });
 
-
 router.get("/password", async (ctx) => {
-    if (ctx.method !== "GET" || ctx.path !== "/password") return await next();
-    
     ctx.body = await crypto.CryptoPasswordGenerator.createPasswordWithBitStrength();
     ctx.status = 200;
 });
