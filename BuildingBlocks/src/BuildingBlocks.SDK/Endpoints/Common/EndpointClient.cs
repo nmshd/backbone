@@ -112,15 +112,7 @@ public class EndpointClient
         var deserializedResponseContent = JsonSerializer.Deserialize<ApiResponse<T>>(responseContent, _jsonSerializerOptions);
         deserializedResponseContent!.Status = statusCode;
         deserializedResponseContent.RawContent = JsonConvert.SerializeObject(deserializedResponseContent.Result);
-
-        try
-        {
-            deserializedResponseContent.ContentType = response.Content.Headers.GetValues("Content-Type").First();
-        }
-        catch (InvalidOperationException)
-        {
-            deserializedResponseContent.ContentType = null;
-        }
+        deserializedResponseContent.ContentType = response.Content.Headers.ContentType?.MediaType;
 
         return deserializedResponseContent;
     }
@@ -139,15 +131,7 @@ public class EndpointClient
 
         var deserializedResponseContent = JsonSerializer.Deserialize<ODataResponse<T>>(responseContent, _jsonSerializerOptions)!;
         var rawContent = JsonConvert.SerializeObject(deserializedResponseContent.Value);
-
-        try
-        {
-            deserializedResponseContent.ContentType = response.Content.Headers.GetValues("Content-Type").First();
-        }
-        catch (InvalidOperationException)
-        {
-            deserializedResponseContent.ContentType = null;
-        }
+        deserializedResponseContent.ContentType = response.Content.Headers.ContentType?.MediaType;
 
         return deserializedResponseContent.ToApiResponse(statusCode, rawContent);
     }
