@@ -57,7 +57,7 @@ public class Relationship
     public byte[]? CreationResponseContent { get; private set; }
     public List<RelationshipAuditLogEntry> AuditLog { get; }
 
-    public IdentityAddress LastModifiedBy => AuditLog.Last().CreatedBy;
+    public IdentityAddress LastModifiedBy => AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy;
 
     public bool FromHasDecomposed { get; private set; }
     public bool ToHasDecomposed { get; private set; }
@@ -92,16 +92,16 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
+    private void EnsureStatus(RelationshipStatus status)
+    {
+        if (Status != status)
+            throw new DomainException(DomainErrors.RelationshipIsNotInCorrectStatus(status));
+    }
+
     private void EnsureRelationshipRequestIsAddressedToSelf(IdentityAddress activeIdentity)
     {
         if (To != activeIdentity)
             throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse());
-    }
-
-    private void EnsureRelationshipRequestIsCreatedBySelf(IdentityAddress activeIdentity)
-    {
-        if (From != activeIdentity)
-            throw new DomainException(DomainErrors.CannotRevokeRelationshipRequestNotCreatedByYourself());
     }
 
     public void Reject(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
@@ -122,12 +122,6 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    private void EnsureStatus(RelationshipStatus status)
-    {
-        if (Status != status)
-            throw new DomainException(DomainErrors.RelationshipIsNotInCorrectStatus(status));
-    }
-
     public void Revoke(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
     {
         EnsureStatus(RelationshipStatus.Pending);
@@ -144,6 +138,12 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+    }
+
+    private void EnsureRelationshipRequestIsCreatedBySelf(IdentityAddress activeIdentity)
+    {
+        if (From != activeIdentity)
+            throw new DomainException(DomainErrors.CannotRevokeRelationshipRequestNotCreatedByYourself());
     }
 
     public void Terminate(IdentityAddress activeIdentity, DeviceId activeDevice)
@@ -165,7 +165,6 @@ public class Relationship
     public void RequestReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureThereIsNoOpenReactivationRequest();
-
         EnsureStatus(RelationshipStatus.Terminated);
 
         var auditLogEntry = new RelationshipAuditLogEntry(
@@ -184,6 +183,27 @@ public class Relationship
 
         if (auditLogEntry.Reason == RelationshipAuditLogEntryReason.ReactivationRequested)
             throw new DomainException(DomainErrors.CannotRequestReactivationWhenThereIsAnOpenReactivationRequest());
+    }
+
+    public void RevokeReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureRevocableReactivationRequestExistsFor(activeIdentity);
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.RevocationOfReactivation,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Terminated,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
+    private void EnsureRevocableReactivationRequestExistsFor(IdentityAddress activeIdentity)
+    {
+        if (AuditLog.OrderBy(a => a.CreatedAt).Last().Reason != RelationshipAuditLogEntryReason.ReactivationRequested ||
+            AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy != activeIdentity)
+            throw new DomainException(DomainErrors.NoRevocableReactivationRequestExists(activeIdentity));
     }
 
     public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
