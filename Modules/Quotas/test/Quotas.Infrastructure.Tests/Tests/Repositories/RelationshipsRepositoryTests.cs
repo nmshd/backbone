@@ -145,7 +145,7 @@ public class RelationshipsRepositoryTests
 
         // Act
         var count = await repository.Count(I1, quotaPeriod.CalculateBegin().AddHours(2), quotaPeriod.CalculateEnd().AddHours(2), CancellationToken.None);
-        
+
         // Assert
         count.Should().Be(0);
     }
