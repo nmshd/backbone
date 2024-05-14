@@ -6,9 +6,9 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
+import '/core/core.dart';
 import '../identities_overview/identities_data_table_source.dart';
 import '../identities_overview/identities_filter.dart';
-import '/core/core.dart';
 import 'modals/modals.dart';
 
 class TierDetail extends StatefulWidget {
@@ -137,7 +137,7 @@ class _QuotaListState extends State<_QuotaList> {
                             color: _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
                           ),
                           style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.resolveWith((states) {
+                            backgroundColor: WidgetStateProperty.resolveWith((states) {
                               return _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.error : null;
                             }),
                           ),
