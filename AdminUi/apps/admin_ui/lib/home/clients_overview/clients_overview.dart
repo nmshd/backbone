@@ -52,7 +52,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                       color: _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
                     ),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith((states) {
+                      backgroundColor: WidgetStateProperty.resolveWith((states) {
                         return _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.error : null;
                       }),
                     ),
@@ -118,7 +118,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                             ),
                             DataCell(
                               ElevatedButton(
-                                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),
+                                style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),
                                 onPressed: () => showChangeClientSecretDialog(context: context, clientId: client.clientId),
                                 child: Text(
                                   'Change Client Secret',
