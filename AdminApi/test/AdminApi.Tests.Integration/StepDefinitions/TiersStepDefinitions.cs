@@ -88,6 +88,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsAListOfTiers()
     {
         _tiersResponse!.IsSuccess.Should().BeTrue();
+        _tiersResponse!.ContentType.Should().StartWith("application/json");
         _tiersResponse!.AssertContentCompliesWithSchema();
     }
 
@@ -95,6 +96,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsATier()
     {
         _tierResponse!.IsSuccess.Should().BeTrue();
+        _tierResponse!.ContentType.Should().StartWith("application/json");
         _tierResponse!.AssertContentCompliesWithSchema();
     }
 

@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using Newtonsoft.Json;
 
 namespace Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 
@@ -21,5 +20,6 @@ public class ApiResponse<TResult>
     public ApiError? Error { get; set; }
     public PaginationData? Pagination { get; set; }
     public HttpStatusCode Status { get; set; }
+    public string? ContentType { get; set; }
     public string? RawContent { get; set; }
 }

@@ -161,6 +161,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsAListOfClients()
     {
         _getClientsResponse!.IsSuccess.Should().BeTrue();
+        _getClientsResponse!.ContentType.Should().StartWith("application/json");
         _getClientsResponse.AssertContentCompliesWithSchema();
     }
 
@@ -168,6 +169,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsAClientWithNewSecret()
     {
         _changeClientSecretResponse!.IsSuccess.Should().BeTrue();
+        _changeClientSecretResponse!.ContentType.Should().StartWith("application/json");
         _changeClientSecretResponse!.AssertContentCompliesWithSchema();
     }
 
@@ -175,6 +177,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsAClientWithRandomGeneratedSecret()
     {
         _changeClientSecretResponse!.IsSuccess.Should().BeTrue();
+        _changeClientSecretResponse!.ContentType.Should().StartWith("application/json");
         _changeClientSecretResponse!.AssertContentCompliesWithSchema();
     }
 
@@ -182,6 +185,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsAClient()
     {
         _updateClientResponse!.IsSuccess.Should().BeTrue();
+        _updateClientResponse!.ContentType.Should().StartWith("application/json");
         _updateClientResponse!.AssertContentCompliesWithSchema();
     }
 

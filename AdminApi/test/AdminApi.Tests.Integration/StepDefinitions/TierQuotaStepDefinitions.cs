@@ -103,6 +103,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsATierQuotaDefinition()
     {
         _createTierQuotaResponse!.IsSuccess.Should().BeTrue();
+        _createTierQuotaResponse!.ContentType.Should().StartWith("application/json");
         _createTierQuotaResponse!.AssertContentCompliesWithSchema();
     }
 

@@ -113,6 +113,15 @@ public class EndpointClient
         deserializedResponseContent!.Status = statusCode;
         deserializedResponseContent.RawContent = JsonConvert.SerializeObject(deserializedResponseContent.Result);
 
+        try
+        {
+            deserializedResponseContent.ContentType = response.Content.Headers.GetValues("Content-Type").First();
+        }
+        catch (InvalidOperationException)
+        {
+            deserializedResponseContent.ContentType = null;
+        }
+
         return deserializedResponseContent;
     }
 
@@ -129,7 +138,18 @@ public class EndpointClient
         }
 
         var deserializedResponseContent = JsonSerializer.Deserialize<ODataResponse<T>>(responseContent, _jsonSerializerOptions)!;
-        return deserializedResponseContent.ToApiResponse(statusCode);
+        var rawContent = JsonConvert.SerializeObject(deserializedResponseContent.Value);
+
+        try
+        {
+            deserializedResponseContent.ContentType = response.Content.Headers.GetValues("Content-Type").First();
+        }
+        catch (InvalidOperationException)
+        {
+            deserializedResponseContent.ContentType = null;
+        }
+
+        return deserializedResponseContent.ToApiResponse(statusCode, rawContent);
     }
 
     private async Task<RawApiResponse> ExecuteRaw(HttpRequestMessage request)

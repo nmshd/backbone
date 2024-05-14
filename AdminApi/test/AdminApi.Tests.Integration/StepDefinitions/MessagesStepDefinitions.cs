@@ -42,6 +42,7 @@ internal class MessagesStepDefinitions : BaseStepDefinitions
     {
         _messagesResponse!.Result.Should().NotBeNull();
         _messagesResponse!.IsSuccess.Should().BeTrue();
+        _messagesResponse!.ContentType.Should().StartWith("application/json");
         _messagesResponse!.AssertContentCompliesWithSchema();
     }
 

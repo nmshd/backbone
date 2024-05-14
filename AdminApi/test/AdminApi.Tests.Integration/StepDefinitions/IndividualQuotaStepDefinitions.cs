@@ -94,6 +94,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsAnIndividualQuota()
     {
         _response!.Result!.Should().NotBeNull();
+        _response!.ContentType.Should().StartWith("application/json");
         _response!.AssertContentCompliesWithSchema();
     }
 

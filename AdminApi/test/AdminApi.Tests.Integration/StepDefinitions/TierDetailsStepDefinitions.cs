@@ -42,6 +42,7 @@ internal class TierDetailsStepDefinitions : BaseStepDefinitions
     {
         _tierDetailsResponse!.Result!.Should().NotBeNull();
         _tierDetailsResponse!.Result!.Id.Should().Be(_tierId);
+        _tierDetailsResponse!.ContentType.Should().StartWith("application/json");
         _tierDetailsResponse.AssertContentCompliesWithSchema();
     }
 

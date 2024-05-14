@@ -67,6 +67,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsAListOfIdentities()
     {
         _identityOverviewsResponse!.Result!.Should().NotBeNull();
+        _identityOverviewsResponse!.ContentType.Should().StartWith("application/json");
         _identityOverviewsResponse!.AssertContentCompliesWithSchema();
     }
 
@@ -74,6 +75,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsADeletionProcess()
     {
         _identityDeletionProcessResponse!.Result!.Should().NotBeNull();
+        _identityDeletionProcessResponse!.ContentType.Should().StartWith("application/json");
         _identityDeletionProcessResponse!.AssertContentCompliesWithSchema();
     }
 
@@ -81,6 +83,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsAnIdentity()
     {
         _identityResponse!.Result!.Should().NotBeNull();
+        _identityResponse!.ContentType.Should().StartWith("application/json");
         _identityResponse!.AssertContentCompliesWithSchema();
     }
 

@@ -27,6 +27,7 @@ internal class MetricsStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsAListOfMetrics()
     {
         _metricsResponse!.Result!.Should().NotBeNullOrEmpty();
+        _metricsResponse!.ContentType.Should().StartWith("application/json");
         _metricsResponse.AssertContentCompliesWithSchema();
     }
 
