@@ -10,6 +10,7 @@ using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRe
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipReactivation;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RelationshipReactivationRequest;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipReactivation;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.TerminateRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.GetRelationship;
@@ -101,14 +102,24 @@ public class RelationshipsController : ApiControllerBase
         return Ok(response);
     }
 
+    [HttpPut("{id}/Reactivate/Revoke")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RevokeRelationshipReactivationResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RevokeRelationshipReactivation([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new RevokeRelationshipReactivationCommand { RelationshipId = id }, cancellationToken);
+        return Ok(response);
+    }
+
     [HttpPut("{id}/Terminate")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<TerminateRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> TerminateRelationship([FromRoute] string id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new TerminateRelationshipCommand() { RelationshipId = id }, cancellationToken);
-        return NoContent();
+        var relationship = await _mediator.Send(new TerminateRelationshipCommand() { RelationshipId = id }, cancellationToken);
+        return Ok(relationship);
     }
 
     [HttpPut("{id}/Reactivate")]

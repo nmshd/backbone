@@ -38,6 +38,24 @@ public static class TestData
         return relationship;
     }
 
+    public static Relationship CreateTerminatedRelationship(IdentityAddress activeIdentity, IdentityAddress? to = null)
+    {
+        to ??= TestDataGenerator.CreateRandomIdentityAddress();
+
+        var relationship = CreateActiveRelationship(activeIdentity, to);
+        relationship.Terminate(relationship.From, TestDataGenerator.CreateRandomDeviceId());
+
+        return relationship;
+    }
+
+    public static Relationship CreateRelationshipWithRequestedReactivation(IdentityAddress from, IdentityAddress to, IdentityAddress reactivationRequestedBy)
+    {
+        var relationship = CreateTerminatedRelationship(from, to);
+        relationship.RequestReactivation(reactivationRequestedBy, TestDataGenerator.CreateRandomDeviceId());
+
+        return relationship;
+    }
+
     public static Relationship CreateTerminatedRelationshipWithPendingReactivationRequest(IdentityAddress activeIdentity)
     {
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
