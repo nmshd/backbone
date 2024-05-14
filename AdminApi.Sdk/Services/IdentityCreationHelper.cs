@@ -9,9 +9,11 @@ using SignatureHelper = Backbone.Crypto.Implementations.SignatureHelper;
 
 namespace Backbone.AdminApi.Sdk.Services;
 
-public class AccountController(Client client)
+public class IdentityCreationHelper(Client client)
 {
-    public async Task<ApiResponse<CreateIdentityResponse>?> CreateIdentity(string clientId, string clientSecret)
+    public const string DEVICE_PASSWORD = "some-device-password";
+
+    public async Task<ApiResponse<CreateIdentityResponse>?> CreateIdentity()
     {
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
 
@@ -28,8 +30,7 @@ public class AccountController(Client client)
 
         var createIdentityPayload = new CreateIdentityRequest
         {
-            ClientId = clientId,
-            ClientSecret = clientSecret,
+            ClientId = string.Empty,
             IdentityVersion = 1,
             SignedChallenge = signedChallenge,
             IdentityPublicKey = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new CryptoSignaturePublicKey
@@ -37,7 +38,7 @@ public class AccountController(Client client)
                 alg = CryptoExchangeAlgorithm.ECDH_X25519,
                 pub = identityKeyPair.PublicKey.Base64Representation
             })).Base64Representation,
-            DevicePassword = PasswordHelper.GeneratePassword(45, 50)
+            DevicePassword = DEVICE_PASSWORD
         };
 
         return await client.Identities.CreateIdentity(createIdentityPayload);

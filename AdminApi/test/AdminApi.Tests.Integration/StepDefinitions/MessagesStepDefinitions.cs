@@ -58,8 +58,8 @@ internal class MessagesStepDefinitions : BaseStepDefinitions
 
     private async Task CreateIdentity()
     {
-        var accountController = new AccountController(_client);
-        var createIdentityResponse = await accountController.CreateIdentity(_options.ClientId, _options.ClientSecret) ?? throw new InvalidOperationException();
+        var accountController = new IdentityCreationHelper(_client);
+        var createIdentityResponse = await accountController.CreateIdentity() ?? throw new InvalidOperationException();
         createIdentityResponse.IsSuccess.Should().BeTrue();
 
         _identityAddress = createIdentityResponse.Result!.Address;

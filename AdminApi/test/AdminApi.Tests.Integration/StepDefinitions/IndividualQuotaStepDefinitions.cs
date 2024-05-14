@@ -15,7 +15,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
 {
     private string _identityAddress;
     private string _quotaId;
-    private ApiResponse<IndividualQuota>? _response;
+    private ApiResponse<IndividualQuota>? _createQuotaResponse;
     private ApiResponse<EmptyResponse>? _deleteResponse;
 
     public IndividualQuotaStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
@@ -61,7 +61,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     [When("a POST request is sent to the /Identity/{i.id}/Quotas endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheCreateIndividualQuotaEndpoint()
     {
-        _response = await _client.Identities.CreateIndividualQuota(_identityAddress, new CreateQuotaForIdentityRequest
+        _createQuotaResponse = await _client.Identities.CreateIndividualQuota(_identityAddress, new CreateQuotaForIdentityRequest
         {
             MetricKey = "NumberOfSentMessages",
             Max = 2,
@@ -72,7 +72,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     [When("a POST request is sent to the /Identity/{address}/Quotas endpoint with an inexistent identity address")]
     public async Task WhenAPOSTRequestIsSentToTheCreateIndividualQuotaEndpointWithAnInexistentIdentityAddress()
     {
-        _response = await _client.Identities.CreateIndividualQuota("some-inexistent-identity-address", new CreateQuotaForIdentityRequest
+        _createQuotaResponse = await _client.Identities.CreateIndividualQuota("some-inexistent-identity-address", new CreateQuotaForIdentityRequest
         {
             MetricKey = "NumberOfSentMessages",
             Max = 2,
@@ -83,8 +83,8 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        if (_response != null)
-            ((int)_response!.Status).Should().Be(expectedStatusCode);
+        if (_createQuotaResponse != null)
+            ((int)_createQuotaResponse!.Status).Should().Be(expectedStatusCode);
 
         if (_deleteResponse != null)
             ((int)_deleteResponse!.Status).Should().Be(expectedStatusCode);
@@ -93,18 +93,18 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     [Then("the response contains an IndividualQuota")]
     public void ThenTheResponseContainsAnIndividualQuota()
     {
-        _response!.Result!.Should().NotBeNull();
-        _response!.ContentType.Should().StartWith("application/json");
-        _response!.AssertContentCompliesWithSchema();
+        _createQuotaResponse!.Result!.Should().NotBeNull();
+        _createQuotaResponse!.ContentType.Should().StartWith("application/json");
+        _createQuotaResponse!.AssertContentCompliesWithSchema();
     }
 
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        if (_response != null)
+        if (_createQuotaResponse != null)
         {
-            _response!.Error.Should().NotBeNull();
-            _response.Error!.Code.Should().Be(errorCode);
+            _createQuotaResponse!.Error.Should().NotBeNull();
+            _createQuotaResponse.Error!.Code.Should().Be(errorCode);
         }
 
         if (_deleteResponse != null)
@@ -116,9 +116,9 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
 
     private async Task CreateIdentity()
     {
-        var accountController = new AccountController(_client);
+        var accountController = new IdentityCreationHelper(_client);
 
-        var createIdentityResponse = await accountController.CreateIdentity(_options.ClientId, _options.ClientSecret) ?? throw new InvalidOperationException();
+        var createIdentityResponse = await accountController.CreateIdentity() ?? throw new InvalidOperationException();
         createIdentityResponse.IsSuccess.Should().BeTrue();
 
         _identityAddress = createIdentityResponse.Result!.Address;
