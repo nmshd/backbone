@@ -7,5 +7,8 @@ public enum RelationshipAuditLogEntryReason
     RejectionOfCreation = 2,
     RevocationOfCreation = 3,
     Termination = 4,
-    ReactivationRequested = 5
+    ReactivationRequested = 5,
+    AcceptanceOfReactivation = 6,
+    RejectionOfReactivation = 7,
+    RevocationOfReactivation = 8
 }

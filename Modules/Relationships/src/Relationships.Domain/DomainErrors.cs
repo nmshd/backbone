@@ -41,6 +41,12 @@ public static class DomainErrors
             $"A relationship to '{targetIdentity}' already exists. If the relationship is terminated, you can reactivate it.");
     }
 
+    public static DomainError NoRevocableReactivationRequestExists(string activeIdentity)
+    {
+        return new DomainError("error.platform.validation.relationshipRequest.noRevocableReactivationRequestExists",
+            $"There is no pending reactivation request or you are not allowed to revoke it. A reactivation request can only be revoked by the identity that requested it.");
+    }
+
     public static DomainError CannotRequestReactivationWhenThereIsAnOpenReactivationRequest()
     {
         return new DomainError("error.platform.validation.relationshipRequest.cannotRequestReactivationWhenThereIsAnOpenReactivationRequest",
