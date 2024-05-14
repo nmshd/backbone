@@ -116,67 +116,70 @@ class _QuotaListState extends State<_QuotaList> {
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionTile(
-      initiallyExpanded: true,
-      title: const Text('Quotas'),
-      subtitle: const Text('View and assign quotas for this tier.'),
-      children: [
-        Card(
-          child: Column(
-            children: [
-              if (widget.tierDetails.id != 'TIR00000000000000001')
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.delete,
-                          color: _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        initiallyExpanded: true,
+        title: const Text('Quotas'),
+        subtitle: const Text('View and assign quotas for this tier.'),
+        children: [
+          Card(
+            child: Column(
+              children: [
+                if (widget.tierDetails.id != 'TIR00000000000000001')
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor: MaterialStateProperty.resolveWith((states) {
+                              return _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.error : null;
+                            }),
+                          ),
+                          onPressed: _selectedQuotas.isNotEmpty ? _removeSelectedQuotas : null,
                         ),
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.resolveWith((states) {
-                            return _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.error : null;
-                          }),
+                        Gaps.w8,
+                        IconButton.filled(
+                          icon: const Icon(Icons.add),
+                          onPressed: () => showAddQuotaDialog(context: context, tierId: widget.tierDetails.id, onQuotaAdded: widget.onQuotasChanged),
                         ),
-                        onPressed: _selectedQuotas.isNotEmpty ? _removeSelectedQuotas : null,
-                      ),
-                      Gaps.w8,
-                      IconButton.filled(
-                        icon: const Icon(Icons.add),
-                        onPressed: () => showAddQuotaDialog(context: context, tierId: widget.tierDetails.id, onQuotaAdded: widget.onQuotasChanged),
-                      ),
+                      ],
+                    ),
+                  ),
+                SizedBox(
+                  width: double.infinity,
+                  child: DataTable(
+                    columns: const [
+                      DataColumn(label: Text('Metric')),
+                      DataColumn(label: Text('Max')),
+                      DataColumn(label: Text('Period')),
                     ],
+                    rows: widget.tierDetails.quotas
+                        .map(
+                          (quota) => DataRow2(
+                            cells: [
+                              DataCell(Text(quota.metric.displayName)),
+                              DataCell(Text(quota.max.toString())),
+                              DataCell(Text(quota.period)),
+                            ],
+                            onSelectChanged: widget.tierDetails.id == 'TIR00000000000000001' ? null : (_) => _toggleSelection(quota.id),
+                            selected: _selectedQuotas.contains(quota.id),
+                          ),
+                        )
+                        .toList(),
                   ),
                 ),
-              SizedBox(
-                width: double.infinity,
-                child: DataTable(
-                  columns: const [
-                    DataColumn(label: Text('Metric')),
-                    DataColumn(label: Text('Max')),
-                    DataColumn(label: Text('Period')),
-                  ],
-                  rows: widget.tierDetails.quotas
-                      .map(
-                        (quota) => DataRow2(
-                          cells: [
-                            DataCell(Text(quota.metric.displayName)),
-                            DataCell(Text(quota.max.toString())),
-                            DataCell(Text(quota.period)),
-                          ],
-                          onSelectChanged: widget.tierDetails.id == 'TIR00000000000000001' ? null : (_) => _toggleSelection(quota.id),
-                          selected: _selectedQuotas.contains(quota.id),
-                        ),
-                      )
-                      .toList(),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -260,62 +263,65 @@ class _IdentitiesListState extends State<_IdentitiesList> {
 
   @override
   Widget build(BuildContext context) {
-    return ExpansionTile(
-      initiallyExpanded: true,
-      title: const Text('Identities'),
-      subtitle: const Text('View Identities associated with this Tier.'),
-      children: [
-        Card(
-          child: Column(
-            children: [
-              IdentitiesFilter(
-                fixedTierId: widget.tierDetails.id,
-                onFilterChanged: ({IdentityOverviewFilter? filter}) async {
-                  _dataSource
-                    ..filter = filter
-                    ..refreshDatasource();
-                },
-              ),
-              SizedBox(
-                height: 500,
-                child: AsyncPaginatedDataTable2(
-                  rowsPerPage: _rowsPerPage,
-                  onRowsPerPageChanged: _setRowsPerPage,
-                  sortColumnIndex: _sortColumnIndex,
-                  sortAscending: _sortColumnAscending,
-                  showFirstLastButtons: true,
-                  columnSpacing: 5,
-                  source: _dataSource,
-                  isVerticalScrollBarVisible: true,
-                  renderEmptyRowsInTheEnd: false,
-                  availableRowsPerPage: const [5, 10, 25, 50, 100],
-                  empty: const Text('No identities found.'),
-                  errorBuilder: (error) => Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Text('An error occurred loading the data.'),
-                        Gaps.h16,
-                        FilledButton(onPressed: _dataSource.refreshDatasource, child: const Text('Retry')),
-                      ],
-                    ),
-                  ),
-                  columns: <DataColumn2>[
-                    DataColumn2(label: const Text('Address'), size: ColumnSize.L, onSort: _sort),
-                    const DataColumn2(label: Text('Tier'), size: ColumnSize.S),
-                    DataColumn2(label: const Text('Created with Client'), onSort: _sort),
-                    DataColumn2(label: const Text('Number of Devices'), onSort: _sort),
-                    DataColumn2(label: const Text('Created at'), size: ColumnSize.S, onSort: _sort),
-                    DataColumn2(label: const Text('Last Login at'), size: ColumnSize.S, onSort: _sort),
-                    DataColumn2(label: const Text('Datawallet version'), onSort: _sort),
-                    DataColumn2(label: const Text('Identity Version'), onSort: _sort),
-                  ],
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        initiallyExpanded: true,
+        title: const Text('Identities'),
+        subtitle: const Text('View Identities associated with this Tier.'),
+        children: [
+          Card(
+            child: Column(
+              children: [
+                IdentitiesFilter(
+                  fixedTierId: widget.tierDetails.id,
+                  onFilterChanged: ({IdentityOverviewFilter? filter}) async {
+                    _dataSource
+                      ..filter = filter
+                      ..refreshDatasource();
+                  },
                 ),
-              ),
-            ],
+                SizedBox(
+                  height: 500,
+                  child: AsyncPaginatedDataTable2(
+                    rowsPerPage: _rowsPerPage,
+                    onRowsPerPageChanged: _setRowsPerPage,
+                    sortColumnIndex: _sortColumnIndex,
+                    sortAscending: _sortColumnAscending,
+                    showFirstLastButtons: true,
+                    columnSpacing: 5,
+                    source: _dataSource,
+                    isVerticalScrollBarVisible: true,
+                    renderEmptyRowsInTheEnd: false,
+                    availableRowsPerPage: const [5, 10, 25, 50, 100],
+                    empty: const Text('No identities found.'),
+                    errorBuilder: (error) => Center(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text('An error occurred loading the data.'),
+                          Gaps.h16,
+                          FilledButton(onPressed: _dataSource.refreshDatasource, child: const Text('Retry')),
+                        ],
+                      ),
+                    ),
+                    columns: <DataColumn2>[
+                      DataColumn2(label: const Text('Address'), size: ColumnSize.L, onSort: _sort),
+                      const DataColumn2(label: Text('Tier'), size: ColumnSize.S),
+                      DataColumn2(label: const Text('Created with Client'), onSort: _sort),
+                      DataColumn2(label: const Text('Number of Devices'), onSort: _sort),
+                      DataColumn2(label: const Text('Created at'), size: ColumnSize.S, onSort: _sort),
+                      DataColumn2(label: const Text('Last Login at'), size: ColumnSize.S, onSort: _sort),
+                      DataColumn2(label: const Text('Datawallet version'), onSort: _sort),
+                      DataColumn2(label: const Text('Identity Version'), onSort: _sort),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
