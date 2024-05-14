@@ -124,4 +124,28 @@ public class RelationshipsRepositoryTests
         countForI1.Should().Be(1);
         countForI2.Should().Be(1);
     }
+
+    [Fact]
+    public async Task Requested_reactivation_outside_given_quota_period_does_not_count_for_any_participant()
+    {
+        // Arrange
+        var relationships = new List<Relationship>
+        {
+            CreateRelationshipWithRequestedReactivation(from: I1, to: I2, reactivationRequestedBy: I1),
+            CreateRelationshipWithRequestedReactivation(from: I2, to: I1, reactivationRequestedBy: I2)
+        };
+        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
+        await _relationshipsArrangeContext.SaveChangesAsync();
+
+        var repository = new RelationshipsRepository(_actContext);
+        const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
+
+        // Act
+        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin().AddHours(2), quotaPeriod.CalculateEnd().AddHours(2), CancellationToken.None);
+        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin().AddHours(2), quotaPeriod.CalculateEnd().AddHours(2), CancellationToken.None);
+
+        // Assert
+        countForI1.Should().Be(0);
+        countForI2.Should().Be(0);
+    }
 }

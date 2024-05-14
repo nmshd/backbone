@@ -10,6 +10,7 @@ using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRe
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RelationshipReactivationRequest;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipReactivation;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.TerminateRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.GetRelationship;
@@ -98,6 +99,16 @@ public class RelationshipsController : ApiControllerBase
     public async Task<IActionResult> RevokeRelationship([FromRoute] string id, [FromBody] RevokeRelationshipRequest request, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new RevokeRelationshipCommand { RelationshipId = id, CreationResponseContent = request.CreationResponseContent }, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpPut("{id}/Reactivate/Revoke")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RevokeRelationshipReactivationResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RevokeRelationshipReactivation([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new RevokeRelationshipReactivationCommand { RelationshipId = id }, cancellationToken);
         return Ok(response);
     }
 

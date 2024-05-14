@@ -20,10 +20,15 @@ public class RelationshipsRepository : IRelationshipsRepository
             .Include(r => r.AuditLog)
             .CreatedInInterval(createdAtFrom, createdAtTo)
             .Where(r => r.Status == RelationshipStatus.Pending && r.From == createdBy ||
-                r.Status == RelationshipStatus.Active && (r.From == createdBy || r.To == createdBy) ||
-                r.Status == RelationshipStatus.Terminated &&
-                r.AuditLog.OrderBy(a => a.CreatedAt).Last().Reason == RelationshipAuditLogEntryReason.ReactivationRequested &&
-                r.AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy == createdBy)
+                        r.Status == RelationshipStatus.Active && (r.From == createdBy || r.To == createdBy) ||
+                        r.Status == RelationshipStatus.Terminated &&
+                        r.AuditLog
+                            .OrderByDescending(a => a.CreatedAt)
+                            .FirstOrDefault(a =>
+                                a.Reason == RelationshipAuditLogEntryReason.ReactivationRequested &&
+                                a.CreatedBy == createdBy &&
+                                a.CreatedAt > createdAtFrom &&
+                                a.CreatedAt < createdAtTo) != null)
             .CountAsync(cancellationToken);
         return (uint)relationshipsCount;
     }

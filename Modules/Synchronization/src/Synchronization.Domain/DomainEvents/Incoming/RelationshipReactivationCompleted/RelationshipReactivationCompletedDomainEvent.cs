@@ -10,5 +10,5 @@ public class RelationshipReactivationCompletedDomainEvent : DomainEvent
     }
 
     public string RelationshipId { get; }
-    public string Peer { get; set; }
+    public string Peer { get; }
 }

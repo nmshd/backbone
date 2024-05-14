@@ -7,7 +7,7 @@ namespace Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 public class RelationshipReactivationRequestedDomainEvent : DomainEvent
 {
     public RelationshipReactivationRequestedDomainEvent(Relationship relationship, IdentityAddress requestingIdentity, IdentityAddress peer) :
-        base($"{relationship.Id}/ReactivationRequested/{relationship.AuditLog.Last().CreatedAt}")
+        base($"{relationship.Id}/ReactivationRequested/{relationship.AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedAt}")
     {
         RelationshipId = relationship.Id;
         RequestingIdentity = requestingIdentity.Value;
