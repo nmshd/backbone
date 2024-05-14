@@ -7,7 +7,6 @@ using Backbone.AdminApi.Infrastructure.DTOs;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using FluentValidation;
@@ -149,7 +148,7 @@ public static class IServiceCollectionExtensions
 
         services.AddHttpContextAccessor();
 
-        services.AddTransient<IUserContext, AspNetCoreUserContext>();
+        services.AddTransient<IUserContext, AnonymousUserContext>();
 
         return services;
     }
