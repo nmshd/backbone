@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
+import 'package:admin_ui/core/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:intl/intl.dart';
 
 class IdentityDetails extends StatefulWidget {
   final String address;
@@ -16,6 +18,9 @@ class IdentityDetails extends StatefulWidget {
 
 class _IdentityDetailsState extends State<IdentityDetails> {
   Identity? _identityDetails;
+  List<TierOverview>? _tiers;
+  String? _selectedTier;
+
   late final ScrollController _scrollController;
 
   @override
@@ -24,7 +29,8 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 
     _scrollController = ScrollController();
 
-    _reload();
+    _reloadIdentity();
+    _reloadTiers();
   }
 
   @override
@@ -57,27 +63,98 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text.rich(
-                            TextSpan(
-                              text: 'Identities Overview',
-                              style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-                            ),
+                          const Text(
+                            'Identities Overview',
+                            style: TextStyle(fontSize: 32),
                           ),
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(text: 'Address: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
-                                TextSpan(text: identityDetails.address, style: Theme.of(context).textTheme.bodyLarge),
-                              ],
-                            ),
+                          Gaps.h32,
+                          Row(
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Address',
+                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    identityDetails.address,
+                                  ),
+                                ],
+                              ),
+                              Gaps.w16,
+                              Column(
+                                children: [
+                                  Text(
+                                    'Client ID',
+                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    identityDetails.clientId,
+                                  ),
+                                ],
+                              ),
+                              Gaps.w16,
+                              Column(
+                                children: [
+                                  Text(
+                                    'Public Key',
+                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    identityDetails.publicKey,
+                                  ),
+                                ],
+                              ),
+                              Gaps.w16,
+                              Column(
+                                children: [
+                                  Text(
+                                    'Created at',
+                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                  Text(
+                                    DateFormat('yyyy-MM-dd hh:MM:ss').format(identityDetails.createdAt),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(text: 'Client ID: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
-                                TextSpan(text: identityDetails.clientId, style: Theme.of(context).textTheme.bodyLarge),
-                              ],
-                            ),
+                          Gaps.h16,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Tier',
+                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                              ),
+                              Gaps.h16,
+                              Wrap(
+                                spacing: 8,
+                                runSpacing: 4,
+                                children: _tiers != null && _tiers!.isNotEmpty
+                                    ? _tiers!.where((tier) => tier.canBeManuallyAssigned || tier.id == _identityDetails!.tierId).map((tier) {
+                                        final isDisabled = isTierDisabled(tier);
+                                        return isDisabled
+                                            ? ChoiceChip(
+                                                label: Text(tier.name),
+                                                selected: false,
+                                                disabledColor: Theme.of(context).disabledColor,
+                                              )
+                                            : ChoiceChip(
+                                                label: Text(tier.name),
+                                                selected: _selectedTier == tier.id,
+                                                onSelected: (bool selected) {
+                                                  setState(() {
+                                                    _selectedTier = selected ? tier.id : _selectedTier;
+                                                  });
+                                                },
+                                              );
+                                      }).toList()
+                                    : [const Text('No tiers found.')],
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -86,14 +163,82 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                 ),
               ],
             ),
+            Gaps.h16,
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                      ),
+                    ),
+                    onPressed: _selectedTier != _identityDetails!.tierId ? _updateIdentity : null,
+                    child: const Text('Save'),
+                  ),
+                  const SizedBox(width: 16),
+                  ElevatedButton(
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(0),
+                        ),
+                      ),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Future<void> _reload() async {
+  Future<void> _updateIdentity() async {
+    if (_identityDetails == null) return;
+
+    await GetIt.I.get<AdminApiClient>().identities.updateIdentity(_identityDetails!.address, tierId: _selectedTier!);
+
+    if (mounted) {
+      setState(() {
+        _selectedTier = _identityDetails!.tierId;
+      });
+    }
+
+    await _reloadIdentity();
+  }
+
+  Future<void> _reloadIdentity() async {
     final identityDetails = await GetIt.I.get<AdminApiClient>().identities.getIdentity(widget.address);
-    if (mounted) setState(() => _identityDetails = identityDetails.data);
+    if (mounted) {
+      setState(() {
+        _identityDetails = identityDetails.data;
+        _selectedTier = _identityDetails!.tierId;
+      });
+    }
+  }
+
+  Future<void> _reloadTiers() async {
+    final tiers = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
+    if (mounted) setState(() => _tiers = tiers.data);
+  }
+
+  bool isTierDisabled(TierOverview tier) {
+    if (_tiers == null || _identityDetails == null) {
+      return false;
+    }
+    final tiersThatCannotBeUnassigned = _tiers!.where((t) => !t.canBeManuallyAssigned);
+    final identityIsInTierThatCannotBeUnassigned = tiersThatCannotBeUnassigned.any((t) => t.id == _identityDetails!.tierId);
+    return identityIsInTierThatCannotBeUnassigned && tier.id != _identityDetails!.tierId;
   }
 }

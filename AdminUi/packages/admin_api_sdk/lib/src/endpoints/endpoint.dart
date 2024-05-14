@@ -67,11 +67,19 @@ abstract class Endpoint {
     Response<Map<String, dynamic>> httpResponse,
     T Function(dynamic) transformer, {
     int? expectedStatus,
-    bool allowEmptyResponse = false,
+    bool allowEmptyResponse = true,
   }) {
     expectedStatus ??= switch (httpResponse.requestOptions.method.toUpperCase()) { 'POST' => 201, _ => 200 };
 
     final payload = httpResponse.data;
+
+    if (httpResponse.statusCode == 204) {
+      if (allowEmptyResponse) {
+        return ApiResponse.success(transformer(null));
+      } else {
+        throw Exception('No content in the response');
+      }
+    }
 
     if (httpResponse.statusCode != expectedStatus) {
       if (payload == null) {
