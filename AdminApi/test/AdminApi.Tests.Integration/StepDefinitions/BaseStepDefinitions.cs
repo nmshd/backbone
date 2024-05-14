@@ -4,14 +4,12 @@ using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 
-internal class BaseStepDefinitions
+internal abstract class BaseStepDefinitions
 {
-    protected readonly HttpClientOptions _options;
     protected readonly Client _client;
 
-    public BaseStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options)
+    protected BaseStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options)
     {
-        _options = options.Value;
-        _client = Client.Create(factory.CreateClient(), _options.ApiKey);
+        _client = Client.Create(factory.CreateClient(), options.Value.ApiKey);
     }
 }
