@@ -55,7 +55,7 @@ final _router = GoRouter(
             GoRoute(
               parentNavigatorKey: _shellNavigatorKey,
               path: ':id',
-              pageBuilder: (context, state) => NoTransitionPage(child: TiersDetail(tierId: state.pathParameters['id']!)),
+              pageBuilder: (context, state) => NoTransitionPage(child: TierDetail(tierId: state.pathParameters['id']!)),
             ),
           ],
         ),

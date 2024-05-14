@@ -11,16 +11,16 @@ import '../identities_overview/identities_filter.dart';
 import '/core/core.dart';
 import 'modals/modals.dart';
 
-class TiersDetail extends StatefulWidget {
+class TierDetail extends StatefulWidget {
   final String tierId;
 
-  const TiersDetail({required this.tierId, super.key});
+  const TierDetail({required this.tierId, super.key});
 
   @override
-  State<TiersDetail> createState() => _TiersDetailState();
+  State<TierDetail> createState() => _TierDetailState();
 }
 
-class _TiersDetailState extends State<TiersDetail> {
+class _TierDetailState extends State<TierDetail> {
   TierDetails? _tierDetails;
   late final ScrollController _scrollController;
 
