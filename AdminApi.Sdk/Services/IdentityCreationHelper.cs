@@ -38,7 +38,7 @@ public class IdentityCreationHelper(Client client)
             {
                 alg = CryptoExchangeAlgorithm.ECDH_X25519,
                 pub = identityKeyPair.PublicKey.Base64Representation
-            })).Base64Representation,
+            })).BytesRepresentation,
             DevicePassword = DEVICE_PASSWORD
         };
 
