@@ -66,7 +66,7 @@ static WebApplication CreateApp(string[] args)
     builder.Host
         .UseSerilog((context, configuration) => configuration
             .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
-            .Enrich.WithCorrelationId("X-Correlation-Id", true)
+            .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
             .Enrich.WithDemystifiedStackTraces()
             .Enrich.FromLogContext()
             .Enrich.WithProperty("service", "adminui")
@@ -137,14 +137,14 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
     var env = webApplicationBuilder.Environment;
 
     webApplicationBuilder.Configuration
-        .AddJsonFile("appsettings.json", true, false)
-        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", true, false)
-        .AddJsonFile("appsettings.override.json", true, true);
+        .AddJsonFile("appsettings.json", optional: true, reloadOnChange: false)
+        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: false)
+        .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
 
     if (env.IsDevelopment())
     {
         var appAssembly = Assembly.Load(new AssemblyName(env.ApplicationName));
-        webApplicationBuilder.Configuration.AddUserSecrets(appAssembly, true);
+        webApplicationBuilder.Configuration.AddUserSecrets(appAssembly, optional: true);
     }
 
     webApplicationBuilder.Configuration.AddEnvironmentVariables();
