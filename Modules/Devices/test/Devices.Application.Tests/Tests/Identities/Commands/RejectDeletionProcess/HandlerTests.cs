@@ -11,10 +11,11 @@ using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.RejectDeletionProcess;
+
 public class HandlerTests
 {
     [Fact]
-    public async void Happy_path()
+    public async Task Happy_path()
     {
         // Arrange
         var utcNow = DateTime.Parse("2000-01-01");
@@ -46,8 +47,6 @@ public class HandlerTests
 
         response.Id.Should().Be(deletionProcess.Id);
         response.Status.Should().Be(DeletionProcessStatus.Rejected);
-        response.RejectedAt.Should().Be(utcNow);
-        response.RejectedByDevice.Should().Be(device.Id);
     }
 
     [Fact]

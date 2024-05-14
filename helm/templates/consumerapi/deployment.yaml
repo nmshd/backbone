@@ -31,7 +31,7 @@ spec:
       {{- end }}
       {{- with .Values.consumerapi.podSecurityContext }}
       securityContext:
-        {{- toYaml .Values.consumerapi.podSecurityContext | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.consumerapi.image.imagePullSecrets }}
       imagePullSecrets:
@@ -49,7 +49,7 @@ spec:
         - name: {{ .Values.consumerapi.name }}
           {{- with .Values.consumerapi.securityContext }}
           securityContext:
-            {{- toYaml .Values.consumerapi.securityContext | nindent 8 }}
+            {{- toYaml . | nindent 8 }}
           {{- end }}
           resources:
             {{- toYaml .Values.consumerapi.resources | nindent 12 }}

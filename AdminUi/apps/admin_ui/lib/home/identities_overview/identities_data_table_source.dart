@@ -10,13 +10,16 @@ class IdentityDataTableSource extends AsyncDataTableSource {
   var _sortingSettings = (sortColumnIndex: 0, sortAscending: true);
 
   IdentityOverviewFilter? _filter;
-
   set filter(IdentityOverviewFilter? newFilter) {
     if (_filter != newFilter) {
       _filter = newFilter;
       notifyListeners();
     }
   }
+
+  final Locale locale;
+
+  IdentityDataTableSource({required this.locale});
 
   void sort({required int sortColumnIndex, required bool sortColumnAscending}) {
     _sortingSettings = (sortColumnIndex: sortColumnIndex, sortAscending: sortColumnAscending);
@@ -55,8 +58,22 @@ class IdentityDataTableSource extends AsyncDataTableSource {
                 DataCell(Text(identity.$2.tier.name)),
                 DataCell(Text(identity.$2.createdWithClient)),
                 DataCell(Text(identity.$2.numberOfDevices.toString())),
-                DataCell(Text(DateFormat('yyyy-MM-dd').format(identity.$2.createdAt))),
-                DataCell(Text(identity.$2.lastLoginAt != null ? DateFormat('yyyy-MM-dd').format(identity.$2.lastLoginAt!) : '')),
+                DataCell(
+                  Tooltip(
+                    message: '${DateFormat.yMd(locale.languageCode).format(identity.$2.createdAt)} ${DateFormat.Hms().format(identity.$2.createdAt)}',
+                    child: Text(DateFormat.yMd(locale.languageCode).format(identity.$2.createdAt)),
+                  ),
+                ),
+                DataCell(
+                  Tooltip(
+                    message: identity.$2.lastLoginAt != null
+                        ? '${DateFormat.yMd(locale.languageCode).format(identity.$2.lastLoginAt!)} ${DateFormat.Hms().format(identity.$2.lastLoginAt!)}'
+                        : '',
+                    child: Text(
+                      identity.$2.lastLoginAt != null ? DateFormat.yMd(locale.languageCode).format(identity.$2.lastLoginAt!) : '',
+                    ),
+                  ),
+                ),
                 DataCell(Text(identity.$2.datawalletVersion?.toString() ?? '')),
                 DataCell(Text(identity.$2.identityVersion.toString())),
               ],

@@ -1,19 +1,21 @@
 using System.ComponentModel;
 using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
 [Serializable]
 [TypeConverter(typeof(DevicePushIdentifierTypeConverter))]
-public class DevicePushIdentifier : StronglyTypedId
+public record DevicePushIdentifier : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
 
     private const string PREFIX = "DPI";
 
-    private DevicePushIdentifier(string stringValue) : base(stringValue) { }
+    private DevicePushIdentifier(string stringValue) : base(stringValue)
+    {
+    }
 
     public static DevicePushIdentifier New()
     {

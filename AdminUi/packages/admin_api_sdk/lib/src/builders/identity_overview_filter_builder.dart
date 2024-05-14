@@ -1,3 +1,5 @@
+import '../utils/utils.dart';
+
 class IdentityOverviewFilterBuilder {
   final IdentityOverviewFilter filter;
 
@@ -123,13 +125,6 @@ class IdentityOverviewFilter {
       identityVersion: (identityVersion != null) ? identityVersion.value : this.identityVersion,
     );
   }
-}
-
-class Optional<T> {
-  final T? value;
-
-  const Optional(this.value);
-  const Optional.absent() : value = null;
 }
 
 class FilterOperatorValue {

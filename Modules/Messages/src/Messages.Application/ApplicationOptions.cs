@@ -4,16 +4,16 @@ namespace Backbone.Modules.Messages.Application;
 
 public class ApplicationOptions
 {
-    [Required]
-    [MinLength(3)]
-    [MaxLength(3)]
-    public string AddressPrefix { get; set; } = null!;
-
     [Range(1, 100)]
     public int MaxNumberOfUnreceivedMessagesFromOneSender { get; set; }
 
     [Required]
     public PaginationOptions Pagination { get; set; } = new();
+
+    [Required]
+    [MinLength(3)]
+    [MaxLength(45)]
+    public string InstanceUrl { get; set; } = null!;
 }
 
 public class PaginationOptions

@@ -16,18 +16,30 @@ class DateFilter extends StatefulWidget {
 }
 
 class _DateFilterState extends State<DateFilter> {
+  late final TextEditingController _controller;
   FilterOperator _operator = FilterOperator.equal;
   DateTime? _selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '${widget.label}:',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
+        Text('${widget.label}:', style: const TextStyle(fontWeight: FontWeight.bold)),
         Gaps.h8,
         Row(
           children: [
@@ -41,31 +53,16 @@ class _DateFilterState extends State<DateFilter> {
               items: FilterOperator.values.toDropdownMenuItems(),
             ),
             Gaps.w8,
-            InkWell(
-              onTap: _selectNewDate,
-              child: Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      _selectedDate != null ? DateFormat('yyyy-MM-dd').format(_selectedDate!) : 'Select date',
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    Gaps.w8,
-                    const Icon(Icons.calendar_today),
-                    if (_selectedDate != null) ...[
-                      Gaps.w8,
-                      GestureDetector(
-                        onTap: _clearDate,
-                        child: const Icon(Icons.clear, size: 20),
-                      ),
-                    ],
-                  ],
+            SizedBox(
+              width: 160,
+              child: TextField(
+                onTap: _selectNewDate,
+                readOnly: true,
+                controller: _controller,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  suffixIcon:
+                      _selectedDate == null ? const Icon(Icons.calendar_today) : IconButton(onPressed: _clearDate, icon: const Icon(Icons.clear)),
                 ),
               ),
             ),
@@ -77,6 +74,7 @@ class _DateFilterState extends State<DateFilter> {
 
   void _clearDate() {
     setState(() => _selectedDate = null);
+    _controller.text = '';
     widget.onFilterSelected(_operator, null);
   }
 
@@ -85,12 +83,14 @@ class _DateFilterState extends State<DateFilter> {
       context: context,
       initialDate: _selectedDate ?? DateTime.now(),
       firstDate: DateTime(2000),
-      lastDate: DateTime.now().add(const Duration(days: 1)),
+      lastDate: DateTime.now(),
+      locale: Localizations.localeOf(context),
     );
 
-    if (picked == null) return;
+    if (picked == null || !mounted) return;
 
     setState(() => _selectedDate = picked);
+    _controller.text = DateFormat.yMd(Localizations.localeOf(context).languageCode).format(picked);
     widget.onFilterSelected(_operator, picked);
   }
 }

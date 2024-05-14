@@ -38,7 +38,7 @@ public class RejectRelationshipTests
         // Assert
         relationship.AuditLog.Should().HaveCount(2);
 
-        var auditLogEntry = relationship.AuditLog.Last();
+        var auditLogEntry = relationship.AuditLog.OrderBy(a => a.CreatedAt).Last();
 
         auditLogEntry.Id.Should().NotBeNull();
         auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.RejectionOfCreation);

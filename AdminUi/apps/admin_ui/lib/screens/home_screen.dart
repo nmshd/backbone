@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -23,29 +25,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const AppTitle(),
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {
-            setState(() {
-              extended = !extended;
-            });
-          },
-        ),
+        title: const AppTitle(padding: EdgeInsets.only(left: 80)),
         actions: [
-          SizedBox(
-            height: 35,
-            width: 120,
-            child: OutlinedButton(
-              onPressed: _logout,
-              child: const Row(
-                children: [
-                  Icon(Icons.logout, size: 18),
-                  Gaps.w4,
-                  Text('Logout', style: TextStyle(fontSize: 12.5)),
-                ],
-              ),
-            ),
+          OutlinedButton.icon(
+            style: OutlinedButton.styleFrom(minimumSize: const Size(120, 35)),
+            onPressed: _logout,
+            icon: const Icon(Icons.logout, size: 18),
+            label: const Text('Logout', style: TextStyle(fontSize: 12.5)),
           ),
           Gaps.w40,
         ],
@@ -53,15 +39,26 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Row(
         children: [
           NavigationRail(
-            extended: extended,
+            labelType: NavigationRailLabelType.all,
             destinations: const [
               NavigationRailDestination(icon: Icon(Icons.account_circle_sharp), label: Text('Identities')),
               NavigationRailDestination(icon: Icon(Icons.cable), label: Text('Tiers')),
               NavigationRailDestination(icon: Icon(Icons.layers), label: Text('Clients')),
             ],
+            trailing: Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: IconButton(onPressed: () => openSettingsDialog(context), icon: const Icon(Icons.settings)),
+                ),
+              ),
+            ),
             selectedIndex: _selectedIndex,
             onDestinationSelected: (int index) {
               if (index == _selectedIndex) return;
+
+              if (index == 3) return unawaited(openSettingsDialog(context));
 
               context.go(
                 switch (index) {

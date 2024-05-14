@@ -11,6 +11,7 @@ using Backbone.Modules.Devices.Application.Identities.Commands.RejectDeletionPro
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsOwner;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetOwnIdentity;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -116,6 +117,14 @@ public class IdentitiesController : ApiControllerBase
     public async Task<IActionResult> CancelDeletionProcess([FromRoute] string id, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new CancelDeletionProcessAsOwnerCommand(id), cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpGet("Self")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<GetOwnIdentityResponse>), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetOwnIdentity(CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetOwnIdentityQuery(), cancellationToken);
         return Ok(response);
     }
 }

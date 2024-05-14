@@ -11,7 +11,7 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.Tiers.GetTierById;
 public class HandlerTests
 {
     [Fact]
-    public async void Gets_tier_by_id_one_quota()
+    public async Task Gets_tier_by_id_one_quota()
     {
         // Arrange
         var tierId = new TierId("SomeTierId");
@@ -41,7 +41,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Gets_tier_by_id_multiple_quotas()
+    public async Task Gets_tier_by_id_multiple_quotas()
     {
         // Arrange
         var tierId = new TierId("SomeTierId");

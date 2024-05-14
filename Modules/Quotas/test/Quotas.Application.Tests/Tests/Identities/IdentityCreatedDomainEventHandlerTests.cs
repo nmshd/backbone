@@ -15,7 +15,7 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
 public class IdentityCreatedDomainEventHandlerTests
 {
     [Fact]
-    public async void Creates_a_copy_of_the_identity_from_the_event()
+    public async Task Creates_a_copy_of_the_identity_from_the_event()
     {
         // Arrange
         const string address = "some-dummy-address";
@@ -33,7 +33,7 @@ public class IdentityCreatedDomainEventHandlerTests
     }
 
     [Fact]
-    public async void Assigns_tier_quotas_to_new_identity()
+    public async Task Assigns_tier_quotas_to_new_identity()
     {
         // Arrange
         const string address = "some-dummy-address";

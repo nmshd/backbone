@@ -22,10 +22,7 @@ class MultiSelectFilter extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          '$label:',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
+        Text('$label:', style: const TextStyle(fontWeight: FontWeight.bold)),
         Gaps.h8,
         SizedBox(
           width: 250,

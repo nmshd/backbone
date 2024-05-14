@@ -23,6 +23,10 @@ public class IdentityDeletionProcessStartedDomainEventHandler : IDomainEventHand
 
     public async Task Handle(IdentityDeletionProcessStartedDomainEvent domainEvent)
     {
+        // No need to create an external event if the deletion process was started by the identity itself (in that case it's not "external").
+        if (domainEvent.Initiator == domainEvent.Address)
+            return;
+
 #pragma warning disable IDE0037
         var payload = new { DeletionProcessId = domainEvent.DeletionProcessId };
 #pragma warning restore IDE0037
@@ -33,7 +37,7 @@ public class IdentityDeletionProcessStartedDomainEventHandler : IDomainEventHand
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing an domain event.");
+            _logger.LogError(ex, "An error occured while processing a domain event.");
             throw;
         }
     }

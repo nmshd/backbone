@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
 import 'package:logger/logger.dart';
+import 'package:watch_it/watch_it.dart';
 
+import 'core/models/models.dart';
 import 'core/theme/theme.dart';
 import 'home/home.dart';
 import 'screens/screens.dart';
@@ -12,6 +14,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   GetIt.I.registerSingleton(Logger());
+  GetIt.I.registerSingleton(await ThemeModeModel.create());
 
   await setup();
 
@@ -52,7 +55,7 @@ final _router = GoRouter(
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/clients',
-          pageBuilder: (context, state) => const NoTransitionPage(child: Clients()),
+          pageBuilder: (context, state) => const NoTransitionPage(child: ClientsOverview()),
         ),
       ],
       builder: (context, state, child) => HomeScreen(
@@ -63,12 +66,15 @@ final _router = GoRouter(
   ],
 );
 
-class AdminUiApp extends StatelessWidget {
+class AdminUiApp extends StatelessWidget with WatchItMixin {
   const AdminUiApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final ThemeMode themeMode = watchValue((ThemeModeModel x) => x.themeMode);
+
     return MaterialApp.router(
+      themeMode: themeMode,
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: lightColorScheme,
@@ -81,6 +87,8 @@ class AdminUiApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       routerConfig: _router,
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
     );
   }
 }

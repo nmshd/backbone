@@ -11,7 +11,7 @@ public class RelationshipTemplateIdEntityFrameworkValueConverter : ValueConverte
 
     public RelationshipTemplateIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
-            id => id.StringValue,
+            id => id.Value,
             value => RelationshipTemplateId.Parse(value),
             mappingHints
         )

@@ -45,7 +45,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Publishes_IdentityDeletionProcessStartedEvent()
+    public async Task Publishes_IdentityDeletionProcessStartedEvent()
     {
         // Arrange
         var activeIdentity = TestDataGenerator.CreateIdentityWithOneDevice();

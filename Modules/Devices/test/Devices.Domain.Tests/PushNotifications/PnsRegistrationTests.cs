@@ -46,6 +46,6 @@ public class PnsRegistrationTests
         var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", PushEnvironment.Development);
 
         // Assert
-        pnsRegistration.DevicePushIdentifier.StringValue.Should().NotBe(otherPnsRegistration.DevicePushIdentifier.StringValue);
+        pnsRegistration.DevicePushIdentifier.Value.Should().NotBe(otherPnsRegistration.DevicePushIdentifier.Value);
     }
 }

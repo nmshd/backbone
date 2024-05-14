@@ -1,19 +1,21 @@
 using System.ComponentModel;
 using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities;
 
 [Serializable]
 [TypeConverter(typeof(DatawalletIdTypeConverter))]
-public class DatawalletId : StronglyTypedId
+public record DatawalletId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
     private const string PREFIX = "DWL";
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
-    private DatawalletId(string stringValue) : base(stringValue) { }
+    private DatawalletId(string stringValue) : base(stringValue)
+    {
+    }
 
     public static DatawalletId Parse(string stringValue)
     {

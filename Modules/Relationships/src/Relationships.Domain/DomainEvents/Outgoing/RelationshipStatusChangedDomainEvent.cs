@@ -6,7 +6,7 @@ namespace Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 
 public class RelationshipStatusChangedDomainEvent : DomainEvent
 {
-    public RelationshipStatusChangedDomainEvent(Relationship relationship) : base($"{relationship.Id}/StatusChanged/{relationship.AuditLog.Last().CreatedAt.ToUniversalString()}")
+    public RelationshipStatusChangedDomainEvent(Relationship relationship) : base($"{relationship.Id}/StatusChanged/{relationship.AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedAt.ToUniversalString()}")
     {
         RelationshipId = relationship.Id;
         Status = relationship.Status.ToString();

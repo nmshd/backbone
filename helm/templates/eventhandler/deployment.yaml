@@ -26,7 +26,7 @@ spec:
     spec:
       {{- with .Values.eventhandler.podSecurityContext }}
       securityContext:
-        {{- toYaml .Values.eventhandler.podSecurityContext | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.eventhandler.image.imagePullSecrets }}
       imagePullSecrets:
@@ -40,7 +40,7 @@ spec:
         - name: {{ .Values.eventhandler.name }}
           {{- with .Values.eventhandler.securityContext }}
           securityContext:
-            {{- toYaml .Values.eventhandler.securityContext | nindent 8 }}
+            {{- toYaml . | nindent 8 }}
           {{- end }}
           resources:
             {{- toYaml .Values.eventhandler.resources | nindent 12 }}
