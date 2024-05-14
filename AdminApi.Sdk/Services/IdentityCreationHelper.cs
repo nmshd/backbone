@@ -12,6 +12,7 @@ namespace Backbone.AdminApi.Sdk.Services;
 public class IdentityCreationHelper(Client client)
 {
     public const string DEVICE_PASSWORD = "some-device-password";
+    public const string TEST_CLIENT_ID = "test";
 
     public async Task<ApiResponse<CreateIdentityResponse>?> CreateIdentity()
     {
@@ -30,7 +31,7 @@ public class IdentityCreationHelper(Client client)
 
         var createIdentityPayload = new CreateIdentityRequest
         {
-            ClientId = string.Empty,
+            ClientId = TEST_CLIENT_ID,
             IdentityVersion = 1,
             SignedChallenge = signedChallenge,
             IdentityPublicKey = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new CryptoSignaturePublicKey
