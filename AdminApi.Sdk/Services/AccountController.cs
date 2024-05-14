@@ -1,7 +1,7 @@
 ﻿using Backbone.AdminApi.Sdk.Endpoints.Challenges.Types;
-using Backbone.AdminApi.Sdk.Endpoints.Common.Crypto;
 using Backbone.AdminApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.AdminApi.Sdk.Endpoints.Identities.Types.Responses;
+using Backbone.BuildingBlocks.SDK.Crypto;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.Crypto;
 using Newtonsoft.Json;
