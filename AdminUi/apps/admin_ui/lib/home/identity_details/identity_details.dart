@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
-import 'package:admin_ui/core/constants.dart';
+import 'package:admin_ui/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
@@ -135,7 +135,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                                 runSpacing: 4,
                                 children: _tiers != null && _tiers!.isNotEmpty
                                     ? _tiers!.where((tier) => tier.canBeManuallyAssigned || tier.id == _identityDetails!.tierId).map((tier) {
-                                        final isDisabled = isTierDisabled(tier);
+                                        final isDisabled = _isTierDisabled(tier);
                                         return isDisabled
                                             ? ChoiceChip(
                                                 label: Text(tier.name),
@@ -177,9 +177,14 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                           borderRadius: BorderRadius.circular(0),
                         ),
                       ),
+                      backgroundColor:
+                          _selectedTier != _identityDetails!.tierId ? MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary) : null,
                     ),
                     onPressed: _selectedTier != _identityDetails!.tierId ? _updateIdentity : null,
-                    child: const Text('Save'),
+                    child: Text(
+                      context.l10n.save,
+                      style: _selectedTier != _identityDetails!.tierId ? TextStyle(color: Theme.of(context).colorScheme.onPrimary) : null,
+                    ),
                   ),
                   const SizedBox(width: 16),
                   ElevatedButton(
@@ -189,11 +194,15 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                           borderRadius: BorderRadius.circular(0),
                         ),
                       ),
+                      backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.secondary),
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text('Cancel'),
+                    child: Text(
+                      context.l10n.cancel,
+                      style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
+                    ),
                   ),
                 ],
               ),
@@ -202,6 +211,15 @@ class _IdentityDetailsState extends State<IdentityDetails> {
         ),
       ),
     );
+  }
+
+  bool _isTierDisabled(TierOverview tier) {
+    if (_tiers == null || _identityDetails == null) {
+      return false;
+    }
+    final tiersThatCannotBeUnassigned = _tiers!.where((t) => !t.canBeManuallyAssigned);
+    final identityIsInTierThatCannotBeUnassigned = tiersThatCannotBeUnassigned.any((t) => t.id == _identityDetails!.tierId);
+    return identityIsInTierThatCannotBeUnassigned && tier.id != _identityDetails!.tierId;
   }
 
   Future<void> _updateIdentity() async {
@@ -231,14 +249,5 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   Future<void> _reloadTiers() async {
     final tiers = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
     if (mounted) setState(() => _tiers = tiers.data);
-  }
-
-  bool isTierDisabled(TierOverview tier) {
-    if (_tiers == null || _identityDetails == null) {
-      return false;
-    }
-    final tiersThatCannotBeUnassigned = _tiers!.where((t) => !t.canBeManuallyAssigned);
-    final identityIsInTierThatCannotBeUnassigned = tiersThatCannotBeUnassigned.any((t) => t.id == _identityDetails!.tierId);
-    return identityIsInTierThatCannotBeUnassigned && tier.id != _identityDetails!.tierId;
   }
 }
