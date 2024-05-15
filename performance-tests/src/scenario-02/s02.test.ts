@@ -1,7 +1,7 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 import { check } from "k6";
 import exec from "k6/execution";
-import http, { Response } from "k6/http";
+import { Response } from "k6/http";
 import { ConstantArrivalRateScenario, Options } from "k6/options";
 import { CreateIdentityResponse, IdentityWithToken } from "../domain/identity";
 import { StartSyncRunRequestBody, StartSyncRunResponse, SyncRunType } from "../domain/sync-runs";
@@ -20,8 +20,6 @@ export const options: Options = {
     }
 };
 
-const client2 = http;
-client2.get("/api/");
 const client = new Httpx({
     baseURL: "http://localhost:8081/api/v1/",
     timeout: 20000 // 20s timeout.
