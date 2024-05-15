@@ -29,6 +29,21 @@
         }
     },
     "Modules": {
+        "Challenges": {
+            "Application": {
+                "Pagination": {
+                    "DefaultPageSize": 50,
+                    "MaxPageSize": 200
+                }
+            },
+            "Infrastructure": {
+                "SqlDatabase": {
+                    "Provider": "Postgres",
+                    "ConnectionString": "User ID=challenges;Password=Passw0rd;Server=localhost;Port=5432;Database=enmeshed;" // postgres
+                    //"ConnectionString": "Server=localhost;Database=enmeshed;User Id=challenges;Password=Passw0rd;TrustServerCertificate=True" // sqlserver
+                }
+            }
+        },
         "Devices": {
             "Application": {
                 "AddressPrefix": "id1",

@@ -1,7 +1,12 @@
-using Backbone.AdminApi.Tests.Integration.API;
+﻿using Backbone.AdminApi.Sdk.Endpoints.Clients.Types;
+using Backbone.AdminApi.Sdk.Endpoints.Clients.Types.Requests;
+using Backbone.AdminApi.Sdk.Endpoints.Clients.Types.Responses;
+using Backbone.AdminApi.Sdk.Endpoints.Tiers.Types.Requests;
+using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.AdminApi.Tests.Integration.Extensions;
-using Backbone.AdminApi.Tests.Integration.Models;
+using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.UnitTestTools.Data;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 
@@ -12,23 +17,19 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "PUT Clients")]
 internal class ClientsStepDefinitions : BaseStepDefinitions
 {
-    private readonly ClientsApi _clientsApi;
-    private readonly TiersApi _tiersApi;
     private string _clientId;
     private string _clientSecret;
     private string _tierId;
     private string _updatedTierId;
     private int? _maxIdentities;
     private int? _updatedMaxIdentities;
-    private HttpResponse<List<ClientOverviewDTO>>? _getClientsResponse;
-    private HttpResponse<ChangeClientSecretResponse>? _changeClientSecretResponse;
-    private HttpResponse<UpdateClientResponse>? _updateClientResponse;
-    private HttpResponse? _deleteResponse;
+    private ApiResponse<ListClientsResponse>? _getClientsResponse;
+    private ApiResponse<ClientInfo>? _changeClientSecretResponse;
+    private ApiResponse<ClientInfo>? _updateClientResponse;
+    private ApiResponse<EmptyResponse>? _deleteResponse;
 
-    public ClientsStepDefinitions(ClientsApi clientsApi, TiersApi tiersApi)
+    public ClientsStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
     {
-        _clientsApi = clientsApi;
-        _tiersApi = tiersApi;
         _clientId = string.Empty;
         _clientSecret = string.Empty;
         _tierId = string.Empty;
@@ -39,39 +40,22 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
 
     public async Task<string> GetTier()
     {
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
+        var response = await _client.Tiers.ListTiers();
+        response.Should().BeASuccess();
 
-        var response = await _tiersApi.GetTiers(requestConfiguration);
-
-        var actualStatusCode = (int)response.StatusCode;
-        actualStatusCode.Should().Be(200);
-
-        var basicTier = response.Content.Result!.SingleOrDefault(t => t.Name == "Basic");
-
+        var basicTier = response.Result!.SingleOrDefault(t => t.Name == "Basic");
         return basicTier != null ? basicTier.Id : await CreateTier();
     }
 
     public async Task<string> CreateTier()
     {
-        var createTierRequest = new CreateTierRequest
-        {
-            Name = "TestTier_" + TestDataGenerator.GenerateString(12)
-        };
-
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(createTierRequest);
-
-        var response = await _tiersApi.CreateTier(requestConfiguration);
-
-        var actualStatusCode = (int)response.StatusCode;
-        actualStatusCode.Should().Be(201);
+        var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + TestDataGenerator.GenerateString(12) });
+        response.Should().BeASuccess();
 
         // allow the event queue to trigger the creation of this tier on the Quotas module
         Thread.Sleep(2000);
 
-        return response.Content.Result!.Id;
+        return response.Result!.Id;
     }
 
     [Given("a Client c")]
@@ -80,24 +64,17 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _tierId = await GetTier();
         _maxIdentities = 100;
 
-        var createClientRequest = new CreateClientRequest
+        var response = await _client.Clients.CreateClient(new CreateClientRequest
         {
             ClientId = string.Empty,
             DisplayName = string.Empty,
             ClientSecret = string.Empty,
             DefaultTier = _tierId,
             MaxIdentities = _maxIdentities
-        };
+        });
+        response.Should().BeASuccess();
 
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(createClientRequest);
-
-        var response = await _clientsApi.CreateClient(requestConfiguration);
-
-        var actualStatusCode = (int)response.StatusCode;
-        actualStatusCode.Should().Be(201);
-        _clientId = response.Content.Result!.ClientId;
+        _clientId = response.Result!.ClientId;
     }
 
     [Given("a non-existent Client c")]
@@ -109,72 +86,32 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     [When("a DELETE request is sent to the /Clients endpoint")]
     public async Task WhenADeleteRequestIsSentToTheClientsEndpoint()
     {
-        _deleteResponse = await _clientsApi.DeleteClient(_clientId, _requestConfiguration);
-        _deleteResponse.Should().NotBeNull();
+        _deleteResponse = await _client.Clients.DeleteClient(_clientId);
     }
 
     [When("a GET request is sent to the /Clients endpoint")]
     public async Task WhenAGetRequestIsSentToTheClientsEndpoint()
     {
-        _getClientsResponse = await _clientsApi.GetAllClients(_requestConfiguration);
-        _getClientsResponse.Should().NotBeNull();
-        _getClientsResponse.Content.Should().NotBeNull();
+        _getClientsResponse = await _client.Clients.GetAllClients();
     }
 
     [When("a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint with a new secret")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointWithASecret()
     {
         _clientSecret = "new-client-secret";
-
-        var changeClientSecretRequest = new ChangeClientSecretRequest
-        {
-            NewSecret = _clientSecret
-        };
-
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(changeClientSecretRequest);
-
-        _changeClientSecretResponse = await _clientsApi.ChangeClientSecret(_clientId, requestConfiguration);
-
-        _changeClientSecretResponse.Should().NotBeNull();
-        _changeClientSecretResponse.Content.Should().NotBeNull();
+        _changeClientSecretResponse = await _client.Clients.ChangeClientSecret(_clientId, new ChangeClientSecretRequest { NewSecret = _clientSecret });
     }
 
     [When("a PATCH request is sent to the /Clients/{c.ClientId}/ChangeSecret endpoint without passing a secret")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointWithoutASecret()
     {
-        var changeClientSecretRequest = new ChangeClientSecretRequest
-        {
-            NewSecret = string.Empty
-        };
-
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(changeClientSecretRequest);
-
-        _changeClientSecretResponse = await _clientsApi.ChangeClientSecret(_clientId, requestConfiguration);
-
-        _changeClientSecretResponse.Should().NotBeNull();
-        _changeClientSecretResponse.Content.Should().NotBeNull();
+        _changeClientSecretResponse = await _client.Clients.ChangeClientSecret(_clientId, new ChangeClientSecretRequest { NewSecret = string.Empty });
     }
 
     [When("a PATCH request is sent to the /Clients/{clientId}/ChangeSecret endpoint")]
     public async Task WhenAPatchRequestIsSentToTheClientsChangeSecretEndpointForAnInexistentClient()
     {
-        var changeClientSecretRequest = new ChangeClientSecretRequest
-        {
-            NewSecret = "new-client-secret"
-        };
-
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(changeClientSecretRequest);
-
-        _changeClientSecretResponse = await _clientsApi.ChangeClientSecret("inexistentClientId", requestConfiguration);
-
-        _changeClientSecretResponse.Should().NotBeNull();
-        _changeClientSecretResponse.Content.Should().NotBeNull();
+        _changeClientSecretResponse = await _client.Clients.ChangeClientSecret("inexistentClientId", new ChangeClientSecretRequest { NewSecret = "new-client-secret" });
     }
 
     [When("a PUT request is sent to the /Clients/{c.ClientId} endpoint")]
@@ -183,172 +120,108 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
         _updatedTierId = await CreateTier();
         _updatedMaxIdentities = 150;
 
-        var updateClientRequest = new UpdateClientRequest()
+        _updateClientResponse = await _client.Clients.UpdateClient(_clientId, new UpdateClientRequest
         {
             DefaultTier = _updatedTierId,
             MaxIdentities = _updatedMaxIdentities
-        };
-
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(updateClientRequest);
-
-        _updateClientResponse = await _clientsApi.UpdateClient(_clientId, requestConfiguration);
-
-        _updateClientResponse.Should().NotBeNull();
-        _updateClientResponse.Content.Should().NotBeNull();
+        });
     }
 
     [When("a PUT request is sent to the /Clients/{c.ClientId} endpoint with a null value for maxIdentities")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithANullMaxIdentities()
     {
-        var updateClientRequest = new UpdateClientRequest()
+        _updateClientResponse = await _client.Clients.UpdateClient(_clientId, new UpdateClientRequest
         {
             DefaultTier = _tierId,
             MaxIdentities = null
-        };
-
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(updateClientRequest);
-
-        _updateClientResponse = await _clientsApi.UpdateClient(_clientId, requestConfiguration);
-
-        _updateClientResponse.Should().NotBeNull();
-        _updateClientResponse.Content.Should().NotBeNull();
+        });
     }
 
     [When("a PUT request is sent to the /Clients/{c.ClientId} endpoint with a non-existent tier id")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointWithAnInexistentDefaultTier()
     {
-        var updateClientRequest = new UpdateClientRequest()
+        _updateClientResponse = await _client.Clients.UpdateClient(_clientId, new UpdateClientRequest
         {
             DefaultTier = "inexistent-tier-id",
             MaxIdentities = _maxIdentities
-        };
-
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(updateClientRequest);
-
-        _updateClientResponse = await _clientsApi.UpdateClient(_clientId, requestConfiguration);
-
-        _updateClientResponse.Should().NotBeNull();
-        _updateClientResponse.Content.Should().NotBeNull();
+        });
     }
 
     [When("a PUT request is sent to the /Clients/{c.clientId} endpoint with a non-existing clientId")]
     public async Task WhenAPatchRequestIsSentToTheClientsEndpointForAnInexistentClient()
     {
-        var updateClientRequest = new UpdateClientRequest()
+        _updateClientResponse = await _client.Clients.UpdateClient("inexistentClientId", new UpdateClientRequest
         {
             DefaultTier = "new-tier-id",
             MaxIdentities = _maxIdentities
-        };
-
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(updateClientRequest);
-
-        _updateClientResponse = await _clientsApi.UpdateClient("inexistentClientId", requestConfiguration);
-
-        _updateClientResponse.Should().NotBeNull();
-        _updateClientResponse.Content.Should().NotBeNull();
+        });
     }
 
     [Then("the response contains a paginated list of Clients")]
     public void ThenTheResponseContainsAListOfClients()
     {
-        _getClientsResponse!.Content.Result.Should().NotBeNullOrEmpty();
-        _getClientsResponse.AssertContentCompliesWithSchema();
+        _getClientsResponse!.Should().BeASuccess();
+        _getClientsResponse!.ContentType.Should().StartWith("application/json");
+        _getClientsResponse.Should().ComplyWithSchema();
     }
 
     [Then("the response contains Client c with the new client secret")]
     public void ThenTheResponseContainsAClientWithNewSecret()
     {
-        _changeClientSecretResponse!.AssertHasValue();
-        _changeClientSecretResponse!.AssertStatusCodeIsSuccess();
-        _changeClientSecretResponse!.AssertContentTypeIs("application/json");
-        _changeClientSecretResponse!.AssertContentCompliesWithSchema();
-        _changeClientSecretResponse!.Content.Result!.ClientSecret.Should().Be(_clientSecret);
+        _changeClientSecretResponse!.Should().BeASuccess();
+        _changeClientSecretResponse!.ContentType.Should().StartWith("application/json");
+        _changeClientSecretResponse.Should().ComplyWithSchema();
     }
 
     [Then("the response contains Client c with a random secret generated by the backend")]
     public void ThenTheResponseContainsAClientWithRandomGeneratedSecret()
     {
-        _changeClientSecretResponse!.AssertHasValue();
-        _changeClientSecretResponse!.AssertStatusCodeIsSuccess();
-        _changeClientSecretResponse!.AssertContentTypeIs("application/json");
-        _changeClientSecretResponse!.AssertContentCompliesWithSchema();
-        _changeClientSecretResponse!.Content.Result!.ClientSecret.Should().NotBeNullOrEmpty();
+        _changeClientSecretResponse!.Should().BeASuccess();
+        _changeClientSecretResponse!.ContentType.Should().StartWith("application/json");
+        _changeClientSecretResponse.Should().ComplyWithSchema();
     }
 
     [Then("the response contains Client c")]
     public void ThenTheResponseContainsAClient()
     {
-        _updateClientResponse!.AssertHasValue();
-        _updateClientResponse!.AssertStatusCodeIsSuccess();
-        _updateClientResponse!.AssertContentTypeIs("application/json");
-        _updateClientResponse!.AssertContentCompliesWithSchema();
+        _updateClientResponse!.Should().BeASuccess();
+        _updateClientResponse!.ContentType.Should().StartWith("application/json");
+        _updateClientResponse!.Should().ComplyWithSchema();
     }
 
     [Then("the Client in the Backend was successfully updated")]
     public async Task ThenTheClientInTheBackendWasUpdatedAsync()
     {
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
+        var response = await _client.Clients.GetClient(_clientId);
 
-        var response = await _clientsApi.GetClient(_clientId, requestConfiguration);
-
-        response.AssertHasValue();
-        response.AssertStatusCodeIsSuccess();
-        response.AssertContentTypeIs("application/json");
-        response.AssertContentCompliesWithSchema();
-        response.Content.Result!.DefaultTier.Should().Be(_updatedTierId);
-        response.Content.Result!.MaxIdentities.Should().Be(_updatedMaxIdentities);
+        response.Should().BeASuccess();
+        response.Result!.DefaultTier.Should().Be(_updatedTierId);
+        response.Result.MaxIdentities.Should().Be(_updatedMaxIdentities);
     }
 
     [Then("the Client in the Backend has a null value for maxIdentities")]
     public async Task ThenTheClientInTheBackendHasNullIdentitiesLimit()
     {
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
+        var response = await _client.Clients.GetClient(_clientId);
 
-        var response = await _clientsApi.GetClient(_clientId, requestConfiguration);
-
-        response.AssertHasValue();
-        response.AssertStatusCodeIsSuccess();
-        response.AssertContentTypeIs("application/json");
-        response.AssertContentCompliesWithSchema();
-        response.Content.Result!.MaxIdentities.Should().BeNull();
+        response.Should().BeASuccess();
+        response.Result!.MaxIdentities.Should().BeNull();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
         if (_getClientsResponse != null)
-        {
-            var actualStatusCode = (int)_getClientsResponse.StatusCode;
-            actualStatusCode.Should().Be(expectedStatusCode);
-        }
+            ((int)_getClientsResponse!.Status).Should().Be(expectedStatusCode);
 
         if (_changeClientSecretResponse != null)
-        {
-            var actualStatusCode = (int)_changeClientSecretResponse.StatusCode;
-            actualStatusCode.Should().Be(expectedStatusCode);
-        }
+            ((int)_changeClientSecretResponse!.Status).Should().Be(expectedStatusCode);
 
         if (_deleteResponse != null)
-        {
-            var actualStatusCode = (int)_deleteResponse.StatusCode;
-            actualStatusCode.Should().Be(expectedStatusCode);
-        }
+            ((int)_deleteResponse!.Status).Should().Be(expectedStatusCode);
 
         if (_updateClientResponse != null)
-        {
-            var actualStatusCode = (int)_updateClientResponse.StatusCode;
-            actualStatusCode.Should().Be(expectedStatusCode);
-        }
+            ((int)_updateClientResponse!.Status).Should().Be(expectedStatusCode);
     }
 
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
@@ -356,27 +229,26 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     {
         if (_getClientsResponse != null)
         {
-            _getClientsResponse!.Content.Error.Should().NotBeNull();
-            _getClientsResponse.Content.Error!.Code.Should().Be(errorCode);
+            _getClientsResponse!.Error.Should().NotBeNull();
+            _getClientsResponse.Error!.Code.Should().Be(errorCode);
         }
 
         if (_changeClientSecretResponse != null)
         {
-            _changeClientSecretResponse!.Content.Error.Should().NotBeNull();
-            _changeClientSecretResponse.Content.Error!.Code.Should().Be(errorCode);
+            _changeClientSecretResponse!.Error.Should().NotBeNull();
+            _changeClientSecretResponse.Error!.Code.Should().Be(errorCode);
         }
 
         if (_deleteResponse != null)
         {
-            _deleteResponse.Content.Should().NotBeNull();
-            _deleteResponse.Content!.Error.Should().NotBeNull();
-            _deleteResponse.Content!.Error.Code.Should().Be(errorCode);
+            _deleteResponse.Error.Should().NotBeNull();
+            _deleteResponse.Error!.Code.Should().Be(errorCode);
         }
 
         if (_updateClientResponse != null)
         {
-            _updateClientResponse!.Content.Error.Should().NotBeNull();
-            _updateClientResponse.Content.Error!.Code.Should().Be(errorCode);
+            _updateClientResponse.Error.Should().NotBeNull();
+            _updateClientResponse.Error!.Code.Should().Be(errorCode);
         }
     }
 }
