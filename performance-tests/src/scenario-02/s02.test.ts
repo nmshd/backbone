@@ -26,6 +26,7 @@ const client = new Httpx({
 }) as HttpxClient;
 
 export default async function (testIdentities: IdentityWithToken[]) {
+    const dataWalletVersion = exec.vu.iterationInInstance + 3;
     const currentVuIdInTest = exec.vu.idInTest;
     const identity = testIdentities[currentVuIdInTest - 1];
 
@@ -43,6 +44,7 @@ export default async function (testIdentities: IdentityWithToken[]) {
     const startSyncRunResponse = client.post("SyncRuns", JSON.stringify(requestBody), {
         headers: {
             "Content-Type": "application/json",
+            "X-Supported-Datawallet-Version": dataWalletVersion,
             Authorization: `Bearer ${identity.token.access_token}`
         }
     }) as Response;
@@ -85,10 +87,8 @@ export function setup(): IdentityWithToken[] {
             }
         }) as Response;
 
-        console.log(startSyncRunResponse.status);
-
         check(startSyncRunResponse, {
-            "Start datawallet version upgrade": (r) => r.status === 200
+            "Start datawallet version upgrade": (r) => r.status === 201
         });
 
         const startSyncRunResponseValue = startSyncRunResponse.json("result") as unknown as StartSyncRunResponse;
