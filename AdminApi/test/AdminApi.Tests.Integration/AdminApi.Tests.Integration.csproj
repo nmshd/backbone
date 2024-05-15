@@ -27,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\AdminApi.Sdk\AdminApi.Sdk.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
     <ProjectReference Include="..\..\src\AdminApi\AdminApi.csproj" />
   </ItemGroup>

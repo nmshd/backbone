@@ -5,7 +5,6 @@ using System.Text;
 using System.Text.Json;
 using System.Web;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Backbone.BuildingBlocks.SDK.Endpoints.Common;
@@ -123,7 +122,8 @@ public class EndpointClient
         }
 
         deserializedResponseContent!.Status = statusCode;
-        deserializedResponseContent.RawContent = JsonConvert.SerializeObject(deserializedResponseContent.Result);
+        deserializedResponseContent.RawContent = await response.Content.ReadAsStringAsync();
+        deserializedResponseContent.ContentType = response.Content.Headers.ContentType?.MediaType;
 
         try
         {
@@ -150,7 +150,10 @@ public class EndpointClient
         }
 
         var deserializedResponseContent = JsonSerializer.Deserialize<ODataResponse<T>>(responseContent, _jsonSerializerOptions)!;
-        return deserializedResponseContent.ToApiResponse(statusCode);
+        var rawContent = await response.Content.ReadAsStringAsync();
+        deserializedResponseContent.ContentType = response.Content.Headers.ContentType?.MediaType;
+
+        return deserializedResponseContent.ToApiResponse(statusCode, rawContent);
     }
 
     private async Task<RawApiResponse> ExecuteRaw(HttpRequestMessage request)
