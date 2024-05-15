@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using CSharpFunctionalExtensions;
 using Entity = Backbone.BuildingBlocks.Domain.Entity;
 
@@ -43,6 +44,8 @@ public class Tier : Entity
             return Result.Failure<TierQuotaDefinitionId, DomainError>(GenericDomainErrors.NotFound(nameof(TierQuotaDefinition)));
 
         Quotas.Remove(quotaDefinition);
+
+        RaiseDomainEvent(new TierQuotaDefinitionDeletedDomainEvent(Id, tierQuotaDefinitionId));
 
         return Result.Success<TierQuotaDefinitionId, DomainError>(quotaDefinition.Id);
     }
