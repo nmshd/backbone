@@ -31,6 +31,12 @@ const lightColorScheme = ColorScheme(
   scrim: Color(0xFF000000),
 );
 
+final cardThemeLight = CardTheme(
+  color: lightColorScheme.surface,
+  shadowColor: lightColorScheme.shadow,
+  surfaceTintColor: lightColorScheme.surfaceTint,
+);
+
 const darkColorScheme = ColorScheme(
   brightness: Brightness.dark,
   primary: Color(0xFFB0C6FF),
@@ -60,4 +66,10 @@ const darkColorScheme = ColorScheme(
   surfaceTint: Color(0xFFB0C6FF),
   outlineVariant: Color(0xFF44464F),
   scrim: Color(0xFF000000),
+);
+
+final cardThemeDark = CardTheme(
+  color: darkColorScheme.surface,
+  shadowColor: darkColorScheme.shadow,
+  surfaceTintColor: darkColorScheme.surfaceTint,
 );

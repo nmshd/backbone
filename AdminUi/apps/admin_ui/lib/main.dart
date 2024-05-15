@@ -85,11 +85,13 @@ class AdminUiApp extends StatelessWidget with WatchItMixin {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: lightColorScheme,
+        cardTheme: cardThemeLight,
         extensions: [lightCustomColors],
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
         colorScheme: darkColorScheme,
+        cardTheme: cardThemeDark,
         extensions: [darkCustomColors],
       ),
       debugShowCheckedModeBanner: false,
