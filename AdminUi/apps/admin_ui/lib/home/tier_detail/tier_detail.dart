@@ -151,12 +151,14 @@ class _QuotaListState extends State<_QuotaList> {
                   ),
                 SizedBox(
                   width: double.infinity,
-                  child: DataTable(
+                  height: 500,
+                  child: DataTable2(
                     columns: const [
                       DataColumn(label: Text('Metric')),
                       DataColumn(label: Text('Max')),
                       DataColumn(label: Text('Period')),
                     ],
+                    empty: const Text('No quotas added to this tier.'),
                     rows: widget.tierDetails.quotas
                         .map(
                           (quota) => DataRow2(
