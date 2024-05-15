@@ -250,12 +250,6 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 
     await GetIt.I.get<AdminApiClient>().identities.updateIdentity(_identityDetails!.address, tierId: _selectedTier!);
 
-    if (mounted) {
-      setState(() {
-        _selectedTier = _identityDetails!.tierId;
-      });
-    }
-
     await _reloadIdentity();
   }
 
