@@ -67,7 +67,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                         children: [
                           const Text(
                             'Identities Overview',
-                            style: TextStyle(fontSize: 32),
+                            style: TextStyle(fontSize: 40),
                           ),
                           Gaps.h32,
                           Row(
@@ -77,10 +77,11 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                                 children: [
                                   Text(
                                     'Address',
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                                   ),
                                   Text(
                                     identityDetails.address,
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                 ],
                               ),
@@ -90,10 +91,11 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                                 children: [
                                   Text(
                                     'Client ID',
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                                   ),
                                   Text(
                                     identityDetails.clientId,
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                 ],
                               ),
@@ -103,10 +105,11 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                                 children: [
                                   Text(
                                     'Public Key',
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                                   ),
                                   Text(
                                     identityDetails.publicKey,
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                 ],
                               ),
@@ -116,10 +119,11 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                                 children: [
                                   Text(
                                     'Created at',
-                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                                   ),
                                   Text(
                                     DateFormat('yyyy-MM-dd hh:MM:ss').format(identityDetails.createdAt),
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                 ],
                               ),
@@ -129,7 +133,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                                 children: [
                                   Text(
                                     'Tier',
-                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
                                   ),
                                   DropdownButton<String>(
                                     isDense: true,
@@ -150,13 +154,13 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                                                       tier.name,
                                                       style: TextStyle(
                                                         color: Theme.of(context).disabledColor,
-                                                        fontSize: 14,
+                                                        fontSize: 18,
                                                       ),
                                                     )
                                                   : Text(
                                                       tier.name,
                                                       style: const TextStyle(
-                                                        fontSize: 14,
+                                                        fontSize: 18,
                                                       ),
                                                     ),
                                             );
