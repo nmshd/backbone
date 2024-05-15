@@ -2,19 +2,22 @@ using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using CSharpFunctionalExtensions;
+using Entity = Backbone.BuildingBlocks.Domain.Entity;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
-public class Tier : BuildingBlocks.Domain.Entity<TierId>
+public class Tier : Entity
 {
     public static readonly Tier QUEUED_FOR_DELETION = new(TierId.Parse("TIR00000000000000001"), "Queued For Deletion");
 
-    public Tier(TierId id, string name) : base(id)
+    public Tier(TierId id, string name)
     {
+        Id = id;
         Name = name;
         Quotas = [];
     }
 
+    public TierId Id { get; }
     public string Name { get; }
     public List<TierQuotaDefinition> Quotas { get; }
 
