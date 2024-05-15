@@ -6,7 +6,6 @@ using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefiniti
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -44,7 +43,9 @@ public class HandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        var domainEvent = tier.Should().HaveASingleDomainEvent<TierQuotaDefinitionDeletedDomainEvent>(); //TODO: Timo (Should I make this a domain test as well or is this handler test enough?)
+        tier.DomainEvents.Should().HaveCount(2);
+        tier.DomainEvents[1].Should().BeOfType<TierQuotaDefinitionDeletedDomainEvent>();
+        var domainEvent = (TierQuotaDefinitionDeletedDomainEvent)tier.DomainEvents[1]; //TODO: Timo (Should I make this a domain test as well or is this handler test enough?)
         domainEvent.TierId.Should().Be(tierId);
         domainEvent.TierQuotaDefinitionId.Should().Be(tierQuotaDefinitionId);
     }
