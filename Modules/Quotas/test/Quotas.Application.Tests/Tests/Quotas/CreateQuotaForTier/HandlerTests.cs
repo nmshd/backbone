@@ -85,6 +85,6 @@ public class HandlerTests
     {
         var logger = A.Fake<ILogger<Handler>>();
 
-        return new Handler(tiersRepository, logger, _eventBus, metricsRepository);
+        return new Handler(tiersRepository, logger, metricsRepository);
     }
 }
