@@ -4,7 +4,8 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 
-import '/core/core.dart';
+import '../../constants.dart';
+import '../filters/filters.dart';
 
 class IdentitiesFilter extends StatefulWidget {
   final Future<void> Function({IdentityOverviewFilter? filter}) onFilterChanged;

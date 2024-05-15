@@ -7,8 +7,6 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '/core/core.dart';
-import '../identities_overview/identities_data_table_source.dart';
-import '../identities_overview/identities_filter.dart';
 import 'modals/modals.dart';
 
 class TierDetail extends StatefulWidget {
@@ -241,22 +239,17 @@ class _IdentitiesList extends StatefulWidget {
 class _IdentitiesListState extends State<_IdentitiesList> {
   late IdentityDataTableSource _dataSource;
 
-  int _sortColumnIndex = 0;
-
-  bool _sortColumnAscending = true;
-
-  int _rowsPerPage = 5;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _dataSource = IdentityDataTableSource(locale: Localizations.localeOf(context));
+    _dataSource = IdentityDataTableSource(locale: Localizations.localeOf(context), hideTierColumn: true);
   }
 
   @override
   void dispose() {
     _dataSource.dispose();
+
     super.dispose();
   }
 
@@ -279,62 +272,12 @@ class _IdentitiesListState extends State<_IdentitiesList> {
                       ..refreshDatasource();
                   },
                 ),
-                SizedBox(
-                  height: 500,
-                  child: AsyncPaginatedDataTable2(
-                    rowsPerPage: _rowsPerPage,
-                    onRowsPerPageChanged: _setRowsPerPage,
-                    sortColumnIndex: _sortColumnIndex,
-                    sortAscending: _sortColumnAscending,
-                    showFirstLastButtons: true,
-                    columnSpacing: 5,
-                    source: _dataSource,
-                    isVerticalScrollBarVisible: true,
-                    renderEmptyRowsInTheEnd: false,
-                    availableRowsPerPage: const [5, 10, 25, 50, 100],
-                    empty: const Text('No identities found.'),
-                    errorBuilder: (error) => Center(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Text('An error occurred loading the data.'),
-                          Gaps.h16,
-                          FilledButton(onPressed: _dataSource.refreshDatasource, child: const Text('Retry')),
-                        ],
-                      ),
-                    ),
-                    columns: <DataColumn2>[
-                      DataColumn2(label: const Text('Address'), size: ColumnSize.L, onSort: _sort),
-                      const DataColumn2(label: Text('Tier'), size: ColumnSize.S),
-                      DataColumn2(label: const Text('Created with Client'), onSort: _sort),
-                      DataColumn2(label: const Text('Number of Devices'), onSort: _sort),
-                      DataColumn2(label: const Text('Created at'), size: ColumnSize.S, onSort: _sort),
-                      DataColumn2(label: const Text('Last Login at'), size: ColumnSize.S, onSort: _sort),
-                      DataColumn2(label: const Text('Datawallet version'), onSort: _sort),
-                      DataColumn2(label: const Text('Identity Version'), onSort: _sort),
-                    ],
-                  ),
-                ),
+                SizedBox(height: 500, child: IdentitiesDataTable(dataSource: _dataSource, hideTierColumn: true)),
               ],
             ),
           ),
         ],
       ),
     );
-  }
-
-  void _setRowsPerPage(int? newValue) {
-    _rowsPerPage = newValue ?? _rowsPerPage;
-    _dataSource.refreshDatasource();
-  }
-
-  void _sort(int columnIndex, bool ascending) {
-    setState(() {
-      _sortColumnIndex = columnIndex;
-      _sortColumnAscending = ascending;
-    });
-    _dataSource
-      ..sort(sortColumnIndex: _sortColumnIndex, sortColumnAscending: _sortColumnAscending)
-      ..refreshDatasource();
   }
 }
