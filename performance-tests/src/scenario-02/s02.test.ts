@@ -1,13 +1,12 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 import { check } from "k6";
-import { b64encode } from "k6/encoding";
 import exec from "k6/execution";
-import { Response } from "k6/http";
+import http, { Response } from "k6/http";
 import { ConstantArrivalRateScenario, Options } from "k6/options";
-import { ChallengeResponse } from "../domain/challenge";
-import { CreateIdentityRequest, CreateIdentityResponse, IdentityWithToken } from "../domain/identity";
+import { CreateIdentityResponse, IdentityWithToken } from "../domain/identity";
 import { StartSyncRunRequestBody, StartSyncRunResponse, SyncRunType } from "../domain/sync-runs";
-import { ChallengeRequestRepresentation, CryptoHelper } from "../libs/crypto-helper";
+import { CreateIdentity, ExchangeToken } from "../libs/backbone-client/identity";
+import { HttpxClient } from "../libs/k6-utils";
 
 export const options: Options = {
     scenarios: {
@@ -21,10 +20,12 @@ export const options: Options = {
     }
 };
 
+const client2 = http;
+client2.get("/api/");
 const client = new Httpx({
     baseURL: "http://localhost:8081/api/v1/",
     timeout: 20000 // 20s timeout.
-});
+}) as HttpxClient;
 
 export default async function (testIdentities: IdentityWithToken[]) {
     const currentVuIdInTest = exec.vu.idInTest;
@@ -58,7 +59,7 @@ export function setup(): IdentityWithToken[] {
     const testIdentities = [];
 
     for (let i = 0; i < scenario.preAllocatedVUs; i++) {
-        const { httpResponse, generatedPassword } = CreateIdentity("test", "test");
+        const { httpResponse, generatedPassword } = CreateIdentity(client, "test", "test");
 
         check(httpResponse, {
             "Identity was created": (r) => r.status === 201
@@ -72,7 +73,7 @@ export function setup(): IdentityWithToken[] {
             "device has Id": (r) => r.device.id != undefined
         });
 
-        const token = ExchangeToken(createdIdentityResponseValue, generatedPassword);
+        const token = ExchangeToken(client, createdIdentityResponseValue, generatedPassword);
 
         const requestBody: StartSyncRunRequestBody = {
             duration: 10,
@@ -117,53 +118,4 @@ export function setup(): IdentityWithToken[] {
     }
     console.log(`testIdentities has ${testIdentities.length} identities after setup completed`);
     return testIdentities;
-}
-
-function CreateIdentity(ClientId: string, ClientSecret: string): { httpResponse: Response; generatedPassword: string } {
-    const sidecar = new CryptoHelper();
-
-    try {
-        const challenge = getChallenge();
-
-        const keyPair = sidecar.GenerateKeyPair();
-
-        const signedChallenge = sidecar.SignChallenge(keyPair, challenge);
-
-        const generatedPassword = sidecar.GeneratePassword();
-
-        const createIdentityRequest: CreateIdentityRequest = {
-            ClientId,
-            ClientSecret,
-            SignedChallenge: { challenge: JSON.stringify(challenge), signature: b64encode(JSON.stringify(signedChallenge)) },
-            IdentityPublicKey: b64encode(JSON.stringify(keyPair.pub)),
-            DevicePassword: generatedPassword,
-            IdentityVersion: 1
-        };
-
-        const httpResponse = client.post("Identities", JSON.stringify(createIdentityRequest), { headers: { "Content-Type": "application/json" } }) as Response;
-        return { httpResponse, generatedPassword };
-    } catch (e) {
-        console.error(e);
-        throw e;
-    }
-}
-
-function getChallenge(): ChallengeRequestRepresentation {
-    const receivedChallenge = client.post("Challenges").json("result") as ChallengeResponse;
-
-    return {
-        expiresAt: receivedChallenge.expiresAt,
-        id: receivedChallenge.id,
-        type: "Identity"
-    };
-}
-function ExchangeToken(createdIdentityResponse: CreateIdentityResponse, password: string) {
-    const payload = {
-        client_id: "test",
-        client_secret: "test",
-        grant_type: "password",
-        username: createdIdentityResponse.device.username,
-        password
-    };
-    return client.post("http://localhost:8081/connect/token", payload, { headers: { "Content-Type": "application/x-www-form-urlencoded" } }).json() as TokenResponse;
 }
