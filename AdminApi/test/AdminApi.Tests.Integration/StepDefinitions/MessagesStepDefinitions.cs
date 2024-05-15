@@ -1,4 +1,5 @@
-﻿using Backbone.AdminApi.Sdk.Endpoints.Messages.Types.Responses;
+﻿using Backbone.AdminApi.Sdk.Endpoints.Messages.Types;
+using Backbone.AdminApi.Sdk.Endpoints.Messages.Types.Responses;
 using Backbone.AdminApi.Sdk.Services;
 using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.AdminApi.Tests.Integration.Extensions;
@@ -28,7 +29,7 @@ internal class MessagesStepDefinitions : BaseStepDefinitions
     [When(@"a GET request is sent to the /Messages endpoint with type '(.*)' and participant i.Address")]
     public async Task WhenAGetRequestIsSentToTheMessagesEndpoint(string type)
     {
-        _messagesResponse = await _client.Messages.GetMessagesWithParticipant(_identityAddress, type);
+        _messagesResponse = await _client.Messages.GetMessagesWithParticipant(_identityAddress, new MessageType(type));
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
