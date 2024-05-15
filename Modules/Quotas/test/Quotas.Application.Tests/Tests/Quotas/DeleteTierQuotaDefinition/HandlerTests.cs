@@ -1,13 +1,12 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Tests.Extensions;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -19,11 +18,8 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.DeleteTierQuota
 
 public class HandlerTests
 {
-    private readonly IEventBus _eventBus;
-
     public HandlerTests()
     {
-        _eventBus = A.Fake<IEventBus>();
         AssertionScope.Current.FormattingOptions.MaxLines = 1000;
     }
 
@@ -35,8 +31,9 @@ public class HandlerTests
         var tier = new Tier(tierId, "some-tier-name");
 
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        var tierQuotaDefinitionId = tier.Quotas.First().Id;
 
-        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.First().Id);
+        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tierQuotaDefinitionId);
 
         var tiersRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tiersRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
@@ -47,7 +44,9 @@ public class HandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => _eventBus.Publish(A<DomainEvent>.That.IsInstanceOf(typeof(TierQuotaDefinitionDeletedDomainEvent)))).MustHaveHappenedOnceExactly();
+        var domainEvent = tier.Should().HaveASingleDomainEvent<TierQuotaDefinitionDeletedDomainEvent>(); //TODO: Timo (Should I make this a domain test as well or is this handler test enough?)
+        domainEvent.TierId.Should().Be(tierId);
+        domainEvent.TierQuotaDefinitionId.Should().Be(tierQuotaDefinitionId);
     }
 
     [Fact]
@@ -151,6 +150,6 @@ public class HandlerTests
     {
         var logger = A.Fake<ILogger<Handler>>();
 
-        return new Handler(tiersRepository, logger, _eventBus);
+        return new Handler(tiersRepository, logger);
     }
 }
