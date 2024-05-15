@@ -59,9 +59,9 @@ public static class DomainErrors
             $"Decompose request does not exist.");
     }
 
-    public static DomainError CannotAcceptOrRejectRelationshipDecomposeRequestAddressedToSomeoneElse()
+    public static DomainError ActiveIdentityAlreadyDecomposed()
     {
-        return new DomainError("error.platform.validation.decompose.cannotAcceptOrRejectRelationshipDecomposeRequestAddressedToSomeoneElse",
-            $"You cannot accept or reject a relationship decompose request that is addressed to someone else.");
+        return new DomainError("error.platform.validation.decompose.activeIdentityAlreadyDecomposed",
+            $"You already started decomposition for this relationship.");
     }
 }

@@ -26,7 +26,7 @@ public class Handler : IRequestHandler<DecomposeRelationshipCommand, DecomposeRe
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
         var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
 
-        relationship.Terminate(_activeIdentity, _activeDevice);
+        relationship.Decompose(_activeIdentity, _activeDevice);
 
         return new DecomposeRelationshipResponse(relationship);
     }

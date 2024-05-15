@@ -60,11 +60,11 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateRelationshipWithDecomposeRequest(IdentityAddress? from = null, IdentityAddress? to = null)
+    public static Relationship CreateRelationshipWithDecompositionStarted(IdentityAddress? from = null, IdentityAddress? to = null)
     {
         var relationship = CreateActiveRelationship(from, to);
 
-        // replace with DecomposeRequest when implemented
+        // replace with Decompose as first participant when implemented
         relationship.AuditLog.Add(new RelationshipAuditLogEntry(
             RelationshipAuditLogEntryReason.Decomposition,
             RelationshipStatus.Active,

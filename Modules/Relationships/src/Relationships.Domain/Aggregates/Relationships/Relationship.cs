@@ -205,7 +205,7 @@ public class Relationship
 
     public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
-        EnsureOpenDecomposeExists();
+        EnsureFirstParticipantStartedDecomposeProcess();
         EnsureActiveIdentityDidNotDecomposeYet(activeIdentity);
 
         Status = RelationshipStatus.ReadyForDeletion;
@@ -220,20 +220,22 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    private void EnsureOpenDecomposeExists() // todo: 
+    private void EnsureFirstParticipantStartedDecomposeProcess()
     {
-        var lastAuditLog = AuditLog.Last();
+        var lastAuditLog = AuditLog.OrderBy(a => a.CreatedAt).Last();
 
         if (lastAuditLog.Reason != RelationshipAuditLogEntryReason.Decomposition && lastAuditLog.NewStatus != RelationshipStatus.DeletionProposed)
         {
-            throw new DomainException(DomainErrors.CannotDecomposeRelationshipIfNoRequestWasMade());
+            throw new DomainException(DomainErrors.CannotDecomposeRelationshipIfNoRequestWasMade()); // todo: Decompose as first should be called, no need to throw
         }
     }
 
     private void EnsureActiveIdentityDidNotDecomposeYet(IdentityAddress activeIdentity)
     {
-        if (To != activeIdentity)
-            throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipDecomposeRequestAddressedToSomeoneElse());
+        var lastAuditLog = AuditLog.OrderBy(a => a.CreatedAt).Last();
+
+        if (lastAuditLog.Reason == RelationshipAuditLogEntryReason.Decomposition && lastAuditLog.CreatedBy == activeIdentity)
+            throw new DomainException(DomainErrors.ActiveIdentityAlreadyDecomposed());
     }
 
     #region Expressions

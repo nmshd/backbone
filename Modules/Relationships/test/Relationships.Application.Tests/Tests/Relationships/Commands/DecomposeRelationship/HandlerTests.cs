@@ -3,17 +3,20 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.UnitTestTools.Data;
 using FakeItEasy;
+using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.DecomposeRelationship;
 public class HandlerTests
 {
     [Fact]
-    public async Task Decompose_is_called()
+    public async Task Returns_the_updated_relationship()
     {
         // Arrange
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
@@ -30,17 +33,21 @@ public class HandlerTests
         var handler = CreateHandler(mockRelationshipsRepository, fakeUserContext);
 
         // Act
-        await handler.Handle(new DecomposeRelationshipCommand
+        var response = await handler.Handle(new DecomposeRelationshipCommand
         {
             RelationshipId = relationship.Id
         }, CancellationToken.None);
 
         // Assert
-        A.CallTo(
-                () => relationship.Decompose(
-                    A<IdentityAddress>.That.Matches(r => r == activeIdentity), A<DeviceId>.That.Matches(d => d == activeDevice))
-            )
-            .MustHaveHappenedOnceExactly();
+        response.Id.Should().Be(relationship.Id);
+        response.Status.Should().Be(RelationshipStatus.ReadyForDeletion);
+        //response.AuditLog.OrderBy(a => a.CreatedAt).Last().Reason.Should().Be(RelationshipAuditLogEntryReason.Decomposition);
+
+        //A.CallTo(
+        //        () => relationship.Decompose(
+        //            A<IdentityAddress>.That.Matches(r => r == activeIdentity), A<DeviceId>.That.Matches(d => d == activeDevice))
+        //    )
+        //    .MustHaveHappenedOnceExactly();
     }
 
     [Fact]

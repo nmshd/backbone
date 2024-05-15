@@ -10,10 +10,10 @@ namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relations
 public class DecomposeRelationshipTests
 {
     [Fact]
-    public void Decompose_transitions_relationship_to_status_ReadyForDeletion()
+    public void Decomposing_as_second_participant_transitions_relationship_to_status_ReadyForDeletion()
     {
         // Arrange
-        var relationship = CreateRelationshipWithDecomposeRequest();
+        var relationship = CreateRelationshipWithDecompositionStarted();
 
         // Act
         relationship.Decompose(IDENTITY_2, DEVICE_2);
@@ -28,7 +28,7 @@ public class DecomposeRelationshipTests
         // Arrange
         SystemTime.Set("2000-01-01");
 
-        var relationship = CreateRelationshipWithDecomposeRequest();
+        var relationship = CreateRelationshipWithDecompositionStarted();
 
         // Act
         relationship.Decompose(IDENTITY_2, DEVICE_2);
@@ -48,7 +48,7 @@ public class DecomposeRelationshipTests
     }
 
     [Fact]
-    public void Can_only_accept_reactivation_when_reactivation_request_has_been_made()
+    public void Decompose_finishedBySecondParticipant_if_firstAlreadyStartedTheProcess()
     {
         // Arrange
         var relationship = CreateActiveRelationship();
@@ -63,16 +63,16 @@ public class DecomposeRelationshipTests
     }
 
     [Fact]
-    public void Can_only_accept_relationship_reactivation_request_addressed_to_self()
+    public void Decompose_throws_if_activeIdentity_alreadyDecomposed()
     {
         // Arrange
-        var relationship = CreateRelationshipWithDecomposeRequest();
+        var relationship = CreateRelationshipWithDecompositionStarted();
 
         // Act
         var acting = () => relationship.Decompose(IDENTITY_1, DEVICE_1);
 
         // Assert
         acting.Should().Throw<DomainException>()
-            .WithError("error.platform.validation.decompose.cannotAcceptOrRejectRelationshipDecomposeRequestAddressedToSomeoneElse");
+            .WithError("error.platform.validation.decompose.activeIdentityAlreadyDecomposed");
     }
 }
