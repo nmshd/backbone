@@ -1,6 +1,6 @@
 ﻿namespace Backbone.AdminApi.Sdk.Endpoints.Clients.Types;
 
-public class ClientOverwiew
+public class ClientOverview
 {
     public required string ClientId { get; set; }
     public required string DisplayName { get; set; }
