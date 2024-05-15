@@ -14,16 +14,13 @@ public class IdentityCreationHelper(Client client)
     public const string DEVICE_PASSWORD = "some-device-password";
     public const string TEST_CLIENT_ID = "test";
 
-    public async Task<ApiResponse<CreateIdentityResponse>?> CreateIdentity()
+    public async Task<ApiResponse<CreateIdentityResponse>> CreateIdentity()
     {
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
 
         var identityKeyPair = signatureHelper.CreateKeyPair();
 
         var challenge = await client.Challenges.CreateChallenge();
-        if (challenge.Result?.Id is null)
-            return null;
-
         var serializedChallenge = JsonConvert.SerializeObject(challenge.Result);
 
         var challengeSignature = signatureHelper.CreateSignature(identityKeyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
