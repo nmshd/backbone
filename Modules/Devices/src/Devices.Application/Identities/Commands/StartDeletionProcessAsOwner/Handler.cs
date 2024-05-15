@@ -2,8 +2,10 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
+using Backbone.Modules.Devices.Domain;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling.Extensions;
@@ -38,7 +40,8 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        await _notificationSender.SendNotification(identity.Address, new DeletionProcessApprovedNotification(deletionProcess.GracePeriodEndsAt?.DaysUntilDate() ?? 0), cancellationToken);
+        var daysUntilDeletion = deletionProcess.GracePeriodEndsAt?.DaysUntilDate() ?? throw new DomainException(DomainErrors.GracePeriodHasNotYetExpired());
+        await _notificationSender.SendNotification(identity.Address, new DeletionProcessApprovedNotification(daysUntilDeletion), cancellationToken);
 
         return new StartDeletionProcessAsOwnerResponse(deletionProcess);
     }
