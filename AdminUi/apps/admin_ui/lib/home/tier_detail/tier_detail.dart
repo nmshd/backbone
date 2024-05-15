@@ -127,7 +127,7 @@ class _QuotaListState extends State<_QuotaList> {
           Card(
             child: Column(
               children: [
-                if (isQueuedForDeletionTier)
+                if (!isQueuedForDeletionTier)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Row(
