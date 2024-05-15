@@ -1,5 +1,3 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
@@ -7,6 +5,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -18,11 +17,8 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.CreateQuotaForT
 
 public class HandlerTests
 {
-    private readonly IEventBus _eventBus;
-
     public HandlerTests()
     {
-        _eventBus = A.Fake<IEventBus>();
         AssertionScope.Current.FormattingOptions.MaxLines = 1000;
     }
 
@@ -78,7 +74,8 @@ public class HandlerTests
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => _eventBus.Publish(A<DomainEvent>.That.IsInstanceOf(typeof(QuotaCreatedForTierDomainEvent)))).MustHaveHappened();
+        var domainEvent = tier.Should().HaveASingleDomainEvent<QuotaCreatedForTierDomainEvent>();
+        domainEvent.TierId.Should().Be(tierId);
     }
 
     private Handler CreateHandler(ITiersRepository tiersRepository, FindMetricsStubRepository metricsRepository)
