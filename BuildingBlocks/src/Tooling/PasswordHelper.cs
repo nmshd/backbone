@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Tooling;
+namespace Backbone.Tooling;
 
 public class PasswordHelper
 {
@@ -48,8 +48,8 @@ public class PasswordHelper
 
     private class Bucket
     {
-        public int MinLength { get; set; }
-        public int MaxLength { get; set; }
-        public string AllowedChars { get; set; }
+        public int MinLength { get; init; }
+        public int MaxLength { get; init; }
+        public required string AllowedChars { get; init; }
     }
 }

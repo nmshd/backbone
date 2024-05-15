@@ -113,7 +113,7 @@ public class EndpointClient
         {
             deserializedResponseContent = JsonSerializer.Deserialize<ApiResponse<T>>(responseContent, _jsonSerializerOptions);
         }
-        catch (System.Text.Json.JsonException)
+        catch (JsonException)
         {
             deserializedResponseContent = new ApiResponse<T>
             {
@@ -124,15 +124,6 @@ public class EndpointClient
         deserializedResponseContent!.Status = statusCode;
         deserializedResponseContent.RawContent = await response.Content.ReadAsStringAsync();
         deserializedResponseContent.ContentType = response.Content.Headers.ContentType?.MediaType;
-
-        try
-        {
-            deserializedResponseContent.ContentType = response.Content.Headers.GetValues("Content-Type").First();
-        }
-        catch (InvalidOperationException)
-        {
-            deserializedResponseContent.ContentType = null;
-        }
 
         return deserializedResponseContent;
     }

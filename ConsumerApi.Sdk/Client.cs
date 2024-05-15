@@ -166,7 +166,7 @@ public class Client
             {
                 alg = CryptoExchangeAlgorithm.ECDH_X25519,
                 pub = keyPair.PublicKey.Base64Representation
-            })).Base64Representation,
+            })).BytesRepresentation,
             DevicePassword = password
         };
 

@@ -3,8 +3,9 @@ using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.Tooling;
 using Microsoft.Extensions.Options;
-using Tooling;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -48,7 +49,7 @@ internal class ChallengesApiStepDefinitions
     public async Task GivenAChallengeC()
     {
         var challengeResponse = !_isAuthenticated ? await _sdk.Challenges.CreateChallengeUnauthenticated() : await _sdk.Challenges.CreateChallenge();
-        challengeResponse.IsSuccess.Should().BeTrue();
+        challengeResponse.Should().BeASuccess();
         _challengeId = challengeResponse.Result!.Id;
 
         _challengeId.Should().NotBeNullOrEmpty();
@@ -85,8 +86,9 @@ internal class ChallengesApiStepDefinitions
     public void ThenTheResponseContainsAChallenge()
     {
         _response!.Should().NotBeNull();
-        _response!.IsSuccess.Should().BeTrue();
-        _response!.ContentType.Should().StartWith("application/json");
+        _response!.Should().BeASuccess();
+        _response!.ContentType.Should().Be("application/json");
+        _response.Should().ComplyWithSchema();
         AssertExpirationDateIsInFuture();
     }
 

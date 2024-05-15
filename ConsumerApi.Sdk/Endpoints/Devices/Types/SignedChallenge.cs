@@ -1,4 +1,4 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Common.Crypto;
+﻿using Backbone.BuildingBlocks.SDK.Crypto;
 using Backbone.Crypto;
 using Newtonsoft.Json;
 
