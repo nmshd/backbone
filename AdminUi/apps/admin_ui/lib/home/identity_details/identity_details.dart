@@ -186,7 +186,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                       style: _selectedTier != _identityDetails!.tierId ? TextStyle(color: Theme.of(context).colorScheme.onPrimary) : null,
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  Gaps.w16,
                   ElevatedButton(
                     style: ButtonStyle(
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
