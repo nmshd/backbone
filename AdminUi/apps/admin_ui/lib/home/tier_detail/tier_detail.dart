@@ -112,18 +112,22 @@ class _QuotaList extends StatefulWidget {
 class _QuotaListState extends State<_QuotaList> {
   final List<String> _selectedQuotas = [];
 
+  bool get isQueuedForDeletionTier => widget.tierDetails.id == 'TIR00000000000000001';
+
   @override
   Widget build(BuildContext context) {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         title: const Text('Quotas'),
-        subtitle: const Text('View and assign quotas for this tier.'),
+        subtitle: isQueuedForDeletionTier
+            ? const Text('View quotas for this tier. This tier is managed by the system and therefore read-only.')
+            : const Text('View and assign quotas for this tier.'),
         children: [
           Card(
             child: Column(
               children: [
-                if (widget.tierDetails.id != 'TIR00000000000000001')
+                if (isQueuedForDeletionTier)
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: Row(
