@@ -19,8 +19,9 @@ class IdentityDataTableSource extends AsyncDataTableSource {
 
   final Locale locale;
   final bool hideTierColumn;
+  final void Function(String address) navigateTo;
 
-  IdentityDataTableSource({required this.locale, this.hideTierColumn = false});
+  IdentityDataTableSource({required this.locale, required this.navigateTo, this.hideTierColumn = false});
 
   void sort({required int sortColumnIndex, required bool sortColumnAscending}) {
     _sortingSettings = (sortColumnIndex: sortColumnIndex, sortAscending: sortColumnAscending);
@@ -52,8 +53,9 @@ class IdentityDataTableSource extends AsyncDataTableSource {
 
       final rows = response.data.indexed
           .map(
-            (identity) => DataRow.byIndex(
+            (identity) => DataRow2.byIndex(
               index: pageNumber * count + identity.$1,
+              onTap: () => navigateTo(identity.$2.address),
               cells: [
                 DataCell(Text(identity.$2.address)),
                 if (!hideTierColumn) DataCell(Text(identity.$2.tier.name)),
