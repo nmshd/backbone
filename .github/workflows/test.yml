@@ -116,8 +116,10 @@ jobs:
           repository: nmshd/runtime
           path: runtime
           ref: feature/backbone-specific-addresses
-      - name: Run Consumer API
-        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml up -d
+      - name: Build Consumer API and Admin API
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml build --parallel
+      - name: Run Consumer API & Admin API
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml up -d --no-build
       - name: Install runtime dependencies
         working-directory: ./runtime
         run: npm install
@@ -127,6 +129,8 @@ jobs:
           NMSHD_TEST_BASEURL: http://localhost:5000
           NMSHD_TEST_CLIENTID: test
           NMSHD_TEST_CLIENTSECRET: test
+          NMSHD_TEST_BASEURL_ADMIN_API: http://localhost:5173
+          NMSHD_TEST_ADMIN_API_KEY: test
         run: npm run test:local:lokijs
       - name: Save Docker Logs
         if: failure()
@@ -154,8 +158,10 @@ jobs:
           repository: nmshd/runtime
           path: runtime
           ref: feature/backbone-specific-addresses
-      - name: Run Consumer API
-        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml up -d
+      - name: Build Consumer API and Admin API
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml build --parallel
+      - name: Run Consumer API & Admin API
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml up -d --no-build
       - name: Install runtime dependencies
         working-directory: ./runtime
         run: npm install
@@ -165,6 +171,8 @@ jobs:
           NMSHD_TEST_BASEURL: http://localhost:5000
           NMSHD_TEST_CLIENTID: test
           NMSHD_TEST_CLIENTSECRET: test
+          NMSHD_TEST_BASEURL_ADMIN_API: http://localhost:5173
+          NMSHD_TEST_ADMIN_API_KEY: test
         run: npm run test:local:lokijs
       - name: Save Docker Logs
         if: failure()

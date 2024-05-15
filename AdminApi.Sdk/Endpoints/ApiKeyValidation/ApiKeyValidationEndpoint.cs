@@ -8,5 +8,7 @@ namespace Backbone.AdminApi.Sdk.Endpoints.ApiKeyValidation;
 public class ApiKeyValidationEndpoint(EndpointClient client) : AdminApiEndpoint(client)
 {
     public async Task<ApiResponse<ValidateApiKeyResponse>> ValidateApiKeyUnauthenticated(ValidateApiKeyRequest? request)
-        => await _client.PostUnauthenticated<ValidateApiKeyResponse>($"api/{API_VERSION}/ValidateApiKey", request);
+    {
+        return await _client.PostUnauthenticated<ValidateApiKeyResponse>($"api/{API_VERSION}/ValidateApiKey", request);
+    }
 }

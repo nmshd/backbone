@@ -55,11 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             selectedIndex: _selectedIndex,
-            onDestinationSelected: (int index) {
-              if (index == _selectedIndex) return;
-
-              if (index == 3) return unawaited(openSettingsDialog(context));
-
+            onDestinationSelected: (index) {
               context.go(
                 switch (index) {
                   0 => '/identities',

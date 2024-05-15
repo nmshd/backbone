@@ -35,8 +35,8 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
     public async Task<CreateIdentityResponse> Handle(CreateIdentityCommand command, CancellationToken cancellationToken)
     {
         var publicKey = PublicKey.FromBytes(command.IdentityPublicKey);
-        if (command.ShouldValidateChallenge)
-            await _challengeValidator.Validate(command.SignedChallenge, publicKey);
+
+        await _challengeValidator.Validate(command.SignedChallenge, publicKey);
 
         _logger.LogTrace("Challenge successfully validated.");
 

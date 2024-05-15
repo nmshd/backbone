@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
@@ -12,11 +13,11 @@ public class MessagesDbContext : AbstractDbContextBase
     {
     }
 
-    public MessagesDbContext(DbContextOptions<MessagesDbContext> options) : base(options)
+    public MessagesDbContext(DbContextOptions<MessagesDbContext> options, IEventBus eventBus) : base(options, eventBus)
     {
     }
 
-    public MessagesDbContext(DbContextOptions<MessagesDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    public MessagesDbContext(DbContextOptions<MessagesDbContext> options, IServiceProvider serviceProvider, IEventBus eventBus) : base(options, eventBus, serviceProvider)
     {
     }
 
