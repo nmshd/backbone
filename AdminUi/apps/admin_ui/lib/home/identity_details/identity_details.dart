@@ -74,7 +74,6 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                             children: [
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'Address',
@@ -87,6 +86,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                               ),
                               Gaps.w16,
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     'Client ID',
@@ -99,6 +99,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                               ),
                               Gaps.w16,
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     'Public Key',
@@ -111,6 +112,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                               ),
                               Gaps.w16,
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     'Created at',
