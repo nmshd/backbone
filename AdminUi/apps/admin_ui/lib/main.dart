@@ -1,3 +1,4 @@
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -17,6 +18,8 @@ void main() async {
   GetIt.I.registerSingleton(await ThemeModeModel.create());
 
   await setup();
+
+  dataTableShowLogs = false;
 
   runApp(const AdminUiApp());
 }
