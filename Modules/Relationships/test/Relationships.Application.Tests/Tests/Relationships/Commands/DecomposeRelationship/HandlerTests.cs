@@ -38,7 +38,7 @@ public class HandlerTests
         // Assert
         A.CallTo(
                 () => relationship.Decompose(
-                    A<IdentityAddress>.That.Matches(r => r == activeIdentity), A<DeviceId>.That.Matches(d=>d==activeDevice))
+                    A<IdentityAddress>.That.Matches(r => r == activeIdentity), A<DeviceId>.That.Matches(d => d == activeDevice))
             )
             .MustHaveHappenedOnceExactly();
     }
