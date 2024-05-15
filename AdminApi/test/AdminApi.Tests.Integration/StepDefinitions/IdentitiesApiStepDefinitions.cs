@@ -26,8 +26,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [Given("an Identity i")]
     public async Task GivenAnIdentityI()
     {
-        var accountController = new IdentityCreationHelper(_client);
-        _createIdentityResponse = await accountController.CreateIdentity();
+        _createIdentityResponse = await IdentityCreationHelper.CreateIdentity(_client);
         _createIdentityResponse.Should().BeASuccess();
 
         _existingIdentity = _createIdentityResponse.Result!.Address;

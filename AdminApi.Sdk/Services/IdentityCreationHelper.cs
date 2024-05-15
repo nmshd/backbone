@@ -9,12 +9,12 @@ using SignatureHelper = Backbone.Crypto.Implementations.SignatureHelper;
 
 namespace Backbone.AdminApi.Sdk.Services;
 
-public class IdentityCreationHelper(Client client)
+public static class IdentityCreationHelper
 {
     public const string DEVICE_PASSWORD = "some-device-password";
     public const string TEST_CLIENT_ID = "test";
 
-    public async Task<ApiResponse<CreateIdentityResponse>> CreateIdentity()
+    public static async Task<ApiResponse<CreateIdentityResponse>> CreateIdentity(Client client)
     {
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
 

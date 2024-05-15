@@ -116,9 +116,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
 
     private async Task CreateIdentity()
     {
-        var accountController = new IdentityCreationHelper(_client);
-
-        var createIdentityResponse = await accountController.CreateIdentity();
+        var createIdentityResponse = await IdentityCreationHelper.CreateIdentity(_client);
         createIdentityResponse.Should().BeASuccess();
 
         _identityAddress = createIdentityResponse.Result!.Address;
