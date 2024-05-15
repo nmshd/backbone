@@ -11,6 +11,7 @@ public class MessagesEndpoint(EndpointClient client) : AdminApiEndpoint(client)
     {
         return await _client
             .Request<ListMessagesResponse>(HttpMethod.Get, $"api/{API_VERSION}/Messages")
+            .Authenticate()
             .AddQueryParameter("participant", identityAddress)
             .AddQueryParameter("type", type.Value)
             .Execute();
