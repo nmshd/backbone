@@ -17,6 +17,8 @@ class IdentityDetails extends StatefulWidget {
 }
 
 class _IdentityDetailsState extends State<IdentityDetails> {
+  static const noTiersFoundMessage = 'No tiers found.';
+
   Identity? _identityDetails;
   List<TierOverview>? _tiers;
   String? _selectedTier;
@@ -119,40 +121,57 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                          Gaps.h16,
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Tier',
-                                style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
-                              ),
-                              Gaps.h16,
-                              Wrap(
-                                spacing: 8,
-                                runSpacing: 4,
-                                children: _tiers != null && _tiers!.isNotEmpty
-                                    ? _tiers!.where((tier) => tier.canBeManuallyAssigned || tier.id == _identityDetails!.tierId).map((tier) {
-                                        final isDisabled = _isTierDisabled(tier);
-                                        return isDisabled
-                                            ? ChoiceChip(
-                                                label: Text(tier.name),
-                                                selected: false,
-                                                disabledColor: Theme.of(context).disabledColor,
-                                              )
-                                            : ChoiceChip(
-                                                label: Text(tier.name),
-                                                selected: _selectedTier == tier.id,
-                                                onSelected: (bool selected) {
-                                                  setState(() {
-                                                    _selectedTier = selected ? tier.id : _selectedTier;
-                                                  });
-                                                },
-                                              );
-                                      }).toList()
-                                    : [const Text('No tiers found.')],
+                              Gaps.w16,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Tier',
+                                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                  DropdownButton<String>(
+                                    isDense: true,
+                                    value: _selectedTier,
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        _selectedTier = newValue;
+                                      });
+                                    },
+                                    items: _tiers!.isNotEmpty
+                                        ? _tiers!.where(_isTierManuallyAssignable).map((tier) {
+                                            final isDisabled = _isTierDisabled(tier);
+                                            return DropdownMenuItem<String>(
+                                              value: tier.id,
+                                              enabled: !isDisabled,
+                                              child: isDisabled
+                                                  ? Text(
+                                                      tier.name,
+                                                      style: TextStyle(
+                                                        color: Theme.of(context).disabledColor,
+                                                        fontSize: 14,
+                                                      ),
+                                                    )
+                                                  : Text(
+                                                      tier.name,
+                                                      style: const TextStyle(
+                                                        fontSize: 14,
+                                                      ),
+                                                    ),
+                                            );
+                                          }).toList()
+                                        : [
+                                            const DropdownMenuItem<String>(
+                                              value: noTiersFoundMessage,
+                                              child: Text(
+                                                noTiersFoundMessage,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -220,6 +239,10 @@ class _IdentityDetailsState extends State<IdentityDetails> {
     final tiersThatCannotBeUnassigned = _tiers!.where((t) => !t.canBeManuallyAssigned);
     final identityIsInTierThatCannotBeUnassigned = tiersThatCannotBeUnassigned.any((t) => t.id == _identityDetails!.tierId);
     return identityIsInTierThatCannotBeUnassigned && tier.id != _identityDetails!.tierId;
+  }
+
+  bool _isTierManuallyAssignable(TierOverview tier) {
+    return tier.canBeManuallyAssigned || tier.id == _identityDetails!.tierId;
   }
 
   Future<void> _updateIdentity() async {
