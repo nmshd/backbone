@@ -26,14 +26,14 @@ public class HandlerTests
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
-        var pushNotificationSender = A.Fake<IPushNotificationSender>();
+        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
         A.CallTo(() => mockIdentitiesRepository.FindByAddress(activeIdentity.Address, CancellationToken.None, A<bool>._))
             .Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, pushNotificationSender: pushNotificationSender);
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, pushNotificationSender: mockPushNotificationSender);
         var command = new CancelDeletionProcessAsOwnerCommand(deletionProcess.Id);
 
         // Act
@@ -49,7 +49,7 @@ public class HandlerTests
 
         response.Status.Should().Be(DeletionProcessStatus.Cancelled);
 
-        A.CallTo(() => pushNotificationSender.SendNotification(activeIdentity.Address, A<DeletionProcessCancelledByOwnerNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockPushNotificationSender.SendNotification(activeIdentity.Address, A<DeletionProcessCancelledByOwnerNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]

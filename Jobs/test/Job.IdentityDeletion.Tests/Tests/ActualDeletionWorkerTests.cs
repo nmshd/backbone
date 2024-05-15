@@ -73,7 +73,7 @@ public class ActualDeletionWorkerTests
         A.CallTo(() => mockMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
 
         var mockPushNotificationSender = A.Dummy<IPushNotificationSender>();
-        var worker = CreateWorker(mockMediator, pushNotificationSender: pushNotificationSender);
+        var worker = CreateWorker(mockMediator, pushNotificationSender: mockPushNotificationSender);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -81,7 +81,7 @@ public class ActualDeletionWorkerTests
         // Assert
         foreach (var identityAddress in new[] { identityAddress1, identityAddress2, identityAddress3 })
         {
-            A.CallTo(() => pushNotificationSender.SendNotification(identityAddress, A<object>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => mockPushNotificationSender.SendNotification(identityAddress, A<object>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         }
     }
 
