@@ -184,8 +184,7 @@ public class Relationship
 
     public void AcceptReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
-        EnsureOpenReactivationRequestExists();
-        EnsureReactivationRequestIsAddressedToSelf(activeIdentity);
+        EnsureAcceptableReactivationRequestExists(activeIdentity);
 
         Status = RelationshipStatus.Active;
 
@@ -199,18 +198,11 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    private void EnsureOpenReactivationRequestExists()
+    private void EnsureAcceptableReactivationRequestExists(IdentityAddress activeIdentity)
     {
-        if (AuditLog.OrderBy(a => a.CreatedAt).Last().Reason != RelationshipAuditLogEntryReason.ReactivationRequested)
-        {
-            throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipReactivationIfNoRequestToDoSoHasBeenMade());
-        }
-    }
-
-    private void EnsureReactivationRequestIsAddressedToSelf(IdentityAddress activeIdentity)
-    {
-        if (To != activeIdentity)
-            throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipReactivationRequestAddressedToSomeoneElse());
+        if (AuditLog.OrderBy(a => a.CreatedAt).Last().Reason != RelationshipAuditLogEntryReason.ReactivationRequested ||
+            AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy == activeIdentity)
+            throw new DomainException(DomainErrors.NoPendingRelationshipReactivationRequestExists());
     }
 
     public void RevokeReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
