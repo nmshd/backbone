@@ -1,25 +1,27 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
-import { check, sleep } from "k6";
+import { check } from "k6";
 import { b64encode } from "k6/encoding";
 import exec from "k6/execution";
 import { Response } from "k6/http";
 import { ConstantArrivalRateScenario, Options } from "k6/options";
+import { ChallengeResponse } from "../domain/challenge";
+import { CreateIdentityRequest, CreateIdentityResponse, IdentityWithToken } from "../domain/identity";
+import { StartSyncRunRequestBody, StartSyncRunResponse, SyncRunType } from "../domain/sync-runs";
 import { ChallengeRequestRepresentation, CryptoHelper } from "../libs/crypto-helper";
 
 export const options: Options = {
     scenarios: {
         constant_request_rate: {
             executor: "constant-arrival-rate",
-            rate: 8,
+            rate: 10,
             timeUnit: "1s",
             duration: "1m",
-            preAllocatedVUs: 2,
-            maxVUs: 5
+            preAllocatedVUs: 10
         }
     }
 };
 
-const session = new Httpx({
+const client = new Httpx({
     baseURL: "http://localhost:8081/api/v1/",
     timeout: 20000 // 20s timeout.
 });
@@ -27,7 +29,6 @@ const session = new Httpx({
 export default async function (testIdentities: IdentityWithToken[]) {
     const currentVuIdInTest = exec.vu.idInTest;
     const identity = testIdentities[currentVuIdInTest - 1];
-    const dataWalletVersion = exec.vu.iterationInInstance;
 
     console.debug(`VU ${currentVuIdInTest} is using identity with address ${identity?.response.address}`);
 
@@ -37,57 +38,26 @@ export default async function (testIdentities: IdentityWithToken[]) {
 
     const requestBody: StartSyncRunRequestBody = {
         duration: 10,
-        type: SyncRunType.DatawalletVersionUpgrade
+        type: SyncRunType.ExternalEventSync
     };
 
-    const startSyncRunResponse = session.post("SyncRuns", JSON.stringify(requestBody), {
+    const startSyncRunResponse = client.post("SyncRuns", JSON.stringify(requestBody), {
         headers: {
             "Content-Type": "application/json",
-            "X-Supported-Datawallet-Version": dataWalletVersion,
             Authorization: `Bearer ${identity.token.access_token}`
         }
     }) as Response;
 
-    const startSyncRunResponseValue = startSyncRunResponse.json("result") as unknown as StartSyncRunResponse;
-
     check(startSyncRunResponse, {
-        "SyncRun was started": (r) => r.status === 201
+        "Start sync run": (r) => r.status === 200
     });
-
-    check(startSyncRunResponseValue, {
-        "response has id": (r) => r.syncRun?.id != undefined
-    });
-
-    const finalizeDatawalletVersionUpgradeResponse = session.put(
-        `SyncRuns/${startSyncRunResponseValue.syncRun?.id}/FinalizeDatawalletVersionUpgrade`,
-        JSON.stringify({ newDatawalletVersion: dataWalletVersion + 1, datawalletModifications: [] } as FinalizeDatawalletVersionUpgradeRequest),
-        {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${identity.token.access_token}`
-            }
-        }
-    ) as Response;
-
-    const finalizeDatawalletVersionUpgradeResponseValue = finalizeDatawalletVersionUpgradeResponse.json("result") as unknown as FinalizeDatawalletVersionUpgradeResponse;
-
-    check(finalizeDatawalletVersionUpgradeResponse, {
-        "SyncRun was finalized": (r) => r.status === 200
-    });
-
-    
-    check(finalizeDatawalletVersionUpgradeResponseValue, {
-        "response has an array of Modifications": (r) => Array.isArray(r.datawalletModifications)
-    });
-
-    sleep(1);
 }
 
 export function setup(): IdentityWithToken[] {
-    const mainScenario = exec.test.options.scenarios?.constant_request_rate as ConstantArrivalRateScenario;
+    const scenario = exec.test.options.scenarios?.constant_request_rate as ConstantArrivalRateScenario;
     const testIdentities = [];
 
-    for (let i = 0; i < (mainScenario.maxVUs ?? 100); i++) {
+    for (let i = 0; i < scenario.preAllocatedVUs; i++) {
         const { httpResponse, generatedPassword } = CreateIdentity("test", "test");
 
         check(httpResponse, {
@@ -104,6 +74,41 @@ export function setup(): IdentityWithToken[] {
 
         const token = ExchangeToken(createdIdentityResponseValue, generatedPassword);
 
+        const requestBody: StartSyncRunRequestBody = {
+            duration: 10,
+            type: SyncRunType.DatawalletVersionUpgrade
+        };
+
+        const startSyncRunResponse = client.post("SyncRuns", JSON.stringify(requestBody), {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token.access_token}`
+            }
+        }) as Response;
+
+        console.log(startSyncRunResponse.status);
+
+        check(startSyncRunResponse, {
+            "Start datawallet version upgrade": (r) => r.status === 200
+        });
+
+        const startSyncRunResponseValue = startSyncRunResponse.json("result") as unknown as StartSyncRunResponse;
+
+        const finalizeDatawalletVersionUpgradeResponse = client.put(
+            `SyncRuns/${startSyncRunResponseValue.syncRun?.id}/FinalizeDatawalletVersionUpgrade`,
+            JSON.stringify({ newDatawalletVersion: 2, datawalletModifications: [] }),
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${token.access_token}`
+                }
+            }
+        ) as Response;
+
+        check(finalizeDatawalletVersionUpgradeResponse, {
+            "Finalize datawallet version upgrade": (r) => r.status === 200
+        });
+
         testIdentities.push({
             response: createdIdentityResponseValue,
             token,
@@ -114,123 +119,37 @@ export function setup(): IdentityWithToken[] {
     return testIdentities;
 }
 
-interface ChallengeResponse {
-    id: string;
-    expiresAt: string;
-    createdBy: string;
-    createdByDevice: string;
-}
-
-interface CreateIdentityRequest {
-    ClientId: string;
-    ClientSecret: string;
-    IdentityPublicKey: any;
-    DevicePassword: string;
-    IdentityVersion: number;
-    SignedChallenge: any;
-}
-
-interface StartSyncRunRequestBody {
-    type: SyncRunType;
-    duration: number;
-}
-
-interface CreateIdentityResponse {
-    address: string;
-    createdAt: string;
-    device: {
-        createdAt: string;
-        id: string;
-        username: string;
-    };
-}
-
-interface TokenResponse {
-    access_token: string;
-    token_type: string;
-    expires_in: number;
-}
-
-enum SyncRunType {
-    ExternalEventSync,
-    DatawalletVersionUpgrade
-}
-
-interface IdentityWithToken {
-    response: CreateIdentityResponse;
-    token: TokenResponse;
-    password: string;
-}
-
-interface FinalizeDatawalletVersionUpgradeResponse {
-    newDatawalletModificationIndex: number;
-    datawalletModifications: {
-        id: string;
-        index: number;
-        createdAt: string;
-    }[];
-}
-
-interface FinalizeDatawalletVersionUpgradeRequest {
-    newDatawalletVersion: number;
-    datawalletModifications?: CreateDatawalletModificationsRequestItem[];
-}
-
-interface CreateDatawalletModificationsRequestItem {
-    objectIdentifier: string;
-    payloadCategory?: string;
-    collection: string;
-    type: string;
-    encryptedPayload?: string;
-    datawalletVersion: number;
-}
-
-interface BackboneSyncRun {
-    id: string;
-    expiresAt: string;
-    index: number;
-    createdAt: string;
-    createdBy: string;
-    createdByDevice: string;
-    eventCount: number;
-}
-
-interface StartSyncRunResponse {
-    status: StartSyncRunStatus;
-    syncRun: BackboneSyncRun | null;
-}
-
-declare enum StartSyncRunStatus {
-    Created = "Created",
-    NoNewEvents = "NoNewEvents"
-}
-
 function CreateIdentity(ClientId: string, ClientSecret: string): { httpResponse: Response; generatedPassword: string } {
     const sidecar = new CryptoHelper();
 
-    const challenge = getChallenge();
+    try {
+        const challenge = getChallenge();
 
-    const keyPair = sidecar.GenerateKeyPair();
+        const keyPair = sidecar.GenerateKeyPair();
 
-    const signedChallenge = sidecar.SignChallenge(keyPair, challenge);
+        const signedChallenge = sidecar.SignChallenge(keyPair, challenge);
 
-    const generatedPassword = sidecar.GeneratePassword();
+        const generatedPassword = sidecar.GeneratePassword();
 
-    const createIdentityRequest: CreateIdentityRequest = {
-        ClientId,
-        ClientSecret,
-        SignedChallenge: { challenge: JSON.stringify(challenge), signature: b64encode(JSON.stringify(signedChallenge)) },
-        IdentityPublicKey: b64encode(JSON.stringify(keyPair.pub)),
-        DevicePassword: generatedPassword,
-        IdentityVersion: 1
-    };
+        const createIdentityRequest: CreateIdentityRequest = {
+            ClientId,
+            ClientSecret,
+            SignedChallenge: { challenge: JSON.stringify(challenge), signature: b64encode(JSON.stringify(signedChallenge)) },
+            IdentityPublicKey: b64encode(JSON.stringify(keyPair.pub)),
+            DevicePassword: generatedPassword,
+            IdentityVersion: 1
+        };
 
-    const httpResponse = session.post("Identities", JSON.stringify(createIdentityRequest), { headers: { "Content-Type": "application/json" } }) as Response;
-    return { httpResponse, generatedPassword };
+        const httpResponse = client.post("Identities", JSON.stringify(createIdentityRequest), { headers: { "Content-Type": "application/json" } }) as Response;
+        return { httpResponse, generatedPassword };
+    } catch (e) {
+        console.error(e);
+        throw e;
+    }
 }
 
 function getChallenge(): ChallengeRequestRepresentation {
-    const receivedChallenge = session.post("Challenges").json("result") as ChallengeResponse;
+    const receivedChallenge = client.post("Challenges").json("result") as ChallengeResponse;
 
     return {
         expiresAt: receivedChallenge.expiresAt,
@@ -246,5 +165,5 @@ function ExchangeToken(createdIdentityResponse: CreateIdentityResponse, password
         username: createdIdentityResponse.device.username,
         password
     };
-    return session.post("http://localhost:8081/connect/token", payload, { headers: { "Content-Type": "application/x-www-form-urlencoded" } }).json() as TokenResponse;
+    return client.post("http://localhost:8081/connect/token", payload, { headers: { "Content-Type": "application/x-www-form-urlencoded" } }).json() as TokenResponse;
 }
