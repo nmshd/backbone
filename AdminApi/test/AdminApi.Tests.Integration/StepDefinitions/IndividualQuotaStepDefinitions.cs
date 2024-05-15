@@ -41,7 +41,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
             Max = 2,
             Period = "Week"
         });
-        response.IsSuccess.Should().BeTrue();
+        response.Should().BeASuccess();
 
         _quotaId = response.Result!.Id;
     }
@@ -119,7 +119,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         var accountController = new IdentityCreationHelper(_client);
 
         var createIdentityResponse = await accountController.CreateIdentity() ?? throw new InvalidOperationException();
-        createIdentityResponse.IsSuccess.Should().BeTrue();
+        createIdentityResponse.Should().BeASuccess();
 
         _identityAddress = createIdentityResponse.Result!.Address;
 

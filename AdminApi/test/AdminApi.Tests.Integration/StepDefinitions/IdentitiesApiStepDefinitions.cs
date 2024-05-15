@@ -28,7 +28,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     {
         var accountController = new IdentityCreationHelper(_client);
         _createIdentityResponse = await accountController.CreateIdentity() ?? throw new InvalidOperationException();
-        _createIdentityResponse.IsSuccess.Should().BeTrue();
+        _createIdentityResponse.Should().BeASuccess();
 
         _existingIdentity = _createIdentityResponse.Result!.Address;
     }

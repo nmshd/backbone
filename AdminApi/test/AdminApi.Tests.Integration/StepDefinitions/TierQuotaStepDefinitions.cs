@@ -28,7 +28,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     public async Task GivenAValidTier()
     {
         var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + TestDataGenerator.GenerateString(12) });
-        response.IsSuccess.Should().BeTrue();
+        response.Should().BeASuccess();
 
         _tierId = response.Result!.Id;
 
@@ -47,7 +47,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
             Max = 2,
             Period = "Week"
         });
-        response.IsSuccess.Should().BeTrue();
+        response.Should().BeASuccess();
 
         _tierQuotaDefinitionId = response.Result!.Id;
 
@@ -102,7 +102,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     [Then("the response contains a TierQuota")]
     public void ThenTheResponseContainsATierQuotaDefinition()
     {
-        _createTierQuotaResponse!.IsSuccess.Should().BeTrue();
+        _createTierQuotaResponse!.Should().BeASuccess();
         _createTierQuotaResponse!.ContentType.Should().StartWith("application/json");
         _createTierQuotaResponse.Should().ComplyWithSchema();
     }

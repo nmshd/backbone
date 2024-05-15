@@ -32,7 +32,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
         {
             Name = "TestTier_" + TestDataGenerator.GenerateString(12)
         });
-        response.IsSuccess.Should().BeTrue();
+        response.Should().BeASuccess();
 
         _tierId = response.Result!.Id;
 
@@ -51,7 +51,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
             DefaultTier = _tierId,
             MaxIdentities = _maxIdentities
         });
-        response.IsSuccess.Should().BeTrue();
+        response.Should().BeASuccess();
 
         _clientId = response.Result!.ClientId;
     }

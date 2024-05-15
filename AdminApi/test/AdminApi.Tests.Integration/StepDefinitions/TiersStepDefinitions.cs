@@ -31,7 +31,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     public async Task GivenATier()
     {
         var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + TestDataGenerator.GenerateString(12) });
-        response.IsSuccess.Should().BeTrue();
+        response.Should().BeASuccess();
 
         _existingTierName = response.Result!.Name;
         _existingTierId = response.Result.Id;
@@ -47,7 +47,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     public async Task GivenTheBasicTierAsT()
     {
         var response = await _client.Tiers.ListTiers();
-        response.IsSuccess.Should().BeTrue();
+        response.Should().BeASuccess();
 
         var basicTier = response.Result!.Single(t => t.Name == "Basic");
         _existingTierName = basicTier.Name;
@@ -87,7 +87,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     [Then("the response contains a paginated list of Tiers")]
     public void ThenTheResponseContainsAListOfTiers()
     {
-        _tiersResponse!.IsSuccess.Should().BeTrue();
+        _tiersResponse!.Should().BeASuccess();
         _tiersResponse!.ContentType.Should().StartWith("application/json");
         _tiersResponse.Should().ComplyWithSchema();
     }
@@ -95,7 +95,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     [Then("the response contains a Tier")]
     public void ThenTheResponseContainsATier()
     {
-        _tierResponse!.IsSuccess.Should().BeTrue();
+        _tierResponse!.Should().BeASuccess();
         _tierResponse!.ContentType.Should().StartWith("application/json");
         _tierResponse.Should().ComplyWithSchema();
     }

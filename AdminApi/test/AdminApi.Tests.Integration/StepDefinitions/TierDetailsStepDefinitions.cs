@@ -24,7 +24,7 @@ internal class TierDetailsStepDefinitions : BaseStepDefinitions
     public async Task GivenATier()
     {
         var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + TestDataGenerator.GenerateString(12) });
-        response.IsSuccess.Should().BeTrue();
+        response.Should().BeASuccess();
         _tierId = response.Result!.Id;
 
         // allow the event queue to trigger the creation of this tier on the Quotas module

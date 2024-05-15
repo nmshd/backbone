@@ -20,7 +20,7 @@ internal class MetricsStepDefinitions : BaseStepDefinitions
     public async Task WhenAGETRequestIsSentToTheMetricsEndpoint()
     {
         _metricsResponse = await _client.Metrics.GetAllMetrics();
-        _metricsResponse.IsSuccess.Should().BeTrue();
+        _metricsResponse.Should().BeASuccess();
     }
 
     [Then("the response contains a list of Metrics")]

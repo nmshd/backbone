@@ -41,7 +41,7 @@ internal class MessagesStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsAListOfMessages()
     {
         _messagesResponse!.Result.Should().NotBeNull();
-        _messagesResponse!.IsSuccess.Should().BeTrue();
+        _messagesResponse!.Should().BeASuccess();
         _messagesResponse!.ContentType.Should().StartWith("application/json");
         _messagesResponse.Should().ComplyWithSchema();
     }
@@ -60,7 +60,7 @@ internal class MessagesStepDefinitions : BaseStepDefinitions
     {
         var accountController = new IdentityCreationHelper(_client);
         var createIdentityResponse = await accountController.CreateIdentity() ?? throw new InvalidOperationException();
-        createIdentityResponse.IsSuccess.Should().BeTrue();
+        createIdentityResponse.Should().BeASuccess();
 
         _identityAddress = createIdentityResponse.Result!.Address;
 
