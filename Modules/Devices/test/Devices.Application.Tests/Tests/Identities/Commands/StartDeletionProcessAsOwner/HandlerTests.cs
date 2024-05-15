@@ -26,14 +26,14 @@ public class HandlerTests
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
-        var pushNotificationSender = A.Dummy<IPushNotificationSender>();
+        var mockPushNotificationSender = A.Dummy<IPushNotificationSender>();
 
         A.CallTo(() => mockIdentitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._))
             .Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, pushNotificationSender: pushNotificationSender);
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, pushNotificationSender: mockPushNotificationSender);
 
         // Act
         var command = new StartDeletionProcessAsOwnerCommand();
@@ -52,7 +52,9 @@ public class HandlerTests
                 A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
 
-        A.CallTo(() => pushNotificationSender.SendNotification(activeIdentity.Address, A<DeletionProcessApprovedNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockPushNotificationSender.SendNotification(activeIdentity.Address,
+            A<DeletionProcessApprovedNotification>.That.Matches(n => n.DaysUntilDeletion == IdentityDeletionConfiguration.LengthOfGracePeriod), A<CancellationToken>._)
+        ).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -83,6 +85,6 @@ public class HandlerTests
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender? pushNotificationSender = null)
     {
-        return new Handler(identitiesRepository, userContext, A.Dummy<IEventBus>(), pushNotificationSender ?? A.Fake<IPushNotificationSender>());
+        return new Handler(identitiesRepository, userContext, A.Dummy<IEventBus>(), pushNotificationSender ?? A.Dummy<IPushNotificationSender>());
     }
 }

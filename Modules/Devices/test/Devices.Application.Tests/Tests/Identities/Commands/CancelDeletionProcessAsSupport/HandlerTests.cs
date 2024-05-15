@@ -26,13 +26,13 @@ public class HandlerTests
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(utcNow);
         var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        var pushNotificationSender = A.Fake<IPushNotificationSender>();
+        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
         A.CallTo(() => fakeIdentitiesRepository
                 .FindByAddress(identity.Address, A<CancellationToken>._, true))
             .Returns(identity);
 
-        var handler = CreateHandler(fakeIdentitiesRepository, pushNotificationSender: pushNotificationSender);
+        var handler = CreateHandler(fakeIdentitiesRepository, pushNotificationSender: mockPushNotificationSender);
 
         // Acting
         var result = await handler.Handle(new CancelDeletionAsSupportCommand(identity.Address, deletionProcess.Id), CancellationToken.None);
@@ -44,7 +44,7 @@ public class HandlerTests
         result.Status.Should().Be(DeletionProcessStatus.Cancelled);
         result.CancelledAt.Should().Be(utcNow);
 
-        A.CallTo(() => pushNotificationSender.SendNotification(identity.Address, A<DeletionProcessCancelledBySupportNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessCancelledBySupportNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -97,9 +97,9 @@ public class HandlerTests
 
     private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IEventBus? eventBus = null, IPushNotificationSender? pushNotificationSender = null)
     {
-        identitiesRepository ??= A.Fake<IIdentitiesRepository>();
-        eventBus ??= A.Fake<IEventBus>();
-        pushNotificationSender ??= A.Fake<IPushNotificationSender>();
+        identitiesRepository ??= A.Dummy<IIdentitiesRepository>();
+        eventBus ??= A.Dummy<IEventBus>();
+        pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
 
         return new Handler(identitiesRepository, eventBus, pushNotificationSender);
     }

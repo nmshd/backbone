@@ -72,7 +72,7 @@ public class ActualDeletionWorkerTests
         SetupRipeDeletionProcessesCommand(mockMediator, identityAddress1, identityAddress2, identityAddress3);
         A.CallTo(() => mockMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
 
-        var pushNotificationSender = A.Dummy<IPushNotificationSender>();
+        var mockPushNotificationSender = A.Dummy<IPushNotificationSender>();
         var worker = CreateWorker(mockMediator, pushNotificationSender: pushNotificationSender);
 
         // Act

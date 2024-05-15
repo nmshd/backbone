@@ -8,6 +8,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Dele
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.Tooling.Extensions;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
@@ -37,9 +38,9 @@ public class HandlerTests
         A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity);
 
-        var pushNotificationSender = A.Dummy<IPushNotificationSender>();
+        var mockPushNotificationSender = A.Dummy<IPushNotificationSender>();
 
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, pushNotificationSender: pushNotificationSender);
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, pushNotificationSender: mockPushNotificationSender);
 
         // Act
         var response = await handler.Handle(new ApproveDeletionProcessCommand(deletionProcess.Id), CancellationToken.None);
@@ -55,7 +56,9 @@ public class HandlerTests
             ), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
 
-        A.CallTo(() => pushNotificationSender.SendNotification(identity.Address, A<DeletionProcessApprovedNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address,
+            A<DeletionProcessApprovedNotification>.That.Matches(n => n.DaysUntilDeletion == IdentityDeletionConfiguration.LengthOfGracePeriod), A<CancellationToken>._)
+        ).MustHaveHappenedOnceExactly();
 
         response.Id.Should().Be(deletionProcess.Id);
         response.ApprovedAt.Should().Be(utcNow);
@@ -85,8 +88,8 @@ public class HandlerTests
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus? eventBus = null, IPushNotificationSender? pushNotificationSender = null)
     {
-        eventBus ??= A.Fake<IEventBus>();
-        pushNotificationSender ??= A.Fake<IPushNotificationSender>();
+        eventBus ??= A.Dummy<IEventBus>();
+        pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
         return new Handler(identitiesRepository, userContext, eventBus, pushNotificationSender);
     }
 }
