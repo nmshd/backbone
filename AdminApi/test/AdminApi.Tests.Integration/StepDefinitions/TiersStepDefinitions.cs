@@ -2,7 +2,7 @@
 using Backbone.AdminApi.Sdk.Endpoints.Tiers.Types.Requests;
 using Backbone.AdminApi.Sdk.Endpoints.Tiers.Types.Responses;
 using Backbone.AdminApi.Tests.Integration.Configuration;
-using Backbone.BuildingBlocks.SDK.Endpoints.Common.Extensions;
+using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.UnitTestTools.Data;
 using Microsoft.Extensions.Options;
@@ -89,7 +89,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     {
         _tiersResponse!.IsSuccess.Should().BeTrue();
         _tiersResponse!.ContentType.Should().StartWith("application/json");
-        _tiersResponse!.AssertContentCompliesWithSchema();
+        _tiersResponse.Should().ComplyWithSchema();
     }
 
     [Then("the response contains a Tier")]
@@ -97,7 +97,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     {
         _tierResponse!.IsSuccess.Should().BeTrue();
         _tierResponse!.ContentType.Should().StartWith("application/json");
-        _tierResponse!.AssertContentCompliesWithSchema();
+        _tierResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

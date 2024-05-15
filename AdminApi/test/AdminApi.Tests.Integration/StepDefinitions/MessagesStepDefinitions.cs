@@ -1,7 +1,7 @@
 ﻿using Backbone.AdminApi.Sdk.Endpoints.Messages.Types.Responses;
 using Backbone.AdminApi.Sdk.Services;
 using Backbone.AdminApi.Tests.Integration.Configuration;
-using Backbone.BuildingBlocks.SDK.Endpoints.Common.Extensions;
+using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Microsoft.Extensions.Options;
 
@@ -43,7 +43,7 @@ internal class MessagesStepDefinitions : BaseStepDefinitions
         _messagesResponse!.Result.Should().NotBeNull();
         _messagesResponse!.IsSuccess.Should().BeTrue();
         _messagesResponse!.ContentType.Should().StartWith("application/json");
-        _messagesResponse!.AssertContentCompliesWithSchema();
+        _messagesResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]

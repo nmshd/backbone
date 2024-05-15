@@ -1,10 +1,10 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
 using NJsonSchema.NewtonsoftJson.Generation;
 using JsonSchemaGenerator = NJsonSchema.Generation.JsonSchemaGenerator;
 
-namespace Backbone.BuildingBlocks.SDK.Endpoints.Common.Validators;
+namespace Backbone.AdminApi.Tests.Integration.Validators;
 
 public class JsonValidators
 {

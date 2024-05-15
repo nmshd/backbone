@@ -1,7 +1,7 @@
 ﻿using Backbone.AdminApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.AdminApi.Sdk.Services;
 using Backbone.AdminApi.Tests.Integration.Configuration;
-using Backbone.BuildingBlocks.SDK.Endpoints.Common.Extensions;
+using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Microsoft.Extensions.Options;
 
@@ -68,7 +68,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     {
         _identityOverviewsResponse!.Result!.Should().NotBeNull();
         _identityOverviewsResponse!.ContentType.Should().StartWith("application/json");
-        _identityOverviewsResponse!.AssertContentCompliesWithSchema();
+        _identityOverviewsResponse.Should().ComplyWithSchema();
     }
 
     [Then("the response contains a Deletion Process")]
@@ -76,7 +76,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     {
         _identityDeletionProcessResponse!.Result!.Should().NotBeNull();
         _identityDeletionProcessResponse!.ContentType.Should().StartWith("application/json");
-        _identityDeletionProcessResponse!.AssertContentCompliesWithSchema();
+        _identityDeletionProcessResponse.Should().ComplyWithSchema();
     }
 
     [Then("the response contains Identity i")]
@@ -84,7 +84,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     {
         _identityResponse!.Result!.Should().NotBeNull();
         _identityResponse!.ContentType.Should().StartWith("application/json");
-        _identityResponse!.AssertContentCompliesWithSchema();
+        _identityResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

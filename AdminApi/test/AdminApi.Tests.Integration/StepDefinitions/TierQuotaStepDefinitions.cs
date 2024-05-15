@@ -1,7 +1,7 @@
 ﻿using Backbone.AdminApi.Sdk.Endpoints.Tiers.Types;
 using Backbone.AdminApi.Sdk.Endpoints.Tiers.Types.Requests;
 using Backbone.AdminApi.Tests.Integration.Configuration;
-using Backbone.BuildingBlocks.SDK.Endpoints.Common.Extensions;
+using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.UnitTestTools.Data;
 using Microsoft.Extensions.Options;
@@ -104,7 +104,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     {
         _createTierQuotaResponse!.IsSuccess.Should().BeTrue();
         _createTierQuotaResponse!.ContentType.Should().StartWith("application/json");
-        _createTierQuotaResponse!.AssertContentCompliesWithSchema();
+        _createTierQuotaResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]

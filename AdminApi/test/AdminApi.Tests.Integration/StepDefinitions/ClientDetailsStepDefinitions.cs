@@ -2,7 +2,7 @@
 using Backbone.AdminApi.Sdk.Endpoints.Clients.Types.Requests;
 using Backbone.AdminApi.Sdk.Endpoints.Tiers.Types.Requests;
 using Backbone.AdminApi.Tests.Integration.Configuration;
-using Backbone.BuildingBlocks.SDK.Endpoints.Common.Extensions;
+using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.UnitTestTools.Data;
 using Microsoft.Extensions.Options;
@@ -70,7 +70,7 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
         _response!.Result!.DefaultTier.Should().Be(_tierId);
         _response!.Result!.MaxIdentities.Should().Be(_maxIdentities);
         _response!.ContentType.Should().StartWith("application/json");
-        _response!.AssertContentCompliesWithSchema();
+        _response!.Should().ComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

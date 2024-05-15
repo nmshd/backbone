@@ -1,6 +1,6 @@
 ﻿using Backbone.AdminApi.Sdk.Endpoints.Metrics.Types.Responses;
 using Backbone.AdminApi.Tests.Integration.Configuration;
-using Backbone.BuildingBlocks.SDK.Endpoints.Common.Extensions;
+using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Microsoft.Extensions.Options;
 
@@ -28,7 +28,7 @@ internal class MetricsStepDefinitions : BaseStepDefinitions
     {
         _metricsResponse!.Result!.Should().NotBeNullOrEmpty();
         _metricsResponse!.ContentType.Should().StartWith("application/json");
-        _metricsResponse.AssertContentCompliesWithSchema();
+        _metricsResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

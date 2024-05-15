@@ -2,7 +2,7 @@
 using Backbone.AdminApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.AdminApi.Sdk.Services;
 using Backbone.AdminApi.Tests.Integration.Configuration;
-using Backbone.BuildingBlocks.SDK.Endpoints.Common.Extensions;
+using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Microsoft.Extensions.Options;
 
@@ -95,7 +95,7 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     {
         _createQuotaResponse!.Result!.Should().NotBeNull();
         _createQuotaResponse!.ContentType.Should().StartWith("application/json");
-        _createQuotaResponse!.AssertContentCompliesWithSchema();
+        _createQuotaResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
