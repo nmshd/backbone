@@ -1,8 +1,7 @@
-using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
-namespace Backbone.Modules.Synchronization.Application.DomainEvents.Outgoing;
+namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 
 public class ExternalEventCreatedDomainEvent : DomainEvent
 {

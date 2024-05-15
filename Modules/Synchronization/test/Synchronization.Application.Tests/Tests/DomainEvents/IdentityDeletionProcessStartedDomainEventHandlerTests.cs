@@ -1,7 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.IdentityDeletionProcessStarted;
-using Backbone.Modules.Synchronization.Application.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -32,14 +31,14 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests
             A<object>._)
         ).Returns(externalEvent);
 
-        var handler = new IdentityDeletionProcessStartedDomainEventHandler(fakeDbContext, mockEventBus, A.Fake<ILogger<IdentityDeletionProcessStartedDomainEventHandler>>());
+        var handler = new IdentityDeletionProcessStartedDomainEventHandler(fakeDbContext, A.Fake<ILogger<IdentityDeletionProcessStartedDomainEventHandler>>());
 
         // Act
         await handler.Handle(identityDeletionProcessStartedDomainEvent);
 
         // Assert
-        A.CallTo(() => mockEventBus.Publish(
-            A<ExternalEventCreatedDomainEvent>.That.Matches(e => e.Owner == externalEvent.Owner && e.EventId == externalEvent.Id))
+        A.CallTo(() => fakeDbContext
+            .CreateExternalEvent(identityAddress, ExternalEventType.IdentityDeletionProcessStarted, A<object>._)
         ).MustHaveHappenedOnceExactly();
     }
 
@@ -51,7 +50,6 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests
         var identityDeletionProcessStartedDomainEvent = new IdentityDeletionProcessStartedDomainEvent(deletionProcessOwner, "some-deletion-process-id", deletionProcessOwner);
 
         var fakeDbContext = A.Fake<ISynchronizationDbContext>();
-        var mockEventBus = A.Fake<IEventBus>();
 
         var externalEvent = new ExternalEvent(ExternalEventType.IdentityDeletionProcessStarted, IdentityAddress.Parse(deletionProcessOwner), 1,
             new { identityDeletionProcessStartedDomainEvent.DeletionProcessId });
@@ -62,12 +60,13 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests
             A<object>._)
         ).Returns(externalEvent);
 
-        var handler = new IdentityDeletionProcessStartedDomainEventHandler(fakeDbContext, mockEventBus, A.Fake<ILogger<IdentityDeletionProcessStartedDomainEventHandler>>());
+        var handler = new IdentityDeletionProcessStartedDomainEventHandler(fakeDbContext, A.Fake<ILogger<IdentityDeletionProcessStartedDomainEventHandler>>());
 
         // Act
         await handler.Handle(identityDeletionProcessStartedDomainEvent);
 
         // Assert
-        A.CallTo(() => mockEventBus.Publish(A<ExternalEventCreatedDomainEvent>._)).MustNotHaveHappened();
+        A.CallTo(() => fakeDbContext.CreateExternalEvent(deletionProcessOwner, ExternalEventType.IdentityDeletionProcessStarted, A<object>._)
+        ).MustNotHaveHappened();
     }
 }
