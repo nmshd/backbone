@@ -193,13 +193,13 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                 children: [
                   ElevatedButton(
                     style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(0),
                         ),
                       ),
                       backgroundColor:
-                          _selectedTier != _identityDetails!.tierId ? MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary) : null,
+                          _selectedTier != _identityDetails!.tierId ? WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.primary) : null,
                     ),
                     onPressed: _selectedTier != _identityDetails!.tierId ? _updateIdentity : null,
                     child: Text(
@@ -210,12 +210,12 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                   Gaps.w16,
                   ElevatedButton(
                     style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                         RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(0),
                         ),
                       ),
-                      backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.secondary),
+                      backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.secondary),
                     ),
                     onPressed: () {
                       Navigator.of(context).pop();
