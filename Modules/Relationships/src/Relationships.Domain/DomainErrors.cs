@@ -53,9 +53,9 @@ public static class DomainErrors
             $"You cannot request reactivation when there is an open reactivation request.");
     }
 
-    public static DomainError CannotAcceptOrRejectRelationshipRevivalIfNoRequestToDoSoHasBeenMade()
+    public static DomainError CannotAcceptOrRejectRelationshipReactivationIfNoRequestToDoSoHasBeenMade()
     {
-        return new DomainError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRevivalIfNoRequestToDoSoHasBeenMade",
+        return new DomainError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipReactivationIfNoRequestToDoSoHasBeenMade",
             "You cannot accept or reject a relationship reactivation if no request to do so has been made.");
     }
 

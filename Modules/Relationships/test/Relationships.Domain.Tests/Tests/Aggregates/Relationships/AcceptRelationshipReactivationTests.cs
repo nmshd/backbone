@@ -58,7 +58,7 @@ public class AcceptRelationshipReactivationTests
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
-            "error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRevivalIfNoRequestToDoSoHasBeenMade"
+            "error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipReactivationIfNoRequestToDoSoHasBeenMade"
         );
     }
 
