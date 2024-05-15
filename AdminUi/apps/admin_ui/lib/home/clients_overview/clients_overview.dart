@@ -52,25 +52,15 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                       color: _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
                     ),
                     style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith((states) {
+                      backgroundColor: WidgetStateProperty.resolveWith((states) {
                         return _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.error : null;
                       }),
                     ),
-                    onPressed: _selectedClients.isNotEmpty
-                        ? () => showRemoveClientsDialog(context: context, selectedClients: _selectedClients, onClientsRemoved: _reloadClients)
-                        : null,
+                    onPressed: _selectedClients.isNotEmpty ? _removeSelectedClients : null,
                   ),
                   Gaps.w8,
-                  IconButton(
-                    icon: Icon(
-                      Icons.add,
-                      color: Theme.of(context).colorScheme.onPrimary,
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.resolveWith((states) {
-                        return Theme.of(context).colorScheme.primary;
-                      }),
-                    ),
+                  IconButton.filled(
+                    icon: const Icon(Icons.add),
                     onPressed: () => showCreateClientDialog(context: context, defaultTiers: _defaultTiers, onClientCreated: _reloadClients),
                   ),
                 ],
@@ -78,6 +68,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
               Expanded(
                 child: DataTable2(
                   isVerticalScrollBarVisible: true,
+                  empty: const Text('No clients found.'),
                   onSelectAll: (selected) {
                     if (selected == null) return;
 
@@ -127,7 +118,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                             ),
                             DataCell(
                               ElevatedButton(
-                                style: ButtonStyle(backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),
+                                style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),
                                 onPressed: () => showChangeClientSecretDialog(context: context, clientId: client.clientId),
                                 child: Text(
                                   'Change Client Secret',
@@ -157,5 +148,41 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   Future<void> _loadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
     setState(() => _defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient == true).toList());
+  }
+
+  Future<void> _removeSelectedClients() async {
+    final confirmed = await showConfirmationDialog(
+      context: context,
+      title: 'Remove Clients',
+      message: 'Are you sure you want to remove the selected clients?',
+    );
+
+    if (!confirmed) return;
+
+    for (final clientId in _selectedClients) {
+      final result = await GetIt.I.get<AdminApiClient>().clients.deleteClient(clientId);
+      if (result.hasError && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An error occurred while deleting the client(s). Please try again.'),
+            showCloseIcon: true,
+          ),
+        );
+        return;
+      }
+
+      await _reloadClients();
+    }
+
+    _selectedClients.clear();
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Selected clients have been removed.'),
+          showCloseIcon: true,
+        ),
+      );
+    }
   }
 }

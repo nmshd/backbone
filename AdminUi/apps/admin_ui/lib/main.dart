@@ -1,3 +1,4 @@
+import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:go_router/go_router.dart';
@@ -17,6 +18,8 @@ void main() async {
   GetIt.I.registerSingleton(await ThemeModeModel.create());
 
   await setup();
+
+  dataTableShowLogs = false;
 
   runApp(const AdminUiApp());
 }
@@ -51,6 +54,13 @@ final _router = GoRouter(
           parentNavigatorKey: _shellNavigatorKey,
           path: '/tiers',
           pageBuilder: (context, state) => const NoTransitionPage(child: TiersOverview()),
+          routes: [
+            GoRoute(
+              parentNavigatorKey: _shellNavigatorKey,
+              path: ':id',
+              pageBuilder: (context, state) => NoTransitionPage(child: TierDetail(tierId: state.pathParameters['id']!)),
+            ),
+          ],
         ),
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
@@ -78,11 +88,13 @@ class AdminUiApp extends StatelessWidget with WatchItMixin {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: lightColorScheme,
+        cardTheme: cardThemeLight,
         extensions: [lightCustomColors],
       ),
       darkTheme: ThemeData(
         useMaterial3: true,
         colorScheme: darkColorScheme,
+        cardTheme: cardThemeDark,
         extensions: [darkCustomColors],
       ),
       debugShowCheckedModeBanner: false,

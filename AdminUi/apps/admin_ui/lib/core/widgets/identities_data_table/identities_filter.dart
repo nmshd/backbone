@@ -4,13 +4,16 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_dropdown/multiselect_dropdown.dart';
 
-import '/core/core.dart';
+import '../../constants.dart';
+import '../filters/filters.dart';
 
 class IdentitiesFilter extends StatefulWidget {
   final Future<void> Function({IdentityOverviewFilter? filter}) onFilterChanged;
+  final String? fixedTierId;
 
   const IdentitiesFilter({
     required this.onFilterChanged,
+    this.fixedTierId,
     super.key,
   });
 
@@ -30,6 +33,10 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
 
     _tierController = MultiSelectController();
     _clientController = MultiSelectController();
+
+    if (widget.fixedTierId != null) {
+      _filter = _filter.copyWith(tiers: Optional([widget.fixedTierId!]));
+    }
 
     _loadTiers();
     _loadClients();
@@ -59,17 +66,19 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
                 widget.onFilterChanged(filter: _filter);
               },
             ),
-            Gaps.w16,
-            MultiSelectFilter(
-              label: 'Tiers',
-              searchLabel: 'Search Tiers',
-              controller: _tierController,
-              onOptionSelected: (List<ValueItem<String>> selectedOptions) {
-                final selectedTiers = selectedOptions.map((item) => item.value!).toList();
-                _filter = _filter.copyWith(tiers: selectedTiers.isEmpty ? const Optional.absent() : Optional(selectedTiers));
-                widget.onFilterChanged(filter: _filter);
-              },
-            ),
+            if (widget.fixedTierId == null) ...[
+              Gaps.w16,
+              MultiSelectFilter(
+                label: 'Tiers',
+                searchLabel: 'Search Tiers',
+                controller: _tierController,
+                onOptionSelected: (List<ValueItem<String>> selectedOptions) {
+                  final selectedTiers = selectedOptions.map((item) => item.value!).toList();
+                  _filter = _filter.copyWith(tiers: selectedTiers.isEmpty ? const Optional.absent() : Optional(selectedTiers));
+                  widget.onFilterChanged(filter: _filter);
+                },
+              ),
+            ],
             Gaps.w16,
             MultiSelectFilter(
               label: 'Clients',
