@@ -72,60 +72,24 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                           Gaps.h32,
                           Row(
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Address',
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-                                  ),
-                                  Text(
-                                    identityDetails.address,
-                                    style: const TextStyle(fontSize: 18),
-                                  ),
-                                ],
+                              _IdentityDetailsColumn(
+                                columnTitle: 'Address',
+                                columnValue: _identityDetails!.address,
                               ),
                               Gaps.w16,
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Client ID',
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-                                  ),
-                                  Text(
-                                    identityDetails.clientId,
-                                    style: const TextStyle(fontSize: 18),
-                                  ),
-                                ],
+                              _IdentityDetailsColumn(
+                                columnTitle: 'Client ID',
+                                columnValue: _identityDetails!.clientId,
                               ),
                               Gaps.w16,
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Public Key',
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-                                  ),
-                                  Text(
-                                    identityDetails.publicKey,
-                                    style: const TextStyle(fontSize: 18),
-                                  ),
-                                ],
+                              _IdentityDetailsColumn(
+                                columnTitle: 'Public Key',
+                                columnValue: _identityDetails!.publicKey,
                               ),
                               Gaps.w16,
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Created at',
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-                                  ),
-                                  Text(
-                                    DateFormat('yyyy-MM-dd hh:MM:ss').format(identityDetails.createdAt),
-                                    style: const TextStyle(fontSize: 18),
-                                  ),
-                                ],
+                              _IdentityDetailsColumn(
+                                columnTitle: 'Created at',
+                                columnValue: DateFormat('yyyy-MM-dd hh:MM:ss').format(identityDetails.createdAt),
                               ),
                               Gaps.w16,
                               Column(
@@ -293,5 +257,29 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   Future<void> _reloadTiers() async {
     final tiers = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
     if (mounted) setState(() => _tiers = tiers.data);
+  }
+}
+
+class _IdentityDetailsColumn extends StatelessWidget {
+  final String columnTitle;
+  final String columnValue;
+
+  const _IdentityDetailsColumn({required this.columnTitle, required this.columnValue, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          columnTitle,
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+        Text(
+          columnValue,
+          style: const TextStyle(fontSize: 18),
+        ),
+      ],
+    );
   }
 }
