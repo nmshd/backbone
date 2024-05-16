@@ -9,19 +9,39 @@ namespace Backbone.AdminApi.Sdk.Endpoints.Identities;
 public class IdentitiesEndpoint(EndpointClient client) : AdminApiEndpoint(client)
 {
     public async Task<ApiResponse<IndividualQuota>> CreateIndividualQuota(string address, CreateQuotaForIdentityRequest request)
-        => await _client.Post<IndividualQuota>($"api/{API_VERSION}/Identities/{address}/Quotas", request);
+    {
+        return await _client.Post<IndividualQuota>($"api/{API_VERSION}/Identities/{address}/Quotas", request);
+    }
 
     public async Task<ApiResponse<EmptyResponse>> DeleteIndividualQuota(string address, string quotaId)
-        => await _client.Delete<EmptyResponse>($"api/{API_VERSION}/Identities/{address}/Quotas/{quotaId}");
+    {
+        return await _client.Delete<EmptyResponse>($"api/{API_VERSION}/Identities/{address}/Quotas/{quotaId}");
+    }
 
-    public async Task<ApiResponse<GetIdentityResponse>> GetIdentity(string address) => await _client.Get<GetIdentityResponse>($"api/{API_VERSION}/Identities/{address}");
+    public async Task<ApiResponse<ListIdentitiesResponse>> ListIdentities()
+    {
+        return await _client.Request<ListIdentitiesResponse>(HttpMethod.Get, "odata/Identities")
+            .Authenticate()
+            .ExecuteOData();
+    }
+
+    public async Task<ApiResponse<GetIdentityResponse>> GetIdentity(string address)
+    {
+        return await _client.Get<GetIdentityResponse>($"api/{API_VERSION}/Identities/{address}");
+    }
 
     public async Task<ApiResponse<EmptyResponse>> UpdateIdentityTier(string address, UpdateIdentityTierRequest request)
-        => await _client.Put<EmptyResponse>($"api/{API_VERSION}/Identities/{address}", request);
+    {
+        return await _client.Put<EmptyResponse>($"api/{API_VERSION}/Identities/{address}", request);
+    }
 
     public async Task<ApiResponse<CreateIdentityResponse>> CreateIdentity(CreateIdentityRequest request)
-        => await _client.Post<CreateIdentityResponse>($"api/{API_VERSION}", request);
+    {
+        return await _client.Post<CreateIdentityResponse>($"api/{API_VERSION}/Identities", request);
+    }
 
     public async Task<ApiResponse<StartDeletionProcessAsSupportResponse>> StartDeletionProcess(string address)
-        => await _client.Post<StartDeletionProcessAsSupportResponse>($"api/{API_VERSION}/Identities/{address}/DeletionProcesses");
+    {
+        return await _client.Post<StartDeletionProcessAsSupportResponse>($"api/{API_VERSION}/Identities/{address}/DeletionProcesses");
+    }
 }

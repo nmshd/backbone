@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Synchronization.Application.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipChangeCreated;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -10,13 +9,11 @@ namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.Rel
 public class RelationshipChangeCreatedDomainEventHandler : IDomainEventHandler<RelationshipChangeCreatedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IEventBus _eventBus;
     private readonly ILogger<RelationshipChangeCreatedDomainEventHandler> _logger;
 
-    public RelationshipChangeCreatedDomainEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<RelationshipChangeCreatedDomainEventHandler> logger)
+    public RelationshipChangeCreatedDomainEventHandler(ISynchronizationDbContext dbContext, ILogger<RelationshipChangeCreatedDomainEventHandler> logger)
     {
         _dbContext = dbContext;
-        _eventBus = eventBus;
         _logger = logger;
     }
 
@@ -32,8 +29,7 @@ public class RelationshipChangeCreatedDomainEventHandler : IDomainEventHandler<R
 #pragma warning restore IDE0037
         try
         {
-            var externalEvent = await _dbContext.CreateExternalEvent(domainEvent.ChangeRecipient, ExternalEventType.RelationshipChangeCreated, payload);
-            _eventBus.Publish(new ExternalEventCreatedDomainEvent(externalEvent));
+            await _dbContext.CreateExternalEvent(domainEvent.ChangeRecipient, ExternalEventType.RelationshipChangeCreated, payload);
         }
         catch (Exception ex)
         {

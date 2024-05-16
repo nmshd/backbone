@@ -1,9 +1,11 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Backbone.AdminApi.Sdk.Authentication;
 using Backbone.AdminApi.Sdk.Endpoints.ApiKeyValidation;
+using Backbone.AdminApi.Sdk.Endpoints.Challenges;
 using Backbone.AdminApi.Sdk.Endpoints.Clients;
 using Backbone.AdminApi.Sdk.Endpoints.Identities;
 using Backbone.AdminApi.Sdk.Endpoints.Logs;
+using Backbone.AdminApi.Sdk.Endpoints.Messages;
 using Backbone.AdminApi.Sdk.Endpoints.Metrics;
 using Backbone.AdminApi.Sdk.Endpoints.Relationships;
 using Backbone.AdminApi.Sdk.Endpoints.Tiers;
@@ -30,6 +32,8 @@ public class Client
         Metrics = new MetricsEndpoint(endpointClient);
         Relationships = new RelationshipsEndpoint(endpointClient);
         Tiers = new TiersEndpoint(endpointClient);
+        Challenges = new ChallengesEndpoint(endpointClient);
+        Messages = new MessagesEndpoint(endpointClient);
     }
 
     public ApiKeyValidationEndpoint ApiKeyValidation { get; }
@@ -39,6 +43,8 @@ public class Client
     public MetricsEndpoint Metrics { get; }
     public RelationshipsEndpoint Relationships { get; }
     public TiersEndpoint Tiers { get; }
+    public ChallengesEndpoint Challenges { get; }
+    public MessagesEndpoint Messages { get; }
 
     public static Client Create(string baseUrl, string apiKey)
     {

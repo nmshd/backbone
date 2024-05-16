@@ -18,9 +18,10 @@
 		</PackageReference>
 	</ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
-		<ProjectReference Include="..\..\src\Synchronization.Domain\Synchronization.Domain.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj"/>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj"/>
+        <ProjectReference Include="..\..\src\Synchronization.Domain\Synchronization.Domain.csproj"/>
+    </ItemGroup>
 
 </Project>

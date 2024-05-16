@@ -129,8 +129,9 @@ public class Identity
     {
         EnsureIdentityOwnsDevice(deviceId);
 
-        var deletionProcess = GetDeletionProcess(deletionProcessId);
+        TierIdBeforeDeletion = TierId;
 
+        var deletionProcess = GetDeletionProcess(deletionProcessId);
         deletionProcess.Approve(Address, deviceId);
 
         Status = IdentityStatus.ToBeDeleted;
