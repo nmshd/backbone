@@ -20,9 +20,4 @@ public class ChallengesEndpoint(EndpointClient client) : ConsumerApiEndpoint(cli
     {
         return await _client.Get<Challenge>($"api/{API_VERSION}/Challenges/{id}");
     }
-
-    public async Task<ApiResponse<Challenge>> GetChallengeUnauthenticated(string id)
-    {
-        return await _client.GetUnauthenticated<Challenge>($"api/{API_VERSION}/Challenges/{id}");
-    }
 }

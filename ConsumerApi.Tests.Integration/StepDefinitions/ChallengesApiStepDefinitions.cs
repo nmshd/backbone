@@ -79,7 +79,7 @@ internal class ChallengesApiStepDefinitions
                 id = "CHLjVPS6h1082AuBVBaR";
                 break;
         }
-        _response = _isAuthenticated ? await _sdk.Challenges.GetChallenge(id) : await _sdk.Challenges.GetChallengeUnauthenticated(id);
+        _response = await _sdk.Challenges.GetChallenge(id);
     }
 
     [Then("the response contains a Challenge")]
