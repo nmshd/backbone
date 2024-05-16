@@ -3,7 +3,7 @@
 namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationCompleted;
 public class RelationshipReactivationCompletedDomainEvent : DomainEvent
 {
-    public RelationshipReactivationCompletedDomainEvent(string relationshipId, string peer) : base($"{relationshipId}/ReactivationCompleted")
+    public RelationshipReactivationCompletedDomainEvent(string relationshipId, string peer)
     {
         RelationshipId = relationshipId;
         Peer = peer;

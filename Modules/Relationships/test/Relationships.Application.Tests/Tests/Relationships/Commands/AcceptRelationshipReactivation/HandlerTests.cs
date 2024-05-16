@@ -20,8 +20,10 @@ public class HandlerTests
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
+        var identityTo = TestDataGenerator.CreateRandomIdentityAddress();
+
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreateRelationshipWithRequestedReactivation(activeIdentity);
+        var relationship = TestData.CreateRelationshipWithRequestedReactivation(from: activeIdentity, to: identityTo, reactivationRequestedBy: identityTo);
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
@@ -49,8 +51,10 @@ public class HandlerTests
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
+        var identityTo = TestDataGenerator.CreateRandomIdentityAddress();
+
         var mockRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreateRelationshipWithRequestedReactivation(activeIdentity);
+        var relationship = TestData.CreateRelationshipWithRequestedReactivation(from: activeIdentity, to: identityTo, reactivationRequestedBy: identityTo);
         A.CallTo(() => mockRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
@@ -80,8 +84,10 @@ public class HandlerTests
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
+        var identityTo = TestDataGenerator.CreateRandomIdentityAddress();
+
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreateRelationshipWithRequestedReactivation(activeIdentity);
+        var relationship = TestData.CreateRelationshipWithRequestedReactivation(from: activeIdentity, to: identityTo, reactivationRequestedBy: identityTo);
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();

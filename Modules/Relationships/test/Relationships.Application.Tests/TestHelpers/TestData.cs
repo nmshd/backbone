@@ -48,11 +48,8 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateRelationshipWithRequestedReactivation(IdentityAddress from, IdentityAddress? to = null, IdentityAddress? reactivationRequestedBy = null)
+    public static Relationship CreateRelationshipWithRequestedReactivation(IdentityAddress from, IdentityAddress to, IdentityAddress reactivationRequestedBy)
     {
-        to ??= TestDataGenerator.CreateRandomIdentityAddress();
-        reactivationRequestedBy ??= to;
-
         var relationship = CreateTerminatedRelationship(from, to);
         relationship.RequestReactivation(reactivationRequestedBy, TestDataGenerator.CreateRandomDeviceId());
 
