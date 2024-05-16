@@ -56,6 +56,6 @@ public static class DomainErrors
     public static DomainError NoRejectableReactivationRequestExists()
     {
         return new DomainError("error.platform.validation.relationshipRequest.noRejectableReactivationRequestExists",
-            "There is no pending reactivation request or you are not allowed to revoke it. A reactivation request can only be rejected by the identity that did not requested it.");
+            "There is no pending reactivation request or you are not allowed to revoke it. A reactivation request can only be rejected by the identity that did not request it.");
     }
 }

@@ -27,8 +27,7 @@ public class Handler : IRequestHandler<RejectRelationshipReactivationCommand, Re
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
 
-        var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true) ??
-                           throw new NotFoundException(nameof(Relationship));
+        var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
 
         relationship.RejectReactivation(_activeIdentity, _activeDevice);
 
