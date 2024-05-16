@@ -8,13 +8,13 @@ using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationCompleted;
-public class RelationshipReactivationCompletedDomainEventHandler
+public class RelationshipReactivationCompletedDomainEventHandler : IDomainEventHandler<RelationshipReactivationCompletedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
-    private readonly ILogger<MessageCreatedDomainEventHandler> _logger;
+    private readonly ILogger<RelationshipReactivationCompletedDomainEventHandler> _logger;
 
-    public RelationshipReactivationCompletedDomainEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<MessageCreatedDomainEventHandler> logger)
+    public RelationshipReactivationCompletedDomainEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<RelationshipReactivationCompletedDomainEventHandler> logger)
     {
         _dbContext = dbContext;
         _eventBus = eventBus;
@@ -29,7 +29,7 @@ public class RelationshipReactivationCompletedDomainEventHandler
     private async Task CreateExternalEvent(RelationshipReactivationCompletedDomainEvent @event)
     {
 #pragma warning disable IDE0037
-        var payload = new { @event.RelationshipId };
+        var payload = new { RelationshipId = @event.RelationshipId };
 #pragma warning restore IDE0037
         try
         {
