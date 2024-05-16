@@ -202,13 +202,12 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                           borderRadius: BorderRadius.circular(0),
                         ),
                       ),
-                      backgroundColor:
-                          _selectedTier != _identityDetails!.tierId ? WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.primary) : null,
+                      backgroundColor: _isTierChanged() ? WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.primary) : null,
                     ),
-                    onPressed: _selectedTier != _identityDetails!.tierId ? _updateIdentity : null,
+                    onPressed: _isTierChanged() ? _updateIdentity : null,
                     child: Text(
                       context.l10n.save,
-                      style: _selectedTier != _identityDetails!.tierId ? TextStyle(color: Theme.of(context).colorScheme.onPrimary) : null,
+                      style: _isTierChanged() ? TextStyle(color: Theme.of(context).colorScheme.onPrimary) : null,
                     ),
                   ),
                   Gaps.w16,
@@ -249,6 +248,10 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 
   bool _isTierManuallyAssignable(TierOverview tier) {
     return tier.canBeManuallyAssigned || tier.id == _identityDetails!.tierId;
+  }
+
+  bool _isTierChanged() {
+    return _selectedTier != _identityDetails!.tierId;
   }
 
   Future<void> _updateIdentity() async {
