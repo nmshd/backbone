@@ -124,7 +124,7 @@ public partial record IdentityAddress : StronglyTypedId
         return ParseUnsafe(stringValue);
     }
 
-    [GeneratedRegex($@"^(?<addressWithoutChecksum>did:e:(?<instanceUrl>(?:[a-z0-9]+\.)+[a-z]{{2,}}):dids:(?<identitySpecificPart>[0-9abcdef]{{20}}))(?<checksum>[0-9abcdef]{{{CHECKSUM_LENGTH_S}}})$")]
+    [GeneratedRegex($@"^(?<addressWithoutChecksum>did:e:(?<instanceUrl>(?:[a-z0-9]+\.)*[a-z]{{2,}}):dids:(?<identitySpecificPart>[0-9a-f]{{20}}))(?<checksum>[0-9a-f]{{{CHECKSUM_LENGTH_S}}})$")]
     private static partial Regex IdentityAddressValidatorRegex();
 
     #endregion
