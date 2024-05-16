@@ -20,6 +20,9 @@
             }
         },
         "Devices": {
+            "Application": {
+                "InstanceUrl": "localhost"
+            },
             "Infrastructure": {
                 "SqlDatabase": {
                     "ConnectionString": "Server=localhost;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
@@ -34,6 +37,9 @@
             }
         },
         "Messages": {
+            "Application": {
+                "InstanceUrl": "localhost"
+            },
             "Infrastructure": {
                 "SqlDatabase": {
                     "ConnectionString": "Server=localhost;Database=enmeshed;User Id=messages;Password=Passw0rd;TrustServerCertificate=True"
