@@ -13,7 +13,7 @@ public class AcceptRelationshipReactivationTests
     public void Accepting_reactivation_transitions_relationship_to_status_active()
     {
         // Arrange
-        var relationship = CreateRelationshipWithRequestedReactivation(IDENTITY_1, IDENTITY_2, IDENTITY_1);
+        var relationship = CreateRelationshipWithRequestedReactivation(from: IDENTITY_1, to: IDENTITY_2, reactivationRequestedBy: IDENTITY_1);
 
         // Act
         relationship.AcceptReactivation(IDENTITY_2, DEVICE_2);
@@ -28,7 +28,7 @@ public class AcceptRelationshipReactivationTests
         // Arrange
         SystemTime.Set("2000-01-01");
 
-        var relationship = CreateRelationshipWithRequestedReactivation(IDENTITY_1, IDENTITY_2, IDENTITY_1);
+        var relationship = CreateRelationshipWithRequestedReactivation(from: IDENTITY_1, to: IDENTITY_2, reactivationRequestedBy: IDENTITY_1);
 
         // Act
         relationship.AcceptReactivation(IDENTITY_2, DEVICE_2);
@@ -58,7 +58,7 @@ public class AcceptRelationshipReactivationTests
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
-            "error.platform.validation.relationshipRequest.noPendingRelationshipReactivationRequestExists"
+            "error.platform.validation.relationshipRequest.noAcceptableRelationshipReactivationRequestExists"
         );
     }
 
@@ -66,13 +66,13 @@ public class AcceptRelationshipReactivationTests
     public void Can_only_accept_relationship_reactivation_request_addressed_to_self()
     {
         // Arrange
-        var relationship = CreateRelationshipWithRequestedReactivation(IDENTITY_1, IDENTITY_2, IDENTITY_1);
+        var relationship = CreateRelationshipWithRequestedReactivation(from: IDENTITY_1, to: IDENTITY_2, reactivationRequestedBy: IDENTITY_1);
 
         // Act
         var acting = () => relationship.AcceptReactivation(IDENTITY_1, DEVICE_1);
 
         // Assert
         acting.Should().Throw<DomainException>()
-            .WithError("error.platform.validation.relationshipRequest.noPendingRelationshipReactivationRequestExists");
+            .WithError("error.platform.validation.relationshipRequest.noAcceptableRelationshipReactivationRequestExists");
     }
 }
