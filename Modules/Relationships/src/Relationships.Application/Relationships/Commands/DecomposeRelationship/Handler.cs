@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeRelationship;
@@ -27,6 +28,10 @@ public class Handler : IRequestHandler<DecomposeRelationshipCommand, DecomposeRe
         var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
 
         relationship.Decompose(_activeIdentity, _activeDevice);
+
+        await _relationshipsRepository.Update(relationship);
+
+        _eventBus.Publish(new RelationshipStatusChangedDomainEvent(relationship));
 
         return new DecomposeRelationshipResponse(relationship);
     }

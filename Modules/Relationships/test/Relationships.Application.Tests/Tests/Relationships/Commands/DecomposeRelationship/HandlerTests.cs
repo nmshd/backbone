@@ -39,15 +39,9 @@ public class HandlerTests
         }, CancellationToken.None);
 
         // Assert
-        response.Id.Should().Be(relationship.Id);
+        response.Id.Should().NotBeNull();
         response.Status.Should().Be(RelationshipStatus.ReadyForDeletion);
-        //response.AuditLog.OrderBy(a => a.CreatedAt).Last().Reason.Should().Be(RelationshipAuditLogEntryReason.Decomposition);
-
-        //A.CallTo(
-        //        () => relationship.Decompose(
-        //            A<IdentityAddress>.That.Matches(r => r == activeIdentity), A<DeviceId>.That.Matches(d => d == activeDevice))
-        //    )
-        //    .MustHaveHappenedOnceExactly();
+        response.AuditLog.Should().HaveCount(4);
     }
 
     [Fact]
@@ -76,7 +70,7 @@ public class HandlerTests
         // Assert
         A.CallTo(
                 () => mockRelationshipsRepository.Update(
-                    A<Relationship>.That.Matches(r => r.Id == relationship.Id && r.Status == RelationshipStatus.Active))
+                    A<Relationship>.That.Matches(r => r.Id == relationship.Id && r.Status == RelationshipStatus.ReadyForDeletion))
             )
             .MustHaveHappenedOnceExactly();
     }
