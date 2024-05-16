@@ -62,6 +62,6 @@ public static class DomainErrors
     public static DomainError RelationshipAlreadyDecomposed()
     {
         return new DomainError("error.platform.validation.relationshipRequest.relationshipAlreadyDecomposed",
-            $"Relationship has already been decomposed.");
+            $"You already decomposed this Relationship.");
     }
 }
