@@ -26,12 +26,12 @@ internal class ChallengesApiStepDefinitions
         _challengeId = string.Empty;
         _httpClient = factory.CreateClient();
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
-        _sdk = Client.CreateUnauthenticated(_httpClient, _clientCredentials);
+        _sdk = null!;
         _isAuthenticated = false;
     }
 
     [Given("the user is authenticated")]
-    public async Task AuthenticatedUser()
+    public async Task GivenTheUserIsAuthenticated()
     {
         _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, PasswordHelper.GeneratePassword(20, 26));
         _isAuthenticated = true;
