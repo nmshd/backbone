@@ -3,6 +3,7 @@ import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 
 import 'modals/show_create_tier_dialog.dart';
 
@@ -67,16 +68,10 @@ class _TiersOverviewState extends State<TiersOverview> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  IconButton(
+                  IconButton.filled(
                     icon: const Icon(Icons.add),
                     color: Theme.of(context).colorScheme.onPrimary,
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.primary),
-                      foregroundColor: MaterialStateProperty.all<Color>(Theme.of(context).colorScheme.onPrimary),
-                    ),
-                    onPressed: () {
-                      _showAddTierDialog(context: context);
-                    },
+                    onPressed: () => _showAddTierDialog(context: context),
                   ),
                 ],
               ),
@@ -87,12 +82,12 @@ class _TiersOverviewState extends State<TiersOverview> {
           else
             Expanded(
               child: Card(
-                elevation: 1,
                 child: SizedBox(
                   width: _boxWidth,
                   child: DataTable2(
                     isVerticalScrollBarVisible: true,
                     showCheckboxColumn: false,
+                    empty: const Text('No tiers found.'),
                     columns: const [
                       DataColumn2(label: Text('Name'), size: ColumnSize.L),
                       DataColumn2(label: Text('Number of Identities'), size: ColumnSize.L),
@@ -100,7 +95,7 @@ class _TiersOverviewState extends State<TiersOverview> {
                     rows: _tiers!
                         .map(
                           (tier) => DataRow2(
-                            onLongPress: () {},
+                            onTap: () => context.go('/tiers/${tier.id}'),
                             cells: [
                               DataCell(Text(tier.name)),
                               DataCell(Text('${tier.numberOfIdentities}')),

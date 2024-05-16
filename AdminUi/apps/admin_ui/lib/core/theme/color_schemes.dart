@@ -18,11 +18,8 @@ const lightColorScheme = ColorScheme(
   errorContainer: Color(0xFFFFDAD6),
   onError: Color(0xFFFFFFFF),
   onErrorContainer: Color(0xFF410002),
-  background: Color(0xFFF8FDFF),
-  onBackground: Color(0xFF001F25),
   surface: Color(0xFFF8FDFF),
   onSurface: Color(0xFF001F25),
-  surfaceVariant: Color(0xFFE1E2EC),
   onSurfaceVariant: Color(0xFF44464F),
   outline: Color(0xFF757780),
   onInverseSurface: Color(0xFFD6F6FF),
@@ -32,6 +29,12 @@ const lightColorScheme = ColorScheme(
   surfaceTint: Color(0xFF365CA8),
   outlineVariant: Color(0xFFC5C6D0),
   scrim: Color(0xFF000000),
+);
+
+final cardThemeLight = CardTheme(
+  color: lightColorScheme.surface,
+  shadowColor: lightColorScheme.shadow,
+  surfaceTintColor: lightColorScheme.surfaceTint,
 );
 
 const darkColorScheme = ColorScheme(
@@ -52,11 +55,8 @@ const darkColorScheme = ColorScheme(
   errorContainer: Color(0xFF93000A),
   onError: Color(0xFF690005),
   onErrorContainer: Color(0xFFFFDAD6),
-  background: Color(0xFF001F25),
-  onBackground: Color(0xFFA6EEFF),
   surface: Color(0xFF001F25),
   onSurface: Color(0xFFA6EEFF),
-  surfaceVariant: Color(0xFF44464F),
   onSurfaceVariant: Color(0xFFC5C6D0),
   outline: Color(0xFF8F9099),
   onInverseSurface: Color(0xFF001F25),
@@ -66,4 +66,10 @@ const darkColorScheme = ColorScheme(
   surfaceTint: Color(0xFFB0C6FF),
   outlineVariant: Color(0xFF44464F),
   scrim: Color(0xFF000000),
+);
+
+final cardThemeDark = CardTheme(
+  color: darkColorScheme.surface,
+  shadowColor: darkColorScheme.shadow,
+  surfaceTintColor: darkColorScheme.surfaceTint,
 );

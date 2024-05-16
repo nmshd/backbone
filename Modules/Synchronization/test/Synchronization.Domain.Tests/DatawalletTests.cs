@@ -1,5 +1,7 @@
 using Backbone.BuildingBlocks.Domain;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -70,6 +72,17 @@ public class DatawalletTests
         datawallet.Version.Should().Be(new Datawallet.DatawalletVersion(2));
     }
 
+    [Fact]
+    public void Raises_a_domain_event_on_adding_a_modification()
+    {
+        var datawallet = CreateDatawallet();
+        var modification = AddModificationToDatawallet(datawallet);
+
+        var domainEvent = datawallet.Should().HaveASingleDomainEvent<DatawalletModifiedDomainEvent>();
+        domainEvent.Identity.Should().Be(datawallet.Owner);
+        domainEvent.ModifiedByDevice.Should().Be(modification.CreatedByDevice);
+    }
+
     private static Datawallet CreateDatawallet()
     {
         return new Datawallet(new Datawallet.DatawalletVersion(1), TestDataGenerator.CreateRandomIdentityAddress());
@@ -82,6 +95,7 @@ public class DatawalletTests
 
     private static DatawalletModification AddModificationToDatawallet(Datawallet datawallet)
     {
-        return datawallet.AddModification(DatawalletModificationType.Create, new Datawallet.DatawalletVersion(1), "aCollection", "anId", "aPayloadCategory", TestDataGenerator.CreateRandomBytes(), TestDataGenerator.CreateRandomDeviceId(), "aBlobName");
+        return datawallet.AddModification(DatawalletModificationType.Create, new Datawallet.DatawalletVersion(1), "aCollection", "anId", "aPayloadCategory", TestDataGenerator.CreateRandomBytes(),
+            TestDataGenerator.CreateRandomDeviceId(), "aBlobName");
     }
 }
