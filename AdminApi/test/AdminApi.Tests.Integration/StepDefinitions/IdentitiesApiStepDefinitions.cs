@@ -1,9 +1,9 @@
-using Backbone.AdminApi.Tests.Integration.API;
+﻿using Backbone.AdminApi.Sdk.Endpoints.Identities.Types.Responses;
+using Backbone.AdminApi.Sdk.Services;
+using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.AdminApi.Tests.Integration.Extensions;
-using Backbone.AdminApi.Tests.Integration.Models;
-using Backbone.Crypto;
-using Backbone.Crypto.Abstractions;
-using Newtonsoft.Json;
+using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 
@@ -12,138 +12,91 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "POST Identities/{id}/DeletionProcess")]
 internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
-    private readonly IdentitiesApi _identitiesApi;
-    private readonly ISignatureHelper _signatureHelper;
-    private ODataResponse<List<IdentityOverviewDTO>>? _identityOverviewsResponse;
-    private HttpResponse<IdentitySummaryDTO>? _identityResponse;
-    private HttpResponse<CreateIdentityResponse>? _createIdentityResponse;
-    private HttpResponse<StartDeletionProcessAsSupportResponse>? _identityDeletionProcessResponse;
+    private ApiResponse<ListIdentitiesResponse>? _identityOverviewsResponse;
+    private ApiResponse<GetIdentityResponse>? _identityResponse;
+    private ApiResponse<CreateIdentityResponse>? _createIdentityResponse;
+    private ApiResponse<StartDeletionProcessAsSupportResponse>? _identityDeletionProcessResponse;
     private string _existingIdentity;
 
-    public IdentitiesApiStepDefinitions(IdentitiesApi identitiesApi, ISignatureHelper signatureHelper)
+    public IdentitiesApiStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
     {
-        _identitiesApi = identitiesApi;
-        _signatureHelper = signatureHelper;
         _existingIdentity = string.Empty;
-    }
-
-
-    [Given("an active deletion process for Identity i exists")]
-    public async Task GivenAnActiveDeletionProcessForIdentityAExists()
-    {
-        await _identitiesApi.StartDeletionProcess(_createIdentityResponse!.Content.Result!.Address, _requestConfiguration);
     }
 
     [Given("an Identity i")]
     public async Task GivenAnIdentityI()
     {
-        var keyPair = _signatureHelper.CreateKeyPair();
+        _createIdentityResponse = await IdentityCreationHelper.CreateIdentity(_client);
+        _createIdentityResponse.Should().BeASuccess();
 
-        dynamic publicKey = new
-        {
-            pub = keyPair.PublicKey.Base64Representation,
-            alg = 3
-        };
+        _existingIdentity = _createIdentityResponse.Result!.Address;
+    }
 
-        var createIdentityRequest = new CreateIdentityRequest()
-        {
-            ClientId = "test",
-            ClientSecret = "test",
-            DevicePassword = "test",
-            IdentityPublicKey = (ConvertibleString.FromUtf8(JsonConvert.SerializeObject(publicKey)) as ConvertibleString)!.Base64Representation,
-            IdentityVersion = 1,
-            SignedChallenge = new CreateIdentityRequestSignedChallenge
-            {
-                Challenge = "string.Empty",
-                Signature = "some-dummy-signature"
-            }
-        };
-
-        var requestConfiguration = _requestConfiguration.Clone();
-        requestConfiguration.ContentType = "application/json";
-        requestConfiguration.SetContent(createIdentityRequest);
-
-        _createIdentityResponse = await _identitiesApi.CreateIdentity(requestConfiguration);
-        _createIdentityResponse.IsSuccessStatusCode.Should().BeTrue();
-        _existingIdentity = _createIdentityResponse.Content.Result!.Address;
+    [Given("an active deletion process for Identity i exists")]
+    public async Task GivenAnActiveDeletionProcessForIdentityAExists()
+    {
+        await _client.Identities.StartDeletionProcess(_createIdentityResponse!.Result!.Address);
     }
 
     [When("a POST request is sent to the /Identities/{i.id}/DeletionProcesses endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesIdDeletionProcessesEndpoint()
     {
-        _identityDeletionProcessResponse = await _identitiesApi.StartDeletionProcess(_createIdentityResponse!.Content.Result!.Address, _requestConfiguration);
+        _identityDeletionProcessResponse = await _client.Identities.StartDeletionProcess(_createIdentityResponse!.Result!.Address);
     }
 
     [When("a GET request is sent to the /Identities endpoint")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesOverviewEndpoint()
     {
-        _identityOverviewsResponse = await _identitiesApi.GetIdentityOverviews();
-        _identityOverviewsResponse.Should().NotBeNull();
-        _identityOverviewsResponse!.Content.Should().NotBeNull();
+        _identityOverviewsResponse = await _client.Identities.ListIdentities();
     }
 
     [When("a GET request is sent to the /Identities/{i.address} endpoint")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesAddressEndpoint()
     {
-        _identityResponse = await _identitiesApi.GetIdentityByAddress(_requestConfiguration, _existingIdentity);
-        _identityResponse.Should().NotBeNull();
-        _identityResponse.Content.Should().NotBeNull();
+        _identityResponse = await _client.Identities.GetIdentity(_existingIdentity);
     }
 
     [When("a GET request is sent to the /Identities/{address} endpoint with an inexistent address")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesAddressEndpointForAnInexistentIdentity()
     {
-        _identityResponse = await _identitiesApi.GetIdentityByAddress(_requestConfiguration, "inexistentIdentityAddress");
-        _identityResponse.Should().NotBeNull();
-        _identityResponse.Content.Should().NotBeNull();
+        _identityResponse = await _client.Identities.GetIdentity("inexistentIdentityAddress");
     }
 
     [Then("the response contains a list of Identities")]
     public void ThenTheResponseContainsAListOfIdentities()
     {
-        _identityOverviewsResponse!.Content.Value.Should().NotBeNull();
-        _identityOverviewsResponse!.Content.Value.Should().NotBeNullOrEmpty();
-        _identityOverviewsResponse!.AssertContentTypeIs("application/json");
-        _identityOverviewsResponse!.AssertContentCompliesWithSchema();
+        _identityOverviewsResponse!.Result!.Should().NotBeNull();
+        _identityOverviewsResponse!.ContentType.Should().StartWith("application/json");
+        _identityOverviewsResponse.Should().ComplyWithSchema();
     }
 
     [Then("the response contains a Deletion Process")]
     public void ThenTheResponseContainsADeletionProcess()
     {
-        _identityDeletionProcessResponse!.Content.Result.Should().NotBeNull();
-        _identityDeletionProcessResponse!.AssertContentTypeIs("application/json");
-        _identityDeletionProcessResponse!.AssertContentCompliesWithSchema();
+        _identityDeletionProcessResponse!.Result!.Should().NotBeNull();
+        _identityDeletionProcessResponse!.ContentType.Should().StartWith("application/json");
+        _identityDeletionProcessResponse.Should().ComplyWithSchema();
     }
 
     [Then("the response contains Identity i")]
     public void ThenTheResponseContainsAnIdentity()
     {
-        _identityResponse!.AssertHasValue();
-        _identityResponse!.AssertStatusCodeIsSuccess();
-        _identityResponse!.AssertContentTypeIs("application/json");
-        _identityResponse!.AssertContentCompliesWithSchema();
+        _identityResponse!.Result!.Should().NotBeNull();
+        _identityResponse!.ContentType.Should().StartWith("application/json");
+        _identityResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
         if (_identityResponse != null)
-        {
-            var actualStatusCode = (int)_identityResponse!.StatusCode;
-            actualStatusCode.Should().Be(expectedStatusCode);
-        }
+            ((int)_identityResponse!.Status).Should().Be(expectedStatusCode);
 
         if (_identityOverviewsResponse != null)
-        {
-            var actualStatusCode = (int)_identityOverviewsResponse!.StatusCode;
-            actualStatusCode.Should().Be(expectedStatusCode);
-        }
+            ((int)_identityOverviewsResponse!.Status).Should().Be(expectedStatusCode);
 
         if (_identityDeletionProcessResponse != null)
-        {
-            var actualStatusCode = (int)_identityDeletionProcessResponse!.StatusCode;
-            actualStatusCode.Should().Be(expectedStatusCode);
-        }
+            ((int)_identityDeletionProcessResponse!.Status).Should().Be(expectedStatusCode);
     }
 
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
@@ -151,14 +104,14 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     {
         if (_identityResponse != null)
         {
-            _identityResponse!.Content.Error.Should().NotBeNull();
-            _identityResponse.Content.Error!.Code.Should().Be(errorCode);
+            _identityResponse!.Result!.Should().NotBeNull();
+            _identityResponse.Error!.Code.Should().Be(errorCode);
         }
 
         if (_identityDeletionProcessResponse != null)
         {
-            _identityDeletionProcessResponse!.Content.Error.Should().NotBeNull();
-            _identityDeletionProcessResponse.Content.Error!.Code.Should().Be(errorCode);
+            _identityDeletionProcessResponse!.Error.Should().NotBeNull();
+            _identityDeletionProcessResponse.Error!.Code.Should().Be(errorCode);
         }
     }
 }

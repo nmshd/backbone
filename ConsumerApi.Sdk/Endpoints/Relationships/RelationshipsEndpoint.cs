@@ -8,20 +8,30 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.Relationships;
 
 public class RelationshipsEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
-    public async Task<ApiResponse<Relationship>> GetRelationship(string id) => await _client.Get<Relationship>($"api/{API_VERSION}/Relationships/{id}");
+    public async Task<ApiResponse<Relationship>> GetRelationship(string id)
+    {
+        return await _client.Get<Relationship>($"api/{API_VERSION}/Relationships/{id}");
+    }
 
     public async Task<ApiResponse<ListRelationshipsResponse>> ListRelationships(PaginationFilter? pagination = null)
-        => await _client.Get<ListRelationshipsResponse>($"api/{API_VERSION}/Relationships", null, pagination);
+    {
+        return await _client.Get<ListRelationshipsResponse>($"api/{API_VERSION}/Relationships", null, pagination);
+    }
 
-    public async Task<ApiResponse<ListRelationshipsResponse>> ListRelationships(IEnumerable<string> ids, PaginationFilter? pagination = null) => await _client
-        .Request<ListRelationshipsResponse>(HttpMethod.Get, $"api/{API_VERSION}/Relationships")
-        .Authenticate()
-        .WithPagination(pagination)
-        .AddQueryParameter("ids", ids)
-        .Execute();
+    public async Task<ApiResponse<ListRelationshipsResponse>> ListRelationships(IEnumerable<string> ids, PaginationFilter? pagination = null)
+    {
+        return await _client
+            .Request<ListRelationshipsResponse>(HttpMethod.Get, $"api/{API_VERSION}/Relationships")
+            .Authenticate()
+            .WithPagination(pagination)
+            .AddQueryParameter("ids", ids)
+            .Execute();
+    }
 
     public async Task<ApiResponse<RelationshipMetadata>> CreateRelationship(CreateRelationshipRequest request)
-        => await _client.Post<RelationshipMetadata>($"api/{API_VERSION}/Relationships", request);
+    {
+        return await _client.Post<RelationshipMetadata>($"api/{API_VERSION}/Relationships", request);
+    }
 
     public async Task<ApiResponse<ListRelationshipChangesResponse>> ListChanges(
         PaginationFilter? pagination = null, IEnumerable<string>? ids = null, OptionalDateRange? createdAt = null, OptionalDateRange? completedAt = null,
@@ -52,14 +62,23 @@ public class RelationshipsEndpoint(EndpointClient client) : ConsumerApiEndpoint(
         return await builder.Execute();
     }
 
-    public async Task<ApiResponse<RelationshipChange>> GetChange(string id) => await _client.Get<RelationshipChange>($"api/{API_VERSION}/Relationships/Changes/{id}");
+    public async Task<ApiResponse<RelationshipChange>> GetChange(string id)
+    {
+        return await _client.Get<RelationshipChange>($"api/{API_VERSION}/Relationships/Changes/{id}");
+    }
 
     public async Task<ApiResponse<RelationshipMetadata>> AcceptChange(string relationshipId, string changeId, CompleteRelationshipChangeRequest request)
-        => await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Changes/{changeId}/Accept", request);
+    {
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Changes/{changeId}/Accept", request);
+    }
 
     public async Task<ApiResponse<RelationshipMetadata>> RejectChange(string relationshipId, string changeId, CompleteRelationshipChangeRequest request)
-        => await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Changes/{changeId}/Reject", request);
+    {
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Changes/{changeId}/Reject", request);
+    }
 
     public async Task<ApiResponse<RelationshipMetadata>> RevokeChange(string relationshipId, string changeId, CompleteRelationshipChangeRequest request)
-        => await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Changes/{changeId}/Revoke", request);
+    {
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Changes/{changeId}/Revoke", request);
+    }
 }
