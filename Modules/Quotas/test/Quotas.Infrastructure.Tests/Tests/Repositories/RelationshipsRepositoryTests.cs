@@ -78,7 +78,7 @@ public class RelationshipsRepositoryTests
     }
 
     [Fact]
-    public async Task Terminated_relationships_dont_count_for_any_participant()
+    public async Task Terminated_relationships_count_for_both_participants()
     {
         // Arrange
         var relationships = new List<Relationship>
@@ -97,55 +97,7 @@ public class RelationshipsRepositoryTests
         var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
 
         // Assert
-        countForI1.Should().Be(0);
-        countForI2.Should().Be(0);
-    }
-
-    [Fact]
-    public async Task Relationship_with_requested_reactivation_only_counts_for_for_requesting_participant()
-    {
-        // Arrange
-        var relationships = new List<Relationship>
-        {
-            CreateRelationshipWithRequestedReactivation(from: I1, to: I2, reactivationRequestedBy: I1),
-            CreateRelationshipWithRequestedReactivation(from: I2, to: I1, reactivationRequestedBy: I2)
-        };
-        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
-        await _relationshipsArrangeContext.SaveChangesAsync();
-
-        var repository = new RelationshipsRepository(_actContext);
-        const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
-
-        // Act
-        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
-        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
-
-        // Assert
-        countForI1.Should().Be(1);
-        countForI2.Should().Be(1);
-    }
-
-    [Fact]
-    public async Task Requested_reactivation_outside_given_quota_period_does_not_count_for_any_participant()
-    {
-        // Arrange
-        var relationships = new List<Relationship>
-        {
-            CreateRelationshipWithRequestedReactivation(from: I1, to: I2, reactivationRequestedBy: I1),
-            CreateRelationshipWithRequestedReactivation(from: I2, to: I1, reactivationRequestedBy: I2)
-        };
-        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
-        await _relationshipsArrangeContext.SaveChangesAsync();
-
-        var repository = new RelationshipsRepository(_actContext);
-        const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
-
-        // Act
-        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin().AddHours(2), quotaPeriod.CalculateEnd().AddHours(2), CancellationToken.None);
-        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin().AddHours(2), quotaPeriod.CalculateEnd().AddHours(2), CancellationToken.None);
-
-        // Assert
-        countForI1.Should().Be(0);
-        countForI2.Should().Be(0);
+        countForI1.Should().Be(2);
+        countForI2.Should().Be(2);
     }
 }
