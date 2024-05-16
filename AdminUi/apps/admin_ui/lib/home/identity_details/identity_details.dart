@@ -254,9 +254,27 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   Future<void> _updateIdentity() async {
     if (_identityDetails == null) return;
 
-    await GetIt.I.get<AdminApiClient>().identities.updateIdentity(_identityDetails!.address, tierId: _selectedTier!);
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
 
-    await _reloadIdentity();
+    try {
+      await GetIt.I.get<AdminApiClient>().identities.updateIdentity(_identityDetails!.address, tierId: _selectedTier!);
+
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(
+          content: Text('Identity updated successfully. Reloading..'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+
+      await _reloadIdentity();
+    } catch (e) {
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(
+          content: Text('Failed to update identity. Please try again.'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
   }
 
   Future<void> _reloadIdentity() async {
