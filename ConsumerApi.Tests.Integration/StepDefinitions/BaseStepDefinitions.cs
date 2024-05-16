@@ -94,7 +94,7 @@ internal class BaseStepDefinitions
             ClientId = "test",
             ClientSecret = "test",
             DevicePassword = "test",
-            IdentityPublicKey = (ConvertibleString.FromUtf8(JsonConvert.SerializeObject(publicKey)) as ConvertibleString)!.Base64Representation,
+            IdentityPublicKey = (ConvertibleString.FromUtf8(JsonConvert.SerializeObject(publicKey)) as ConvertibleString)!.BytesRepresentation,
             IdentityVersion = 1,
             SignedChallenge = new CreateIdentityRequestSignedChallenge()
             {
