@@ -109,6 +109,7 @@ public class EndpointClient
         }
 
         var deserializedResponseContent = JsonSerializer.Deserialize<ApiResponse<T>>(responseContent, _jsonSerializerOptions);
+
         deserializedResponseContent!.Status = statusCode;
         deserializedResponseContent.RawContent = await response.Content.ReadAsStringAsync();
         deserializedResponseContent.ContentType = response.Content.Headers.ContentType?.MediaType;
