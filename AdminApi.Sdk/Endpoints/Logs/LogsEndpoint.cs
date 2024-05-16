@@ -6,5 +6,8 @@ namespace Backbone.AdminApi.Sdk.Endpoints.Logs;
 
 public class LogsEndpoint(EndpointClient client) : AdminApiEndpoint(client)
 {
-    public async Task<ApiResponse<EmptyResponse>> CreateLog(LogRequest request) => await _client.Post<EmptyResponse>($"api/{API_VERSION}/Logs", request);
+    public async Task<ApiResponse<EmptyResponse>> CreateLog(LogRequest request)
+    {
+        return await _client.Post<EmptyResponse>($"api/{API_VERSION}/Logs", request);
+    }
 }

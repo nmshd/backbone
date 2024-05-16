@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
@@ -12,11 +13,11 @@ public class RelationshipsDbContext : AbstractDbContextBase
     {
     }
 
-    public RelationshipsDbContext(DbContextOptions<RelationshipsDbContext> options) : base(options)
+    public RelationshipsDbContext(DbContextOptions<RelationshipsDbContext> options, IEventBus eventBus) : base(options, eventBus)
     {
     }
 
-    public RelationshipsDbContext(DbContextOptions<RelationshipsDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    public RelationshipsDbContext(DbContextOptions<RelationshipsDbContext> options, IServiceProvider serviceProvider, IEventBus eventBus) : base(options, eventBus, serviceProvider)
     {
     }
 
