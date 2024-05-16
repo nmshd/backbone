@@ -1,11 +1,10 @@
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Schema;
-using Newtonsoft.Json.Serialization;
 using NJsonSchema.NewtonsoftJson.Generation;
 using JsonSchemaGenerator = NJsonSchema.Generation.JsonSchemaGenerator;
 
-namespace Backbone.AdminApi.Tests.Integration.Support;
+namespace Backbone.AdminApi.Tests.Integration.Validators;
 
 public class JsonValidators
 {
@@ -15,17 +14,19 @@ public class JsonValidators
     {
         if (CACHED_SCHEMAS.TryGetValue(typeof(T), out var schema))
         {
-            var parsedJson = JObject.Parse(json);
-            return parsedJson.IsValid(schema, out errors);
+            try
+            {
+                var parsedJson = JObject.Parse(json);
+                return parsedJson.IsValid(schema, out errors);
+            }
+            catch (JsonReaderException)
+            {
+                var parsedJson = JArray.Parse(json);
+                return parsedJson.IsValid(schema, out errors);
+            }
         }
 
-        var settings = new NewtonsoftJsonSchemaGeneratorSettings
-        {
-            SerializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            }
-        };
+        var settings = new NewtonsoftJsonSchemaGeneratorSettings();
 
         var generator = new JsonSchemaGenerator(settings);
 
@@ -39,8 +40,15 @@ public class JsonValidators
 
         CACHED_SCHEMAS.Add(typeof(T), schema);
 
-        var responseJson = JObject.Parse(json);
-
-        return responseJson.IsValid(schema, out errors);
+        try
+        {
+            var responseJson = JObject.Parse(json);
+            return responseJson.IsValid(schema, out errors);
+        }
+        catch (JsonReaderException)
+        {
+            var responseJson = JArray.Parse(json);
+            return responseJson.IsValid(schema, out errors);
+        }
     }
 }
