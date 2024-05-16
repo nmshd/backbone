@@ -19,7 +19,7 @@ export class QuotasService {
     }
 
     public getPeriods(): string[] {
-        return ["Hour", "Day", "Week", "Month", "Year"];
+        return ["Hour", "Day", "Week", "Month", "Year", "Total"];
     }
 
     public createTierQuota(request: CreateQuotaForTierRequest, tierId: string): Observable<HttpResponseEnvelope<TierQuota>> {

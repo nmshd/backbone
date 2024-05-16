@@ -1,13 +1,16 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.Configurations;
 
-public class DatawalletModificationEntityTypeConfiguration : IEntityTypeConfiguration<DatawalletModification>
+public class DatawalletModificationEntityTypeConfiguration : EntityEntityTypeConfiguration<DatawalletModification>
 {
-    public void Configure(EntityTypeBuilder<DatawalletModification> builder)
+    public override void Configure(EntityTypeBuilder<DatawalletModification> builder)
     {
+        base.Configure(builder);
+
         builder.HasIndex(p => new { p.CreatedBy, p.Index }).IsUnique();
 
         builder.HasKey(x => x.Id);

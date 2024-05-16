@@ -2,4 +2,4 @@
 
 namespace Backbone.AdminApi.Sdk.Endpoints.Clients.Types.Responses;
 
-public class ListClientsResponse : EnumerableResponseBase<ClientOverwiew>;
+public class ListClientsResponse : EnumerableResponseBase<ClientOverview>;
