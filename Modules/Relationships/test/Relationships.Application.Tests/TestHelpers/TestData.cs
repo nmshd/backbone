@@ -55,15 +55,4 @@ public static class TestData
 
         return relationship;
     }
-
-    public static Relationship CreateRelationshipWithRequestedReactivation(IdentityAddress activeIdentity)
-    {
-        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
-
-        var relationship = CreateActiveRelationship(to: activeIdentity);
-        relationship.Terminate(activeIdentity, activeDevice);
-        relationship.RequestReactivation(activeIdentity, activeDevice);
-
-        return relationship;
-    }
 }

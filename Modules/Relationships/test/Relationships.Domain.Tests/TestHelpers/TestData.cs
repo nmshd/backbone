@@ -59,12 +59,4 @@ public static class TestData
         relationship.RequestReactivation(reactivationRequestedBy, DEVICE_1);
         return relationship;
     }
-
-    public static Relationship CreateRelationshipWithRequestedReactivation()
-    {
-        var relationship = CreateTerminatedRelationship();
-        relationship.RequestReactivation(IDENTITY_1, DEVICE_1);
-
-        return relationship;
-    }
 }

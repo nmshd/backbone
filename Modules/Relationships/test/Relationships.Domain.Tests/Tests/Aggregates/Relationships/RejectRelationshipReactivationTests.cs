@@ -13,7 +13,7 @@ public class RejectRelationshipReactivationTests
     public void RejectReactivation_leaves_relationship_in_status_terminated()
     {
         // Arrange
-        var relationship = CreateRelationshipWithRequestedReactivation();
+        var relationship = CreateRelationshipWithRequestedReactivation(from: IDENTITY_1, to: IDENTITY_2, reactivationRequestedBy: IDENTITY_1);
 
         // Act
         relationship.RejectReactivation(IDENTITY_2, DEVICE_2);
@@ -28,7 +28,7 @@ public class RejectRelationshipReactivationTests
         // Arrange
         SystemTime.Set("2000-01-01");
 
-        var relationship = CreateRelationshipWithRequestedReactivation();
+        var relationship = CreateRelationshipWithRequestedReactivation(from: IDENTITY_1, to: IDENTITY_2, reactivationRequestedBy: IDENTITY_1);
 
         // Act
         relationship.RejectReactivation(IDENTITY_2, DEVICE_2);
@@ -57,22 +57,21 @@ public class RejectRelationshipReactivationTests
         var acting = () => relationship.RejectReactivation(IDENTITY_2, DEVICE_2);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError(
-            "error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRevivalIfNoRequestToDoSoHasBeenMade"
-        );
+        acting.Should().Throw<DomainException>()
+            .WithError("error.platform.validation.relationshipRequest.noRejectableReactivationRequestExists");
     }
 
     [Fact]
-    public void Can_only_reject_relationship_reactivation_request_addressed_to_self()
+    public void Can_not_reject_your_own_relationship_reactivation_request()
     {
         // Arrange
-        var relationship = CreateRelationshipWithRequestedReactivation();
+        var relationship = CreateRelationshipWithRequestedReactivation(from: IDENTITY_1, to: IDENTITY_2, reactivationRequestedBy: IDENTITY_1);
 
         // Act
         var acting = () => relationship.RejectReactivation(IDENTITY_1, DEVICE_1);
 
         // Assert
         acting.Should().Throw<DomainException>()
-            .WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipReactivationRequestAddressedToSomeoneElse");
+            .WithError("error.platform.validation.relationshipRequest.noRejectableReactivationRequestExists");
     }
 }

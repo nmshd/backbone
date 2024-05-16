@@ -53,15 +53,9 @@ public static class DomainErrors
             $"You cannot request reactivation when there is an open reactivation request.");
     }
 
-    public static DomainError CannotAcceptOrRejectRelationshipReactivationRequestAddressedToSomeoneElse()
+    public static DomainError NoRejectableReactivationRequestExists()
     {
-        return new DomainError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipReactivationRequestAddressedToSomeoneElse",
-            "You cannot accept or reject a relationship reactivation request that is addressed to someone else.");
-    }
-
-    public static DomainError CannotAcceptOrRejectRelationshipRevivalIfNoRequestToDoSoHasBeenMade()
-    {
-        return new DomainError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRevivalIfNoRequestToDoSoHasBeenMade",
-            "You cannot accept or reject a relationship reactivation if no request to do so has been made.");
+        return new DomainError("error.platform.validation.relationshipRequest.noRejectableReactivationRequestExists",
+            "There is no pending reactivation request or you are not allowed to revoke it. A reactivation request can only be rejected by the identity that did not requested it.");
     }
 }
