@@ -208,9 +208,9 @@ public class Relationship
 
     public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
-        EnsureRelationshipNotDecomposed();
+        EnsureRelationshipNotDecomposed(activeIdentity);
         EnsureStatus(RelationshipStatus.Terminated);
-        EnsureRequestingIdentityBelongsToRelationship(activeIdentity);
+        EnsureHasParticipant(activeIdentity);
 
         if (From == activeIdentity)
             FromHasDecomposed = true;
@@ -230,13 +230,13 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    private void EnsureRelationshipNotDecomposed()
+    private void EnsureRelationshipNotDecomposed(IdentityAddress activeIdentity)
     {
-        if (FromHasDecomposed || ToHasDecomposed)
+        if (From == activeIdentity && FromHasDecomposed || To == activeIdentity && ToHasDecomposed)
             throw new DomainException(DomainErrors.RelationshipAlreadyDecomposed());
     }
 
-    private void EnsureRequestingIdentityBelongsToRelationship(IdentityAddress activeIdentity)
+    private void EnsureHasParticipant(IdentityAddress activeIdentity)
     {
         if (From != activeIdentity && To != activeIdentity)
             throw new DomainException(DomainErrors.RequestingIdentityDoesNotBelongToRelationship());
