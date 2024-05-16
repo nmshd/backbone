@@ -53,6 +53,12 @@ public static class DomainErrors
             $"You cannot request reactivation when there is an open reactivation request.");
     }
 
+    public static DomainError NoAcceptableRelationshipReactivationRequestExists()
+    {
+        return new DomainError("error.platform.validation.relationshipRequest.noAcceptableRelationshipReactivationRequestExists",
+            "There is no pending reactivation request or you are not allowed to accept it. A reactivation request can only be accepted by the identity that did not request it.");
+    }
+
     public static DomainError NoRejectableReactivationRequestExists()
     {
         return new DomainError("error.platform.validation.relationshipRequest.noRejectableReactivationRequestExists",
