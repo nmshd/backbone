@@ -264,7 +264,7 @@ class _IdentityDetailsColumn extends StatelessWidget {
   final String columnTitle;
   final String columnValue;
 
-  const _IdentityDetailsColumn({required this.columnTitle, required this.columnValue, super.key});
+  const _IdentityDetailsColumn({required this.columnTitle, required this.columnValue});
 
   @override
   Widget build(BuildContext context) {
