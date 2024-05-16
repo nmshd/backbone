@@ -182,6 +182,27 @@ public class Relationship
             throw new DomainException(DomainErrors.CannotRequestReactivationWhenThereIsAnOpenReactivationRequest());
     }
 
+    public void RejectReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureRejectableRelationshipReactivationRequestExistsFor(activeIdentity);
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.RejectionOfReactivation,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Terminated,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
+    private void EnsureRejectableRelationshipReactivationRequestExistsFor(IdentityAddress activeIdentity)
+    {
+        if (AuditLog.OrderBy(a => a.CreatedAt).Last().Reason != RelationshipAuditLogEntryReason.ReactivationRequested ||
+            AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy == activeIdentity)
+            throw new DomainException(DomainErrors.NoRejectableReactivationRequestExists());
+    }
+
     public void RevokeReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureRevocableReactivationRequestExistsFor(activeIdentity);
