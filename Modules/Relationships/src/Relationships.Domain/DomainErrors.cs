@@ -44,7 +44,7 @@ public static class DomainErrors
     public static DomainError NoRevocableReactivationRequestExists(string activeIdentity)
     {
         return new DomainError("error.platform.validation.relationshipRequest.noRevocableReactivationRequestExists",
-            $"There is no pending reactivation request or you are not allowed to revoke it. A reactivation request can only be revoked by the identity that requested it.");
+            $"There is no pending reactivation request or you are not allowed to revoke it. A reactivation request can only be revoked by the identity that request it.");
     }
 
     public static DomainError CannotRequestReactivationWhenThereIsAnOpenReactivationRequest()
@@ -57,5 +57,11 @@ public static class DomainErrors
     {
         return new DomainError("error.platform.validation.relationshipRequest.noAcceptableRelationshipReactivationRequestExists",
             "There is no pending reactivation request or you are not allowed to accept it. A reactivation request can only be accepted by the identity that did not request it.");
+    }
+
+    public static DomainError NoRejectableReactivationRequestExists()
+    {
+        return new DomainError("error.platform.validation.relationshipRequest.noRejectableReactivationRequestExists",
+            "There is no pending reactivation request or you are not allowed to revoke it. A reactivation request can only be rejected by the identity that did not request it.");
     }
 }

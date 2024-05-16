@@ -85,6 +85,7 @@ public class CreateRelationshipTests
         // Arrange
         var existingRelationships = new List<Relationship>
         {
+            CreateRejectedRelationship(),
             CreateRevokedRelationship()
         };
 
