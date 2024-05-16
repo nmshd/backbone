@@ -334,7 +334,7 @@ sendidentitydeletionreminders:
 
   schedule: "0 3 * * *"
   successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 10
+  failedJobsHistoryLimit: 1
   backoffLimit: 5
 
   image:
@@ -379,7 +379,7 @@ cancelstaledeletionprocesses:
 
   schedule: "0 3 * * *"
   successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 10
+  failedJobsHistoryLimit: 1
   backoffLimit: 5
 
   image:
@@ -424,7 +424,7 @@ actualidentitydeletion:
 
   schedule: "0 3 * * *"
   successfulJobsHistoryLimit: 0
-  failedJobsHistoryLimit: 10
+  failedJobsHistoryLimit: 1
   backoffLimit: 5
 
   image:
