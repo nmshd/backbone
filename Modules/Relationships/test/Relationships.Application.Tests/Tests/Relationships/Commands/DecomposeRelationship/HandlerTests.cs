@@ -115,7 +115,7 @@ public class HandlerTests
 
     private static Handler CreateHandler(IUserContext userContext, IRelationshipsRepository relationshipsRepository, IEventBus? eventBus = null)
     {
-        eventBus ??= A.Fake<IEventBus>();
+        eventBus ??= A.Dummy<IEventBus>();
         return new Handler(relationshipsRepository, userContext, eventBus);
     }
 }

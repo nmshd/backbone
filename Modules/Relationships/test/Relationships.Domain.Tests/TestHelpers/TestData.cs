@@ -59,4 +59,11 @@ public static class TestData
         relationship.RequestReactivation(reactivationRequestedBy, DEVICE_1);
         return relationship;
     }
+
+    public static Relationship CreateDecomposedRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
+    {
+        var relationship = CreateTerminatedRelationship(from, to);
+        relationship.Decompose(IDENTITY_1, DEVICE_1);
+        return relationship;
+    }
 }
