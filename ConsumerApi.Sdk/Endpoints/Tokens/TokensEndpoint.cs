@@ -9,17 +9,27 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.Tokens;
 public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
     public async Task<ApiResponse<CreateTokenResponse>> CreateToken(CreateTokenRequest request)
-        => await _client.Post<CreateTokenResponse>($"api/{API_VERSION}/Tokens", request);
+    {
+        return await _client.Post<CreateTokenResponse>($"api/{API_VERSION}/Tokens", request);
+    }
 
     public async Task<ApiResponse<ListTokensResponse>> ListTokens(PaginationFilter? pagination = null)
-        => await _client.Get<ListTokensResponse>($"api/{API_VERSION}/Tokens", null, pagination);
+    {
+        return await _client.Get<ListTokensResponse>($"api/{API_VERSION}/Tokens", null, pagination);
+    }
 
-    public async Task<ApiResponse<ListTokensResponse>> ListTokens(IEnumerable<string> ids, PaginationFilter? pagination = null) => await _client
-        .Request<ListTokensResponse>(HttpMethod.Get, $"api/{API_VERSION}/Tokens")
-        .Authenticate()
-        .WithPagination(pagination)
-        .AddQueryParameter("ids", ids)
-        .Execute();
+    public async Task<ApiResponse<ListTokensResponse>> ListTokens(IEnumerable<string> ids, PaginationFilter? pagination = null)
+    {
+        return await _client
+            .Request<ListTokensResponse>(HttpMethod.Get, $"api/{API_VERSION}/Tokens")
+            .Authenticate()
+            .WithPagination(pagination)
+            .AddQueryParameter("ids", ids)
+            .Execute();
+    }
 
-    public async Task<ApiResponse<Token>> GetToken(string id) => await _client.GetUnauthenticated<Token>($"api/{API_VERSION}/Tokens/{id}");
+    public async Task<ApiResponse<Token>> GetToken(string id)
+    {
+        return await _client.GetUnauthenticated<Token>($"api/{API_VERSION}/Tokens/{id}");
+    }
 }

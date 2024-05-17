@@ -240,13 +240,7 @@ public class Client
         var serializedChallenge = JsonConvert.SerializeObject(createChallengeResponse.Result);
 
         var challengeSignature = signatureHelper.CreateSignature(keyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
-        var signedChallenge = new SignedChallenge
-        {
-            Challenge = serializedChallenge,
-            Signature = ConvertibleString.FromUtf8(
-                JsonConvert.SerializeObject(new CryptoSignatureSignedChallenge { alg = CryptoHashAlgorithm.SHA512, sig = challengeSignature.BytesRepresentation }
-                )).BytesRepresentation
-        };
+        var signedChallenge = new SignedChallenge(serializedChallenge, challengeSignature);
         return (keyPair, signedChallenge);
     }
 }
