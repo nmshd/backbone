@@ -40,7 +40,7 @@ public class HandlerTests
 
         var mockPushNotificationSender = A.Dummy<IPushNotificationSender>();
 
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, pushNotificationSender: mockPushNotificationSender);
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockPushNotificationSender);
 
         // Act
         var response = await handler.Handle(new ApproveDeletionProcessCommand(deletionProcess.Id), CancellationToken.None);
@@ -91,5 +91,10 @@ public class HandlerTests
         eventBus ??= A.Dummy<IEventBus>();
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
         return new Handler(identitiesRepository, userContext, eventBus, pushNotificationSender);
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender pushNotificationSender)
+    {
+        return CreateHandler(identitiesRepository, userContext, null, pushNotificationSender);
     }
 }

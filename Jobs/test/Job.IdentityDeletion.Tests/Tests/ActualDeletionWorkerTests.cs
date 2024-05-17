@@ -73,7 +73,7 @@ public class ActualDeletionWorkerTests
         A.CallTo(() => mockMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
 
         var mockPushNotificationSender = A.Dummy<IPushNotificationSender>();
-        var worker = CreateWorker(mockMediator, pushNotificationSender: mockPushNotificationSender);
+        var worker = CreateWorker(mockMediator, mockPushNotificationSender);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -102,5 +102,10 @@ public class ActualDeletionWorkerTests
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
         var logger = A.Dummy<ILogger<ActualDeletionWorker>>();
         return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, eventBus, logger);
+    }
+
+    private static ActualDeletionWorker CreateWorker(IMediator mediator, IPushNotificationSender pushNotificationSender)
+    {
+        return CreateWorker(mediator, null, null, pushNotificationSender);
     }
 }

@@ -32,7 +32,7 @@ public class HandlerTests
                 .FindByAddress(identity.Address, A<CancellationToken>._, true))
             .Returns(identity);
 
-        var handler = CreateHandler(fakeIdentitiesRepository, pushNotificationSender: mockPushNotificationSender);
+        var handler = CreateHandler(fakeIdentitiesRepository, mockPushNotificationSender);
 
         // Acting
         var result = await handler.Handle(new CancelDeletionAsSupportCommand(identity.Address, deletionProcess.Id), CancellationToken.None);
@@ -102,5 +102,10 @@ public class HandlerTests
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
 
         return new Handler(identitiesRepository, eventBus, pushNotificationSender);
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IPushNotificationSender pushNotificationSender)
+    {
+        return CreateHandler(identitiesRepository, null, pushNotificationSender);
     }
 }

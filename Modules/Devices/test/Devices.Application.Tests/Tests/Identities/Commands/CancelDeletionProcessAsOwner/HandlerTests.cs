@@ -33,7 +33,7 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, pushNotificationSender: mockPushNotificationSender);
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockPushNotificationSender);
         var command = new CancelDeletionProcessAsOwnerCommand(deletionProcess.Id);
 
         // Act
@@ -111,5 +111,10 @@ public class HandlerTests
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
 
         return new Handler(identitiesRepository, userContext, eventBus, pushNotificationSender);
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender pushNotificationSender)
+    {
+        return CreateHandler(identitiesRepository, userContext, null, pushNotificationSender);
     }
 }

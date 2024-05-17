@@ -33,7 +33,7 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, pushNotificationSender: mockPushNotificationSender);
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockPushNotificationSender);
 
         // Act
         var command = new StartDeletionProcessAsOwnerCommand();
