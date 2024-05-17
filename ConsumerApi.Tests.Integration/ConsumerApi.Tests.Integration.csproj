@@ -29,6 +29,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BuildingBlocks\src\Crypto\Crypto.csproj" />
+    <ProjectReference Include="..\ConsumerApi.Sdk\ConsumerApi.Sdk.csproj" />
     <ProjectReference Include="..\ConsumerApi\ConsumerApi.csproj" />
   </ItemGroup>
 
