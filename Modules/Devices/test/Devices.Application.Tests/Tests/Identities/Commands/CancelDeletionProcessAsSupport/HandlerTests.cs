@@ -95,6 +95,11 @@ public class HandlerTests
         acting.Should().AwaitThrowAsync<NotFoundException, CancelDeletionAsSupportResponse>().Which.Message.Should().Contain("Identity");
     }
 
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IPushNotificationSender pushNotificationSender)
+    {
+        return CreateHandler(identitiesRepository, null, pushNotificationSender);
+    }
+
     private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IEventBus? eventBus = null, IPushNotificationSender? pushNotificationSender = null)
     {
         identitiesRepository ??= A.Dummy<IIdentitiesRepository>();
@@ -102,10 +107,5 @@ public class HandlerTests
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
 
         return new Handler(identitiesRepository, eventBus, pushNotificationSender);
-    }
-
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IPushNotificationSender pushNotificationSender)
-    {
-        return CreateHandler(identitiesRepository, null, pushNotificationSender);
     }
 }

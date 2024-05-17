@@ -103,6 +103,11 @@ public class HandlerTests
         ).MustHaveHappenedOnceExactly();
     }
 
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender pushNotificationSender)
+    {
+        return CreateHandler(identitiesRepository, userContext, null, pushNotificationSender);
+    }
+
     private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IUserContext? userContext = null, IEventBus? eventBus = null, IPushNotificationSender? pushNotificationSender = null)
     {
         userContext ??= A.Dummy<IUserContext>();
@@ -111,10 +116,5 @@ public class HandlerTests
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
 
         return new Handler(identitiesRepository, userContext, eventBus, pushNotificationSender);
-    }
-
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender pushNotificationSender)
-    {
-        return CreateHandler(identitiesRepository, userContext, null, pushNotificationSender);
     }
 }

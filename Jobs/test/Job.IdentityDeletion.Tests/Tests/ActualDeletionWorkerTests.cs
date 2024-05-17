@@ -91,6 +91,11 @@ public class ActualDeletionWorkerTests
         A.CallTo(() => mediator.Send(A<TriggerRipeDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(commandResponse);
     }
 
+    private static ActualDeletionWorker CreateWorker(IMediator mediator, IPushNotificationSender pushNotificationSender)
+    {
+        return CreateWorker(mediator, null, null, pushNotificationSender);
+    }
+
     private static ActualDeletionWorker CreateWorker(IMediator mediator,
         List<IIdentityDeleter>? identityDeleters = null,
         IEventBus? eventBus = null,
@@ -102,10 +107,5 @@ public class ActualDeletionWorkerTests
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
         var logger = A.Dummy<ILogger<ActualDeletionWorker>>();
         return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, eventBus, logger);
-    }
-
-    private static ActualDeletionWorker CreateWorker(IMediator mediator, IPushNotificationSender pushNotificationSender)
-    {
-        return CreateWorker(mediator, null, null, pushNotificationSender);
     }
 }
