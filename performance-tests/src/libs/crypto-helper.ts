@@ -1,31 +1,22 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 
 export class CryptoHelper {
-    private static instance: CryptoHelper | null = null;
-
-    session = new Httpx({
+    public static readonly session = new Httpx({
         baseURL: "http://localhost:3000/",
         timeout: 2000,
         tags: ["k6-crypto"]
     });
 
-    constructor() {
-        if (CryptoHelper.instance === null) {
-            CryptoHelper.instance = this;
-        }
-        return CryptoHelper.instance;
+    public static generateKeyPair(): KeyPair {
+        return CryptoHelper.session.get("keypair").json() as unknown as KeyPair;
     }
 
-    public GenerateKeyPair(): KeyPair {
-        return this.session.get("keypair").json();
+    public static generatePassword(): string | undefined {
+        return (CryptoHelper.session.get("password")).body?.toString();
     }
 
-    public GeneratePassword(): string {
-        return (this.session.get("password") as Response).body?.toString()!;
-    }
-
-    public SignChallenge(keyPair: KeyPair, challenge: ChallengeRequestRepresentation) {
-        return this.session
+    public static signChallenge(keyPair: KeyPair, challenge: ChallengeRequestRepresentation): string | undefined {
+        return CryptoHelper.session
             .post(
                 "sign",
                 JSON.stringify({
@@ -33,6 +24,7 @@ export class CryptoHelper {
                     challenge: JSON.stringify(challenge)
                 }),
                 {
+                    // eslint-disable-next-line @typescript-eslint/naming-convention
                     headers: { "Content-Type": "application/json" }
                 }
             )

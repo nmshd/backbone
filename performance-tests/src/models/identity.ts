@@ -1,12 +1,12 @@
 import { TokenResponse } from "./token";
 
 export interface CreateIdentityRequest {
-    ClientId: string;
-    ClientSecret: string;
-    IdentityPublicKey: any;
-    DevicePassword: string;
-    IdentityVersion: number;
-    SignedChallenge: any;
+    clientId: string;
+    clientSecret: string;
+    identityPublicKey: any;
+    devicePassword: string;
+    identityVersion: number;
+    signedChallenge: any;
 }
 
 export interface CreateIdentityResponse {

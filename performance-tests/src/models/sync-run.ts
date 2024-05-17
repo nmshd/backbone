@@ -8,7 +8,7 @@ export enum SyncRunType {
     DatawalletVersionUpgrade
 }
 
-interface BackboneSyncRun {
+interface SyncRun {
     id: string;
     expiresAt: string;
     index: number;
@@ -20,7 +20,7 @@ interface BackboneSyncRun {
 
 export interface StartSyncRunResponse {
     status: StartSyncRunStatus;
-    syncRun: BackboneSyncRun | null;
+    syncRun: SyncRun | null;
 }
 
 declare enum StartSyncRunStatus {

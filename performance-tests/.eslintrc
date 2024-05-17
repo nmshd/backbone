@@ -3,5 +3,8 @@
     "extends": ["@js-soft/ts"],
     "parserOptions": {
         "project": ["tsconfig.json"]
+    },
+    "rules": {
+        "no-console": "off"
     }
 }
