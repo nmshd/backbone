@@ -19,6 +19,9 @@ spec:
       labels:
         app: {{ .Values.databasemigrator.name }}
     spec:
+      {{- with .Values.global.serviceAccount.name}}
+      serviceAccountName: {{ . }}
+      {{- end }}
       restartPolicy: Never
       {{- with .Values.databasemigrator.podSecurityContext }}
       securityContext:
