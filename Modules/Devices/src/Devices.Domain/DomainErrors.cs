@@ -59,12 +59,6 @@ public static class DomainErrors
             "The deletion via this deletion process cannot be started because the grace period has not yet expired.");
     }
 
-    public static DomainError GracePeriodEndsAtIsNotSet()
-    {
-        return new DomainError("error.platform.validation.device.gracePeriodEndsAtIsNotSet",
-            "The deletion via this deletion process cannot be approved because the grace period end is not set or could not be set.");
-    }
-
     public static DomainError DeletionProcessMustBePastDueApproval()
     {
         return new DomainError("error.platform.validation.device.noDeletionProcessIsPastDueApproval", "No deletion process is past due approval.");
