@@ -4,13 +4,14 @@ on:
   push:
     tags: "*"
 
+permissions:
+  contents: read
+  packages: write
+
 jobs:
   publish-admin-cli:
     name: Publish Admin CLI Container Image
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -22,11 +23,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract version from git tag
-        id: extract-version-from-git-tag
-        run: echo "VERSION=$(./.ci/extractVersionFromGitTag.js)" >> $GITHUB_OUTPUT
-        env:
-          GIT_TAG: ${{ github.ref_name }}
       - name: Log in to Docker Hub for accessing the cloud builder
         uses: docker/login-action@v3
         with:
@@ -41,15 +37,12 @@ jobs:
       - name: Build and Push Container Image
         run: ./.ci/acli/buildContainerImage.js
         env:
-          TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
+          TAG: ${{ github.ref_name }}
           PUSH: 1
 
   publish-admin-ui:
     name: Publish Admin UI Container Image
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -61,11 +54,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract version from git tag
-        id: extract-version-from-git-tag
-        run: echo "VERSION=$(./.ci/extractVersionFromGitTag.js)" >> $GITHUB_OUTPUT
-        env:
-          GIT_TAG: ${{ github.ref_name }}
       - name: Log in to Docker Hub for accessing the cloud builder
         uses: docker/login-action@v3
         with:
@@ -80,15 +68,12 @@ jobs:
       - name: Build and Push Container Image
         run: ./.ci/aui/buildContainerImage.js
         env:
-          TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
+          TAG: ${{ github.ref_name }}
           PUSH: 1
 
   publish-consumer-api:
     name: Publish Consumer API Container Image
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -100,11 +85,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract version from git tag
-        id: extract-version-from-git-tag
-        run: echo "VERSION=$(./.ci/extractVersionFromGitTag.js)" >> $GITHUB_OUTPUT
-        env:
-          GIT_TAG: ${{ github.ref_name }}
       - name: Log in to Docker Hub for accessing the cloud builder
         uses: docker/login-action@v3
         with:
@@ -119,15 +99,12 @@ jobs:
       - name: Build and Push Container Image
         run: ./.ci/capi/buildContainerImage.js
         env:
-          TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
+          TAG: ${{ github.ref_name }}
           PUSH: 1
 
   publish-event-handler:
     name: Publish Event Handler Service Container Image
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -139,11 +116,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract version from git tag
-        id: extract-version-from-git-tag
-        run: echo "VERSION=$(./.ci/extractVersionFromGitTag.js)" >> $GITHUB_OUTPUT
-        env:
-          GIT_TAG: ${{ github.ref_name }}
       - name: Log in to Docker Hub for accessing the cloud builder
         uses: docker/login-action@v3
         with:
@@ -158,31 +130,17 @@ jobs:
       - name: Build and Push Container Image
         run: ./.ci/eh/buildContainerImage.js
         env:
-          TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
+          TAG: ${{ github.ref_name }}
           PUSH: 1
 
   publish-database-migrator:
     name: Publish Database Migrator Container Image
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install script dependencies
         run: npm install --prefix ./.ci
-      - name: Docker Login
-        uses: docker/login-action@v3.0.0
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract version from git tag
-        id: extract-version-from-git-tag
-        run: echo "VERSION=$(./.ci/extractVersionFromGitTag.js)" >> $GITHUB_OUTPUT
-        env:
-          GIT_TAG: ${{ github.ref_name }}
       - name: Log in to Docker Hub for accessing the cloud builder
         uses: docker/login-action@v3
         with:
@@ -197,15 +155,12 @@ jobs:
       - name: Build and Push Container Image
         run: ./.ci/dbm/buildContainerImage.js
         env:
-          TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
+          TAG: ${{ github.ref_name }}
           PUSH: 1
 
   publish-identity-deletion-jobs:
     name: Publish Identity Deletion Jobs Image
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -217,11 +172,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract version from git tag
-        id: extract-version-from-git-tag
-        run: echo "VERSION=$(./.ci/extractVersionFromGitTag.js)" >> $GITHUB_OUTPUT
-        env:
-          GIT_TAG: ${{ github.ref_name }}
       - name: Log in to Docker Hub for accessing the cloud builder
         uses: docker/login-action@v3
         with:
@@ -236,15 +186,12 @@ jobs:
       - name: Build and Push Container Image
         run: ./.ci/idj/buildContainerImage.js
         env:
-          TAG: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
+          TAG: ${{ github.ref_name }}
           PUSH: 1
 
   publish-helm-chart:
     name: Publish Helm Chart
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
     needs:
       - publish-admin-cli
       - publish-admin-ui
@@ -259,16 +206,11 @@ jobs:
         env:
           USER: ${{ github.actor }}
           PASSWORD: ${{ secrets.GITHUB_TOKEN }}
-      - name: Extract version from git tag
-        id: extract-version-from-git-tag
-        run: echo "VERSION=$(./.ci/extractVersionFromGitTag.js)" >> $GITHUB_OUTPUT
-        env:
-          GIT_TAG: ${{ github.ref_name }}
       - name: Build Helm Chart
         run: ./.ci/helm/buildChart.js
         env:
-          VERSION: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
+          VERSION: ${{ github.ref_name }}
       - name: Push Helm Chart
         run: ./.ci/helm/pushChart.js
         env:
-          VERSION: ${{ steps.extract-version-from-git-tag.outputs.VERSION }}
+          VERSION: ${{ github.ref_name }}
