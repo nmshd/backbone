@@ -7,7 +7,6 @@ using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProc
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Tooling;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
@@ -22,9 +21,6 @@ public class HandlerTests
     public async Task Happy_path()
     {
         // Arrange
-        var utcNow = DateTime.Parse("2000-01-01");
-        SystemTime.Set(utcNow);
-
         var activeIdentity = TestDataGenerator.CreateIdentityWithOneDevice();
         var activeDevice = activeIdentity.Devices[0];
 
@@ -56,9 +52,7 @@ public class HandlerTests
                 A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
 
-        A.CallTo(() => mockPushNotificationSender.SendNotification(activeIdentity.Address,
-            A<DeletionProcessApprovedNotification>.That.Matches(n => n.DaysUntilDeletion == IdentityDeletionConfiguration.LengthOfGracePeriod), A<CancellationToken>._)
-        ).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockPushNotificationSender.SendNotification(activeIdentity.Address, A<DeletionProcessStartedPushNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
