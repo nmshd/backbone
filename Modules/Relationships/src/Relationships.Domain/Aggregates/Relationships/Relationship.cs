@@ -185,6 +185,50 @@ public class Relationship
             throw new DomainException(DomainErrors.CannotRequestReactivationWhenThereIsAnOpenReactivationRequest());
     }
 
+    public void AcceptReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureAcceptableReactivationRequestExistsFor(activeIdentity);
+
+        Status = RelationshipStatus.Active;
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.AcceptanceOfReactivation,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Active,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
+    private void EnsureAcceptableReactivationRequestExistsFor(IdentityAddress activeIdentity)
+    {
+        if (AuditLog.OrderBy(a => a.CreatedAt).Last().Reason != RelationshipAuditLogEntryReason.ReactivationRequested ||
+            AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy == activeIdentity)
+            throw new DomainException(DomainErrors.NoAcceptableRelationshipReactivationRequestExists());
+    }
+
+    public void RejectReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureRejectableRelationshipReactivationRequestExistsFor(activeIdentity);
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.RejectionOfReactivation,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.Terminated,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
+    private void EnsureRejectableRelationshipReactivationRequestExistsFor(IdentityAddress activeIdentity)
+    {
+        if (AuditLog.OrderBy(a => a.CreatedAt).Last().Reason != RelationshipAuditLogEntryReason.ReactivationRequested ||
+            AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy == activeIdentity)
+            throw new DomainException(DomainErrors.NoRejectableReactivationRequestExists());
+    }
+
     public void RevokeReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureRevocableReactivationRequestExistsFor(activeIdentity);
