@@ -100,4 +100,28 @@ public class RelationshipsRepositoryTests
         countForI1.Should().Be(2);
         countForI2.Should().Be(2);
     }
+
+    [Fact]
+    public async Task Decomposed_relationships_count_for_peer_only()
+    {
+        // Arrange
+        var relationships = new List<Relationship>
+        {
+            CreateDecomposedRelationship(I1, I2, I1),
+            CreateDecomposedRelationship(I1, I2, I2)
+        };
+        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
+        await _relationshipsArrangeContext.SaveChangesAsync();
+
+        var repository = new RelationshipsRepository(_actContext);
+        const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
+
+        // Act
+        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+
+        // Assert
+        countForI1.Should().Be(1);
+        countForI2.Should().Be(1);
+    }
 }
