@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
@@ -42,6 +42,21 @@ internal class ChallengesApiStepDefinitions
         _isAuthenticated = false;
     }
 
+    [Given("the user is authenticated")]
+    public async Task GivenTheUserIsAuthenticated()
+    {
+        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, PasswordHelper.GeneratePassword(20, 26));
+        _isAuthenticated = true;
+    }
+
+    [Given("the user is unauthenticated")]
+    public void GivenTheUserIsUnauthenticated()
+    {
+        _sdk = Client.CreateUnauthenticated(_httpClient, _clientCredentials);
+        _isAuthenticated = false;
+    }
+
+
     [Given("a Challenge c")]
     public async Task GivenAChallengeC()
     {
@@ -76,7 +91,6 @@ internal class ChallengesApiStepDefinitions
                 id = "CHLjVPS6h1082AuBVBaR";
                 break;
         }
-
         _response = await _sdk!.Challenges.GetChallenge(id);
     }
 

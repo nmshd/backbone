@@ -19,6 +19,9 @@ spec:
       labels:
         app: {{ .Values.admincli.name }}
     spec:
+      {{- with .Values.global.serviceAccount.name}}
+      serviceAccountName: {{ . }}
+      {{- end }}
       {{- with .Values.admincli.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}
