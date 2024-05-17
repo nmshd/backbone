@@ -6,7 +6,6 @@ import { ConstantArrivalRateScenario, Options } from "k6/options";
 import { CreateIdentityResponse, IdentityWithToken } from "../domain/identity";
 import { StartSyncRunRequestBody, StartSyncRunResponse, SyncRunType } from "../domain/sync-runs";
 import { CreateIdentity, ExchangeToken } from "../libs/backbone-client/identity";
-import { HttpxClient } from "../libs/k6-utils";
 
 export const options: Options = {
     scenarios: {
@@ -22,15 +21,15 @@ export const options: Options = {
 
 const client = new Httpx({
     baseURL: "http://localhost:8081/api/v1/",
-    timeout: 20000 // 20s timeout.
-}) as HttpxClient;
+    timeout: 20000 // 20s timeout
+}) as any; // TODO: remove cast to any
 
 export default async function (testIdentities: IdentityWithToken[]) {
     const dataWalletVersion = exec.vu.iterationInInstance + 3;
     const currentVuIdInTest = exec.vu.idInTest;
     const identity = testIdentities[currentVuIdInTest - 1];
 
-    console.debug(`VU ${currentVuIdInTest} is using identity with address ${identity?.response.address}`);
+    console.debug(`VU ${currentVuIdInTest} is using identity with address ${identity.response.address}`);
 
     if (identity == undefined) {
         return;
