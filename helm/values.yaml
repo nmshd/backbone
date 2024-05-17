@@ -656,4 +656,3 @@ global:
     logging:
       minimumLevel:
         default: Error
-      
