@@ -43,9 +43,9 @@ jobs:
       - name: Check formatting
         run: ./.ci/checkFormatting.sh
 
-  test:
+  unit-test:
     runs-on: ubuntu-latest
-    name: Run Tests
+    name: Run Unit Tests
     steps:
       - name: Checkout
         uses: actions/checkout@v4
