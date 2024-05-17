@@ -7,5 +7,7 @@ public class Token
     public required string CreatedByDevice { get; set; }
     public required DateTime CreatedAt { get; set; }
     public required DateTime ExpiresAt { get; set; }
+
+    //[JsonConverter(typeof(ByteArrayConverter))]
     public required byte[] Content { get; set; }
 }

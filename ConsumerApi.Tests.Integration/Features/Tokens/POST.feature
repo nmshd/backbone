@@ -5,20 +5,20 @@ User creates a Token
 
 Scenario: Creating a Token as an authenticated user
 	Given the user is authenticated
-	When a POST request is sent to the Tokens endpoint with
-		| Key			| Value                                         |
-		| ContentType	| application/json								|
-		| Content		| {"content": "QQ==","expiresAt": "<tomorrow>"} |
+	When a POST request is sent to the Tokens endpoint
 	Then the response status code is 201 (Created)
 	And the response contains a CreateTokenResponse
 
 Scenario: Creating a Token as an anonymous user
 	Given the user is unauthenticated
-	When a POST request is sent to the Tokens endpoint with
-		| Key			| Value											|
-		| ContentType	| application/json								|
-		| Content		| {"content": "QQ==","expiresAt": "<tomorrow>"} |
+	When a POST request is sent to the Tokens endpoint
 	Then the response status code is 401 (Unauthorized)
+
+#@ignore("skipping_due_to_required_sdk_changes")
+#Scenario: Creating a Token with an unsupported Content-Type
+#	Given the user is authenticated
+#	When a POST request is sent to the Tokens endpoint with invalid Content Type
+#	Then the response status code is 415 (Unsupported Media Type)
 
 #@ignore("skipping_due_to_required_backbone_changes")
 #Scenario: Creating a Token without the "Content" request content property
@@ -71,15 +71,7 @@ Scenario: Creating a Token as an anonymous user
 #	When a POST request is sent to the Tokens endpoint with no request content
 #	Then the response status code is 400 (Bad Request)
 #	And the response content includes an error with the error code "error.platform.inputCannotBeParsed"
-
-Scenario: Creating a Token with an unsupported Content-Type
-	Given the user is authenticated
-	When a POST request is sent to the Tokens endpoint with
-		| Key         | Value                              |
-		| ContentType | application/xml                    |
-		| Content     | <this>is some arbitrary xml</this> |
-	Then the response status code is 415 (Unsupported Media Type)
-
+#
 #@ignore("skipping_due_to_required_backbone_changes")
 #Scenario Outline: Creating a Token with an invalid DateTime format in the "expiresAt" request content property
 #	Given the user is authenticated

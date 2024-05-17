@@ -1,4 +1,4 @@
-using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
@@ -42,7 +42,6 @@ internal class ChallengesApiStepDefinitions
         _isAuthenticated = false;
     }
 
-
     [Given("a Challenge c")]
     public async Task GivenAChallengeC()
     {
@@ -77,6 +76,7 @@ internal class ChallengesApiStepDefinitions
                 id = "CHLjVPS6h1082AuBVBaR";
                 break;
         }
+
         _response = await _sdk!.Challenges.GetChallenge(id);
     }
 
