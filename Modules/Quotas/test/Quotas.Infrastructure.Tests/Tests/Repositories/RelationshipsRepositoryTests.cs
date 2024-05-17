@@ -133,9 +133,9 @@ public class RelationshipsRepositoryTests
         // Arrange
         var relationships = new List<Relationship>
         {
-            CreateActiveRelationship(I3,I4),
-            CreateActiveRelationship(I2,I4),
-            CreateActiveRelationship(I2,I3)
+            CreateActiveRelationship(I3, I4),
+            CreateActiveRelationship(I2, I4),
+            CreateActiveRelationship(I2, I3)
         };
         await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
         await _relationshipsArrangeContext.SaveChangesAsync();
@@ -156,8 +156,8 @@ public class RelationshipsRepositoryTests
         // Arrange
         var relationships = new List<Relationship>
         {
-            CreateDecomposedRelationship(I1, I2, I1),
-            CreateDecomposedRelationship(I1, I2, I2)
+            CreateDecomposedRelationship(from: I1, to: I2, decomposedBy: I1),
+            CreateDecomposedRelationship(from: I1, to: I2, decomposedBy: I2)
         };
         await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
         await _relationshipsArrangeContext.SaveChangesAsync();
