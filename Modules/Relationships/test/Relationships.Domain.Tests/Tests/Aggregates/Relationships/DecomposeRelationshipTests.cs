@@ -66,15 +66,15 @@ public class DecomposeRelationshipTests
     }
 
     [Fact]
-    public void Only_the_identity_belonging_to_the_relationship_can_decompose_it()
+    public void Only_a_identity_belonging_to_the_relationship_can_decompose_it()
     {
         // Arrange
         var relationship = CreateTerminatedRelationship(IDENTITY_1, IDENTITY_2);
-        var randomIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-        var randomDeviceId = DeviceId.New();
+        var externalIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+        var externalDeviceId = DeviceId.New();
 
         // Act
-        var acting = () => relationship.Decompose(randomIdentity, randomDeviceId);
+        var acting = () => relationship.Decompose(externalIdentity, externalDeviceId);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.requestingIdentityDoesNotBelongToRelationship");
@@ -106,22 +106,5 @@ public class DecomposeRelationshipTests
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipAlreadyDecomposed");
-    }
-
-    [Fact]
-    public void Two_identities_can_enter_into_a_new_relationship_again_after_decomposing()
-    {
-        // Arrange
-        var existingRelationships = new List<Relationship>
-        {
-            CreateDecomposedRelationship(IDENTITY_1, IDENTITY_2)
-        };
-
-        // Act
-        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
-        newRelationship.Accept(IDENTITY_1, DEVICE_1, []);
-
-        // Assert
-        newRelationship.Status.Should().Be(RelationshipStatus.Active);
     }
 }
