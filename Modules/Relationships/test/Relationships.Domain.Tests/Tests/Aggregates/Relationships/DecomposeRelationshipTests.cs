@@ -13,7 +13,7 @@ public class DecomposeRelationshipTests
     public void Decomposing_as_second_participant_transitions_relationship_to_status_ReadyForDeletion()
     {
         // Arrange
-        var relationship = CreateRelationshipWithDecompositionStarted();
+        var relationship = CreateRelationshipInDecompositionByFirstParticipant();
 
         // Act
         relationship.Decompose(IDENTITY_2, DEVICE_2);
@@ -28,13 +28,13 @@ public class DecomposeRelationshipTests
         // Arrange
         SystemTime.Set("2000-01-01");
 
-        var relationship = CreateRelationshipWithDecompositionStarted();
+        var relationship = CreateRelationshipInDecompositionByFirstParticipant();
 
         // Act
         relationship.Decompose(IDENTITY_2, DEVICE_2);
 
         // Assert
-        relationship.AuditLog.Should().HaveCount(4);
+        relationship.AuditLog.Should().HaveCount(4); // AuditLog(Creation->Acceptance->Decomposition->Decomposition)
 
         var auditLogEntry = relationship.AuditLog.Last();
 
@@ -48,25 +48,10 @@ public class DecomposeRelationshipTests
     }
 
     [Fact]
-    public void Decompose_finishedBySecondParticipant_if_firstAlreadyStartedTheProcess()
-    {
-        // Arrange
-        var relationship = CreateActiveRelationship();
-
-        // Act
-        var acting = () => relationship.Decompose(IDENTITY_2, DEVICE_2);
-
-        // Assert
-        acting.Should().Throw<DomainException>().WithError(
-            "error.platform.validation.decompose.cannotDecomposeRelationshipIfNoRequestWasMade"
-        );
-    }
-
-    [Fact]
     public void Decompose_throws_if_activeIdentity_alreadyDecomposed()
     {
         // Arrange
-        var relationship = CreateRelationshipWithDecompositionStarted();
+        var relationship = CreateRelationshipInDecompositionByFirstParticipant();
 
         // Act
         var acting = () => relationship.Decompose(IDENTITY_1, DEVICE_1);

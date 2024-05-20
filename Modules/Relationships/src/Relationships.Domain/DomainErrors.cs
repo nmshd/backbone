@@ -65,12 +65,6 @@ public static class DomainErrors
             "There is no pending reactivation request or you are not allowed to revoke it. A reactivation request can only be rejected by the identity that did not request it.");
     }
 
-    public static DomainError CannotDecomposeRelationshipIfNoRequestWasMade()
-    {
-        return new DomainError("error.platform.validation.decompose.cannotDecomposeRelationshipIfNoRequestWasMade",
-            $"Decompose request does not exist.");
-    }
-
     public static DomainError ActiveIdentityAlreadyDecomposed()
     {
         return new DomainError("error.platform.validation.decompose.activeIdentityAlreadyDecomposed",

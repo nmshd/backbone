@@ -58,6 +58,8 @@ public static class TestData
 
     public static Relationship CreateRelationshipWithDecomposeRequest(IdentityAddress from, IdentityAddress? to = null)
     {
+        to ??= TestDataGenerator.CreateRandomIdentityAddress();
+
         var relationship = CreateActiveRelationship(from, to);
 
         // replace with DecomposeRequest when implemented
@@ -65,7 +67,7 @@ public static class TestData
             RelationshipAuditLogEntryReason.Decomposition,
             RelationshipStatus.Active,
             RelationshipStatus.DeletionProposed,
-            TestDataGenerator.CreateRandomIdentityAddress(),
+            to,
             TestDataGenerator.CreateRandomDeviceId()
         ));
 

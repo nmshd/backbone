@@ -60,7 +60,7 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateRelationshipWithDecompositionStarted(IdentityAddress? from = null, IdentityAddress? to = null)
+    public static Relationship CreateRelationshipInDecompositionByFirstParticipant(IdentityAddress? from = null, IdentityAddress? to = null)
     {
         var relationship = CreateActiveRelationship(from, to);
 

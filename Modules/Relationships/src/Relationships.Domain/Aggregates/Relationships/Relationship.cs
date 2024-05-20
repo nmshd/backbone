@@ -249,7 +249,6 @@ public class Relationship
 
     public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
-        EnsureFirstParticipantStartedDecomposeProcess();
         EnsureActiveIdentityDidNotDecomposeYet(activeIdentity);
 
         Status = RelationshipStatus.ReadyForDeletion;
@@ -262,16 +261,6 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
-    }
-
-    private void EnsureFirstParticipantStartedDecomposeProcess()
-    {
-        var lastAuditLog = AuditLog.OrderBy(a => a.CreatedAt).Last();
-
-        if (lastAuditLog.Reason != RelationshipAuditLogEntryReason.Decomposition && lastAuditLog.NewStatus != RelationshipStatus.DeletionProposed)
-        {
-            throw new DomainException(DomainErrors.CannotDecomposeRelationshipIfNoRequestWasMade()); // todo: Decompose as first should be called, no need to throw
-        }
     }
 
     private void EnsureActiveIdentityDidNotDecomposeYet(IdentityAddress activeIdentity)
