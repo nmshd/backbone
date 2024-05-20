@@ -6,9 +6,9 @@ using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
-namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RelationshipReactivationRequest;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeRelationship;
 
-public class Handler : IRequestHandler<RequestRelationshipReactivationCommand, RequestRelationshipReactivationResponse>
+public class Handler : IRequestHandler<DecomposeRelationshipCommand, DecomposeRelationshipResponse>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IEventBus _eventBus;
@@ -22,19 +22,18 @@ public class Handler : IRequestHandler<RequestRelationshipReactivationCommand, R
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
-    public async Task<RequestRelationshipReactivationResponse> Handle(RequestRelationshipReactivationCommand request, CancellationToken cancellationToken)
+
+    public async Task<DecomposeRelationshipResponse> Handle(DecomposeRelationshipCommand request, CancellationToken cancellationToken)
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
         var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
 
-        relationship.RequestReactivation(_activeIdentity, _activeDevice);
+        relationship.Decompose(_activeIdentity, _activeDevice);
 
         await _relationshipsRepository.Update(relationship);
 
-        var peer = relationship.To == _activeIdentity ? relationship.From : relationship.To;
+        _eventBus.Publish(new RelationshipStatusChangedDomainEvent(relationship));
 
-        _eventBus.Publish(new RelationshipReactivationRequestedDomainEvent(relationship, _activeIdentity, peer));
-
-        return new RequestRelationshipReactivationResponse(relationship);
+        return new DecomposeRelationshipResponse(relationship);
     }
 }

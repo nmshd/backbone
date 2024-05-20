@@ -64,4 +64,16 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.relationshipRequest.noRejectableReactivationRequestExists",
             "There is no pending reactivation request or you are not allowed to revoke it. A reactivation request can only be rejected by the identity that did not request it.");
     }
+
+    public static DomainError RequestingIdentityDoesNotBelongToRelationship()
+    {
+        return new DomainError("error.platform.validation.relationshipRequest.requestingIdentityDoesNotBelongToRelationship",
+            $"Requesting identity does not belong to the relationship.");
+    }
+
+    public static DomainError RelationshipAlreadyDecomposed()
+    {
+        return new DomainError("error.platform.validation.relationshipRequest.relationshipAlreadyDecomposed",
+            $"You already decomposed this Relationship.");
+    }
 }

@@ -4,6 +4,7 @@ using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,14 +12,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(RelationshipsDbContext))]
-    partial class RelationshipsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240430223050_AddModificationsRequestedByDecomposingRelationship")]
+    partial class AddModificationsRequestedByDecomposingRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Relationships")
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -39,9 +42,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
+                        .HasColumnType("char(36)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")
@@ -78,9 +81,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.Property<string>("AllocatedBy")
                         .IsRequired()
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
+                        .HasColumnType("char(36)")
                         .IsFixedLength();
 
                     b.Property<string>("AllocatedByDevice")
@@ -123,9 +126,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.Property<string>("From")
                         .IsRequired()
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
+                        .HasColumnType("char(36)")
                         .IsFixedLength();
 
                     b.Property<bool>("FromHasDecomposed")
@@ -143,9 +146,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.Property<string>("To")
                         .IsRequired()
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
+                        .HasColumnType("char(36)")
                         .IsFixedLength();
 
                     b.Property<bool>("ToHasDecomposed")
@@ -175,9 +178,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
+                        .HasColumnType("char(36)")
                         .IsFixedLength();
 
                     b.Property<string>("CreatedByDevice")

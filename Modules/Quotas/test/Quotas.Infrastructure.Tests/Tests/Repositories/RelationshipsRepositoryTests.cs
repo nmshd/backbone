@@ -133,9 +133,9 @@ public class RelationshipsRepositoryTests
         // Arrange
         var relationships = new List<Relationship>
         {
-            CreateActiveRelationship(I3,I4),
-            CreateActiveRelationship(I2,I4),
-            CreateActiveRelationship(I2,I3)
+            CreateActiveRelationship(I3, I4),
+            CreateActiveRelationship(I2, I4),
+            CreateActiveRelationship(I2, I3)
         };
         await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
         await _relationshipsArrangeContext.SaveChangesAsync();
@@ -148,5 +148,29 @@ public class RelationshipsRepositoryTests
 
         // Assert
         count.Should().Be(0);
+    }
+
+    [Fact]
+    public async Task Decomposed_relationships_count_for_peer_only()
+    {
+        // Arrange
+        var relationships = new List<Relationship>
+        {
+            CreateDecomposedRelationship(from: I1, to: I2, decomposedBy: I1),
+            CreateDecomposedRelationship(from: I1, to: I2, decomposedBy: I2)
+        };
+        await _relationshipsArrangeContext.Relationships.AddRangeAsync(relationships);
+        await _relationshipsArrangeContext.SaveChangesAsync();
+
+        var repository = new RelationshipsRepository(_actContext);
+        const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
+
+        // Act
+        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+
+        // Assert
+        countForI1.Should().Be(1);
+        countForI2.Should().Be(1);
     }
 }

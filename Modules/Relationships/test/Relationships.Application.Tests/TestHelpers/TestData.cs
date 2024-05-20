@@ -30,19 +30,12 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateTerminatedRelationship()
+    public static Relationship CreateTerminatedRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
     {
-        var relationship = CreateActiveRelationship();
-        relationship.Terminate(relationship.From, TestDataGenerator.CreateRandomDeviceId());
-
-        return relationship;
-    }
-
-    public static Relationship CreateTerminatedRelationship(IdentityAddress activeIdentity, IdentityAddress? to = null)
-    {
+        from ??= TestDataGenerator.CreateRandomIdentityAddress();
         to ??= TestDataGenerator.CreateRandomIdentityAddress();
 
-        var relationship = CreateActiveRelationship(activeIdentity, to);
+        var relationship = CreateActiveRelationship(from, to);
         relationship.Terminate(relationship.From, TestDataGenerator.CreateRandomDeviceId());
 
         return relationship;
