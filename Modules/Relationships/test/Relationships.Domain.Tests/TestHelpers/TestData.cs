@@ -27,21 +27,21 @@ public static class TestData
     {
         to ??= IDENTITY_2;
         var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
-        var relationship = new Relationship(template, from ?? IDENTITY_1, DEVICE_1, null, []);
+        var relationship = new Relationship(template, from ?? IDENTITY_1, DEVICE_1, [], []);
         relationship.Accept(to, DEVICE_2, []);
         return relationship;
     }
 
     public static Relationship CreateRejectedRelationship()
     {
-        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, []);
+        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, [], []);
         relationship.Reject(IDENTITY_2, DEVICE_2, null);
         return relationship;
     }
 
     public static Relationship CreateRevokedRelationship()
     {
-        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, []);
+        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, [], []);
         relationship.Revoke(IDENTITY_1, DEVICE_1, null);
         return relationship;
     }
@@ -60,6 +60,18 @@ public static class TestData
         return relationship;
     }
 
+    public static Relationship CreateDecomposedRelationship(IdentityAddress? from = null, IdentityAddress? to = null, IdentityAddress? decomposedBy = null)
+    {
+        from ??= IDENTITY_1;
+        to ??= IDENTITY_2;
+        decomposedBy ??= from;
+
+        var relationship = CreateTerminatedRelationship(from, to);
+        relationship.Decompose(decomposedBy, DEVICE_1);
+        return relationship;
+    }
+
+    // todo: check if this is needed at all
     public static Relationship CreateRelationshipInDecompositionByFirstParticipant(IdentityAddress? from = null, IdentityAddress? to = null)
     {
         var relationship = CreateActiveRelationship(from, to);

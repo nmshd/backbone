@@ -10,8 +10,10 @@ using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
+using Handler = Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeRelationship.Handler;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.DecomposeRelationship;
+
 public class HandlerTests
 {
     [Fact]
@@ -21,15 +23,15 @@ public class HandlerTests
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
-        var mockRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreateRelationshipWithDecomposeRequest(activeIdentity);
-        A.CallTo(() => mockRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
+        var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
+        var relationship = TestData.CreateTerminatedRelationship(activeIdentity);
+        A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
 
-        var handler = CreateHandler(mockRelationshipsRepository, fakeUserContext);
+        var handler = CreateHandler(fakeRelationshipsRepository, fakeUserContext);
 
         // Act
         var response = await handler.Handle(new DecomposeRelationshipCommand
@@ -39,7 +41,7 @@ public class HandlerTests
 
         // Assert
         response.Id.Should().NotBeNull();
-        response.Status.Should().Be(RelationshipStatus.ReadyForDeletion);
+        response.Status.Should().Be(RelationshipStatus.DeletionProposed);
         response.AuditLog.Should().HaveCount(4);
     }
 
@@ -51,8 +53,9 @@ public class HandlerTests
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
         var mockRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreateRelationshipWithDecomposeRequest(activeIdentity);
-        A.CallTo(() => mockRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
+        var relationship = TestData.CreateTerminatedRelationship(from: activeIdentity);
+        A.CallTo(() => mockRelationshipsRepository
+            .FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
@@ -69,7 +72,7 @@ public class HandlerTests
         // Assert
         A.CallTo(
                 () => mockRelationshipsRepository.Update(
-                    A<Relationship>.That.Matches(r => r.Id == relationship.Id && r.Status == RelationshipStatus.ReadyForDeletion))
+                    A<Relationship>.That.Matches(r => r.Id == relationship.Id && r.Status == RelationshipStatus.DeletionProposed))
             )
             .MustHaveHappenedOnceExactly();
     }
@@ -82,7 +85,7 @@ public class HandlerTests
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreateRelationshipWithDecomposeRequest(activeIdentity);
+        var relationship = TestData.CreateTerminatedRelationship(to: activeIdentity);
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
 
         var fakeUserContext = A.Fake<IUserContext>();
@@ -103,16 +106,16 @@ public class HandlerTests
         A.CallTo(
                 () => mockEventBus.Publish(A<RelationshipStatusChangedDomainEvent>.That.Matches(e =>
                     e.RelationshipId == relationship.Id &&
-                    e.Status == RelationshipStatus.ReadyForDeletion.ToDtoString() &&
+                    e.Status == RelationshipStatus.DeletionProposed.ToDtoString() &&
                     e.Initiator == activeIdentity &&
-                    e.Peer == relationship.To)
+                    e.Peer == relationship.From)
                 ))
             .MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IRelationshipsRepository relationshipsRepository, IUserContext userContext, IEventBus? eventBus = null)
     {
-        eventBus ??= A.Fake<IEventBus>();
+        eventBus ??= A.Dummy<IEventBus>();
         return new Handler(relationshipsRepository, userContext, eventBus);
     }
 }

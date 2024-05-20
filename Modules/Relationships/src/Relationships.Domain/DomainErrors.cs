@@ -65,7 +65,19 @@ public static class DomainErrors
             "There is no pending reactivation request or you are not allowed to revoke it. A reactivation request can only be rejected by the identity that did not request it.");
     }
 
-    public static DomainError ActiveIdentityAlreadyDecomposed()
+    public static DomainError RequestingIdentityDoesNotBelongToRelationship()
+    {
+        return new DomainError("error.platform.validation.relationshipRequest.requestingIdentityDoesNotBelongToRelationship",
+            $"Requesting identity does not belong to the relationship.");
+    }
+
+    public static DomainError RelationshipAlreadyDecomposed()
+    {
+        return new DomainError("error.platform.validation.relationshipRequest.relationshipAlreadyDecomposed",
+            $"You already decomposed this Relationship.");
+    }
+
+    public static DomainError ActiveIdentityAlreadyDecomposed() // todo: should remove
     {
         return new DomainError("error.platform.validation.decompose.activeIdentityAlreadyDecomposed",
             $"You already started decomposition for this relationship.");

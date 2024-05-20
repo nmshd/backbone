@@ -111,4 +111,20 @@ public class CreateRelationshipTests
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists");
     }
+
+    [Fact]
+    public void A_new_relationship_can_be_created_after_decomposing_the_old_one()
+    {
+        // Arrange
+        var existingRelationships = new List<Relationship>
+        {
+            CreateDecomposedRelationship(IDENTITY_1, IDENTITY_2)
+        };
+
+        // Act
+        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, [], existingRelationships);
+
+        // Assert
+        newRelationship.Status.Should().Be(RelationshipStatus.Pending);
+    }
 }

@@ -24,6 +24,9 @@ spec:
       labels:
         app: {{ .Values.eventhandler.name }}
     spec:
+      {{- with .Values.global.serviceAccount.name}}
+      serviceAccountName: {{ . }}
+      {{- end }}
       {{- with .Values.eventhandler.podSecurityContext }}
       securityContext:
         {{- toYaml . | nindent 8 }}

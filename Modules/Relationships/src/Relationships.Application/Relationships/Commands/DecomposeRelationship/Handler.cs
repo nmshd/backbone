@@ -7,6 +7,7 @@ using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeRelationship;
+
 public class Handler : IRequestHandler<DecomposeRelationshipCommand, DecomposeRelationshipResponse>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;

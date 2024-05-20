@@ -6,6 +6,8 @@ public class Relationship : ICreatedAt
     public required string To { get; set; }
     public required RelationshipStatus Status { get; set; }
     public required DateTime CreatedAt { get; set; }
+    public required bool FromHasDecomposed { get; set; }
+    public required bool ToHasDecomposed { get; set; }
 }
 public enum RelationshipStatus
 {
@@ -13,5 +15,6 @@ public enum RelationshipStatus
     Active = 20,
     Rejected = 30,
     Revoked = 40,
-    Terminated = 50
+    Terminated = 50,
+    DeletionProposed = 60
 }

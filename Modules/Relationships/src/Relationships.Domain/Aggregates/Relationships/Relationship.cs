@@ -59,6 +59,9 @@ public class Relationship
 
     public IdentityAddress LastModifiedBy => AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy;
 
+    public bool FromHasDecomposed { get; private set; }
+    public bool ToHasDecomposed { get; private set; }
+
     private static void EnsureTargetIsNotSelf(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity)
     {
         if (activeIdentity == relationshipTemplate.CreatedBy)
@@ -245,6 +248,42 @@ public class Relationship
         if (AuditLog.OrderBy(a => a.CreatedAt).Last().Reason != RelationshipAuditLogEntryReason.ReactivationRequested ||
             AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy != activeIdentity)
             throw new DomainException(DomainErrors.NoRevocableReactivationRequestExists(activeIdentity));
+    }
+
+    public void Decompose1(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureHasParticipant(activeIdentity);
+        EnsureRelationshipNotDecomposedBy(activeIdentity);
+        EnsureStatus(RelationshipStatus.Terminated);
+
+        if (From == activeIdentity)
+            FromHasDecomposed = true;
+
+        if (To == activeIdentity)
+            ToHasDecomposed = true;
+
+        Status = RelationshipStatus.DeletionProposed;
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.Decomposed,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.DeletionProposed,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
+    private void EnsureRelationshipNotDecomposedBy(IdentityAddress activeIdentity)
+    {
+        if (From == activeIdentity && FromHasDecomposed || To == activeIdentity && ToHasDecomposed)
+            throw new DomainException(DomainErrors.RelationshipAlreadyDecomposed());
+    }
+
+    private void EnsureHasParticipant(IdentityAddress activeIdentity)
+    {
+        if (From != activeIdentity && To != activeIdentity)
+            throw new DomainException(DomainErrors.RequestingIdentityDoesNotBelongToRelationship());
     }
 
     public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
