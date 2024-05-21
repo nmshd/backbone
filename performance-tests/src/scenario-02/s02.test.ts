@@ -3,9 +3,9 @@ import { check } from "k6";
 import exec from "k6/execution";
 import { Response } from "k6/http";
 import { ConstantArrivalRateScenario, Options } from "k6/options";
+import { createIdentity, exchangeToken } from "../libs/backbone-client/identity";
 import { CreateIdentityResponse, IdentityWithToken } from "../models/identity";
 import { StartSyncRunRequestBody, StartSyncRunResponse, SyncRunType } from "../models/sync-run";
-import { createIdentity, exchangeToken } from "../libs/backbone-client/identity";
 
 export const options: Options = {
     scenarios: {
@@ -22,7 +22,7 @@ export const options: Options = {
 const client = new Httpx({
     baseURL: "http://localhost:8081/api/v1/",
     timeout: 20000 // 20s timeout
-}) as any; // TODO: remove cast to any
+}) as Httpx;
 
 export default function (testIdentities: IdentityWithToken[]): void {
     const dataWalletVersion = exec.vu.iterationInInstance + 3;
@@ -38,18 +38,14 @@ export default function (testIdentities: IdentityWithToken[]): void {
 
     const startSyncRunResponse = client.post("SyncRuns", JSON.stringify(requestBody), {
         headers: {
-            /* eslint-disable @typescript-eslint/naming-convention */
             "Content-Type": "application/json",
             "X-Supported-Datawallet-Version": dataWalletVersion,
             Authorization: `Bearer ${identity.token.access_token}`
-            /* eslint-enable @typescript-eslint/naming-convention */
         }
     }) as Response;
 
     check(startSyncRunResponse, {
-        /* eslint-disable @typescript-eslint/naming-convention */
         "Start sync run": (r) => r.status === 200
-        /* eslint-enable @typescript-eslint/naming-convention */
     });
 }
 
@@ -61,19 +57,15 @@ export function setup(): IdentityWithToken[] {
         const { httpResponse, generatedPassword } = createIdentity(client, "test", "test");
 
         check(httpResponse, {
-            /* eslint-disable @typescript-eslint/naming-convention */
             "Identity was created": (r) => r.status === 201
-            /* eslint-enable @typescript-eslint/naming-convention */
         });
 
         const createdIdentityResponseValue = httpResponse.json("result") as unknown as CreateIdentityResponse | undefined;
 
         check(createdIdentityResponseValue, {
-            /* eslint-disable @typescript-eslint/naming-convention */
-            "response has Address": (r) => r?.address !== undefined,
-            "response has device": (r) => r?.device !== undefined,
-            "device has Id": (r) => r?.device.id !== undefined
-            /* eslint-enable @typescript-eslint/naming-convention */
+            "Response has Address": (r) => r?.address !== undefined,
+            "Response has device": (r) => r?.device !== undefined,
+            "Device has Id": (r) => r?.device.id !== undefined
         });
 
         const token = exchangeToken(client, createdIdentityResponseValue!.device.username, generatedPassword);
@@ -85,17 +77,13 @@ export function setup(): IdentityWithToken[] {
 
         const startSyncRunResponse = client.post("SyncRuns", JSON.stringify(requestBody), {
             headers: {
-                /* eslint-disable @typescript-eslint/naming-convention */
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token.access_token}`
-                /* eslint-enable @typescript-eslint/naming-convention */
             }
         }) as Response;
 
         check(startSyncRunResponse, {
-            /* eslint-disable @typescript-eslint/naming-convention */
             "Start datawallet version upgrade": (r) => r.status === 201
-            /* eslint-enable @typescript-eslint/naming-convention */
         });
 
         const startSyncRunResponseValue = startSyncRunResponse.json("result") as unknown as StartSyncRunResponse | undefined;
@@ -105,18 +93,14 @@ export function setup(): IdentityWithToken[] {
             JSON.stringify({ newDatawalletVersion: 2, datawalletModifications: [] }),
             {
                 headers: {
-                    /* eslint-disable @typescript-eslint/naming-convention */
                     "Content-Type": "application/json",
                     Authorization: `Bearer ${token.access_token}`
-                    /* eslint-enable @typescript-eslint/naming-convention */
                 }
             }
         ) as Response;
 
         check(finalizeDatawalletVersionUpgradeResponse, {
-            /* eslint-disable @typescript-eslint/naming-convention */
             "Finalize datawallet version upgrade": (r) => r.status === 200
-            /* eslint-enable @typescript-eslint/naming-convention */
         });
 
         testIdentities.push({
