@@ -6,8 +6,10 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.Crypto;
 using Backbone.Tooling;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -29,7 +31,13 @@ internal class TokensApiStepDefinitions
     private readonly ClientCredentials _clientCredentials;
     private bool _isAuthenticated;
     private Client? _sdk;
+
     private static readonly DateTime TOMORROW = DateTime.Now.AddDays(1);
+
+    private static readonly byte[] CONTENT = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new
+    {
+        key = "some-value"
+    })).BytesRepresentation;
 
     public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, HttpClientFactory factory)
     {
@@ -61,7 +69,7 @@ internal class TokensApiStepDefinitions
     {
         var createTokenRequest = new CreateTokenRequest
         {
-            Content = Enumerable.Repeat((byte)0x20, 100).ToArray(),
+            Content = CONTENT,
             ExpiresAt = TOMORROW
         };
 
@@ -78,7 +86,7 @@ internal class TokensApiStepDefinitions
     {
         var createTokenRequest = new CreateTokenRequest
         {
-            Content = Enumerable.Repeat((byte)0x20, 100).ToArray(),
+            Content = CONTENT,
             ExpiresAt = TOMORROW
         };
 
@@ -96,7 +104,7 @@ internal class TokensApiStepDefinitions
         {
             var createTokenRequest = new CreateTokenRequest
             {
-                Content = Enumerable.Repeat((byte)0x20, 100).ToArray(),
+                Content = CONTENT,
                 ExpiresAt = TOMORROW
             };
 
@@ -125,9 +133,9 @@ internal class TokensApiStepDefinitions
     [When("a POST request is sent to the Tokens endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWith()
     {
-        var request = new CreateTokenRequest()
+        var request = new CreateTokenRequest
         {
-            Content = Enumerable.Repeat((byte)0x20, 100).ToArray(),
+            Content = CONTENT,
             ExpiresAt = TOMORROW
         };
 
@@ -144,9 +152,9 @@ internal class TokensApiStepDefinitions
     [When("a POST request is sent to the Tokens endpoint with invalid Content Type")]
     public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWithNoRequestContent()
     {
-        var request = new CreateTokenRequest()
+        var request = new CreateTokenRequest
         {
-            Content = Enumerable.Repeat((byte)0x20, 100).ToArray(),
+            Content = CONTENT,
             ExpiresAt = TOMORROW
         };
 
