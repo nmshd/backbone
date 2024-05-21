@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "start": "ts-node src/index.ts",
+        "start": "tsc && node dist/index.js",
         "dev": "nodemon src/index.ts"
     },
     "author": "",
