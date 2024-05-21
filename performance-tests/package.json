@@ -1,5 +1,5 @@
 {
-    "name": "performance-test-challenges",
+    "name": "enmshed-backbone-performance-tests",
     "license": "MIT",
     "devDependencies": {
         "@babel/core": "7.23.7",
