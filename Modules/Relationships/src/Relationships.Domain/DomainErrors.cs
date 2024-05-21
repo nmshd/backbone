@@ -76,10 +76,4 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.relationshipRequest.relationshipAlreadyDecomposed",
             $"You already decomposed this Relationship.");
     }
-
-    public static DomainError ActiveIdentityAlreadyDecomposed() // todo: should remove
-    {
-        return new DomainError("error.platform.validation.decompose.activeIdentityAlreadyDecomposed",
-            $"You already started decomposition for this relationship.");
-    }
 }
