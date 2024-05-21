@@ -255,10 +255,10 @@ public class Relationship
         EnsureHasParticipant(activeIdentity);
         EnsureRelationshipNotDecomposedBy(activeIdentity);
 
-        if (FromHasDecomposed || ToHasDecomposed)
-            DecomposeAsSecondParticipant(activeIdentity, activeDevice);
-        else
+        if (Status == RelationshipStatus.Terminated)
             DecomposeAsFirstParticipant(activeIdentity, activeDevice);
+        else
+            DecomposeAsSecondParticipant(activeIdentity, activeDevice);
     }
 
     private void DecomposeAsFirstParticipant(IdentityAddress activeIdentity, DeviceId activeDevice)
