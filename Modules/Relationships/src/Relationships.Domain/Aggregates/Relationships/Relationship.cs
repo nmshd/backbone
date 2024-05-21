@@ -253,7 +253,7 @@ public class Relationship
     public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureHasParticipant(activeIdentity);
-        EnsureRelationshipNotDecomposedBy(activeIdentity);        
+        EnsureRelationshipNotDecomposedBy(activeIdentity);
 
         if (FromHasDecomposed || ToHasDecomposed)
             DecomposeAsSecondParticipant(activeIdentity, activeDevice);
