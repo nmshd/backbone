@@ -4,7 +4,6 @@ using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
-using Backbone.Tooling;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -27,7 +26,7 @@ internal class PnsRegistrationStepDefinitions
     [Given("the user is authenticated")]
     public async Task GivenTheUserIsAuthenticated()
     {
-        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, PasswordHelper.GeneratePassword(20, 26));
+        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, "somePassword");
     }
 
     [When("a PUT request is sent to the /Devices/Self/PushNotifications endpoint")]
