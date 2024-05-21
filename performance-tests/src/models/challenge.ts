@@ -1,4 +1,4 @@
-export interface ChallengeResponse {
+export interface CreateChallengeResponse {
     id: string;
     expiresAt: string;
     createdBy: string;

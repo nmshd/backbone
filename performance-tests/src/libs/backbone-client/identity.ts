@@ -1,7 +1,7 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 import { b64encode } from "k6/encoding";
 import { Response } from "k6/http";
-import { ChallengeResponse } from "../../models/challenge";
+import { CreateChallengeResponse } from "../../models/challenge";
 import { CreateIdentityRequest } from "../../models/identity";
 import { TokenResponse } from "../../models/token";
 import { ChallengeRequestPayload, CryptoHelper } from "../crypto-helper";
@@ -57,7 +57,7 @@ export function exchangeToken(client: Httpx, username: string, password: string)
 }
 
 function getChallenge(client: Httpx): ChallengeRequestPayload {
-    const receivedChallenge = client.post("Challenges").json("result") as unknown as ChallengeResponse;
+    const receivedChallenge = client.post("Challenges").json("result") as unknown as CreateChallengeResponse;
 
     return {
         id: receivedChallenge.id,
