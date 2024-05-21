@@ -13,7 +13,7 @@ namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relations
 public class DecomposeRelationshipTests
 {
     [Fact]
-    public void Decomposing_relationship_transitions_relationship_to_status_deletion_proposed()
+    public void Decomposing_as_firstParticipant_transitions_relationship_to_status_DeletionProposed()
     {
         // Arrange
         var relationship = CreateTerminatedRelationship(IDENTITY_1, IDENTITY_2);
@@ -26,7 +26,36 @@ public class DecomposeRelationshipTests
     }
 
     [Fact]
-    public void Can_only_decompose_when_relationship_is_in_status_terminated()
+    public void Decomposing_as_second_participant_transitions_relationship_to_status_ReadyForDeletion()
+    {
+        // Arrange
+        var relationship = CreateRelationshipDecomposedByFrom(IDENTITY_1, IDENTITY_2);
+
+        // Act
+        relationship.Decompose(IDENTITY_2, DEVICE_2);
+
+        // Assert
+        relationship.Status.Should().Be(RelationshipStatus.ReadyForDeletion);
+    }
+
+    [Fact]
+    public void Can_only_decompose_when_relationship_is_in_status_Terminated_or_DeletionProposed()
+    {
+        // Arrange
+        var relationship = CreatePendingRelationship(IDENTITY_1, IDENTITY_2);
+
+        // Act
+        var acting = () => relationship.Decompose(IDENTITY_1, DEVICE_1);
+
+        // Assert
+        acting.Should().Throw<DomainException>().WithError(
+            "error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus",
+            nameof(RelationshipStatus.DeletionProposed)
+        );
+    }
+
+    [Fact]
+    public void Can_only_decompose_as_firstParticipant_when_relationship_is_in_status_Terminated()
     {
         // Arrange
         var relationship = CreatePendingRelationship(IDENTITY_1, IDENTITY_2);
@@ -42,14 +71,14 @@ public class DecomposeRelationshipTests
     }
 
     [Fact]
-    public void Decomposing_relationship_creates_an_audit_log_entry()
+    public void Decomposing_as_firstParticipant_creates_an_AuditLog_entry()
     {
         // Arrange
         SystemTime.Set("2000-01-01");
         var relationship = CreateTerminatedRelationship(IDENTITY_1, IDENTITY_2);
 
         // Act
-        relationship.Decompose(IDENTITY_2, DEVICE_2);
+        relationship.Decompose(IDENTITY_1, DEVICE_1);
 
         // Assert
         relationship.AuditLog.Should().HaveCount(4);
@@ -57,16 +86,41 @@ public class DecomposeRelationshipTests
         var auditLogEntry = relationship.AuditLog.Last();
 
         auditLogEntry.Id.Should().NotBeNull();
-        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.Decomposed);
+        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.Decomposition);
         auditLogEntry.OldStatus.Should().Be(RelationshipStatus.Terminated);
         auditLogEntry.NewStatus.Should().Be(RelationshipStatus.DeletionProposed);
+        auditLogEntry.CreatedBy.Should().Be(IDENTITY_1);
+        auditLogEntry.CreatedByDevice.Should().Be(DEVICE_1);
+        auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
+    }
+
+    [Fact]
+    public void Decomposing_as_secondParticipant_creates_an_AuditLog_entry()
+    {
+        // Arrange
+        SystemTime.Set("2000-01-01");
+
+        var relationship = CreateRelationshipDecomposedByFrom(IDENTITY_1, IDENTITY_2);
+
+        // Act
+        relationship.Decompose(IDENTITY_2, DEVICE_2);
+
+        // Assert
+        relationship.AuditLog.Should().HaveCount(5); // AuditLog(Creation->Acceptance->Termination->Decomposition->Decomposition)
+
+        var auditLogEntry = relationship.AuditLog.Last();
+
+        auditLogEntry.Id.Should().NotBeNull();
+        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.Decomposition);
+        auditLogEntry.OldStatus.Should().Be(RelationshipStatus.DeletionProposed);
+        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.ReadyForDeletion);
         auditLogEntry.CreatedBy.Should().Be(IDENTITY_2);
         auditLogEntry.CreatedByDevice.Should().Be(DEVICE_2);
         auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
     }
 
     [Fact]
-    public void Only_a_identity_belonging_to_the_relationship_can_decompose_it()
+    public void Identity_must_belong_to_relationship_to_decompose_it()
     {
         // Arrange
         var relationship = CreateTerminatedRelationship(IDENTITY_1, IDENTITY_2);

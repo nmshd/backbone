@@ -7,5 +7,6 @@ public enum RelationshipStatus
     Rejected = 30,
     Revoked = 40,
     Terminated = 50,
-    DeletionProposed = 60
+    DeletionProposed = 60,
+    ReadyForDeletion = 70
 }

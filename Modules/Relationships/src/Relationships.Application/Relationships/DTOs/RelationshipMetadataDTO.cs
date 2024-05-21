@@ -52,6 +52,7 @@ public static class RelationshipStatusExtensions
             RelationshipStatus.Revoked => "Revoked",
             RelationshipStatus.Terminated => "Terminated",
             RelationshipStatus.DeletionProposed => "DeletionProposed",
+            RelationshipStatus.ReadyForDeletion => "ReadyForDeletion",
             _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
         };
     }

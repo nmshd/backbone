@@ -70,4 +70,13 @@ public static class TestData
         relationship.Decompose(decomposedBy, DEVICE_1);
         return relationship;
     }
+
+    public static Relationship CreateRelationshipDecomposedByFrom(IdentityAddress from, IdentityAddress to)
+    {
+        var relationship = CreateTerminatedRelationship(from, to);
+
+        relationship.Decompose(from, DEVICE_1);
+
+        return relationship;
+    }
 }

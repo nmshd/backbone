@@ -31,7 +31,7 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
 
-        var handler = CreateHandler(fakeUserContext, fakeRelationshipsRepository);
+        var handler = CreateHandler(fakeRelationshipsRepository, fakeUserContext);
 
         // Act
         var response = await handler.Handle(new DecomposeRelationshipCommand
@@ -61,7 +61,7 @@ public class HandlerTests
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
 
-        var handler = CreateHandler(fakeUserContext, mockRelationshipsRepository);
+        var handler = CreateHandler(mockRelationshipsRepository, fakeUserContext);
 
         // Act
         await handler.Handle(new DecomposeRelationshipCommand
@@ -78,7 +78,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Publishes_RelationshipStatusChangedIntegrationEvent()
+    public async Task Publishes_RelationshipStatusChangedDomainEvent()
     {
         // Arrange
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
@@ -94,7 +94,7 @@ public class HandlerTests
 
         var mockEventBus = A.Fake<IEventBus>();
 
-        var handler = CreateHandler(fakeUserContext, fakeRelationshipsRepository, mockEventBus);
+        var handler = CreateHandler(fakeRelationshipsRepository, fakeUserContext, mockEventBus);
 
         // Act
         await handler.Handle(new DecomposeRelationshipCommand
@@ -113,7 +113,7 @@ public class HandlerTests
             .MustHaveHappenedOnceExactly();
     }
 
-    private static Handler CreateHandler(IUserContext userContext, IRelationshipsRepository relationshipsRepository, IEventBus? eventBus = null)
+    private static Handler CreateHandler(IRelationshipsRepository relationshipsRepository, IUserContext userContext, IEventBus? eventBus = null)
     {
         eventBus ??= A.Dummy<IEventBus>();
         return new Handler(relationshipsRepository, userContext, eventBus);
