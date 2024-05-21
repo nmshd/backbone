@@ -71,7 +71,7 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateRelationshipInDecompositionByFirstParticipant(IdentityAddress from, IdentityAddress to)
+    public static Relationship CreateRelationshipDecomposedByFrom(IdentityAddress from, IdentityAddress to)
     {
         var relationship = CreateTerminatedRelationship(from, to);
 

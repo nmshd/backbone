@@ -29,7 +29,7 @@ public class DecomposeRelationshipTests
     public void Decomposing_as_second_participant_transitions_relationship_to_status_ReadyForDeletion()
     {
         // Arrange
-        var relationship = CreateRelationshipInDecompositionByFirstParticipant(IDENTITY_1, IDENTITY_2);
+        var relationship = CreateRelationshipDecomposedByFrom(IDENTITY_1, IDENTITY_2);
 
         // Act
         relationship.Decompose(IDENTITY_2, DEVICE_2);
@@ -84,7 +84,7 @@ public class DecomposeRelationshipTests
         // Arrange
         SystemTime.Set("2000-01-01");
 
-        var relationship = CreateRelationshipInDecompositionByFirstParticipant(IDENTITY_1, IDENTITY_2);
+        var relationship = CreateRelationshipDecomposedByFrom(IDENTITY_1, IDENTITY_2);
 
         // Act
         relationship.Decompose(IDENTITY_2, DEVICE_2);
