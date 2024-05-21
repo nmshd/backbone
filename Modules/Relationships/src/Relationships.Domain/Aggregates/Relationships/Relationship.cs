@@ -250,7 +250,7 @@ public class Relationship
             throw new DomainException(DomainErrors.NoRevocableReactivationRequestExists(activeIdentity));
     }
 
-    public void Decompose1(IdentityAddress activeIdentity, DeviceId activeDevice)
+    public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureHasParticipant(activeIdentity);
         EnsureRelationshipNotDecomposedBy(activeIdentity);
@@ -265,7 +265,7 @@ public class Relationship
         Status = RelationshipStatus.DeletionProposed;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.Decomposed,
+            RelationshipAuditLogEntryReason.Decomposition,
             RelationshipStatus.Terminated,
             RelationshipStatus.DeletionProposed,
             activeIdentity,
@@ -286,7 +286,7 @@ public class Relationship
             throw new DomainException(DomainErrors.RequestingIdentityDoesNotBelongToRelationship());
     }
 
-    public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
+    public void Decompose1(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureActiveIdentityDidNotDecomposeYet(activeIdentity);
 
