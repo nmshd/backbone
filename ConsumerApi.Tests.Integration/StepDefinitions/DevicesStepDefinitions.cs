@@ -12,7 +12,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "DELETE Device")]
 internal class DevicesStepDefinitions
 {
-    private Client? _sdk;
+    private Client _sdk = null!;
     private readonly ClientCredentials _clientCredentials;
     private readonly HttpClient _httpClient;
 
@@ -38,26 +38,26 @@ internal class DevicesStepDefinitions
     [Given("an un-onboarded device d2")]
     public async Task GivenAnUnOnboardedDeviceD2()
     {
-        var client = await _sdk!.OnboardNewDevice("deviceTwoPassword");
+        var client = await _sdk.OnboardNewDevice("deviceTwoPassword");
         _deviceIdD2 = client.DeviceData!.DeviceId;
     }
 
     [When("a DELETE request is sent to the Devices/{id} endpoint with d1.Id")]
     public async Task WhenADeleteRequestIsSentToTheDeviceIdEndpointWithDId()
     {
-        _deletionResponse = await _sdk!.Devices.DeleteDevice(_deviceIdD1!);
+        _deletionResponse = await _sdk.Devices.DeleteDevice(_deviceIdD1!);
     }
 
     [When("a DELETE request is sent to the Devices/{id} endpoint with d2.Id")]
     public async Task WhenADeleteRequestIsSentToTheDeviceIdEndpointWithD2Id()
     {
-        _deletionResponse = await _sdk!.Devices.DeleteDevice(_deviceIdD2!);
+        _deletionResponse = await _sdk.Devices.DeleteDevice(_deviceIdD2!);
     }
 
     [When("a DELETE request is sent to the Devices/{id} endpoint with a non existent id")]
     public async Task WhenADeleteRequestIsSentToTheDeviceIdEndpointWithNonExistentId()
     {
-        _deletionResponse = await _sdk!.Devices.DeleteDevice(NON_EXISTENT_DEVICE_ID);
+        _deletionResponse = await _sdk.Devices.DeleteDevice(NON_EXISTENT_DEVICE_ID);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
@@ -97,7 +97,7 @@ internal class DevicesStepDefinitions
 
     protected async Task<ApiResponse<ListDevicesResponse>> ListDevices()
     {
-        var response = await _sdk!.Devices.ListDevices();
+        var response = await _sdk.Devices.ListDevices();
         response.Should().BeASuccess();
 
         return response;

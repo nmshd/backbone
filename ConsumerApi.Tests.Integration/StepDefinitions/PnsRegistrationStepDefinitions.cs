@@ -13,7 +13,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "PUT /Devices/Self/PushNotifications")]
 internal class PnsRegistrationStepDefinitions
 {
-    private Client? _sdk;
+    private Client _sdk = null!;
     private readonly ClientCredentials _clientCredentials;
     private readonly HttpClient _httpClient;
     private ApiResponse<UpdateDeviceRegistrationResponse>? _response;
@@ -40,7 +40,7 @@ internal class PnsRegistrationStepDefinitions
             AppId = "someAppId"
         };
 
-        _response = await _sdk!.PushNotifications.RegisterForPushNotifications(request);
+        _response = await _sdk.PushNotifications.RegisterForPushNotifications(request);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]

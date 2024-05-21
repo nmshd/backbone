@@ -16,7 +16,7 @@ internal class ChallengesApiStepDefinitions
 {
     private string _challengeId;
     private ApiResponse<Challenge>? _response;
-    private Client? _sdk;
+    private Client _sdk = null!;
     private bool _isAuthenticated;
     private readonly HttpClient _httpClient;
     private readonly ClientCredentials _clientCredentials;
@@ -45,7 +45,7 @@ internal class ChallengesApiStepDefinitions
     [Given("a Challenge c")]
     public async Task GivenAChallengeC()
     {
-        var challengeResponse = !_isAuthenticated ? await _sdk!.Challenges.CreateChallengeUnauthenticated() : await _sdk!.Challenges.CreateChallenge();
+        var challengeResponse = !_isAuthenticated ? await _sdk.Challenges.CreateChallengeUnauthenticated() : await _sdk.Challenges.CreateChallenge();
         challengeResponse.Should().BeASuccess();
         _challengeId = challengeResponse.Result!.Id;
 
@@ -55,13 +55,13 @@ internal class ChallengesApiStepDefinitions
     [When("a POST request is sent to the Challenges endpoint with")]
     public async Task WhenAPOSTRequestIsSentToTheChallengesEndpointWith(Table table)
     {
-        _response = await _sdk!.Challenges.CreateChallenge();
+        _response = await _sdk.Challenges.CreateChallenge();
     }
 
     [When("a POST request is sent to the Challenges endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheChallengesEndpoint()
     {
-        _response = _isAuthenticated ? await _sdk!.Challenges.CreateChallenge() : await _sdk!.Challenges.CreateChallengeUnauthenticated();
+        _response = _isAuthenticated ? await _sdk.Challenges.CreateChallenge() : await _sdk.Challenges.CreateChallengeUnauthenticated();
     }
 
     [When(@"a GET request is sent to the Challenges/{id} endpoint with ""?(.*?)""?")]
@@ -77,7 +77,7 @@ internal class ChallengesApiStepDefinitions
                 break;
         }
 
-        _response = await _sdk!.Challenges.GetChallenge(id);
+        _response = await _sdk.Challenges.GetChallenge(id);
     }
 
     [Then("the response contains a Challenge")]

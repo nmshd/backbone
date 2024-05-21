@@ -20,7 +20,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "POST Identity")]
 internal class IdentitiesApiStepDefinitions
 {
-    private Client? _sdk;
+    private Client _sdk = null!;
     private readonly ClientCredentials _clientCredentials;
     private readonly HttpClient _httpClient;
     private ApiResponse<StartDeletionProcessResponse>? _startDeletionProcessResponse;
@@ -41,7 +41,7 @@ internal class IdentitiesApiStepDefinitions
     [Given("an active deletion process for the identity exists")]
     public async Task GivenAnActiveDeletionProcessForTheUserExists()
     {
-        await _sdk!.Identities.StartDeletionProcess();
+        await _sdk.Identities.StartDeletionProcess();
     }
 
     [Given("an Identity i")]
@@ -60,7 +60,7 @@ internal class IdentitiesApiStepDefinitions
     [When("a POST request is sent to the /Identities/Self/DeletionProcesses endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesSelfDeletionProcessEndpoint()
     {
-        _startDeletionProcessResponse = await _sdk!.Identities.StartDeletionProcess();
+        _startDeletionProcessResponse = await _sdk.Identities.StartDeletionProcess();
     }
 
     [When("a POST request is sent to the /Identities endpoint with a valid signature on c")]
@@ -87,7 +87,7 @@ internal class IdentitiesApiStepDefinitions
             DevicePassword = "some-device-password"
         };
 
-        _identityResponse = await _sdk!.Identities.CreateIdentity(createIdentityPayload);
+        _identityResponse = await _sdk.Identities.CreateIdentity(createIdentityPayload);
     }
 
     [Then(@"the response content includes an error with the error code ""([^""]*)""")]
