@@ -254,7 +254,6 @@ public class Relationship
     {
         EnsureHasParticipant(activeIdentity);
         EnsureRelationshipNotDecomposedBy(activeIdentity);
-        EnsureStatus(RelationshipStatus.Terminated);
 
         if (From == activeIdentity)
             FromHasDecomposed = true;
@@ -264,30 +263,42 @@ public class Relationship
 
         if (FromHasDecomposed && ToHasDecomposed)
         {
-            Status = RelationshipStatus.ReadyForDeletion;
-
-            var auditLogEntry = new RelationshipAuditLogEntry(
-                RelationshipAuditLogEntryReason.Decomposition,
-                RelationshipStatus.DeletionProposed,
-                RelationshipStatus.ReadyForDeletion,
-                activeIdentity,
-                activeDevice
-            );
-            AuditLog.Add(auditLogEntry);
+            DecomposeAsSecondParticipant(activeIdentity, activeDevice);
         }
         else
         {
-            Status = RelationshipStatus.DeletionProposed;
-
-            var auditLogEntry = new RelationshipAuditLogEntry(
-                RelationshipAuditLogEntryReason.Decomposition,
-                RelationshipStatus.Terminated,
-                RelationshipStatus.DeletionProposed,
-                activeIdentity,
-                activeDevice
-            );
-            AuditLog.Add(auditLogEntry);
+            DecomposeAsFirstParticipant(activeIdentity, activeDevice);
         }
+    }
+
+    private void DecomposeAsFirstParticipant(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        EnsureStatus(RelationshipStatus.Terminated);
+
+        Status = RelationshipStatus.DeletionProposed;
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.Decomposition,
+            RelationshipStatus.Terminated,
+            RelationshipStatus.DeletionProposed,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
+    }
+
+    private void DecomposeAsSecondParticipant(IdentityAddress activeIdentity, DeviceId activeDevice)
+    {
+        Status = RelationshipStatus.ReadyForDeletion;
+
+        var auditLogEntry = new RelationshipAuditLogEntry(
+            RelationshipAuditLogEntryReason.Decomposition,
+            RelationshipStatus.DeletionProposed,
+            RelationshipStatus.ReadyForDeletion,
+            activeIdentity,
+            activeDevice
+        );
+        AuditLog.Add(auditLogEntry);
     }
 
     private void EnsureRelationshipNotDecomposedBy(IdentityAddress activeIdentity)

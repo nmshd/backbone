@@ -72,18 +72,11 @@ public static class TestData
     }
 
     // todo: check if this is needed at all
-    public static Relationship CreateRelationshipInDecompositionByFirstParticipant(IdentityAddress? from = null, IdentityAddress? to = null)
+    public static Relationship CreateRelationshipInDecompositionByFirstParticipant(IdentityAddress from, IdentityAddress to)
     {
-        var relationship = CreateActiveRelationship(from, to);
+        var relationship = CreateTerminatedRelationship(from, to);
 
-        // replace with Decompose as first participant when implemented
-        relationship.AuditLog.Add(new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.Decomposition,
-            RelationshipStatus.Active,
-            RelationshipStatus.DeletionProposed,
-            IDENTITY_1,
-            DEVICE_1
-        ));
+        relationship.Decompose(from, DEVICE_1);
 
         return relationship;
     }

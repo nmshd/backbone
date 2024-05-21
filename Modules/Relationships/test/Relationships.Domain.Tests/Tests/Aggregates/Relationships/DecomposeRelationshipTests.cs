@@ -26,7 +26,20 @@ public class DecomposeRelationshipTests
     }
 
     [Fact]
-    public void Can_only_decompose_when_relationship_is_in_status_terminated()
+    public void Decomposing_as_second_participant_transitions_relationship_to_status_ReadyForDeletion()
+    {
+        // Arrange
+        var relationship = CreateRelationshipInDecompositionByFirstParticipant(IDENTITY_1, IDENTITY_2);
+
+        // Act
+        relationship.Decompose(IDENTITY_2, DEVICE_2);
+
+        // Assert
+        relationship.Status.Should().Be(RelationshipStatus.ReadyForDeletion);
+    }
+
+    [Fact]
+    public void Can_only_decompose_as_firstParticipant_when_relationship_is_in_status_terminated()
     {
         // Arrange
         var relationship = CreatePendingRelationship(IDENTITY_1, IDENTITY_2);
@@ -49,7 +62,7 @@ public class DecomposeRelationshipTests
         var relationship = CreateTerminatedRelationship(IDENTITY_1, IDENTITY_2);
 
         // Act
-        relationship.Decompose(IDENTITY_2, DEVICE_2);
+        relationship.Decompose(IDENTITY_1, DEVICE_1);
 
         // Assert
         relationship.AuditLog.Should().HaveCount(4);
@@ -60,6 +73,31 @@ public class DecomposeRelationshipTests
         auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.Decomposition);
         auditLogEntry.OldStatus.Should().Be(RelationshipStatus.Terminated);
         auditLogEntry.NewStatus.Should().Be(RelationshipStatus.DeletionProposed);
+        auditLogEntry.CreatedBy.Should().Be(IDENTITY_1);
+        auditLogEntry.CreatedByDevice.Should().Be(DEVICE_1);
+        auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
+    }
+
+    [Fact]
+    public void Decomposing_as_secondParticipant_creates_an_AuditLog_entry()
+    {
+        // Arrange
+        SystemTime.Set("2000-01-01");
+
+        var relationship = CreateRelationshipInDecompositionByFirstParticipant(IDENTITY_1, IDENTITY_2);
+
+        // Act
+        relationship.Decompose(IDENTITY_2, DEVICE_2);
+
+        // Assert
+        relationship.AuditLog.Should().HaveCount(5); // AuditLog(Creation->Acceptance->Termination->Decomposition->Decomposition)
+
+        var auditLogEntry = relationship.AuditLog.Last();
+
+        auditLogEntry.Id.Should().NotBeNull();
+        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.Decomposition);
+        auditLogEntry.OldStatus.Should().Be(RelationshipStatus.DeletionProposed);
+        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.ReadyForDeletion);
         auditLogEntry.CreatedBy.Should().Be(IDENTITY_2);
         auditLogEntry.CreatedByDevice.Should().Be(DEVICE_2);
         auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
@@ -106,43 +144,5 @@ public class DecomposeRelationshipTests
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipAlreadyDecomposed");
-    }
-
-    [Fact]
-    public void Decomposing_as_second_participant_transitions_relationship_to_status_ReadyForDeletion()
-    {
-        // Arrange
-        var relationship = CreateRelationshipInDecompositionByFirstParticipant();
-
-        // Act
-        relationship.Decompose(IDENTITY_2, DEVICE_2);
-
-        // Assert
-        relationship.Status.Should().Be(RelationshipStatus.ReadyForDeletion);
-    }
-
-    [Fact]
-    public void Decompose_creates_an_audit_log_entry()
-    {
-        // Arrange
-        SystemTime.Set("2000-01-01");
-
-        var relationship = CreateRelationshipInDecompositionByFirstParticipant();
-
-        // Act
-        relationship.Decompose(IDENTITY_2, DEVICE_2);
-
-        // Assert
-        relationship.AuditLog.Should().HaveCount(4); // AuditLog(Creation->Acceptance->Decomposition->Decomposition)
-
-        var auditLogEntry = relationship.AuditLog.Last();
-
-        auditLogEntry.Id.Should().NotBeNull();
-        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.Decomposition);
-        auditLogEntry.OldStatus.Should().Be(RelationshipStatus.DeletionProposed);
-        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.ReadyForDeletion);
-        auditLogEntry.CreatedBy.Should().Be(IDENTITY_2);
-        auditLogEntry.CreatedByDevice.Should().Be(DEVICE_2);
-        auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
     }
 }
