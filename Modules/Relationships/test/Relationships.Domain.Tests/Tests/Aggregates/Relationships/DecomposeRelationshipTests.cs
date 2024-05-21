@@ -39,7 +39,23 @@ public class DecomposeRelationshipTests
     }
 
     [Fact]
-    public void Can_only_decompose_as_firstParticipant_when_relationship_is_in_status_terminated()
+    public void Can_only_decompose_when_relationship_is_in_status_Terminated_or_DeletionProposed()
+    {
+        // Arrange
+        var relationship = CreatePendingRelationship(IDENTITY_1, IDENTITY_2);
+
+        // Act
+        var acting = () => relationship.Decompose(IDENTITY_1, DEVICE_1);
+
+        // Assert
+        acting.Should().Throw<DomainException>().WithError(
+            "error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus",
+            nameof(RelationshipStatus.DeletionProposed)
+        );
+    }
+
+    [Fact]
+    public void Can_only_decompose_as_firstParticipant_when_relationship_is_in_status_Terminated()
     {
         // Arrange
         var relationship = CreatePendingRelationship(IDENTITY_1, IDENTITY_2);

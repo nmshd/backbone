@@ -92,10 +92,10 @@ public class Relationship
         AuditLog.Add(auditLogEntry);
     }
 
-    private void EnsureStatus(RelationshipStatus status)
+    private void EnsureStatus(params RelationshipStatus[] statuses)
     {
-        if (Status != status)
-            throw new DomainException(DomainErrors.RelationshipIsNotInCorrectStatus(status));
+        if (!statuses.Contains(Status))
+            throw new DomainException(DomainErrors.RelationshipIsNotInCorrectStatus(statuses));
     }
 
     private void EnsureRelationshipRequestIsAddressedToSelf(IdentityAddress activeIdentity)
@@ -254,6 +254,7 @@ public class Relationship
     {
         EnsureHasParticipant(activeIdentity);
         EnsureRelationshipNotDecomposedBy(activeIdentity);
+        EnsureStatus(RelationshipStatus.Terminated, RelationshipStatus.DeletionProposed);
 
         if (Status == RelationshipStatus.Terminated)
             DecomposeAsFirstParticipant(activeIdentity, activeDevice);
@@ -284,6 +285,8 @@ public class Relationship
 
     private void DecomposeAsSecondParticipant(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
+        EnsureStatus(RelationshipStatus.DeletionProposed);
+
         Status = RelationshipStatus.ReadyForDeletion;
 
         var auditLogEntry = new RelationshipAuditLogEntry(

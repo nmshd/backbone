@@ -29,10 +29,10 @@ public static class DomainErrors
             "You cannot revoke a relationship request that was not created by yourself.");
     }
 
-    public static DomainError RelationshipIsNotInCorrectStatus(RelationshipStatus expectedStatus)
+    public static DomainError RelationshipIsNotInCorrectStatus(RelationshipStatus[] expectedStatuses)
     {
         return new DomainError("error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus",
-            $"The relationship has to be in status '{expectedStatus}' to perform this action.");
+            $"The relationship has to be in status '{string.Join(" or ", expectedStatuses)}' to perform this action.");
     }
 
     public static DomainError RelationshipToTargetAlreadyExists(string targetIdentity)
