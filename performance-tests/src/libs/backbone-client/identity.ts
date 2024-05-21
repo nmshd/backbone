@@ -1,10 +1,10 @@
+import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 import { b64encode } from "k6/encoding";
 import { Response } from "k6/http";
 import { ChallengeResponse } from "../../models/challenge";
 import { CreateIdentityRequest } from "../../models/identity";
 import { TokenResponse } from "../../models/token";
-import { ChallengeRequestRepresentation, CryptoHelper } from "../crypto-helper";
-import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
+import { ChallengeRequestPayload, CryptoHelper } from "../crypto-helper";
 
 export function createIdentity(client: Httpx, clientId: string, clientSecret: string): { httpResponse: Response; generatedPassword: string } {
     try {
@@ -36,7 +36,7 @@ export function createIdentity(client: Httpx, clientId: string, clientSecret: st
     }
 }
 
-export function exchangeToken(client: Httpx, username: string, password: string) : TokenResponse {
+export function exchangeToken(client: Httpx, username: string, password: string): TokenResponse {
     const payload = {
         /* eslint-disable @typescript-eslint/naming-convention */
         client_id: "test",
@@ -46,20 +46,21 @@ export function exchangeToken(client: Httpx, username: string, password: string)
         password
         /* eslint-enable @typescript-eslint/naming-convention */
     };
-    return client.post("http://localhost:8081/connect/token", payload, {
-        headers: {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
-            "Content-Type": "application/x-www-form-urlencoded"
-        }
-    }).json() as unknown as TokenResponse;
+    return client
+        .post("http://localhost:8081/connect/token", payload, {
+            headers: {
+                // eslint-disable-next-line @typescript-eslint/naming-convention
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        })
+        .json() as unknown as TokenResponse;
 }
 
-function getChallenge(client: Httpx): ChallengeRequestRepresentation {
+function getChallenge(client: Httpx): ChallengeRequestPayload {
     const receivedChallenge = client.post("Challenges").json("result") as unknown as ChallengeResponse;
 
     return {
         expiresAt: receivedChallenge.expiresAt,
-        id: receivedChallenge.id,
-        type: "Identity"
+        id: receivedChallenge.id
     };
 }

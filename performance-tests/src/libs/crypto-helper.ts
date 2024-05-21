@@ -1,22 +1,22 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 
 export class CryptoHelper {
-    public static readonly session = new Httpx({
+    public static readonly client = new Httpx({
         baseURL: "http://localhost:3000/",
         timeout: 2000,
         tags: ["k6-crypto"]
     });
 
     public static generateKeyPair(): KeyPair {
-        return CryptoHelper.session.get("keypair").json() as unknown as KeyPair;
+        return CryptoHelper.client.get("keypair").json() as unknown as KeyPair;
     }
 
     public static generatePassword(): string | undefined {
-        return (CryptoHelper.session.get("password")).body?.toString();
+        return CryptoHelper.client.get("password").body?.toString();
     }
 
-    public static signChallenge(keyPair: KeyPair, challenge: ChallengeRequestRepresentation): string | undefined {
-        return CryptoHelper.session
+    public static signChallenge(keyPair: KeyPair, challenge: ChallengeRequestPayload): string | undefined {
+        return CryptoHelper.client
             .post(
                 "sign",
                 JSON.stringify({
@@ -44,8 +44,7 @@ interface KeyPair {
     };
 }
 
-export interface ChallengeRequestRepresentation {
+export interface ChallengeRequestPayload {
     expiresAt: string;
     id: string;
-    type: string;
 }
