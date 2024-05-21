@@ -262,13 +262,9 @@ public class Relationship
             ToHasDecomposed = true;
 
         if (FromHasDecomposed && ToHasDecomposed)
-        {
             DecomposeAsSecondParticipant(activeIdentity, activeDevice);
-        }
         else
-        {
             DecomposeAsFirstParticipant(activeIdentity, activeDevice);
-        }
     }
 
     private void DecomposeAsFirstParticipant(IdentityAddress activeIdentity, DeviceId activeDevice)
