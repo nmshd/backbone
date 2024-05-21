@@ -104,7 +104,7 @@ public class DecomposeRelationshipTests
     }
 
     [Fact]
-    public void Identity_can_not_decompose_foreign_relationship()
+    public void Identity_must_belong_to_relationship_to_decompose_it()
     {
         // Arrange
         var relationship = CreateTerminatedRelationship(IDENTITY_1, IDENTITY_2);
