@@ -6,6 +6,8 @@ import { CreateIdentityRequest } from "../../models/identity";
 import { JwtResponse } from "../../models/jwt-response";
 import { ChallengeRequestPayload, CryptoHelper } from "../crypto-helper";
 
+const apiVersion = "v1";
+
 export function createIdentity(client: Httpx, clientId: string, clientSecret: string): { httpResponse: Response; generatedPassword: string } {
     try {
         const keyPair = CryptoHelper.generateKeyPair();
@@ -25,8 +27,7 @@ export function createIdentity(client: Httpx, clientId: string, clientSecret: st
             identityVersion: 1
         };
 
-        const httpResponse = client.post("Identities", JSON.stringify(createIdentityRequest), {
-            // eslint-disable-next-line @typescript-eslint/naming-convention
+        const httpResponse = client.post(`api/${ apiVersion }/Identities`, JSON.stringify(createIdentityRequest), {
             headers: { "Content-Type": "application/json" }
         }) as Response;
         return { httpResponse, generatedPassword };
@@ -38,18 +39,15 @@ export function createIdentity(client: Httpx, clientId: string, clientSecret: st
 
 export function exchangeToken(client: Httpx, username: string, password: string): JwtResponse {
     const payload = {
-        /* eslint-disable @typescript-eslint/naming-convention */
         client_id: "test",
         client_secret: "test",
         grant_type: "password",
         username,
         password
-        /* eslint-enable @typescript-eslint/naming-convention */
     };
     return client
-        .post("http://localhost:8081/connect/token", payload, {
+        .post("connect/token", payload, {
             headers: {
-                // eslint-disable-next-line @typescript-eslint/naming-convention
                 "Content-Type": "application/x-www-form-urlencoded"
             }
         })
@@ -57,7 +55,7 @@ export function exchangeToken(client: Httpx, username: string, password: string)
 }
 
 function getChallenge(client: Httpx): ChallengeRequestPayload {
-    const receivedChallenge = client.post("Challenges").json("result") as unknown as CreateChallengeResponse;
+    const receivedChallenge = client.post(`api/${ apiVersion }/Challenges`).json("result") as unknown as CreateChallengeResponse;
 
     return {
         id: receivedChallenge.id,
