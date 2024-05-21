@@ -60,7 +60,7 @@ function getChallenge(client: Httpx): ChallengeRequestPayload {
     const receivedChallenge = client.post("Challenges").json("result") as unknown as ChallengeResponse;
 
     return {
-        expiresAt: receivedChallenge.expiresAt,
-        id: receivedChallenge.id
+        id: receivedChallenge.id,
+        expiresAt: receivedChallenge.expiresAt
     };
 }

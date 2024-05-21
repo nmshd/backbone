@@ -45,6 +45,6 @@ interface KeyPair {
 }
 
 export interface ChallengeRequestPayload {
-    expiresAt: string;
     id: string;
+    expiresAt: string;
 }
