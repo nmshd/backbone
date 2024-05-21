@@ -3,7 +3,7 @@ import { b64encode } from "k6/encoding";
 import { Response } from "k6/http";
 import { CreateChallengeResponse } from "../../models/challenge";
 import { CreateIdentityRequest } from "../../models/identity";
-import { TokenResponse } from "../../models/token";
+import { JwtResponse } from "../../models/jwt-response";
 import { ChallengeRequestPayload, CryptoHelper } from "../crypto-helper";
 
 export function createIdentity(client: Httpx, clientId: string, clientSecret: string): { httpResponse: Response; generatedPassword: string } {
@@ -36,7 +36,7 @@ export function createIdentity(client: Httpx, clientId: string, clientSecret: st
     }
 }
 
-export function exchangeToken(client: Httpx, username: string, password: string): TokenResponse {
+export function exchangeToken(client: Httpx, username: string, password: string): JwtResponse {
     const payload = {
         /* eslint-disable @typescript-eslint/naming-convention */
         client_id: "test",
@@ -53,7 +53,7 @@ export function exchangeToken(client: Httpx, username: string, password: string)
                 "Content-Type": "application/x-www-form-urlencoded"
             }
         })
-        .json() as unknown as TokenResponse;
+        .json() as unknown as JwtResponse;
 }
 
 function getChallenge(client: Httpx): ChallengeRequestPayload {

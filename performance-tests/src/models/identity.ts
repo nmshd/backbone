@@ -1,4 +1,4 @@
-import { TokenResponse } from "./token";
+import { JwtResponse } from "./jwt-response";
 
 export interface CreateIdentityRequest {
     clientId: string;
@@ -21,6 +21,6 @@ export interface CreateIdentityResponse {
 
 export interface IdentityWithToken {
     response: CreateIdentityResponse;
-    token: TokenResponse;
+    token: JwtResponse;
     password: string;
 }
