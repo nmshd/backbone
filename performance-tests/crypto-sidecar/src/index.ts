@@ -20,29 +20,29 @@ app.use(async (ctx, next) => {
     console.log(`${ctx.method} ${ctx.url} - ${ms} ms`);
 });
 
-router.get('/keypair', async (ctx) => {
+router.get('/keypair', async ({response}) => {
     const keypair = await CryptoSignatures.generateKeypair();
-    ctx.response.body = keypair.toJSON();
-    ctx.response.status = 200;
-    ctx.response.type = 'application/json';
+    response.body = keypair.toJSON();
+    response.status = 200;
+    response.type = 'application/json';
 });
 
-router.get('/password', async (ctx) => {
+router.get('/password', async ({response}) => {
     const password = await CryptoPasswordGenerator.createPasswordWithBitStrength();
-    ctx.response.body = password;
-    ctx.response.status = 200;
+    response.body = password;
+    response.status = 200;
 });
 
-router.post('/sign', async (ctx) => {
-    const challenge = CoreBuffer.fromUtf8(ctx.request.body.challenge);
-    const privateKey = ctx.request.body.keyPair.prv;
+router.post('/sign', async ({request, response}) => {
+    const challenge = CoreBuffer.fromUtf8(request.body.challenge);
+    const privateKey = request.body.keyPair.prv;
 
     const cryptoSignaturePrivateKey = CryptoSignaturePrivateKey.fromJSON({prv: privateKey.prv, alg: privateKey.alg});
 
     const signedChallenge = await CryptoSignatures.sign(challenge, cryptoSignaturePrivateKey);
 
-    ctx.response.body = signedChallenge.toJSON();
-    ctx.response.status = 200;
+    response.body = signedChallenge.toJSON();
+    response.status = 200;
 });
 
 app.use(router.routes());
