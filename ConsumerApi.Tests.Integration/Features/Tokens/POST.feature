@@ -14,12 +14,6 @@ Scenario: Creating a Token as an anonymous user
 	When a POST request is sent to the Tokens endpoint
 	Then the response status code is 401 (Unauthorized)
 
-#@ignore("skipping_due_to_required_sdk_changes")
-#Scenario: Creating a Token with an unsupported Content-Type
-#	Given the user is authenticated
-#	When a POST request is sent to the Tokens endpoint with invalid Content Type
-#	Then the response status code is 415 (Unsupported Media Type)
-
 #@ignore("skipping_due_to_required_backbone_changes")
 #Scenario: Creating a Token without the "Content" request content property
 #	Given the user is authenticated
