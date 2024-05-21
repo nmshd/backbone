@@ -3,16 +3,19 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "start": "node index.js",
-        "dev": "nodemon index.js"
+        "start": "node-ts src/index.ts",
+        "dev": "nodemon src/index.ts"
     },
     "author": "",
     "license": "ISC",
     "dependencies": {
         "@js-soft/ts-serval": "^2.0.10",
         "@nmshd/crypto": "^2.0.6",
+        "@types/koa": "^2.15.0",
+        "@types/koa-router": "^7.4.8",
         "koa": "^2.15.3",
         "koa-body": "^6.0.1",
-        "koa-router": "^12.0.1"
+        "koa-router": "^12.0.1",
+        "ts-node": "^10.9.2"
     }
 }
