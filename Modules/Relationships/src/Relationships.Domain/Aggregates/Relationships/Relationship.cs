@@ -253,15 +253,9 @@ public class Relationship
     public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
         EnsureHasParticipant(activeIdentity);
-        EnsureRelationshipNotDecomposedBy(activeIdentity);
+        EnsureRelationshipNotDecomposedBy(activeIdentity);        
 
-        if (From == activeIdentity)
-            FromHasDecomposed = true;
-
-        if (To == activeIdentity)
-            ToHasDecomposed = true;
-
-        if (FromHasDecomposed && ToHasDecomposed)
+        if (FromHasDecomposed || ToHasDecomposed)
             DecomposeAsSecondParticipant(activeIdentity, activeDevice);
         else
             DecomposeAsFirstParticipant(activeIdentity, activeDevice);
@@ -281,6 +275,11 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        if (From == activeIdentity)
+            FromHasDecomposed = true;
+        else
+            ToHasDecomposed = true;
     }
 
     private void DecomposeAsSecondParticipant(IdentityAddress activeIdentity, DeviceId activeDevice)
@@ -295,6 +294,9 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        FromHasDecomposed = true;
+        ToHasDecomposed = true;
     }
 
     private void EnsureRelationshipNotDecomposedBy(IdentityAddress activeIdentity)
