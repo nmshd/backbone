@@ -14,15 +14,18 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.A
 public class ApplePushNotificationServiceConnector : IPnsConnector
 {
     private readonly IJwtGenerator _jwtGenerator;
+    private readonly NotificationTextService _notificationTextService;
     private readonly HttpClient _httpClient;
     private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
     private readonly DirectPnsCommunicationOptions.ApnsOptions _options;
 
     public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<DirectPnsCommunicationOptions.ApnsOptions> options, IJwtGenerator jwtGenerator,
+        NotificationTextService notificationTextService,
         ILogger<ApplePushNotificationServiceConnector> logger)
     {
         _httpClient = httpClientFactory.CreateClient();
         _jwtGenerator = jwtGenerator;
+        _notificationTextService = notificationTextService;
         _logger = logger;
         _options = options.Value;
     }
@@ -55,7 +58,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
     private async Task SendNotification(PnsRegistration registration, object notification, SendResults sendResults)
     {
-        var (notificationTitle, notificationBody) = GetNotificationText(notification);
+        var (notificationTitle, notificationBody) = _notificationTextService.GetNotificationText(notification);
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
 
@@ -100,32 +103,5 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     {
         var attribute = pushNotification.GetType().GetCustomAttribute<NotificationIdAttribute>();
         return attribute?.Value ?? 0;
-    }
-
-    private static (string Title, string Body) GetNotificationText(object pushNotification)
-    {
-        switch (pushNotification)
-        {
-            case null:
-                return ("", "");
-            case JsonElement jsonElement:
-            {
-                var notification = jsonElement.Deserialize<NotificationTextAttribute>();
-                return notification == null ? ("", "") : (notification.Title, notification.Body);
-            }
-            default:
-            {
-                var attribute = pushNotification.GetType().GetCustomAttribute<NotificationTextAttribute>();
-                return attribute == null ? ("", "") : (attribute.Title, attribute.Body);
-            }
-        }
-    }
-}
-
-public static class TypeExtensions
-{
-    public static T? GetCustomAttribute<T>(this Type type) where T : Attribute
-    {
-        return (T?)type.GetCustomAttribute(typeof(T));
     }
 }

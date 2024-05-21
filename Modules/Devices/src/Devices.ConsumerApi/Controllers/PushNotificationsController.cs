@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Datawallet;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.SendTestNotification;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
@@ -39,6 +40,14 @@ public class PushNotificationsController : ApiControllerBase
     public async Task<IActionResult> SendTestPushNotification([FromBody] dynamic data, CancellationToken cancellationToken)
     {
         await _mediator.Send(new SendTestNotificationCommand { Data = data }, cancellationToken);
+        return NoContent();
+    }
+
+    [HttpPost("SendTestNotification/{languageCode}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> SendTestPushNotification2([FromRoute] string languageCode, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new SendTestNotificationCommand { Data = languageCode}, cancellationToken);
         return NoContent();
     }
 }

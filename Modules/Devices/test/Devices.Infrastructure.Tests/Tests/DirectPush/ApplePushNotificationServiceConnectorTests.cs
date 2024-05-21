@@ -57,8 +57,9 @@ public class ApplePushNotificationServiceConnectorTests
         });
         var jwtGenerator = A.Fake<IJwtGenerator>();
         var logger = A.Fake<ILogger<ApplePushNotificationServiceConnector>>();
+        var notificationTextService = A.Dummy<NotificationTextService>();
 
-        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, logger);
+        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, notificationTextService, logger);
     }
 
     private static IHttpClientFactory CreateHttpClientFactoryReturning(HttpClient client)

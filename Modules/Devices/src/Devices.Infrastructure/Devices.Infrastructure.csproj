@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="FirebaseAdmin" Version="3.0.0"/>
+        <PackageReference Include="FirebaseAdmin" Version="3.0.0" />
         <PackageReference Include="JWT" Version="10.1.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.4" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.4" />
@@ -14,7 +14,7 @@
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.4" />
         <PackageReference Include="OpenIddict.AspNetCore" Version="5.5.0" />
         <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="5.5.0" />
-        <PackageReference Include="Polly" Version="8.4.0"/>
+        <PackageReference Include="Polly" Version="8.4.0" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.4" />
     </ItemGroup>
 
@@ -24,6 +24,36 @@
         <ProjectReference Include="..\Devices.Domain\Devices.Domain.csproj">
             <TreatAsUsed>true</TreatAsUsed>
         </ProjectReference>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Translations\PushNotifications - Copy.DirectPush.IPushNotification.en.Designer.cs">
+        <DependentUpon>PushNotifications.DirectPush.IPushNotification.en.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+      </Compile>
+      <Compile Update="Translations\PushNotifications.DirectPush.IPushNotification.en.Designer.cs">
+        <DependentUpon>PushNotifications.DirectPush.IPushNotification.en.resx</DependentUpon>
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+      </Compile>
+      <Compile Update="Translations\PushNotifications.DirectPush.IPushNotification.pt.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>PushNotifications.DirectPush.IPushNotification.pt.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Translations\PushNotifications.DirectPush.IPushNotification.en.resx">
+        <SubType>Designer</SubType>
+        <LastGenOutput>PushNotifications.DirectPush.IPushNotification.en.Designer.cs</LastGenOutput>
+        <Generator>ResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="Translations\PushNotifications.DirectPush.IPushNotification.pt.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>PushNotifications.DirectPush.IPushNotification.pt.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
     </ItemGroup>
 
 </Project>

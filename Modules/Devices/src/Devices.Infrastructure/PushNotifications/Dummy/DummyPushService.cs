@@ -3,22 +3,26 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
 
 public class DummyPushService : IPushNotificationRegistrationService, IPushNotificationSender
 {
+    private readonly NotificationTextService _notificationTextService;
     private readonly ILogger<DummyPushService> _logger;
 
-    public DummyPushService(ILogger<DummyPushService> logger)
+    public DummyPushService(NotificationTextService notificationTextService, ILogger<DummyPushService> logger)
     {
+        _notificationTextService = notificationTextService;
         _logger = logger;
     }
 
-    public Task SendNotification(IdentityAddress recipient, object notification, CancellationToken cancellationToken)
+    public Task SendNotification(IdentityAddress recipient, object notification, string languageCode, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Sending push notification to '{recipient}'.", recipient);
+        var (title, body) = _notificationTextService.GetNotificationText(notification, languageCode);
+        _logger.LogInformation("Sending push notification to '{recipient}': {title}, {body}.", recipient, title, body);
         return Task.CompletedTask;
     }
 
