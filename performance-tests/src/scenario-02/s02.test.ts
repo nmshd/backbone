@@ -56,7 +56,8 @@ export function setup(): IdentityWithToken[] {
     const testIdentities: IdentityWithToken[] = [];
 
     for (let i = 0; i < scenario.preAllocatedVUs; i++) {
-        const { httpResponse, generatedPassword } = createIdentity(client, "test", "test");
+        const password = "test-password";
+        const httpResponse = createIdentity(client, "test", "test", password);
 
         check(httpResponse, {
             "Identity was created": (r) => r.status === 201
@@ -70,7 +71,7 @@ export function setup(): IdentityWithToken[] {
             "Device has Id": (r) => r?.device.id !== undefined
         });
 
-        const token = exchangeToken(client, createdIdentityResponseValue!.device.username, generatedPassword);
+        const token = exchangeToken(client, createdIdentityResponseValue!.device.username, password);
 
         const requestBody: StartSyncRunRequestBody = {
             duration: 10,
@@ -108,7 +109,7 @@ export function setup(): IdentityWithToken[] {
         testIdentities.push({
             response: createdIdentityResponseValue!,
             token,
-            password: generatedPassword
+            password
         });
     }
     console.log(`testIdentities has ${testIdentities.length} identities after setup completed`);

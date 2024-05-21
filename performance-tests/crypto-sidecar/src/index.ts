@@ -27,12 +27,6 @@ router.get('/keypair', async ({response}) => {
     response.type = 'application/json';
 });
 
-router.get('/password', async ({response}) => {
-    const password = await CryptoPasswordGenerator.createPasswordWithBitStrength();
-    response.body = password;
-    response.status = 200;
-});
-
 router.post('/sign', async ({request, response}) => {
     const challenge = CoreBuffer.fromUtf8(request.body.challenge);
     const privateKey = request.body.keyPair.prv;
