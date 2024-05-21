@@ -1,7 +1,7 @@
 import { b64encode } from "k6/encoding";
 import { Response } from "k6/http";
 import { ChallengeResponse } from "../../models/challenge";
-import { CreateIdentityRequest, CreateIdentityResponse } from "../../models/identity";
+import { CreateIdentityRequest } from "../../models/identity";
 import { TokenResponse } from "../../models/token";
 import { ChallengeRequestRepresentation, CryptoHelper } from "../crypto-helper";
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
@@ -36,13 +36,13 @@ export function createIdentity(client: Httpx, clientId: string, clientSecret: st
     }
 }
 
-export function exchangeToken(client: Httpx, createdIdentityResponse: CreateIdentityResponse, password: string) : TokenResponse {
+export function exchangeToken(client: Httpx, username: string, password: string) : TokenResponse {
     const payload = {
         /* eslint-disable @typescript-eslint/naming-convention */
         client_id: "test",
         client_secret: "test",
         grant_type: "password",
-        username: createdIdentityResponse.device.username,
+        username,
         password
         /* eslint-enable @typescript-eslint/naming-convention */
     };

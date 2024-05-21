@@ -76,7 +76,7 @@ export function setup(): IdentityWithToken[] {
             /* eslint-enable @typescript-eslint/naming-convention */
         });
 
-        const token = exchangeToken(client, createdIdentityResponseValue!, generatedPassword);
+        const token = exchangeToken(client, createdIdentityResponseValue!.device.username, generatedPassword);
 
         const requestBody: StartSyncRunRequestBody = {
             duration: 10,
