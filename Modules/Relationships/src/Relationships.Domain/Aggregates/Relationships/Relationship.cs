@@ -62,6 +62,11 @@ public class Relationship
     public bool FromHasDecomposed { get; private set; }
     public bool ToHasDecomposed { get; private set; }
 
+    public IdentityAddress GetPeer(IdentityAddress activeIdentity)
+    {
+        return From == activeIdentity ? To : From;
+    }
+
     private static void EnsureTargetIsNotSelf(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity)
     {
         if (activeIdentity == relationshipTemplate.CreatedBy)

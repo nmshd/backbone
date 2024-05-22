@@ -6,7 +6,7 @@ using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
-namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RelationshipReactivationRequest;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RequestRelationshipReactivation;
 
 public class Handler : IRequestHandler<RequestRelationshipReactivationCommand, RequestRelationshipReactivationResponse>
 {
@@ -22,6 +22,7 @@ public class Handler : IRequestHandler<RequestRelationshipReactivationCommand, R
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
+
     public async Task<RequestRelationshipReactivationResponse> Handle(RequestRelationshipReactivationCommand request, CancellationToken cancellationToken)
     {
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
@@ -31,9 +32,7 @@ public class Handler : IRequestHandler<RequestRelationshipReactivationCommand, R
 
         await _relationshipsRepository.Update(relationship);
 
-        var peer = relationship.To == _activeIdentity ? relationship.From : relationship.To;
-
-        _eventBus.Publish(new RelationshipReactivationRequestedDomainEvent(relationship, _activeIdentity, peer));
+        _eventBus.Publish(new RelationshipReactivationRequestedDomainEvent(relationship, _activeIdentity, relationship.GetPeer(_activeIdentity)));
 
         return new RequestRelationshipReactivationResponse(relationship);
     }

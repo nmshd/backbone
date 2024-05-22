@@ -7,6 +7,7 @@ using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipReactivation;
+
 public class Handler : IRequestHandler<RevokeRelationshipReactivationCommand, RevokeRelationshipReactivationResponse>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
@@ -31,9 +32,7 @@ public class Handler : IRequestHandler<RevokeRelationshipReactivationCommand, Re
 
         await _relationshipsRepository.Update(relationship);
 
-        var peer = relationship.To == _activeIdentity ? relationship.From : relationship.To;
-
-        _eventBus.Publish(new RelationshipReactivationCompletedDomainEvent(relationship, peer));
+        _eventBus.Publish(new RelationshipReactivationCompletedDomainEvent(relationship, relationship.GetPeer(_activeIdentity)));
 
         return new RevokeRelationshipReactivationResponse(relationship);
     }

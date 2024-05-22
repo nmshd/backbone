@@ -6,12 +6,13 @@ namespace Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 
 public class RelationshipStatusChangedDomainEvent : DomainEvent
 {
-    public RelationshipStatusChangedDomainEvent(Relationship relationship) : base($"{relationship.Id}/StatusChanged/{relationship.AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedAt.ToUniversalString()}")
+    public RelationshipStatusChangedDomainEvent(Relationship relationship) : base(
+        $"{relationship.Id}/StatusChanged/{relationship.AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedAt.ToUniversalString()}")
     {
         RelationshipId = relationship.Id;
         Status = relationship.Status.ToString();
         Initiator = relationship.LastModifiedBy;
-        Peer = relationship.LastModifiedBy == relationship.From ? relationship.To : relationship.From;
+        Peer = relationship.GetPeer(relationship.LastModifiedBy);
     }
 
     public string RelationshipId { get; set; }

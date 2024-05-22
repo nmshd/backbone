@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
@@ -8,6 +7,7 @@ using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipReactivation;
+
 public class Handler : IRequestHandler<RejectRelationshipReactivationCommand, RejectRelationshipReactivationResponse>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
@@ -33,7 +33,7 @@ public class Handler : IRequestHandler<RejectRelationshipReactivationCommand, Re
 
         await _relationshipsRepository.Update(relationship);
 
-        _eventBus.Publish(new RelationshipReactivationCompletedDomainEvent(relationship, _activeIdentity));
+        _eventBus.Publish(new RelationshipReactivationCompletedDomainEvent(relationship, relationship.GetPeer(_activeIdentity)));
 
         return new RejectRelationshipReactivationResponse(relationship);
     }

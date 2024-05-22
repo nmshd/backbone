@@ -11,6 +11,7 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.RejectRelationshipReactivation;
+
 public class HandlerTests
 {
     [Fact]
@@ -76,7 +77,7 @@ public class HandlerTests
         A.CallTo(
                 () => mockEventBus.Publish(A<RelationshipReactivationCompletedDomainEvent>.That.Matches(e =>
                     e.RelationshipId == relationship.Id &&
-                    e.Peer == activeIdentity)
+                    e.Peer == identityTo)
                 ))
             .MustHaveHappenedOnceExactly();
     }
