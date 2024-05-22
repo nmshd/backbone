@@ -52,7 +52,7 @@ internal class ChallengesApiStepDefinitions
     }
 
     [When("a POST request is sent to the Challenges endpoint with")]
-    public async Task WhenAPOSTRequestIsSentToTheChallengesEndpointWith(Table table)
+    public async Task WhenAPOSTRequestIsSentToTheChallengesEndpointWith()
     {
         _response = await _sdk.Challenges.CreateChallenge();
     }
