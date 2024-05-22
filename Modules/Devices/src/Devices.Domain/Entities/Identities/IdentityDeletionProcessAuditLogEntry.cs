@@ -52,7 +52,7 @@ public class IdentityDeletionProcessAuditLogEntry
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            MessageKey.ProcessStartedByOwner,
+            MessageKey.ProcessStartedBySupport,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             null,
@@ -195,15 +195,16 @@ public class IdentityDeletionProcessAuditLogEntry
 public enum MessageKey
 {
     ProcessStartedByOwner = 1,
-    ProcessApproved = 2,
-    ProcessRejected = 3,
-    ProcessCancelledByOwner = 4,
-    ProcessCancelledBySupport = 5,
-    ProcessCancelledAutomatically = 6,
-    ApprovalReminder1Sent = 7,
-    ApprovalReminder2Sent = 8,
-    ApprovalReminder3Sent = 9,
-    GracePeriodReminder1Sent = 10,
-    GracePeriodReminder2Sent = 11,
-    GracePeriodReminder3Sent = 12
+    ProcessStartedBySupport = 2,
+    ProcessApproved = 3,
+    ProcessRejected = 4,
+    ProcessCancelledByOwner = 5,
+    ProcessCancelledBySupport = 6,
+    ProcessCancelledAutomatically = 7,
+    ApprovalReminder1Sent = 8,
+    ApprovalReminder2Sent = 9,
+    ApprovalReminder3Sent = 10,
+    GracePeriodReminder1Sent = 11,
+    GracePeriodReminder2Sent = 12,
+    GracePeriodReminder3Sent = 13
 }
