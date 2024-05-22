@@ -27,7 +27,7 @@ Scenario: Requesting a nonexistent Challenge as an authenticated user
 #	Given the user is authenticated
 #	When a GET request is sent to the Challenges/{id} endpoint with <id>
 #	Then the response status code is 400 (Bad Request)
-#	And the response content includes an error with the error code "error.platform.invalidId"
+#	And the response content contains an error with the error code "error.platform.invalidId"
 #Examples:
 #	| id                          | description                 |
 #	| CHLthishastoomanycharacters | More than 20 characters     |
