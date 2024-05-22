@@ -189,7 +189,7 @@ public class TierTests
     }
 
     [Fact]
-    public void Triggers_TierQuotaDefinitionDeletedDomainEvent()
+    public void Deleting_a_quota_triggers_TierQuotaDefinitionDeletedDomainEvent()
     {
         // Arrange
         var tierId = new TierId("tier-id");
@@ -209,7 +209,7 @@ public class TierTests
     }
 
     [Fact]
-    public void Triggers_TierQuotaDefinitionCreatedDomainEvent()
+    public void Creating_a_quota_triggers_TierQuotaDefinitionCreatedDomainEvent()
     {
         // Arrange
         var tierId = TierId.Parse("TIRsomeTierId1111111");
