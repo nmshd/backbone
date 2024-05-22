@@ -174,10 +174,6 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
 
         builder.ApplyConfigurationsFromAssembly(typeof(DeviceEntityTypeConfiguration).Assembly);
 
-        builder.Entity<IdentityDeletionProcessAuditLogEntry>()
-            .Property(e => e.MessageKey)
-            .HasConversion(
-                v => v.ToString(),
-                v => (MessageKey)Enum.Parse(typeof(MessageKey), v));
+        builder.Entity<IdentityDeletionProcessAuditLogEntry>().Property(e => e.MessageKey).HasConversion<string>();
     }
 }
