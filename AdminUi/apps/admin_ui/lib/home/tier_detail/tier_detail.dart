@@ -5,6 +5,7 @@ import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
 import 'modals/modals.dart';
@@ -249,7 +250,13 @@ class _IdentitiesListState extends State<_IdentitiesList> {
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _dataSource = IdentityDataTableSource(locale: Localizations.localeOf(context), hideTierColumn: true);
+    _dataSource = IdentityDataTableSource(
+      locale: Localizations.localeOf(context),
+      hideTierColumn: true,
+      navigateTo: (String address) {
+        context.go('/identities/$address');
+      },
+    );
   }
 
   @override

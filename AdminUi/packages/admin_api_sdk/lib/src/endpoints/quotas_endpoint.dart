@@ -34,13 +34,13 @@ class QuotasEndpoint extends Endpoint {
       );
 
   Future<ApiResponse<Quota>> createIdentityQuota({
-    required String identityId,
+    required String address,
     required String metricKey,
     required int max,
     required String period,
   }) =>
       post(
-        '/api/v1/Identities/$identityId/Quotas',
+        '/api/v1/Identities/$address/Quotas',
         data: {
           'metricKey': metricKey,
           'max': max,
@@ -50,11 +50,11 @@ class QuotasEndpoint extends Endpoint {
       );
 
   Future<ApiResponse<void>> deleteIdentityQuota({
-    required String tierId,
+    required String address,
     required String individualQuotaId,
   }) =>
       delete(
-        '/api/v1/Tiers/$tierId/Quotas/$individualQuotaId',
+        '/api/v1/Identities/$address/Quotas/$individualQuotaId',
         expectedStatus: 204,
         transformer: (e) {},
         allowEmptyResponse: true,
