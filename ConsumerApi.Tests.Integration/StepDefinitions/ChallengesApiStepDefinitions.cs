@@ -52,12 +52,6 @@ internal class ChallengesApiStepDefinitions
         _challengeId.Should().NotBeNullOrEmpty();
     }
 
-    [When("a POST request is sent to the Challenges endpoint with")]
-    public async Task WhenAPOSTRequestIsSentToTheChallengesEndpointWith()
-    {
-        _response = await _sdk.Challenges.CreateChallenge();
-    }
-
     [When("a POST request is sent to the Challenges endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheChallengesEndpoint()
     {
