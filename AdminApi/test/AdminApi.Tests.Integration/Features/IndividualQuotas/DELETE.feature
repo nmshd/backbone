@@ -12,4 +12,4 @@ Scenario: Deleting an inexistent Individual Quota
 	Given an Identity i
 	When a DELETE request is sent to the /Identities/{i.address}/Quotas/inexistentQuotaId endpoint
 	Then the response status code is 404 (Not Found)
-	And the response content includes an error with the error code "error.platform.recordNotFound"
+	And the response content contains an error with the error code "error.platform.recordNotFound"

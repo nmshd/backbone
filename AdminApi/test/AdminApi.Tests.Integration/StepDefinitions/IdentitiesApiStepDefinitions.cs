@@ -99,7 +99,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
             ((int)_identityDeletionProcessResponse!.Status).Should().Be(expectedStatusCode);
     }
 
-    [Then(@"the response content includes an error with the error code ""([^""]+)""")]
+    [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
         if (_identityResponse != null)
