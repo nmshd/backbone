@@ -11,8 +11,8 @@ Scenario: Deleting an un-onboarded Device
 	And d2 is deleted
 
 Scenario: Deleting an onboarded Device is not possible
-	Given an Identity i with a device d1
-	When a DELETE request is sent to the Devices/{id} endpoint with d1.Id
+	Given an Identity i with a device d
+	When a DELETE request is sent to the Devices/{id} endpoint with d.Id
 	Then the response status code is 400 (Bad Request)
 	And the response content contains an error with the error code "error.platform.validation.device.deviceCannotBeDeleted"
 	And d is not deleted

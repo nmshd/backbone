@@ -28,8 +28,9 @@ internal class DevicesStepDefinitions
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
     }
 
+    [Given("an Identity i with a device d")]
     [Given("an Identity i with a device d1")]
-    public async Task GivenAnIdentityIWithADeviceD()
+    public async Task GivenAnIdentityIWithADevice()
     {
         _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, "somePassword");
         _deviceIdD1 = _sdk.DeviceData!.DeviceId;
@@ -42,8 +43,9 @@ internal class DevicesStepDefinitions
         _deviceIdD2 = client.DeviceData!.DeviceId;
     }
 
+    [When("a DELETE request is sent to the Devices/{id} endpoint with d.Id")]
     [When("a DELETE request is sent to the Devices/{id} endpoint with d1.Id")]
-    public async Task WhenADeleteRequestIsSentToTheDeviceIdEndpointWithDId()
+    public async Task WhenADeleteRequestIsSentToTheDeviceIdEndpointWithTheDeviceId()
     {
         _deletionResponse = await _sdk.Devices.DeleteDevice(_deviceIdD1!);
     }
