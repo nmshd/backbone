@@ -18,6 +18,9 @@ spec:
       backoffLimit: {{ .Values.cancelstaledeletionprocesses.backoffLimit }}
       template:
         spec:
+          {{- with .Values.global.serviceAccount.name}}
+          serviceAccountName: {{ . }}
+          {{- end }}
           restartPolicy: Never
           {{- with .Values.cancelstaledeletionprocesses.podSecurityContext }}
           securityContext:

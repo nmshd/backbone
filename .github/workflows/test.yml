@@ -7,6 +7,10 @@ on:
     tags-ignore:
       - "**"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   run-adminUi-checks:
     runs-on: ubuntu-latest
@@ -43,9 +47,9 @@ jobs:
       - name: Check formatting
         run: ./.ci/checkFormatting.sh
 
-  test:
+  unit-test:
     runs-on: ubuntu-latest
-    name: Run Tests
+    name: Run Unit Tests
     steps:
       - name: Checkout
         uses: actions/checkout@v4
