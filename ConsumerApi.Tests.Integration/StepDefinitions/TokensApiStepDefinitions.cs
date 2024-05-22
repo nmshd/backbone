@@ -239,7 +239,7 @@ internal class TokensApiStepDefinitions
             ((int)_createTokenResponse401.Status).Should().Be(expectedStatusCode);
     }
 
-    [Then(@"the response content includes an error with the error code ""([^""]+)""")]
+    [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
         _tokenResponse!.Error.Should().NotBeNull();
