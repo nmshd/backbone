@@ -203,6 +203,8 @@ jobs:
       - publish-admin-ui
       - publish-consumer-api
       - publish-event-handler
+      - publish-database-migrator
+      - publish-identity-deletion-jobs
     steps:
       - name: Checkout
         uses: actions/checkout@v4
