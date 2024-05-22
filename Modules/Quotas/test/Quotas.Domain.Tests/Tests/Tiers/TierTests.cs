@@ -6,7 +6,6 @@ using Backbone.UnitTestTools.Extensions;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Tiers;
 
@@ -229,7 +228,8 @@ file static class TierExtensions
 {
     public static Tier Clone(this Tier tier)
     {
-        var serialized = JsonSerializer.Serialize(tier);
-        return JsonSerializer.Deserialize<Tier>(serialized)!;
+        var newTier = new Tier(tier.Id, tier.Name);
+        newTier.Quotas.AddRange(tier.Quotas);
+        return newTier;
     }
 }

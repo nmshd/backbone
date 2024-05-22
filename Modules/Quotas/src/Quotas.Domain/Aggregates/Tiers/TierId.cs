@@ -1,6 +1,5 @@
 using System.ComponentModel;
 using System.Globalization;
-using System.Text.Json.Serialization;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
@@ -15,7 +14,6 @@ public record TierId
         return id.Value;
     }
 
-    [JsonConstructor]
     private TierId(string value)
     {
         Value = value;
