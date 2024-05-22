@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.BuildingBlocks.Domain.PushNotifications;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
@@ -23,7 +24,7 @@ public class DirectPushService : IPushNotificationRegistrationService, IPushNoti
         _logger = logger;
     }
 
-    public async Task SendNotification(IdentityAddress recipient, object notification, string languageCode, CancellationToken cancellationToken)
+    public async Task SendNotification(IdentityAddress recipient, IPushNotification notification, CancellationToken cancellationToken)
     {
         var registrations = await _pnsRegistrationsRepository.FindWithAddress(recipient, cancellationToken);
 

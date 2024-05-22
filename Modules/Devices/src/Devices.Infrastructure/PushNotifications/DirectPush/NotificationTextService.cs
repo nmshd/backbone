@@ -1,44 +1,42 @@
 ﻿using System.Globalization;
 using System.Reflection;
 using System.Resources;
-using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using System.Text.Json;
+using Backbone.BuildingBlocks.Domain.PushNotifications;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Microsoft.Extensions.Localization;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 public class NotificationTextService
 {
     private readonly IStringLocalizer _localizer;
+    private readonly IIdentitiesRepository _identitiesRepository;
+    private const string DEFAULT_LANGUAGE_CODE = "en";
 
-    public NotificationTextService(IStringLocalizer<IPushNotification> localizer)
+    public NotificationTextService(
+        IStringLocalizer<IPushNotification> localizer,
+        IIdentitiesRepository identitiesRepository
+        )
     {
         _localizer = localizer;
+        _identitiesRepository = identitiesRepository;
     }
 
-    public (string Title, string Body) GetNotificationText(object pushNotification, string languageCode = "en")
+    public async Task<(string Title, string Body)> GetNotificationTextForDeviceId(IPushNotification pushNotification, DeviceId deviceId)
+    {
+        //var device = await _identitiesRepository.GetDeviceById(deviceId, CancellationToken.None);
+        //var languageCode = device.LanguageCode;
+        const string languageCode = DEFAULT_LANGUAGE_CODE;
+
+        return await GetNotificationTextForLanguage(pushNotification, languageCode);
+    }
+
+    public async Task<(string Title, string Body)> GetNotificationText(IPushNotification pushNotification) => await GetNotificationTextForLanguage(pushNotification, DEFAULT_LANGUAGE_CODE);
+
+    public async Task<(string Title, string Body)> GetNotificationTextForLanguage(IPushNotification pushNotification, string languageCode)
     {
         var (title, body) = LoadTranslationFromResources(pushNotification, languageCode);
-
-        if (title is not null && body is not null)
-        {
-            return (title, body);
-        }
-
-        switch (pushNotification)
-        {
-            case null:
-                return ("", "");
-            case JsonElement jsonElement:
-            {
-                var notification = jsonElement.Deserialize<NotificationTextAttribute>();
-                return notification == null ? ("", "") : (notification.Title, notification.Body);
-            }
-            default:
-            {
-                var attribute = pushNotification.GetType().GetCustomAttribute<NotificationTextAttribute>();
-                return attribute == null ? ("", "") : (attribute.Title, attribute.Body);
-            }
-        }
+        return title is not null && body is not null ? (title, body) : ("", "");
     }
 
     private (string? title, string? body) LoadTranslationFromResources(object pushNotification, string languageCode)
@@ -63,7 +61,8 @@ public class NotificationTextService
         }
 
         CultureInfo.CurrentUICulture = oldCurrentUiCulture;
-
+        
+        // try to find a way to not use currentuiculture
         return type is null ? localizedStrings : localizedStrings.Where(ls => ls.Name.StartsWith(type.Name)).ToArray();
     }
 

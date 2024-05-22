@@ -34,11 +34,6 @@ public class IdentityDeletionConfiguration
     {
         Time = 2
     };
-
-    public static DeletionStartsNotification DeletionStartsNotification { get; set; } = new()
-    {
-        Text = "The grace period for the deletion of your identity has expired. The deletion starts now."
-    };
 }
 
 public class GracePeriodNotificationConfiguration

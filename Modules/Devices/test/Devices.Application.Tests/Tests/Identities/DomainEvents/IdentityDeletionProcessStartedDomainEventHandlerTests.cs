@@ -24,7 +24,7 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address,
-            A<DeletionProcessStartedPushNotification>._, "en", CancellationToken.None)
+            A<DeletionProcessStartedPushNotification>._, CancellationToken.None)
         ).MustHaveHappenedOnceExactly();
     }
 }

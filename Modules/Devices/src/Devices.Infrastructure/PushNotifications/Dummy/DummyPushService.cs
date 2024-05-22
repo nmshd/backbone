@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.BuildingBlocks.Domain.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
@@ -19,11 +20,10 @@ public class DummyPushService : IPushNotificationRegistrationService, IPushNotif
         _logger = logger;
     }
 
-    public Task SendNotification(IdentityAddress recipient, object notification, string languageCode, CancellationToken cancellationToken)
+    public async Task SendNotification(IdentityAddress recipient, IPushNotification notification, CancellationToken cancellationToken)
     {
-        var (title, body) = _notificationTextService.GetNotificationText(notification, languageCode);
+        var (title, body) = await _notificationTextService.GetNotificationText(notification);
         _logger.LogInformation("Sending push notification to '{recipient}': {title}, {body}.", recipient, title, body);
-        return Task.CompletedTask;
     }
 
     public Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment, CancellationToken cancellationToken)

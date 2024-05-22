@@ -2,6 +2,7 @@
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Job.IdentityDeletion.Workers;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
@@ -81,7 +82,7 @@ public class ActualDeletionWorkerTests
         // Assert
         foreach (var identityAddress in new[] { identityAddress1, identityAddress2, identityAddress3 })
         {
-            A.CallTo(() => pushNotificationSender.SendNotification(identityAddress, A<object>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => pushNotificationSender.SendNotification(identityAddress, A<IPushNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         }
     }
 

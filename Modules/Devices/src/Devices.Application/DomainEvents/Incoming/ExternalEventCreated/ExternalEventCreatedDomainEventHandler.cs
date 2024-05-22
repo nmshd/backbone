@@ -16,6 +16,6 @@ public class ExternalEventCreatedDomainEventHandler : IDomainEventHandler<Extern
 
     public async Task Handle(ExternalEventCreatedDomainEvent @event)
     {
-        await _pushSenderService.SendNotification(@event.Owner, new ExternalEventCreatedPushNotification(), "en", CancellationToken.None);
+        await _pushSenderService.SendNotification(@event.Owner, new ExternalEventCreatedPushNotification(), CancellationToken.None);
     }
 }

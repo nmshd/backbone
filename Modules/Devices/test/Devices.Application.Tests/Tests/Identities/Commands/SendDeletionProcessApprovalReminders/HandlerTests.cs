@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.BuildingBlocks.Domain.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessApprovalReminders;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
@@ -31,7 +32,7 @@ public class HandlerTests
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>._, A<CancellationToken>._))
             .MustNotHaveHappened();
-        A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>._, A<object>._, A<string>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>._, A<IPushNotification>._, A<CancellationToken>._))
             .MustNotHaveHappened();
     }
 
@@ -56,7 +57,7 @@ public class HandlerTests
         await handler.Handle(new SendDeletionProcessApprovalRemindersCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<string>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
             i.Address == identity.Address
@@ -86,7 +87,7 @@ public class HandlerTests
         await handler.Handle(new SendDeletionProcessApprovalRemindersCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<string>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address
@@ -118,7 +119,7 @@ public class HandlerTests
         await handler.Handle(new SendDeletionProcessApprovalRemindersCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<string>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address
@@ -148,7 +149,7 @@ public class HandlerTests
         await handler.Handle(new SendDeletionProcessApprovalRemindersCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<string>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address
@@ -179,7 +180,7 @@ public class HandlerTests
         await handler.Handle(new SendDeletionProcessApprovalRemindersCommand(), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<string>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessWaitingForApprovalReminderPushNotification>._, A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address

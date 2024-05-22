@@ -1,5 +1,4 @@
-using System.Reflection;
-using System.Text.Json;
+using Backbone.BuildingBlocks.Domain.PushNotifications;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
@@ -30,7 +29,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         _options = options.Value;
     }
 
-    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, object notification)
+    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, IPushNotification notification)
     {
         ValidateRegistrations(registrations);
 
@@ -56,9 +55,9 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedBundleIds()));
     }
 
-    private async Task SendNotification(PnsRegistration registration, object notification, SendResults sendResults)
+    private async Task SendNotification(PnsRegistration registration, IPushNotification notification, SendResults sendResults)
     {
-        var (notificationTitle, notificationBody) = _notificationTextService.GetNotificationText(notification);
+        var (notificationTitle, notificationBody) = await _notificationTextService.GetNotificationTextForDeviceId(notification, registration.DeviceId);
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
 
