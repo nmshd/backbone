@@ -197,14 +197,13 @@ public class TierTests
 
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
         var tierQuotaDefinitionId = tier.Quotas.First().Id;
+        tier.ClearDomainEvents();
 
         // Act
         tier.DeleteQuota(tierQuotaDefinitionId);
 
         // Assert
-        tier.DomainEvents.Should().HaveCount(2);
-        tier.DomainEvents[1].Should().BeOfType<TierQuotaDefinitionDeletedDomainEvent>();
-        var domainEvent = (TierQuotaDefinitionDeletedDomainEvent)tier.DomainEvents[1];
+        var domainEvent = tier.Should().HaveASingleDomainEvent<TierQuotaDefinitionDeletedDomainEvent>();
         domainEvent.TierId.Should().Be(tierId);
         domainEvent.TierQuotaDefinitionId.Should().Be(tierQuotaDefinitionId);
     }
