@@ -24,7 +24,6 @@ export class CryptoHelper {
                     challenge: JSON.stringify(challenge)
                 }),
                 {
-                    // eslint-disable-next-line @typescript-eslint/naming-convention
                     headers: { "Content-Type": "application/json" }
                 }
             )
