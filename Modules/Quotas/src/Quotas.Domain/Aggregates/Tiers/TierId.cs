@@ -1,39 +1,20 @@
 using System.ComponentModel;
 using System.Globalization;
-using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 [Serializable]
 [TypeConverter(typeof(TierIdTypeConverter))]
-public record TierId : StronglyTypedId
+public record TierId(string Value)
 {
-    public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
-    private const string PREFIX = "TIR";
-    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
-
-    private TierId(string value) : base(value)
+    public static implicit operator string(TierId id)
     {
+        return id.Value;
     }
 
     public static TierId Parse(string stringValue)
     {
-        if (!IsValid(stringValue))
-            throw new InvalidIdException($"'{stringValue}' is not a valid {nameof(TierId)}.");
-
         return new TierId(stringValue);
-    }
-
-    public static bool IsValid(string stringValue)
-    {
-        return UTILS.IsValid(stringValue);
-    }
-
-    public static TierId New()
-    {
-        var challengeIdAsString = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
-        return new TierId(PREFIX + challengeIdAsString);
     }
 
     public class TierIdTypeConverter : TypeConverter

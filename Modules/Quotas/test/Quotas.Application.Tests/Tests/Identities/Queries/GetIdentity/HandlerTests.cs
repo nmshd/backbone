@@ -20,7 +20,7 @@ public class HandlerTests
     {
         // Arrange
         var metric = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
-        var identity = new Identity("some-identity-address", TierId.New());
+        var identity = new Identity("some-identity-address", new TierId("tier-id"));
 
         const int max = 5;
         const QuotaPeriod period = QuotaPeriod.Month;
