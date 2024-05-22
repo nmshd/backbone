@@ -8,6 +8,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.ConsumerApi.Tests.Integration.Support;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
 using Microsoft.Extensions.Options;
@@ -47,7 +48,7 @@ internal class IdentitiesApiStepDefinitions
     [Given("an Identity i")]
     public async Task GivenAnIdentityI()
     {
-        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, "somePassword");
+        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
     }
 
     [Given("a Challenge c")]

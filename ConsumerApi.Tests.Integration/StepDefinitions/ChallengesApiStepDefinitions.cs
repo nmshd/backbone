@@ -4,6 +4,7 @@ using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.ConsumerApi.Tests.Integration.Support;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -30,7 +31,7 @@ internal class ChallengesApiStepDefinitions
     [Given("the user is authenticated")]
     public async Task GivenTheUserIsAuthenticated()
     {
-        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, "somePassword");
+        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
         _isAuthenticated = true;
     }
 

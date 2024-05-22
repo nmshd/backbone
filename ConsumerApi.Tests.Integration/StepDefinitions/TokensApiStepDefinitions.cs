@@ -6,6 +6,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.ConsumerApi.Tests.Integration.Support;
 using Backbone.Crypto;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -52,7 +53,7 @@ internal class TokensApiStepDefinitions
     [Given("the user is authenticated")]
     public async Task GivenTheUserIsAuthenticated()
     {
-        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, "somePassword");
+        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
         _isAuthenticated = true;
     }
 
@@ -72,7 +73,7 @@ internal class TokensApiStepDefinitions
             ExpiresAt = TOMORROW
         };
 
-        var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, "somePassword");
+        var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
         var response = await client.Tokens.CreateToken(createTokenRequest);
         response.Should().BeASuccess();
 
