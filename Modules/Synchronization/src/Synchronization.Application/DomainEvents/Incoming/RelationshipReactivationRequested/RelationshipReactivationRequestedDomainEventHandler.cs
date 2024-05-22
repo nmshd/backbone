@@ -8,7 +8,8 @@ using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationRequested;
-public class RelationshipReactivationRequestedDomainEventHandler
+
+public class RelationshipReactivationRequestedDomainEventHandler : IDomainEventHandler<RelationshipReactivationRequestedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
     private readonly IEventBus _eventBus;
