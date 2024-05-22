@@ -1,4 +1,4 @@
-using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.QuotaCreatedForTier;
+using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.TierQuotaDefinitionCreated;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
@@ -12,7 +12,7 @@ using Xunit;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
 
-public class QuotaCreatedForTierDomainEventHandlerTests
+public class TierQuotaDefinitionCreatedDomainEventHandlerTests
 {
     [Fact]
     public async Task Creates_tier_quota_after_consuming_domain_event()
@@ -68,9 +68,10 @@ public class QuotaCreatedForTierDomainEventHandlerTests
         ).MustHaveHappened();
     }
 
-    private static QuotaCreatedForTierDomainEventHandler CreateHandler(IIdentitiesRepository identities, ITiersRepository tierQuotaDefinitions, IMetricStatusesService? metricStatusesService = null)
+    private static TierQuotaDefinitionCreatedDomainEventHandler CreateHandler(IIdentitiesRepository identities, ITiersRepository tierQuotaDefinitions,
+        IMetricStatusesService? metricStatusesService = null)
     {
-        var logger = A.Fake<ILogger<QuotaCreatedForTierDomainEventHandler>>();
-        return new QuotaCreatedForTierDomainEventHandler(identities, tierQuotaDefinitions, logger, metricStatusesService ?? A.Fake<IMetricStatusesService>());
+        var logger = A.Fake<ILogger<TierQuotaDefinitionCreatedDomainEventHandler>>();
+        return new TierQuotaDefinitionCreatedDomainEventHandler(identities, tierQuotaDefinitions, logger, metricStatusesService ?? A.Fake<IMetricStatusesService>());
     }
 }

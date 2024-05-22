@@ -5,17 +5,17 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Quotas.Application.DomainEvents.Incoming.QuotaCreatedForTier;
+namespace Backbone.Modules.Quotas.Application.DomainEvents.Incoming.TierQuotaDefinitionCreated;
 
-public class QuotaCreatedForTierDomainEventHandler : IDomainEventHandler<TierQuotaDefinitionCreatedDomainEvent>
+public class TierQuotaDefinitionCreatedDomainEventHandler : IDomainEventHandler<TierQuotaDefinitionCreatedDomainEvent>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
-    private readonly ILogger<QuotaCreatedForTierDomainEventHandler> _logger;
+    private readonly ILogger<TierQuotaDefinitionCreatedDomainEventHandler> _logger;
     private readonly IMetricStatusesService _metricStatusesService;
 
-    public QuotaCreatedForTierDomainEventHandler(IIdentitiesRepository identitiesRepository,
-        ITiersRepository tiersRepository, ILogger<QuotaCreatedForTierDomainEventHandler> logger, IMetricStatusesService metricStatusesService)
+    public TierQuotaDefinitionCreatedDomainEventHandler(IIdentitiesRepository identitiesRepository,
+        ITiersRepository tiersRepository, ILogger<TierQuotaDefinitionCreatedDomainEventHandler> logger, IMetricStatusesService metricStatusesService)
     {
         _identitiesRepository = identitiesRepository;
         _tiersRepository = tiersRepository;
