@@ -61,7 +61,7 @@ public class NotificationTextService
         }
 
         CultureInfo.CurrentUICulture = oldCurrentUiCulture;
-        
+
         // try to find a way to not use currentuiculture
         return type is null ? localizedStrings : localizedStrings.Where(ls => ls.Name.StartsWith(type.Name)).ToArray();
     }

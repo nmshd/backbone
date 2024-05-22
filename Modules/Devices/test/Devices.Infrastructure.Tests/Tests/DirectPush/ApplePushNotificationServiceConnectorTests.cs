@@ -30,9 +30,9 @@ public class ApplePushNotificationServiceConnectorTests
         {
             new(recipient, DeviceId.New(), PnsHandle.Parse(PushNotificationPlatform.Apns, "some-device-id").Value, APP_ID, PushEnvironment.Development)
         };
-        
+
         await connector.Send(registrations, recipient, new TestPushNotification());
-        
+
 
         // Assert
         client.SendAsyncCalls.Should().Be(1);

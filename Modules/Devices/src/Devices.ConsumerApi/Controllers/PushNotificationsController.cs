@@ -47,7 +47,7 @@ public class PushNotificationsController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> SendTestPushNotification2([FromRoute] string languageCode, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new SendTestNotificationCommand { Data = languageCode}, cancellationToken);
+        await _mediator.Send(new SendTestNotificationCommand { Data = languageCode }, cancellationToken);
         return NoContent();
     }
 }
