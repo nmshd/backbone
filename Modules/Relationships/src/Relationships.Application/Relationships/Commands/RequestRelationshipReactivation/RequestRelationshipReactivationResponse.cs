@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RelationshipReactivationRequest;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RequestRelationshipReactivation;
 
 public class RequestRelationshipReactivationResponse : RelationshipMetadataDTO
 {
