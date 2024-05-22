@@ -20,7 +20,7 @@ public class HandlerTests
     public async Task Delete_individual_quota()
     {
         // Arrange
-        var identity = new Identity("some-identity-address", new TierId("tier-id"));
+        var identity = new Identity("some-identity-address", TierId.Parse("tier-id"));
         var createdQuota = identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
         var command = new DeleteQuotaForIdentityCommand(identity.Address, createdQuota.Id);
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -42,7 +42,7 @@ public class HandlerTests
     public async Task Deletes_individual_quota_for_identity_with_multiple_quotas()
     {
         // Arrange
-        var identity = new Identity("some-identity-address", new TierId("tier-id"));
+        var identity = new Identity("some-identity-address", TierId.Parse("tier-id"));
         var quotaToDelete = identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
         identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
         identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 50, QuotaPeriod.Year);
@@ -85,7 +85,7 @@ public class HandlerTests
     {
         // Arrange
         const string identityAddress = "some-identity-address";
-        var identity = new Identity("some-identity-address", new TierId("tier-id"));
+        var identity = new Identity("some-identity-address", TierId.Parse("tier-id"));
         var command = new DeleteQuotaForIdentityCommand(identityAddress, "QUOsomequotaid111111");
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Find(identityAddress, A<CancellationToken>._, A<bool>._)).Returns(identity);
