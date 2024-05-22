@@ -5,9 +5,6 @@ namespace Backbone.ConsumerApi.Tests.Integration.Configuration;
 public class HttpConfiguration
 {
     [Required]
-    public string BaseUrl { get; set; } = string.Empty;
-
-    [Required]
     public ClientCredentialsConfiguration ClientCredentials { get; set; } = new();
 }
 
