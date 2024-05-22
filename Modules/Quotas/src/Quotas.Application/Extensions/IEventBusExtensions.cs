@@ -37,7 +37,7 @@ public static class IEventBusExtensions
         eventBus.Subscribe<IdentityCreatedDomainEvent, IdentityCreatedDomainEventHandler>();
         eventBus.Subscribe<TierCreatedDomainEvent, TierCreatedDomainEventHandler>();
         eventBus.Subscribe<TierDeletedDomainEvent, TierDeletedDomainEventHandler>();
-        eventBus.Subscribe<QuotaCreatedForTierDomainEvent, QuotaCreatedForTierDomainEventHandler>();
+        eventBus.Subscribe<TierQuotaDefinitionCreatedDomainEvent, QuotaCreatedForTierDomainEventHandler>();
         eventBus.Subscribe<MessageCreatedDomainEvent, MessageCreatedDomainEventHandler>();
         eventBus.Subscribe<TierQuotaDefinitionDeletedDomainEvent, TierQuotaDefinitionDeletedDomainEventHandler>();
         eventBus.Subscribe<FileUploadedDomainEvent, FileUploadedDomainEventHandler>();

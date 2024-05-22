@@ -75,7 +75,7 @@ public class Tier : Entity
         var quotaDefinition = new TierQuotaDefinition(metricKey, max, period);
         Quotas.Add(quotaDefinition);
 
-        RaiseDomainEvent(new QuotaCreatedForTierDomainEvent(Id, quotaDefinition.Id));
+        RaiseDomainEvent(new TierQuotaDefinitionCreatedDomainEvent(Id, quotaDefinition.Id));
 
         return Result.Success<TierQuotaDefinition, DomainError>(quotaDefinition);
     }

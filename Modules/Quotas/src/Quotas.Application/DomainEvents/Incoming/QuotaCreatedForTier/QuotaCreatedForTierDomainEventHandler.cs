@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Quotas.Application.DomainEvents.Incoming.QuotaCreatedForTier;
 
-public class QuotaCreatedForTierDomainEventHandler : IDomainEventHandler<QuotaCreatedForTierDomainEvent>
+public class QuotaCreatedForTierDomainEventHandler : IDomainEventHandler<TierQuotaDefinitionCreatedDomainEvent>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
@@ -23,7 +23,7 @@ public class QuotaCreatedForTierDomainEventHandler : IDomainEventHandler<QuotaCr
         _metricStatusesService = metricStatusesService;
     }
 
-    public async Task Handle(QuotaCreatedForTierDomainEvent @event)
+    public async Task Handle(TierQuotaDefinitionCreatedDomainEvent @event)
     {
         _logger.LogTrace("Handling QuotaCreatedForTierDomainEvent...");
 

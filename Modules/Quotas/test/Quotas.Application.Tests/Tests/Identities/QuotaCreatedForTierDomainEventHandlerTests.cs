@@ -31,7 +31,7 @@ public class QuotaCreatedForTierDomainEventHandlerTests
         var handler = CreateHandler(identitiesRepository, tierQuotaDefinitionsRepository);
 
         // Act
-        await handler.Handle(new QuotaCreatedForTierDomainEvent(tierId, tierQuotaDefinition.Id));
+        await handler.Handle(new TierQuotaDefinitionCreatedDomainEvent(tierId, tierQuotaDefinition.Id));
 
         // Assert
         A.CallTo(() => identitiesRepository.Update(A<IEnumerable<Identity>>.That.Matches(ids =>
@@ -58,7 +58,7 @@ public class QuotaCreatedForTierDomainEventHandlerTests
         var handler = CreateHandler(identitiesRepository, tierQuotaDefinitionsRepository, metricStatusesService);
 
         // Act
-        await handler.Handle(new QuotaCreatedForTierDomainEvent(tierId, tierQuotaDefinition.Id));
+        await handler.Handle(new TierQuotaDefinitionCreatedDomainEvent(tierId, tierQuotaDefinition.Id));
 
         // Assert
         A.CallTo(() => metricStatusesService.RecalculateMetricStatuses(
