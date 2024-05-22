@@ -190,8 +190,7 @@ file static class TierExtensions
 {
     public static Tier Clone(this Tier tier)
     {
-        var newTier = new Tier(tier.Id, tier.Name);
-        newTier.Quotas.AddRange(tier.Quotas);
-        return newTier;
+        var serialized = JsonSerializer.Serialize(tier);
+        return JsonSerializer.Deserialize<Tier>(serialized)!;
     }
 }
