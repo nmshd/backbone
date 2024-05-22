@@ -6,7 +6,9 @@ import { CreateIdentityRequest } from "../../models/identity";
 import { JwtResponse } from "../../models/jwt-response";
 import { ChallengeRequestPayload, CryptoHelper } from "../crypto-helper";
 
-export function createIdentity(client: Httpx, clientId: string, clientSecret: string): { httpResponse: Response; generatedPassword: string } {
+const apiVersion = "v1";
+
+export function createIdentity(client: Httpx, clientId: string, clientSecret: string, password: string): Response {
     try {
         const keyPair = CryptoHelper.generateKeyPair();
 
@@ -14,21 +16,19 @@ export function createIdentity(client: Httpx, clientId: string, clientSecret: st
 
         const signedChallenge = CryptoHelper.signChallenge(keyPair, challenge);
 
-        const generatedPassword = CryptoHelper.generatePassword()!;
-
         const createIdentityRequest: CreateIdentityRequest = {
             clientId: clientId,
             clientSecret: clientSecret,
             signedChallenge: { challenge: JSON.stringify(challenge), signature: b64encode(JSON.stringify(signedChallenge)) },
             identityPublicKey: b64encode(JSON.stringify(keyPair.pub)),
-            devicePassword: generatedPassword,
+            devicePassword: password,
             identityVersion: 1
         };
 
-        const httpResponse = client.post("Identities", JSON.stringify(createIdentityRequest), {
+        const httpResponse = client.post(`api/${apiVersion}/Identities`, JSON.stringify(createIdentityRequest), {
             headers: { "Content-Type": "application/json" }
         }) as Response;
-        return { httpResponse, generatedPassword };
+        return httpResponse;
     } catch (e) {
         console.error(e);
         throw e;
@@ -44,7 +44,7 @@ export function exchangeToken(client: Httpx, username: string, password: string)
         password
     };
     return client
-        .post("http://localhost:8081/connect/token", payload, {
+        .post("connect/token", payload, {
             headers: {
                 "Content-Type": "application/x-www-form-urlencoded"
             }
@@ -53,7 +53,7 @@ export function exchangeToken(client: Httpx, username: string, password: string)
 }
 
 function getChallenge(client: Httpx): ChallengeRequestPayload {
-    const receivedChallenge = client.post("Challenges").json("result") as unknown as CreateChallengeResponse;
+    const receivedChallenge = client.post(`api/${apiVersion}/Challenges`).json("result") as unknown as CreateChallengeResponse;
 
     return {
         id: receivedChallenge.id,

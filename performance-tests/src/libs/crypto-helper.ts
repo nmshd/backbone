@@ -11,10 +11,6 @@ export class CryptoHelper {
         return CryptoHelper.client.get("keypair").json() as unknown as KeyPair;
     }
 
-    public static generatePassword(): string | undefined {
-        return CryptoHelper.client.get("password").body?.toString();
-    }
-
     public static signChallenge(keyPair: KeyPair, challenge: ChallengeRequestPayload): string | undefined {
         return CryptoHelper.client
             .post(
