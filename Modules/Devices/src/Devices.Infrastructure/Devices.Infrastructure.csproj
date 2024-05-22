@@ -27,11 +27,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Translations\PushNotifications - Copy.DirectPush.IPushNotification.en.Designer.cs">
-        <DependentUpon>PushNotifications.DirectPush.IPushNotification.en.resx</DependentUpon>
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-      </Compile>
       <Compile Update="Translations\PushNotifications.DirectPush.IPushNotification.en.Designer.cs">
         <DependentUpon>PushNotifications.DirectPush.IPushNotification.en.resx</DependentUpon>
         <DesignTime>True</DesignTime>
@@ -48,11 +43,13 @@
       <EmbeddedResource Update="Translations\PushNotifications.DirectPush.IPushNotification.en.resx">
         <SubType>Designer</SubType>
         <LastGenOutput>PushNotifications.DirectPush.IPushNotification.en.Designer.cs</LastGenOutput>
-        <Generator>ResXFileCodeGenerator</Generator>
+        <Generator>PublicResXFileCodeGenerator</Generator>
+        <CustomToolNamespace>Backbone.Modules.Devices.Infrastructure.Translation</CustomToolNamespace>
       </EmbeddedResource>
       <EmbeddedResource Update="Translations\PushNotifications.DirectPush.IPushNotification.pt.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
+        <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>PushNotifications.DirectPush.IPushNotification.pt.Designer.cs</LastGenOutput>
+        <CustomToolNamespace>Backbone.Modules.Devices.Infrastructure.Translation</CustomToolNamespace>
       </EmbeddedResource>
     </ItemGroup>
 
