@@ -4,8 +4,6 @@ using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -53,29 +51,6 @@ public class HandlerTests
                 t.Quotas.Count == 1)
             , CancellationToken.None)
         ).MustHaveHappened();
-    }
-
-    [Fact]
-    public async Task Triggers_QuotaCreatedForTierDomainEvent()
-    {
-        // Arrange
-        var tierId = TierId.Parse("TIRsomeTierId1111111");
-        var metricKey = MetricKey.NumberOfSentMessages.Value;
-        var command = new CreateQuotaForTierCommand(tierId, metricKey, 5, QuotaPeriod.Month);
-        var tier = new Tier(tierId, "some-tier-name");
-
-        var tierRepository = A.Fake<ITiersRepository>();
-        A.CallTo(() => tierRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
-
-        var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
-        var handler = CreateHandler(tierRepository, metricsRepository);
-
-        // Act
-        await handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        var domainEvent = tier.Should().HaveASingleDomainEvent<QuotaCreatedForTierDomainEvent>();
-        domainEvent.TierId.Should().Be(tierId);
     }
 
     private Handler CreateHandler(ITiersRepository tiersRepository, FindMetricsStubRepository metricsRepository)

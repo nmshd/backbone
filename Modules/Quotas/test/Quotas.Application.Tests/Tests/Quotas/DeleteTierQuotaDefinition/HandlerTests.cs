@@ -5,7 +5,6 @@ using Backbone.Modules.Quotas.Application.Tests.Extensions;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -20,34 +19,6 @@ public class HandlerTests
     public HandlerTests()
     {
         AssertionScope.Current.FormattingOptions.MaxLines = 1000;
-    }
-
-    [Fact]
-    public async Task Triggers_TierQuotaDefinitionDeletedDomainEvent()
-    {
-        // Arrange
-        var tierId = TierId.New();
-        var tier = new Tier(tierId, "some-tier-name");
-
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
-        var tierQuotaDefinitionId = tier.Quotas.First().Id;
-
-        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tierQuotaDefinitionId);
-
-        var tiersRepository = A.Fake<ITiersRepository>();
-        A.CallTo(() => tiersRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
-
-        var handler = CreateHandler(tiersRepository);
-
-        // Act
-        await handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        tier.DomainEvents.Should().HaveCount(2);
-        tier.DomainEvents[1].Should().BeOfType<TierQuotaDefinitionDeletedDomainEvent>();
-        var domainEvent = (TierQuotaDefinitionDeletedDomainEvent)tier.DomainEvents[1]; //TODO: Timo (Should I make this a domain test as well or is this handler test enough?)
-        domainEvent.TierId.Should().Be(tierId);
-        domainEvent.TierQuotaDefinitionId.Should().Be(tierQuotaDefinitionId);
     }
 
     [Fact]

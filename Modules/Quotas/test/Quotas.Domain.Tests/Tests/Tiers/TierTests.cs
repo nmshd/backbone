@@ -1,9 +1,12 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Tiers;
 
@@ -183,6 +186,43 @@ public class TierTests
         // Assert
         addedQuotas.Should().HaveCount(1);
         tier.Quotas.Should().HaveCount(2);
+    }
+
+    [Fact]
+    public void Triggers_TierQuotaDefinitionDeletedDomainEvent()
+    {
+        // Arrange
+        var tierId = new TierId("tier-id");
+        var tier = new Tier(tierId, "some-tier-name");
+
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        var tierQuotaDefinitionId = tier.Quotas.First().Id;
+
+        // Act
+        tier.DeleteQuota(tierQuotaDefinitionId);
+
+        // Assert
+        tier.DomainEvents.Should().HaveCount(2);
+        tier.DomainEvents[1].Should().BeOfType<TierQuotaDefinitionDeletedDomainEvent>();
+        var domainEvent = (TierQuotaDefinitionDeletedDomainEvent)tier.DomainEvents[1];
+        domainEvent.TierId.Should().Be(tierId);
+        domainEvent.TierQuotaDefinitionId.Should().Be(tierQuotaDefinitionId);
+    }
+
+    [Fact]
+    public void Triggers_TierQuotaDefinitionCreatedDomainEvent()
+    {
+        // Arrange
+        var tierId = TierId.Parse("TIRsomeTierId1111111");
+        var metricKey = MetricKey.NumberOfSentMessages;
+        var tier = new Tier(tierId, "some-tier-name");
+
+        // Act
+        tier.CreateQuota(metricKey, 5, QuotaPeriod.Month);
+
+        // Assert
+        var domainEvent = tier.Should().HaveASingleDomainEvent<TierQuotaDefinitionCreatedDomainEvent>();
+        domainEvent.TierId.Should().Be(tierId);
     }
 }
 
