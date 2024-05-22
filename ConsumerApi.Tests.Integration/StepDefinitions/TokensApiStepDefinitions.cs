@@ -23,7 +23,7 @@ internal class TokensApiStepDefinitions
     private readonly List<CreateTokenResponse> _givenOwnTokens;
     private readonly List<Token> _responseTokens;
     private ApiResponse<CreateTokenResponse>? _createTokenResponse;
-    private ApiResponse<EmptyResponse>? _createTokenResponseError;
+    private ApiResponse<EmptyResponse>? _createTokenResponse401;
     private ApiResponse<Token>? _tokenResponse;
     private ApiResponse<ListTokensResponse>? _tokensResponse;
     private readonly HttpClient _httpClient;
@@ -144,7 +144,7 @@ internal class TokensApiStepDefinitions
         }
         else
         {
-            _createTokenResponseError = await _sdk.Tokens.CreateTokenUnauthenticated(request);
+            _createTokenResponse401 = await _sdk.Tokens.CreateTokenUnauthenticated(request);
         }
     }
 
@@ -235,8 +235,8 @@ internal class TokensApiStepDefinitions
         if (_createTokenResponse != null)
             ((int)_createTokenResponse.Status).Should().Be(expectedStatusCode);
 
-        if (_createTokenResponseError != null)
-            ((int)_createTokenResponseError.Status).Should().Be(expectedStatusCode);
+        if (_createTokenResponse401 != null)
+            ((int)_createTokenResponse401.Status).Should().Be(expectedStatusCode);
     }
 
     [Then(@"the response content includes an error with the error code ""([^""]+)""")]
