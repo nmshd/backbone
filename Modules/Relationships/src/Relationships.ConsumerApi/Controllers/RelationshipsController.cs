@@ -10,7 +10,7 @@ using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRe
 using Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipReactivation;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.RelationshipReactivationRequest;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RequestRelationshipReactivation;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipReactivation;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.TerminateRelationship;
