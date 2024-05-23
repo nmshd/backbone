@@ -18,7 +18,7 @@ public class IdentityDeletionProcessTests
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval();
         SystemTime.Set(utcNow);
 
-        IdentityDeletionConfiguration.MaxApprovalTime = 10;
+        IdentityDeletionConfiguration.LengthOfApprovalPeriod = 10;
 
         // Act
         var result = identity.DeletionProcesses[0].HasApprovalPeriodExpired;
@@ -38,7 +38,7 @@ public class IdentityDeletionProcessTests
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval();
         SystemTime.Set(utcNow);
 
-        IdentityDeletionConfiguration.MaxApprovalTime = 10;
+        IdentityDeletionConfiguration.LengthOfApprovalPeriod = 10;
 
         // Act
         var result = identity.DeletionProcesses[0].HasApprovalPeriodExpired;

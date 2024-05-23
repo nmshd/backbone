@@ -90,7 +90,7 @@ public class IdentityDeletionProcess
 
     public DateTime GetEndOfApprovalPeriod()
     {
-        return CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime);
+        return CreatedAt.AddDays(IdentityDeletionConfiguration.LengthOfApprovalPeriod);
     }
 
     public void ApprovalReminder1Sent(IdentityAddress address)

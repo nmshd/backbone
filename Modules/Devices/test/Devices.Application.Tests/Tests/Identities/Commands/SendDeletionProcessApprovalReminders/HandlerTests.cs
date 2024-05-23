@@ -17,6 +17,8 @@ public class HandlerTests
     public async Task No_identities_with_a_deletion_process_waiting_for_approval_exists()
     {
         // Arrange
+        IdentityDeletionConfiguration.LengthOfApprovalPeriod = 10;
+
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
@@ -39,9 +41,12 @@ public class HandlerTests
     public async Task Sends_first_reminder()
     {
         // Arrange
+        IdentityDeletionConfiguration.LengthOfApprovalPeriod = 10;
+        IdentityDeletionConfiguration.ApprovalReminder1.Time = 10;
+
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
 
-        var utcNow = DateTime.Parse("2000-01-02");
+        var utcNow = DateTime.Parse("2000-01-03");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -68,6 +73,9 @@ public class HandlerTests
     public async Task Sends_second_reminder()
     {
         // Arrange
+        IdentityDeletionConfiguration.LengthOfApprovalPeriod = 10;
+        IdentityDeletionConfiguration.ApprovalReminder2.Time = 5;
+
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
         identity.DeletionProcessApprovalReminder1Sent();
 
@@ -99,6 +107,9 @@ public class HandlerTests
     public async Task Sends_third_reminder()
     {
         // Arrange
+        IdentityDeletionConfiguration.LengthOfApprovalPeriod = 10;
+        IdentityDeletionConfiguration.ApprovalReminder1.Time = 2;
+
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
         identity.DeletionProcessApprovalReminder1Sent();
         identity.DeletionProcessApprovalReminder2Sent();
@@ -131,6 +142,10 @@ public class HandlerTests
     public async Task Does_not_send_reminder_1_when_2_has_to_be_sent_as_well()
     {
         // Arrange
+        IdentityDeletionConfiguration.LengthOfApprovalPeriod = 10;
+        IdentityDeletionConfiguration.ApprovalReminder1.Time = 10;
+        IdentityDeletionConfiguration.ApprovalReminder2.Time = 5;
+
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
 
         var utcNow = DateTime.Parse("2000-01-06");
@@ -162,6 +177,11 @@ public class HandlerTests
     public async Task Does_not_send_reminder_1_and_2_when_3_has_to_be_sent_as_well()
     {
         // Arrange
+        IdentityDeletionConfiguration.LengthOfApprovalPeriod = 10;
+        IdentityDeletionConfiguration.ApprovalReminder1.Time = 10;
+        IdentityDeletionConfiguration.ApprovalReminder2.Time = 5;
+        IdentityDeletionConfiguration.ApprovalReminder3.Time = 2;
+
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
 
         var utcNow = DateTime.Parse("2000-01-09");

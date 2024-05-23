@@ -112,7 +112,7 @@ public class DeletionProcessApprovalReminderTests
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
-        IdentityDeletionConfiguration.MaxApprovalTime = 10;
+        IdentityDeletionConfiguration.LengthOfApprovalPeriod = 10;
 
         var deletionProcess = IdentityDeletionProcess.StartAsOwner(CreateRandomIdentityAddress(), CreateRandomDeviceId());
 
