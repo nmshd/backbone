@@ -1,4 +1,3 @@
-using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
