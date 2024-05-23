@@ -9,13 +9,13 @@ public class IdentityDeletionProcessTests
     [Theory]
     [InlineData("2020-01-01T00:00:00")]
     [InlineData("2020-01-01T00:00:01")]
-    [InlineData("2020-01-09T23:59:59")]
+    [InlineData("2020-01-06T23:59:59")]
     public void HasApprovalPeriodExpired_is_false_for_deletion_process_still_in_approval_period(string utcNow)
     {
         // Arrange
         SystemTime.Set("2020-01-01T00:00:00");
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval();
-        SystemTime.Set("2020-01-06T00:00:00");
+        SystemTime.Set(utcNow);
 
         // Act
         var result = identity.DeletionProcesses[0].HasApprovalPeriodExpired;
