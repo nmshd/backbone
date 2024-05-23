@@ -40,6 +40,7 @@ public class IdentityDeletionProcess
     public DeletionProcessStatus Status { get; private set; }
     public DateTime DeletionStartedAt { get; private set; }
     public DateTime CreatedAt { get; }
+    public DateTime ApprovalPeriodEndsAt => CreatedAt.AddDays(IdentityDeletionConfiguration.LengthOfApprovalPeriod);
 
     public DateTime? ApprovalReminder1SentAt { get; private set; }
     public DateTime? ApprovalReminder2SentAt { get; private set; }
