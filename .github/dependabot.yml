@@ -59,3 +59,23 @@ updates:
       - "daniel-almeida-konkconsulting"
     labels:
       - "dependencies"
+
+  ##### Docker #####
+  - package-ecosystem: "docker"
+    directories:
+      - "/AdminApi/src/AdminApi"
+      - "/ConsumerApi"
+      - "/DatabaseMigrator"
+      - "/EventHandlerService/src/EventHandlerService"
+      - "/Jobs/src/Job.IdentityDeletion"
+      - "/Modules/Devices/src/Devices.AdminCli"
+    schedule:
+      interval: "weekly"
+    groups:
+      update-docker-dependencies:
+        patterns:
+          - "*"
+    reviewers:
+      - "tnotheis"
+    labels:
+      - "dependencies"
