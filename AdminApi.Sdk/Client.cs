@@ -10,7 +10,6 @@ using Backbone.AdminApi.Sdk.Endpoints.Metrics;
 using Backbone.AdminApi.Sdk.Endpoints.Relationships;
 using Backbone.AdminApi.Sdk.Endpoints.Tiers;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common;
-using Backbone.Tooling.JsonConverters;
 
 namespace Backbone.AdminApi.Sdk;
 
@@ -21,7 +20,6 @@ public class Client
         var authenticator = new XsrfAndApiKeyAuthenticator(apiKey, httpClient);
 
         var jsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-        jsonSerializerOptions.Converters.Add(new UrlSafeBase64ToByteArrayJsonConverter());
 
         var endpointClient = new EndpointClient(httpClient, authenticator, jsonSerializerOptions);
 

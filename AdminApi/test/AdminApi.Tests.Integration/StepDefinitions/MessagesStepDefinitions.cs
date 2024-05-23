@@ -47,7 +47,7 @@ internal class MessagesStepDefinitions : BaseStepDefinitions
         _messagesResponse.Should().ComplyWithSchema();
     }
 
-    [Then(@"the response content includes an error with the error code ""([^""]+)""")]
+    [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
         if (_messagesResponse != null)
