@@ -40,6 +40,7 @@ public class IdentityDeletionProcess
     public DeletionProcessStatus Status { get; private set; }
     public DateTime DeletionStartedAt { get; private set; }
     public DateTime CreatedAt { get; }
+    public DateTime ApprovalPeriodEndsAt => CreatedAt.AddDays(IdentityDeletionConfiguration.LengthOfApprovalPeriod);
 
     public DateTime? ApprovalReminder1SentAt { get; private set; }
     public DateTime? ApprovalReminder2SentAt { get; private set; }
@@ -60,7 +61,7 @@ public class IdentityDeletionProcess
     public DateTime? GracePeriodReminder2SentAt { get; private set; }
     public DateTime? GracePeriodReminder3SentAt { get; private set; }
 
-    public bool HasApprovalPeriodExpired => Status == DeletionProcessStatus.WaitingForApproval && SystemTime.UtcNow >= GetEndOfApprovalPeriod();
+    public bool HasApprovalPeriodExpired => Status == DeletionProcessStatus.WaitingForApproval && SystemTime.UtcNow >= ApprovalPeriodEndsAt;
 
     public bool HasGracePeriodExpired => Status == DeletionProcessStatus.Approved && SystemTime.UtcNow >= GracePeriodEndsAt;
 
@@ -85,11 +86,6 @@ public class IdentityDeletionProcess
     public bool IsActive()
     {
         return Status is DeletionProcessStatus.Approved or DeletionProcessStatus.WaitingForApproval or DeletionProcessStatus.Deleting;
-    }
-
-    public DateTime GetEndOfApprovalPeriod()
-    {
-        return CreatedAt.AddDays(IdentityDeletionConfiguration.MaxApprovalTime);
     }
 
     public void ApprovalReminder1Sent(IdentityAddress address)

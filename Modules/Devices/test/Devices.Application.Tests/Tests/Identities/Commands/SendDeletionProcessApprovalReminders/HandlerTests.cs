@@ -72,7 +72,7 @@ public class HandlerTests : AbstractTestsBase
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
         identity.DeletionProcessApprovalReminder1Sent();
 
-        var utcNow = DateTime.Parse("2000-01-06");
+        var utcNow = DateTime.Parse("2000-01-04");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -104,7 +104,7 @@ public class HandlerTests : AbstractTestsBase
         identity.DeletionProcessApprovalReminder1Sent();
         identity.DeletionProcessApprovalReminder2Sent();
 
-        var utcNow = DateTime.Parse("2000-01-09");
+        var utcNow = DateTime.Parse("2000-01-06");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -134,7 +134,7 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
 
-        var utcNow = DateTime.Parse("2000-01-06");
+        var utcNow = DateTime.Parse("2000-01-04");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -165,7 +165,7 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
 
-        var utcNow = DateTime.Parse("2000-01-09");
+        var utcNow = DateTime.Parse("2000-01-06");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();

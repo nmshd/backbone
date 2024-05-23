@@ -49,10 +49,8 @@ public class CancelStaleDeletionProcessTests : AbstractTestsBase
         var identity = TestDataGenerator.CreateIdentity();
         identity.StartDeletionProcessAsSupport();
 
-        var utcNow = DateTime.Parse("2020-01-11T00:00:00");
+        var utcNow = DateTime.Parse("2020-01-08T00:00:00");
         SystemTime.Set(utcNow);
-
-        IdentityDeletionConfiguration.MaxApprovalTime = 10;
 
         // Act
         var result = identity.CancelStaleDeletionProcess();
@@ -71,9 +69,7 @@ public class CancelStaleDeletionProcessTests : AbstractTestsBase
         // Arrange
         SystemTime.Set(DateTime.Parse("2020-01-01T00:00:00"));
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval();
-        SystemTime.Set(DateTime.Parse("2020-01-11T00:00:00"));
-
-        IdentityDeletionConfiguration.MaxApprovalTime = 10;
+        SystemTime.Set(DateTime.Parse("2020-01-08T00:00:00"));
 
         // Act
         var result = identity.CancelStaleDeletionProcess();

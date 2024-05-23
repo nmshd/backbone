@@ -26,7 +26,7 @@ public class ApproveDeletionProcessTests : AbstractTestsBase
 
         // Assert
         identity.Status.Should().Be(IdentityStatus.ToBeDeleted);
-        identity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
+        identity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-15"));
         identity.TierId.Should().Be(Tier.QUEUED_FOR_DELETION.Id);
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!;
         AssertAuditLogEntryWasCreated(deletionProcess);
