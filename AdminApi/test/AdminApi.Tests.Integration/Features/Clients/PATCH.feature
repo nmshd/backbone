@@ -18,4 +18,4 @@ Scenario: Changing the client secret of an existing Client with an empty secret
 Scenario: Changing the client secret of a non-existent Client
 	When a PATCH request is sent to the /Clients/{clientId}/ChangeSecret endpoint
 	Then the response status code is 404 (Not Found)
-	And the response content includes an error with the error code "error.platform.recordNotFound"
+	And the response content contains an error with the error code "error.platform.recordNotFound"

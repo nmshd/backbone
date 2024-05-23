@@ -1,62 +1,57 @@
-using System.Net;
-using Backbone.ConsumerApi.Tests.Integration.API;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Sdk;
+using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
-using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using Backbone.ConsumerApi.Tests.Integration.Models;
-using Backbone.Crypto.Abstractions;
-using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
+using Backbone.ConsumerApi.Tests.Integration.Support;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using RequestConfiguration = Backbone.ConsumerApi.Tests.Integration.Models.RequestConfiguration;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "PUT /Devices/Self/PushNotifications")]
-internal class PnsRegistrationStepDefinitions : BaseStepDefinitions
+internal class PnsRegistrationStepDefinitions
 {
-    // keep in mind: these tests use DummyPushService so they will not execute the implemented code
+    private Client _sdk = null!;
+    private readonly ClientCredentials _clientCredentials;
+    private readonly HttpClient _httpClient;
+    private ApiResponse<UpdateDeviceRegistrationResponse>? _response;
 
-    private readonly PushNotificationsApi _pnsRegistrationsApi;
-    private HttpResponse<UpdateDeviceRegistrationResponse>? _response;
-
-    public PnsRegistrationStepDefinitions(
-        IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi, PushNotificationsApi pnsRegistrationsApi) :
-        base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
+    public PnsRegistrationStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
     {
-        _pnsRegistrationsApi = pnsRegistrationsApi;
+        _httpClient = factory.CreateClient();
+        _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
+    }
+
+    [Given("the user is authenticated")]
+    public async Task GivenTheUserIsAuthenticated()
+    {
+        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
     }
 
     [When("a PUT request is sent to the /Devices/Self/PushNotifications endpoint")]
-    public async Task WhenAPUTRequestIsSentToTheDevicesSelfPushNotificationsEndpoint()
+    public async Task WhenAPutRequestIsSentToTheDevicesSelfPushNotificationsEndpoint()
     {
-        var requestConfiguration = new RequestConfiguration();
-        requestConfiguration.SupplementWith(_requestConfiguration);
-        requestConfiguration.AuthenticationParameters.Username = "USRa";
-        requestConfiguration.AuthenticationParameters.Password = "a";
-
-        requestConfiguration.ContentType = "application/json";
-
-        requestConfiguration.Content = JsonConvert.SerializeObject(new PnsRegistrationRequest()
+        var request = new UpdateDeviceRegistrationRequest
         {
             Platform = "fcm",
             Handle = "eXYs0v3XT9w:APA91bHal6RzkPdjiFmoXvtVRJlfN81OCyzVIbXx4bTQupfcUQmDY9eAdUABLntZzO4M5rv7jmcj3Mk6",
             AppId = "someAppId"
-        });
+        };
 
-        _response = await _pnsRegistrationsApi.RegisterForPushNotifications(requestConfiguration);
+        _response = await _sdk.PushNotifications.RegisterForPushNotifications(request);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
-    public void ThenTheResponseStatusCodeIs(int statusCode)
+    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        ThrowHelpers.ThrowIfNull(_response);
-        _response.StatusCode.Should().Be((HttpStatusCode)statusCode);
+        ((int)_response!.Status).Should().Be(expectedStatusCode);
     }
 
     [Then("the response contains the push identifier for the device")]
     public void ThenTheResponseContainsThePushIdentifierForTheDevice()
     {
-        _response!.Content.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();
+        _response!.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();
     }
 }
