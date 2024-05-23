@@ -13,8 +13,6 @@ public abstract class AbstractTestsBase : IDisposable
         _dateTimeNow = DateTime.UtcNow;
         _dateTimeTomorrow = _dateTimeNow.AddDays(1);
         _dateTimeYesterday = _dateTimeNow.AddDays(-1);
-
-        SystemTime.Set(_dateTimeNow);
     }
 
     public virtual void Dispose()
