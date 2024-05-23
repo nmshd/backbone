@@ -6,12 +6,12 @@ metadata:
     {{- include "global.labels" . | nindent 4 }}
     app: {{ .Values.eventhandler.name }}
 spec:
-  replicas: 1
+  replicas: {{ .Values.eventhandler.replicas }}
   strategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: {{ .Values.maxSurge }}
-      maxUnavailable: {{ .Values.maxUnavailable }}
+      maxSurge: {{ .Values.eventhandler.maxSurge }}
+      maxUnavailable: {{ .Values.eventhandler.maxUnavailable }}
   selector:
     matchLabels:
       app: {{ .Values.eventhandler.name }}
