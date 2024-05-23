@@ -109,6 +109,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                                       setState(() {
                                         _selectedTier = newValue;
                                       });
+                                      _updateIdentity();
                                     },
                                     items: _tiers!.isNotEmpty
                                         ? _tiers!.where(_isTierManuallyAssignable).map((tier) {
@@ -155,51 +156,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                 ),
               ],
             ),
-            Gaps.h16,
             _IdentityQuotaList(identityDetails, _reloadIdentity),
-            Gaps.h16,
-            Padding(
-              padding: const EdgeInsets.all(8),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                      ),
-                      backgroundColor: _isTierChanged() ? WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.primary) : null,
-                    ),
-                    onPressed: _isTierChanged() ? _updateIdentity : null,
-                    child: Text(
-                      context.l10n.save,
-                      style: _isTierChanged() ? TextStyle(color: Theme.of(context).colorScheme.onPrimary) : null,
-                    ),
-                  ),
-                  Gaps.w16,
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(0),
-                        ),
-                      ),
-                      backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.secondary),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      context.l10n.cancel,
-                      style: TextStyle(color: Theme.of(context).colorScheme.onSecondary),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),
@@ -217,10 +174,6 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 
   bool _isTierManuallyAssignable(TierOverview tier) {
     return tier.canBeManuallyAssigned || tier.id == _identityDetails!.tierId;
-  }
-
-  bool _isTierChanged() {
-    return _selectedTier != _identityDetails!.tierId;
   }
 
   Future<void> _updateIdentity() async {
