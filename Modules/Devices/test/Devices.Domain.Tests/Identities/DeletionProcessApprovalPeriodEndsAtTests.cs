@@ -1,5 +1,4 @@
-﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.Tooling;
+﻿using Backbone.Tooling;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
@@ -14,7 +13,6 @@ public class DeletionProcessApprovalPeriodEndsAtTests
     {
         // Arrange
         SystemTime.Set("2024-01-01");
-        IdentityDeletionConfiguration.LengthOfApprovalPeriod = 14;
 
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
         var deletionProcess = identity.DeletionProcesses[0];
@@ -23,6 +21,6 @@ public class DeletionProcessApprovalPeriodEndsAtTests
         var approvalPeriodEndsAt = deletionProcess.ApprovalPeriodEndsAt;
 
         // Assert
-        approvalPeriodEndsAt.Should().Be("2024-01-15");
+        approvalPeriodEndsAt.Should().Be("2024-01-08");
     }
 }
