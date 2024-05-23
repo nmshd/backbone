@@ -14,6 +14,7 @@ public class Cqrs
 
     private static readonly IObjectProvider<IType> COMMANDS =
         Classes().That().Are(NON_ABSTRACT_CLASSES_IMPLEMENTING_IREQUEST)
+            .And().AreNot(Backbone.TEST_TYPES)
             .And().HaveName(".+Command$", true);
 
     private static readonly IObjectProvider<IType> QUERIES =

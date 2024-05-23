@@ -2,6 +2,7 @@ using System.Reflection;
 using ArchUnitNET.Domain;
 using ArchUnitNET.Loader;
 using Assembly = System.Reflection.Assembly;
+using static ArchUnitNET.Fluent.ArchRuleDefinition;
 
 namespace Backbone.Backbone.Tests.ArchUnit;
 public static class Backbone
@@ -10,6 +11,9 @@ public static class Backbone
         new ArchLoader()
             .LoadAssemblies(GetSolutionAssemblies())
             .Build();
+
+    public static readonly IObjectProvider<IType> TEST_TYPES =
+        Types().That().ResideInAssembly(".*\\.Tests", true);
 
     private static Assembly[] GetSolutionAssemblies()
     {

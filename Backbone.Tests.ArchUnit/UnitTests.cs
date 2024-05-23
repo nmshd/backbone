@@ -7,7 +7,7 @@ namespace Backbone.Backbone.Tests.ArchUnit;
 public class UnitTests
 {
     [Fact]
-    public void QueriesShouldResideInQueriesNamespace()
+    public void UnitTestsShouldExtendAbstractTestsBase()
     {
         Classes().That().HaveName(".+Tests$", true)
             .And().AreNot(typeof(UnitTests))
