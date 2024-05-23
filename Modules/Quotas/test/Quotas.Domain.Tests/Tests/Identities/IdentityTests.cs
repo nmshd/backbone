@@ -3,6 +3,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
@@ -11,7 +12,7 @@ using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
 
-public class IdentityTests : IDisposable
+public class IdentityTests : AbstractTestsBase
 {
     #region Creation
 
@@ -435,11 +436,6 @@ public class IdentityTests : IDisposable
     private static Identity CreateIdentity()
     {
         return new Identity(TestDataGenerator.CreateRandomIdentityAddress(), new TierId("tier-id"));
-    }
-
-    public void Dispose()
-    {
-        SystemTime.Reset();
     }
 }
 

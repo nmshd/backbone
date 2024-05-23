@@ -1,10 +1,11 @@
 using Backbone.Crypto.Implementations.Deprecated.BouncyCastle;
 using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
+using Backbone.UnitTestTools.BaseClasses;
 using Xunit;
 
 namespace Backbone.Crypto.Tests;
 
-public class KeyGeneratorTests
+public class KeyGeneratorTests : AbstractTestsBase
 {
     private readonly KeyGenerator _keyGeneratorUnderTest;
 

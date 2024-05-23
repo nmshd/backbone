@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -12,7 +13,7 @@ using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Devices.Commands.DeleteDevice;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Deletes_unOnboarded_device_owned_by_identity()

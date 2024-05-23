@@ -1,11 +1,12 @@
 using System.Collections;
 using Backbone.Tooling.Extensions;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Tooling.Tests.Tests;
-public class DateTimeExtensionsTests
+public class DateTimeExtensionsTests : AbstractTestsBase
 {
     [Theory]
     [ClassData(typeof(DateTimeExtensionsTestData))]

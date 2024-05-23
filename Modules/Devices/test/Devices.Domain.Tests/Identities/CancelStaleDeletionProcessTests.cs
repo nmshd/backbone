@@ -1,11 +1,12 @@
 ﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class CancelStaleDeletionProcessTests
+public class CancelStaleDeletionProcessTests : AbstractTestsBase
 {
     [Fact]
     public void Returns_failure_if_no_process_is_waiting_for_approval()

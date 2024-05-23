@@ -3,13 +3,14 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Tests.Tests.Repositories;
 
-public class TiersRepositoryTests
+public class TiersRepositoryTests : AbstractTestsBase
 {
     /**
      * This test makes sure that when the Update method is called on the TiersRepository with a Tier from which

@@ -1,12 +1,13 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
 
-public class QuotaPeriodTests
+public class QuotaPeriodTests : AbstractTestsBase
 {
     [Theory]
     [InlineData("2023-01-01T13:45:00.000", QuotaPeriod.Hour, "2023-01-01T13:00:00.000")]

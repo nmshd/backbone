@@ -1,6 +1,7 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Newtonsoft.Json;
@@ -8,7 +9,7 @@ using Xunit;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Tiers;
 
-public class TierTests
+public class TierTests : AbstractTestsBase
 {
     [Fact]
     public void Can_create_tier_with_valid_properties()

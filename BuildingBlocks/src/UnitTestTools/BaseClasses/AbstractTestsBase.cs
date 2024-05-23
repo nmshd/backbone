@@ -19,5 +19,6 @@ public abstract class AbstractTestsBase : IDisposable
 
     public virtual void Dispose()
     {
+        SystemTime.Reset();
     }
 }

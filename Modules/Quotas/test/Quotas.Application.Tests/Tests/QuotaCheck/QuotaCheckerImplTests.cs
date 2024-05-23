@@ -2,11 +2,12 @@ using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.QuotaCheck;
-public class QuotaCheckerImplTests
+public class QuotaCheckerImplTests : AbstractTestsBase
 {
 
     private static readonly MetricKey TEST_METRIC_KEY = new("a-metric-key");

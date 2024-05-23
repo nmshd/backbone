@@ -1,10 +1,11 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
 
-public class ExhaustionDateTests
+public class ExhaustionDateTests : AbstractTestsBase
 {
     [Theory]
     [InlineData("2000-01-01T00:00:00.0000", "2000-01-01T00:00:00.0000", 0)] // equal

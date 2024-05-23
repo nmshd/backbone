@@ -1,10 +1,11 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.DevelopmentKit.Identity.Tests;
 
-public class IdentityAddressTests
+public class IdentityAddressTests : AbstractTestsBase
 {
     [Theory]
     [InlineData("fj0o9eOiPRswTZL6j9lE9TRvpDDnPRMF0gJeahz/W2c=", "id1QF24Gk2DfqCywRS7NpeH5iu7D4xvu6qv1")]

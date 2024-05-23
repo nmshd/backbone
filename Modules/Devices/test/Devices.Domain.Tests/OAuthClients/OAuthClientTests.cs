@@ -1,11 +1,12 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.OAuthClients;
-public class OAuthClientTests
+public class OAuthClientTests : AbstractTestsBase
 {
     [Fact]
     public void Client_properties_are_updated_with_new_values()
