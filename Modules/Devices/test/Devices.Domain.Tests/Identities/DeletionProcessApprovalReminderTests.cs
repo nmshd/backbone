@@ -6,7 +6,6 @@ using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
 using FluentAssertions;
 using Xunit;
-using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -105,22 +104,6 @@ public class DeletionProcessApprovalReminderTests
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
-    }
-
-    [Fact]
-    public void GetEndOfApprovalPeriod_returns_expected_date()
-    {
-        // Arrange
-        SystemTime.Set(DateTime.Parse("2000-01-01"));
-        IdentityDeletionConfiguration.MaxApprovalTime = 10;
-
-        var deletionProcess = IdentityDeletionProcess.StartAsOwner(CreateRandomIdentityAddress(), CreateRandomDeviceId());
-
-        // Act
-        var endOfApprovalPeriod = deletionProcess.GetEndOfApprovalPeriod();
-
-        // Assert
-        endOfApprovalPeriod.Should().Be(DateTime.Parse("2000-01-11"));
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)

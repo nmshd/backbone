@@ -14,4 +14,4 @@ Scenario: There can only be one active deletion process
 	And an active deletion process for Identity i exists
 	When a POST request is sent to the /Identities/{i.id}/DeletionProcesses endpoint
 	Then the response status code is 400 (Bad Request)
-	And the response content includes an error with the error code "error.platform.validation.device.onlyOneActiveDeletionProcessAllowed"
+	And the response content contains an error with the error code "error.platform.validation.device.onlyOneActiveDeletionProcessAllowed"

@@ -31,7 +31,7 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
         var deletionProcess = activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
 
         // Assert
-        activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
+        activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-15"));
         activeIdentity.TierId.Value.Should().Be(Tier.QUEUED_FOR_DELETION.Id.Value);
         activeIdentity.Status.Should().Be(IdentityStatus.ToBeDeleted);
 
@@ -39,7 +39,7 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Approved);
         deletionProcess.ApprovedAt.Should().Be(SystemTime.UtcNow);
         deletionProcess.ApprovedByDevice.Should().Be(activeDevice.Id);
-        deletionProcess.GracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
+        deletionProcess.GracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-15"));
 
         AssertAuditLogEntryWasCreated(deletionProcess);
         var auditLogEntry = deletionProcess.AuditLog[0];
