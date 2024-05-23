@@ -135,8 +135,9 @@ public class DeletionProcessApprovalReminderTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Dispose()
+    public override void Dispose()
     {
         Hasher.Reset();
+        base.Dispose();
     }
 }
