@@ -106,6 +106,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                                       setState(() {
                                         _selectedTier = newValue;
                                       });
+                                      _updateIdentity();
                                     },
                                     items: _tiers!.isNotEmpty
                                         ? _tiers!.where(_isTierManuallyAssignable).map((tier) {
