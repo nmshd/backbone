@@ -1,13 +1,10 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Tests.Extensions;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.DeleteTierQuotaDefinition;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -19,42 +16,16 @@ namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.DeleteTierQuota
 
 public class HandlerTests
 {
-    private readonly IEventBus _eventBus;
-
     public HandlerTests()
     {
-        _eventBus = A.Fake<IEventBus>();
         AssertionScope.Current.FormattingOptions.MaxLines = 1000;
-    }
-
-    [Fact]
-    public async Task Triggers_TierQuotaDefinitionDeletedDomainEvent()
-    {
-        // Arrange
-        var tierId = new TierId("SomeTierId");
-        var tier = new Tier(tierId, "some-tier-name");
-
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
-
-        var command = new DeleteTierQuotaDefinitionCommand(tier.Id, tier.Quotas.First().Id);
-
-        var tiersRepository = A.Fake<ITiersRepository>();
-        A.CallTo(() => tiersRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
-
-        var handler = CreateHandler(tiersRepository);
-
-        // Act
-        await handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        A.CallTo(() => _eventBus.Publish(A<DomainEvent>.That.IsInstanceOf(typeof(TierQuotaDefinitionDeletedDomainEvent)))).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public async Task Deletes_tier_quota_definition()
     {
         // Arrange
-        var tierId = new TierId("SomeTierId");
+        var tierId = TierId.Parse("tier-id");
         var tier = new Tier(tierId, "some-tier-name");
 
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
@@ -81,7 +52,7 @@ public class HandlerTests
     public async Task Deletes_tier_quota_definition_with_multiple_quotas()
     {
         // Arrange
-        var tierId = new TierId("SomeTierId");
+        var tierId = TierId.Parse("tier-id");
         var tier = new Tier(tierId, "some-tier-name");
 
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
@@ -110,7 +81,7 @@ public class HandlerTests
     public async Task Fails_to_delete_tier_quota_definition_for_missing_tier()
     {
         // Arrange
-        var tierId = new TierId("SomeTierId");
+        var tierId = TierId.Parse("tier-id");
 
         var command = new DeleteTierQuotaDefinitionCommand(tierId, "SomeTierQuotaDefinitionId");
 
@@ -130,7 +101,7 @@ public class HandlerTests
     public async Task Fails_to_delete_tier_quota_definition_for_missing_quota()
     {
         // Arrange
-        var tierId = new TierId("SomeTierId");
+        var tierId = TierId.Parse("tier-id");
         var tier = new Tier(tierId, "some-tier-name");
 
         var command = new DeleteTierQuotaDefinitionCommand(tier.Id, "SomeTierQuotaDefinitionId");
@@ -151,6 +122,6 @@ public class HandlerTests
     {
         var logger = A.Fake<ILogger<Handler>>();
 
-        return new Handler(tiersRepository, logger, _eventBus);
+        return new Handler(tiersRepository, logger);
     }
 }
