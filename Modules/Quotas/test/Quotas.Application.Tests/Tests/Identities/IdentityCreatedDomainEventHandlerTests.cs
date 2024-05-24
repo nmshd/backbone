@@ -19,7 +19,7 @@ public class IdentityCreatedDomainEventHandlerTests
     {
         // Arrange
         const string address = "some-dummy-address";
-        var tierId = new TierId("TIRsomeTierId1111111");
+        var tierId = TierId.Parse("TIRsomeTierId1111111");
         var tier = new Tier(tierId, "some-tier-name");
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var stubTiersRepository = new FindTiersStubRepository(tier);
@@ -37,7 +37,7 @@ public class IdentityCreatedDomainEventHandlerTests
     {
         // Arrange
         const string address = "some-dummy-address";
-        var tierId = new TierId("TIRsomeTierId1111111");
+        var tierId = TierId.Parse("TIRsomeTierId1111111");
 
         const int max = 5;
         var tier = new Tier(tierId, "some-tier-name");

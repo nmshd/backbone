@@ -8,13 +8,13 @@ using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.CreateQuotaForIdentity;
 
@@ -28,8 +28,8 @@ public class HandlerTests
         const QuotaPeriod period = QuotaPeriod.Month;
         var metricKey = MetricKey.NumberOfSentMessages.Value;
 
-        var tierId = new TierId("TIRsomeTierId1111111");
-        var identity = new Identity(TestDataGenerator.CreateRandomIdentityAddress(), tierId);
+        var tierId = TierId.Parse("TIRsomeTierId1111111");
+        var identity = new Identity(CreateRandomIdentityAddress(), tierId);
         var command = new CreateQuotaForIdentityCommand(identity.Address, metricKey, max, period);
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -59,9 +59,13 @@ public class HandlerTests
     public void Create_quota_with_invalid_metric_key_throws_domain_exception()
     {
         // Arrange
-        var command = new CreateQuotaForIdentityCommand(IdentityAddress.Parse(TestDataGenerator.CreateRandomIdentityAddress()), "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
-        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        var identity = new Identity(CreateRandomIdentityAddress(), TierId.Parse("TIRsomeTierId1111111"));
+        var command = new CreateQuotaForIdentityCommand(identity.Address, "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
+
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.Find(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
+
         var handler = CreateHandler(identitiesRepository, metricsRepository);
 
         // Act
@@ -75,7 +79,7 @@ public class HandlerTests
     public void Create_quota_for_non_existent_identity_throws_not_found_exception()
     {
         // Arrange
-        var command = new CreateQuotaForIdentityCommand(IdentityAddress.Parse(TestDataGenerator.CreateRandomIdentityAddress()), "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
+        var command = new CreateQuotaForIdentityCommand(IdentityAddress.Parse(CreateRandomIdentityAddress()), "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns((Identity?)null);
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
@@ -95,8 +99,8 @@ public class HandlerTests
     {
         // Arrange
         var metricKey = MetricKey.NumberOfSentMessages;
-        var tierId = new TierId("TIRsomeTierId1111111");
-        var identity = new Identity(TestDataGenerator.CreateRandomIdentityAddress(), tierId);
+        var tierId = TierId.Parse("TIRsomeTierId1111111");
+        var identity = new Identity(CreateRandomIdentityAddress(), tierId);
         var command = new CreateQuotaForIdentityCommand(identity.Address, metricKey.Value, 5, QuotaPeriod.Month);
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
