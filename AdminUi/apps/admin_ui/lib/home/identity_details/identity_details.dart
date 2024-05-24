@@ -41,9 +41,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 
   @override
   Widget build(BuildContext context) {
-    if (_identityDetails == null) {
-      return const Center(child: CircularProgressIndicator());
-    }
+    if (_identityDetails == null) return const Center(child: CircularProgressIndicator());
 
     return Scrollbar(
       controller: _scrollController,
@@ -61,6 +59,8 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   }
 
   Widget _buildIdentityCard(BuildContext context) {
+    final identityDetails = _identityDetails!;
+
     return Row(
       children: [
         Expanded(
@@ -79,22 +79,22 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                     children: [
                       _IdentityDetailsColumn(
                         columnTitle: 'Address',
-                        columnValue: _identityDetails!.address,
+                        columnValue: identityDetails.address,
                       ),
                       Gaps.w16,
                       _IdentityDetailsColumn(
                         columnTitle: 'Client ID',
-                        columnValue: _identityDetails!.clientId,
+                        columnValue: identityDetails.clientId,
                       ),
                       Gaps.w16,
                       _IdentityDetailsColumn(
                         columnTitle: 'Public Key',
-                        columnValue: _identityDetails!.publicKey,
+                        columnValue: identityDetails.publicKey,
                       ),
                       Gaps.w16,
                       _IdentityDetailsColumn(
                         columnTitle: 'Created at',
-                        columnValue: DateFormat('yyyy-MM-dd hh:MM:ss').format(_identityDetails!.createdAt),
+                        columnValue: DateFormat('yyyy-MM-dd hh:MM:ss').format(identityDetails.createdAt),
                       ),
                       Gaps.w16,
                       _buildTierDropdown(context),
