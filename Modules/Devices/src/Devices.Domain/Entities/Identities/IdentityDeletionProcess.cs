@@ -1,10 +1,11 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
-public class IdentityDeletionProcess
+public class IdentityDeletionProcess : Entity
 {
     private readonly List<IdentityDeletionProcessAuditLogEntry> _auditLog;
 
@@ -23,6 +24,8 @@ public class IdentityDeletionProcess
         Status = status;
 
         _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, createdBy)];
+
+        RaiseDomainEvent(new IdentityDeletionProcessStartedDomainEvent(createdBy, Id, null));
     }
 
     private IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice)
@@ -177,6 +180,8 @@ public class IdentityDeletionProcess
         CancelledAt = SystemTime.UtcNow;
         CancelledByDevice = cancelledByDevice;
 
+        RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, address));
+
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledByOwner(Id, address, cancelledByDevice));
     }
 
@@ -188,6 +193,8 @@ public class IdentityDeletionProcess
         Status = DeletionProcessStatus.Cancelled;
         CancelledAt = SystemTime.UtcNow;
 
+        RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, null));
+
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledBySupport(Id, address));
     }
 
@@ -197,6 +204,8 @@ public class IdentityDeletionProcess
 
         Status = DeletionProcessStatus.Cancelled;
         CancelledAt = SystemTime.UtcNow;
+
+        RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, null));
 
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledAutomatically(Id, address));
     }

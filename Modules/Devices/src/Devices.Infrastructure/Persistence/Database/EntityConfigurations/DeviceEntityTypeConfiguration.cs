@@ -1,13 +1,14 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
 
-public class DeviceEntityTypeConfiguration : IEntityTypeConfiguration<Device>
+public class DeviceEntityTypeConfiguration : EntityEntityTypeConfiguration<Device>
 {
-    public void Configure(EntityTypeBuilder<Device> builder)
+    public override void Configure(EntityTypeBuilder<Device> builder)
     {
+        base.Configure(builder);
         builder.Ignore(x => x.IsOnboarded);
     }
 }

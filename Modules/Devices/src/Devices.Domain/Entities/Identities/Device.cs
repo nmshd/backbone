@@ -6,7 +6,7 @@ using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
-public class Device
+public class Device : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private Device()

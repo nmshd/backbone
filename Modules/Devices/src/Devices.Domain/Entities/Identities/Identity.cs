@@ -3,12 +3,14 @@ using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 using CSharpFunctionalExtensions;
+using Entity = Backbone.BuildingBlocks.Domain.Entity;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
-public class Identity
+public class Identity : Entity
 {
     private readonly List<IdentityDeletionProcess> _deletionProcesses;
 
@@ -23,6 +25,8 @@ public class Identity
         TierId = tierId;
         Status = IdentityStatus.Active;
         _deletionProcesses = [];
+
+        RaiseDomainEvent(new IdentityCreatedDomainEvent(this));
     }
 
     public string? ClientId { get; }
