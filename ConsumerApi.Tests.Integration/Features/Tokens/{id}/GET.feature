@@ -28,7 +28,7 @@ Scenario: Requesting a nonexistent Token as an authenticated user
 	Given the user is authenticated
 	When a GET request is sent to the Tokens/{id} endpoint with "TOKthisisnonexisting"
 	Then the response status code is 404 (Not Found)
-	And the response content includes an error with the error code "error.platform.recordNotFound"
+	And the response content contains an error with the error code "error.platform.recordNotFound"
 
 #@ignore("skipping_due_to_required_backbone_changes")
 #Scenario: Requesting a Token with an unsupported Accept Header
@@ -40,7 +40,7 @@ Scenario: Requesting a nonexistent Token as an authenticated user
 #Scenario Outline: Requesting a Token with an invalid id
 #	When a GET request is sent to the Tokens/{id} endpoint with <id>
 #	Then the response status code is 400 (Bad Request)
-#	And the response content includes an error with the error code "error.platform.invalidId"
+#	And the response content contains an error with the error code "error.platform.invalidId"
 #Examples:
 #	| id                          | description                 |
 #	| TOKthishastoomanycharacters | More than 20 characters     |
