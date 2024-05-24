@@ -1,8 +1,9 @@
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.BuildingBlocks.Domain;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
-public abstract class Quota
+public abstract class Quota : Entity
 {
     // ReSharper disable once UnusedMember.Local
     protected Quota()

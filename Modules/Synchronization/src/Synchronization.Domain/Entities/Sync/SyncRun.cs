@@ -4,7 +4,7 @@ using Backbone.Tooling;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
-public class SyncRun : Entity<SyncRunId>
+public class SyncRun : Entity
 {
     private readonly List<SyncError> _errors = [];
     private readonly List<ExternalEvent> _externalEvents = [];
@@ -13,12 +13,14 @@ public class SyncRun : Entity<SyncRunId>
     private SyncRun()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
         CreatedBy = null!;
         CreatedByDevice = null!;
     }
 
-    public SyncRun(long index, ushort duration, IdentityAddress createdBy, DeviceId createdByDevice, IEnumerable<ExternalEvent> items, SyncRunType type) : base(SyncRunId.New())
+    public SyncRun(long index, ushort duration, IdentityAddress createdBy, DeviceId createdByDevice, IEnumerable<ExternalEvent> items, SyncRunType type)
     {
+        Id = SyncRunId.New();
         ExpiresAt = SystemTime.UtcNow.AddSeconds(duration);
         CreatedAt = SystemTime.UtcNow;
         Index = index;
@@ -29,6 +31,7 @@ public class SyncRun : Entity<SyncRunId>
         EventCount = _externalEvents.Count;
     }
 
+    public SyncRunId Id { get; }
     public SyncRunType Type { get; set; }
     public DateTime ExpiresAt { get; internal set; }
     public long Index { get; }
