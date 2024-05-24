@@ -10,12 +10,17 @@ public class IdentityDeletionProcessOverviewDTO
         Id = process.Id;
         Status = process.Status;
         CreatedAt = process.CreatedAt;
+        ApprovalPeriodEndsAt = process.ApprovalPeriodEndsAt;
+
         ApprovalReminder1SentAt = process.ApprovalReminder1SentAt;
         ApprovalReminder2SentAt = process.ApprovalReminder2SentAt;
         ApprovalReminder3SentAt = process.ApprovalReminder3SentAt;
+
         ApprovedAt = process.ApprovedAt;
         ApprovedByDevice = process.ApprovedByDevice;
+
         GracePeriodEndsAt = process.GracePeriodEndsAt;
+
         GracePeriodReminder1SentAt = process.GracePeriodReminder1SentAt;
         GracePeriodReminder2SentAt = process.GracePeriodReminder2SentAt;
         GracePeriodReminder3SentAt = process.GracePeriodReminder3SentAt;
@@ -24,6 +29,7 @@ public class IdentityDeletionProcessOverviewDTO
     public string Id { get; set; }
     public DeletionProcessStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime ApprovalPeriodEndsAt { get; set; }
 
     public DateTime? ApprovalReminder1SentAt { get; set; }
     public DateTime? ApprovalReminder2SentAt { get; set; }
