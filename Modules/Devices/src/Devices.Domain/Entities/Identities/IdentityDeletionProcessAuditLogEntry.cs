@@ -40,7 +40,7 @@ public class IdentityDeletionProcessAuditLogEntry
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            MessageKey.ProcessStartedByOwner,
+            MessageKey.StartedByOwner,
             Hasher.HashUtf8(identityAddress),
             Hasher.HashUtf8(deviceId),
             null,
@@ -52,7 +52,7 @@ public class IdentityDeletionProcessAuditLogEntry
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            MessageKey.ProcessStartedBySupport,
+            MessageKey.StartedBySupport,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             null,
@@ -64,7 +64,7 @@ public class IdentityDeletionProcessAuditLogEntry
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            MessageKey.ProcessApproved,
+            MessageKey.Approved,
             Hasher.HashUtf8(identityAddress.Value),
             Hasher.HashUtf8(deviceId),
             DeletionProcessStatus.WaitingForApproval,
@@ -76,7 +76,7 @@ public class IdentityDeletionProcessAuditLogEntry
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            MessageKey.ProcessRejected,
+            MessageKey.Rejected,
             Hasher.HashUtf8(identityAddress.Value),
             Hasher.HashUtf8(deviceId),
             DeletionProcessStatus.WaitingForApproval,
@@ -88,7 +88,7 @@ public class IdentityDeletionProcessAuditLogEntry
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            MessageKey.ProcessCancelledByOwner,
+            MessageKey.CancelledByOwner,
             Hasher.HashUtf8(identityAddress.Value),
             Hasher.HashUtf8(deviceId),
             DeletionProcessStatus.Approved,
@@ -100,7 +100,7 @@ public class IdentityDeletionProcessAuditLogEntry
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            MessageKey.ProcessCancelledBySupport,
+            MessageKey.CancelledBySupport,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.Approved,
@@ -112,7 +112,7 @@ public class IdentityDeletionProcessAuditLogEntry
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            MessageKey.ProcessCancelledAutomatically,
+            MessageKey.CancelledAutomatically,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.WaitingForApproval,
@@ -194,13 +194,13 @@ public class IdentityDeletionProcessAuditLogEntry
 
 public enum MessageKey
 {
-    ProcessStartedByOwner = 1,
-    ProcessStartedBySupport = 2,
-    ProcessApproved = 3,
-    ProcessRejected = 4,
-    ProcessCancelledByOwner = 5,
-    ProcessCancelledBySupport = 6,
-    ProcessCancelledAutomatically = 7,
+    StartedByOwner = 1,
+    StartedBySupport = 2,
+    Approved = 3,
+    Rejected = 4,
+    CancelledByOwner = 5,
+    CancelledBySupport = 6,
+    CancelledAutomatically = 7,
     ApprovalReminder1Sent = 8,
     ApprovalReminder2Sent = 9,
     ApprovalReminder3Sent = 10,

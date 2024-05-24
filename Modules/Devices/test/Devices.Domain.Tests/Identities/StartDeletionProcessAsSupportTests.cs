@@ -29,7 +29,7 @@ public class StartDeletionProcessAsSupportTests
 
         AssertAuditLogEntryWasCreated(deletionProcess);
         var auditLogEntry = deletionProcess.AuditLog[0];
-        auditLogEntry.MessageKey.Should().Be(MessageKey.ProcessStartedBySupport);
+        auditLogEntry.MessageKey.Should().Be(MessageKey.StartedBySupport);
         auditLogEntry.DeviceIdHash.Should().BeNull();
         auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
     }

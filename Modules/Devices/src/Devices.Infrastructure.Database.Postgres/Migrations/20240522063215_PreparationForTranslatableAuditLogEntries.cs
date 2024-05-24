@@ -19,13 +19,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.Sql(@"
                 UPDATE ""Devices"".""IdentityDeletionProcessAuditLog""
                 SET ""MessageKey"" = CASE ""MessageKey""
-                    WHEN 'The deletion process was started by the owner. It was automatically approved.' THEN 'ProcessStartedByOwner'
-                    WHEN 'The deletion process was started by support. It is now waiting for approval.' THEN 'ProcessStartedBySupport'
-                    WHEN 'The deletion process was approved.' THEN 'ProcessApproved'
-                    WHEN 'The deletion process was rejected.' THEN 'ProcessRejected'
-                    WHEN 'The deletion process was cancelled by the owner of the identity.' THEN 'ProcessCancelledByOwner'
-                    WHEN 'The deletion process was cancelled by a support employee.' THEN 'ProcessCancelledBySupport'
-                    WHEN 'The deletion process was cancelled automatically, because it wasn''t approved by the owner within the approval period.' THEN 'ProcessCancelledAutomatically'
+                    WHEN 'The deletion process was started by the owner. It was automatically approved.' THEN 'StartedByOwner'
+                    WHEN 'The deletion process was started by support. It is now waiting for approval.' THEN 'StartedBySupport'
+                    WHEN 'The deletion process was approved.' THEN 'Approved'
+                    WHEN 'The deletion process was rejected.' THEN 'Rejected'
+                    WHEN 'The deletion process was cancelled by the owner of the identity.' THEN 'CancelledByOwner'
+                    WHEN 'The deletion process was cancelled by a support employee.' THEN 'CancelledBySupport'
+                    WHEN 'The deletion process was cancelled automatically, because it wasn''t approved by the owner within the approval period.' THEN 'CancelledAutomatically'
                     WHEN 'The first approval reminder notification has been sent.' THEN 'ApprovalReminder1Sent'
                     WHEN 'The second approval reminder notification has been sent.' THEN 'ApprovalReminder2Sent'
                     WHEN 'The third approval reminder notification has been sent.' THEN 'ApprovalReminder3Sent'
@@ -49,13 +49,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.Sql(@"
                 UPDATE ""Devices"".""IdentityDeletionProcessAuditLog""
                 SET ""Message"" = CASE ""Message""
-                    WHEN 'ProcessStartedByOwner' THEN 'The deletion process was started by the owner. It was automatically approved.'
-                    WHEN 'ProcessStartedBySupport' THEN 'The deletion process was started by support. It is now waiting for approval.'
-                    WHEN 'ProcessApproved' THEN 'The deletion process was approved.'
-                    WHEN 'ProcessRejected' THEN 'The deletion process was rejected.'
-                    WHEN 'ProcessCancelledByOwner' THEN 'The deletion process was cancelled by the owner of the identity.'
-                    WHEN 'ProcessCancelledBySupport' THEN 'The deletion process was cancelled by a support employee.'
-                    WHEN 'ProcessCancelledAutomatically' THEN 'The deletion process was cancelled automatically, because it wasn''t approved by the owner within the approval period.'
+                    WHEN 'StartedByOwner' THEN 'The deletion process was started by the owner. It was automatically approved.'
+                    WHEN 'StartedBySupport' THEN 'The deletion process was started by support. It is now waiting for approval.'
+                    WHEN 'Approved' THEN 'The deletion process was approved.'
+                    WHEN 'Rejected' THEN 'The deletion process was rejected.'
+                    WHEN 'CancelledByOwner' THEN 'The deletion process was cancelled by the owner of the identity.'
+                    WHEN 'CancelledBySupport' THEN 'The deletion process was cancelled by a support employee.'
+                    WHEN 'CancelledAutomatically' THEN 'The deletion process was cancelled automatically, because it wasn''t approved by the owner within the approval period.'
                     WHEN 'ApprovalReminder1Sent' THEN 'The first approval reminder notification has been sent.'
                     WHEN 'ApprovalReminder2Sent' THEN 'The second approval reminder notification has been sent.'
                     WHEN 'ApprovalReminder3Sent' THEN 'The third approval reminder notification has been sent.'
