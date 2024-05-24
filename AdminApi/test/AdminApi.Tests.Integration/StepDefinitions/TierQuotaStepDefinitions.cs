@@ -107,7 +107,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
         _createTierQuotaResponse.Should().ComplyWithSchema();
     }
 
-    [Then(@"the response content includes an error with the error code ""([^""]+)""")]
+    [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
         if (_createTierQuotaResponse != null)

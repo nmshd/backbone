@@ -13,6 +13,11 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
         return await _client.Post<CreateTokenResponse>($"api/{API_VERSION}/Tokens", request);
     }
 
+    public async Task<ApiResponse<EmptyResponse>> CreateTokenUnauthenticated(CreateTokenRequest request)
+    {
+        return await _client.PostUnauthenticated<EmptyResponse>($"api/{API_VERSION}/Tokens", request);
+    }
+
     public async Task<ApiResponse<ListTokensResponse>> ListTokens(PaginationFilter? pagination = null)
     {
         return await _client.Get<ListTokensResponse>($"api/{API_VERSION}/Tokens", null, pagination);

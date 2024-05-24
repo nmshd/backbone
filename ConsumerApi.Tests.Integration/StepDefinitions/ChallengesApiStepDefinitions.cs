@@ -4,7 +4,7 @@ using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
-using Backbone.Tooling;
+using Backbone.ConsumerApi.Tests.Integration.Support;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -16,7 +16,7 @@ internal class ChallengesApiStepDefinitions
 {
     private string _challengeId;
     private ApiResponse<Challenge>? _response;
-    private Client? _sdk;
+    private Client _sdk = null!;
     private bool _isAuthenticated;
     private readonly HttpClient _httpClient;
     private readonly ClientCredentials _clientCredentials;
@@ -31,7 +31,7 @@ internal class ChallengesApiStepDefinitions
     [Given("the user is authenticated")]
     public async Task GivenTheUserIsAuthenticated()
     {
-        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, PasswordHelper.GeneratePassword(20, 26));
+        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
         _isAuthenticated = true;
     }
 
@@ -42,27 +42,20 @@ internal class ChallengesApiStepDefinitions
         _isAuthenticated = false;
     }
 
-
     [Given("a Challenge c")]
     public async Task GivenAChallengeC()
     {
-        var challengeResponse = !_isAuthenticated ? await _sdk!.Challenges.CreateChallengeUnauthenticated() : await _sdk!.Challenges.CreateChallenge();
+        var challengeResponse = !_isAuthenticated ? await _sdk.Challenges.CreateChallengeUnauthenticated() : await _sdk.Challenges.CreateChallenge();
         challengeResponse.Should().BeASuccess();
         _challengeId = challengeResponse.Result!.Id;
 
         _challengeId.Should().NotBeNullOrEmpty();
     }
 
-    [When("a POST request is sent to the Challenges endpoint with")]
-    public async Task WhenAPOSTRequestIsSentToTheChallengesEndpointWith(Table table)
-    {
-        _response = await _sdk!.Challenges.CreateChallenge();
-    }
-
     [When("a POST request is sent to the Challenges endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheChallengesEndpoint()
     {
-        _response = _isAuthenticated ? await _sdk!.Challenges.CreateChallenge() : await _sdk!.Challenges.CreateChallengeUnauthenticated();
+        _response = _isAuthenticated ? await _sdk.Challenges.CreateChallenge() : await _sdk.Challenges.CreateChallengeUnauthenticated();
     }
 
     [When(@"a GET request is sent to the Challenges/{id} endpoint with ""?(.*?)""?")]
@@ -77,7 +70,8 @@ internal class ChallengesApiStepDefinitions
                 id = "CHLjVPS6h1082AuBVBaR";
                 break;
         }
-        _response = await _sdk!.Challenges.GetChallenge(id);
+
+        _response = await _sdk.Challenges.GetChallenge(id);
     }
 
     [Then("the response contains a Challenge")]
@@ -111,7 +105,7 @@ internal class ChallengesApiStepDefinitions
         actualStatusCode.Should().Be(expectedStatusCode);
     }
 
-    [Then(@"the response content includes an error with the error code ""([^""]+)""")]
+    [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
         _response!.Error.Should().NotBeNull();
