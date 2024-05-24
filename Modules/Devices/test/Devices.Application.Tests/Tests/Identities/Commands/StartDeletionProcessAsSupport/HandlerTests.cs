@@ -1,8 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
@@ -45,31 +43,6 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Publishes_IdentityDeletionProcessStartedEvent()
-    {
-        // Arrange
-        var activeIdentity = TestDataGenerator.CreateIdentityWithOneDevice();
-
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        var mockEventBus = A.Fake<IEventBus>();
-
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(activeIdentity.Address, A<CancellationToken>._, A<bool>._))
-            .Returns(activeIdentity);
-
-        var handler = CreateHandler(fakeIdentitiesRepository, mockEventBus);
-
-        // Act
-        var response = await handler.Handle(new StartDeletionProcessAsSupportCommand(activeIdentity.Address), CancellationToken.None);
-
-        // Assert
-        A.CallTo(() => mockEventBus.Publish(
-            A<IdentityDeletionProcessStartedDomainEvent>.That.Matches(
-                e => e.Address == activeIdentity.Address &&
-                     e.DeletionProcessId == response.Id))
-        ).MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
     public void Cannot_start_when_given_identity_does_not_exist()
     {
         // Arrange
@@ -92,9 +65,8 @@ public class HandlerTests
         acting.Should().AwaitThrowAsync<NotFoundException, StartDeletionProcessAsSupportResponse>().Which.Message.Should().Contain("Identity");
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IEventBus? eventBus = null)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)
     {
-        eventBus ??= A.Fake<IEventBus>();
-        return new Handler(identitiesRepository, eventBus);
+        return new Handler(identitiesRepository);
     }
 }
