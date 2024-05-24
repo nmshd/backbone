@@ -1,10 +1,13 @@
 ﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
+
 public class CancelDeletionProcessAsSupportTests
 {
     [Fact]
@@ -54,6 +57,21 @@ public class CancelDeletionProcessAsSupportTests
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
+    }
+
+    [Fact]
+    public void Triggers_IdentityDeletionProcessStatusChangedDomainEvent_when_Canceling()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+
+        // Act
+        var deletionProcess = identity.CancelDeletionProcessAsSupport(identity.DeletionProcesses[0].Id);
+
+        var domainEvent = deletionProcess.Should().HaveASingleDomainEvent<IdentityDeletionProcessStatusChangedDomainEvent>();
+        domainEvent.DeletionProcessId.Should().Be(deletionProcess.Id);
+        domainEvent.Address.Should().Be(identity.Address);
+        domainEvent.Initiator.Should().Be(null);
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)

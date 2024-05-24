@@ -1,5 +1,7 @@
-﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
+﻿using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -79,5 +81,27 @@ public class CancelStaleDeletionProcessTests
         result.Value.AuditLog[1].ProcessId.Should().Be(identity.DeletionProcesses[0].Id);
         result.Value.AuditLog[1].OldStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
         result.Value.AuditLog[1].NewStatus.Should().Be(DeletionProcessStatus.Cancelled);
+    }
+
+    [Fact]
+    public void Triggers_IdentityDeletionProcessStatusChangedDomainEvent_when_Canceling()
+    {
+        // Arrange
+        SystemTime.Set(DateTime.Parse("2020-01-01T00:00:00"));
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval();
+        SystemTime.Set(DateTime.Parse("2020-01-08T00:00:00"));
+        identity.DeletionProcesses[0].ClearDomainEvents();
+
+        // Act
+        var deletionProcessResult = identity.CancelStaleDeletionProcess();
+
+        deletionProcessResult.IsSuccess.Should().BeTrue();
+
+        var deletionProcess = deletionProcessResult.Value;
+
+        var domainEvent = deletionProcess.Should().HaveASingleDomainEvent<IdentityDeletionProcessStatusChangedDomainEvent>();
+        domainEvent.DeletionProcessId.Should().Be(deletionProcess.Id);
+        domainEvent.Address.Should().Be(identity.Address);
+        domainEvent.Initiator.Should().Be(null);
     }
 }

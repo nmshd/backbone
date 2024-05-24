@@ -3,7 +3,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FakeItEasy;
 using FluentAssertions;
@@ -59,43 +58,6 @@ public class HandlerTests
 
         // Assert
         acting.Should().ThrowAsync<NotFoundException>();
-    }
-
-    [Fact]
-    public async Task Publishes_domain_events()
-    {
-        // Arrange
-        var activeIdentity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
-        var activeDevice = activeIdentity.Devices[0];
-        var deletionProcess = activeIdentity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
-
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        var fakeUserContext = A.Fake<IUserContext>();
-        var mockEventBus = A.Fake<IEventBus>();
-
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(activeIdentity.Address, CancellationToken.None, A<bool>._))
-            .Returns(activeIdentity);
-        A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity.Address);
-        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
-
-        var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext, mockEventBus);
-        var command = new CancelDeletionProcessAsOwnerCommand(deletionProcess.Id);
-
-        // Act
-        var response = await handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        A.CallTo(() => mockEventBus.Publish(
-            A<TierOfIdentityChangedDomainEvent>.That.Matches(e =>
-                e.IdentityAddress == activeIdentity.Address &&
-                e.OldTierId == "TIR00000000000000001"))
-        ).MustHaveHappenedOnceExactly();
-
-        A.CallTo(() => mockEventBus.Publish(
-            A<IdentityDeletionProcessStatusChangedDomainEvent>.That.Matches(e =>
-                e.Address == activeIdentity.Address &&
-                e.DeletionProcessId == response.Id))
-        ).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IUserContext? userContext = null, IEventBus? eventBus = null)

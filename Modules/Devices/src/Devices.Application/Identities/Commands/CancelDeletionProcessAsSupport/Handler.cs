@@ -37,7 +37,6 @@ public class Handler : IRequestHandler<CancelDeletionAsSupportCommand, CancelDel
         var newTierId = identity.TierId;
 
         _eventBus.Publish(new TierOfIdentityChangedDomainEvent(identity, oldTierId, newTierId));
-        _eventBus.Publish(new IdentityDeletionProcessStatusChangedDomainEvent(identity.Address, deletionProcess.Id, null));
 
         return new CancelDeletionAsSupportResponse(deletionProcess);
     }
