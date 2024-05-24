@@ -2,7 +2,6 @@ using System.Net.Sockets;
 using System.Text;
 using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 using Microsoft.Extensions.Logging;
@@ -170,7 +169,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             }
             catch (Exception ex)
             {
-                channel.BasicReject(eventArgs.DeliveryTag, true);
+                channel.BasicReject(eventArgs.DeliveryTag, false);
 
                 _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
             }
