@@ -28,9 +28,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   @override
   void initState() {
     super.initState();
-
     _scrollController = ScrollController();
-
     _reloadIdentity();
     _reloadTiers();
   }
@@ -38,15 +36,15 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   @override
   void dispose() {
     _scrollController.dispose();
-
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_identityDetails == null) return const Center(child: CircularProgressIndicator());
+    if (_identityDetails == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
 
-    final identityDetails = _identityDetails!;
     return Scrollbar(
       controller: _scrollController,
       child: SingleChildScrollView(
@@ -55,108 +53,112 @@ class _IdentityDetailsState extends State<IdentityDetails> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (Platform.isMacOS || Platform.isWindows) const BackButton(),
-            Row(
-              children: [
-                Expanded(
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Identities Overview',
-                            style: TextStyle(fontSize: 40),
-                          ),
-                          Gaps.h32,
-                          Row(
-                            children: [
-                              _IdentityDetailsColumn(
-                                columnTitle: 'Address',
-                                columnValue: _identityDetails!.address,
-                              ),
-                              Gaps.w16,
-                              _IdentityDetailsColumn(
-                                columnTitle: 'Client ID',
-                                columnValue: _identityDetails!.clientId,
-                              ),
-                              Gaps.w16,
-                              _IdentityDetailsColumn(
-                                columnTitle: 'Public Key',
-                                columnValue: _identityDetails!.publicKey,
-                              ),
-                              Gaps.w16,
-                              _IdentityDetailsColumn(
-                                columnTitle: 'Created at',
-                                columnValue: DateFormat('yyyy-MM-dd hh:MM:ss').format(identityDetails.createdAt),
-                              ),
-                              Gaps.w16,
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Tier',
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-                                  ),
-                                  DropdownButton<String>(
-                                    isDense: true,
-                                    value: _selectedTier,
-                                    onChanged: (String? newValue) {
-                                      setState(() {
-                                        _selectedTier = newValue;
-                                      });
-                                      _updateIdentity();
-                                    },
-                                    items: _tiers!.isNotEmpty
-                                        ? _tiers!.where(_isTierManuallyAssignable).map((tier) {
-                                            final isDisabled = _isTierDisabled(tier);
-                                            return DropdownMenuItem<String>(
-                                              value: tier.id,
-                                              enabled: !isDisabled,
-                                              child: isDisabled
-                                                  ? Text(
-                                                      tier.name,
-                                                      style: TextStyle(
-                                                        color: Theme.of(context).disabledColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    )
-                                                  : Text(
-                                                      tier.name,
-                                                      style: const TextStyle(
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                            );
-                                          }).toList()
-                                        : [
-                                            const DropdownMenuItem<String>(
-                                              value: noTiersFoundMessage,
-                                              child: Text(
-                                                noTiersFoundMessage,
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
+            _buildIdentityCard(context),
           ],
         ),
       ),
     );
+  }
+
+  Widget _buildIdentityCard(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    'Identities Overview',
+                    style: TextStyle(fontSize: 40),
+                  ),
+                  Gaps.h32,
+                  Row(
+                    children: [
+                      _IdentityDetailsColumn(
+                        columnTitle: 'Address',
+                        columnValue: _identityDetails!.address,
+                      ),
+                      Gaps.w16,
+                      _IdentityDetailsColumn(
+                        columnTitle: 'Client ID',
+                        columnValue: _identityDetails!.clientId,
+                      ),
+                      Gaps.w16,
+                      _IdentityDetailsColumn(
+                        columnTitle: 'Public Key',
+                        columnValue: _identityDetails!.publicKey,
+                      ),
+                      Gaps.w16,
+                      _IdentityDetailsColumn(
+                        columnTitle: 'Created at',
+                        columnValue: DateFormat('yyyy-MM-dd hh:MM:ss').format(_identityDetails!.createdAt),
+                      ),
+                      Gaps.w16,
+                      _buildTierDropdown(context),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTierDropdown(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Tier',
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+        ),
+        DropdownButton<String>(
+          isDense: true,
+          value: _selectedTier,
+          onChanged: (String? newValue) {
+            setState(() {
+              _selectedTier = newValue;
+            });
+            _updateIdentity();
+          },
+          items: _buildTierDropdownItems(context),
+        ),
+      ],
+    );
+  }
+
+  List<DropdownMenuItem<String>> _buildTierDropdownItems(BuildContext context) {
+    if (_tiers == null || _tiers!.isEmpty) {
+      return [
+        const DropdownMenuItem<String>(
+          value: noTiersFoundMessage,
+          child: Text(
+            noTiersFoundMessage,
+            style: TextStyle(fontSize: 14),
+          ),
+        ),
+      ];
+    }
+
+    return _tiers!.where(_isTierManuallyAssignable).map((tier) {
+      final isDisabled = _isTierDisabled(tier);
+      return DropdownMenuItem<String>(
+        value: tier.id,
+        enabled: !isDisabled,
+        child: Text(
+          tier.name,
+          style: TextStyle(
+            color: isDisabled ? Theme.of(context).disabledColor : null,
+            fontSize: 18,
+          ),
+        ),
+      );
+    }).toList();
   }
 
   bool _isTierDisabled(TierOverview tier) {
@@ -210,7 +212,9 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 
   Future<void> _reloadTiers() async {
     final tiers = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
-    if (mounted) setState(() => _tiers = tiers.data);
+    if (mounted) {
+      setState(() => _tiers = tiers.data);
+    }
   }
 }
 
