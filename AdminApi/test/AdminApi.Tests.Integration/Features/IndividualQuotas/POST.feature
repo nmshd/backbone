@@ -12,4 +12,4 @@ Scenario: Creating an Individual Quota for existing Identity
 Scenario: Creating an Individual Quota for inexistent Identity
 	When a POST request is sent to the /Identity/{address}/Quotas endpoint with an inexistent identity address
 	Then the response status code is 404 (Not Found)
-	And the response content includes an error with the error code "error.platform.recordNotFound"
+	And the response content contains an error with the error code "error.platform.recordNotFound"

@@ -33,8 +33,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
         foreach (var identity in identities)
         {
             var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval) ?? throw new NotFoundException(nameof(IdentityDeletionProcess));
-            var endOfApprovalPeriod = deletionProcess.GetEndOfApprovalPeriod();
-            var daysUntilApprovalPeriodEnds = (endOfApprovalPeriod - SystemTime.UtcNow).Days;
+            var daysUntilApprovalPeriodEnds = (deletionProcess.ApprovalPeriodEndsAt - SystemTime.UtcNow).Days;
 
             if (deletionProcess.ApprovalReminder3SentAt != null)
             {
@@ -77,6 +76,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
         await _identitiesRepository.Update(identity, cancellationToken);
         _logger.ApprovalReminder2Sent(identity.Address, deletionProcessId);
     }
+
     private async Task SendReminder1(Identity identity, int daysUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
         await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), cancellationToken);

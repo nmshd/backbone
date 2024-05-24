@@ -12,4 +12,4 @@ Scenario: Deleting a non-existent Client
 	Given a non-existent Client c
 	When a DELETE request is sent to the /Clients endpoint
 	Then the response status code is 404 (Not Found)
-	And the response content includes an error with the error code "error.platform.recordNotFound"
+	And the response content contains an error with the error code "error.platform.recordNotFound"

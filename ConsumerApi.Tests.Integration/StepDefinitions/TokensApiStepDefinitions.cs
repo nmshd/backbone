@@ -1,12 +1,15 @@
-using System.Net;
-using Backbone.ConsumerApi.Tests.Integration.API;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Sdk;
+using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
-using Backbone.ConsumerApi.Tests.Integration.Models;
-using Backbone.Crypto.Abstractions;
+using Backbone.ConsumerApi.Tests.Integration.Support;
+using Backbone.Crypto;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
-using TechTalk.SpecFlow.Assist;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -14,27 +17,51 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "POST Token")]
 [Scope(Feature = "GET Token")]
 [Scope(Feature = "GET Tokens")]
-internal class TokensApiStepDefinitions : BaseStepDefinitions
+internal class TokensApiStepDefinitions
 {
-    private readonly TokensApi _tokensApi;
     private string _tokenId;
     private string _peerTokenId;
     private readonly List<CreateTokenResponse> _givenOwnTokens;
     private readonly List<Token> _responseTokens;
-    private HttpResponse<CreateTokenResponse>? _createTokenResponse;
-    private HttpResponse<Token>? _tokenResponse;
-    private HttpResponse<IEnumerable<Token>>? _tokensResponse;
-    private static readonly string TOMORROW_AS_STRING = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
-    private static readonly string YESTERDAY_AS_STRING = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd");
+    private ApiResponse<CreateTokenResponse>? _createTokenResponse;
+    private ApiResponse<EmptyResponse>? _createTokenResponse401;
+    private ApiResponse<Token>? _tokenResponse;
+    private ApiResponse<ListTokensResponse>? _tokensResponse;
+    private readonly HttpClient _httpClient;
+    private readonly ClientCredentials _clientCredentials;
+    private bool _isAuthenticated;
+    private Client _sdk = null!;
 
-    public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, TokensApi tokensApi, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) :
-        base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
+    private static readonly DateTime TOMORROW = DateTime.Now.AddDays(1);
+
+    private static readonly byte[] CONTENT = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new
     {
-        _tokensApi = tokensApi;
+        key = "some-value"
+    })).BytesRepresentation;
+
+    public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, HttpClientFactory factory)
+    {
+        _isAuthenticated = false;
         _tokenId = string.Empty;
         _peerTokenId = string.Empty;
         _givenOwnTokens = [];
         _responseTokens = [];
+        _httpClient = factory.CreateClient();
+        _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
+    }
+
+    [Given("the user is authenticated")]
+    public async Task GivenTheUserIsAuthenticated()
+    {
+        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
+        _isAuthenticated = true;
+    }
+
+    [Given("the user is unauthenticated")]
+    public void GivenTheUserIsUnauthenticated()
+    {
+        _sdk = Client.CreateUnauthenticated(_httpClient, _clientCredentials);
+        _isAuthenticated = false;
     }
 
     [Given("an own Token t")]
@@ -42,21 +69,15 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
     {
         var createTokenRequest = new CreateTokenRequest
         {
-            Content = "QQ==",
-            ExpiresAt = TOMORROW_AS_STRING
+            Content = CONTENT,
+            ExpiresAt = TOMORROW
         };
 
-        var requestConfiguration = new RequestConfiguration();
-        requestConfiguration.SupplementWith(_requestConfiguration);
-        requestConfiguration.Authenticate = true;
-        requestConfiguration.Content = JsonConvert.SerializeObject(createTokenRequest);
-        requestConfiguration.ContentType = "application/json";
+        var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
+        var response = await client.Tokens.CreateToken(createTokenRequest);
+        response.Should().BeASuccess();
 
-        var response = await _tokensApi.CreateToken(requestConfiguration);
-        response.IsSuccessStatusCode.Should().BeTrue();
-
-        var token = response.Content.Result!;
-        _tokenId = token.Id;
+        _tokenId = response.Result!.Id;
         _tokenId.Should().NotBeNullOrEmpty();
     }
 
@@ -65,23 +86,14 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
     {
         var createTokenRequest = new CreateTokenRequest
         {
-            Content = "QQ==",
-            ExpiresAt = TOMORROW_AS_STRING
+            Content = CONTENT,
+            ExpiresAt = TOMORROW
         };
 
-        var requestConfiguration = new RequestConfiguration();
-        requestConfiguration.SupplementWith(_requestConfiguration);
-        requestConfiguration.Authenticate = true;
-        requestConfiguration.AuthenticationParameters.Username = "USRb";
-        requestConfiguration.AuthenticationParameters.Password = "b";
-        requestConfiguration.Content = JsonConvert.SerializeObject(createTokenRequest);
-        requestConfiguration.ContentType = "application/json";
+        var response = await _sdk.Tokens.CreateToken(createTokenRequest);
+        response.Should().BeASuccess();
 
-        var response = await _tokensApi.CreateToken(requestConfiguration);
-        response.IsSuccessStatusCode.Should().BeTrue();
-
-        var token = response.Content.Result!;
-        _peerTokenId = token.Id;
+        _peerTokenId = response.Result!.Id;
         _peerTokenId.Should().NotBeNullOrEmpty();
     }
 
@@ -92,22 +104,15 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         {
             var createTokenRequest = new CreateTokenRequest
             {
-                Content = "QQ==",
-                ExpiresAt = TOMORROW_AS_STRING
+                Content = CONTENT,
+                ExpiresAt = TOMORROW
             };
 
-            var requestConfiguration = new RequestConfiguration
-            {
-                Content = JsonConvert.SerializeObject(createTokenRequest),
-                ContentType = "application/json"
-            };
-            requestConfiguration.SupplementWith(_requestConfiguration);
-            var response = await _tokensApi.CreateToken(requestConfiguration);
+            var response = await _sdk.Tokens.CreateToken(createTokenRequest);
 
-            response.Should().NotBeNull();
-            response.StatusCode.Should().Be(HttpStatusCode.Created);
+            response.Should().BeASuccess();
 
-            _givenOwnTokens.Add(response.Content.Result!);
+            _givenOwnTokens.Add(response.Result!);
         }
     }
 
@@ -116,42 +121,44 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
     {
         var tokenIds = _givenOwnTokens.Select(t => t.Id);
 
-        _tokensResponse = await _tokensApi.GetTokensByIds(_requestConfiguration, tokenIds);
+        _tokensResponse = await _sdk.Tokens.ListTokens(tokenIds);
         _tokensResponse.Should().NotBeNull();
 
-        var tokens = _tokensResponse.Content.Result!.ToArray();
+        var tokens = _tokensResponse.Result!.ToArray();
         tokens.Should().HaveCount(_givenOwnTokens.Count);
 
         _responseTokens.AddRange(tokens);
     }
 
-    [When("a POST request is sent to the Tokens endpoint with")]
-    public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWith(Table table)
+    [When("a POST request is sent to the Tokens endpoint")]
+    public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWith()
     {
-        var requestConfiguration = table.CreateInstance<RequestConfiguration>();
-        requestConfiguration.SupplementWith(_requestConfiguration);
-
-        if (!string.IsNullOrEmpty(requestConfiguration.Content))
+        var request = new CreateTokenRequest
         {
-            switch (requestConfiguration.Content)
-            {
-                case var c when c.Contains("<tomorrow>"):
-                    requestConfiguration.Content = requestConfiguration.Content.Replace("<tomorrow>", TOMORROW_AS_STRING);
-                    break;
-                case var c when c.Contains("<yesterday>"):
-                    requestConfiguration.Content = requestConfiguration.Content.Replace("<yesterday>", YESTERDAY_AS_STRING);
-                    break;
-            }
-        }
+            Content = CONTENT,
+            ExpiresAt = TOMORROW
+        };
 
-        _createTokenResponse = await _tokensApi.CreateToken(requestConfiguration);
+        if (_isAuthenticated)
+        {
+            _createTokenResponse = await _sdk.Tokens.CreateToken(request);
+        }
+        else
+        {
+            _createTokenResponse401 = await _sdk.Tokens.CreateTokenUnauthenticated(request);
+        }
     }
 
-    [When("a POST request is sent to the Tokens endpoint with no request content")]
+    [When("a POST request is sent to the Tokens endpoint with invalid Content Type")]
     public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWithNoRequestContent()
     {
-        _requestConfiguration.Content = null;
-        _createTokenResponse = await _tokensApi.CreateToken(_requestConfiguration);
+        var request = new CreateTokenRequest
+        {
+            Content = CONTENT,
+            ExpiresAt = TOMORROW
+        };
+
+        _createTokenResponse = await _sdk.Tokens.CreateToken(request);
     }
 
     [When(@"a GET request is sent to the Tokens/{id} endpoint with ""?(.*?)""?")]
@@ -170,37 +177,16 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
                 break;
         }
 
-        _tokenResponse = await _tokensApi.GetTokenById(_requestConfiguration, id);
-    }
-
-    [When("a POST request is sent to the Tokens endpoint with '([^']*)', '([^']*)'")]
-    public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWith(string content, string expiresAt)
-    {
-        var createTokenRequest = new CreateTokenRequest
-        {
-            Content = content,
-            ExpiresAt = expiresAt
-        };
-
-        var requestConfiguration = new RequestConfiguration
-        {
-            Content = JsonConvert.SerializeObject(createTokenRequest),
-            ContentType = "application/json"
-        };
-
-        requestConfiguration.SupplementWith(_requestConfiguration);
-
-        _createTokenResponse = await _tokensApi.CreateToken(requestConfiguration);
+        _tokenResponse = await _sdk.Tokens.GetToken(id);
     }
 
     [When(@"a GET request is sent to the Tokens endpoint with a list containing t\.Id, p\.Id")]
     public async Task WhenAGETRequestIsSentToTheTokensEndpointWithAListContainingT_IdP_Id()
     {
         var tokenIds = new List<string> { _tokenId, _peerTokenId };
-        _tokensResponse = await _tokensApi.GetTokensByIds(_requestConfiguration, tokenIds);
+        _tokensResponse = await _sdk.Tokens.ListTokens(tokenIds);
 
-        var tokens = _tokensResponse.Content.Result!;
-        _responseTokens.AddRange(tokens);
+        _responseTokens.AddRange(_tokensResponse.Result!);
     }
 
     [Then("the response contains both Tokens")]
@@ -210,7 +196,6 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
             .And.Contain(token => token.Id == _tokenId)
             .And.Contain(token => token.Id == _peerTokenId);
     }
-
 
     [Then("the response contains all Tokens with the given ids")]
     public void ThenTheResponseContainsAllTokensWithTheGivenIds()
@@ -225,46 +210,40 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsACreateTokenResponse()
     {
         _createTokenResponse!.Should().NotBeNull();
-        _createTokenResponse!.IsSuccessStatusCode.Should().BeTrue();
+        _createTokenResponse!.Should().BeASuccess();
         _createTokenResponse!.ContentType.Should().Be("application/json");
-        _createTokenResponse!.AssertContentCompliesWithSchema();
+        _createTokenResponse!.Should().ComplyWithSchema();
     }
 
     [Then("the response contains a Token")]
     public void ThenTheResponseContainsAToken()
     {
         _tokenResponse!.Should().NotBeNull();
-        _tokenResponse!.IsSuccessStatusCode.Should().BeTrue();
+        _tokenResponse!.Should().BeASuccess();
         _tokenResponse!.ContentType.Should().Be("application/json");
-        _tokenResponse!.AssertContentCompliesWithSchema();
+        _tokenResponse!.Should().ComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
         if (_tokensResponse != null)
-        {
-            var actualStatusCode = (int)_tokensResponse.StatusCode;
-            actualStatusCode.Should().Be(expectedStatusCode);
-        }
+            ((int)_tokensResponse.Status).Should().Be(expectedStatusCode);
 
         if (_tokenResponse != null)
-        {
-            var actualStatusCode = (int)_tokenResponse.StatusCode;
-            actualStatusCode.Should().Be(expectedStatusCode);
-        }
+            ((int)_tokenResponse.Status).Should().Be(expectedStatusCode);
 
         if (_createTokenResponse != null)
-        {
-            var actualStatusCode = (int)_createTokenResponse.StatusCode;
-            actualStatusCode.Should().Be(expectedStatusCode);
-        }
+            ((int)_createTokenResponse.Status).Should().Be(expectedStatusCode);
+
+        if (_createTokenResponse401 != null)
+            ((int)_createTokenResponse401.Status).Should().Be(expectedStatusCode);
     }
 
-    [Then(@"the response content includes an error with the error code ""([^""]+)""")]
+    [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _tokenResponse!.Content.Error.Should().NotBeNull();
-        _tokenResponse.Content.Error!.Code.Should().Be(errorCode);
+        _tokenResponse!.Error.Should().NotBeNull();
+        _tokenResponse.Error!.Code.Should().Be(errorCode);
     }
 }
