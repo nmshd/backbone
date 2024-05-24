@@ -17,6 +17,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 newName: "MessageKey");
 
             migrationBuilder.Sql(@"
+                DECLARE @unmatched_count INT;
+
                 UPDATE [Devices].[IdentityDeletionProcessAuditLog]
                 SET [MessageKey] = CASE [MessageKey]
                     WHEN 'The deletion process was started by the owner. It was automatically approved.' THEN 'StartedByOwner'
@@ -32,7 +34,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     WHEN 'The first grace period reminder notification has been sent.' THEN 'GracePeriodReminder1Sent'
                     WHEN 'The second grace period reminder notification has been sent.' THEN 'GracePeriodReminder2Sent'
                     WHEN 'The third grace period reminder notification has been sent.' THEN 'GracePeriodReminder3Sent'
-                    ELSE [MessageKey]
+                    ELSE 'Invalid string'
                 END;
 
                 SELECT @unmatched_count = COUNT(*)
@@ -71,7 +73,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     WHEN 'GracePeriodReminder1Sent' THEN 'The first grace period reminder notification has been sent.'
                     WHEN 'GracePeriodReminder2Sent' THEN 'The second grace period reminder notification has been sent.'
                     WHEN 'GracePeriodReminder3Sent' THEN 'The third grace period reminder notification has been sent.'
-                    ELSE 'Invalid string'
                 END;
             ");
         }
