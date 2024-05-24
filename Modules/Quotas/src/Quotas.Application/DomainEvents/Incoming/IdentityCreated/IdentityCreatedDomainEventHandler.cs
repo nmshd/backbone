@@ -29,7 +29,7 @@ public class IdentityCreatedDomainEventHandler : IDomainEventHandler<IdentityCre
     {
         _logger.LogTrace("Handling IdentityCreatedDomainEvent ...");
 
-        var identity = new Identity(domainEvent.Address, new TierId(domainEvent.Tier));
+        var identity = new Identity(domainEvent.Address, TierId.Parse(domainEvent.Tier));
 
         var tier = await _tiersRepository.Find(identity.TierId, CancellationToken.None, track: true) ?? throw new NotFoundException(nameof(Tier));
 

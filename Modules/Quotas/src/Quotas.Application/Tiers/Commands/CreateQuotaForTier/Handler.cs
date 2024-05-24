@@ -1,10 +1,8 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
@@ -15,14 +13,12 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
 {
     private readonly ITiersRepository _tiersRepository;
     private readonly ILogger<Handler> _logger;
-    private readonly IEventBus _eventBus;
     private readonly IMetricsRepository _metricsRepository;
 
-    public Handler(ITiersRepository tierRepository, ILogger<Handler> logger, IEventBus eventBus, IMetricsRepository metricsRepository)
+    public Handler(ITiersRepository tierRepository, ILogger<Handler> logger, IMetricsRepository metricsRepository)
     {
         _tiersRepository = tierRepository;
         _logger = logger;
-        _eventBus = eventBus;
         _metricsRepository = metricsRepository;
     }
 
@@ -46,8 +42,6 @@ public class Handler : IRequestHandler<CreateQuotaForTierCommand, TierQuotaDefin
         await _tiersRepository.Update(tier, cancellationToken);
 
         _logger.CreatedQuotaForTier(tier.Id, tier.Name, result.Value.Id);
-
-        _eventBus.Publish(new QuotaCreatedForTierDomainEvent(tier.Id, result.Value.Id));
 
         var response = new TierQuotaDefinitionDTO(result.Value.Id, new MetricDTO(metric), result.Value.Max, result.Value.Period);
         return response;

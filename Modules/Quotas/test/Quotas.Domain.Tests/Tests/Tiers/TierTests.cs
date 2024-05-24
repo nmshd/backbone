@@ -1,9 +1,10 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using Backbone.UnitTestTools.Extensions;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Tiers;
@@ -14,10 +15,10 @@ public class TierTests
     public void Can_create_tier_with_valid_properties()
     {
         // Act
-        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        var tier = new Tier(TierId.Parse("TIRsomeTierId1111111"), "some tier");
 
         // Assert
-        tier.Id.Should().Be(new TierId("SomeTierId"));
+        tier.Id.Should().Be(TierId.Parse("TIRsomeTierId1111111"));
         tier.Name.Should().Be("some tier");
     }
 
@@ -25,7 +26,7 @@ public class TierTests
     public void Can_create_quota_on_tier()
     {
         // Arrange
-        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        var tier = new Tier(TierId.Parse("tier-id"), "some tier");
 
         // Act
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
@@ -50,7 +51,7 @@ public class TierTests
     public void Can_delete_quota_on_tier()
     {
         // Arrange
-        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        var tier = new Tier(TierId.Parse("tier-id"), "some tier");
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
 
         // Act
@@ -83,7 +84,7 @@ public class TierTests
     public void Does_only_delete_quota_with_given_id()
     {
         // Arrange
-        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        var tier = new Tier(TierId.Parse("tier-id"), "some tier");
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
         tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Week);
 
@@ -102,7 +103,7 @@ public class TierTests
     public void Trying_to_delete_inexistent_quota_fails()
     {
         // Arrange
-        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        var tier = new Tier(TierId.Parse("tier-id"), "some tier");
 
         // Act
         var result = tier.DeleteQuota("SomeInexistentTierQuotaDefinitionId");
@@ -117,7 +118,7 @@ public class TierTests
     {
         // Arrange
         var metricKey = MetricKey.NumberOfSentMessages;
-        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        var tier = new Tier(TierId.Parse("tier-id"), "some tier");
         tier.CreateQuota(metricKey, 5, QuotaPeriod.Hour);
 
         // Act
@@ -136,7 +137,7 @@ public class TierTests
         {
             new(MetricKey.NumberOfRelationships, "Number of Relationships")
         };
-        var tier = new Tier(new TierId("SomeTierId"), "some tier");
+        var tier = new Tier(TierId.Parse("tier-id"), "some tier");
 
         // Act
         Action act = () => tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics);
@@ -185,14 +186,50 @@ public class TierTests
         addedQuotas.Should().HaveCount(1);
         tier.Quotas.Should().HaveCount(2);
     }
-}
 
+    [Fact]
+    public void Deleting_a_quota_triggers_TierQuotaDefinitionDeletedDomainEvent()
+    {
+        // Arrange
+        var tierId = TierId.Parse("tier-id");
+        var tier = new Tier(tierId, "some-tier-name");
+
+        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        var tierQuotaDefinitionId = tier.Quotas.First().Id;
+        tier.ClearDomainEvents();
+
+        // Act
+        tier.DeleteQuota(tierQuotaDefinitionId);
+
+        // Assert
+        var domainEvent = tier.Should().HaveASingleDomainEvent<TierQuotaDefinitionDeletedDomainEvent>();
+        domainEvent.TierId.Should().Be(tierId);
+        domainEvent.TierQuotaDefinitionId.Should().Be(tierQuotaDefinitionId);
+    }
+
+    [Fact]
+    public void Creating_a_quota_triggers_TierQuotaDefinitionCreatedDomainEvent()
+    {
+        // Arrange
+        var tierId = TierId.Parse("TIRsomeTierId1111111");
+        var metricKey = MetricKey.NumberOfSentMessages;
+        var tier = new Tier(tierId, "some-tier-name");
+
+        // Act
+        tier.CreateQuota(metricKey, 5, QuotaPeriod.Month);
+
+        // Assert
+        var domainEvent = tier.Should().HaveASingleDomainEvent<TierQuotaDefinitionCreatedDomainEvent>();
+        domainEvent.TierId.Should().Be(tierId);
+    }
+}
 
 file static class TierExtensions
 {
     public static Tier Clone(this Tier tier)
     {
-        var serialized = JsonConvert.SerializeObject(tier);
-        return JsonConvert.DeserializeObject<Tier>(serialized)!;
+        var newTier = new Tier(tier.Id, tier.Name);
+        newTier.Quotas.AddRange(tier.Quotas);
+        return newTier;
     }
 }

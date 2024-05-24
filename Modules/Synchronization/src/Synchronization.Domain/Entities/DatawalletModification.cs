@@ -5,12 +5,13 @@ using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities;
 
-public class DatawalletModification : Entity<DatawalletModificationId>
+public class DatawalletModification : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private DatawalletModification()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
         DatawalletVersion = null!;
         ObjectIdentifier = null!;
         CreatedBy = null!;
@@ -20,8 +21,9 @@ public class DatawalletModification : Entity<DatawalletModificationId>
     }
 
     public DatawalletModification(Datawallet datawallet, DatawalletVersion datawalletVersion, long index, DatawalletModificationType type, string collection, string objectIdentifier,
-        string? payloadCategory, byte[]? encryptedPayload, DeviceId createdByDevice, string blobReference) : base(DatawalletModificationId.New())
+        string? payloadCategory, byte[]? encryptedPayload, DeviceId createdByDevice, string blobReference)
     {
+        Id = DatawalletModificationId.New();
         Datawallet = datawallet;
         DatawalletVersion = datawalletVersion;
         Index = index;
@@ -38,6 +40,7 @@ public class DatawalletModification : Entity<DatawalletModificationId>
         BlobReference = blobReference;
     }
 
+    public DatawalletModificationId Id { get; }
     public Datawallet? Datawallet { get; }
     public DatawalletVersion DatawalletVersion { get; }
     public long Index { get; }

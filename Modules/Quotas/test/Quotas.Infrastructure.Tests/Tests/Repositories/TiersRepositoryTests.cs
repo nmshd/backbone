@@ -23,7 +23,7 @@ public class TiersRepositoryTests
         // Arrange
         var (arrangeContext, actContext, assertContext) = FakeDbContextFactory.CreateDbContexts<QuotasDbContext>();
 
-        var arrangedTier = new Tier(new TierId("TIR00000000000000000"), "Test");
+        var arrangedTier = new Tier(TierId.Parse("TIR00000000000000000"), "Test");
         var tierQuotaDefinitionToBeDeleted = arrangedTier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month).Value;
         var otherTierQuotaDefinition = arrangedTier.CreateQuota(MetricKey.NumberOfFiles, 5, QuotaPeriod.Month).Value;
 
