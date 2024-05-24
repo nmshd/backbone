@@ -34,5 +34,6 @@ public class IdentityDeletionProcessAuditLogEntryEntityTypeConfiguration : IEnti
         builder.Property(x => x.MessageKey);
         builder.Property(x => x.NewStatus);
         builder.Property(x => x.OldStatus);
+        builder.Property(x => x.MessageKey).HasConversion<string>();
     }
 }

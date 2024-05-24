@@ -173,7 +173,5 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         builder.HasDefaultSchema("Devices");
 
         builder.ApplyConfigurationsFromAssembly(typeof(DeviceEntityTypeConfiguration).Assembly);
-
-        builder.Entity<IdentityDeletionProcessAuditLogEntry>().Property(e => e.MessageKey).HasConversion<string>();
     }
 }
