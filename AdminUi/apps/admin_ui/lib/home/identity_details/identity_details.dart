@@ -97,7 +97,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                         columnValue: DateFormat('yyyy-MM-dd hh:MM:ss').format(identityDetails.createdAt),
                       ),
                       Gaps.w16,
-                      _buildTierDropdown(context),
+                      _buildTierDropdown(context, identityDetails),
                     ],
                   ),
                 ],
@@ -109,7 +109,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
     );
   }
 
-  Widget _buildTierDropdown(BuildContext context) {
+  Widget _buildTierDropdown(BuildContext context, Identity identityDetails) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -124,7 +124,9 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             setState(() {
               _selectedTier = newValue;
             });
-            _updateIdentity();
+            if (_selectedTier != identityDetails.tierId) {
+              _updateIdentity();
+            }
           },
           items: _buildTierDropdownItems(context),
         ),
