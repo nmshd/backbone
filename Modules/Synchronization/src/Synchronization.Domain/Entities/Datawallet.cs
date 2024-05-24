@@ -4,25 +4,27 @@ using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities;
 
-public class Datawallet : Entity<DatawalletId>
+public class Datawallet : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private Datawallet()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
         Owner = null!;
         Version = null!;
         Modifications = null!;
     }
 
-    public Datawallet(DatawalletVersion version, IdentityAddress owner) : base(DatawalletId.New())
+    public Datawallet(DatawalletVersion version, IdentityAddress owner)
     {
+        Id = DatawalletId.New();
         Version = version;
         Owner = owner;
         Modifications = [];
     }
 
-
+    public DatawalletId Id { get; }
     public IdentityAddress Owner { get; }
     public DatawalletVersion Version { get; private set; }
     public List<DatawalletModification> Modifications { get; }
