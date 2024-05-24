@@ -54,6 +54,9 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
     public void StartConsuming()
     {
+        using var channel = _persistentConnection.CreateModel();
+        channel.ExchangeDeclare(BROKER_NAME, "direct");
+
         if (_consumer is null)
         {
             throw new Exception("Cannot start consuming without a consumer set.");
@@ -75,8 +78,6 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         var eventName = @event.GetType().Name;
 
         _logger.LogInformation("Creating RabbitMQ channel to publish event: '{EventId}' ({EventName})", @event.DomainEventId, eventName);
-
-        _persistentConnection.CreateModel().ExchangeDeclare(BROKER_NAME, "direct");
 
         _logger.LogInformation("Declaring RabbitMQ exchange to publish event: '{EventId}'", @event.DomainEventId);
 
