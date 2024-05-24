@@ -38,13 +38,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         WHEN 'The first grace period reminder notification has been sent.' THEN 'GracePeriodReminder1Sent'
                         WHEN 'The second grace period reminder notification has been sent.' THEN 'GracePeriodReminder2Sent'
                         WHEN 'The third grace period reminder notification has been sent.' THEN 'GracePeriodReminder3Sent'
-                        ELSE NULL
+                        ELSE 'Invalid string'
                     END;
 
                     SELECT COUNT(*)
                     INTO unmatched_count
                     FROM ""Devices"".""IdentityDeletionProcessAuditLog""
-                    WHERE ""MessageKey"" IS NULL;
+                    WHERE ""MessageKey"" = 'Invalid string';
 
                     IF unmatched_count > 0 THEN
                         RAISE EXCEPTION 'There are invalid MessageKey values in the IdentityDeletionProcessAuditLog table.';
@@ -53,7 +53,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 $$;
             ");
         }
-
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)

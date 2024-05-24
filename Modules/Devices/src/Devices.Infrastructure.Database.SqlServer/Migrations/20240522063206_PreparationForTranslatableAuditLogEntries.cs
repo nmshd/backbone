@@ -34,6 +34,15 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     WHEN 'The third grace period reminder notification has been sent.' THEN 'GracePeriodReminder3Sent'
                     ELSE [MessageKey]
                 END;
+
+                SELECT @unmatched_count = COUNT(*)
+                FROM [Devices].[IdentityDeletionProcessAuditLog]
+                WHERE [MessageKey] = 'Invalid string';
+
+                IF @unmatched_count > 0
+                BEGIN
+                    RAISERROR ('There are invalid MessageKey values in the IdentityDeletionProcessAuditLog table.', 16, 1);
+                END
             ");
         }
 
@@ -62,7 +71,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     WHEN 'GracePeriodReminder1Sent' THEN 'The first grace period reminder notification has been sent.'
                     WHEN 'GracePeriodReminder2Sent' THEN 'The second grace period reminder notification has been sent.'
                     WHEN 'GracePeriodReminder3Sent' THEN 'The third grace period reminder notification has been sent.'
-                    ELSE [Message]
+                    ELSE 'Invalid string'
                 END;
             ");
         }
