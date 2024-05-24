@@ -5,11 +5,12 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using CSharpFunctionalExtensions;
+using Entity = Backbone.BuildingBlocks.Domain.Entity;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
-public class Identity
+public class Identity : Entity
 {
     private readonly List<TierQuota> _tierQuotas;
     private readonly List<IndividualQuota> _individualQuotas;
@@ -21,10 +22,10 @@ public class Identity
     private Identity()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Address = null!;
         _tierQuotas = null!;
         _individualQuotas = null!;
         _metricStatuses = null!;
-        Address = null!;
         TierId = null!;
     }
 
@@ -38,6 +39,7 @@ public class Identity
     }
 
     public string Address { get; }
+
     public TierId TierId { get; private set; }
 
     public IReadOnlyCollection<MetricStatus> MetricStatuses => _metricStatuses.AsReadOnly();
@@ -168,6 +170,7 @@ public class Identity
     }
 
     #region Selectors
+
     public static Expression<Func<Identity, bool>> HasAddress(IdentityAddress identityAddress)
     {
         return i => i.Address == identityAddress.ToString();
