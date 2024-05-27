@@ -70,36 +70,30 @@ class _IdentityDetailsState extends State<IdentityDetails> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Identities Overview',
-                    style: TextStyle(fontSize: 40),
+                  _IdentityDetails(
+                    title: 'Address',
+                    value: identityDetails.address,
                   ),
                   Gaps.h32,
-                  Row(
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
                     children: [
-                      _IdentityDetailsColumn(
-                        columnTitle: 'Address',
-                        columnValue: identityDetails.address,
+                      _IdentityDetails(
+                        title: 'Client ID',
+                        value: identityDetails.clientId,
                       ),
-                      Gaps.w16,
-                      _IdentityDetailsColumn(
-                        columnTitle: 'Client ID',
-                        columnValue: identityDetails.clientId,
+                      _IdentityDetails(
+                        title: 'Public Key',
+                        value: identityDetails.publicKey,
                       ),
-                      Gaps.w16,
-                      _IdentityDetailsColumn(
-                        columnTitle: 'Public Key',
-                        columnValue: identityDetails.publicKey,
+                      _IdentityDetails(
+                        title: 'Created at',
+                        value: DateFormat('yyyy-MM-dd hh:MM:ss').format(identityDetails.createdAt),
                       ),
-                      Gaps.w16,
-                      _IdentityDetailsColumn(
-                        columnTitle: 'Created at',
-                        columnValue: DateFormat('yyyy-MM-dd hh:MM:ss').format(identityDetails.createdAt),
-                      ),
-                      Gaps.w16,
                       _buildTierDropdown(context, identityDetails),
                     ],
-                  ),
+                  )
                 ],
               ),
             ),
@@ -110,12 +104,12 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   }
 
   Widget _buildTierDropdown(BuildContext context, Identity identityDetails) {
-    return Column(
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Tier',
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
+          'Tier: ',
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
         ),
         DropdownButton<String>(
           isDense: true,
@@ -141,7 +135,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
           value: noTiersFoundMessage,
           child: Text(
             noTiersFoundMessage,
-            style: TextStyle(fontSize: 14),
+            style: TextStyle(fontSize: 10),
           ),
         ),
       ];
@@ -220,24 +214,24 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   }
 }
 
-class _IdentityDetailsColumn extends StatelessWidget {
-  final String columnTitle;
-  final String columnValue;
+class _IdentityDetails extends StatelessWidget {
+  final String title;
+  final String value;
 
-  const _IdentityDetailsColumn({required this.columnTitle, required this.columnValue});
+  const _IdentityDetails({required this.title, required this.value});
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          columnTitle,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-        Text(
-          columnValue,
-          style: const TextStyle(fontSize: 18),
+        Text.rich(
+          TextSpan(
+            children: [
+              TextSpan(text: '$title: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
+              TextSpan(text: value, style: Theme.of(context).textTheme.bodyLarge),
+            ],
+          ),
         ),
       ],
     );
