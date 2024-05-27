@@ -17,7 +17,7 @@ class IdentityDetails extends StatefulWidget {
 
 class _IdentityDetailsState extends State<IdentityDetails> {
   Identity? _identityDetails;
-  late List<TierOverview>? _tiers;
+  late List<TierOverview> _tiers;
   String? _selectedTier;
 
   late final ScrollController _scrollController;
@@ -59,7 +59,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                   _selectedTier = newValue;
                 });
               },
-              availableTiers: _tiers!,
+              availableTiers: _tiers,
               updateIdentity: _updateIdentity,
             ),
           ],
