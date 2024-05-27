@@ -20,7 +20,7 @@ class IdentityDetails extends StatefulWidget {
 
 class _IdentityDetailsState extends State<IdentityDetails> {
   Identity? _identityDetails;
-  late List<TierOverview> _tiers;
+  List<TierOverview>? _tiers;
   String? _selectedTier;
 
   late final ScrollController _scrollController;
@@ -44,7 +44,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 
   @override
   Widget build(BuildContext context) {
-    if (_identityDetails == null) return const Center(child: CircularProgressIndicator());
+    if (_identityDetails == null || _tiers == null) return const Center(child: CircularProgressIndicator());
 
     final identityDetails = _identityDetails!;
     return Scrollbar(
@@ -63,7 +63,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                   _selectedTier = newValue;
                 });
               },
-              availableTiers: _tiers,
+              availableTiers: _tiers!,
               updateTierOfIdentity: _reloadIdentity,
             ),
           ],
