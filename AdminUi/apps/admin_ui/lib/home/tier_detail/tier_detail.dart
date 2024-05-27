@@ -253,8 +253,8 @@ class _IdentitiesListState extends State<_IdentitiesList> {
     _dataSource = IdentityDataTableSource(
       locale: Localizations.localeOf(context),
       hideTierColumn: true,
-      navigateTo: (String address) {
-        context.go('/identities/$address');
+      navigateToIdentity: ({required String address}) {
+        context.push('/identities/$address');
       },
     );
   }

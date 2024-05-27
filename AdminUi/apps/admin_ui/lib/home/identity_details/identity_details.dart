@@ -2,13 +2,14 @@ import 'dart:io';
 
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
-import 'package:admin_ui/core/core.dart';
+import 'package:admin_ui/home/identity_details/modals/add_identity_quota.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
-import 'modals/modals.dart';
+import '/core/core.dart';
+import 'modals/change_tier.dart';
 
 class IdentityDetails extends StatefulWidget {
   final String address;
@@ -20,8 +21,6 @@ class IdentityDetails extends StatefulWidget {
 }
 
 class _IdentityDetailsState extends State<IdentityDetails> {
-  static const noTiersFoundMessage = 'No tiers found.';
-
   Identity? _identityDetails;
   List<TierOverview>? _tiers;
   String? _selectedTier;
@@ -47,7 +46,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 
   @override
   Widget build(BuildContext context) {
-    if (_identityDetails == null) return const Center(child: CircularProgressIndicator());
+    if (_identityDetails == null || _tiers == null) return const Center(child: CircularProgressIndicator());
 
     final identityDetails = _identityDetails!;
     return Scrollbar(
@@ -58,148 +57,23 @@ class _IdentityDetailsState extends State<IdentityDetails> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (Platform.isMacOS || Platform.isWindows) const BackButton(),
-            Row(
-              children: [
-                Expanded(
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Identities Overview',
-                            style: TextStyle(fontSize: 40),
-                          ),
-                          Gaps.h32,
-                          Row(
-                            children: [
-                              _IdentityDetailsColumn(
-                                columnTitle: 'Address',
-                                columnValue: _identityDetails!.address,
-                              ),
-                              Gaps.w16,
-                              _IdentityDetailsColumn(
-                                columnTitle: 'Client ID',
-                                columnValue: _identityDetails!.clientId,
-                              ),
-                              Gaps.w16,
-                              _IdentityDetailsColumn(
-                                columnTitle: 'Public Key',
-                                columnValue: _identityDetails!.publicKey,
-                              ),
-                              Gaps.w16,
-                              _IdentityDetailsColumn(
-                                columnTitle: 'Created at',
-                                columnValue: DateFormat('yyyy-MM-dd hh:MM:ss').format(identityDetails.createdAt),
-                              ),
-                              Gaps.w16,
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Tier',
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-                                  ),
-                                  DropdownButton<String>(
-                                    isDense: true,
-                                    value: _selectedTier,
-                                    onChanged: (String? newValue) {
-                                      setState(() {
-                                        _selectedTier = newValue;
-                                      });
-                                      _updateIdentity();
-                                    },
-                                    items: _tiers!.isNotEmpty
-                                        ? _tiers!.where(_isTierManuallyAssignable).map((tier) {
-                                            final isDisabled = _isTierDisabled(tier);
-                                            return DropdownMenuItem<String>(
-                                              value: tier.id,
-                                              enabled: !isDisabled,
-                                              child: isDisabled
-                                                  ? Text(
-                                                      tier.name,
-                                                      style: TextStyle(
-                                                        color: Theme.of(context).disabledColor,
-                                                        fontSize: 18,
-                                                      ),
-                                                    )
-                                                  : Text(
-                                                      tier.name,
-                                                      style: const TextStyle(
-                                                        fontSize: 18,
-                                                      ),
-                                                    ),
-                                            );
-                                          }).toList()
-                                        : [
-                                            const DropdownMenuItem<String>(
-                                              value: noTiersFoundMessage,
-                                              child: Text(
-                                                noTiersFoundMessage,
-                                                style: TextStyle(
-                                                  fontSize: 14,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            _IdentityDetailsCard(
+              identityDetails: identityDetails,
+              selectedTier: _selectedTier,
+              onTierChanged: (String? newValue) {
+                setState(() {
+                  _selectedTier = newValue;
+                });
+              },
+              availableTiers: _tiers!,
+              updateTierOfIdentity: _reloadIdentity,
             ),
+            Gaps.h16,
             _IdentityQuotaList(identityDetails, _reloadIdentity),
           ],
         ),
       ),
     );
-  }
-
-  bool _isTierDisabled(TierOverview tier) {
-    if (_tiers == null || _identityDetails == null) {
-      return false;
-    }
-    final tiersThatCannotBeUnassigned = _tiers!.where((t) => !t.canBeManuallyAssigned);
-    final identityIsInTierThatCannotBeUnassigned = tiersThatCannotBeUnassigned.any((t) => t.id == _identityDetails!.tierId);
-    return identityIsInTierThatCannotBeUnassigned && tier.id != _identityDetails!.tierId;
-  }
-
-  bool _isTierManuallyAssignable(TierOverview tier) {
-    return tier.canBeManuallyAssigned || tier.id == _identityDetails!.tierId;
-  }
-
-  Future<void> _updateIdentity() async {
-    if (_identityDetails == null) return;
-
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-
-    try {
-      await GetIt.I.get<AdminApiClient>().identities.updateIdentity(_identityDetails!.address, tierId: _selectedTier!);
-
-      scaffoldMessenger.showSnackBar(
-        const SnackBar(
-          content: Text('Identity updated successfully. Reloading..'),
-          duration: Duration(seconds: 3),
-        ),
-      );
-
-      await _reloadIdentity();
-    } catch (e) {
-      scaffoldMessenger.showSnackBar(
-        const SnackBar(
-          content: Text('Failed to update identity. Please try again.'),
-          duration: Duration(seconds: 3),
-        ),
-      );
-    }
   }
 
   Future<void> _reloadIdentity() async {
@@ -214,30 +88,135 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 
   Future<void> _reloadTiers() async {
     final tiers = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
-    if (mounted) setState(() => _tiers = tiers.data);
+    if (mounted) {
+      setState(() => _tiers = tiers.data);
+    }
   }
 }
 
-class _IdentityDetailsColumn extends StatelessWidget {
-  final String columnTitle;
-  final String columnValue;
+class _IdentityDetailsCard extends StatelessWidget {
+  final Identity identityDetails;
+  final String? selectedTier;
+  final ValueChanged<String?>? onTierChanged;
+  final List<TierOverview> availableTiers;
+  final VoidCallback updateTierOfIdentity;
 
-  const _IdentityDetailsColumn({required this.columnTitle, required this.columnValue});
+  const _IdentityDetailsCard({
+    required this.identityDetails,
+    required this.availableTiers,
+    required this.updateTierOfIdentity,
+    this.selectedTier,
+    this.onTierChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    final currentTier = availableTiers.firstWhere((tier) => tier.id == identityDetails.tierId);
+
+    return Row(
       children: [
-        Text(
-          columnTitle,
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold, fontSize: 20),
-        ),
-        Text(
-          columnValue,
-          style: const TextStyle(fontSize: 18),
+        Expanded(
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(identityDetails.address, style: Theme.of(context).textTheme.headlineLarge),
+                      Gaps.w16,
+                      CopyToClipboardButton(
+                        clipboardText: identityDetails.address,
+                        successMessage: 'Identity address copied to clipboard.',
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 32),
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      _IdentityDetails(
+                        title: 'Client ID',
+                        value: identityDetails.clientId,
+                      ),
+                      _IdentityDetails(
+                        title: 'Public Key',
+                        value: identityDetails.publicKey.ellipsize(20),
+                        onIconPressed: () => context.setClipboardDataWithSuccessNotification(
+                          clipboardText: identityDetails.publicKey,
+                          successMessage: 'Public key copied to clipboard.',
+                        ),
+                        icon: Icons.copy,
+                        tooltipMessage: 'Copy public key',
+                      ),
+                      _IdentityDetails(
+                        title: 'Created at',
+                        value:
+                            '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(identityDetails.createdAt)} ${DateFormat.Hms().format(identityDetails.createdAt)}',
+                      ),
+                      _IdentityDetails(
+                        title: 'Tier',
+                        value: currentTier.name,
+                        onIconPressed: currentTier.canBeManuallyAssigned
+                            ? () => showChangeTierDialog(
+                                  context: context,
+                                  onTierUpdated: updateTierOfIdentity,
+                                  identityDetails: identityDetails,
+                                  availableTiers: availableTiers,
+                                )
+                            : null,
+                        icon: Icons.edit,
+                        tooltipMessage: 'Change tier',
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
       ],
+    );
+  }
+}
+
+class _IdentityDetails extends StatelessWidget {
+  final String title;
+  final String value;
+  final VoidCallback? onIconPressed;
+  final IconData? icon;
+  final String? tooltipMessage;
+
+  const _IdentityDetails({
+    required this.title,
+    required this.value,
+    this.onIconPressed,
+    this.icon,
+    this.tooltipMessage,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    assert(
+      onIconPressed == null || (onIconPressed != null && icon != null || tooltipMessage != null),
+      'If edit is provided, icon and tooltipMessage must be provided too.',
+    );
+
+    return RawChip(
+      label: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(text: '$title ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
+            TextSpan(text: value, style: Theme.of(context).textTheme.bodyLarge),
+          ],
+        ),
+      ),
+      onDeleted: onIconPressed,
+      deleteIcon: Icon(icon),
+      deleteButtonTooltipMessage: tooltipMessage,
     );
   }
 }

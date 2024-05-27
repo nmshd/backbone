@@ -1,6 +1,5 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
@@ -81,12 +80,10 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                           onPressed: () => setState(() => _isClientSecretVisible = !_isClientSecretVisible),
                         ),
                         Gaps.w4,
-                        IconButton(
-                          icon: const Icon(Icons.copy),
+                        CopyToClipboardButton(
                           tooltip: 'Copy to clipboard.',
-                          onPressed: _newClientSecretController.text.isNotEmpty
-                              ? () => Clipboard.setData(ClipboardData(text: _newClientSecretController.text))
-                              : null,
+                          clipboardText: _newClientSecretController.text,
+                          successMessage: 'Client Secret copied to clipboard.',
                         ),
                       ],
                     ),

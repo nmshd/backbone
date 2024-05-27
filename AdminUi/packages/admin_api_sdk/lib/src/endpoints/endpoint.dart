@@ -74,11 +74,7 @@ abstract class Endpoint {
     final payload = httpResponse.data;
 
     if (httpResponse.statusCode == 204) {
-      if (allowEmptyResponse) {
-        return ApiResponse.success(transformer(null));
-      } else {
-        throw Exception('No content in the response');
-      }
+      return ApiResponse.success(transformer(null));
     }
 
     if (httpResponse.statusCode != expectedStatus) {
