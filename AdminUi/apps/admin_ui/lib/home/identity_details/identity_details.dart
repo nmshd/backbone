@@ -91,38 +91,34 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                         title: 'Created at',
                         value: DateFormat('yyyy-MM-dd hh:MM:ss').format(identityDetails.createdAt),
                       ),
-                      _buildTierDropdown(context, identityDetails),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Tier: ',
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          DropdownButton<String>(
+                            isDense: true,
+                            value: _selectedTier,
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _selectedTier = newValue;
+                              });
+                              if (_selectedTier != identityDetails.tierId) {
+                                _updateIdentity();
+                              }
+                            },
+                            items: _buildTierDropdownItems(context),
+                          ),
+                        ],
+                      )
                     ],
                   ),
                 ],
               ),
             ),
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildTierDropdown(BuildContext context, Identity identityDetails) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Tier: ',
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-        ),
-        DropdownButton<String>(
-          isDense: true,
-          value: _selectedTier,
-          onChanged: (String? newValue) {
-            setState(() {
-              _selectedTier = newValue;
-            });
-            if (_selectedTier != identityDetails.tierId) {
-              _updateIdentity();
-            }
-          },
-          items: _buildTierDropdownItems(context),
         ),
       ],
     );
@@ -180,7 +176,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 
       scaffoldMessenger.showSnackBar(
         const SnackBar(
-          content: Text('Identity updated successfully. Reloading..'),
+          content: Text('Identity updated successfully.'),
           duration: Duration(seconds: 3),
         ),
       );
