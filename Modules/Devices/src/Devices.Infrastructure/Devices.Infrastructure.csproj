@@ -31,11 +31,13 @@
         <DependentUpon>PushNotifications.DirectPush.IPushNotification.en.resx</DependentUpon>
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Compile>
       <Compile Update="Translations\PushNotifications.DirectPush.IPushNotification.pt.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>PushNotifications.DirectPush.IPushNotification.pt.resx</DependentUpon>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Compile>
     </ItemGroup>
 
@@ -45,11 +47,13 @@
         <LastGenOutput>PushNotifications.DirectPush.IPushNotification.en.Designer.cs</LastGenOutput>
         <Generator>PublicResXFileCodeGenerator</Generator>
         <CustomToolNamespace>Backbone.Modules.Devices.Infrastructure.Translation</CustomToolNamespace>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
       <EmbeddedResource Update="Translations\PushNotifications.DirectPush.IPushNotification.pt.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
         <LastGenOutput>PushNotifications.DirectPush.IPushNotification.pt.Designer.cs</LastGenOutput>
         <CustomToolNamespace>Backbone.Modules.Devices.Infrastructure.Translation</CustomToolNamespace>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>
 
