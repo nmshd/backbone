@@ -118,15 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DatawalletModificationsCreatedPushNotification.Body" xml:space="preserve">
-    <value>Datawallet modification were created for your identity.</value>
+    <value>Foram criadas Modificações de Datawallet para a sua identidade.</value>
   </data>
   <data name="DatawalletModificationsCreatedPushNotification.Title" xml:space="preserve">
-    <value>Datawallet modifications created</value>
+    <value>Modificações de Datawallet Criadas</value>
   </data>
   <data name="DeletionProcessApprovedNotification.Body" xml:space="preserve">
-    <value>One of your identity's deletion processes was approved and will be processed shortly.</value>
+    <value>Um dos processos de eliminação da sua identidade foi aprovado e será processado brevemente.</value>
   </data>
   <data name="DeletionProcessApprovedNotification.Title" xml:space="preserve">
-    <value>A deletion process has been approved</value>
+    <value>Processo de eliminação aprovado</value>
+  </data>
+  <data name="TestPushNotification.Body" xml:space="preserve">
+    <value>Isto é uma notificação de teste.</value>
+  </data>
+  <data name="TestPushNotification.Title" xml:space="preserve">
+    <value>Teste</value>
   </data>
 </root>

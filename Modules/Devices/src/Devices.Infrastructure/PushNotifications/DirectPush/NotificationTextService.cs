@@ -4,6 +4,8 @@ using System.Resources;
 using Backbone.BuildingBlocks.Domain.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Translations;
 using Microsoft.Extensions.Localization;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
@@ -14,7 +16,7 @@ public class NotificationTextService
     private const string DEFAULT_LANGUAGE_CODE = "en";
 
     public NotificationTextService(
-        IStringLocalizer<IPushNotification> localizer,
+        IStringLocalizer<IPushNotificationResource> localizer,
         IIdentitiesRepository identitiesRepository
         )
     {
@@ -41,29 +43,36 @@ public class NotificationTextService
 
     private (string? title, string? body) LoadTranslationFromResources(object pushNotification, string languageCode)
     {
-        var localizedStrings = GetStrings(languageCode, pushNotification.GetType()).ToArray();
+        var localizedStrings = GetStrings(pushNotification.GetType(), languageCode).ToArray();
         return (localizedStrings.FindStringEndingWith("Title"), localizedStrings.FindStringEndingWith("Body"));
     }
 
-    public IEnumerable<LocalizedString> GetStrings(string languageCode = "en", Type? type = null)
+    public IEnumerable<LocalizedString> GetStrings(Type type, string languageCode = "en")
     {
-        var oldCurrentUiCulture = CultureInfo.CurrentCulture;
-        IList<LocalizedString> localizedStrings;
-        try
-        {
-            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(languageCode);
-            localizedStrings = _localizer.GetAllStrings().ToList();
-        }
-        catch (SystemException ex) when (ex is ArgumentNullException or MissingManifestResourceException)
-        {
-            CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en");
-            localizedStrings = _localizer.GetAllStrings().ToList();
-        }
+        var localizedStrings = new List<LocalizedString>();
 
-        CultureInfo.CurrentUICulture = oldCurrentUiCulture;
+        lock (CultureInfo.CurrentUICulture)
+        {
+            var oldCurrentUiCulture = CultureInfo.CurrentCulture;
+            var titleKey = $"{type.Name}.Title";
+            var bodyKey = $"{type.Name}.Body";
 
-        // try to find a way to not use currentuiculture
-        return type is null ? localizedStrings : localizedStrings.Where(ls => ls.Name.StartsWith(type.Name)).ToArray();
+            try
+            {
+                CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo(languageCode);
+                localizedStrings.Add(_localizer[titleKey]);
+                localizedStrings.Add(_localizer[bodyKey]);
+            }
+            catch (SystemException ex) when (ex is ArgumentNullException or MissingManifestResourceException)
+            {
+                CultureInfo.CurrentUICulture = CultureInfo.GetCultureInfo("en");
+                localizedStrings.Add(_localizer[titleKey]);
+                localizedStrings.Add(_localizer[bodyKey]);
+            }
+
+            CultureInfo.CurrentUICulture = oldCurrentUiCulture;
+        }
+        return localizedStrings.ToArray();
     }
 
 }

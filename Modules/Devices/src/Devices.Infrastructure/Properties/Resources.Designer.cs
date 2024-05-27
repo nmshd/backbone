@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Backbone.Modules.Devices.Infrastructure.Translations {
+namespace Backbone.Modules.Devices.Infrastructure.Properties {
     using System;
     
     
@@ -22,24 +22,24 @@ namespace Backbone.Modules.Devices.Infrastructure.Translations {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource1 {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resource1() {
+        internal Resources() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Backbone.Modules.Devices.Infrastructure.Translations.Resource1", typeof(Resource1).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Backbone.Modules.Devices.Infrastructure.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -51,12 +51,37 @@ namespace Backbone.Modules.Devices.Infrastructure.Translations {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;root&gt;
+        ///  &lt;!-- 
+        ///    Microsoft ResX Schema 
+        ///    
+        ///    Version 2.0
+        ///    
+        ///    The primary goals of this format is to allow a simple XML format 
+        ///    that is mostly human readable. The generation and parsing of the 
+        ///    various data types are done through the TypeConverter classes 
+        ///    associated with the data types.
+        ///    
+        ///    Example:
+        ///    
+        ///    ... ado.net/XML headers &amp; schema ...
+        ///    &lt;resheader name=&quot;resmimetype&quot;&gt;text/microsoft-resx&lt;/resheader&gt;
+        ///    &lt;resheader n [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string PushNotifications_Translations_IPushNotificationResource_en {
+            get {
+                return ResourceManager.GetString("PushNotifications.Translations.IPushNotificationResource.en", resourceCulture);
             }
         }
     }

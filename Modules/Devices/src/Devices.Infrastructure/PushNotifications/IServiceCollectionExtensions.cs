@@ -15,7 +15,7 @@ public static class IServiceCollectionExtensions
     {
         services.AddLocalization(o =>
         {
-            o.ResourcesPath = "Translations";
+            o.ResourcesPath = """PushNotifications\Translations""";
         });
 
         services.AddTransient<NotificationTextService>();

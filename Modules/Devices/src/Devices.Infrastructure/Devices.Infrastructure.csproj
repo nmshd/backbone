@@ -27,33 +27,20 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Compile Update="Translations\PushNotifications.DirectPush.IPushNotification.en.Designer.cs">
-        <DependentUpon>PushNotifications.DirectPush.IPushNotification.en.resx</DependentUpon>
+      <Compile Update="Properties\Resources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </Compile>
-      <Compile Update="Translations\PushNotifications.DirectPush.IPushNotification.pt.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>PushNotifications.DirectPush.IPushNotification.pt.resx</DependentUpon>
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <DependentUpon>Resources.resx</DependentUpon>
       </Compile>
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Update="Translations\PushNotifications.DirectPush.IPushNotification.en.resx">
-        <SubType>Designer</SubType>
-        <LastGenOutput>PushNotifications.DirectPush.IPushNotification.en.Designer.cs</LastGenOutput>
+      <EmbeddedResource Update="PushNotifications\Translations\PushNotifications.Translations.IPushNotificationResource.en.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
-        <CustomToolNamespace>Backbone.Modules.Devices.Infrastructure.Translation</CustomToolNamespace>
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
-      <EmbeddedResource Update="Translations\PushNotifications.DirectPush.IPushNotification.pt.resx">
+      <EmbeddedResource Update="Properties\Resources.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
-        <LastGenOutput>PushNotifications.DirectPush.IPushNotification.pt.Designer.cs</LastGenOutput>
-        <CustomToolNamespace>Backbone.Modules.Devices.Infrastructure.Translation</CustomToolNamespace>
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       </EmbeddedResource>
     </ItemGroup>
 
