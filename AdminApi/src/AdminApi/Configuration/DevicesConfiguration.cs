@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 namespace Backbone.AdminApi.Configuration;
 
@@ -15,6 +16,9 @@ public class DevicesConfiguration
     {
         [Required]
         public SqlDatabaseConfiguration SqlDatabase { get; set; } = new();
+
+        [Required]
+        public PushNotificationOptions PushNotifications { get; set; } = new();
 
         public class SqlDatabaseConfiguration
         {
