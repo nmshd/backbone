@@ -233,7 +233,7 @@ class _IdentityDetails extends StatelessWidget {
         Text.rich(
           TextSpan(
             children: [
-              TextSpan(text: '$title: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
+              TextSpan(text: '$title ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
               TextSpan(text: value, style: Theme.of(context).textTheme.bodyLarge),
             ],
           ),
