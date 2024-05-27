@@ -31,8 +31,9 @@ public class IdentityDeletionProcessAuditLogEntryEntityTypeConfiguration : IEnti
         builder.Property(x => x.DeviceIdHash);
         builder.Property(x => x.IdentityAddressHash);
         builder.Property(x => x.CreatedAt);
-        builder.Property(x => x.Message);
+        builder.Property(x => x.MessageKey);
         builder.Property(x => x.NewStatus);
         builder.Property(x => x.OldStatus);
+        builder.Property(x => x.MessageKey).HasConversion<string>();
     }
 }
