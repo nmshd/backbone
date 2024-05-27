@@ -27,7 +27,7 @@ const apiVersion = "v1";
 const client = new Httpx({
     baseURL: "http://localhost:8081/",
     timeout: 20000 // 20s timeout
-}) as Httpx;
+});
 
 export default function (testIdentities: IdentityWithToken[]): void {
     const dataWalletVersion = exec.vu.iterationInInstance + 3;

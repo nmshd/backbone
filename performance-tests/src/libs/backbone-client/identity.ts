@@ -5,8 +5,7 @@ import { CreateChallengeResponse } from "../../models/challenge";
 import { CreateIdentityRequest } from "../../models/identity";
 import { JwtResponse } from "../../models/jwt-response";
 import { ChallengeRequestPayload, CryptoHelper } from "../crypto-helper";
-
-const apiVersion = "v1";
+import { apiVersion } from "./api-version";
 
 export function createIdentity(client: Httpx, clientId: string, clientSecret: string, password: string): Response {
     try {
@@ -53,7 +52,7 @@ export function exchangeToken(client: Httpx, username: string, password: string)
 }
 
 function getChallenge(client: Httpx): ChallengeRequestPayload {
-    const receivedChallenge = client.post(`api/${apiVersion}/Challenges`).json("result") as unknown as CreateChallengeResponse;
+    const receivedChallenge = client.post(`api/${apiVersion}/Challenges`).json("result") as CreateChallengeResponse;
 
     return {
         id: receivedChallenge.id,
