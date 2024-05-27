@@ -15,7 +15,7 @@ public class TierCreatedDomainEventHandlerTests
     public async Task Creates_tier_after_consuming_domain_event()
     {
         // Arrange
-        var id = new TierId("TIRFxoL0U24aUqZDSAWc");
+        var id = TierId.Parse("TIRFxoL0U24aUqZDSAWc");
         const string name = "Basic";
         var mockTierRepository = new AddMockTiersRepository();
         var handler = CreateHandler(mockTierRepository);

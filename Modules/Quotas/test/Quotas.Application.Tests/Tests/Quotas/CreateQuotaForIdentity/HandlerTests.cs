@@ -27,7 +27,7 @@ public class HandlerTests
         const QuotaPeriod period = QuotaPeriod.Month;
         var metricKey = MetricKey.NumberOfSentMessages.Value;
         var identityAddress = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
-        var tierId = new TierId("TIRsomeTierId1111111");
+        var tierId = TierId.Parse("TIRsomeTierId1111111");
         var command = new CreateQuotaForIdentityCommand(identityAddress, metricKey, max, period);
         var identity = new Identity("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", tierId);
 
@@ -59,7 +59,10 @@ public class HandlerTests
     {
         // Arrange
         var command = new CreateQuotaForIdentityCommand(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
+        var identity = new Identity("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", TierId.Parse("TIRsomeTierId1111111"));
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.Find("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", A<CancellationToken>._, A<bool>._)).Returns(identity);
+
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
         var handler = CreateHandler(identitiesRepository, metricsRepository);
 
@@ -96,7 +99,7 @@ public class HandlerTests
         var metricKey = MetricKey.NumberOfSentMessages.Value;
         var identityAddress = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
         var command = new CreateQuotaForIdentityCommand(identityAddress, metricKey, 5, QuotaPeriod.Month);
-        var identity = new Identity("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", new TierId("TIRsomeTierId1111111"));
+        var identity = new Identity("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", TierId.Parse("TIRsomeTierId1111111"));
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Find(identityAddress, A<CancellationToken>._, A<bool>._)).Returns(identity);

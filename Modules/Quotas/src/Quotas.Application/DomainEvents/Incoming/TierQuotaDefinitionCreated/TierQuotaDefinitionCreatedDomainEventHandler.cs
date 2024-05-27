@@ -5,17 +5,17 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Quotas.Application.DomainEvents.Incoming.QuotaCreatedForTier;
+namespace Backbone.Modules.Quotas.Application.DomainEvents.Incoming.TierQuotaDefinitionCreated;
 
-public class QuotaCreatedForTierDomainEventHandler : IDomainEventHandler<QuotaCreatedForTierDomainEvent>
+public class TierQuotaDefinitionCreatedDomainEventHandler : IDomainEventHandler<TierQuotaDefinitionCreatedDomainEvent>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
-    private readonly ILogger<QuotaCreatedForTierDomainEventHandler> _logger;
+    private readonly ILogger<TierQuotaDefinitionCreatedDomainEventHandler> _logger;
     private readonly IMetricStatusesService _metricStatusesService;
 
-    public QuotaCreatedForTierDomainEventHandler(IIdentitiesRepository identitiesRepository,
-        ITiersRepository tiersRepository, ILogger<QuotaCreatedForTierDomainEventHandler> logger, IMetricStatusesService metricStatusesService)
+    public TierQuotaDefinitionCreatedDomainEventHandler(IIdentitiesRepository identitiesRepository,
+        ITiersRepository tiersRepository, ILogger<TierQuotaDefinitionCreatedDomainEventHandler> logger, IMetricStatusesService metricStatusesService)
     {
         _identitiesRepository = identitiesRepository;
         _tiersRepository = tiersRepository;
@@ -23,11 +23,11 @@ public class QuotaCreatedForTierDomainEventHandler : IDomainEventHandler<QuotaCr
         _metricStatusesService = metricStatusesService;
     }
 
-    public async Task Handle(QuotaCreatedForTierDomainEvent @event)
+    public async Task Handle(TierQuotaDefinitionCreatedDomainEvent @event)
     {
         _logger.LogTrace("Handling QuotaCreatedForTierDomainEvent...");
 
-        var identitiesWithTier = await _identitiesRepository.FindWithTier(new TierId(@event.TierId), CancellationToken.None, true);
+        var identitiesWithTier = await _identitiesRepository.FindWithTier(TierId.Parse(@event.TierId), CancellationToken.None, true);
 
         if (!identitiesWithTier.Any())
         {
