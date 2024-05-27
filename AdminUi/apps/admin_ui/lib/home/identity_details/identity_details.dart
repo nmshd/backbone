@@ -25,6 +25,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   @override
   void initState() {
     super.initState();
+
     _scrollController = ScrollController();
 
     _reloadIdentity();
