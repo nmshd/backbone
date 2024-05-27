@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '/core/core.dart';
+import '../extensions.dart';
 
 class CopyToClipboardButton extends StatelessWidget {
   final String clipboardText;
