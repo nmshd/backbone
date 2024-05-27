@@ -24,9 +24,8 @@ public class HandlerTests
 
     private Handler CreateHandler()
     {
-        var eventBus = A.Fake<IEventBus>();
         var logger = A.Fake<ILogger<Handler>>();
-        return new Handler(_tierRepository, logger, eventBus);
+        return new Handler(_tierRepository, logger);
     }
 
     [Fact]
