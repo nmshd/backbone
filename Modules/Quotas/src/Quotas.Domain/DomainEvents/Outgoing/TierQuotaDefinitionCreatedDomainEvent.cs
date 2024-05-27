@@ -2,9 +2,9 @@ using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 
-public class QuotaCreatedForTierDomainEvent : DomainEvent
+public class TierQuotaDefinitionCreatedDomainEvent : DomainEvent
 {
-    public QuotaCreatedForTierDomainEvent(string tierId, string tierQuotaDefinitionId) : base($"{tierQuotaDefinitionId}/Created")
+    public TierQuotaDefinitionCreatedDomainEvent(string tierId, string tierQuotaDefinitionId) : base($"{tierQuotaDefinitionId}/Created")
     {
         TierId = tierId;
         TierQuotaDefinitionId = tierQuotaDefinitionId;
