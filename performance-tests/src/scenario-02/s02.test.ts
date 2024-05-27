@@ -7,6 +7,9 @@ import { createIdentity, exchangeToken } from "../libs/backbone-client/identity"
 import { CreateIdentityResponse, IdentityWithToken } from "../models/identity";
 import { StartSyncRunRequestBody, StartSyncRunResponse, SyncRunType } from "../models/sync-run";
 
+const ClientId = "test";
+const ClientSecret = "test";
+
 export const options: Options = {
     scenarios: {
         constantRequestRate: {
@@ -38,7 +41,7 @@ export default function (testIdentities: IdentityWithToken[]): void {
         type: SyncRunType.ExternalEventSync
     };
 
-    const startSyncRunResponse = client.post(`api/${ apiVersion }/SyncRuns`, JSON.stringify(requestBody), {
+    const startSyncRunResponse = client.post(`api/${apiVersion}/SyncRuns`, JSON.stringify(requestBody), {
         headers: {
             "Content-Type": "application/json",
             "X-Supported-Datawallet-Version": dataWalletVersion,
@@ -57,7 +60,7 @@ export function setup(): IdentityWithToken[] {
 
     for (let i = 0; i < scenario.preAllocatedVUs; i++) {
         const password = "test-password";
-        const httpResponse = createIdentity(client, "test", "test", password);
+        const httpResponse = createIdentity(client, ClientId, ClientSecret, password);
 
         check(httpResponse, {
             "Identity was created": (r) => r.status === 201
@@ -78,7 +81,7 @@ export function setup(): IdentityWithToken[] {
             type: SyncRunType.DatawalletVersionUpgrade
         };
 
-        const startSyncRunResponse = client.post(`api/${ apiVersion }/SyncRuns`, JSON.stringify(requestBody), {
+        const startSyncRunResponse = client.post(`api/${apiVersion}/SyncRuns`, JSON.stringify(requestBody), {
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${token.access_token}`
@@ -92,7 +95,7 @@ export function setup(): IdentityWithToken[] {
         const startSyncRunResponseValue = startSyncRunResponse.json("result") as unknown as StartSyncRunResponse | undefined;
 
         const finalizeDatawalletVersionUpgradeResponse = client.put(
-            `api/${ apiVersion }/SyncRuns/${startSyncRunResponseValue?.syncRun?.id}/FinalizeDatawalletVersionUpgrade`,
+            `api/${apiVersion}/SyncRuns/${startSyncRunResponseValue?.syncRun?.id}/FinalizeDatawalletVersionUpgrade`,
             JSON.stringify({ newDatawalletVersion: 2, datawalletModifications: [] }),
             {
                 headers: {
