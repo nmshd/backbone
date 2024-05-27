@@ -43,6 +43,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   Widget build(BuildContext context) {
     if (_identityDetails == null) return const Center(child: CircularProgressIndicator());
 
+    final identityDetails = _identityDetails!;
     return Scrollbar(
       controller: _scrollController,
       child: SingleChildScrollView(
@@ -51,76 +52,70 @@ class _IdentityDetailsState extends State<IdentityDetails> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (Platform.isMacOS || Platform.isWindows) const BackButton(),
-            _buildIdentityCard(context),
+            Row(
+              children: [
+                Expanded(
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _IdentityDetails(
+                            title: 'Address',
+                            value: identityDetails.address,
+                          ),
+                          Gaps.h32,
+                          Wrap(
+                            spacing: 8,
+                            runSpacing: 8,
+                            children: [
+                              _IdentityDetails(
+                                title: 'Client ID',
+                                value: identityDetails.clientId,
+                              ),
+                              _IdentityDetails(
+                                title: 'Public Key',
+                                value: identityDetails.publicKey,
+                              ),
+                              _IdentityDetails(
+                                title: 'Created at',
+                                value: DateFormat('yyyy-MM-dd hh:MM:ss').format(identityDetails.createdAt),
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'Tier: ',
+                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                                  ),
+                                  DropdownButton<String>(
+                                    isDense: true,
+                                    value: _selectedTier,
+                                    onChanged: (String? newValue) {
+                                      setState(() {
+                                        _selectedTier = newValue;
+                                      });
+                                      if (_selectedTier != identityDetails.tierId) {
+                                        _updateIdentity();
+                                      }
+                                    },
+                                    items: _buildTierDropdownItems(context),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildIdentityCard(BuildContext context) {
-    final identityDetails = _identityDetails!;
-
-    return Row(
-      children: [
-        Expanded(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _IdentityDetails(
-                    title: 'Address',
-                    value: identityDetails.address,
-                  ),
-                  Gaps.h32,
-                  Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      _IdentityDetails(
-                        title: 'Client ID',
-                        value: identityDetails.clientId,
-                      ),
-                      _IdentityDetails(
-                        title: 'Public Key',
-                        value: identityDetails.publicKey,
-                      ),
-                      _IdentityDetails(
-                        title: 'Created at',
-                        value: DateFormat('yyyy-MM-dd hh:MM:ss').format(identityDetails.createdAt),
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Tier: ',
-                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          DropdownButton<String>(
-                            isDense: true,
-                            value: _selectedTier,
-                            onChanged: (String? newValue) {
-                              setState(() {
-                                _selectedTier = newValue;
-                              });
-                              if (_selectedTier != identityDetails.tierId) {
-                                _updateIdentity();
-                              }
-                            },
-                            items: _buildTierDropdownItems(context),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
     );
   }
 
