@@ -36,11 +36,13 @@
         <DependentUpon>PushNotifications.DirectPush.IPushNotification.en.resx</DependentUpon>
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Compile>
       <Compile Update="Translations\PushNotifications.DirectPush.IPushNotification.pt.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>
         <DependentUpon>PushNotifications.DirectPush.IPushNotification.pt.resx</DependentUpon>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </Compile>
     </ItemGroup>
 
@@ -49,10 +51,12 @@
         <SubType>Designer</SubType>
         <LastGenOutput>PushNotifications.DirectPush.IPushNotification.en.Designer.cs</LastGenOutput>
         <Generator>ResXFileCodeGenerator</Generator>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
       <EmbeddedResource Update="Translations\PushNotifications.DirectPush.IPushNotification.pt.resx">
         <Generator>ResXFileCodeGenerator</Generator>
         <LastGenOutput>PushNotifications.DirectPush.IPushNotification.pt.Designer.cs</LastGenOutput>
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </EmbeddedResource>
     </ItemGroup>
 
