@@ -46,7 +46,7 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
 
         AssertAuditLogEntryWasCreated(deletionProcess);
         var auditLogEntry = deletionProcess.AuditLog[0];
-        auditLogEntry.Message.Should().Be("The deletion process was started by the owner. It was automatically approved.");
+        auditLogEntry.MessageKey.Should().Be(MessageKey.StartedByOwner);
         auditLogEntry.DeviceIdHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
         auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.Approved);
     }

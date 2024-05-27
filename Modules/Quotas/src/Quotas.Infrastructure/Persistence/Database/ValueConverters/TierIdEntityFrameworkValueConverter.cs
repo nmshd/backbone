@@ -12,7 +12,7 @@ public class TierIdEntityFrameworkValueConverter : ValueConverter<TierId, string
     public TierIdEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
             id => id.Value,
-            value => new TierId(value),
+            value => TierId.Parse(value),
             mappingHints
         )
     {
@@ -28,7 +28,7 @@ public class NullableTierIdValueConverter : ValueConverter<TierId?, string?>
     public NullableTierIdValueConverter(ConverterMappingHints? mappingHints)
         : base(
             id => id == null ? null : id.Value,
-            value => value == null ? null : new TierId(value),
+            value => value == null ? null : TierId.Parse(value),
             mappingHints
         )
     {

@@ -21,6 +21,42 @@ public class DateTimeExtensionsTests : AbstractTestsBase
         target.Should().Be(expected);
     }
 
+    [Fact]
+    public void DaysUntilDateInTheFuture()
+    {
+        // Arrange
+
+        // Act
+        var daysDifference = _dateTimeTomorrow.DaysUntilDate();
+
+        // Assert
+        daysDifference.Should().Be(1);
+    }
+
+    [Fact]
+    public void DaysUntilDateInThePast()
+    {
+        // Arrange
+
+        // Act
+        var daysDifference = _dateTimeYesterday.DaysUntilDate();
+
+        // Assert
+        daysDifference.Should().Be(-1);
+    }
+
+    [Fact]
+    public void DaysUntilDateNow()
+    {
+        // Arrange
+
+        // Act
+        var daysDifference = _dateTimeNow.DaysUntilDate();
+
+        // Assert
+        daysDifference.Should().Be(0);
+    }
+
 #pragma warning disable CS8974 // Converting method group to non-delegate type
     public class DateTimeExtensionsTestData : IEnumerable<object[]>
     {
@@ -46,4 +82,6 @@ public class DateTimeExtensionsTests : AbstractTestsBase
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 #pragma warning restore CS8974 // Converting method group to non-delegate type
+
+
 }

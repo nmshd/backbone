@@ -1,8 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.BaseClasses;
@@ -25,13 +27,14 @@ public class HandlerTests : AbstractTestsBase
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
+        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
         A.CallTo(() => mockIdentitiesRepository.FindByAddress(activeIdentity.Address, CancellationToken.None, A<bool>._))
             .Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockPushNotificationSender);
         var command = new CancelDeletionProcessAsOwnerCommand(deletionProcess.Id);
 
         // Act
@@ -46,6 +49,8 @@ public class HandlerTests : AbstractTestsBase
             .MustHaveHappenedOnceExactly();
 
         response.Status.Should().Be(DeletionProcessStatus.Cancelled);
+
+        A.CallTo(() => mockPushNotificationSender.SendNotification(activeIdentity.Address, A<DeletionProcessCancelledByOwnerNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -99,12 +104,18 @@ public class HandlerTests : AbstractTestsBase
         ).MustHaveHappenedOnceExactly();
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IUserContext? userContext = null, IEventBus? eventBus = null)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender pushNotificationSender)
     {
-        userContext ??= A.Fake<IUserContext>();
-        identitiesRepository ??= A.Fake<IIdentitiesRepository>();
-        eventBus ??= A.Fake<IEventBus>();
+        return CreateHandler(identitiesRepository, userContext, null, pushNotificationSender);
+    }
 
-        return new Handler(identitiesRepository, userContext, eventBus);
+    private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IUserContext? userContext = null, IEventBus? eventBus = null, IPushNotificationSender? pushNotificationSender = null)
+    {
+        userContext ??= A.Dummy<IUserContext>();
+        identitiesRepository ??= A.Dummy<IIdentitiesRepository>();
+        eventBus ??= A.Dummy<IEventBus>();
+        pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
+
+        return new Handler(identitiesRepository, userContext, eventBus, pushNotificationSender);
     }
 }

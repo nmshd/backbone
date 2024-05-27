@@ -30,7 +30,7 @@ public class StartDeletionProcessAsSupportTests : AbstractTestsBase
 
         AssertAuditLogEntryWasCreated(deletionProcess);
         var auditLogEntry = deletionProcess.AuditLog[0];
-        auditLogEntry.Message.Should().Be("The deletion process was started by support. It is now waiting for approval.");
+        auditLogEntry.MessageKey.Should().Be(MessageKey.StartedBySupport);
         auditLogEntry.DeviceIdHash.Should().BeNull();
         auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
     }

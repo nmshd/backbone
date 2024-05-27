@@ -20,7 +20,7 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var metric1 = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
         var metric2 = new Metric(MetricKey.NumberOfTokens, "Number Of Tokens");
-        var identity = new Identity(CreateRandomIdentityAddress(), new TierId("SomeTierId"));
+        var identity = new Identity(CreateRandomIdentityAddress(), TierId.Parse("tier-id"));
 
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(metric1.Key, 5, QuotaPeriod.Month));
         identity.CreateIndividualQuota(metric2.Key, 5, QuotaPeriod.Month);

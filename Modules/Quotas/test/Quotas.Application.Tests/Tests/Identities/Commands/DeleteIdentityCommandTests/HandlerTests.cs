@@ -14,7 +14,7 @@ public class HandlerTests : AbstractTestsBase
     [Fact]
     public async Task Handler_calls_deletion_method_on_repository()
     {
-        var identity = new Identity(CreateRandomIdentityAddress(), new TierId("tier-id"));
+        var identity = new Identity(CreateRandomIdentityAddress(), TierId.Parse("tier-id"));
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var handler = CreateHandler(mockIdentitiesRepository);
 

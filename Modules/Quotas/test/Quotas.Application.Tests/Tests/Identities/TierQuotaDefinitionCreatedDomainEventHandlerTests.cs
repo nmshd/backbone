@@ -1,4 +1,4 @@
-using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.QuotaCreatedForTier;
+using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.TierQuotaDefinitionCreated;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
@@ -13,13 +13,13 @@ using Xunit;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
 
-public class QuotaCreatedForTierDomainEventHandlerTests : AbstractTestsBase
+public class TierQuotaDefinitionCreatedDomainEventHandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Creates_tier_quota_after_consuming_domain_event()
     {
         // Arrange
-        var tierId = new TierId("TIRFxoL0U24aUqZDSAWc");
+        var tierId = TierId.Parse("TIRFxoL0U24aUqZDSAWc");
 
         var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
         var tierQuotaDefinitionsRepository = new FindTierQuotaDefinitionsStubRepository(tierQuotaDefinition);
@@ -32,7 +32,7 @@ public class QuotaCreatedForTierDomainEventHandlerTests : AbstractTestsBase
         var handler = CreateHandler(identitiesRepository, tierQuotaDefinitionsRepository);
 
         // Act
-        await handler.Handle(new QuotaCreatedForTierDomainEvent(tierId, tierQuotaDefinition.Id));
+        await handler.Handle(new TierQuotaDefinitionCreatedDomainEvent(tierId, tierQuotaDefinition.Id));
 
         // Assert
         A.CallTo(() => identitiesRepository.Update(A<IEnumerable<Identity>>.That.Matches(ids =>
@@ -45,7 +45,7 @@ public class QuotaCreatedForTierDomainEventHandlerTests : AbstractTestsBase
     public async Task Updates_metric_statuses_after_creating_tier_quota()
     {
         // Arrange
-        var tierId = new TierId("TIRFxoL0U24aUqZDSAWc");
+        var tierId = TierId.Parse("TIRFxoL0U24aUqZDSAWc");
 
         var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
         var tierQuotaDefinitionsRepository = new FindTierQuotaDefinitionsStubRepository(tierQuotaDefinition);
@@ -59,7 +59,7 @@ public class QuotaCreatedForTierDomainEventHandlerTests : AbstractTestsBase
         var handler = CreateHandler(identitiesRepository, tierQuotaDefinitionsRepository, metricStatusesService);
 
         // Act
-        await handler.Handle(new QuotaCreatedForTierDomainEvent(tierId, tierQuotaDefinition.Id));
+        await handler.Handle(new TierQuotaDefinitionCreatedDomainEvent(tierId, tierQuotaDefinition.Id));
 
         // Assert
         A.CallTo(() => metricStatusesService.RecalculateMetricStatuses(
@@ -69,9 +69,10 @@ public class QuotaCreatedForTierDomainEventHandlerTests : AbstractTestsBase
         ).MustHaveHappened();
     }
 
-    private static QuotaCreatedForTierDomainEventHandler CreateHandler(IIdentitiesRepository identities, ITiersRepository tierQuotaDefinitions, IMetricStatusesService? metricStatusesService = null)
+    private static TierQuotaDefinitionCreatedDomainEventHandler CreateHandler(IIdentitiesRepository identities, ITiersRepository tierQuotaDefinitions,
+        IMetricStatusesService? metricStatusesService = null)
     {
-        var logger = A.Fake<ILogger<QuotaCreatedForTierDomainEventHandler>>();
-        return new QuotaCreatedForTierDomainEventHandler(identities, tierQuotaDefinitions, logger, metricStatusesService ?? A.Fake<IMetricStatusesService>());
+        var logger = A.Fake<ILogger<TierQuotaDefinitionCreatedDomainEventHandler>>();
+        return new TierQuotaDefinitionCreatedDomainEventHandler(identities, tierQuotaDefinitions, logger, metricStatusesService ?? A.Fake<IMetricStatusesService>());
     }
 }

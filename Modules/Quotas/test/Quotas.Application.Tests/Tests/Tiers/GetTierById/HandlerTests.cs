@@ -15,7 +15,7 @@ public class HandlerTests : AbstractTestsBase
     public async Task Gets_tier_by_id_one_quota()
     {
         // Arrange
-        var tierId = new TierId("SomeTierId");
+        var tierId = TierId.Parse("tier-id");
         const string tierName = "some-tier-name";
         var tier = new Tier(tierId, tierName);
 
@@ -45,7 +45,7 @@ public class HandlerTests : AbstractTestsBase
     public async Task Gets_tier_by_id_multiple_quotas()
     {
         // Arrange
-        var tierId = new TierId("SomeTierId");
+        var tierId = TierId.Parse("tier-id");
         const string tierName = "some-tier-name";
         var tier = new Tier(tierId, tierName);
 
