@@ -1,4 +1,3 @@
-using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
@@ -15,10 +14,8 @@ public enum QuotaPeriod
 
 public static class QuotaPeriodExtensions
 {
-    public static DateTime CalculateBegin(this QuotaPeriod period)
+    public static DateTime CalculateBegin(this QuotaPeriod period, DateTime utcNow)
     {
-        var utcNow = SystemTime.UtcNow;
-
         switch (period)
         {
             case QuotaPeriod.Hour:
@@ -38,10 +35,8 @@ public static class QuotaPeriodExtensions
         }
     }
 
-    public static DateTime CalculateEnd(this QuotaPeriod period)
+    public static DateTime CalculateEnd(this QuotaPeriod period, DateTime utcNow)
     {
-        var utcNow = SystemTime.UtcNow;
-
         switch (period)
         {
             case QuotaPeriod.Hour:

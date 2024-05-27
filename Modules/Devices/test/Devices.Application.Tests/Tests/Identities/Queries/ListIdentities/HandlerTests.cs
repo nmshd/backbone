@@ -2,6 +2,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
@@ -9,7 +10,7 @@ using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     public HandlerTests()
     {

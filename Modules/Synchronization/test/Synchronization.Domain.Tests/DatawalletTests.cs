@@ -1,13 +1,14 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Synchronization.Domain.Tests;
 
-public class DatawalletTests
+public class DatawalletTests : AbstractTestsBase
 {
     [Fact]
     public void Cannot_upgrade_to_version_lower_than_current_version()

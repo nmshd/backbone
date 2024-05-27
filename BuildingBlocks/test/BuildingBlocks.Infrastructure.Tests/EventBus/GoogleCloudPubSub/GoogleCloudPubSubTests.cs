@@ -5,6 +5,7 @@ using Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestDomainEventHandlers;
 using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestDomainEvents;
 using Backbone.Tooling.Extensions;
+using Backbone.UnitTestTools.BaseClasses;
 using Divergic.Logging.Xunit;
 using FluentAssertions;
 using FluentAssertions.Extensions;
@@ -18,7 +19,7 @@ using Xunit.Abstractions;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub;
 
-public class GoogleCloudPubSubTests : IDisposable
+public class GoogleCloudPubSubTests : AbstractTestsBase
 {
     private readonly EventBusFactory _factory;
 
@@ -27,13 +28,15 @@ public class GoogleCloudPubSubTests : IDisposable
         _factory = new EventBusFactory(output);
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
         _factory.Dispose();
 
         TestEvent1DomainEventHandler1.Instances.Clear();
         TestEvent1DomainEventHandler2.Instances.Clear();
         TestEvent2DomainEventHandler.Instances.Clear();
+
+        base.Dispose();
     }
 
     [Fact(Skip = "No valid emulator for GCP")]

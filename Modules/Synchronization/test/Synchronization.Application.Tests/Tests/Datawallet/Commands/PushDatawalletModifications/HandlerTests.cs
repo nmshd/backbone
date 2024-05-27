@@ -7,6 +7,7 @@ using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
@@ -15,7 +16,7 @@ using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     private readonly DeviceId _activeDevice = TestDataGenerator.CreateRandomDeviceId();
     private readonly IdentityAddress _activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();

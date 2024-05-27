@@ -6,13 +6,14 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.IdentityCreated;
 using Backbone.Modules.Quotas.Domain.Metrics;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
 
-public class IdentityCreatedDomainEventHandlerTests
+public class IdentityCreatedDomainEventHandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Creates_a_copy_of_the_identity_from_the_event()

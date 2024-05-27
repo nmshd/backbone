@@ -6,13 +6,14 @@ using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repo
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions.Execution;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     private readonly IUserContext _userContext;
     private readonly IMapper _mapper;

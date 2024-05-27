@@ -26,10 +26,10 @@ public abstract class Quota : Entity
     public abstract int Max { get; }
     public abstract QuotaPeriod Period { get; }
 
-    internal ExhaustionDate CalculateExhaustion(uint newUsage)
+    internal ExhaustionDate CalculateExhaustion(uint newUsage, DateTime utcNow)
     {
         if (newUsage >= Max)
-            return new ExhaustionDate(Period.CalculateEnd());
+            return new ExhaustionDate(Period.CalculateEnd(utcNow));
 
         return ExhaustionDate.Unexhausted;
     }

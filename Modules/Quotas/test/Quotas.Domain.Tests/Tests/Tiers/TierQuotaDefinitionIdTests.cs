@@ -1,10 +1,11 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Tiers;
 
-public class TierQuotaDefinitionIdTests
+public class TierQuotaDefinitionIdTests : AbstractTestsBase
 {
     [Fact]
     public void Can_create_tier_quota_definition_id_with_valid_value()
