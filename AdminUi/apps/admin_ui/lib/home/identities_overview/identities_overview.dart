@@ -20,7 +20,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
 
     _dataSource = IdentityDataTableSource(
       locale: Localizations.localeOf(context),
-      navigateTo: (String address) {
+      navigateToIdentity: ({required String address}) {
         context.go('/identities/$address');
       },
     );
