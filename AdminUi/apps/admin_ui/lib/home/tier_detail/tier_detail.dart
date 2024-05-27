@@ -254,7 +254,7 @@ class _IdentitiesListState extends State<_IdentitiesList> {
       locale: Localizations.localeOf(context),
       hideTierColumn: true,
       navigateToIdentity: ({required String address}) {
-        context.go('/identities/$address');
+        context.push('/identities/$address');
       },
     );
   }
