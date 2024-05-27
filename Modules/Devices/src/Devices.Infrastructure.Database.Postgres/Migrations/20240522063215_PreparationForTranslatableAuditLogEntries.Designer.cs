@@ -3,17 +3,20 @@ using System;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Devices.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    partial class DevicesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240522063215_PreparationForTranslatableAuditLogEntries")]
+    partial class PreparationForTranslatableAuditLogEntries
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,9 +57,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
+                        .HasColumnType("character(36)")
                         .IsFixedLength();
 
                     b.Property<DateTime>("UpdatedAt")
@@ -207,9 +210,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
+                        .HasColumnType("character(36)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -222,9 +225,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
                 {
                     b.Property<string>("Address")
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
+                        .HasColumnType("character(36)")
                         .IsFixedLength();
 
                     b.Property<string>("ClientId")
@@ -323,9 +326,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("IdentityAddress")
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
+                        .HasColumnType("character(36)")
                         .IsFixedLength();
 
                     b.Property<DateTime?>("RejectedAt")
