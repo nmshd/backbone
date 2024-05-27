@@ -16,10 +16,8 @@ class IdentityDetails extends StatefulWidget {
 }
 
 class _IdentityDetailsState extends State<IdentityDetails> {
-  static const noTiersFoundMessage = 'No tiers found.';
-
   Identity? _identityDetails;
-  List<TierOverview>? _tiers;
+  late List<TierOverview>? _tiers;
   String? _selectedTier;
 
   late final ScrollController _scrollController;
@@ -28,6 +26,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+
     _reloadIdentity();
     _reloadTiers();
   }
@@ -59,55 +58,13 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                   _selectedTier = newValue;
                 });
               },
-              tierDropdownItems: _buildTierDropdownItems(context),
+              availableTiers: _tiers!,
               updateIdentity: _updateIdentity,
             ),
           ],
         ),
       ),
     );
-  }
-
-  List<DropdownMenuItem<String>> _buildTierDropdownItems(BuildContext context) {
-    if (_tiers == null || _tiers!.isEmpty) {
-      return [
-        const DropdownMenuItem<String>(
-          value: noTiersFoundMessage,
-          child: Text(
-            noTiersFoundMessage,
-            style: TextStyle(fontSize: 10),
-          ),
-        ),
-      ];
-    }
-
-    return _tiers!.where(_isTierManuallyAssignable).map((tier) {
-      final isDisabled = _isTierDisabled(tier);
-      return DropdownMenuItem<String>(
-        value: tier.id,
-        enabled: !isDisabled,
-        child: Text(
-          tier.name,
-          style: TextStyle(
-            color: isDisabled ? Theme.of(context).disabledColor : null,
-            fontSize: 18,
-          ),
-        ),
-      );
-    }).toList();
-  }
-
-  bool _isTierDisabled(TierOverview tier) {
-    if (_tiers == null || _identityDetails == null) {
-      return false;
-    }
-    final tiersThatCannotBeUnassigned = _tiers!.where((t) => !t.canBeManuallyAssigned);
-    final identityIsInTierThatCannotBeUnassigned = tiersThatCannotBeUnassigned.any((t) => t.id == _identityDetails!.tierId);
-    return identityIsInTierThatCannotBeUnassigned && tier.id != _identityDetails!.tierId;
-  }
-
-  bool _isTierManuallyAssignable(TierOverview tier) {
-    return tier.canBeManuallyAssigned || tier.id == _identityDetails!.tierId;
   }
 
   Future<void> _updateIdentity() async {
@@ -155,15 +112,17 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 }
 
 class _IdentityDetailsCard extends StatelessWidget {
+  static const noTiersFoundMessage = 'No tiers found.';
+
   final Identity identityDetails;
   final String? selectedTier;
   final ValueChanged<String?>? onTierChanged;
-  final List<DropdownMenuItem<String>> tierDropdownItems;
+  final List<TierOverview> availableTiers;
   final void Function()? updateIdentity;
 
   const _IdentityDetailsCard({
     required this.identityDetails,
-    required this.tierDropdownItems,
+    required this.availableTiers,
     this.selectedTier,
     this.onTierChanged,
     this.updateIdentity,
@@ -217,7 +176,7 @@ class _IdentityDetailsCard extends StatelessWidget {
                                 updateIdentity?.call();
                               }
                             },
-                            items: tierDropdownItems,
+                            items: _buildTierDropdownItems(context),
                           ),
                         ],
                       ),
@@ -230,6 +189,45 @@ class _IdentityDetailsCard extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  List<DropdownMenuItem<String>> _buildTierDropdownItems(BuildContext context) {
+    if (availableTiers.isEmpty) {
+      return [
+        const DropdownMenuItem<String>(
+          value: noTiersFoundMessage,
+          child: Text(
+            noTiersFoundMessage,
+            style: TextStyle(fontSize: 10),
+          ),
+        ),
+      ];
+    }
+
+    return availableTiers.where(_isTierManuallyAssignable).map((tier) {
+      final isDisabled = _isTierDisabled(tier);
+      return DropdownMenuItem<String>(
+        value: tier.id,
+        enabled: !isDisabled,
+        child: Text(
+          tier.name,
+          style: TextStyle(
+            color: isDisabled ? Theme.of(context).disabledColor : null,
+            fontSize: 18,
+          ),
+        ),
+      );
+    }).toList();
+  }
+
+  bool _isTierDisabled(TierOverview tier) {
+    final tiersThatCannotBeUnassigned = availableTiers.where((t) => !t.canBeManuallyAssigned);
+    final identityIsInTierThatCannotBeUnassigned = tiersThatCannotBeUnassigned.any((t) => t.id == identityDetails.tierId);
+    return identityIsInTierThatCannotBeUnassigned && tier.id != identityDetails.tierId;
+  }
+
+  bool _isTierManuallyAssignable(TierOverview tier) {
+    return tier.canBeManuallyAssigned || tier.id == identityDetails.tierId;
   }
 }
 
