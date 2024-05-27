@@ -35,6 +35,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   @override
   void dispose() {
     _scrollController.dispose();
+
     super.dispose();
   }
 
