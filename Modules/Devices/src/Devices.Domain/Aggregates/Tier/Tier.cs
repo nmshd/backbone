@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 
 namespace Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
@@ -9,6 +10,7 @@ public class Tier : Entity
 
     public Tier(TierName name) : this(TierId.Generate(), name, true, true)
     {
+        RaiseDomainEvent(new TierCreatedDomainEvent(this));
     }
 
     private Tier(TierId id, TierName name, bool canBeUsedAsDefaultForClient, bool canBeManuallyAssigned)

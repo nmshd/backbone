@@ -61,7 +61,10 @@ public class Identity : Entity
         if (TierId == id)
             throw new DomainException(GenericDomainErrors.NewAndOldParametersMatch("TierId"));
 
+        var oldTier = TierId;
         TierId = id;
+
+        RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, id));
     }
 
     public IdentityDeletionProcess StartDeletionProcessAsSupport()
@@ -87,6 +90,8 @@ public class Identity : Entity
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
         TierId = Tier.QUEUED_FOR_DELETION.Id;
         Status = IdentityStatus.ToBeDeleted;
+
+        RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, TierIdBeforeDeletion, TierId));
 
         return deletionProcess;
     }
@@ -141,6 +146,8 @@ public class Identity : Entity
         Status = IdentityStatus.ToBeDeleted;
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
         TierId = Tier.QUEUED_FOR_DELETION.Id;
+
+        RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, TierIdBeforeDeletion, TierId));
 
         return deletionProcess;
     }
@@ -251,6 +258,7 @@ public class Identity : Entity
     {
         var deletionProcess = GetDeletionProcessWithId(deletionProcessId);
         deletionProcess.EnsureStatus(DeletionProcessStatus.Approved);
+        var oldTierId = TierId;
 
         EnsureIdentityOwnsDevice(canceledByDeviceId);
 
@@ -258,6 +266,8 @@ public class Identity : Entity
         TierId = TierIdBeforeDeletion!;
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
+
+        RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTierId, TierId));
 
         return deletionProcess;
     }
@@ -273,11 +283,14 @@ public class Identity : Entity
         EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
 
         var deletionProcess = DeletionProcesses.First(d => d.Id == deletionProcessId);
+        var oldTier = TierId;
 
         deletionProcess.CancelAsSupport(Address);
         TierId = TierIdBeforeDeletion!;
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
+
+        RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, TierId));
 
         return deletionProcess;
     }

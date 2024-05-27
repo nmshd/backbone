@@ -12,17 +12,16 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
         ProcessId = null!;
-        Message = null!;
         IdentityAddressHash = null!;
     }
 
-    private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId processId, string message, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus,
+    private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId processId, MessageKey messageKey, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus,
         DeletionProcessStatus newStatus)
     {
         Id = IdentityDeletionProcessAuditLogEntryId.Generate();
         ProcessId = processId;
         CreatedAt = SystemTime.UtcNow;
-        Message = message;
+        MessageKey = messageKey;
         IdentityAddressHash = identityAddressHash;
         DeviceIdHash = deviceIdHash;
         OldStatus = oldStatus;
@@ -32,7 +31,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     public IdentityDeletionProcessAuditLogEntryId Id { get; }
     public IdentityDeletionProcessId ProcessId { get; }
     public DateTime CreatedAt { get; }
-    public string Message { get; }
+    public MessageKey MessageKey { get; }
     public byte[] IdentityAddressHash { get; }
     public byte[]? DeviceIdHash { get; }
     public DeletionProcessStatus? OldStatus { get; }
@@ -42,7 +41,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            "The deletion process was started by the owner. It was automatically approved.",
+            MessageKey.StartedByOwner,
             Hasher.HashUtf8(identityAddress),
             Hasher.HashUtf8(deviceId),
             null,
@@ -54,7 +53,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            "The deletion process was started by support. It is now waiting for approval.",
+            MessageKey.StartedBySupport,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             null,
@@ -66,7 +65,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            "The deletion process was approved.",
+            MessageKey.Approved,
             Hasher.HashUtf8(identityAddress.Value),
             Hasher.HashUtf8(deviceId),
             DeletionProcessStatus.WaitingForApproval,
@@ -78,7 +77,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            "The deletion process was rejected.",
+            MessageKey.Rejected,
             Hasher.HashUtf8(identityAddress.Value),
             Hasher.HashUtf8(deviceId),
             DeletionProcessStatus.WaitingForApproval,
@@ -90,7 +89,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            "The deletion process was cancelled by the owner of the identity.",
+            MessageKey.CancelledByOwner,
             Hasher.HashUtf8(identityAddress.Value),
             Hasher.HashUtf8(deviceId),
             DeletionProcessStatus.Approved,
@@ -102,7 +101,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            "The deletion process was cancelled by a support employee.",
+            MessageKey.CancelledBySupport,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.Approved,
@@ -114,7 +113,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            "The deletion process was cancelled automatically, because it wasn't approved by the owner within the approval period.",
+            MessageKey.CancelledAutomatically,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.WaitingForApproval,
@@ -126,7 +125,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            "The first approval reminder notification has been sent.",
+            MessageKey.ApprovalReminder1Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.WaitingForApproval,
@@ -137,7 +136,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     public static IdentityDeletionProcessAuditLogEntry ApprovalReminder2Sent(IdentityDeletionProcessId processId, IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(processId,
-            "The second approval reminder notification has been sent.",
+            MessageKey.ApprovalReminder2Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.WaitingForApproval,
@@ -149,7 +148,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            "The third approval reminder notification has been sent.",
+            MessageKey.ApprovalReminder3Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.WaitingForApproval,
@@ -161,7 +160,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            "The first grace period reminder notification has been sent.",
+            MessageKey.GracePeriodReminder1Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.Approved,
@@ -173,7 +172,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            "The second grace period reminder notification has been sent.",
+            MessageKey.GracePeriodReminder2Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.Approved,
@@ -185,11 +184,28 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     {
         return new IdentityDeletionProcessAuditLogEntry(
             processId,
-            "The third grace period reminder notification has been sent.",
+            MessageKey.GracePeriodReminder3Sent,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.Approved,
             DeletionProcessStatus.Approved
         );
     }
+}
+
+public enum MessageKey
+{
+    StartedByOwner = 1,
+    StartedBySupport = 2,
+    Approved = 3,
+    Rejected = 4,
+    CancelledByOwner = 5,
+    CancelledBySupport = 6,
+    CancelledAutomatically = 7,
+    ApprovalReminder1Sent = 8,
+    ApprovalReminder2Sent = 9,
+    ApprovalReminder3Sent = 10,
+    GracePeriodReminder1Sent = 11,
+    GracePeriodReminder2Sent = 12,
+    GracePeriodReminder3Sent = 13
 }

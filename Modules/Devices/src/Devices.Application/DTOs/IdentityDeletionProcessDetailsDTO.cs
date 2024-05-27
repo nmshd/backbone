@@ -57,14 +57,14 @@ public class IdentityDeletionProcessAuditLogEntryDTO
     {
         Id = entry.Id;
         CreatedAt = entry.CreatedAt;
-        Message = entry.Message;
+        MessageKey = entry.MessageKey;
         OldStatus = entry.OldStatus;
         NewStatus = entry.NewStatus;
     }
 
     public string Id { get; set; }
     public DateTime CreatedAt { get; set; }
-    public string Message { get; set; }
+    public MessageKey MessageKey { get; set; }
     public DeletionProcessStatus? OldStatus { get; set; }
     public DeletionProcessStatus NewStatus { get; set; }
 }

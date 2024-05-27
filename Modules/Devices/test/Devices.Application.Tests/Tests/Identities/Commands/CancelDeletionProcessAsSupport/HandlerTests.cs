@@ -1,7 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Extensions;
@@ -22,13 +25,14 @@ public class HandlerTests
 
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess(utcNow);
         var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved)!;
-
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
+
         A.CallTo(() => fakeIdentitiesRepository
                 .FindByAddress(identity.Address, A<CancellationToken>._, true))
             .Returns(identity);
 
-        var handler = CreateHandler(fakeIdentitiesRepository);
+        var handler = CreateHandler(fakeIdentitiesRepository, mockPushNotificationSender);
 
         // Acting
         var result = await handler.Handle(new CancelDeletionAsSupportCommand(identity.Address, deletionProcess.Id), CancellationToken.None);
@@ -39,6 +43,8 @@ public class HandlerTests
         result.Id.Should().Be(deletionProcess.Id);
         result.Status.Should().Be(DeletionProcessStatus.Cancelled);
         result.CancelledAt.Should().Be(utcNow);
+
+        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessCancelledBySupportNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -56,11 +62,17 @@ public class HandlerTests
         acting.Should().AwaitThrowAsync<NotFoundException, CancelDeletionAsSupportResponse>().Which.Message.Should().Contain("Identity");
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IEventBus? eventBus = null)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IPushNotificationSender pushNotificationSender)
     {
-        identitiesRepository ??= A.Fake<IIdentitiesRepository>();
-        eventBus ??= A.Fake<IEventBus>();
+        return CreateHandler(identitiesRepository, null, pushNotificationSender);
+    }
 
-        return new Handler(identitiesRepository, eventBus);
+    private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IEventBus? eventBus = null, IPushNotificationSender? pushNotificationSender = null)
+    {
+        identitiesRepository ??= A.Dummy<IIdentitiesRepository>();
+        eventBus ??= A.Dummy<IEventBus>();
+        pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
+
+        return new Handler(identitiesRepository, eventBus, pushNotificationSender);
     }
 }

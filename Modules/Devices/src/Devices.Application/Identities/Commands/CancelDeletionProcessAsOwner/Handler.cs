@@ -1,8 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
@@ -13,13 +15,13 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IUserContext _userContext;
-    private readonly IEventBus _eventBus;
+    private readonly IPushNotificationSender _notificationSender;
 
-    public Handler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus eventBus)
+    public Handler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender notificationSender)
     {
         _identitiesRepository = identitiesRepository;
         _userContext = userContext;
-        _eventBus = eventBus;
+        _notificationSender = notificationSender;
     }
 
     public async Task<CancelDeletionProcessAsOwnerResponse> Handle(CancelDeletionProcessAsOwnerCommand request, CancellationToken cancellationToken)
@@ -40,7 +42,7 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
         await _identitiesRepository.Update(identity, cancellationToken);
         var newTierId = identity.TierId;
 
-        _eventBus.Publish(new TierOfIdentityChangedDomainEvent(identity, oldTierId, newTierId));
+        await _notificationSender.SendNotification(identity.Address, new DeletionProcessCancelledByOwnerNotification(), cancellationToken);
 
         return new CancelDeletionProcessAsOwnerResponse(deletionProcess);
     }

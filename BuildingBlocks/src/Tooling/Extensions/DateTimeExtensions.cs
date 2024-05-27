@@ -22,7 +22,8 @@ public static class DateTimeExtensions
     public static DateTime StartOfWeek(this DateTime pivot)
     {
         var result = new DateTime(pivot.Year, pivot.Month, pivot.Day, 0, 0, 0, 0, DateTimeKind.Utc);
-        do result = result.AddDays(-1); while (result.DayOfWeek != FIRST_DAY_OF_WEEK);
+        do result = result.AddDays(-1);
+        while (result.DayOfWeek != FIRST_DAY_OF_WEEK);
         return result;
     }
 
@@ -61,5 +62,10 @@ public static class DateTimeExtensions
     public static DateTime EndOfYear(this DateTime pivot)
     {
         return new DateTime(pivot.Year, 12, 31, 23, 59, 59, 999, DateTimeKind.Utc);
+    }
+
+    public static int DaysUntilDate(this DateTime pivot)
+    {
+        return (pivot - SystemTime.UtcNow).Days;
     }
 }
