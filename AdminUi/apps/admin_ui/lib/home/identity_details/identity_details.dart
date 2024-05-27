@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
+import '/core/core.dart';
+import 'modals/change_tier.dart';
+
 class IdentityDetails extends StatefulWidget {
   final String address;
 
@@ -92,18 +95,20 @@ class _IdentityDetailsCard extends StatelessWidget {
   final String? selectedTier;
   final ValueChanged<String?>? onTierChanged;
   final List<TierOverview> availableTiers;
-  final VoidCallback? updateTierOfIdentity;
+  final VoidCallback updateTierOfIdentity;
 
   const _IdentityDetailsCard({
     required this.identityDetails,
     required this.availableTiers,
+    required this.updateTierOfIdentity,
     this.selectedTier,
     this.onTierChanged,
-    this.updateTierOfIdentity,
   });
 
   @override
   Widget build(BuildContext context) {
+    final currentTier = availableTiers.firstWhere((tier) => tier.id == identityDetails.tierId);
+
     return Row(
       children: [
         Expanded(
@@ -113,12 +118,19 @@ class _IdentityDetailsCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _IdentityDetails(
-                    title: 'Address',
-                    value: identityDetails.address,
+                  Row(
+                    children: [
+                      Text(identityDetails.address, style: Theme.of(context).textTheme.headlineLarge),
+                      Gaps.w16,
+                      CopyToClipboardButton(
+                        clipboardText: identityDetails.address,
+                        successMessage: 'Identity address copied to clipboard.',
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 32),
                   Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
                     spacing: 8,
                     runSpacing: 8,
                     children: [
@@ -128,23 +140,31 @@ class _IdentityDetailsCard extends StatelessWidget {
                       ),
                       _IdentityDetails(
                         title: 'Public Key',
-                        value: identityDetails.publicKey,
+                        value: '${identityDetails.publicKey.substring(0, 16)}...',
+                        onIconPressed: () => context.setClipboardDataWithSuccessNotification(
+                          clipboardText: identityDetails.publicKey,
+                          successMessage: 'Public key copied to clipboard.',
+                        ),
+                        icon: Icons.copy,
+                        tooltipMessage: 'Copy public key',
                       ),
                       _IdentityDetails(
                         title: 'Created at',
                         value: DateFormat('yyyy-MM-dd hh:mm:ss').format(identityDetails.createdAt),
                       ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _IdentityTierDropdown(
-                            selectedTier: selectedTier,
-                            identityDetails: identityDetails,
-                            onTierChanged: onTierChanged,
-                            availableTiers: availableTiers,
-                            updateTierOfIdentity: updateTierOfIdentity,
-                          ),
-                        ],
+                      _IdentityDetails(
+                        title: 'Tier',
+                        value: currentTier.name,
+                        onIconPressed: currentTier.canBeManuallyAssigned
+                            ? () => showChangeTierDialog(
+                                  context: context,
+                                  onTierUpdated: updateTierOfIdentity,
+                                  identityDetails: identityDetails,
+                                  availableTiers: availableTiers,
+                                )
+                            : null,
+                        icon: Icons.edit,
+                        tooltipMessage: 'Change tier',
                       ),
                     ],
                   ),
@@ -158,117 +178,40 @@ class _IdentityDetailsCard extends StatelessWidget {
   }
 }
 
-class _IdentityTierDropdown extends StatelessWidget {
-  final String? selectedTier;
-  final Identity identityDetails;
-  final ValueChanged<String?>? onTierChanged;
-  final List<TierOverview> availableTiers;
-  final VoidCallback? updateTierOfIdentity;
+class _IdentityDetails extends StatelessWidget {
+  final String title;
+  final String value;
+  final VoidCallback? onIconPressed;
+  final IconData? icon;
+  final String? tooltipMessage;
 
-  const _IdentityTierDropdown({
-    required this.selectedTier,
-    required this.identityDetails,
-    required this.onTierChanged,
-    required this.availableTiers,
-    required this.updateTierOfIdentity,
+  const _IdentityDetails({
+    required this.title,
+    required this.value,
+    this.onIconPressed,
+    this.icon,
+    this.tooltipMessage,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Tier ',
-          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-        ),
-        DropdownButton<String>(
-          isDense: true,
-          value: selectedTier,
-          onChanged: (String? newTier) {
-            onTierChanged?.call(newTier);
-            if (newTier != identityDetails.tierId) {
-              _updateTierOfIdentity(newTier, context);
-            }
-          },
-          items: _buildTierDropdownItems(context),
-        ),
-      ],
+    assert(
+      onIconPressed == null || (onIconPressed != null && icon != null || tooltipMessage != null),
+      'If edit is provided, icon and tooltipMessage must be provided too.',
     );
-  }
 
-  List<DropdownMenuItem<String>> _buildTierDropdownItems(BuildContext context) {
-    return availableTiers.where(_isTierManuallyAssignable).map((tier) {
-      final isDisabled = _isTierDisabled(tier);
-      return DropdownMenuItem<String>(
-        value: tier.id,
-        enabled: !isDisabled,
-        child: Text(
-          tier.name,
-          style: TextStyle(
-            color: isDisabled ? Theme.of(context).disabledColor : null,
-            fontSize: 18,
-          ),
+    return RawChip(
+      label: Text.rich(
+        TextSpan(
+          children: [
+            TextSpan(text: '$title ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
+            TextSpan(text: value, style: Theme.of(context).textTheme.bodyLarge),
+          ],
         ),
-      );
-    }).toList();
-  }
-
-  bool _isTierDisabled(TierOverview tier) {
-    final tiersThatCannotBeUnassigned = availableTiers.where((t) => !t.canBeManuallyAssigned);
-    final identityIsInTierThatCannotBeUnassigned = tiersThatCannotBeUnassigned.any((t) => t.id == identityDetails.tierId);
-    return identityIsInTierThatCannotBeUnassigned && tier.id != identityDetails.tierId;
-  }
-
-  bool _isTierManuallyAssignable(TierOverview tier) {
-    return tier.canBeManuallyAssigned || tier.id == identityDetails.tierId;
-  }
-
-  Future<void> _updateTierOfIdentity(String? newTier, BuildContext context) async {
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-
-    try {
-      await GetIt.I.get<AdminApiClient>().identities.updateIdentity(identityDetails.address, tierId: newTier!);
-
-      scaffoldMessenger.showSnackBar(
-        const SnackBar(
-          content: Text('Identity updated successfully.'),
-          duration: Duration(seconds: 3),
-        ),
-      );
-
-      updateTierOfIdentity!();
-    } catch (e) {
-      scaffoldMessenger.showSnackBar(
-        const SnackBar(
-          content: Text('Failed to update identity. Please try again.'),
-          duration: Duration(seconds: 3),
-        ),
-      );
-    }
-  }
-}
-
-class _IdentityDetails extends StatelessWidget {
-  final String title;
-  final String value;
-
-  const _IdentityDetails({required this.title, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(text: '$title ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
-              TextSpan(text: value, style: Theme.of(context).textTheme.bodyLarge),
-            ],
-          ),
-        ),
-      ],
+      ),
+      onDeleted: onIconPressed,
+      deleteIcon: Icon(icon),
+      deleteButtonTooltipMessage: tooltipMessage,
     );
   }
 }
