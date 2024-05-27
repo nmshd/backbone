@@ -93,7 +93,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                       ),
                       _buildTierDropdown(context, identityDetails),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),
