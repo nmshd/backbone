@@ -112,7 +112,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 }
 
 class _IdentityDetailsCard extends StatelessWidget {
-  static const noTiersFoundMessage = 'No tiers found.';
+  static const _noTiersFoundMessage = 'No tiers found.';
 
   final Identity identityDetails;
   final String? selectedTier;
@@ -195,9 +195,9 @@ class _IdentityDetailsCard extends StatelessWidget {
     if (availableTiers.isEmpty) {
       return [
         const DropdownMenuItem<String>(
-          value: noTiersFoundMessage,
+          value: _noTiersFoundMessage,
           child: Text(
-            noTiersFoundMessage,
+            _noTiersFoundMessage,
             style: TextStyle(fontSize: 10),
           ),
         ),
