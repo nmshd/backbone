@@ -62,4 +62,9 @@ public static class DateTimeExtensions
     {
         return new DateTime(pivot.Year, 12, 31, 23, 59, 59, 999, DateTimeKind.Utc);
     }
+
+    public static int DaysUntilDate(this DateTime pivot)
+    {
+        return (pivot - SystemTime.UtcNow).Days;
+    }
 }
