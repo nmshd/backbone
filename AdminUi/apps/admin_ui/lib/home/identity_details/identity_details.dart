@@ -61,38 +61,12 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                 });
               },
               availableTiers: _tiers,
-              updateIdentity: _updateIdentity,
+              updateTierOfIdentity: _reloadIdentity,
             ),
           ],
         ),
       ),
     );
-  }
-
-  Future<void> _updateIdentity() async {
-    if (_identityDetails == null) return;
-
-    final scaffoldMessenger = ScaffoldMessenger.of(context);
-
-    try {
-      await GetIt.I.get<AdminApiClient>().identities.updateIdentity(_identityDetails!.address, tierId: _selectedTier!);
-
-      scaffoldMessenger.showSnackBar(
-        const SnackBar(
-          content: Text('Identity updated successfully.'),
-          duration: Duration(seconds: 3),
-        ),
-      );
-
-      await _reloadIdentity();
-    } catch (e) {
-      scaffoldMessenger.showSnackBar(
-        const SnackBar(
-          content: Text('Failed to update identity. Please try again.'),
-          duration: Duration(seconds: 3),
-        ),
-      );
-    }
   }
 
   Future<void> _reloadIdentity() async {
@@ -118,14 +92,14 @@ class _IdentityDetailsCard extends StatelessWidget {
   final String? selectedTier;
   final ValueChanged<String?>? onTierChanged;
   final List<TierOverview> availableTiers;
-  final void Function()? updateIdentity;
+  final VoidCallback? updateTierOfIdentity;
 
   const _IdentityDetailsCard({
     required this.identityDetails,
     required this.availableTiers,
     this.selectedTier,
     this.onTierChanged,
-    this.updateIdentity,
+    this.updateTierOfIdentity,
   });
 
   @override
@@ -163,20 +137,12 @@ class _IdentityDetailsCard extends StatelessWidget {
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Tier: ',
-                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          DropdownButton<String>(
-                            isDense: true,
-                            value: selectedTier,
-                            onChanged: (String? newValue) {
-                              onTierChanged?.call(newValue);
-                              if (newValue != identityDetails.tierId) {
-                                updateIdentity?.call();
-                              }
-                            },
-                            items: _buildTierDropdownItems(context),
+                          _IdentityTierDropdown(
+                            selectedTier: selectedTier,
+                            identityDetails: identityDetails,
+                            onTierChanged: onTierChanged,
+                            availableTiers: availableTiers,
+                            updateTierOfIdentity: updateTierOfIdentity,
                           ),
                         ],
                       ),
@@ -186,6 +152,46 @@ class _IdentityDetailsCard extends StatelessWidget {
               ),
             ),
           ),
+        ),
+      ],
+    );
+  }
+}
+
+class _IdentityTierDropdown extends StatelessWidget {
+  final String? selectedTier;
+  final Identity identityDetails;
+  final ValueChanged<String?>? onTierChanged;
+  final List<TierOverview> availableTiers;
+  final VoidCallback? updateTierOfIdentity;
+
+  const _IdentityTierDropdown({
+    required this.selectedTier,
+    required this.identityDetails,
+    required this.onTierChanged,
+    required this.availableTiers,
+    required this.updateTierOfIdentity,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Tier ',
+          style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+        ),
+        DropdownButton<String>(
+          isDense: true,
+          value: selectedTier,
+          onChanged: (String? newTier) {
+            onTierChanged?.call(newTier);
+            if (newTier != identityDetails.tierId) {
+              _updateTierOfIdentity(newTier, context);
+            }
+          },
+          items: _buildTierDropdownItems(context),
         ),
       ],
     );
@@ -216,6 +222,30 @@ class _IdentityDetailsCard extends StatelessWidget {
 
   bool _isTierManuallyAssignable(TierOverview tier) {
     return tier.canBeManuallyAssigned || tier.id == identityDetails.tierId;
+  }
+
+  Future<void> _updateTierOfIdentity(String? newTier, BuildContext context) async {
+    final scaffoldMessenger = ScaffoldMessenger.of(context);
+
+    try {
+      await GetIt.I.get<AdminApiClient>().identities.updateIdentity(identityDetails.address, tierId: newTier!);
+
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(
+          content: Text('Identity updated successfully.'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+
+      updateTierOfIdentity!();
+    } catch (e) {
+      scaffoldMessenger.showSnackBar(
+        const SnackBar(
+          content: Text('Failed to update identity. Please try again.'),
+          duration: Duration(seconds: 3),
+        ),
+      );
+    }
   }
 }
 
