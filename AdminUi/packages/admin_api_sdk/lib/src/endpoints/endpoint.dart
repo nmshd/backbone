@@ -73,6 +73,10 @@ abstract class Endpoint {
 
     final payload = httpResponse.data;
 
+    if (httpResponse.statusCode == 204) {
+      return ApiResponse.success(transformer(null));
+    }
+
     if (httpResponse.statusCode != expectedStatus) {
       if (payload == null) {
         throw Exception('Invalid response type');
