@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
-import 'package:admin_ui/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
@@ -52,66 +51,16 @@ class _IdentityDetailsState extends State<IdentityDetails> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             if (Platform.isMacOS || Platform.isWindows) const BackButton(),
-            Row(
-              children: [
-                Expanded(
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _IdentityDetails(
-                            title: 'Address',
-                            value: identityDetails.address,
-                          ),
-                          Gaps.h32,
-                          Wrap(
-                            spacing: 8,
-                            runSpacing: 8,
-                            children: [
-                              _IdentityDetails(
-                                title: 'Client ID',
-                                value: identityDetails.clientId,
-                              ),
-                              _IdentityDetails(
-                                title: 'Public Key',
-                                value: identityDetails.publicKey,
-                              ),
-                              _IdentityDetails(
-                                title: 'Created at',
-                                value: DateFormat('yyyy-MM-dd hh:MM:ss').format(identityDetails.createdAt),
-                              ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'Tier: ',
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-                                  ),
-                                  DropdownButton<String>(
-                                    isDense: true,
-                                    value: _selectedTier,
-                                    onChanged: (String? newValue) {
-                                      setState(() {
-                                        _selectedTier = newValue;
-                                      });
-                                      if (_selectedTier != identityDetails.tierId) {
-                                        _updateIdentity();
-                                      }
-                                    },
-                                    items: _buildTierDropdownItems(context),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+            _IdentityDetailsCard(
+              identityDetails: identityDetails,
+              selectedTier: _selectedTier,
+              onTierChanged: (String? newValue) {
+                setState(() {
+                  _selectedTier = newValue;
+                });
+              },
+              tierDropdownItems: _buildTierDropdownItems(context),
+              updateIdentity: _updateIdentity,
             ),
           ],
         ),
@@ -202,6 +151,85 @@ class _IdentityDetailsState extends State<IdentityDetails> {
     if (mounted) {
       setState(() => _tiers = tiers.data);
     }
+  }
+}
+
+class _IdentityDetailsCard extends StatelessWidget {
+  final Identity identityDetails;
+  final String? selectedTier;
+  final ValueChanged<String?>? onTierChanged;
+  final List<DropdownMenuItem<String>> tierDropdownItems;
+  final void Function()? updateIdentity;
+
+  const _IdentityDetailsCard({
+    required this.identityDetails,
+    required this.tierDropdownItems,
+    this.selectedTier,
+    this.onTierChanged,
+    this.updateIdentity,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _IdentityDetails(
+                    title: 'Address',
+                    value: identityDetails.address,
+                  ),
+                  const SizedBox(height: 32),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      _IdentityDetails(
+                        title: 'Client ID',
+                        value: identityDetails.clientId,
+                      ),
+                      _IdentityDetails(
+                        title: 'Public Key',
+                        value: identityDetails.publicKey,
+                      ),
+                      _IdentityDetails(
+                        title: 'Created at',
+                        value: DateFormat('yyyy-MM-dd hh:mm:ss').format(identityDetails.createdAt),
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Tier: ',
+                            style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                          DropdownButton<String>(
+                            isDense: true,
+                            value: selectedTier,
+                            onChanged: (String? newValue) {
+                              onTierChanged?.call(newValue);
+                              if (newValue != identityDetails.tierId) {
+                                updateIdentity?.call();
+                              }
+                            },
+                            items: tierDropdownItems,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
