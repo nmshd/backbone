@@ -150,7 +150,8 @@ class _IdentityDetailsCard extends StatelessWidget {
                       ),
                       _IdentityDetails(
                         title: 'Created at',
-                        value: DateFormat('yyyy-MM-dd hh:mm:ss').format(identityDetails.createdAt),
+                        value:
+                            '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(identityDetails.createdAt)} ${DateFormat.Hms().format(identityDetails.createdAt)}',
                       ),
                       _IdentityDetails(
                         title: 'Tier',
