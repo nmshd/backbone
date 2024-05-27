@@ -23,7 +23,7 @@ public class QuotaPeriodTests : AbstractTestsBase
         SystemTime.Set(currentDate);
 
         // Act
-        var start = quotaPeriod.CalculateBegin();
+        var start = quotaPeriod.CalculateBegin(SystemTime.UtcNow);
 
         // Assert
         start.Should().Be(targetDate);
@@ -43,7 +43,7 @@ public class QuotaPeriodTests : AbstractTestsBase
         SystemTime.Set(currentDate);
 
         // Act
-        var start = quotaPeriod.CalculateEnd();
+        var start = quotaPeriod.CalculateEnd(SystemTime.UtcNow);
 
         // Assert
         start.Should().Be(targetDate);

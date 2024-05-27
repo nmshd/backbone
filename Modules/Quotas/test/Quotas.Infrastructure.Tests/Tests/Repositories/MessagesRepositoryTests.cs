@@ -63,7 +63,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
         count.Should().Be(1);
@@ -88,7 +88,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
         const QuotaPeriod quotaPeriod = QuotaPeriod.Month;
 
         // Act
-        var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
         count.Should().Be(3);
@@ -111,7 +111,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
         const QuotaPeriod quotaPeriod = QuotaPeriod.Total;
 
         // Act
-        var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
         count.Should().Be(3);
@@ -134,7 +134,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
         const QuotaPeriod quotaPeriod = QuotaPeriod.Total;
 
         // Act
-        var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var count = await repository.Count(_identityAddress1, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
         count.Should().Be(2);
