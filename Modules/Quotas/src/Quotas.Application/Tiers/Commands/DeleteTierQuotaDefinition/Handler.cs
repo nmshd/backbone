@@ -1,9 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -13,13 +11,11 @@ public class Handler : IRequestHandler<DeleteTierQuotaDefinitionCommand>
 {
     private readonly ITiersRepository _tiersRepository;
     private readonly ILogger<Handler> _logger;
-    private readonly IEventBus _eventBus;
 
-    public Handler(ITiersRepository tiersRepository, ILogger<Handler> logger, IEventBus eventBus)
+    public Handler(ITiersRepository tiersRepository, ILogger<Handler> logger)
     {
         _tiersRepository = tiersRepository;
         _logger = logger;
-        _eventBus = eventBus;
     }
 
     public async Task Handle(DeleteTierQuotaDefinitionCommand request, CancellationToken cancellationToken)
@@ -33,8 +29,6 @@ public class Handler : IRequestHandler<DeleteTierQuotaDefinitionCommand>
         await _tiersRepository.Update(tier, cancellationToken);
 
         _logger.DeletedTierQuotaDefinition(request.TierQuotaDefinitionId, tier.Id);
-
-        _eventBus.Publish(new TierQuotaDefinitionDeletedDomainEvent(tier.Id, request.TierQuotaDefinitionId));
     }
 }
 

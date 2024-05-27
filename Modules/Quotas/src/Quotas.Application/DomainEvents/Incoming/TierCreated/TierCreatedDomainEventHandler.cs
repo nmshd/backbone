@@ -19,7 +19,7 @@ public class TierCreatedDomainEventHandler : IDomainEventHandler<TierCreatedDoma
 
     public async Task Handle(TierCreatedDomainEvent domainEvent)
     {
-        var tier = new Tier(new TierId(domainEvent.Id), domainEvent.Name);
+        var tier = new Tier(TierId.Parse(domainEvent.Id), domainEvent.Name);
         await _tiersRepository.Add(tier, CancellationToken.None);
 
         _logger.TierCreated(tier.Id, tier.Name);
