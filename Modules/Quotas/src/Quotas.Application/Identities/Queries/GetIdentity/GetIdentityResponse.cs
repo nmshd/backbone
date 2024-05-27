@@ -2,6 +2,7 @@ using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Metrics;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
 public class GetIdentityResponse
@@ -35,6 +36,6 @@ public class GetIdentityResponse
     private static async Task<uint> CalculateUsage(MetricCalculatorFactory metricCalculatorFactory, Quota quota, string identityAddress, CancellationToken cancellationToken)
     {
         var calculator = metricCalculatorFactory.CreateFor(quota.MetricKey);
-        return await calculator.CalculateUsage(quota.Period.CalculateBegin(), quota.Period.CalculateEnd(), identityAddress, cancellationToken);
+        return await calculator.CalculateUsage(quota.Period.CalculateBegin(SystemTime.UtcNow), quota.Period.CalculateEnd(SystemTime.UtcNow), identityAddress, cancellationToken);
     }
 }

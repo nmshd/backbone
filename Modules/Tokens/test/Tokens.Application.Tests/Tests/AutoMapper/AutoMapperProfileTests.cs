@@ -1,10 +1,11 @@
 using AutoMapper;
 using Backbone.Modules.Tokens.Application.AutoMapper;
+using Backbone.UnitTestTools.BaseClasses;
 using Xunit;
 
 namespace Backbone.Modules.Tokens.Application.Tests.Tests.AutoMapper;
 
-public class AutoMapperProfileTests
+public class AutoMapperProfileTests : AbstractTestsBase
 {
     [Fact]
     public void ProfileIsValid()

@@ -1,10 +1,11 @@
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests;
-public class PnsHandleTests
+public class PnsHandleTests : AbstractTestsBase
 {
     [Fact]
     public void Can_create_fcm_handle()

@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -13,7 +14,7 @@ using Xunit;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 
-public class ApplePushNotificationServiceConnectorTests
+public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
 {
     private const string APP_ID = "some-app-id";
 

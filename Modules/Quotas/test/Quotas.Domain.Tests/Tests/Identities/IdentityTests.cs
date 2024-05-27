@@ -3,6 +3,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
@@ -11,7 +12,7 @@ using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
 
-public class IdentityTests : IDisposable
+public class IdentityTests : AbstractTestsBase
 {
     #region Creation
 
@@ -19,11 +20,11 @@ public class IdentityTests : IDisposable
     public void Can_create_identity_with_valid_properties()
     {
         // Act
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = new Identity("some-address", TierId.Parse("TIRsomeTierId1111111"));
 
         // Assert
         identity.Address.Should().Be("some-address");
-        identity.TierId.Should().Be(new TierId("some-tier-id"));
+        identity.TierId.Should().Be(TierId.Parse("TIRsomeTierId1111111"));
     }
 
     #endregion
@@ -95,7 +96,7 @@ public class IdentityTests : IDisposable
     public void Deleting_individual_Quota_only_deletes_Quota_with_given_id()
     {
         // Arrange
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = new Identity("some-address", TierId.Parse("tier-id"));
         var firstQuota = identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
         var secondQuota = identity.CreateIndividualQuota(MetricKey.NumberOfFiles, 1, QuotaPeriod.Day);
 
@@ -145,7 +146,7 @@ public class IdentityTests : IDisposable
     public void Deleting_Tier_Quota_by_definition_id_only_deletes_Quota_with_given_definition_id()
     {
         // Arrange
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = new Identity("some-address", TierId.Parse("tier-id"));
         var tierQuotaDefinition1 = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
         var tierQuotaDefinition2 = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition1);
@@ -231,7 +232,7 @@ public class IdentityTests : IDisposable
         // Arrange
         SystemTime.Set(DateTime.Parse("2023-01-15T12:00:00"));
 
-        var identity = new Identity("some-address", new TierId("some-tier-id"));
+        var identity = new Identity("some-address", TierId.Parse("tier-id"));
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
 
         // Act
@@ -259,7 +260,7 @@ public class IdentityTests : IDisposable
 
         // To make sure that the order of the added Quotas does not matter, we do the same with reversed order
         // Arrange
-        identity = new Identity("some-address", new TierId("some-tier-id"));
+        identity = new Identity("some-address", TierId.Parse("tier-id"));
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 2, QuotaPeriod.Day));
         identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
 
@@ -351,8 +352,8 @@ public class IdentityTests : IDisposable
     {
         // Arrange
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var identity = new Identity(identityAddress, new TierId("tier-id"));
-        var newTier = new Tier(new TierId("new-tier-id"), "New Tier");
+        var identity = new Identity(identityAddress, TierId.Parse("tier-id"));
+        var newTier = new Tier(TierId.Parse("new-tier-id"), "New Tier");
 
         // Act
         await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(0), CancellationToken.None);
@@ -374,7 +375,7 @@ public class IdentityTests : IDisposable
         await identity.AddUnexhaustedTierQuotaToIdentity(MetricKey.NumberOfFiles, 1);
         await identity.AddUnexhaustedTierQuotaToIdentity(MetricKey.NumberOfRelationships, 1);
 
-        var newTier = new Tier(new TierId("new-tier-id"), "New Tier");
+        var newTier = new Tier(TierId.Parse("new-tier-id"), "New Tier");
         newTier.CreateQuota(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
         newTier.CreateQuota(MetricKey.NumberOfRelationships, 1, QuotaPeriod.Day);
 
@@ -402,7 +403,7 @@ public class IdentityTests : IDisposable
         await identity.AddExhaustedTierQuotaToIdentity(MetricKey.NumberOfFiles, 1);
         await identity.AddUnexhaustedTierQuotaToIdentity(MetricKey.NumberOfSentMessages, 3);
 
-        var newTier = new Tier(new TierId("new-tier-id"), "New Tier");
+        var newTier = new Tier(TierId.Parse("new-tier-id"), "New Tier");
         newTier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfFiles, 3, QuotaPeriod.Day));
         newTier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day));
 
@@ -419,7 +420,7 @@ public class IdentityTests : IDisposable
     {
         // Arrange
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var oldTier = new Tier(new TierId("tier-id"), "Old Tier");
+        var oldTier = new Tier(TierId.Parse("tier-id"), "Old Tier");
         var identity = new Identity(identityAddress, oldTier.Id);
 
         // Act
@@ -434,12 +435,7 @@ public class IdentityTests : IDisposable
 
     private static Identity CreateIdentity()
     {
-        return new Identity(TestDataGenerator.CreateRandomIdentityAddress(), new TierId("tier-id"));
-    }
-
-    public void Dispose()
-    {
-        SystemTime.Reset();
+        return new Identity(TestDataGenerator.CreateRandomIdentityAddress(), TierId.Parse("tier-id"));
     }
 }
 

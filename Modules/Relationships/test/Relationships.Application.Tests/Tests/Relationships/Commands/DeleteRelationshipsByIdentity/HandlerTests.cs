@@ -2,11 +2,12 @@
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.DeleteRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.DeleteRelationshipsByIdentity;
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Command_calls_delete_on_repository()

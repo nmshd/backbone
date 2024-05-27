@@ -4,13 +4,13 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
-using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class DeletionProcessApprovalReminderTests
+public class DeletionProcessApprovalReminderTests : AbstractTestsBase
 {
     [Fact]
     public void DeletionProcessApprovalReminder1Sent_updates_ApprovalReminder1SentAt()
@@ -107,22 +107,6 @@ public class DeletionProcessApprovalReminderTests
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
-    [Fact]
-    public void GetEndOfApprovalPeriod_returns_expected_date()
-    {
-        // Arrange
-        SystemTime.Set(DateTime.Parse("2000-01-01"));
-        IdentityDeletionConfiguration.MaxApprovalTime = 10;
-
-        var deletionProcess = IdentityDeletionProcess.StartAsOwner(CreateRandomIdentityAddress(), CreateRandomDeviceId());
-
-        // Act
-        var endOfApprovalPeriod = deletionProcess.GetEndOfApprovalPeriod();
-
-        // Assert
-        endOfApprovalPeriod.Should().Be(DateTime.Parse("2000-01-11"));
-    }
-
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
     {
         deletionProcess.AuditLog.Should().HaveCount(2);
@@ -151,8 +135,9 @@ public class DeletionProcessApprovalReminderTests
     }
 
     [Fact]
-    public void Dispose()
+    public override void Dispose()
     {
         Hasher.Reset();
+        base.Dispose();
     }
 }

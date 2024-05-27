@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -9,7 +10,7 @@ using Xunit;
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.Tests;
 
 [Collection("AzureBlobStorageTests")]
-public class AzureStorageAccountTests
+public class AzureStorageAccountTests : AbstractTestsBase
 {
     private const string CONTAINER_NAME = "test-container";
 

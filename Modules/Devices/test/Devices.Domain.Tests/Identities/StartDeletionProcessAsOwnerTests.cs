@@ -4,16 +4,19 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
+using FluentAssertions.Formatting;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class StartDeletionProcessAsOwnerTests : IDisposable
+public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
 {
-    public void Dispose()
+    public override void Dispose()
     {
         Hasher.Reset();
+        base.Dispose();
     }
 
     [Fact]
@@ -31,7 +34,7 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
         var deletionProcess = activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
 
         // Assert
-        activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
+        activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-15"));
         activeIdentity.TierId.Value.Should().Be(Tier.QUEUED_FOR_DELETION.Id.Value);
         activeIdentity.Status.Should().Be(IdentityStatus.ToBeDeleted);
 
@@ -39,11 +42,11 @@ public class StartDeletionProcessAsOwnerTests : IDisposable
         deletionProcess.Status.Should().Be(DeletionProcessStatus.Approved);
         deletionProcess.ApprovedAt.Should().Be(SystemTime.UtcNow);
         deletionProcess.ApprovedByDevice.Should().Be(activeDevice.Id);
-        deletionProcess.GracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
+        deletionProcess.GracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-15"));
 
         AssertAuditLogEntryWasCreated(deletionProcess);
         var auditLogEntry = deletionProcess.AuditLog[0];
-        auditLogEntry.Message.Should().Be("The deletion process was started by the owner. It was automatically approved.");
+        auditLogEntry.MessageKey.Should().Be(MessageKey.StartedByOwner);
         auditLogEntry.DeviceIdHash.Should().BeEquivalentTo(new byte[] { 1, 2, 3 });
         auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.Approved);
     }

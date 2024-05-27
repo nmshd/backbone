@@ -3,11 +3,12 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Clients.Commands.ChangeClientSecret;
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Change_client_secret()

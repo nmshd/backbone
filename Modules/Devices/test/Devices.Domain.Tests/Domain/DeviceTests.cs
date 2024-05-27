@@ -1,11 +1,12 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Domain;
 
-public class DeviceTests
+public class DeviceTests : AbstractTestsBase
 {
     [Fact]
     public void IsOnboarded_returns_false_if_user_has_never_logged_in_before()

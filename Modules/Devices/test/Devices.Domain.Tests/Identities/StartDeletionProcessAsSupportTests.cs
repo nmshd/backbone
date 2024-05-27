@@ -4,12 +4,13 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class StartDeletionProcessAsSupportTests
+public class StartDeletionProcessAsSupportTests : AbstractTestsBase
 {
     [Fact]
     public void Start_deletion_process()
@@ -29,7 +30,7 @@ public class StartDeletionProcessAsSupportTests
 
         AssertAuditLogEntryWasCreated(deletionProcess);
         var auditLogEntry = deletionProcess.AuditLog[0];
-        auditLogEntry.Message.Should().Be("The deletion process was started by support. It is now waiting for approval.");
+        auditLogEntry.MessageKey.Should().Be(MessageKey.StartedBySupport);
         auditLogEntry.DeviceIdHash.Should().BeNull();
         auditLogEntry.NewStatus.Should().Be(DeletionProcessStatus.WaitingForApproval);
     }

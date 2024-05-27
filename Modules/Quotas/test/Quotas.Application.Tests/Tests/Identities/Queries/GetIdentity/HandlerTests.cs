@@ -6,6 +6,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
@@ -13,14 +14,14 @@ using Xunit;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities.Queries.GetIdentity;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Gets_identity_quotas_by_address()
     {
         // Arrange
         var metric = new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages");
-        var identity = new Identity("some-identity-address", new TierId("SomeTierId"));
+        var identity = new Identity("some-identity-address", TierId.Parse("tier-id"));
 
         const int max = 5;
         const QuotaPeriod period = QuotaPeriod.Month;

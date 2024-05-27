@@ -107,12 +107,10 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                           onPressed: () => setState(() => _isClientSecretVisible = !_isClientSecretVisible),
                         ),
                         Gaps.w4,
-                        IconButton(
-                          icon: const Icon(Icons.copy),
+                        CopyToClipboardButton(
                           tooltip: 'Copy to clipboard.',
-                          onPressed: _clientSecretController.text.isNotEmpty
-                              ? () => Clipboard.setData(ClipboardData(text: _clientSecretController.text))
-                              : null,
+                          clipboardText: _clientSecretController.text,
+                          successMessage: 'Client Secret copied to clipboard.',
                         ),
                       ],
                     ),

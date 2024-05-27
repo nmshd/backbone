@@ -1,10 +1,11 @@
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Metrics;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Metrics;
-public class UsedFileStorageSpaceMetricCalculatorTests
+public class UsedFileStorageSpaceMetricCalculatorTests : AbstractTestsBase
 {
     [Fact]
     public async Task Aggregate_Used_Space_Throws_OverflowException_When_Sum_Wont_Fit_In_A_Long()

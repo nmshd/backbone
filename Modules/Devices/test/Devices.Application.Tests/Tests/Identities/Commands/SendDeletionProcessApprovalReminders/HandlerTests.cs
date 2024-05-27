@@ -6,13 +6,14 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.SendDeletionProcessApprovalReminders;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task No_identities_with_a_deletion_process_waiting_for_approval_exists()
@@ -72,7 +73,7 @@ public class HandlerTests
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
         identity.DeletionProcessApprovalReminder1Sent();
 
-        var utcNow = DateTime.Parse("2000-01-06");
+        var utcNow = DateTime.Parse("2000-01-04");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -104,7 +105,7 @@ public class HandlerTests
         identity.DeletionProcessApprovalReminder1Sent();
         identity.DeletionProcessApprovalReminder2Sent();
 
-        var utcNow = DateTime.Parse("2000-01-09");
+        var utcNow = DateTime.Parse("2000-01-06");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -134,7 +135,7 @@ public class HandlerTests
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
 
-        var utcNow = DateTime.Parse("2000-01-06");
+        var utcNow = DateTime.Parse("2000-01-04");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -165,7 +166,7 @@ public class HandlerTests
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(deletionProcessStartedAt: DateTime.Parse("2000-01-01"));
 
-        var utcNow = DateTime.Parse("2000-01-09");
+        var utcNow = DateTime.Parse("2000-01-06");
         SystemTime.Set(utcNow);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();

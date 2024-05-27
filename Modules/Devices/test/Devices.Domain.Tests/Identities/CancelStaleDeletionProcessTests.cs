@@ -1,11 +1,12 @@
 ﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class CancelStaleDeletionProcessTests
+public class CancelStaleDeletionProcessTests : AbstractTestsBase
 {
     [Fact]
     public void Returns_failure_if_no_process_is_waiting_for_approval()
@@ -48,10 +49,8 @@ public class CancelStaleDeletionProcessTests
         var identity = TestDataGenerator.CreateIdentity();
         identity.StartDeletionProcessAsSupport();
 
-        var utcNow = DateTime.Parse("2020-01-11T00:00:00");
+        var utcNow = DateTime.Parse("2020-01-08T00:00:00");
         SystemTime.Set(utcNow);
-
-        IdentityDeletionConfiguration.MaxApprovalTime = 10;
 
         // Act
         var result = identity.CancelStaleDeletionProcess();
@@ -70,9 +69,7 @@ public class CancelStaleDeletionProcessTests
         // Arrange
         SystemTime.Set(DateTime.Parse("2020-01-01T00:00:00"));
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval();
-        SystemTime.Set(DateTime.Parse("2020-01-11T00:00:00"));
-
-        IdentityDeletionConfiguration.MaxApprovalTime = 10;
+        SystemTime.Set(DateTime.Parse("2020-01-08T00:00:00"));
 
         // Act
         var result = identity.CancelStaleDeletionProcess();

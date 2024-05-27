@@ -1,13 +1,10 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -17,13 +14,10 @@ using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.CreateQuotaForTier;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
-    private readonly IEventBus _eventBus;
-
     public HandlerTests()
     {
-        _eventBus = A.Fake<IEventBus>();
         AssertionScope.Current.FormattingOptions.MaxLines = 1000;
     }
 
@@ -31,7 +25,7 @@ public class HandlerTests
     public async Task Creates_quota_for_tier()
     {
         // Arrange
-        var tierId = new TierId("TIRsomeTierId1111111");
+        var tierId = TierId.Parse("TIRsomeTierId1111111");
         const int max = 5;
         const QuotaPeriod period = QuotaPeriod.Month;
         var metricKey = MetricKey.NumberOfSentMessages.Value;
@@ -60,32 +54,10 @@ public class HandlerTests
         ).MustHaveHappened();
     }
 
-    [Fact]
-    public async Task Triggers_QuotaCreatedForTierDomainEvent()
-    {
-        // Arrange
-        var tierId = new TierId("TIRsomeTierId1111111");
-        var metricKey = MetricKey.NumberOfSentMessages.Value;
-        var command = new CreateQuotaForTierCommand(tierId, metricKey, 5, QuotaPeriod.Month);
-        var tier = new Tier(tierId, "some-tier-name");
-
-        var tierRepository = A.Fake<ITiersRepository>();
-        A.CallTo(() => tierRepository.Find(tierId, A<CancellationToken>._, A<bool>._)).Returns(tier);
-
-        var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
-        var handler = CreateHandler(tierRepository, metricsRepository);
-
-        // Act
-        await handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        A.CallTo(() => _eventBus.Publish(A<DomainEvent>.That.IsInstanceOf(typeof(QuotaCreatedForTierDomainEvent)))).MustHaveHappened();
-    }
-
     private Handler CreateHandler(ITiersRepository tiersRepository, FindMetricsStubRepository metricsRepository)
     {
         var logger = A.Fake<ILogger<Handler>>();
 
-        return new Handler(tiersRepository, logger, _eventBus, metricsRepository);
+        return new Handler(tiersRepository, logger, metricsRepository);
     }
 }
