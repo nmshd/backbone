@@ -140,7 +140,7 @@ class _IdentityDetailsCard extends StatelessWidget {
                       ),
                       _IdentityDetails(
                         title: 'Public Key',
-                        value: '${identityDetails.publicKey.substring(0, 16)}...',
+                        value: identityDetails.publicKey.ellipsize(20),
                         onIconPressed: () => context.setClipboardDataWithSuccessNotification(
                           clipboardText: identityDetails.publicKey,
                           successMessage: 'Public key copied to clipboard.',

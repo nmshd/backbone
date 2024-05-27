@@ -36,3 +36,11 @@ extension SetClipboardDataWithSnack on BuildContext {
     );
   }
 }
+
+extension Ellipsize on String {
+  String ellipsize(int maxLength) {
+    if (length <= maxLength) return this;
+
+    return '${substring(0, maxLength - 3)}...';
+  }
+}
