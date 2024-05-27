@@ -13,8 +13,8 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
-using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.CreateQuotaForIdentity;
 
