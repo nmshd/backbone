@@ -6,27 +6,27 @@ import 'package:admin_ui/core/modals/add_quota_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-Future<void> showAddIdentityQuotaDialog({required BuildContext context, required String address, required VoidCallback onQuotaAdded}) async {
+Future<void> showAddQuotaDialog({required BuildContext context, required String tierId, required VoidCallback onQuotaAdded}) async {
   await showDialog<void>(
     context: context,
-    builder: (BuildContext context) => _AddIdentityQuotaDialog(
-      address: address,
+    builder: (BuildContext context) => _AddTierQuotaDialog(
+      tierId: tierId,
       onQuotaAdded: onQuotaAdded,
     ),
   );
 }
 
-class _AddIdentityQuotaDialog extends StatefulWidget {
-  final String address;
+class _AddTierQuotaDialog extends StatefulWidget {
+  final String tierId;
   final VoidCallback onQuotaAdded;
 
-  const _AddIdentityQuotaDialog({required this.address, required this.onQuotaAdded});
+  const _AddTierQuotaDialog({required this.tierId, required this.onQuotaAdded});
 
   @override
-  State<_AddIdentityQuotaDialog> createState() => _AddIdentityQuotaDialogState();
+  State<_AddTierQuotaDialog> createState() => _AddTierQuotaDialogState();
 }
 
-class _AddIdentityQuotaDialogState extends State<_AddIdentityQuotaDialog> {
+class _AddTierQuotaDialogState extends State<_AddTierQuotaDialog> {
   final _maxAmountController = TextEditingController();
   List<Metric> _availableMetrics = [];
 
@@ -83,8 +83,8 @@ class _AddIdentityQuotaDialogState extends State<_AddIdentityQuotaDialog> {
   Future<void> _addQuota() async {
     setState(() => _saving = true);
 
-    final response = await GetIt.I.get<AdminApiClient>().quotas.createIdentityQuota(
-          address: widget.address,
+    final response = await GetIt.I.get<AdminApiClient>().quotas.createTierQuota(
+          tierId: widget.tierId,
           metricKey: _selectedMetric!,
           max: _maxAmount!,
           period: _selectedPeriod!,
