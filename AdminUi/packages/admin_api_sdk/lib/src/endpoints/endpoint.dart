@@ -67,7 +67,7 @@ abstract class Endpoint {
     Response<Map<String, dynamic>> httpResponse,
     T Function(dynamic) transformer, {
     int? expectedStatus,
-    bool allowEmptyResponse = true,
+    bool allowEmptyResponse = false,
   }) {
     expectedStatus ??= switch (httpResponse.requestOptions.method.toUpperCase()) { 'POST' => 201, _ => 200 };
 
