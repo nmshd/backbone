@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
@@ -11,6 +12,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "DELETE Device")]
+[Scope(Feature = "UPDATE Device")]
 internal class DevicesStepDefinitions
 {
     private Client _sdk = null!;
@@ -18,6 +20,7 @@ internal class DevicesStepDefinitions
     private readonly HttpClient _httpClient;
 
     private ApiResponse<EmptyResponse>? _deletionResponse;
+    private ApiResponse<EmptyResponse>? _updateResponse;
 
     private string? _deviceIdD1;
     private string? _deviceIdD2;
@@ -61,10 +64,28 @@ internal class DevicesStepDefinitions
         _deletionResponse = await _sdk.Devices.DeleteDevice(NON_EXISTENT_DEVICE_ID);
     }
 
+    [When("a PUT request is sent to the Devices/Self endpoint with a valid payload")]
+    public async Task WhenAPutRequestIsSentToTheDeviceSelfEndpointWithAValidPayload()
+    {
+        var request = new UpdateDeviceRequest { CommunicationLanguage = "en" };
+        _updateResponse = await _sdk.Devices.UpdateDevice(request);
+    }
+
+    [When("a PUT request is sent to the Devices/Self endpoint with an invalid payload")]
+    public async Task WhenAPutRequestIsSentToTheDeviceSelfEndpointWithAnInvalidPayload()
+    {
+        var request = new UpdateDeviceRequest { CommunicationLanguage = "some-non-existent-language" };
+        _updateResponse = await _sdk.Devices.UpdateDevice(request);
+    }
+
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        ((int)_deletionResponse!.Status).Should().Be(expectedStatusCode);
+        if (_deletionResponse != null)
+            ((int)_deletionResponse!.Status).Should().Be(expectedStatusCode);
+
+        if (_updateResponse != null)
+            ((int)_updateResponse!.Status).Should().Be(expectedStatusCode);
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]*)""")]
