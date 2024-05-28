@@ -2,7 +2,7 @@ import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
-import '../../core.dart';
+import '../../../core/core.dart';
 
 class QuotasButtonGroup extends StatefulWidget {
   final List<String> selectedQuotas;
