@@ -17,6 +17,7 @@ public class Device
         Identity = null!;
         User = null!;
         CreatedByDevice = null!;
+        CommunicationLanguage = null!;
     }
 
     public Device(Identity identity, DeviceId? createdByDevice = null)
@@ -25,6 +26,7 @@ public class Device
         CreatedAt = SystemTime.UtcNow;
         CreatedByDevice = createdByDevice ?? Id;
 
+        CommunicationLanguage = null!;
         User = null!; // This is just to satisfy the compiler; the property is actually set by EF core
 
         // The following distinction is unfortunately necessary in order to make EF recognize that the identity already exists
@@ -49,6 +51,8 @@ public class Device
 
     public DateTime CreatedAt { get; set; }
 
+    public string CommunicationLanguage { get; set; }
+
     public DeviceId CreatedByDevice { get; set; }
 
     public DateTime? DeletedAt { get; set; }
@@ -68,6 +72,18 @@ public class Device
             return new DomainError("error.platform.validation.device.deviceCannotBeDeleted", "You are not allowed to delete this device as it belongs to another identity.");
 
         return null;
+    }
+
+    public bool Update(string communicationLanguage)
+    {
+        var hasChanges = false;
+        if (communicationLanguage != CommunicationLanguage)
+        {
+            hasChanges = true;
+            CommunicationLanguage = communicationLanguage;
+        }
+
+        return hasChanges;
     }
 
     public void MarkAsDeleted(DeviceId deletedByDevice, IdentityAddress addressOfActiveIdentity)
