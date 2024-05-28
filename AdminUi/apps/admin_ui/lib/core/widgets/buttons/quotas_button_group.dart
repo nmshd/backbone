@@ -1,9 +1,8 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
-import 'package:admin_ui/core/constants.dart';
-import 'package:admin_ui/core/modals/add_quota_dialog.dart';
-import 'package:admin_ui/core/modals/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+
+import '../../core.dart';
 
 class QuotasButtonGroup extends StatefulWidget {
   final List<String> selectedQuotas;
