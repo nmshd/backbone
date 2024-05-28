@@ -73,6 +73,7 @@
 .details-expansion-panel-header:hover {
     background: #11337a !important;
 }
+
 .details-expansion-panel-header.mat-expansion-panel-header.mat-expanded {
     border-radius: 4px 4px 0px 0px;
 }
@@ -102,8 +103,12 @@
 .mat-column-createdAt,
 .mat-column-lastLogin,
 .mat-column-createdByDevice {
-    width: 20%;
+    width: 18%;
     word-break: break-all;
+}
+
+.mat-column-communicationLanguage {
+    width: 20%;
 }
 
 .disabled-tier {
