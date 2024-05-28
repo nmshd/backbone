@@ -44,7 +44,7 @@ public class NotificationTextService
         var bodyKey = $"{type.Name}.Body";
 
         var rm = new ResourceManager(typeof(IPushNotificationResource).FullName!, GetType().Assembly);
-        
+
         var title = rm.GetString(titleKey, new CultureInfo(languageCode));
         var body = rm.GetString(bodyKey, new CultureInfo(languageCode));
 

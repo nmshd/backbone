@@ -1,11 +1,11 @@
-﻿using Backbone.BuildingBlocks.Domain.PushNotifications;
+﻿using System.Resources;
+using Backbone.BuildingBlocks.Domain.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
-using System.Resources;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications;
 public class PushNotificationTranslations
