@@ -8,13 +8,14 @@ using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using Backbone.Modules.Tokens.Domain.DomainEvents;
 using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions.Execution;
 using Xunit;
 
 namespace Backbone.Modules.Tokens.Application.Tests.Tests.Tokens.CreateToken;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     private readonly IUserContext _userContext;
     private readonly IMapper _mapper;

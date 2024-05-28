@@ -2,13 +2,14 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Queries.ListTiers;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     public HandlerTests()
     {

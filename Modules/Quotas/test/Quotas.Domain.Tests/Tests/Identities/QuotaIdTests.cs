@@ -1,9 +1,10 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
-public class QuotaIdTests
+public class QuotaIdTests : AbstractTestsBase
 {
     [Fact]
     public void Can_create_quota_id_with_valid_value()

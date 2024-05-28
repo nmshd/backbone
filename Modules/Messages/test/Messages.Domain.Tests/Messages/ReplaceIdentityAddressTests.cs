@@ -1,6 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
@@ -8,7 +9,7 @@ using Xunit;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
 
-public class ReplaceIdentityAddressTests
+public class ReplaceIdentityAddressTests : AbstractTestsBase
 {
     [Fact]
     public void CreatedBy_gets_updated()

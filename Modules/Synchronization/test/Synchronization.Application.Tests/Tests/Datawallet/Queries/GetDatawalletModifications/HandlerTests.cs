@@ -5,6 +5,7 @@ using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
 using FluentAssertions;
@@ -13,7 +14,7 @@ using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Queries.GetDatawalletModifications;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     private const ushort DATAWALLET_VERSION = 1;
 

@@ -1,9 +1,10 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Tiers;
-public class TierNameTests
+public class TierNameTests : AbstractTestsBase
 {
     [Theory]
     [InlineData("a-tier-name")]

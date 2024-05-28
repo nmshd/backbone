@@ -1,11 +1,12 @@
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentValidation.TestHelper;
 using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
 
-public class PushDatawalletModificationsCommandValidatorTests
+public class PushDatawalletModificationsCommandValidatorTests : AbstractTestsBase
 {
     [Fact]
     public void Happy_path()

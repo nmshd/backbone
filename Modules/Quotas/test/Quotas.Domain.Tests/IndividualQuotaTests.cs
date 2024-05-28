@@ -1,11 +1,12 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Domain.Tests;
 
-public class IndividualQuotaTests
+public class IndividualQuotaTests : AbstractTestsBase
 {
     [Fact]
     public void Creates_individual_quota_with_valid_properties()

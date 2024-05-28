@@ -1,10 +1,11 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Tiers;
 
-public class TierTests
+public class TierTests : AbstractTestsBase
 {
     [Fact]
     public void Can_create_tier_with_valid_properties()

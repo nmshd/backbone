@@ -1,11 +1,12 @@
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.EventHandlerService.Tests;
 
-public class EventHandlerServiceTests
+public class EventHandlerServiceTests : AbstractTestsBase
 {
     [Fact]
     public async Task HappyPath()
