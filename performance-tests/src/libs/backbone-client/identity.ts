@@ -5,7 +5,7 @@ import { CreateChallengeResponse } from "../../models/challenge";
 import { CreateIdentityRequest } from "../../models/identity";
 import { JwtResponse } from "../../models/jwt-response";
 import { ChallengeRequestPayload, CryptoHelper } from "../crypto-helper";
-import { apiVersion } from "./api-version";
+import { apiVersion } from "./constants";
 
 export function createIdentity(client: Httpx, clientId: string, clientSecret: string, password: string): Response {
     try {
