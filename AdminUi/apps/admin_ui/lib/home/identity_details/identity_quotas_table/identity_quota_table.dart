@@ -1,5 +1,5 @@
 import 'package:admin_api_types/admin_api_types.dart';
-import 'package:admin_ui/core/widgets/buttons/quotas_button_group.dart';
+import 'package:admin_ui/core/widgets/widgets.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 
