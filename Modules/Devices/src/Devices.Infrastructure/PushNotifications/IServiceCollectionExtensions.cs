@@ -13,7 +13,7 @@ public static class IServiceCollectionExtensions
 
     public static void AddPushNotifications(this IServiceCollection services, PushNotificationOptions options)
     {
-        services.AddTransient<NotificationTextService>();
+        services.AddTransient<PushNotificationTextProvider>();
 
         switch (options.Provider)
         {

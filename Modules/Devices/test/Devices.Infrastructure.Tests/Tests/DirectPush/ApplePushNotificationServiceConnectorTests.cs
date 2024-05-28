@@ -61,7 +61,7 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
         });
         var jwtGenerator = A.Fake<IJwtGenerator>();
         var logger = A.Fake<ILogger<ApplePushNotificationServiceConnector>>();
-        var notificationTextService = A.Dummy<NotificationTextService>();
+        var notificationTextService = A.Dummy<PushNotificationTextProvider>();
 
         return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, notificationTextService, logger);
     }

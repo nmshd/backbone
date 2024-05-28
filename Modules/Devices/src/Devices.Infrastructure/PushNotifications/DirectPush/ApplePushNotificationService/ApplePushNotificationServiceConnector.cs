@@ -13,13 +13,13 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.A
 public class ApplePushNotificationServiceConnector : IPnsConnector
 {
     private readonly IJwtGenerator _jwtGenerator;
-    private readonly NotificationTextService _notificationTextService;
+    private readonly PushNotificationTextProvider _notificationTextService;
     private readonly HttpClient _httpClient;
     private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
     private readonly DirectPnsCommunicationOptions.ApnsOptions _options;
 
     public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<DirectPnsCommunicationOptions.ApnsOptions> options, IJwtGenerator jwtGenerator,
-        NotificationTextService notificationTextService,
+        PushNotificationTextProvider notificationTextService,
         ILogger<ApplePushNotificationServiceConnector> logger)
     {
         _httpClient = httpClientFactory.CreateClient();

@@ -13,12 +13,12 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.F
 public class FirebaseCloudMessagingConnector : IPnsConnector
 {
     private readonly FirebaseMessagingFactory _firebaseMessagingFactory;
-    private readonly NotificationTextService _notificationTextService;
+    private readonly PushNotificationTextProvider _notificationTextService;
     private readonly ILogger<FirebaseCloudMessagingConnector> _logger;
     private readonly DirectPnsCommunicationOptions.FcmOptions _options;
 
     public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory, IOptions<DirectPnsCommunicationOptions.FcmOptions> options,
-        NotificationTextService notificationTextService,
+        PushNotificationTextProvider notificationTextService,
         ILogger<FirebaseCloudMessagingConnector> logger)
     {
         _firebaseMessagingFactory = firebaseMessagingFactory;

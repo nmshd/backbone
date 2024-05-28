@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.Reflection;
 using System.Resources;
-using Backbone.BuildingBlocks.Domain.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
@@ -9,12 +8,12 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications.Translations;
 using Microsoft.Extensions.Localization;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
-public class NotificationTextService
+public class PushNotificationTextProvider
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private const string DEFAULT_LANGUAGE_CODE = "en";
 
-    public NotificationTextService(
+    public PushNotificationTextProvider(
         IIdentitiesRepository identitiesRepository
         )
     {

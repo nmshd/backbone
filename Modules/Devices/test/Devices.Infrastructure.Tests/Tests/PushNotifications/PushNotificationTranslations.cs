@@ -33,9 +33,9 @@ public class PushNotificationTranslations
         notificationTypesWithMissingTranslations.Should().BeEmpty();
     }
 
-    private static NotificationTextService CreateNotificationTextService()
+    private static PushNotificationTextProvider CreateNotificationTextService()
     {
-        return new NotificationTextService(A.Dummy<IIdentitiesRepository>());
+        return new PushNotificationTextProvider(A.Dummy<IIdentitiesRepository>());
     }
 
     private static IEnumerable<Type> GetNotificationTypes()

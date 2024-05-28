@@ -11,10 +11,10 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
 
 public class DummyPushService : IPushNotificationRegistrationService, IPushNotificationSender
 {
-    private readonly NotificationTextService _notificationTextService;
+    private readonly PushNotificationTextProvider _notificationTextService;
     private readonly ILogger<DummyPushService> _logger;
 
-    public DummyPushService(NotificationTextService notificationTextService, ILogger<DummyPushService> logger)
+    public DummyPushService(PushNotificationTextProvider notificationTextService, ILogger<DummyPushService> logger)
     {
         _notificationTextService = notificationTextService;
         _logger = logger;
