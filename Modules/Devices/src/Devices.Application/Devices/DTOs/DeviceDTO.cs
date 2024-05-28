@@ -12,6 +12,7 @@ public class DeviceDTO : IHaveCustomMapping
     public required DateTime CreatedAt { get; set; }
     public required DeviceId CreatedByDevice { get; set; }
     public required LastLoginInformation LastLogin { get; set; }
+    public required string CommunicationLanguage { get; set; }
 
     public void CreateMappings(Profile configuration)
     {

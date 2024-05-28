@@ -13,13 +13,14 @@ public class IdentitySummaryDTO
         PublicKey = identity.PublicKey;
         CreatedAt = identity.CreatedAt;
 
-        Devices = identity.Devices.Select(it => new DeviceDTO()
+        Devices = identity.Devices.Select(it => new DeviceDTO
         {
             CreatedAt = it.CreatedAt,
             CreatedByDevice = it.CreatedByDevice,
             Id = it.Id,
             LastLogin = new LastLoginInformation { Time = it.User.LastLoginAt },
-            Username = it.User.UserName!
+            Username = it.User.UserName!,
+            CommunicationLanguage = it.CommunicationLanguage
         });
         NumberOfDevices = identity.Devices.Count;
 
