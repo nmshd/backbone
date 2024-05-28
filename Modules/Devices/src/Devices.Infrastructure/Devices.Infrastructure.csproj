@@ -21,13 +21,14 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
         <ProjectReference Include="..\Devices.Application\Devices.Application.csproj" />
-        <ProjectReference Include="..\Devices.Domain\Devices.Domain.csproj">
-            <TreatAsUsed>true</TreatAsUsed>
-        </ProjectReference>
+        <ProjectReference Include="..\Devices.Domain\Devices.Domain.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <EmbeddedResource Update="PushNotifications\Translations\IPushNotificationResource.en.resx">
+        <Generator>PublicResXFileCodeGenerator</Generator>
+      </EmbeddedResource>
+      <EmbeddedResource Update="PushNotifications\Translations\IPushNotificationResource.pt.resx">
         <Generator>PublicResXFileCodeGenerator</Generator>
       </EmbeddedResource>
     </ItemGroup>
