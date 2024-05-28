@@ -129,6 +129,18 @@
   <data name="DeletionProcessApprovedNotification.Title" xml:space="preserve">
     <value>A deletion process has been approved</value>
   </data>
+  <data name="DeletionProcessCancelledByOwnerNotification.Body" xml:space="preserve">
+    <value>One of your identity's deletion processes was cancelled by you.</value>
+  </data>
+  <data name="DeletionProcessCancelledByOwnerNotification.Title" xml:space="preserve">
+    <value>A deletion process has been cancelled</value>
+  </data>
+  <data name="DeletionProcessCancelledBySupportNotification.Body" xml:space="preserve">
+    <value>One of your identity's deletion processes was cancelled by the support team.</value>
+  </data>
+  <data name="DeletionProcessCancelledBySupportNotification.Title" xml:space="preserve">
+    <value>A deletion process has been cancelled</value>
+  </data>
   <data name="DeletionProcessGracePeriodReminderPushNotification.Body" xml:space="preserve">
     <value>Your Identity will be deleted in a few days. You can still cancel up to this point.</value>
   </data>
