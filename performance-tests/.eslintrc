@@ -6,13 +6,16 @@
     },
     "rules": {
         "no-console": "off",
-        "@typescript-eslint/naming-convention": ["error", {
-            "selector": "variableLike",
-            "format": null,
-            "custom": {
-              "regex": "^(@type|@version|@context|(\\$?[a-zA-Z0-9]+)([A-Z][a-z0-9]*)*)(\\.(@type|@version|@context|[a-z0-9]+([A-Z][a-z0-9\\s]*)*))*$",
-              "match": true
+        "@typescript-eslint/naming-convention": [
+            "error",
+            {
+                "selector": "variableLike",
+                "format": null,
+                "custom": {
+                    "regex": "^(@type|@version|@context|(\\$?[a-zA-Z0-9]+)([A-Z][a-z0-9]*)*)(\\.(@type|@version|@context|[a-z0-9]+([A-Z][a-z0-9\\s]*)*))*$",
+                    "match": true
+                }
             }
-        }]
+        ]
     }
 }
