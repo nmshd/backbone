@@ -9,6 +9,34 @@ namespace Backbone.Modules.Devices.Domain.Tests.Domain;
 public class DeviceTests : AbstractTestsBase
 {
     [Fact]
+    public void Update_returns_true_if_communication_language_is_different()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentity();
+        var device = new Device(identity);
+
+        // Act
+        var result = device.Update("en");
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Update_returns_false_if_communication_language_is_the_same()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentity();
+        var device = new Device(identity) { CommunicationLanguage = "en" };
+
+        // Act
+        var result = device.Update("en");
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
     public void IsOnboarded_returns_false_if_user_has_never_logged_in_before()
     {
         // Arrange
