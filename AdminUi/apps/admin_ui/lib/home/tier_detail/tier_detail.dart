@@ -171,7 +171,7 @@ class _QuotaListState extends State<_QuotaList> {
                               DataCell(Text(quota.max.toString())),
                               DataCell(Text(quota.period)),
                             ],
-                            onSelectChanged: widget.tierDetails.id == 'TIR00000000000000001' ? null : (_) => _toggleSelection(quota.id),
+                            onSelectChanged: isQueuedForDeletionTier ? null : (_) => _toggleSelection(quota.id),
                             selected: _selectedQuotas.contains(quota.id),
                           ),
                         )
