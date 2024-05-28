@@ -124,6 +124,8 @@ class _AddQuotaDialogState extends State<AddQuotaDialog> {
   Future<void> _addQuota() async {
     setState(() => _saving = true);
 
+    assert(_selectedMetric != null && _maxAmount != null && _selectedPeriod != null, 'Invalid state');
+
     final response = await widget.addQuota(
       metricKey: _selectedMetric!,
       max: _maxAmount!,
