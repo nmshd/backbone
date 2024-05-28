@@ -36,9 +36,9 @@ public class PushNotificationsController : ApiControllerBase
 
     [HttpPost("SendTestNotification")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
-    public async Task<IActionResult> SendTestPushNotification(CancellationToken cancellationToken)
+    public async Task<IActionResult> SendTestPushNotification([FromBody] dynamic data, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new SendTestNotificationCommand(), cancellationToken);
+        await _mediator.Send(new SendTestNotificationCommand { Data = data }, cancellationToken);
         return NoContent();
     }
 }
