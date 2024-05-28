@@ -91,8 +91,17 @@ internal class DevicesStepDefinitions
     [Then(@"the response content contains an error with the error code ""([^""]*)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _deletionResponse!.Error.Should().NotBeNull();
-        _deletionResponse.Error!.Code.Should().Be(errorCode);
+        if (_deletionResponse != null)
+        {
+            _deletionResponse!.Error.Should().NotBeNull();
+            _deletionResponse.Error!.Code.Should().Be(errorCode);
+        }
+
+        if (_updateResponse != null)
+        {
+            _updateResponse!.Error.Should().NotBeNull();
+            _updateResponse.Error!.Code.Should().Be(errorCode);
+        }
     }
 
     [Then("d is not deleted")]
