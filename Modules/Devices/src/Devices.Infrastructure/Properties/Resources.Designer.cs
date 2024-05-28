@@ -77,7 +77,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Properties {
         ///    
         ///    ... ado.net/XML headers &amp; schema ...
         ///    &lt;resheader name=&quot;resmimetype&quot;&gt;text/microsoft-resx&lt;/resheader&gt;
-        ///    &lt;resheader n [rest of string was truncated]&quot;;.
+        ///    &lt;resheader name=&quot;version&quot;&gt;2. [rest of string was truncated]&quot;;.
         /// </summary>
         public static string PushNotifications_Translations_IPushNotificationResource_en {
             get {
