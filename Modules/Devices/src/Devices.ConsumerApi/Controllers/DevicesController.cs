@@ -8,6 +8,7 @@ using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Devices.Commands.ChangePassword;
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
+using Backbone.Modules.Devices.Application.Devices.Commands.UpdateDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Devices.Queries.GetActiveDevice;
 using Backbone.Modules.Devices.Application.Devices.Queries.ListDevices;
@@ -40,6 +41,17 @@ public class DevicesController : ApiControllerBase
         var response = await _mediator.Send(request, cancellationToken);
 
         return Created("", response);
+    }
+
+    [HttpPut("Self")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> UpdateDevice(UpdateDeviceCommand request, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(request, cancellationToken);
+
+        return NoContent();
     }
 
     [HttpPut("Self/Password")]
