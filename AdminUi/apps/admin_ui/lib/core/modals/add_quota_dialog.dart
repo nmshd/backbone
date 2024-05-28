@@ -28,8 +28,8 @@ class _AddQuotaDialogState extends State<AddQuotaDialog> {
   String? _errorMessage;
 
   String? _selectedMetric;
-  String? _selectedPeriod;
   int? _maxAmount;
+  String? _selectedPeriod;
 
   bool get _isValid => _selectedMetric != null && _maxAmount != null && _selectedPeriod != null;
 
@@ -61,13 +61,7 @@ class _AddQuotaDialogState extends State<AddQuotaDialog> {
               DropdownButtonFormField(
                 value: _selectedMetric,
                 items: widget.availableMetrics.map((metric) => DropdownMenuItem(value: metric.key, child: Text(metric.displayName))).toList(),
-                onChanged: _saving
-                    ? null
-                    : (String? selectedMetric) {
-                        if (selectedMetric == null) return;
-
-                        setState(() => _selectedMetric = selectedMetric);
-                      },
+                onChanged: _saving ? null : (String? selected) => setState(() => _selectedMetric = selected),
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Metric*',
@@ -95,13 +89,7 @@ class _AddQuotaDialogState extends State<AddQuotaDialog> {
                   DropdownMenuItem(value: 'Month', child: Text('Month')),
                   DropdownMenuItem(value: 'Year', child: Text('Year')),
                 ],
-                onChanged: _saving
-                    ? null
-                    : (String? selectedPeriod) {
-                        if (selectedPeriod == null) return;
-
-                        setState(() => _selectedPeriod = selectedPeriod);
-                      },
+                onChanged: _saving ? null : (String? selected) => setState(() => _selectedPeriod = selected),
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Period*',
@@ -123,7 +111,7 @@ class _AddQuotaDialogState extends State<AddQuotaDialog> {
             onPressed: _saving ? null : () => Navigator.of(context, rootNavigator: true).pop(),
             child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
           ),
-          ElevatedButton(
+          FilledButton(
             onPressed: _isValid && !_saving ? _addQuota : null,
             child: const Text('Add'),
           ),
