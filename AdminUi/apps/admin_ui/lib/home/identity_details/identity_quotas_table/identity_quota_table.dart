@@ -1,7 +1,8 @@
 import 'package:admin_api_types/admin_api_types.dart';
-import 'package:admin_ui/core/widgets/widgets.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+
+import '/core/core.dart';
 
 class IdentityQuotaList extends StatefulWidget {
   final Identity identityDetails;
