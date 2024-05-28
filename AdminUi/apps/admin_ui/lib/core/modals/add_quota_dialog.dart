@@ -52,7 +52,7 @@ class _AddQuotaDialog extends StatefulWidget {
 }
 
 class _AddQuotaDialogState extends State<_AddQuotaDialog> {
-  late final _maxAmountController = TextEditingController();
+  final _maxAmountController = TextEditingController();
 
   bool _saving = false;
   String? _errorMessage;
