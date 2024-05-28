@@ -57,7 +57,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
     private async Task SendNotification(PnsRegistration registration, IPushNotification notification, SendResults sendResults)
     {
-        var (notificationTitle, notificationBody) = await _notificationTextService.GetNotificationTextForDeviceId(notification, registration.DeviceId);
+        var (notificationTitle, notificationBody) = await _notificationTextService.GetNotificationTextForDeviceId(notification.GetType(), registration.DeviceId);
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
 

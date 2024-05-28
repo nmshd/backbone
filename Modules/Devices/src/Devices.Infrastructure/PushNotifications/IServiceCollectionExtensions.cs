@@ -13,11 +13,6 @@ public static class IServiceCollectionExtensions
 
     public static void AddPushNotifications(this IServiceCollection services, PushNotificationOptions options)
     {
-        services.AddLocalization(o =>
-        {
-            o.ResourcesPath = """PushNotifications\Translations""";
-        });
-
         services.AddTransient<NotificationTextService>();
 
         switch (options.Provider)
