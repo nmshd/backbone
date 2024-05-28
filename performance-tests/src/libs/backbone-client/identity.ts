@@ -1,7 +1,7 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 import { b64encode } from "k6/encoding";
 import { Response } from "k6/http";
-import { apiVersion } from ".";
+import { apiVersion, clientId, clientSecret } from ".";
 import { CreateChallengeResponse, CreateIdentityRequest, JwtResponse } from "../../models";
 import { ChallengeRequestPayload, CryptoHelper } from "../crypto-helper";
 
@@ -34,8 +34,8 @@ export function createIdentity(client: Httpx, clientId: string, clientSecret: st
 
 export function exchangeToken(client: Httpx, username: string, password: string): JwtResponse {
     const payload = {
-        client_id: "test",
-        client_secret: "test",
+        client_id: clientId,
+        client_secret: clientSecret,
         grant_type: "password",
         username,
         password
