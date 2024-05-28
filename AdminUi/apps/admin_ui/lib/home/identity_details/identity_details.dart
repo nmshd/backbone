@@ -2,14 +2,13 @@ import 'dart:io';
 
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
-import 'package:admin_ui/home/identity_details/modals/add_identity_quota.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
-import 'modals/change_tier.dart';
+import 'modals/modals.dart';
 
 class IdentityDetails extends StatefulWidget {
   final String address;
@@ -283,10 +282,11 @@ class _IdentityQuotaListState extends State<_IdentityQuotaList> {
                 height: 500,
                 child: DataTable2(
                   columns: const [
-                    DataColumn(label: Text('Metric')),
-                    DataColumn(label: Text('Source')),
-                    DataColumn(label: Text('Max')),
-                    DataColumn(label: Text('Period')),
+                    DataColumn2(label: Text('Metric')),
+                    DataColumn2(label: Text('Source'), size: ColumnSize.S),
+                    DataColumn2(label: Text('Max'), size: ColumnSize.L),
+                    DataColumn2(label: Text('Period'), size: ColumnSize.S),
+                    DataColumn2(label: Text(''), size: ColumnSize.S),
                   ],
                   empty: const Text('No quotas applied for this identity.'),
                   rows: groupedQuotas.entries.expand((entry) {
@@ -300,6 +300,7 @@ class _IdentityQuotaListState extends State<_IdentityQuotaList> {
                         color: WidgetStateProperty.all(Theme.of(context).colorScheme.surfaceBright),
                         cells: [
                           DataCell(Text(metricName)),
+                          const DataCell(Text('')),
                           const DataCell(Text('')),
                           const DataCell(Text('')),
                           const DataCell(Text('')),
@@ -318,28 +319,48 @@ class _IdentityQuotaListState extends State<_IdentityQuotaList> {
                             cells: [
                               DataCell(Container()),
                               DataCell(
-                                Tooltip(
-                                  message: tooltipMessage ?? '',
-                                  child: Text(quota.source),
+                                Text(
+                                  quota.source,
+                                  style: TextStyle(color: shouldDisable ? Colors.grey : null),
                                 ),
                               ),
                               DataCell(
                                 Row(
                                   children: [
-                                    Text('${quota.usage}/${quota.max}'),
+                                    Text(
+                                      '${quota.usage}/${quota.max}',
+                                      style: TextStyle(color: shouldDisable ? Colors.grey : null),
+                                    ),
                                     const SizedBox(width: 8),
                                     Expanded(
                                       child: LinearProgressIndicator(
                                         value: quota.max > 0 ? quota.usage / quota.max : 0,
-                                        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-                                        valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).colorScheme.primary),
+                                        backgroundColor: shouldDisable ? Colors.grey : Theme.of(context).colorScheme.inversePrimary,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(shouldDisable ? Colors.grey : Theme.of(context).colorScheme.primary),
                                         minHeight: 8,
                                       ),
                                     ),
                                   ],
                                 ),
                               ),
-                              DataCell(Text(quota.period)),
+                              DataCell(
+                                Text(
+                                  quota.period,
+                                  style: TextStyle(color: shouldDisable ? Colors.grey : null),
+                                ),
+                              ),
+                              DataCell(
+                                Tooltip(
+                                  message: tooltipMessage ?? '',
+                                  child: isTierQuota
+                                      ? Icon(
+                                          Icons.info,
+                                          color: shouldDisable ? Colors.grey : null,
+                                        )
+                                      : null,
+                                ),
+                              ),
                             ],
                           );
                         },
