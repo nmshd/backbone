@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../constants.dart';
+import '../extensions.dart';
 
 class AddQuotaDialog extends StatefulWidget {
   final List<Metric> availableMetrics;
@@ -109,7 +110,7 @@ class _AddQuotaDialogState extends State<AddQuotaDialog> {
         actions: [
           OutlinedButton(
             onPressed: _saving ? null : () => Navigator.of(context, rootNavigator: true).pop(),
-            child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+            child: Text(context.l10n.cancel),
           ),
           FilledButton(
             onPressed: _isValid && !_saving ? _addQuota : null,
