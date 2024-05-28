@@ -269,7 +269,7 @@ class _IdentityQuotaListState extends State<_IdentityQuotaList> {
                         Gaps.w8,
                         IconButton.filled(
                           icon: const Icon(Icons.add),
-                          onPressed: () => showAddIdentityQuotaDialog(
+                          onPressed: () => showAddQuotaDialog(
                             context: context,
                             address: widget.identityDetails.address,
                             onQuotaAdded: widget.onQuotasChanged,

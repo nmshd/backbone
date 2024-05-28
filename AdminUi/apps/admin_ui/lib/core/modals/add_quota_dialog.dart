@@ -7,7 +7,15 @@ import 'package:get_it/get_it.dart';
 import '../constants.dart';
 import '../extensions.dart';
 
-Future<void> showAddIdentityQuotaDialog({required BuildContext context, required String address, required VoidCallback onQuotaAdded}) async {
+Future<void> showAddQuotaDialog({
+  required BuildContext context,
+  required VoidCallback onQuotaAdded,
+  String? tierId,
+  String? address,
+}) async {
+  assert(tierId != null || address != null, 'Either tierId or address must be provided');
+  assert(tierId == null || address == null, 'Only one of tierId or address can be provided');
+
   final metrics = await GetIt.I.get<AdminApiClient>().quotas.getMetrics();
 
   if (!context.mounted) return;
@@ -16,24 +24,13 @@ Future<void> showAddIdentityQuotaDialog({required BuildContext context, required
     context: context,
     builder: (BuildContext context) => _AddQuotaDialog(
       availableMetrics: metrics.data,
-      addQuota: ({required String metricKey, required int max, required String period}) =>
-          GetIt.I.get<AdminApiClient>().quotas.createIdentityQuota(address: address, metricKey: metricKey, max: max, period: period),
-      onQuotaAdded: onQuotaAdded,
-    ),
-  );
-}
+      addQuota: ({required String metricKey, required int max, required String period}) {
+        if (tierId != null) {
+          return GetIt.I.get<AdminApiClient>().quotas.createTierQuota(tierId: tierId, metricKey: metricKey, max: max, period: period);
+        }
 
-Future<void> showAddQuotaDialog({required BuildContext context, required String tierId, required VoidCallback onQuotaAdded}) async {
-  final metrics = await GetIt.I.get<AdminApiClient>().quotas.getMetrics();
-
-  if (!context.mounted) return;
-
-  await showDialog<void>(
-    context: context,
-    builder: (BuildContext context) => _AddQuotaDialog(
-      availableMetrics: metrics.data,
-      addQuota: ({required String metricKey, required int max, required String period}) =>
-          GetIt.I.get<AdminApiClient>().quotas.createTierQuota(tierId: tierId, metricKey: metricKey, max: max, period: period),
+        return GetIt.I.get<AdminApiClient>().quotas.createIdentityQuota(address: address!, metricKey: metricKey, max: max, period: period);
+      },
       onQuotaAdded: onQuotaAdded,
     ),
   );
