@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
-import 'package:admin_ui/home/identity_details/identity_quotas_table/identity_quota_table.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
+import './identity_quotas_table/identity_quotas_table.dart';
 import 'modals/change_tier.dart';
 
 class IdentityDetails extends StatefulWidget {
