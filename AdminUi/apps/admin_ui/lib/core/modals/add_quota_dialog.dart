@@ -11,10 +11,10 @@ Future<void> showAddQuotaDialog({
   required BuildContext context,
   required VoidCallback onQuotaAdded,
   String? tierId,
-  String? address,
+  String? identityAddress,
 }) async {
-  assert(tierId != null || address != null, 'Either tierId or address must be provided');
-  assert(tierId == null || address == null, 'Only one of tierId or address can be provided');
+  assert(tierId != null || identityAddress != null, 'Either tierId or address must be provided');
+  assert(tierId == null || identityAddress == null, 'Only one of tierId or address can be provided');
 
   final metrics = await GetIt.I.get<AdminApiClient>().quotas.getMetrics();
 
@@ -29,7 +29,7 @@ Future<void> showAddQuotaDialog({
           return GetIt.I.get<AdminApiClient>().quotas.createTierQuota(tierId: tierId, metricKey: metricKey, max: max, period: period);
         }
 
-        return GetIt.I.get<AdminApiClient>().quotas.createIdentityQuota(address: address!, metricKey: metricKey, max: max, period: period);
+        return GetIt.I.get<AdminApiClient>().quotas.createIdentityQuota(address: identityAddress!, metricKey: metricKey, max: max, period: period);
       },
       onQuotaAdded: onQuotaAdded,
     ),

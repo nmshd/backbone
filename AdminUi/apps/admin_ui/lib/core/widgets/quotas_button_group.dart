@@ -17,7 +17,8 @@ class QuotasButtonGroup extends StatefulWidget {
     this.identityAddress,
     this.tierId,
     super.key,
-  });
+  })  : assert(identityAddress != null || tierId != null, 'Either identityAddress or tierId must be provided'),
+        assert(identityAddress == null || tierId == null, 'Only one of identityAddress or tierId can be provided');
 
   @override
   State<QuotasButtonGroup> createState() => _QuotasButtonGroupState();
@@ -48,7 +49,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
             icon: const Icon(Icons.add),
             onPressed: () => showAddQuotaDialog(
               context: context,
-              address: widget.identityAddress,
+              identityAddress: widget.identityAddress,
               tierId: widget.tierId,
               onQuotaAdded: widget.onQuotasChanged,
             ),
