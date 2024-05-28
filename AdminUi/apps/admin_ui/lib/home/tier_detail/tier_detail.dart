@@ -8,7 +8,6 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
-import 'modals/modals.dart';
 
 class TierDetail extends StatefulWidget {
   final String tierId;

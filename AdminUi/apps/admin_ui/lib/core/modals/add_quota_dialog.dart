@@ -2,27 +2,59 @@ import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get_it/get_it.dart';
 
 import '../constants.dart';
 import '../extensions.dart';
 
-class AddQuotaDialog extends StatefulWidget {
+Future<void> showAddIdentityQuotaDialog({required BuildContext context, required String address, required VoidCallback onQuotaAdded}) async {
+  final metrics = await GetIt.I.get<AdminApiClient>().quotas.getMetrics();
+
+  if (!context.mounted) return;
+
+  await showDialog<void>(
+    context: context,
+    builder: (BuildContext context) => _AddQuotaDialog(
+      availableMetrics: metrics.data,
+      addQuota: ({required String metricKey, required int max, required String period}) =>
+          GetIt.I.get<AdminApiClient>().quotas.createIdentityQuota(address: address, metricKey: metricKey, max: max, period: period),
+      onQuotaAdded: onQuotaAdded,
+    ),
+  );
+}
+
+Future<void> showAddQuotaDialog({required BuildContext context, required String tierId, required VoidCallback onQuotaAdded}) async {
+  final metrics = await GetIt.I.get<AdminApiClient>().quotas.getMetrics();
+
+  if (!context.mounted) return;
+
+  await showDialog<void>(
+    context: context,
+    builder: (BuildContext context) => _AddQuotaDialog(
+      availableMetrics: metrics.data,
+      addQuota: ({required String metricKey, required int max, required String period}) =>
+          GetIt.I.get<AdminApiClient>().quotas.createTierQuota(tierId: tierId, metricKey: metricKey, max: max, period: period),
+      onQuotaAdded: onQuotaAdded,
+    ),
+  );
+}
+
+class _AddQuotaDialog extends StatefulWidget {
   final List<Metric> availableMetrics;
   final Future<ApiResponse<dynamic>> Function({required String metricKey, required int max, required String period}) addQuota;
   final VoidCallback onQuotaAdded;
 
-  const AddQuotaDialog({
+  const _AddQuotaDialog({
     required this.availableMetrics,
     required this.addQuota,
     required this.onQuotaAdded,
-    super.key,
   });
 
   @override
-  State<AddQuotaDialog> createState() => _AddQuotaDialogState();
+  State<_AddQuotaDialog> createState() => _AddQuotaDialogState();
 }
 
-class _AddQuotaDialogState extends State<AddQuotaDialog> {
+class _AddQuotaDialogState extends State<_AddQuotaDialog> {
   late final _maxAmountController = TextEditingController();
 
   bool _saving = false;
