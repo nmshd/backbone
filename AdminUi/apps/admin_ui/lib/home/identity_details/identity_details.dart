@@ -245,131 +245,133 @@ class _IdentityQuotaListState extends State<_IdentityQuotaList> {
         title: const Text('Quotas'),
         subtitle: const Text('View and assign quotas for this identity.'),
         children: [
-          Column(
-            children: [
-              if (!isQueuedForDeletionTier)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        icon: Icon(
-                          Icons.delete,
-                          color: _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
+          Card(
+            child: Column(
+              children: [
+                if (!isQueuedForDeletionTier)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.resolveWith((states) {
+                              return _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.error : null;
+                            }),
+                          ),
+                          onPressed: _selectedQuotas.isNotEmpty ? _removeSelectedQuotas : null,
                         ),
-                        style: ButtonStyle(
-                          backgroundColor: WidgetStateProperty.resolveWith((states) {
-                            return _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.error : null;
-                          }),
+                        Gaps.w8,
+                        IconButton.filled(
+                          icon: const Icon(Icons.add),
+                          onPressed: () => showAddIdentityQuotaDialog(
+                            context: context,
+                            address: widget.identityDetails.address,
+                            onQuotaAdded: widget.onQuotasChanged,
+                          ),
                         ),
-                        onPressed: _selectedQuotas.isNotEmpty ? _removeSelectedQuotas : null,
-                      ),
-                      Gaps.w8,
-                      IconButton.filled(
-                        icon: const Icon(Icons.add),
-                        onPressed: () => showAddIdentityQuotaDialog(
-                          context: context,
-                          address: widget.identityDetails.address,
-                          onQuotaAdded: widget.onQuotasChanged,
-                        ),
-                      ),
+                      ],
+                    ),
+                  ),
+                SizedBox(
+                  width: double.infinity,
+                  height: 500,
+                  child: DataTable2(
+                    columns: const [
+                      DataColumn2(label: Text('Metric')),
+                      DataColumn2(label: Text('Source'), size: ColumnSize.S),
+                      DataColumn2(label: Text('Max'), size: ColumnSize.L),
+                      DataColumn2(label: Text('Period'), size: ColumnSize.S),
+                      DataColumn2(label: Text(''), size: ColumnSize.S),
                     ],
+                    empty: const Text('No quotas applied for this identity.'),
+                    rows: groupedQuotas.entries.expand((entry) {
+                      final metricName = entry.key;
+                      final quotas = entry.value;
+
+                      final hasIndividualQuota = quotas.any((quota) => quota.source == 'Individual');
+
+                      return [
+                        DataRow2(
+                          color: WidgetStateProperty.all(Theme.of(context).colorScheme.surfaceBright),
+                          cells: [
+                            DataCell(Text(metricName)),
+                            const DataCell(Text('')),
+                            const DataCell(Text('')),
+                            const DataCell(Text('')),
+                            const DataCell(Text('')),
+                          ],
+                        ),
+                        ...quotas.map(
+                          (quota) {
+                            final isTierQuota = quota.source == 'Tier';
+                            final shouldDisable = isTierQuota && hasIndividualQuota;
+                            final tooltipMessage = shouldDisable ? 'Tier quotas do not take effect if there is an individual quota.' : null;
+
+                            return DataRow2(
+                              selected: _selectedQuotas.contains(quota.id),
+                              color: shouldDisable ? WidgetStateProperty.all(Theme.of(context).colorScheme.surfaceBright) : null,
+                              onSelectChanged: shouldDisable || isTierQuota ? null : (_) => _toggleSelection(quota.id),
+                              cells: [
+                                DataCell(Container()),
+                                DataCell(
+                                  Text(
+                                    quota.source,
+                                    style: TextStyle(color: shouldDisable ? Colors.grey : null),
+                                  ),
+                                ),
+                                DataCell(
+                                  Row(
+                                    children: [
+                                      Text(
+                                        '${quota.usage}/${quota.max}',
+                                        style: TextStyle(color: shouldDisable ? Colors.grey : null),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: LinearProgressIndicator(
+                                          value: quota.max > 0 ? quota.usage / quota.max : 0,
+                                          backgroundColor: shouldDisable ? Colors.grey : Theme.of(context).colorScheme.inversePrimary,
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(shouldDisable ? Colors.grey : Theme.of(context).colorScheme.primary),
+                                          minHeight: 8,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                DataCell(
+                                  Text(
+                                    quota.period,
+                                    style: TextStyle(color: shouldDisable ? Colors.grey : null),
+                                  ),
+                                ),
+                                DataCell(
+                                  Tooltip(
+                                    message: tooltipMessage ?? '',
+                                    child: isTierQuota
+                                        ? Icon(
+                                            Icons.info,
+                                            color: shouldDisable ? Colors.grey : null,
+                                          )
+                                        : null,
+                                  ),
+                                ),
+                              ],
+                            );
+                          },
+                        ),
+                      ];
+                    }).toList(),
                   ),
                 ),
-              SizedBox(
-                width: double.infinity,
-                height: 500,
-                child: DataTable2(
-                  columns: const [
-                    DataColumn2(label: Text('Metric')),
-                    DataColumn2(label: Text('Source'), size: ColumnSize.S),
-                    DataColumn2(label: Text('Max'), size: ColumnSize.L),
-                    DataColumn2(label: Text('Period'), size: ColumnSize.S),
-                    DataColumn2(label: Text(''), size: ColumnSize.S),
-                  ],
-                  empty: const Text('No quotas applied for this identity.'),
-                  rows: groupedQuotas.entries.expand((entry) {
-                    final metricName = entry.key;
-                    final quotas = entry.value;
-
-                    final hasIndividualQuota = quotas.any((quota) => quota.source == 'Individual');
-
-                    return [
-                      DataRow2(
-                        color: WidgetStateProperty.all(Theme.of(context).colorScheme.surfaceBright),
-                        cells: [
-                          DataCell(Text(metricName)),
-                          const DataCell(Text('')),
-                          const DataCell(Text('')),
-                          const DataCell(Text('')),
-                          const DataCell(Text('')),
-                        ],
-                      ),
-                      ...quotas.map(
-                        (quota) {
-                          final isTierQuota = quota.source == 'Tier';
-                          final shouldDisable = isTierQuota && hasIndividualQuota;
-                          final tooltipMessage = shouldDisable ? 'Tier quotas do not take effect if there is an individual quota.' : null;
-
-                          return DataRow2(
-                            selected: _selectedQuotas.contains(quota.id),
-                            color: shouldDisable ? WidgetStateProperty.all(Theme.of(context).colorScheme.surfaceBright) : null,
-                            onSelectChanged: shouldDisable || isTierQuota ? null : (_) => _toggleSelection(quota.id),
-                            cells: [
-                              DataCell(Container()),
-                              DataCell(
-                                Text(
-                                  quota.source,
-                                  style: TextStyle(color: shouldDisable ? Colors.grey : null),
-                                ),
-                              ),
-                              DataCell(
-                                Row(
-                                  children: [
-                                    Text(
-                                      '${quota.usage}/${quota.max}',
-                                      style: TextStyle(color: shouldDisable ? Colors.grey : null),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: LinearProgressIndicator(
-                                        value: quota.max > 0 ? quota.usage / quota.max : 0,
-                                        backgroundColor: shouldDisable ? Colors.grey : Theme.of(context).colorScheme.inversePrimary,
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(shouldDisable ? Colors.grey : Theme.of(context).colorScheme.primary),
-                                        minHeight: 8,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              DataCell(
-                                Text(
-                                  quota.period,
-                                  style: TextStyle(color: shouldDisable ? Colors.grey : null),
-                                ),
-                              ),
-                              DataCell(
-                                Tooltip(
-                                  message: tooltipMessage ?? '',
-                                  child: isTierQuota
-                                      ? Icon(
-                                          Icons.info,
-                                          color: shouldDisable ? Colors.grey : null,
-                                        )
-                                      : null,
-                                ),
-                              ),
-                            ],
-                          );
-                        },
-                      ),
-                    ];
-                  }).toList(),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ],
       ),
