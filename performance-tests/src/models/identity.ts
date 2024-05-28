@@ -1,4 +1,4 @@
-import { JwtResponse } from "./jwt-response";
+import { JwtResponse } from ".";
 
 export interface CreateIdentityRequest {
     clientId: string;

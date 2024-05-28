@@ -1,11 +1,9 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 import { b64encode } from "k6/encoding";
 import { Response } from "k6/http";
-import { CreateChallengeResponse } from "../../models/challenge";
-import { CreateIdentityRequest } from "../../models/identity";
-import { JwtResponse } from "../../models/jwt-response";
+import { apiVersion } from ".";
+import { CreateChallengeResponse, CreateIdentityRequest, JwtResponse } from "../../models";
 import { ChallengeRequestPayload, CryptoHelper } from "../crypto-helper";
-import { apiVersion } from "./constants";
 
 export function createIdentity(client: Httpx, clientId: string, clientSecret: string, password: string): Response {
     try {
