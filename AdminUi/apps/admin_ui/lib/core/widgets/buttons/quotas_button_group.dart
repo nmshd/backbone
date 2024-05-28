@@ -76,28 +76,15 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
 
     if (!confirmed) return;
 
-    if (widget.identityAddress != null) {
-      for (final quota in widget.selectedQuotas) {
-        final result = await GetIt.I.get<AdminApiClient>().quotas.deleteIdentityQuota(address: widget.identityAddress!, individualQuotaId: quota);
-        if (result.hasError && mounted) {
-          _showErrorScaffoldMessenger();
-          return;
-        }
-
-        widget.onQuotasChanged();
-      }
-    } else {
-      for (final quota in widget.selectedQuotas) {
-        final result = await GetIt.I.get<AdminApiClient>().quotas.deleteTierQuota(tierId: widget.tierId!, tierQuotaDefinitionId: quota);
-        if (result.hasError && mounted) {
-          _showErrorScaffoldMessenger();
-          return;
-        }
-
-        widget.onQuotasChanged();
+    for (final quota in widget.selectedQuotas) {
+      final result = await _deleteQuota(quota);
+      if (result.hasError && mounted) {
+        _showErrorScaffoldMessenger();
+        return;
       }
     }
 
+    widget.onQuotasChanged();
     widget.selectedQuotas.clear();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -106,6 +93,20 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
           showCloseIcon: true,
         ),
       );
+    }
+  }
+
+  Future<ApiResponse<void>> _deleteQuota(String quota) {
+    if (widget.identityAddress != null) {
+      return GetIt.I.get<AdminApiClient>().quotas.deleteIdentityQuota(
+            address: widget.identityAddress!,
+            individualQuotaId: quota,
+          );
+    } else {
+      return GetIt.I.get<AdminApiClient>().quotas.deleteTierQuota(
+            tierId: widget.tierId!,
+            tierQuotaDefinitionId: quota,
+          );
     }
   }
 
