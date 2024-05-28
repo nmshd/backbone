@@ -1,11 +1,12 @@
 ﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
-public class CancelDeletionProcessAsSupportTests
+public class CancelDeletionProcessAsSupportTests : AbstractTestsBase
 {
     [Fact]
     public void Cancel_deletion_process()

@@ -3,13 +3,14 @@ using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeleti
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.UpdateDeletionProcesses;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Empty_response_if_no_identities_are_past_DeletionGracePeriodEndsAt()

@@ -1,10 +1,11 @@
 using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.BuildingBlocks.Application.Tests.Pagination;
 
-public class PaginationDataTests
+public class PaginationDataTests : AbstractTestsBase
 {
     [Theory]
     [InlineData(10, 1, 10)]

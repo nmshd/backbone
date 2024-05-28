@@ -1,10 +1,11 @@
-﻿using Backbone.Tooling;
+using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class IdentityDeletionProcessTests
+public class IdentityDeletionProcessTests : AbstractTestsBase
 {
     [Theory]
     [InlineData("2020-01-01T00:00:00")]

@@ -1,10 +1,11 @@
 using Backbone.Crypto.Implementations;
+using Backbone.UnitTestTools.BaseClasses;
 using NSec.Cryptography;
 using Xunit;
 
 namespace Backbone.Crypto.Tests.Tests.Implementations;
 
-public class SignatureHelperTests
+public class SignatureHelperTests : AbstractTestsBase
 {
     private readonly SignatureHelper _signatureHelper;
 

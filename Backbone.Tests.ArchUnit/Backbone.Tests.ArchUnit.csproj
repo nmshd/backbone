@@ -21,7 +21,31 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\test\BuildingBlocks.Application.Tests\BuildingBlocks.Application.Tests.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\test\BuildingBlocks.Infrastructure.Tests\BuildingBlocks.Infrastructure.Tests.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\test\Crypto.Tests\Crypto.Tests.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\test\DevelopmentKit.Identity.Tests\DevelopmentKit.Identity.Tests.csproj" />
+    <ProjectReference Include="..\BuildingBlocks\test\Tooling.Tests\Tooling.Tests.csproj" />
     <ProjectReference Include="..\ConsumerApi\ConsumerApi.csproj" />
+    <ProjectReference Include="..\EventHandlerService\test\EventHandlerService.Tests\EventHandlerService.Tests.csproj" />
+    <ProjectReference Include="..\Jobs\test\Job.IdentityDeletion.Tests\Job.IdentityDeletion.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Devices\test\Devices.Application.Tests\Devices.Application.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Devices\test\Devices.Domain.Tests\Devices.Domain.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Devices\test\Devices.Infrastructure.Tests\Devices.Infrastructure.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Files\test\Files.Application.Tests\Files.Application.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Files\test\Files.Infrastructure.Tests\Files.Infrastructure.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Files\test\Files.Jobs.SanityCheck.Tests\Files.Jobs.SanityCheck.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Messages\test\Messages.Application.Tests\Messages.Application.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Messages\test\Messages.Domain.Tests\Messages.Domain.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Quotas\test\Quotas.Application.Tests\Quotas.Application.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Quotas\test\Quotas.Domain.Tests\Quotas.Domain.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Quotas\test\Quotas.Infrastructure.Tests\Quotas.Infrastructure.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Relationships\test\Relationships.Application.Tests\Relationships.Application.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Relationships\test\Relationships.Domain.Tests\Relationships.Domain.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Synchronization\test\Synchronization.Application.Tests\Synchronization.Application.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Synchronization\test\Synchronization.Domain.Tests\Synchronization.Domain.Tests.csproj" />
+    <ProjectReference Include="..\Modules\Tokens\test\Tokens.Application.Tests\Tokens.Application.Tests.csproj" />
   </ItemGroup>
 
 </Project>

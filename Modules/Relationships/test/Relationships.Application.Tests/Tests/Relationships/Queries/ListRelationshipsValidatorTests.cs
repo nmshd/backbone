@@ -1,13 +1,14 @@
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
 using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using FluentValidation.TestHelper;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Queries;
 
-public class ListRelationshipsValidatorTests
+public class ListRelationshipsValidatorTests : AbstractTestsBase
 {
     [Fact]
     public void Happy_path()

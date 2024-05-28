@@ -2,12 +2,13 @@
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteTokensOfIdentity;
 using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 using Xunit;
 
 namespace Backbone.Modules.Tokens.Application.Tests.Tests.Tokens.DeleteTokenOfIdentity;
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Command_calls_delete_on_repository()

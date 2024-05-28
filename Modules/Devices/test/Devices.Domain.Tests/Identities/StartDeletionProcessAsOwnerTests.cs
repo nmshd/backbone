@@ -4,16 +4,19 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
+using FluentAssertions.Formatting;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class StartDeletionProcessAsOwnerTests : IDisposable
+public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
 {
-    public void Dispose()
+    public override void Dispose()
     {
         Hasher.Reset();
+        base.Dispose();
     }
 
     [Fact]

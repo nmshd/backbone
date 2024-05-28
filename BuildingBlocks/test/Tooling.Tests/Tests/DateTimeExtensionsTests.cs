@@ -25,6 +25,7 @@ public class DateTimeExtensionsTests : AbstractTestsBase
     public void DaysUntilDateInTheFuture()
     {
         // Arrange
+        SystemTime.Set(_dateTimeNow);
 
         // Act
         var daysDifference = _dateTimeTomorrow.DaysUntilDate();
@@ -37,6 +38,7 @@ public class DateTimeExtensionsTests : AbstractTestsBase
     public void DaysUntilDateInThePast()
     {
         // Arrange
+        SystemTime.Set(_dateTimeNow);
 
         // Act
         var daysDifference = _dateTimeYesterday.DaysUntilDate();
@@ -49,6 +51,7 @@ public class DateTimeExtensionsTests : AbstractTestsBase
     public void DaysUntilDateNow()
     {
         // Arrange
+        SystemTime.Set(_dateTimeNow);
 
         // Act
         var daysDifference = _dateTimeNow.DaysUntilDate();

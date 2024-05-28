@@ -1,12 +1,13 @@
 ﻿using Backbone.Modules.Relationships.Application.Identities;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.DeleteRelationshipTemplatesOfIdentity;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using MediatR;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Identities;
-public class IdentityDeleterTests
+public class IdentityDeleterTests : AbstractTestsBase
 {
     [Fact]
     public async Task Deleter_calls_correct_command()

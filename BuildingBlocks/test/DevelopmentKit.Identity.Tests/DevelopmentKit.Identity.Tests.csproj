@@ -20,6 +20,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
+		<ProjectReference Include="..\..\src\UnitTestTools\UnitTestTools.csproj" />
 	</ItemGroup>
 
 </Project>
