@@ -46,32 +46,24 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
           Gaps.w8,
           IconButton.filled(
             icon: const Icon(Icons.add),
-            onPressed: showCorrectDialog,
+            onPressed: () => showAddQuotaDialog(
+              context: context,
+              address: widget.identityAddress,
+              tierId: widget.tierId,
+              onQuotaAdded: widget.onQuotasChanged,
+            ),
           ),
         ],
       ),
     );
   }
 
-  void showCorrectDialog() {
-    widget.identityAddress != null
-        ? showAddQuotaDialog(
-            context: context,
-            address: widget.identityAddress,
-            onQuotaAdded: widget.onQuotasChanged,
-          )
-        : showAddQuotaDialog(
-            context: context,
-            tierId: widget.tierId,
-            onQuotaAdded: widget.onQuotasChanged,
-          );
-  }
-
   Future<void> _removeSelectedQuotas() async {
     final confirmed = await showConfirmationDialog(
       context: context,
       title: 'Remove Quotas',
-      message: 'Are you sure you want to remove the selected quotas from the identity "${widget.identityAddress}"?',
+      message:
+          'Are you sure you want to remove the selected quotas from ${widget.identityAddress != null ? 'the identity "${widget.identityAddress}"' : 'the tier "${widget.tierId}"'}?',
     );
 
     if (!confirmed) return;
@@ -79,7 +71,13 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
     for (final quota in widget.selectedQuotas) {
       final result = await _deleteQuota(quota);
       if (result.hasError && mounted) {
-        _showErrorScaffoldMessenger();
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('An error occurred while deleting the quota(s). Please try again.'),
+            showCloseIcon: true,
+          ),
+        );
+
         return;
       }
     }
@@ -97,25 +95,9 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
   }
 
   Future<ApiResponse<void>> _deleteQuota(String quota) {
-    if (widget.identityAddress != null) {
-      return GetIt.I.get<AdminApiClient>().quotas.deleteIdentityQuota(
-            address: widget.identityAddress!,
-            individualQuotaId: quota,
-          );
-    } else {
-      return GetIt.I.get<AdminApiClient>().quotas.deleteTierQuota(
-            tierId: widget.tierId!,
-            tierQuotaDefinitionId: quota,
-          );
-    }
-  }
+    final client = GetIt.I.get<AdminApiClient>();
 
-  void _showErrorScaffoldMessenger() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('An error occurred while deleting the quota(s). Please try again.'),
-        showCloseIcon: true,
-      ),
-    );
+    if (widget.identityAddress != null) return client.quotas.deleteIdentityQuota(address: widget.identityAddress!, individualQuotaId: quota);
+    return client.quotas.deleteTierQuota(tierId: widget.tierId!, tierQuotaDefinitionId: quota);
   }
 }
