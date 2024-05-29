@@ -28,7 +28,7 @@ public record CommunicationLanguage
     public static DomainError? Validate(string value)
     {
         if (CULTURES.All(c => c.TwoLetterISOLanguageName != value))
-            return DomainErrors.InvalidDeviceCommunicationLanguage("The Device Communication Language must be a valid two letter ISO code");
+            return DomainErrors.InvalidDeviceCommunicationLanguage();
 
         return null;
     }

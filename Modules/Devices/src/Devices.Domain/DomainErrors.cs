@@ -12,11 +12,9 @@ public static class DomainErrors
             string.IsNullOrEmpty(reason) ? $"The Tier Name is invalid{formattedReason}." : reason);
     }
 
-    public static DomainError InvalidDeviceCommunicationLanguage(string reason = "")
+    public static DomainError InvalidDeviceCommunicationLanguage()
     {
-        var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
-        return new DomainError("error.platform.validation.invalidDeviceCommunicationLanguage",
-            string.IsNullOrEmpty(reason) ? $"The Device Communication Language is invalid{formattedReason}." : reason);
+        return new DomainError("error.platform.validation.invalidDeviceCommunicationLanguage", "The Device Communication Language must be a valid two letter ISO code");
     }
 
     public static DomainError InvalidPnsPlatform(string reason = "")

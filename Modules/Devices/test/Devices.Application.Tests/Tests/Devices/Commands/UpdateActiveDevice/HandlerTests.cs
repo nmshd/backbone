@@ -30,17 +30,17 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
 
         var expectedCommunicationLanguage = CommunicationLanguage.Create("de").Value;
-        var updateDeviceCommand = new UpdateActiveDeviceCommand
+        var updateActiveDeviceCommand = new UpdateActiveDeviceCommand
         {
             CommunicationLanguage = expectedCommunicationLanguage
         };
 
         // Act
-        await handler.Handle(updateDeviceCommand, CancellationToken.None);
+        await handler.Handle(updateActiveDeviceCommand, CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Update(
-            A<Device>.That.Matches(d => d.CommunicationLanguage == updateDeviceCommand.CommunicationLanguage),
+            A<Device>.That.Matches(d => d.CommunicationLanguage == updateActiveDeviceCommand.CommunicationLanguage),
             A<CancellationToken>._
         )).MustHaveHappenedOnceExactly();
     }
@@ -53,13 +53,13 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => mockIdentitiesRepository.GetDeviceById(A<DeviceId>._, A<CancellationToken>._, A<bool>._)).Returns((Device?)null);
 
         var handler = CreateHandler(mockIdentitiesRepository);
-        var updateDeviceCommand = new UpdateActiveDeviceCommand
+        var updateActiveDeviceCommand = new UpdateActiveDeviceCommand
         {
             CommunicationLanguage = "de"
         };
 
         // Act
-        var acting = async () => await handler.Handle(updateDeviceCommand, CancellationToken.None);
+        var acting = async () => await handler.Handle(updateActiveDeviceCommand, CancellationToken.None);
 
         // Assert
         acting.Should().ThrowAsync<NotFoundException>().WithMessage(nameof(Device));

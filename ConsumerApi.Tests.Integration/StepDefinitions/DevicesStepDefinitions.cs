@@ -69,15 +69,15 @@ internal class DevicesStepDefinitions
     public async Task WhenAPutRequestIsSentToTheDeviceSelfEndpointWithAValidPayload(string communicationLanguage)
     {
         _communicationLanguage = communicationLanguage;
-        var request = new UpdateDeviceRequest { CommunicationLanguage = _communicationLanguage };
-        _updateResponse = await _sdk.Devices.UpdateDevice(request);
+        var request = new UpdateActiveDeviceRequest { CommunicationLanguage = _communicationLanguage };
+        _updateResponse = await _sdk.Devices.UpdateActiveDevice(request);
     }
 
     [When("a PUT request is sent to the Devices/Self endpoint with a non-existent language code")]
     public async Task WhenAPutRequestIsSentToTheDeviceSelfEndpointWithAnInvalidPayload()
     {
-        var request = new UpdateDeviceRequest { CommunicationLanguage = "xz" };
-        _updateResponse = await _sdk.Devices.UpdateDevice(request);
+        var request = new UpdateActiveDeviceRequest { CommunicationLanguage = "xz" };
+        _updateResponse = await _sdk.Devices.UpdateActiveDevice(request);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]

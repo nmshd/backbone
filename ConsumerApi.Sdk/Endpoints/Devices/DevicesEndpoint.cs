@@ -38,7 +38,7 @@ public class DevicesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client
         return await _client.Put<EmptyResponse>($"api/{API_VERSION}/Devices/Self/Password", request);
     }
 
-    public async Task<ApiResponse<EmptyResponse>> UpdateDevice(UpdateDeviceRequest request)
+    public async Task<ApiResponse<EmptyResponse>> UpdateActiveDevice(UpdateActiveDeviceRequest request)
     {
         return await _client.Put<EmptyResponse>($"api/{API_VERSION}/Devices/Self", request);
     }
