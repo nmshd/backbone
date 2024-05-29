@@ -16,14 +16,14 @@ public static class DomainErrors
     {
         var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
         return new DomainError("error.platform.validation.invalidDeviceCommunicationLanguage",
-            string.IsNullOrEmpty(reason) ? $"The Device Communication Language is invalid {formattedReason}." : reason);
+            string.IsNullOrEmpty(reason) ? $"The Device Communication Language is invalid{formattedReason}." : reason);
     }
 
     public static DomainError InvalidPnsPlatform(string reason = "")
     {
         var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
         return new DomainError("error.platform.validation.invalidPnsPlatform",
-            string.IsNullOrEmpty(reason) ? $"The Push Notification Service Platform is invalid {formattedReason}." : reason);
+            string.IsNullOrEmpty(reason) ? $"The Device Communication Language is invalid{formattedReason}." : reason);
     }
 
     public static DomainError CannotDeleteBasicTier(string reason = "")

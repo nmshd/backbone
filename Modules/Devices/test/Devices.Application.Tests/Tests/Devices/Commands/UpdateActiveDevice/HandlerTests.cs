@@ -29,18 +29,16 @@ public class HandlerTests : AbstractTestsBase
 
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
 
-        var expectedCommunicationLanguage = CommunicationLanguage.Create("de");
+        var expectedCommunicationLanguage = CommunicationLanguage.Create("de").Value;
         var updateDeviceCommand = new UpdateActiveDeviceCommand
         {
-            CommunicationLanguage = expectedCommunicationLanguage.Value
+            CommunicationLanguage = expectedCommunicationLanguage
         };
 
         // Act
         await handler.Handle(updateDeviceCommand, CancellationToken.None);
 
         // Assert
-        activeDevice.CommunicationLanguage.Should().Be(expectedCommunicationLanguage.Value);
-
         A.CallTo(() => mockIdentitiesRepository.Update(
             A<Device>.That.Matches(d => d.CommunicationLanguage == updateDeviceCommand.CommunicationLanguage),
             A<CancellationToken>._
@@ -64,7 +62,7 @@ public class HandlerTests : AbstractTestsBase
         var acting = async () => await handler.Handle(updateDeviceCommand, CancellationToken.None);
 
         // Assert
-        var exception = acting.Should().ThrowAsync<NotFoundException>().WithMessage(nameof(Device));
+        acting.Should().ThrowAsync<NotFoundException>().WithMessage(nameof(Device));
     }
 
     private static Device CreateDevice()

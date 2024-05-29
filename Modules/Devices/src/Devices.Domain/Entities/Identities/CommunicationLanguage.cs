@@ -7,6 +7,7 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 public record CommunicationLanguage
 {
     public static readonly CommunicationLanguage DEFAULT_LANGUAGE = new("en");
+    private static readonly CultureInfo[] CULTURES = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures);
 
     public string Value { get; }
     public const int LENGTH = 2;
@@ -26,14 +27,8 @@ public record CommunicationLanguage
 
     public static DomainError? Validate(string value)
     {
-        if (value.Length != LENGTH)
-            return DomainErrors.InvalidDeviceCommunicationLanguage($"Device Communication Language length must be {LENGTH}");
-
-        var cultureInfos = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures);
-        var culture = cultureInfos.FirstOrDefault(c => c.TwoLetterISOLanguageName == value);
-
-        if (culture == null)
-            return DomainErrors.InvalidDeviceCommunicationLanguage("Device Communication Language must be a valid two letter ISO code");
+        if (CULTURES.All(c => c.TwoLetterISOLanguageName != value))
+            return DomainErrors.InvalidDeviceCommunicationLanguage("The Device Communication Language must be a valid two letter ISO code");
 
         return null;
     }
