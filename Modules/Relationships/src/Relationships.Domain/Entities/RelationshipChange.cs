@@ -6,7 +6,7 @@ using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Entities;
 
-public class RelationshipChange
+public class RelationshipChange : Entity
 {
     // ReSharper disable once UnusedMember.Local
     protected RelationshipChange()

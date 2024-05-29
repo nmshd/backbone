@@ -7,7 +7,7 @@ using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Entities;
 
-public class RelationshipTemplate
+public class RelationshipTemplate : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private RelationshipTemplate()
