@@ -12,6 +12,7 @@ public class DeviceDTO : IHaveCustomMapping
     public required DateTime CreatedAt { get; set; }
     public required DeviceId CreatedByDevice { get; set; }
     public required LastLoginInformation LastLogin { get; set; }
+    public required string CommunicationLanguage { get; set; }
 
     public void CreateMappings(Profile configuration)
     {
@@ -20,7 +21,9 @@ public class DeviceDTO : IHaveCustomMapping
             .ForMember(dto => dto.LastLogin,
                 expression => expression.MapFrom(device => new LastLoginInformation { Time = device.User.LastLoginAt }))
             .ForMember(dto => dto.Username,
-                expression => expression.MapFrom(device => device.User.UserName));
+                expression => expression.MapFrom(device => device.User.UserName))
+            .ForMember(dto => dto.CommunicationLanguage,
+                expression => expression.MapFrom(device => device.CommunicationLanguage.Value));
     }
 }
 

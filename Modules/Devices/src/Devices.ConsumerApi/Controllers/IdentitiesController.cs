@@ -52,6 +52,7 @@ public class IdentitiesController : ApiControllerBase
             DevicePassword = request.DevicePassword,
             IdentityPublicKey = request.IdentityPublicKey,
             IdentityVersion = request.IdentityVersion,
+            CommunicationLanguage = request.DeviceCommunicationLanguage ?? "en",
             SignedChallenge = new SignedChallengeDTO
             {
                 Challenge = request.SignedChallenge.Challenge,
@@ -135,6 +136,7 @@ public class CreateIdentityRequest
     public required string ClientSecret { get; set; }
     public required byte[] IdentityPublicKey { get; set; }
     public required string DevicePassword { get; set; }
+    public string? DeviceCommunicationLanguage { get; set; }
     public required byte IdentityVersion { get; set; }
     public required CreateIdentityRequestSignedChallenge SignedChallenge { get; set; }
 }
