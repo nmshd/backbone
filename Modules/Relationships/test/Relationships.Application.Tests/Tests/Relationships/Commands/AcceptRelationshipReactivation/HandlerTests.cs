@@ -5,6 +5,7 @@ using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRe
 using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 using FluentAssertions;
@@ -12,7 +13,7 @@ using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.AcceptRelationshipReactivation;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Returns_the_updated_relationship()

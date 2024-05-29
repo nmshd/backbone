@@ -3,6 +3,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Tests.Extensions;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using FluentAssertions;
 using Xunit;
@@ -10,7 +11,7 @@ using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relationships;
 
-public class DecomposeRelationshipTests
+public class DecomposeRelationshipTests : AbstractTestsBase
 {
     [Fact]
     public void Decomposing_as_firstParticipant_transitions_relationship_to_status_DeletionProposed()

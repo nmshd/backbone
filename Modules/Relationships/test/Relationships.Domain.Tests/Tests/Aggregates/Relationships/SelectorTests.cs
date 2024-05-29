@@ -1,5 +1,6 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using FluentAssertions;
 using Xunit;
@@ -7,7 +8,7 @@ using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relationships;
 
-public class SelectorTests
+public class SelectorTests : AbstractTestsBase
 {
     [Fact]
     public void WithParticipant_From()

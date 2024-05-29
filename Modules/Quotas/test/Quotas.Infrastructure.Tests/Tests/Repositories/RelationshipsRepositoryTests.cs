@@ -4,6 +4,8 @@ using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
+using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FluentAssertions;
 using FluentAssertions.Execution;
@@ -12,7 +14,7 @@ using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Tests.Tests.Repositories;
 
-public class RelationshipsRepositoryTests
+public class RelationshipsRepositoryTests : AbstractTestsBase
 {
     private static readonly IdentityAddress I1 = IdentityAddress.Create([2, 2, 2], "enmeshed.eu");
     private static readonly IdentityAddress I2 = IdentityAddress.Create([1, 1, 1], "enmeshed.eu");
@@ -47,8 +49,8 @@ public class RelationshipsRepositoryTests
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
-        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
+        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
         countForI1.Should().Be(1);
@@ -71,8 +73,8 @@ public class RelationshipsRepositoryTests
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
-        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
+        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
         countForI1.Should().Be(2);
@@ -95,8 +97,8 @@ public class RelationshipsRepositoryTests
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
-        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
+        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
         countForI1.Should().Be(2);
@@ -119,8 +121,8 @@ public class RelationshipsRepositoryTests
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin().AddHours(2), quotaPeriod.CalculateEnd().AddHours(2), CancellationToken.None);
-        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin().AddHours(2), quotaPeriod.CalculateEnd().AddHours(2), CancellationToken.None);
+        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(SystemTime.UtcNow).AddHours(2), quotaPeriod.CalculateEnd(SystemTime.UtcNow).AddHours(2), CancellationToken.None);
+        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(SystemTime.UtcNow).AddHours(2), quotaPeriod.CalculateEnd(SystemTime.UtcNow).AddHours(2), CancellationToken.None);
 
         // Assert
         countForI1.Should().Be(0);
@@ -144,7 +146,7 @@ public class RelationshipsRepositoryTests
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var count = await repository.Count(I1, quotaPeriod.CalculateBegin().AddHours(2), quotaPeriod.CalculateEnd().AddHours(2), CancellationToken.None);
+        var count = await repository.Count(I1, quotaPeriod.CalculateBegin(SystemTime.UtcNow).AddHours(2), quotaPeriod.CalculateEnd(SystemTime.UtcNow).AddHours(2), CancellationToken.None);
 
         // Assert
         count.Should().Be(0);
@@ -166,8 +168,8 @@ public class RelationshipsRepositoryTests
         const QuotaPeriod quotaPeriod = QuotaPeriod.Hour;
 
         // Act
-        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
-        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(), quotaPeriod.CalculateEnd(), CancellationToken.None);
+        var countForI1 = await repository.Count(I1, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
+        var countForI2 = await repository.Count(I2, quotaPeriod.CalculateBegin(SystemTime.UtcNow), quotaPeriod.CalculateEnd(SystemTime.UtcNow), CancellationToken.None);
 
         // Assert
         countForI1.Should().Be(1);

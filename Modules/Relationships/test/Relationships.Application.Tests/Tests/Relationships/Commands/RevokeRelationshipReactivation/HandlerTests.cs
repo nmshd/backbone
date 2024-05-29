@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipReactivation;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 using FluentAssertions;
@@ -10,7 +11,8 @@ using Xunit;
 using static Backbone.Modules.Relationships.Application.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.RevokeRelationshipReactivation;
-public class HandlerTests
+
+public class HandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Returns_the_updated_relationship()
