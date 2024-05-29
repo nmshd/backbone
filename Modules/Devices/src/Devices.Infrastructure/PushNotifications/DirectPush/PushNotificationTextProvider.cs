@@ -42,7 +42,7 @@ public class PushNotificationTextProvider
         var titleKey = $"{type.Name}.Title";
         var bodyKey = $"{type.Name}.Body";
 
-        var rm = new ResourceManager(typeof(IPushNotificationResource).FullName!, GetType().Assembly);
+        var rm = new ResourceManager(typeof(IPushNotificationResource).FullName!, typeof(PushNotificationTextProvider).Assembly);
 
         var title = rm.GetString(titleKey, new CultureInfo(languageCode));
         var body = rm.GetString(bodyKey, new CultureInfo(languageCode));
