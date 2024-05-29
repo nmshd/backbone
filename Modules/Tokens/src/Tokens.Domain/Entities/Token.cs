@@ -1,10 +1,11 @@
 using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Tokens.Domain.Entities;
 
-public class Token
+public class Token : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private Token()
