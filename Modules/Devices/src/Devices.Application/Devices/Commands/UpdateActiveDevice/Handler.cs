@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
@@ -24,7 +23,7 @@ public class Handler : IRequestHandler<UpdateActiveDeviceCommand>
 
     public async Task Handle(UpdateActiveDeviceCommand request, CancellationToken cancellationToken)
     {
-        var currentDevice = await _identitiesRepository.GetDeviceById(_activeDevice, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Device));
+        var currentDevice = await _identitiesRepository.GetDeviceById(_activeDevice, cancellationToken, track: true) ?? throw new Exception("Active device could not be found.");
 
         var communicationLanguage = CommunicationLanguage.Create(request.CommunicationLanguage);
         if (communicationLanguage.IsFailure)

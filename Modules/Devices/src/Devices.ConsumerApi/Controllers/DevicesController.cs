@@ -53,7 +53,6 @@ public class DevicesController : ApiControllerBase
     [HttpPut("Self")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> UpdateDevice(UpdateActiveDeviceCommand request, CancellationToken cancellationToken)
     {
         await _mediator.Send(request, cancellationToken);
