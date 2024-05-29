@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Tooling;
@@ -27,6 +28,8 @@ public class RelationshipChange : Entity
         Status = RelationshipChangeStatus.Pending;
         Request = new RelationshipChangeRequest(Id, createdBy, createdByDevice, requestContent);
         CreatedAt = SystemTime.UtcNow;
+
+        RaiseDomainEvent(new RelationshipChangeCreatedDomainEvent(this));
     }
 
     public RelationshipChangeId Id { get; }
