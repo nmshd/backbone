@@ -85,7 +85,8 @@ public class ActualDeletionWorker : IHostedService
 
         foreach (var relationship in relationships)
         {
-            _eventBus.Publish(new PeerIdentityDeletedDomainEvent(relationship.Id, identityAddress));
+            _eventBus.Publish(new PeerIdentityDeletedDomainEvent(relationship.Id,
+                identityAddress)); //TODO: Timo (Should I make this a method in the relationship class? I'm not sure since it's very specific)
         }
     }
 
