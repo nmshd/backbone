@@ -8,7 +8,6 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
-import 'modals/modals.dart';
 
 class TierDetail extends StatefulWidget {
   final String tierId;
@@ -129,30 +128,10 @@ class _QuotaListState extends State<_QuotaList> {
             child: Column(
               children: [
                 if (!isQueuedForDeletionTier)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        IconButton(
-                          icon: Icon(
-                            Icons.delete,
-                            color: _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: WidgetStateProperty.resolveWith((states) {
-                              return _selectedQuotas.isNotEmpty ? Theme.of(context).colorScheme.error : null;
-                            }),
-                          ),
-                          onPressed: _selectedQuotas.isNotEmpty ? _removeSelectedQuotas : null,
-                        ),
-                        Gaps.w8,
-                        IconButton.filled(
-                          icon: const Icon(Icons.add),
-                          onPressed: () => showAddQuotaDialog(context: context, tierId: widget.tierDetails.id, onQuotaAdded: widget.onQuotasChanged),
-                        ),
-                      ],
-                    ),
+                  QuotasButtonGroup(
+                    selectedQuotas: _selectedQuotas,
+                    onQuotasChanged: widget.onQuotasChanged,
+                    tierId: widget.tierDetails.id,
                   ),
                 SizedBox(
                   width: double.infinity,
@@ -172,7 +151,7 @@ class _QuotaListState extends State<_QuotaList> {
                               DataCell(Text(quota.max.toString())),
                               DataCell(Text(quota.period)),
                             ],
-                            onSelectChanged: widget.tierDetails.id == 'TIR00000000000000001' ? null : (_) => _toggleSelection(quota.id),
+                            onSelectChanged: isQueuedForDeletionTier ? null : (_) => _toggleSelection(quota.id),
                             selected: _selectedQuotas.contains(quota.id),
                           ),
                         )
@@ -196,41 +175,6 @@ class _QuotaListState extends State<_QuotaList> {
 
       _selectedQuotas.add(id);
     });
-  }
-
-  Future<void> _removeSelectedQuotas() async {
-    final confirmed = await showConfirmationDialog(
-      context: context,
-      title: 'Remove Quotas',
-      message: 'Are you sure you want to remove the selected quotas from the tier "${widget.tierDetails.name}"?',
-    );
-
-    if (!confirmed) return;
-
-    for (final quota in _selectedQuotas) {
-      final result = await GetIt.I.get<AdminApiClient>().quotas.deleteTierQuota(tierId: widget.tierDetails.id, tierQuotaDefinitionId: quota);
-      if (result.hasError && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An error occurred while deleting the quota(s). Please try again.'),
-            showCloseIcon: true,
-          ),
-        );
-        return;
-      }
-
-      widget.onQuotasChanged();
-    }
-
-    _selectedQuotas.clear();
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Selected quotas have been removed.'),
-          showCloseIcon: true,
-        ),
-      );
-    }
   }
 }
 

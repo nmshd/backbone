@@ -1,28 +1,51 @@
-import 'dart:async';
-
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 
-import '/core/core.dart';
+import '../constants.dart';
+import '../extensions.dart';
 
-Future<void> showAddQuotaDialog({required BuildContext context, required String tierId, required VoidCallback onQuotaAdded}) async {
+Future<void> showAddQuotaDialog({
+  required BuildContext context,
+  required VoidCallback onQuotaAdded,
+  String? tierId,
+  String? identityAddress,
+}) async {
+  assert(tierId != null || identityAddress != null, 'Either tierId or address must be provided');
+  assert(tierId == null || identityAddress == null, 'Only one of tierId or address can be provided');
+
+  final metrics = await GetIt.I.get<AdminApiClient>().quotas.getMetrics();
+
+  if (!context.mounted) return;
+
   await showDialog<void>(
     context: context,
     builder: (BuildContext context) => _AddQuotaDialog(
-      tierId: tierId,
+      availableMetrics: metrics.data,
+      addQuota: ({required String metricKey, required int max, required String period}) {
+        if (tierId != null) {
+          return GetIt.I.get<AdminApiClient>().quotas.createTierQuota(tierId: tierId, metricKey: metricKey, max: max, period: period);
+        }
+
+        return GetIt.I.get<AdminApiClient>().quotas.createIdentityQuota(address: identityAddress!, metricKey: metricKey, max: max, period: period);
+      },
       onQuotaAdded: onQuotaAdded,
     ),
   );
 }
 
 class _AddQuotaDialog extends StatefulWidget {
-  final String tierId;
+  final List<Metric> availableMetrics;
+  final Future<ApiResponse<dynamic>> Function({required String metricKey, required int max, required String period}) addQuota;
   final VoidCallback onQuotaAdded;
 
-  const _AddQuotaDialog({required this.tierId, required this.onQuotaAdded});
+  const _AddQuotaDialog({
+    required this.availableMetrics,
+    required this.addQuota,
+    required this.onQuotaAdded,
+  });
 
   @override
   State<_AddQuotaDialog> createState() => _AddQuotaDialogState();
@@ -30,7 +53,6 @@ class _AddQuotaDialog extends StatefulWidget {
 
 class _AddQuotaDialogState extends State<_AddQuotaDialog> {
   final _maxAmountController = TextEditingController();
-  List<Metric> _availableMetrics = [];
 
   bool _saving = false;
   String? _errorMessage;
@@ -38,6 +60,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
   String? _selectedMetric;
   int? _maxAmount;
   String? _selectedPeriod;
+
   bool get _isValid => _selectedMetric != null && _maxAmount != null && _selectedPeriod != null;
 
   @override
@@ -45,8 +68,6 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
     super.initState();
 
     _maxAmountController.addListener(() => setState(() => _maxAmount = int.tryParse(_maxAmountController.text)));
-
-    _loadMetrics();
   }
 
   @override
@@ -68,7 +89,8 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
             mainAxisSize: MainAxisSize.min,
             children: [
               DropdownButtonFormField(
-                items: _availableMetrics.map((metric) => DropdownMenuItem(value: metric.key, child: Text(metric.displayName))).toList(),
+                value: _selectedMetric,
+                items: widget.availableMetrics.map((metric) => DropdownMenuItem(value: metric.key, child: Text(metric.displayName))).toList(),
                 onChanged: _saving ? null : (String? selected) => setState(() => _selectedMetric = selected),
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(),
@@ -89,6 +111,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
               ),
               Gaps.h24,
               DropdownButtonFormField(
+                value: _selectedPeriod,
                 items: const [
                   DropdownMenuItem(value: 'Hour', child: Text('Hour')),
                   DropdownMenuItem(value: 'Day', child: Text('Day')),
@@ -130,12 +153,13 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
   Future<void> _addQuota() async {
     setState(() => _saving = true);
 
-    final response = await GetIt.I.get<AdminApiClient>().quotas.createTierQuota(
-          tierId: widget.tierId,
-          metricKey: _selectedMetric!,
-          max: _maxAmount!,
-          period: _selectedPeriod!,
-        );
+    assert(_selectedMetric != null && _maxAmount != null && _selectedPeriod != null, 'Invalid state');
+
+    final response = await widget.addQuota(
+      metricKey: _selectedMetric!,
+      max: _maxAmount!,
+      period: _selectedPeriod!,
+    );
 
     if (response.hasError) {
       setState(() {
@@ -148,10 +172,5 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
 
     if (mounted) Navigator.of(context, rootNavigator: true).pop();
     widget.onQuotaAdded();
-  }
-
-  Future<void> _loadMetrics() async {
-    final metrics = await GetIt.I.get<AdminApiClient>().quotas.getMetrics();
-    setState(() => _availableMetrics = metrics.data);
   }
 }
