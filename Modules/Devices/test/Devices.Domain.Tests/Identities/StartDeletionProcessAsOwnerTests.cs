@@ -6,7 +6,6 @@ using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
-using FluentAssertions.Formatting;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
