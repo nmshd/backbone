@@ -5,7 +5,7 @@ namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 
 public class DatawalletModifiedDomainEvent : DomainEvent
 {
-    public DatawalletModifiedDomainEvent(IdentityAddress identity, DeviceId modifiedByDevice) : base(Guid.NewGuid().ToString())
+    public DatawalletModifiedDomainEvent(IdentityAddress identity, DeviceId modifiedByDevice) : base($"{identity}/Datawallet/Modified/{Guid.NewGuid()}")
     {
         Identity = identity;
         ModifiedByDevice = modifiedByDevice;
