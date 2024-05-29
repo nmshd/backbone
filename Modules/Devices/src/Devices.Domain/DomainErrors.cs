@@ -9,7 +9,7 @@ public static class DomainErrors
     {
         var formattedReason = string.IsNullOrEmpty(reason) ? "" : $" ({reason})";
         return new DomainError("error.platform.validation.invalidTierName",
-            string.IsNullOrEmpty(reason) ? $"The Tier Name is invalid {formattedReason}." : reason);
+            string.IsNullOrEmpty(reason) ? $"The Tier Name is invalid{formattedReason}." : reason);
     }
 
     public static DomainError InvalidDeviceCommunicationLanguage(string reason = "")
