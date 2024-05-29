@@ -50,6 +50,8 @@ public class RelationshipChange : Entity
         EnsureCanBeAccepted(by, content);
         Status = RelationshipChangeStatus.Accepted;
         Response = new RelationshipChangeResponse(Id, by, byDevice, content);
+
+        RaiseDomainEvent(new RelationshipChangeCompletedDomainEvent(this));
     }
 
     protected virtual void EnsureCanBeAccepted(IdentityAddress by, byte[]? content)
@@ -66,6 +68,8 @@ public class RelationshipChange : Entity
         EnsureCanBeRejected(by, content);
         Status = RelationshipChangeStatus.Rejected;
         Response = new RelationshipChangeResponse(Id, by, byDevice, content);
+
+        RaiseDomainEvent(new RelationshipChangeCompletedDomainEvent(this));
     }
 
     protected virtual void EnsureCanBeRejected(IdentityAddress by, byte[]? content)
@@ -82,6 +86,8 @@ public class RelationshipChange : Entity
         EnsureCanBeRevoked(by, content);
         Status = RelationshipChangeStatus.Revoked;
         Response = new RelationshipChangeResponse(Id, by, byDevice, content);
+
+        RaiseDomainEvent(new RelationshipChangeCompletedDomainEvent(this));
     }
 
     protected virtual void EnsureCanBeRevoked(IdentityAddress by, byte[]? content)
