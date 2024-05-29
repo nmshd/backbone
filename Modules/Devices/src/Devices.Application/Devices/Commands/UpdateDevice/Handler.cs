@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<UpdateDeviceCommand>
 
     public async Task Handle(UpdateDeviceCommand request, CancellationToken cancellationToken)
     {
-        var currentDevice = await _identitiesRepository.GetDeviceById(_activeDevice, cancellationToken, true) ?? throw new NotFoundException(nameof(Device));
+        var currentDevice = await _identitiesRepository.GetDeviceById(_activeDevice, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Device));
 
         var cultureInfos = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures);
         var culture = cultureInfos.FirstOrDefault(c => c.TwoLetterISOLanguageName == request.CommunicationLanguage) ??
