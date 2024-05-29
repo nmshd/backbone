@@ -1,5 +1,4 @@
 using System.Text.Json;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
@@ -20,7 +19,7 @@ public class FcmMessageBuilderTests : AbstractTestsBase
             .SetTag(1)
             .SetToken("token1")
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
-            .AddContent(new NotificationContent(IdentityAddress.Parse("did:e:prod.enmeshed.eu:dids:b9d25bd0a2bbd3aa48437c"), DevicePushIdentifier.New(), new { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(DevicePushIdentifier.New(), new { SomeProperty = "someValue" }))
             .Build();
 
         // Assert
@@ -46,13 +45,12 @@ public class FcmMessageBuilderTests : AbstractTestsBase
 
         // Act
         var message = new FcmMessageBuilder()
-            .AddContent(new NotificationContent(IdentityAddress.Parse("did:e:prod.enmeshed.eu:dids:b9d25bd0a2bbd3aa48437c"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"), new { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"), new { SomeProperty = "someValue" }))
             .Build();
         var contentJson = FormatJson(message.Data["content"]);
 
         // Assert
         contentJson.Should().Be(FormatJson(@"{
-          'accRef': 'did:e:prod.enmeshed.eu:dids:b9d25bd0a2bbd3aa48437c',
           'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
           'eventName': 'dynamic',
           'sentAt': '2021-01-01T00:00:00.000Z',
