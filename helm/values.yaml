@@ -502,7 +502,7 @@ global:
         # connectionInfo - only applicable if Vendor is "RabbitMQ"; the host name of the RabbitMQ service; the connection string of the Azure Service Bus if Vendor is "Azure"; if Vendor is "GoogleCloud" this is not used
         connectionInfo: ""
         # subscriptionClientName - the name of the subscription that should be used to receive events
-        subscriptionClientName: ""
+        subscriptionClientName: "consumerapi"
         # rabbitMQUsername - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
         rabbitMQUsername: ""
         # rabbitMQPassword - only applicable if Vendor is "RabbitMQ"; should be set via environment variable
