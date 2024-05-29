@@ -1,4 +1,5 @@
 ﻿using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
@@ -6,7 +7,7 @@ using static Backbone.Modules.Devices.Domain.Tests.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class DeletionProcessApprovalPeriodEndsAtTests
+public class DeletionProcessApprovalPeriodEndsAtTests : AbstractTestsBase
 {
     [Fact]
     public void Deletion_process_ApprovalPeriodEndsAt_returns_expected_date()

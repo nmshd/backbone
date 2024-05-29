@@ -4,6 +4,7 @@ using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.UnitTestTools.Data;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FluentAssertions;
 using Xunit;
@@ -11,7 +12,7 @@ using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Extensions;
 
-public class RelationshipTemplateQueryableExtensionsTests
+public class RelationshipTemplateQueryableExtensionsTests : AbstractTestsBase
 {
     private static readonly DateTime YESTERDAY = DateTime.UtcNow.AddDays(-1);
 

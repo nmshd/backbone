@@ -1,10 +1,11 @@
 using Backbone.Crypto.Implementations;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Crypto.Tests.Tests.Implementations;
 
-public class KeyAgreementHelperTests
+public class KeyAgreementHelperTests : AbstractTestsBase
 {
     private readonly KeyAgreementHelper _keyAgreementHelper;
 

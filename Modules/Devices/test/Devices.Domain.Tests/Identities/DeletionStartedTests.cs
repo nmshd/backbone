@@ -1,12 +1,13 @@
 ﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class DeletionStartedTests
+public class DeletionStartedTests : AbstractTestsBase
 {
     [Fact]
     public void DeletionStarted_sets_status_and_creates_valid_DeletionProcess()

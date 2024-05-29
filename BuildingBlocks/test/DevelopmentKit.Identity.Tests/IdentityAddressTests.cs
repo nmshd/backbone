@@ -1,10 +1,11 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.DevelopmentKit.Identity.Tests;
 
-public class IdentityAddressTests
+public class IdentityAddressTests : AbstractTestsBase
 {
     [Theory]
     // ReSharper disable StringLiteralTypo

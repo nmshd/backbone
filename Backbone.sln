@@ -94,8 +94,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Crypto.Tests", "BuildingBlo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DevelopmentKit.Identity.Tests", "BuildingBlocks\test\DevelopmentKit.Identity.Tests\DevelopmentKit.Identity.Tests.csproj", "{AF32BAD3-0D93-4B42-B226-D1ABEEE730F4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StronglyTypedIds.Tests", "BuildingBlocks\test\StronglyTypedIds.Tests\StronglyTypedIds.Tests.csproj", "{49F96E45-9FB2-496A-ABB8-5B5532FA2BF4}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tooling.Tests", "BuildingBlocks\test\Tooling.Tests\Tooling.Tests.csproj", "{33AF4A60-5E10-4F84-93A5-E724D013CFC3}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BuildingBlocks.API", "BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj", "{EB4F2036-B4F2-4DEF-838C-480BFF3635E4}"
@@ -293,11 +291,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D54A9259-770
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2429FCAB-2058-4403-94DA-DA26B1655A7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHandlerService", "EventHandlerService\src\EventHandlerService\EventHandlerService.csproj", "{B4664E79-77A5-41AE-8480-C449ED5B2576}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHandlerService", "EventHandlerService\src\EventHandlerService\EventHandlerService.csproj", "{B4664E79-77A5-41AE-8480-C449ED5B2576}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventHandlerService.Tests", "EventHandlerService\test\EventHandlerService.Tests\EventHandlerService.Tests.csproj", "{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHandlerService.Tests", "EventHandlerService\test\EventHandlerService.Tests\EventHandlerService.Tests.csproj", "{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrator", "DatabaseMigrator\DatabaseMigrator.csproj", "{143EAC38-A2D0-4F74-88F1-3EF27413A8C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrator", "DatabaseMigrator\DatabaseMigrator.csproj", "{143EAC38-A2D0-4F74-88F1-3EF27413A8C6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -429,10 +427,6 @@ Global
 		{AF32BAD3-0D93-4B42-B226-D1ABEEE730F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AF32BAD3-0D93-4B42-B226-D1ABEEE730F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AF32BAD3-0D93-4B42-B226-D1ABEEE730F4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49F96E45-9FB2-496A-ABB8-5B5532FA2BF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49F96E45-9FB2-496A-ABB8-5B5532FA2BF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49F96E45-9FB2-496A-ABB8-5B5532FA2BF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49F96E45-9FB2-496A-ABB8-5B5532FA2BF4}.Release|Any CPU.Build.0 = Release|Any CPU
 		{33AF4A60-5E10-4F84-93A5-E724D013CFC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{33AF4A60-5E10-4F84-93A5-E724D013CFC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33AF4A60-5E10-4F84-93A5-E724D013CFC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -765,7 +759,6 @@ Global
 		{35B85FC1-3134-4FE5-815E-F7C4282C6991} = {76F6B614-D605-427C-ADFE-0A6D63A3858B}
 		{6932B4A6-A8D8-4F0B-9338-520F6488925E} = {76F6B614-D605-427C-ADFE-0A6D63A3858B}
 		{AF32BAD3-0D93-4B42-B226-D1ABEEE730F4} = {76F6B614-D605-427C-ADFE-0A6D63A3858B}
-		{49F96E45-9FB2-496A-ABB8-5B5532FA2BF4} = {76F6B614-D605-427C-ADFE-0A6D63A3858B}
 		{33AF4A60-5E10-4F84-93A5-E724D013CFC3} = {76F6B614-D605-427C-ADFE-0A6D63A3858B}
 		{EB4F2036-B4F2-4DEF-838C-480BFF3635E4} = {06D714AE-EDF4-421C-9340-EDA6FCDF491F}
 		{6F58D49A-BDF4-4599-9584-AC7A4134838E} = {06D714AE-EDF4-421C-9340-EDA6FCDF491F}

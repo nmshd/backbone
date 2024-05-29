@@ -1,11 +1,12 @@
 using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using FluentValidation;
 using Xunit;
 
 namespace Backbone.BuildingBlocks.Application.Tests.FluentValidation;
 
-public class ValueInValidatorTests
+public class ValueInValidatorTests : AbstractTestsBase
 {
     [Theory]
     [InlineData("validValue1")]

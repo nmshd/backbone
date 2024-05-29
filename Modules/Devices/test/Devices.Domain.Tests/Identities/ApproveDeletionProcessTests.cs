@@ -4,12 +4,13 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class ApproveDeletionProcessTests
+public class ApproveDeletionProcessTests : AbstractTestsBase
 {
     [Fact]
     public void Approve_deletion_process_waiting_for_approval()

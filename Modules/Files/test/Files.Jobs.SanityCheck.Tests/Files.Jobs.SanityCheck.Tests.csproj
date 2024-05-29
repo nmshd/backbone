@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
     <ProjectReference Include="..\..\src\Files.Jobs.SanityCheck\Files.Jobs.SanityCheck.csproj" />
   </ItemGroup>
 

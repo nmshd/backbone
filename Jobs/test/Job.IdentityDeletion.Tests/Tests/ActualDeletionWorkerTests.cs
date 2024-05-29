@@ -7,6 +7,7 @@ using Backbone.Job.IdentityDeletion.Workers;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using CSharpFunctionalExtensions;
 using FakeItEasy;
@@ -17,7 +18,7 @@ using Xunit;
 
 namespace Backbone.Job.IdentityDeletion.Tests.Tests;
 
-public class ActualDeletionWorkerTests
+public class ActualDeletionWorkerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Proxies_triggering_the_deletion_processes_to_command_handler()

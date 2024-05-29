@@ -4,6 +4,7 @@ using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
+using Backbone.Tooling;
 using CSharpFunctionalExtensions;
 using Entity = Backbone.BuildingBlocks.Domain.Entity;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
@@ -116,15 +117,17 @@ public class Identity : Entity
 
         var latestExhaustionDate = ExhaustionDate.Unexhausted;
 
+        var utcNow = SystemTime.UtcNow;
+
         await Parallel.ForEachAsync(quotasForMetric, cancellationToken, async (quota, _) =>
         {
             var newUsage = await metricCalculator.CalculateUsage(
-                quota.Period.CalculateBegin(),
-                quota.Period.CalculateEnd(),
+                quota.Period.CalculateBegin(utcNow),
+                quota.Period.CalculateEnd(utcNow),
                 Address,
                 cancellationToken);
 
-            var quotaExhaustion = quota.CalculateExhaustion(newUsage);
+            var quotaExhaustion = quota.CalculateExhaustion(newUsage, utcNow);
 
             lock (_latestExhaustionDateLock)
             {
