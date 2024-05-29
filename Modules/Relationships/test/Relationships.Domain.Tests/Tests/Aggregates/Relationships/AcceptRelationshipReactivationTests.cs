@@ -2,12 +2,14 @@
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Tests.Extensions;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relationships;
-public class AcceptRelationshipReactivationTests
+
+public class AcceptRelationshipReactivationTests : AbstractTestsBase
 {
     [Fact]
     public void Accepting_reactivation_transitions_relationship_to_status_active()

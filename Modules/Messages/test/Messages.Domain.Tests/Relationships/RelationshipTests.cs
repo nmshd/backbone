@@ -2,12 +2,14 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Relationships;
-public class RelationshipTests
+
+public class RelationshipTests : AbstractTestsBase
 {
     [Fact]
     public void Relationship_must_be_active_to_allow_sending_messages()
@@ -55,7 +57,8 @@ public class RelationshipTests
         return CreateRelationship(null, null, null, null, status);
     }
 
-    private static Relationship CreateRelationship(string? relationshipId = null, IdentityAddress? from = null, IdentityAddress? to = null, DateTime? createdAt = null, RelationshipStatus? status = null)
+    private static Relationship CreateRelationship(string? relationshipId = null, IdentityAddress? from = null, IdentityAddress? to = null, DateTime? createdAt = null,
+        RelationshipStatus? status = null)
     {
         relationshipId ??= "REL00000000000000000";
         from ??= TestDataGenerator.CreateRandomIdentityAddress();
@@ -65,5 +68,6 @@ public class RelationshipTests
 
         return Relationship.LoadForTesting(RelationshipId.Parse(relationshipId), from, to, createdAt.Value, status.Value);
     }
+
     #endregion
 }

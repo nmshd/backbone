@@ -1,10 +1,11 @@
 ﻿using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Tests.TestHelpers;
+using Backbone.UnitTestTools.BaseClasses;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relationships;
 
-public class ExpressionTests
+public class ExpressionTests : AbstractTestsBase
 {
     #region CountsAsActive
 

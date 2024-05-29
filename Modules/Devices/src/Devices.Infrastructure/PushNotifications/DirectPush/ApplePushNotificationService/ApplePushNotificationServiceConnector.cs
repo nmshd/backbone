@@ -57,16 +57,16 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     {
         var (notificationTitle, notificationBody) = GetNotificationText(notification);
         var notificationId = GetNotificationId(notification);
-        var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
+        var notificationContent = new NotificationContent(registration.DevicePushIdentifier, notification);
 
         var keyInformation = _options.GetKeyInformationForBundleId(registration.AppId);
         var jwt = _jwtGenerator.Generate(keyInformation.PrivateKey, keyInformation.KeyId, keyInformation.TeamId, registration.AppId);
 
         var request = new ApnsMessageBuilder(registration.AppId, BuildUrl(registration.Environment, registration.Handle.Value), jwt.Value)
-                .AddContent(notificationContent)
-                .SetNotificationText(notificationTitle, notificationBody)
-                .SetNotificationId(notificationId)
-                .Build();
+            .AddContent(notificationContent)
+            .SetNotificationText(notificationTitle, notificationBody)
+            .SetNotificationId(notificationId)
+            .Build();
 
         _logger.LogDebug("Sending push notification (type '{eventName}') to '{address}' with handle '{handle}'.", notificationContent.EventName, registration.IdentityAddress, registration.Handle);
 

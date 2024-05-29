@@ -2,12 +2,14 @@
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Tests.Extensions;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relationships;
-public class TerminateRelationshipTests
+
+public class TerminateRelationshipTests : AbstractTestsBase
 {
     [Fact]
     public void Terminating_relationship_transitions_relationship_to_status_terminated()

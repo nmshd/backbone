@@ -2,12 +2,14 @@
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Tests.Extensions;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relationships;
-public class RequestReactivationOfRelationshipTests
+
+public class RequestReactivationOfRelationshipTests : AbstractTestsBase
 {
     [Fact]
     public void Requesting_reactivation_creates_an_audit_log_entry()

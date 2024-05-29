@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Tooling;
 
@@ -9,10 +8,9 @@ public class NotificationContent
 {
     private const string PUSH_NOTIFICATION_POSTFIX = "PushNotification";
 
-    public NotificationContent(IdentityAddress recipient, DevicePushIdentifier devicePushIdentifier, object pushNotification)
+    public NotificationContent(DevicePushIdentifier devicePushIdentifier, object pushNotification)
     {
         EventName = DetermineEventName(pushNotification);
-        AccountReference = recipient;
         DevicePushIdentifier = devicePushIdentifier;
         Payload = pushNotification;
         SentAt = SystemTime.UtcNow;
@@ -28,8 +26,6 @@ public class NotificationContent
         return "dynamic";
     }
 
-    [JsonPropertyName("accRef")]
-    public string AccountReference { get; }
     [JsonPropertyName("devicePushIdentifier")]
     public string DevicePushIdentifier { get; }
 
