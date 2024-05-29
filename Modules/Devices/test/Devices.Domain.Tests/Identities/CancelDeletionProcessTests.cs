@@ -3,12 +3,13 @@ using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class CancelDeletionProcessTests
+public class CancelDeletionProcessTests : AbstractTestsBase
 {
     [Fact]
     public void Cancel_deletion_process()

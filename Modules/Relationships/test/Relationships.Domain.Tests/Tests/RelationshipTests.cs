@@ -6,13 +6,14 @@ using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Modules.Relationships.Domain.Tests.Extensions;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests;
 
-public class RelationshipTests
+public class RelationshipTests : AbstractTestsBase
 {
     private static readonly IdentityAddress FROM_IDENTITY = IdentityAddress.Create([1, 1, 1], "id1");
     private static readonly DeviceId FROM_DEVICE = DeviceId.New();

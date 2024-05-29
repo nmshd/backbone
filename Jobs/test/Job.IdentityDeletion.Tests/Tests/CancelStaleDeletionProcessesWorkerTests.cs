@@ -1,5 +1,6 @@
 ﻿using Backbone.Job.IdentityDeletion.Workers;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdentityDeletionProcesses;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using MediatR;
 using Microsoft.Extensions.Hosting;
@@ -8,7 +9,7 @@ using Xunit;
 
 namespace Backbone.Job.IdentityDeletion.Tests.Tests
 {
-    public class CancelStaleDeletionProcessesWorkerTests
+    public class CancelStaleDeletionProcessesWorkerTests : AbstractTestsBase
     {
         [Fact]
         public async Task Happy_path()

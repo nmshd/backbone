@@ -3,12 +3,13 @@ using Backbone.Modules.Devices.Application.DomainEvents.Incoming.IdentityDeletio
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.DomainEvents;
 
-public class IdentityDeletionProcessStartedDomainEventHandlerTests
+public class IdentityDeletionProcessStartedDomainEventHandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Sends_push_notification()

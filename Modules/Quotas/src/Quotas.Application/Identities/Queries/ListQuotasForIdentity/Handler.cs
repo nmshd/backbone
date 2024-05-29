@@ -3,6 +3,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Metrics;
+using Backbone.Tooling;
 using MediatR;
 
 // ReSharper disable InconsistentNaming
@@ -47,9 +48,9 @@ file static class IdentityExtensions
         var singleQuotaDTOs = await Task.WhenAll(quotas.Select(async q =>
         {
             var calculator = metricCalculatorFactory.CreateFor(q.MetricKey);
-            var usage = await calculator.CalculateUsage(q.Period.CalculateBegin(), q.Period.CalculateEnd(), identityAddress, cancellationToken);
+            var usage = await calculator.CalculateUsage(q.Period.CalculateBegin(SystemTime.UtcNow), q.Period.CalculateEnd(SystemTime.UtcNow), identityAddress, cancellationToken);
 
-            return new SingleQuotaDTO()
+            return new SingleQuotaDTO
             {
                 Source = q is IndividualQuota ? QuotaSource.Individual : QuotaSource.Tier,
                 MetricKey = q.MetricKey.Value,

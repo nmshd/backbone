@@ -24,6 +24,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\src\Crypto\Crypto.csproj" />
+		<ProjectReference Include="..\..\src\UnitTestTools\UnitTestTools.csproj" />
 	</ItemGroup>
 
 </Project>

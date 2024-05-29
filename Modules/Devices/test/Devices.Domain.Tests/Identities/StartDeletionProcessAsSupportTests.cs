@@ -6,12 +6,13 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class StartDeletionProcessAsSupportTests
+public class StartDeletionProcessAsSupportTests : AbstractTestsBase
 {
     [Fact]
     public void Start_deletion_process()

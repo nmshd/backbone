@@ -1,12 +1,13 @@
 using System.Text;
 using System.Text.Json;
 using Backbone.Tooling.JsonConverters;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Tooling.Tests.Tests;
 
-public class UrlSafeBase64ToByteArrayJsonConverterTests
+public class UrlSafeBase64ToByteArrayJsonConverterTests : AbstractTestsBase
 {
     [Fact]
     public void ShouldDeserializeJsonCorrectly()
