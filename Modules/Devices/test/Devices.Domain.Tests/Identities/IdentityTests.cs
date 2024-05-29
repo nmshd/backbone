@@ -2,13 +2,14 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class IdentityTests
+public class IdentityTests : AbstractTestsBase
 {
     [Fact]
     public void Raises_TierOfIdentityChangedDomainEvent_on_updating()

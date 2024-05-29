@@ -2,6 +2,7 @@
 using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
@@ -9,7 +10,7 @@ using Xunit;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
 
-public class MessagesTests
+public class MessagesTests : AbstractTestsBase
 {
     [Fact]
     public void Raises_MessageCreatedDomainEvent_when_created()

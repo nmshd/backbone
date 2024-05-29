@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Tokens.Domain.DomainEvents;
 using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
@@ -7,7 +8,7 @@ using Xunit;
 
 namespace Backbone.Modules.Tokens.Domain.Tests.Tests;
 
-public class TokenTests
+public class TokenTests : AbstractTestsBase
 {
     [Fact]
     public void Raises_TemplateCreatedDomainEvent_on_creation()

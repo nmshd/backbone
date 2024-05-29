@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
@@ -7,7 +8,7 @@ using Xunit;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests;
 
-public class RelationshipTemplateTests
+public class RelationshipTemplateTests : AbstractTestsBase
 {
     [Fact]
     public void Raises_RelationshipTemplateCreatedDomainEvent_when_creating()
