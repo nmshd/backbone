@@ -22,6 +22,7 @@ internal class DevicesStepDefinitions
     private ApiResponse<EmptyResponse>? _deletionResponse;
     private ApiResponse<EmptyResponse>? _updateResponse;
 
+    private string? _communicationLanguage;
     private string? _deviceIdD1;
     private string? _deviceIdD2;
     private const string NON_EXISTENT_DEVICE_ID = "DVC00000000000000000";
@@ -64,14 +65,15 @@ internal class DevicesStepDefinitions
         _deletionResponse = await _sdk.Devices.DeleteDevice(NON_EXISTENT_DEVICE_ID);
     }
 
-    [When("a PUT request is sent to the Devices/Self endpoint with a valid payload")]
-    public async Task WhenAPutRequestIsSentToTheDeviceSelfEndpointWithAValidPayload()
+    [When("a PUT request is sent to the Devices/Self endpoint with the communication language '(.*)'")]
+    public async Task WhenAPutRequestIsSentToTheDeviceSelfEndpointWithAValidPayload(string communicationLanguage)
     {
-        var request = new UpdateDeviceRequest { CommunicationLanguage = "en" };
+        _communicationLanguage = communicationLanguage;
+        var request = new UpdateDeviceRequest { CommunicationLanguage = _communicationLanguage };
         _updateResponse = await _sdk.Devices.UpdateDevice(request);
     }
 
-    [When("a PUT request is sent to the Devices/Self endpoint with an invalid payload")]
+    [When("a PUT request is sent to the Devices/Self endpoint with a non-existent language code")]
     public async Task WhenAPutRequestIsSentToTheDeviceSelfEndpointWithAnInvalidPayload()
     {
         var request = new UpdateDeviceRequest { CommunicationLanguage = "some-non-existent-language" };
@@ -102,6 +104,14 @@ internal class DevicesStepDefinitions
             _updateResponse!.Error.Should().NotBeNull();
             _updateResponse.Error!.Code.Should().Be(errorCode);
         }
+    }
+
+    [Then("the device on the Backbone has the new communication language")]
+    public async Task ThenTheDeviceOnTheBackboneHasTheNewCommunicationLanguage()
+    {
+        var response = await ListDevices();
+        response.Result!.Count.Should().Be(1);
+        response.Result!.First().CommunicationLanguage.Should().Be(_communicationLanguage);
     }
 
     [Then("d is not deleted")]
