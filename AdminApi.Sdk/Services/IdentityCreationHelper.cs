@@ -13,6 +13,7 @@ public static class IdentityCreationHelper
 {
     public const string DEVICE_PASSWORD = "some-device-password";
     public const string TEST_CLIENT_ID = "test";
+    public const string DEFAULT_DEVICE_COMMUNICATION_LANGUAGE = "en";
 
     public static async Task<ApiResponse<CreateIdentityResponse>> CreateIdentity(Client client)
     {
@@ -31,6 +32,7 @@ public static class IdentityCreationHelper
             ClientId = TEST_CLIENT_ID,
             IdentityVersion = 1,
             SignedChallenge = signedChallenge,
+            DeviceCommunicationLanguage = DEFAULT_DEVICE_COMMUNICATION_LANGUAGE,
             IdentityPublicKey = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new CryptoSignaturePublicKey
             {
                 alg = CryptoExchangeAlgorithm.ECDH_X25519,

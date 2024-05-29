@@ -18,7 +18,7 @@ public class RejectDeletionProcessTests : AbstractTestsBase
         // Arrange
         SystemTime.Set(DateTime.Parse("2020-01-01"));
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
-        identity.Devices.Add(new Device(identity));
+        identity.Devices.Add(new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE));
         var deviceId = identity.Devices[0].Id;
 
         // Act
@@ -50,7 +50,7 @@ public class RejectDeletionProcessTests : AbstractTestsBase
     {
         // Arrange
         var identity = CreateIdentity();
-        identity.Devices.Add(new Device(identity));
+        identity.Devices.Add(new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE));
         var deviceId = identity.Devices[0].Id;
         var deletionProcessId = IdentityDeletionProcessId.Create("IDP00000000000000001").Value;
 
@@ -69,7 +69,7 @@ public class RejectDeletionProcessTests : AbstractTestsBase
     {
         // Arrange
         var identity = CreateIdentity();
-        identity.Devices.Add(new Device(identity));
+        identity.Devices.Add(new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE));
         var deviceId = identity.Devices[0].Id;
         var deletionProcess = identity.StartDeletionProcessAsOwner(deviceId);
 

@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240528172309_Add_Device_Communication_Language")]
+    partial class Add_Device_Communication_Language
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,9 +57,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
+                        .HasColumnType("char(36)")
                         .IsFixedLength();
 
                     b.Property<DateTime>("UpdatedAt")
@@ -216,9 +219,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
+                        .HasColumnType("char(36)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -231,9 +234,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
                 {
                     b.Property<string>("Address")
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
+                        .HasColumnType("char(36)")
                         .IsFixedLength();
 
                     b.Property<string>("ClientId")
@@ -332,9 +335,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("IdentityAddress")
-                        .HasMaxLength(80)
+                        .HasMaxLength(36)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
+                        .HasColumnType("char(36)")
                         .IsFixedLength();
 
                     b.Property<DateTime?>("RejectedAt")

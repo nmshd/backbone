@@ -7,6 +7,7 @@ public class Device
     public required DateTime CreatedAt { get; set; }
     public required string CreatedByDevice { get; set; }
     public required LastLoginInformation LastLogin { get; set; }
+    public required string CommunicationLanguage { get; set; }
 }
 
 public class LastLoginInformation

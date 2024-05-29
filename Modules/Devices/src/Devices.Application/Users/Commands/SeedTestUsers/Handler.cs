@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
         var user = new ApplicationUser(new Device(new Identity("test",
             IdentityAddress.Create([1, 1, 1, 1, 1], _applicationOptions.InstanceUrl),
             [1, 1, 1, 1, 1], basicTier!.Id, 1
-        )))
+        ), CommunicationLanguage.DEFAULT_LANGUAGE))
         {
             SecurityStamp = Guid.NewGuid().ToString("D"),
             UserName = "USRa",
@@ -44,7 +44,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
         user = new ApplicationUser(new Device(new Identity("test",
             IdentityAddress.Create([2, 2, 2, 2, 2], _applicationOptions.InstanceUrl),
             [2, 2, 2, 2, 2], basicTier.Id, 1
-        )))
+        ), CommunicationLanguage.DEFAULT_LANGUAGE))
         {
             SecurityStamp = Guid.NewGuid().ToString("D"),
             UserName = "USRb",

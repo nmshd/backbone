@@ -38,6 +38,11 @@ public class DevicesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client
         return await _client.Put<EmptyResponse>($"api/{API_VERSION}/Devices/Self/Password", request);
     }
 
+    public async Task<ApiResponse<EmptyResponse>> UpdateActiveDevice(UpdateActiveDeviceRequest request)
+    {
+        return await _client.Put<EmptyResponse>($"api/{API_VERSION}/Devices/Self", request);
+    }
+
     public async Task<ApiResponse<EmptyResponse>> DeleteDevice(string id)
     {
         return await _client.Delete<EmptyResponse>($"api/{API_VERSION}/Devices/{id}");

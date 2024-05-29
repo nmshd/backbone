@@ -79,7 +79,7 @@ export class IdentityDetailsComponent {
         this.headerDeletionProcessesDescription = "View deletion processes of this Identity.";
         this.quotasTableDisplayedColumns = ["select", "metric", "source", "max", "period"];
         this.quotasTableData = [];
-        this.devicesTableDisplayedColumns = ["id", "username", "createdAt", "lastLogin", "createdByDevice"];
+        this.devicesTableDisplayedColumns = ["id", "username", "createdAt", "lastLogin", "createdByDevice", "communicationLanguage"];
         this.devicesTableData = [];
         this.loading = true;
         this.disabled = false;
