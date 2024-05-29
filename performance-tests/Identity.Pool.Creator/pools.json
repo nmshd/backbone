@@ -1,0 +1,86 @@
+[
+    {
+        "type": "never",
+        "name": "NeverUse",
+        "alias": "e",
+        "amount": 5000,
+        "numberOfRelationshipTemplates": 0,
+        "numberOfRelationships": 0,
+        "numberOfSentMessages": 0,
+        "numberOfDatawalletModifications": 50,
+        "numberOfDevices": 1,
+        "numberOfChallenges": 0
+    },
+    {
+        "type": "app",
+        "name": "AppLight",
+        "alias": "a1",
+        "amount": 500,
+        "numberOfRelationshipTemplates": 0,
+        "numberOfRelationships": 0,
+        "numberOfSentMessages": 0,
+        "numberOfDatawalletModifications": 50,
+        "numberOfDevices": 1,
+        "numberOfChallenges": 1
+    },
+    {
+        "type": "app",
+        "name": "AppMedium",
+        "alias": "a2",
+        "amount": 1500,
+        "numberOfRelationshipTemplates": 0,
+        "numberOfRelationships": 2,
+        "numberOfSentMessages": 50,
+        "numberOfDatawalletModifications": 500,
+        "numberOfDevices": 2,
+        "numberOfChallenges": 10
+    },
+    {
+        "type": "app",
+        "name": "AppHeavy",
+        "alias": "a3",
+        "amount": 3500,
+        "numberOfRelationshipTemplates": 0,
+        "numberOfRelationships": 5,
+        "numberOfSentMessages": 200,
+        "numberOfDatawalletModifications": 1,
+        "numberOfDevices": 3,
+        "numberOfChallenges": 20
+    },
+    {
+        "type": "connector",
+        "name": "ConnectorLight",
+        "alias": "c1",
+        "amount": 10,
+        "numberOfRelationshipTemplates": 0,
+        "numberOfRelationships": 0,
+        "numberOfSentMessages": 0,
+        "numberOfDatawalletModifications": 0,
+        "numberOfDevices": 1,
+        "numberOfChallenges": 0
+    },
+    {
+        "type": "connector",
+        "name": "ConnectorMedium",
+        "alias": "c2",
+        "amount": 20,
+        "numberOfRelationshipTemplates": 8000,
+        "numberOfRelationships": 316,
+        "numberOfSentMessages": 11924,
+        "numberOfDatawalletModifications": 0,
+        "numberOfDevices": 1,
+        "numberOfChallenges": 100
+    },
+    {
+        "type": "connector",
+        "name": "ConnectorHeavy",
+        "alias": "c3",
+        "amount": 30,
+        "numberOfRelationshipTemplates": 12000,
+        "numberOfRelationships": 474,
+        "numberOfSentMessages": 17886,
+        "numberOfDatawalletModifications": 0,
+        "numberOfDevices": 1,
+        "numberOfChallenges": 300
+    }
+]
