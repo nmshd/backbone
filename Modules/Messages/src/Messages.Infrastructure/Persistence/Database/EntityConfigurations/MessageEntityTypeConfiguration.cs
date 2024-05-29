@@ -1,13 +1,15 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Messages.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.EntityConfigurations;
 
-public class MessageEntityTypeConfiguration : IEntityTypeConfiguration<Message>
+public class MessageEntityTypeConfiguration : EntityEntityTypeConfiguration<Message>
 {
-    public void Configure(EntityTypeBuilder<Message> builder)
+    public override void Configure(EntityTypeBuilder<Message> builder)
     {
+        base.Configure(builder);
+
         builder.HasIndex(m => m.CreatedBy);
 
         builder.Property(m => m.Body).IsRequired(false);
