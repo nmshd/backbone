@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Tooling;
@@ -28,6 +29,8 @@ public class RelationshipTemplate : Entity
         MaxNumberOfAllocations = maxNumberOfAllocations;
         ExpiresAt = expiresAt;
         Content = content;
+
+        RaiseDomainEvent(new RelationshipTemplateCreatedDomainEvent(this));
     }
 
     public RelationshipTemplateId Id { get; set; }
