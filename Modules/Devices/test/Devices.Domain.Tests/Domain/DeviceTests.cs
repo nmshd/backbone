@@ -9,14 +9,29 @@ namespace Backbone.Modules.Devices.Domain.Tests.Domain;
 public class DeviceTests : AbstractTestsBase
 {
     [Fact]
+    public void Updates_communication_language()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentity();
+        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
+        var expectedCommunicationLanguage = CommunicationLanguage.Create("de").Value;
+
+        // Act
+        device.Update(expectedCommunicationLanguage);
+
+        // Assert
+        device.CommunicationLanguage.Should().Be(expectedCommunicationLanguage);
+    }
+
+    [Fact]
     public void Update_returns_true_if_communication_language_is_different()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
-        var device = new Device(identity);
+        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
 
         // Act
-        var result = device.Update("en");
+        var result = device.Update(CommunicationLanguage.Create("de").Value);
 
         // Assert
         result.Should().BeTrue();
@@ -27,10 +42,10 @@ public class DeviceTests : AbstractTestsBase
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
-        var device = new Device(identity) { CommunicationLanguage = "en" };
+        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
 
         // Act
-        var result = device.Update("en");
+        var result = device.Update(CommunicationLanguage.Create("en").Value);
 
         // Assert
         result.Should().BeFalse();
@@ -41,9 +56,9 @@ public class DeviceTests : AbstractTestsBase
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
-        var device = new Device(identity);
+        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
 
-        device.User = new ApplicationUser(identity, device.Id);
+        device.User = new ApplicationUser(identity, CommunicationLanguage.DEFAULT_LANGUAGE, device.Id);
 
         // Act
         var isOnboarded = device.IsOnboarded;
@@ -57,9 +72,9 @@ public class DeviceTests : AbstractTestsBase
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
-        var device = new Device(identity);
+        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
 
-        device.User = new ApplicationUser(identity, device.Id);
+        device.User = new ApplicationUser(identity, CommunicationLanguage.DEFAULT_LANGUAGE, device.Id);
         device.User.LoginOccurred();
 
         // Act
@@ -123,15 +138,15 @@ public class DeviceTests : AbstractTestsBase
 
     private static Device CreateUnonboardedDevice(Identity identity)
     {
-        var activeDevice = new Device(identity);
-        activeDevice.User = new ApplicationUser(identity, activeDevice.Id);
+        var activeDevice = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
+        activeDevice.User = new ApplicationUser(identity, CommunicationLanguage.DEFAULT_LANGUAGE, activeDevice.Id);
         return activeDevice;
     }
 
     private static Device CreateOnboardedDevice(Identity identity)
     {
-        var activeDevice = new Device(identity);
-        activeDevice.User = new ApplicationUser(identity, activeDevice.Id);
+        var activeDevice = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
+        activeDevice.User = new ApplicationUser(identity, CommunicationLanguage.DEFAULT_LANGUAGE, activeDevice.Id);
         activeDevice.User.LoginOccurred();
         return activeDevice;
     }

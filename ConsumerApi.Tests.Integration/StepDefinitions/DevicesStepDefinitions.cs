@@ -76,7 +76,7 @@ internal class DevicesStepDefinitions
     [When("a PUT request is sent to the Devices/Self endpoint with a non-existent language code")]
     public async Task WhenAPutRequestIsSentToTheDeviceSelfEndpointWithAnInvalidPayload()
     {
-        var request = new UpdateDeviceRequest { CommunicationLanguage = "some-non-existent-language" };
+        var request = new UpdateDeviceRequest { CommunicationLanguage = "xz" };
         _updateResponse = await _sdk.Devices.UpdateDevice(request);
     }
 

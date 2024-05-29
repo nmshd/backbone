@@ -20,13 +20,13 @@ public class Device
         CommunicationLanguage = null!;
     }
 
-    public Device(Identity identity, DeviceId? createdByDevice = null)
+    public Device(Identity identity, CommunicationLanguage communicationLanguage, DeviceId? createdByDevice = null)
     {
         Id = DeviceId.New();
         CreatedAt = SystemTime.UtcNow;
         CreatedByDevice = createdByDevice ?? Id;
+        CommunicationLanguage = communicationLanguage;
 
-        CommunicationLanguage = null!;
         User = null!; // This is just to satisfy the compiler; the property is actually set by EF core
 
         // The following distinction is unfortunately necessary in order to make EF recognize that the identity already exists
@@ -51,7 +51,7 @@ public class Device
 
     public DateTime CreatedAt { get; set; }
 
-    public string CommunicationLanguage { get; set; }
+    public CommunicationLanguage CommunicationLanguage { get; set; }
 
     public DeviceId CreatedByDevice { get; set; }
 
@@ -74,7 +74,7 @@ public class Device
         return null;
     }
 
-    public bool Update(string communicationLanguage)
+    public bool Update(CommunicationLanguage communicationLanguage)
     {
         var hasChanges = false;
         if (communicationLanguage != CommunicationLanguage)

@@ -1,16 +1,15 @@
-﻿using System.Globalization;
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
-namespace Backbone.Modules.Devices.Application.Devices.Commands.UpdateDevice;
+namespace Backbone.Modules.Devices.Application.Devices.Commands.UpdateActiveDevice;
 
-public class Handler : IRequestHandler<UpdateDeviceCommand>
+public class Handler : IRequestHandler<UpdateActiveDeviceCommand>
 {
     private readonly DeviceId _activeDevice;
     private readonly ILogger<Handler> _logger;
@@ -23,15 +22,15 @@ public class Handler : IRequestHandler<UpdateDeviceCommand>
         _identitiesRepository = identitiesRepository;
     }
 
-    public async Task Handle(UpdateDeviceCommand request, CancellationToken cancellationToken)
+    public async Task Handle(UpdateActiveDeviceCommand request, CancellationToken cancellationToken)
     {
         var currentDevice = await _identitiesRepository.GetDeviceById(_activeDevice, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Device));
 
-        var cultureInfos = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures);
-        var culture = cultureInfos.FirstOrDefault(c => c.TwoLetterISOLanguageName == request.CommunicationLanguage) ??
-                      throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPropertyValue(nameof(Device.CommunicationLanguage)));
+        var communicationLanguage = CommunicationLanguage.Create(request.CommunicationLanguage);
+        if (communicationLanguage.IsFailure)
+            throw new DomainException(communicationLanguage.Error);
 
-        var deviceUpdated = currentDevice.Update(culture.TwoLetterISOLanguageName);
+        var deviceUpdated = currentDevice.Update(communicationLanguage.Value);
         if (deviceUpdated)
             await _identitiesRepository.Update(currentDevice, cancellationToken);
 
@@ -43,7 +42,7 @@ internal static partial class UpdateDeviceLogs
 {
     [LoggerMessage(
         EventId = 274194,
-        EventName = "Devices.UpdateDevice.UpdatedDevice",
+        EventName = "Devices.UpdateActiveDevice.UpdatedDevice",
         Level = LogLevel.Information,
         Message = "Successfully updated device with id '{activeDevice}'.")]
     public static partial void UpdatedDevice(this ILogger logger, DeviceId activeDevice);

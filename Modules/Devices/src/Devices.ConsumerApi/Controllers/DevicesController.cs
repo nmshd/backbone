@@ -8,7 +8,7 @@ using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Devices.Commands.ChangePassword;
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
-using Backbone.Modules.Devices.Application.Devices.Commands.UpdateDevice;
+using Backbone.Modules.Devices.Application.Devices.Commands.UpdateActiveDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Devices.Queries.GetActiveDevice;
 using Backbone.Modules.Devices.Application.Devices.Queries.ListDevices;
@@ -36,9 +36,16 @@ public class DevicesController : ApiControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RegisterDeviceResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> RegisterDevice(RegisterDeviceCommand request, CancellationToken cancellationToken)
+    public async Task<IActionResult> RegisterDevice(RegisterDeviceRequest request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(request, cancellationToken);
+        var command = new RegisterDeviceCommand()
+        {
+            CommunicationLanguage = request.CommunicationLanguage ?? "en",
+            SignedChallenge = request.SignedChallenge,
+            DevicePassword = request.DevicePassword
+        };
+
+        var response = await _mediator.Send(command, cancellationToken);
 
         return Created("", response);
     }
@@ -47,7 +54,7 @@ public class DevicesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesError(StatusCodes.Status400BadRequest)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> UpdateDevice(UpdateDeviceCommand request, CancellationToken cancellationToken)
+    public async Task<IActionResult> UpdateDevice(UpdateActiveDeviceCommand request, CancellationToken cancellationToken)
     {
         await _mediator.Send(request, cancellationToken);
 
@@ -96,4 +103,11 @@ public class DevicesController : ApiControllerBase
         await _mediator.Send(new DeleteDeviceCommand { DeviceId = id, }, cancellationToken);
         return NoContent();
     }
+}
+
+public class RegisterDeviceRequest
+{
+    public required string DevicePassword { get; set; }
+    public string? CommunicationLanguage { get; set; }
+    public required SignedChallengeDTO SignedChallenge { get; set; }
 }

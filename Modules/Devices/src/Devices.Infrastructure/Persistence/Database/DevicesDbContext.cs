@@ -147,6 +147,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
             .HaveMaxLength(IdentityAddress.MAX_LENGTH).HaveConversion<IdentityAddressValueConverter>();
         configurationBuilder.Properties<DeviceId>().AreUnicode(false).AreFixedLength()
             .HaveMaxLength(DeviceId.MAX_LENGTH).HaveConversion<DeviceIdValueConverter>();
+        configurationBuilder.Properties<CommunicationLanguage>().AreUnicode().AreFixedLength()
+            .HaveMaxLength(CommunicationLanguage.LENGTH).HaveConversion<CommunicationLanguageEntityFrameworkValueConverter>();
         configurationBuilder.Properties<DevicePushIdentifier>().AreUnicode(false).AreFixedLength()
             .HaveMaxLength(DevicePushIdentifier.MAX_LENGTH).HaveConversion<DevicePushIdentifierEntityFrameworkValueConverter>();
         configurationBuilder.Properties<Username>().AreUnicode(false).AreFixedLength()

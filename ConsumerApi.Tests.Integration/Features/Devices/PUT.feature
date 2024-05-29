@@ -13,4 +13,4 @@ Scenario: Updating own Device with invalid data
 	Given an Identity i with a device d
 	When a PUT request is sent to the Devices/Self endpoint with a non-existent language code
 	Then the response status code is 400 (Bad Request)
-	And the response content contains an error with the error code "error.platform.validation.invalidPropertyValue"
+	And the response content contains an error with the error code "error.platform.validation.invalidDeviceCommunicationLanguage"
