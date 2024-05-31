@@ -90,7 +90,7 @@ jobs:
           context: .
           file: ConsumerApi/Dockerfile
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=min
           tags: consumer-api
           load: true
           #outputs: type=registry,dest=localhost:6000/consumer-api
@@ -101,7 +101,7 @@ jobs:
           context: .
           file: AdminApi/src/AdminApi/Dockerfile
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=min
           tags: admin-ui
           load: true
           #outputs: type=registry,dest=localhost:6000/admin-ui  
@@ -112,7 +112,7 @@ jobs:
           context: .
           file: Modules/Devices/src/Devices.AdminCli/Dockerfile
           cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-to: type=gha,mode=min
           tags: seed-client
           load: true
           #outputs: type=registry,dest=localhost:6000/seed-client
