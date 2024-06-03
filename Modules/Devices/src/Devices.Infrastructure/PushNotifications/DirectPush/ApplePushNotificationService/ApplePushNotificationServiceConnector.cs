@@ -13,18 +13,18 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.A
 public class ApplePushNotificationServiceConnector : IPnsConnector
 {
     private readonly IJwtGenerator _jwtGenerator;
-    private readonly PushNotificationTextProvider _notificationTextService;
+    private readonly PushNotificationTextProvider _notificationTextProvider;
     private readonly HttpClient _httpClient;
     private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
     private readonly DirectPnsCommunicationOptions.ApnsOptions _options;
 
     public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<DirectPnsCommunicationOptions.ApnsOptions> options, IJwtGenerator jwtGenerator,
-        PushNotificationTextProvider notificationTextService,
+        PushNotificationTextProvider notificationTextProvider,
         ILogger<ApplePushNotificationServiceConnector> logger)
     {
         _httpClient = httpClientFactory.CreateClient();
         _jwtGenerator = jwtGenerator;
-        _notificationTextService = notificationTextService;
+        _notificationTextProvider = notificationTextProvider;
         _logger = logger;
         _options = options.Value;
     }
@@ -57,7 +57,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
     private async Task SendNotification(PnsRegistration registration, IPushNotification notification, SendResults sendResults)
     {
-        var (notificationTitle, notificationBody) = await _notificationTextService.GetNotificationTextForDeviceId(notification.GetType(), registration.DeviceId);
+        var (notificationTitle, notificationBody) = await _notificationTextProvider.GetNotificationTextForDeviceId(notification.GetType(), registration.DeviceId);
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
 
