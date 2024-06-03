@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
 
-public class MessagesTests : AbstractTestsBase
+public class MessageTests : AbstractTestsBase
 {
     [Fact]
     public void Raises_MessageCreatedDomainEvent_when_created()

@@ -9,10 +9,10 @@ using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class IdentityTests : AbstractTestsBase
+public class ChangeTierTests : AbstractTestsBase
 {
     [Fact]
-    public void Raises_TierOfIdentityChangedDomainEvent_on_updating()
+    public void Changing_the_tier_raises_TierOfIdentityChangedDomainEvent()
     {
         // Arrange
         var identity = CreateIdentity();
