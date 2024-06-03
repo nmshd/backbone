@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Resources;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.Translations;
 using Microsoft.Extensions.Localization;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
@@ -40,7 +39,7 @@ public class PushNotificationTextProvider
         var titleKey = $"{type.Name}.Title";
         var bodyKey = $"{type.Name}.Body";
 
-        var rm = new ResourceManager(typeof(IPushNotificationResource).FullName!, typeof(PushNotificationTextProvider).Assembly);
+        var rm = new ResourceManager("Backbone.Modules.Devices.Infrastructure.Translations.Resource", typeof(PushNotificationTextProvider).Assembly);
 
         var title = rm.GetString(titleKey, new CultureInfo(languageCode));
         var body = rm.GetString(bodyKey, new CultureInfo(languageCode));

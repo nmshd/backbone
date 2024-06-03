@@ -24,13 +24,4 @@
         <ProjectReference Include="..\Devices.Domain\Devices.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <EmbeddedResource Update="PushNotifications\Translations\IPushNotificationResource.en.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
-      <EmbeddedResource Update="PushNotifications\Translations\IPushNotificationResource.pt.resx">
-        <Generator>PublicResXFileCodeGenerator</Generator>
-      </EmbeddedResource>
-    </ItemGroup>
-
 </Project>
