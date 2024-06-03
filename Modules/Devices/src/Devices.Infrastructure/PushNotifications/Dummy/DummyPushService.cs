@@ -22,7 +22,7 @@ public class DummyPushService : IPushNotificationRegistrationService, IPushNotif
 
     public async Task SendNotification(IdentityAddress recipient, IPushNotification notification, CancellationToken cancellationToken)
     {
-        var (title, body) = await _notificationTextService.GetNotificationText(notification.GetType());
+        var (title, body) = _notificationTextService.GetNotificationTextWithDefaultLanguage(notification.GetType());
         _logger.LogInformation("Sending push notification to '{recipient}': {title}, {body}.", recipient, title, body);
     }
 

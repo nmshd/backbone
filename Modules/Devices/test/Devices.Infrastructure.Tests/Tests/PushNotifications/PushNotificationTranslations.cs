@@ -22,7 +22,7 @@ public class PushNotificationTranslations
         {
             try
             {
-                await notificationTextService.GetNotificationText(notificationType);
+                await notificationTextService.GetNotificationTextWithDefaultLanguage(notificationType);
             }
             catch (MissingManifestResourceException)
             {

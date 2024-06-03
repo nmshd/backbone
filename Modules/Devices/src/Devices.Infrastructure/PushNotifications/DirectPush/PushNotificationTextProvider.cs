@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Resources;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Translations;
 using Microsoft.Extensions.Localization;
 
@@ -22,14 +21,13 @@ public class PushNotificationTextProvider
 
     public async Task<(string Title, string Body)> GetNotificationTextForDeviceId(Type pushNotificationType, DeviceId deviceId)
     {
-        //var device = await _identitiesRepository.GetDeviceById(deviceId, CancellationToken.None);
-        //var languageCode = device.LanguageCode;
-        const string languageCode = DEFAULT_LANGUAGE_CODE;
+        var device = await _identitiesRepository.GetDeviceById(deviceId, CancellationToken.None);
+        var languageCode = device?.CommunicationLanguage.Value ?? DEFAULT_LANGUAGE_CODE;
 
         return GetNotificationTextForLanguage(pushNotificationType, languageCode);
     }
 
-    public async Task<(string Title, string Body)> GetNotificationText(Type pushNotificationType) => GetNotificationTextForLanguage(pushNotificationType, DEFAULT_LANGUAGE_CODE);
+    public (string Title, string Body) GetNotificationTextWithDefaultLanguage(Type pushNotificationType) => GetNotificationTextForLanguage(pushNotificationType, DEFAULT_LANGUAGE_CODE);
 
     public (string Title, string Body) GetNotificationTextForLanguage(Type pushNotificationType, string languageCode)
     {
