@@ -77,7 +77,7 @@ public class Identity : Entity
         var oldTier = TierId;
         TierId = id;
 
-        RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, id));
+        //RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, id));
     }
 
     public IdentityDeletionProcess StartDeletionProcessAsSupport()
@@ -276,7 +276,7 @@ public class Identity : Entity
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
 
-        RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTierId, TierId));
+        //RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTierId, TierId));
 
         return deletionProcess;
     }
@@ -299,7 +299,7 @@ public class Identity : Entity
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
 
-        RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, TierId));
+        //RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, TierId));
 
         return deletionProcess;
     }
