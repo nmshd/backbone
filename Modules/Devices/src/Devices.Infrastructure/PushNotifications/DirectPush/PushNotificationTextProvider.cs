@@ -39,7 +39,7 @@ public class PushNotificationTextProvider
         var titleKey = $"{type.Name}.Title";
         var bodyKey = $"{type.Name}.Body";
 
-        var rm = new ResourceManager("Backbone.Modules.Devices.Infrastructure.Translations.Resource", typeof(PushNotificationTextProvider).Assembly);
+        var rm = new ResourceManager("Backbone.Modules.Devices.Infrastructure.Translations.Resources", typeof(PushNotificationTextProvider).Assembly);
 
         var title = rm.GetString(titleKey, new CultureInfo(languageCode));
         var body = rm.GetString(bodyKey, new CultureInfo(languageCode));
