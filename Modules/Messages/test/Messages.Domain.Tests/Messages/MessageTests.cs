@@ -17,17 +17,23 @@ public class MessageTests : AbstractTestsBase
     {
         // Arrange
         var sender = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipient = TestDataGenerator.CreateRandomIdentityAddress();
+        var recipient = new RecipientInformation(TestDataGenerator.CreateRandomIdentityAddress(), RelationshipId.New(), []);
 
         // Act
-        var message = CreateMessage(sender, [recipient]);
+        var message = new Message(
+            sender,
+            TestDataGenerator.CreateRandomDeviceId(),
+            [],
+            [],
+            [recipient]
+        );
 
         // Assert
         var domainEvent = message.Should().HaveASingleDomainEvent<MessageCreatedDomainEvent>();
         domainEvent.CreatedBy.Should().Be(sender);
         domainEvent.Id.Should().Be(message.Id);
         domainEvent.Recipients.Should().HaveCount(1);
-        domainEvent.Recipients.First().Should().Be(recipient);
+        domainEvent.Recipients.First().Should().Be(recipient.Address);
     }
 
     private static Message CreateMessage(IdentityAddress createdBy, IEnumerable<IdentityAddress> recipients)

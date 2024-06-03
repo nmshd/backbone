@@ -56,10 +56,10 @@ public class RelationshipTests : AbstractTestsBase
     public void Raises_RelationshipChangeCreatedDomainEvent_when_creating()
     {
         // Act
-        var relationship = CreatePendingRelationship();
-        var change = relationship.Changes.GetOpenCreation()!;
+        var relationship = new Relationship(TEMPLATE, FROM_IDENTITY, FROM_DEVICE, REQUEST_CONTENT);
 
         // Assert
+        var change = relationship.Changes.GetOpenCreation()!;
         var domainEvent = change.Should().HaveASingleDomainEvent<RelationshipChangeCreatedDomainEvent>();
         domainEvent.ChangeId.Should().Be(change.Id);
         domainEvent.RelationshipId.Should().Be(relationship.Id);
