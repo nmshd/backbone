@@ -10,5 +10,6 @@ public class DeviceEntityTypeConfiguration : EntityEntityTypeConfiguration<Devic
     {
         base.Configure(builder);
         builder.Ignore(x => x.IsOnboarded);
+        builder.Property(x => x.CommunicationLanguage).HasDefaultValue(CommunicationLanguage.DEFAULT_LANGUAGE);
     }
 }

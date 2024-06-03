@@ -24,7 +24,7 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
         var activeIdentity = CreateIdentity();
-        var activeDevice = new Device(activeIdentity);
+        var activeDevice = new Device(activeIdentity, CommunicationLanguage.DEFAULT_LANGUAGE);
         activeIdentity.Devices.Add(activeDevice);
 
         Hasher.SetHasher(new DummyHasher([1, 2, 3]));
@@ -56,7 +56,7 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         // Arrange
         SystemTime.Set(DateTime.Parse("2020-01-01"));
         var identity = TestDataGenerator.CreateIdentity();
-        var device = new Device(identity);
+        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
 
         identity.Devices.Add(device);
 
@@ -74,7 +74,7 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
     {
         // Arrange
         var activeIdentity = CreateIdentity();
-        var activeDevice = new Device(activeIdentity);
+        var activeDevice = new Device(activeIdentity, CommunicationLanguage.DEFAULT_LANGUAGE);
         activeIdentity.Devices.Add(activeDevice);
 
         activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);

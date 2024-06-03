@@ -227,6 +227,7 @@ export interface Device {
     createdAt: Date;
     lastLogin: LastLoginInformation;
     createdByDevice: string;
+    communicationLanguage: string;
 }
 
 export interface LastLoginInformation {

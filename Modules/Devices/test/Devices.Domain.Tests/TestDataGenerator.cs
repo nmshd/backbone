@@ -33,7 +33,7 @@ public static class TestDataGenerator
     public static Identity CreateIdentityWithApprovedDeletionProcess()
     {
         var identity = CreateIdentity();
-        var device = new Device(identity);
+        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
         identity.Devices.Add(device);
         identity.StartDeletionProcessAsOwner(device.Id);
         return identity;
@@ -42,7 +42,7 @@ public static class TestDataGenerator
     public static Identity CreateIdentityWithDeletionProcessWaitingForApproval()
     {
         var identity = CreateIdentity();
-        identity.Devices.Add(new Device(identity));
+        identity.Devices.Add(new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE));
         Hasher.SetHasher(new DummyHasher([1, 2, 3]));
         identity.StartDeletionProcessAsSupport();
         return identity;
@@ -56,7 +56,7 @@ public static class TestDataGenerator
             CreateRandomBytes(),
             CreateRandomTierId(),
             1);
-        identity.Devices.Add(new Device(identity));
+        identity.Devices.Add(new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE));
 
         return identity;
     }
