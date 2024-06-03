@@ -77,7 +77,7 @@ $my-theme: mat.m2-define-light-theme(
             primary: $my-primary,
             accent: $my-accent
         ),
-            typography: mat.m2-define-typography-config(),
+        typography: mat.m2-define-typography-config(),
         density: 0
     )
 );
