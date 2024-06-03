@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class CancelDeletionProcessTests : AbstractTestsBase
+public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
 {
     [Fact]
     public void Cancel_deletion_process()
