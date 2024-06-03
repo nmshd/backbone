@@ -66,7 +66,7 @@ public class CancelStaleDeletionProcessTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Canceling_stale_deletion_process_creates_audit_log_entry_when_executed()
+    public void Creates_audit_log_entry_when_executed()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2020-01-01T00:00:00"));
@@ -85,7 +85,7 @@ public class CancelStaleDeletionProcessTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Triggers_IdentityDeletionProcessStatusChangedDomainEvent_when_Canceling()
+    public void Triggers_IdentityDeletionProcessStatusChangedDomainEvent()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2020-01-01T00:00:00"));
