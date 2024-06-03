@@ -40,7 +40,7 @@ public static class TestDataGenerator
             CreateRandomBytes(),
             CreateRandomTierId(),
             1);
-        identity.Devices.Add(new Device(identity));
+        identity.Devices.Add(new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE));
 
         return identity;
     }

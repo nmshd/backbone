@@ -21,9 +21,9 @@ public class ApplicationUser : IdentityUser
         DeviceId = null!;
     }
 
-    public ApplicationUser(Identity identity, DeviceId? createdByDevice = null) : base(Username.New())
+    public ApplicationUser(Identity identity, CommunicationLanguage communicationLanguage, DeviceId? createdByDevice = null) : base(Username.New())
     {
-        _device = new Device(identity, createdByDevice);
+        _device = new Device(identity, communicationLanguage, createdByDevice);
         DeviceId = Device.Id;
 
         CreatedAt = SystemTime.UtcNow;

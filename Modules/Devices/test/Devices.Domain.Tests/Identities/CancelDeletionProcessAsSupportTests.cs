@@ -34,7 +34,7 @@ public class CancelDeletionProcessAsSupportTests : AbstractTestsBase
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
-        identity.Devices.Add(new Device(identity));
+        identity.Devices.Add(new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE));
         var deletionProcessId = IdentityDeletionProcessId.Create("IDP00000000000000001").Value;
 
         // Act

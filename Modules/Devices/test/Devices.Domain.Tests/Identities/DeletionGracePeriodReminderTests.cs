@@ -128,7 +128,7 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
     private static Identity CreateIdentityWithApprovedDeletionProcess()
     {
         var identity = CreateIdentity();
-        var device = new Device(identity);
+        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
         identity.Devices.Add(device);
         Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
 

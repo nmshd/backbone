@@ -2,7 +2,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
@@ -84,8 +83,8 @@ public class HandlerTests : AbstractTestsBase
 
     private static Device CreateUnOnboardedDevice(Identity identity)
     {
-        var unOnboardedDevice = new Device(identity);
-        var unOnboardedDeviceUser = new ApplicationUser(identity, unOnboardedDevice.Id);
+        var unOnboardedDevice = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
+        var unOnboardedDeviceUser = new ApplicationUser(identity, CommunicationLanguage.DEFAULT_LANGUAGE, unOnboardedDevice.Id);
         unOnboardedDevice.User = unOnboardedDeviceUser;
 
         return unOnboardedDevice;
@@ -94,8 +93,8 @@ public class HandlerTests : AbstractTestsBase
     private static Device CreateOnboardedDevice(Identity? identity = null)
     {
         identity ??= TestDataGenerator.CreateIdentity();
-        var onboardedDevice = new Device(identity);
-        var onboardedDeviceUser = new ApplicationUser(identity, onboardedDevice.Id);
+        var onboardedDevice = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
+        var onboardedDeviceUser = new ApplicationUser(identity, CommunicationLanguage.DEFAULT_LANGUAGE, onboardedDevice.Id);
         onboardedDevice.User = onboardedDeviceUser;
         onboardedDevice.User.LoginOccurred();
 
