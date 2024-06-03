@@ -1,10 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
@@ -63,17 +61,11 @@ public class HandlerTests : AbstractTestsBase
         acting.Should().AwaitThrowAsync<NotFoundException, CancelDeletionAsSupportResponse>().Which.Message.Should().Contain("Identity");
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IPushNotificationSender pushNotificationSender)
-    {
-        return CreateHandler(identitiesRepository, null, pushNotificationSender);
-    }
-
-    private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IEventBus? eventBus = null, IPushNotificationSender? pushNotificationSender = null)
+    private static Handler CreateHandler(IIdentitiesRepository? identitiesRepository = null, IPushNotificationSender? pushNotificationSender = null)
     {
         identitiesRepository ??= A.Dummy<IIdentitiesRepository>();
-        eventBus ??= A.Dummy<IEventBus>();
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
 
-        return new Handler(identitiesRepository, eventBus, pushNotificationSender);
+        return new Handler(identitiesRepository, pushNotificationSender);
     }
 }
