@@ -4,16 +4,16 @@ namespace Backbone.Identity.Pool.Creator;
 public class Identity
 {
     public readonly UserCredentials UserCredentials;
-    private readonly List<string> _deviceIds = [];
+    public List<string> DeviceIds { get; }  = [];
 
     public Identity(UserCredentials userCredentials, string deviceId)
     {
         UserCredentials = userCredentials;
-        _deviceIds.Add(deviceId);
+        DeviceIds.Add(deviceId);
     }
 
     public void AddDevice(string deviceId)
     {
-        _deviceIds.Add(deviceId);
+        DeviceIds.Add(deviceId);
     }
 }

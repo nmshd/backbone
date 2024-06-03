@@ -3,14 +3,11 @@
 namespace Backbone.Identity.Pool.Creator.PoolsGenerator;
 internal record PoolsOffset
 {
-    private PoolsOffset(long messages, long relationships)
-    {
-        MessagesOffset = messages;
-        RelationshipsOffset = relationships;
-    }
+    public OffsetDirections? MessagesOffsetPendingTo { get; private set; }
+    public OffsetDirections? RelationshipsOffsetPendingTo { get; private set; }
 
-    private long MessagesOffset { get; set; }
-    private long RelationshipsOffset { get; set; }
+    public long MessagesOffset { get; private set; }
+    public long RelationshipsOffset { get; private set; }
 
     /// <summary>
     /// We split the pools up into two groups: app and connector.
@@ -34,4 +31,21 @@ internal record PoolsOffset
 
         return new PoolsOffset((appMessagesSum - connectorMessagesSum), appRelationshipsSum - connectorRelationshipsSum);
     }
+
+    private PoolsOffset(long messages, long relationships)
+    {
+        MessagesOffset = long.Abs(messages);
+        MessagesOffsetPendingTo = CalculateOffsetDirection(messages);
+
+        RelationshipsOffset = long.Abs(relationships);
+        RelationshipsOffsetPendingTo = CalculateOffsetDirection(relationships);
+    }
+
+    private static OffsetDirections? CalculateOffsetDirection(long offset)
+    {
+        if (offset == 0) return null;
+        return offset > 0 ? OffsetDirections.App : OffsetDirections.Connector;
+    }
 }
+
+internal enum OffsetDirections { App, Connector }

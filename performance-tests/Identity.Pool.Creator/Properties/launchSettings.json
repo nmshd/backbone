@@ -1,12 +1,12 @@
 {
   "profiles": {
-    "WSL": {
-      "commandName": "WSL2",
-      "distributionName": ""
-    },
     "CLI": {
       "commandName": "Project",
       "commandLineArgs": "GeneratePools --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools.json"
+    },
+    "CLI Light": {
+      "commandName": "Project",
+      "commandLineArgs": "GeneratePools --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools_light.json"
     }
   }
 }

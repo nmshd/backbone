@@ -1,8 +1,5 @@
 ﻿using System.CommandLine;
 using System.Text.Json;
-using Backbone.ConsumerApi.Sdk;
-using Backbone.ConsumerApi.Sdk.Authentication;
-using Backbone.Tooling;
 using Backbone.Identity.Pool.Creator.PoolsFile;
 
 namespace Backbone.Identity.Pool.Creator;
