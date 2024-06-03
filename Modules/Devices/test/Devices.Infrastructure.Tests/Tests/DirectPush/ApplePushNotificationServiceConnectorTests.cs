@@ -32,7 +32,7 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
             new(recipient, DeviceId.New(), PnsHandle.Parse(PushNotificationPlatform.Apns, "some-device-id").Value, APP_ID, PushEnvironment.Development)
         };
 
-        await connector.Send(registrations, recipient, new TestPushNotification());
+        await connector.Send(registrations, recipient, new TestPushNotification { Data = "test-notification-payload" });
 
 
         // Assert
