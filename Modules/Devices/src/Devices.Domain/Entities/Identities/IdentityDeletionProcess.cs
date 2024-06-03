@@ -176,11 +176,12 @@ public class IdentityDeletionProcess : Entity
         if (Status != DeletionProcessStatus.Approved)
             throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
 
-        Status = DeletionProcessStatus.Cancelled;
+        //Status = DeletionProcessStatus.Cancelled;
+        ChangeStatus(DeletionProcessStatus.Cancelled, address, address);
         CancelledAt = SystemTime.UtcNow;
         CancelledByDevice = cancelledByDevice;
 
-        RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, address));
+        //RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, address));
 
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledByOwner(Id, address, cancelledByDevice));
     }
@@ -190,10 +191,11 @@ public class IdentityDeletionProcess : Entity
         if (Status != DeletionProcessStatus.Approved)
             throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
 
-        Status = DeletionProcessStatus.Cancelled;
+        //Status = DeletionProcessStatus.Cancelled;
+        ChangeStatus(DeletionProcessStatus.Cancelled, address, null);
         CancelledAt = SystemTime.UtcNow;
 
-        RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, null));
+        //RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, null));
 
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledBySupport(Id, address));
     }
@@ -202,11 +204,18 @@ public class IdentityDeletionProcess : Entity
     {
         EnsureStatus(DeletionProcessStatus.WaitingForApproval);
 
-        Status = DeletionProcessStatus.Cancelled;
+        //Status = DeletionProcessStatus.Cancelled;
+        ChangeStatus(DeletionProcessStatus.Cancelled, address, null);
         CancelledAt = SystemTime.UtcNow;
 
-        RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, null));
+        //RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, null));
 
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledAutomatically(Id, address));
+    }
+
+    private void ChangeStatus(DeletionProcessStatus newStatus, IdentityAddress address, string? initiator)
+    {
+        Status = newStatus;
+        RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, initiator));
     }
 }
