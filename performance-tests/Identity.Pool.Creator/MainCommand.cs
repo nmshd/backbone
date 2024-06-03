@@ -28,55 +28,19 @@ public class GenerateCommand : Command
         var clientSecret = new Option<string>(name: "--clientSecret", description: "The corresponding client secret.");
         AddOption(clientSecret);
 
-        var poolsFilePath = new Option<string>(name: "--poolsFile", description: "The json file with the pools configuration.");
+        var poolsFilePath = new Option<string>(name: "--poolsFile", description: "The json file with the pools' configuration.");
         AddOption(poolsFilePath);
 
-
-
-        this.SetHandler(Generate, baseAddress, clientId, clientSecret, poolsFilePath);
-
+        this.SetHandler(GenerationPreprocessor, baseAddress, clientId, clientSecret, poolsFilePath);
     }
 
-    private async Task Generate(string baseAddress, string clientId, string clientSecret, string poolsFilePath)
+    private static async Task GenerationPreprocessor(string baseAddress, string clientId, string clientSecret, string poolsFilePath)
     {
         var pools = await ReadPools(poolsFilePath);
-        try
-        {
-            PoolsAreValid(pools);
-        }
-        catch (ArgumentException e)
-        {
-            Console.WriteLine($"Pool Parsing failed. Error: {e.Message}");
-        }
-
-        var password = PasswordHelper.GeneratePassword(18, 24);
-        var sdk = await Client.CreateForNewIdentity(baseAddress, new ClientCredentials(clientId, clientSecret), password);
-
-        var credentials = sdk.DeviceData?.UserCredentials;
+        var generator = new PoolsGenerator.PoolsGenerator(baseAddress, clientId, clientSecret, pools);
+        await generator.CreatePools();
     }
 
-    /// <summary>
-    /// Validation is a simple process. We split the pools up into two groups: app and connector.
-    /// The total of Messages & Relationships in each group must match.
-    /// </summary>
-    /// <param name="pools"></param>
-    private static void PoolsAreValid(PoolEntry[] pools)
-    {
-        var appPools = pools.Where(p => p.Type == "app").ToList();
-        var connectorPools = pools.Where(p => p.Type == "connector").ToList();
-
-        var appMessagesSum = appPools.Sum(p => p.NumberOfSentMessages * p.Amount);
-        var appRelationshipsSum = appPools.Sum(p => p.NumberOfRelationships * p.Amount);
-        
-        var connectorMessagesSum = connectorPools.Sum(p => p.NumberOfSentMessages * p.Amount);
-        var connectorRelationshipsSum = connectorPools.Sum(p => p.NumberOfRelationships * p.Amount);
-
-        if (appMessagesSum != connectorMessagesSum)
-            throw new ArgumentException($"The number of messages for app pools and connector pools does not match (difference is {long.Abs(appMessagesSum - connectorMessagesSum)}).");
-
-        if(appRelationshipsSum != connectorRelationshipsSum)
-            throw new ArgumentException($"The number of relationships for app pools and connector pools does not match (difference is {long.Abs(appRelationshipsSum - connectorRelationshipsSum)}).");
-    }
 
     private static async Task<PoolEntry[]> ReadPools(string poolsFilePath)
     {

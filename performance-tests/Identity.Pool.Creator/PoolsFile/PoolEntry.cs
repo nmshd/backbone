@@ -4,6 +4,10 @@ public record PoolEntry
     public string Type { get; set; }
     public string Name { get; set; }
     public string Alias { get; set; }
+
+    /// <summary>
+    /// The number of <strong>Identities</strong> to be created in this pool.
+    /// </summary>
     public uint Amount { get; set; }
     public uint NumberOfRelationshipTemplates { get; set; }
     public uint NumberOfRelationships { get; set; }
@@ -11,4 +15,6 @@ public record PoolEntry
     public uint NumberOfDatawalletModifications { get; set; }
     public uint NumberOfDevices { get; set; }
     public uint NumberOfChallenges { get; set; }
+
+    public List<Identity> identities = [];
 }
