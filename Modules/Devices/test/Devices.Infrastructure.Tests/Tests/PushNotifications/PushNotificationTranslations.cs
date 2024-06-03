@@ -32,7 +32,7 @@ public class PushNotificationTranslationTests
 
         notificationTypesWithMissingTranslations.Should().BeEmpty();
     }
-        
+
     private static PushNotificationTextProvider CreateNotificationTextService()
     {
         return new PushNotificationTextProvider(A.Dummy<IIdentitiesRepository>());
