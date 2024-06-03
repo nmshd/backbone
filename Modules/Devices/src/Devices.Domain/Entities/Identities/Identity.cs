@@ -74,7 +74,7 @@ public class Identity : Entity
         if (TierId == id)
             throw new DomainException(GenericDomainErrors.NewAndOldParametersMatch("TierId"));
 
-        var oldTier = TierId;
+        //var oldTier = TierId;
         TierId = id;
 
         //RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, id));
@@ -267,7 +267,7 @@ public class Identity : Entity
     {
         var deletionProcess = GetDeletionProcessWithId(deletionProcessId);
         deletionProcess.EnsureStatus(DeletionProcessStatus.Approved);
-        var oldTierId = TierId;
+        //var oldTierId = TierId;
 
         EnsureIdentityOwnsDevice(canceledByDeviceId);
 
@@ -292,7 +292,7 @@ public class Identity : Entity
         EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
 
         var deletionProcess = DeletionProcesses.First(d => d.Id == deletionProcessId);
-        var oldTier = TierId;
+        //var oldTier = TierId;
 
         deletionProcess.CancelAsSupport(Address);
         TierId = TierIdBeforeDeletion!;
