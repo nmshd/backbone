@@ -90,35 +90,35 @@ jobs:
           context: .
           file: ConsumerApi/Dockerfile
           cache-from: type=gha
-          cache-to: type=gha,mode=min
+          cache-to: type=gha,mode=max
           tags: consumer-api
           load: true
           #outputs: type=registry,dest=localhost:6000/consumer-api
           
-      - name: Build Admin Api
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: AdminApi/src/AdminApi/Dockerfile
-          cache-from: type=gha
-          cache-to: type=gha,mode=min
-          tags: admin-ui
-          load: true
-          #outputs: type=registry,dest=localhost:6000/admin-ui  
-
-      - name: Build Seed Client
-        uses: docker/build-push-action@v5
-        with:
-          context: .
-          file: Modules/Devices/src/Devices.AdminCli/Dockerfile
-          cache-from: type=gha
-          cache-to: type=gha,mode=min
-          tags: seed-client
-          load: true
-          #outputs: type=registry,dest=localhost:6000/seed-client
-      
-      - name: Run integration tests
-        run: ./.ci/integrationTest.postgres.sh
+#      - name: Build Admin Api
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: .
+#          file: AdminApi/src/AdminApi/Dockerfile
+#          cache-from: type=gha
+#          cache-to: type=gha,mode=min
+#          tags: admin-ui
+#          load: true
+#          #outputs: type=registry,dest=localhost:6000/admin-ui  
+#
+#      - name: Build Seed Client
+#        uses: docker/build-push-action@v5
+#        with:
+#          context: .
+#          file: Modules/Devices/src/Devices.AdminCli/Dockerfile
+#          cache-from: type=gha
+#          cache-to: type=gha,mode=min
+#          tags: seed-client
+#          load: true
+#          #outputs: type=registry,dest=localhost:6000/seed-client
+#      
+#      - name: Run integration tests
+#        run: ./.ci/integrationTest.postgres.sh
         
 #      - name: Push ConsumerAPI to local registry
 #        run: docker tag consumer-api localhost:6000/consumer-api && docker push localhost:6000/consumer-api || true
