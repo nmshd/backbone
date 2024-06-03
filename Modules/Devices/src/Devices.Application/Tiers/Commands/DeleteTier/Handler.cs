@@ -41,6 +41,6 @@ public class Handler : IRequestHandler<DeleteTierCommand>
 
         await _tiersRepository.Remove(tier);
 
-        _eventBus.Publish(new TierDeletedDomainEvent(tier)); //TODO: Timo (I'm not sure whether the Tier class can raise this event since the instance is deleted directly after it)
+        _eventBus.Publish(new TierDeletedDomainEvent(tier));
     }
 }
