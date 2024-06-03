@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.BuildingBlocks.Domain.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProcessApprovalReminders;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;

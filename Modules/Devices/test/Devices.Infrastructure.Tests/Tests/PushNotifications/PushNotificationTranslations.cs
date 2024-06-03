@@ -1,5 +1,5 @@
 ﻿using System.Resources;
-using Backbone.BuildingBlocks.Domain.PushNotifications;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
@@ -22,7 +22,7 @@ public class PushNotificationTranslations
         {
             try
             {
-                await notificationTextService.GetNotificationTextWithDefaultLanguage(notificationType);
+                notificationTextService.GetNotificationTextWithDefaultLanguage(notificationType);
             }
             catch (MissingManifestResourceException)
             {
@@ -32,7 +32,7 @@ public class PushNotificationTranslations
 
         notificationTypesWithMissingTranslations.Should().BeEmpty();
     }
-
+        
     private static PushNotificationTextProvider CreateNotificationTextService()
     {
         return new PushNotificationTextProvider(A.Dummy<IIdentitiesRepository>());

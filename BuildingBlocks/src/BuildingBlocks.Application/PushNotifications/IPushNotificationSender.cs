@@ -1,4 +1,3 @@
-using Backbone.BuildingBlocks.Domain.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.BuildingBlocks.Application.PushNotifications;

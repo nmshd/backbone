@@ -1,8 +1,5 @@
-using Backbone.BuildingBlocks.Domain.PushNotifications;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 
-public record DeletionProcessApprovedNotification(int DaysUntilDeletion) : IPushNotification
-{
-    internal DeletionProcessApprovedNotification() : this(0) { }
-}
+public record DeletionProcessApprovedNotification(int DaysUntilDeletion) : IPushNotification;
