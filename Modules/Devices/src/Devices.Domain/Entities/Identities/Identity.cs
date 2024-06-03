@@ -13,8 +13,9 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 public class Identity : Entity
 {
     private readonly List<IdentityDeletionProcess> _deletionProcesses;
+    private TierId _tierId;
 
-    public Identity(string? clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion)
+    public Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion)
     {
         ClientId = clientId;
         Address = address;
@@ -22,7 +23,7 @@ public class Identity : Entity
         IdentityVersion = identityVersion;
         CreatedAt = SystemTime.UtcNow;
         Devices = [];
-        TierId = tierId;
+        _tierId = tierId;
         Status = IdentityStatus.Active;
         _deletionProcesses = [];
 
@@ -40,7 +41,19 @@ public class Identity : Entity
     public byte IdentityVersion { get; private set; }
 
     public TierId? TierIdBeforeDeletion { get; private set; }
-    public TierId TierId { get; private set; }
+
+    public TierId TierId
+    {
+        get => _tierId;
+        private set
+        {
+            if (_tierId == null! || value == _tierId) return; //TODO: Timo (Since I use a backing field and init this one in the constructor, I don't need the null check, right?)
+
+            var oldTier = _tierId;
+            _tierId = value;
+            RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, value));
+        }
+    }
 
     public IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
 
@@ -90,8 +103,6 @@ public class Identity : Entity
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
         TierId = Tier.QUEUED_FOR_DELETION.Id;
         Status = IdentityStatus.ToBeDeleted;
-
-        RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, TierIdBeforeDeletion, TierId));
 
         return deletionProcess;
     }
@@ -146,8 +157,6 @@ public class Identity : Entity
         Status = IdentityStatus.ToBeDeleted;
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
         TierId = Tier.QUEUED_FOR_DELETION.Id;
-
-        RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, TierIdBeforeDeletion, TierId));
 
         return deletionProcess;
     }
