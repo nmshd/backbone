@@ -58,7 +58,7 @@ RUN dotnet publish --configuration Release --output /app/publish --no-restore "C
 RUN dotnet publish --configuration Release --output /app/publish/health "HealthCheck/HealthCheck.csproj"
 
 ### Final ####
-FROM mcr.microsoft.com/dotnet/aspnet:8.0.5-jammy-chiseled
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.6-jammy-chiseled
 
 LABEL org.opencontainers.image.source = "https://github.com/nmshd/backbone"
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s --retries=3 CMD [ "dotnet", "/app/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]
