@@ -160,16 +160,16 @@
     <value>Deletion process waiting for approval</value>
   </data>
   <data name="DeletionStartsPushNotification.Body" xml:space="preserve">
-    <value />
+    <value>A deletion was executed</value>
   </data>
   <data name="DeletionStartsPushNotification.Title" xml:space="preserve">
     <value>Your identity is now deleted</value>
   </data>
   <data name="ExternalEventCreatedPushNotification.Body" xml:space="preserve">
-    <value />
+    <value>New updates are available in the Enmeshed app</value>
   </data>
   <data name="ExternalEventCreatedPushNotification.Title" xml:space="preserve">
-    <value />
+    <value>Update Received</value>
   </data>
   <data name="TestPushNotification.Body" xml:space="preserve">
     <value>This is a Test push notification.</value>

@@ -19,11 +19,7 @@ public class PushNotificationTextProvider
 
     public async Task<(string Title, string Body)> GetNotificationTextForDeviceId(Type pushNotificationType, DeviceId deviceId)
     {
-        var device = await _identitiesRepository.GetDeviceById(deviceId, CancellationToken.None);
-
-        if (device == null)
-            throw new Exception("A device with the given id could not be found.");
-
+        var device = await _identitiesRepository.GetDeviceById(deviceId, CancellationToken.None) ?? throw new Exception("A device with the given id could not be found.");
         var languageCode = device.CommunicationLanguage.Value;
 
         return GetNotificationTextForLanguage(pushNotificationType, languageCode);

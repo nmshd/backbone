@@ -135,4 +135,46 @@
   <data name="TestPushNotification.Title" xml:space="preserve">
     <value>Teste</value>
   </data>
+  <data name="DeletionProcessCancelledByOwnerNotification.Body" xml:space="preserve">
+    <value>Um dos seus processos de eliminação de identidade foi cancelado por si.</value>
+  </data>
+  <data name="DeletionProcessCancelledByOwnerNotification.Title" xml:space="preserve">
+    <value>Um processo de eliminação foi cancelado</value>
+  </data>
+  <data name="DeletionProcessCancelledBySupportNotification.Body" xml:space="preserve">
+    <value>Um dos processos de eliminação da sua identidade foi cancelado pela equipa de suporte.</value>
+  </data>
+  <data name="DeletionProcessCancelledBySupportNotification.Title" xml:space="preserve">
+    <value>Um processo de eliminação foi cancelado</value>
+  </data>
+  <data name="DeletionProcessGracePeriodReminderPushNotification.Body" xml:space="preserve">
+    <value>A sua identidade será excluída dentro de alguns dias. O cancelamento ainda é possível.</value>
+  </data>
+  <data name="DeletionProcessGracePeriodReminderPushNotification.Title" xml:space="preserve">
+    <value>A sua identidade será excluída</value>
+  </data>
+  <data name="DeletionProcessStartedPushNotification.Body" xml:space="preserve">
+    <value>Um processo de eliminação foi iniciado para a sua identidade.</value>
+  </data>
+  <data name="DeletionProcessStartedPushNotification.Title" xml:space="preserve">
+    <value>O processo de eliminação foi iniciado</value>
+  </data>
+  <data name="DeletionProcessWaitingForApprovalReminderPushNotification.Body" xml:space="preserve">
+    <value>Há um processo de eliminação para a sua identidade que aguarda a sua aprovação. Se não o aprovar dentro de alguns dias, o processo será encerrado.</value>
+  </data>
+  <data name="DeletionProcessWaitingForApprovalReminderPushNotification.Title" xml:space="preserve">
+    <value>Processo de eliminação a aguardar aprovação</value>
+  </data>
+  <data name="DeletionStartsPushNotification.Body" xml:space="preserve">
+    <value>Foi execuação a eliminação</value>
+  </data>
+  <data name="DeletionStartsPushNotification.Title" xml:space="preserve">
+    <value>A sua identidade foi eliminada!</value>
+  </data>
+  <data name="ExternalEventCreatedPushNotification.Body" xml:space="preserve">
+    <value>Estão disponíveis novas atualizações na aplicação Enmeshed!</value>
+  </data>
+  <data name="ExternalEventCreatedPushNotification.Title" xml:space="preserve">
+    <value>Atualização recebida</value>
+  </data>
 </root>
