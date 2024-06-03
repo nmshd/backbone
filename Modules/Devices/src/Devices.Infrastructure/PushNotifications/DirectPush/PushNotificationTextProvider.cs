@@ -1,63 +1,64 @@
 ﻿using System.Globalization;
-using System.Reflection;
 using System.Resources;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Microsoft.Extensions.Localization;
+using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+
 public class PushNotificationTextProvider
 {
     private readonly IIdentitiesRepository _identitiesRepository;
-    private const string DEFAULT_LANGUAGE_CODE = "en";
+    private readonly ResourceManager _resourceManager;
 
-    public PushNotificationTextProvider(
-        IIdentitiesRepository identitiesRepository
-        )
+    public PushNotificationTextProvider(IIdentitiesRepository identitiesRepository, ResourceManager resourceManager)
     {
         _identitiesRepository = identitiesRepository;
+        _resourceManager = resourceManager;
     }
 
     public async Task<(string Title, string Body)> GetNotificationTextForDeviceId(Type pushNotificationType, DeviceId deviceId)
     {
         var device = await _identitiesRepository.GetDeviceById(deviceId, CancellationToken.None);
-        var languageCode = device?.CommunicationLanguage.Value ?? DEFAULT_LANGUAGE_CODE;
+
+        if (device == null)
+            throw new Exception("A device with the given id could not be found.");
+
+        var languageCode = device.CommunicationLanguage.Value;
 
         return GetNotificationTextForLanguage(pushNotificationType, languageCode);
     }
 
-    public (string Title, string Body) GetNotificationTextWithDefaultLanguage(Type pushNotificationType) => GetNotificationTextForLanguage(pushNotificationType, DEFAULT_LANGUAGE_CODE);
-
-    public (string Title, string Body) GetNotificationTextForLanguage(Type pushNotificationType, string languageCode)
+    private (string Title, string Body) GetNotificationTextForLanguage(Type pushNotificationType, string? languageCode)
     {
-        var (title, body) = GetStrings(pushNotificationType, languageCode);
-        return title is not null && body is not null ? (title, body) : ("", "");
-    }
+        var titleKey = $"{pushNotificationType.Name}.Title";
+        var bodyKey = $"{pushNotificationType.Name}.Body";
 
-    public (string? title, string? body) GetStrings(Type type, string languageCode)
-    {
-        var titleKey = $"{type.Name}.Title";
-        var bodyKey = $"{type.Name}.Body";
+        var culture = languageCode != null ? new CultureInfo(languageCode) : null;
 
-        var rm = new ResourceManager("Backbone.Modules.Devices.Infrastructure.Translations.Resources", typeof(PushNotificationTextProvider).Assembly);
+        try
+        {
+            var title = _resourceManager.GetString(titleKey, culture);
+            var body = _resourceManager.GetString(bodyKey, culture);
 
-        var title = rm.GetString(titleKey, new CultureInfo(languageCode));
-        var body = rm.GetString(bodyKey, new CultureInfo(languageCode));
+            if (title.IsNullOrEmpty())
+                throw new MissingPushNotificationTextException($"Title for notification type '{pushNotificationType.Name}' not found.");
 
-        return (title, body);
+            if (body.IsNullOrEmpty())
+                throw new MissingPushNotificationTextException($"Body for notification type '{pushNotificationType.Name}' not found.");
+
+            return (title, body);
+        }
+        catch (MissingManifestResourceException)
+        {
+            throw new MissingPushNotificationTextException($"Title or body for notification type {pushNotificationType.Name} not found.");
+        }
     }
 }
 
-public static class TypeExtensions
+public class MissingPushNotificationTextException : Exception
 {
-    public static T? GetCustomAttribute<T>(this Type type) where T : Attribute
+    public MissingPushNotificationTextException(string message) : base(message)
     {
-        return (T?)type.GetCustomAttribute(typeof(T));
-    }
-
-    public static string? FindStringEndingWith(this LocalizedString[] localizedStrings, string endsWith)
-    {
-        return localizedStrings.SingleOrDefault(s => s.Name.EndsWith($".{endsWith}"))?.Value;
     }
 }
-
