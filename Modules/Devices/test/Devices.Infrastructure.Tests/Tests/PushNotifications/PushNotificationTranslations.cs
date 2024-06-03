@@ -8,10 +8,10 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications;
-public class PushNotificationTranslations
+public class PushNotificationTranslationTests
 {
     [Fact]
-    public async Task AllPushNotificationsHaveEnglishText()
+    public void AllPushNotificationsHaveEnglishText()
     {
         var notificationTypesWithMissingTranslations = new List<Type>();
 
