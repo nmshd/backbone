@@ -13,13 +13,13 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.A
 public class ApplePushNotificationServiceConnector : IPnsConnector
 {
     private readonly IJwtGenerator _jwtGenerator;
-    private readonly PushNotificationTextProvider _notificationTextProvider;
+    private readonly IPushNotificationTextProvider _notificationTextProvider;
     private readonly HttpClient _httpClient;
     private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
     private readonly DirectPnsCommunicationOptions.ApnsOptions _options;
 
     public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<DirectPnsCommunicationOptions.ApnsOptions> options, IJwtGenerator jwtGenerator,
-        PushNotificationTextProvider notificationTextProvider,
+        IPushNotificationTextProvider notificationTextProvider,
         ILogger<ApplePushNotificationServiceConnector> logger)
     {
         _httpClient = httpClientFactory.CreateClient();
@@ -65,10 +65,10 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         var jwt = _jwtGenerator.Generate(keyInformation.PrivateKey, keyInformation.KeyId, keyInformation.TeamId, registration.AppId);
 
         var request = new ApnsMessageBuilder(registration.AppId, BuildUrl(registration.Environment, registration.Handle.Value), jwt.Value)
-                .AddContent(notificationContent)
-                .SetNotificationText(notificationTitle, notificationBody)
-                .SetNotificationId(notificationId)
-                .Build();
+            .AddContent(notificationContent)
+            .SetNotificationText(notificationTitle, notificationBody)
+            .SetNotificationId(notificationId)
+            .Build();
 
         _logger.LogDebug("Sending push notification (type '{eventName}') to '{address}' with handle '{handle}'.", notificationContent.EventName, registration.IdentityAddress, registration.Handle);
 

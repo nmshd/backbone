@@ -6,7 +6,7 @@ using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 
-public class PushNotificationTextProvider
+public class PushNotificationTextProvider : IPushNotificationTextProvider
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly PushNotificationResourceManager _resourceManager;
@@ -50,6 +50,11 @@ public class PushNotificationTextProvider
             throw new MissingPushNotificationTextException($"Title or body for notification type {pushNotificationType.Name} not found.");
         }
     }
+}
+
+public interface IPushNotificationTextProvider
+{
+    Task<(string Title, string Body)> GetNotificationTextForDeviceId(Type pushNotificationType, DeviceId deviceId);
 }
 
 public class MissingPushNotificationTextException : Exception

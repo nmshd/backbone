@@ -15,7 +15,7 @@ public static class IServiceCollectionExtensions
     {
         services.AddSingleton<PushNotificationResourceManager>();
 
-        services.AddScoped<PushNotificationTextProvider>();
+        services.AddScoped<IPushNotificationTextProvider, PushNotificationTextProvider>();
 
         switch (options.Provider)
         {

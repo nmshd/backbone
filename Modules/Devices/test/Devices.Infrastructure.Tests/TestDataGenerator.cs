@@ -6,11 +6,6 @@ namespace Backbone.Modules.Devices.Infrastructure.Tests;
 
 public static class TestDataGenerator
 {
-    public static TierId CreateRandomTierId()
-    {
-        return TierId.Generate();
-    }
-
     public static Device CreateDevice()
     {
         return CreateIdentityWithOneDevice().Devices.First();
@@ -23,9 +18,16 @@ public static class TestDataGenerator
             CreateRandomIdentityAddress(),
             CreateRandomBytes(),
             CreateRandomTierId(),
-            1);
+            1
+        );
+
         identity.Devices.Add(new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE));
 
         return identity;
+    }
+
+    public static TierId CreateRandomTierId()
+    {
+        return TierId.Generate();
     }
 }
