@@ -25,6 +25,7 @@ public class DummyPushService : IPushNotificationRegistrationService, IPushNotif
     public async Task SendNotification(IdentityAddress recipient, IPushNotification notification, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.FindByAddress(recipient, cancellationToken) ?? throw new Exception("Identity not found.");
+
         foreach (var device in identity.Devices)
         {
             var (title, body) = await _notificationTextProvider.GetNotificationTextForDeviceId(notification.GetType(), device.Id);

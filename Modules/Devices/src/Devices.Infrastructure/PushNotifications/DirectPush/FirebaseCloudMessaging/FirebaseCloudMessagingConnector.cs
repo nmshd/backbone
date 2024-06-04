@@ -18,8 +18,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
     private readonly DirectPnsCommunicationOptions.FcmOptions _options;
 
     public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory, IOptions<DirectPnsCommunicationOptions.FcmOptions> options,
-        IPushNotificationTextProvider notificationTextProvider,
-        ILogger<FirebaseCloudMessagingConnector> logger)
+        IPushNotificationTextProvider notificationTextProvider, ILogger<FirebaseCloudMessagingConnector> logger)
     {
         _firebaseMessagingFactory = firebaseMessagingFactory;
         _notificationTextProvider = notificationTextProvider;

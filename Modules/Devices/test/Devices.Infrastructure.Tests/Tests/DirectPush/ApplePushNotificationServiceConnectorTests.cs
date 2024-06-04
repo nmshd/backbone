@@ -34,7 +34,6 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
 
         await connector.Send(registrations, recipient, new TestPushNotification { Data = "test-notification-payload" });
 
-
         // Assert
         client.SendAsyncCalls.Should().Be(1);
     }
@@ -60,8 +59,8 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
                 { APP_ID, new DirectPnsCommunicationOptions.ApnsOptions.Bundle() { KeyName = "test-key-name" } }
             }
         });
-        var jwtGenerator = A.Fake<IJwtGenerator>();
-        var logger = A.Fake<ILogger<ApplePushNotificationServiceConnector>>();
+        var jwtGenerator = A.Dummy<IJwtGenerator>();
+        var logger = A.Dummy<ILogger<ApplePushNotificationServiceConnector>>();
         var notificationTextProvider = A.Dummy<IPushNotificationTextProvider>();
 
         return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, notificationTextProvider, logger);
