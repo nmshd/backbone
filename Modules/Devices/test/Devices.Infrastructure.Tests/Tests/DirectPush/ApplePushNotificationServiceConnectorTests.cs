@@ -46,7 +46,8 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
         {
             Keys = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Key>()
             {
-                {"test-key-name", new DirectPnsCommunicationOptions.ApnsOptions.Key
+                {
+                    "test-key-name", new DirectPnsCommunicationOptions.ApnsOptions.Key
                     {
                         PrivateKey = "some-private-key",
                         TeamId = "some-team-id",
@@ -56,14 +57,14 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
             },
             Bundles = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Bundle>()
             {
-                {APP_ID, new DirectPnsCommunicationOptions.ApnsOptions.Bundle() { KeyName = "test-key-name" }}
+                { APP_ID, new DirectPnsCommunicationOptions.ApnsOptions.Bundle() { KeyName = "test-key-name" } }
             }
         });
         var jwtGenerator = A.Fake<IJwtGenerator>();
         var logger = A.Fake<ILogger<ApplePushNotificationServiceConnector>>();
-        var notificationTextService = A.Dummy<PushNotificationTextProvider>();
+        var notificationTextProvider = A.Dummy<PushNotificationTextProvider>();
 
-        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, notificationTextService, logger);
+        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, notificationTextProvider, logger);
     }
 
     private static IHttpClientFactory CreateHttpClientFactoryReturning(HttpClient client)

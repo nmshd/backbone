@@ -13,16 +13,16 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.F
 public class FirebaseCloudMessagingConnector : IPnsConnector
 {
     private readonly FirebaseMessagingFactory _firebaseMessagingFactory;
-    private readonly PushNotificationTextProvider _notificationTextService;
+    private readonly PushNotificationTextProvider _notificationTextProvider;
     private readonly ILogger<FirebaseCloudMessagingConnector> _logger;
     private readonly DirectPnsCommunicationOptions.FcmOptions _options;
 
     public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory, IOptions<DirectPnsCommunicationOptions.FcmOptions> options,
-        PushNotificationTextProvider notificationTextService,
+        PushNotificationTextProvider notificationTextProvider,
         ILogger<FirebaseCloudMessagingConnector> logger)
     {
         _firebaseMessagingFactory = firebaseMessagingFactory;
-        _notificationTextService = notificationTextService;
+        _notificationTextProvider = notificationTextProvider;
         _logger = logger;
         _options = options.Value;
     }
@@ -43,7 +43,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 
     private async Task SendNotification(PnsRegistration registration, IPushNotification notification, SendResults sendResults)
     {
-        var (notificationTitle, notificationBody) = await _notificationTextService.GetNotificationTextForDeviceId(notification.GetType(), registration.DeviceId);
+        var (notificationTitle, notificationBody) = await _notificationTextProvider.GetNotificationTextForDeviceId(notification.GetType(), registration.DeviceId);
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
 

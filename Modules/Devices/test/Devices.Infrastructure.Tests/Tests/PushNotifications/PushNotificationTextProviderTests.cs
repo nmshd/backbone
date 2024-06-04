@@ -26,10 +26,10 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
         A.CallTo(() => fakeIdentitiesRepository.GetDeviceById(device.Id, A<CancellationToken>._, A<bool>._)).Returns(device);
         A.CallTo(() => fakeResourceManager.GetString(A<string>._, A<CultureInfo>._)).Returns("");
 
-        var notificationTextService = CreateNotificationTextService(fakeIdentitiesRepository, fakeResourceManager);
+        var notificationTextProvider = CreateNotificationTextProvider(fakeIdentitiesRepository, fakeResourceManager);
 
         // Act
-        var acting = async () => await notificationTextService.GetNotificationTextForDeviceId(typeof(PushNotificationWithoutExistingTexts), device.Id);
+        var acting = async () => await notificationTextProvider.GetNotificationTextForDeviceId(typeof(PushNotificationWithoutExistingTexts), device.Id);
 
         // Assert
         acting.Should().AwaitThrowAsync<MissingPushNotificationTextException, (string PageTitle, string Body)>();
@@ -43,10 +43,10 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => fakeIdentitiesRepository.GetDeviceById(device.Id, A<CancellationToken>._, A<bool>._)).Returns(device);
 
-        var notificationTextService = CreateNotificationTextService(fakeIdentitiesRepository);
+        var notificationTextProvider = CreateNotificationTextProvider(fakeIdentitiesRepository);
 
         // Act
-        var acting = async () => await notificationTextService.GetNotificationTextForDeviceId(typeof(PushNotificationWithoutExistingTexts), device.Id);
+        var acting = async () => await notificationTextProvider.GetNotificationTextForDeviceId(typeof(PushNotificationWithoutExistingTexts), device.Id);
 
         // Assert
         acting.Should().AwaitThrowAsync<MissingPushNotificationTextException, (string PageTitle, string Body)>();
@@ -62,7 +62,7 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => fakeIdentitiesRepository.GetDeviceById(device.Id, A<CancellationToken>._, A<bool>._)).Returns(device);
 
-        var notificationTextService = CreateNotificationTextService(fakeIdentitiesRepository);
+        var notificationTextProvider = CreateNotificationTextProvider(fakeIdentitiesRepository);
         var notificationTypes = GetNotificationTypes().ToArray();
 
         // Act
@@ -70,7 +70,7 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
         {
             try
             {
-                await notificationTextService.GetNotificationTextForDeviceId(notificationType, device.Id);
+                await notificationTextProvider.GetNotificationTextForDeviceId(notificationType, device.Id);
             }
             catch (MissingPushNotificationTextException)
             {
@@ -97,7 +97,7 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
         A.CallTo(() => fakeIdentitiesRepository.GetDeviceById(englishDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(englishDevice);
         A.CallTo(() => fakeIdentitiesRepository.GetDeviceById(foreignDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(foreignDevice);
 
-        var notificationTextService = CreateNotificationTextService(fakeIdentitiesRepository);
+        var notificationTextProvider = CreateNotificationTextProvider(fakeIdentitiesRepository);
         var notificationTypes = GetNotificationTypes().ToArray();
 
         // Act
@@ -105,8 +105,8 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
         {
             try
             {
-                var englishText = await notificationTextService.GetNotificationTextForDeviceId(notificationType, englishDevice.Id);
-                var foreignText = await notificationTextService.GetNotificationTextForDeviceId(notificationType, foreignDevice.Id);
+                var englishText = await notificationTextProvider.GetNotificationTextForDeviceId(notificationType, englishDevice.Id);
+                var foreignText = await notificationTextProvider.GetNotificationTextForDeviceId(notificationType, foreignDevice.Id);
 
                 if (englishText == foreignText)
                 {
@@ -123,7 +123,7 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
         notificationTypesWithMissingTranslations.Should().BeEmpty();
     }
 
-    private static PushNotificationTextProvider CreateNotificationTextService(IIdentitiesRepository? fakeIdentitiesRepository = null, PushNotificationResourceManager? resourceManager = null)
+    private static PushNotificationTextProvider CreateNotificationTextProvider(IIdentitiesRepository? fakeIdentitiesRepository = null, PushNotificationResourceManager? resourceManager = null)
     {
         return new PushNotificationTextProvider(
             fakeIdentitiesRepository ?? A.Fake<IIdentitiesRepository>(),

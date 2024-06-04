@@ -11,13 +11,13 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
 
 public class DummyPushService : IPushNotificationRegistrationService, IPushNotificationSender
 {
-    private readonly PushNotificationTextProvider _notificationTextService;
+    private readonly PushNotificationTextProvider _notificationTextProvider;
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ILogger<DummyPushService> _logger;
 
-    public DummyPushService(PushNotificationTextProvider notificationTextService, IIdentitiesRepository identitiesRepository, ILogger<DummyPushService> logger)
+    public DummyPushService(PushNotificationTextProvider notificationTextProvider, IIdentitiesRepository identitiesRepository, ILogger<DummyPushService> logger)
     {
-        _notificationTextService = notificationTextService;
+        _notificationTextProvider = notificationTextProvider;
         _identitiesRepository = identitiesRepository;
         _logger = logger;
     }
@@ -27,7 +27,7 @@ public class DummyPushService : IPushNotificationRegistrationService, IPushNotif
         var identity = await _identitiesRepository.FindByAddress(recipient, cancellationToken) ?? throw new Exception("Identity not found.");
         foreach (var device in identity.Devices)
         {
-            var (title, body) = await _notificationTextService.GetNotificationTextForDeviceId(notification.GetType(), device.Id);
+            var (title, body) = await _notificationTextProvider.GetNotificationTextForDeviceId(notification.GetType(), device.Id);
             _logger.LogInformation("Sending push notification to device with id '{deviceId}' of identity with address '{recipient}': {title}, {body}.", recipient, device.Id, title, body);
         }
     }
