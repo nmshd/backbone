@@ -6,12 +6,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Tests;
 
 public static class TestDataGenerator
 {
-    public static Device CreateDevice()
+    public static Device CreateDevice(string? language = null)
     {
-        return CreateIdentityWithOneDevice().Devices.First();
+        return CreateIdentityWithOneDevice(language).Devices.First();
     }
 
-    public static Identity CreateIdentityWithOneDevice()
+    public static Identity CreateIdentityWithOneDevice(string? deviceCommunicationLanguage = null)
     {
         var identity = new Identity(
             CreateRandomDeviceId(),
@@ -21,7 +21,7 @@ public static class TestDataGenerator
             1
         );
 
-        identity.Devices.Add(new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE));
+        identity.Devices.Add(new Device(identity, deviceCommunicationLanguage != null ? CommunicationLanguage.Create(deviceCommunicationLanguage).Value : CommunicationLanguage.DEFAULT_LANGUAGE));
 
         return identity;
     }
