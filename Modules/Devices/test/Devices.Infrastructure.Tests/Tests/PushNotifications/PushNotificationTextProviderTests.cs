@@ -53,7 +53,7 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
     }
 
     [Fact]
-    public async Task AllPushNotificationsHaveEnglishText()
+    public async Task All_push_notifications_have_english_texts()
     {
         // Arrange
         var notificationTypesWithMissingTranslations = new List<Type>();
@@ -84,7 +84,7 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
 
     [Theory]
     [InlineData("pt")]
-    public async Task AllPushNotificationsHaveForeignText(string language)
+    public async Task All_push_notifications_have_translations_for_all_supported_languages(string language)
     {
         // Arrange
         var notificationTypesWithMissingTranslations = new List<Type>();
