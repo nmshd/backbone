@@ -25,7 +25,7 @@
         "SqlDatabase": {
             "Provider": "Postgres",
             "ConnectionString": "User ID=adminUi;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;" // postgres
-            //"ConnectionString": "Server=ms-sql-server;Database=enmeshed;User Id=adminUi;Password=Passw0rd;TrustServerCertificate=True"
+            // "ConnectionString": "Server=ms-sql-server;Database=enmeshed;User Id=adminUi;Password=Passw0rd;TrustServerCertificate=True"
         }
     },
     "Modules": {
@@ -40,7 +40,7 @@
                 "SqlDatabase": {
                     "Provider": "Postgres",
                     "ConnectionString": "User ID=challenges;Password=Passw0rd;Server=localhost;Port=5432;Database=enmeshed;" // postgres
-                    //"ConnectionString": "Server=localhost;Database=enmeshed;User Id=challenges;Password=Passw0rd;TrustServerCertificate=True" // sqlserver
+                    // "ConnectionString": "Server=localhost;Database=enmeshed;User Id=challenges;Password=Passw0rd;TrustServerCertificate=True" // sqlserver
                 }
             }
         },
@@ -56,10 +56,14 @@
                 "SqlDatabase": {
                     "Provider": "Postgres",
                     "ConnectionString": "User ID=devices;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;" // postgres
-                    //"ConnectionString": "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
+                    // "ConnectionString": "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
                 },
                 "PushNotifications": {
-                    "Provider": "Dummy"
+                    "Providers": {
+                        "dummy": {
+                            "enabled": true
+                        }
+                    }
                 }
             }
         },
@@ -74,7 +78,7 @@
                 "SqlDatabase": {
                     "Provider": "Postgres",
                     "ConnectionString": "User ID=quotas;Password=Passw0rd;Server=postgres;Port=5432;Database=enmeshed;" // postgres
-                    //"ConnectionString": "Server=ms-sql-server;Database=enmeshed;User Id=quotas;Password=Passw0rd;TrustServerCertificate=True"
+                    // "ConnectionString": "Server=ms-sql-server;Database=enmeshed;User Id=quotas;Password=Passw0rd;TrustServerCertificate=True"
                 }
             }
         }
