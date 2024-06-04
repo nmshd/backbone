@@ -1,7 +1,7 @@
 using System.Text.Json;
 using FirebaseAdmin.Messaging;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 
 public class FcmMessageBuilder
 {

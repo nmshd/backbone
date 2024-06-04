@@ -4,8 +4,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
@@ -42,12 +41,12 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
     private static ApplePushNotificationServiceConnector CreateConnector(HttpClient httpClient)
     {
         var httpClientFactory = CreateHttpClientFactoryReturning(httpClient);
-        var options = new OptionsWrapper<DirectPnsCommunicationOptions.ApnsOptions>(new DirectPnsCommunicationOptions.ApnsOptions()
+        var options = new OptionsWrapper<ApnsOptions>(new ApnsOptions
         {
-            Keys = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Key>()
+            Keys = new Dictionary<string, ApnsOptions.Key>
             {
                 {
-                    "test-key-name", new DirectPnsCommunicationOptions.ApnsOptions.Key
+                    "test-key-name", new ApnsOptions.Key
                     {
                         PrivateKey = "some-private-key",
                         TeamId = "some-team-id",
@@ -55,9 +54,9 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
                     }
                 }
             },
-            Bundles = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Bundle>()
+            Bundles = new Dictionary<string, ApnsOptions.Bundle>
             {
-                { APP_ID, new DirectPnsCommunicationOptions.ApnsOptions.Bundle() { KeyName = "test-key-name" } }
+                { APP_ID, new ApnsOptions.Bundle { KeyName = "test-key-name" } }
             }
         });
         var jwtGenerator = A.Dummy<IJwtGenerator>();

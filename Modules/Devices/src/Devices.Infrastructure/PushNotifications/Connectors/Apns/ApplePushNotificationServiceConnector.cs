@@ -3,12 +3,12 @@ using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 
 public class ApplePushNotificationServiceConnector : IPnsConnector
 {
@@ -16,9 +16,9 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     private readonly IPushNotificationTextProvider _notificationTextProvider;
     private readonly HttpClient _httpClient;
     private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
-    private readonly DirectPnsCommunicationOptions.ApnsOptions _options;
+    private readonly ApnsOptions _options;
 
-    public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<DirectPnsCommunicationOptions.ApnsOptions> options, IJwtGenerator jwtGenerator,
+    public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<ApnsOptions> options, IJwtGenerator jwtGenerator,
         IPushNotificationTextProvider notificationTextProvider, ILogger<ApplePushNotificationServiceConnector> logger)
     {
         _httpClient = httpClientFactory.CreateClient();

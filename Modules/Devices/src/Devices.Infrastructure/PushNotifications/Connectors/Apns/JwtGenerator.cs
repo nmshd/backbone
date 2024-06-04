@@ -5,7 +5,7 @@ using JWT.Builder;
 using Org.BouncyCastle.Crypto.Parameters;
 using Org.BouncyCastle.Security;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 
 public class JwtGenerator : IJwtGenerator
 {
