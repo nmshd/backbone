@@ -2,9 +2,7 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
@@ -15,6 +13,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications;
 
 public class PushNotificationTextProviderTests : AbstractTestsBase
 {
+    private static readonly string[] SUPPORTED_LANGUAGES = ["en", "pt"];
+    public static readonly TheoryData<Type> NOTIFICATION_TYPES_DATA = new(GetNotificationTypes());
+
     [Fact]
     public void Empty_translation_throws_custom_exception()
     {
@@ -52,75 +53,42 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
         acting.Should().AwaitThrowAsync<MissingPushNotificationTextException, (string PageTitle, string Body)>();
     }
 
-    [Fact]
-    public async Task All_push_notifications_have_english_texts()
+    [Theory, MemberData(nameof(NOTIFICATION_TYPES_DATA))]
+    public async Task All_push_notifications_have_english_texts(Type notificationType)
     {
         // Arrange
-        var notificationTypesWithMissingTranslations = new List<Type>();
-
         var device = TestDataGenerator.CreateDevice();
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => fakeIdentitiesRepository.GetDeviceById(device.Id, A<CancellationToken>._, A<bool>._)).Returns(device);
 
         var notificationTextProvider = CreateNotificationTextProvider(fakeIdentitiesRepository);
-        var notificationTypes = GetNotificationTypes().ToArray();
 
         // Act
-        foreach (var notificationType in notificationTypes)
-        {
-            try
-            {
-                await notificationTextProvider.GetNotificationTextForDeviceId(notificationType, device.Id);
-            }
-            catch (MissingPushNotificationTextException)
-            {
-                notificationTypesWithMissingTranslations.Add(notificationType);
-            }
-        }
+        var acting = async () => await notificationTextProvider.GetNotificationTextForDeviceId(notificationType, device.Id);
 
         // Assert
-        notificationTypesWithMissingTranslations.Should().BeEmpty();
+        await acting.Should().NotThrowAsync<MissingPushNotificationTextException>();
     }
 
-    [Theory]
-    [InlineData("pt")]
-    public async Task All_push_notifications_have_translations_for_all_supported_languages(string language)
+    [Theory, ClassData(typeof(AllSupportedLanguagesExceptEnglishCrossJoinedWithNotificationTypes))]
+    public async Task All_push_notifications_have_translations_for_all_supported_languages(string language, Type notificationType)
     {
         // Arrange
-        var notificationTypesWithMissingTranslations = new List<Type>();
-
         var englishDevice = TestDataGenerator.CreateDevice();
-        var foreignDevice = TestDataGenerator.CreateDevice();
-        foreignDevice.CommunicationLanguage = CommunicationLanguage.Create(language).Value;
+        var foreignDevice = TestDataGenerator.CreateDevice(language);
 
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => fakeIdentitiesRepository.GetDeviceById(englishDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(englishDevice);
         A.CallTo(() => fakeIdentitiesRepository.GetDeviceById(foreignDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(foreignDevice);
 
         var notificationTextProvider = CreateNotificationTextProvider(fakeIdentitiesRepository);
-        var notificationTypes = GetNotificationTypes().ToArray();
 
         // Act
-        foreach (var notificationType in notificationTypes)
-        {
-            try
-            {
-                var englishText = await notificationTextProvider.GetNotificationTextForDeviceId(notificationType, englishDevice.Id);
-                var foreignText = await notificationTextProvider.GetNotificationTextForDeviceId(notificationType, foreignDevice.Id);
-
-                if (englishText == foreignText)
-                {
-                    notificationTypesWithMissingTranslations.Add(notificationType);
-                }
-            }
-            catch (MissingPushNotificationTextException)
-            {
-                notificationTypesWithMissingTranslations.Add(notificationType);
-            }
-        }
+        var englishText = await notificationTextProvider.GetNotificationTextForDeviceId(notificationType, englishDevice.Id);
+        var foreignText = await notificationTextProvider.GetNotificationTextForDeviceId(notificationType, foreignDevice.Id);
 
         // Assert
-        notificationTypesWithMissingTranslations.Should().BeEmpty();
+        foreignText.Should().NotBe(englishText);
     }
 
     private static PushNotificationTextProvider CreateNotificationTextProvider(IIdentitiesRepository? fakeIdentitiesRepository = null, PushNotificationResourceManager? resourceManager = null)
@@ -134,6 +102,26 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
     private static IEnumerable<Type> GetNotificationTypes()
     {
         return typeof(TestPushNotification).Assembly.GetTypes().Where(t => typeof(IPushNotification).IsAssignableFrom(t) && !t.IsInterface);
+    }
+
+    private class AllSupportedLanguagesExceptEnglishCrossJoinedWithNotificationTypes : TheoryData<string, Type>
+    {
+        public AllSupportedLanguagesExceptEnglishCrossJoinedWithNotificationTypes()
+        {
+            var items =
+                GetNotificationTypes()
+                    .SelectMany(_ =>
+                        SUPPORTED_LANGUAGES.Where(l => l != "en"), (t, l) => new
+                    {
+                        Language = l,
+                        NotificationType = t
+                    });
+
+            foreach (var item in items)
+            {
+                Add(item.Language, item.NotificationType);
+            }
+        }
     }
 }
 
