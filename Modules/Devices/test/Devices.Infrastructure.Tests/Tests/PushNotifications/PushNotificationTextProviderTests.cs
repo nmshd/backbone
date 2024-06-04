@@ -106,16 +106,12 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
 
     private class AllSupportedLanguagesExceptEnglishCrossJoinedWithNotificationTypes : TheoryData<string, Type>
     {
+        private static readonly string[] SUPPORTED_LANGUAGES_EXCEPT_ENGLISH = SUPPORTED_LANGUAGES.Where(l => l != "en").ToArray();
+
         public AllSupportedLanguagesExceptEnglishCrossJoinedWithNotificationTypes()
         {
-            var items =
-                GetNotificationTypes()
-                    .SelectMany(_ =>
-                        SUPPORTED_LANGUAGES.Where(l => l != "en"), (t, l) => new
-                    {
-                        Language = l,
-                        NotificationType = t
-                    });
+            var items = GetNotificationTypes()
+                .SelectMany(_ => SUPPORTED_LANGUAGES_EXCEPT_ENGLISH, (notificationType, language) => new { Language = language, NotificationType = notificationType });
 
             foreach (var item in items)
             {
