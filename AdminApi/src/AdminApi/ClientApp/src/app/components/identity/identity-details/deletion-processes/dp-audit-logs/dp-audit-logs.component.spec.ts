@@ -1,23 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { DpAuditLogsComponent } from './dp-audit-logs.component';
+import { DeletionProcessAuditLogsComponent } from "./dp-audit-logs.component";
 
-describe('DpAuditLogsComponent', () => {
-  let component: DpAuditLogsComponent;
-  let fixture: ComponentFixture<DpAuditLogsComponent>;
+describe("DeletionProcessAuditLogsComponent", () => {
+    let component: DeletionProcessAuditLogsComponent;
+    let fixture: ComponentFixture<DeletionProcessAuditLogsComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [DpAuditLogsComponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(DpAuditLogsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [DeletionProcessAuditLogsComponent]
+        }).compileComponents();
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+        fixture = TestBed.createComponent(DeletionProcessAuditLogsComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it("should create", async () => {
+        await expect(component).toBeTruthy();
+    });
 });

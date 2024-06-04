@@ -1,19 +1,20 @@
 import { Component } from "@angular/core";
-import { Router } from "express";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
 import { IdentityService } from "src/app/services/identity-service/identity.service";
-
 @Component({
     selector: "app-dp-audit-logs",
     templateUrl: "./dp-audit-logs.component.html",
     styleUrls: ["./dp-audit-logs.component.css"]
 })
 export class DeletionProcessAuditLogsComponent {
-    public disabled;
-    public identityAddress;
-    public headerTitle;
+    public disabled: boolean;
+    public identityAddress: string;
+    public headerTitle: string;
 
     public constructor(
         private readonly router: Router,
+        private readonly snackBar: MatSnackBar,
         private readonly identityService: IdentityService
     ) {
         this.disabled = false;
@@ -22,17 +23,11 @@ export class DeletionProcessAuditLogsComponent {
         this.headerTitle = "Identity deletion process audit logs";
     }
 
-    findIdentityAuditLogs() {
-        // this.identityService.getDeletionProcessAuditLogsOfIdentity(this.identityAddress).subscribe({
-        //     next: (data: HttpResponseEnvelope<DeletionProcess>) => {},
-        //     complete: () => {},
-        //     error: (err: any) => {
-        //         const errorMessage = err.error?.error?.message ?? err.message;
-        //     }
-        // });
+    public async navigateToIdentityDeletionProcessAuditLogs() : Promise<void>{
+        await this.router.navigate([`identities/${this.identityAddress}/deletion-processes/audit-logs`]);
     }
 
-    canFindIdentityAuditLogs(): boolean {
+    public isNotEmptyIdentityAddress(): boolean {
         return this.identityAddress.trim().length > 0;
     }
 }

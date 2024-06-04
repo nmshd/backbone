@@ -1,23 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from "@angular/core/testing";
 
-import { DpAuditLogsDetailsComponent } from './dp-audit-logs-details.component';
+import { DeletionProcessAuditLogsDetailsComponent } from "./dp-audit-logs-details.component";
 
-describe('DpAuditLogsDetailsComponent', () => {
-  let component: DpAuditLogsDetailsComponent;
-  let fixture: ComponentFixture<DpAuditLogsDetailsComponent>;
+describe("DeletionProcessAuditLogsDetailsComponent", () => {
+    let component: DeletionProcessAuditLogsDetailsComponent;
+    let fixture: ComponentFixture<DeletionProcessAuditLogsDetailsComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [DpAuditLogsDetailsComponent]
-    })
-    .compileComponents();
-    
-    fixture = TestBed.createComponent(DpAuditLogsDetailsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(async () => {
+        await TestBed.configureTestingModule({
+            imports: [DeletionProcessAuditLogsDetailsComponent]
+        }).compileComponents();
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+        fixture = TestBed.createComponent(DeletionProcessAuditLogsDetailsComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it("should create", async () => {
+        await expect(component).toBeTruthy();
+    });
 });

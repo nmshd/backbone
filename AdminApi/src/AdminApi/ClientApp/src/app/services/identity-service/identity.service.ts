@@ -202,7 +202,7 @@ export class IdentityService {
     }
 
     public getDeletionProcessAuditLogsOfIdentity(address: String): Observable<HttpResponseEnvelope<DeletionProcess>> {
-        return this.http.get<HttpResponseEnvelope<DeletionProcess>>(`${this.apiUrl}/Identities/${address}/DeletionProcesses/AuditLogs`);
+        return this.http.get<HttpResponseEnvelope<DeletionProcess>>(`${this.apiUrl}/${address}/DeletionProcesses/AuditLogs`);
     }
 
     public cancelDeletionProcessAsSupport(identityAddress: string, deletionProcessId: string): Observable<HttpResponseEnvelope<void>> {

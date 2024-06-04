@@ -9,7 +9,7 @@
                 <input matInput [(ngModel)]="identityAddress" />
                 <mat-hint>Enter an identity address</mat-hint>
             </mat-form-field>
-            <button mat-raised-button color="primary" class="find-button" (click)="findIdentityAuditLogs()" [disabled]="!canFindIdentityAuditLogs() || disabled">Find</button>
+            <button mat-raised-button color="primary" class="find-button" (click)="navigateToIdentityDeletionProcessAuditLogs()" [disabled]="!isNotEmptyIdentityAddress() || disabled">Find</button>
         </div>
     </mat-card-content>
 </div>
