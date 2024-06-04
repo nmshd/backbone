@@ -23,7 +23,7 @@ public class DirectPushService : IPushNotificationRegistrationService, IPushNoti
         _logger = logger;
     }
 
-    public async Task SendNotification(IdentityAddress recipient, object notification, CancellationToken cancellationToken)
+    public async Task SendNotification(IdentityAddress recipient, IPushNotification notification, CancellationToken cancellationToken)
     {
         var registrations = await _pnsRegistrationsRepository.FindWithAddress(recipient, cancellationToken);
 

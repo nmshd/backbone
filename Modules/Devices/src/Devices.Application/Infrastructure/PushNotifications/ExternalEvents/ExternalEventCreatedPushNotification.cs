@@ -1,4 +1,5 @@
+using Backbone.BuildingBlocks.Application.PushNotifications;
+
 namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.ExternalEvents;
 
-[NotificationText(Title = NotificationTextAttribute.DEFAULT_TITLE, Body = NotificationTextAttribute.DEFAULT_BODY)]
-public record ExternalEventCreatedPushNotification;
+public record ExternalEventCreatedPushNotification : IPushNotification;

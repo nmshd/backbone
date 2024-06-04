@@ -51,7 +51,7 @@ public class Device : Entity
 
     public DateTime CreatedAt { get; set; }
 
-    public CommunicationLanguage CommunicationLanguage { get; set; }
+    public CommunicationLanguage CommunicationLanguage { get; private set; }
 
     public DeviceId CreatedByDevice { get; set; }
 
