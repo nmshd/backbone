@@ -9,9 +9,9 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 public class PushNotificationTextProvider
 {
     private readonly IIdentitiesRepository _identitiesRepository;
-    private readonly ResourceManager _resourceManager;
+    private readonly PushNotificationResourceManager _resourceManager;
 
-    public PushNotificationTextProvider(IIdentitiesRepository identitiesRepository, ResourceManager resourceManager)
+    public PushNotificationTextProvider(IIdentitiesRepository identitiesRepository, PushNotificationResourceManager resourceManager)
     {
         _identitiesRepository = identitiesRepository;
         _resourceManager = resourceManager;

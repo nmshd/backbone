@@ -1,9 +1,9 @@
 ﻿using System.Globalization;
-using System.Resources;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
@@ -15,14 +15,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications;
 
 public class PushNotificationTextProviderTests : AbstractTestsBase
 {
-
     [Fact]
     public void Empty_translation_throws_custom_exception()
     {
         // Arrange
         var device = TestDataGenerator.CreateDevice();
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        var fakeResourceManager = A.Fake<ResourceManager>();
+        var fakeResourceManager = A.Fake<PushNotificationResourceManager>();
 
         A.CallTo(() => fakeIdentitiesRepository.GetDeviceById(device.Id, A<CancellationToken>._, A<bool>._)).Returns(device);
         A.CallTo(() => fakeResourceManager.GetString(A<string>._, A<CultureInfo>._)).Returns("");
@@ -124,12 +123,12 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
         notificationTypesWithMissingTranslations.Should().BeEmpty();
     }
 
-    private static PushNotificationTextProvider CreateNotificationTextService(IIdentitiesRepository? fakeIdentitiesRepository = null, ResourceManager? resourceManager = null)
+    private static PushNotificationTextProvider CreateNotificationTextService(IIdentitiesRepository? fakeIdentitiesRepository = null, PushNotificationResourceManager? resourceManager = null)
     {
         return new PushNotificationTextProvider(
             fakeIdentitiesRepository ?? A.Fake<IIdentitiesRepository>(),
-            resourceManager ?? new ResourceManager("Backbone.Modules.Devices.Infrastructure.Translations.Resources", typeof(PushNotificationTextProvider).Assembly)
-            );
+            resourceManager ?? new PushNotificationResourceManager()
+        );
     }
 
     private static IEnumerable<Type> GetNotificationTypes()

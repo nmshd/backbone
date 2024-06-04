@@ -1,5 +1,4 @@
 using System.ComponentModel.DataAnnotations;
-using System.Resources;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
@@ -15,9 +14,12 @@ public static class IServiceCollectionExtensions
 
     public static void AddPushNotifications(this IServiceCollection services, PushNotificationOptions options)
     {
-        services.AddScoped<PushNotificationTextProvider>(sp => new PushNotificationTextProvider(
-            sp.GetRequiredService<IIdentitiesRepository>(),
-            new ResourceManager("Backbone.Modules.Devices.Infrastructure.Translations.Resources", typeof(PushNotificationTextProvider).Assembly)));
+        services.AddScoped<PushNotificationTextProvider>(sp =>
+            new PushNotificationTextProvider(
+                sp.GetRequiredService<IIdentitiesRepository>(),
+                new PushNotificationResourceManager()
+            )
+        );
 
         switch (options.Provider)
         {
