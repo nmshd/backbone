@@ -13,6 +13,10 @@ public static class IServiceCollectionExtensions
 
     public static void AddPushNotifications(this IServiceCollection services, PushNotificationOptions options)
     {
+        services.AddSingleton<PushNotificationResourceManager>();
+
+        services.AddScoped<IPushNotificationTextProvider, PushNotificationTextProvider>();
+
         switch (options.Provider)
         {
             case PROVIDER_DUMMY:

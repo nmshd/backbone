@@ -1,25 +1,36 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
 
 public class DummyPushService : IPushNotificationRegistrationService, IPushNotificationSender
 {
+    private readonly IPushNotificationTextProvider _notificationTextProvider;
+    private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ILogger<DummyPushService> _logger;
 
-    public DummyPushService(ILogger<DummyPushService> logger)
+    public DummyPushService(IPushNotificationTextProvider notificationTextProvider, IIdentitiesRepository identitiesRepository, ILogger<DummyPushService> logger)
     {
+        _notificationTextProvider = notificationTextProvider;
+        _identitiesRepository = identitiesRepository;
         _logger = logger;
     }
 
-    public Task SendNotification(IdentityAddress recipient, object notification, CancellationToken cancellationToken)
+    public async Task SendNotification(IdentityAddress recipient, IPushNotification notification, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("Sending push notification to '{recipient}'.", recipient);
-        return Task.CompletedTask;
+        var identity = await _identitiesRepository.FindByAddress(recipient, cancellationToken) ?? throw new Exception("Identity not found.");
+
+        foreach (var device in identity.Devices)
+        {
+            var (title, body) = await _notificationTextProvider.GetNotificationTextForDeviceId(notification.GetType(), device.Id);
+            _logger.LogInformation("Sending push notification to device with id '{deviceId}' of identity with address '{recipient}': {title}, {body}.", recipient, device.Id, title, body);
+        }
     }
 
     public Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment, CancellationToken cancellationToken)

@@ -1,7 +1,9 @@
 using System.Net;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
 using Backbone.UnitTestTools.BaseClasses;
@@ -30,7 +32,8 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
         {
             new(recipient, DeviceId.New(), PnsHandle.Parse(PushNotificationPlatform.Apns, "some-device-id").Value, APP_ID, PushEnvironment.Development)
         };
-        await connector.Send(registrations, recipient, new { SomeProperty = "SomeValue" });
+
+        await connector.Send(registrations, recipient, new TestPushNotification { Data = "test-notification-payload" });
 
         // Assert
         client.SendAsyncCalls.Should().Be(1);
@@ -43,7 +46,8 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
         {
             Keys = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Key>()
             {
-                {"test-key-name", new DirectPnsCommunicationOptions.ApnsOptions.Key
+                {
+                    "test-key-name", new DirectPnsCommunicationOptions.ApnsOptions.Key
                     {
                         PrivateKey = "some-private-key",
                         TeamId = "some-team-id",
@@ -53,13 +57,14 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
             },
             Bundles = new Dictionary<string, DirectPnsCommunicationOptions.ApnsOptions.Bundle>()
             {
-                {APP_ID, new DirectPnsCommunicationOptions.ApnsOptions.Bundle() { KeyName = "test-key-name" }}
+                { APP_ID, new DirectPnsCommunicationOptions.ApnsOptions.Bundle() { KeyName = "test-key-name" } }
             }
         });
-        var jwtGenerator = A.Fake<IJwtGenerator>();
-        var logger = A.Fake<ILogger<ApplePushNotificationServiceConnector>>();
+        var jwtGenerator = A.Dummy<IJwtGenerator>();
+        var logger = A.Dummy<ILogger<ApplePushNotificationServiceConnector>>();
+        var notificationTextProvider = A.Dummy<IPushNotificationTextProvider>();
 
-        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, logger);
+        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, notificationTextProvider, logger);
     }
 
     private static IHttpClientFactory CreateHttpClientFactoryReturning(HttpClient client)
