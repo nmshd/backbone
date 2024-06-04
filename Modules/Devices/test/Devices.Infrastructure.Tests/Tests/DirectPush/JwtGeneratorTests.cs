@@ -1,5 +1,5 @@
 using System.Collections.Concurrent;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;

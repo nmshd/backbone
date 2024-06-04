@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public static class TypeExtensions
 {

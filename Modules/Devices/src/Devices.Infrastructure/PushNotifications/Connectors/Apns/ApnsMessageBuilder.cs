@@ -1,11 +1,12 @@
 using System.Net;
+using System.Net.Http.Headers;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.Tooling.Extensions;
 
 // ReSharper disable UnusedAutoPropertyAccessor.Local
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 
 public class ApnsMessageBuilder
 {
@@ -20,14 +21,14 @@ public class ApnsMessageBuilder
             Version = HttpVersion.Version30,
             Headers =
             {
-                {"apns-topic", appBundleIdentifier},
-                {"apns-expiration", "0"},
-                {"apns-priority", "5"},
-                {"apns-push-type", "alert"}
+                { "apns-topic", appBundleIdentifier },
+                { "apns-expiration", "0" },
+                { "apns-priority", "5" },
+                { "apns-push-type", "alert" }
             }
         };
 
-        _request.Headers.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("bearer", jwt);
+        _request.Headers.Authorization = new AuthenticationHeaderValue("bearer", jwt);
     }
 
     public ApnsMessageBuilder AddContent(NotificationContent content)

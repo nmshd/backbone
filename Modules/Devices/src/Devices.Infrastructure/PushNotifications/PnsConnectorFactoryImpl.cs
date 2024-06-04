@@ -1,8 +1,10 @@
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Dummy;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
+
 public class PnsConnectorFactoryImpl : PnsConnectorFactory
 {
     private readonly IServiceProvider _serviceProvider;
@@ -20,5 +22,10 @@ public class PnsConnectorFactoryImpl : PnsConnectorFactory
     protected override IPnsConnector CreateForApplePushNotificationService()
     {
         return _serviceProvider.GetRequiredService<ApplePushNotificationServiceConnector>();
+    }
+
+    protected override IPnsConnector CreateForDummy()
+    {
+        return _serviceProvider.GetRequiredService<DummyConnector>();
     }
 }

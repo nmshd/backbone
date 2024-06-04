@@ -2,7 +2,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
@@ -10,7 +10,8 @@ using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
-public class DirectPushServiceTests : AbstractTestsBase
+
+public class PushServiceTests : AbstractTestsBase
 {
     [Fact]
     public async Task Update_of_a_registration_that_does_not_exist_yet()
@@ -24,7 +25,7 @@ public class DirectPushServiceTests : AbstractTestsBase
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
         A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, A<bool>._))
-           .Returns<PnsRegistration?>(null).Once();
+            .Returns<PnsRegistration?>(null).Once();
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 
@@ -33,7 +34,7 @@ public class DirectPushServiceTests : AbstractTestsBase
 
         // Assert
         A.CallTo(() => mockPnsRegistrationsRepository
-            .Add(A<PnsRegistration>.That.Matches(p => p.DevicePushIdentifier == devicePushIdentifier), A<CancellationToken>._))
+                .Add(A<PnsRegistration>.That.Matches(p => p.DevicePushIdentifier == devicePushIdentifier), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -51,7 +52,7 @@ public class DirectPushServiceTests : AbstractTestsBase
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
         A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, A<bool>._))
-           .Returns(pnsRegistration);
+            .Returns(pnsRegistration);
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 
@@ -60,7 +61,7 @@ public class DirectPushServiceTests : AbstractTestsBase
 
         // Assert
         A.CallTo(() => mockPnsRegistrationsRepository
-            .Update(A<PnsRegistration>.That.Matches(p => p.DevicePushIdentifier == devicePushIdentifier), A<CancellationToken>._))
+                .Update(A<PnsRegistration>.That.Matches(p => p.DevicePushIdentifier == devicePushIdentifier), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -77,7 +78,7 @@ public class DirectPushServiceTests : AbstractTestsBase
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
         A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, A<bool>._))
-           .Returns(pnsRegistration);
+            .Returns(pnsRegistration);
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 
@@ -99,7 +100,7 @@ public class DirectPushServiceTests : AbstractTestsBase
         var mockPnsRegistrationsRepository = A.Fake<IPnsRegistrationsRepository>();
 
         A.CallTo(() => mockPnsRegistrationsRepository.FindByDeviceId(deviceId, A<CancellationToken>._, A<bool>._))
-           .Returns<PnsRegistration?>(null);
+            .Returns<PnsRegistration?>(null);
 
         var directPushService = CreateDirectPushService(mockPnsRegistrationsRepository);
 
@@ -112,11 +113,11 @@ public class DirectPushServiceTests : AbstractTestsBase
             .MustNotHaveHappened();
     }
 
-    private DirectPushService CreateDirectPushService(IPnsRegistrationsRepository pnsRegistrationsRepository)
+    private PushService CreateDirectPushService(IPnsRegistrationsRepository pnsRegistrationsRepository)
     {
         var dummyPnsConnectorFactory = A.Dummy<PnsConnectorFactory>();
-        var dummyLogger = A.Dummy<ILogger<DirectPushService>>();
+        var dummyLogger = A.Dummy<ILogger<PushService>>();
 
-        return new DirectPushService(pnsRegistrationsRepository, dummyPnsConnectorFactory, dummyLogger);
+        return new PushService(pnsRegistrationsRepository, dummyPnsConnectorFactory, dummyLogger);
     }
 }
