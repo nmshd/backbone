@@ -45,16 +45,6 @@ public static class TestDataGenerator
         return identity;
     }
 
-    public static Identity CreateIdentityWithThreeAuditLogEntries()
-    {
-        var identity = CreateIdentityWithOneDevice();
-        var deletionProcess = identity.StartDeletionProcessAsSupport();
-        identity.ApproveDeletionProcess(deletionProcess.Id, identity.Devices.ElementAt(0).Id);
-        identity.CancelDeletionProcessAsSupport(deletionProcess.Id);
-
-        return identity;
-    }
-
     public static Identity CreateIdentityWithApprovedDeletionProcess(DateTime? approvalDate = null)
     {
         approvalDate ??= SystemTime.UtcNow;
