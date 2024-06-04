@@ -23,7 +23,7 @@ export class DeletionProcessAuditLogsComponent {
         this.headerTitle = "Identity deletion process audit logs";
     }
 
-    public async navigateToIdentityDeletionProcessAuditLogs() : Promise<void>{
+    public async navigateToIdentityDeletionProcessAuditLogs(): Promise<void> {
         await this.router.navigate([`identities/${this.identityAddress}/deletion-processes/audit-logs`]);
     }
 
