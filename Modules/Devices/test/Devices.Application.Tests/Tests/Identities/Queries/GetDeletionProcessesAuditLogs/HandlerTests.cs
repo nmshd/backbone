@@ -18,7 +18,10 @@ public class HandlerTests : AbstractTestsBase
     public async Task Gets_audit_logs_of_identity_with_address()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithThreeAuditLogEntries();
+        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        var deletionProcess = identity.StartDeletionProcessAsSupport();
+        identity.ApproveDeletionProcess(deletionProcess.Id, identity.Devices.ElementAt(0).Id);
+        identity.CancelDeletionProcessAsSupport(deletionProcess.Id);
 
         var handler = CreateHandler(new FindByAddressStubRepository(identity));
 
@@ -26,7 +29,29 @@ public class HandlerTests : AbstractTestsBase
         var result = await handler.Handle(new GetDeletionProcessesAuditLogsQuery(identity.Address), CancellationToken.None);
 
         // Assert
-        result.ToList().Count.Should().Be(3);
+        result.Should().HaveCount(3);
+    }
+
+    [Fact]
+    public async Task Gets_audit_logs_of_identity_with_address_and_multiple_deletion_processes()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        var deletionProcess1 = identity.StartDeletionProcessAsSupport();
+        identity.ApproveDeletionProcess(deletionProcess1.Id, identity.Devices.ElementAt(0).Id);
+        identity.CancelDeletionProcessAsSupport(deletionProcess1.Id);
+
+        var deletionProcess2 = identity.StartDeletionProcessAsSupport();
+        identity.ApproveDeletionProcess(deletionProcess2.Id, identity.Devices.ElementAt(0).Id);
+        identity.CancelDeletionProcessAsSupport(deletionProcess2.Id);
+
+        var handler = CreateHandler(new FindByAddressStubRepository(identity));
+
+        // Act
+        var result = await handler.Handle(new GetDeletionProcessesAuditLogsQuery(identity.Address), CancellationToken.None);
+
+        // Assert
+        result.ToList().Count.Should().Be(6);
     }
 
     [Fact]
