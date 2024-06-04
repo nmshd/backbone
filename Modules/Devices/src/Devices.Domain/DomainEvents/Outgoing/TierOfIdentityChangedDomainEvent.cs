@@ -6,10 +6,10 @@ namespace Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 
 public class TierOfIdentityChangedDomainEvent : DomainEvent
 {
-    public TierOfIdentityChangedDomainEvent(Identity identity, TierId oldTierIdId, TierId newTierIdId) : base($"{identity.Address}/TierOfIdentityChanged/{Guid.NewGuid()}")
+    public TierOfIdentityChangedDomainEvent(Identity identity, TierId oldTierIdId, TierId newTierId) : base($"{identity.Address}/TierOfIdentityChanged", randomizeId: true)
     {
         OldTierId = oldTierIdId;
-        NewTierId = newTierIdId;
+        NewTierId = newTierId;
         IdentityAddress = identity.Address;
     }
 

@@ -4,16 +4,19 @@ namespace Backbone.BuildingBlocks.Domain.Events;
 
 public class DomainEvent
 {
-    public DomainEvent() : this(Guid.NewGuid().ToString())
+    protected DomainEvent() : this(Guid.NewGuid().ToString())
     {
     }
 
-    public DomainEvent(string domainEventId)
+    protected DomainEvent(string domainEventId, bool randomizeId = false)
     {
-        if (domainEventId.Length is 0 or > 128)
+        var randomPart = randomizeId ? "/" + Guid.NewGuid().ToString("N")[..3] : "";
+
+        DomainEventId = domainEventId + randomPart;
+
+        if (DomainEventId.Length is 0 or > 128)
             throw new ArgumentException($"{nameof(domainEventId)} must be between 1 and 128 characters long.");
 
-        DomainEventId = domainEventId;
         CreationDate = SystemTime.UtcNow;
     }
 
