@@ -25,6 +25,11 @@ public class IdentitiesEndpoint(EndpointClient client) : AdminApiEndpoint(client
             .ExecuteOData();
     }
 
+    public async Task<ApiResponse<ListIdentityDeletionProcessAuditLogsResponse>?> ListIdentityDeletionProcessAuditLogs(string address)
+    {
+        return await _client.Get<ListIdentityDeletionProcessAuditLogsResponse>($"api/{API_VERSION}/Identities/{address}/DeletionProcesses/AuditLogs");
+    }
+
     public async Task<ApiResponse<GetIdentityResponse>> GetIdentity(string address)
     {
         return await _client.Get<GetIdentityResponse>($"api/{API_VERSION}/Identities/{address}");
