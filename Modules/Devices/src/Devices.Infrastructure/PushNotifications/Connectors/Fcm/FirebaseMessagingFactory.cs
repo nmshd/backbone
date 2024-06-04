@@ -3,13 +3,13 @@ using FirebaseAdmin.Messaging;
 using Google.Apis.Auth.OAuth2;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 
 public class FirebaseMessagingFactory
 {
-    private readonly DirectPnsCommunicationOptions.FcmOptions _options;
+    private readonly FcmOptions _options;
 
-    public FirebaseMessagingFactory(IOptions<DirectPnsCommunicationOptions.FcmOptions> options)
+    public FirebaseMessagingFactory(IOptions<FcmOptions> options)
     {
         _options = options.Value;
     }

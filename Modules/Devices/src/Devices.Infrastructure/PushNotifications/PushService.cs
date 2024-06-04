@@ -5,18 +5,18 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
-public class DirectPushService : IPushNotificationRegistrationService, IPushNotificationSender
+public class PushService : IPushNotificationRegistrationService, IPushNotificationSender
 {
     private readonly IPnsRegistrationsRepository _pnsRegistrationsRepository;
-    private readonly ILogger<DirectPushService> _logger;
+    private readonly ILogger<PushService> _logger;
     private readonly PnsConnectorFactory _pnsConnectorFactory;
 
-    public DirectPushService(IPnsRegistrationsRepository pnsRegistrationRepository, PnsConnectorFactory pnsConnectorFactory, ILogger<DirectPushService> logger)
+    public PushService(IPnsRegistrationsRepository pnsRegistrationRepository, PnsConnectorFactory pnsConnectorFactory, ILogger<PushService> logger)
     {
         _pnsRegistrationsRepository = pnsRegistrationRepository;
         _pnsConnectorFactory = pnsConnectorFactory;
@@ -65,7 +65,8 @@ public class DirectPushService : IPushNotificationRegistrationService, IPushNoti
         _logger.LogTrace("Successfully sent push notifications to '{devicesIds}'.", string.Join(", ", sendResults.Successes));
     }
 
-    public async Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment, CancellationToken cancellationToken)
+    public async Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment,
+        CancellationToken cancellationToken)
     {
         var registration = await _pnsRegistrationsRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
         var pnsConnector = _pnsConnectorFactory.CreateFor(handle.Platform);
