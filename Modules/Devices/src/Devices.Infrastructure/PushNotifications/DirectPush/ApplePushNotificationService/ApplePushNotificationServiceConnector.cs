@@ -19,8 +19,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     private readonly DirectPnsCommunicationOptions.ApnsOptions _options;
 
     public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<DirectPnsCommunicationOptions.ApnsOptions> options, IJwtGenerator jwtGenerator,
-        IPushNotificationTextProvider notificationTextProvider,
-        ILogger<ApplePushNotificationServiceConnector> logger)
+        IPushNotificationTextProvider notificationTextProvider, ILogger<ApplePushNotificationServiceConnector> logger)
     {
         _httpClient = httpClientFactory.CreateClient();
         _jwtGenerator = jwtGenerator;
