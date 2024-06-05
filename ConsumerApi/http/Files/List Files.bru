@@ -1,0 +1,16 @@
+meta {
+  name: /Files
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/Files
+  body: none
+  auth: inherit
+}
+
+query {
+  ~PageNumber: 2
+  ~PageSize: 2
+}

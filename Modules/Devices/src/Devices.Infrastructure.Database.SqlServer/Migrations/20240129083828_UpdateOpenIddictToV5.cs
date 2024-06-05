@@ -12,11 +12,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.RenameColumn(
                 name: "Type",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 newName: "ClientType");
 
             migrationBuilder.AddColumn<string>(
                 name: "ApplicationType",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 type: "nvarchar(50)",
                 maxLength: 50,
@@ -24,12 +26,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
             migrationBuilder.AddColumn<string>(
                 name: "JsonWebKeySet",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 type: "nvarchar(max)",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "Settings",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 type: "nvarchar(max)",
                 nullable: true);
@@ -40,18 +44,22 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "ApplicationType",
+                schema: "Devices",
                 table: "OpenIddictApplications");
 
             migrationBuilder.DropColumn(
                 name: "JsonWebKeySet",
+                schema: "Devices",
                 table: "OpenIddictApplications");
 
             migrationBuilder.DropColumn(
                 name: "Settings",
+                schema: "Devices",
                 table: "OpenIddictApplications");
 
             migrationBuilder.RenameColumn(
                 name: "ClientType",
+                schema: "Devices",
                 table: "OpenIddictApplications",
                 newName: "Type");
         }

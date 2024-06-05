@@ -1,9 +1,10 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
@@ -21,7 +22,8 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
     private readonly ILogger<Handler> _logger;
     private readonly IEventBus _eventBus;
 
-    public Handler(ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, IIdentitiesRepository identitiesRepository, IOAuthClientsRepository oAuthClientsRepository)
+    public Handler(ChallengeValidator challengeValidator, ILogger<Handler> logger, IEventBus eventBus, IOptions<ApplicationOptions> applicationOptions, IIdentitiesRepository identitiesRepository,
+        IOAuthClientsRepository oAuthClientsRepository)
     {
         _challengeValidator = challengeValidator;
         _logger = logger;
@@ -34,8 +36,8 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
     public async Task<CreateIdentityResponse> Handle(CreateIdentityCommand command, CancellationToken cancellationToken)
     {
         var publicKey = PublicKey.FromBytes(command.IdentityPublicKey);
-        if (command.ShouldValidateChallenge)
-            await _challengeValidator.Validate(command.SignedChallenge, publicKey);
+
+        await _challengeValidator.Validate(command.SignedChallenge, publicKey);
 
         _logger.LogTrace("Challenge successfully validated.");
 
@@ -57,13 +59,17 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion);
 
-        var user = new ApplicationUser(newIdentity);
+        var communicationLanguageResult = CommunicationLanguage.Create(command.CommunicationLanguage);
+        if (communicationLanguageResult.IsFailure)
+            throw new DomainException(communicationLanguageResult.Error);
+
+        var user = new ApplicationUser(newIdentity, communicationLanguageResult.Value);
 
         await _identitiesRepository.AddUser(user, command.DevicePassword);
 
         _logger.CreatedIdentity(newIdentity.Address, user.DeviceId, user.UserName!);
 
-        _eventBus.Publish(new IdentityCreatedIntegrationEvent(newIdentity));
+        _eventBus.Publish(new IdentityCreatedDomainEvent(newIdentity));
 
         return new CreateIdentityResponse
         {

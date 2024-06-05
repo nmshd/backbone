@@ -13,12 +13,14 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AddColumn<DateTime>(
                 name: "CancelledAt",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 type: "datetime2",
                 nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "CancelledByDevice",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses",
                 type: "char(20)",
                 unicode: false,
@@ -32,10 +34,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "CancelledAt",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses");
 
             migrationBuilder.DropColumn(
                 name: "CancelledByDevice",
+                schema: "Devices",
                 table: "IdentityDeletionProcesses");
         }
     }

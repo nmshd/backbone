@@ -2,8 +2,9 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
@@ -12,7 +13,7 @@ using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.StartDeletionProcessAsSupport;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Happy_path()
@@ -45,7 +46,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Publishes_IdentityDeletionProcessStartedEvent()
+    public async Task Publishes_IdentityDeletionProcessStartedEvent()
     {
         // Arrange
         var activeIdentity = TestDataGenerator.CreateIdentityWithOneDevice();
@@ -63,7 +64,7 @@ public class HandlerTests
 
         // Assert
         A.CallTo(() => mockEventBus.Publish(
-            A<IdentityDeletionProcessStartedIntegrationEvent>.That.Matches(
+            A<IdentityDeletionProcessStartedDomainEvent>.That.Matches(
                 e => e.Address == activeIdentity.Address &&
                      e.DeletionProcessId == response.Id))
         ).MustHaveHappenedOnceExactly();

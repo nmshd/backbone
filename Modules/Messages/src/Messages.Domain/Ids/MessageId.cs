@@ -1,19 +1,21 @@
 using System.ComponentModel;
 using System.Globalization;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Classes;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.Modules.Messages.Domain.Ids;
 
 [Serializable]
 [TypeConverter(typeof(MessageIdTypeConverter))]
-public class MessageId : StronglyTypedId
+public record MessageId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
     private const string PREFIX = "MSG";
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
-    private MessageId(string stringValue) : base(stringValue) { }
+    private MessageId(string stringValue) : base(stringValue)
+    {
+    }
 
     public static MessageId Parse(string stringValue)
     {

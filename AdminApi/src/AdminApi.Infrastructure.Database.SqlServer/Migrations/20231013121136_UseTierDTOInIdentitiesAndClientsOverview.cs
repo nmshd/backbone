@@ -11,7 +11,7 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""
-                CREATE OR ALTER VIEW ClientOverviews AS
+                CREATE OR ALTER VIEW AdminUi.ClientOverviews AS
                     SELECT
                         CLIENTS.ClientId,
                         CLIENTS.DisplayName,
@@ -33,7 +33,7 @@ namespace AdminUi.Infrastructure.Database.SqlServer.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""
-                CREATE OR ALTER VIEW ClientOverviews AS
+                CREATE OR ALTER VIEW AdminUi.ClientOverviews AS
                     SELECT
                         CLIENTS.ClientId,
                         CLIENTS.DisplayName,

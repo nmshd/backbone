@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Application.Tests.Extensions;
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
@@ -11,7 +12,7 @@ using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Ex
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Commands.CreateTier;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     private readonly Handler _handler;
     private readonly ITiersRepository _tierRepository;
@@ -30,7 +31,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Creates_a_tier_when_properties_are_valid()
+    public async Task Creates_a_tier_when_properties_are_valid()
     {
         // Arrange
         var expectedTierName = TierName.Create("my-tier-name");
@@ -46,7 +47,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Fails_to_create_a_tier_when_tier_name_already_exists()
+    public async Task Fails_to_create_a_tier_when_tier_name_already_exists()
     {
         // Arrange
         A.CallTo(() => _tierRepository.ExistsWithName(A<TierName>._, CancellationToken.None)).Returns(Task.FromResult(true));

@@ -4,12 +4,13 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class ApproveDeletionProcessTests
+public class ApproveDeletionProcessTests : AbstractTestsBase
 {
     [Fact]
     public void Approve_deletion_process_waiting_for_approval()
@@ -17,7 +18,7 @@ public class ApproveDeletionProcessTests
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
         var identity = CreateIdentityWithDeletionProcessWaitingForApproval();
-        identity.Devices.Add(new Device(identity));
+        identity.Devices.Add(new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE));
         var deviceId = identity.Devices[0].Id;
 
         // Act
@@ -25,7 +26,7 @@ public class ApproveDeletionProcessTests
 
         // Assert
         identity.Status.Should().Be(IdentityStatus.ToBeDeleted);
-        identity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-31"));
+        identity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-15"));
         identity.TierId.Should().Be(Tier.QUEUED_FOR_DELETION.Id);
         var deletionProcess = identity.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!;
         AssertAuditLogEntryWasCreated(deletionProcess);
@@ -51,7 +52,7 @@ public class ApproveDeletionProcessTests
     {
         // Arrange
         var identity = CreateIdentity();
-        identity.Devices.Add(new Device(identity));
+        identity.Devices.Add(new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE));
         var deviceId = identity.Devices[0].Id;
         var deletionProcessId = IdentityDeletionProcessId.Create("IDP00000000000000001").Value;
 
@@ -69,7 +70,7 @@ public class ApproveDeletionProcessTests
     {
         // Arrange
         var identity = CreateIdentity();
-        identity.Devices.Add(new Device(identity));
+        identity.Devices.Add(new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE));
         var deviceId = identity.Devices[0].Id;
         var deletionProcess = identity.StartDeletionProcessAsOwner(deviceId);
 

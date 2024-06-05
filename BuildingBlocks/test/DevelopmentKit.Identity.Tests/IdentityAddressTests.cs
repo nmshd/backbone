@@ -1,10 +1,11 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.DevelopmentKit.Identity.Tests;
 
-public class IdentityAddressTests
+public class IdentityAddressTests : AbstractTestsBase
 {
     [Theory]
     [InlineData("fj0o9eOiPRswTZL6j9lE9TRvpDDnPRMF0gJeahz/W2c=", "id1QF24Gk2DfqCywRS7NpeH5iu7D4xvu6qv1")]
@@ -22,7 +23,7 @@ public class IdentityAddressTests
     {
         var address = IdentityAddress.Create(Convert.FromBase64String(publicKey), "id1");
 
-        address.StringValue.Should().Be(expectedAddress);
+        address.Value.Should().Be(expectedAddress);
     }
 
     [Fact]
@@ -31,7 +32,7 @@ public class IdentityAddressTests
         var testData = TestData.Valid();
         var address = IdentityAddress.Create(testData.PublicKey, testData.Realm);
 
-        address.Should().Be(testData.Address);
+        address.Value.Should().Be(testData.Address);
     }
 
     [Fact]
@@ -40,7 +41,7 @@ public class IdentityAddressTests
         var testData = TestData.Valid();
         var address = IdentityAddress.Create(testData.PublicKey, testData.Realm);
 
-        address.Should().Be(testData.Address);
+        address.Value.Should().Be(testData.Address);
     }
 
     [Fact]

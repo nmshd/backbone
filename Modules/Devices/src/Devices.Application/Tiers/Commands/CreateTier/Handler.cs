@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
@@ -35,7 +35,7 @@ public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
 
         _logger.CreatedTier(tier.Id.Value, tier.Name.Value);
 
-        _eventBus.Publish(new TierCreatedIntegrationEvent(tier));
+        _eventBus.Publish(new TierCreatedDomainEvent(tier));
 
         return new CreateTierResponse(tier.Id, tier.Name);
     }

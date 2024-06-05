@@ -2,6 +2,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
@@ -9,7 +10,7 @@ using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     public HandlerTests()
     {
@@ -17,7 +18,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Returns_an_empty_list_when_no_identities_exist()
+    public async Task Returns_an_empty_list_when_no_identities_exist()
     {
         // Arrange
         var identitiesList = new List<Identity>();
@@ -32,7 +33,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Returns_a_list_of_all_existing_identities()
+    public async Task Returns_a_list_of_all_existing_identities()
     {
         // Arrange
         var request = new PaginationFilter();
@@ -61,7 +62,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Returned_identities_have_all_properties_filled_as_expected()
+    public async Task Returned_identities_have_all_properties_filled_as_expected()
     {
         // Arrange
         var request = new PaginationFilter();

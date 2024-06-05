@@ -4,16 +4,18 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class DeletionGracePeriodReminderTests : IDisposable
+public class DeletionGracePeriodReminderTests : AbstractTestsBase
 {
-    public void Dispose()
+    public override void Dispose()
     {
         Hasher.Reset();
+        base.Dispose();
     }
 
     [Fact]
@@ -126,7 +128,7 @@ public class DeletionGracePeriodReminderTests : IDisposable
     private static Identity CreateIdentityWithApprovedDeletionProcess()
     {
         var identity = CreateIdentity();
-        var device = new Device(identity);
+        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
         identity.Devices.Add(device);
         Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
 

@@ -48,7 +48,7 @@ public class PnsRegistration
         Environment = environment;
 
         // this may be the case for old registrations that were created before the introduction of DevicePushIdentifiers, because the identifier column has a default value of an empty string
-        if (DevicePushIdentifier.StringValue.Trim().IsEmpty())
+        if (DevicePushIdentifier.Value.Trim().IsEmpty())
             DevicePushIdentifier = DevicePushIdentifier.New();
     }
 

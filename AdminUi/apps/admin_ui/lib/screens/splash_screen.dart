@@ -61,6 +61,6 @@ class _SplashScreenState extends State<SplashScreen> {
     }
 
     GetIt.I.registerSingleton(await AdminApiClient.create(baseUrl: baseUrl, apiKey: apiKey));
-    if (mounted) context.go('/dashboard');
+    if (mounted) context.go('/identities');
   }
 }

@@ -1,6 +1,8 @@
-using Backbone.AdminApi.Tests.Integration.API;
+﻿using Backbone.AdminApi.Sdk.Endpoints.Metrics.Types.Responses;
+using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.AdminApi.Tests.Integration.Extensions;
-using Backbone.AdminApi.Tests.Integration.Models;
+using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 
@@ -8,33 +10,30 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "GET Metrics")]
 internal class MetricsStepDefinitions : BaseStepDefinitions
 {
-    private readonly MetricsApi _metricsApi;
-    private HttpResponse<List<MetricDTO>>? _response;
+    private ApiResponse<ListMetricsResponse>? _metricsResponse;
 
-    public MetricsStepDefinitions(MetricsApi metricsApi)
+    public MetricsStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
     {
-        _metricsApi = metricsApi;
     }
 
     [When("a GET request is sent to the /Metrics endpoint")]
     public async Task WhenAGETRequestIsSentToTheMetricsEndpoint()
     {
-        _response = await _metricsApi.GetAllMetrics(_requestConfiguration);
-        _response.Should().NotBeNull();
-        _response.Content.Should().NotBeNull();
+        _metricsResponse = await _client.Metrics.GetAllMetrics();
+        _metricsResponse.Should().BeASuccess();
     }
 
     [Then("the response contains a list of Metrics")]
     public void ThenTheResponseContainsAListOfMetrics()
     {
-        _response!.Content.Result.Should().NotBeNullOrEmpty();
-        _response.AssertContentCompliesWithSchema();
+        _metricsResponse!.Result!.Should().NotBeNullOrEmpty();
+        _metricsResponse!.ContentType.Should().StartWith("application/json");
+        _metricsResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        var actualStatusCode = (int)_response!.StatusCode;
-        actualStatusCode.Should().Be(expectedStatusCode);
+        ((int)_metricsResponse!.Status).Should().Be(expectedStatusCode);
     }
 }

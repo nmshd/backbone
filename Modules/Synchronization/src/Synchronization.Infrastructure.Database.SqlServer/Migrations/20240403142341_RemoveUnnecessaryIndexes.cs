@@ -12,10 +12,12 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
             migrationBuilder.DropIndex(
                 name: "IX_SyncRuns_CreatedBy",
+                schema: "Synchronization",
                 table: "SyncRuns");
 
             migrationBuilder.DropIndex(
                 name: "IX_DatawalletModifications_CreatedBy",
+                schema: "Synchronization",
                 table: "DatawalletModifications");
         }
 
@@ -24,11 +26,13 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
         {
             migrationBuilder.CreateIndex(
                 name: "IX_SyncRuns_CreatedBy",
+                schema: "Synchronization",
                 table: "SyncRuns",
                 column: "CreatedBy");
 
             migrationBuilder.CreateIndex(
                 name: "IX_DatawalletModifications_CreatedBy",
+                schema: "Synchronization",
                 table: "DatawalletModifications",
                 column: "CreatedBy");
         }

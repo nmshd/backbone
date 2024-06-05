@@ -1,49 +1,61 @@
-using Backbone.ConsumerApi.Tests.Integration.API;
+using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Sdk;
+using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
-using Backbone.ConsumerApi.Tests.Integration.Models;
-using Backbone.Crypto.Abstractions;
+using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.ConsumerApi.Tests.Integration.Support;
 using Microsoft.Extensions.Options;
-using TechTalk.SpecFlow.Assist;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "POST Challenge")]
 [Scope(Feature = "GET Challenge")]
-internal class ChallengesApiStepDefinitions : BaseStepDefinitions
+internal class ChallengesApiStepDefinitions
 {
     private string _challengeId;
-    private HttpResponse<Challenge>? _response;
+    private ApiResponse<Challenge>? _response;
+    private Client _sdk = null!;
+    private bool _isAuthenticated;
+    private readonly HttpClient _httpClient;
+    private readonly ClientCredentials _clientCredentials;
 
-    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, ISignatureHelper signatureHelper, ChallengesApi challengesApi, IdentitiesApi identitiesApi, DevicesApi devicesApi) :
-        base(httpConfiguration, signatureHelper, challengesApi, identitiesApi, devicesApi)
+    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, HttpClientFactory factory)
     {
         _challengeId = string.Empty;
+        _httpClient = factory.CreateClient();
+        _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
+    }
+
+    [Given("the user is authenticated")]
+    public async Task GivenTheUserIsAuthenticated()
+    {
+        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
+        _isAuthenticated = true;
+    }
+
+    [Given("the user is unauthenticated")]
+    public void GivenTheUserIsUnauthenticated()
+    {
+        _sdk = Client.CreateUnauthenticated(_httpClient, _clientCredentials);
+        _isAuthenticated = false;
     }
 
     [Given("a Challenge c")]
     public async Task GivenAChallengeC()
     {
-        var challengeResponse = await _challengesApi.CreateChallenge(_requestConfiguration);
-        challengeResponse.IsSuccessStatusCode.Should().BeTrue();
+        var challengeResponse = !_isAuthenticated ? await _sdk.Challenges.CreateChallengeUnauthenticated() : await _sdk.Challenges.CreateChallenge();
+        challengeResponse.Should().BeASuccess();
+        _challengeId = challengeResponse.Result!.Id;
 
-        _challengeId = challengeResponse.Content.Result!.Id;
         _challengeId.Should().NotBeNullOrEmpty();
-    }
-
-    [When("a POST request is sent to the Challenges endpoint with")]
-    public async Task WhenAPOSTRequestIsSentToTheChallengesEndpointWith(Table table)
-    {
-        var requestConfiguration = table.CreateInstance<RequestConfiguration>();
-        requestConfiguration.SupplementWith(_requestConfiguration);
-
-        _response = await _challengesApi.CreateChallenge(requestConfiguration);
     }
 
     [When("a POST request is sent to the Challenges endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheChallengesEndpoint()
     {
-        _response = await _challengesApi.CreateChallenge(_requestConfiguration);
+        _response = _isAuthenticated ? await _sdk.Challenges.CreateChallenge() : await _sdk.Challenges.CreateChallengeUnauthenticated();
     }
 
     [When(@"a GET request is sent to the Challenges/{id} endpoint with ""?(.*?)""?")]
@@ -58,48 +70,50 @@ internal class ChallengesApiStepDefinitions : BaseStepDefinitions
                 id = "CHLjVPS6h1082AuBVBaR";
                 break;
         }
-        _response = await _challengesApi.GetChallengeById(_requestConfiguration, id);
+
+        _response = await _sdk.Challenges.GetChallenge(id);
     }
 
     [Then("the response contains a Challenge")]
     public void ThenTheResponseContainsAChallenge()
     {
         _response!.Should().NotBeNull();
-        _response!.IsSuccessStatusCode.Should().BeTrue();
+        _response!.Should().BeASuccess();
         _response!.ContentType.Should().Be("application/json");
+        _response.Should().ComplyWithSchema();
         AssertExpirationDateIsInFuture();
     }
 
     [Then("the Challenge does not contain information about the creator")]
     public void ThenTheChallengeDoesNotContainInformationAboutTheCreator()
     {
-        _response!.Content.Result!.CreatedBy.Should().BeNull();
-        _response.Content.Result!.CreatedByDevice.Should().BeNull();
+        _response!.Result!.CreatedBy.Should().BeNull();
+        _response.Result!.CreatedByDevice.Should().BeNull();
     }
 
     [Then("the Challenge contains information about the creator")]
     public void ThenTheChallengeContainsInformationAboutTheCreator()
     {
-        _response!.Content.Result!.CreatedBy.Should().NotBeNull();
-        _response.Content.Result!.CreatedByDevice.Should().NotBeNull();
+        _response!.Result!.CreatedBy.Should().NotBeNull();
+        _response.Result!.CreatedByDevice.Should().NotBeNull();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        var actualStatusCode = (int)_response!.StatusCode;
+        var actualStatusCode = (int)_response!.Status;
         actualStatusCode.Should().Be(expectedStatusCode);
     }
 
-    [Then(@"the response content includes an error with the error code ""([^""]+)""")]
+    [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _response!.Content.Error.Should().NotBeNull();
-        _response.Content.Error!.Code.Should().Be(errorCode);
+        _response!.Error.Should().NotBeNull();
+        _response.Error!.Code.Should().Be(errorCode);
     }
 
     private void AssertExpirationDateIsInFuture()
     {
-        _response!.Content.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
+        _response!.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
     }
 }

@@ -21,9 +21,9 @@ Scenario: Changing the default tier of an existing Client with a non-existent ti
 	Given a Client c
 	When a PUT request is sent to the /Clients/{c.ClientId} endpoint with a non-existent tier id
 	Then the response status code is 400 (Bad request)
-	And the response content includes an error with the error code "error.platform.validation.device.tierIdInvalidOrDoesNotExist"
+	And the response content contains an error with the error code "error.platform.validation.device.tierIdInvalidOrDoesNotExist"
 
 Scenario: Changing the default tier of a non-existing Client
 	When a PUT request is sent to the /Clients/{c.clientId} endpoint with a non-existing clientId
 	Then the response status code is 404 (Not Found)
-	And the response content includes an error with the error code "error.platform.recordNotFound"
+	And the response content contains an error with the error code "error.platform.recordNotFound"

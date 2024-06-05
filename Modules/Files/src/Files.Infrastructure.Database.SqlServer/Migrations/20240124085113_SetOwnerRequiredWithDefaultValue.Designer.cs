@@ -20,6 +20,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("Files")
                 .HasAnnotation("ProductVersion", "8.0.0")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -111,7 +112,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("FileMetadata", (string)null);
+                    b.ToTable("FileMetadata", "Files");
                 });
 #pragma warning restore 612, 618
         }

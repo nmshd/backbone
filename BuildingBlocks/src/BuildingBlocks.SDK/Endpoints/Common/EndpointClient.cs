@@ -5,6 +5,8 @@ using System.Text;
 using System.Text.Json;
 using System.Web;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.Tooling.JsonConverters;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Backbone.BuildingBlocks.SDK.Endpoints.Common;
 
@@ -16,6 +18,12 @@ public class EndpointClient
                                         }
                                         """;
 
+    private const string EMPTY_VALUE = """
+                                       {
+                                           "value": {}
+                                       }
+                                       """;
+
     private readonly IAuthenticator _authenticator;
 
     private readonly HttpClient _httpClient;
@@ -26,49 +34,69 @@ public class EndpointClient
         _httpClient = httpClient;
         _authenticator = authenticator;
         _jsonSerializerOptions = jsonSerializerOptions;
+        jsonSerializerOptions.Converters.Add(new UrlSafeBase64ToByteArrayJsonConverter());
     }
 
     public async Task<ApiResponse<T>> Post<T>(string url, object? requestContent = null)
-        => await Request<T>(HttpMethod.Post, url)
+    {
+        return await Request<T>(HttpMethod.Post, url)
             .Authenticate()
             .WithJson(requestContent)
             .Execute();
+    }
 
     public async Task<ApiResponse<T>> PostUnauthenticated<T>(string url, object? requestContent = null)
-        => await Request<T>(HttpMethod.Post, url)
+    {
+        return await Request<T>(HttpMethod.Post, url)
             .WithJson(requestContent)
             .Execute();
+    }
 
     public async Task<ApiResponse<T>> Get<T>(string url, object? requestContent = null, PaginationFilter? pagination = null)
-        => await Request<T>(HttpMethod.Get, url)
+    {
+        return await Request<T>(HttpMethod.Get, url)
             .Authenticate()
             .WithPagination(pagination)
             .WithJson(requestContent)
             .Execute();
+    }
 
     public async Task<ApiResponse<T>> GetUnauthenticated<T>(string url, object? requestContent = null, PaginationFilter? pagination = null)
-        => await Request<T>(HttpMethod.Get, url)
+    {
+        return await Request<T>(HttpMethod.Get, url)
             .WithPagination(pagination)
             .WithJson(requestContent)
             .Execute();
+    }
 
     public async Task<ApiResponse<T>> Put<T>(string url, object? requestContent = null)
-        => await Request<T>(HttpMethod.Put, url)
+    {
+        return await Request<T>(HttpMethod.Put, url)
             .Authenticate()
             .WithJson(requestContent)
             .Execute();
+    }
 
-    public async Task<ApiResponse<T>> Patch<T>(string url, object? requestContent = null) => await Request<T>(HttpMethod.Patch, url)
-        .Authenticate()
-        .WithJson(requestContent)
-        .Execute();
+    public async Task<ApiResponse<T>> Patch<T>(string url, object? requestContent = null)
+    {
+        return await Request<T>(HttpMethod.Patch, url)
+            .Authenticate()
+            .WithJson(requestContent)
+            .Execute();
+    }
 
-    public async Task<ApiResponse<T>> Delete<T>(string url, object? requestContent = null) => await Request<T>(HttpMethod.Delete, url)
-        .Authenticate()
-        .WithJson(requestContent)
-        .Execute();
+    public async Task<ApiResponse<T>> Delete<T>(string url, object? requestContent = null)
+    {
+        return await Request<T>(HttpMethod.Delete, url)
+            .Authenticate()
+            .WithJson(requestContent)
+            .Execute();
+    }
 
-    public RequestBuilder<T> Request<T>(HttpMethod method, string url) => new(this, _jsonSerializerOptions, _authenticator, method, url);
+    public RequestBuilder<T> Request<T>(HttpMethod method, string url)
+    {
+        return new RequestBuilder<T>(this, _jsonSerializerOptions, _authenticator, method, url);
+    }
 
     private async Task<ApiResponse<T>> Execute<T>(HttpRequestMessage request)
     {
@@ -82,10 +110,32 @@ public class EndpointClient
             responseContent = new MemoryStream(Encoding.UTF8.GetBytes(EMPTY_RESULT));
         }
 
-        var deserializedResponseContent = JsonSerializer.Deserialize<ApiResponse<T>>(responseContent, _jsonSerializerOptions)!;
-        deserializedResponseContent.Status = statusCode;
+        var deserializedResponseContent = JsonSerializer.Deserialize<ApiResponse<T>>(responseContent, _jsonSerializerOptions);
+
+        deserializedResponseContent!.Status = statusCode;
+        deserializedResponseContent.RawContent = await response.Content.ReadAsStringAsync();
+        deserializedResponseContent.ContentType = response.Content.Headers.ContentType?.MediaType;
 
         return deserializedResponseContent;
+    }
+
+    private async Task<ApiResponse<T>> ExecuteOData<T>(HttpRequestMessage request)
+    {
+        var response = await _httpClient.SendAsync(request);
+        var responseContent = await response.Content.ReadAsStreamAsync();
+        var statusCode = response.StatusCode;
+
+        if (statusCode == HttpStatusCode.NoContent || responseContent.Length == 0)
+        {
+            responseContent.Close();
+            responseContent = new MemoryStream(Encoding.UTF8.GetBytes(EMPTY_VALUE));
+        }
+
+        var deserializedResponseContent = JsonSerializer.Deserialize<ODataResponse<T>>(responseContent, _jsonSerializerOptions)!;
+        var rawContent = await response.Content.ReadAsStringAsync();
+        deserializedResponseContent.ContentType = response.Content.Headers.ContentType?.MediaType;
+
+        return deserializedResponseContent.ToApiResponse(statusCode, rawContent);
     }
 
     private async Task<RawApiResponse> ExecuteRaw(HttpRequestMessage request)
@@ -104,10 +154,10 @@ public class EndpointClient
 
     public class RequestBuilder<T>
     {
+        private readonly IAuthenticator _authenticator;
         private readonly EndpointClient _client;
         private readonly NameValueCollection _extraHeaders = [];
         private readonly JsonSerializerOptions _jsonSerializerOptions;
-        private readonly IAuthenticator _authenticator;
         private readonly HttpMethod _method;
         private readonly NameValueCollection _queryParameters = [];
 
@@ -207,9 +257,20 @@ public class EndpointClient
             return this;
         }
 
-        public async Task<ApiResponse<T>> Execute() => await _client.Execute<T>(await CreateRequestMessage());
+        public async Task<ApiResponse<T>> Execute()
+        {
+            return await _client.Execute<T>(await CreateRequestMessage());
+        }
 
-        public async Task<RawApiResponse> ExecuteRaw() => await _client.ExecuteRaw(await CreateRequestMessage());
+        public async Task<ApiResponse<T>> ExecuteOData()
+        {
+            return await _client.ExecuteOData<T>(await CreateRequestMessage());
+        }
+
+        public async Task<RawApiResponse> ExecuteRaw()
+        {
+            return await _client.ExecuteRaw(await CreateRequestMessage());
+        }
 
         private async Task<HttpRequestMessage> CreateRequestMessage()
         {

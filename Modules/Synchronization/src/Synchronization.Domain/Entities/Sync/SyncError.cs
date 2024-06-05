@@ -1,6 +1,8 @@
+using Backbone.BuildingBlocks.Domain;
+
 namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
-public class SyncError
+public class SyncError : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private SyncError()

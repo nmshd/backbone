@@ -31,4 +31,13 @@ public class StronglyTypedIdHelpers
 
         return null;
     }
+
+    public bool IsValid(string stringValue)
+    {
+        var hasPrefix = stringValue.StartsWith(_prefix);
+        var lengthIsValid = stringValue.Length <= _maxLength;
+        var hasOnlyValidChars = stringValue.ContainsOnly(_validChars);
+
+        return hasPrefix && lengthIsValid && hasOnlyValidChars;
+    }
 }

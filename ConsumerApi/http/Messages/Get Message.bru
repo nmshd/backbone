@@ -1,0 +1,15 @@
+meta {
+  name: /Messages/{MessageId}
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/Messages/{{MessageId}}
+  body: none
+  auth: inherit
+}
+
+vars:pre-request {
+  MessageId: MSGZILDETNmPHQgs7f0H
+}

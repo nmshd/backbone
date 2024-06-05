@@ -34,6 +34,6 @@ public class SynchronizationModule : AbstractModule
 
     public override void ConfigureEventBus(IEventBus eventBus)
     {
-        eventBus.AddSynchronizationIntegrationEventSubscriptions();
+        eventBus.AddSynchronizationDomainEventSubscriptions();
     }
 }

@@ -7,6 +7,10 @@ on:
     tags-ignore:
       - "**"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   run-adminUi-checks:
     runs-on: ubuntu-latest
@@ -63,9 +67,9 @@ jobs:
       - name: Check formatting
         run: ./.ci/checkFormatting.sh
 
-  test:
+  unit-test:
     runs-on: ubuntu-latest
-    name: Run Tests
+    name: Run Unit Tests
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -193,8 +197,10 @@ jobs:
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
-      - name: Run Consumer API
-        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml up -d
+      - name: Build Consumer API and Admin API
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml build --parallel
+      - name: Run Consumer API & Admin API
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml up -d --no-build
       - name: Install runtime dependencies
         working-directory: ./runtime
         run: npm install
@@ -204,6 +210,8 @@ jobs:
           NMSHD_TEST_BASEURL: http://localhost:5000
           NMSHD_TEST_CLIENTID: test
           NMSHD_TEST_CLIENTSECRET: test
+          NMSHD_TEST_BASEURL_ADMIN_API: http://localhost:5173
+          NMSHD_TEST_ADMIN_API_KEY: test
         run: npm run test:local:lokijs
       - name: Save Docker Logs
         if: failure()
@@ -238,8 +246,10 @@ jobs:
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
-      - name: Run Consumer API
-        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml up -d
+      - name: Build Consumer API and Admin API
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml build --parallel
+      - name: Run Consumer API & Admin API
+        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml up -d --no-build
       - name: Install runtime dependencies
         working-directory: ./runtime
         run: npm install
@@ -249,6 +259,8 @@ jobs:
           NMSHD_TEST_BASEURL: http://localhost:5000
           NMSHD_TEST_CLIENTID: test
           NMSHD_TEST_CLIENTSECRET: test
+          NMSHD_TEST_BASEURL_ADMIN_API: http://localhost:5173
+          NMSHD_TEST_ADMIN_API_KEY: test
         run: npm run test:local:lokijs
       - name: Save Docker Logs
         if: failure()
@@ -287,6 +299,54 @@ jobs:
         uses: docker/setup-buildx-action@v3
       - name: Build image
         run: ./.ci/capi/buildContainerImage.js
+        env:
+          TAG: test
+          PLATFORMS: linux/amd64
+
+  build-eh-container-image:
+    name: Build Event Handler Service Container Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build image
+        run: ./.ci/eh/buildContainerImage.js
+        env:
+          TAG: test
+          PLATFORMS: linux/amd64
+
+  build-dbm-container-image:
+    name: Build Database Migrator Container Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build image
+        run: ./.ci/dbm/buildContainerImage.js
+        env:
+          TAG: test
+          PLATFORMS: linux/amd64
+
+  build-idj-container-image:
+    name: Build Database Migrator Container Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build image
+        run: ./.ci/idj/buildContainerImage.js
         env:
           TAG: test
           PLATFORMS: linux/amd64

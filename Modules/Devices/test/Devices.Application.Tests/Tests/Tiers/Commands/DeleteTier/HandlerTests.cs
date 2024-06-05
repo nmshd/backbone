@@ -1,16 +1,17 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Commands.DeleteTier;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     private readonly ITiersRepository _tiersRepository;
     private readonly IEventBus _eventBus;
@@ -24,7 +25,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async Task Deletes_the_tier_from_the_database_and_publishes_TierDeletedIntegrationEvent()
+    public async Task Deletes_the_tier_from_the_database_and_publishes_TierDeletedDomainEvent()
     {
         // Arrange
         var tier = new Tier(TierName.Create("tier-name").Value);
@@ -37,7 +38,7 @@ public class HandlerTests
         await _handler.Handle(new DeleteTierCommand(tier.Id), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => _eventBus.Publish(A<TierDeletedIntegrationEvent>._)).MustHaveHappened();
+        A.CallTo(() => _eventBus.Publish(A<TierDeletedDomainEvent>._)).MustHaveHappened();
         A.CallTo(() => _tiersRepository.Remove(tier)).MustHaveHappenedOnceExactly();
     }
 

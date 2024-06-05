@@ -1,9 +1,10 @@
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
-public class SyncRun
+public class SyncRun : Entity
 {
     private readonly List<SyncError> _errors = [];
     private readonly List<ExternalEvent> _externalEvents = [];

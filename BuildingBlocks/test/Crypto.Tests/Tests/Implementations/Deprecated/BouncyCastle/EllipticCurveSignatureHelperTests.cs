@@ -1,9 +1,10 @@
 using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Asymmetric;
+using Backbone.UnitTestTools.BaseClasses;
 using Xunit;
 
 namespace Backbone.Crypto.Tests.Tests.Implementations.Deprecated.BouncyCastle;
 
-public class EllipticCurveSignatureHelperTests
+public class EllipticCurveSignatureHelperTests : AbstractTestsBase
 {
     private readonly EllipticCurveSignatureHelper _signatureHelper;
 

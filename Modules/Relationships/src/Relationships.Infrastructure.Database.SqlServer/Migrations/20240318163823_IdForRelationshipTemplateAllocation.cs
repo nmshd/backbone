@@ -12,10 +12,12 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         {
             migrationBuilder.DropPrimaryKey(
                 name: "PK_RelationshipTemplateAllocations",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations");
 
             migrationBuilder.AddColumn<int>(
                 name: "Id",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations",
                 type: "int",
                 nullable: false,
@@ -24,6 +26,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AlterColumn<string>(
                 name: "Discriminator",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 type: "nvarchar(34)",
                 maxLength: 34,
@@ -33,11 +36,13 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_RelationshipTemplateAllocations",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations",
                 column: "Id");
 
             migrationBuilder.CreateIndex(
                 name: "IX_RelationshipTemplateAllocations_RelationshipTemplateId_AllocatedBy",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations",
                 columns: new[] { "RelationshipTemplateId", "AllocatedBy" });
         }
@@ -47,18 +52,22 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
         {
             migrationBuilder.DropPrimaryKey(
                 name: "PK_RelationshipTemplateAllocations",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations");
 
             migrationBuilder.DropIndex(
                 name: "IX_RelationshipTemplateAllocations_RelationshipTemplateId_AllocatedBy",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations");
 
             migrationBuilder.DropColumn(
                 name: "Id",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Discriminator",
+                schema: "Relationships",
                 table: "RelationshipChanges",
                 type: "nvarchar(max)",
                 nullable: false,
@@ -68,6 +77,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
             migrationBuilder.AddPrimaryKey(
                 name: "PK_RelationshipTemplateAllocations",
+                schema: "Relationships",
                 table: "RelationshipTemplateAllocations",
                 columns: new[] { "RelationshipTemplateId", "AllocatedBy" });
         }

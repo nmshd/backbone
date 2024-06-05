@@ -1,11 +1,14 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeletionProcess;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
 using FluentAssertions;
@@ -14,10 +17,10 @@ using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.ApproveDeletionProcess;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     [Fact]
-    public async void Happy_path()
+    public async Task Happy_path()
     {
         // Arrange
         var utcNow = DateTime.Parse("2000-01-01");
@@ -35,7 +38,9 @@ public class HandlerTests
         A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity);
 
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext);
+        var mockPushNotificationSender = A.Dummy<IPushNotificationSender>();
+
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockPushNotificationSender);
 
         // Act
         var response = await handler.Handle(new ApproveDeletionProcessCommand(deletionProcess.Id), CancellationToken.None);
@@ -46,10 +51,14 @@ public class HandlerTests
                 && i.Status == IdentityStatus.ToBeDeleted
                 && i.TierId == Tier.QUEUED_FOR_DELETION.Id
                 && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.ApprovedAt == DateTime.Parse("2000-01-01")
-                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodEndsAt == DateTime.Parse("2000-01-31")
+                && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodEndsAt == DateTime.Parse("2000-01-15")
                 && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.ApprovedByDevice == device.Id
             ), A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
+
+        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address,
+            A<DeletionProcessApprovedNotification>.That.Matches(n => n.DaysUntilDeletion == IdentityDeletionConfiguration.LengthOfGracePeriod), A<CancellationToken>._)
+        ).MustHaveHappenedOnceExactly();
 
         response.Id.Should().Be(deletionProcess.Id);
         response.ApprovedAt.Should().Be(utcNow);
@@ -77,9 +86,15 @@ public class HandlerTests
         acting.Should().AwaitThrowAsync<NotFoundException, ApproveDeletionProcessResponse>().Which.Message.Should().Contain("Identity");
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus? eventBus = null)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus? eventBus = null, IPushNotificationSender? pushNotificationSender = null)
     {
-        eventBus ??= A.Fake<IEventBus>();
-        return new Handler(identitiesRepository, userContext, eventBus);
+        eventBus ??= A.Dummy<IEventBus>();
+        pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
+        return new Handler(identitiesRepository, userContext, eventBus, pushNotificationSender);
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender pushNotificationSender)
+    {
+        return CreateHandler(identitiesRepository, userContext, null, pushNotificationSender);
     }
 }

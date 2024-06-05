@@ -1,0 +1,19 @@
+meta {
+  name: /Datawallet/Modifications
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/Datawallet/Modifications?localIndex=8
+  body: none
+  auth: inherit
+}
+
+query {
+  localIndex: 8
+}
+
+headers {
+  x-supported-datawallet-version: 1
+}

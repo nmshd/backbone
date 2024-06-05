@@ -7,6 +7,10 @@
     "Job.IdentityDeletion.ActualDeletion": {
       "commandName": "Project",
       "commandLineArgs": "--Worker ActualDeletionWorker"
+    },
+    "Job.IdentityDeletion.SendGracePeriodAndApprovalReminders": {
+      "commandName": "Project",
+      "commandLineArgs": "--Worker SendGracePeriodAndApprovalRemindersWorker"
     }
   }
 }

@@ -1,0 +1,22 @@
+meta {
+  name: /Clients/{ClientId}
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/Clients/{{ClientId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "defaultTier": "TIRysp6NxeWFxjSL2iHs",
+    "maxIdentities": null
+  }
+}
+
+vars:pre-request {
+  ClientId: brunotest
+}

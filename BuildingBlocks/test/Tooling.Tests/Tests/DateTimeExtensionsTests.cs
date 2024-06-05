@@ -1,11 +1,12 @@
 using System.Collections;
 using Backbone.Tooling.Extensions;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Tooling.Tests.Tests;
-public class DateTimeExtensionsTests
+public class DateTimeExtensionsTests : AbstractTestsBase
 {
     [Theory]
     [ClassData(typeof(DateTimeExtensionsTestData))]
@@ -18,6 +19,45 @@ public class DateTimeExtensionsTests
 
         // Assert
         target.Should().Be(expected);
+    }
+
+    [Fact]
+    public void DaysUntilDateInTheFuture()
+    {
+        // Arrange
+        SystemTime.Set(_dateTimeNow);
+
+        // Act
+        var daysDifference = _dateTimeTomorrow.DaysUntilDate();
+
+        // Assert
+        daysDifference.Should().Be(1);
+    }
+
+    [Fact]
+    public void DaysUntilDateInThePast()
+    {
+        // Arrange
+        SystemTime.Set(_dateTimeNow);
+
+        // Act
+        var daysDifference = _dateTimeYesterday.DaysUntilDate();
+
+        // Assert
+        daysDifference.Should().Be(-1);
+    }
+
+    [Fact]
+    public void DaysUntilDateNow()
+    {
+        // Arrange
+        SystemTime.Set(_dateTimeNow);
+
+        // Act
+        var daysDifference = _dateTimeNow.DaysUntilDate();
+
+        // Assert
+        daysDifference.Should().Be(0);
     }
 
 #pragma warning disable CS8974 // Converting method group to non-delegate type
@@ -45,4 +85,6 @@ public class DateTimeExtensionsTests
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 #pragma warning restore CS8974 // Converting method group to non-delegate type
+
+
 }

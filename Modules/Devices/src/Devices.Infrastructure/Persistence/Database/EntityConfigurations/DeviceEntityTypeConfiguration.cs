@@ -9,5 +9,6 @@ public class DeviceEntityTypeConfiguration : IEntityTypeConfiguration<Device>
     public void Configure(EntityTypeBuilder<Device> builder)
     {
         builder.Ignore(x => x.IsOnboarded);
+        builder.Property(x => x.CommunicationLanguage).HasDefaultValue(CommunicationLanguage.DEFAULT_LANGUAGE);
     }
 }

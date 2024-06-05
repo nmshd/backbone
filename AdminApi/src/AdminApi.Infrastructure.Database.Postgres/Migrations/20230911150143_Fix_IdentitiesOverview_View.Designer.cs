@@ -20,6 +20,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("AdminUi")
                 .HasAnnotation("ProductVersion", "7.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -59,7 +60,7 @@ namespace AdminUi.Infrastructure.Database.Postgres.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("IdentityOverviews", (string)null);
+                    b.ToView("IdentityOverviews", "AdminUi");
                 });
 #pragma warning restore 612, 618
         }

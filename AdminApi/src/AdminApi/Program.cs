@@ -12,9 +12,11 @@ using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Logging;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
@@ -79,7 +81,8 @@ static WebApplication CreateApp(string[] args)
     var app = builder.Build();
     Configure(app);
 
-    app.MigrateDbContext<AdminApiDbContext>();
+    if ((app.Environment.IsLocal() || app.Environment.IsDevelopment()) && app.Configuration.GetValue<bool>("RunMigrations"))
+        app.MigrateDbContext<AdminApiDbContext>();
 
     return app;
 }
@@ -106,6 +109,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
         .AddDevices(parsedConfiguration.Modules.Devices)
         .AddQuotas(parsedConfiguration.Modules.Quotas)
+        .AddChallenges(parsedConfiguration.Modules.Challenges)
         .AddHealthChecks();
 
     if (parsedConfiguration.SwaggerUi.Enabled)
@@ -126,6 +130,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
+    services.AddPushNotifications(parsedConfiguration.Modules.Devices.Infrastructure.PushNotifications);
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)
@@ -175,7 +180,7 @@ static void Configure(WebApplication app)
         app.UseSwagger().UseSwaggerUI();
 
     if (app.Environment.IsDevelopment())
-        Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+        IdentityModelEventSource.ShowPII = true;
 
     app.UseCors();
 

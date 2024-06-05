@@ -1,4 +1,5 @@
 using Backbone.AdminApi.Infrastructure.DTOs;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,11 +11,11 @@ public class AdminApiDbContext : AbstractDbContextBase
     {
     }
 
-    public AdminApiDbContext(DbContextOptions<AdminApiDbContext> options) : base(options)
+    public AdminApiDbContext(DbContextOptions<AdminApiDbContext> options, IEventBus eventBus) : base(options, eventBus)
     {
     }
 
-    public AdminApiDbContext(DbContextOptions<AdminApiDbContext> options, IServiceProvider serviceProvider) : base(options, serviceProvider)
+    public AdminApiDbContext(DbContextOptions<AdminApiDbContext> options, IServiceProvider serviceProvider, IEventBus eventBus) : base(options, eventBus, serviceProvider)
     {
     }
 
@@ -26,9 +27,13 @@ public class AdminApiDbContext : AbstractDbContextBase
 
     public DbSet<RelationshipOverview> RelationshipOverviews { get; set; } = null!;
 
+    public DbSet<MessageOverview> MessageOverviews { get; set; }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.HasDefaultSchema("AdminUi");
 
         builder.ApplyConfigurationsFromAssembly(typeof(AdminApiDbContext).Assembly);
     }

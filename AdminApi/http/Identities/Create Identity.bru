@@ -1,0 +1,21 @@
+meta {
+  name: /Identities
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/Identities
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "ClientId": "test",
+    "ClientSecret" : "test",
+    "DevicePassword" : "test",
+    "IdentityVersion" : 1,
+    "IdentityPublicKey" : "eyJhbGciOiAzLCJwdWIiOiAiQUFBQSJ9"
+  }
+}

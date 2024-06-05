@@ -12,6 +12,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.DropIndex(
                 name: "IX_FileMetadata_CreatedBy",
+                schema: "Files",
                 table: "FileMetadata");
         }
 
@@ -20,6 +21,7 @@ namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
         {
             migrationBuilder.CreateIndex(
                 name: "IX_FileMetadata_CreatedBy",
+                schema: "Files",
                 table: "FileMetadata",
                 column: "CreatedBy");
         }

@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:get_it/get_it.dart';
 
 import 'theme/theme.dart';
+
+extension AppLocalizationsExtension on BuildContext {
+  AppLocalizations get l10n => AppLocalizations.of(this)!;
+}
 
 extension UnregisterIfRegistered on GetIt {
   Future<void> unregisterIfRegistered<T extends Object>() async {
@@ -13,4 +19,28 @@ extension UnregisterIfRegistered on GetIt {
 
 extension GetCustomColors on BuildContext {
   CustomColors get customColors => Theme.of(this).extension<CustomColors>()!;
+}
+
+extension SetClipboardDataWithSnack on BuildContext {
+  void setClipboardDataWithSuccessNotification({
+    required String clipboardText,
+    required String successMessage,
+  }) {
+    Clipboard.setData(ClipboardData(text: clipboardText));
+
+    ScaffoldMessenger.of(this).showSnackBar(
+      SnackBar(
+        content: Text(successMessage),
+        showCloseIcon: true,
+      ),
+    );
+  }
+}
+
+extension Ellipsize on String {
+  String ellipsize(int maxLength) {
+    if (length <= maxLength) return this;
+
+    return '${substring(0, maxLength - 3)}...';
+  }
 }

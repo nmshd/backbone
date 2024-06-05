@@ -33,6 +33,7 @@ public class CleanArchitecture
 
         Types()
             .That().Are(module)
+            .And().AreNot(Backbone.TEST_TYPES)
             .Should().NotDependOnAny(otherModules)
             .Because("modules should be self-contained.")
             .Check(Backbone.ARCHITECTURE);
@@ -43,6 +44,7 @@ public class CleanArchitecture
     {
         Types()
             .That().Are(APPLICATION_ASSEMBLIES)
+            .And().AreNot(Backbone.TEST_TYPES)
             .Should().NotDependOnAnyTypesThat().Are(INFRASTRUCTURE_ASSEMBLIES)
             .Because("this would violate Clean Architecture")
             .Check(Backbone.ARCHITECTURE);

@@ -1,11 +1,12 @@
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using FluentValidation.TestHelper;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Commands.CreateTier;
 
-public class CreateTierCommandValidatorTests
+public class CreateTierCommandValidatorTests : AbstractTestsBase
 {
 
     [Theory]

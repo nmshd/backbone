@@ -3,7 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Messages.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using MediatR;
@@ -53,7 +53,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 
         await _messagesRepository.Add(message, cancellationToken);
 
-        _eventBus.Publish(new MessageCreatedIntegrationEvent(message));
+        _eventBus.Publish(new MessageCreatedDomainEvent(message));
 
         return _mapper.Map<SendMessageResponse>(message);
     }

@@ -1,13 +1,14 @@
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Domain.Tests.PushNotifications;
 
-public class PnsRegistrationTests
+public class PnsRegistrationTests : AbstractTestsBase
 {
     [Fact]
     public void Generate_DevicePushIdentifier_while_instancing_PnsRegistration()
@@ -46,6 +47,6 @@ public class PnsRegistrationTests
         var pnsRegistration = new PnsRegistration(identityAddress, deviceId, pnsHandle, "someAppId", PushEnvironment.Development);
 
         // Assert
-        pnsRegistration.DevicePushIdentifier.StringValue.Should().NotBe(otherPnsRegistration.DevicePushIdentifier.StringValue);
+        pnsRegistration.DevicePushIdentifier.Value.Should().NotBe(otherPnsRegistration.DevicePushIdentifier.Value);
     }
 }

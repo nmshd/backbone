@@ -3,9 +3,11 @@ using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Job.IdentityDeletion.Workers;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using CSharpFunctionalExtensions;
 using FakeItEasy;
@@ -16,7 +18,7 @@ using Xunit;
 
 namespace Backbone.Job.IdentityDeletion.Tests.Tests;
 
-public class ActualDeletionWorkerTests
+public class ActualDeletionWorkerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Proxies_triggering_the_deletion_processes_to_command_handler()
@@ -71,8 +73,8 @@ public class ActualDeletionWorkerTests
         SetupRipeDeletionProcessesCommand(mockMediator, identityAddress1, identityAddress2, identityAddress3);
         A.CallTo(() => mockMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
 
-        var pushNotificationSender = A.Dummy<IPushNotificationSender>();
-        var worker = CreateWorker(mockMediator, pushNotificationSender: pushNotificationSender);
+        var mockPushNotificationSender = A.Dummy<IPushNotificationSender>();
+        var worker = CreateWorker(mockMediator, mockPushNotificationSender);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -80,7 +82,7 @@ public class ActualDeletionWorkerTests
         // Assert
         foreach (var identityAddress in new[] { identityAddress1, identityAddress2, identityAddress3 })
         {
-            A.CallTo(() => pushNotificationSender.SendNotification(identityAddress, A<object>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => mockPushNotificationSender.SendNotification(identityAddress, A<IPushNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         }
     }
 
@@ -88,6 +90,11 @@ public class ActualDeletionWorkerTests
     {
         var commandResponse = new TriggerRipeDeletionProcessesResponse(identityAddresses.ToDictionary(x => x, _ => UnitResult.Success<DomainError>()));
         A.CallTo(() => mediator.Send(A<TriggerRipeDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(commandResponse);
+    }
+
+    private static ActualDeletionWorker CreateWorker(IMediator mediator, IPushNotificationSender pushNotificationSender)
+    {
+        return CreateWorker(mediator, null, null, pushNotificationSender);
     }
 
     private static ActualDeletionWorker CreateWorker(IMediator mediator,

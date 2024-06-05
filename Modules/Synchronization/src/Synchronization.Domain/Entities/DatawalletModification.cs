@@ -1,10 +1,11 @@
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 using static Backbone.Modules.Synchronization.Domain.Entities.Datawallet;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities;
 
-public class DatawalletModification
+public class DatawalletModification : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private DatawalletModification()
@@ -19,10 +20,10 @@ public class DatawalletModification
         BlobReference = null!;
     }
 
-    public DatawalletModification(Datawallet datawallet, DatawalletVersion datawalletVersion, long index, DatawalletModificationType type, string collection, string objectIdentifier, string? payloadCategory, byte[]? encryptedPayload, DeviceId createdByDevice, string blobReference)
+    public DatawalletModification(Datawallet datawallet, DatawalletVersion datawalletVersion, long index, DatawalletModificationType type, string collection, string objectIdentifier,
+        string? payloadCategory, byte[]? encryptedPayload, DeviceId createdByDevice, string blobReference)
     {
         Id = DatawalletModificationId.New();
-
         Datawallet = datawallet;
         DatawalletVersion = datawalletVersion;
         Index = index;

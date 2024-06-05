@@ -1,7 +1,4 @@
-using Backbone.AdminApi.Tests.Integration.API;
 using Backbone.AdminApi.Tests.Integration.Configuration;
-using Backbone.Crypto.Abstractions;
-using Backbone.Crypto.Implementations;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using SolidToken.SpecFlow.DependencyInjection;
@@ -18,7 +15,7 @@ public static class Dependencies
         var services = new ServiceCollection();
 
         var config = new ConfigurationBuilder()
-            .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), APP_SETTINGS_FILE), optional: false, reloadOnChange: false)
+            .AddJsonFile(Path.Combine(Directory.GetCurrentDirectory(), APP_SETTINGS_FILE), false, false)
             .Build();
 
         services.ConfigureAndValidate<HttpClientOptions>(options =>
@@ -26,13 +23,6 @@ public static class Dependencies
         );
 
         services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory<Program>()));
-        services.AddSingleton<ISignatureHelper>(SignatureHelper.CreateEd25519WithRawKeyFormat());
-
-        services.AddTransient<IdentitiesApi>();
-        services.AddTransient<TiersApi>();
-        services.AddTransient<ClientsApi>();
-        services.AddTransient<MetricsApi>();
-        services.AddTransient<LogsApi>();
 
         return services;
     }

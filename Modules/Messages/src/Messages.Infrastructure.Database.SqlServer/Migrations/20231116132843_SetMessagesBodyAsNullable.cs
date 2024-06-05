@@ -12,6 +12,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<byte[]>(
                 name: "Body",
+                schema: "Messages",
                 table: "Messages",
                 type: "varbinary(max)",
                 nullable: true,
@@ -24,6 +25,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AlterColumn<byte[]>(
                 name: "Body",
+                schema: "Messages",
                 table: "Messages",
                 type: "varbinary(max)",
                 nullable: false,

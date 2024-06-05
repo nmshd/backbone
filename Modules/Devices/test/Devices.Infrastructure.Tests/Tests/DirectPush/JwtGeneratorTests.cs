@@ -1,12 +1,13 @@
 using System.Collections.Concurrent;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.ApplePushNotificationService;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Tooling;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 
-public class JwtGeneratorTests : IDisposable
+public class JwtGeneratorTests : AbstractTestsBase
 {
     private const string SOME_KEY =
         "MIGHAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBG0wawIBAQQgNsu2YNPiqJQrkibTejrFM2w7D/POivZ4nmoeCwhoPm+hRANCAAToCt8MDybjEhLeCgKh3oAoO7MRT8r041ABrA3uqAXdcAFDhipJeB7SimtCrp2E+QR8qvTvRCMdx3b2srv/UsJZ";
@@ -123,10 +124,5 @@ public class JwtGeneratorTests : IDisposable
     private static JwtGenerator CreateJwtGenerator()
     {
         return new JwtGenerator(new ApnsJwtCache());
-    }
-
-    public void Dispose()
-    {
-        SystemTime.Reset();
     }
 }

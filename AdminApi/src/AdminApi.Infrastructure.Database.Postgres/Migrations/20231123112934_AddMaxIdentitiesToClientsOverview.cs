@@ -11,7 +11,7 @@ namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.Sql("""
-                CREATE OR REPLACE VIEW "ClientOverviews" AS
+                CREATE OR REPLACE VIEW "AdminUi"."ClientOverviews" AS
                     SELECT
                         CLIENTS."ClientId" AS "ClientId",
                         CLIENTS."DisplayName" AS "DisplayName",
@@ -33,9 +33,9 @@ namespace Backbone.AdminUi.Infrastructure.Database.Postgres.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql(""" DROP VIEW "ClientOverviews" """);
+            migrationBuilder.Sql(""" DROP VIEW "AdminUi"."ClientOverviews" """);
             migrationBuilder.Sql("""
-                CREATE VIEW "ClientOverviews" AS
+                CREATE VIEW "AdminUi"."ClientOverviews" AS
                     SELECT
                         CLIENTS."ClientId" AS "ClientId",
                         CLIENTS."DisplayName" AS "DisplayName",

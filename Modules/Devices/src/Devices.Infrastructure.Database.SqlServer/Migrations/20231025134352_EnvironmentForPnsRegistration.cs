@@ -12,6 +12,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.AddColumn<int>(
                 name: "Environment",
+                schema: "Devices",
                 table: "PnsRegistrations",
                 type: "int",
                 nullable: false,
@@ -23,6 +24,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "Environment",
+                schema: "Devices",
                 table: "PnsRegistrations");
         }
     }

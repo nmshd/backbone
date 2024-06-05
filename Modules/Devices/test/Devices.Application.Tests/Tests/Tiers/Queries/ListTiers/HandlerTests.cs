@@ -2,13 +2,14 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Queries.ListTiers;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     public HandlerTests()
     {
@@ -16,7 +17,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Returns_an_empty_list_when_no_tiers_exist()
+    public async Task Returns_an_empty_list_when_no_tiers_exist()
     {
         // Arrange
         var tiersList = new List<Tier>();
@@ -31,7 +32,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Returns_a_list_of_all_existing_tiers()
+    public async Task Returns_a_list_of_all_existing_tiers()
     {
         // Arrange
         var request = new PaginationFilter();
@@ -51,7 +52,7 @@ public class HandlerTests
     }
 
     [Fact]
-    public async void Returned_tiers_have_all_properties_filled_as_expected()
+    public async Task Returned_tiers_have_all_properties_filled_as_expected()
     {
         // Arrange
         var request = new PaginationFilter();

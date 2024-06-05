@@ -1,12 +1,10 @@
 using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Application.IntegrationEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -19,21 +17,19 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
-
-    private PushDatawalletModificationsCommand _request = null!;
     private CancellationToken _cancellationToken;
-    private DatawalletVersion _supportedDatawalletVersion = null!;
     private Datawallet? _datawallet;
     private DatawalletModification[] _modifications = null!;
-    private PushDatawalletModificationsResponse _response = null!;
 
-    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus)
+    private PushDatawalletModificationsCommand _request = null!;
+    private PushDatawalletModificationsResponse _response = null!;
+    private DatawalletVersion _supportedDatawalletVersion = null!;
+
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper)
     {
         _dbContext = dbContext;
         _mapper = mapper;
-        _eventBus = eventBus;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
@@ -50,7 +46,6 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         EnsureSufficientSupportedDatawalletVersion();
         EnsureDeviceIsUpToDate();
         await CreateModifications();
-        PublishIntegrationEvent();
         BuildResponse();
 
         return _response;
@@ -137,10 +132,5 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
             throw;
         }
-    }
-
-    private void PublishIntegrationEvent()
-    {
-        _eventBus.Publish(new DatawalletModifiedIntegrationEvent(_activeIdentity, _activeDevice));
     }
 }

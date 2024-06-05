@@ -1,8 +1,10 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.IntegrationEvents.Outgoing;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
@@ -13,12 +15,14 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IUserContext _userContext;
     private readonly IEventBus _eventBus;
+    private readonly IPushNotificationSender _notificationSender;
 
-    public Handler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus eventBus)
+    public Handler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus eventBus, IPushNotificationSender notificationSender)
     {
         _identitiesRepository = identitiesRepository;
         _userContext = userContext;
         _eventBus = eventBus;
+        _notificationSender = notificationSender;
     }
 
     public async Task<StartDeletionProcessAsOwnerResponse> Handle(StartDeletionProcessAsOwnerCommand request, CancellationToken cancellationToken)
@@ -29,9 +33,11 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
         var deletionProcess = identity.StartDeletionProcessAsOwner(_userContext.GetDeviceId());
         var newTierId = identity.TierId;
 
-        _eventBus.Publish(new TierOfIdentityChangedIntegrationEvent(identity, oldTierId, newTierId));
+        _eventBus.Publish(new TierOfIdentityChangedDomainEvent(identity, oldTierId, newTierId));
 
         await _identitiesRepository.Update(identity, cancellationToken);
+
+        await _notificationSender.SendNotification(identity.Address, new DeletionProcessStartedPushNotification(), cancellationToken);
 
         return new StartDeletionProcessAsOwnerResponse(deletionProcess);
     }

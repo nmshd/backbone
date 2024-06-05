@@ -3,13 +3,14 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Tests.Tests.Repositories;
 
-public class TiersRepositoryTests
+public class TiersRepositoryTests : AbstractTestsBase
 {
     /**
      * This test makes sure that when the Update method is called on the TiersRepository with a Tier from which
@@ -23,7 +24,7 @@ public class TiersRepositoryTests
         // Arrange
         var (arrangeContext, actContext, assertContext) = FakeDbContextFactory.CreateDbContexts<QuotasDbContext>();
 
-        var arrangedTier = new Tier(new TierId("TIR00000000000000000"), "Test");
+        var arrangedTier = new Tier(TierId.Parse("TIR00000000000000000"), "Test");
         var tierQuotaDefinitionToBeDeleted = arrangedTier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month).Value;
         var otherTierQuotaDefinition = arrangedTier.CreateQuota(MetricKey.NumberOfFiles, 5, QuotaPeriod.Month).Value;
 

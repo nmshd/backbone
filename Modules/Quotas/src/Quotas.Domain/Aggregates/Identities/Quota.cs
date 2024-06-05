@@ -1,8 +1,9 @@
-using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
+using Backbone.BuildingBlocks.Domain;
+using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
-public abstract class Quota
+public abstract class Quota : Entity
 {
     // ReSharper disable once UnusedMember.Local
     protected Quota()
@@ -25,10 +26,10 @@ public abstract class Quota
     public abstract int Max { get; }
     public abstract QuotaPeriod Period { get; }
 
-    internal ExhaustionDate CalculateExhaustion(uint newUsage)
+    internal ExhaustionDate CalculateExhaustion(uint newUsage, DateTime utcNow)
     {
         if (newUsage >= Max)
-            return new ExhaustionDate(Period.CalculateEnd());
+            return new ExhaustionDate(Period.CalculateEnd(utcNow));
 
         return ExhaustionDate.Unexhausted;
     }

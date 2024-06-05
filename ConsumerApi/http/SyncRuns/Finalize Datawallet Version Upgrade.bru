@@ -1,0 +1,15 @@
+meta {
+  name: /SyncRuns/{SyncRunId}/FinalizeDatawalletVersionUpgrade
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/SyncRuns/{{SyncRunId}}/FinalizeDatawalletVersionUpgrade
+  body: json
+  auth: inherit
+}
+
+vars:pre-request {
+  SyncRunId: test
+}

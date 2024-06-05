@@ -7,6 +7,7 @@ using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Data.Sqlite;
@@ -15,11 +16,12 @@ using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
 
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
-    private readonly IdentityAddress _activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
     private readonly DeviceId _activeDevice = TestDataGenerator.CreateRandomDeviceId();
+    private readonly IdentityAddress _activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
     private readonly DbContextOptions<SynchronizationDbContext> _dbOptions;
+    private readonly IEventBus _eventBus;
     private readonly Fixture _testDataGenerator;
 
     public HandlerTests()
@@ -27,8 +29,9 @@ public class HandlerTests
         var connection = new SqliteConnection("DataSource=:memory:");
         connection.Open();
         _dbOptions = new DbContextOptionsBuilder<SynchronizationDbContext>().UseSqlite(connection).Options;
+        _eventBus = A.Dummy<IEventBus>();
 
-        var setupContext = new SynchronizationDbContext(_dbOptions);
+        var setupContext = new SynchronizationDbContext(_dbOptions, _eventBus);
         setupContext.Database.EnsureCreated();
         setupContext.Dispose();
 
@@ -72,7 +75,7 @@ public class HandlerTests
 
     private SynchronizationDbContext CreateDbContext()
     {
-        return new SynchronizationDbContext(_dbOptions);
+        return new SynchronizationDbContext(_dbOptions, _eventBus);
     }
 
     private Handler CreateHandlerWithDelayedSave()
@@ -82,7 +85,7 @@ public class HandlerTests
 
     private ApplicationDbContextWithDelayedSave CreateDbContextWithDelayedSave()
     {
-        return new ApplicationDbContextWithDelayedSave(_dbOptions, TimeSpan.FromMilliseconds(200));
+        return new ApplicationDbContextWithDelayedSave(_dbOptions, TimeSpan.FromMilliseconds(200), _eventBus);
     }
 
     private static Handler CreateHandler(IdentityAddress activeIdentity, DeviceId activeDevice, SynchronizationDbContext dbContext)
@@ -93,8 +96,6 @@ public class HandlerTests
 
         var mapper = AutoMapperProfile.CreateMapper();
 
-        var eventBus = A.Fake<IEventBus>();
-
-        return new Handler(dbContext, userContext, mapper, eventBus);
+        return new Handler(dbContext, userContext, mapper);
     }
 }

@@ -6,6 +6,7 @@ using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExten
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
+
 public class MessagesRepository : IMessagesRepository
 {
     private readonly IQueryable<Message> _readOnlyMessages;
@@ -19,7 +20,7 @@ public class MessagesRepository : IMessagesRepository
     {
         var count = await _readOnlyMessages
             .CreatedInInterval(createdAtFrom, createdAtTo)
-            .CountAsync(m => m.CreatedBy == sender.StringValue, cancellationToken);
+            .CountAsync(m => m.CreatedBy == sender.Value, cancellationToken);
         return (uint)count;
     }
 }

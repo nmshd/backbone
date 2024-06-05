@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -23,40 +25,42 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const AppTitle(),
-        leading: IconButton(
-          icon: const Icon(Icons.menu),
-          onPressed: () {
-            setState(() {
-              extended = !extended;
-            });
-          },
-        ),
+        title: const AppTitle(padding: EdgeInsets.only(left: 80)),
         actions: [
-          IconButton(icon: const Icon(Icons.logout), onPressed: _logout),
-          Gaps.w8,
+          OutlinedButton.icon(
+            style: OutlinedButton.styleFrom(minimumSize: const Size(120, 35)),
+            onPressed: _logout,
+            icon: const Icon(Icons.logout, size: 18),
+            label: const Text('Logout', style: TextStyle(fontSize: 12.5)),
+          ),
+          Gaps.w40,
         ],
       ),
       body: Row(
         children: [
           NavigationRail(
-            extended: extended,
+            labelType: NavigationRailLabelType.all,
             destinations: const [
-              NavigationRailDestination(icon: Icon(Icons.apps), label: Text('Dashboard')),
-              NavigationRailDestination(icon: Icon(Icons.badge), label: Text('Identities')),
-              NavigationRailDestination(icon: Icon(Icons.clear_all), label: Text('Tiers')),
-              NavigationRailDestination(icon: Icon(Icons.person), label: Text('Clients')),
+              NavigationRailDestination(icon: Icon(Icons.account_circle_sharp), label: Text('Identities')),
+              NavigationRailDestination(icon: Icon(Icons.cable), label: Text('Tiers')),
+              NavigationRailDestination(icon: Icon(Icons.layers), label: Text('Clients')),
             ],
+            trailing: Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: IconButton(onPressed: () => openSettingsDialog(context), icon: const Icon(Icons.settings)),
+                ),
+              ),
+            ),
             selectedIndex: _selectedIndex,
-            onDestinationSelected: (int index) {
-              if (index == _selectedIndex) return;
-
+            onDestinationSelected: (index) {
               context.go(
                 switch (index) {
-                  0 => '/dashboard',
-                  1 => '/identities',
-                  2 => '/tiers',
-                  3 => '/clients',
+                  0 => '/identities',
+                  1 => '/tiers',
+                  2 => '/clients',
                   _ => throw Exception(),
                 },
               );
@@ -69,10 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   int get _selectedIndex {
-    if (widget.location.startsWith('/dashboard')) return 0;
-    if (widget.location.startsWith('/identities')) return 1;
-    if (widget.location.startsWith('/tiers')) return 2;
-    if (widget.location.startsWith('/clients')) return 3;
+    if (widget.location.startsWith('/identities')) return 0;
+    if (widget.location.startsWith('/tiers')) return 1;
+    if (widget.location.startsWith('/clients')) return 2;
 
     throw Exception();
   }

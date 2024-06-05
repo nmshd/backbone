@@ -7,11 +7,11 @@ using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using IServiceCollectionExtensions = Backbone.Modules.Devices.Infrastructure.PushNotifications.IServiceCollectionExtensions;
 
 namespace Backbone.Modules.Devices.ConsumerApi;
 
@@ -41,24 +41,33 @@ public class DevicesModule : AbstractModule
 
     public override void ConfigureEventBus(IEventBus eventBus)
     {
-        eventBus.AddDevicesIntegrationEventSubscriptions();
+        eventBus.AddDevicesDomainEventSubscriptions();
     }
 
     public override void PostStartupValidation(IServiceProvider serviceProvider)
     {
         var configuration = serviceProvider.GetRequiredService<IOptions<Configuration>>();
-        if (configuration.Value.Infrastructure.PushNotifications.Provider != IServiceCollectionExtensions.PROVIDER_DIRECT)
-            return;
-
-        var fcmOptions = serviceProvider.GetRequiredService<IOptions<DirectPnsCommunicationOptions.FcmOptions>>().Value;
-        var apnsOptions = serviceProvider.GetRequiredService<IOptions<DirectPnsCommunicationOptions.ApnsOptions>>().Value;
         var devicesDbContext = serviceProvider.GetRequiredService<DevicesDbContext>();
 
-        var supportedFcmAppIds = fcmOptions.GetSupportedAppIds();
-        var supportedApnsBundleIds = apnsOptions.GetSupportedBundleIds();
+        var failingApnsBundleIds = new List<string>();
+        var supportedApnsBundleIds = new List<string>();
 
-        var failingFcmAppIds = devicesDbContext.GetFcmAppIdsForWhichNoConfigurationExists(supportedFcmAppIds);
-        var failingApnsBundleIds = devicesDbContext.GetApnsBundleIdsForWhichNoConfigurationExists(supportedApnsBundleIds);
+        var failingFcmAppIds = new List<string>();
+        var supportedFcmAppIds = new List<string>();
+
+        if (configuration.Value.Infrastructure.PushNotifications.Providers.Apns is { Enabled: true })
+        {
+            var apnsOptions = serviceProvider.GetRequiredService<IOptions<ApnsOptions>>().Value;
+            supportedApnsBundleIds = apnsOptions.GetSupportedBundleIds();
+            failingApnsBundleIds = devicesDbContext.GetApnsBundleIdsForWhichNoConfigurationExists(supportedApnsBundleIds);
+        }
+
+        if (configuration.Value.Infrastructure.PushNotifications.Providers.Fcm is { Enabled: true })
+        {
+            var fcmOptions = serviceProvider.GetRequiredService<IOptions<FcmOptions>>().Value;
+            supportedFcmAppIds = fcmOptions.GetSupportedAppIds();
+            failingFcmAppIds = devicesDbContext.GetFcmAppIdsForWhichNoConfigurationExists(supportedFcmAppIds);
+        }
 
         if (failingFcmAppIds.Count + failingApnsBundleIds.Count > 0)
         {

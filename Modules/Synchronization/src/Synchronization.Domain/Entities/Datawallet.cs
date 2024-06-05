@@ -1,9 +1,10 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 
 namespace Backbone.Modules.Synchronization.Domain.Entities;
 
-public class Datawallet
+public class Datawallet : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private Datawallet()
@@ -15,7 +16,7 @@ public class Datawallet
         Modifications = null!;
     }
 
-    public Datawallet(DatawalletVersion version, IdentityAddress owner) : this()
+    public Datawallet(DatawalletVersion version, IdentityAddress owner)
     {
         Id = DatawalletId.New();
         Version = version;
@@ -37,21 +38,28 @@ public class Datawallet
         Version = targetVersion;
     }
 
-    public DatawalletModification AddModification(DatawalletModificationType type, DatawalletVersion datawalletVersionOfModification, string collection, string objectIdentifier, string? payloadCategory, byte[]? encryptedPayload, DeviceId createdByDevice, string blobReference)
+    public DatawalletModification AddModification(DatawalletModificationType type, DatawalletVersion datawalletVersionOfModification, string collection, string objectIdentifier,
+        string? payloadCategory, byte[]? encryptedPayload, DeviceId createdByDevice, string blobReference)
     {
         if (datawalletVersionOfModification > Version)
             throw new DomainException(DomainErrors.Datawallet.DatawalletVersionOfModificationTooHigh(Version, datawalletVersionOfModification));
 
         var indexOfNewModification = Modifications.Count > 0 ? Modifications.Max(m => m.Index) + 1 : 0;
 
-        var newModification = new DatawalletModification(this, datawalletVersionOfModification, indexOfNewModification, type, collection, objectIdentifier, payloadCategory, encryptedPayload, createdByDevice, blobReference);
+        var newModification = new DatawalletModification(this, datawalletVersionOfModification, indexOfNewModification, type, collection, objectIdentifier, payloadCategory, encryptedPayload,
+            createdByDevice, blobReference);
         Modifications.Add(newModification);
+
+        RaiseDomainEvent(new DatawalletModifiedDomainEvent(Owner, createdByDevice));
+
         return newModification;
     }
 
     public class DatawalletVersion : SimpleValueObject<ushort>
     {
-        public DatawalletVersion(ushort value) : base(value) { }
+        public DatawalletVersion(ushort value) : base(value)
+        {
+        }
 
         public static bool operator <(DatawalletVersion versionA, DatawalletVersion versionB)
         {

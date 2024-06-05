@@ -13,10 +13,12 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
         {
             migrationBuilder.DropColumn(
                 name: "IsExhaustedUntil",
+                schema: "Quotas",
                 table: "TierQuotas");
 
             migrationBuilder.CreateTable(
                 name: "MetricStatus",
+                schema: "Quotas",
                 columns: table => new
                 {
                     MetricKey = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
@@ -29,20 +31,24 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                     table.ForeignKey(
                         name: "FK_MetricStatus_Identities_Owner",
                         column: x => x.Owner,
+                        principalSchema: "Quotas",
                         principalTable: "Identities",
                         principalColumn: "Address",
                         onDelete: ReferentialAction.Cascade);
-                });
+                }
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                schema: "Quotas",
                 name: "MetricStatus");
 
             migrationBuilder.AddColumn<DateTime>(
                 name: "IsExhaustedUntil",
+                schema: "Quotas",
                 table: "TierQuotas",
                 type: "datetime2",
                 nullable: true);

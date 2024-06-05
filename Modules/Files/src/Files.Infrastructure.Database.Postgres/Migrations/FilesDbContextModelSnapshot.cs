@@ -17,6 +17,7 @@ namespace Files.Infrastructure.Database.Postgres.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("Files")
                 .HasAnnotation("ProductVersion", "8.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
@@ -106,7 +107,7 @@ namespace Files.Infrastructure.Database.Postgres.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("FileMetadata", (string)null);
+                    b.ToTable("FileMetadata", "Files");
                 });
 #pragma warning restore 612, 618
         }

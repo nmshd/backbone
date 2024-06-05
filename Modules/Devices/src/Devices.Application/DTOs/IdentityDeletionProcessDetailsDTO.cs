@@ -13,21 +13,29 @@ public class IdentityDeletionProcessDetailsDTO
             .ToList();
         Status = process.Status;
         CreatedAt = process.CreatedAt;
+        ApprovalPeriodEndsAt = process.ApprovalPeriodEndsAt;
+
         ApprovalReminder1SentAt = process.ApprovalReminder1SentAt;
         ApprovalReminder2SentAt = process.ApprovalReminder2SentAt;
         ApprovalReminder3SentAt = process.ApprovalReminder3SentAt;
+
         ApprovedAt = process.ApprovedAt;
         ApprovedByDevice = process.ApprovedByDevice;
+
         GracePeriodEndsAt = process.GracePeriodEndsAt;
+
         GracePeriodReminder1SentAt = process.GracePeriodReminder1SentAt;
         GracePeriodReminder2SentAt = process.GracePeriodReminder2SentAt;
         GracePeriodReminder3SentAt = process.GracePeriodReminder3SentAt;
     }
 
+
     public string Id { get; set; }
     public List<IdentityDeletionProcessAuditLogEntryDTO> AuditLog { get; set; }
     public DeletionProcessStatus Status { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime ApprovalPeriodEndsAt { get; set; }
+
 
     public DateTime? ApprovalReminder1SentAt { get; set; }
     public DateTime? ApprovalReminder2SentAt { get; set; }
@@ -49,14 +57,14 @@ public class IdentityDeletionProcessAuditLogEntryDTO
     {
         Id = entry.Id;
         CreatedAt = entry.CreatedAt;
-        Message = entry.Message;
+        MessageKey = entry.MessageKey;
         OldStatus = entry.OldStatus;
         NewStatus = entry.NewStatus;
     }
 
     public string Id { get; set; }
     public DateTime CreatedAt { get; set; }
-    public string Message { get; set; }
+    public MessageKey MessageKey { get; set; }
     public DeletionProcessStatus? OldStatus { get; set; }
     public DeletionProcessStatus NewStatus { get; set; }
 }

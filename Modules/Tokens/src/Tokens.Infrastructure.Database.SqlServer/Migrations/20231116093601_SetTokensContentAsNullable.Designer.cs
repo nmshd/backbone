@@ -20,6 +20,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
+                .HasDefaultSchema("Tokens")
                 .HasAnnotation("ProductVersion", "7.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
@@ -60,7 +61,7 @@ namespace Backbone.Modules.Tokens.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.ToTable("Tokens");
+                    b.ToTable("Tokens", "Tokens");
                 });
 #pragma warning restore 612, 618
         }
