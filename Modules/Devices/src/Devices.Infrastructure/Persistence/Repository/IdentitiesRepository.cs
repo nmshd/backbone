@@ -9,7 +9,6 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
-using Backbone.Tooling;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -53,6 +52,18 @@ public class IdentitiesRepository : IIdentitiesRepository
     {
         return await _readonlyIdentities
             .AnyAsync(i => i.Address == address, cancellationToken);
+    }
+
+    public async Task<IEnumerable<Identity>> FindAllWithAddresses(IEnumerable<IdentityAddress> addresses, CancellationToken cancellationToken, bool track = false)
+    {
+        var query = (track ? _identities : _readonlyIdentities)
+            .IncludeAll(_dbContext);
+
+        if (addresses.Any())
+            query = query.Where(i => addresses.Contains(i.Address));
+
+        return await query
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
