@@ -14,16 +14,19 @@ debugRun() {
     time $@
 }
 
-{
-  debugRun dockerCompose down;
-#  debugRun dockerCompose build;
-  debugRun dockerCompose up -d --no-build
-} &
-{
-  debugRun dotnet restore "Backbone.sln";
-  debugRun dotnet build --no-restore "Backbone.sln"
-}
-wait
+#{
+#  debugRun dockerCompose down;
+##  debugRun dockerCompose build;
+#  debugRun dockerCompose up -d --no-build
+#} &
+#{
+#  debugRun dotnet restore "Backbone.sln";
+#  debugRun dotnet build --no-restore "Backbone.sln"
+#}
+#wait
+
+debugRun dockerCompose down;
+debugRun dockerCompose up -d --no-build
 
 export CONSUMER_API_BASE_ADDRESS="http://localhost:5000"
 export ADMIN_API_BASE_ADDRESS="http://localhost:5173"
