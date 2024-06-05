@@ -103,7 +103,14 @@ jobs:
           cache-to: type=gha,mode=max
           tags: ${{ matrix.tag }}
           load: true
+          outputs: type=docker,dest=/tmp/${{ matrix.tag }}.tar
           #outputs: type=registry,dest=localhost:6000/consumer-api
+          
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-${{ matrix.tag }}
+          path: /tmp/${{ matrix.tag }}.tar
           
 #      - name: Build Admin Api
 #        uses: docker/build-push-action@v5
@@ -171,12 +178,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          check-latest: true
-          cache: "npm"
-          cache-dependency-path: "**/package-lock.json"
+#      - uses: actions/setup-node@v3
+#        with:
+#          node-version: 20
+#          check-latest: true
+#          cache: "npm"
+#          cache-dependency-path: "**/package-lock.json"
 
       - name: Setup Docker
         uses: docker/setup-buildx-action@v3
@@ -186,8 +193,21 @@ jobs:
         with:
           dotnet-version: 8.x
           
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
+#      - name: Install script dependencies
+#        run: npm install --prefix ./.ci
         
+      - name: Download Docker images
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp
+          pattern: docker-*
+          merge-multiple: true
+          
+      - name: Load Docker images
+        run: |
+          docker load --input /tmp/consumer-api.tar
+          docker load --input /tmp/admin-ui.tar
+          docker load --input /tmp/seed-client.tar
+      
       - name: Run integration tests
         run: ./.ci/integrationTest.postgres.sh
