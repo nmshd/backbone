@@ -2,7 +2,7 @@
 set -e
 
 dockerCompose() {
-    DOCKER_BUILDKIT=1 COMPOSE_DOCKER_CLI_BUILD=1 docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.postgres.yml "$@"
+    docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.postgres.yml "$@"
 }
 
 debugRun() {
@@ -14,19 +14,16 @@ debugRun() {
     time $@
 }
 
-#{
-#  debugRun dockerCompose down;
-##  debugRun dockerCompose build;
-#  debugRun dockerCompose up -d --no-build
-#} &
-#{
-#  debugRun dotnet restore "Backbone.sln";
-#  debugRun dotnet build --no-restore "Backbone.sln"
-#}
-#wait
-
-debugRun dockerCompose down;
-debugRun dockerCompose up -d --no-build
+{
+  debugRun dockerCompose down;
+#  debugRun dockerCompose build;
+  debugRun dockerCompose up -d --no-build
+} &
+{
+  debugRun dotnet restore "Backbone.sln";
+  debugRun dotnet build --no-restore "Backbone.sln"
+}
+wait
 
 export CONSUMER_API_BASE_ADDRESS="http://localhost:5000"
 export ADMIN_API_BASE_ADDRESS="http://localhost:5173"

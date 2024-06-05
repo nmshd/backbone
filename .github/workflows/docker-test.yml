@@ -115,6 +115,7 @@ jobs:
         with:
           name: docker-${{ matrix.tag }}
           path: /tmp/${{ matrix.tag }}.tar
+          retention-days: 1
           
 #      - name: Build Admin Api
 #        uses: docker/build-push-action@v5
@@ -173,47 +174,11 @@ jobs:
       #  run: |
       #    rm -rf /tmp/.buildx-cache
       #    mv /tmp/.buildx-cache-new /tmp/.buildx-cache
-      
-  build-solution:
-    name: Build Solution
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 20
-          check-latest: true
-          cache: "npm"
-          cache-dependency-path: "**/package-lock.json"
-
-      - name: Setup NuGet
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: 8.x
-
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-        
-      - name: Restore Solution
-        run: dotnet restore "Backbone.sln"
-        
-      - name: Build Solution
-        run: dotnet build --no-restore "Backbone.sln"
-        
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with: 
-          name: solution
-          path: ./**/bin/Debug/net8.0/
 
   run-tests:
     name: Run tests
     runs-on: ubuntu-latest
-    needs:
-      - docker-integration-test-postgres
-      - build-solution
+    needs: docker-integration-test-postgres
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -242,12 +207,6 @@ jobs:
           path: /tmp
           pattern: docker-*
           merge-multiple: true
-          
-      - name: Download Built solution
-        uses: actions/download-artifact@v4
-        with:
-          name: solution
-          path: .
       
       - name: Load Docker images
         run: |
