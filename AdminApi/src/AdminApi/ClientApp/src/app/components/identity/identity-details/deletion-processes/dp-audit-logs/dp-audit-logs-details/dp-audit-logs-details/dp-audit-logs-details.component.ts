@@ -1,15 +1,15 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActivatedRoute } from "@angular/router";
-import { DeletionProcess, DeletionProcessAuditLog, IdentityService } from "src/app/services/identity-service/identity.service";
+import { DeletionProcessAuditLog, IdentityService } from "src/app/services/identity-service/identity.service";
 import { HttpResponseEnvelope } from "src/app/utils/http-response-envelope";
 
 @Component({
     selector: "app-dp-audit-logs-details",
     templateUrl: "./dp-audit-logs-details.component.html",
-    styleUrl: "./dp-audit-logs-details.component.css"
+    styleUrls: ["./dp-audit-logs-details.component.css"]
 })
-export class DeletionProcessAuditLogsDetailsComponent {
+export class DeletionProcessAuditLogsDetailsComponent implements OnInit {
     public identityDeletionProcessID: string;
     public identityAddress: string;
 
@@ -20,10 +20,7 @@ export class DeletionProcessAuditLogsDetailsComponent {
     public loading: boolean;
     public deletionProcessesAuditLogTableDisplayedColumns: string[];
 
-    public identityDeletionProcess?: DeletionProcess;
-    public identityDeletionProcessAuditLogs?: DeletionProcessAuditLog[];
-
-    public deletionProcesses?: DeletionProcess;
+    public identityDeletionProcessAuditLogs: DeletionProcessAuditLog[] = [];
 
     public constructor(
         private readonly identityService: IdentityService,
@@ -43,15 +40,16 @@ export class DeletionProcessAuditLogsDetailsComponent {
     public ngOnInit(): void {
         this.activatedRoute.params.subscribe((params) => {
             this.identityAddress = params["address"];
+            this.loadIdentityDeletionProcessAuditLogs();
         });
-        this.loadIdentityDeletionProcessAuditLogs();
     }
 
     private loadIdentityDeletionProcessAuditLogs(): void {
         this.loading = true;
         this.identityService.getDeletionProcessAuditLogsOfIdentity(this.identityAddress.trim()).subscribe({
-            next: (data: HttpResponseEnvelope<DeletionProcess>) => {
-                this.deletionProcesses = data.result;
+            next: (data: HttpResponseEnvelope<DeletionProcessAuditLog[]>) => {
+                this.identityDeletionProcessAuditLogs = data.result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+                this.loading = false;
             },
             error: (err: any) => {
                 const errorMessage = err.error?.error?.message ?? err.message;
@@ -59,6 +57,7 @@ export class DeletionProcessAuditLogsDetailsComponent {
                     verticalPosition: "top",
                     horizontalPosition: "center"
                 });
+                this.loading = false;
             }
         });
     }
