@@ -1,44 +1,78 @@
 using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.Dummy;
+using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Dummy;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 using Microsoft.Extensions.DependencyInjection;
-using DirectPnsCommunicationOptions = Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.DirectPnsCommunicationOptions;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public static class IServiceCollectionExtensions
 {
-    public const string PROVIDER_DIRECT = "Direct";
-    public const string PROVIDER_DUMMY = "Dummy";
-
     public static void AddPushNotifications(this IServiceCollection services, PushNotificationOptions options)
     {
         services.AddSingleton<PushNotificationResourceManager>();
 
         services.AddScoped<IPushNotificationTextProvider, PushNotificationTextProvider>();
 
-        switch (options.Provider)
+        services.AddTransient<PnsConnectorFactory, PnsConnectorFactoryImpl>();
+
+        services.AddTransient<IPushNotificationRegistrationService, PushService>();
+        services.AddTransient<IPushNotificationSender, PushService>();
+
+        if (options.Providers.Fcm is { Enabled: true })
         {
-            case PROVIDER_DUMMY:
-                services.AddDummyPushNotifications();
-                break;
-            case PROVIDER_DIRECT:
-                if (options.DirectPnsCommunication == null)
-                    throw new Exception($"The '{nameof(PushNotificationOptions.DirectPnsCommunication)}' property must be provided when using the provider '${PROVIDER_DIRECT}'.");
-                services.AddDirectPushNotifications(options.DirectPnsCommunication);
-                break;
-            default:
-                throw new Exception($"Push Notification Provider {options.Provider} does not exist.");
+            services.AddFcm();
+            services.AddSingleton<IOptions<FcmOptions>>(
+                new OptionsWrapper<FcmOptions>(options.Providers.Fcm));
         }
+
+        if (options.Providers.Apns is { Enabled: true })
+        {
+            services.AddApns();
+            services.AddSingleton<IOptions<ApnsOptions>>(
+                new OptionsWrapper<ApnsOptions>(options.Providers.Apns));
+        }
+
+        if (options.Providers.Dummy is { Enabled: true })
+            services.AddDummy();
+    }
+
+    private static void AddFcm(this IServiceCollection services)
+    {
+        services.AddSingleton<FirebaseMessagingFactory>();
+        services.AddTransient<FirebaseCloudMessagingConnector>();
+    }
+
+    private static void AddApns(this IServiceCollection services)
+    {
+        services.AddHttpClient();
+        services.AddTransient<ApplePushNotificationServiceConnector>();
+        services.AddTransient<IPushNotificationRegistrationService, PushService>();
+        services.AddTransient<IPushNotificationSender, PushService>();
+        services.AddTransient<IJwtGenerator, JwtGenerator>();
+        services.AddSingleton<ApnsJwtCache>();
+    }
+
+    private static void AddDummy(this IServiceCollection services)
+    {
+        services.AddTransient<DummyConnector>();
     }
 }
 
 public class PushNotificationOptions
 {
     [Required]
-    [RegularExpression(
-        $"{IServiceCollectionExtensions.PROVIDER_DIRECT}|{IServiceCollectionExtensions.PROVIDER_DUMMY}")]
-    public string Provider { get; set; } = null!;
+    public PushNotificationProviders Providers { get; set; } = null!;
 
-    public DirectPnsCommunicationOptions? DirectPnsCommunication { get; set; }
+    public class PushNotificationProviders
+    {
+        public required FcmOptions? Fcm { get; set; } = null!;
+
+        public required ApnsOptions? Apns { get; set; } = null!;
+
+        public required DummyOptions? Dummy { get; set; } = null!;
+    }
 }

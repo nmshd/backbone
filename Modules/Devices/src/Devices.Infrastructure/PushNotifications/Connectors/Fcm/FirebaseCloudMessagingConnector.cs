@@ -3,21 +3,21 @@ using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 using FirebaseAdmin.Messaging;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.FirebaseCloudMessaging;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 
 public class FirebaseCloudMessagingConnector : IPnsConnector
 {
     private readonly FirebaseMessagingFactory _firebaseMessagingFactory;
     private readonly IPushNotificationTextProvider _notificationTextProvider;
     private readonly ILogger<FirebaseCloudMessagingConnector> _logger;
-    private readonly DirectPnsCommunicationOptions.FcmOptions _options;
+    private readonly FcmOptions _options;
 
-    public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory, IOptions<DirectPnsCommunicationOptions.FcmOptions> options,
+    public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory, IOptions<FcmOptions> options,
         IPushNotificationTextProvider notificationTextProvider, ILogger<FirebaseCloudMessagingConnector> logger)
     {
         _firebaseMessagingFactory = firebaseMessagingFactory;

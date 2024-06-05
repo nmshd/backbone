@@ -1,4 +1,4 @@
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.DirectPush.Responses;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 
 public class SendError
 {
