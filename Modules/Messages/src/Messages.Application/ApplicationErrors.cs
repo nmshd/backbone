@@ -4,6 +4,13 @@ namespace Backbone.Modules.Messages.Application;
 
 public static class ApplicationErrors
 {
+    public static ApplicationError RecipientsToBeDeleted(IEnumerable<string> peersToBeDeleted)
+    {
+        return new ApplicationError("error.platform.validation.message.recipientToBeDeleted",
+            $"Cannot send message to {peersToBeDeleted.Count()} of the recipients because their identity is set to be deleted.",
+            peersToBeDeleted);
+    }
+
     public static ApplicationError NoRelationshipToRecipientExists(string recipient = "")
     {
         var recipientText = string.IsNullOrEmpty(recipient) ? "one of the recipients" : recipient;

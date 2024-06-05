@@ -3,6 +3,8 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Messages.Application;
 using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using Backbone.Modules.Messages.Application.Messages.DTOs;
@@ -60,6 +62,12 @@ public class MessagesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SendMessage(SendMessageCommand request, CancellationToken cancellationToken)
     {
+        var recipientAddresses = request.Recipients.Select(r => r.Address);
+        var recipientIdentities = await _mediator.Send(new ListIdentitiesQuery(recipientAddresses), cancellationToken);
+        var identitiesToBeDeleted = recipientIdentities.Where(i => i.Status == IdentityStatus.ToBeDeleted).ToList();
+        if (identitiesToBeDeleted.Any())
+            throw new ApplicationException(ApplicationErrors.RecipientsToBeDeleted(identitiesToBeDeleted.Select(i => i.Address)));
+
         var response = await _mediator.Send(request, cancellationToken);
         return CreatedAtAction(nameof(GetMessage), new { id = response.Id }, response);
     }
