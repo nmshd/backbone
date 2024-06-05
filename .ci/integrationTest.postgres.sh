@@ -17,7 +17,7 @@ debugRun() {
 {
   debugRun dockerCompose down;
 #  debugRun dockerCompose build;
-  debugRun dockerCompose up -d
+  debugRun dockerCompose up -d --no-build
 } &
 {
   debugRun dotnet restore "Backbone.sln";

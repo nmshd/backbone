@@ -60,9 +60,10 @@ services:
 
   event-handler-service:
     container_name: event-handler-service-test
-    build:
-      context: ..
-      dockerfile: EventHandlerService/src/EventHandlerService/Dockerfile
+    image: event-handler-service
+#    build:
+#      context: ..
+#      dockerfile: EventHandlerService/src/EventHandlerService/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
@@ -76,9 +77,10 @@ services:
 
   database-migrator:
     container_name: database-migrator-test
-    build:
-      context: ..
-      dockerfile: DatabaseMigrator/Dockerfile
+    image: database-migrator
+#    build:
+#      context: ..
+#      dockerfile: DatabaseMigrator/Dockerfile
     depends_on:
       seed-database:
         condition: service_completed_successfully
