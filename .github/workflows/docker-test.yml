@@ -11,6 +11,16 @@ jobs:
   docker-integration-test-postgres:
     name: Run Cached Integration Tests (on Postgres)
     runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        include:
+          - dockerfile: ConsumerApi/Dockerfile
+            tag: consumer-api
+          - dockerfile: AdminApi/src/AdminApi/Dockerfile
+            tag: admin-ui
+          - dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
+            tag: seed-client
+    
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -84,14 +94,14 @@ jobs:
 #      - name: Run local registry
 #        run: docker run -d -p 6000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:6000
       
-      - name: Build Consumer Api
+      - name: Build Containers
         uses: docker/build-push-action@v5
         with: 
           context: .
-          file: ConsumerApi/Dockerfile
+          file: ${{ matrix.dockerfile }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          tags: consumer-api
+          tags: ${{ matrix.tag }}
           load: true
           #outputs: type=registry,dest=localhost:6000/consumer-api
           
