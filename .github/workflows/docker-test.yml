@@ -206,7 +206,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with: 
           name: solution
-          path: ./
+          path: ./**/bin/Debug/net8.0/
 
   run-tests:
     name: Run tests
