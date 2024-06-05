@@ -21,6 +21,11 @@ public class FindByAddressStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
+    public Task<IEnumerable<Identity>> FindAllWithAddresses(IEnumerable<IdentityAddress> addresses, CancellationToken cancellationToken, bool track = false)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
@@ -32,16 +37,6 @@ public class FindByAddressStubRepository : IIdentitiesRepository
     }
 
     public Task AddUser(ApplicationUser user, string password)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<Identity>> FindAllWithDeletionProcessWaitingForApproval(CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
     }

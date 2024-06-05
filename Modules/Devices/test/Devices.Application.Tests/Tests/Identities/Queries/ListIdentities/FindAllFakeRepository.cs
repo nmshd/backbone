@@ -7,11 +7,11 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
 
-public class FindAllStubRepository : IIdentitiesRepository
+public class FindAllFakeRepository : IIdentitiesRepository
 {
-    private readonly DbPaginationResult<Identity> _identities;
+    private readonly IEnumerable<Identity> _identities;
 
-    public FindAllStubRepository(DbPaginationResult<Identity> identities)
+    public FindAllFakeRepository(IEnumerable<Identity> identities)
     {
         _identities = identities;
     }
@@ -19,6 +19,15 @@ public class FindAllStubRepository : IIdentitiesRepository
     public Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<Identity>> FindAllWithAddresses(IEnumerable<IdentityAddress> addresses, CancellationToken cancellationToken, bool track = false)
+    {
+        var result = _identities;
+        if (addresses.Any())
+            result = result.Where(i => addresses.Contains(i.Address));
+
+        return Task.FromResult(result);
     }
 
     public Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
@@ -34,11 +43,6 @@ public class FindAllStubRepository : IIdentitiesRepository
     public Task AddUser(ApplicationUser user, string password)
     {
         throw new NotImplementedException();
-    }
-
-    public Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
-    {
-        return Task.FromResult(_identities);
     }
 
     public Task<IEnumerable<Identity>> FindAllWithDeletionProcessWaitingForApproval(CancellationToken cancellationToken, bool track = false)
