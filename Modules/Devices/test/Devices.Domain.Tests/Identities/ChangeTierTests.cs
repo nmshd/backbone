@@ -1,4 +1,5 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -29,9 +30,51 @@ public class ChangeTierTests : AbstractTestsBase
         domainEvent.NewTierId.Should().Be(identity.TierId);
     }
 
-    private static Identity CreateIdentity()
+    [Fact]
+    public void Changing_the_tier_from_QueuedForDeletion_throws_DomainException()
     {
+        // Arrange
+        var identity = CreateIdentity(Tier.QUEUED_FOR_DELETION.Id);
+
+        // Act
+        var acting = () => identity.ChangeTier(TierId.Generate());
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Message.Should().Be(DomainErrors.CannotChangeTierQueuedForDeletion().Message);
+    }
+
+    [Fact]
+    public void Changing_the_tier_to_QueuedForDeletion_throws_DomainException()
+    {
+        // Arrange
+        var identity = CreateIdentity();
+
+        // Act
+        var acting = () => identity.ChangeTier(Tier.QUEUED_FOR_DELETION.Id);
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Message.Should().Be(DomainErrors.CannotChangeTierQueuedForDeletion().Message);
+    }
+
+    [Fact]
+    public void Changing_the_tier_to_the_same_tier_throws_DomainException()
+    {
+        // Arrange
+        var tierId = TierId.Generate();
+        var identity = CreateIdentity(tierId);
+
+        // Act
+        var acting = () => identity.ChangeTier(tierId);
+
+        // Assert
+        acting.Should().Throw<DomainException>().Which.Message.Should().Contain("cannot be the same");
+    }
+
+    private static Identity CreateIdentity(TierId? tierId = null)
+    {
+        tierId ??= TierId.Generate();
+
         var address = IdentityAddress.Create([], "id1");
-        return new Identity("", address, [], TierId.Generate(), 1);
+        return new Identity("", address, [], tierId, 1);
     }
 }
