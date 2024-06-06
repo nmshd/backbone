@@ -7,4 +7,5 @@ public class ApiError
     public required string Message { get; set; }
     public required string Docs { get; set; }
     public required DateTime Time { get; set; }
+    public dynamic? Data { get; set; }
 }
