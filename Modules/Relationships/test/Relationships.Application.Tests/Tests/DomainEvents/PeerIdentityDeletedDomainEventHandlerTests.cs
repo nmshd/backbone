@@ -13,7 +13,7 @@ namespace Backbone.Modules.Relationships.Application.Tests.Tests.DomainEvents;
 public class PeerIdentityDeletedDomainEventHandlerTests : AbstractTestsBase
 {
     [Fact]
-    public static async void Publishes_PeerFromRelationshipDeleted_DomainEvent()
+    public static async void Publishes_PeerFromRelationshipDeletedDomainEvent()
     {
         // Arrange
         var identity = TestDataGenerator.CreateRandomIdentityAddress();
