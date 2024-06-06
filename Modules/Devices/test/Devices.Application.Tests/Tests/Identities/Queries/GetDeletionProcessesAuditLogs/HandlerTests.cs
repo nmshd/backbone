@@ -2,7 +2,6 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAuditLogs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetIdentity;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
@@ -22,14 +21,15 @@ public class HandlerTests : AbstractTestsBase
         var deletionProcess = identity.StartDeletionProcessAsSupport();
         identity.ApproveDeletionProcess(deletionProcess.Id, identity.Devices.ElementAt(0).Id);
         identity.CancelDeletionProcessAsSupport(deletionProcess.Id);
+        var identityDeletionProcessAuditLogs = identity.DeletionProcesses.SelectMany(identityDeletionProcess => identityDeletionProcess.AuditLog).ToList();
 
-        var handler = CreateHandler(new FindByAddressStubRepository(identity));
+        var handler = CreateHandler(new FindDeletionProcessAuditLogsByAddressStubRepository(identity, identityDeletionProcessAuditLogs));
 
         // Act
         var result = await handler.Handle(new GetDeletionProcessesAuditLogsQuery(identity.Address), CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(3);
+        result.Should().HaveCount(identityDeletionProcessAuditLogs.Count);
     }
 
     [Fact]
@@ -44,14 +44,15 @@ public class HandlerTests : AbstractTestsBase
         var deletionProcess2 = identity.StartDeletionProcessAsSupport();
         identity.ApproveDeletionProcess(deletionProcess2.Id, identity.Devices.ElementAt(0).Id);
         identity.CancelDeletionProcessAsSupport(deletionProcess2.Id);
+        var identityDeletionProcessAuditLogs = identity.DeletionProcesses.SelectMany(identityDeletionProcess => identityDeletionProcess.AuditLog).ToList();
 
-        var handler = CreateHandler(new FindByAddressStubRepository(identity));
+        var handler = CreateHandler(new FindDeletionProcessAuditLogsByAddressStubRepository(identity, identityDeletionProcessAuditLogs));
 
         // Act
         var result = await handler.Handle(new GetDeletionProcessesAuditLogsQuery(identity.Address), CancellationToken.None);
 
         // Assert
-        result.ToList().Count.Should().Be(6);
+        result.ToList().Count.Should().Be(identityDeletionProcessAuditLogs.Count);
     }
 
     [Fact]

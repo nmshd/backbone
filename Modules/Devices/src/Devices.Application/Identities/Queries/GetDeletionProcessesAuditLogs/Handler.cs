@@ -16,7 +16,8 @@ public class Handler : IRequestHandler<GetDeletionProcessesAuditLogsQuery, GetDe
 
     public async Task<GetDeletionProcessesAuditLogsResponse> Handle(GetDeletionProcessesAuditLogsQuery request, CancellationToken cancellationToken)
     {
-        var identity = await _identityRepository.FindByAddress(request.IdentityAddress, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
-        return new GetDeletionProcessesAuditLogsResponse(identity.DeletionProcesses.SelectMany(d => d.AuditLog));
+        _ = await _identityRepository.FindByAddress(request.IdentityAddress, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
+        var identityDeletionProcessAuditLogEntries = await _identityRepository.GetIdentityDeletionProcessAuditLogsByAddress(request.IdentityAddress, cancellationToken);
+        return new GetDeletionProcessesAuditLogsResponse(identityDeletionProcessAuditLogEntries);
     }
 }

@@ -38,6 +38,8 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         _serviceProvider = serviceProvider;
     }
 
+    public DbSet<IdentityDeletionProcessAuditLogEntry> IdentityDeletionProcessAuditLogs { get; set; } = null!;
+
     public DbSet<Identity> Identities { get; set; } = null!;
 
     public DbSet<Device> Devices { get; set; } = null!;

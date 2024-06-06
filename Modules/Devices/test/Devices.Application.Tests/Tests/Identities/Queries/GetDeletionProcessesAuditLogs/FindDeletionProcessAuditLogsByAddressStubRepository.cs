@@ -1,19 +1,21 @@
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetDeletionProcessesAuditLogs;
 
-public class FindAllStubRepository : IIdentitiesRepository
+public class FindDeletionProcessAuditLogsByAddressStubRepository : IIdentitiesRepository
 {
-    private readonly DbPaginationResult<Identity> _identities;
+    private readonly Identity _identity;
+    private readonly IEnumerable<IdentityDeletionProcessAuditLogEntry> _identityDeletionProcessAuditLogs;
 
-    public FindAllStubRepository(DbPaginationResult<Identity> identities)
+    public FindDeletionProcessAuditLogsByAddressStubRepository(Identity identity, IEnumerable<IdentityDeletionProcessAuditLogEntry> identityDeletionProcessAuditLogs)
     {
-        _identities = identities;
+        _identity = identity;
+        _identityDeletionProcessAuditLogs = identityDeletionProcessAuditLogs;
     }
 
     public Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken)
@@ -38,7 +40,7 @@ public class FindAllStubRepository : IIdentitiesRepository
 
     public Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
-        return Task.FromResult(_identities);
+        throw new NotImplementedException();
     }
 
     public Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
@@ -58,7 +60,7 @@ public class FindAllStubRepository : IIdentitiesRepository
 
     public Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(IdentityAddress address, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(_identityDeletionProcessAuditLogs);
     }
 
     public Task Update(Identity identity, CancellationToken cancellationToken)
@@ -68,7 +70,7 @@ public class FindAllStubRepository : IIdentitiesRepository
 
     public Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
-        throw new NotImplementedException();
+        return Task.FromResult((Identity?)_identity);
     }
 
     public Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
@@ -81,3 +83,4 @@ public class FindAllStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 }
+
