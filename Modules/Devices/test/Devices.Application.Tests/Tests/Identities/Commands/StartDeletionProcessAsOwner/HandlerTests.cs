@@ -6,6 +6,8 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
@@ -34,7 +36,7 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(activeIdentity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockPushNotificationSender);
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, pushNotificationSender: mockPushNotificationSender);
 
         // Act
         var command = new StartDeletionProcessAsOwnerCommand();
@@ -82,8 +84,68 @@ public class HandlerTests : AbstractTestsBase
         acting.Should().AwaitThrowAsync<NotFoundException, StartDeletionProcessAsOwnerResponse>().Which.Message.Should().Contain("Identity");
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender? pushNotificationSender = null)
+    [Fact]
+    public async Task Publishes_TierOfIdentityChangedDomainEvent()
     {
-        return new Handler(identitiesRepository, userContext, A.Dummy<IEventBus>(), pushNotificationSender ?? A.Dummy<IPushNotificationSender>());
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        var activeDevice = identity.Devices[0];
+        var oldTierId = identity.TierId;
+
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var fakeUserContext = A.Fake<IUserContext>();
+        var mockEventBus = A.Fake<IEventBus>();
+
+        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._))
+            .Returns(identity);
+        A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(identity.Address);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
+
+        var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext, mockEventBus);
+
+        // Act
+        var command = new StartDeletionProcessAsOwnerCommand();
+        await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => mockEventBus.Publish(A<TierOfIdentityChangedDomainEvent>.That.Matches(i =>
+                i.IdentityAddress == identity.Address &&
+                i.OldTierId == oldTierId &&
+                i.NewTierId == Tier.QUEUED_FOR_DELETION.Id)))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task Publishes_PeerIdentityToBeDeletedDomainEvent()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        var activeDevice = identity.Devices[0];
+        var oldTierId = identity.TierId;
+
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var fakeUserContext = A.Fake<IUserContext>();
+        var mockEventBus = A.Fake<IEventBus>();
+
+        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._))
+            .Returns(identity);
+        A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(identity.Address);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
+
+        var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext, mockEventBus);
+
+        // Act
+        var command = new StartDeletionProcessAsOwnerCommand();
+        await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => mockEventBus.Publish(A<PeerIdentityToBeDeletedDomainEvent>.That.Matches(i =>
+                i.IdentityAddress == identity.Address)))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus? eventBus = null, IPushNotificationSender? pushNotificationSender = null)
+    {
+        return new Handler(identitiesRepository, userContext, eventBus ?? A.Dummy<IEventBus>(), pushNotificationSender ?? A.Dummy<IPushNotificationSender>());
     }
 }

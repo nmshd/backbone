@@ -34,6 +34,7 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
         var newTierId = identity.TierId;
 
         _eventBus.Publish(new TierOfIdentityChangedDomainEvent(identity, oldTierId, newTierId));
+        _eventBus.Publish(new PeerIdentityToBeDeletedDomainEvent(identity.Address));
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
