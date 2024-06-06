@@ -129,7 +129,6 @@ public class IdentitiesController : ApiControllerBase
 
     [HttpGet("{identityAddress}/DeletionProcesses/AuditLogs")]
     [ProducesResponseType(typeof(GetDeletionProcessesAuditLogsResponse), StatusCodes.Status200OK)]
-    [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetDeletionProcessesAuditLogs([FromRoute] string identityAddress, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetDeletionProcessesAuditLogsQuery(identityAddress), cancellationToken);
