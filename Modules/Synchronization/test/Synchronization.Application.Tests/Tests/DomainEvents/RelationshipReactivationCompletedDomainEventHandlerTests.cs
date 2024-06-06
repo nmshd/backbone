@@ -19,12 +19,12 @@ public class RelationshipReactivationCompletedDomainEventHandlerTests : Abstract
     {
         // Arrange
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var relationshipReactivationCompletedIntegrationEvent = new RelationshipReactivationCompletedDomainEvent("someRelationshipId", identityAddress);
+        var relationshipReactivationCompletedDomainEvent = new RelationshipReactivationCompletedDomainEvent("someRelationshipId", identityAddress);
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
         var externalEvent = new ExternalEvent(ExternalEventType.RelationshipReactivationCompleted, IdentityAddress.Parse(identityAddress), 1,
-            new { relationshipReactivationCompletedIntegrationEvent.RelationshipId });
+            new { relationshipReactivationCompletedDomainEvent.RelationshipId });
 
         A.CallTo(() => mockDbContext.CreateExternalEvent(
             identityAddress,
@@ -37,7 +37,7 @@ public class RelationshipReactivationCompletedDomainEventHandlerTests : Abstract
             A.Fake<ILogger<RelationshipReactivationCompletedDomainEventHandler>>());
 
         // Act
-        await handler.Handle(relationshipReactivationCompletedIntegrationEvent);
+        await handler.Handle(relationshipReactivationCompletedDomainEvent);
 
         // Assert
         A.CallTo(() => mockDbContext.CreateExternalEvent(identityAddress, ExternalEventType.RelationshipReactivationCompleted, A<object>._))
@@ -49,13 +49,13 @@ public class RelationshipReactivationCompletedDomainEventHandlerTests : Abstract
     {
         // Arrange
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var relationshipReactivationCompletedIntegrationEvent = new RelationshipReactivationCompletedDomainEvent("someRelationshipId", identityAddress);
+        var relationshipReactivationCompletedDomainEvent = new RelationshipReactivationCompletedDomainEvent("someRelationshipId", identityAddress);
 
         var fakeDbContext = A.Fake<ISynchronizationDbContext>();
         var mockEventBus = A.Fake<IEventBus>();
 
         var externalEvent = new ExternalEvent(ExternalEventType.RelationshipReactivationCompleted, IdentityAddress.Parse(identityAddress), 1,
-            new { relationshipReactivationCompletedIntegrationEvent.RelationshipId });
+            new { relationshipReactivationCompletedDomainEvent.RelationshipId });
 
         A.CallTo(() => fakeDbContext.CreateExternalEvent(
             identityAddress,
@@ -68,7 +68,7 @@ public class RelationshipReactivationCompletedDomainEventHandlerTests : Abstract
             A.Fake<ILogger<RelationshipReactivationCompletedDomainEventHandler>>());
 
         // Act
-        await handler.Handle(relationshipReactivationCompletedIntegrationEvent);
+        await handler.Handle(relationshipReactivationCompletedDomainEvent);
 
         // Assert
         A.CallTo(() => mockEventBus.Publish(

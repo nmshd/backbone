@@ -19,12 +19,12 @@ public class RelationshipDecomposedDomainEventHandlerTests : AbstractTestsBase
     {
         // Arrange
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var relationshipReactivationCompletedIntegrationEvent = new RelationshipDecomposedDomainEvent("someRelationshipId", identityAddress);
+        var relationshipReactivationCompletedDomainEvent = new RelationshipDecomposedDomainEvent("someRelationshipId", identityAddress);
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
         var externalEvent = new ExternalEvent(ExternalEventType.RelationshipDecomposedByPeer, IdentityAddress.Parse(identityAddress), 1,
-            new { relationshipReactivationCompletedIntegrationEvent.RelationshipId });
+            new { relationshipReactivationCompletedDomainEvent.RelationshipId });
 
         A.CallTo(() => mockDbContext.CreateExternalEvent(
             identityAddress,
@@ -37,7 +37,7 @@ public class RelationshipDecomposedDomainEventHandlerTests : AbstractTestsBase
             A.Fake<ILogger<RelationshipDecomposedDomainEventHandler>>());
 
         // Act
-        await handler.Handle(relationshipReactivationCompletedIntegrationEvent);
+        await handler.Handle(relationshipReactivationCompletedDomainEvent);
 
         // Assert
         A.CallTo(() => mockDbContext.CreateExternalEvent(identityAddress, ExternalEventType.RelationshipDecomposedByPeer, A<object>._))
@@ -49,13 +49,13 @@ public class RelationshipDecomposedDomainEventHandlerTests : AbstractTestsBase
     {
         // Arrange
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var relationshipReactivationCompletedIntegrationEvent = new RelationshipDecomposedDomainEvent("someRelationshipId", identityAddress);
+        var relationshipReactivationCompletedDomainEvent = new RelationshipDecomposedDomainEvent("someRelationshipId", identityAddress);
 
         var fakeDbContext = A.Fake<ISynchronizationDbContext>();
         var mockEventBus = A.Fake<IEventBus>();
 
         var externalEvent = new ExternalEvent(ExternalEventType.RelationshipDecomposedByPeer, IdentityAddress.Parse(identityAddress), 1,
-            new { relationshipReactivationCompletedIntegrationEvent.RelationshipId });
+            new { relationshipReactivationCompletedDomainEvent.RelationshipId });
 
         A.CallTo(() => fakeDbContext.CreateExternalEvent(
             identityAddress,
@@ -68,7 +68,7 @@ public class RelationshipDecomposedDomainEventHandlerTests : AbstractTestsBase
             A.Fake<ILogger<RelationshipDecomposedDomainEventHandler>>());
 
         // Act
-        await handler.Handle(relationshipReactivationCompletedIntegrationEvent);
+        await handler.Handle(relationshipReactivationCompletedDomainEvent);
 
         // Assert
         A.CallTo(() => mockEventBus.Publish(
