@@ -1,6 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAuditLogs;
@@ -16,7 +14,6 @@ public class Handler : IRequestHandler<GetDeletionProcessesAuditLogsQuery, GetDe
 
     public async Task<GetDeletionProcessesAuditLogsResponse> Handle(GetDeletionProcessesAuditLogsQuery request, CancellationToken cancellationToken)
     {
-        _ = await _identityRepository.FindByAddress(request.IdentityAddress, cancellationToken) ?? throw new NotFoundException(nameof(Identity));
         var identityDeletionProcessAuditLogEntries = await _identityRepository.GetIdentityDeletionProcessAuditLogsByAddress(request.IdentityAddress, cancellationToken);
         return new GetDeletionProcessesAuditLogsResponse(identityDeletionProcessAuditLogEntries);
     }

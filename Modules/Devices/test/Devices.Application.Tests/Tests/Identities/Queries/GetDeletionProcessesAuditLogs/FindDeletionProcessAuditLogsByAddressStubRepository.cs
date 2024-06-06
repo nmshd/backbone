@@ -9,12 +9,10 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.Ge
 
 public class FindDeletionProcessAuditLogsByAddressStubRepository : IIdentitiesRepository
 {
-    private readonly Identity _identity;
     private readonly IEnumerable<IdentityDeletionProcessAuditLogEntry> _identityDeletionProcessAuditLogs;
 
-    public FindDeletionProcessAuditLogsByAddressStubRepository(Identity identity, IEnumerable<IdentityDeletionProcessAuditLogEntry> identityDeletionProcessAuditLogs)
+    public FindDeletionProcessAuditLogsByAddressStubRepository(IEnumerable<IdentityDeletionProcessAuditLogEntry> identityDeletionProcessAuditLogs)
     {
-        _identity = identity;
         _identityDeletionProcessAuditLogs = identityDeletionProcessAuditLogs;
     }
 
@@ -70,7 +68,7 @@ public class FindDeletionProcessAuditLogsByAddressStubRepository : IIdentitiesRe
 
     public Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
-        return Task.FromResult((Identity?)_identity);
+        throw new NotImplementedException();
     }
 
     public Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
