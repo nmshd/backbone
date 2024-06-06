@@ -13,7 +13,7 @@ public interface IIdentitiesRepository
     Task Update(Identity identity, CancellationToken cancellationToken);
     Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false);
     Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken);
-    Task<IEnumerable<Identity>> FindAllWithAddresses(IEnumerable<IdentityAddress> addresses, CancellationToken cancellationToken, bool track = false);
+    Task<IEnumerable<Identity>> FindAllWithAddresses(CancellationToken cancellationToken, IEnumerable<IdentityAddress>? addresses = null, IdentityStatus? requestStatus = null, bool track = false);
     Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false);
     Task<int> CountByClientId(string clientId, CancellationToken cancellationToken);
     Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false);

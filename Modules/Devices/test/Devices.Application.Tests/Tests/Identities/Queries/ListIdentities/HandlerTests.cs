@@ -1,4 +1,3 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.BaseClasses;
@@ -15,17 +14,17 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         var identitiesList = new List<Identity>();
-        var handler = CreateHandler(new FindAllFakeRepository(identitiesList));
+        var handler = CreateHandler(new FindAllStubRepository(identitiesList));
 
         // Act
-        var result = await handler.Handle(new ListIdentitiesQuery(new List<IdentityAddress>()), CancellationToken.None);
+        var result = await handler.Handle(new ListIdentitiesQuery(), CancellationToken.None);
 
         // Assert
         result.Should().HaveCount(identitiesList.Count);
     }
 
     [Fact]
-    public async Task Returns_a_list_of_all_identities_when_addresses_list_is_empty()
+    public async Task? Returns_a_list_of_all_existing_identities()
     {
         // Arrange
         List<Identity> identitiesList =
@@ -42,43 +41,13 @@ public class HandlerTests : AbstractTestsBase
                 TestDataGenerator.CreateRandomTierId(),
                 1)
         ];
-        var handler = CreateHandler(new FindAllFakeRepository(identitiesList));
+        var handler = CreateHandler(new FindAllStubRepository(identitiesList));
 
         // Act
-        var result = await handler.Handle(new ListIdentitiesQuery(new List<IdentityAddress>()), CancellationToken.None);
+        var result = await handler.Handle(new ListIdentitiesQuery(), CancellationToken.None);
 
         // Assert
         result.Should().HaveCount(identitiesList.Count);
-    }
-
-
-    [Fact]
-    public async Task Returns_a_list_of_identities_with_matching_address_from_addresses_list_when_not_empty()
-    {
-        // Arrange
-        var firstIdentityAddress = CreateRandomIdentityAddress();
-        List<Identity> identitiesList =
-        [
-            new Identity(CreateRandomDeviceId(),
-                firstIdentityAddress,
-                CreateRandomBytes(),
-                TestDataGenerator.CreateRandomTierId(),
-                1),
-
-            new Identity(CreateRandomDeviceId(),
-                CreateRandomIdentityAddress(),
-                CreateRandomBytes(),
-                TestDataGenerator.CreateRandomTierId(),
-                1)
-        ];
-        var addresses = new List<IdentityAddress> { firstIdentityAddress };
-        var handler = CreateHandler(new FindAllFakeRepository(identitiesList));
-
-        // Act
-        var result = await handler.Handle(new ListIdentitiesQuery(addresses), CancellationToken.None);
-
-        // Assert
-        result.Should().HaveCount(addresses.Count);
     }
 
     [Fact]
@@ -90,10 +59,10 @@ public class HandlerTests : AbstractTestsBase
         var expectedTierId = TestDataGenerator.CreateRandomTierId();
         List<Identity> identitiesList = [new Identity(expectedClientId, expectedAddress, [], expectedTierId, 1)];
 
-        var handler = CreateHandler(new FindAllFakeRepository(identitiesList));
+        var handler = CreateHandler(new FindAllStubRepository(identitiesList));
 
         // Act
-        var result = await handler.Handle(new ListIdentitiesQuery(new List<IdentityAddress>()), CancellationToken.None);
+        var result = await handler.Handle(new ListIdentitiesQuery(), CancellationToken.None);
 
         // Assert
         result.Should().HaveCount(1);
@@ -105,8 +74,8 @@ public class HandlerTests : AbstractTestsBase
         result.First().IdentityVersion.Should().Be(1);
     }
 
-    private Handler CreateHandler(FindAllFakeRepository findAllFakeRepository)
+    private Handler CreateHandler(FindAllStubRepository findAllStubRepository)
     {
-        return new Handler(findAllFakeRepository);
+        return new Handler(findAllStubRepository);
     }
 }

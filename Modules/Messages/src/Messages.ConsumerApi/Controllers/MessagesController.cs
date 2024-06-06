@@ -63,8 +63,7 @@ public class MessagesController : ApiControllerBase
     public async Task<IActionResult> SendMessage(SendMessageCommand request, CancellationToken cancellationToken)
     {
         var recipientAddresses = request.Recipients.Select(r => r.Address);
-        var recipientIdentities = await _mediator.Send(new ListIdentitiesQuery(recipientAddresses), cancellationToken);
-        var identitiesToBeDeleted = recipientIdentities.Where(i => i.Status == IdentityStatus.ToBeDeleted).ToList();
+        var identitiesToBeDeleted = await _mediator.Send(new ListIdentitiesQuery(recipientAddresses, IdentityStatus.ToBeDeleted), cancellationToken);
         if (identitiesToBeDeleted.Any())
             throw new ApplicationException(ApplicationErrors.RecipientsToBeDeleted(identitiesToBeDeleted.Select(i => i.Address)));
 

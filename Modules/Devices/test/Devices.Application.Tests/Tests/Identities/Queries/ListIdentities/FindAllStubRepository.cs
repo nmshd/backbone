@@ -7,11 +7,11 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
 
-public class FindAllFakeRepository : IIdentitiesRepository
+public class FindAllStubRepository : IIdentitiesRepository
 {
     private readonly IEnumerable<Identity> _identities;
 
-    public FindAllFakeRepository(IEnumerable<Identity> identities)
+    public FindAllStubRepository(IEnumerable<Identity> identities)
     {
         _identities = identities;
     }
@@ -21,13 +21,9 @@ public class FindAllFakeRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Identity>> FindAllWithAddresses(IEnumerable<IdentityAddress> addresses, CancellationToken cancellationToken, bool track = false)
+    public Task<IEnumerable<Identity>> FindAllWithAddresses(CancellationToken cancellationToken, IEnumerable<IdentityAddress>? addresses, IdentityStatus? requestStatus, bool track = false)
     {
-        var result = _identities;
-        if (addresses.Any())
-            result = result.Where(i => addresses.Contains(i.Address));
-
-        return Task.FromResult(result);
+        return Task.FromResult(_identities);
     }
 
     public Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)

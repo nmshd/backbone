@@ -21,7 +21,7 @@ public class FindByAddressStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Identity>> FindAllWithAddresses(IEnumerable<IdentityAddress> addresses, CancellationToken cancellationToken, bool track = false)
+    public Task<IEnumerable<Identity>> FindAllWithAddresses(CancellationToken cancellationToken, IEnumerable<IdentityAddress>? addresses, IdentityStatus? requestStatus, bool track = false)
     {
         throw new NotImplementedException();
     }

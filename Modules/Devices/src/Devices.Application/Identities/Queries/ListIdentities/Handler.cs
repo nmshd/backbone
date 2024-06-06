@@ -15,7 +15,7 @@ public class Handler : IRequestHandler<ListIdentitiesQuery, ListIdentitiesRespon
 
     public async Task<ListIdentitiesResponse> Handle(ListIdentitiesQuery request, CancellationToken cancellationToken)
     {
-        var identities = await _identitiesRepository.FindAllWithAddresses(request.Addresses, cancellationToken);
+        var identities = await _identitiesRepository.FindAllWithAddresses(cancellationToken, request.Addresses, request.Status);
         var identityDtos = identities.Select(el => new IdentitySummaryDTO(el)).ToList();
 
         return new ListIdentitiesResponse(identityDtos);
