@@ -33,17 +33,27 @@ public class GenerateCommand : Command
 
     private static async Task GenerationPreprocessor(string baseAddress, string clientId, string clientSecret, string poolsFilePath)
     {
-        var pools = await ReadPools(poolsFilePath);
-        var generator = new PoolsGenerator.PoolsGenerator(baseAddress, clientId, clientSecret, pools);
+        var poolsConfiguration = await ReadPools(poolsFilePath);
+        var generator = new PoolsGenerator.PoolsGenerator(baseAddress, clientId, clientSecret, poolsConfiguration);
         await generator.CreatePools();
     }
 
 
-    private static async Task<PoolEntry[]> ReadPools(string poolsFilePath)
+    private static async Task<PoolFileRoot> ReadPools(string poolsFilePath)
     {
         var poolsFile = await File.ReadAllBytesAsync(poolsFilePath);
-        var pools = JsonSerializer.Deserialize<PoolEntry[]>(poolsFile, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        return pools ?? throw new Exception($"Could not read {poolsFilePath}.");
+
+        var poolsConfiguration = JsonSerializer.Deserialize<PoolFileRoot>(poolsFile, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        var n = new PoolFileRoot
+        {
+            Configuration = new() { MessagesSentByConnectorRatio = 0.5m },
+            Pools = [
+                new PoolEntry()
+            ]
+        };
+
+        var json = JsonSerializer.Serialize(n);
+        return poolsConfiguration ?? throw new Exception($"Could not read {poolsFilePath}.");
     }
 }
 

@@ -1,4 +1,6 @@
-﻿namespace Backbone.Identity.Pool.Creator.PoolsFile;
+﻿using System.Text.Json.Serialization;
+
+namespace Backbone.Identity.Pool.Creator.PoolsFile;
 public record PoolEntry
 {
     public string Type { get; set; }
@@ -11,10 +13,23 @@ public record PoolEntry
     public uint Amount { get; set; }
     public uint NumberOfRelationshipTemplates { get; set; }
     public uint NumberOfRelationships { get; set; }
-    public uint NumberOfSentMessages { get; set; }
+    public uint TotalNumberOfMessages { get; set; }
     public uint NumberOfDatawalletModifications { get; set; }
     public uint NumberOfDevices { get; set; }
     public uint NumberOfChallenges { get; set; }
 
-    public List<Identity> identities = [];
+    [JsonIgnore]
+    public List<Identity> Identities = [];
+
+    [JsonIgnore] public uint NumberOfSentMessages;
+
+    [JsonIgnore] public uint NumberOfReceivedMessages;
+
+    [JsonIgnore]
+    private const string CONNECTOR_TYPE = "Connector";
+
+    [JsonIgnore]
+    private const string APP_TYPE = "App";
+    public bool IsConnector() => Type == CONNECTOR_TYPE;
+    public bool IsApp() => Type == APP_TYPE;
 }
