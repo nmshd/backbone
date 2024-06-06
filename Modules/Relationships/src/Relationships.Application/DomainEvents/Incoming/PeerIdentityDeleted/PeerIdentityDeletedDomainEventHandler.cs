@@ -2,6 +2,7 @@
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming.PeerIdentityDeleted;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 
 namespace Backbone.Modules.Relationships.Application.DomainEvents.Incoming.PeerIdentityDeleted;
 public class PeerIdentityDeletedDomainEventHandler : IDomainEventHandler<PeerIdentityDeletedDomainEvent>
@@ -22,6 +23,6 @@ public class PeerIdentityDeletedDomainEventHandler : IDomainEventHandler<PeerIde
 
         var identity = relationship.To == request.IdentityAddress ? relationship.From : relationship.To;
 
-        _eventBus.Publish(new Domain.DomainEvents.Outgoing.PeerIdentityDeletedDomainEvent(identity, relationship.Id));
+        _eventBus.Publish(new PeerFromRelationshipDeletedDomainEvent(identity, relationship.Id, request.IdentityAddress));
     }
 }
