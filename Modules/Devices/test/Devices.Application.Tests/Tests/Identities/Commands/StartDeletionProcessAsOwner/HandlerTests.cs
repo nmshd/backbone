@@ -121,7 +121,6 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
         var activeDevice = identity.Devices[0];
-        var oldTierId = identity.TierId;
 
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
