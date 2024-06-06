@@ -112,7 +112,8 @@ public static class IServiceCollectionExtensions
             {
                 options.UseEntityFrameworkCore()
                     .UseDbContext<DevicesDbContext>()
-                    .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope, CustomOpenIddictEntityFrameworkCoreToken, string>();
+                    .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope,
+                        CustomOpenIddictEntityFrameworkCoreToken, string>();
             })
             .AddServer(options =>
             {
@@ -131,6 +132,7 @@ public static class IServiceCollectionExtensions
                     var certificate = new X509Certificate2(privateKeyBytes, (string?)null);
                     options.AddSigningCertificate(certificate);
                 }
+
                 options.SetTokenEndpointUris("connect/token");
                 options.AllowPasswordFlow();
                 options.SetAccessTokenLifetime(TimeSpan.FromSeconds(configuration.JwtLifetimeInSeconds));
@@ -157,10 +159,7 @@ public static class IServiceCollectionExtensions
 
     public static IServiceCollection AddCustomFluentValidation(this IServiceCollection services)
     {
-        services.AddFluentValidationAutoValidation(config =>
-        {
-            config.DisableDataAnnotationsValidation = true;
-        });
+        services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
 
         ValidatorOptions.Global.DisplayNameResolver = (_, member, _) =>
             member != null ? char.ToLowerInvariant(member.Name[0]) + member.Name[1..] : null;
