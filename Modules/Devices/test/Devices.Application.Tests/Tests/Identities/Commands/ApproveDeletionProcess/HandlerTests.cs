@@ -88,7 +88,7 @@ public class HandlerTests : AbstractTestsBase
     }
 
     [Fact]
-    public async Task Publishes_TierOfIdentityChanged_DomainEvent()
+    public async Task Publishes_domain_events()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(new DateTime());
@@ -117,39 +117,12 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => mockEventBus.Publish(A<TierOfIdentityChangedDomainEvent>.That.Matches(i =>
                 i.IdentityAddress == identity.Address &&
                 i.OldTierId == oldTierId &&
-                i.NewTierId == Tier.QUEUED_FOR_DELETION.Id)))
-            .MustHaveHappenedOnceExactly();
-    }
+                i.NewTierId == Tier.QUEUED_FOR_DELETION.Id))
+            ).MustHaveHappenedOnceExactly();
 
-    [Fact]
-    public async Task Publishes_IdentityToBeDeleted_DomainEvent()
-    {
-        //Arrange
-        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(new DateTime());
-        var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
-        var device = identity.Devices[0];
-
-        var fakeUserContext = A.Fake<IUserContext>();
-        A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
-        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(device.Id);
-
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
-            .Returns(identity);
-
-        var fakePushNotificationSender = A.Dummy<IPushNotificationSender>();
-
-        var mockEventBus = A.Fake<IEventBus>();
-
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockEventBus, fakePushNotificationSender);
-
-        // Act
-        await handler.Handle(new ApproveDeletionProcessCommand(deletionProcess.Id), CancellationToken.None);
-
-        // Assert
         A.CallTo(() => mockEventBus.Publish(A<IdentityToBeDeletedDomainEvent>.That.Matches(i =>
-                i.IdentityAddress == identity.Address)))
-            .MustHaveHappenedOnceExactly();
+                i.IdentityAddress == identity.Address))
+            ).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus? eventBus = null, IPushNotificationSender? pushNotificationSender = null)

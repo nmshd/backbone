@@ -85,7 +85,7 @@ public class HandlerTests : AbstractTestsBase
     }
 
     [Fact]
-    public async Task Publishes_TierOfIdentityChanged_DomainEvent()
+    public async Task Publishes_domain_events()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
@@ -111,36 +111,12 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => mockEventBus.Publish(A<TierOfIdentityChangedDomainEvent>.That.Matches(i =>
                 i.IdentityAddress == identity.Address &&
                 i.OldTierId == oldTierId &&
-                i.NewTierId == Tier.QUEUED_FOR_DELETION.Id)))
-            .MustHaveHappenedOnceExactly();
-    }
+                i.NewTierId == Tier.QUEUED_FOR_DELETION.Id))
+            ).MustHaveHappenedOnceExactly();
 
-    [Fact]
-    public async Task Publishes_IdentityToBeDeleted_DomainEvent()
-    {
-        // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
-        var activeDevice = identity.Devices[0];
-
-        var fakeIdentitiesRepository = A.Dummy<IIdentitiesRepository>();
-        var fakeUserContext = A.Fake<IUserContext>();
-        var mockEventBus = A.Fake<IEventBus>();
-
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._))
-            .Returns(identity);
-        A.CallTo(() => fakeUserContext.GetAddressOrNull()).Returns(identity.Address);
-        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
-
-        var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext, mockEventBus);
-
-        // Act
-        var command = new StartDeletionProcessAsOwnerCommand();
-        await handler.Handle(command, CancellationToken.None);
-
-        // Assert
         A.CallTo(() => mockEventBus.Publish(A<IdentityToBeDeletedDomainEvent>.That.Matches(i =>
-                i.IdentityAddress == identity.Address)))
-            .MustHaveHappenedOnceExactly();
+                i.IdentityAddress == identity.Address))
+            ).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus? eventBus = null, IPushNotificationSender? pushNotificationSender = null)
