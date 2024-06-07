@@ -48,7 +48,7 @@ export class DeletionProcessAuditLogsDetailsComponent implements OnInit {
         this.loading = true;
         this.identityService.getDeletionProcessAuditLogsOfIdentity(this.identityAddress.trim()).subscribe({
             next: (data: HttpResponseEnvelope<DeletionProcessAuditLog[]>) => {
-                this.identityDeletionProcessAuditLogs = data.result.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+                this.identityDeletionProcessAuditLogs = data.result;
                 this.loading = false;
             },
             error: (err: any) => {
