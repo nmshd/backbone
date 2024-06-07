@@ -23,7 +23,7 @@ public class Identity : Entity
         IdentityVersion = identityVersion;
         CreatedAt = SystemTime.UtcNow;
         Devices = [];
-        _tierId = tierId;
+        TierId = tierId;
         Status = IdentityStatus.Active;
         _deletionProcesses = [];
 
@@ -47,11 +47,18 @@ public class Identity : Entity
         get => _tierId;
         private set
         {
-            if (_tierId == null! || value == _tierId) return; //TODO: Timo (Since I use a backing field and init this one in the constructor, I don't need the null check, right?)
+            if (value == _tierId) return;
 
-            var oldTier = _tierId;
-            _tierId = value;
-            RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, value));
+            if (_tierId == null!)
+            {
+                _tierId = value;
+            }
+            else
+            {
+                var oldTier = _tierId;
+                _tierId = value;
+                RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, value));
+            }
         }
     }
 
