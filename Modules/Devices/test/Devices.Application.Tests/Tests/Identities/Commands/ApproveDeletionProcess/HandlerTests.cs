@@ -124,24 +124,24 @@ public class HandlerTests : AbstractTestsBase
     [Fact]
     public async Task Publishes_IdentityToBeDeleted_DomainEvent()
     {
-       //Arrange
-       var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(new DateTime());
-       var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
-       var device = identity.Devices[0];
+        //Arrange
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(new DateTime());
+        var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
+        var device = identity.Devices[0];
 
-       var fakeUserContext = A.Fake<IUserContext>();
-       A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
-       A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(device.Id);
+        var fakeUserContext = A.Fake<IUserContext>();
+        A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(device.Id);
 
-       var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-       A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
-           .Returns(identity);
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
+            .Returns(identity);
 
-       var fakePushNotificationSender = A.Dummy<IPushNotificationSender>();
+        var fakePushNotificationSender = A.Dummy<IPushNotificationSender>();
 
-       var mockEventBus = A.Fake<IEventBus>();
+        var mockEventBus = A.Fake<IEventBus>();
 
-       var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockEventBus, fakePushNotificationSender);
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockEventBus, fakePushNotificationSender);
 
         // Act
         await handler.Handle(new ApproveDeletionProcessCommand(deletionProcess.Id), CancellationToken.None);
