@@ -1,6 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿namespace Backbone.Identity.Pool.Creator.PoolsFile;
 
-namespace Backbone.Identity.Pool.Creator.PoolsFile;
 public class PoolFileRoot
 {
     public PoolEntry[] Pools { get; set; }

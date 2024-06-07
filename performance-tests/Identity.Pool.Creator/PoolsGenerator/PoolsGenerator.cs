@@ -24,23 +24,24 @@ public class PoolsGenerator
         _clientCredentials = new ClientCredentials(clientId, clientSecret);
         _pools = configuration.Pools.ToList();
         _poolsConfiguration = configuration.Configuration;
-        CalculateMessageTotals();
+        CalculateSentAndReceivedMessages();
         _poolsOffset = PoolsOffset.CalculatePoolOffsets(_pools.ToArray());
     }
 
-    private void CalculateMessageTotals()
+    private void CalculateSentAndReceivedMessages()
     {
         var messagesSentByConnectorRatio = _poolsConfiguration.MessagesSentByConnectorRatio;
         var messagesSentByAppRatio = 1 - messagesSentByConnectorRatio;
 
-        foreach (var pool in _pools)
+        foreach (var pool in _pools.Where(p => p.TotalNumberOfMessages > 0))
         {
             if (pool.IsApp())
             {
-                pool.NumberOfReceivedMessages = Convert.ToUInt32(decimal.Ceiling(pool.TotalNumberOfMessages / messagesSentByAppRatio));
-            }else if (pool.IsConnector())
+                pool.NumberOfReceivedMessages = Convert.ToUInt32(decimal.Ceiling(pool.TotalNumberOfMessages * messagesSentByAppRatio));
+            }
+            else if (pool.IsConnector())
             {
-                pool.NumberOfReceivedMessages = Convert.ToUInt32(decimal.Ceiling(pool.TotalNumberOfMessages / messagesSentByConnectorRatio));
+                pool.NumberOfReceivedMessages = Convert.ToUInt32(decimal.Ceiling(pool.TotalNumberOfMessages * messagesSentByConnectorRatio));
             }
             else
             {
@@ -53,13 +54,73 @@ public class PoolsGenerator
     public async Task CreatePools()
     {
         CreateOffsetPools();
+
         await CreateIdentities();
+        DistributeRelationships();
+
         await CreateRelationshipTemplates();
         await CreateChallenges();
         await CreateMessages();
         await CreateDatawalletModifications();
 
         OutputAll();
+    }
+
+    private void DistributeRelationships()
+    {
+        var appPools = _pools.Where(p => p.IsApp() && p.NumberOfRelationships > 0).ToList();
+        var connectorPools = _pools.Where(p => p.IsConnector() && p.NumberOfRelationships > 0).ToList();
+
+        var appRelationships = appPools.Sum(p => p.NumberOfRelationships * p.Amount);
+        var connectorRelationships = connectorPools.Sum(p => p.NumberOfRelationships * p.Amount);
+
+        if (appRelationships != connectorRelationships)
+            throw new Exception(
+                "The number of relationships in the app pools does not match the number of relationships in the connector pools, despite there being offset pools. There is an implementation error.");
+
+
+        var targetIdentities = connectorPools.SelectMany(p => p.Identities).ToArray();
+        var targetIdentitiesIteratorIndex = 0;
+
+        while (appPools.Sum(p => p.Identities.Sum(i => i.IdentitiesToEstablishRelationshipsWith.Count)) < appRelationships)
+        {
+            foreach (var poolEntry in appPools)
+            {
+                foreach (var identity in poolEntry.Identities.Where(i=>i.HasAvailabilityForNewRelationships()))
+                {
+                    Identity candidateIdentityForRelationship;
+                    do
+                        candidateIdentityForRelationship = GetCandidateIdentityForRelationship(ref targetIdentities, ref targetIdentitiesIteratorIndex);
+                    while (identity.IdentitiesToEstablishRelationshipsWith.Contains(candidateIdentityForRelationship));
+
+                    identity.AddIdentityToEstablishRelationshipsWith(candidateIdentityForRelationship);
+                }
+            }
+        }
+
+        var relationshipsToA21 = appPools.SelectMany(p => p.Identities).SelectMany(i => i.IdentitiesToEstablishRelationshipsWith).Count(i => i.Nickname == "c21");
+    }
+
+    private static Identity GetCandidateIdentityForRelationship(ref Identity[] targetIdentities, ref int targetIdentitiesIteratorIndex)
+    {
+        var candidateIdentityForRelationship = targetIdentities[targetIdentitiesIteratorIndex];
+        if (!candidateIdentityForRelationship.HasAvailabilityForNewRelationships())
+        {
+            // this identity has been exhausted and can be removed from the iteration list.
+            targetIdentities = targetIdentities.Except([candidateIdentityForRelationship]).ToArray();
+        }
+        else
+        {
+            targetIdentitiesIteratorIndex++;
+        }
+
+        if (targetIdentitiesIteratorIndex == targetIdentities.Length - 1)
+        {
+            // removed the last item and fell out of the indexes. reset
+            targetIdentitiesIteratorIndex = 0;
+        }
+
+        return candidateIdentityForRelationship;
     }
 
 
@@ -106,7 +167,7 @@ public class PoolsGenerator
                 if (sdk.DeviceData is null)
                     throw new Exception("The SDK could not be used to create a new Identity.");
 
-                var createdIdentity = new Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId);
+                var createdIdentity = new Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
 
                 if (pool.NumberOfDevices > 1)
                 {
@@ -163,7 +224,6 @@ public class PoolsGenerator
                     await sdk.Challenges.CreateChallenge();
                     progress.Increment();
                 }
-
             }
         }
     }
@@ -228,7 +288,7 @@ public class PoolsGenerator
     #endregion
 
     #region Offsets
-    
+
     private void CreateOffsetPools()
     {
         var relationshipsOffsetPool = new PoolEntry

@@ -14,13 +14,13 @@ internal record PoolsOffset
     /// The total of Messages & Relationships in each group should match.
     /// However, this is not trivial, and sometimes not even something we can achieve.
     /// Thus, this method can be used to determine if an extra pool must be created to accomodate
-    /// the messages and relationships that are required but do not fit in the original pools.
+    /// the messages and relationships that are required but do not fit in the original pools.>
     /// </summary>
     /// <param name="pools"></param>
     public static PoolsOffset CalculatePoolOffsets(PoolEntry[] pools)
     {
-        var appPools = pools.Where(p => p.Type == "app").ToList();
-        var connectorPools = pools.Where(p => p.Type == "connector").ToList();
+        var appPools = pools.Where(p => p.IsApp()).ToList();
+        var connectorPools = pools.Where(p => p.IsConnector()).ToList();
 
         var appMessagesSum = appPools.Sum(p => p.NumberOfSentMessages * p.Amount);
         var appRelationshipsSum = appPools.Sum(p => p.NumberOfRelationships * p.Amount);

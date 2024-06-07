@@ -44,15 +44,6 @@ public class GenerateCommand : Command
         var poolsFile = await File.ReadAllBytesAsync(poolsFilePath);
 
         var poolsConfiguration = JsonSerializer.Deserialize<PoolFileRoot>(poolsFile, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        var n = new PoolFileRoot
-        {
-            Configuration = new() { MessagesSentByConnectorRatio = 0.5m },
-            Pools = [
-                new PoolEntry()
-            ]
-        };
-
-        var json = JsonSerializer.Serialize(n);
         return poolsConfiguration ?? throw new Exception($"Could not read {poolsFilePath}.");
     }
 }
