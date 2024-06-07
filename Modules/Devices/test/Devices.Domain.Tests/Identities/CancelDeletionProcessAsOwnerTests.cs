@@ -66,6 +66,7 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        identity.DeletionProcesses[0].ClearDomainEvents();
 
         // Act
         var deletionProcess = identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);

@@ -65,6 +65,7 @@ public class CancelDeletionProcessAsSupportTests : AbstractTestsBase
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        identity.DeletionProcesses[0].ClearDomainEvents();
 
         // Act
         var deletionProcess = identity.CancelDeletionProcessAsSupport(identity.DeletionProcesses[0].Id);

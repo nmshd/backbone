@@ -166,7 +166,7 @@ public class Identity : Entity
         var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.Status == DeletionProcessStatus.Approved)
                               ?? throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
 
-        deletionProcess.DeletionStarted();
+        deletionProcess.DeletionStarted(Address);
         Status = IdentityStatus.Deleting;
     }
 
