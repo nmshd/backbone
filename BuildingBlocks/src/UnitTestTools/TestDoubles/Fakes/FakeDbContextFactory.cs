@@ -11,29 +11,17 @@ public static class FakeDbContextFactory
     public static (TContext arrangeContext, TContext actContext, TContext assertionContext)
         CreateDbContexts<TContext>(SqliteConnection? connection = null) where TContext : AbstractDbContextBase
     {
-        connection ??= CreateDbConnection();
-        connection.Open();
-
-        var options = new DbContextOptionsBuilder<TContext>()
-            .UseSqlite(connection)
-            .Options;
-
-        object[] args = [options, A.Dummy<IEventBus>()];
-
-        var context = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
-        context.Database.EnsureCreated();
-        context.Dispose();
-
-        var arrangeContext = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
-        var assertionContext = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
-        var actContext = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
-
-        return (arrangeContext, assertionContext, actContext);
+        return CreateDbContextsInternal<TContext>(connection, A.Dummy<IEventBus>());
     }
-
 
     public static (TContext arrangeContext, TContext actContext, TContext assertionContext)
         CreateDbContexts2<TContext>(SqliteConnection? connection = null) where TContext : DbContext
+    {
+        return CreateDbContextsInternal<TContext>(connection);
+    }
+
+    private static (TContext arrangeContext, TContext actContext, TContext assertionContext)
+        CreateDbContextsInternal<TContext>(SqliteConnection? connection, params object[] additionalArguments) where TContext : DbContext
     {
         connection ??= CreateDbConnection();
         connection.Open();
@@ -42,7 +30,7 @@ public static class FakeDbContextFactory
             .UseSqlite(connection)
             .Options;
 
-        object[] args = [options];
+        object[] args = [options, ..additionalArguments];
 
         var context = (TContext)Activator.CreateInstance(typeof(TContext), args)!;
         context.Database.EnsureCreated();
@@ -54,7 +42,6 @@ public static class FakeDbContextFactory
 
         return (arrangeContext, assertionContext, actContext);
     }
-
 
     public static SqliteConnection CreateDbConnection()
     {
