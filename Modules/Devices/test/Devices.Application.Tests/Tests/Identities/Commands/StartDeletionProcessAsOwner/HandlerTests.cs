@@ -39,8 +39,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, pushNotificationSender: mockPushNotificationSender);
 
         // Act
-        var command = new StartDeletionProcessAsOwnerCommand();
-        var response = await handler.Handle(command, CancellationToken.None);
+        var response = await handler.Handle(new StartDeletionProcessAsOwnerCommand(), CancellationToken.None);
 
         // Assert
         response.Should().NotBeNull();
@@ -77,8 +76,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
 
         // Act
-        var command = new StartDeletionProcessAsOwnerCommand();
-        var acting = async () => await handler.Handle(command, CancellationToken.None);
+        var acting = async () => await handler.Handle(new StartDeletionProcessAsOwnerCommand(), CancellationToken.None);
 
         // Assert
         acting.Should().AwaitThrowAsync<NotFoundException, StartDeletionProcessAsOwnerResponse>().Which.Message.Should().Contain("Identity");
@@ -104,8 +102,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext, mockEventBus);
 
         // Act
-        var command = new StartDeletionProcessAsOwnerCommand();
-        await handler.Handle(command, CancellationToken.None);
+        await handler.Handle(new StartDeletionProcessAsOwnerCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockEventBus.Publish(A<TierOfIdentityChangedDomainEvent>.That.Matches(i =>

@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -94,19 +93,17 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
     private static ActualDeletionWorker CreateWorker(IMediator mediator, IPushNotificationSender pushNotificationSender)
     {
-        return CreateWorker(mediator, null, null, pushNotificationSender);
+        return CreateWorker(mediator, null, pushNotificationSender);
     }
 
     private static ActualDeletionWorker CreateWorker(IMediator mediator,
         List<IIdentityDeleter>? identityDeleters = null,
-        IEventBus? eventBus = null,
         IPushNotificationSender? pushNotificationSender = null)
     {
         var hostApplicationLifetime = A.Dummy<IHostApplicationLifetime>();
         identityDeleters ??= [A.Dummy<IIdentityDeleter>()];
-        eventBus ??= A.Dummy<IEventBus>();
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
         var logger = A.Dummy<ILogger<ActualDeletionWorker>>();
-        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, eventBus, logger);
+        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, logger);
     }
 }

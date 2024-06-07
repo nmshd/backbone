@@ -21,10 +21,9 @@ public class HandlerTests : AbstractTestsBase
         var mockIdentitiesRepository = CreateFakeIdentitiesRepository(0, out _);
 
         var handler = CreateHandler(mockIdentitiesRepository);
-        var command = new TriggerRipeDeletionProcessesCommand();
 
         // Act
-        var response = await handler.Handle(command, CancellationToken.None);
+        var response = await handler.Handle(new TriggerRipeDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
         response.Results.Should().BeEmpty();
@@ -40,10 +39,9 @@ public class HandlerTests : AbstractTestsBase
         anIdentity.StartDeletionProcessAsOwner(anIdentity.Devices.First().Id);
 
         var handler = CreateHandler(identitiesRepository);
-        var command = new TriggerRipeDeletionProcessesCommand();
 
         // Act
-        var response = await handler.Handle(command, CancellationToken.None);
+        var response = await handler.Handle(new TriggerRipeDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
         response.Results.Should().HaveCount(1);
@@ -62,10 +60,9 @@ public class HandlerTests : AbstractTestsBase
         SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod + 1));
 
         var handler = CreateHandler(identitiesRepository);
-        var command = new TriggerRipeDeletionProcessesCommand();
 
         // Act
-        var response = await handler.Handle(command, CancellationToken.None);
+        var response = await handler.Handle(new TriggerRipeDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
         response.Results.Should().HaveCount(1);
@@ -86,10 +83,9 @@ public class HandlerTests : AbstractTestsBase
         var mockEventBus = A.Fake<IEventBus>();
 
         var handler = CreateHandler(identitiesRepository, mockEventBus);
-        var command = new TriggerRipeDeletionProcessesCommand();
 
         // Act
-        await handler.Handle(command, CancellationToken.None);
+        await handler.Handle(new TriggerRipeDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockEventBus.Publish(A<IdentityDeletedDomainEvent>.That.Matches(e =>

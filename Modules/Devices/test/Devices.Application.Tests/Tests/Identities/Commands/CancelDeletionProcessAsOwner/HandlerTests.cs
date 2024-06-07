@@ -35,10 +35,9 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockPushNotificationSender);
-        var command = new CancelDeletionProcessAsOwnerCommand(deletionProcess.Id);
 
         // Act
-        var response = await handler.Handle(command, CancellationToken.None);
+        var response = await handler.Handle(new CancelDeletionProcessAsOwnerCommand(deletionProcess.Id), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
@@ -85,10 +84,9 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice.Id);
 
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext, mockEventBus);
-        var command = new CancelDeletionProcessAsOwnerCommand(deletionProcess.Id);
 
         // Act
-        var response = await handler.Handle(command, CancellationToken.None);
+        var response = await handler.Handle(new CancelDeletionProcessAsOwnerCommand(deletionProcess.Id), CancellationToken.None);
 
         // Assert
         A.CallTo(() => mockEventBus.Publish(
