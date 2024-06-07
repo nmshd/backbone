@@ -1,5 +1,6 @@
 <div class="card-header">
-    <h2 class="header-title">{{ header }}</h2>
+    <h2 class="header-title"> {{ headerDeletionProcessAuditLog }}</h2>
+    <p class="header-description">{{ headerDeletionProcessAuditLogDescription }}</p>
 </div>
 <div [ngClass]="{ 'disabled-container': loading }" *ngIf="identityDeletionProcessAuditLogs.length">
     <mat-card>
@@ -18,20 +19,6 @@
                         </div>
                     </div>
                 </mat-list>
-            </div>
-        </mat-card-content>
-    </mat-card>
-    <mat-accordion class="identity-accordion" *ngIf="!loading">
-        <mat-expansion-panel class="details-expansion-panel" [expanded]="true" style="overflow-x: auto">
-            <mat-expansion-panel-header class="details-expansion-panel-header">
-                <mat-panel-title class="details-panel-header-title">
-                    {{ headerDeletionProcessAuditLog }}
-                </mat-panel-title>
-                <mat-panel-description class="details-panel-header-desc">
-                    {{ headerDeletionProcessAuditLogDescription }}
-                </mat-panel-description>
-            </mat-expansion-panel-header>
-            <ng-template matExpansionPanelContent *ngIf="identityDeletionProcessAuditLogs">
                 <table mat-table class="responsive" [dataSource]="identityDeletionProcessAuditLogs">
                     <ng-container matColumnDef="id">
                         <th mat-header-cell *matHeaderCellDef>ID</th>
@@ -77,7 +64,7 @@
                         <td class="mat-cell no-data" [attr.colspan]="deletionProcessesAuditLogTableDisplayedColumns.length">No deletion process audit logs found.</td>
                     </tr>
                 </table>
-            </ng-template>
-        </mat-expansion-panel>
-    </mat-accordion>
+            </div>
+        </mat-card-content>
+    </mat-card>
 </div>

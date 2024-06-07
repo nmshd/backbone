@@ -13,6 +13,11 @@
     justify-content: flex-end;
 }
 
+.header-description {
+    color: #fff;
+}
+
+
 .action-buttons button {
     margin: 10px;
 }
