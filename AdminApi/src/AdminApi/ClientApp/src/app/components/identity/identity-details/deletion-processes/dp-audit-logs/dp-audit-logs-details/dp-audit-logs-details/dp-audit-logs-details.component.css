@@ -13,6 +13,10 @@
     justify-content: flex-end;
 }
 
+.header-description {
+    color: #fff;
+}
+
 .action-buttons button {
     margin: 10px;
 }
@@ -35,7 +39,7 @@
 }
 
 .form-card {
-    margin-top: 60px;
+    margin-top: 30px;
     min-height: 150px;
 }
 
