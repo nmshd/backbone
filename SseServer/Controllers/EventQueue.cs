@@ -1,0 +1,42 @@
+﻿using System.Collections.Concurrent;
+using System.Threading.Channels;
+
+namespace Backbone.SseServer.Controllers;
+
+public class EventQueue : IEventQueue
+{
+    private readonly ConcurrentDictionary<string, Channel<string>> _channels = new();
+
+    public void Register(string address)
+    {
+        var success = _channels.TryAdd(address, Channel.CreateUnbounded<string>());
+
+        if (!success)
+            throw new ClientAlreadyRegisteredException();
+    }
+
+    public void Deregister(string address)
+    {
+        _channels.TryRemove(address, out _);
+    }
+
+    public async Task EnqueueFor(string address, string notification, CancellationToken cancellationToken)
+    {
+        if (!_channels.TryGetValue(address, out var channel))
+            throw new ClientNotFoundException();
+
+        await channel.Writer.WriteAsync(notification, cancellationToken);
+    }
+
+    public IAsyncEnumerable<string> DequeueFor(string address, CancellationToken cancellationToken)
+    {
+        if (!_channels.TryGetValue(address, out var channel))
+            throw new Exception($"An sse client for the address {address} is not registered.");
+
+        return channel.Reader.ReadAllAsync(cancellationToken);
+    }
+}
+
+public class ClientNotFoundException : Exception;
+
+public class ClientAlreadyRegisteredException : Exception;
