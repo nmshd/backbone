@@ -79,6 +79,11 @@ public class HandlerTests : AbstractTestsBase
                 e.Address == identity.Address &&
                 e.DeletionProcessId == response.Id))
         ).MustHaveHappenedOnceExactly();
+
+        A.CallTo(() => mockEventBus.Publish(
+            A<IdentityDeletionCanceledDomainEvent>.That.Matches(e =>
+                e.IdentityAddress == identity.Address))
+        ).MustHaveHappenedOnceExactly();
     }
 
     [Fact]

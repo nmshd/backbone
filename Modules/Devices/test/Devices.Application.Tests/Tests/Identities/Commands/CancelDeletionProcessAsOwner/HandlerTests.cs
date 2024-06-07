@@ -102,6 +102,10 @@ public class HandlerTests : AbstractTestsBase
                 e.Address == activeIdentity.Address &&
                 e.DeletionProcessId == response.Id))
         ).MustHaveHappenedOnceExactly();
+
+        A.CallTo(() => mockEventBus.Publish(A<IdentityDeletionCanceledDomainEvent>.That.Matches(e =>
+            e.IdentityAddress == activeIdentity.Address))
+        ).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender pushNotificationSender)
