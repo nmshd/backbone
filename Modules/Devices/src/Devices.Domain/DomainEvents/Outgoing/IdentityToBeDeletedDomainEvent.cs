@@ -2,9 +2,9 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
-public class PeerIdentityToBeDeletedDomainEvent : DomainEvent
+public class IdentityToBeDeletedDomainEvent : DomainEvent
 {
-    public PeerIdentityToBeDeletedDomainEvent(IdentityAddress identityAddress) : base($"PeerIdentityToBeDeleted/{identityAddress}")
+    public IdentityToBeDeletedDomainEvent(IdentityAddress identityAddress) : base($"IdentityToBeDeleted/{identityAddress}", randomizeId: true)
     {
         IdentityAddress = identityAddress;
     }
