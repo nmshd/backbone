@@ -10,6 +10,7 @@ public class IdentityDeletionProcessDetailsDTO
         Id = process.Id;
         AuditLog = process.AuditLog
             .Select(e => new IdentityDeletionProcessAuditLogEntryDTO(e))
+            .OrderBy(e => e.CreatedAt)
             .ToList();
         Status = process.Status;
         CreatedAt = process.CreatedAt;
