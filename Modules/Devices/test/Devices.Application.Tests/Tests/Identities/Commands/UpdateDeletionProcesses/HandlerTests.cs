@@ -92,7 +92,7 @@ public class HandlerTests : AbstractTestsBase
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockEventBus.Publish(A<IdentityDeletedDomainEvent>.That.Matches(e => 
+        A.CallTo(() => mockEventBus.Publish(A<IdentityDeletedDomainEvent>.That.Matches(e =>
             e.IdentityAddress == anIdentity.Address))
         ).MustHaveHappenedOnceExactly();
     }
