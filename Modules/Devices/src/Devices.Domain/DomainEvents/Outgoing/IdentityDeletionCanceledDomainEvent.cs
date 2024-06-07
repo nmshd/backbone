@@ -4,7 +4,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 namespace Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 public class IdentityDeletionCanceledDomainEvent : DomainEvent
 {
-    public IdentityDeletionCanceledDomainEvent(IdentityAddress identityAddress)
+    public IdentityDeletionCanceledDomainEvent(IdentityAddress identityAddress) : base($"{identityAddress}/IdentityDeletionCanceled", randomizeId: true)
     {
         IdentityAddress = identityAddress;
     }
