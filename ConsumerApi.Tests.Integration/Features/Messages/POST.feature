@@ -5,14 +5,14 @@ User sends a Message
 
 Scenario: Sending a Message
 	Given Identities i1 and i2 with an established Relationship
-	When a POST request is sent to the /Messages endpoint
+	When i1 sends a POST request to the /Messages endpoint with i2 as recipient
 	Then the response status code is 201 (Created)
-	And the response contains a CreateMessageResponse
+	And the response contains a SendMessageResponse
 
 Scenario: Sending a Message to Identity to be deleted
 	Given Identities i1 and i2 with an established Relationship
-	And Identity i2 is to be deleted
-	When a POST request is sent to the /Messages endpoint
+	And i2 is in status "ToBeDeleted"
+	When i1 sends a POST request to the /Messages endpoint with i2 as recipient
 	Then the response status code is 400 (Bad Request)
 	And the response content contains an error with the error code "error.platform.validation.message.recipientToBeDeleted"
-	And the error contains a list of identities to be deleted that includes Identity i2
+	And the error contains a list of Identities to be deleted that includes i2

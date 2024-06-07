@@ -46,21 +46,6 @@ public class IdentitiesRepository : IIdentitiesRepository
             .AnyAsync(i => i.Address == address, cancellationToken);
     }
 
-    public async Task<IEnumerable<Identity>> FindAllWithAddresses(CancellationToken cancellationToken, IEnumerable<IdentityAddress>? addresses, IdentityStatus? requestStatus, bool track = false)
-    {
-        var query = (track ? _identities : _readonlyIdentities)
-            .IncludeAll(_dbContext);
-
-        if (addresses.Any())
-            query = query.Where(i => addresses.Contains(i.Address));
-
-        if (requestStatus != null)
-            query = query.Where(i => i.Status == requestStatus);
-
-        return await query
-            .ToListAsync(cancellationToken);
-    }
-
     public async Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _identities : _readonlyIdentities)

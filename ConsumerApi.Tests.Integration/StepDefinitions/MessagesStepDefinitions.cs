@@ -4,10 +4,9 @@ using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Responses;
-using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
-using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.ConsumerApi.Tests.Integration.Support;
 using Backbone.Crypto;
 using Microsoft.Extensions.Options;
@@ -18,8 +17,8 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "POST Message")]
 internal class MessagesStepDefinitions
 {
-    private Client _sdk1 = null!;
-    private Client _sdk2 = null!;
+    private Client _client1 = null!;
+    private Client _client2 = null!;
     private ApiResponse<SendMessageResponse>? _sendMessageResponse;
     private readonly ClientCredentials _clientCredentials;
     private readonly HttpClient _httpClient;
@@ -33,43 +32,20 @@ internal class MessagesStepDefinitions
     [Given("Identities i1 and i2 with an established Relationship")]
     public async Task GivenIdentitiesI1AndI2WithAnEstablishedRelationship()
     {
-        _sdk1 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
-        _sdk2 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
+        _client1 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
+        _client2 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
 
-        var createRelationshipTemplateRequest = new CreateRelationshipTemplateRequest
-        {
-            Content = ConvertibleString.FromUtf8("AAA").BytesRepresentation
-        };
-
-        var relationshipTemplateResponse = await _sdk1.RelationshipTemplates.CreateTemplate(createRelationshipTemplateRequest);
-        relationshipTemplateResponse.Should().BeASuccess();
-
-        var createRelationshipRequest = new CreateRelationshipRequest
-        {
-            RelationshipTemplateId = relationshipTemplateResponse.Result!.Id,
-            Content = ConvertibleString.FromUtf8("AAA").BytesRepresentation
-        };
-
-        var createRelationshipResponse = await _sdk2.Relationships.CreateRelationship(createRelationshipRequest);
-        createRelationshipResponse.Should().BeASuccess();
-
-        var completeRelationshipChangeRequest = new CompleteRelationshipChangeRequest
-        {
-            Content = ConvertibleString.FromUtf8("AAA").BytesRepresentation
-        };
-        var acceptRelationChangeResponse =
-            await _sdk1.Relationships.AcceptChange(createRelationshipResponse.Result!.Id, createRelationshipResponse.Result.Changes.First().Id, completeRelationshipChangeRequest);
-        acceptRelationChangeResponse.Should().BeASuccess();
+        await Utils.EstablishRelationshipBetween(_client1, _client2);
     }
 
-    [Given("Identity i2 is to be deleted")]
+    [Given("i2 is in status \"ToBeDeleted\"")]
     public async Task GivenIdentityI2IsToBeDeleted()
     {
-        var startDeletionProcessResponse = await _sdk2.Identities.StartDeletionProcess();
+        var startDeletionProcessResponse = await _client2.Identities.StartDeletionProcess();
         startDeletionProcessResponse.Should().BeASuccess();
     }
 
-    [When("a POST request is sent to the /Messages endpoint")]
+    [When("i1 sends a POST request to the /Messages endpoint with i2 as recipient")]
     public async Task WhenAPostRequestIsSentToTheMessagesEndpoint()
     {
         var sendMessageRequest = new SendMessageRequest
@@ -80,12 +56,12 @@ internal class MessagesStepDefinitions
             [
                 new SendMessageRequestRecipientInformation
                 {
-                    Address = _sdk2.IdentityData!.Address,
+                    Address = _client2.IdentityData!.Address,
                     EncryptedKey = ConvertibleString.FromUtf8("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").BytesRepresentation
                 }
             ]
         };
-        _sendMessageResponse = await _sdk1.Messages.SendMessage(sendMessageRequest);
+        _sendMessageResponse = await _client1.Messages.SendMessage(sendMessageRequest);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
@@ -94,8 +70,8 @@ internal class MessagesStepDefinitions
         ((int)_sendMessageResponse!.Status).Should().Be(expectedStatusCode);
     }
 
-    [Then("the response contains a CreateMessageResponse")]
-    public void ThenTheResponseContainsADeletionProcess()
+    [Then("the response contains a SendMessageResponse")]
+    public void ThenTheResponseContainsASendMessageResponse()
     {
         _sendMessageResponse!.Result.Should().NotBeNull();
         _sendMessageResponse.Should().BeASuccess();
@@ -109,10 +85,15 @@ internal class MessagesStepDefinitions
         _sendMessageResponse.Error!.Code.Should().Be(errorCode);
     }
 
-    [Then(@"the error contains a list of identities to be deleted that includes Identity i2")]
+    [Then(@"the error contains a list of Identities to be deleted that includes i2")]
     public void ThenTheErrorContainsAListOfIdentitiesToBeDeletedThatIncludesIdentityI2()
     {
-        var peersToBeDeleted = ((JsonElement)_sendMessageResponse!.Error!.Data!).Deserialize<List<string>>();
-        peersToBeDeleted!.Contains(_sdk2.IdentityData!.Address).Should().BeTrue();
+        var data = ((JsonElement)_sendMessageResponse!.Error!.Data!).Deserialize<SendMessageErrorData>(new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        data!.PeersToBeDeleted.Contains(_client2.IdentityData!.Address).Should().BeTrue();
     }
+}
+
+public class SendMessageErrorData
+{
+    public List<string> PeersToBeDeleted { get; set; } = [];
 }

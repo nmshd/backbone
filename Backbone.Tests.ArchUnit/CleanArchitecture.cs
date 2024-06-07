@@ -14,7 +14,8 @@ public class CleanArchitecture
 
     private static readonly IObjectProvider<IType> CONSUMER_API_ASSEMBLIES =
         Types().That()
-            .ResideInAssembly("Backbone.Modules.*.ConsumerApi", true)
+            .Are(MODULES)
+            .And().HaveNameEndingWith(".ConsumerApi")
             .As("ConsumerApi Assemblies");
 
     private static readonly IObjectProvider<IType> APPLICATION_ASSEMBLIES =

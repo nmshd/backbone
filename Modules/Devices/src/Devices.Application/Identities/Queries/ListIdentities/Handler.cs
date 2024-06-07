@@ -1,5 +1,7 @@
+using System.Linq.Expressions;
 using Backbone.Modules.Devices.Application.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
@@ -15,7 +17,10 @@ public class Handler : IRequestHandler<ListIdentitiesQuery, ListIdentitiesRespon
 
     public async Task<ListIdentitiesResponse> Handle(ListIdentitiesQuery request, CancellationToken cancellationToken)
     {
-        var identities = await _identitiesRepository.FindAllWithAddresses(cancellationToken, request.Addresses, request.Status);
+        Expression<Func<Identity, bool>> filter = i => (request.Addresses == null || request.Addresses.Contains(i.Address))
+                                                       && (request.Status == null || i.Status == request.Status);
+
+        var identities = await _identitiesRepository.Find(filter, cancellationToken);
         var identityDtos = identities.Select(el => new IdentitySummaryDTO(el)).ToList();
 
         return new ListIdentitiesResponse(identityDtos);

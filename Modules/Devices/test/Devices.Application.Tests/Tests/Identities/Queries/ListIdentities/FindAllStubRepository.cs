@@ -21,11 +21,6 @@ public class FindAllStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Identity>> FindAllWithAddresses(CancellationToken cancellationToken, IEnumerable<IdentityAddress>? addresses, IdentityStatus? requestStatus, bool track = false)
-    {
-        return Task.FromResult(_identities);
-    }
-
     public Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
@@ -37,11 +32,6 @@ public class FindAllStubRepository : IIdentitiesRepository
     }
 
     public Task AddUser(ApplicationUser user, string password)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<Identity>> FindAllWithDeletionProcessWaitingForApproval(CancellationToken cancellationToken, bool track = false)
     {
         throw new NotImplementedException();
     }
@@ -71,14 +61,9 @@ public class FindAllStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<Identity>> FindAllWithPastDeletionGracePeriod(CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(_identities);
     }
 
     public Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)

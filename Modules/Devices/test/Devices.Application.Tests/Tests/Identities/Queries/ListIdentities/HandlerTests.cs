@@ -13,21 +13,21 @@ public class HandlerTests : AbstractTestsBase
     public async Task Returns_an_empty_list_when_no_identities_exist()
     {
         // Arrange
-        var identitiesList = new List<Identity>();
-        var handler = CreateHandler(new FindAllStubRepository(identitiesList));
+        var identities = new List<Identity>();
+        var handler = CreateHandler(new FindAllStubRepository(identities));
 
         // Act
         var result = await handler.Handle(new ListIdentitiesQuery(), CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(identitiesList.Count);
+        result.Should().HaveCount(identities.Count);
     }
 
     [Fact]
     public async Task? Returns_a_list_of_all_existing_identities()
     {
         // Arrange
-        List<Identity> identitiesList =
+        List<Identity> identities =
         [
             new Identity(CreateRandomDeviceId(),
                 CreateRandomIdentityAddress(),
@@ -41,13 +41,13 @@ public class HandlerTests : AbstractTestsBase
                 TestDataGenerator.CreateRandomTierId(),
                 1)
         ];
-        var handler = CreateHandler(new FindAllStubRepository(identitiesList));
+        var handler = CreateHandler(new FindAllStubRepository(identities));
 
         // Act
         var result = await handler.Handle(new ListIdentitiesQuery(), CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(identitiesList.Count);
+        result.Should().HaveCount(identities.Count);
     }
 
     [Fact]
@@ -57,9 +57,9 @@ public class HandlerTests : AbstractTestsBase
         var expectedClientId = CreateRandomDeviceId();
         var expectedAddress = CreateRandomIdentityAddress();
         var expectedTierId = TestDataGenerator.CreateRandomTierId();
-        List<Identity> identitiesList = [new Identity(expectedClientId, expectedAddress, [], expectedTierId, 1)];
+        List<Identity> identities = [new Identity(expectedClientId, expectedAddress, [], expectedTierId, 1)];
 
-        var handler = CreateHandler(new FindAllStubRepository(identitiesList));
+        var handler = CreateHandler(new FindAllStubRepository(identities));
 
         // Act
         var result = await handler.Handle(new ListIdentitiesQuery(), CancellationToken.None);
