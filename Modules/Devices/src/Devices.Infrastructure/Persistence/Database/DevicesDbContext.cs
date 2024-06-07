@@ -1,4 +1,5 @@
 using System.Data;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -21,22 +22,32 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 
 public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbContext
 {
-    private readonly IServiceProvider? _serviceProvider;
     private const int MAX_RETRY_COUNT = 50000;
-    private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
     private const string SQLSERVER = "Microsoft.EntityFrameworkCore.SqlServer";
     private const string POSTGRES = "Npgsql.EntityFrameworkCore.PostgreSQL";
+    private static readonly TimeSpan MAX_RETRY_DELAY = TimeSpan.FromSeconds(1);
 
-    public DevicesDbContext(DbContextOptions<DevicesDbContext> options)
-        : base(options)
+    private readonly IServiceProvider? _serviceProvider;
+    private readonly IEventBus _eventBus;
+
+    public DevicesDbContext(DbContextOptions<DevicesDbContext> options) : base(options)
     {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        _eventBus = null!;
     }
 
-    public DevicesDbContext(DbContextOptions<DevicesDbContext> options, IServiceProvider serviceProvider)
-        : base(options)
+    public DevicesDbContext(DbContextOptions<DevicesDbContext> options, IEventBus eventBus) : base(options)
+    {
+        _eventBus = eventBus;
+    }
+
+    public DevicesDbContext(DbContextOptions<DevicesDbContext> options, IServiceProvider serviceProvider, IEventBus eventBus) : base(options)
     {
         _serviceProvider = serviceProvider;
+        _eventBus = eventBus;
     }
+
+    public DbSet<IdentityDeletionProcessAuditLogEntry> IdentityDeletionProcessAuditLogs { get; set; } = null!;
 
     public DbSet<Identity> Identities { get; set; } = null!;
 

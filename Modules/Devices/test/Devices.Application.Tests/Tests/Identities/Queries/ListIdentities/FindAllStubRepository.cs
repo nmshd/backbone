@@ -41,11 +41,6 @@ public class FindAllStubRepository : IIdentitiesRepository
         return Task.FromResult(_identities);
     }
 
-    public Task<IEnumerable<Identity>> FindAllWithDeletionProcessWaitingForApproval(CancellationToken cancellationToken, bool track = false)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
@@ -61,17 +56,17 @@ public class FindAllStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
+    public Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task Update(Identity identity, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
     public Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<IEnumerable<Identity>> FindAllWithPastDeletionGracePeriod(CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }

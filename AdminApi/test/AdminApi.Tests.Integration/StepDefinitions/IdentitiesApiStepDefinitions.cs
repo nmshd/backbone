@@ -10,12 +10,14 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 [Binding]
 [Scope(Feature = "GET Identities")]
 [Scope(Feature = "POST Identities/{id}/DeletionProcess")]
+[Scope(Feature = "GET Identities/{identityAddress}/DeletionProcesses/AuditLogs")]
 internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
     private ApiResponse<ListIdentitiesResponse>? _identityOverviewsResponse;
     private ApiResponse<GetIdentityResponse>? _identityResponse;
     private ApiResponse<CreateIdentityResponse>? _createIdentityResponse;
     private ApiResponse<StartDeletionProcessAsSupportResponse>? _identityDeletionProcessResponse;
+    private ApiResponse<ListIdentityDeletionProcessAuditLogsResponse>? _identityDeletionProcessAuditLogsResponse;
     private string _existingIdentity;
 
     public IdentitiesApiStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
@@ -50,6 +52,12 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _identityOverviewsResponse = await _client.Identities.ListIdentities();
     }
 
+    [When("a GET request is sent to the /Identities/{i.address}/DeletionProcesses/AuditLogs endpoint")]
+    public async Task WhenAGETRequestIsSentToTheIdentitiesDeletionProcessesAuditLogsEndpoint()
+    {
+        _identityDeletionProcessAuditLogsResponse = await _client.Identities.ListIdentityDeletionProcessAuditLogs(_existingIdentity);
+    }
+
     [When("a GET request is sent to the /Identities/{i.address} endpoint")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesAddressEndpoint()
     {
@@ -68,6 +76,14 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
         _identityOverviewsResponse!.Result!.Should().NotBeNull();
         _identityOverviewsResponse!.ContentType.Should().StartWith("application/json");
         _identityOverviewsResponse.Should().ComplyWithSchema();
+    }
+
+    [Then("the response contains a list of Identity Deletion Process Audit Logs")]
+    public void ThenTheResponseContainsAListOfIdentityDeletionProcessAuditLogs()
+    {
+        _identityDeletionProcessAuditLogsResponse!.Result!.Should().NotBeNull();
+        _identityDeletionProcessAuditLogsResponse!.ContentType.Should().StartWith("application/json");
+        _identityDeletionProcessAuditLogsResponse.Should().ComplyWithSchema();
     }
 
     [Then("the response contains a Deletion Process")]
@@ -97,6 +113,9 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
 
         if (_identityDeletionProcessResponse != null)
             ((int)_identityDeletionProcessResponse!.Status).Should().Be(expectedStatusCode);
+
+        if (_identityDeletionProcessAuditLogsResponse != null)
+            ((int)_identityDeletionProcessAuditLogsResponse!.Status).Should().Be(expectedStatusCode);
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
