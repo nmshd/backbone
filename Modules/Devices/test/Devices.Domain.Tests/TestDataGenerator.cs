@@ -12,14 +12,18 @@ public static class TestDataGenerator
         return TierId.Generate();
     }
 
-    public static Identity CreateIdentity()
+    public static Identity CreateIdentity(TierId? tierId = null)
     {
-        return new Identity(
+        var identity = new Identity(
             CreateRandomDeviceId(),
             CreateRandomIdentityAddress(),
             CreateRandomBytes(),
-            CreateRandomTierId(),
+            tierId ?? CreateRandomTierId(),
             1);
+
+        identity.ClearDomainEvents();
+
+        return identity;
     }
 
     public static string GenerateString(int resultLength, char[]? chars = null)

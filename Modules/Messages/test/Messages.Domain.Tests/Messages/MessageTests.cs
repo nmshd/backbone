@@ -1,5 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
+﻿using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.UnitTestTools.BaseClasses;
@@ -34,20 +33,5 @@ public class MessageTests : AbstractTestsBase
         domainEvent.Id.Should().Be(message.Id);
         domainEvent.Recipients.Should().HaveCount(1);
         domainEvent.Recipients.First().Should().Be(recipient.Address);
-    }
-
-    private static Message CreateMessage(IdentityAddress createdBy, IEnumerable<IdentityAddress> recipients)
-    {
-        var recipientInformation = recipients.Select(recipientIdentityAddress =>
-            new RecipientInformation(recipientIdentityAddress, RelationshipId.New(), [])
-        ).ToList();
-
-        return new Message(
-            createdBy,
-            TestDataGenerator.CreateRandomDeviceId(),
-            [],
-            [],
-            recipientInformation
-        );
     }
 }
