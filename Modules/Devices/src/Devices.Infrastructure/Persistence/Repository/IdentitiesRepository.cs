@@ -50,10 +50,10 @@ public class IdentitiesRepository : IIdentitiesRepository
             .FirstWithAddressOrDefault(address, cancellationToken);
     }
 
-    public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(IdentityAddress address, CancellationToken cancellationToken)
+    public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken)
     {
         return await _readonlyIdentityDeletionProcessAuditLogs
-            .Where(auditLog => auditLog.IdentityAddressHash == Hasher.HashUtf8(address))
+            .Where(auditLog => auditLog.IdentityAddressHash == identityAddressHash)
             .ToListAsync(cancellationToken);
     }
 

@@ -30,6 +30,6 @@ public interface IIdentitiesRepository
     #endregion
 
     #region Deletion Process Audit Logs
-    Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(IdentityAddress address, CancellationToken cancellationToken);
+    Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken);
     #endregion
 }

@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAuditLogs;
@@ -14,7 +15,7 @@ public class Handler : IRequestHandler<GetDeletionProcessesAuditLogsQuery, GetDe
 
     public async Task<GetDeletionProcessesAuditLogsResponse> Handle(GetDeletionProcessesAuditLogsQuery request, CancellationToken cancellationToken)
     {
-        var identityDeletionProcessAuditLogEntries = await _identityRepository.GetIdentityDeletionProcessAuditLogsByAddress(request.IdentityAddress, cancellationToken);
+        var identityDeletionProcessAuditLogEntries = await _identityRepository.GetIdentityDeletionProcessAuditLogsByAddress(Hasher.HashUtf8(request.IdentityAddress), cancellationToken);
         return new GetDeletionProcessesAuditLogsResponse(identityDeletionProcessAuditLogEntries);
     }
 }
