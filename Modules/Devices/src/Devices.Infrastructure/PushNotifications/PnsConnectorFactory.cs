@@ -18,7 +18,7 @@ public abstract class PnsConnectorFactory
                 return CreateForSse();
         }
 
-        throw new NotImplementedException($"There is currently no {nameof(IPnsConnector)} for the platform '{platform}'.");
+        throw new NotSupportedException($"There is currently no {nameof(IPnsConnector)} for the platform '{platform}'.");
     }
 
     protected abstract IPnsConnector CreateForFirebaseCloudMessaging();
