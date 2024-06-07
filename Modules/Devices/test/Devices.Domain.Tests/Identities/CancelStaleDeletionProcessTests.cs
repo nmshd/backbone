@@ -85,7 +85,7 @@ public class CancelStaleDeletionProcessTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Triggers_IdentityDeletionProcessStatusChangedDomainEvent()
+    public void Raises_IdentityDeletionProcessStatusChangedDomainEvent()
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2020-01-01T00:00:00"));

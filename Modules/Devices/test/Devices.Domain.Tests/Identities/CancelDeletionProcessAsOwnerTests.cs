@@ -62,7 +62,7 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Triggers_IdentityDeletionProcessStatusChangedDomainEvent_when_Canceling()
+    public void Raises_IdentityDeletionProcessStatusChangedDomainEvent_when_Cancelling()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();

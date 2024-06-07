@@ -13,7 +13,7 @@ namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 public class ChangeTierTests : AbstractTestsBase
 {
     [Fact]
-    public void Changing_the_tier_raises_TierOfIdentityChangedDomainEvent()
+    public void Raises_TierOfIdentityChangedDomainEvent()
     {
         // Arrange
         var identity = CreateIdentity();

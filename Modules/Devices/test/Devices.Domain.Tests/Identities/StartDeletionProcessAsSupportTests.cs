@@ -53,7 +53,7 @@ public class StartDeletionProcessAsSupportTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Triggers_an_IdentityDeletionProcessStartedDomainEvent()
+    public void Raises_IdentityDeletionProcessStartedDomainEvent()
     {
         //Arrange
         var activeIdentity = CreateIdentity();
