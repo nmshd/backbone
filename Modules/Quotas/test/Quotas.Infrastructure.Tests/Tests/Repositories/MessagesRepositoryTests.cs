@@ -41,7 +41,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
 
         var connection = FakeDbContextFactory.CreateDbConnection();
         (_messagesArrangeContext, _, _) = FakeDbContextFactory.CreateDbContexts<MessagesDbContext>(connection);
-        (_, _, _actContext) = FakeDbContextFactory.CreateDbContexts<QuotasDbContext>(connection);
+        (_, _actContext, _) = FakeDbContextFactory.CreateDbContexts<QuotasDbContext>(connection);
 
         SystemTime.Set(TODAY);
     }

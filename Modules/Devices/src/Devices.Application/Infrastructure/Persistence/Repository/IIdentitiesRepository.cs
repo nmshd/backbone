@@ -27,4 +27,8 @@ public interface IIdentitiesRepository
     Task<Device?> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false);
     Task Update(Device device, CancellationToken cancellationToken);
     #endregion
+
+    #region Deletion Process Audit Logs
+    Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken);
+    #endregion
 }

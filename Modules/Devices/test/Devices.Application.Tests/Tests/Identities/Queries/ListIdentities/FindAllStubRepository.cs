@@ -51,6 +51,11 @@ public class FindAllStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 
+    public Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task Update(Identity identity, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();

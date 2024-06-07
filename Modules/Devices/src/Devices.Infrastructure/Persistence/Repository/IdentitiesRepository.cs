@@ -22,6 +22,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     private readonly DbSet<Device> _devices;
     private readonly IQueryable<Device> _readonlyDevices;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IQueryable<IdentityDeletionProcessAuditLogEntry> _readonlyIdentityDeletionProcessAuditLogs;
 
     public IdentitiesRepository(DevicesDbContext dbContext, UserManager<ApplicationUser> userManager)
     {
@@ -30,6 +31,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         _dbContext = dbContext;
         _devices = dbContext.Devices;
         _readonlyDevices = dbContext.Devices.AsNoTracking();
+        _readonlyIdentityDeletionProcessAuditLogs = dbContext.IdentityDeletionProcessAuditLogs.AsNoTracking();
         _userManager = userManager;
     }
 
@@ -38,6 +40,13 @@ public class IdentitiesRepository : IIdentitiesRepository
         return await (track ? _identities : _readonlyIdentities)
             .IncludeAll(_dbContext)
             .FirstWithAddressOrDefault(address, cancellationToken);
+    }
+
+    public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken)
+    {
+        return await _readonlyIdentityDeletionProcessAuditLogs
+            .Where(auditLog => auditLog.IdentityAddressHash == identityAddressHash)
+            .ToListAsync(cancellationToken);
     }
 
     public async Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken)
