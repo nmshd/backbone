@@ -1,6 +1,8 @@
 ﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
@@ -70,9 +72,34 @@ public class HandlerTests : AbstractTestsBase
         identities.First().Status.Should().Be(IdentityStatus.Deleting);
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)
+    [Fact]
+    public async Task Publishes_IdentityDeleted_DomainEvent()
     {
-        return new Handler(identitiesRepository);
+        // Arrange
+        var identitiesRepository = CreateFakeIdentitiesRepository(1, out var identities);
+
+        var anIdentity = identities.First();
+        anIdentity.StartDeletionProcessAsOwner(anIdentity.Devices.First().Id);
+
+        SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod + 1));
+
+        var mockEventBus = A.Fake<IEventBus>();
+
+        var handler = CreateHandler(identitiesRepository, mockEventBus);
+        var command = new TriggerRipeDeletionProcessesCommand();
+
+        // Act
+        await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => mockEventBus.Publish(A<IdentityDeletedDomainEvent>.That.Matches(e => 
+            e.IdentityAddress == anIdentity.Address))
+        ).MustHaveHappenedOnceExactly();
+    }
+
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IEventBus? eventBus = null)
+    {
+        return new Handler(identitiesRepository, eventBus ?? A.Dummy<IEventBus>());
     }
 
     private static IIdentitiesRepository CreateFakeIdentitiesRepository(ushort numberOfIdentities, out List<Identity> returnedIdentities)
