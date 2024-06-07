@@ -13,9 +13,8 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
-        var deletionProcess = identity.StartDeletionProcessAsSupport();
-        identity.ApproveDeletionProcess(deletionProcess.Id, identity.Devices.ElementAt(0).Id);
-        identity.CancelDeletionProcessAsSupport(deletionProcess.Id);
+        TestDataGenerator.CreateCancelledDeletionProcessFor(identity);
+
         var identityDeletionProcessAuditLogs = identity.DeletionProcesses.SelectMany(identityDeletionProcess => identityDeletionProcess.AuditLog).ToList();
 
         var handler = CreateHandler(new FindDeletionProcessAuditLogsByAddressStubRepository(identityDeletionProcessAuditLogs));
@@ -32,13 +31,9 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
-        var deletionProcess1 = identity.StartDeletionProcessAsSupport();
-        identity.ApproveDeletionProcess(deletionProcess1.Id, identity.Devices.ElementAt(0).Id);
-        identity.CancelDeletionProcessAsSupport(deletionProcess1.Id);
+        TestDataGenerator.CreateCancelledDeletionProcessFor(identity);
+        TestDataGenerator.CreateCancelledDeletionProcessFor(identity);
 
-        var deletionProcess2 = identity.StartDeletionProcessAsSupport();
-        identity.ApproveDeletionProcess(deletionProcess2.Id, identity.Devices.ElementAt(0).Id);
-        identity.CancelDeletionProcessAsSupport(deletionProcess2.Id);
         var identityDeletionProcessAuditLogs = identity.DeletionProcesses.SelectMany(identityDeletionProcess => identityDeletionProcess.AuditLog).ToList();
 
         var handler = CreateHandler(new FindDeletionProcessAuditLogsByAddressStubRepository(identityDeletionProcessAuditLogs));
@@ -47,7 +42,7 @@ public class HandlerTests : AbstractTestsBase
         var result = await handler.Handle(new GetDeletionProcessesAuditLogsQuery(identity.Address), CancellationToken.None);
 
         // Assert
-        result.ToList().Count.Should().Be(identityDeletionProcessAuditLogs.Count);
+        result.Should().HaveCount(identityDeletionProcessAuditLogs.Count);
     }
 
     private Handler CreateHandler(IIdentitiesRepository identitiesRepository)

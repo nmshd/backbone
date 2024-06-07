@@ -45,6 +45,15 @@ public static class TestDataGenerator
         return identity;
     }
 
+    public static IdentityDeletionProcess CreateCancelledDeletionProcessFor(Identity identity)
+    {
+        var deletionProcess = identity.StartDeletionProcessAsSupport();
+        identity.ApproveDeletionProcess(deletionProcess.Id, identity.Devices.First().Id);
+        identity.CancelDeletionProcessAsSupport(deletionProcess.Id);
+
+        return deletionProcess;
+    }
+
     public static Identity CreateIdentityWithApprovedDeletionProcess(DateTime? approvalDate = null)
     {
         approvalDate ??= SystemTime.UtcNow;
