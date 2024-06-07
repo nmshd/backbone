@@ -6,6 +6,7 @@ using Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeletionPr
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
@@ -84,6 +85,71 @@ public class HandlerTests : AbstractTestsBase
 
         // Assert
         acting.Should().AwaitThrowAsync<NotFoundException, ApproveDeletionProcessResponse>().Which.Message.Should().Contain("Identity");
+    }
+
+    [Fact]
+    public async Task Publishes_TierOfIdentityChanged_DomainEvent()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(new DateTime());
+        var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
+        var device = identity.Devices[0];
+        var oldTierId = identity.TierId;
+
+        var fakeUserContext = A.Fake<IUserContext>();
+        A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
+        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(device.Id);
+
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
+            .Returns(identity);
+
+        var fakePushNotificationSender = A.Dummy<IPushNotificationSender>();
+
+        var mockEventBus = A.Fake<IEventBus>();
+
+        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockEventBus, fakePushNotificationSender);
+
+        // Act
+        await handler.Handle(new ApproveDeletionProcessCommand(deletionProcess.Id), CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => mockEventBus.Publish(A<TierOfIdentityChangedDomainEvent>.That.Matches(i =>
+                i.IdentityAddress == identity.Address &&
+                i.OldTierId == oldTierId &&
+                i.NewTierId == Tier.QUEUED_FOR_DELETION.Id)))
+            .MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task Publishes_IdentityToBeDeleted_DomainEvent()
+    {
+       //Arrange
+       var identity = TestDataGenerator.CreateIdentityWithDeletionProcessWaitingForApproval(new DateTime());
+       var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval)!;
+       var device = identity.Devices[0];
+
+       var fakeUserContext = A.Fake<IUserContext>();
+       A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
+       A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(device.Id);
+
+       var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+       A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
+           .Returns(identity);
+
+       var fakePushNotificationSender = A.Dummy<IPushNotificationSender>();
+
+       var mockEventBus = A.Fake<IEventBus>();
+
+       var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockEventBus, fakePushNotificationSender);
+
+        // Act
+        await handler.Handle(new ApproveDeletionProcessCommand(deletionProcess.Id), CancellationToken.None);
+
+        // Assert
+        A.CallTo(() => mockEventBus.Publish(A<IdentityToBeDeletedDomainEvent>.That.Matches(i =>
+                i.IdentityAddress == identity.Address)))
+            .MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus? eventBus = null, IPushNotificationSender? pushNotificationSender = null)

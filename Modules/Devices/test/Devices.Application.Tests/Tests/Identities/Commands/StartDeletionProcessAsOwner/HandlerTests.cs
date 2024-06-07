@@ -85,14 +85,14 @@ public class HandlerTests : AbstractTestsBase
     }
 
     [Fact]
-    public async Task Publishes_TierOfIdentityChangedDomainEvent()
+    public async Task Publishes_TierOfIdentityChanged_DomainEvent()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
         var activeDevice = identity.Devices[0];
         var oldTierId = identity.TierId;
 
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var fakeIdentitiesRepository = A.Dummy<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
         var mockEventBus = A.Fake<IEventBus>();
 
@@ -116,13 +116,13 @@ public class HandlerTests : AbstractTestsBase
     }
 
     [Fact]
-    public async Task Publishes_PeerIdentityToBeDeletedDomainEvent()
+    public async Task Publishes_IdentityToBeDeleted_DomainEvent()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
         var activeDevice = identity.Devices[0];
 
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var fakeIdentitiesRepository = A.Dummy<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
         var mockEventBus = A.Fake<IEventBus>();
 
@@ -138,7 +138,7 @@ public class HandlerTests : AbstractTestsBase
         await handler.Handle(command, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockEventBus.Publish(A<PeerIdentityToBeDeletedDomainEvent>.That.Matches(i =>
+        A.CallTo(() => mockEventBus.Publish(A<IdentityToBeDeletedDomainEvent>.That.Matches(i =>
                 i.IdentityAddress == identity.Address)))
             .MustHaveHappenedOnceExactly();
     }
