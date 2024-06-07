@@ -70,6 +70,17 @@ public static class TestDataGenerator
         return deletionProcess;
     }
 
+    public static IdentityDeletionProcess CreateDeletingDeletionProcessFor(Identity identity, DeviceId deviceId)
+    {
+        var deletionProcess = identity.StartDeletionProcessAsOwner(deviceId);
+
+        SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod + 1));
+        identity.DeletionStarted();
+        SystemTime.UndoSet();
+
+        return deletionProcess;
+    }
+
     public static Identity CreateIdentityWithApprovedDeletionProcess(DateTime? approvalDate = null)
     {
         approvalDate ??= SystemTime.UtcNow;
