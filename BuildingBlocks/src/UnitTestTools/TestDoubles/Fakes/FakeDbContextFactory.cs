@@ -8,7 +8,7 @@ namespace Backbone.UnitTestTools.TestDoubles.Fakes;
 
 public static class FakeDbContextFactory
 {
-    public static (TContext arrangeContext, TContext assertionContext, TContext actContext)
+    public static (TContext arrangeContext, TContext actContext, TContext assertionContext)
         CreateDbContexts<TContext>(SqliteConnection? connection = null) where TContext : AbstractDbContextBase
     {
         connection ??= CreateDbConnection();
@@ -32,7 +32,7 @@ public static class FakeDbContextFactory
     }
 
 
-    public static (TContext arrangeContext, TContext assertionContext, TContext actContext)
+    public static (TContext arrangeContext, TContext actContext, TContext assertionContext)
         CreateDbContexts2<TContext>(SqliteConnection? connection = null) where TContext : DbContext
     {
         connection ??= CreateDbConnection();
@@ -54,6 +54,7 @@ public static class FakeDbContextFactory
 
         return (arrangeContext, assertionContext, actContext);
     }
+
 
     public static SqliteConnection CreateDbConnection()
     {
