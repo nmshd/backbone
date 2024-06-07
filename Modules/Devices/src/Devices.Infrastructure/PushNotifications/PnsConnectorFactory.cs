@@ -14,6 +14,8 @@ public abstract class PnsConnectorFactory
                 return CreateForApplePushNotificationService();
             case PushNotificationPlatform.Dummy:
                 return CreateForDummy();
+            case PushNotificationPlatform.Sse:
+                return CreateForSse();
         }
 
         throw new NotImplementedException($"There is currently no {nameof(IPnsConnector)} for the platform '{platform}'.");
@@ -24,4 +26,6 @@ public abstract class PnsConnectorFactory
     protected abstract IPnsConnector CreateForApplePushNotificationService();
 
     protected abstract IPnsConnector CreateForDummy();
+
+    protected abstract IPnsConnector CreateForSse();
 }

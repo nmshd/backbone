@@ -54,6 +54,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
             "fcm" => PushNotificationPlatform.Fcm,
             "apns" => PushNotificationPlatform.Apns,
             "dummy" => PushNotificationPlatform.Dummy,
+            "sse" => PushNotificationPlatform.Sse,
             _ => throw new NotImplementedException($"The platform '{platform}' is invalid.")
         };
     }

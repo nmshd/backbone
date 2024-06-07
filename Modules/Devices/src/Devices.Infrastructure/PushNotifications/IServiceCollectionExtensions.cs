@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Dummy;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
@@ -38,6 +39,9 @@ public static class IServiceCollectionExtensions
 
         if (options.Providers.Dummy is { Enabled: true })
             services.AddDummy();
+
+        if (options.Providers.Sse is { Enabled: true })
+            services.AddSse(options.Providers.Sse);
     }
 
     private static void AddFcm(this IServiceCollection services)
@@ -60,6 +64,21 @@ public static class IServiceCollectionExtensions
     {
         services.AddTransient<DummyConnector>();
     }
+
+    private static void AddSse(this IServiceCollection services, SseOptions options)
+    {
+        services.AddSingleton<SseServerClient>();
+
+        services.AddHttpClient(nameof(SseServerClient), client => { client.BaseAddress = new Uri(options.SseServerBaseAddress); });
+
+        services.Configure<SseOptions>(o =>
+        {
+            o.Enabled = options.Enabled;
+            o.SseServerBaseAddress = options.SseServerBaseAddress;
+        });
+
+        services.AddTransient<SseConnector>();
+    }
 }
 
 public class PushNotificationOptions
@@ -74,5 +93,7 @@ public class PushNotificationOptions
         public required ApnsOptions? Apns { get; set; } = null!;
 
         public required DummyOptions? Dummy { get; set; } = null!;
+
+        public required SseOptions? Sse { get; set; } = null!;
     }
 }
