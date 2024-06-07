@@ -42,6 +42,7 @@ public class Handler : IRequestHandler<CancelDeletionAsSupportCommand, CancelDel
 
         _eventBus.Publish(new TierOfIdentityChangedDomainEvent(identity, oldTierId, newTierId));
         _eventBus.Publish(new IdentityDeletionProcessStatusChangedDomainEvent(identity.Address, deletionProcess.Id, null));
+        _eventBus.Publish(new IdentityDeletionCanceledDomainEvent(identity.Address));
 
         await _notificationSender.SendNotification(identity.Address, new DeletionProcessCancelledBySupportNotification(), cancellationToken);
 
