@@ -1,5 +1,4 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAuditLogs;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
@@ -9,24 +8,20 @@ using FakeItEasy;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Data.Sqlite;
-using Microsoft.EntityFrameworkCore;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetDeletionProcessesAuditLogs;
 
 public class HandlerTests : AbstractTestsBase
 {
-    private readonly DevicesDbContext _devicesArrangeDbContext;
+    private readonly DevicesDbContext _arrangeDbContext;
     private readonly DevicesDbContext _actDbContext;
 
     public HandlerTests()
     {
         AssertionScope.Current.FormattingOptions.MaxLines = 1000;
 
-        var connection = FakeDbContextFactory.CreateDbConnection();
-        (_devicesArrangeDbContext, _, _) = CreateDbContexts(connection);
-        (_, _, _actDbContext) = CreateDbContexts(connection);
+        (_arrangeDbContext, _actDbContext, _) = FakeDbContextFactory.CreateDbContexts2<DevicesDbContext>();
     }
 
     [Fact]
@@ -35,21 +30,17 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
         TestDataGenerator.CreateCancelledDeletionProcessFor(identity);
-        var identityDeletionProcessAuditLogs = identity.DeletionProcesses.SelectMany(identityDeletionProcess => identityDeletionProcess.AuditLog).ToList();
 
-        await _devicesArrangeDbContext.IdentityDeletionProcessAuditLogs.AddRangeAsync(identityDeletionProcessAuditLogs);
-        await _devicesArrangeDbContext.SaveChangesAsync();
+        _arrangeDbContext.SaveEntity(identity);
+        _arrangeDbContext.RemoveEntity(identity);
 
-        await _devicesArrangeDbContext.Identities.Where(Identity.HasAddress(identity.Address)).ExecuteDeleteAsync();
-
-        var identitiesRepository = new IdentitiesRepository(_actDbContext, A.Fake<UserManager<ApplicationUser>>());
-        var handler = CreateHandler(identitiesRepository);
+        var handler = CreateHandler(_actDbContext);
 
         // Act
         var result = await handler.Handle(new GetDeletionProcessesAuditLogsQuery(identity.Address), CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(identityDeletionProcessAuditLogs.Count);
+        result.Should().HaveCount(identity.DeletionProcesses.SelectMany(d => d.AuditLog).Count());
     }
 
     [Fact]
@@ -58,13 +49,10 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
         TestDataGenerator.CreateCancelledDeletionProcessFor(identity);
-        var identityDeletionProcessAuditLogs = identity.DeletionProcesses.SelectMany(identityDeletionProcess => identityDeletionProcess.AuditLog).ToList();
 
-        await _devicesArrangeDbContext.IdentityDeletionProcessAuditLogs.AddRangeAsync(identityDeletionProcessAuditLogs);
-        await _devicesArrangeDbContext.SaveChangesAsync();
+        _arrangeDbContext.SaveEntity(identity);
 
-        var identitiesRepository = new IdentitiesRepository(_actDbContext, A.Fake<UserManager<ApplicationUser>>());
-        var handler = CreateHandler(identitiesRepository);
+        var handler = CreateHandler(_actDbContext);
 
         // Act
         var result = await handler.Handle(new GetDeletionProcessesAuditLogsQuery("non-existent-identity-address"), CancellationToken.None);
@@ -81,21 +69,17 @@ public class HandlerTests : AbstractTestsBase
         TestDataGenerator.CreateCancelledDeletionProcessFor(identity);
         TestDataGenerator.CreateRejectedDeletionProcessFor(identity, identity.Devices.First().Id);
         TestDataGenerator.CreateApprovedDeletionProcessFor(identity, identity.Devices.First().Id);
-        var identityDeletionProcessAuditLogs = identity.DeletionProcesses.SelectMany(identityDeletionProcess => identityDeletionProcess.AuditLog).ToList();
 
-        await _devicesArrangeDbContext.IdentityDeletionProcessAuditLogs.AddRangeAsync(identityDeletionProcessAuditLogs);
-        await _devicesArrangeDbContext.SaveChangesAsync();
+        _arrangeDbContext.SaveEntity(identity);
+        _arrangeDbContext.RemoveEntity(identity);
 
-        await _devicesArrangeDbContext.Identities.Where(Identity.HasAddress(identity.Address)).ExecuteDeleteAsync();
-
-        var identitiesRepository = new IdentitiesRepository(_actDbContext, A.Fake<UserManager<ApplicationUser>>());
-        var handler = CreateHandler(identitiesRepository);
+        var handler = CreateHandler(_actDbContext);
 
         // Act
         var result = await handler.Handle(new GetDeletionProcessesAuditLogsQuery(identity.Address), CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(identityDeletionProcessAuditLogs.Count);
+        result.Should().HaveCount(identity.DeletionProcesses.SelectMany(d => d.AuditLog).Count());
     }
 
     [Fact]
@@ -104,21 +88,17 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
         TestDataGenerator.CreateDeletingDeletionProcessFor(identity, identity.Devices.First().Id);
-        var identityDeletionProcessAuditLogs = identity.DeletionProcesses.SelectMany(identityDeletionProcess => identityDeletionProcess.AuditLog).ToList();
 
-        await _devicesArrangeDbContext.IdentityDeletionProcessAuditLogs.AddRangeAsync(identityDeletionProcessAuditLogs);
-        await _devicesArrangeDbContext.SaveChangesAsync();
+        _arrangeDbContext.SaveEntity(identity);
+        _arrangeDbContext.RemoveEntity(identity);
 
-        await _devicesArrangeDbContext.Identities.Where(Identity.HasAddress(identity.Address)).ExecuteDeleteAsync();
-
-        var identitiesRepository = new IdentitiesRepository(_actDbContext, A.Fake<UserManager<ApplicationUser>>());
-        var handler = CreateHandler(identitiesRepository);
+        var handler = CreateHandler(_actDbContext);
 
         // Act
         var result = await handler.Handle(new GetDeletionProcessesAuditLogsQuery(identity.Address), CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(identityDeletionProcessAuditLogs.Count);
+        result.Should().HaveCount(identity.DeletionProcesses.SelectMany(d => d.AuditLog).Count());
     }
 
     [Fact]
@@ -127,47 +107,22 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
         TestDataGenerator.CreateDeletingDeletionProcessFor(identity, identity.Devices.First().Id);
-        var identityDeletionProcessAuditLogs = identity.DeletionProcesses.SelectMany(identityDeletionProcess => identityDeletionProcess.AuditLog).ToList();
 
-        await _devicesArrangeDbContext.IdentityDeletionProcessAuditLogs.AddRangeAsync(identityDeletionProcessAuditLogs);
-        await _devicesArrangeDbContext.SaveChangesAsync();
+        _arrangeDbContext.SaveEntity(identity);
+        _arrangeDbContext.RemoveEntity(identity);
 
-        await _devicesArrangeDbContext.Identities.Where(Identity.HasAddress(identity.Address)).ExecuteDeleteAsync();
-
-        var identitiesRepository = new IdentitiesRepository(_actDbContext, A.Fake<UserManager<ApplicationUser>>());
-        var handler = CreateHandler(identitiesRepository);
+        var handler = CreateHandler(_actDbContext);
 
         // Act
         var result = await handler.Handle(new GetDeletionProcessesAuditLogsQuery(identity.Address), CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(identityDeletionProcessAuditLogs.Count);
+        result.Should().HaveCount(identity.DeletionProcesses.SelectMany(d => d.AuditLog).Count());
     }
 
-    private Handler CreateHandler(IIdentitiesRepository identitiesRepository)
+    private static Handler CreateHandler(DevicesDbContext actDbContext)
     {
-        return new Handler(identitiesRepository);
-    }
-
-    private (DevicesDbContext arrangeContext, DevicesDbContext assertionContext, DevicesDbContext actContext)
-        CreateDbContexts(SqliteConnection connection)
-    {
-        connection.Open();
-
-        var options = new DbContextOptionsBuilder<DevicesDbContext>()
-            .UseSqlite(connection)
-            .Options;
-
-        object[] args = [options];
-
-        var context = (DevicesDbContext)Activator.CreateInstance(typeof(DevicesDbContext), args)!;
-        context.Database.EnsureCreated();
-        context.Dispose();
-
-        var arrangeContext = (DevicesDbContext)Activator.CreateInstance(typeof(DevicesDbContext), args)!;
-        var assertionContext = (DevicesDbContext)Activator.CreateInstance(typeof(DevicesDbContext), args)!;
-        var actContext = (DevicesDbContext)Activator.CreateInstance(typeof(DevicesDbContext), args)!;
-
-        return (arrangeContext, assertionContext, actContext);
+        var repository = new IdentitiesRepository(actDbContext, A.Fake<UserManager<ApplicationUser>>());
+        return new Handler(repository);
     }
 }
