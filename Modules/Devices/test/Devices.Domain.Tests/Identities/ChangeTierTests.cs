@@ -31,6 +31,21 @@ public class ChangeTierTests : AbstractTestsBase
     }
 
     [Fact]
+    public void Changing_the_tier_to_valid_tier_is_successful()
+    {
+        // Arrange
+        var identity = CreateIdentity();
+        var newTier = TierId.Generate();
+
+        // Act
+        var acting = () => identity.ChangeTier(newTier);
+
+        // Assert
+        acting.Should().NotThrow();
+        identity.TierId.Should().Be(newTier);
+    }
+
+    [Fact]
     public void Changing_the_tier_from_QueuedForDeletion_throws_DomainException()
     {
         // Arrange
