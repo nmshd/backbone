@@ -2,14 +2,18 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.MessageCreated;
-using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerFromRelationshipDeleted;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeleted;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeletionCanceled;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerToBeDeleted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationCompleted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationRequested;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipStatusChanged;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.MessageCreated;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerFromRelationshipDeleted;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeleted;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeletionCanceled;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerToBeDeleted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationCompleted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationRequested;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipStatusChanged;
@@ -39,6 +43,8 @@ public static class IEventBusExtensions
         eventBus.Subscribe<RelationshipStatusChangedDomainEvent, RelationshipStatusChangedDomainEventHandler>();
         eventBus.Subscribe<RelationshipReactivationRequestedDomainEvent, RelationshipReactivationRequestedDomainEventHandler>();
         eventBus.Subscribe<RelationshipReactivationCompletedDomainEvent, RelationshipReactivationCompletedDomainEventHandler>();
-        eventBus.Subscribe<PeerFromRelationshipDeletedDomainEvent, PeerFromRelationshipDeletedDomainEventHandler>();
+        eventBus.Subscribe<PeerToBeDeletedDomainEvent, PeerToBeDeletedDomainEventHandler>();
+        eventBus.Subscribe<PeerDeletionCanceledDomainEvent, PeerDeletionCanceledDomainEventHandler>();
+        eventBus.Subscribe<PeerDeletedDomainEvent, PeerDeletedDomainEventHandler>();
     }
 }
