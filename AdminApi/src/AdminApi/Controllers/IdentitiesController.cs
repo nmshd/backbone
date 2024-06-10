@@ -9,6 +9,7 @@ using Backbone.Modules.Devices.Application.Identities.Commands.StartDeletionProc
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsSupport;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAuditLogs;
 using Backbone.Modules.Quotas.Application.DTOs;
 using Backbone.Modules.Quotas.Application.Identities.Commands.CreateQuotaForIdentity;
 using Backbone.Modules.Quotas.Application.Identities.Commands.DeleteQuotaForIdentity;
@@ -123,6 +124,14 @@ public class IdentitiesController : ApiControllerBase
     public async Task<IActionResult> GetDeletionProcessesAsSupport([FromRoute] string identityAddress, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetDeletionProcessesAsSupportQuery(identityAddress), cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpGet("{identityAddress}/DeletionProcesses/AuditLogs")]
+    [ProducesResponseType(typeof(GetDeletionProcessesAuditLogsResponse), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetDeletionProcessesAuditLogs([FromRoute] string identityAddress, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new GetDeletionProcessesAuditLogsQuery(identityAddress), cancellationToken);
         return Ok(response);
     }
 

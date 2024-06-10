@@ -28,7 +28,7 @@ public class HandlerTests : AbstractTestsBase
     {
         AssertionScope.Current.FormattingOptions.MaxLines = 1000;
 
-        (_arrangeContext, _, _actContext) = FakeDbContextFactory.CreateDbContexts<SynchronizationDbContext>();
+        (_arrangeContext, _actContext, _) = FakeDbContextFactory.CreateDbContexts<SynchronizationDbContext>();
         _handler = CreateHandler();
     }
 
