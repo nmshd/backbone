@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Relationships.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Identities;
+using Backbone.Modules.Relationships.Application.Identities;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.DeleteRelationshipTemplatesOfIdentity;
 using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
@@ -14,11 +15,13 @@ public class IdentityDeleterTests : AbstractTestsBase
     {
         // Arrange
         var identityAddress = CreateRandomIdentityAddress();
+        var mockIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
         var mockMediator = A.Fake<IMediator>();
+
         var deleter = new IdentityDeleter(mockMediator);
 
         // Act
-        await deleter.Delete(identityAddress);
+        await deleter.Delete(identityAddress, mockIDeletionProcessLogger);
 
         // Assert
         A.CallTo(() => mockMediator.Send(

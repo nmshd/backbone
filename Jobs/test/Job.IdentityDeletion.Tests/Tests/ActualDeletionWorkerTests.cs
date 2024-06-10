@@ -47,6 +47,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
         SetupRipeDeletionProcessesCommand(mediator, identityAddress1, identityAddress2);
         var mockIdentityDeleter = A.Fake<IIdentityDeleter>();
+        var mockIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
         var identityDeleters = new List<IIdentityDeleter>([mockIdentityDeleter]);
 
         var worker = CreateWorker(mediator, identityDeleters);
@@ -58,8 +59,8 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
         // Assert
 
-        A.CallTo(() => mockIdentityDeleter.Delete(identityAddress1)).MustHaveHappenedOnceExactly();
-        A.CallTo(() => mockIdentityDeleter.Delete(identityAddress2)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentityDeleter.Delete(identityAddress1, mockIDeletionProcessLogger)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentityDeleter.Delete(identityAddress2, mockIDeletionProcessLogger)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -100,13 +101,15 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     private static ActualDeletionWorker CreateWorker(IMediator mediator,
         List<IIdentityDeleter>? identityDeleters = null,
         IEventBus? eventBus = null,
-        IPushNotificationSender? pushNotificationSender = null)
+        IPushNotificationSender? pushNotificationSender = null,
+        IDeletionProcessLogger? deletionProcessLogger = null)
     {
         var hostApplicationLifetime = A.Dummy<IHostApplicationLifetime>();
         identityDeleters ??= [A.Dummy<IIdentityDeleter>()];
         eventBus ??= A.Dummy<IEventBus>();
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
         var logger = A.Dummy<ILogger<ActualDeletionWorker>>();
-        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, eventBus, logger);
+        deletionProcessLogger ??= A.Dummy<IDeletionProcessLogger>();
+        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, eventBus, logger, deletionProcessLogger);
     }
 }

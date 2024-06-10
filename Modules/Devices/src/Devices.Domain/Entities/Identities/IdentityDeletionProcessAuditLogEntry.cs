@@ -193,7 +193,7 @@ public class IdentityDeletionProcessAuditLogEntry
 
     public static IdentityDeletionProcessAuditLogEntry DataDeleted(IdentityDeletionProcessId processId, IdentityAddress identityAddress, string aggregateType)
     {
-        if (!TryGetMessageKey(aggregateType, out MessageKey messageKey))
+        if (!TryGetMessageKey(aggregateType, out var messageKey))
             throw new ArgumentException("Invalid aggregateType", nameof(aggregateType));
 
         return new IdentityDeletionProcessAuditLogEntry(
