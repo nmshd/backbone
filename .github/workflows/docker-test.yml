@@ -45,13 +45,13 @@ jobs:
           dotnet-version: 8.x
           #cache: true
       
-      #- name: Cache Docker
-      #  uses: actions/cache@v3
-      #  with:
-      #    path: /tmp/.buildx-cache
-      #    key: ${{ runner.os }}-buildx-${{ github.sha }}
-      #    restore-keys: |
-      #      ${{ runner.os }}-buildx-
+      - name: Cache Image
+        uses: actions/cache@v3
+        with:
+          path: /tmp/.buildx-${{ matrix.tag }}-cache
+          key: buildx-${{ matrix.tag }}-cache-${{ github.sha }}
+          restore-keys: |
+            buildx-${{ matrix.tag }}-cache-
 
 #      - id: cache
 #        name: Cache Docker
@@ -103,8 +103,10 @@ jobs:
         with: 
           context: .
           file: ${{ matrix.dockerfile }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=local,src=/tmp/.buildx-${{ matrix.tag }}-cache
+          cache-to: type=local,mode=max,dest=/tmp/.buildx-${{ matrix.tag }}-cache-new
+          #cache-from: type=gha
+          #cache-to: type=gha,mode=max
           tags: ${{ matrix.tag }}
           load: false
           outputs: type=docker,dest=/tmp/${{ matrix.tag }}.tar
@@ -167,13 +169,13 @@ jobs:
         env:
           DOTNET_CONSOLE_ANSI_COLOR: true
           
-      #- # Temp fix
-        # https://github.com/docker/build-push-action/issues/252
-        # https://github.com/moby/buildkit/issues/1896
-      #  name: Move cache
-      #  run: |
-      #    rm -rf /tmp/.buildx-cache
-      #    mv /tmp/.buildx-cache-new /tmp/.buildx-cache
+      # Temp fix
+      # https://github.com/docker/build-push-action/issues/252
+      # https://github.com/moby/buildkit/issues/1896
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-${{ matrix.tag }}-cache
+          mv /tmp/.buildx-${{ matrix.tag }}-cache-new /tmp/.buildx-${{ matrix.tag }}-cache
 
   run-tests:
     name: Run tests
