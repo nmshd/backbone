@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityDeletionCanceled;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
@@ -26,7 +21,7 @@ public class IdentityDeletionCanceledDomainEventHandlerTests : AbstractTestsBase
         var identity = TestDataGenerator.CreateRandomIdentityAddress();
         var mockRelationshipsRepository = A.Fake<IRelationshipsRepository>();
 
-        var handler = new IdentityDeletionCanceledDomainEventHandler(mockRelationshipsRepository, A.Dummy<IEventBus>());
+        var handler = CreateHandler(mockRelationshipsRepository);
 
         //Act
         await handler.Handle(new IdentityDeletionCanceledDomainEvent(identity));
@@ -49,7 +44,7 @@ public class IdentityDeletionCanceledDomainEventHandlerTests : AbstractTestsBase
         A.CallTo(() => fakeRelationshipsRepository.FindRelationships(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._))
             .Returns(new List<Relationship>() { relationship });
 
-        var handler = new IdentityDeletionCanceledDomainEventHandler(fakeRelationshipsRepository, mockEventBus);
+        var handler = CreateHandler(fakeRelationshipsRepository, mockEventBus);
 
         //Act
         await handler.Handle(new IdentityDeletionCanceledDomainEvent(identityToBeDeleted));
@@ -60,5 +55,10 @@ public class IdentityDeletionCanceledDomainEventHandlerTests : AbstractTestsBase
             e.RelationshipId == relationship.Id &&
             e.PeerIdentityAddress == identityToBeDeleted))
         ).MustHaveHappenedOnceExactly();
+    }
+
+    private static IdentityDeletionCanceledDomainEventHandler CreateHandler(IRelationshipsRepository relationshipsRepository, IEventBus? eventBus = null)
+    {
+        return new IdentityDeletionCanceledDomainEventHandler(relationshipsRepository, eventBus ?? A.Dummy<IEventBus>());
     }
 }

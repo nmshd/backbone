@@ -21,7 +21,7 @@ public class IdentityToBeDeletedDomainEventHandlerTests : AbstractTestsBase
         var identity = TestDataGenerator.CreateRandomIdentityAddress();
         var mockRelationshipsRepository = A.Fake<IRelationshipsRepository>();
 
-        var handler = new IdentityToBeDeletedDomainEventHandler(mockRelationshipsRepository, A.Dummy<IEventBus>());
+        var handler = CreateHandler(mockRelationshipsRepository);
 
         //Act
         await handler.Handle(new IdentityToBeDeletedDomainEvent(identity));
@@ -44,7 +44,7 @@ public class IdentityToBeDeletedDomainEventHandlerTests : AbstractTestsBase
         A.CallTo(() => fakeRelationshipsRepository.FindRelationships(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._))
             .Returns(new List<Relationship>() { relationship });
 
-        var handler = new IdentityToBeDeletedDomainEventHandler(fakeRelationshipsRepository, mockEventBus);
+        var handler = CreateHandler(fakeRelationshipsRepository, mockEventBus);
 
         //Act
         await handler.Handle(new IdentityToBeDeletedDomainEvent(identityToBeDeleted));
@@ -55,5 +55,10 @@ public class IdentityToBeDeletedDomainEventHandlerTests : AbstractTestsBase
             e.RelationshipId == relationship.Id &&
             e.PeerIdentityAddress == identityToBeDeleted))
         ).MustHaveHappenedOnceExactly();
+    }
+
+    private static IdentityToBeDeletedDomainEventHandler CreateHandler(IRelationshipsRepository relationshipsRepository, IEventBus? eventBus = null)
+    {
+        return new IdentityToBeDeletedDomainEventHandler(relationshipsRepository, eventBus ?? A.Dummy<IEventBus>());
     }
 }
