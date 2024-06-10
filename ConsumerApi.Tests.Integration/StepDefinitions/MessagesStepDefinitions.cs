@@ -87,13 +87,13 @@ internal class MessagesStepDefinitions
     [Then(@"the error contains a list of Identities to be deleted that includes i2")]
     public void ThenTheErrorContainsAListOfIdentitiesToBeDeletedThatIncludesIdentityI2()
     {
-        var data = _sendMessageResponse!.Error!.Data?.As<SendMessageErrorData>();
+        var data = _sendMessageResponse!.Error!.Data?.As<PeersToBeDeletedErrorData>();
         data.Should().NotBeNull();
         data!.PeersToBeDeleted.Contains(_client2.IdentityData!.Address).Should().BeTrue();
     }
 }
 
-public class SendMessageErrorData
+public class PeersToBeDeletedErrorData
 {
-    public List<string> PeersToBeDeleted { get; set; } = [];
+    public required List<string> PeersToBeDeleted { get; set; }
 }
