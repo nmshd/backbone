@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
@@ -88,7 +87,8 @@ internal class MessagesStepDefinitions
     [Then(@"the error contains a list of Identities to be deleted that includes i2")]
     public void ThenTheErrorContainsAListOfIdentitiesToBeDeletedThatIncludesIdentityI2()
     {
-        var data = ((JsonElement)_sendMessageResponse!.Error!.Data!).Deserialize<SendMessageErrorData>(new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.CamelCase });
+        var data = _sendMessageResponse!.Error!.Data?.As<SendMessageErrorData>();
+        data.Should().NotBeNull();
         data!.PeersToBeDeleted.Contains(_client2.IdentityData!.Address).Should().BeTrue();
     }
 }
