@@ -8,8 +8,8 @@ on:
       - "**"
 
 jobs:
-  docker-integration-test-postgres:
-    name: Run Cached Integration Tests (on Postgres)
+  container-test-builds:
+    name: Build ${{matrix.tag}} Container
     runs-on: ubuntu-latest
     strategy:
       matrix: 
@@ -98,7 +98,7 @@ jobs:
 #      - name: Run local registry
 #        run: docker run -d -p 6000:5000 --restart=always --name registry -v /tmp/docker-registry:/var/lib/registry registry:2 && npx wait-on tcp:6000
       
-      - name: Build Containers
+      - name: Build Container
         uses: docker/build-push-action@v5
         with: 
           context: .
