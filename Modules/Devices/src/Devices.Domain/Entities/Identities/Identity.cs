@@ -13,7 +13,7 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 public class Identity : Entity
 {
     private readonly List<IdentityDeletionProcess> _deletionProcesses;
-    private TierId _tierId;
+    private TierId? _tierId;
 
     public Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion)
     {
@@ -44,21 +44,18 @@ public class Identity : Entity
 
     public TierId TierId
     {
-        get => _tierId;
+        get => _tierId!; // the only time the backing filed is null is within the constructor, so we can suppress the warning
         private set
         {
             if (value == _tierId) return;
 
-            if (_tierId == null!)
-            {
-                _tierId = value;
-            }
-            else
-            {
-                var oldTier = _tierId;
-                _tierId = value;
+            var oldTier = _tierId;
+
+            _tierId = value;
+
+            // if the oldTier was null, we don't consider it a change
+            if (oldTier != null)
                 RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, value));
-            }
         }
     }
 
