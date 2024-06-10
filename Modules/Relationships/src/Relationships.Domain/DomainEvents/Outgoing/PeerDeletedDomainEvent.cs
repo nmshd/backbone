@@ -2,9 +2,9 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
-public class PeerFromRelationshipDeletedDomainEvent : DomainEvent
+public class PeerDeletedDomainEvent : DomainEvent
 {
-    public PeerFromRelationshipDeletedDomainEvent(IdentityAddress identityAddress, string relationshipId, string peerAddress)
+    public PeerDeletedDomainEvent(IdentityAddress identityAddress, string relationshipId, string peerAddress)
         : base($"{relationshipId}/PeerFromRelationshipDeleted/{peerAddress}")
     {
         IdentityAddress = identityAddress;
