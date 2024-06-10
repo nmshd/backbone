@@ -190,6 +190,43 @@ public class IdentityDeletionProcessAuditLogEntry
             DeletionProcessStatus.Approved
         );
     }
+
+    public static IdentityDeletionProcessAuditLogEntry DataDeleted(IdentityDeletionProcessId processId, IdentityAddress identityAddress, string aggregateType)
+    {
+        if (!TryGetMessageKey(aggregateType, out MessageKey messageKey))
+            throw new ArgumentException("Invalid aggregateType", nameof(aggregateType));
+
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId,
+            messageKey,
+            Hasher.HashUtf8(identityAddress.Value),
+            null,
+            DeletionProcessStatus.Deleting,
+            DeletionProcessStatus.Deleting
+        );
+    }
+
+    private static bool TryGetMessageKey(string aggregateType, out MessageKey messageKey)
+    {
+        var messageKeyMappings = new Dictionary<string, MessageKey>
+        {
+            { "Challenges", MessageKey.Challenges },
+            { "PnsRegistrations", MessageKey.PnsRegistrations },
+            { "Identity", MessageKey.Identity },
+            { "Files", MessageKey.Files },
+            { "Messages", MessageKey.Messages },
+            { "QuotasIdentity", MessageKey.QuotasIdentity },
+            { "Relationships", MessageKey.Relationships },
+            { "RelationshipTemplates", MessageKey.RelationshipTemplates },
+            { "RelationshipTemplateAllocations", MessageKey.RelationshipTemplateAllocations },
+            { "ExternalEvents", MessageKey.ExternalEvents },
+            { "SyncRuns", MessageKey.SyncRuns },
+            { "Datawallets", MessageKey.Datawallets },
+            { "Tokens", MessageKey.Tokens }
+        };
+
+        return messageKeyMappings.TryGetValue(aggregateType, out messageKey);
+    }
 }
 
 public enum MessageKey
@@ -206,5 +243,18 @@ public enum MessageKey
     ApprovalReminder3Sent = 10,
     GracePeriodReminder1Sent = 11,
     GracePeriodReminder2Sent = 12,
-    GracePeriodReminder3Sent = 13
+    GracePeriodReminder3Sent = 13,
+    Challenges = 14,
+    PnsRegistrations = 15,
+    Identity = 16,
+    Files = 17,
+    Messages = 18,
+    QuotasIdentity = 19,
+    Relationships = 20,
+    RelationshipTemplates = 21,
+    RelationshipTemplateAllocations = 22,
+    ExternalEvents = 23,
+    SyncRuns = 24,
+    Datawallets = 25,
+    Tokens = 26
 }

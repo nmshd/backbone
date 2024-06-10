@@ -200,4 +200,9 @@ public class IdentityDeletionProcess
 
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledAutomatically(Id, address));
     }
+
+    public void LogDeletedData(IdentityAddress address, string aggregateType)
+    {
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.DataDeleted(Id, address, aggregateType));
+    }
 }
