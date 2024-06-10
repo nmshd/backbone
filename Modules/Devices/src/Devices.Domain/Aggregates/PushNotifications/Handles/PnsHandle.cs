@@ -28,8 +28,25 @@ public record PnsHandle
                 var parseHandleResult = ApnsHandle.Parse(value);
                 return parseHandleResult.Map(v => (PnsHandle)v);
             }
+            case PushNotificationPlatform.Dummy:
+            {
+                var parseHandleResult = DummyHandle.Create();
+                return parseHandleResult.Map(v => (PnsHandle)v);
+            }
             default:
                 return Result.Failure<PnsHandle, DomainError>(DomainErrors.InvalidPnsPlatform($"Platform '{platform}' does not exist"));
         }
+    }
+}
+
+public record DummyHandle : PnsHandle
+{
+    private DummyHandle() : base(PushNotificationPlatform.Dummy, "")
+    {
+    }
+
+    public static Result<DummyHandle, DomainError> Create()
+    {
+        return Result.Success<DummyHandle, DomainError>(new DummyHandle());
     }
 }

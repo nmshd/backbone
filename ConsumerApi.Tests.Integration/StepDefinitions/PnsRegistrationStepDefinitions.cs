@@ -35,7 +35,7 @@ internal class PnsRegistrationStepDefinitions
     {
         var request = new UpdateDeviceRegistrationRequest
         {
-            Platform = "fcm",
+            Platform = "dummy",
             Handle = "eXYs0v3XT9w:APA91bHal6RzkPdjiFmoXvtVRJlfN81OCyzVIbXx4bTQupfcUQmDY9eAdUABLntZzO4M5rv7jmcj3Mk6",
             AppId = "someAppId"
         };

@@ -49,7 +49,11 @@
                     // "ConnectionString": "Server=ms-sql-server;Database=enmeshed;User Id=devices;Password=Passw0rd;TrustServerCertificate=True"
                 },
                 "PushNotifications": {
-                    "Provider": "Dummy"
+                    "Providers": {
+                        "dummy": {
+                            "enabled": true
+                        }
+                    }
                 }
             }
         },
