@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
@@ -55,15 +56,34 @@ public class PoolsGenerator
     {
         CreateOffsetPools();
 
-        await CreateIdentities();
+        //await CreateIdentities();
+        CreateFakeIdentities();
         DistributeRelationships();
 
-        await CreateRelationshipTemplates();
-        await CreateChallenges();
-        await CreateMessages();
-        await CreateDatawalletModifications();
+        //await CreateRelationshipTemplates();
+        //await CreateChallenges();
+        //await CreateMessages();
+        //await CreateDatawalletModifications();
 
         OutputAll();
+    }
+
+    private void CreateFakeIdentities()
+    {
+        foreach (var pool in _pools)
+        {
+            for (uint i = 0; i < pool.Amount; i++)
+            {
+                var createdIdentity = new Identity(new("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)), "ID1" + PasswordHelper.GeneratePassword(16, 16), "DVC" + PasswordHelper.GeneratePassword(8, 8), pool, i + 1);
+
+                if (pool.NumberOfDevices > 1)
+                {
+                    for (uint j = 1; j < pool.NumberOfDevices; j++)
+                        createdIdentity.AddDevice("DVC" + PasswordHelper.GeneratePassword(8, 8));
+                }
+                pool.Identities.Add(createdIdentity);
+            }
+        }
     }
 
     private void DistributeRelationships()
@@ -86,11 +106,19 @@ public class PoolsGenerator
         {
             foreach (var poolEntry in appPools)
             {
-                foreach (var identity in poolEntry.Identities.Where(i=>i.HasAvailabilityForNewRelationships()))
+                foreach (var identity in poolEntry.Identities.Where(i => i.HasAvailabilityForNewRelationships()))
                 {
                     Identity candidateIdentityForRelationship;
+                    var counter = 0;
                     do
+                    {
+                        if (counter++ > targetIdentities.Length)
+                        {
+                            throw new Exception("The current algorithm cannot handle this input because the attribution of relationships is not trivial.");
+                        }
                         candidateIdentityForRelationship = GetCandidateIdentityForRelationship(ref targetIdentities, ref targetIdentitiesIteratorIndex);
+
+                    }
                     while (identity.IdentitiesToEstablishRelationshipsWith.Contains(candidateIdentityForRelationship));
 
                     identity.AddIdentityToEstablishRelationshipsWith(candidateIdentityForRelationship);
@@ -99,6 +127,7 @@ public class PoolsGenerator
         }
 
         var relationshipsToA21 = appPools.SelectMany(p => p.Identities).SelectMany(i => i.IdentitiesToEstablishRelationshipsWith).Count(i => i.Nickname == "c21");
+        var c21 = connectorPools.SelectMany(p => p.Identities).Where(i => i.Nickname == "c21").Single();
     }
 
     private static Identity GetCandidateIdentityForRelationship(ref Identity[] targetIdentities, ref int targetIdentitiesIteratorIndex)
@@ -291,32 +320,37 @@ public class PoolsGenerator
 
     private void CreateOffsetPools()
     {
+        // because the creation of identities is a somewhat heavy operation, we should avoid carelessly creating identities.
+        // This requires finding the right ballance between identities and messages/relationships per identity.
+        // This is a TODO
+
         var relationshipsOffsetPool = new PoolEntry
         {
             Name = $"{(_poolsOffset.RelationshipsOffsetPendingTo == OffsetDirections.App ? "App" : "Connector")} Offset Pool for Relationships",
             NumberOfDevices = 1,
-            Amount = 1,
+            Amount = Convert.ToUInt32(_poolsOffset.RelationshipsOffset),
             Alias = _poolsOffset.RelationshipsOffsetPendingTo == OffsetDirections.App ? "a0r" : "c0r",
             NumberOfChallenges = 0,
             NumberOfDatawalletModifications = 0,
             NumberOfRelationshipTemplates = 0,
-            NumberOfRelationships = Convert.ToUInt32(_poolsOffset.RelationshipsOffset),
-            NumberOfSentMessages = 0,
-            Type = "Offset"
+            NumberOfRelationships = 1,
+            TotalNumberOfMessages = 0,
+            Type = _poolsOffset.RelationshipsOffsetPendingTo == OffsetDirections.App ? "connector" : "app"
         };
+
 
         var messagesOffsetPool = new PoolEntry
         {
             Name = $"{(_poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "App" : "Connector")} Offset Pool for Messages",
             NumberOfDevices = 1,
-            Amount = 1,
+            Amount = Convert.ToUInt32(_poolsOffset.MessagesOffset),
             Alias = _poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "a0m" : "c0m",
             NumberOfChallenges = 0,
             NumberOfDatawalletModifications = 0,
             NumberOfRelationshipTemplates = 0,
             NumberOfRelationships = 0,
-            NumberOfSentMessages = Convert.ToUInt32(_poolsOffset.MessagesOffset),
-            Type = "Offset"
+            NumberOfSentMessages = 1,
+            Type = _poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "connector" : "app"
         };
 
         if (_poolsOffset.RelationshipsOffset != 0)
