@@ -17,11 +17,11 @@ public class Handler : IRequestHandler<ListIdentitiesQuery, ListIdentitiesRespon
 
     public async Task<ListIdentitiesResponse> Handle(ListIdentitiesQuery request, CancellationToken cancellationToken)
     {
-        Expression<Func<Identity, bool>> filter = i => (request.Addresses == null || request.Addresses.Contains(i.Address))
-                                                       && (request.Status == null || i.Status == request.Status);
+        Expression<Func<Identity, bool>> filter = i => (request.Addresses == null || request.Addresses.Contains(i.Address)) &&
+                                                       (request.Status == null || i.Status == request.Status);
 
         var identities = await _identitiesRepository.Find(filter, cancellationToken);
-        var identityDtos = identities.Select(el => new IdentitySummaryDTO(el)).ToList();
+        var identityDtos = identities.Select(i => new IdentitySummaryDTO(i)).ToList();
 
         return new ListIdentitiesResponse(identityDtos);
     }

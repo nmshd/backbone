@@ -51,8 +51,7 @@ public class IdentitiesRepository : IIdentitiesRepository
 
     public async Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken)
     {
-        return await _readonlyIdentities
-            .AnyAsync(i => i.Address == address, cancellationToken);
+        return await _readonlyIdentities.AnyAsync(i => i.Address == address, cancellationToken);
     }
 
     public async Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
@@ -65,8 +64,7 @@ public class IdentitiesRepository : IIdentitiesRepository
 
     public async Task<int> CountByClientId(string clientId, CancellationToken cancellationToken)
     {
-        return await _readonlyIdentities
-            .CountAsync(i => i.ClientId == clientId, cancellationToken);
+        return await _readonlyIdentities.CountAsync(i => i.ClientId == clientId, cancellationToken);
     }
 
     public async Task AddUser(ApplicationUser user, string password)
