@@ -1,19 +1,19 @@
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetIdentity;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetDeletionProcessesAuditLogs;
 
-public class FindByAddressStubRepository : IIdentitiesRepository
+public class FindDeletionProcessAuditLogsByAddressStubRepository : IIdentitiesRepository
 {
-    private readonly Identity _identity;
+    private readonly IEnumerable<IdentityDeletionProcessAuditLogEntry> _identityDeletionProcessAuditLogs;
 
-    public FindByAddressStubRepository(Identity identity)
+    public FindDeletionProcessAuditLogsByAddressStubRepository(IEnumerable<IdentityDeletionProcessAuditLogEntry> identityDeletionProcessAuditLogs)
     {
-        _identity = identity;
+        _identityDeletionProcessAuditLogs = identityDeletionProcessAuditLogs;
     }
 
     public Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken)
@@ -58,7 +58,7 @@ public class FindByAddressStubRepository : IIdentitiesRepository
 
     public Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(_identityDeletionProcessAuditLogs);
     }
 
     public Task Update(Identity identity, CancellationToken cancellationToken)
@@ -68,7 +68,7 @@ public class FindByAddressStubRepository : IIdentitiesRepository
 
     public Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
-        return Task.FromResult((Identity?)_identity);
+        throw new NotImplementedException();
     }
 
     public Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
@@ -81,3 +81,4 @@ public class FindByAddressStubRepository : IIdentitiesRepository
         throw new NotImplementedException();
     }
 }
+

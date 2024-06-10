@@ -17,4 +17,10 @@ public static class ApplicationDbContextExtensions
         dbContext.SaveChanges();
         return entity;
     }
+
+    public static void RemoveEntity<TEntity>(this DevicesDbContext dbContext, TEntity entity) where TEntity : class
+    {
+        dbContext.Set<TEntity>().Remove(entity);
+        dbContext.SaveChanges();
+    }
 }

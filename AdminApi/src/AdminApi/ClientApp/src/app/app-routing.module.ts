@@ -12,6 +12,7 @@ import { TierListComponent } from "./components/quotas/tier/tier-list/tier-list.
 import { LoginComponent } from "./components/shared/login/login.component";
 import { AuthGuard } from "./shared/auth-guard/auth-guard.guard";
 import { CustomRouteReuseStrategy } from "./utils/custom-route-reuse-strategy";
+import { DeletionProcessAuditLogsDetailsComponent } from "./components/identity/identity-details/deletion-processes/dp-audit-logs/dp-audit-logs-details/dp-audit-logs-details/dp-audit-logs-details.component";
 
 const routes: Routes = [
     { path: "", redirectTo: "/dashboard", pathMatch: "full" },
@@ -19,6 +20,7 @@ const routes: Routes = [
     { path: "dashboard", component: DashboardComponent, data: { breadcrumb: "Dashboard" }, canActivate: [AuthGuard] },
     { path: "identities", component: IdentityListComponent, data: { breadcrumb: "Identities" }, canActivate: [AuthGuard] },
     { path: "identities/:address", component: IdentityDetailsComponent, canActivate: [AuthGuard] },
+    { path: "identities/:address/deletion-processes/audit-logs", component: DeletionProcessAuditLogsDetailsComponent, canActivate: [AuthGuard] },
     { path: "tiers", component: TierListComponent, data: { breadcrumb: "Tiers" }, canActivate: [AuthGuard] },
     { path: "tiers/create", component: TierEditComponent, data: { breadcrumb: "Create Tier" }, canActivate: [AuthGuard] },
     { path: "tiers/:id", component: TierEditComponent, canActivate: [AuthGuard] },
