@@ -35,10 +35,9 @@ public class ChangeTierTests : AbstractTestsBase
         var newTier = TierId.Generate();
 
         // Act
-        var acting = () => identity.ChangeTier(newTier);
+        identity.ChangeTier(newTier);
 
         // Assert
-        acting.Should().NotThrow();
         identity.TierId.Should().Be(newTier);
     }
 
