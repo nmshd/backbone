@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
-public class PeerIsToBeDeletedDomainEvent : DomainEvent
+public class PeerToBeDeletedDomainEvent : DomainEvent
 {
-    public PeerIsToBeDeletedDomainEvent(string identityAddress, string relationshipId, string peerIdentityAddress)
+    public PeerToBeDeletedDomainEvent(string identityAddress, string relationshipId, string peerIdentityAddress)
     {
         IdentityAddress = identityAddress;
         RelationshipId = relationshipId;
