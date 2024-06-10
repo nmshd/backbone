@@ -81,10 +81,7 @@ public class Identity : Entity
         if (TierId == id)
             throw new DomainException(GenericDomainErrors.NewAndOldParametersMatch("TierId"));
 
-        //var oldTier = TierId;
         TierId = id;
-
-        //RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, id));
     }
 
     public IdentityDeletionProcess StartDeletionProcessAsSupport()
