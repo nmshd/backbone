@@ -21,7 +21,7 @@ public class RelationshipTemplateQueryableExtensionsTests : AbstractTestsBase
 
     public RelationshipTemplateQueryableExtensionsTests()
     {
-        (_arrangeContext, _, _actContext) = FakeDbContextFactory.CreateDbContexts<RelationshipsDbContext>();
+        (_arrangeContext, _actContext, _) = FakeDbContextFactory.CreateDbContexts<RelationshipsDbContext>();
     }
 
     [Fact]

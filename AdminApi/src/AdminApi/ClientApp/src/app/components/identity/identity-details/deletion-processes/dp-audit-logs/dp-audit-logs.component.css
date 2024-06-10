@@ -1,0 +1,27 @@
+.form-container {
+    display: flex;
+    align-items: center;
+}
+
+.form-field {
+    flex: 0 0 25%;
+    min-width: 25%;
+}
+
+.find-button {
+    height: 56px;
+    margin-left: 8px;
+    margin-bottom: 21px;
+}
+
+.mat-form-field {
+    width: 100%;
+}
+
+.mat-form-field-infix {
+    height: 56px;
+}
+
+.custom-mat-hint {
+    font-size: 16px;
+}

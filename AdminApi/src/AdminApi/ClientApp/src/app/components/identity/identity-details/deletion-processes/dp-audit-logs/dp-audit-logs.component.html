@@ -1,0 +1,15 @@
+<div style="min-height: 120px; overflow-x: auto">
+    <div class="card-header">
+        <h2 class="header-title">{{ headerTitle }}</h2>
+    </div>
+    <mat-card-content class="form-card">
+        <div class="form-container">
+            <mat-form-field class="form-field">
+                <mat-label>Address</mat-label>
+                <input matInput [(ngModel)]="identityAddress" />
+                <mat-hint>Enter an identity address</mat-hint>
+            </mat-form-field>
+            <button mat-raised-button color="primary" class="find-button" (click)="navigateToIdentityDeletionProcessAuditLogs()" [disabled]="!isNotEmptyIdentityAddress() || disabled">Find</button>
+        </div>
+    </mat-card-content>
+</div>
