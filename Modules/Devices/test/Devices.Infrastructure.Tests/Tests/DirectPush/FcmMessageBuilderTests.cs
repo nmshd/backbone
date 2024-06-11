@@ -1,4 +1,5 @@
 using System.Text.Json;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
@@ -20,7 +21,7 @@ public class FcmMessageBuilderTests : AbstractTestsBase
             .SetTag(1)
             .SetToken("token1")
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
-            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.New(), new { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.New(), new TestPushNotification { SomeProperty = "someValue" }))
             .Build();
 
         // Assert
@@ -46,7 +47,8 @@ public class FcmMessageBuilderTests : AbstractTestsBase
 
         // Act
         var message = new FcmMessageBuilder()
-            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"), new { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"),
+                new TestPushNotification { SomeProperty = "someValue" }))
             .Build();
         var contentJson = FormatJson(message.Data["content"]);
 
@@ -54,7 +56,7 @@ public class FcmMessageBuilderTests : AbstractTestsBase
         contentJson.Should().Be(FormatJson(@"{
           'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
           'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
-          'eventName': 'dynamic',
+          'eventName': 'Test',
           'sentAt': '2021-01-01T00:00:00.000Z',
           'payload': {
             'someProperty': 'someValue'
@@ -72,5 +74,10 @@ public class FcmMessageBuilderTests : AbstractTestsBase
         {
             WriteIndented = true,
         });
+    }
+
+    private record TestPushNotification : IPushNotification
+    {
+        public required string SomeProperty { get; set; }
     }
 }
