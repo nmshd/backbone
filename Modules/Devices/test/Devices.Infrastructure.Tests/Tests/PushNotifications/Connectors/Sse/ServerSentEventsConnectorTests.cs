@@ -11,7 +11,7 @@ using static Backbone.Modules.Devices.Infrastructure.Tests.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Sse;
 
-public class SseConnectorTests : AbstractTestsBase
+public class ServerSentEventsConnectorTests : AbstractTestsBase
 {
     [Fact]
     public async Task Can_handle_empty_list_of_registrations()
@@ -113,10 +113,10 @@ public class SseConnectorTests : AbstractTestsBase
         results.Failures.First().Error!.Reason.Should().Be(ErrorReason.Unexpected);
     }
 
-    private static SseConnector CreateConnector(ISseServerClient? sseServerClient = null)
+    private static ServerSentEventsConnector CreateConnector(ISseServerClient? sseServerClient = null)
     {
         sseServerClient ??= A.Dummy<ISseServerClient>();
-        return new SseConnector(sseServerClient, A.Dummy<ILogger<SseConnector>>());
+        return new ServerSentEventsConnector(sseServerClient, A.Dummy<ILogger<ServerSentEventsConnector>>());
     }
 
     private class TestPushNotification : IPushNotification;

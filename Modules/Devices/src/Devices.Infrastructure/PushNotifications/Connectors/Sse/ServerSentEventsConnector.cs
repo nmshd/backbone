@@ -6,12 +6,12 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 
-public class SseConnector : IPnsConnector
+public class ServerSentEventsConnector : IPnsConnector
 {
     private readonly ISseServerClient _sseServerClient;
-    private readonly ILogger<SseConnector> _logger;
+    private readonly ILogger<ServerSentEventsConnector> _logger;
 
-    public SseConnector(ISseServerClient sseServerClient, ILogger<SseConnector> logger)
+    public ServerSentEventsConnector(ISseServerClient sseServerClient, ILogger<ServerSentEventsConnector> logger)
     {
         _sseServerClient = sseServerClient;
         _logger = logger;
@@ -52,18 +52,18 @@ public class SseConnector : IPnsConnector
     }
 }
 
-internal static partial class SseConnectorLogs
+internal static partial class ServerSentEventsConnectorLogs
 {
     [LoggerMessage(
         EventId = 433411,
-        EventName = "SseConnector.Sending",
+        EventName = "ServerSentEventsConnector.Sending",
         Level = LogLevel.Debug,
         Message = "Sending push notification (type '{eventName}') to '{address}'.")]
     public static partial void Sending(this ILogger logger, string eventName, string address);
 
     [LoggerMessage(
         EventId = 707295,
-        EventName = "SseConnector.ErrorOnSend",
+        EventName = "ServerSentEventsConnector.ErrorOnSend",
         Level = LogLevel.Debug,
         Message = "An unexpected error occurred while sending the event.")]
     public static partial void ErrorOnSend(this ILogger logger, Exception exception);

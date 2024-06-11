@@ -32,6 +32,6 @@ public class PnsConnectorFactoryImpl : PnsConnectorFactory
 
     protected override IPnsConnector CreateForSse()
     {
-        return _serviceProvider.GetRequiredService<SseConnector>();
+        return _serviceProvider.GetRequiredService<ServerSentEventsConnector>();
     }
 }

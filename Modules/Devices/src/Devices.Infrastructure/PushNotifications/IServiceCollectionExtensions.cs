@@ -79,7 +79,7 @@ public static class IServiceCollectionExtensions
             o.SseServerBaseAddress = options.SseServerBaseAddress;
         });
 
-        services.AddTransient<SseConnector>();
+        services.AddTransient<ServerSentEventsConnector>();
     }
 }
 
