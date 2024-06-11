@@ -1,10 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Dummy;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 

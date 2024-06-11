@@ -4,7 +4,7 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors;
 
 public class PnsConnectorFactoryImpl : PnsConnectorFactory
 {

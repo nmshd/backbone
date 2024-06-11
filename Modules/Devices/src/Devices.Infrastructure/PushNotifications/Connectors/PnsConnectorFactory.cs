@@ -1,6 +1,6 @@
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors;
 
 public abstract class PnsConnectorFactory
 {
