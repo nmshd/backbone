@@ -21,21 +21,25 @@ public class SseServerClient
     public async Task SendEvent(string recipient, NotificationContent notificationContent)
     {
         var payload = JsonContent.Create(new EventPayload { Message = JsonSerializer.Serialize(new { notificationContent.EventName }, JSON_SERIALIZER_OPTIONS) });
-        var response = await _client.PostAsync($"/{recipient}/events", payload);
 
-        if (response.StatusCode != HttpStatusCode.OK)
+        try
         {
-            var errorPayload = await response.Content.ReadFromJsonAsync<ErrorPayload>();
+            var response = await _client.PostAsync($"/{recipient}/events", payload);
 
-            if (errorPayload is { Code: "error.platform.sseClientNotRegistered" })
-                throw new SseClientNotRegisteredException();
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                var errorPayload = await response.Content.ReadFromJsonAsync<ErrorPayload>();
 
-            throw new Exception("An unexpected error occurred while sending the event.");
+                if (errorPayload is { Code: "error.platform.sseClientNotRegistered" })
+                    throw new SseClientNotRegisteredException();
+
+                throw new Exception("An unexpected error occurred while sending the event.");
+            }
         }
-
-        // Possible errors:
-        // - The server is not reachable
-        // - The sse connection is closed (need to return a corresponding error from sse server)
+        catch (Exception ex)
+        {
+            throw new Exception("An unexpected error occurred while sending the event.", ex);
+        }
     }
 
     private class EventPayload
@@ -45,7 +49,7 @@ public class SseServerClient
 
     private class ErrorPayload
     {
-        public string Code { get; }
+        public string? Code { get; set; }
     }
 }
 
