@@ -52,8 +52,6 @@
   "error_loading_data": "An error occurred loading the data.",
   "noQuotasAppliedForIdentity": "No quotas applied for this identity.",
   "noQuotasAddedForTier": "No quotas added to this tier.",
-  "clientIDMessage": "A Client ID will be generated if this field is left blank.",
-  "clientSecretMessage": "A Client Secret will be generated if this field is left blank.",
   "copyToClipboardMessage": "Client Secret copied to clipboard.",
   "deletionOfQuotaMessage": "Are you sure you want to remove the selected quotas from",
   "displayNameMessage": "Client ID will be used as a Display Name if no value is provided.",
@@ -71,8 +69,6 @@
   "tierCreatedSuccessfullyMessage": "Tier was created successfully.",
   "tierQuotaEffectMessage": "Tier quotas do not take effect if there is an individual quota.",
   "viewQuotasForTheTier": "View quotas for this tier. This tier is managed by the system and therefore read-only.",
-  "viewAndAssignQuotasForIdentity": "View and assign quotas for this identity.",
-  "viewAndAssignQuotasForTier": "View and assign quotas for this tier.",
   "viewIdentitiesAssociatedWithTier": "View Identities associated with this Tier.",
   "createEntity": "Create {entityName}",
   "@createEntity": {
@@ -106,6 +102,14 @@
       }
     }
   },
+  "clientDataMessage": "A {entityName} will be generated if this field is left blank.",
+  "@clientDataMessage": {
+    "placeholders": {
+      "entityName": {
+        "type": "String"
+      }
+    }
+  },
   "searchEntities": "Search {entityName}",
   "@searchEntities": {
     "placeholders": {
@@ -116,6 +120,14 @@
   },
   "errorOccurredWhileDeletingEntities": "An error occurred while deleting the {entityName}. Please try again.",
   "@errorOccurredWhileDeletingEntities": {
+    "placeholders": {
+      "entityName": {
+        "type": "String"
+      }
+    }
+  },
+  "viewAndAssignQuotasForEntity": "View and assign quotas for this {entityName}.",
+  "@viewAndAssignQuotasForEntity": {
     "placeholders": {
       "entityName": {
         "type": "String"

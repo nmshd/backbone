@@ -27,7 +27,7 @@ class IdentityQuotaListState extends State<IdentityQuotaList> {
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         title: Text(context.l10n.quotas),
-        subtitle: Text(context.l10n.viewAndAssignQuotasForIdentity),
+        subtitle: Text(context.l10n.viewAndAssignQuotasForEntity('identity')),
         children: [
           Card(
             child: Column(

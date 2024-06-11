@@ -75,7 +75,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: context.l10n.clientID,
-                  helperText: context.l10n.clientIDMessage,
+                  helperText: context.l10n.clientDataMessage(context.l10n.clientID),
                 ),
               ),
               Gaps.h24,
@@ -96,7 +96,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: context.l10n.clientSecret,
-                  helperText: context.l10n.clientSecretMessage,
+                  helperText: context.l10n.clientDataMessage(context.l10n.clientSecret),
                   suffixIcon: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
