@@ -1,12 +1,17 @@
-using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
+
 public class ListIdentitiesQuery : IRequest<ListIdentitiesResponse>
 {
-    public ListIdentitiesQuery(PaginationFilter paginationFilter)
+    public ListIdentitiesQuery(IEnumerable<IdentityAddress>? addresses = null, IdentityStatus? status = null)
     {
-        PaginationFilter = paginationFilter;
+        Addresses = addresses;
+        Status = status;
     }
-    public PaginationFilter PaginationFilter { get; set; }
+
+    public IEnumerable<IdentityAddress>? Addresses { get; set; }
+    public IdentityStatus? Status { get; set; }
 }
