@@ -41,11 +41,6 @@ public class FindByAddressStubRepository : IIdentitiesRepository
         throw new NotSupportedException();
     }
 
-    public Task<IEnumerable<Identity>> FindAllWithDeletionProcessWaitingForApproval(CancellationToken cancellationToken, bool track = false)
-    {
-        throw new NotSupportedException();
-    }
-
     public Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         throw new NotSupportedException();
@@ -61,6 +56,11 @@ public class FindByAddressStubRepository : IIdentitiesRepository
         throw new NotSupportedException();
     }
 
+    public Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken)
+    {
+        throw new NotSupportedException();
+    }
+
     public Task Update(Identity identity, CancellationToken cancellationToken)
     {
         throw new NotSupportedException();
@@ -69,11 +69,6 @@ public class FindByAddressStubRepository : IIdentitiesRepository
     public Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
         return Task.FromResult((Identity?)_identity);
-    }
-
-    public Task<IEnumerable<Identity>> FindAllWithPastDeletionGracePeriod(CancellationToken cancellationToken)
-    {
-        throw new NotSupportedException();
     }
 
     public Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
