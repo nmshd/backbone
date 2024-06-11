@@ -55,7 +55,7 @@ class _TiersOverviewState extends State<TiersOverview> {
                     style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontSize: 30),
                   ),
                   Text(
-                    context.l10n.listOfAllTiers,
+                    context.l10n.listOfExistingEntities('Tiers'),
                     style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontSize: 13),
                   ),
                 ],
@@ -88,10 +88,10 @@ class _TiersOverviewState extends State<TiersOverview> {
                   child: DataTable2(
                     isVerticalScrollBarVisible: true,
                     showCheckboxColumn: false,
-                    empty: Text(context.l10n.noTiersFound),
+                    empty: Text(context.l10n.noEntitiesFound('tiers')),
                     columns: [
                       DataColumn2(label: Text(context.l10n.name), size: ColumnSize.L),
-                      DataColumn2(label: Text(context.l10n.numberOfIdentities), size: ColumnSize.L),
+                      DataColumn2(label: Text(context.l10n.numberOfEntities('Identities')), size: ColumnSize.L),
                     ],
                     rows: _tiers!
                         .map(

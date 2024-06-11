@@ -37,12 +37,12 @@ class _IdentitiesDataTableState extends State<IdentitiesDataTable> {
       isVerticalScrollBarVisible: true,
       renderEmptyRowsInTheEnd: false,
       availableRowsPerPage: const [5, 10, 25, 50, 100],
-      empty: Text(context.l10n.cancel),
+      empty: Text(context.l10n.noEntitiesFound('identities')),
       errorBuilder: (error) => Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(context.l10n.dataLoadingError),
+            Text(context.l10n.error_data_load_failed),
             Gaps.h16,
             FilledButton(onPressed: widget.dataSource.refreshDatasource, child: Text(context.l10n.retry)),
           ],
@@ -52,11 +52,11 @@ class _IdentitiesDataTableState extends State<IdentitiesDataTable> {
         DataColumn2(label: Text(context.l10n.address), size: ColumnSize.L, onSort: _sort),
         if (!widget.hideTierColumn) DataColumn2(label: Text(context.l10n.tier), size: ColumnSize.S),
         DataColumn2(label: Text(context.l10n.createdWithClient), onSort: _sort),
-        DataColumn2(label: Text(context.l10n.numberOfDevices), onSort: _sort),
+        DataColumn2(label: Text(context.l10n.numberOfEntities('Devices')), onSort: _sort),
         DataColumn2(label: Text(context.l10n.createdAt), size: ColumnSize.S, onSort: _sort),
         DataColumn2(label: Text(context.l10n.lastLoginAt), size: ColumnSize.S, onSort: _sort),
-        DataColumn2(label: Text(context.l10n.datawalletVersion), onSort: _sort),
-        DataColumn2(label: Text(context.l10n.identityVersion), onSort: _sort),
+        DataColumn2(label: Text(context.l10n.entityVersion('Datawallet')), onSort: _sort),
+        DataColumn2(label: Text(context.l10n.entityVersion('Identity')), onSort: _sort),
       ],
     );
   }

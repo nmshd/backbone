@@ -201,7 +201,7 @@ class _IdentityDetails extends StatelessWidget {
   Widget build(BuildContext context) {
     assert(
       onIconPressed == null || (onIconPressed != null && icon != null || tooltipMessage != null),
-      context.l10n.editProvidedMessage,
+      'If edit is provided, icon and tooltipMessage must be provided too.',
     );
 
     return RawChip(

@@ -142,7 +142,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             Gaps.w16,
             MultiSelectFilter(
               label: context.l10n.defaultTier,
-              searchLabel: context.l10n.searchTiers,
+              searchLabel: context.l10n.searchEntities('Tiers'),
               controller: _tierController,
               onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
                 filter = filter.copyWith(
@@ -154,7 +154,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             ),
             Gaps.w16,
             NumberFilter(
-              label: context.l10n.numberOfIdentities,
+              label: context.l10n.numberOfEntities('Identities'),
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 filter = filter.copyWith(
                   numberOfIdentities: enteredValue.isEmpty ? const Optional.absent() : Optional((operator, int.parse(enteredValue))),

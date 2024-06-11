@@ -63,7 +63,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        title: Text(context.l10n.createClient, textAlign: TextAlign.center),
+        title: Text(context.l10n.createEntity('Client'), textAlign: TextAlign.center),
         content: SizedBox(
           width: 500,
           child: Column(
@@ -130,7 +130,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 readOnly: _saveSucceeded,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: context.l10n.maxIdentities,
+                  labelText: context.l10n.maxEntities('Identities'),
                   helperText: '${context.l10n.maxIdentitiesMessage}'
                       '\n${context.l10n.noIdentityLimitMessage}',
                 ),

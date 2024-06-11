@@ -71,7 +71,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               Gaps.w16,
               MultiSelectFilter(
                 label: context.l10n.tiers,
-                searchLabel: context.l10n.searchTiers,
+                searchLabel: context.l10n.searchEntities('Tiers'),
                 controller: _tierController,
                 onOptionSelected: (List<ValueItem<String>> selectedOptions) {
                   final selectedTiers = selectedOptions.map((item) => item.value!).toList();
@@ -83,7 +83,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             Gaps.w16,
             MultiSelectFilter(
               label: context.l10n.clients,
-              searchLabel: context.l10n.searchClients,
+              searchLabel: context.l10n.searchEntities('Clients'),
               controller: _clientController,
               onOptionSelected: (List<ValueItem<String>> selectedOptions) {
                 final selectedClients = selectedOptions.map((item) => item.value!).toList();
@@ -93,7 +93,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             ),
             Gaps.w16,
             NumberFilter(
-              label: context.l10n.numberOfDevices,
+              label: context.l10n.numberOfEntities('Devices'),
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 final numberOfDevices = FilterOperatorValue(operator, enteredValue);
                 _filter = _filter.copyWith(numberOfDevices: numberOfDevices.value.isEmpty ? const Optional.absent() : Optional(numberOfDevices));
@@ -120,7 +120,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             ),
             Gaps.w16,
             NumberFilter(
-              label: context.l10n.datawalletVersion,
+              label: context.l10n.entityVersion('Datawallet'),
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 final datawalletVersion = FilterOperatorValue(operator, enteredValue);
                 _filter =
@@ -130,7 +130,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             ),
             Gaps.w16,
             NumberFilter(
-              label: context.l10n.identityVersion,
+              label: context.l10n.entityVersion('Identity'),
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 final identityVersion = FilterOperatorValue(operator, enteredValue);
                 _filter = _filter.copyWith(identityVersion: identityVersion.value.isEmpty ? const Optional.absent() : Optional(identityVersion));

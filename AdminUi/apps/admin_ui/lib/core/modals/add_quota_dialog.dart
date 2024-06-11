@@ -13,8 +13,8 @@ Future<void> showAddQuotaDialog({
   String? tierId,
   String? identityAddress,
 }) async {
-  assert(tierId != null || identityAddress != null, context.l10n.requirementOfTierIdOrAddress);
-  assert(tierId == null || identityAddress == null, context.l10n.exclusiveTierIdOrAddress);
+  assert(tierId != null || identityAddress != null, 'Either tierId or address must be provided');
+  assert(tierId == null || identityAddress == null, 'Only one of tierId or address can be provided');
 
   final metrics = await GetIt.I.get<AdminApiClient>().quotas.getMetrics();
 
@@ -103,8 +103,8 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
                 enabled: !_saving,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: context.l10n.maxAmount,
-                  helperText: context.l10n.helperMaxAmount,
+                  labelText: context.l10n.maxEntities('Amount'),
+                  helperText: context.l10n.maxAmountMessage,
                 ),
                 inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
                 keyboardType: TextInputType.number,

@@ -1,102 +1,157 @@
 {
   "@@locale": "en",
-  "add": "Add",
+ "add": "Add",
   "addQuota": "Add Quota",
   "address": "Address",
-  "listOfExistingClients": "A list of existing Clients",
-  "listOfExistingIdentities": "A list of existing Identities",
-  "listOfAllTiers": "A list of all Tiers",
   "cancel": "Cancel",
+  "changeClientSecret": "Change Client Secret",
+  "changeTier": "Change Tier",
+  "clientID": "Client ID",
+  "clientSecret": "Client Secret",
+  "clients": "Clients",
   "close": "Close",
   "confirm": "Confirm",
-  "createdWithClient": "Created with Client",
-  "createdAt": "Created At",
-  "clients": "Clients",
-  "changeClientSecret": "Change Client Secret",
-  "clientSecret": "Client Secret",
-  "clientSecretMessage": "A Client Secret will be generated if this field is left blank.",
-  "copyToClipboard": "Copy to clipboard",
-  "copyToClipboardMessage": "Client Secret copied to clipboard.",
-  "createClient": "Create Client",
-  "clientID": "Client ID",
-  "clientIDMessage": "A Client ID will be generated if this field is left blank.",
-  "changeTier": "Change Tier",
   "copyPublicKey": "Copy public key",
-  "createTier": "Create Tier",
+  "copyToClipboard": "Copy to clipboard",
   "create": "Create",
-  "day": "Day",
+  "createdAt": "Created At",
+  "createdWithClient": "Created with Client",
   "dark": "Dark",
-  "dataException": "Failed to load data",
-  "dataLoadingError": "An error occurred loading the data.",
-  "datawalletVersion": "Datawallet Version",
-  "deletionOfQuotaMessage": "Are you sure you want to remove the selected quotas from",
-  "displayName": "Display Name",
-  "displayNameMessage": "Client ID will be used as a Display Name if no value is provided.",
+  "day": "Day",
   "defaultTier": "Default Tier",
-  "exclusiveTierIdOrAddress": "Only one of tierId or address can be provided",
-  "emptyIdentityMessage": "No identities found.",
-  "errorOccurrence": "An error occurred while deleting the quota(s). Please try again.",
-  "errorOccurredDeletingClient": "An error occurred while deleting the client(s). Please try again.",
-  "editProvidedMessage": "If edit is provided, icon and tooltipMessage must be provided too.",
-  "failedToUpdateIdentityMessage": "Failed to update identity. Please try again.",
-  "formMessageForTier": "Please fill the form below to create your Tier",
-  "helperMaxAmount": "Only numbers greater or equal to 0 are valid.",
+  "displayName": "Display Name",
   "hour": "Hour",
-  "invalidState": "Invalid State",
-  "identityVersion": "Identity Version",
-  "individual": "Individual",
-  "identityUpdatedMessage": "Identity updated successfully.",
-  "identityCopiedToClipboardMessage": "Identity address copied to clipboard.",
   "id": "ID: ",
   "identities": "Identities",
-  "light": "Light",
+  "individual": "Individual",
+  "invalidState": "Invalid State",
   "lastLoginAt": "Last Login at",
-  "metric": "Metric*",
-  "maxAmount": "Max Amount",
-  "month": "Month",
-  "maxIdentities": "Max Identities",
-  "maxIdentitiesMessage": "The maximum number of Identities that can be created with this Client.",
+  "light": "Light",
   "max": "Max",
-  "numberOfDevices": "Number of Devices",
-  "noIdentityLimitMessage": "No Identity limit will be assigned if this field is left blank.",
-  "numberOfIdentities": "Number of Identities",
-  "noClientsFound": "No clients found.",
-  "noTiersFound": "No tiers found.",
-  "noQuotasAppliedForIdentity": "No quotas applied for this identity.",
-  "noQuotasAddedForTier": "No quotas added to this tier.",
+  "metric": "Metric*",
+  "month": "Month",
   "name": "Name: ",
-  "nameCannotBeEmptyMessage": "Name cannot be empty.",
   "period": "Period",
   "publicKey": "Public Key",
-  "publicKeyCopiedToClipboardMessage": "Public key copied to clipboard.",
   "quotas": "Quotas",
-  "requirementOfTierIdOrAddress": "Either tierId or address must be provided",
   "retry": "Retry",
-  "removeQuota": "Remove Quota",
-  "removeClients": "Remove Clients",
-  "removeClientsMessage": "Are you sure you want to remove the selected clients?",
-  "settings": "Settings",
-  "system": "System",
-  "searchTiers": "Search Tiers",
-  "searchClients": "Search Clients",
   "save": "Save",
-  "selectedQuotaWasRemoved": "Selected quota(s) have been removed.",
-  "selectedClientsWereRemovedMessage": "Selected clients have been removed.",
+  "settings": "Settings",
   "source": "Source",
-  "saveTheClientSecretMessage": "Please save the Client Secret since it will be inaccessible after exiting.",
-  "theme": "Theme",
-  "tiers": "Tiers",
-  "tier": "Tier",
+  "system": "System",
   "theIdentity": "the identity",
   "theTier": "the tier",
-  "tierQuotaEffectMessage": "Tier quotas do not take effect if there is an individual quota.",
-  "tierCreatedSuccessfullyMessage": "Tier was created successfully.",
+  "theme": "Theme",
+  "tier": "Tier",
+  "tiers": "Tiers",
   "usage": "Usage (Used/Max)",
-  "viewAndAssignQuotasForIdentity": "View and assign quotas for this identity.",
+  "week": "Week",
+  "year": "Year",
+  "yes": "Yes",
+  "error_data_load_failed": "Failed to load data",
+  "error_loading_data": "An error occurred loading the data.",
+  "noQuotasAppliedForIdentity": "No quotas applied for this identity.",
+  "noQuotasAddedForTier": "No quotas added to this tier.",
+  "clientIDMessage": "A Client ID will be generated if this field is left blank.",
+  "clientSecretMessage": "A Client Secret will be generated if this field is left blank.",
+  "copyToClipboardMessage": "Client Secret copied to clipboard.",
+  "deletionOfQuotaMessage": "Are you sure you want to remove the selected quotas from",
+  "displayNameMessage": "Client ID will be used as a Display Name if no value is provided.",
+  "failedToUpdateIdentityMessage": "Failed to update identity. Please try again.",
+  "formMessageForTier": "Please fill the form below to create your Tier",
+  "identityCopiedToClipboardMessage": "Identity address copied to clipboard.",
+  "identityUpdatedMessage": "Identity updated successfully.",
+  "maxIdentitiesMessage": "The maximum number of Identities that can be created with this Client.",
+  "maxAmountMessage": "Only numbers greater or equal to 0 are valid.",
+  "nameCannotBeEmptyMessage": "Name cannot be empty.",
+  "noIdentityLimitMessage": "No Identity limit will be assigned if this field is left blank.",
+  "publicKeyCopiedToClipboardMessage": "Public key copied to clipboard.",
+  "removeClientsMessage": "Are you sure you want to remove the selected clients?",
+  "saveTheClientSecretMessage": "Please save the Client Secret since it will be inaccessible after exiting.",
+  "tierCreatedSuccessfullyMessage": "Tier was created successfully.",
+  "tierQuotaEffectMessage": "Tier quotas do not take effect if there is an individual quota.",
   "viewQuotasForTheTier": "View quotas for this tier. This tier is managed by the system and therefore read-only.",
+  "viewAndAssignQuotasForIdentity": "View and assign quotas for this identity.",
   "viewAndAssignQuotasForTier": "View and assign quotas for this tier.",
   "viewIdentitiesAssociatedWithTier": "View Identities associated with this Tier.",
-  "week": "Week",
-  "yes": "Yes",
-  "year": "Year"
+  "createEntity": "Create {entityName}",
+  "@createEntity": {
+    "placeholders": {
+      "entityName": {
+        "type": "String"
+      }
+    }
+  },
+  "removeEntities": "Remove {entityName}",
+  "@removeEntities": {
+    "placeholders": {
+      "entityName": {
+        "type": "String"
+      }
+    }
+  },
+  "entityVersion": "{entityName} Version",
+   "@entityVersion": {
+    "placeholders": {
+      "entityName": {
+        "type": "String"
+      }
+    }
+  },
+  "numberOfEntities": "Number of {entityName}",
+  "@numberOfEntities": {
+    "placeholders": {
+      "entityName": {
+        "type": "String"
+      }
+    }
+  },
+  "searchEntities": "Search {entityName}",
+  "@searchEntities": {
+    "placeholders": {
+      "entityName": {
+        "type": "String"
+      }
+    }
+  },
+  "errorOccurredWhileDeletingEntities": "An error occurred while deleting the {entityName}. Please try again.",
+  "@errorOccurredWhileDeletingEntities": {
+    "placeholders": {
+      "entityName": {
+        "type": "String"
+      }
+    }
+  },
+  "maxEntities": "Max {entityName}",
+  "@maxEntities": {
+    "placeholders": {
+      "entityName": {
+        "type": "String"
+      }
+    }
+  },
+  "noEntitiesFound": "No {entityName} found.",
+  "@noEntitiesFound": {
+    "placeholders": {
+      "entityName": {
+        "type": "String"
+      }
+    }
+  },
+  "listOfExistingEntities": "A list of existing {entityName}",
+  "@listOfExistingEntities": {
+    "placeholders": {
+      "entityName": {
+        "type": "String"
+      }
+    }
+  },
+  "selectedEntityWasRemoved": "Selected {entityName} have been removed.",
+  "@selectedEntityWasRemoved": {
+    "placeholders": {
+      "entityName": {
+        "type": "String"
+      }
+    }
+  }
 }
