@@ -9,9 +9,9 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.Li
 
 public class FindAllStubRepository : IIdentitiesRepository
 {
-    private readonly DbPaginationResult<Identity> _identities;
+    private readonly IEnumerable<Identity> _identities;
 
-    public FindAllStubRepository(DbPaginationResult<Identity> identities)
+    public FindAllStubRepository(IEnumerable<Identity> identities)
     {
         _identities = identities;
     }
@@ -34,11 +34,6 @@ public class FindAllStubRepository : IIdentitiesRepository
     public Task AddUser(ApplicationUser user, string password)
     {
         throw new NotImplementedException();
-    }
-
-    public Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
-    {
-        return Task.FromResult(_identities);
     }
 
     public Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
@@ -73,7 +68,7 @@ public class FindAllStubRepository : IIdentitiesRepository
 
     public Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
     {
-        throw new NotImplementedException();
+        return Task.FromResult(_identities);
     }
 
     public Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
