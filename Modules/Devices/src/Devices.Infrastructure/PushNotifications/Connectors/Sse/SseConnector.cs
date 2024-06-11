@@ -26,6 +26,7 @@ public class SseConnector : IPnsConnector
             try
             {
                 await _sseServerClient.SendEvent(recipient, notification.GetEventName());
+                sendResults.AddSuccess(registration.DeviceId);
             }
             catch (SseClientNotRegisteredException)
             {
@@ -36,8 +37,6 @@ public class SseConnector : IPnsConnector
                 _logger.LogError(ex, "An unexpected error occurred while sending the event.");
                 sendResults.AddFailure(registration.DeviceId, ErrorReason.Unexpected);
             }
-
-            sendResults.AddSuccess(registration.DeviceId);
         }
 
         return sendResults;
