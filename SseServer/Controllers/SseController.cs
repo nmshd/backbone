@@ -49,13 +49,7 @@ public class SseController : ControllerBase
 
             await foreach (var eventName in _eventQueue.DequeueFor(address, HttpContext.RequestAborted))
             {
-                await streamWriter.WriteLineAsync($"""
-                                                   event: {eventName}
-                                                   data:.
-
-
-                                                   """);
-                await streamWriter.FlushAsync();
+                await streamWriter.SendServerSentEvent(eventName);
             }
         }
         catch (ClientAlreadyRegisteredException)
@@ -74,5 +68,16 @@ public class SseController : ControllerBase
         }
 
         return Ok();
+    }
+}
+
+public static class StreamWriterExtensions
+{
+    public static async Task SendServerSentEvent(this StreamWriter streamWriter, string eventName)
+    {
+        await streamWriter.WriteLineAsync($"event: {eventName}");
+        await streamWriter.WriteLineAsync("data: _");
+        await streamWriter.WriteLineAsync();
+        await streamWriter.FlushAsync();
     }
 }
