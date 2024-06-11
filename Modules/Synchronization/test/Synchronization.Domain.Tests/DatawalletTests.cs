@@ -92,7 +92,7 @@ public class DatawalletTests : AbstractTestsBase
         AddModificationToDatawallet(datawallet);
         AddModificationToDatawallet(datawallet);
 
-        var domainEvent = datawallet.DomainEvents.Should().HaveCount(1);
+        datawallet.DomainEvents.Should().HaveCount(1);
     }
 
     private static Datawallet CreateDatawallet()

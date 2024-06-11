@@ -112,8 +112,13 @@ public static class IServiceCollectionExtensions
             {
                 options.UseEntityFrameworkCore()
                     .UseDbContext<DevicesDbContext>()
-                    .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope,
-                        CustomOpenIddictEntityFrameworkCoreToken, string>();
+                    .ReplaceDefaultEntities<
+                        CustomOpenIddictEntityFrameworkCoreApplication,
+                        CustomOpenIddictEntityFrameworkCoreAuthorization,
+                        CustomOpenIddictEntityFrameworkCoreScope,
+                        CustomOpenIddictEntityFrameworkCoreToken,
+                        string
+                    >();
             })
             .AddServer(options =>
             {
