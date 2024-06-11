@@ -123,7 +123,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
           mainAxisSize: MainAxisSize.min,
           children: [
             InputField(
-              label: 'Client ID',
+              label: context.l10n.clientID,
               onEnteredText: (String enteredText) {
                 filter = filter.copyWith(clientId: enteredText.isEmpty ? const Optional.absent() : Optional(enteredText));
 
@@ -132,7 +132,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             ),
             Gaps.w16,
             InputField(
-              label: 'Display Name',
+              label: context.l10n.displayName,
               onEnteredText: (String enteredText) {
                 filter = filter.copyWith(displayName: enteredText.isEmpty ? const Optional.absent() : Optional(enteredText));
 
@@ -141,8 +141,8 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             ),
             Gaps.w16,
             MultiSelectFilter(
-              label: 'Default Tier',
-              searchLabel: 'Search Tiers',
+              label: context.l10n.defaultTier,
+              searchLabel: context.l10n.searchTiers,
               controller: _tierController,
               onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
                 filter = filter.copyWith(
@@ -154,7 +154,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             ),
             Gaps.w16,
             NumberFilter(
-              label: 'Number of Identitites',
+              label: context.l10n.numberOfIdentities,
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 filter = filter.copyWith(
                   numberOfIdentities: enteredValue.isEmpty ? const Optional.absent() : Optional((operator, int.parse(enteredValue))),
@@ -165,7 +165,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             ),
             Gaps.w16,
             DateFilter(
-              label: 'Created At',
+              label: context.l10n.createdAt,
               onFilterSelected: (FilterOperator operator, DateTime? selectedDate) {
                 filter = filter.copyWith(
                   createdAt: selectedDate == null ? const Optional.absent() : Optional((operator, selectedDate)),

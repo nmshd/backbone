@@ -44,7 +44,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
     return PopScope(
       canPop: !_isLoading,
       child: AlertDialog(
-        title: const Text('Create Tier'),
+        title: Text(context.l10n.createTier),
         content: _isLoading
             ? const Padding(
                 padding: EdgeInsets.all(16),
@@ -53,7 +53,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
             : Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Text('Please fill the form below to create your Tier'),
+                  Text(context.l10n.formMessageForTier),
                   Gaps.h16,
                   TextField(
                     controller: _tierNameController,
@@ -65,7 +65,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
                     onSubmitted: _onSubmitted,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
-                      labelText: 'Name',
+                      labelText: context.l10n.name,
                       error: _errorMessage != null
                           ? Text(
                               _errorMessage!,
@@ -84,7 +84,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
           ),
           FilledButton(
             onPressed: _isLoading ? null : () => _onSubmitted(_tierNameController.text),
-            child: const Text('Create'),
+            child: Text(context.l10n.create),
           ),
         ],
       ),
@@ -93,7 +93,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
 
   Future<void> _onSubmitted(String name) async {
     if (name.isEmpty) {
-      _setErrorMessage('Name cannot be empty.');
+      _setErrorMessage(context.l10n.nameCannotBeEmptyMessage);
       _focusNode.requestFocus();
       return;
     }

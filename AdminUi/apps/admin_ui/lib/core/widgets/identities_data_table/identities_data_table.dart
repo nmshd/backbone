@@ -2,6 +2,7 @@ import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants.dart';
+import '../../extensions.dart';
 import 'identities_data_table_source.dart';
 
 export 'identities_data_table_source.dart';
@@ -36,26 +37,26 @@ class _IdentitiesDataTableState extends State<IdentitiesDataTable> {
       isVerticalScrollBarVisible: true,
       renderEmptyRowsInTheEnd: false,
       availableRowsPerPage: const [5, 10, 25, 50, 100],
-      empty: const Text('No identities found.'),
+      empty: Text(context.l10n.cancel),
       errorBuilder: (error) => Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text('An error occurred loading the data.'),
+            Text(context.l10n.dataLoadingError),
             Gaps.h16,
-            FilledButton(onPressed: widget.dataSource.refreshDatasource, child: const Text('Retry')),
+            FilledButton(onPressed: widget.dataSource.refreshDatasource, child: Text(context.l10n.retry)),
           ],
         ),
       ),
       columns: <DataColumn2>[
-        DataColumn2(label: const Text('Address'), size: ColumnSize.L, onSort: _sort),
-        if (!widget.hideTierColumn) const DataColumn2(label: Text('Tier'), size: ColumnSize.S),
-        DataColumn2(label: const Text('Created with Client'), onSort: _sort),
-        DataColumn2(label: const Text('Number of Devices'), onSort: _sort),
-        DataColumn2(label: const Text('Created at'), size: ColumnSize.S, onSort: _sort),
-        DataColumn2(label: const Text('Last Login at'), size: ColumnSize.S, onSort: _sort),
-        DataColumn2(label: const Text('Datawallet version'), onSort: _sort),
-        DataColumn2(label: const Text('Identity Version'), onSort: _sort),
+        DataColumn2(label: Text(context.l10n.address), size: ColumnSize.L, onSort: _sort),
+        if (!widget.hideTierColumn) DataColumn2(label: Text(context.l10n.tier), size: ColumnSize.S),
+        DataColumn2(label: Text(context.l10n.createdWithClient), onSort: _sort),
+        DataColumn2(label: Text(context.l10n.numberOfDevices), onSort: _sort),
+        DataColumn2(label: Text(context.l10n.createdAt), size: ColumnSize.S, onSort: _sort),
+        DataColumn2(label: Text(context.l10n.lastLoginAt), size: ColumnSize.S, onSort: _sort),
+        DataColumn2(label: Text(context.l10n.datawalletVersion), onSort: _sort),
+        DataColumn2(label: Text(context.l10n.identityVersion), onSort: _sort),
       ],
     );
   }
