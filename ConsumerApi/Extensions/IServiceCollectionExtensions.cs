@@ -9,14 +9,12 @@ using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Tooling.Extensions;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
-using Serilog;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 
 namespace Backbone.ConsumerApi.Extensions;
@@ -122,21 +120,9 @@ public static class IServiceCollectionExtensions
             })
             .AddServer(options =>
             {
-                if (configuration.JwtSigningCertificate.IsNullOrEmpty())
-                {
-                    if (environment.IsProduction())
-                        throw new Exception(
-                            $"For production scenarios, you need to set a '{nameof(configuration.JwtSigningCertificate)}'.");
-
-                    Log.Logger.Warning("Using development signing certificate. Note that this is not recommended for production scenarios!");
-                    options.AddDevelopmentSigningCertificate();
-                }
-                else
-                {
-                    var privateKeyBytes = Convert.FromBase64String(configuration.JwtSigningCertificate);
-                    var certificate = new X509Certificate2(privateKeyBytes, (string?)null);
-                    options.AddSigningCertificate(certificate);
-                }
+                var privateKeyBytes = Convert.FromBase64String(configuration.JwtSigningCertificate);
+                var certificate = new X509Certificate2(privateKeyBytes, (string?)null);
+                options.AddSigningCertificate(certificate);
 
                 options.SetTokenEndpointUris("connect/token");
                 options.AllowPasswordFlow();

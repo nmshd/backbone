@@ -17,6 +17,7 @@ public class BackboneConfiguration
 
     public class AuthenticationConfiguration
     {
+        [Required]
         public string JwtSigningCertificate { get; set; } = "";
 
         [Required]
