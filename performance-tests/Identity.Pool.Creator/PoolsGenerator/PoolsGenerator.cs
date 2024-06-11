@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
-using System.Text;
+﻿using System.Text;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
@@ -59,9 +57,12 @@ public class PoolsGenerator
 
         //await CreateIdentities();
         CreateFakeIdentities();
+
+        EstablishMessagesOffsetPoolsRelationships();
         DistributeRelationshipsV2();
         PrintRelationships(summaryOnly: true);
 
+        //DistributeMessages();
         //await CreateRelationshipTemplates();
         //await CreateChallenges();
         //await CreateMessages();
@@ -70,10 +71,19 @@ public class PoolsGenerator
         OutputAll();
     }
 
+    private void EstablishMessagesOffsetPoolsRelationships()
+    {
+        var messagesOffsetPools = _pools.Where(p => p.Alias.StartsWith("a0m") || p.Alias.StartsWith("c0m")).ToList();
+        if (messagesOffsetPools.Count != 2) return;
+
+        var (p1, p2) = (messagesOffsetPools[0], messagesOffsetPools[1]);
+        p1.Identities.Single().AddIdentityToEstablishRelationshipsWith(p2.Identities.Single());
+    }
+
     private void PrintRelationships(bool summaryOnly = false)
     {
         Console.WriteLine($"{_pools.Where(p => p.IsApp()).SelectMany(p => p.Identities).Sum(i => i.IdentitiesToEstablishRelationshipsWith.Count)} relationships found");
-        
+
         if (!summaryOnly)
             foreach (var appPoolIdentity in _pools.Where(p => p.IsApp()).SelectMany(p => p.Identities))
             {
@@ -134,9 +144,6 @@ public class PoolsGenerator
                 }
             }
         }
-
-        var relationshipsToA21 = appPools.SelectMany(p => p.Identities).SelectMany(i => i.IdentitiesToEstablishRelationshipsWith).Count(i => i.Nickname == "c21");
-        var c21 = connectorPools.SelectMany(p => p.Identities).Where(i => i.Nickname == "c21").Single();
     }
 
     private static long CheckRelationshipCounts(List<PoolEntry> appPools, List<PoolEntry> connectorPools)
@@ -160,269 +167,291 @@ public class PoolsGenerator
         var connectorPoolsIdentities = connectorPools.SelectMany(p => p.Identities).OrderByDescending(i => i.RelationshipsAvailable).ToList();
 
         var expectedRelationshipsCount = CheckRelationshipCounts(appPools, connectorPools);
-        var successfullyEstablishedRelationshipsCount = 0;
-        while (expectedRelationshipsCount > successfullyEstablishedRelationshipsCount)
+        List<int> successfullyEstablishedRelationshipsCounts = [_pools.HasMessagesOffsetPool() ? 1 : 0];
+
+        while (expectedRelationshipsCount > successfullyEstablishedRelationshipsCounts.Last())
         {
             foreach (var identity in appAndConnectorIdentities.Where(i => i.HasAvailabilityForNewRelationships()))
             {
-                successfullyEstablishedRelationshipsCount = DistributeRelationshipsV2InnerLoop(appPoolsIdentities, connectorPoolsIdentities, successfullyEstablishedRelationshipsCount, identity);
+                successfullyEstablishedRelationshipsCounts.Add(DistributeRelationshipsV2InnerLoop(appPoolsIdentities, connectorPoolsIdentities, successfullyEstablishedRelationshipsCounts.Last(),
+                    identity));
+            }
+
+            // break on convergence
+            if (successfullyEstablishedRelationshipsCounts.Count > 3)
+            {
+                var length = successfullyEstablishedRelationshipsCounts.Count;
+                if (successfullyEstablishedRelationshipsCounts[length - 1] == successfullyEstablishedRelationshipsCounts[length - 2] &&
+                    successfullyEstablishedRelationshipsCounts[length - 3] == successfullyEstablishedRelationshipsCounts[length - 2])
+                {
+                    return;
+                }
             }
         }
     }
 
     private static int DistributeRelationshipsV2InnerLoop(List<Identity> appPoolsIdentities, List<Identity> connectorPoolsIdentities, int successfullyEstablishedRelationshipsCount, Identity identity)
-    {
-        var oppositePoolIdentities = identity.PoolType == PoolTypes.CONNECTOR_TYPE ? appPoolsIdentities : connectorPoolsIdentities;
-
-        Identity selectedIdentity;
-        var index = 0;
-        while (identity.RelationshipsAvailable > 0)
         {
-            // We select the identity with the highest capacity for relationships and we fill it with an identity from an opposite pool.
-            do
+            var oppositePoolIdentities = identity.PoolType == PoolTypes.CONNECTOR_TYPE ? appPoolsIdentities : connectorPoolsIdentities;
+
+            Identity selectedIdentity;
+            var index = 0;
+            while (identity.RelationshipsAvailable > 0)
             {
-                selectedIdentity = oppositePoolIdentities[index++];
-                if (index == oppositePoolIdentities.Count)
-                    return successfullyEstablishedRelationshipsCount;
-
-            } while (identity.IdentitiesToEstablishRelationshipsWith.Contains(selectedIdentity));
-
-            if (identity.AddIdentityToEstablishRelationshipsWith(selectedIdentity))
-                successfullyEstablishedRelationshipsCount++;
-        }
-
-        return successfullyEstablishedRelationshipsCount;
-    }
-
-    private static Identity GetCandidateIdentityForRelationship(ref Identity[] targetIdentities, ref int targetIdentitiesIteratorIndex)
-    {
-        var candidateIdentityForRelationship = targetIdentities[targetIdentitiesIteratorIndex];
-        if (!candidateIdentityForRelationship.HasAvailabilityForNewRelationships())
-        {
-            // this identity has been exhausted and can be removed from the iteration list.
-            targetIdentities = targetIdentities.Except([candidateIdentityForRelationship]).ToArray();
-        }
-        else
-        {
-            targetIdentitiesIteratorIndex++;
-        }
-
-        if (targetIdentitiesIteratorIndex == targetIdentities.Length - 1)
-        {
-            // removed the last item and fell out of the indexes. reset
-            targetIdentitiesIteratorIndex = 0;
-        }
-
-        return candidateIdentityForRelationship;
-    }
-
-
-    #region Creators
-
-    private async Task CreateMessages()
-    {
-        var connectorPools = _pools.Where(p => p.IsConnector()).ToList();
-        var remainingPools = _pools.Except(connectorPools).ToList();
-
-        foreach (var connectorPool in connectorPools)
-        {
-            foreach (var connectorPoolIdentity in connectorPool.Identities)
-            {
-                for (var i = 0; i < connectorPool.NumberOfSentMessages; i++)
+                // We select the identity with the highest capacity for relationships and we fill it with an identity from an opposite pool.
+                do
                 {
-                    var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, connectorPoolIdentity.UserCredentials);
-                    var candidateRecipientIdentity = remainingPools.SelectMany(p => p.Identities.Where(id => !id.HasBeenUsedAsMessageRecipient)).First();
-                    candidateRecipientIdentity.UseAsMessageRecipient();
-                    await sdk.Messages.SendMessage(new()
-                    {
-                        Recipients = [new SendMessageRequestRecipientInformation { Address = candidateRecipientIdentity.Address, EncryptedKey = ConvertibleString.FromUtf8(new string('A', 152)).BytesRepresentation }],
-                        Attachments = [],
-                        Body = []
-                    });
-                }
+                    selectedIdentity = oppositePoolIdentities[index++];
+                    if (index == oppositePoolIdentities.Count)
+                        return successfullyEstablishedRelationshipsCount;
+
+                } while (identity.IdentitiesToEstablishRelationshipsWith.Contains(selectedIdentity));
+
+                if (identity.AddIdentityToEstablishRelationshipsWith(selectedIdentity))
+                    successfullyEstablishedRelationshipsCount++;
             }
+
+            return successfullyEstablishedRelationshipsCount;
         }
-    }
 
-    /// <summary>
-    /// Creates identities pertaining to each pool.
-    /// </summary>
-    private async Task CreateIdentities()
-    {
-        Console.Write("Creating Identities... ");
-        using var progress = new ProgressBar(_pools.Sum(p => p.Amount));
-
-        foreach (var pool in _pools)
+        private static Identity GetCandidateIdentityForRelationship(ref Identity[] targetIdentities, ref int targetIdentitiesIteratorIndex)
         {
-            for (uint i = 0; i < pool.Amount; i++)
+            var candidateIdentityForRelationship = targetIdentities[targetIdentitiesIteratorIndex];
+            if (!candidateIdentityForRelationship.HasAvailabilityForNewRelationships())
             {
-                var sdk = await Client.CreateForNewIdentity(_baseAddress, _clientCredentials, PasswordHelper.GeneratePassword(18, 24));
-                if (sdk.DeviceData is null)
-                    throw new Exception("The SDK could not be used to create a new Identity.");
+                // this identity has been exhausted and can be removed from the iteration list.
+                targetIdentities = targetIdentities.Except([candidateIdentityForRelationship]).ToArray();
+            }
+            else
+            {
+                targetIdentitiesIteratorIndex++;
+            }
 
-                var createdIdentity = new Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
+            if (targetIdentitiesIteratorIndex == targetIdentities.Length - 1)
+            {
+                // removed the last item and fell out of the indexes. reset
+                targetIdentitiesIteratorIndex = 0;
+            }
 
-                if (pool.NumberOfDevices > 1)
+            return candidateIdentityForRelationship;
+        }
+
+
+        #region Creators
+
+        private async Task CreateMessages()
+        {
+            var connectorPools = _pools.Where(p => p.IsConnector()).ToList();
+            var remainingPools = _pools.Except(connectorPools).ToList();
+
+            foreach (var connectorPool in connectorPools)
+            {
+                foreach (var connectorPoolIdentity in connectorPool.Identities)
                 {
-                    for (uint j = 1; j < pool.NumberOfDevices; j++)
+                    for (var i = 0; i < connectorPool.NumberOfSentMessages; i++)
                     {
-                        var newDevice = await sdk.OnboardNewDevice(PasswordHelper.GeneratePassword(18, 24));
-                        if (newDevice.DeviceData is null)
-                            throw new Exception("The SDK could not be used to create a new Identity.");
-                        createdIdentity.AddDevice(newDevice.DeviceData.DeviceId);
+                        var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, connectorPoolIdentity.UserCredentials);
+                        var candidateRecipientIdentity = remainingPools.SelectMany(p => p.Identities.Where(id => !id.HasBeenUsedAsMessageRecipient)).First();
+                        candidateRecipientIdentity.UseAsMessageRecipient();
+                        await sdk.Messages.SendMessage(new()
+                        {
+                            Recipients = [new SendMessageRequestRecipientInformation { Address = candidateRecipientIdentity.Address, EncryptedKey = ConvertibleString.FromUtf8(new string('A', 152)).BytesRepresentation }],
+                            Attachments = [],
+                            Body = []
+                        });
                     }
                 }
-
-                pool.Identities.Add(createdIdentity);
-                progress.Increment();
             }
         }
-    }
 
-    private async Task CreateRelationshipTemplates()
-    {
-        Console.Write("Creating RelationshipTemplates... ");
-        using var progress = new ProgressBar(_pools.Sum(p => p.NumberOfRelationshipTemplates * p.Amount));
-        foreach (var pool in _pools.Where(p => p.NumberOfRelationshipTemplates > 0))
+        /// <summary>
+        /// Creates identities pertaining to each pool.
+        /// </summary>
+        private async Task CreateIdentities()
         {
-            foreach (var identity in pool.Identities)
+            Console.Write("Creating Identities... ");
+            using var progress = new ProgressBar(_pools.Sum(p => p.Amount));
+
+            foreach (var pool in _pools)
             {
-                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
-                for (uint i = 0; i < pool.NumberOfRelationshipTemplates; i++)
+                for (uint i = 0; i < pool.Amount; i++)
                 {
-                    await sdk.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest
+                    var sdk = await Client.CreateForNewIdentity(_baseAddress, _clientCredentials, PasswordHelper.GeneratePassword(18, 24));
+                    if (sdk.DeviceData is null)
+                        throw new Exception("The SDK could not be used to create a new Identity.");
+
+                    var createdIdentity = new Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
+
+                    if (pool.NumberOfDevices > 1)
                     {
-                        Content = [],
-                        ExpiresAt = DateTime.Now.EndOfYear(),
-                        MaxNumberOfAllocations = 10
-                    });
+                        for (uint j = 1; j < pool.NumberOfDevices; j++)
+                        {
+                            var newDevice = await sdk.OnboardNewDevice(PasswordHelper.GeneratePassword(18, 24));
+                            if (newDevice.DeviceData is null)
+                                throw new Exception("The SDK could not be used to create a new Identity.");
+                            createdIdentity.AddDevice(newDevice.DeviceData.DeviceId);
+                        }
+                    }
+
+                    pool.Identities.Add(createdIdentity);
                     progress.Increment();
                 }
             }
         }
-    }
 
-    private async Task CreateChallenges()
-    {
-        Console.Write("Creating Challenges... ");
-        using var progress = new ProgressBar(_pools.Sum(p => p.NumberOfChallenges * p.Amount));
-
-        foreach (var pool in _pools.Where(p => p.NumberOfChallenges > 0))
+        private async Task CreateRelationshipTemplates()
         {
-            foreach (var identity in pool.Identities)
+            Console.Write("Creating RelationshipTemplates... ");
+            using var progress = new ProgressBar(_pools.Sum(p => p.NumberOfRelationshipTemplates * p.Amount));
+            foreach (var pool in _pools.Where(p => p.NumberOfRelationshipTemplates > 0))
             {
-                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
-                for (var i = 0; i < pool.NumberOfChallenges; i++)
+                foreach (var identity in pool.Identities)
                 {
-                    await sdk.Challenges.CreateChallenge();
-                    progress.Increment();
-                }
-            }
-        }
-    }
-
-    private async Task CreateDatawalletModifications()
-    {
-        Console.Write("Creating DataWalletModifications... ");
-        using var progress = new ProgressBar(_pools.Sum(p => p.NumberOfDatawalletModifications * p.Amount));
-        foreach (var pool in _pools.Where(p => p.NumberOfDatawalletModifications > 0))
-        {
-            foreach (var identity in pool.Identities)
-            {
-                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
-                for (uint i = 0; i < pool.NumberOfDatawalletModifications; i++)
-                {
-                    await sdk.Datawallet.PushDatawalletModifications(new()
+                    var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
+                    for (uint i = 0; i < pool.NumberOfRelationshipTemplates; i++)
                     {
-                        LocalIndex = 0,
-                        Modifications = []
-                    }, 0);
-                    progress.Increment();
+                        await sdk.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest
+                        {
+                            Content = [],
+                            ExpiresAt = DateTime.Now.EndOfYear(),
+                            MaxNumberOfAllocations = 10
+                        });
+                        progress.Increment();
+                    }
                 }
             }
         }
-    }
 
-    #endregion
-
-    #region Outputters
-
-    private void OutputAll()
-    {
-        var outputDirName = $@"{GetProjectPath()}\poolCreator.{SystemTime.UtcNow:yyyyMMdd-HHmmss}";
-        Directory.CreateDirectory(outputDirName);
-
-        OutputIdentities(outputDirName);
-    }
-
-    private void OutputIdentities(string outputDirName)
-    {
-        var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("DeviceId;Username;Password;Alias");
-        foreach (var pool in _pools)
+        private async Task CreateChallenges()
         {
-            foreach (var identity in pool.Identities)
+            Console.Write("Creating Challenges... ");
+            using var progress = new ProgressBar(_pools.Sum(p => p.NumberOfChallenges * p.Amount));
+
+            foreach (var pool in _pools.Where(p => p.NumberOfChallenges > 0))
             {
-                foreach (var deviceId in identity.DeviceIds)
+                foreach (var identity in pool.Identities)
                 {
-                    stringBuilder.AppendLine($"""{deviceId};{identity.UserCredentials.Username};"{identity.UserCredentials.Password}";{pool.Alias}""");
+                    var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
+                    for (var i = 0; i < pool.NumberOfChallenges; i++)
+                    {
+                        await sdk.Challenges.CreateChallenge();
+                        progress.Increment();
+                    }
                 }
             }
         }
-        File.WriteAllTextAsync($@"{outputDirName}\identities.csv", stringBuilder.ToString());
-    }
 
-    private static string GetProjectPath()
-    {
-        var dir = Path.GetFullPath(@"..\..\..");
-        return dir;
-    }
-
-    #endregion
-
-    #region Offsets
-
-    private void CreateOffsetPools()
-    {
-        // because the creation of identities is a somewhat heavy operation, we should avoid carelessly creating identities.
-        // This requires finding the right ballance between identities and messages/relationships per identity.
-        // This is a TODO
-
-        var relationshipsOffsetPool = new PoolEntry
+        private async Task CreateDatawalletModifications()
         {
-            Name = $"{(_poolsOffset.RelationshipsOffsetPendingTo == OffsetDirections.App ? "App" : "Connector")} Offset Pool for Relationships",
-            NumberOfDevices = 1,
-            Amount = Convert.ToUInt32(_poolsOffset.RelationshipsOffset),
-            Alias = _poolsOffset.RelationshipsOffsetPendingTo == OffsetDirections.App ? "a0r" : "c0r",
-            NumberOfChallenges = 0,
-            NumberOfDatawalletModifications = 0,
-            NumberOfRelationshipTemplates = 0,
-            NumberOfRelationships = 1,
-            TotalNumberOfMessages = 0,
-            Type = _poolsOffset.RelationshipsOffsetPendingTo == OffsetDirections.App ? "connector" : "app"
-        };
+            Console.Write("Creating DataWalletModifications... ");
+            using var progress = new ProgressBar(_pools.Sum(p => p.NumberOfDatawalletModifications * p.Amount));
+            foreach (var pool in _pools.Where(p => p.NumberOfDatawalletModifications > 0))
+            {
+                foreach (var identity in pool.Identities)
+                {
+                    var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
+                    for (uint i = 0; i < pool.NumberOfDatawalletModifications; i++)
+                    {
+                        await sdk.Datawallet.PushDatawalletModifications(new()
+                        {
+                            LocalIndex = 0,
+                            Modifications = []
+                        }, 0);
+                        progress.Increment();
+                    }
+                }
+            }
+        }
 
-        // TODO Fix messages cannot be sent to these identities because they're not related to other identities.
-        var messagesOffsetPool = new PoolEntry
+        #endregion
+
+        #region Outputters
+
+        private void OutputAll()
         {
-            Name = $"{(_poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "App" : "Connector")} Offset Pool for Messages",
-            NumberOfDevices = 1,
-            Amount = Convert.ToUInt32(_poolsOffset.MessagesOffset),
-            Alias = _poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "a0m" : "c0m",
-            NumberOfChallenges = 0,
-            NumberOfDatawalletModifications = 0,
-            NumberOfRelationshipTemplates = 0,
-            NumberOfRelationships = 0,
-            NumberOfSentMessages = 1,
-            Type = _poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "connector" : "app"
-        };
+            var outputDirName = $@"{GetProjectPath()}\poolCreator.{SystemTime.UtcNow:yyyyMMdd-HHmmss}";
+            Directory.CreateDirectory(outputDirName);
 
-        if (_poolsOffset.RelationshipsOffset != 0)
-            _pools.Add(relationshipsOffsetPool);
+            OutputIdentities(outputDirName);
+        }
 
-        //if (_poolsOffset.MessagesOffset != 0)
-        //    _pools.Add(messagesOffsetPool);
+        private void OutputIdentities(string outputDirName)
+        {
+            var stringBuilder = new StringBuilder();
+            stringBuilder.AppendLine("DeviceId;Username;Password;Alias");
+            foreach (var pool in _pools)
+            {
+                foreach (var identity in pool.Identities)
+                {
+                    foreach (var deviceId in identity.DeviceIds)
+                    {
+                        stringBuilder.AppendLine($"""{deviceId};{identity.UserCredentials.Username};"{identity.UserCredentials.Password}";{pool.Alias}""");
+                    }
+                }
+            }
+            File.WriteAllTextAsync($@"{outputDirName}\identities.csv", stringBuilder.ToString());
+        }
+
+        private static string GetProjectPath()
+        {
+            var dir = Path.GetFullPath(@"..\..\..");
+            return dir;
+        }
+
+        #endregion
+
+        #region Offsets
+
+        private void CreateOffsetPools()
+        {
+            if (_poolsOffset.RelationshipsOffset != 0)
+            {
+                var avgCeiling = Convert.ToUInt32(Math.Ceiling(_pools.Where(p => p.NumberOfRelationships > 0).Average(p => p.NumberOfRelationships)));
+                var otherPoolsRelationshipsAverage = avgCeiling % 2 == 0 ? avgCeiling : avgCeiling - 1;
+                if (_poolsOffset.RelationshipsOffset < otherPoolsRelationshipsAverage / 2)
+                {
+                    otherPoolsRelationshipsAverage = Convert.ToUInt32(_poolsOffset.RelationshipsOffset / 10);
+                }
+
+                _pools.Add(new PoolEntry
+                {
+                    Name = $"{(_poolsOffset.RelationshipsOffsetPendingTo == OffsetDirections.App ? "Connector" : "App")} Offset Pool for Relationships",
+                    NumberOfDevices = 1,
+                    Amount = Convert.ToUInt32(_poolsOffset.RelationshipsOffset / otherPoolsRelationshipsAverage),
+                    Alias = _poolsOffset.RelationshipsOffsetPendingTo == OffsetDirections.App ? "c0r" : "a0r",
+                    NumberOfRelationships = otherPoolsRelationshipsAverage,
+                    Type = _poolsOffset.RelationshipsOffsetPendingTo == OffsetDirections.App ? "connector" : "app"
+                });
+            }
+
+            if (_poolsOffset.MessagesOffset != 0)
+            {
+                var messagesOffsetPool1 = new PoolEntry
+                {
+                    Name = $"{(_poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "Connector" : "App")} Offset Pool for Messages",
+                    NumberOfDevices = 1,
+                    Amount = 1,
+                    Alias = _poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "c0m" : "a0m",
+                    NumberOfRelationships = 1,
+                    TotalNumberOfMessages = Convert.ToUInt32(_poolsOffset.MessagesOffset),
+                    Type = _poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "connector" : "app"
+                };
+
+                // this pool is created simply to balance the 1 relationship created by the Pool above.
+                var messagesOffsetPool2 = new PoolEntry
+                {
+                    Name = $"{(_poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "App" : "Connector")} Compensation Offset Pool for Messages",
+                    NumberOfDevices = 1,
+                    Amount = 1,
+                    Alias = _poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "a0mc" : "c0mc",
+                    NumberOfRelationships = 1,
+                    Type = _poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "app" : "connector"
+                };
+
+                _pools.Add(messagesOffsetPool1);
+                _pools.Add(messagesOffsetPool2);
+            }
+        }
+
+        #endregion
     }
-
-    #endregion
-}

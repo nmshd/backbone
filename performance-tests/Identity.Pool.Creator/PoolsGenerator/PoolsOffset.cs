@@ -48,4 +48,7 @@ internal record PoolsOffset
     }
 }
 
+/// <summary>
+/// The kind that has the most of some entity, e.g. relationships
+/// </summary>
 internal enum OffsetDirections { App, Connector }
