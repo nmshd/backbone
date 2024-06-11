@@ -8,10 +8,10 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.S
 
 public class SseConnector : IPnsConnector
 {
-    private readonly SseServerClient _sseServerClient;
+    private readonly ISseServerClient _sseServerClient;
     private readonly ILogger<SseConnector> _logger;
 
-    public SseConnector(SseServerClient sseServerClient, ILogger<SseConnector> logger)
+    public SseConnector(ISseServerClient sseServerClient, ILogger<SseConnector> logger)
     {
         _sseServerClient = sseServerClient;
         _logger = logger;

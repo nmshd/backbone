@@ -69,7 +69,7 @@ public static class IServiceCollectionExtensions
 
     private static void AddSse(this IServiceCollection services, SseOptions options)
     {
-        services.AddSingleton<SseServerClient>();
+        services.AddSingleton<ISseServerClient, SseServerClient>();
 
         services.AddHttpClient(nameof(SseServerClient), client => { client.BaseAddress = new Uri(options.SseServerBaseAddress); });
 

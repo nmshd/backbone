@@ -4,7 +4,12 @@ using System.Text.Json;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 
-public class SseServerClient
+public interface ISseServerClient
+{
+    Task SendEvent(string recipient, string eventName);
+}
+
+public class SseServerClient : ISseServerClient
 {
     private static readonly JsonSerializerOptions JSON_SERIALIZER_OPTIONS = new()
     {
