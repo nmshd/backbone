@@ -1,6 +1,5 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
-using System.Text.Json;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 
@@ -11,12 +10,6 @@ public interface ISseServerClient
 
 public class SseServerClient : ISseServerClient
 {
-    private static readonly JsonSerializerOptions JSON_SERIALIZER_OPTIONS = new()
-    {
-        Converters = { new DateTimeConverter() },
-        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-    };
-
     private readonly HttpClient _client;
 
     public SseServerClient(IHttpClientFactory httpClientFactory)
@@ -26,11 +19,10 @@ public class SseServerClient : ISseServerClient
 
     public async Task SendEvent(string recipient, string eventName)
     {
-        var payload = JsonContent.Create(new EventPayload(eventName), options: JSON_SERIALIZER_OPTIONS);
-
         try
         {
-            var response = await _client.PostAsync($"/{recipient}/events", payload);
+            var request = new SseMessageBuilder(recipient, eventName).Build();
+            var response = await _client.SendAsync(request);
 
             if (response.StatusCode != HttpStatusCode.OK)
             {
@@ -46,16 +38,6 @@ public class SseServerClient : ISseServerClient
         {
             throw new Exception("An unexpected error occurred while sending the event.", ex);
         }
-    }
-
-    private class EventPayload
-    {
-        public EventPayload(string eventName)
-        {
-            EventName = eventName;
-        }
-
-        public string EventName { get; set; }
     }
 
     private class ErrorPayload
