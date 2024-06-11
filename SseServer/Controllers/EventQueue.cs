@@ -20,12 +20,12 @@ public class EventQueue : IEventQueue
         _channels.TryRemove(address, out _);
     }
 
-    public async Task EnqueueFor(string address, string notification, CancellationToken cancellationToken)
+    public async Task EnqueueFor(string address, string eventName, CancellationToken cancellationToken)
     {
         if (!_channels.TryGetValue(address, out var channel))
             throw new ClientNotFoundException();
 
-        await channel.Writer.WriteAsync(notification, cancellationToken);
+        await channel.Writer.WriteAsync(eventName, cancellationToken);
     }
 
     public IAsyncEnumerable<string> DequeueFor(string address, CancellationToken cancellationToken)

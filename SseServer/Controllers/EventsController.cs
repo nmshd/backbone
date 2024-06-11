@@ -13,11 +13,11 @@ public class EventsController : ControllerBase
     }
 
     [HttpPost("/{address}/events")]
-    public async Task<IActionResult> PostMessage([FromRoute] string address, [FromBody] CreateMessageRequest request)
+    public async Task<IActionResult> PostMessage([FromRoute] string address, [FromBody] CreateEventRequest request)
     {
         try
         {
-            await _eventQueue.EnqueueFor(address, request.Message, HttpContext.RequestAborted);
+            await _eventQueue.EnqueueFor(address, request.EventName, HttpContext.RequestAborted);
             return Ok();
         }
         catch (ClientNotFoundException)
@@ -31,7 +31,7 @@ public class EventsController : ControllerBase
     }
 }
 
-public class CreateMessageRequest
+public class CreateEventRequest
 {
-    public required string Message { get; set; }
+    public required string EventName { get; set; }
 }

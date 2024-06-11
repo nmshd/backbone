@@ -47,16 +47,21 @@ public class SseController : ControllerBase
         {
             _eventQueue.Register(address);
 
-            await foreach (var message in _eventQueue.DequeueFor(address, HttpContext.RequestAborted))
+            await foreach (var eventName in _eventQueue.DequeueFor(address, HttpContext.RequestAborted))
             {
-                await streamWriter.WriteLineAsync($"data: {message}\n\n");
+                await streamWriter.WriteLineAsync($"""
+                                                   event: {eventName}
+                                                   data:.
+
+
+                                                   """);
                 await streamWriter.FlushAsync();
             }
         }
         catch (ClientAlreadyRegisteredException)
         {
             return BadRequest(HttpError.ForProduction("error.platform.sseClientAlreadyRegistered",
-                $"An SSE client for your identity is already registered. You can only register once per identity.", ""));
+                "An SSE client for your identity is already registered. You can only register once per identity.", ""));
         }
         catch (Exception ex)
         {

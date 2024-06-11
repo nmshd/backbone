@@ -23,10 +23,9 @@ public class SseConnector : IPnsConnector
 
         foreach (var registration in registrations)
         {
-            var notificationContent = new NotificationContent(recipient, registration.DevicePushIdentifier, notification);
             try
             {
-                await _sseServerClient.SendEvent(recipient, notificationContent);
+                await _sseServerClient.SendEvent(recipient, notification.GetEventName());
             }
             catch (SseClientNotRegisteredException)
             {

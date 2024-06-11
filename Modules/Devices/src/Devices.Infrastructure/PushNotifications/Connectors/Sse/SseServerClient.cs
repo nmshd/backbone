@@ -8,7 +8,8 @@ public class SseServerClient
 {
     private static readonly JsonSerializerOptions JSON_SERIALIZER_OPTIONS = new()
     {
-        Converters = { new DateTimeConverter() }, PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        Converters = { new DateTimeConverter() },
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
     };
 
     private readonly HttpClient _client;
@@ -18,9 +19,9 @@ public class SseServerClient
         _client = httpClientFactory.CreateClient(nameof(SseServerClient));
     }
 
-    public async Task SendEvent(string recipient, NotificationContent notificationContent)
+    public async Task SendEvent(string recipient, string eventName)
     {
-        var payload = JsonContent.Create(new EventPayload { Message = JsonSerializer.Serialize(new { notificationContent.EventName }, JSON_SERIALIZER_OPTIONS) });
+        var payload = JsonContent.Create(new EventPayload(eventName), options: JSON_SERIALIZER_OPTIONS);
 
         try
         {
@@ -44,7 +45,12 @@ public class SseServerClient
 
     private class EventPayload
     {
-        public required string Message { get; set; }
+        public EventPayload(string eventName)
+        {
+            EventName = eventName;
+        }
+
+        public string EventName { get; set; }
     }
 
     private class ErrorPayload
