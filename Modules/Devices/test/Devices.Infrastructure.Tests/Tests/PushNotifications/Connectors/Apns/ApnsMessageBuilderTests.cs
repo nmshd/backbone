@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
@@ -6,6 +5,7 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -41,10 +41,10 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
             .SetNotificationId(1)
             .Build();
-        var requestBody = FormatJson(await request.Content!.ReadAsStringAsync());
+        var actualContent = await request.Content!.ReadAsStringAsync();
 
         // Assert
-        requestBody.Should().Be(FormatJson(@"{
+        actualContent.Should().BeEquivalentToJson(@"{
             'notId': 1,
             'content': {
                 'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
@@ -62,19 +62,7 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
                     'body': 'someNotificationTextBody'
                 }
             }
-        }"));
-    }
-
-    private static string FormatJson(string jsonString)
-    {
-        jsonString = jsonString.Replace("'", "\"");
-
-        var deserialized = JsonSerializer.Deserialize<JsonElement>(jsonString);
-
-        return JsonSerializer.Serialize(deserialized, new JsonSerializerOptions
-        {
-            WriteIndented = true,
-        });
+        }");
     }
 
     private record TestPushNotification : IPushNotification
