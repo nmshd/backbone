@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Text;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
@@ -58,7 +59,8 @@ public class PoolsGenerator
 
         //await CreateIdentities();
         CreateFakeIdentities();
-        DistributeRelationships();
+        DistributeRelationshipsV2();
+        PrintRelationships(summaryOnly: true);
 
         //await CreateRelationshipTemplates();
         //await CreateChallenges();
@@ -66,6 +68,19 @@ public class PoolsGenerator
         //await CreateDatawalletModifications();
 
         OutputAll();
+    }
+
+    private void PrintRelationships(bool summaryOnly = false)
+    {
+        Console.WriteLine($"{_pools.Where(p => p.IsApp()).SelectMany(p => p.Identities).Sum(i => i.IdentitiesToEstablishRelationshipsWith.Count)} relationships found");
+        
+        if (!summaryOnly)
+            foreach (var appPoolIdentity in _pools.Where(p => p.IsApp()).SelectMany(p => p.Identities))
+            {
+                Console.WriteLine($"Identity {appPoolIdentity.Nickname} of type App establishes {appPoolIdentity.IdentitiesToEstablishRelationshipsWith.Count} relationships:");
+                foreach (var relatedIdentity in appPoolIdentity.IdentitiesToEstablishRelationshipsWith)
+                    Console.WriteLine($"    - with connector {relatedIdentity.Nickname}");
+            }
     }
 
     private void CreateFakeIdentities()
@@ -91,18 +106,12 @@ public class PoolsGenerator
         var appPools = _pools.Where(p => p.IsApp() && p.NumberOfRelationships > 0).ToList();
         var connectorPools = _pools.Where(p => p.IsConnector() && p.NumberOfRelationships > 0).ToList();
 
-        var appRelationships = appPools.Sum(p => p.NumberOfRelationships * p.Amount);
-        var connectorRelationships = connectorPools.Sum(p => p.NumberOfRelationships * p.Amount);
-
-        if (appRelationships != connectorRelationships)
-            throw new Exception(
-                "The number of relationships in the app pools does not match the number of relationships in the connector pools, despite there being offset pools. There is an implementation error.");
-
+        var appRelationshipsCount = CheckRelationshipCounts(appPools, connectorPools);
 
         var targetIdentities = connectorPools.SelectMany(p => p.Identities).ToArray();
         var targetIdentitiesIteratorIndex = 0;
 
-        while (appPools.Sum(p => p.Identities.Sum(i => i.IdentitiesToEstablishRelationshipsWith.Count)) < appRelationships)
+        while (appPools.Sum(p => p.Identities.Sum(i => i.IdentitiesToEstablishRelationshipsWith.Count)) < appRelationshipsCount)
         {
             foreach (var poolEntry in appPools)
             {
@@ -128,6 +137,61 @@ public class PoolsGenerator
 
         var relationshipsToA21 = appPools.SelectMany(p => p.Identities).SelectMany(i => i.IdentitiesToEstablishRelationshipsWith).Count(i => i.Nickname == "c21");
         var c21 = connectorPools.SelectMany(p => p.Identities).Where(i => i.Nickname == "c21").Single();
+    }
+
+    private static long CheckRelationshipCounts(List<PoolEntry> appPools, List<PoolEntry> connectorPools)
+    {
+        var appRelationshipsCount = appPools.Sum(p => p.NumberOfRelationships * p.Amount);
+        var connectorRelationshipsCount = connectorPools.Sum(p => p.NumberOfRelationships * p.Amount);
+
+        if (appRelationshipsCount != connectorRelationshipsCount)
+            throw new Exception(
+                "The number of relationships in the app pools does not match the number of relationships in the connector pools, despite there being offset pools. There is an implementation error.");
+        return appRelationshipsCount;
+    }
+
+    private void DistributeRelationshipsV2()
+    {
+        var appPools = _pools.Where(p => p.IsApp() && p.NumberOfRelationships > 0).ToList();
+        var connectorPools = _pools.Where(p => p.IsConnector() && p.NumberOfRelationships > 0).ToList();
+        var appAndConnectorIdentities = _pools.Where(p => p.IsApp() || p.IsConnector()).SelectMany(p => p.Identities).OrderByDescending(i => i.RelationshipsAvailable).ToList();
+
+        var appPoolsIdentities = appPools.SelectMany(p => p.Identities).OrderByDescending(i => i.RelationshipsAvailable).ToList();
+        var connectorPoolsIdentities = connectorPools.SelectMany(p => p.Identities).OrderByDescending(i => i.RelationshipsAvailable).ToList();
+
+        var expectedRelationshipsCount = CheckRelationshipCounts(appPools, connectorPools);
+        var successfullyEstablishedRelationshipsCount = 0;
+        while (expectedRelationshipsCount > successfullyEstablishedRelationshipsCount)
+        {
+            foreach (var identity in appAndConnectorIdentities.Where(i => i.HasAvailabilityForNewRelationships()))
+            {
+                successfullyEstablishedRelationshipsCount = DistributeRelationshipsV2InnerLoop(appPoolsIdentities, connectorPoolsIdentities, successfullyEstablishedRelationshipsCount, identity);
+            }
+        }
+    }
+
+    private static int DistributeRelationshipsV2InnerLoop(List<Identity> appPoolsIdentities, List<Identity> connectorPoolsIdentities, int successfullyEstablishedRelationshipsCount, Identity identity)
+    {
+        var oppositePoolIdentities = identity.PoolType == PoolTypes.CONNECTOR_TYPE ? appPoolsIdentities : connectorPoolsIdentities;
+
+        Identity selectedIdentity;
+        var index = 0;
+        while (identity.RelationshipsAvailable > 0)
+        {
+            // We select the identity with the highest capacity for relationships and we fill it with an identity from an opposite pool.
+            do
+            {
+                selectedIdentity = oppositePoolIdentities[index++];
+                if (index == oppositePoolIdentities.Count)
+                    return successfullyEstablishedRelationshipsCount;
+
+            } while (identity.IdentitiesToEstablishRelationshipsWith.Contains(selectedIdentity));
+
+            if (identity.AddIdentityToEstablishRelationshipsWith(selectedIdentity))
+                successfullyEstablishedRelationshipsCount++;
+        }
+
+        return successfullyEstablishedRelationshipsCount;
     }
 
     private static Identity GetCandidateIdentityForRelationship(ref Identity[] targetIdentities, ref int targetIdentitiesIteratorIndex)
@@ -266,7 +330,7 @@ public class PoolsGenerator
             foreach (var identity in pool.Identities)
             {
                 var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
-                for (int i = 0; i < pool.NumberOfDatawalletModifications; i++)
+                for (uint i = 0; i < pool.NumberOfDatawalletModifications; i++)
                 {
                     await sdk.Datawallet.PushDatawalletModifications(new()
                     {
@@ -338,7 +402,7 @@ public class PoolsGenerator
             Type = _poolsOffset.RelationshipsOffsetPendingTo == OffsetDirections.App ? "connector" : "app"
         };
 
-
+        // TODO Fix messages cannot be sent to these identities because they're not related to other identities.
         var messagesOffsetPool = new PoolEntry
         {
             Name = $"{(_poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "App" : "Connector")} Offset Pool for Messages",
@@ -356,8 +420,8 @@ public class PoolsGenerator
         if (_poolsOffset.RelationshipsOffset != 0)
             _pools.Add(relationshipsOffsetPool);
 
-        if (_poolsOffset.MessagesOffset != 0)
-            _pools.Add(messagesOffsetPool);
+        //if (_poolsOffset.MessagesOffset != 0)
+        //    _pools.Add(messagesOffsetPool);
     }
 
     #endregion

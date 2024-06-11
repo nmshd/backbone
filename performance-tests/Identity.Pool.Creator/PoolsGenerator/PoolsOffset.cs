@@ -22,10 +22,10 @@ internal record PoolsOffset
         var appPools = pools.Where(p => p.IsApp()).ToList();
         var connectorPools = pools.Where(p => p.IsConnector()).ToList();
 
-        var appMessagesSum = appPools.Sum(p => p.NumberOfSentMessages * p.Amount);
+        var appMessagesSum = appPools.Sum(p => p.TotalNumberOfMessages * p.Amount);
         var appRelationshipsSum = appPools.Sum(p => p.NumberOfRelationships * p.Amount);
 
-        var connectorMessagesSum = connectorPools.Sum(p => p.NumberOfSentMessages * p.Amount);
+        var connectorMessagesSum = connectorPools.Sum(p => p.TotalNumberOfMessages * p.Amount);
         var connectorRelationshipsSum = connectorPools.Sum(p => p.NumberOfRelationships * p.Amount);
 
 

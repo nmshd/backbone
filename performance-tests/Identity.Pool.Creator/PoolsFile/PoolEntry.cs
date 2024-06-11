@@ -26,13 +26,8 @@ public record PoolEntry
     [JsonIgnore] public uint NumberOfReceivedMessages;
 
     [JsonIgnore]
-    private const string CONNECTOR_TYPE = "connector";
-
-    [JsonIgnore]
     public PoolEntry Pool = null!;
 
-    [JsonIgnore]
-    private const string APP_TYPE = "app";
-    public bool IsConnector() => Type == CONNECTOR_TYPE;
-    public bool IsApp() => Type == APP_TYPE;
+    public bool IsConnector() => Type == PoolTypes.CONNECTOR_TYPE;
+    public bool IsApp() => Type == PoolTypes.APP_TYPE;
 }

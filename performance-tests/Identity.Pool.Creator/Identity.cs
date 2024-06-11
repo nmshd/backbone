@@ -13,8 +13,7 @@ public class Identity
     //public uint RelationshipsTarget { get; private set; } = 0;
 
     public List<Identity> IdentitiesToEstablishRelationshipsWith { get; }
-    private uint _relationshipsAvailable;
-
+    public uint RelationshipsAvailable { get; private set; }
     public Identity(UserCredentials userCredentials, string address, string deviceId, PoolEntry pool, uint orderNumber)
     {
         Address = address;
@@ -22,13 +21,14 @@ public class Identity
         DeviceIds.Add(deviceId);
         HasBeenUsedAsMessageRecipient = false;
 
-        _relationshipsAvailable = pool.NumberOfRelationships;
+        RelationshipsAvailable = pool.NumberOfRelationships;
         IdentitiesToEstablishRelationshipsWith = [];
         Nickname = pool.Alias + orderNumber;
+        PoolType = pool.Type;
     }
 
     public string Nickname { get; private set; }
-
+    public string PoolType { get; }
 
     public void AddDevice(string deviceId)
     {
@@ -40,14 +40,14 @@ public class Identity
         HasBeenUsedAsMessageRecipient = true;
     }
 
-    public bool HasAvailabilityForNewRelationships() => _relationshipsAvailable > 0;
+    public bool HasAvailabilityForNewRelationships() => RelationshipsAvailable > 0;
 
     public bool AddIdentityToEstablishRelationshipsWith(Identity identity, bool isRecursiveCall = false)
     {
-        if (!HasAvailabilityForNewRelationships()) return false;
+        if (!HasAvailabilityForNewRelationships() || !identity.HasAvailabilityForNewRelationships()) return false;
 
         IdentitiesToEstablishRelationshipsWith.Add(identity);
-        _relationshipsAvailable--;
+        RelationshipsAvailable--;
         if (!isRecursiveCall) identity.AddIdentityToEstablishRelationshipsWith(this, true);
 
         return true;
