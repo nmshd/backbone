@@ -13,5 +13,5 @@ public class PeerDeletionCanceledDomainEvent : DomainEvent
 
     public string IdentityAddress { get; }
     public string RelationshipId { get; }
-    public string PeerIdentityAddress { get; set; }
+    public string PeerIdentityAddress { get; }
 }

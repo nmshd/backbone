@@ -5,7 +5,7 @@ namespace Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 public class PeerDeletionCanceledDomainEvent : DomainEvent
 {
     public PeerDeletionCanceledDomainEvent(IdentityAddress identityAddress, string relationshipId, string peerIdentityAddress)
-        : base($"{relationshipId}/PeerDeletionCanceled/{peerIdentityAddress}", true)
+        : base($"{relationshipId}/PeerDeletionCanceled/{peerIdentityAddress}", randomizeId: true)
     {
         IdentityAddress = identityAddress;
         RelationshipId = relationshipId;
@@ -14,5 +14,5 @@ public class PeerDeletionCanceledDomainEvent : DomainEvent
 
     public string IdentityAddress { get; }
     public string RelationshipId { get; }
-    public string PeerIdentityAddress { get; set; }
+    public string PeerIdentityAddress { get; }
 }

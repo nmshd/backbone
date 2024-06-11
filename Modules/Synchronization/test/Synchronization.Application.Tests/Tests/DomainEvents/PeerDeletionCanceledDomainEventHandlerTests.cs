@@ -71,10 +71,10 @@ public class PeerDeletionCanceledDomainEventHandlerTests : AbstractTestsBase
         ).MustHaveHappenedOnceExactly();
     }
 
-    private static PeerDeletionCanceledDomainEventHandler CreateHandler(ISynchronizationDbContext fakeDbContext, IEventBus? mockEventBus = null)
+    private static PeerDeletionCanceledDomainEventHandler CreateHandler(ISynchronizationDbContext dbContext, IEventBus? eventBus = null)
     {
-        return new PeerDeletionCanceledDomainEventHandler(fakeDbContext,
-            mockEventBus ?? A.Dummy<IEventBus>(),
+        return new PeerDeletionCanceledDomainEventHandler(dbContext,
+            eventBus ?? A.Dummy<IEventBus>(),
             A.Fake<ILogger<PeerDeletionCanceledDomainEventHandler>>());
     }
 }

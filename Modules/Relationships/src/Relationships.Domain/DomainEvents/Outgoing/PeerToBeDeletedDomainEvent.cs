@@ -4,7 +4,7 @@ namespace Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 public class PeerToBeDeletedDomainEvent : DomainEvent
 {
     public PeerToBeDeletedDomainEvent(string identityAddress, string relationshipId, string peerIdentityAddress)
-        : base($"{relationshipId}/peerToBeDeleted/{peerIdentityAddress}", true)
+        : base($"{relationshipId}/peerToBeDeleted/{peerIdentityAddress}", randomizeId: true)
     {
         IdentityAddress = identityAddress;
         RelationshipId = relationshipId;

@@ -59,6 +59,8 @@ public class IdentityToBeDeletedDomainEventHandlerTests : AbstractTestsBase
 
     private static IdentityToBeDeletedDomainEventHandler CreateHandler(IRelationshipsRepository relationshipsRepository, IEventBus? eventBus = null)
     {
-        return new IdentityToBeDeletedDomainEventHandler(relationshipsRepository, eventBus ?? A.Dummy<IEventBus>());
+        eventBus ??= A.Dummy<IEventBus>();
+
+        return new IdentityToBeDeletedDomainEventHandler(relationshipsRepository, eventBus);
     }
 }

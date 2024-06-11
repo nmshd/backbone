@@ -90,7 +90,7 @@ public class HandlerTests : AbstractTestsBase
         var activeDevice = identity.Devices[0];
         var oldTierId = identity.TierId;
 
-        var fakeIdentitiesRepository = A.Dummy<IIdentitiesRepository>();
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var fakeUserContext = A.Fake<IUserContext>();
         var mockEventBus = A.Fake<IEventBus>();
 
@@ -118,6 +118,9 @@ public class HandlerTests : AbstractTestsBase
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus? eventBus = null, IPushNotificationSender? pushNotificationSender = null)
     {
-        return new Handler(identitiesRepository, userContext, eventBus ?? A.Dummy<IEventBus>(), pushNotificationSender ?? A.Dummy<IPushNotificationSender>());
+        eventBus ??= A.Dummy<IEventBus>();
+        pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
+
+        return new Handler(identitiesRepository, userContext, eventBus, pushNotificationSender);
     }
 }

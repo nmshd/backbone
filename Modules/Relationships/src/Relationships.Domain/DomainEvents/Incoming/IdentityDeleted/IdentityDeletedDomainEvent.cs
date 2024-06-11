@@ -8,5 +8,5 @@ public class IdentityDeletedDomainEvent : DomainEvent
         IdentityAddress = identityAddress;
     }
 
-    public string IdentityAddress { get; set; }
+    public string IdentityAddress { get; }
 }

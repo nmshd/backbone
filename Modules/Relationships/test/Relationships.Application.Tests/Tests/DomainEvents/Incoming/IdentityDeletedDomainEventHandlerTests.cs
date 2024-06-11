@@ -31,7 +31,7 @@ public class IdentityDeletedDomainEventHandlerTests : AbstractTestsBase
     }
 
     [Fact]
-    public static async Task Publishes_PeerToBeDeletedDomainEvent()
+    public static async Task Publishes_PeerDeletedDomainEvent()
     {
         //Arrange
         var identity = TestDataGenerator.CreateRandomIdentityAddress();
@@ -59,6 +59,8 @@ public class IdentityDeletedDomainEventHandlerTests : AbstractTestsBase
 
     private static IdentityDeletedDomainEventHandler CreateHandler(IRelationshipsRepository relationshipsRepository, IEventBus? eventBus = null)
     {
-        return new IdentityDeletedDomainEventHandler(relationshipsRepository, eventBus ?? A.Dummy<IEventBus>());
+        eventBus ??= A.Dummy<IEventBus>();
+
+        return new IdentityDeletedDomainEventHandler(relationshipsRepository, eventBus);
     }
 }

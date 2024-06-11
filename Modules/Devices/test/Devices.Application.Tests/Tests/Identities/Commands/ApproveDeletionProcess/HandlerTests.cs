@@ -72,11 +72,12 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         var address = CreateRandomIdentityAddress();
+
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(address, A<CancellationToken>._, A<bool>._)).Returns<Identity?>(null);
+
         var fakeUserContext = A.Fake<IUserContext>();
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(address);
-
-        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(address, A<CancellationToken>._, A<bool>._)).Returns<Identity?>(null);
 
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
 
@@ -96,19 +97,17 @@ public class HandlerTests : AbstractTestsBase
         var device = identity.Devices[0];
         var oldTierId = identity.TierId;
 
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
+            .Returns(identity);
+
         var fakeUserContext = A.Fake<IUserContext>();
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(identity.Address);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(device.Id);
 
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
-            .Returns(identity);
-
-        var fakePushNotificationSender = A.Dummy<IPushNotificationSender>();
-
         var mockEventBus = A.Fake<IEventBus>();
 
-        var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockEventBus, fakePushNotificationSender);
+        var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext, mockEventBus);
 
         // Act
         await handler.Handle(new ApproveDeletionProcessCommand(deletionProcess.Id), CancellationToken.None);

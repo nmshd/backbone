@@ -18,22 +18,22 @@ public class IdentityDeletionCanceledDomainEventHandler : IDomainEventHandler<Id
 
     public async Task Handle(IdentityDeletionCanceledDomainEvent @event)
     {
-        var relationships = await FindRelationshipsOfPeer(@event.IdentityAddress);
+        var relationships = await GetRelationshipsOfPeer(@event.IdentityAddress);
 
-        NotifyRelationshipsOfPeerDeletionCanceled(@event, relationships);
+        NotifyRelationshipsOfPeerDeletionCanceled(@event.IdentityAddress, relationships);
     }
 
-    private void NotifyRelationshipsOfPeerDeletionCanceled(IdentityDeletionCanceledDomainEvent @event, IEnumerable<Relationship> relationships)
+    private void NotifyRelationshipsOfPeerDeletionCanceled(string peerAddress, IEnumerable<Relationship> relationships)
     {
         foreach (var relationship in relationships)
         {
-            var identity = relationship.To == @event.IdentityAddress ? relationship.From : relationship.To;
+            var identity = relationship.To == peerAddress ? relationship.From : relationship.To;
 
-            _eventBus.Publish(new PeerDeletionCanceledDomainEvent(identity, relationship.Id, @event.IdentityAddress));
+            _eventBus.Publish(new PeerDeletionCanceledDomainEvent(identity, relationship.Id, peerAddress));
         }
     }
 
-    private async Task<IEnumerable<Relationship>> FindRelationshipsOfPeer(string identityAddress)
+    private async Task<IEnumerable<Relationship>> GetRelationshipsOfPeer(string identityAddress)
     {
         return await _relationshipsRepository
             .FindRelationships(r => r.From == identityAddress || r.To == identityAddress, CancellationToken.None);

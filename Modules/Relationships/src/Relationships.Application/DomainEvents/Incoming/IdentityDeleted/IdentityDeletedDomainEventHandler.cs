@@ -20,16 +20,16 @@ public class IdentityDeletedDomainEventHandler : IDomainEventHandler<IdentityDel
     {
         var relationships = await GetRelationshipsOfDeletedPeer(@event.IdentityAddress);
 
-        NotifyRelationshipsOfPeerDeleted(@event, relationships);
+        NotifyRelationshipsOfDeletedPeer(@event.IdentityAddress, relationships);
     }
 
-    private void NotifyRelationshipsOfPeerDeleted(IdentityDeletedDomainEvent @event, IEnumerable<Relationship> relationships)
+    private void NotifyRelationshipsOfDeletedPeer(string deletedPeerAddress, IEnumerable<Relationship> relationships)
     {
         foreach (var relationship in relationships)
         {
-            var identity = relationship.To == @event.IdentityAddress ? relationship.From : relationship.To;
+            var identity = relationship.To == deletedPeerAddress ? relationship.From : relationship.To;
 
-            _eventBus.Publish(new PeerDeletedDomainEvent(identity, relationship.Id, @event.IdentityAddress));
+            _eventBus.Publish(new PeerDeletedDomainEvent(identity, relationship.Id, deletedPeerAddress));
         }
     }
 
