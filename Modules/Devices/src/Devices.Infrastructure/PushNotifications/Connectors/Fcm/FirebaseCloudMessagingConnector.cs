@@ -54,8 +54,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
             .SetToken(registration.Handle.Value)
             .Build();
 
-        _logger.LogDebug("Sending push notification (type '{eventName}') to device '{deviceId}' of '{address}' with handle '{handle}'.",
-            notificationContent.EventName, registration.DeviceId, registration.IdentityAddress, registration.Handle.Value);
+        _logger.Sending(notificationContent.EventName, registration.DeviceId, registration.IdentityAddress, registration.Handle.Value);
 
         var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(registration.AppId);
         try
@@ -96,4 +95,14 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
         var attribute = pushNotification.GetType().GetCustomAttribute<NotificationIdAttribute>();
         return attribute?.Value ?? 0;
     }
+}
+
+internal static partial class FirebaseCloudMessagingConnectorLogs
+{
+    [LoggerMessage(
+        EventId = 227730,
+        EventName = "FirebaseCloudMessagingConnector.Sending",
+        Level = LogLevel.Debug,
+        Message = "Sending push notification (type '{eventName}') to device '{deviceId}' of '{address}' with handle '{handle}'.")]
+    public static partial void Sending(this ILogger logger, string eventName, string deviceId, string address, string handle);
 }

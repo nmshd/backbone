@@ -25,7 +25,11 @@ public class SseConnector : IPnsConnector
         {
             try
             {
-                await _sseServerClient.SendEvent(recipient, notification.GetEventName());
+                var eventName = notification.GetEventName();
+
+                _logger.Sending(eventName, recipient);
+
+                await _sseServerClient.SendEvent(recipient, eventName);
                 sendResults.AddSuccess(registration.DeviceId);
             }
             catch (SseClientNotRegisteredException)
@@ -34,7 +38,7 @@ public class SseConnector : IPnsConnector
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An unexpected error occurred while sending the event.");
+                _logger.ErrorOnSend(ex);
                 sendResults.AddFailure(registration.DeviceId, ErrorReason.Unexpected);
             }
         }
@@ -44,5 +48,23 @@ public class SseConnector : IPnsConnector
 
     public void ValidateRegistration(PnsRegistration registration)
     {
+        // There is nothing to validate here
     }
+}
+
+internal static partial class SseConnectorLogs
+{
+    [LoggerMessage(
+        EventId = 433411,
+        EventName = "SseConnector.Sending",
+        Level = LogLevel.Debug,
+        Message = "Sending push notification (type '{eventName}') to '{address}'.")]
+    public static partial void Sending(this ILogger logger, string eventName, string address);
+
+    [LoggerMessage(
+        EventId = 707295,
+        EventName = "SseConnector.ErrorOnSend",
+        Level = LogLevel.Debug,
+        Message = "An unexpected error occurred while sending the event.")]
+    public static partial void ErrorOnSend(this ILogger logger, Exception exception);
 }

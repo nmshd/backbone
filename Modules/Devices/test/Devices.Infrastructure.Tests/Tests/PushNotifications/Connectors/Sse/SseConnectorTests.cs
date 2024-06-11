@@ -116,7 +116,7 @@ public class SseConnectorTests : AbstractTestsBase
     private static SseConnector CreateConnector(ISseServerClient? sseServerClient = null)
     {
         sseServerClient ??= A.Dummy<ISseServerClient>();
-        return new SseConnector(sseServerClient, A.Fake<ILogger<SseConnector>>());
+        return new SseConnector(sseServerClient, A.Dummy<ILogger<SseConnector>>());
     }
 
     private class TestPushNotification : IPushNotification;
