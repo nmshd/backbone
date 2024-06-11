@@ -12,6 +12,11 @@ public class CleanArchitecture
             .ResideInAssembly("Backbone.Modules.*", true)
             .As("All Modules");
 
+    private static readonly IObjectProvider<IType> CONSUMER_API_ASSEMBLIES =
+        Types().That()
+            .ResideInAssembly("Backbone.Modules.*.ConsumerApi", true)
+            .As("ConsumerApi Assemblies");
+
     private static readonly IObjectProvider<IType> APPLICATION_ASSEMBLIES =
         Types().That()
             .ResideInAssembly("Backbone.Modules.*.Application", true)
@@ -34,6 +39,7 @@ public class CleanArchitecture
         Types()
             .That().Are(module)
             .And().AreNot(Backbone.TEST_TYPES)
+            .And().AreNot(CONSUMER_API_ASSEMBLIES)
             .Should().NotDependOnAny(otherModules)
             .Because("modules should be self-contained.")
             .Check(Backbone.ARCHITECTURE);

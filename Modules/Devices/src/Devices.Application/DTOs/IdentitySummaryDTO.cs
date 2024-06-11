@@ -12,6 +12,7 @@ public class IdentitySummaryDTO
         Address = identity.Address.ToString();
         PublicKey = identity.PublicKey;
         CreatedAt = identity.CreatedAt;
+        Status = identity.Status;
 
         Devices = identity.Devices.Select(d => new DeviceDTO
         {
@@ -33,6 +34,7 @@ public class IdentitySummaryDTO
     public string? ClientId { get; set; }
     public byte[] PublicKey { get; set; }
     public DateTime CreatedAt { get; set; }
+    public IdentityStatus Status { get; set; }
 
     public IEnumerable<DeviceDTO> Devices { get; set; }
     public int NumberOfDevices { get; set; }
