@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
 
 namespace Backbone.SseServer;
 
@@ -12,15 +13,11 @@ public class Configuration
     public class AuthenticationConfiguration
     {
         public string JwtSigningCertificate { get; set; } = "";
-
-        [Required]
-        [Range(60, 3600)]
-        public int JwtLifetimeInSeconds { get; set; }
     }
 
     public class ModulesConfiguration
     {
         [Required]
-        public Modules.Devices.ConsumerApi.Configuration Devices { get; set; }
+        public DevicesConfiguration Devices { get; set; } = new();
     }
 }
