@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
@@ -66,18 +65,6 @@ public class FcmMessageBuilderTests : AbstractTestsBase
                       }
                     }
             """);
-    }
-
-    private static string FormatJson(string jsonString)
-    {
-        jsonString = jsonString.Replace("'", "\"");
-
-        var deserialized = JsonSerializer.Deserialize<JsonElement>(jsonString);
-
-        return JsonSerializer.Serialize(deserialized, new JsonSerializerOptions
-        {
-            WriteIndented = true,
-        });
     }
 
     private record TestPushNotification : IPushNotification

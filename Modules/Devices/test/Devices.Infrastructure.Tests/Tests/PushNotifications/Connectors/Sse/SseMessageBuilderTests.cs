@@ -9,7 +9,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.
 public class SseMessageBuilderTests : AbstractTestsBase
 {
     [Fact]
-    public async Task Test()
+    public async Task Builds_the_expected_http_request()
     {
         // Arrange
         var sseMessageBuilder = new SseMessageBuilder("recipient-address", "Test");
@@ -20,8 +20,8 @@ public class SseMessageBuilderTests : AbstractTestsBase
         // Assert
         request.Method.Should().Be(HttpMethod.Post);
         request.RequestUri.Should().Be("recipient-address/events");
-        request.Content.Should().NotBeNull();
 
+        request.Content.Should().NotBeNull();
         var actualContent = await request.Content!.ReadAsStringAsync();
         actualContent.Should().BeEquivalentToJson("""{ "eventName": "Test" }""");
     }
