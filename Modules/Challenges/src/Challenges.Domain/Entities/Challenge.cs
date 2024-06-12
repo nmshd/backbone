@@ -1,15 +1,18 @@
 using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Challenges.Domain.Ids;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Challenges.Domain.Entities;
 
-public class Challenge
+public class Challenge : Entity
 {
     private const int EXPIRY_TIME_IN_MINUTES = 10;
 
-    public Challenge() : this(null, null) { }
+    public Challenge() : this(null, null)
+    {
+    }
 
     public Challenge(IdentityAddress? createdBy, DeviceId? createdByDevice)
     {

@@ -1,6 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
+﻿using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
@@ -8,13 +6,11 @@ namespace Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleId
 
 public class Handler : IRequestHandler<CancelStaleIdentityDeletionProcessesCommand, CancelStaleIdentityDeletionProcessesResponse>
 {
-    private readonly IEventBus _eventBus;
     private readonly IIdentitiesRepository _identityRepository;
 
-    public Handler(IIdentitiesRepository identityRepository, IEventBus eventBus)
+    public Handler(IIdentitiesRepository identityRepository)
     {
         _identityRepository = identityRepository;
-        _eventBus = eventBus;
     }
 
     public async Task<CancelStaleIdentityDeletionProcessesResponse> Handle(CancelStaleIdentityDeletionProcessesCommand request, CancellationToken cancellationToken)
@@ -33,8 +29,6 @@ public class Handler : IRequestHandler<CancelStaleIdentityDeletionProcessesComma
             idsOfCancelledDeletionProcesses.Add(deletionProcess.Value.Id);
 
             await _identityRepository.Update(identity, cancellationToken);
-
-            _eventBus.Publish(new IdentityDeletionProcessStatusChangedDomainEvent(identity.Address, deletionProcess.Value.Id, null));
         }
 
         return new CancelStaleIdentityDeletionProcessesResponse(idsOfCancelledDeletionProcesses);

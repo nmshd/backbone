@@ -46,7 +46,8 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
 
         _eventBus.Publish(new TierOfIdentityChangedDomainEvent(identity, oldTierId, newTierId));
 
-        var daysUntilDeletion = deletionProcess.GracePeriodEndsAt?.DaysUntilDate() ?? throw new Exception($"Expected '{nameof(deletionProcess.GracePeriodEndsAt)}' to be set but found 'null' instead.");
+        var daysUntilDeletion = deletionProcess.GracePeriodEndsAt?.DaysUntilDate() ??
+                                throw new Exception($"Expected '{nameof(deletionProcess.GracePeriodEndsAt)}' to be set but found 'null' instead.");
         await _notificationSender.SendNotification(identity.Address, new DeletionProcessApprovedNotification(daysUntilDeletion), cancellationToken);
 
         return new ApproveDeletionProcessResponse(deletionProcess);

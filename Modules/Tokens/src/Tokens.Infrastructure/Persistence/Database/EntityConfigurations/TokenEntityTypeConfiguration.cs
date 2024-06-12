@@ -1,13 +1,15 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Tokens.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Tokens.Infrastructure.Persistence.Database.EntityConfigurations;
 
-public class TokenEntityTypeConfiguration : IEntityTypeConfiguration<Token>
+public class TokenEntityTypeConfiguration : EntityEntityTypeConfiguration<Token>
 {
-    public void Configure(EntityTypeBuilder<Token> builder)
+    public override void Configure(EntityTypeBuilder<Token> builder)
     {
+        base.Configure(builder);
+
         builder.Property(r => r.Content).IsRequired(false);
     }
 }

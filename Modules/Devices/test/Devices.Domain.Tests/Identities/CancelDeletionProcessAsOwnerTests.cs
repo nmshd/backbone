@@ -1,13 +1,15 @@
 ﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class CancelDeletionProcessTests : AbstractTestsBase
+public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
 {
     [Fact]
     public void Cancel_deletion_process()
@@ -57,6 +59,22 @@ public class CancelDeletionProcessTests : AbstractTestsBase
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
+    }
+
+    [Fact]
+    public void Raises_IdentityDeletionProcessStatusChangedDomainEvent_when_Cancelling()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        identity.DeletionProcesses[0].ClearDomainEvents();
+
+        // Act
+        var deletionProcess = identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
+
+        var domainEvent = deletionProcess.Should().HaveASingleDomainEvent<IdentityDeletionProcessStatusChangedDomainEvent>();
+        domainEvent.DeletionProcessId.Should().Be(deletionProcess.Id);
+        domainEvent.Address.Should().Be(identity.Address);
+        domainEvent.Initiator.Should().Be(identity.Address);
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
