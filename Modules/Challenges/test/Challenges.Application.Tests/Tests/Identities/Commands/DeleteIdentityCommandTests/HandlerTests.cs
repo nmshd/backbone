@@ -2,11 +2,12 @@
 using Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteChallengesOfIdentity;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Domain.Entities;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using Xunit;
 
 namespace Backbone.Modules.Challenges.Application.Tests.Tests.Identities.Commands.DeleteIdentityCommandTests;
-public class HandlerTests
+public class HandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Handler_calls_deletion_method_on_repository()
