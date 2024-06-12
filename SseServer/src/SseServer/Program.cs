@@ -106,6 +106,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddScoped<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 
+    services.AddHealthChecks();
+
     services.Configure<ForwardedHeadersOptions>(options =>
     {
         options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
