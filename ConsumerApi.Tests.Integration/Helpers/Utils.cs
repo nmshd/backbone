@@ -27,12 +27,12 @@ public static class Utils
         var createRelationshipResponse = await client2.Relationships.CreateRelationship(createRelationshipRequest);
         createRelationshipResponse.Should().BeASuccess();
 
-        var completeRelationshipChangeRequest = new CompleteRelationshipChangeRequest
+        var acceptRelationshipRequest = new AcceptRelationshipRequest
         {
-            Content = ConvertibleString.FromUtf8("AAA").BytesRepresentation
+            CreationResponseContent = ConvertibleString.FromUtf8("AAA").BytesRepresentation
         };
-        var acceptRelationChangeResponse =
-            await client1.Relationships.AcceptChange(createRelationshipResponse.Result!.Id, createRelationshipResponse.Result.Changes.First().Id, completeRelationshipChangeRequest);
-        acceptRelationChangeResponse.Should().BeASuccess();
+
+        var acceptRelationshipResponse = await client1.Relationships.AcceptRelationship(createRelationshipResponse.Result!.Id, acceptRelationshipRequest);
+        acceptRelationshipResponse.Should().BeASuccess();
     }
 }
