@@ -38,7 +38,6 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using DevicesConfiguration = Backbone.Modules.Devices.ConsumerApi.Configuration;
 using LogHelper = Backbone.Infrastructure.Logging.LogHelper;
 
 Log.Logger = new LoggerConfiguration()
@@ -127,6 +126,12 @@ static WebApplication CreateApp(string[] args)
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
+    services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
+
+#pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
+    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
+#pragma warning restore ASP0000
+
     services.AddSaveChangesTimeInterceptor();
 
     services.AddTransient<DevicesDbContextSeeder>();
@@ -142,20 +147,13 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<SynchronizationModule>(configuration)
         .AddModule<TokensModule>(configuration);
 
-    var quotasSqlDatabaseConfiguration = configuration.GetSection("Modules:Quotas:Infrastructure:SqlDatabase");
-    var quotasDbProvider = quotasSqlDatabaseConfiguration.GetValue<string>("Provider") ?? throw new ArgumentException("Quotas database connection string is not configured");
-    var quotasDbConnectionString = quotasSqlDatabaseConfiguration.GetValue<string>("ConnectionString") ?? throw new ArgumentException("Quotas database connection string is not configured");
-    services.AddMetricStatusesRepository(quotasDbProvider, quotasDbConnectionString);
+    var quotasSqlDatabaseConfiguration = parsedConfiguration.Modules.Quotas.Infrastructure.SqlDatabase;
+    services.AddMetricStatusesRepository(quotasSqlDatabaseConfiguration.Provider, quotasSqlDatabaseConfiguration.ConnectionString);
 
     services.AddTransient<IQuotaChecker, QuotaCheckerImpl>();
 
-    services.ConfigureAndValidate<BackboneConfiguration>(configuration.Bind);
-
-#pragma warning disable ASP0000 // We retrieve the BackboneConfiguration via IOptions here so that it is validated
-    var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
-#pragma warning restore ASP0000
     services
-        .AddCustomAspNetCore(parsedConfiguration, environment)
+        .AddCustomAspNetCore(parsedConfiguration)
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
         .AddCustomOpenIddict(parsedConfiguration.Authentication, environment);
@@ -173,10 +171,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 
-    var devicesConfiguration = new DevicesConfiguration();
-    configuration.GetSection("Modules:Devices").Bind(devicesConfiguration);
-
-    services.AddPushNotifications(devicesConfiguration.Infrastructure.PushNotifications);
+    services.AddPushNotifications(parsedConfiguration.Modules.Devices.Infrastructure.PushNotifications);
 }
 
 static void Configure(WebApplication app)

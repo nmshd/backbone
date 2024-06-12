@@ -71,15 +71,9 @@ public static class IServiceCollectionExtensions
     {
         services.AddSingleton<ISseServerClient, SseServerClient>();
 
-        services.AddHttpClient(nameof(SseServerClient), client => { client.BaseAddress = new Uri(options.SseServerBaseAddress); });
+        services.AddHttpClient(nameof(SseServerClient), client => client.BaseAddress = new Uri(options.SseServerBaseAddress));
 
-        services.Configure<SseOptions>(o =>
-        {
-            o.Enabled = options.Enabled;
-            o.SseServerBaseAddress = options.SseServerBaseAddress;
-        });
-
-        services.AddTransient<ServerSentEventsConnector>();
+        services.AddScoped<ServerSentEventsConnector>();
     }
 }
 

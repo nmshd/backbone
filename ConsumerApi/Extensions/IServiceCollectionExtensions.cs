@@ -24,9 +24,7 @@ namespace Backbone.ConsumerApi.Extensions;
 
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services,
-        BackboneConfiguration configuration,
-        IHostEnvironment env)
+    public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services, BackboneConfiguration configuration)
     {
         services
             .AddControllers(options => options.Filters.Add(typeof(CustomExceptionFilter)))
@@ -102,7 +100,8 @@ public static class IServiceCollectionExtensions
 
         services.AddTransient<IUserContext, AspNetCoreUserContext>();
 
-        services.AddHealthChecks().AddCheck<SseServerHealthCheck>("SseServer");
+        if (configuration.Modules.Devices.Infrastructure.PushNotifications.Providers.Sse is { Enabled: true })
+            services.AddHealthChecks().AddCheck<SseServerHealthCheck>("SseServer");
 
         return services;
     }
