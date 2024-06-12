@@ -6,8 +6,8 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
-using static Backbone.UnitTestTools.Data.TestDataGenerator;
 using static Backbone.Modules.Devices.Infrastructure.Tests.TestDataGenerator;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Sse;
 
