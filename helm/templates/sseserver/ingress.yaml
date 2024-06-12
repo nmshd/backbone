@@ -1,0 +1,26 @@
+{{- if .Values.sseserver.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.sseserver.name }}
+  labels:
+    {{- include "global.labels" . | nindent 4 }}
+    app: {{ .Values.sseserver.name }}
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+    appgw.ingress.kubernetes.io/appgw-ssl-certificate: {{ .Values.sseserver.ingress.certName }}
+    appgw.ingress.kubernetes.io/connection-draining: "true"
+    appgw.ingress.kubernetes.io/connection-draining-timeout: "30"
+spec:
+  rules:
+    - host: {{ .Values.sseserver.ingress.host }}
+      http:
+        paths:
+          - path: "/api/v1/sse"
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.sseserver.name }}
+                port:
+                  number: 8080   
+{{- end }}
