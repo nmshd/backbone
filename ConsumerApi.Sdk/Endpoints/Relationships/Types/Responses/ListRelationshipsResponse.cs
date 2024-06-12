@@ -2,4 +2,4 @@
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Responses;
 
-public class ListRelationshipsResponse : EnumerableResponseBase<Relationship>;
+public class ListRelationshipsResponse : EnumerableResponseBase<RelationshipDTO>;
