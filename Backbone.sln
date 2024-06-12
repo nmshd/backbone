@@ -297,6 +297,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHandlerService.Tests",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrator", "DatabaseMigrator\DatabaseMigrator.csproj", "{143EAC38-A2D0-4F74-88F1-3EF27413A8C6}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Application.Tests", "Modules\Challenges\test\Challenges.Application.Tests\Challenges.Application.Tests.csproj", "{EAA10D43-BD28-40D8-BE07-B8F6DE47C156}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -715,6 +717,10 @@ Global
 		{143EAC38-A2D0-4F74-88F1-3EF27413A8C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{143EAC38-A2D0-4F74-88F1-3EF27413A8C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{143EAC38-A2D0-4F74-88F1-3EF27413A8C6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAA10D43-BD28-40D8-BE07-B8F6DE47C156}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAA10D43-BD28-40D8-BE07-B8F6DE47C156}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAA10D43-BD28-40D8-BE07-B8F6DE47C156}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAA10D43-BD28-40D8-BE07-B8F6DE47C156}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -849,6 +855,7 @@ Global
 		{2429FCAB-2058-4403-94DA-DA26B1655A7D} = {11FE034C-FA73-4766-99DB-D2C606018934}
 		{B4664E79-77A5-41AE-8480-C449ED5B2576} = {D54A9259-7708-45C1-B8D9-448B97F43B80}
 		{D47E0FE1-23A0-4A96-AF57-E3CE71A132AD} = {2429FCAB-2058-4403-94DA-DA26B1655A7D}
+		{EAA10D43-BD28-40D8-BE07-B8F6DE47C156} = {EFC1F89E-1C44-4385-A0F6-1F2124260561}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}

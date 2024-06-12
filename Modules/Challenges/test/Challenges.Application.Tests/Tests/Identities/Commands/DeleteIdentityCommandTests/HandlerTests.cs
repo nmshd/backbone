@@ -20,7 +20,7 @@ public class HandlerTests
         await handler.Handle(new DeleteChallengesOfIdentityCommand(identityAddress), CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockChallengesRepository.DeleteChallenges(A<Expression<Func<Challenge, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockChallengesRepository.Delete(A<Expression<Func<Challenge, bool>>>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
     }
 
     private static Handler CreateHandler(IChallengesRepository challengesRepository)

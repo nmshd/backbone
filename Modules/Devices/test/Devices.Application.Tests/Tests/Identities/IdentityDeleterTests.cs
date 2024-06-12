@@ -1,7 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Devices.Application.Identities;
 using Backbone.Modules.Devices.Application.Identities.Commands.DeleteIdentity;
-using Backbone.Modules.Devices.Application.Identities.Commands.LogDeletionProcess;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeletePnsRegistrationsOfIdentity;
 using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
@@ -30,7 +29,7 @@ public class IdentityDeleterTests : AbstractTestsBase
     }
 
     [Fact]
-    public async Task Deleter_correctly_logs_commands()
+    public async Task Deleter_correctly_creates_audit_log()
     {
         // Arrange
         var mockMediator = A.Fake<IMediator>();

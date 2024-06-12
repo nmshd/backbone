@@ -1,13 +1,14 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
-using Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteChallengesOfIdentity;
-using Backbone.Modules.Challenges.Application.Identities;
+using Backbone.Modules.Messages.Application.Identities;
+using Backbone.Modules.Messages.Application.Messages.Commands.AnonymizeMessagesOfIdentity;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using MediatR;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
-namespace Backbone.Modules.Challenges.Application.Tests.Tests.Identities;
-public class IdentityDeleterTests
+namespace Backbone.Modules.Messages.Application.Tests.Tests.Identities;
+public class IdentityDeleterTests : AbstractTestsBase
 {
     [Fact]
     public async Task Deleter_calls_correct_command()
@@ -22,7 +23,7 @@ public class IdentityDeleterTests
         await deleter.Delete(identityAddress, mockIDeletionProcessLogger);
 
         // Assert
-        A.CallTo(() => mockMediator.Send(A<DeleteChallengesOfIdentityCommand>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
+        A.CallTo(() => mockMediator.Send(A<AnonymizeMessagesOfIdentityCommand>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
     }
 
     [Fact]
@@ -38,6 +39,6 @@ public class IdentityDeleterTests
         await deleter.Delete(identityAddress, mockIDeletionProcessLogger);
 
         // Assert
-        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, AggregateType.Challenges)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, AggregateType.Messages)).MustHaveHappenedOnceExactly();
     }
 }
