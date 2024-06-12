@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.API;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.SseServer.Controllers;
@@ -12,6 +13,7 @@ public class EventsController : ControllerBase
         _eventQueue = eventQueue;
     }
 
+    [AllowAnonymous]
     [HttpPost("/{address}/events")]
     public async Task<IActionResult> PostMessage([FromRoute] string address, [FromBody] CreateEventRequest request)
     {
