@@ -29,7 +29,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         SetupRipeDeletionProcessesCommand(mockMediator);
 
         var identityDeleters = new List<IIdentityDeleter>();
-        var worker = CreateWorker(mockMediator, identityDeleters);
+        var worker = CreateWorker(mediator: mockMediator, identityDeleters);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -42,23 +42,25 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     public async Task Calls_Deleters_For_Each_Identity()
     {
         // Arrange
-        var mediator = A.Fake<IMediator>();
+        var mockMediator = A.Fake<IMediator>();
         var identityAddress1 = TestDataGenerator.CreateRandomIdentityAddress();
         var identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
-        SetupRipeDeletionProcessesCommand(mediator, identityAddress1, identityAddress2);
+        SetupRipeDeletionProcessesCommand(mockMediator, identityAddress1, identityAddress2);
+
         var mockIdentityDeleter = A.Fake<IIdentityDeleter>();
         var mockIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
-        var identityDeleters = new List<IIdentityDeleter>([mockIdentityDeleter]);
 
-        var worker = CreateWorker(mediator, identityDeleters);
+        var identityDeleters = new List<IIdentityDeleter> { mockIdentityDeleter };
 
-        A.CallTo(() => mediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
+        var worker = CreateWorker(mediator: mockMediator, identityDeleters, deletionProcessLogger: mockIDeletionProcessLogger);
+
+        A.CallTo(() => mockMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._))
+            .Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
 
         // Assert
-
         A.CallTo(() => mockIdentityDeleter.Delete(identityAddress1, mockIDeletionProcessLogger)).MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentityDeleter.Delete(identityAddress2, mockIDeletionProcessLogger)).MustHaveHappenedOnceExactly();
     }
@@ -75,7 +77,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         A.CallTo(() => mockMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
 
         var mockPushNotificationSender = A.Dummy<IPushNotificationSender>();
-        var worker = CreateWorker(mockMediator, mockPushNotificationSender);
+        var worker = CreateWorker(mediator: mockMediator, pushNotificationSender: mockPushNotificationSender);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -91,11 +93,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     {
         var commandResponse = new TriggerRipeDeletionProcessesResponse(identityAddresses.ToDictionary(x => x, _ => UnitResult.Success<DomainError>()));
         A.CallTo(() => mediator.Send(A<TriggerRipeDeletionProcessesCommand>._, A<CancellationToken>._)).Returns(commandResponse);
-    }
-
-    private static ActualDeletionWorker CreateWorker(IMediator mediator, IPushNotificationSender pushNotificationSender)
-    {
-        return CreateWorker(mediator, null, null, pushNotificationSender);
     }
 
     private static ActualDeletionWorker CreateWorker(IMediator mediator,
