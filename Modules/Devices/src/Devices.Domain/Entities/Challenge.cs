@@ -1,8 +1,9 @@
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities;
 
-public class Challenge
+public class Challenge : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private Challenge()

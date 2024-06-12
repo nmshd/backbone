@@ -1,13 +1,16 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 
-public class RelationshipChangeEntityTypeConfiguration : IEntityTypeConfiguration<RelationshipChange>
+public class RelationshipChangeEntityTypeConfiguration : EntityEntityTypeConfiguration<RelationshipChange>
 {
-    public void Configure(EntityTypeBuilder<RelationshipChange> builder)
+    public override void Configure(EntityTypeBuilder<RelationshipChange> builder)
     {
+        base.Configure(builder);
+
         builder.ToTable("RelationshipChanges");
 
         builder.Ignore(x => x.IsCompleted);
