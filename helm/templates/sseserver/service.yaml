@@ -1,3 +1,4 @@
+{{- if eq ((((.Values.global.configuration.modules.devices.infrastructure).pushNotifications).providers).sse).enabled true }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -23,3 +24,4 @@ spec:
       targetPort: 8080
   selector:
     app: {{ .Values.sseserver.name }}
+{{- end }}

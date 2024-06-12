@@ -634,6 +634,11 @@ global:
             connectionString: ""
           pushNotifications:
             providers:
+              sse:
+                enabled: false
+                sseServerBaseAddress: 'http://sseserver:8080'
+              dummy:
+                enabled: false
             #   fcm:
             #     # serviceAccounts - the service accounts that should be used to communicate with the FCM service
             #     serviceAccounts:
@@ -662,8 +667,6 @@ global:
             #      bundleId1:
             #         # the name of the key that should be used to communicate with APNs (has to match the name of one of the keys specified above)
             #         keyName: ''
-            #     dummy:
-            #       enabled: false
       files:
         application:
           # pagination - the following options describe the default and maximum page size for the different endpoints

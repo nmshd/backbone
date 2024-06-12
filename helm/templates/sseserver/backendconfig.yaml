@@ -1,3 +1,4 @@
+{{- if eq ((((.Values.global.configuration.modules.devices.infrastructure).pushNotifications).providers).sse).enabled true }}
 {{- if eq .Values.global.provider "GoogleCloud" }}
 apiVersion: cloud.google.com/v1
 kind: BackendConfig
@@ -14,4 +15,5 @@ spec:
     type: HTTP
     requestPath: /health
     port: 8080
+{{- end }}
 {{- end }}

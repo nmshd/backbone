@@ -1,3 +1,4 @@
+{{- if eq ((((.Values.global.configuration.modules.devices.infrastructure).pushNotifications).providers).sse).enabled true }}
 {{- if .Values.sseserver.httpRoute.enabled }}
 apiVersion: gateway.networking.k8s.io/v1beta1
 kind: HTTPRoute
@@ -22,4 +23,5 @@ spec:
       backendRefs:
         - name: {{ .Values.sseserver.name }}
           port: 8080
+{{- end }}
 {{- end }}
