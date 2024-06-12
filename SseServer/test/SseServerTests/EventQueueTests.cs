@@ -66,7 +66,7 @@ public class EventQueueTests : AbstractTestsBase
     {
         // Arrange
         var queue = new EventQueue();
-        queue.Register("test");
+        queue.Register("testAddress");
 
         await queue.EnqueueFor("testAddress", "event1", CancellationToken.None);
         await queue.EnqueueFor("testAddress", "event2", CancellationToken.None);
