@@ -4,17 +4,6 @@ services:
     container_name: consumer-api-test
     hostname: consumer-api
     image: consumer-api
-#    build:
-#      context: ..
-#      dockerfile: ConsumerApi/Dockerfile
-#      cache_from:
-#        #- type=local,src=/tmp/.buildx-cache
-#        - type=registry,ref=localhost:6000/consumer-api
-#      cache_to:
-#        #- type=local,dest=/tmp/.buildx-cache-new,mode=min
-#        - type=inline
-#      args:
-#        DOCKER_BUILDKIT: 1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
@@ -34,17 +23,6 @@ services:
     container_name: admin-ui-test
     hostname: admin-ui
     image: admin-ui
-#    build:
-#      context: ..
-#      dockerfile: AdminApi/src/AdminApi/Dockerfile
-#      cache_from:
-#        #- type=local,src=/tmp/.buildx-cache
-#        - type=registry,ref=localhost:6000/test-adminui
-#      cache_to:
-#        #- type=local,dest=/tmp/.buildx-cache-new,mode=min
-#        - type=inline
-#      args:
-#        DOCKER_BUILDKIT: 1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
@@ -61,9 +39,6 @@ services:
   event-handler-service:
     container_name: event-handler-service-test
     image: event-handler-service
-#    build:
-#      context: ..
-#      dockerfile: EventHandlerService/src/EventHandlerService/Dockerfile
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
@@ -78,9 +53,6 @@ services:
   database-migrator:
     container_name: database-migrator-test
     image: database-migrator
-#    build:
-#      context: ..
-#      dockerfile: DatabaseMigrator/Dockerfile
     depends_on:
       seed-database:
         condition: service_completed_successfully
@@ -119,17 +91,6 @@ services:
   seed-client:
     container_name: seed-client-test
     image: seed-client
-#    build:
-#      context: ..
-#      dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
-#      cache_from:
-#        #- type=local,src=/tmp/.buildx-cache
-#        - type=registry,ref=localhost:6000/seed-client
-#      cache_to:
-#        #- type=local,dest=/tmp/.buildx-cache-new,mode=min
-#        - type=inline
-#      args:
-#        DOCKER_BUILDKIT: 1
     depends_on:
       consumer-api:
         condition: service_healthy
