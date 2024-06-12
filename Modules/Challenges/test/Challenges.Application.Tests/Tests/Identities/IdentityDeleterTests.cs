@@ -1,13 +1,14 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteChallengesOfIdentity;
 using Backbone.Modules.Challenges.Application.Identities;
+using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using MediatR;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Challenges.Application.Tests.Tests.Identities;
-public class IdentityDeleterTests
+public class IdentityDeleterTests : AbstractTestsBase
 {
     [Fact]
     public async Task Deleter_calls_correct_command()

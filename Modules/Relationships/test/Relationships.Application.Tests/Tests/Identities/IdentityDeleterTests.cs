@@ -28,10 +28,10 @@ public class IdentityDeleterTests : AbstractTestsBase
         // Assert
         A.CallTo(() => mockMediator.Send(
             A<DeleteRelationshipsOfIdentityCommand>.That.Matches(i => i.IdentityAddress == identityAddress),
-            A<CancellationToken>._)).MustHaveHappenedOnceExactly();      
+            A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => mockMediator.Send(
             A<DeleteRelationshipTemplatesOfIdentityCommand>.That.Matches(i => i.IdentityAddress == identityAddress),
-            A<CancellationToken>._)).MustHaveHappenedOnceExactly(); 
+            A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => mockMediator.Send(
             A<AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand>.That.Matches(i => i.IdentityAddress == identityAddress),
             A<CancellationToken>._)).MustHaveHappenedOnceExactly();
