@@ -11,6 +11,7 @@ public record MetricKey
     public static MetricKey NumberOfFiles = new("NumberOfFiles");
     public static MetricKey NumberOfTokens = new("NumberOfTokens");
     public static MetricKey UsedFileStorageSpace = new("UsedFileStorageSpace");
+    public static MetricKey NumberOfStartedDeletionProcesses = new("NumberOfStartedDeletionProcesses");
 
 
     private static readonly MetricKey[] SUPPORTED_METRIC_KEYS =
@@ -20,7 +21,8 @@ public record MetricKey
         NumberOfFiles,
         NumberOfTokens,
         UsedFileStorageSpace,
-        NumberOfRelationshipTemplates
+        NumberOfRelationshipTemplates,
+        NumberOfStartedDeletionProcesses
     ];
     private static readonly string[] SUPPORTED_METRIC_KEY_VALUES = SUPPORTED_METRIC_KEYS.Select(m => m.Value).ToArray();
 

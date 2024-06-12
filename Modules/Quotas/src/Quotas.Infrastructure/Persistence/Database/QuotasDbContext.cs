@@ -6,6 +6,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Messages;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
+using Backbone.Modules.Quotas.Domain.Aggregates.StartedDeletionProcesses;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tokens;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.ValueConverters;
@@ -41,6 +42,8 @@ public class QuotasDbContext : AbstractDbContextBase
 
     public DbSet<Token> Tokens { get; set; } = null!;
 
+    public DbSet<StartedDeletionProcess> StartedDeletionProcesses { get; set; } = null!;
+    
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

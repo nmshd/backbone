@@ -61,6 +61,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IRelationshipTemplatesRepository, RelationshipTemplatesRepository>();
         services.AddTransient<ITokensRepository, TokensRepository>();
         services.AddTransient<MetricCalculatorFactory, ServiceProviderMetricCalculatorFactory>();
+        services.AddTransient<IStartedDeletionProcessesRepository, StartedDeletionProcessesRepository>();
     }
 
     public class DbOptions

@@ -487,6 +487,11 @@ public class MetricCalculatorFactoryStub : MetricCalculatorFactory
     {
         return _calculator;
     }
+
+    protected override IMetricCalculator CreateNumberOfStartedDeletionProcessesCalculator()
+    {
+        return _calculator;
+    }
 }
 
 public class MetricCalculatorStub : IMetricCalculator

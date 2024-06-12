@@ -17,7 +17,8 @@ public class MetricsRepository : IMetricsRepository
             new(MetricKey.NumberOfRelationshipTemplates, "Number of Relationship Templates"),
             new(MetricKey.NumberOfFiles, "Number of Files"),
             new(MetricKey.NumberOfTokens, "Number of Tokens"),
-            new(MetricKey.UsedFileStorageSpace, "File Storage Capacity (in Megabytes)")
+            new(MetricKey.UsedFileStorageSpace, "File Storage Capacity (in Megabytes)"),
+            new (MetricKey.NumberOfStartedDeletionProcesses, "Number of Started Deletion Processes")
         ];
     }
 

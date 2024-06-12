@@ -5,7 +5,8 @@ namespace Backbone.Modules.Quotas.Application.Tests;
 
 public class FakeMetricCalculatorFactory(
         int? numberOfFiles = null, int? numberOfSentMessages = null, int? numberOfRelationships = null,
-        int? numberOfRelationshipTemplates = null, int? numberOfTokens = null, int? amountOfUsedFileStorageSpace = null) : MetricCalculatorFactory
+        int? numberOfRelationshipTemplates = null, int? numberOfTokens = null, int? amountOfUsedFileStorageSpace = null,
+        int? numberOfStartedDeletionProcesses = null) : MetricCalculatorFactory
 {
     protected override IMetricCalculator CreateNumberOfFilesMetricCalculator()
     {
@@ -35,6 +36,12 @@ public class FakeMetricCalculatorFactory(
     protected override IMetricCalculator CreateUsedFileStorageSpaceCalculator()
     {
         return amountOfUsedFileStorageSpace.HasValue ? new FakeMetricCalculator(amountOfUsedFileStorageSpace.Value) : throw new ArgumentNullException(nameof(amountOfUsedFileStorageSpace));
+    }
+
+    protected override IMetricCalculator CreateNumberOfStartedDeletionProcessesCalculator()
+    {
+        return numberOfStartedDeletionProcesses.HasValue ? new FakeMetricCalculator(numberOfStartedDeletionProcesses.Value) : throw new ArgumentNullException(nameof(numberOfStartedDeletionProcesses));
+
     }
 }
 

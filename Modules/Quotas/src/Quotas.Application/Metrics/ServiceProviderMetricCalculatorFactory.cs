@@ -47,4 +47,10 @@ public class ServiceProviderMetricCalculatorFactory : MetricCalculatorFactory
         var calculator = _serviceProvider.GetRequiredService<UsedFileStorageSpaceMetricCalculator>();
         return calculator;
     }
+
+    protected override IMetricCalculator CreateNumberOfStartedDeletionProcessesCalculator()
+    {
+        var calculator = _serviceProvider.GetRequiredService<NumberOfStartedDeletionProcessesMetricCalculator>();
+        return calculator;
+    }
 }
