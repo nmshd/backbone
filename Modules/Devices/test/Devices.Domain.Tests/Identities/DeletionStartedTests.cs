@@ -42,7 +42,7 @@ public class DeletionStartedTests : AbstractTestsBase
     public void Fails_to_start_if_no_deletion_process_exists()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        var identity = TestDataGenerator.CreateIdentity();
 
         // Act
         var acting = identity.DeletionStarted;
@@ -55,7 +55,7 @@ public class DeletionStartedTests : AbstractTestsBase
     public void Fails_to_start_if_no_approved_deletion_process_exists()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        var identity = TestDataGenerator.CreateIdentity();
         identity.StartDeletionProcessAsSupport();
 
         // Act
@@ -67,7 +67,7 @@ public class DeletionStartedTests : AbstractTestsBase
 
     private static Identity CreateIdentityWithApprovedDeletionProcess()
     {
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        var identity = TestDataGenerator.CreateIdentity();
         identity.StartDeletionProcessAsOwner(identity.Devices.First().Id);
         return identity;
     }

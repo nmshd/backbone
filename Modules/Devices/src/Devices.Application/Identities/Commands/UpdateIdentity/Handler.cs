@@ -13,13 +13,11 @@ public class Handler : IRequestHandler<UpdateIdentityCommand>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
-    private readonly IEventBus _eventBus;
 
-    public Handler(IIdentitiesRepository identitiesRepository, ITiersRepository tiersRepository, IEventBus eventBus)
+    public Handler(IIdentitiesRepository identitiesRepository, ITiersRepository tiersRepository)
     {
         _identitiesRepository = identitiesRepository;
         _tiersRepository = tiersRepository;
-        _eventBus = eventBus;
     }
 
     public async Task Handle(UpdateIdentityCommand request, CancellationToken cancellationToken)
@@ -39,6 +37,5 @@ public class Handler : IRequestHandler<UpdateIdentityCommand>
 
         identity.ChangeTier(newTier.Id);
         await _identitiesRepository.Update(identity, cancellationToken);
-        _eventBus.Publish(new TierOfIdentityChangedDomainEvent(identity, oldTier.Id, newTier.Id));
     }
 }
