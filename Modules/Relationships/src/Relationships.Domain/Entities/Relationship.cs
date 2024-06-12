@@ -7,7 +7,7 @@ using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Entities;
 
-public class Relationship
+public class Relationship : Entity
 {
     private readonly RelationshipChangeLog _changes = [];
 

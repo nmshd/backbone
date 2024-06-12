@@ -1,7 +1,9 @@
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
 namespace Backbone.Modules.Devices.Domain.Entities;
-public class OAuthClient
+
+public class OAuthClient : Entity
 {
     public OAuthClient(string clientId, string displayName, TierId defaultTier, DateTime createdAt, int? maxIdentities)
     {

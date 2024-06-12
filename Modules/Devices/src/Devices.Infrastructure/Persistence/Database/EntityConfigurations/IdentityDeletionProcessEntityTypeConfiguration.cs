@@ -1,13 +1,15 @@
-﻿using Backbone.Modules.Devices.Domain.Entities.Identities;
+﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
 
-public class IdentityDeletionProcessEntityTypeConfiguration : IEntityTypeConfiguration<IdentityDeletionProcess>
+public class IdentityDeletionProcessEntityTypeConfiguration : EntityEntityTypeConfiguration<IdentityDeletionProcess>
 {
-    public void Configure(EntityTypeBuilder<IdentityDeletionProcess> builder)
+    public override void Configure(EntityTypeBuilder<IdentityDeletionProcess> builder)
     {
+        base.Configure(builder);
         builder.ToTable("IdentityDeletionProcesses");
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Status);
@@ -22,10 +24,11 @@ public class IdentityDeletionProcessEntityTypeConfiguration : IEntityTypeConfigu
     }
 }
 
-public class IdentityDeletionProcessAuditLogEntryEntityTypeConfiguration : IEntityTypeConfiguration<IdentityDeletionProcessAuditLogEntry>
+public class IdentityDeletionProcessAuditLogEntryEntityTypeConfiguration : EntityEntityTypeConfiguration<IdentityDeletionProcessAuditLogEntry>
 {
-    public void Configure(EntityTypeBuilder<IdentityDeletionProcessAuditLogEntry> builder)
+    public override void Configure(EntityTypeBuilder<IdentityDeletionProcessAuditLogEntry> builder)
     {
+        base.Configure(builder);
         builder.ToTable("IdentityDeletionProcessAuditLog");
         builder.HasKey(x => x.Id);
         builder.Property(x => x.DeviceIdHash);

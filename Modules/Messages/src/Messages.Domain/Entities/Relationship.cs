@@ -1,9 +1,10 @@
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 
-public class Relationship
+public class Relationship : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private Relationship()

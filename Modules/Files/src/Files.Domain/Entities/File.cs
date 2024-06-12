@@ -1,10 +1,12 @@
 using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Files.Domain.DomainEvents.Out;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Files.Domain.Entities;
 
-public class File
+public class File : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private File()
@@ -22,7 +24,8 @@ public class File
         EncryptedProperties = null!;
     }
 
-    public File(IdentityAddress createdBy, DeviceId createdByDevice, IdentityAddress owner, byte[] ownerSignature, byte[] cipherHash, byte[] content, long cipherSize, DateTime expiresAt, byte[] encryptedProperties)
+    public File(IdentityAddress createdBy, DeviceId createdByDevice, IdentityAddress owner, byte[] ownerSignature, byte[] cipherHash, byte[] content, long cipherSize, DateTime expiresAt,
+        byte[] encryptedProperties)
     {
         Id = FileId.New();
 
@@ -41,6 +44,8 @@ public class File
         ExpiresAt = expiresAt;
 
         EncryptedProperties = encryptedProperties;
+
+        RaiseDomainEvent(new FileUploadedDomainEvent(this));
     }
 
     public FileId Id { get; set; }
@@ -71,6 +76,7 @@ public class File
         {
             throw new InvalidOperationException($"The Content of the file {Id} is already filled. It is not possible to change it.");
         }
+
         Content = content;
     }
 

@@ -6,6 +6,7 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Tooling.Tests.Tests;
+
 public class DateTimeExtensionsTests : AbstractTestsBase
 {
     [Theory]
@@ -69,6 +70,7 @@ public class DateTimeExtensionsTests : AbstractTestsBase
             yield return ["2023-02-23T23:58:30.000", DateTimeExtensions.StartOfDay, "2023-02-23T00:00:00.000"];
             yield return ["2023-06-20T00:00:30.000", DateTimeExtensions.StartOfWeek, "2023-06-19T00:00:00.000"];
             yield return ["2023-01-01T23:58:30.000", DateTimeExtensions.StartOfWeek, "2022-12-26T00:00:00.000"];
+            yield return ["2024-06-10T23:58:30.000", DateTimeExtensions.StartOfWeek, "2024-06-10T00:00:00.000"];
             yield return ["2023-01-01T00:00:30.000", DateTimeExtensions.StartOfMonth, "2023-01-01T00:00:00.000"];
             yield return ["2023-02-23T00:00:30.000", DateTimeExtensions.StartOfMonth, "2023-02-01T00:00:00.000"];
             yield return ["2023-02-23T00:00:30.000", DateTimeExtensions.StartOfYear, "2023-01-01T00:00:00.000"];
@@ -85,6 +87,4 @@ public class DateTimeExtensionsTests : AbstractTestsBase
         IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 #pragma warning restore CS8974 // Converting method group to non-delegate type
-
-
 }
