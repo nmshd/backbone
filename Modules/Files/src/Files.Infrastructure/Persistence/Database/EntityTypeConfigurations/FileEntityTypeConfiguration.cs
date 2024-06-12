@@ -1,13 +1,16 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 
-public class FileEntityTypeConfiguration : IEntityTypeConfiguration<File>
+public class FileEntityTypeConfiguration : EntityEntityTypeConfiguration<File>
 {
-    public void Configure(EntityTypeBuilder<File> builder)
+    public override void Configure(EntityTypeBuilder<File> builder)
     {
+        base.Configure(builder);
+
         builder.ToTable("FileMetadata");
 
         builder.Property(m => m.CipherHash).IsRequired();

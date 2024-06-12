@@ -1,8 +1,9 @@
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Messages.Domain.Ids;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 
-public class Attachment
+public class Attachment : Entity
 {
     public Attachment(FileId id)
     {
