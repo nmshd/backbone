@@ -36,11 +36,6 @@ public class FindByAddressStubRepository : IIdentitiesRepository
         throw new NotSupportedException();
     }
 
-    public Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
-    {
-        throw new NotSupportedException();
-    }
-
     public Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         throw new NotSupportedException();
