@@ -6,7 +6,7 @@ using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-public class Relationship
+public class Relationship : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private Relationship()

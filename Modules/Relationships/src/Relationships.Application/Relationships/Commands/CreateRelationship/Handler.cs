@@ -4,16 +4,12 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
-using Backbone.Modules.Relationships.Domain.Entities;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 
 public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelationshipResponse>
 {
-    private readonly IEventBus _eventBus;
-    private readonly IMapper _mapper;
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly IdentityAddress _activeIdentity;
@@ -24,7 +20,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
     private RelationshipTemplate _template;
     private Relationship _relationship;
 
-    public Handler(IUserContext userContext, IEventBus eventBus, IMapper mapper, IRelationshipsRepository relationshipsRepository, IRelationshipTemplatesRepository relationshipTemplatesRepository)
+    public Handler(IUserContext userContext, IRelationshipsRepository relationshipsRepository, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
@@ -73,15 +69,5 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         );
 
         await _relationshipsRepository.Add(_relationship, _cancellationToken);
-    }
-
-    private void PublishDomainEvent()
-    {
-        _eventBus.Publish(new RelationshipStatusChangedDomainEvent(_relationship));
-    }
-    
-    private CreateRelationshipResponse CreateResponse()
-    {
-        return _mapper.Map<CreateRelationshipResponse>(_relationship);
     }
 }

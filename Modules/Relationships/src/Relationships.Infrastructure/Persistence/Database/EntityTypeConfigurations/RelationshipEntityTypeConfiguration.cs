@@ -1,5 +1,5 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.EntityTypeConfigurations;

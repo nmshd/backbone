@@ -181,10 +181,9 @@ public class HandlerTests : AbstractTestsBase
         IRelationshipsRepository? relationshipsRepository)
     {
         userContext ??= A.Dummy<IUserContext>();
-        eventBus ??= A.Dummy<IEventBus>();
         relationshipsRepository ??= A.Dummy<IRelationshipsRepository>();
 
-        var handler = new Handler(userContext, eventBus, relationshipsRepository, relationshipTemplatesRepository);
+        var handler = new Handler(userContext, relationshipsRepository, relationshipTemplatesRepository);
         return handler;
     }
 }

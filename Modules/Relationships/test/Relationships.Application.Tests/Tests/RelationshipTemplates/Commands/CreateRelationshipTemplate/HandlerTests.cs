@@ -53,6 +53,6 @@ public class HandlerTests : AbstractTestsBase
 
     private Handler CreateHandler(IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
-        return new Handler(relationshipTemplatesRepository, _userContext, _mapper, _eventBus);
+        return new Handler(relationshipTemplatesRepository, _userContext, _mapper);
     }
 }

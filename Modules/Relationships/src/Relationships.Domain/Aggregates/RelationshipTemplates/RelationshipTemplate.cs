@@ -3,8 +3,6 @@ using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
-using Backbone.Modules.Relationships.Domain.Errors;
-using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
