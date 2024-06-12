@@ -102,7 +102,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 .AddModule<SynchronizationModule>(configuration)
                 .AddModule<TokensModule>(configuration);
 
-            services.AddSingleton<IDeletionProcessLogger>();
+            services.AddSingleton<IDeletionProcessLogger, DeletionProcessLogger>();
 
             services.AddTransient<IQuotaChecker, AlwaysSuccessQuotaChecker>();
             services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
