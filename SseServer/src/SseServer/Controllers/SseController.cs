@@ -31,8 +31,8 @@ public class SseController : ControllerBase
 
         await _mediator.Send(new UpdateDeviceRegistrationCommand
         {
-            Handle = "sse-handle",
-            AppId = "sse-client",
+            Handle = "sse-handle", // this is just some dummy value; the SSE connector doesn't use it
+            AppId = "sse-client", // this is just some dummy value; the SSE connector doesn't use it
             Platform = "sse"
         });
 
