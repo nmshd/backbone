@@ -28,7 +28,7 @@ public static class TestDataGenerator
         return identity;
     }
 
-    public static PnsRegistration CreatePnsRegistration()
+    public static PnsRegistration CreatePnsRegistrationForSse()
     {
         return new PnsRegistration(CreateRandomIdentityAddress(), CreateRandomDeviceId(), SseHandle.Create(), "", PushEnvironment.Production);
     }

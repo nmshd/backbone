@@ -44,25 +44,29 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
         var actualContent = await request.Content!.ReadAsStringAsync();
 
         // Assert
-        actualContent.Should().BeEquivalentToJson(@"{
-            'notId': 1,
-            'content': {
-                'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
-                'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
-                'eventName': 'Test',
-                'sentAt': '2021-01-01T00:00:00.000Z',
-                'payload': {
-                    'someProperty': 'someValue'
-                }
-            },
-            'aps': {
-                'content-available': '1',
-                'alert': {
-                    'title': 'someNotificationTextTitle',
-                    'body': 'someNotificationTextBody'
+        actualContent.Should().BeEquivalentToJson(
+            """
+            {
+                'notId': 1,
+                'content': {
+                    'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
+                    'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
+                    'eventName': 'Test',
+                    'sentAt': '2021-01-01T00:00:00.000Z',
+                    'payload': {
+                        'someProperty': 'someValue'
+                    }
+                },
+                'aps': {
+                    'content-available': '1',
+                    'alert': {
+                        'title': 'someNotificationTextTitle',
+                        'body': 'someNotificationTextBody'
+                    }
                 }
             }
-        }");
+            """
+        );
     }
 
     private record TestPushNotification : IPushNotification

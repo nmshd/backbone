@@ -6,6 +6,7 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -50,18 +51,21 @@ public class FcmMessageBuilderTests : AbstractTestsBase
             .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"),
                 new TestPushNotification { SomeProperty = "someValue" }))
             .Build();
-        var contentJson = FormatJson(message.Data["content"]);
+        var actualContent = message.Data["content"];
 
         // Assert
-        contentJson.Should().Be(FormatJson(@"{
-          'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
-          'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
-          'eventName': 'Test',
-          'sentAt': '2021-01-01T00:00:00.000Z',
-          'payload': {
-            'someProperty': 'someValue'
-          }
-        }"));
+        actualContent.Should().BeEquivalentToJson(
+            """
+            {
+                      'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
+                      'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
+                      'eventName': 'Test',
+                      'sentAt': '2021-01-01T00:00:00.000Z',
+                      'payload': {
+                        'someProperty': 'someValue'
+                      }
+                    }
+            """);
     }
 
     private static string FormatJson(string jsonString)

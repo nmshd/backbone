@@ -33,7 +33,7 @@ public class FindAllStubRepository : IIdentitiesRepository
 
     public Task AddUser(ApplicationUser user, string password)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
