@@ -8,6 +8,7 @@ public class Configuration
     [Required]
     public AuthenticationConfiguration Authentication { get; set; } = new();
 
+    [Required]
     public ModulesConfiguration Modules { get; set; } = new();
 
     public class AuthenticationConfiguration
