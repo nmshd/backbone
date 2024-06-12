@@ -142,8 +142,6 @@ static void Configure(WebApplication app)
     if (app.Environment.IsDevelopment())
         IdentityModelEventSource.ShowPII = true;
 
-    // app.UseCors();
-
     app.UseAuthentication().UseAuthorization();
 
     app.MapControllers();
@@ -153,34 +151,6 @@ static void Configure(WebApplication app)
     });
 
     app.UseResponseCaching();
-
-    // app.MapGet("/api/v1/sse", async (HttpContext context, [FromServices] IUserContext userContext, [FromServices] IMediator mediator, CancellationToken cancellationToken) =>
-    // {
-    //     context.Response.Headers.ContentType = "text/event-stream";
-    //
-    //     await mediator.Send(new UpdateDeviceRegistrationCommand { AppId = "sse-client", Environment = null, Handle = "sse-handle", Platform = "sse" }, cancellationToken);
-    //
-    //     var item = new { address = userContext.GetAddress() };
-    //
-    //     await context.Response.WriteAsync($"data: ", cancellationToken: cancellationToken);
-    //     await JsonSerializer.SerializeAsync(context.Response.Body, item, cancellationToken: cancellationToken);
-    //     await context.Response.WriteAsync($"\n\n", cancellationToken: cancellationToken);
-    //     await context.Response.Body.FlushAsync(cancellationToken);
-    //
-    //     // sseClient.AddSession(address, context, cancellationToken);
-    //
-    //     // while (!cancellationToken.IsCancellationRequested)
-    //     // {
-    //     //     var item = new { a = "a" };
-    //     //
-    //     //     await context.Response.WriteAsync($"data: ", cancellationToken: cancellationToken);
-    //     //     await JsonSerializer.SerializeAsync(context.Response.Body, item, cancellationToken: cancellationToken);
-    //     //     await context.Response.WriteAsync($"\n\n", cancellationToken: cancellationToken);
-    //     //     await context.Response.Body.FlushAsync(cancellationToken);
-    //     //
-    //     //     await Task.Delay(500, cancellationToken);
-    //     // }
-    // }).RequireAuthorization();
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)
