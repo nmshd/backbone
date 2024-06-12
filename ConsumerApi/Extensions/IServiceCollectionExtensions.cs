@@ -1,3 +1,4 @@
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -9,10 +10,12 @@ using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
@@ -98,6 +101,8 @@ public static class IServiceCollectionExtensions
         services.AddHttpContextAccessor();
 
         services.AddTransient<IUserContext, AspNetCoreUserContext>();
+
+        services.AddHealthChecks().AddCheck<SseServerHealthCheck>("SseServer");
 
         return services;
     }
@@ -191,5 +196,28 @@ public static class IServiceCollectionExtensions
             });
 
         return services;
+    }
+}
+
+public class SseServerHealthCheck : IHealthCheck
+{
+    private readonly HttpClient _client;
+
+    public SseServerHealthCheck(IHttpClientFactory clientFactory)
+    {
+        _client = clientFactory.CreateClient(nameof(SseServerClient));
+    }
+
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await _client.GetAsync("health", cancellationToken);
+            return result.StatusCode == HttpStatusCode.OK ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy();
+        }
+        catch (Exception)
+        {
+            return HealthCheckResult.Unhealthy();
+        }
     }
 }
