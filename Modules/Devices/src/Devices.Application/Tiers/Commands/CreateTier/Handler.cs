@@ -1,7 +1,5 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
@@ -12,13 +10,11 @@ public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
 {
     private readonly ITiersRepository _tierRepository;
     private readonly ILogger<Handler> _logger;
-    private readonly IEventBus _eventBus;
 
-    public Handler(ITiersRepository tierRepository, ILogger<Handler> logger, IEventBus eventBus)
+    public Handler(ITiersRepository tierRepository, ILogger<Handler> logger)
     {
         _tierRepository = tierRepository;
         _logger = logger;
-        _eventBus = eventBus;
     }
 
     public async Task<CreateTierResponse> Handle(CreateTierCommand request, CancellationToken cancellationToken)
@@ -34,8 +30,6 @@ public class Handler : IRequestHandler<CreateTierCommand, CreateTierResponse>
         await _tierRepository.AddAsync(tier, cancellationToken);
 
         _logger.CreatedTier(tier.Id.Value, tier.Name.Value);
-
-        _eventBus.Publish(new TierCreatedDomainEvent(tier));
 
         return new CreateTierResponse(tier.Id, tier.Name);
     }

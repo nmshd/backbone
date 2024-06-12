@@ -9,7 +9,6 @@ namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Reposi
 public interface IIdentitiesRepository
 {
     #region Identities
-    Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken);
     Task Update(Identity identity, CancellationToken cancellationToken);
     Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false);
     Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken);

@@ -1,10 +1,12 @@
 using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Tokens.Domain.DomainEvents;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Tokens.Domain.Entities;
 
-public class Token
+public class Token : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private Token()
@@ -27,6 +29,8 @@ public class Token
         ExpiresAt = expiresAt;
 
         Content = content;
+
+        RaiseDomainEvent(new TokenCreatedDomainEvent(this));
     }
 
     public TokenId Id { get; set; }
