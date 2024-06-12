@@ -16,7 +16,6 @@ debugRun() {
 
 {
   debugRun dockerCompose down;
-#  debugRun dockerCompose build;
   debugRun dockerCompose up -d --no-build
 } &
 {
