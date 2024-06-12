@@ -44,6 +44,9 @@
             }
         },
         "Devices": {
+            "Application": {
+                "InstanceUrl": "localhost"
+            },
             "Infrastructure": {
                 "SqlDatabase": {
                     "Provider": "Postgres",
