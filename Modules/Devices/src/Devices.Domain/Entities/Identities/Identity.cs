@@ -44,7 +44,7 @@ public class Identity : Entity
 
     public TierId TierId
     {
-        get => _tierId!; // the only time the backing filed is null is within the constructor, so we can suppress the warning
+        get => _tierId!; // the only time the backing field is null is within the constructor, so we can suppress the warning
         private set
         {
             if (value == _tierId) return;
@@ -268,7 +268,6 @@ public class Identity : Entity
     {
         var deletionProcess = GetDeletionProcessWithId(deletionProcessId);
         deletionProcess.EnsureStatus(DeletionProcessStatus.Approved);
-        //var oldTierId = TierId;
 
         EnsureIdentityOwnsDevice(canceledByDeviceId);
 
@@ -276,8 +275,6 @@ public class Identity : Entity
         TierId = TierIdBeforeDeletion!;
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
-
-        //RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTierId, TierId));
 
         return deletionProcess;
     }
@@ -293,14 +290,11 @@ public class Identity : Entity
         EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
 
         var deletionProcess = DeletionProcesses.First(d => d.Id == deletionProcessId);
-        //var oldTier = TierId;
 
         deletionProcess.CancelAsSupport(Address);
         TierId = TierIdBeforeDeletion!;
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
-
-        //RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, TierId));
 
         return deletionProcess;
     }
