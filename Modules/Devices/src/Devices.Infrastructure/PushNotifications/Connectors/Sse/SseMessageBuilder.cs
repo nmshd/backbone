@@ -16,8 +16,11 @@ public class SseMessageBuilder
 
     public HttpRequestMessage Build()
     {
-        var request = new HttpRequestMessage(HttpMethod.Post, $"{_recipient}/events");
-        request.Content = JsonContent.Create(new EventPayload(_eventName));
+        var request = new HttpRequestMessage(HttpMethod.Post, $"{_recipient}/events")
+        {
+            Content = JsonContent.Create(new EventPayload(_eventName))
+        };
+
         return request;
     }
 

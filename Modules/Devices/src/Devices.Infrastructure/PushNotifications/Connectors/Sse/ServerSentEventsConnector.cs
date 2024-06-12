@@ -64,7 +64,7 @@ internal static partial class ServerSentEventsConnectorLogs
     [LoggerMessage(
         EventId = 707295,
         EventName = "ServerSentEventsConnector.ErrorOnSend",
-        Level = LogLevel.Debug,
+        Level = LogLevel.Error,
         Message = "An unexpected error occurred while sending the event.")]
     public static partial void ErrorOnSend(this ILogger logger, Exception exception);
 }
