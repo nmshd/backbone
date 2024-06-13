@@ -1,5 +1,5 @@
-﻿using Backbone.ConsumerApi.Mvc;
-using Backbone.Modules.Devices.Application.Clients.DTOs;
+﻿using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
+using Backbone.ConsumerApi.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,13 +18,13 @@ public class VersionController : ApiControllerBase
 
     [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> GetCurrentBackboneVersion(CancellationToken cancellationToken)
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetBackboneMajorVersion(CancellationToken cancellationToken)
     {
-        var majorVersion = await _versionService.GetCurrentBackboneVersion();
+        var majorVersion = await _versionService.GetBackboneMajorVersion();
         if (majorVersion != null)
-        {
             return Ok(new { majorVersion });
-        }
+
         return NotFound(new { message = "Version not found" });
     }
 }
