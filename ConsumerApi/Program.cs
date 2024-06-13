@@ -126,6 +126,8 @@ static WebApplication CreateApp(string[] args)
 
 static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
 {
+    services.AddScoped<VersionService>();
+
     services.AddSaveChangesTimeInterceptor();
 
     services.AddTransient<DevicesDbContextSeeder>();
