@@ -1,14 +1,15 @@
-using System.Text.Json;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
+namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Fcm;
 
 public class FcmMessageBuilderTests : AbstractTestsBase
 {
@@ -20,7 +21,7 @@ public class FcmMessageBuilderTests : AbstractTestsBase
             .SetTag(1)
             .SetToken("token1")
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
-            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.New(), new { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.New(), new TestPushNotification { SomeProperty = "someValue" }))
             .Build();
 
         // Assert
@@ -46,31 +47,28 @@ public class FcmMessageBuilderTests : AbstractTestsBase
 
         // Act
         var message = new FcmMessageBuilder()
-            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"), new { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"),
+                new TestPushNotification { SomeProperty = "someValue" }))
             .Build();
-        var contentJson = FormatJson(message.Data["content"]);
+        var actualContent = message.Data["content"];
 
         // Assert
-        contentJson.Should().Be(FormatJson(@"{
-          'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
-          'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
-          'eventName': 'dynamic',
-          'sentAt': '2021-01-01T00:00:00.000Z',
-          'payload': {
-            'someProperty': 'someValue'
-          }
-        }"));
+        actualContent.Should().BeEquivalentToJson(
+            """
+            {
+                      'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
+                      'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
+                      'eventName': 'Test',
+                      'sentAt': '2021-01-01T00:00:00.000Z',
+                      'payload': {
+                        'someProperty': 'someValue'
+                      }
+                    }
+            """);
     }
 
-    private static string FormatJson(string jsonString)
+    private record TestPushNotification : IPushNotification
     {
-        jsonString = jsonString.Replace("'", "\"");
-
-        var deserialized = JsonSerializer.Deserialize<JsonElement>(jsonString);
-
-        return JsonSerializer.Serialize(deserialized, new JsonSerializerOptions
-        {
-            WriteIndented = true,
-        });
+        public required string SomeProperty { get; set; }
     }
 }

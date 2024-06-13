@@ -14,12 +14,12 @@ public class FindTierQuotaDefinitionsStubRepository : ITiersRepository
 
     public Task Add(Tier tier, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task<Tier?> Find(string id, CancellationToken cancellationToken, bool track = false)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task<TierQuotaDefinition> FindTierQuotaDefinition(string id, CancellationToken cancellationToken, bool track = false)
@@ -29,16 +29,16 @@ public class FindTierQuotaDefinitionsStubRepository : ITiersRepository
 
     public Task RemoveById(TierId tierId)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task RemoveTierQuotaDefinitionIfOrphaned(TierQuotaDefinitionId tierQuotaDefinitionId)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task Update(Tier tier, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 }

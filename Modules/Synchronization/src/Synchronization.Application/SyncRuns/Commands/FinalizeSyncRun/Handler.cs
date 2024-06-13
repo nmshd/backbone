@@ -5,7 +5,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using MediatR;
@@ -62,15 +61,11 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        PublishDatawalletModifiedDomainEvent();
-
         var response = new FinalizeDatawalletVersionUpgradeSyncRunResponse
         {
             NewDatawalletModificationIndex = _datawallet.LatestModification?.Index,
             DatawalletModifications = _mapper.Map<CreatedDatawalletModificationDTO[]>(newModifications)
         };
-
-        PublishDatawalletModifiedDomainEvent();
 
         return response;
     }
@@ -95,16 +90,11 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
         await _dbContext.SaveChangesAsync(cancellationToken);
 
-        PublishDatawalletModifiedDomainEvent();
-
         var response = new FinalizeExternalEventSyncSyncRunResponse
         {
             NewDatawalletModificationIndex = _datawallet.LatestModification?.Index,
             DatawalletModifications = _mapper.Map<CreatedDatawalletModificationDTO[]>(newModifications)
         };
-
-        if (newModifications.Count > 0)
-            PublishDatawalletModifiedDomainEvent();
 
         return response;
     }
@@ -146,10 +136,5 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         }
 
         return newModifications;
-    }
-
-    private void PublishDatawalletModifiedDomainEvent()
-    {
-        _eventBus.Publish(new DatawalletModifiedDomainEvent(_activeIdentity, _activeDevice));
     }
 }
