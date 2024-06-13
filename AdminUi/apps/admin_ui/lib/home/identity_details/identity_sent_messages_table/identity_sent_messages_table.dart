@@ -97,7 +97,7 @@ class _IdentitySentMessagesTableState extends State<IdentitySentMessagesTable> {
                 ],
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -141,7 +141,6 @@ class IdentitySentMessagesTableSource extends AsyncDataTableSource {
             pageSize: count,
           );
       _pagination = response.pagination;
-      print(_pagination);
 
       final rows = response.data.indexed
           .map(
