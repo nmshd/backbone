@@ -250,7 +250,7 @@ jobs:
           PLATFORMS: linux/amd64
 
   build-idj-container-image:
-    name: Build Database Migrator Container Image
+    name: Build Identity Deletion Jobs Container Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
