@@ -20,10 +20,10 @@ public class VersionController : ApiControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> GetCurrentBackboneVersion(CancellationToken cancellationToken)
     {
-        var majorVersion = await _versionService.GetDependencyMajorVersionAsync();
+        var majorVersion = await _versionService.GetCurrentBackboneVersion();
         if (majorVersion != null)
         {
-            return Ok(new { majorVersion = majorVersion });
+            return Ok(new { majorVersion });
         }
         return NotFound(new { message = "Version not found" });
     }
