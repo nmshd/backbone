@@ -26,7 +26,8 @@ public class PnsHandleEntityFrameworkValueConverter : ValueConverter<PnsHandle, 
             PushNotificationPlatform.Fcm => "fcm",
             PushNotificationPlatform.Apns => "apns",
             PushNotificationPlatform.Dummy => "dummy",
-            _ => throw new NotImplementedException($"The platform '{pnsHandle.Platform}' is invalid.")
+            PushNotificationPlatform.Sse => "sse",
+            _ => throw new NotSupportedException($"The platform '{pnsHandle.Platform}' is invalid.")
         };
 
         return $"{platformAsString}|{pnsHandle.Value}";
@@ -40,7 +41,8 @@ public class PnsHandleEntityFrameworkValueConverter : ValueConverter<PnsHandle, 
             "fcm" => PushNotificationPlatform.Fcm,
             "apns" => PushNotificationPlatform.Apns,
             "dummy" => PushNotificationPlatform.Dummy,
-            _ => throw new NotImplementedException($"The platform '{tokens[0]}' is invalid.")
+            "sse" => PushNotificationPlatform.Sse,
+            _ => throw new NotSupportedException($"The platform '{tokens[0]}' is invalid.")
         };
         var value = tokens[1];
 

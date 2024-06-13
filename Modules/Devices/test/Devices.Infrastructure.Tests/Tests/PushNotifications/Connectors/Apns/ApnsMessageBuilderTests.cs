@@ -1,14 +1,15 @@
-using System.Text.Json;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
+namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Apns;
 
 public class ApnsMessageBuilderTests : AbstractTestsBase
 {
@@ -35,43 +36,41 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
 
         // Act
         var request = new ApnsMessageBuilder("someAppBundleIdentifier", "https://api.development.push.apple.com/3/device/someDeviceId", "someValidJwt")
-            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"), new { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"),
+                new TestPushNotification { SomeProperty = "someValue" }))
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
             .SetNotificationId(1)
             .Build();
-        var requestBody = FormatJson(await request.Content!.ReadAsStringAsync());
+        var actualContent = await request.Content!.ReadAsStringAsync();
 
         // Assert
-        requestBody.Should().Be(FormatJson(@"{
-            'notId': 1,
-            'content': {
-                'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
-                'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
-                'eventName': 'dynamic',
-                'sentAt': '2021-01-01T00:00:00.000Z',
-                'payload': {
-                    'someProperty': 'someValue'
-                }
-            },
-            'aps': {
-                'content-available': '1',
-                'alert': {
-                    'title': 'someNotificationTextTitle',
-                    'body': 'someNotificationTextBody'
+        actualContent.Should().BeEquivalentToJson(
+            """
+            {
+                'notId': 1,
+                'content': {
+                    'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
+                    'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
+                    'eventName': 'Test',
+                    'sentAt': '2021-01-01T00:00:00.000Z',
+                    'payload': {
+                        'someProperty': 'someValue'
+                    }
+                },
+                'aps': {
+                    'content-available': '1',
+                    'alert': {
+                        'title': 'someNotificationTextTitle',
+                        'body': 'someNotificationTextBody'
+                    }
                 }
             }
-        }"));
+            """
+        );
     }
 
-    private static string FormatJson(string jsonString)
+    private record TestPushNotification : IPushNotification
     {
-        jsonString = jsonString.Replace("'", "\"");
-
-        var deserialized = JsonSerializer.Deserialize<JsonElement>(jsonString);
-
-        return JsonSerializer.Serialize(deserialized, new JsonSerializerOptions
-        {
-            WriteIndented = true,
-        });
+        public required string SomeProperty { get; set; }
     }
 }

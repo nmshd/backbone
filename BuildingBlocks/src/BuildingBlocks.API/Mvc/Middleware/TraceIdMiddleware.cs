@@ -1,4 +1,6 @@
-namespace Backbone.ConsumerApi.Mvc.Middleware;
+using Microsoft.AspNetCore.Http;
+
+namespace Backbone.BuildingBlocks.API.Mvc.Middleware;
 
 public class TraceIdMiddleware
 {
