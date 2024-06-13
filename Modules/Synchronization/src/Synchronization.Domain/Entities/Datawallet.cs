@@ -50,7 +50,8 @@ public class Datawallet : Entity
             createdByDevice, blobReference);
         Modifications.Add(newModification);
 
-        RaiseDomainEvent(new DatawalletModifiedDomainEvent(Owner, createdByDevice));
+        if (DomainEvents.All(d => d.GetType() != typeof(DatawalletModifiedDomainEvent)))
+            RaiseDomainEvent(new DatawalletModifiedDomainEvent(Owner, createdByDevice));
 
         return newModification;
     }

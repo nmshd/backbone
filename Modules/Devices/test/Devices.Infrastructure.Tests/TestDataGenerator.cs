@@ -1,3 +1,5 @@
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
@@ -24,6 +26,11 @@ public static class TestDataGenerator
         identity.Devices.Add(new Device(identity, deviceCommunicationLanguage != null ? CommunicationLanguage.Create(deviceCommunicationLanguage).Value : CommunicationLanguage.DEFAULT_LANGUAGE));
 
         return identity;
+    }
+
+    public static PnsRegistration CreatePnsRegistrationForSse()
+    {
+        return new PnsRegistration(CreateRandomIdentityAddress(), CreateRandomDeviceId(), SseHandle.Create(), "", PushEnvironment.Production);
     }
 
     public static TierId CreateRandomTierId()

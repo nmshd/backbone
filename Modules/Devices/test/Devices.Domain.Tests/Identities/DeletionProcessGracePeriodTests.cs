@@ -102,7 +102,7 @@ public class DeletionProcessGracePeriodTests : AbstractTestsBase
     {
         // Arrange
         SystemTime.Set(DateTime.Parse("2000-01-01"));
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        var identity = TestDataGenerator.CreateIdentity();
 
         // Act
         var acting = identity.DeletionGracePeriodReminder3Sent;
@@ -125,7 +125,7 @@ public class DeletionProcessGracePeriodTests : AbstractTestsBase
 
     private static Identity CreateIdentityWithApprovedDeletionProcess()
     {
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        var identity = TestDataGenerator.CreateIdentity();
         Hasher.SetHasher(new DummyHasher([1, 2, 3]));
         identity.StartDeletionProcessAsOwner(identity.Devices.First().Id);
 

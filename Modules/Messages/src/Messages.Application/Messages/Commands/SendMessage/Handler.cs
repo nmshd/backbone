@@ -1,9 +1,7 @@
 using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using MediatR;
@@ -14,7 +12,6 @@ namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 
 public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 {
-    private readonly IEventBus _eventBus;
     private readonly ILogger<Handler> _logger;
     private readonly IMapper _mapper;
     private readonly ApplicationOptions _options;
@@ -25,7 +22,6 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
     public Handler(
         IUserContext userContext,
         IMapper mapper,
-        IEventBus eventBus,
         IOptionsSnapshot<ApplicationOptions> options,
         ILogger<Handler> logger,
         IMessagesRepository messagesRepository,
@@ -33,7 +29,6 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
     {
         _userContext = userContext;
         _mapper = mapper;
-        _eventBus = eventBus;
         _logger = logger;
         _options = options.Value;
         _messagesRepository = messagesRepository;
@@ -52,8 +47,6 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
             recipients);
 
         await _messagesRepository.Add(message, cancellationToken);
-
-        _eventBus.Publish(new MessageCreatedDomainEvent(message));
 
         return _mapper.Map<SendMessageResponse>(message);
     }

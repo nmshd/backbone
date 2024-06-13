@@ -7,7 +7,7 @@ using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Entities;
 
-public class Relationship
+public class Relationship : Entity
 {
     private readonly RelationshipChangeLog _changes = [];
 
@@ -115,7 +115,7 @@ public class Relationship
                     _ => throw new NotSupportedException()
                 };
             case RelationshipChangeType.TerminationCancellation:
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             default:
                 throw new NotSupportedException();
         }
@@ -148,9 +148,11 @@ public class Relationship
     }
 
     #region Selectors
+
     public static Expression<Func<Relationship, bool>> HasParticipant(string identity)
     {
         return r => r.From == identity || r.To == identity;
     }
+
     #endregion
 }

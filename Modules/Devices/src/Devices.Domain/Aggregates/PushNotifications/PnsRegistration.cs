@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Tooling;
@@ -6,7 +7,7 @@ using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
-public class PnsRegistration
+public class PnsRegistration : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private PnsRegistration()

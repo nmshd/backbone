@@ -1,13 +1,16 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 
-public class RelationshipTemplateEntityTypeConfiguration : IEntityTypeConfiguration<RelationshipTemplate>
+public class RelationshipTemplateEntityTypeConfiguration : EntityEntityTypeConfiguration<RelationshipTemplate>
 {
-    public void Configure(EntityTypeBuilder<RelationshipTemplate> builder)
+    public override void Configure(EntityTypeBuilder<RelationshipTemplate> builder)
     {
+        base.Configure(builder);
+
         builder
             .HasMany(x => x.Relationships)
             .WithOne(x => x.RelationshipTemplate)
