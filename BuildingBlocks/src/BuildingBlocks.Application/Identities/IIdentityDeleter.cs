@@ -15,10 +15,10 @@ public enum AggregateType
 {
     Challenges,
     PnsRegistrations,
-    Identity,
+    Identities,
     Files,
     Messages,
-    QuotasIdentity,
+    QuotaIdentities,
     Relationships,
     RelationshipTemplates,
     RelationshipTemplateAllocations,

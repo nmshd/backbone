@@ -19,6 +19,6 @@ public class IdentityDeleter : IIdentityDeleter
         await _mediator.Send(new DeletePnsRegistrationsOfIdentityCommand(identityAddress));
         await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.PnsRegistrations);
         await _mediator.Send(new DeleteIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Identity);
+        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Identities);
     }
 }
