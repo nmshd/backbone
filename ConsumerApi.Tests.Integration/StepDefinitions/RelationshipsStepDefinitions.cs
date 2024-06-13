@@ -8,7 +8,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Support;
-using Backbone.Crypto;
+using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -42,20 +42,37 @@ internal class RelationshipsStepDefinitions
         _client2 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
     }
 
-    [Given("a Relationship Template rt created by i1")]
-    public async Task GivenARelationshipTemplateRtCreatedByI1()
+    [Given("a Relationship Template rt created by i2")]
+    public async Task GivenARelationshipTemplateRtCreatedByI2()
     {
-        _relationshipTemplateResponse = await CreateRelationshipTemplate(_client1);
+        _relationshipTemplateResponse = await CreateRelationshipTemplate(_client2);
     }
 
-    [Given("a pending Relationship between i1 and i2 initiated by i1")]
-    public async Task GivenAPendingRelationshipBetweenI1AndI2InitiatedByI1()
+    [Given("a pending Relationship between i1 and i2 created by i2")]
+    public async Task GivenAPendingRelationshipBetweenI1AndI2CreatedByI2()
+    {
+        var relationshipTemplateResponse = await CreateRelationshipTemplate(_client2);
+        var createRelationshipResponse = await CreateRelationship(_client1, relationshipTemplateResponse.Result!.Id);
+
+        _relationshipId = createRelationshipResponse.Result!.Id;
+        _relationshipChangeId = createRelationshipResponse.Result!.Changes.First().Id;
+    }
+
+    [Given("a pending Relationship between i1 and i2 created by i1")]
+    public async Task GivenAPendingRelationshipBetweenI1AndI2CreatedByI1()
     {
         var relationshipTemplateResponse = await CreateRelationshipTemplate(_client1);
         var createRelationshipResponse = await CreateRelationship(_client2, relationshipTemplateResponse.Result!.Id);
 
         _relationshipId = createRelationshipResponse.Result!.Id;
         _relationshipChangeId = createRelationshipResponse!.Result!.Changes.First().Id;
+    }
+
+    [Given("i2 is in status \"ToBeDeleted\"")]
+    public async Task GivenIdentityI2IsToBeDeleted()
+    {
+        var startDeletionProcessResponse = await _client2.Identities.StartDeletionProcess();
+        startDeletionProcessResponse.Should().BeASuccess();
     }
 
     [Given("i1 is in status \"ToBeDeleted\"")]
@@ -65,10 +82,10 @@ internal class RelationshipsStepDefinitions
         startDeletionProcessResponse.Should().BeASuccess();
     }
 
-    [When("a POST request is sent to the /Relationships endpoint by i2 with rt.id")]
-    public async Task WhenAPostRequestIsSentToTheRelationshipsEndpointByI2With()
+    [When("a POST request is sent to the /Relationships endpoint by i1 with rt.id")]
+    public async Task WhenAPostRequestIsSentToTheRelationshipsEndpointByI1With()
     {
-        _createRelationshipResponse = await CreateRelationship(_client2, _relationshipTemplateResponse!.Result!.Id);
+        _createRelationshipResponse = await CreateRelationship(_client1, _relationshipTemplateResponse!.Result!.Id);
     }
 
     [When("a POST request is sent to the /Relationships/{r.Id}/Changes/{r.Changes.Id}/Accept endpoint by i1")]
@@ -76,7 +93,7 @@ internal class RelationshipsStepDefinitions
     {
         var completeRelationshipChangeRequest = new CompleteRelationshipChangeRequest
         {
-            Content = ConvertibleString.FromUtf8("AAA").BytesRepresentation
+            Content = "AAA".GetBytes()
         };
         _acceptRelationshipChangeResponse = await _client1.Relationships.AcceptChange(_relationshipId, _relationshipChangeId, completeRelationshipChangeRequest);
     }
@@ -86,19 +103,19 @@ internal class RelationshipsStepDefinitions
     {
         var completeRelationshipChangeRequest = new CompleteRelationshipChangeRequest
         {
-            Content = ConvertibleString.FromUtf8("AAA").BytesRepresentation
+            Content = "AAA".GetBytes()
         };
         _rejectRelationshipChangeResponse = await _client1.Relationships.RejectChange(_relationshipId, _relationshipChangeId, completeRelationshipChangeRequest);
     }
 
-    [When("a POST request is sent to the /Relationships/{r.Id}/Changes/{r.Changes.Id}/Revoke endpoint by i2")]
+    [When("a POST request is sent to the /Relationships/{r.Id}/Changes/{r.Changes.Id}/Revoke endpoint by i1")]
     public async Task WhenAPostRequestIsSentToTheRevokeRelationshipChangeEndpointByI2()
     {
         var completeRelationshipChangeRequest = new CompleteRelationshipChangeRequest
         {
-            Content = ConvertibleString.FromUtf8("AAA").BytesRepresentation
+            Content = "AAA".GetBytes()
         };
-        _revokeRelationshipChangeResponse = await _client2.Relationships.RevokeChange(_relationshipId, _relationshipChangeId, completeRelationshipChangeRequest);
+        _revokeRelationshipChangeResponse = await _client1.Relationships.RevokeChange(_relationshipId, _relationshipChangeId, completeRelationshipChangeRequest);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
@@ -177,7 +194,7 @@ internal class RelationshipsStepDefinitions
     {
         var createRelationshipTemplateRequest = new CreateRelationshipTemplateRequest
         {
-            Content = ConvertibleString.FromUtf8("AAA").BytesRepresentation
+            Content = "AAA".GetBytes()
         };
 
         return await client.RelationshipTemplates.CreateTemplate(createRelationshipTemplateRequest);
@@ -188,7 +205,7 @@ internal class RelationshipsStepDefinitions
         var createRelationshipRequest = new CreateRelationshipRequest
         {
             RelationshipTemplateId = relationshipTemplateId,
-            Content = ConvertibleString.FromUtf8("AAA").BytesRepresentation
+            Content = "AAA".GetBytes()
         };
 
         return await client.Relationships.CreateRelationship(createRelationshipRequest);
