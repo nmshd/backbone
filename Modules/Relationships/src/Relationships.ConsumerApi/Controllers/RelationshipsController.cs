@@ -13,6 +13,7 @@ using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRe
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipChangeRequest;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.GetChange;
+using Backbone.Modules.Relationships.Application.Relationships.Queries.GetPeerOfActiveIdentityInRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.GetRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.ListChanges;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
@@ -116,10 +117,7 @@ public class RelationshipsController : ApiControllerBase
     public async Task<IActionResult> CreateRelationship(CreateRelationshipCommand request, CancellationToken cancellationToken)
     {
         var relationshipTemplate = await _mediator.Send(new GetRelationshipTemplateQuery { Id = request.RelationshipTemplateId }, cancellationToken);
-
-        var peerIdentity = await _mediator.Send(new GetIdentityQuery(relationshipTemplate.CreatedBy), cancellationToken);
-        if (peerIdentity.Status is IdentityStatus.ToBeDeleted)
-            throw new ApplicationException(ApplicationErrors.Relationship.PeerIsToBeDeleted(peerIdentity.Address));
+        await EnsurePeerIsValid(relationshipTemplate.CreatedBy, cancellationToken);
 
         var relationship = await _mediator.Send(request, cancellationToken);
         return Created(relationship);
@@ -130,11 +128,8 @@ public class RelationshipsController : ApiControllerBase
     public async Task<IActionResult> AcceptRelationshipChange([FromRoute] RelationshipId relationshipId,
         [FromRoute] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request, CancellationToken cancellationToken)
     {
-        var relationship = await _mediator.Send(new GetRelationshipQuery { Id = relationshipId }, cancellationToken);
-
-        var peerIdentity = await _mediator.Send(new GetIdentityQuery(relationship.To), cancellationToken);
-        if (peerIdentity.Status is IdentityStatus.ToBeDeleted)
-            throw new ApplicationException(ApplicationErrors.Relationship.PeerIsToBeDeleted(peerIdentity.Address));
+        var peerIdentityAddress = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = relationshipId }, cancellationToken);
+        await EnsurePeerIsValid(peerIdentityAddress, cancellationToken);
 
         var change = await _mediator.Send(new AcceptRelationshipChangeRequestCommand
         {
@@ -151,11 +146,8 @@ public class RelationshipsController : ApiControllerBase
     public async Task<IActionResult> RejectRelationshipChange([FromRoute] RelationshipId relationshipId,
         [FromRoute(Name = "changeId")] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request, CancellationToken cancellationToken)
     {
-        var relationship = await _mediator.Send(new GetRelationshipQuery { Id = relationshipId }, cancellationToken);
-
-        var peerIdentity = await _mediator.Send(new GetIdentityQuery(relationship.To), cancellationToken);
-        if (peerIdentity.Status is IdentityStatus.ToBeDeleted)
-            throw new ApplicationException(ApplicationErrors.Relationship.PeerIsToBeDeleted(peerIdentity.Address));
+        var peerIdentityAddress = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = relationshipId }, cancellationToken);
+        await EnsurePeerIsValid(peerIdentityAddress, cancellationToken);
 
         var change = await _mediator.Send(new RejectRelationshipChangeRequestCommand
         {
@@ -172,11 +164,8 @@ public class RelationshipsController : ApiControllerBase
     public async Task<IActionResult> RevokeRelationshipChange([FromRoute] RelationshipId relationshipId,
         [FromRoute(Name = "changeId")] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request, CancellationToken cancellationToken)
     {
-        var relationship = await _mediator.Send(new GetRelationshipQuery { Id = relationshipId }, cancellationToken);
-
-        var peerIdentity = await _mediator.Send(new GetIdentityQuery(relationship.To), cancellationToken);
-        if (peerIdentity.Status is IdentityStatus.ToBeDeleted)
-            throw new ApplicationException(ApplicationErrors.Relationship.PeerIsToBeDeleted(peerIdentity.Address));
+        var peerIdentityAddress = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = relationshipId }, cancellationToken);
+        await EnsurePeerIsValid(peerIdentityAddress, cancellationToken);
 
         var change = await _mediator.Send(new RevokeRelationshipChangeRequestCommand
         {
@@ -186,6 +175,13 @@ public class RelationshipsController : ApiControllerBase
         }, cancellationToken);
 
         return Ok(change);
+    }
+
+    private async Task EnsurePeerIsValid(string peerIdentityAddress, CancellationToken cancellationToken)
+    {
+        var peerIdentity = await _mediator.Send(new GetIdentityQuery(peerIdentityAddress), cancellationToken);
+        if (peerIdentity.Status is IdentityStatus.ToBeDeleted)
+            throw new ApplicationException(ApplicationErrors.Relationship.PeerIsToBeDeleted(peerIdentity.Address));
     }
 }
 
