@@ -28,6 +28,11 @@ public record PnsHandle
                 var parseHandleResult = ApnsHandle.Parse(value);
                 return parseHandleResult.Map(v => (PnsHandle)v);
             }
+            case PushNotificationPlatform.Sse:
+            {
+                var handle = SseHandle.Create();
+                return Result.Success<PnsHandle, DomainError>(handle);
+            }
             case PushNotificationPlatform.Dummy:
             {
                 var parseHandleResult = DummyHandle.Create();
