@@ -28,4 +28,19 @@ public class EntityAssertions : ReferenceTypeAssertions<Entity, EntityAssertions
 
         return (TEvent)Subject.DomainEvents[0];
     }
+
+    public TEvent HaveLastRisenADomainEvent<TEvent>(string because = "", params object[] becauseArgs) where TEvent : DomainEvent
+    {
+        Execute.Assertion
+            .BecauseOf(because, becauseArgs)
+            .Given(() => Subject.DomainEvents)
+            .ForCondition(events => events.Count > 1)
+            .FailWith("Expected {context:entity} to have at least 2 domain events.")
+            .Then
+            .ForCondition(events => events.OrderBy(e => e.CreationDate).Last().GetType() == typeof(TEvent))
+            .FailWith("Expected the domain event to be of type {0}, but found {1}.",
+                typeof(TEvent), Subject.DomainEvents.OrderBy(e => e.CreationDate).Last().GetType());
+
+        return (TEvent)Subject.DomainEvents.OrderBy(e => e.CreationDate).Last();
+    }
 }
