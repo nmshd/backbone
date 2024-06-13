@@ -41,7 +41,7 @@ public class IdentityDeleterTests : AbstractTestsBase
         await deleter.Delete(identityAddress, mockIDeletionProcessLogger);
 
         // Assert
-        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, AggregateType.Identity)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, AggregateType.Identities)).MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, AggregateType.PnsRegistrations)).MustHaveHappenedOnceExactly();
     }
 }
