@@ -1,12 +1,13 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Entities;
 
-public class RelationshipChange
+public class RelationshipChange : Entity
 {
     // ReSharper disable once UnusedMember.Local
     protected RelationshipChange()
@@ -27,6 +28,8 @@ public class RelationshipChange
         Status = RelationshipChangeStatus.Pending;
         Request = new RelationshipChangeRequest(Id, createdBy, createdByDevice, requestContent);
         CreatedAt = SystemTime.UtcNow;
+
+        RaiseDomainEvent(new RelationshipChangeCreatedDomainEvent(this));
     }
 
     public RelationshipChangeId Id { get; }
@@ -47,6 +50,8 @@ public class RelationshipChange
         EnsureCanBeAccepted(by, content);
         Status = RelationshipChangeStatus.Accepted;
         Response = new RelationshipChangeResponse(Id, by, byDevice, content);
+
+        RaiseDomainEvent(new RelationshipChangeCompletedDomainEvent(this));
     }
 
     protected virtual void EnsureCanBeAccepted(IdentityAddress by, byte[]? content)
@@ -63,6 +68,8 @@ public class RelationshipChange
         EnsureCanBeRejected(by, content);
         Status = RelationshipChangeStatus.Rejected;
         Response = new RelationshipChangeResponse(Id, by, byDevice, content);
+
+        RaiseDomainEvent(new RelationshipChangeCompletedDomainEvent(this));
     }
 
     protected virtual void EnsureCanBeRejected(IdentityAddress by, byte[]? content)
@@ -79,6 +86,8 @@ public class RelationshipChange
         EnsureCanBeRevoked(by, content);
         Status = RelationshipChangeStatus.Revoked;
         Response = new RelationshipChangeResponse(Id, by, byDevice, content);
+
+        RaiseDomainEvent(new RelationshipChangeCompletedDomainEvent(this));
     }
 
     protected virtual void EnsureCanBeRevoked(IdentityAddress by, byte[]? content)

@@ -1,10 +1,11 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
-public class IdentityDeletionProcess
+public class IdentityDeletionProcess : Entity
 {
     private readonly List<IdentityDeletionProcessAuditLogEntry> _auditLog;
 
@@ -23,6 +24,8 @@ public class IdentityDeletionProcess
         Status = status;
 
         _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedBySupport(Id, createdBy)];
+
+        RaiseDomainEvent(new IdentityDeletionProcessStartedDomainEvent(createdBy, Id, null));
     }
 
     private IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice)
@@ -30,7 +33,7 @@ public class IdentityDeletionProcess
         Id = IdentityDeletionProcessId.Generate();
         CreatedAt = SystemTime.UtcNow;
 
-        Approve(createdByDevice);
+        ApproveInternally(createdBy, createdByDevice);
 
         _auditLog = [IdentityDeletionProcessAuditLogEntry.ProcessStartedByOwner(Id, createdBy, createdByDevice)];
     }
@@ -65,12 +68,12 @@ public class IdentityDeletionProcess
 
     public bool HasGracePeriodExpired => Status == DeletionProcessStatus.Approved && SystemTime.UtcNow >= GracePeriodEndsAt;
 
-    private void Approve(DeviceId createdByDevice)
+    private void ApproveInternally(IdentityAddress address, DeviceId createdByDevice)
     {
-        Status = DeletionProcessStatus.Approved;
         ApprovedAt = SystemTime.UtcNow;
         ApprovedByDevice = createdByDevice;
         GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
+        ChangeStatus(DeletionProcessStatus.Approved, address, address);
     }
 
     public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
@@ -124,12 +127,12 @@ public class IdentityDeletionProcess
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.GracePeriodReminder3Sent(Id, address));
     }
 
-    internal void DeletionStarted()
+    internal void DeletionStarted(IdentityAddress address)
     {
         EnsureStatus(DeletionProcessStatus.Approved);
         EnsureGracePeriodHasExpired();
 
-        Status = DeletionProcessStatus.Deleting;
+        ChangeStatus(DeletionProcessStatus.Deleting, address, address);
         DeletionStartedAt = SystemTime.UtcNow;
     }
 
@@ -143,7 +146,7 @@ public class IdentityDeletionProcess
     {
         EnsureStatus(DeletionProcessStatus.WaitingForApproval);
 
-        Approve(approvedByDevice);
+        ApproveInternally(address, approvedByDevice);
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
     }
 
@@ -151,7 +154,10 @@ public class IdentityDeletionProcess
     {
         EnsureStatus(DeletionProcessStatus.WaitingForApproval);
 
-        Reject(rejectedByDevice);
+        ChangeStatus(DeletionProcessStatus.Rejected, address, address);
+        RejectedAt = SystemTime.UtcNow;
+        RejectedByDevice = rejectedByDevice;
+
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessRejected(Id, address, rejectedByDevice));
     }
 
@@ -161,19 +167,12 @@ public class IdentityDeletionProcess
             throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(deletionProcessStatus));
     }
 
-    private void Reject(DeviceId rejectedByDevice)
-    {
-        Status = DeletionProcessStatus.Rejected;
-        RejectedAt = SystemTime.UtcNow;
-        RejectedByDevice = rejectedByDevice;
-    }
-
     public void CancelAsOwner(IdentityAddress address, DeviceId cancelledByDevice)
     {
         if (Status != DeletionProcessStatus.Approved)
             throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
 
-        Status = DeletionProcessStatus.Cancelled;
+        ChangeStatus(DeletionProcessStatus.Cancelled, address, address);
         CancelledAt = SystemTime.UtcNow;
         CancelledByDevice = cancelledByDevice;
 
@@ -185,7 +184,7 @@ public class IdentityDeletionProcess
         if (Status != DeletionProcessStatus.Approved)
             throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
 
-        Status = DeletionProcessStatus.Cancelled;
+        ChangeStatus(DeletionProcessStatus.Cancelled, address, null);
         CancelledAt = SystemTime.UtcNow;
 
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledBySupport(Id, address));
@@ -195,10 +194,16 @@ public class IdentityDeletionProcess
     {
         EnsureStatus(DeletionProcessStatus.WaitingForApproval);
 
-        Status = DeletionProcessStatus.Cancelled;
+        ChangeStatus(DeletionProcessStatus.Cancelled, address, null);
         CancelledAt = SystemTime.UtcNow;
 
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessCancelledAutomatically(Id, address));
+    }
+
+    private void ChangeStatus(DeletionProcessStatus newStatus, IdentityAddress address, string? initiator)
+    {
+        Status = newStatus;
+        RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, initiator));
     }
 
     public void LogDeletedData(IdentityAddress address, string aggregateType)

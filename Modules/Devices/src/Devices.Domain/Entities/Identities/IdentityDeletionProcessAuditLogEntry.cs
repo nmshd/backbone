@@ -1,9 +1,10 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
-public class IdentityDeletionProcessAuditLogEntry
+public class IdentityDeletionProcessAuditLogEntry : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private IdentityDeletionProcessAuditLogEntry()

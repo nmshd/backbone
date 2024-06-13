@@ -1,10 +1,11 @@
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 
-public class RecipientInformation
+public class RecipientInformation : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private RecipientInformation()
