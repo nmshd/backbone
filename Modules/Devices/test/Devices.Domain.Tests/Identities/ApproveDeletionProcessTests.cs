@@ -1,10 +1,12 @@
 ﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -81,6 +83,28 @@ public class ApproveDeletionProcessTests : AbstractTestsBase
         // Assert
         exception.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
         exception.Message.Should().Contain("WaitingForApproval");
+    }
+
+    [Fact]
+    public void Raises_domain_events()
+    {
+        //Arrange
+        var activeIdentity = TestDataGenerator.CreateIdentity();
+        var activeDevice = activeIdentity.Devices[0];
+        var deletionProcess = activeIdentity.StartDeletionProcessAsSupport();
+
+        //Act
+        activeIdentity.ApproveDeletionProcess(deletionProcess.Id, activeDevice.Id);
+
+        //Assert
+        var domainEvents = activeIdentity
+            .Should().HaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityToBeDeletedDomainEvent>();
+
+        domainEvents.Item1.IdentityAddress.Should().Be(activeIdentity.Address);
+        domainEvents.Item1.OldTierId.Should().Be(activeIdentity.TierIdBeforeDeletion!);
+        domainEvents.Item1.NewTierId.Should().Be(activeIdentity.TierId);
+
+        domainEvents.Item2.IdentityAddress.Should().Be(activeIdentity.Address);
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
