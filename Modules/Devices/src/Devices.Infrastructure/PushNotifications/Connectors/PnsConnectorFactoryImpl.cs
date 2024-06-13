@@ -1,9 +1,10 @@
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Dummy;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors;
 
 public class PnsConnectorFactoryImpl : PnsConnectorFactory
 {
@@ -27,5 +28,10 @@ public class PnsConnectorFactoryImpl : PnsConnectorFactory
     protected override IPnsConnector CreateForDummy()
     {
         return _serviceProvider.GetRequiredService<DummyConnector>();
+    }
+
+    protected override IPnsConnector CreateForSse()
+    {
+        return _serviceProvider.GetRequiredService<ServerSentEventsConnector>();
     }
 }

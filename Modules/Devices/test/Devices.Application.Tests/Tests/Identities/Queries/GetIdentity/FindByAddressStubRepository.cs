@@ -18,47 +18,47 @@ public class FindByAddressStubRepository : IIdentitiesRepository
 
     public Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task<int> CountByClientId(string clientId, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task AddUser(ApplicationUser user, string password)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task<Device?> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task Update(Device device, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task Update(Identity identity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
@@ -68,11 +68,11 @@ public class FindByAddressStubRepository : IIdentitiesRepository
 
     public Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 }

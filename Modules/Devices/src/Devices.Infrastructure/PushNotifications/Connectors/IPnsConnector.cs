@@ -3,7 +3,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors;
 
 public interface IPnsConnector
 {
