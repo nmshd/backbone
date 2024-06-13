@@ -4,5 +4,6 @@ public enum PushNotificationPlatform
 {
     Fcm,
     Apns,
+    Sse,
     Dummy
 }

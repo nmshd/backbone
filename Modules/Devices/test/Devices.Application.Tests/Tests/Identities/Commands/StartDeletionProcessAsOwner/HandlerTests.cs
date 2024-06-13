@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -84,6 +83,6 @@ public class HandlerTests : AbstractTestsBase
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender? pushNotificationSender = null)
     {
-        return new Handler(identitiesRepository, userContext, A.Dummy<IEventBus>(), pushNotificationSender ?? A.Dummy<IPushNotificationSender>());
+        return new Handler(identitiesRepository, userContext, pushNotificationSender ?? A.Dummy<IPushNotificationSender>());
     }
 }
