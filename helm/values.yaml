@@ -462,6 +462,98 @@ actualidentitydeletion:
   # the affinity for the pods deployed by the Deployment (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity)
   affinity: {}
 
+#=========================== Consumer API ===========================
+
+sseserver:
+  name: "sseserver"
+
+  livenessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+  readinessProbe:
+    initialDelaySeconds: 30
+    periodSeconds: 30
+    timeoutSeconds: 5
+    failureThreshold: 3
+
+  image:
+    repository: "ghcr.io/nmshd/backbone-sse-server"
+    tagOverride: ""
+    pullPolicy: "IfNotPresent"
+    imagePullSecrets: []
+
+  # resources - the resources for the Consumer API container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#resources)
+  resources:
+    requests:
+      cpu: "200m"
+      memory: "128Mi"
+    limits:
+      cpu: "400m"
+      memory: "1Gi"
+
+  # securityContext - securityContext for the Consumer API container (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#security-context-1)
+  securityContext: {}
+
+  # podSecurityContext - securityContext for the pods deployed by the Deployment (see https://kubernetes.io/docs/tasks/configure-pod-container/security-context/)
+  podSecurityContext: {}
+
+  podAnnotations: {}
+
+  # env - environment variables for the Consumer API container (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
+  env: []
+
+  service:
+    type: "ClusterIP"
+    loadBalancer:
+      # ip - the static ip address the LoadBalancer should use
+      ip: ""
+      # resourceGroup - the Azure resource group the LoadBalancer should be created in
+      azureResourceGroup: ""
+
+  # httpRoute - the configuration of the HttpRoute for the Consumer API
+  httpRoute:
+    # enabled - whether to enable the HttpRoute for the Consumer API
+    enabled: false
+    # parentRefName - the name of the gateway this Route wants to be attached to
+    parentRefName: ""
+    # parentRefNamespace - # the namespace of the gateway this Route wants to be attached to
+    parentRefNamespace: ""
+    # parentRefSectionName - the name of the section in the gateway this Route wants to be attached to
+    parentRefSectionName: ""
+    # hostnames - the hostnames the Consumer API should be reachable under
+    hostnames: []
+
+  ingress:
+    # enabled - whether to enable the Ingress for the Consumer API
+    enabled: false
+    host: ""
+    # certName - the name of the certificate to use for SSL/TLS
+    certName: ""
+
+  # the nodeSelector for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector)
+  nodeSelector: {}
+
+  # the tolerations for the pods deployed by the Deployment (see https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/)
+  tolerations: []
+
+  # the affinity for the pods deployed by the Deployment (see https://kubernetes.io/docs/reference/kubernetes-api/workload-resources/pod-v1/#NodeAffinity)
+  affinity: {}
+
+  # backendConfig - only applicable if .Values.global.provider is set to "GoogleCloud"; see https://cloud.google.com/kubernetes-engine/docs/how-to/ingress-configuration#direct_health for a description of `HttpRoute`s`
+  backendConfig:
+    healthCheck:
+      # checkIntervalSec - time from the start of one prober's check to the start of its next check
+      checkIntervalSec: 15
+      # timeoutSec - the amount of time that Google Cloud waits for a response to a probe
+      timeoutSec: 15
+      # healthyThreshold - the number of consecutive successful checks required to mark a backend as healthy
+      healthyThreshold: 1
+      # unhealthyThreshold - the number of consecutive failed checks required to mark a backend as unhealthy
+      unhealthyThreshold: 2
+
 global:
   # useBuiltInEventbus - if a development event bus should be created, set this to true; if you want to use an existing one, set it to false
   useBuiltInEventbus: false
@@ -542,6 +634,11 @@ global:
             connectionString: ""
           pushNotifications:
             providers:
+              sse:
+                enabled: false
+                sseServerBaseAddress: 'http://sseserver:8080'
+              dummy:
+                enabled: false
             #   fcm:
             #     # serviceAccounts - the service accounts that should be used to communicate with the FCM service
             #     serviceAccounts:
@@ -570,8 +667,6 @@ global:
             #      bundleId1:
             #         # the name of the key that should be used to communicate with APNs (has to match the name of one of the keys specified above)
             #         keyName: ''
-            #     dummy:
-            #       enabled: false
       files:
         application:
           # pagination - the following options describe the default and maximum page size for the different endpoints
