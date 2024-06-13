@@ -10,7 +10,7 @@ Scenario: Creating a Relationship
 	Then the response status code is 201 (Created)
 	And the response contains a Relationship
 
-Scenario: Creating a Relationship with Identity "ToBeDeleted"
+Scenario: Creating a Relationship to an Identity in status "ToBeDeleted"
 	Given Identities i1 and i2
 	And a Relationship Template rt created by i1
 	And i1 is in status "ToBeDeleted"
@@ -25,7 +25,7 @@ Scenario: Accept Relationship Change
 	Then the response status code is 200 (OK)
 	And the response contains an AcceptRelationshipChangeResponse
 
-Scenario: Accept Relationship Change with Identity "ToBeDeleted"
+Scenario: Accept Relationship Change to an Identity in status "ToBeDeleted"
 	Given Identities i1 and i2
 	And a pending Relationship between i1 and i2 initiated by i1
 	And i1 is in status "ToBeDeleted"
@@ -40,7 +40,7 @@ Scenario: Reject Relationship Change
 	Then the response status code is 200 (OK)
 	And the response contains an RejectRelationshipChangeResponse
 
-Scenario: Reject Relationship Change with Identity "ToBeDeleted"
+Scenario: Reject Relationship Change to an Identity in status "ToBeDeleted"
 	Given Identities i1 and i2
 	And a pending Relationship between i1 and i2 initiated by i1
 	And i1 is in status "ToBeDeleted"
@@ -55,7 +55,7 @@ Scenario: Revoke Relationship Change
 	Then the response status code is 200 (OK)
 	And the response contains an RevokeRelationshipChangeResponse
 
-Scenario: Revoke Relationship Change with Identity "ToBeDeleted"
+Scenario: Revoke Relationship Change to an Identity in status "ToBeDeleted"
 	Given Identities i1 and i2
 	And a pending Relationship between i1 and i2 initiated by i1
 	And i1 is in status "ToBeDeleted"
