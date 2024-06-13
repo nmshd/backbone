@@ -1,6 +1,10 @@
 ﻿using System.CommandLine;
 using System.Text.Json;
+using Backbone.Identity.Pool.Creator.Application.MessageDistributor;
+using Backbone.Identity.Pool.Creator.Application.Printer;
+using Backbone.Identity.Pool.Creator.Application.RelationshipDistributor;
 using Backbone.Identity.Pool.Creator.PoolsFile;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Identity.Pool.Creator;
 
@@ -33,9 +37,34 @@ public class GenerateCommand : Command
 
     private static async Task GenerationPreprocessor(string baseAddress, string clientId, string clientSecret, string poolsFilePath)
     {
+        var serviceProvider = ConfigureServices();
+
         var poolsConfiguration = await ReadPools(poolsFilePath);
-        var generator = new PoolsGenerator.PoolsGenerator(baseAddress, clientId, clientSecret, poolsConfiguration);
+        var generator = new PoolsGenerator.PoolsGenerator(baseAddress, 
+            clientId, 
+            clientSecret, 
+            poolsConfiguration,
+            serviceProvider.GetRequiredService<IRelationshipDistributor>(),
+            serviceProvider.GetRequiredService<IMessageDistributor>(),
+            printer: serviceProvider.GetRequiredService<IPrinter>()
+
+            );
+
         await generator.CreatePools();
+    }
+
+    private static ServiceProvider ConfigureServices()
+    {
+        var services = new ServiceCollection();
+
+        //services.AddSingleton<IRelationshipDistributor, RelationshipDistributorV1>();
+        services.AddSingleton<IRelationshipDistributor, RelationshipDistributorV2>();
+
+        services.AddSingleton<IMessageDistributor, MessageDistributorV1>();
+
+        services.AddSingleton<IPrinter, Printer>();
+
+        return services.BuildServiceProvider();
     }
 
 
