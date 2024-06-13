@@ -1,0 +1,27 @@
+{{- if eq ((((.Values.global.configuration.modules.devices.infrastructure).pushNotifications).providers).sse).enabled true }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.sseserver.name }}
+  labels:
+    {{- include "global.labels" . | nindent 4 }}
+    app: {{ .Values.sseserver.name }}
+  {{- if eq .Values.global.provider "GoogleCloud" }}
+  annotations:
+    cloud.google.com/backend-config: '{"default": "{{ .Values.sseserver.name }}"}'
+  {{- end }}
+  {{- if eq .Values.sseserver.service.type "LoadBalancer" }}
+  annotations:
+    service.beta.kubernetes.io/azure-load-balancer-resource-group: {{ .Values.sseserver.service.loadBalancer.azureResourceGroup }}
+  {{- end }}
+spec:
+  type: {{ .Values.sseserver.service.type }}
+  {{- if eq .Values.sseserver.service.type "LoadBalancer" }}
+  loadBalancerIP: {{ .Values.sseserver.service.loadBalancer.ip }}
+  {{- end }}
+  ports:
+    - port: 8080
+      targetPort: 8080
+  selector:
+    app: {{ .Values.sseserver.name }}
+{{- end }}

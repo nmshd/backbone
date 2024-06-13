@@ -19,11 +19,11 @@ public class FindMetricsStubRepository : IMetricsRepository
 
     public Task<IEnumerable<Metric>> FindAll(CancellationToken cancellationToken, bool track = false)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public Task<IEnumerable<Metric>> FindAllWithKeys(IEnumerable<MetricKey> keys, CancellationToken cancellationToken, bool track = false)
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 }

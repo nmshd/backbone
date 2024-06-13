@@ -1,3 +1,4 @@
+using System.Net;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -9,23 +10,21 @@ using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Tooling.Extensions;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.OpenApi.Models;
 using OpenIddict.Validation.AspNetCore;
-using Serilog;
 using PublicKey = Backbone.Modules.Devices.Application.Devices.DTOs.PublicKey;
 
 namespace Backbone.ConsumerApi.Extensions;
 
 public static class IServiceCollectionExtensions
 {
-    public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services,
-        BackboneConfiguration configuration,
-        IHostEnvironment env)
+    public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services, BackboneConfiguration configuration)
     {
         services
             .AddControllers(options => options.Filters.Add(typeof(CustomExceptionFilter)))
@@ -101,6 +100,9 @@ public static class IServiceCollectionExtensions
 
         services.AddTransient<IUserContext, AspNetCoreUserContext>();
 
+        if (configuration.Modules.Devices.Infrastructure.PushNotifications.Providers.Sse is { Enabled: true })
+            services.AddHealthChecks().AddCheck<SseServerHealthCheck>("SseServer");
+
         return services;
     }
 
@@ -112,25 +114,20 @@ public static class IServiceCollectionExtensions
             {
                 options.UseEntityFrameworkCore()
                     .UseDbContext<DevicesDbContext>()
-                    .ReplaceDefaultEntities<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreScope, CustomOpenIddictEntityFrameworkCoreToken, string>();
+                    .ReplaceDefaultEntities<
+                        CustomOpenIddictEntityFrameworkCoreApplication,
+                        CustomOpenIddictEntityFrameworkCoreAuthorization,
+                        CustomOpenIddictEntityFrameworkCoreScope,
+                        CustomOpenIddictEntityFrameworkCoreToken,
+                        string
+                    >();
             })
             .AddServer(options =>
             {
-                if (configuration.JwtSigningCertificate.IsNullOrEmpty())
-                {
-                    if (environment.IsProduction())
-                        throw new Exception(
-                            $"For production scenarios, you need to set a '{nameof(configuration.JwtSigningCertificate)}'.");
+                var privateKeyBytes = Convert.FromBase64String(configuration.JwtSigningCertificate);
+                var certificate = new X509Certificate2(privateKeyBytes, (string?)null);
+                options.AddSigningCertificate(certificate);
 
-                    Log.Logger.Warning("Using development signing certificate. Note that this is not recommended for production scenarios!");
-                    options.AddDevelopmentSigningCertificate();
-                }
-                else
-                {
-                    var privateKeyBytes = Convert.FromBase64String(configuration.JwtSigningCertificate);
-                    var certificate = new X509Certificate2(privateKeyBytes, (string?)null);
-                    options.AddSigningCertificate(certificate);
-                }
                 options.SetTokenEndpointUris("connect/token");
                 options.AllowPasswordFlow();
                 options.SetAccessTokenLifetime(TimeSpan.FromSeconds(configuration.JwtLifetimeInSeconds));
@@ -157,10 +154,7 @@ public static class IServiceCollectionExtensions
 
     public static IServiceCollection AddCustomFluentValidation(this IServiceCollection services)
     {
-        services.AddFluentValidationAutoValidation(config =>
-        {
-            config.DisableDataAnnotationsValidation = true;
-        });
+        services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
 
         ValidatorOptions.Global.DisplayNameResolver = (_, member, _) =>
             member != null ? char.ToLowerInvariant(member.Name[0]) + member.Name[1..] : null;
@@ -201,5 +195,28 @@ public static class IServiceCollectionExtensions
             });
 
         return services;
+    }
+}
+
+public class SseServerHealthCheck : IHealthCheck
+{
+    private readonly HttpClient _client;
+
+    public SseServerHealthCheck(IHttpClientFactory clientFactory)
+    {
+        _client = clientFactory.CreateClient(nameof(SseServerClient));
+    }
+
+    public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var result = await _client.GetAsync("health", cancellationToken);
+            return result.StatusCode == HttpStatusCode.OK ? HealthCheckResult.Healthy() : HealthCheckResult.Unhealthy();
+        }
+        catch (Exception)
+        {
+            return HealthCheckResult.Unhealthy();
+        }
     }
 }
