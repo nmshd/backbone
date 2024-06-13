@@ -14,7 +14,6 @@ public class Identity : Entity
 {
     private readonly List<IdentityDeletionProcess> _deletionProcesses;
     private TierId? _tierId;
-    private IdentityStatus _status;
 
     public Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion)
     {
@@ -64,17 +63,7 @@ public class Identity : Entity
 
     public DateTime? DeletionGracePeriodEndsAt { get; private set; }
 
-    public IdentityStatus Status 
-    {
-        get => _status;
-        private set
-        {
-            if (value == IdentityStatus.ToBeDeleted)
-                RaiseDomainEvent(new IdentityToBeDeletedDomainEvent(Address));
-
-            _status = value;
-        }
-    }
+    public IdentityStatus Status { get; private set; }
 
     public bool IsNew()
     {
@@ -115,6 +104,7 @@ public class Identity : Entity
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
         TierId = Tier.QUEUED_FOR_DELETION.Id;
         Status = IdentityStatus.ToBeDeleted;
+        RaiseDomainEvent(new IdentityToBeDeletedDomainEvent(Address));
 
         return deletionProcess;
     }
@@ -167,6 +157,7 @@ public class Identity : Entity
         deletionProcess.Approve(Address, deviceId);
 
         Status = IdentityStatus.ToBeDeleted;
+        RaiseDomainEvent(new IdentityDeletionCanceledDomainEvent(Address));
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
         TierId = Tier.QUEUED_FOR_DELETION.Id;
 
