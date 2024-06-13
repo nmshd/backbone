@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 
 import '/core/core.dart';
 import 'identity_quotas_table/identity_quotas_table.dart';
+import 'identity_sent_messages_table/identity_sent_messages_table.dart';
 import 'modals/change_tier.dart';
 
 class IdentityDetails extends StatefulWidget {
@@ -69,6 +70,11 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             ),
             Gaps.h16,
             IdentityQuotaList(identityDetails, _reloadIdentity),
+            Gaps.h16,
+            IdentitySentMessagesOverview(
+              address: widget.address,
+              type: 'Outgoing',
+            ),
           ],
         ),
       ),

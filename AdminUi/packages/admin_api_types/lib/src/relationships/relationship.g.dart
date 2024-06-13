@@ -17,7 +17,8 @@ Relationship _$RelationshipFromJson(Map<String, dynamic> json) => Relationship(
       answeredByDevice: json['answeredByDevice'] as String,
     );
 
-Map<String, dynamic> _$RelationshipToJson(Relationship instance) => <String, dynamic>{
+Map<String, dynamic> _$RelationshipToJson(Relationship instance) =>
+    <String, dynamic>{
       'peer': instance.peer,
       'requestedBy': instance.requestedBy,
       'templateId': instance.templateId,
