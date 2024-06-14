@@ -1,4 +1,5 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
+import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -137,10 +138,18 @@ class IdentitySentMessagesTableSource extends AsyncDataTableSource {
       final response = await GetIt.I.get<AdminApiClient>().messages.getMessagesByParticipantAddress(
             address: address,
             type: type,
-            pageNumber: pageNumber,
+            pageNumber: pageNumber + 1,
             pageSize: count,
           );
-      _pagination = response.pagination;
+
+      _pagination = response.isPaged
+          ? response.pagination
+          : Pagination(
+              pageNumber: pageNumber,
+              pageSize: count,
+              totalPages: _totalPages(count, response.data),
+              totalRecords: response.data.length,
+            );
 
       final rows = response.data.indexed
           .map(
@@ -161,10 +170,15 @@ class IdentitySentMessagesTableSource extends AsyncDataTableSource {
             ),
           )
           .toList();
-      return AsyncRowsResponse(response.pagination.totalRecords, rows);
+      return AsyncRowsResponse(response.isPaged ? response.pagination.totalPages : _pagination!.totalPages, rows);
     } catch (e) {
       GetIt.I.get<Logger>().e('Failed to load data: $e');
       throw Exception('Failed to load data: $e');
     }
+  }
+
+  int _totalPages(int count, List<MessageOverview>? data) {
+    if (data == null || data.isEmpty) return 0;
+    return (data.length / count).ceil();
   }
 }
