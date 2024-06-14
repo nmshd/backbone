@@ -71,7 +71,7 @@ public class DeletionStartedTests : AbstractTestsBase
     public void Raises_domain_events()
     {
         //Arrange
-        var activeIdentity = CreateIdentityWithApprovedDeletionProcess();
+        var activeIdentity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
 
         SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod).AddDays(1));
 
@@ -79,7 +79,7 @@ public class DeletionStartedTests : AbstractTestsBase
         activeIdentity.DeletionStarted();
 
         //Assert
-        var domainEvent = activeIdentity.Should().HaveDomainEvent<IdentityDeletedDomainEvent>();
+        var domainEvent = activeIdentity.Should().HaveASingleDomainEvent<IdentityDeletedDomainEvent>();
         domainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
     }
 
@@ -87,6 +87,7 @@ public class DeletionStartedTests : AbstractTestsBase
     {
         var identity = TestDataGenerator.CreateIdentity();
         identity.StartDeletionProcessAsOwner(identity.Devices.First().Id);
+
         return identity;
     }
 }

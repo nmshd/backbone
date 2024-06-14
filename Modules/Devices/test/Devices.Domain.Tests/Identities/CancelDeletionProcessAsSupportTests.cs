@@ -5,7 +5,6 @@ using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
-using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
@@ -66,17 +65,22 @@ public class CancelDeletionProcessAsSupportTests : AbstractTestsBase
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+        var tierBeforeDeletion = identity.TierId;
 
         // Act
         var deletionProcess = identity.CancelDeletionProcessAsSupport(identity.DeletionProcesses[0].Id);
 
+        // Assert
         var deletionProcessDomainEvent = deletionProcess.Should().HaveASingleDomainEvent<IdentityDeletionProcessStatusChangedDomainEvent>();
         deletionProcessDomainEvent.DeletionProcessId.Should().Be(deletionProcess.Id);
         deletionProcessDomainEvent.Address.Should().Be(identity.Address);
         deletionProcessDomainEvent.Initiator.Should().Be(null);
-
-        var identityDomainEvent = identity.Should().HaveDomainEvent<IdentityDeletionCanceledDomainEvent>();
-        identityDomainEvent.IdentityAddress.Should().Be(identity.Address);
+        
+        var domainEvent = identity.Should().HaveDomainEvent<TierOfIdentityChangedDomainEvent, IdentityDeletionCanceledDomainEvent>();
+        domainEvent.Item1.IdentityAddress.Should().Be(identity.Address);
+        domainEvent.Item1.OldTierId.Should().Be(tierBeforeDeletion);
+        domainEvent.Item1.NewTierId.Should().Be(identity.TierId);
+        domainEvent.Item2.IdentityAddress.Should().Be(identity.Address);
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
