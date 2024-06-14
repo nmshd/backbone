@@ -29,7 +29,7 @@ public class EntityAssertions : ReferenceTypeAssertions<Entity, EntityAssertions
         return (TEvent)Subject.DomainEvents[0];
     }
 
-    public (TEvent1, TEvent2) HaveDomainEvent<TEvent1, TEvent2>(string because = "", params object[] becauseArgs)
+    public (TEvent1, TEvent2) HaveDomainEvents<TEvent1, TEvent2>(string because = "", params object[] becauseArgs)
         where TEvent1 : DomainEvent
         where TEvent2 : DomainEvent
     {
@@ -37,14 +37,14 @@ public class EntityAssertions : ReferenceTypeAssertions<Entity, EntityAssertions
             .BecauseOf(because, becauseArgs)
             .Given(() => Subject.DomainEvents)
             .ForCondition(events => events.Count > 1)
-            .FailWith("Expected {context:entity} to have at least 2 domain events.")
+            .FailWith("Expected {context:entity} to have 2 domain events.")
             .Then
             .ForCondition(events => events[0].GetType() == typeof(TEvent1) || events[1].GetType() == typeof(TEvent1))
-            .FailWith("Expected domain events to contain type {0}, but did not found it.",
+            .FailWith("Expected one domain event to be of type {0}, but did not found it.",
                 typeof(TEvent1))
             .Then
             .ForCondition(events => events[0].GetType() == typeof(TEvent2) || events[1].GetType() == typeof(TEvent2))
-            .FailWith("Expected domain events to contain type {0}, but did not found it.",
+            .FailWith("Expected one domain event to be of type {0}, but did not found it.",
                 typeof(TEvent2));
 
         return ((TEvent1)Subject.DomainEvents.Single(e => e.GetType() == typeof(TEvent1)),
