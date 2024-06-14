@@ -155,6 +155,13 @@ public class Relationship : Entity
         RaiseDomainEvent(new PeerToBeDeletedDomainEvent(peerOfIdentityToBeDeleted, Id, identityToBeDeleted));
     }
 
+    public void RaisePeerDeletionCanceledDomainEvent(string identityWithDeletionCanceled)
+    {
+        var peerOfIdentityWithDeletionCanceled = To == identityWithDeletionCanceled ? From : To;
+
+        RaiseDomainEvent(new PeerDeletionCanceledDomainEvent(peerOfIdentityWithDeletionCanceled, Id, identityWithDeletionCanceled));
+    }
+
     #region Selectors
 
     public static Expression<Func<Relationship, bool>> HasParticipant(string identity)
