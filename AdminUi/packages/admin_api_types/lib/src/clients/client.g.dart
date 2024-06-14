@@ -30,7 +30,8 @@ Clients _$ClientsFromJson(Map<String, dynamic> json) => Clients(
       clientId: json['clientId'] as String,
       displayName: json['displayName'] as String,
       defaultTier: ClientDefaultTier.fromJson(
-          json['defaultTier'] as Map<String, dynamic>),
+        json['defaultTier'] as Map<String, dynamic>,
+      ),
       createdAt: DateTime.parse(json['createdAt'] as String),
       maxIdentities: (json['maxIdentities'] as num?)?.toInt(),
       numberOfIdentities: (json['numberOfIdentities'] as num?)?.toInt(),
@@ -45,14 +46,12 @@ Map<String, dynamic> _$ClientsToJson(Clients instance) => <String, dynamic>{
       'numberOfIdentities': instance.numberOfIdentities,
     };
 
-ClientDefaultTier _$ClientDefaultTierFromJson(Map<String, dynamic> json) =>
-    ClientDefaultTier(
+ClientDefaultTier _$ClientDefaultTierFromJson(Map<String, dynamic> json) => ClientDefaultTier(
       id: json['id'] as String,
       name: json['name'] as String,
     );
 
-Map<String, dynamic> _$ClientDefaultTierToJson(ClientDefaultTier instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$ClientDefaultTierToJson(ClientDefaultTier instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
     };
