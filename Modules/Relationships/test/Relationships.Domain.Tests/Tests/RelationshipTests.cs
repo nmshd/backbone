@@ -670,6 +670,28 @@ public class RelationshipTests : AbstractTestsBase
     }
 
     #endregion
+
+    #region DomainEvents
+
+    [Fact]
+    public void Raises_PeerDeletedDomainEvent()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityToBeDeleted = TestDataGenerator.CreateRandomIdentityAddress();
+        var relationship = CreateActiveRelationship((identity, identityToBeDeleted));
+
+        // Act
+        relationship.RaisePeerToBeDeletedDomainEvent(identityToBeDeleted);
+
+        // Assert
+        var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerToBeDeletedDomainEvent>();
+        domainEvent.PeerOfIdentityToBeDeleted.Should().Be(identity);
+        domainEvent.RelationshipId.Should().Be(relationship.Id);
+        domainEvent.IdentityToBeDeleted.Should().Be(identityToBeDeleted);
+    }
+
+    #endregion
 }
 
 #region Extensions

@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Tooling;
@@ -121,11 +122,6 @@ public class Relationship : Entity
         }
     }
 
-    private RelationshipChange? GetPendingChangeOrNull()
-    {
-        return _changes.FirstOrDefault(c => c.Status == RelationshipChangeStatus.Pending);
-    }
-
     public RelationshipChange RequestTermination(IdentityAddress requestedBy, DeviceId requestedByDevice)
     {
         EnsureCanBeTerminated();
@@ -145,6 +141,18 @@ public class Relationship : Entity
 
         if (existingChange != null)
             throw new DomainException(DomainErrors.PendingChangeAlreadyExists(existingChange.Id));
+    }
+
+    private RelationshipChange? GetPendingChangeOrNull()
+    {
+        return _changes.FirstOrDefault(c => c.Status == RelationshipChangeStatus.Pending);
+    }
+
+    public void RaisePeerToBeDeletedDomainEvent(string identityToBeDeleted)
+    {
+        var peerOfIdentityToBeDeleted = To == identityToBeDeleted ? From : To;
+
+        RaiseDomainEvent(new PeerToBeDeletedDomainEvent(peerOfIdentityToBeDeleted, Id, identityToBeDeleted));
     }
 
     #region Selectors
