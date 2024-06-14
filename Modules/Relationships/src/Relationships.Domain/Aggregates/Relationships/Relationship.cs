@@ -189,6 +189,8 @@ public class Relationship : Entity
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipReactivationRequestedDomainEvent(this, activeIdentity, GetPeer(activeIdentity)));
     }
 
     private void EnsureThereIsNoOpenReactivationRequest()
