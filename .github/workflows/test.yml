@@ -102,22 +102,22 @@ jobs:
         env:
           DOTNET_CONSOLE_ANSI_COLOR: true
           
-  container-test-builds:
-    name: Build ${{matrix.tag}} Container
+  image-test-builds:
+    name: Build ${{matrix.image}} Image
     runs-on: ubuntu-latest
     strategy:
       matrix:
         include:
           - dockerfile: ConsumerApi/Dockerfile
-            tag: consumer-api
+            image: consumer-api
           - dockerfile: AdminApi/src/AdminApi/Dockerfile
-            tag: admin-ui
+            image: admin-ui
           - dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
-            tag: seed-client
+            image: seed-client
           - dockerfile: DatabaseMigrator/Dockerfile
-            tag: database-migrator
+            image: database-migrator
           - dockerfile: EventHandlerService/src/EventHandlerService/Dockerfile
-            tag: event-handler-service
+            image: event-handler-service
     
     steps:
       - name: Checkout
@@ -140,30 +140,29 @@ jobs:
       - name: Cache Image
         uses: actions/cache@v4
         with:
-          path: /tmp/.buildx-${{ matrix.tag }}-cache
-          key: buildx-${{ matrix.tag }}-cache-${{ hashFiles(matrix.dockerfile) }}
+          path: /tmp/.buildx-${{ matrix.image }}-cache
+          key: buildx-${{ matrix.image }}-cache-${{ hashFiles(matrix.dockerfile) }}
           restore-keys: |
-            buildx-${{ matrix.tag }}-cache-
+            buildx-${{ matrix.image }}-cache-
             
       - name: Install script dependencies
         run: npm install --prefix ./.ci
         
-      - name: Build Container
+      - name: Build Image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ${{ matrix.dockerfile }}
-          cache-from: type=local,src=/tmp/.buildx-${{ matrix.tag }}-cache
-          cache-to: type=local,mode=max,dest=/tmp/.buildx-${{ matrix.tag }}-cache-new
-          tags: ${{ matrix.tag }}
+          cache-from: type=local,src=/tmp/.buildx-${{ matrix.image }}-cache
+          cache-to: type=local,mode=max,dest=/tmp/.buildx-${{ matrix.image }}-cache-new
           load: false
-          outputs: type=docker,dest=/tmp/${{ matrix.tag }}.tar
+          outputs: type=docker,dest=/tmp/${{ matrix.image }}.tar
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: docker-${{ matrix.tag }}
-          path: /tmp/${{ matrix.tag }}.tar
+          name: docker-${{ matrix.image }}
+          path: /tmp/${{ matrix.image }}.tar
           retention-days: 1
           
       - name: Save Docker Logs
@@ -184,13 +183,13 @@ jobs:
       # https://github.com/moby/buildkit/issues/1896
       - name: Move cache
         run: |
-          rm -rf /tmp/.buildx-${{ matrix.tag }}-cache
-          mv /tmp/.buildx-${{ matrix.tag }}-cache-new /tmp/.buildx-${{ matrix.tag }}-cache
+          rm -rf /tmp/.buildx-${{ matrix.image }}-cache
+          mv /tmp/.buildx-${{ matrix.image }}-cache-new /tmp/.buildx-${{ matrix.image }}-cache
 
   integration-test-sqlserver:
     name: Run Integration Tests (on SQL Server)
     runs-on: ubuntu-latest
-    needs: container-test-builds
+    needs: image-test-builds
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -209,7 +208,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
         
-      - name: Download Docker images
+      - name: Download cached Docker images
         uses: actions/download-artifact@v4
         with:
           path: /tmp
@@ -243,7 +242,7 @@ jobs:
   integration-test-postgres:
     name: Run Integration Tests (on Postgres)
     runs-on: ubuntu-latest
-    needs: container-test-builds
+    needs: image-test-builds
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -262,7 +261,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
 
-      - name: Download Docker images
+      - name: Download cached Docker images
         uses: actions/download-artifact@v4
         with:
           path: /tmp
@@ -296,7 +295,7 @@ jobs:
   transport-test-sqlserver:
     name: Run transport Tests (on SQL Server)
     runs-on: ubuntu-latest
-    needs: container-test-builds
+    needs: image-test-builds
     steps:
       - name: Checkout backbone repository
         uses: actions/checkout@v4
@@ -311,8 +310,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
-          check-latest: true
+          node-version: latest
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 
@@ -365,7 +363,7 @@ jobs:
   transport-test-postgres:
     name: Run transport Tests (on Postgres)
     runs-on: ubuntu-latest
-    needs: container-test-builds
+    needs: image-test-builds
     steps:
       - name: Checkout backbone repository
         uses: actions/checkout@v4
@@ -384,7 +382,7 @@ jobs:
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 
-      - name: Download Docker images
+      - name: Download cached Docker images
         uses: actions/download-artifact@v4
         with:
           path: /tmp
