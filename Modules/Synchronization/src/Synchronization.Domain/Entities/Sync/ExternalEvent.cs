@@ -65,5 +65,6 @@ public enum ExternalEventType
     RelationshipChangeCreated = 2,
     RelationshipChangeCompleted = 3,
     IdentityDeletionProcessStarted = 4,
-    IdentityDeletionProcessStatusChanged = 5
+    IdentityDeletionProcessStatusChanged = 5,
+    PeerToBeDeleted = 6
 }
