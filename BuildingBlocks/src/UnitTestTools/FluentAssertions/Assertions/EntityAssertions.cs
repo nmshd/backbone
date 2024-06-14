@@ -30,7 +30,7 @@ public class EntityAssertions : ReferenceTypeAssertions<Entity, EntityAssertions
     }
 
     public (TEvent1, TEvent2) HaveDomainEvent<TEvent1, TEvent2>(string because = "", params object[] becauseArgs)
-        where TEvent1 : DomainEvent 
+        where TEvent1 : DomainEvent
         where TEvent2 : DomainEvent
     {
         Execute.Assertion

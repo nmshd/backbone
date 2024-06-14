@@ -5,12 +5,12 @@ using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Entities;
-using Xunit;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FakeItEasy;
 using FluentAssertions;
+using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.DomainEvents.Incoming;
 public class IdentityDeletedDomainEventHandlerTests : AbstractTestsBase

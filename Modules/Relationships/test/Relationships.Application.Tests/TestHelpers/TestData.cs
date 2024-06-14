@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Relationships.Application.Tests.Extensions;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.UnitTestTools.Data;
-using Backbone.Modules.Relationships.Application.Tests.Extensions;
 
 namespace Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 
@@ -25,5 +25,5 @@ public static class TestData
         return relationship;
     }
 
-    
+
 }

@@ -77,7 +77,7 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
         deletionProcessDomainEvent.DeletionProcessId.Should().Be(deletionProcess.Id);
         deletionProcessDomainEvent.Address.Should().Be(identity.Address);
         deletionProcessDomainEvent.Initiator.Should().Be(identity.Address);
-        
+
         var domainEvent = identity.Should().HaveDomainEvent<TierOfIdentityChangedDomainEvent, IdentityDeletionCanceledDomainEvent>();
 
         domainEvent.Item1.IdentityAddress.Should().Be(identity.Address);
