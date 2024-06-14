@@ -203,12 +203,7 @@ jobs:
           merge-multiple: true
 
       - name: Load Docker images
-        run: |
-          docker load --input /tmp/consumer-api.tar
-          docker load --input /tmp/admin-ui.tar
-          docker load --input /tmp/seed-client.tar
-          docker load --input /tmp/database-migrator.tar
-          docker load --input /tmp/event-handler-service.tar
+        run: ./.ci/loadDockerImages.sh
       
       - name: Run integration tests
         run: ./.ci/integrationTest.sqlserver.sh
@@ -256,12 +251,7 @@ jobs:
           merge-multiple: true
 
       - name: Load Docker images
-        run: |
-          docker load --input /tmp/consumer-api.tar
-          docker load --input /tmp/admin-ui.tar
-          docker load --input /tmp/seed-client.tar
-          docker load --input /tmp/database-migrator.tar
-          docker load --input /tmp/event-handler-service.tar
+        run: ./.ci/loadDockerImages.sh
       
       - name: Run integration tests
         run: ./.ci/integrationTest.postgres.sh
@@ -309,12 +299,7 @@ jobs:
           merge-multiple: true
 
       - name: Load Docker images
-        run: |
-          docker load --input /tmp/consumer-api.tar
-          docker load --input /tmp/admin-ui.tar
-          docker load --input /tmp/seed-client.tar
-          docker load --input /tmp/database-migrator.tar
-          docker load --input /tmp/event-handler-service.tar
+        run: ./.ci/loadDockerImages.sh
       
       - name: Run Consumer API & Admin API
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml up -d --no-build
@@ -377,12 +362,7 @@ jobs:
           merge-multiple: true
 
       - name: Load Docker images
-        run: |
-          docker load --input /tmp/consumer-api.tar
-          docker load --input /tmp/admin-ui.tar
-          docker load --input /tmp/seed-client.tar
-          docker load --input /tmp/database-migrator.tar
-          docker load --input /tmp/event-handler-service.tar
+        run: ./.ci/loadDockerImages.sh
       
       - name: Run Consumer API & Admin API
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml up -d --no-build
