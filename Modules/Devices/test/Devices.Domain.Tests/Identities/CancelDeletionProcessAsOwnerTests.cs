@@ -78,11 +78,11 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
         deletionProcessDomainEvent.Address.Should().Be(identity.Address);
         deletionProcessDomainEvent.Initiator.Should().Be(identity.Address);
 
-        var identityDomainEvent = identity.Should().HaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityDeletionCanceledDomainEvent>();
-        identityDomainEvent.Item1.IdentityAddress.Should().Be(identity.Address);
-        identityDomainEvent.Item1.OldTierId.Should().Be(tierBeforeDeletion);
-        identityDomainEvent.Item1.NewTierId.Should().Be(identity.TierId);
-        identityDomainEvent.Item2.IdentityAddress.Should().Be(identity.Address);
+        var identityDomainEvents = identity.Should().HaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityDeletionCanceledDomainEvent>();
+        identityDomainEvents.Item1.IdentityAddress.Should().Be(identity.Address);
+        identityDomainEvents.Item1.OldTierId.Should().Be(tierBeforeDeletion);
+        identityDomainEvents.Item1.NewTierId.Should().Be(identity.TierId);
+        identityDomainEvents.Item2.IdentityAddress.Should().Be(identity.Address);
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
