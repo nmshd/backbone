@@ -67,5 +67,6 @@ public enum ExternalEventType
     IdentityDeletionProcessStarted = 4,
     IdentityDeletionProcessStatusChanged = 5,
     PeerToBeDeleted = 6,
-    PeerDeletionCanceled = 7
+    PeerDeletionCanceled = 7,
+    PeerDeleted = 8
 }
