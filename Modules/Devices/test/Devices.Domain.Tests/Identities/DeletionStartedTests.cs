@@ -1,7 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -63,6 +65,22 @@ public class DeletionStartedTests : AbstractTestsBase
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
+    }
+
+    [Fact]
+    public void Raises_domain_events()
+    {
+        //Arrange
+        var activeIdentity = CreateIdentityWithApprovedDeletionProcess();
+
+        SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod).AddDays(1));
+
+        //Act
+        activeIdentity.DeletionStarted();
+
+        //Assert
+        var domainEvent = activeIdentity.Should().HaveDomainEvent<IdentityDeletedDomainEvent>();
+        domainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
     }
 
     private static Identity CreateIdentityWithApprovedDeletionProcess()

@@ -157,7 +157,7 @@ public class Identity : Entity
         deletionProcess.Approve(Address, deviceId);
 
         Status = IdentityStatus.ToBeDeleted;
-        RaiseDomainEvent(new IdentityDeletionCanceledDomainEvent(Address));
+        RaiseDomainEvent(new IdentityToBeDeletedDomainEvent(Address));
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
         TierId = Tier.QUEUED_FOR_DELETION.Id;
 
@@ -171,6 +171,7 @@ public class Identity : Entity
 
         deletionProcess.DeletionStarted(Address);
         Status = IdentityStatus.Deleting;
+        RaiseDomainEvent(new IdentityDeletedDomainEvent(Address));
     }
 
     public IdentityDeletionProcess CancelDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
