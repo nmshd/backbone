@@ -4,7 +4,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationship;
@@ -34,8 +33,6 @@ public class Handler : IRequestHandler<RejectRelationshipCommand, RejectRelation
         relationship.Reject(_activeIdentity, _activeDevice, request.CreationResponseContent);
 
         await _relationshipsRepository.Update(relationship);
-
-        _eventBus.Publish(new RelationshipStatusChangedDomainEvent(relationship));
 
         return new RejectRelationshipResponse(relationship);
     }

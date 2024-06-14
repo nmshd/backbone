@@ -2,6 +2,7 @@ using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -95,6 +96,8 @@ public class Relationship : Entity
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
     private void EnsureStatus(params RelationshipStatus[] statuses)
@@ -125,6 +128,8 @@ public class Relationship : Entity
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
     public void Revoke(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
@@ -143,6 +148,8 @@ public class Relationship : Entity
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
     private void EnsureRelationshipRequestIsCreatedBySelf(IdentityAddress activeIdentity)
@@ -165,6 +172,8 @@ public class Relationship : Entity
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
     public void RequestReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
@@ -265,6 +274,8 @@ public class Relationship : Entity
             DecomposeAsFirstParticipant(activeIdentity, activeDevice);
         else
             DecomposeAsSecondParticipant(activeIdentity, activeDevice);
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
     private void DecomposeAsFirstParticipant(IdentityAddress activeIdentity, DeviceId activeDevice)
