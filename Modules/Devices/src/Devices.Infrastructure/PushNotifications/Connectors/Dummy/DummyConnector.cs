@@ -3,6 +3,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 using Microsoft.Extensions.Logging;
 

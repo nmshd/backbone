@@ -115,7 +115,7 @@ public class Relationship : Entity
                     _ => throw new NotSupportedException()
                 };
             case RelationshipChangeType.TerminationCancellation:
-                throw new NotImplementedException();
+                throw new NotSupportedException();
             default:
                 throw new NotSupportedException();
         }

@@ -3,8 +3,8 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using FluentAssertions;
@@ -12,7 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
+namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Apns;
 
 public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
 {
