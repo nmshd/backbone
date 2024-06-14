@@ -62,7 +62,7 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Raises_IdentityDeletionProcessStatusChangedDomainEvent_when_Cancelling()
+    public void Raises_domain_evnets()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
@@ -71,10 +71,13 @@ public class CancelDeletionProcessAsOwnerTests : AbstractTestsBase
         // Act
         var deletionProcess = identity.CancelDeletionProcessAsOwner(identity.DeletionProcesses[0].Id, identity.Devices[0].Id);
 
-        var domainEvent = deletionProcess.Should().HaveASingleDomainEvent<IdentityDeletionProcessStatusChangedDomainEvent>();
-        domainEvent.DeletionProcessId.Should().Be(deletionProcess.Id);
-        domainEvent.Address.Should().Be(identity.Address);
-        domainEvent.Initiator.Should().Be(identity.Address);
+        var deletionProcessDomainEvent = deletionProcess.Should().HaveASingleDomainEvent<IdentityDeletionProcessStatusChangedDomainEvent>();
+        deletionProcessDomainEvent.DeletionProcessId.Should().Be(deletionProcess.Id);
+        deletionProcessDomainEvent.Address.Should().Be(identity.Address);
+        deletionProcessDomainEvent.Initiator.Should().Be(identity.Address);
+
+        var identityDomainEvent = identity.Should().HaveDomainEvent<IdentityDeletionCanceledDomainEvent>();
+        identityDomainEvent.IdentityAddress.Should().Be(identity.Address);
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)

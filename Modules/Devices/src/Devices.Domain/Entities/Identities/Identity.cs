@@ -278,6 +278,7 @@ public class Identity : Entity
         TierId = TierIdBeforeDeletion!;
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
+        RaiseDomainEvent(new IdentityDeletionCanceledDomainEvent(Address));
 
         return deletionProcess;
     }
@@ -298,6 +299,7 @@ public class Identity : Entity
         TierId = TierIdBeforeDeletion!;
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
+        RaiseDomainEvent(new IdentityDeletionCanceledDomainEvent(Address));
 
         return deletionProcess;
     }
