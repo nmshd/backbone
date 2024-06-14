@@ -52,9 +52,9 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
             (message) => DataRow2.byIndex(
               index: pageNumber * count + message.$1,
               cells: [
-                DataCell(Text(message.$2.recipients.map((recipient) => recipient.address).join(', '))),
-                DataCell(Text(message.$2.senderAddress)),
-                DataCell(Text(message.$2.senderDevice)),
+                if (type == 'Outgoing') DataCell(Text(message.$2.recipients.map((recipient) => recipient.address).join(', '))),
+                if (type == 'Incoming') DataCell(Text(message.$2.senderAddress)),
+                if (type == 'Incoming') DataCell(Text(message.$2.senderDevice)),
                 DataCell(Text(message.$2.numberOfAttachments.toString())),
                 DataCell(
                   Tooltip(

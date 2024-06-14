@@ -74,11 +74,15 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             IdentityMessagesOverview(
               address: widget.address,
               type: 'Incoming',
+              title: 'Received Messages',
+              subtitle: 'View messages received by this identity.',
             ),
             Gaps.h16,
             IdentityMessagesOverview(
               address: widget.address,
               type: 'Outgoing',
+              title: 'Sent Messages',
+              subtitle: 'View messages sent by this identity.',
             ),
           ],
         ),

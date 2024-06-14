@@ -5,7 +5,16 @@ import '/core/core.dart';
 class IdentityMessagesOverview extends StatefulWidget {
   final String address;
   final String type;
-  const IdentityMessagesOverview({required this.address, required this.type, super.key});
+  final String title;
+  final String subtitle;
+
+  const IdentityMessagesOverview({
+    required this.address,
+    required this.type,
+    required this.title,
+    required this.subtitle,
+    super.key,
+  });
 
   @override
   State<IdentityMessagesOverview> createState() => _IdentityMessagesOverviewState();
@@ -33,6 +42,11 @@ class _IdentityMessagesOverviewState extends State<IdentityMessagesOverview> {
 
   @override
   Widget build(BuildContext context) {
-    return IdentityMessagesTable(dataSource: _dataSource);
+    return IdentityMessagesTable(
+      dataSource: _dataSource,
+      type: widget.type,
+      title: widget.title,
+      subtitle: widget.subtitle,
+    );
   }
 }

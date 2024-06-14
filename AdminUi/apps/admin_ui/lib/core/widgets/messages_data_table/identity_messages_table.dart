@@ -8,9 +8,17 @@ export 'identity_messages_table_source.dart';
 
 class IdentityMessagesTable extends StatefulWidget {
   final IdentityMessagesTableSource dataSource;
-  final bool hideTierColumn;
+  final String type;
+  final String title;
+  final String subtitle;
 
-  const IdentityMessagesTable({required this.dataSource, this.hideTierColumn = false, super.key});
+  const IdentityMessagesTable({
+    required this.dataSource,
+    required this.type,
+    required this.title,
+    required this.subtitle,
+    super.key,
+  });
 
   @override
   State<IdentityMessagesTable> createState() => _IdentityMessagesTableState();
@@ -24,8 +32,8 @@ class _IdentityMessagesTableState extends State<IdentityMessagesTable> {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        title: const Text('Sent Messages'),
-        subtitle: const Text('View sent messages sent by identity.'),
+        title: Text(widget.title),
+        subtitle: Text(widget.subtitle),
         children: [
           Card(
             child: SizedBox(
@@ -52,12 +60,11 @@ class _IdentityMessagesTableState extends State<IdentityMessagesTable> {
                   ),
                 ),
                 columns: <DataColumn2>[
-                  const DataColumn2(label: Text('Recipients'), size: ColumnSize.L),
-                  if (!widget.hideTierColumn) const DataColumn2(label: Text('Send Date'), size: ColumnSize.S),
-                  const DataColumn2(label: Text('Number of Attachments')),
-                  const DataColumn2(label: Text('Sender Address')),
-                  const DataColumn2(label: Text('Sender Device'), size: ColumnSize.S),
+                  if (widget.type == 'Outgoing') const DataColumn2(label: Text('Recipients'), size: ColumnSize.L),
+                  if (widget.type == 'Incoming') const DataColumn2(label: Text('Sender Address')),
+                  if (widget.type == 'Incoming') const DataColumn2(label: Text('Sender Device'), size: ColumnSize.S),
                   const DataColumn2(label: Text('Send Date'), size: ColumnSize.S),
+                  const DataColumn2(label: Text('Number of Attachments')),
                 ],
               ),
             ),
