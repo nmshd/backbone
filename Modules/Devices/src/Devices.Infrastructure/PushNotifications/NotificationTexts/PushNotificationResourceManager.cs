@@ -1,6 +1,6 @@
 ﻿using System.Resources;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 
 public class PushNotificationResourceManager : ResourceManager
 {

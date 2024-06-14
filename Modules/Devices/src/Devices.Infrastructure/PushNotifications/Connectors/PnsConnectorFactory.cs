@@ -1,6 +1,6 @@
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 
-namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
+namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors;
 
 public abstract class PnsConnectorFactory
 {
@@ -14,9 +14,11 @@ public abstract class PnsConnectorFactory
                 return CreateForApplePushNotificationService();
             case PushNotificationPlatform.Dummy:
                 return CreateForDummy();
+            case PushNotificationPlatform.Sse:
+                return CreateForSse();
         }
 
-        throw new NotImplementedException($"There is currently no {nameof(IPnsConnector)} for the platform '{platform}'.");
+        throw new NotSupportedException($"There is currently no {nameof(IPnsConnector)} for the platform '{platform}'.");
     }
 
     protected abstract IPnsConnector CreateForFirebaseCloudMessaging();
@@ -24,4 +26,6 @@ public abstract class PnsConnectorFactory
     protected abstract IPnsConnector CreateForApplePushNotificationService();
 
     protected abstract IPnsConnector CreateForDummy();
+
+    protected abstract IPnsConnector CreateForSse();
 }
