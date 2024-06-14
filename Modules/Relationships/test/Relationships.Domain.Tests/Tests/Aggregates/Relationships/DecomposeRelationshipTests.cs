@@ -1,10 +1,12 @@
 ﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Tests.Extensions;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
@@ -37,6 +39,24 @@ public class DecomposeRelationshipTests : AbstractTestsBase
 
         // Assert
         relationship.Status.Should().Be(RelationshipStatus.ReadyForDeletion);
+    }
+
+    [Fact]
+    public void Raises_RelationshipStatusChangedDomainEvent()
+    {
+        // Arrange
+        var relationship = CreateTerminatedRelationship(IDENTITY_1, IDENTITY_2);
+        relationship.ClearDomainEvents();
+
+        // Act
+        relationship.Decompose(IDENTITY_2, DEVICE_2);
+
+        // Assert
+        var domainEvent = relationship.Should().HaveASingleDomainEvent<RelationshipStatusChangedDomainEvent>();
+        domainEvent.RelationshipId.Should().Be(relationship.Id);
+        domainEvent.Status.Should().Be(relationship.Status.ToString());
+        domainEvent.Initiator.Should().Be(relationship.LastModifiedBy);
+        domainEvent.Peer.Should().Be(relationship.GetPeer(relationship.LastModifiedBy));
     }
 
     [Fact]
