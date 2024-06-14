@@ -117,7 +117,7 @@ public class RelationshipsController : ApiControllerBase
     public async Task<IActionResult> CreateRelationship(CreateRelationshipCommand request, CancellationToken cancellationToken)
     {
         var relationshipTemplate = await _mediator.Send(new GetRelationshipTemplateQuery { Id = request.RelationshipTemplateId }, cancellationToken);
-        await EnsurePeerIsValid(relationshipTemplate.CreatedBy, cancellationToken);
+        await EnsurePeerIsNotToBeDeleted(relationshipTemplate.CreatedBy, cancellationToken);
 
         var relationship = await _mediator.Send(request, cancellationToken);
         return Created(relationship);
@@ -129,7 +129,7 @@ public class RelationshipsController : ApiControllerBase
         [FromRoute] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request, CancellationToken cancellationToken)
     {
         var peerIdentityAddress = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = relationshipId }, cancellationToken);
-        await EnsurePeerIsValid(peerIdentityAddress, cancellationToken);
+        await EnsurePeerIsNotToBeDeleted(peerIdentityAddress, cancellationToken);
 
         var change = await _mediator.Send(new AcceptRelationshipChangeRequestCommand
         {
@@ -147,7 +147,7 @@ public class RelationshipsController : ApiControllerBase
         [FromRoute(Name = "changeId")] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request, CancellationToken cancellationToken)
     {
         var peerIdentityAddress = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = relationshipId }, cancellationToken);
-        await EnsurePeerIsValid(peerIdentityAddress, cancellationToken);
+        await EnsurePeerIsNotToBeDeleted(peerIdentityAddress, cancellationToken);
 
         var change = await _mediator.Send(new RejectRelationshipChangeRequestCommand
         {
@@ -165,7 +165,7 @@ public class RelationshipsController : ApiControllerBase
         [FromRoute(Name = "changeId")] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request, CancellationToken cancellationToken)
     {
         var peerIdentityAddress = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = relationshipId }, cancellationToken);
-        await EnsurePeerIsValid(peerIdentityAddress, cancellationToken);
+        await EnsurePeerIsNotToBeDeleted(peerIdentityAddress, cancellationToken);
 
         var change = await _mediator.Send(new RevokeRelationshipChangeRequestCommand
         {
@@ -177,7 +177,7 @@ public class RelationshipsController : ApiControllerBase
         return Ok(change);
     }
 
-    private async Task EnsurePeerIsValid(string peerIdentityAddress, CancellationToken cancellationToken)
+    private async Task EnsurePeerIsNotToBeDeleted(string peerIdentityAddress, CancellationToken cancellationToken)
     {
         var peerIdentity = await _mediator.Send(new GetIdentityQuery(peerIdentityAddress), cancellationToken);
         if (peerIdentity.Status is IdentityStatus.ToBeDeleted)
