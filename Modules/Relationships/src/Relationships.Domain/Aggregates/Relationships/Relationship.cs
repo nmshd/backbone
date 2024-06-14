@@ -215,6 +215,8 @@ public class Relationship : Entity
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeer(activeIdentity)));
     }
 
     private void EnsureAcceptableReactivationRequestExistsFor(IdentityAddress activeIdentity)
@@ -236,6 +238,8 @@ public class Relationship : Entity
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeer(activeIdentity)));
     }
 
     private void EnsureRejectableRelationshipReactivationRequestExistsFor(IdentityAddress activeIdentity)
@@ -257,6 +261,8 @@ public class Relationship : Entity
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeer(activeIdentity)));
     }
 
     private void EnsureRevocableReactivationRequestExistsFor(IdentityAddress activeIdentity)
