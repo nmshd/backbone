@@ -54,9 +54,9 @@ public class PoolsGenerator
         RelationshipDistributorTools.EstablishMessagesOffsetPoolsRelationships(_pools);
         
         _relationshipDistributor.Distribute(_pools);
-        _printer.PrintRelationships(_pools, summaryOnly: true);
+        _printer.PrintRelationships(_pools, summaryOnly: false);
 
-        _messageDistributor.Distribute(_pools);
+        //_messageDistributor.Distribute(_pools);
         _printer.PrintMessages(_pools, summaryOnly: true);
 
         //await CreateRelationshipTemplates();
