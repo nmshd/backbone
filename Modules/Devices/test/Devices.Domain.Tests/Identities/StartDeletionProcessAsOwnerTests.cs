@@ -100,13 +100,11 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
 
         //Assert
-        var domainEvent = activeIdentity.Should().HaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityToBeDeletedDomainEvent>();
-
-        domainEvent.Item1.IdentityAddress.Should().Be(activeIdentity.Address);
-        domainEvent.Item1.OldTierId.Should().Be(tierBeforeDeletion);
-        domainEvent.Item1.NewTierId.Should().Be(activeIdentity.TierId);
-
-        domainEvent.Item2.IdentityAddress.Should().Be(activeIdentity.Address);
+        var domainEvents = activeIdentity.Should().HaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityToBeDeletedDomainEvent>();
+        domainEvents.Item1.IdentityAddress.Should().Be(activeIdentity.Address);
+        domainEvents.Item1.OldTierId.Should().Be(tierBeforeDeletion);
+        domainEvents.Item1.NewTierId.Should().Be(activeIdentity.TierId);
+        domainEvents.Item2.IdentityAddress.Should().Be(activeIdentity.Address);
     }
 
     private static void AssertDeletionProcessWasStarted(Identity activeIdentity)
