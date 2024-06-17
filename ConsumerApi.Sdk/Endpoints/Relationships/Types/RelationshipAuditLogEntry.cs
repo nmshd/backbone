@@ -1,6 +1,6 @@
 ﻿namespace Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 
-public class RelationshipAuditLogEntryDTO
+public class RelationshipAuditLogEntry
 {
     public required DateTime CreatedAt { get; set; }
     public required string CreatedBy { get; set; }

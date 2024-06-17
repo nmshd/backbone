@@ -8,9 +8,9 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.Relationships;
 
 public class RelationshipsEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
-    public async Task<ApiResponse<RelationshipDTO>> GetRelationship(string id)
+    public async Task<ApiResponse<Relationship>> GetRelationship(string id)
     {
-        return await _client.Get<RelationshipDTO>($"api/{API_VERSION}/Relationships/{id}");
+        return await _client.Get<Relationship>($"api/{API_VERSION}/Relationships/{id}");
     }
 
     public async Task<ApiResponse<ListRelationshipsResponse>> ListRelationships(PaginationFilter? pagination = null)
@@ -28,53 +28,53 @@ public class RelationshipsEndpoint(EndpointClient client) : ConsumerApiEndpoint(
             .Execute();
     }
 
-    public async Task<ApiResponse<RelationshipMetadataDTO>> CreateRelationship(CreateRelationshipRequest request)
+    public async Task<ApiResponse<RelationshipMetadata>> CreateRelationship(CreateRelationshipRequest request)
     {
-        return await _client.Post<RelationshipMetadataDTO>($"api/{API_VERSION}/Relationships", request);
+        return await _client.Post<RelationshipMetadata>($"api/{API_VERSION}/Relationships", request);
     }
 
-    public async Task<ApiResponse<RelationshipMetadataDTO>> AcceptRelationship(string relationshipId, AcceptRelationshipRequest request)
+    public async Task<ApiResponse<RelationshipMetadata>> AcceptRelationship(string relationshipId, AcceptRelationshipRequest request)
     {
-        return await _client.Put<RelationshipMetadataDTO>($"api/{API_VERSION}/Relationships/{relationshipId}/Accept", request);
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Accept", request);
     }
 
-    public async Task<ApiResponse<RelationshipMetadataDTO>> RejectRelationship(string relationshipId, RejectRelationshipRequest request)
+    public async Task<ApiResponse<RelationshipMetadata>> RejectRelationship(string relationshipId, RejectRelationshipRequest request)
     {
-        return await _client.Put<RelationshipMetadataDTO>($"api/{API_VERSION}/Relationships/{relationshipId}/Reject", request);
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Reject", request);
     }
 
-    public async Task<ApiResponse<RelationshipMetadataDTO>> RevokeRelationship(string relationshipId, RevokeRelationshipRequest request)
+    public async Task<ApiResponse<RelationshipMetadata>> RevokeRelationship(string relationshipId, RevokeRelationshipRequest request)
     {
-        return await _client.Put<RelationshipMetadataDTO>($"api/{API_VERSION}/Relationships/{relationshipId}/Revoke", request);
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Revoke", request);
     }
 
-    public async Task<ApiResponse<RelationshipMetadataDTO>> RevokeRelationshipReactivation(string relationshipId)
+    public async Task<ApiResponse<RelationshipMetadata>> RevokeRelationshipReactivation(string relationshipId)
     {
-        return await _client.Put<RelationshipMetadataDTO>($"api/{API_VERSION}/Relationships/{relationshipId}/Reactivate/Revoke");
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Reactivate/Revoke");
     }
 
-    public async Task<ApiResponse<RelationshipDTO>> TerminateRelationship(string relationshipId)
+    public async Task<ApiResponse<Relationship>> TerminateRelationship(string relationshipId)
     {
-        return await _client.Put<RelationshipDTO>($"api/{API_VERSION}/Relationships/{relationshipId}/Terminate");
+        return await _client.Put<Relationship>($"api/{API_VERSION}/Relationships/{relationshipId}/Terminate");
     }
 
-    public async Task<ApiResponse<RelationshipMetadataDTO>> RelationshipReactivationRequest(string relationshipId)
+    public async Task<ApiResponse<RelationshipMetadata>> RelationshipReactivationRequest(string relationshipId)
     {
-        return await _client.Put<RelationshipMetadataDTO>($"api/{API_VERSION}/Relationships/{relationshipId}/Reactivate");
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Reactivate");
     }
 
-    public async Task<ApiResponse<RelationshipMetadataDTO>> AcceptReactivationOfRelationship(string relationshipId)
+    public async Task<ApiResponse<RelationshipMetadata>> AcceptReactivationOfRelationship(string relationshipId)
     {
-        return await _client.Put<RelationshipMetadataDTO>($"api/{API_VERSION}/Relationships/{relationshipId}/Reactivate/Accept");
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Reactivate/Accept");
     }
 
-    public async Task<ApiResponse<RelationshipMetadataDTO>> RejectReactivationOfRelationship(string relationshipId)
+    public async Task<ApiResponse<RelationshipMetadata>> RejectReactivationOfRelationship(string relationshipId)
     {
-        return await _client.Put<RelationshipMetadataDTO>($"api/{API_VERSION}/Relationships/{relationshipId}/Reactivate/Reject");
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Reactivate/Reject");
     }
 
-    public async Task<ApiResponse<RelationshipMetadataDTO>> DecomposeRelationship(string relationshipId)
+    public async Task<ApiResponse<RelationshipMetadata>> DecomposeRelationship(string relationshipId)
     {
-        return await _client.Put<RelationshipMetadataDTO>($"api/{API_VERSION}/Relationships/{relationshipId}/Decompose");
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Decompose");
     }
 }
