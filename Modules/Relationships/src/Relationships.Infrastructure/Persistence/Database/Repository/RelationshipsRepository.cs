@@ -73,7 +73,7 @@ public class RelationshipsRepository : IRelationshipsRepository
             .WithParticipant(identityAddress)
             .FirstWithId(id, cancellationToken);
 
-        return relationship.To;
+        return relationship.To != identityAddress ? relationship.To : relationship.From;
     }
 
     public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress,

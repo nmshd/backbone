@@ -48,7 +48,7 @@ internal class RelationshipsStepDefinitions
         _relationshipTemplateResponse = await CreateRelationshipTemplate(_client2);
     }
 
-    [Given("a pending Relationship between i1 and i2 created by i2")]
+    [Given("a pending Relationship between i1 and i2 created by i1")]
     public async Task GivenAPendingRelationshipBetweenI1AndI2CreatedByI2()
     {
         var relationshipTemplateResponse = await CreateRelationshipTemplate(_client2);
@@ -58,7 +58,7 @@ internal class RelationshipsStepDefinitions
         _relationshipChangeId = createRelationshipResponse.Result!.Changes.First().Id;
     }
 
-    [Given("a pending Relationship between i1 and i2 created by i1")]
+    [Given("a pending Relationship between i1 and i2 created by i2")]
     public async Task GivenAPendingRelationshipBetweenI1AndI2CreatedByI1()
     {
         var relationshipTemplateResponse = await CreateRelationshipTemplate(_client1);
