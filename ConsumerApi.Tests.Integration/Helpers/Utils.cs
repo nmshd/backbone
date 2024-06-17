@@ -2,7 +2,7 @@
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
-using Backbone.Crypto;
+using Backbone.Tooling.Extensions;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Helpers;
 
@@ -12,7 +12,7 @@ public static class Utils
     {
         var createRelationshipTemplateRequest = new CreateRelationshipTemplateRequest
         {
-            Content = ConvertibleString.FromUtf8("AAA").BytesRepresentation
+            Content = "AAA".GetBytes()
         };
 
         var relationshipTemplateResponse = await client1.RelationshipTemplates.CreateTemplate(createRelationshipTemplateRequest);
@@ -21,7 +21,7 @@ public static class Utils
         var createRelationshipRequest = new CreateRelationshipRequest
         {
             RelationshipTemplateId = relationshipTemplateResponse.Result!.Id,
-            Content = ConvertibleString.FromUtf8("AAA").BytesRepresentation
+            Content = "AAA".GetBytes()
         };
 
         var createRelationshipResponse = await client2.Relationships.CreateRelationship(createRelationshipRequest);
@@ -29,7 +29,7 @@ public static class Utils
 
         var completeRelationshipChangeRequest = new CompleteRelationshipChangeRequest
         {
-            Content = ConvertibleString.FromUtf8("AAA").BytesRepresentation
+            Content = "AAA".GetBytes()
         };
         var acceptRelationChangeResponse =
             await client1.Relationships.AcceptChange(createRelationshipResponse.Result!.Id, createRelationshipResponse.Result.Changes.First().Id, completeRelationshipChangeRequest);
