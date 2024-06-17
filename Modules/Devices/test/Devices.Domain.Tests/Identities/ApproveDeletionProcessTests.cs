@@ -98,13 +98,13 @@ public class ApproveDeletionProcessTests : AbstractTestsBase
         activeIdentity.ApproveDeletionProcess(deletionProcess.Id, activeDevice.Id);
 
         //Assert
-        var domainEvent = activeIdentity.Should().HaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityToBeDeletedDomainEvent>();
+        var (tierOfIdentityChangedDomainEvent, identityToBeDeletedDomainEvent) = activeIdentity.Should().HaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityToBeDeletedDomainEvent>();
 
-        domainEvent.Item1.IdentityAddress.Should().Be(activeIdentity.Address);
-        domainEvent.Item1.OldTierId.Should().Be(tierBeforeDeletion);
-        domainEvent.Item1.NewTierId.Should().Be(activeIdentity.TierId);
+        tierOfIdentityChangedDomainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
+        tierOfIdentityChangedDomainEvent.OldTierId.Should().Be(tierBeforeDeletion);
+        tierOfIdentityChangedDomainEvent.NewTierId.Should().Be(activeIdentity.TierId);
 
-        domainEvent.Item2.IdentityAddress.Should().Be(activeIdentity.Address);
+        identityToBeDeletedDomainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
