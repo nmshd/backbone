@@ -39,19 +39,17 @@ public class RelationshipDistributorV2 : IRelationshipDistributor
 
     private static int DistributeRelationshipsV2InnerLoop(List<Identity> appPoolsIdentities, List<Identity> connectorPoolsIdentities, int successfullyEstablishedRelationshipsCount, Identity identity)
     {
-        var oppositePoolIdentities = identity.PoolType == PoolTypes.CONNECTOR_TYPE ? appPoolsIdentities : connectorPoolsIdentities;
+        var oppositePoolIdentitiesWithCapacityForFurtherRelationships = (identity.PoolType == PoolTypes.CONNECTOR_TYPE ? appPoolsIdentities : connectorPoolsIdentities).Where(i => i.HasAvailabilityForNewRelationships()).ToList();
 
         Identity selectedIdentity;
         var index = 0;
         while (identity.RelationshipsCapacity > 0)
         {
-            // We select the identity with the highest capacity for relationships and we fill it with an identity from an opposite pool.
             do
             {
-                selectedIdentity = oppositePoolIdentities[index++];
-                if (index == oppositePoolIdentities.Count)
+                if (index == oppositePoolIdentitiesWithCapacityForFurtherRelationships.Count)
                     return successfullyEstablishedRelationshipsCount;
-
+                selectedIdentity = oppositePoolIdentitiesWithCapacityForFurtherRelationships[index++];
             } while (identity.IdentitiesToEstablishRelationshipsWith.Contains(selectedIdentity));
 
             if (identity.AddIdentityToEstablishRelationshipsWith(selectedIdentity))
