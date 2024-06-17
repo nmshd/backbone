@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
@@ -65,7 +66,6 @@ public class CancelDeletionProcessAsSupportTests : AbstractTestsBase
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
-        var tierBeforeDeletion = identity.TierId;
 
         // Act
         var deletionProcess = identity.CancelDeletionProcessAsSupport(identity.DeletionProcesses[0].Id);
@@ -79,7 +79,7 @@ public class CancelDeletionProcessAsSupportTests : AbstractTestsBase
         var (tierOfIdentityChangedDomainEvent, identityDeletionCanceledDomainEvent) = identity.Should().HaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityDeletionCanceledDomainEvent>();
 
         tierOfIdentityChangedDomainEvent.IdentityAddress.Should().Be(identity.Address);
-        tierOfIdentityChangedDomainEvent.OldTierId.Should().Be(tierBeforeDeletion);
+        tierOfIdentityChangedDomainEvent.OldTierId.Should().Be(Tier.QUEUED_FOR_DELETION.Id);
         tierOfIdentityChangedDomainEvent.NewTierId.Should().Be(identity.TierId);
 
         identityDeletionCanceledDomainEvent.IdentityAddress.Should().Be(identity.Address);

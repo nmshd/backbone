@@ -102,7 +102,7 @@ public class ApproveDeletionProcessTests : AbstractTestsBase
 
         tierOfIdentityChangedDomainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
         tierOfIdentityChangedDomainEvent.OldTierId.Should().Be(tierBeforeDeletion);
-        tierOfIdentityChangedDomainEvent.NewTierId.Should().Be(activeIdentity.TierId);
+        tierOfIdentityChangedDomainEvent.NewTierId.Should().Be(Tier.QUEUED_FOR_DELETION.Id);
 
         identityToBeDeletedDomainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
     }
