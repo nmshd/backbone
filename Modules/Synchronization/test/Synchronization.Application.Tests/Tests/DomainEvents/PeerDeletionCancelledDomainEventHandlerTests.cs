@@ -9,34 +9,35 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.DomainEvents;
-public class PeerDeletionCanceledDomainEventHandlerTests : AbstractTestsBase
+
+public class PeerDeletionCancelledDomainEventHandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Creates_an_external_event()
     {
         // Arrange
-        var peerOfIdentityWithDeletionCanceled = TestDataGenerator.CreateRandomIdentityAddress();
-        var peerDeletionCanceledDomainEvent = new PeerDeletionCanceledDomainEvent(peerOfIdentityWithDeletionCanceled, "some-relationship-id", "some-deletedIdentity-id");
+        var peerOfIdentityWithDeletionCancelled = TestDataGenerator.CreateRandomIdentityAddress();
+        var domainEvent = new PeerDeletionCancelledDomainEvent(peerOfIdentityWithDeletionCancelled, "some-relationship-id", "some-deletedIdentity-id");
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var externalEvent = new ExternalEvent(ExternalEventType.PeerDeletionCanceled, IdentityAddress.Parse(peerOfIdentityWithDeletionCanceled), 1,
-            new { peerDeletionCanceledDomainEvent.RelationshipId });
+        var externalEvent = new ExternalEvent(ExternalEventType.PeerDeletionCanceled, IdentityAddress.Parse(peerOfIdentityWithDeletionCancelled), 1,
+            new { domainEvent.RelationshipId });
 
         A.CallTo(() => mockDbContext.CreateExternalEvent(
-            peerOfIdentityWithDeletionCanceled,
+            peerOfIdentityWithDeletionCancelled,
             ExternalEventType.PeerDeletionCanceled,
             A<object>._)
         ).Returns(externalEvent);
 
-        var handler = new PeerDeletionCanceledDomainEventHandler(mockDbContext,
-            A.Fake<ILogger<PeerDeletionCanceledDomainEventHandler>>());
+        var handler = new PeerDeletionCancelledDomainEventHandler(mockDbContext,
+            A.Fake<ILogger<PeerDeletionCancelledDomainEventHandler>>());
 
         // Act
-        await handler.Handle(peerDeletionCanceledDomainEvent);
+        await handler.Handle(domainEvent);
 
         // Assert
-        A.CallTo(() => mockDbContext.CreateExternalEvent(peerOfIdentityWithDeletionCanceled, ExternalEventType.PeerDeletionCanceled, A<object>._))
+        A.CallTo(() => mockDbContext.CreateExternalEvent(peerOfIdentityWithDeletionCancelled, ExternalEventType.PeerDeletionCanceled, A<object>._))
             .MustHaveHappenedOnceExactly();
     }
 }

@@ -1,9 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeletionCanceled;
-public class PeerDeletionCanceledDomainEvent : DomainEvent
+
+public class PeerDeletionCancelledDomainEvent : DomainEvent
 {
-    public PeerDeletionCanceledDomainEvent(string peerOfIdentityWithDeletionCanceled, string relationshipId, string identityWithDeletionCanceled)
+    public PeerDeletionCancelledDomainEvent(string peerOfIdentityWithDeletionCanceled, string relationshipId, string identityWithDeletionCanceled)
     {
         PeerOfIdentityWithDeletionCanceled = peerOfIdentityWithDeletionCanceled;
         RelationshipId = relationshipId;

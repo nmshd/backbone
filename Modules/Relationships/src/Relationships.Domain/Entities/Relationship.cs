@@ -148,25 +148,30 @@ public class Relationship : Entity
         return _changes.FirstOrDefault(c => c.Status == RelationshipChangeStatus.Pending);
     }
 
-    public void RaisePeerToBeDeletedDomainEvent(string identityToBeDeleted)
+    public void ParticipantIsToBeDeleted(string identityToBeDeleted)
     {
-        var peerOfIdentityToBeDeleted = To == identityToBeDeleted ? From : To;
+        var peer = GetPeerOf(identityToBeDeleted);
 
-        RaiseDomainEvent(new PeerToBeDeletedDomainEvent(peerOfIdentityToBeDeleted, Id, identityToBeDeleted));
+        RaiseDomainEvent(new PeerToBeDeletedDomainEvent(peer, Id, identityToBeDeleted));
     }
 
-    public void RaisePeerDeletionCanceledDomainEvent(string identityWithDeletionCanceled)
+    public void DeletionOfParticipantCancelled(string identityWithDeletionCancelled)
     {
-        var peerOfIdentityWithDeletionCanceled = To == identityWithDeletionCanceled ? From : To;
+        var peer = GetPeerOf(identityWithDeletionCancelled);
 
-        RaiseDomainEvent(new PeerDeletionCanceledDomainEvent(peerOfIdentityWithDeletionCanceled, Id, identityWithDeletionCanceled));
+        RaiseDomainEvent(new PeerDeletionCancelledDomainEvent(peer, Id, identityWithDeletionCancelled));
     }
 
-    public void RaisePeerDeletedDomainEvent(string deletedIdentity)
+    public void DeletionOfParticipantStarted(string deletedIdentity)
     {
-        var peerOfDeletedIdentity = To == deletedIdentity ? From : To;
+        var peer = GetPeerOf(deletedIdentity);
 
-        RaiseDomainEvent(new PeerDeletedDomainEvent(peerOfDeletedIdentity, Id, deletedIdentity));
+        RaiseDomainEvent(new PeerDeletedDomainEvent(peer, Id, deletedIdentity));
+    }
+
+    private IdentityAddress GetPeerOf(string identity)
+    {
+        return To == identity ? From : To;
     }
 
     #region Selectors

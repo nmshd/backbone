@@ -13,7 +13,8 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.DomainEvents.Incoming;
-public class IdentityDeletionCanceledDomainEventHandlerTests : AbstractTestsBase
+
+public class IdentityDeletionCancelledDomainEventHandlerTests : AbstractTestsBase
 {
     [Fact]
     public static async Task Publishes_PeerToBeDeletedDomainEvent()
@@ -22,10 +23,10 @@ public class IdentityDeletionCanceledDomainEventHandlerTests : AbstractTestsBase
         var identity1 = TestDataGenerator.CreateRandomIdentityAddress();
         var identity2 = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var identityWithDeletionCanceled = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityWithDeletionCancelled = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var relationship1 = TestData.CreateActiveRelationship(identity1, identityWithDeletionCanceled);
-        var relationship2 = TestData.CreateActiveRelationship(identity2, identityWithDeletionCanceled);
+        var relationship1 = TestData.CreateActiveRelationship(identity1, identityWithDeletionCancelled);
+        var relationship2 = TestData.CreateActiveRelationship(identity2, identityWithDeletionCancelled);
 
         var fakeRelationshipsRepository = A.Dummy<IRelationshipsRepository>();
 
@@ -35,22 +36,22 @@ public class IdentityDeletionCanceledDomainEventHandlerTests : AbstractTestsBase
         var handler = CreateHandler(fakeRelationshipsRepository);
 
         //Act
-        await handler.Handle(new IdentityDeletionCanceledDomainEvent(identityWithDeletionCanceled));
+        await handler.Handle(new IdentityDeletionCancelledDomainEvent(identityWithDeletionCancelled));
 
         //Assert
-        var domainEvent1 = relationship1.Should().HaveASingleDomainEvent<PeerDeletionCanceledDomainEvent>();
+        var domainEvent1 = relationship1.Should().HaveASingleDomainEvent<PeerDeletionCancelledDomainEvent>();
         domainEvent1.PeerOfIdentityWithDeletionCanceled.Should().Be(identity1);
         domainEvent1.RelationshipId.Should().Be(relationship1.Id);
-        domainEvent1.IdentityWithDeletionCanceled.Should().Be(identityWithDeletionCanceled);
+        domainEvent1.IdentityWithDeletionCanceled.Should().Be(identityWithDeletionCancelled);
 
-        var domainEvent2 = relationship2.Should().HaveASingleDomainEvent<PeerDeletionCanceledDomainEvent>();
+        var domainEvent2 = relationship2.Should().HaveASingleDomainEvent<PeerDeletionCancelledDomainEvent>();
         domainEvent2.PeerOfIdentityWithDeletionCanceled.Should().Be(identity2);
         domainEvent2.RelationshipId.Should().Be(relationship2.Id);
-        domainEvent2.IdentityWithDeletionCanceled.Should().Be(identityWithDeletionCanceled);
+        domainEvent2.IdentityWithDeletionCanceled.Should().Be(identityWithDeletionCancelled);
     }
 
-    private static IdentityDeletionCanceledDomainEventHandler CreateHandler(IRelationshipsRepository relationshipsRepository)
+    private static IdentityDeletionCancelledDomainEventHandler CreateHandler(IRelationshipsRepository relationshipsRepository)
     {
-        return new IdentityDeletionCanceledDomainEventHandler(relationshipsRepository);
+        return new IdentityDeletionCancelledDomainEventHandler(relationshipsRepository);
     }
 }

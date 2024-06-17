@@ -1,9 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
-public class IdentityDeletionCanceledDomainEvent : DomainEvent
+
+public class IdentityDeletionCancelledDomainEvent : DomainEvent
 {
-    public IdentityDeletionCanceledDomainEvent(string identityAddress) : base($"{identityAddress}/IdentityDeletionCanceled", randomizeId: true)
+    public IdentityDeletionCancelledDomainEvent(string identityAddress) : base($"{identityAddress}/IdentityDeletionCanceled", randomizeId: true)
     {
         IdentityAddress = identityAddress;
     }

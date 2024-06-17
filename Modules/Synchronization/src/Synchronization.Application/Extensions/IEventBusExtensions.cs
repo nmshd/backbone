@@ -41,7 +41,7 @@ public static class IEventBusExtensions
         eventBus.Subscribe<RelationshipChangeCompletedDomainEvent, RelationshipChangeCompletedDomainEventHandler>();
         eventBus.Subscribe<RelationshipChangeCreatedDomainEvent, RelationshipChangeCreatedDomainEventHandler>();
         eventBus.Subscribe<PeerToBeDeletedDomainEvent, PeerToBeDeletedDomainEventHandler>();
-        eventBus.Subscribe<PeerDeletionCanceledDomainEvent, PeerDeletionCanceledDomainEventHandler>();
+        eventBus.Subscribe<PeerDeletionCancelledDomainEvent, PeerDeletionCancelledDomainEventHandler>();
         eventBus.Subscribe<PeerDeletedDomainEvent, PeerDeletedDomainEventHandler>();
     }
 }

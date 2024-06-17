@@ -1,9 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
-public class PeerDeletionCanceledDomainEvent : DomainEvent
+
+public class PeerDeletionCancelledDomainEvent : DomainEvent
 {
-    public PeerDeletionCanceledDomainEvent(string peerOfIdentityWithDeletionCanceled, string relationshipId, string identityWithDeletionCanceled)
+    public PeerDeletionCancelledDomainEvent(string peerOfIdentityWithDeletionCanceled, string relationshipId, string identityWithDeletionCanceled)
         : base($"{relationshipId}/peerDeletionCanceled/{identityWithDeletionCanceled}", randomizeId: true)
     {
         PeerOfIdentityWithDeletionCanceled = peerOfIdentityWithDeletionCanceled;

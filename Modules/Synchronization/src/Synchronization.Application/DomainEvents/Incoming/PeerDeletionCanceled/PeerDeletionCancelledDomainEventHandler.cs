@@ -5,23 +5,24 @@ using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeletionCanceled;
-public class PeerDeletionCanceledDomainEventHandler : IDomainEventHandler<PeerDeletionCanceledDomainEvent>
+
+public class PeerDeletionCancelledDomainEventHandler : IDomainEventHandler<PeerDeletionCancelledDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly ILogger<PeerDeletionCanceledDomainEventHandler> _logger;
+    private readonly ILogger<PeerDeletionCancelledDomainEventHandler> _logger;
 
-    public PeerDeletionCanceledDomainEventHandler(ISynchronizationDbContext dbContext, ILogger<PeerDeletionCanceledDomainEventHandler> logger)
+    public PeerDeletionCancelledDomainEventHandler(ISynchronizationDbContext dbContext, ILogger<PeerDeletionCancelledDomainEventHandler> logger)
     {
         _dbContext = dbContext;
         _logger = logger;
     }
 
-    public async Task Handle(PeerDeletionCanceledDomainEvent domainEvent)
+    public async Task Handle(PeerDeletionCancelledDomainEvent domainEvent)
     {
         await CreateExternalEvent(domainEvent);
     }
 
-    private async Task CreateExternalEvent(PeerDeletionCanceledDomainEvent @event)
+    private async Task CreateExternalEvent(PeerDeletionCancelledDomainEvent @event)
     {
 #pragma warning disable IDE0037
         var payload = new { RelationshipId = @event.RelationshipId };

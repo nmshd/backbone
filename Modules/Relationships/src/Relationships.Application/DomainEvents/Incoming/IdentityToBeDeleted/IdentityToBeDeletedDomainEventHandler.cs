@@ -4,6 +4,7 @@ using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
 using Backbone.Modules.Relationships.Domain.Entities;
 
 namespace Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityToBeDeleted;
+
 public class IdentityToBeDeletedDomainEventHandler : IDomainEventHandler<IdentityToBeDeletedDomainEvent>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
@@ -24,7 +25,7 @@ public class IdentityToBeDeletedDomainEventHandler : IDomainEventHandler<Identit
     {
         foreach (var relationship in relationships)
         {
-            relationship.RaisePeerToBeDeletedDomainEvent(identityToBeDeleted);
+            relationship.ParticipantIsToBeDeleted(identityToBeDeleted);
         }
     }
 

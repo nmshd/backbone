@@ -682,7 +682,7 @@ public class RelationshipTests : AbstractTestsBase
         var relationship = CreateActiveRelationship((identity, identityToBeDeleted));
 
         // Act
-        relationship.RaisePeerToBeDeletedDomainEvent(identityToBeDeleted);
+        relationship.ParticipantIsToBeDeleted(identityToBeDeleted);
 
         // Assert
         var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerToBeDeletedDomainEvent>();
@@ -692,7 +692,7 @@ public class RelationshipTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Raises_PeerDeletionCanceledDomainEvent()
+    public void Raises_PeerDeletionCancelledDomainEvent()
     {
         // Arrange
         var identity = TestDataGenerator.CreateRandomIdentityAddress();
@@ -700,10 +700,10 @@ public class RelationshipTests : AbstractTestsBase
         var relationship = CreateActiveRelationship((identity, identityToBeDeleted));
 
         // Act
-        relationship.RaisePeerDeletionCanceledDomainEvent(identityToBeDeleted);
+        relationship.DeletionOfParticipantCancelled(identityToBeDeleted);
 
         // Assert
-        var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerDeletionCanceledDomainEvent>();
+        var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerDeletionCancelledDomainEvent>();
         domainEvent.PeerOfIdentityWithDeletionCanceled.Should().Be(identity);
         domainEvent.RelationshipId.Should().Be(relationship.Id);
         domainEvent.IdentityWithDeletionCanceled.Should().Be(identityToBeDeleted);
@@ -718,7 +718,7 @@ public class RelationshipTests : AbstractTestsBase
         var relationship = CreateActiveRelationship((identity, identityToBeDeleted));
 
         // Act
-        relationship.RaisePeerDeletedDomainEvent(identityToBeDeleted);
+        relationship.DeletionOfParticipantStarted(identityToBeDeleted);
 
         // Assert
         var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerDeletedDomainEvent>();

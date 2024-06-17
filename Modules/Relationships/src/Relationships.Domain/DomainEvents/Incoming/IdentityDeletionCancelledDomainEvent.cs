@@ -1,9 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
-public class IdentityDeletionCanceledDomainEvent : DomainEvent
+
+public class IdentityDeletionCancelledDomainEvent : DomainEvent
 {
-    public IdentityDeletionCanceledDomainEvent(string identityAddress)
+    public IdentityDeletionCancelledDomainEvent(string identityAddress)
     {
         IdentityAddress = identityAddress;
     }

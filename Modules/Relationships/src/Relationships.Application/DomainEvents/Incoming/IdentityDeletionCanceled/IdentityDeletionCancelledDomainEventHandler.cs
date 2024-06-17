@@ -4,16 +4,17 @@ using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
 using Backbone.Modules.Relationships.Domain.Entities;
 
 namespace Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityDeletionCanceled;
-public class IdentityDeletionCanceledDomainEventHandler : IDomainEventHandler<IdentityDeletionCanceledDomainEvent>
+
+public class IdentityDeletionCancelledDomainEventHandler : IDomainEventHandler<IdentityDeletionCancelledDomainEvent>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
 
-    public IdentityDeletionCanceledDomainEventHandler(IRelationshipsRepository relationshipsRepository)
+    public IdentityDeletionCancelledDomainEventHandler(IRelationshipsRepository relationshipsRepository)
     {
         _relationshipsRepository = relationshipsRepository;
     }
 
-    public async Task Handle(IdentityDeletionCanceledDomainEvent @event)
+    public async Task Handle(IdentityDeletionCancelledDomainEvent @event)
     {
         var relationships = await GetRelationshipsOfPeer(@event.IdentityAddress);
 
@@ -24,7 +25,7 @@ public class IdentityDeletionCanceledDomainEventHandler : IDomainEventHandler<Id
     {
         foreach (var relationship in relationships)
         {
-            relationship.RaisePeerDeletionCanceledDomainEvent(identityToBeDeleted);
+            relationship.DeletionOfParticipantCancelled(identityToBeDeleted);
         }
     }
 
