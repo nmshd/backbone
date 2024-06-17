@@ -1,5 +1,5 @@
 ﻿using System.Linq.Expressions;
-using Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityDeletionCanceled;
+using Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityDeletionCancelled;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
@@ -40,14 +40,14 @@ public class IdentityDeletionCancelledDomainEventHandlerTests : AbstractTestsBas
 
         //Assert
         var event1 = relationshipToPeer1.Should().HaveASingleDomainEvent<PeerDeletionCancelledDomainEvent>();
-        event1.PeerOfIdentityWithDeletionCanceled.Should().Be(peer1);
+        event1.PeerOfIdentityWithDeletionCancelled.Should().Be(peer1);
         event1.RelationshipId.Should().Be(relationshipToPeer1.Id);
-        event1.IdentityWithDeletionCanceled.Should().Be(identityWithDeletionCancelled);
+        event1.IdentityWithDeletionCancelled.Should().Be(identityWithDeletionCancelled);
 
         var event2 = relationshipToPeer2.Should().HaveASingleDomainEvent<PeerDeletionCancelledDomainEvent>();
-        event2.PeerOfIdentityWithDeletionCanceled.Should().Be(peer2);
+        event2.PeerOfIdentityWithDeletionCancelled.Should().Be(peer2);
         event2.RelationshipId.Should().Be(relationshipToPeer2.Id);
-        event2.IdentityWithDeletionCanceled.Should().Be(identityWithDeletionCancelled);
+        event2.IdentityWithDeletionCancelled.Should().Be(identityWithDeletionCancelled);
     }
 
     private static IdentityDeletionCancelledDomainEventHandler CreateHandler(IRelationshipsRepository relationshipsRepository)

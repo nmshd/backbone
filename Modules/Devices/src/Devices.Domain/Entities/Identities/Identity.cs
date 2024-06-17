@@ -251,14 +251,14 @@ public class Identity : Entity
         return i => i.Status == IdentityStatus.ToBeDeleted && i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow;
     }
 
-    public IdentityDeletionProcess CancelDeletionProcessAsOwner(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
+    public IdentityDeletionProcess CancelDeletionProcessAsOwner(IdentityDeletionProcessId deletionProcessId, DeviceId cancelledByDeviceId)
     {
-        EnsureIdentityOwnsDevice(canceledByDeviceId);
+        EnsureIdentityOwnsDevice(cancelledByDeviceId);
 
         var deletionProcess = GetDeletionProcessWithId(deletionProcessId);
         deletionProcess.EnsureStatus(DeletionProcessStatus.Approved);
 
-        deletionProcess.CancelAsOwner(Address, canceledByDeviceId);
+        deletionProcess.CancelAsOwner(Address, cancelledByDeviceId);
         TierId = TierIdBeforeDeletion ?? throw new Exception($"Error when trying to cancel deletion process: '{nameof(TierIdBeforeDeletion)}' is null.");
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;

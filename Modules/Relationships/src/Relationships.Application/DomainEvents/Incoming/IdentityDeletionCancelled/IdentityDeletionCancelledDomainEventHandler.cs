@@ -3,7 +3,7 @@ using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repo
 using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
 using Backbone.Modules.Relationships.Domain.Entities;
 
-namespace Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityDeletionCanceled;
+namespace Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityDeletionCancelled;
 
 public class IdentityDeletionCancelledDomainEventHandler : IDomainEventHandler<IdentityDeletionCancelledDomainEvent>
 {

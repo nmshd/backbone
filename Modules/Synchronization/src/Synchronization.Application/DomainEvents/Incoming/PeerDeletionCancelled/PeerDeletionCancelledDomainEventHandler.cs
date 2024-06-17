@@ -1,10 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeletionCanceled;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeletionCancelled;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
-namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeletionCanceled;
+namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeletionCancelled;
 
 public class PeerDeletionCancelledDomainEventHandler : IDomainEventHandler<PeerDeletionCancelledDomainEvent>
 {
@@ -29,7 +29,7 @@ public class PeerDeletionCancelledDomainEventHandler : IDomainEventHandler<PeerD
 #pragma warning restore IDE0037
         try
         {
-            await _dbContext.CreateExternalEvent(@event.PeerOfIdentityWithDeletionCanceled, ExternalEventType.PeerDeletionCanceled, payload);
+            await _dbContext.CreateExternalEvent(@event.PeerOfIdentityWithDeletionCancelled, ExternalEventType.PeerDeletionCancelled, payload);
         }
         catch (Exception ex)
         {

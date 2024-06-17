@@ -1,10 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+
 public class PeerDeletedDomainEvent : DomainEvent
 {
     public PeerDeletedDomainEvent(string peerOfDeletedIdentity, string relationshipId, string deletedIdentity)
-        : base($"{relationshipId}/peerDeletionCanceled/{deletedIdentity}")
+        : base($"{relationshipId}/peerDeletionCancelled/{deletedIdentity}")
     {
         PeerOfDeletedIdentity = peerOfDeletedIdentity;
         RelationshipId = relationshipId;

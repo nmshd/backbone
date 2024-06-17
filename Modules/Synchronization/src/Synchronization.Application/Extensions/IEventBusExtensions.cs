@@ -3,7 +3,7 @@ using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.Identit
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeleted;
-using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeletionCanceled;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeletionCancelled;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerToBeDeleted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipChangeCompleted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipChangeCreated;
@@ -11,7 +11,7 @@ using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDele
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeleted;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeletionCanceled;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeletionCancelled;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerToBeDeleted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipChangeCompleted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipChangeCreated;

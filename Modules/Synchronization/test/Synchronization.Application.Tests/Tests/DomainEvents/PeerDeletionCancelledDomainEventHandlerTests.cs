@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeletionCanceled;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeletionCancelled;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeletionCanceled;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeletionCancelled;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
@@ -21,12 +21,12 @@ public class PeerDeletionCancelledDomainEventHandlerTests : AbstractTestsBase
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var externalEvent = new ExternalEvent(ExternalEventType.PeerDeletionCanceled, IdentityAddress.Parse(peerOfIdentityWithDeletionCancelled), 1,
+        var externalEvent = new ExternalEvent(ExternalEventType.PeerDeletionCancelled, IdentityAddress.Parse(peerOfIdentityWithDeletionCancelled), 1,
             new { domainEvent.RelationshipId });
 
         A.CallTo(() => mockDbContext.CreateExternalEvent(
             peerOfIdentityWithDeletionCancelled,
-            ExternalEventType.PeerDeletionCanceled,
+            ExternalEventType.PeerDeletionCancelled,
             A<object>._)
         ).Returns(externalEvent);
 
@@ -37,7 +37,7 @@ public class PeerDeletionCancelledDomainEventHandlerTests : AbstractTestsBase
         await handler.Handle(domainEvent);
 
         // Assert
-        A.CallTo(() => mockDbContext.CreateExternalEvent(peerOfIdentityWithDeletionCancelled, ExternalEventType.PeerDeletionCanceled, A<object>._))
+        A.CallTo(() => mockDbContext.CreateExternalEvent(peerOfIdentityWithDeletionCancelled, ExternalEventType.PeerDeletionCancelled, A<object>._))
             .MustHaveHappenedOnceExactly();
     }
 }

@@ -704,9 +704,9 @@ public class RelationshipTests : AbstractTestsBase
 
         // Assert
         var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerDeletionCancelledDomainEvent>();
-        domainEvent.PeerOfIdentityWithDeletionCanceled.Should().Be(peer);
+        domainEvent.PeerOfIdentityWithDeletionCancelled.Should().Be(peer);
         domainEvent.RelationshipId.Should().Be(relationship.Id);
-        domainEvent.IdentityWithDeletionCanceled.Should().Be(identityToBeDeleted);
+        domainEvent.IdentityWithDeletionCancelled.Should().Be(identityToBeDeleted);
     }
 
     [Fact]
