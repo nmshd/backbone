@@ -1,5 +1,4 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Application.Tests.Extensions;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.UnitTestTools.Data;
 
@@ -19,11 +18,9 @@ public static class TestData
         to ??= TestDataGenerator.CreateRandomIdentityAddress();
 
         var relationship = new Relationship(CreateRelationshipTemplate(createdBy: to), from, TestDataGenerator.CreateRandomDeviceId(), []);
-        var change = relationship.Changes.GetOpenCreation()!;
+        var change = relationship.Changes.First();
         relationship.AcceptChange(change.Id, to, TestDataGenerator.CreateRandomDeviceId(), []);
 
         return relationship;
     }
-
-
 }
