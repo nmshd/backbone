@@ -15,7 +15,7 @@ public class MessageDistributorV1 : IMessageDistributor
             // if this identity must send more messages than its peers can receive
             if (identity.SentMessagesCapacity > identity.IdentitiesToEstablishRelationshipsWith.Sum(i => i.ReceivedMessagesCapacity))
             {
-                throw new Exception("Pool configuration is invalid or relationship allocation ran wrongfully.");
+                throw new Exception("The executed relationship allocation created a graph which does not allow for messages to be exchanged as expected.");
             }
 
             using var relatedIdentitiesIterator = identity.IdentitiesToEstablishRelationshipsWith.AsEnumerable().GetEnumerator();
