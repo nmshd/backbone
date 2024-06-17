@@ -76,6 +76,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
               type: 'Incoming',
               title: 'Received Messages',
               subtitle: 'View messages received by this identity.',
+              emptyTableMessage: 'No received messages found.',
             ),
             Gaps.h16,
             IdentityMessagesOverview(
@@ -83,6 +84,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
               type: 'Outgoing',
               title: 'Sent Messages',
               subtitle: 'View messages sent by this identity.',
+              emptyTableMessage: 'No sent messages found.',
             ),
           ],
         ),

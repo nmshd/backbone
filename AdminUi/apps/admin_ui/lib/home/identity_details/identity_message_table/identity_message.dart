@@ -7,12 +7,14 @@ class IdentityMessagesOverview extends StatefulWidget {
   final String type;
   final String title;
   final String subtitle;
+  final String emptyTableMessage;
 
   const IdentityMessagesOverview({
     required this.address,
     required this.type,
     required this.title,
     required this.subtitle,
+    required this.emptyTableMessage,
     super.key,
   });
 
@@ -47,6 +49,7 @@ class _IdentityMessagesOverviewState extends State<IdentityMessagesOverview> {
       type: widget.type,
       title: widget.title,
       subtitle: widget.subtitle,
+      emptyTableMessage: widget.emptyTableMessage,
     );
   }
 }

@@ -11,12 +11,14 @@ class IdentityMessagesTable extends StatefulWidget {
   final String type;
   final String title;
   final String subtitle;
+  final String emptyTableMessage;
 
   const IdentityMessagesTable({
     required this.dataSource,
     required this.type,
     required this.title,
     required this.subtitle,
+    required this.emptyTableMessage,
     super.key,
   });
 
@@ -48,7 +50,7 @@ class _IdentityMessagesTableState extends State<IdentityMessagesTable> {
                 isVerticalScrollBarVisible: true,
                 renderEmptyRowsInTheEnd: false,
                 availableRowsPerPage: const [5, 10, 25, 50, 100],
-                empty: const Text('No sent messages found.'),
+                empty: Text(widget.emptyTableMessage),
                 errorBuilder: (error) => Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
