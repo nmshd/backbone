@@ -57,7 +57,6 @@ public class GenerateCommand : Command
     {
         var services = new ServiceCollection();
 
-        //services.AddSingleton<IRelationshipDistributor, RelationshipDistributorV1>();
         services.AddSingleton<IRelationshipDistributor, RelationshipDistributorV2>();
 
         services.AddSingleton<IMessageDistributor, MessageDistributorV1>();

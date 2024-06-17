@@ -52,7 +52,7 @@ public class RelationshipDistributorV1 : IRelationshipDistributor
             targetIdentitiesIteratorIndex++;
         }
 
-        if (targetIdentitiesIteratorIndex == targetIdentities.Length - 1)
+        if (targetIdentitiesIteratorIndex >= targetIdentities.Length - 1)
         {
             // removed the last item and fell out of the indexes. reset
             targetIdentitiesIteratorIndex = 0;
