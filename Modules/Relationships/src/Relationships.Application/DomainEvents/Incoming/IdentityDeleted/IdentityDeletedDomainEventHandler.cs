@@ -16,24 +16,24 @@ public class IdentityDeletedDomainEventHandler : IDomainEventHandler<IdentityDel
 
     public async Task Handle(IdentityDeletedDomainEvent @event)
     {
-        var relationships = await GetRelationshipsOfPeer(@event.IdentityAddress);
+        var relationships = await GetRelationshipsOf(@event.IdentityAddress);
 
-        NotifyRelationshipsOfPeerToBeDeleted(@event.IdentityAddress, relationships);
+        NotifyRelationshipsAboutDeletedPeer(@event.IdentityAddress, relationships);
     }
 
-    private static void NotifyRelationshipsOfPeerToBeDeleted(string identityToBeDeleted, IEnumerable<Relationship> relationships)
-    {
-        foreach (var relationship in relationships)
-        {
-            relationship.DeletionOfParticipantStarted(identityToBeDeleted);
-        }
-    }
-
-    private async Task<IEnumerable<Relationship>> GetRelationshipsOfPeer(string identityAddress)
+    private async Task<IEnumerable<Relationship>> GetRelationshipsOf(string identityAddress)
     {
         var relationships = await _relationshipsRepository
             .FindRelationships(r => (r.From == identityAddress || r.To == identityAddress) && r.Status == RelationshipStatus.Active,
                 CancellationToken.None);
         return relationships;
+    }
+
+    private static void NotifyRelationshipsAboutDeletedPeer(string identityToBeDeleted, IEnumerable<Relationship> relationships)
+    {
+        foreach (var relationship in relationships)
+        {
+            relationship.DeletionOfParticipantStarted(identityToBeDeleted);
+        }
     }
 }
