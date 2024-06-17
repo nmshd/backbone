@@ -7,7 +7,10 @@ public class VersionService
         var assembly = System.Reflection.Assembly.GetExecutingAssembly();
         var version = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
 
-        var majorVersion = version?.Split(['.'], 2)[0];
+        if (string.IsNullOrEmpty(version))
+            throw new InvalidOperationException("The file version information could not be retrieved.");
+
+        var majorVersion = version.Split('.', 2)[0];
 
         return await Task.FromResult(majorVersion);
     }
