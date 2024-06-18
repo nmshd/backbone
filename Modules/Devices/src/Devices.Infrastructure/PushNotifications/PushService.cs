@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 using Microsoft.Extensions.Logging;
 

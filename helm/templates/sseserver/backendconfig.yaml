@@ -1,0 +1,19 @@
+{{- if eq ((((.Values.global.configuration.modules.devices.infrastructure).pushNotifications).providers).sse).enabled true }}
+{{- if eq .Values.global.provider "GoogleCloud" }}
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  labels:
+    {{- include "global.labels" . | nindent 4 }}
+  name: {{ .Values.sseserver.name }}
+spec:
+  healthCheck:
+    checkIntervalSec: {{ .Values.sseserver.backendConfig.healthCheck.checkIntervalSec }}
+    timeoutSec: {{ .Values.sseserver.backendConfig.healthCheck.timeoutSec }}
+    healthyThreshold: {{ .Values.sseserver.backendConfig.healthCheck.healthyThreshold }}
+    unhealthyThreshold: {{ .Values.sseserver.backendConfig.healthCheck.unhealthyThreshold }}
+    type: HTTP
+    requestPath: /health
+    port: 8080
+{{- end }}
+{{- end }}
