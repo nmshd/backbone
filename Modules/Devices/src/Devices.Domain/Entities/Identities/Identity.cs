@@ -15,6 +15,17 @@ public class Identity : Entity
     private readonly List<IdentityDeletionProcess> _deletionProcesses;
     private TierId? _tierId;
 
+    // ReSharper disable once UnusedMember.Local
+    private Identity()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        ClientId = null!;
+        Address = null!;
+        PublicKey = null!;
+        Devices = null!;
+        _deletionProcesses = null!;
+    }
+
     public Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion)
     {
         ClientId = clientId;
