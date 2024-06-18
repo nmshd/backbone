@@ -27,7 +27,6 @@ internal class RelationshipsStepDefinitions
     private ApiResponse<RelationshipMetadata>? _rejectRelationshipChangeResponse;
     private ApiResponse<RelationshipMetadata>? _revokeRelationshipChangeResponse;
     private string _relationshipId = string.Empty;
-    private string _relationshipChangeId = string.Empty;
 
     public RelationshipsStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
     {
@@ -55,7 +54,6 @@ internal class RelationshipsStepDefinitions
         var createRelationshipResponse = await CreateRelationship(_client1, relationshipTemplateResponse.Result!.Id);
 
         _relationshipId = createRelationshipResponse.Result!.Id;
-        _relationshipChangeId = createRelationshipResponse.Result!.Changes.First().Id;
     }
 
     [Given("a pending Relationship between i1 and i2 created by i2")]
@@ -65,7 +63,6 @@ internal class RelationshipsStepDefinitions
         var createRelationshipResponse = await CreateRelationship(_client2, relationshipTemplateResponse.Result!.Id);
 
         _relationshipId = createRelationshipResponse.Result!.Id;
-        _relationshipChangeId = createRelationshipResponse!.Result!.Changes.First().Id;
     }
 
     [Given("i2 is in status \"ToBeDeleted\"")]
@@ -88,34 +85,34 @@ internal class RelationshipsStepDefinitions
         _createRelationshipResponse = await CreateRelationship(_client1, _relationshipTemplateResponse!.Result!.Id);
     }
 
-    [When("a POST request is sent to the /Relationships/{r.Id}/Changes/{r.Changes.Id}/Accept endpoint by i1")]
-    public async Task WhenAPostRequestIsSentToTheAcceptRelationshipChangeEndpointByI1()
+    [When("a POST request is sent to the /Relationships/{r.Id}/Accept endpoint by i1")]
+    public async Task WhenAPostRequestIsSentToTheAcceptRelationshipEndpointByI1()
     {
-        var completeRelationshipChangeRequest = new CompleteRelationshipChangeRequest
+        var acceptRelationshipRequest = new AcceptRelationshipRequest
         {
-            Content = "AAA".GetBytes()
+            CreationResponseContent = "AAA".GetBytes()
         };
-        _acceptRelationshipChangeResponse = await _client1.Relationships.AcceptChange(_relationshipId, _relationshipChangeId, completeRelationshipChangeRequest);
+        _acceptRelationshipChangeResponse = await _client1.Relationships.AcceptRelationship(_relationshipId, acceptRelationshipRequest);
     }
 
-    [When("a POST request is sent to the /Relationships/{r.Id}/Changes/{r.Changes.Id}/Reject endpoint by i1")]
+    [When("a POST request is sent to the /Relationships/{r.Id}/Reject endpoint by i1")]
     public async Task WhenAPostRequestIsSentToTheRejectRelationshipChangeEndpointByI1()
     {
-        var completeRelationshipChangeRequest = new CompleteRelationshipChangeRequest
+        var rejectRelationshipRequest = new RejectRelationshipRequest
         {
-            Content = "AAA".GetBytes()
+            CreationResponseContent = "AAA".GetBytes()
         };
-        _rejectRelationshipChangeResponse = await _client1.Relationships.RejectChange(_relationshipId, _relationshipChangeId, completeRelationshipChangeRequest);
+        _rejectRelationshipChangeResponse = await _client1.Relationships.RejectRelationship(_relationshipId, rejectRelationshipRequest);
     }
 
     [When("a POST request is sent to the /Relationships/{r.Id}/Changes/{r.Changes.Id}/Revoke endpoint by i1")]
     public async Task WhenAPostRequestIsSentToTheRevokeRelationshipChangeEndpointByI2()
     {
-        var completeRelationshipChangeRequest = new CompleteRelationshipChangeRequest
+        var revokeRelationshipRequest = new RevokeRelationshipRequest
         {
-            Content = "AAA".GetBytes()
+            CreationResponseContent = "AAA".GetBytes()
         };
-        _revokeRelationshipChangeResponse = await _client1.Relationships.RevokeChange(_relationshipId, _relationshipChangeId, completeRelationshipChangeRequest);
+        _revokeRelationshipChangeResponse = await _client1.Relationships.RevokeRelationship(_relationshipId, revokeRelationshipRequest);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]

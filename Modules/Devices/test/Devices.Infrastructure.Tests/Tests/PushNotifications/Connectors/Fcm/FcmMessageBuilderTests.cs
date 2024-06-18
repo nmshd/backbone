@@ -13,50 +13,51 @@ namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.
 
 public class FcmMessageBuilderTests : AbstractTestsBase
 {
-  [Fact]
-  public void Built_message_has_all_properties_set()
-  {
-    // Act
-    var message = new FcmMessageBuilder()
-        .SetTag(1)
-        .SetToken("token1")
-        .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
-        .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.New(), new TestPushNotification { SomeProperty = "someValue" }))
-        .Build();
+    [Fact]
+    public void Built_message_has_all_properties_set()
+    {
+        // Act
+        var message = new FcmMessageBuilder()
+            .SetTag(1)
+            .SetToken("token1")
+            .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
+            .AddContent(new NotificationContent(IdentityAddress.Parse("did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d"), DevicePushIdentifier.New(),
+                new TestPushNotification { SomeProperty = "someValue" }))
+            .Build();
 
-    // Assert
-    message.Notification.Title.Should().Be("someNotificationTextTitle");
-    message.Notification.Body.Should().Be("someNotificationTextBody");
+        // Assert
+        message.Notification.Title.Should().Be("someNotificationTextTitle");
+        message.Notification.Body.Should().Be("someNotificationTextBody");
 
-    message.Token.Should().Contain("token1");
+        message.Token.Should().Contain("token1");
 
-    message.Android.Notification.ChannelId.Should().Be("ENMESHED");
-    message.Data.Should().Contain("android_channel_id", "ENMESHED");
+        message.Android.Notification.ChannelId.Should().Be("ENMESHED");
+        message.Data.Should().Contain("android_channel_id", "ENMESHED");
 
-    message.Data["content-available"].Should().Be("1");
+        message.Data["content-available"].Should().Be("1");
 
-    message.Android.CollapseKey.Should().Be("1");
-    message.Data.Should().Contain("tag", "1");
-  }
+        message.Android.CollapseKey.Should().Be("1");
+        message.Data.Should().Contain("tag", "1");
+    }
 
-  [Fact]
-  public void Content_is_valid_json()
-  {
-    // Arrange
-    SystemTime.Set(DateTime.Parse("2021-01-01T00:00:00.000Z"));
+    [Fact]
+    public void Content_is_valid_json()
+    {
+        // Arrange
+        SystemTime.Set(DateTime.Parse("2021-01-01T00:00:00.000Z"));
 
-    // Act
-    var message = new FcmMessageBuilder()
-        .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"),
-            new TestPushNotification { SomeProperty = "someValue" }))
-        .Build();
-    var actualContent = message.Data["content"];
+        // Act
+        var message = new FcmMessageBuilder()
+            .AddContent(new NotificationContent(IdentityAddress.Parse("did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"),
+                new TestPushNotification { SomeProperty = "someValue" }))
+            .Build();
+        var actualContent = message.Data["content"];
 
-    // Assert
-    actualContent.Should().BeEquivalentToJson(
-        """
+        // Assert
+        actualContent.Should().BeEquivalentToJson(
+            """
             {
-                      'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
+                      'accRef': 'did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d',
                       'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
                       'eventName': 'Test',
                       'sentAt': '2021-01-01T00:00:00.000Z',
@@ -65,10 +66,10 @@ public class FcmMessageBuilderTests : AbstractTestsBase
                       }
                     }
             """);
-  }
+    }
 
-  private record TestPushNotification : IPushNotification
-  {
-    public required string SomeProperty { get; set; }
-  }
+    private record TestPushNotification : IPushNotification
+    {
+        public required string SomeProperty { get; set; }
+    }
 }

@@ -12,6 +12,7 @@ using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
+
 public class RelationshipsRepository : IRelationshipsRepository
 {
     private readonly DbSet<Relationship> _relationships;
@@ -23,41 +24,6 @@ public class RelationshipsRepository : IRelationshipsRepository
         _relationships = dbContext.Relationships;
         _readOnlyRelationships = dbContext.Relationships.AsNoTracking();
         _dbContext = dbContext;
-    }
-
-    public async Task<DbPaginationResult<RelationshipChange>> FindChangesWithIds(IEnumerable<RelationshipChangeId> ids,
-        RelationshipChangeType? relationshipChangeType, RelationshipChangeStatus? relationshipChangeStatus,
-        OptionalDateRange? modifiedAt, OptionalDateRange? createdAt, OptionalDateRange? completedAt,
-        IdentityAddress? createdBy, IdentityAddress? completedBy, IdentityAddress activeIdentity,
-        PaginationFilter paginationFilter, CancellationToken cancellationToken, bool onlyPeerChanges = false, bool track = false)
-    {
-        var query = (track ? _changes : _readOnlyChanges)
-            .AsQueryable()
-            .IncludeAll(_dbContext)
-            .WithRelationshipParticipant(activeIdentity);
-
-        if (relationshipChangeType.HasValue)
-            query = query.WithType(relationshipChangeType.Value);
-        if (relationshipChangeStatus.HasValue)
-            query = query.WithStatus(relationshipChangeStatus.Value);
-        if (modifiedAt != null)
-            query = query.ModifiedAt(modifiedAt);
-        if (createdAt != null)
-            query = query.CreatedAt(createdAt);
-        if (completedAt != null)
-            query = query.CompletedAt(completedAt);
-        if (createdBy != null)
-            query = query.CreatedBy(createdBy);
-        if (completedBy != null)
-            query = query.CompletedBy(completedBy);
-        if (ids.Any())
-            query = query.WithIdIn(ids);
-        if (onlyPeerChanges)
-            query = query.OnlyPeerChanges(activeIdentity);
-
-        var changes = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
-
-        return changes;
     }
 
     public async Task<IdentityAddress> FindRelationshipPeer(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken)

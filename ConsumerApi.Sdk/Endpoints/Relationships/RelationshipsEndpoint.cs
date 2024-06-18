@@ -8,9 +8,9 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.Relationships;
 
 public class RelationshipsEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
-    public async Task<ApiResponse<RelationshipDTO>> GetRelationship(string id)
+    public async Task<ApiResponse<Relationship>> GetRelationship(string id)
     {
-        return await _client.Get<RelationshipDTO>($"api/{API_VERSION}/Relationships/{id}");
+        return await _client.Get<Relationship>($"api/{API_VERSION}/Relationships/{id}");
     }
 
     public async Task<ApiResponse<ListRelationshipsResponse>> ListRelationships(PaginationFilter? pagination = null)
@@ -28,9 +28,9 @@ public class RelationshipsEndpoint(EndpointClient client) : ConsumerApiEndpoint(
             .Execute();
     }
 
-    public async Task<ApiResponse<RelationshipMetadataDTO>> CreateRelationship(CreateRelationshipRequest request)
+    public async Task<ApiResponse<RelationshipMetadata>> CreateRelationship(CreateRelationshipRequest request)
     {
-        return await _client.Post<RelationshipMetadataDTO>($"api/{API_VERSION}/Relationships", request);
+        return await _client.Post<RelationshipMetadata>($"api/{API_VERSION}/Relationships", request);
     }
 
     public async Task<ApiResponse<RelationshipMetadata>> AcceptRelationship(string relationshipId, AcceptRelationshipRequest request)

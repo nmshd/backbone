@@ -29,7 +29,7 @@ public static class Utils
 
         var acceptRelationshipRequest = new AcceptRelationshipRequest
         {
-            Content = "AAA".GetBytes()
+            CreationResponseContent = "AAA".GetBytes()
         };
 
         var acceptRelationshipResponse = await client1.Relationships.AcceptRelationship(createRelationshipResponse.Result!.Id, acceptRelationshipRequest);

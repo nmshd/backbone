@@ -23,7 +23,8 @@ public class Handler : IRequestHandler<GetRelationshipTemplateQuery, Relationshi
 
     public async Task<RelationshipTemplateDTO> Handle(GetRelationshipTemplateQuery request, CancellationToken cancellationToken)
     {
-        var template = await _relationshipTemplatesRepository.Find(request.Id, _userContext.GetAddress(), cancellationToken, track: true) ?? throw new NotFoundException(nameof(RelationshipTemplate));
+        var template = await _relationshipTemplatesRepository.Find(RelationshipTemplateId.Parse(request.Id), _userContext.GetAddress(), cancellationToken, true) ??
+                       throw new NotFoundException(nameof(RelationshipTemplate));
 
         template.AllocateFor(_userContext.GetAddress(), _userContext.GetDeviceId());
 
