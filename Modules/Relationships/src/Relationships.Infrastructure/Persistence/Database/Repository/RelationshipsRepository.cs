@@ -67,6 +67,15 @@ public class RelationshipsRepository : IRelationshipsRepository
         return changes;
     }
 
+    public async Task<IdentityAddress> FindRelationshipPeer(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken)
+    {
+        var relationship = await _readOnlyRelationships
+            .WithParticipant(identityAddress)
+            .FirstWithId(id, cancellationToken);
+
+        return relationship.To != identityAddress ? relationship.To : relationship.From;
+    }
+
     public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress,
         CancellationToken cancellationToken, bool track = false)
     {

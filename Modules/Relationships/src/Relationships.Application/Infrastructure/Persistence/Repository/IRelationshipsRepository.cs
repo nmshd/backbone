@@ -15,6 +15,7 @@ public interface IRelationshipsRepository
         RelationshipChangeStatus? relationshipChangeStatus, OptionalDateRange? modifiedAt, OptionalDateRange? createdAt, OptionalDateRange? completedAt, IdentityAddress? createdBy,
         IdentityAddress? completedBy, IdentityAddress activeIdentity, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool onlyPeerChanges = false, bool track = false);
     Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false);
+    Task<IdentityAddress> FindRelationshipPeer(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken);
     Task<RelationshipChange?> FindRelationshipChange(RelationshipChangeId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false);
     Task Add(Relationship relationship, CancellationToken cancellationToken);
     Task Update(Relationship relationship);
