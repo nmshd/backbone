@@ -59,7 +59,7 @@ public class GenerateCommand : Command
 
         services.AddSingleton<IRelationshipDistributor, RelationshipDistributorV2>();
 
-        services.AddSingleton<IMessageDistributor, MessageDistributorV1>();
+        services.AddSingleton<IMessageDistributor, MessageDistributorV2>();
 
         services.AddSingleton<IPrinter, Printer>();
 

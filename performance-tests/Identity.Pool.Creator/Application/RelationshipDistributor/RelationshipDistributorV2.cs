@@ -44,12 +44,16 @@ public class RelationshipDistributorV2 : IRelationshipDistributor
         Identity identity
         )
     {
-        var oppositePoolIdentitiesWithCapacityForFurtherRelationships = (identity.PoolType == PoolTypes.CONNECTOR_TYPE ? appPoolsIdentities : connectorPoolsIdentities).Where(i => i.HasAvailabilityForNewRelationships()).ToList();
+        var oppositePoolIdentitiesWithCapacityForFurtherRelationships = (identity.PoolType == PoolTypes.CONNECTOR_TYPE
+                ? appPoolsIdentities
+                : connectorPoolsIdentities
+                ).Where(i => i.HasAvailabilityForNewRelationships()).OrderBy(i=>i.IdentitiesToEstablishRelationshipsWith.Count)
+            .ToList();
 
-        Identity selectedIdentity;
         var index = 0;
         while (identity.RelationshipsCapacity > 0)
         {
+            Identity selectedIdentity;
             do
             {
                 if (index == oppositePoolIdentitiesWithCapacityForFurtherRelationships.Count)

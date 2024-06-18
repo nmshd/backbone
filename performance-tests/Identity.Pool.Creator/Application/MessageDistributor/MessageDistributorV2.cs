@@ -7,24 +7,21 @@ public class MessageDistributorV2 : IMessageDistributor
 {
     public void Distribute(IList<PoolEntry> pools)
     {
-        var appIdentities = pools.Where(p => p.IsApp()).SelectMany(i => i.Identities).ToList();
-        var connectorIdentities = pools.Where(p => p.IsConnector()).SelectMany(i => i.Identities).ToList();
+        var appAndConnectorIdentities = pools.Where(p => p.IsApp() || p.IsConnector()).SelectMany(p => p.Identities).ToList();
 
-        foreach (var identity in appIdentities)
+        foreach (var identity in appAndConnectorIdentities)
         {
-            // if this identity must send more messages than its peers can receive
-            if (identity.SentMessagesCapacity > identity.IdentitiesToEstablishRelationshipsWith.Sum(i => i.ReceivedMessagesCapacity))
-            {
-                throw new Exception("Pool configuration is invalid or relationship allocation ran wrongfully.");
-            }
-
             using var relatedIdentitiesIterator = identity.IdentitiesToEstablishRelationshipsWith.AsEnumerable().GetEnumerator();
-            while (identity.HasAvailabilityToSendNewMessages())
+            var endReached = false;
+            while (identity.HasAvailabilityToSendNewMessages() && !endReached)
             {
                 var peerIdentity = relatedIdentitiesIterator.NextOrFirst();
                 
                 if (peerIdentity.HasAvailabilityToReceiveNewMessages())
                     identity.SendMessageTo(peerIdentity);
+
+                if (peerIdentity == identity.IdentitiesToEstablishRelationshipsWith.Last())
+                    endReached = true;
             }
         }
     }

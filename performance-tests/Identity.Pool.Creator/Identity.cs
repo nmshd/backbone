@@ -16,6 +16,8 @@ public class Identity
     public uint ReceivedMessagesCapacity { get; set; }
     public uint SentMessagesCapacity { get; set; }
 
+    public PoolEntry Pool { get; private set; }
+
     public Identity(UserCredentials userCredentials, string address, string deviceId, PoolEntry pool, uint orderNumber)
     {
         Address = address;
@@ -28,6 +30,7 @@ public class Identity
 
         Nickname = pool.Alias + orderNumber;
         PoolType = pool.Type;
+        Pool = pool;
     }
 
 
@@ -60,14 +63,16 @@ public class Identity
             throw new Exception("Cannot send message to identity which does not have a relationship with this one.");
         }
 
-        if (SentMessagesCapacity == 0 || ReceivedMessagesCapacity == 0)
+        if (SentMessagesCapacity == 0)
         {
             throw new Exception("There is no capacity to send this message.");
         }
 
+        if (Nickname.First() == recipient.Nickname.First())
+            throw new Exception($"Cannot send message from identity of type {Nickname.First()} to identity of the same type.");
+
         IdentitiesToSendMessagesTo.Add(recipient);
         SentMessagesCapacity--;
-        recipient.ReceivedMessagesCapacity--;
     }
 
     public bool HasAvailabilityToReceiveNewMessages() => ReceivedMessagesCapacity > 0;

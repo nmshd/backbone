@@ -7,6 +7,10 @@
     "CLI Light": {
       "commandName": "Project",
       "commandLineArgs": "GeneratePools --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools_light.json"
+    },
+    "CLI Light 2": {
+      "commandName": "Project",
+      "commandLineArgs": "GeneratePools --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools_light_2.json"
     }
   }
 }

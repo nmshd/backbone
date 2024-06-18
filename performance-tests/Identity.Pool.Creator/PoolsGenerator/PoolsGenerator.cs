@@ -37,7 +37,7 @@ public class PoolsGenerator
         _printer = printer;
         _clientCredentials = new ClientCredentials(clientId, clientSecret);
         _pools = configuration.Pools.ToList();
-        
+
         MessageDistributorTools.CalculateSentAndReceivedMessages(_pools, configuration.Configuration);
         _poolsOffset = PoolsOffset.CalculatePoolOffsets(_pools.ToArray());
     }
@@ -46,17 +46,17 @@ public class PoolsGenerator
     {
         CreateOffsetPools();
 
-        // TODO add check: for each pool p, p.NumberOfRelationships must NOT be greater than the number of identities it its pool's opposite type
+        CheckPoolsConfiguration();
 
         //await CreateIdentities();
         CreateFakeIdentities();
 
         RelationshipDistributorTools.EstablishMessagesOffsetPoolsRelationships(_pools);
-        
-        _relationshipDistributor.Distribute(_pools);
-        _printer.PrintRelationships(_pools, summaryOnly: false);
 
-        //_messageDistributor.Distribute(_pools);
+        _relationshipDistributor.Distribute(_pools);
+        _printer.PrintRelationships(_pools, summaryOnly: true);
+
+        _messageDistributor.Distribute(_pools);
         _printer.PrintMessages(_pools, summaryOnly: true);
 
         //await CreateRelationshipTemplates();
@@ -65,6 +65,26 @@ public class PoolsGenerator
         //await CreateDatawalletModifications();
 
         OutputAll();
+    }
+
+    /// <summary>
+    /// For each pool p, p.NumberOfRelationships must NOT be greater than the sum of identities in all pools of the opposite type
+    /// </summary>
+    /// <exception cref="NotImplementedException"></exception>
+    private void CheckPoolsConfiguration()
+    {
+        var expectedAppIdentitiesCount = _pools.Where(p => p.IsApp()).Sum(p => p.Amount);
+        var expectedConnectorIdentitiesCount = _pools.Where(p => p.IsConnector()).Sum(p => p.Amount);
+
+        foreach (var poolEntry in _pools)
+        {
+            var oppositeIdentitiesCount = poolEntry.IsApp() ? expectedConnectorIdentitiesCount : expectedAppIdentitiesCount;
+
+            if (poolEntry.NumberOfRelationships > oppositeIdentitiesCount)
+            {
+                throw new Exception($"The number of relationships ({poolEntry.NumberOfRelationships}) for pool {poolEntry.Name} is higher than the number of identities in the opposite pools.");
+            }
+        }
     }
 
     private void CreateFakeIdentities()
