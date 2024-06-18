@@ -2,7 +2,7 @@
     <h2 class="header-title">{{ headerDeletionProcessAuditLog }}</h2>
     <p class="header-description">{{ headerDeletionProcessAuditLogDescription }}</p>
 </div>
-<div [ngClass]="{ 'disabled-container': loading }">
+<div [ngClass]="{ 'disabled-container': loading }" *ngIf="identityDeletionProcessAuditLogs.length">
     <mat-card>
         <mat-card-content class="form-card">
             <div *ngIf="loading" class="loading">
