@@ -8,6 +8,16 @@ public class Tier : Entity
 {
     public static readonly Tier QUEUED_FOR_DELETION = new(TierId.Create("TIR00000000000000001").Value, TierName.Create("Queued for Deletion").Value, false, false);
 
+    // ReSharper disable once UnusedMember.Local
+    private Tier()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        Id = null!;
+        Name = null!;
+        CanBeUsedAsDefaultForClient = false;
+        CanBeManuallyAssigned = false;
+    }
+
     public Tier(TierName name) : this(TierId.Generate(), name, true, true)
     {
         RaiseDomainEvent(new TierCreatedDomainEvent(this));
