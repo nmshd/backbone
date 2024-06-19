@@ -36,8 +36,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockPushNotificationSender);
 
         // Act
-        var command = new StartDeletionProcessAsOwnerCommand();
-        var response = await handler.Handle(command, CancellationToken.None);
+        var response = await handler.Handle(new StartDeletionProcessAsOwnerCommand(), CancellationToken.None);
 
         // Assert
         response.Should().NotBeNull();
@@ -74,8 +73,7 @@ public class HandlerTests : AbstractTestsBase
         var handler = CreateHandler(fakeIdentitiesRepository, fakeUserContext);
 
         // Act
-        var command = new StartDeletionProcessAsOwnerCommand();
-        var acting = async () => await handler.Handle(command, CancellationToken.None);
+        var acting = async () => await handler.Handle(new StartDeletionProcessAsOwnerCommand(), CancellationToken.None);
 
         // Assert
         acting.Should().AwaitThrowAsync<NotFoundException, StartDeletionProcessAsOwnerResponse>().Which.Message.Should().Contain("Identity");
@@ -83,6 +81,7 @@ public class HandlerTests : AbstractTestsBase
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender? pushNotificationSender = null)
     {
-        return new Handler(identitiesRepository, userContext, pushNotificationSender ?? A.Dummy<IPushNotificationSender>());
+        pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
+        return new Handler(identitiesRepository, userContext, pushNotificationSender);
     }
 }
