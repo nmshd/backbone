@@ -31,11 +31,11 @@
         "ngx-logger": "^5.0.12",
         "odata-filter-builder": "^1.0.0",
         "oidc-client": "^1.11.5",
-        "popper.js": "^1.16.0",
+        "popper.js": "^1.16.1",
         "run-script-os": "^1.1.6",
         "rxjs": "~7.8.1",
         "tslib": "^2.6.3",
-        "zone.js": "~0.14.7"
+        "zone.js": "^0.14.7"
     },
     "devDependencies": {
         "@angular-devkit/build-angular": "^18.0.4",
@@ -45,7 +45,7 @@
         "@js-soft/license-check": "^1.0.9",
         "@types/jasmine": "~5.1.4",
         "@types/jasminewd2": "~2.0.13",
-        "@types/node": "^20.14.2",
+        "@types/node": "^20.14.5",
         "eslint": "^8.57.0",
         "jasmine-core": "~5.1.2",
         "karma": "~6.4.3",
