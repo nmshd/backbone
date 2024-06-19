@@ -67,6 +67,15 @@ public class RelationshipsRepository : IRelationshipsRepository
         return changes;
     }
 
+    public async Task<IdentityAddress> FindRelationshipPeer(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken)
+    {
+        var relationship = await _readOnlyRelationships
+            .WithParticipant(identityAddress)
+            .FirstWithId(id, cancellationToken);
+
+        return relationship.To != identityAddress ? relationship.To : relationship.From;
+    }
+
     public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress,
         CancellationToken cancellationToken, bool track = false)
     {
@@ -110,6 +119,11 @@ public class RelationshipsRepository : IRelationshipsRepository
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task Update(IEnumerable<Relationship> relationships)
+    {
+        _relationships.UpdateRange(relationships);
+        await _dbContext.SaveChangesAsync();
+    }
 
     public async Task Add(Relationship relationship, CancellationToken cancellationToken)
     {
