@@ -49,6 +49,7 @@ public static class TestDataGenerator
     {
         var identity = CreateIdentity();
         identity.StartDeletionProcessAsOwner(identity.Devices.First().Id);
+        identity.ClearDomainEvents();
 
         foreach (var deletionProcess in identity.DeletionProcesses)
         {
