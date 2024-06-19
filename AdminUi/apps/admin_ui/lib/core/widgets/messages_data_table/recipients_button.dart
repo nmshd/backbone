@@ -13,7 +13,6 @@ class RecipientsButton extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(4),
       child: FilledButton(
-        style: ButtonStyle(),
         onPressed: () {
           showDialog<Widget>(
             context: context,
