@@ -198,7 +198,7 @@ jobs:
           file: ${{ matrix.dockerfile }}
           cache-from: type=local,src=/tmp/.buildx-${{ matrix.image }}-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-${{ matrix.image }}-cache-new
-          outputs: type=docker,dest=/tmp/${{ matrix.image }}.tar
+          outputs: type=oci,dest=/tmp/${{ matrix.image }}.tar
           push: true
           provenance: true
           sbom: true
