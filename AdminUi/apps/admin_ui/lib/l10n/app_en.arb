@@ -11,5 +11,29 @@
     "sendDate": "Send Date",
     "numberOfAttachments": "Number of Attachments",
     "listOfAllRecipients": "List of all Recipients",
-    "error_loading_data": "An error occurred loading data."
+    "error_loading_data": "An error occurred loading data.",
+    "messages_title": "{title} Messages",
+    "@messages_title": {
+        "placeholders": {
+            "title": {
+                "type": "String"
+            }
+        }
+    },
+    "messages_subtitle": "View messages {subtitle} by this identity.",
+    "@messages_subtitle": {
+        "placeholders": {
+            "subtitle": {
+                "type": "String"
+            }
+        }
+    },
+    "no_messages_found": "No {text} messages found.",
+    "@no_messages_found": {
+        "placeholders": {
+            "text": {
+                "type": "String"
+            }
+        }
+    }
 }
