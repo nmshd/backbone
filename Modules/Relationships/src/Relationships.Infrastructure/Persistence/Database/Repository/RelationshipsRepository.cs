@@ -119,6 +119,11 @@ public class RelationshipsRepository : IRelationshipsRepository
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task Update(IEnumerable<Relationship> relationships)
+    {
+        _relationships.UpdateRange(relationships);
+        await _dbContext.SaveChangesAsync();
+    }
 
     public async Task Add(Relationship relationship, CancellationToken cancellationToken)
     {

@@ -115,6 +115,7 @@ public class Identity : Entity
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
         TierId = Tier.QUEUED_FOR_DELETION.Id;
         Status = IdentityStatus.ToBeDeleted;
+        RaiseDomainEvent(new IdentityToBeDeletedDomainEvent(Address));
 
         return deletionProcess;
     }
@@ -167,6 +168,7 @@ public class Identity : Entity
         deletionProcess.Approve(Address, deviceId);
 
         Status = IdentityStatus.ToBeDeleted;
+        RaiseDomainEvent(new IdentityToBeDeletedDomainEvent(Address));
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
         TierId = Tier.QUEUED_FOR_DELETION.Id;
 
@@ -180,22 +182,7 @@ public class Identity : Entity
 
         deletionProcess.DeletionStarted(Address);
         Status = IdentityStatus.Deleting;
-    }
-
-    public IdentityDeletionProcess CancelDeletionProcess(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
-    {
-        EnsureIdentityOwnsDevice(canceledByDeviceId);
-
-        var deletionProcess = DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ??
-                              throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
-
-        deletionProcess.CancelAsOwner(Address, canceledByDeviceId);
-
-        TierId = TierIdBeforeDeletion ?? throw new Exception($"Error when trying to cancel deletion process: '{nameof(TierIdBeforeDeletion)}' is null.");
-        TierIdBeforeDeletion = null;
-        Status = IdentityStatus.Active;
-
-        return deletionProcess;
+        RaiseDomainEvent(new IdentityDeletedDomainEvent(Address));
     }
 
     private IdentityDeletionProcess GetDeletionProcess(IdentityDeletionProcessId deletionProcessId)
@@ -275,17 +262,34 @@ public class Identity : Entity
         return i => i.Status == IdentityStatus.ToBeDeleted && i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow;
     }
 
-    public IdentityDeletionProcess CancelDeletionProcessAsOwner(IdentityDeletionProcessId deletionProcessId, DeviceId canceledByDeviceId)
+    public IdentityDeletionProcess CancelDeletionProcessAsOwner(IdentityDeletionProcessId deletionProcessId, DeviceId cancelledByDeviceId)
+    {
+        EnsureIdentityOwnsDevice(cancelledByDeviceId);
+
+        var deletionProcess = GetDeletionProcessWithId(deletionProcessId);
+        deletionProcess.EnsureStatus(DeletionProcessStatus.Approved);
+
+        deletionProcess.CancelAsOwner(Address, cancelledByDeviceId);
+        TierId = TierIdBeforeDeletion ?? throw new Exception($"Error when trying to cancel deletion process: '{nameof(TierIdBeforeDeletion)}' is null.");
+        TierIdBeforeDeletion = null;
+        Status = IdentityStatus.Active;
+
+        RaiseDomainEvent(new IdentityDeletionCancelledDomainEvent(Address));
+
+        return deletionProcess;
+    }
+
+    public IdentityDeletionProcess CancelDeletionProcessAsSupport(IdentityDeletionProcessId deletionProcessId)
     {
         var deletionProcess = GetDeletionProcessWithId(deletionProcessId);
         deletionProcess.EnsureStatus(DeletionProcessStatus.Approved);
 
-        EnsureIdentityOwnsDevice(canceledByDeviceId);
-
-        deletionProcess.CancelAsOwner(Address, canceledByDeviceId);
-        TierId = TierIdBeforeDeletion!;
+        deletionProcess.CancelAsSupport(Address);
+        TierId = TierIdBeforeDeletion ?? throw new Exception($"Error when trying to cancel deletion process: '{nameof(TierIdBeforeDeletion)}' is null.");
         TierIdBeforeDeletion = null;
         Status = IdentityStatus.Active;
+
+        RaiseDomainEvent(new IdentityDeletionCancelledDomainEvent(Address));
 
         return deletionProcess;
     }
@@ -293,29 +297,6 @@ public class Identity : Entity
     private IdentityDeletionProcess GetDeletionProcessWithId(IdentityDeletionProcessId deletionProcessId)
     {
         return DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
-    }
-
-    public IdentityDeletionProcess CancelDeletionProcessAsSupport(IdentityDeletionProcessId deletionProcessId)
-    {
-        EnsureDeletionProcessExists(deletionProcessId);
-        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Approved);
-
-        var deletionProcess = DeletionProcesses.First(d => d.Id == deletionProcessId);
-
-        deletionProcess.CancelAsSupport(Address);
-        TierId = TierIdBeforeDeletion!;
-        TierIdBeforeDeletion = null;
-        Status = IdentityStatus.Active;
-
-        return deletionProcess;
-    }
-
-    private void EnsureDeletionProcessExists(IdentityDeletionProcessId deletionProcessId)
-    {
-        var isDeletionProcessOwnedByDevice = DeletionProcesses.Any(d => d.Id == deletionProcessId);
-
-        if (!isDeletionProcessOwnedByDevice)
-            throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
     }
 }
 
