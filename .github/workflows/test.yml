@@ -110,14 +110,48 @@ jobs:
         include:
           - dockerfile: ConsumerApi/Dockerfile
             image: consumer-api
+            tag: ghcr.io/nmshd/backbone-consumer-api:test
+            platforms: linux/amd64
+            
           - dockerfile: AdminApi/src/AdminApi/Dockerfile
             image: admin-ui
+            tag: ghcr.io/nmshd/backbone-admin-ui:test
+            platforms: linux/amd64
+            
           - dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
             image: seed-client
+            tag: ghcr.io/nmshd/backbone-admin-cli:test
+            platforms: linux/amd64
+            
           - dockerfile: DatabaseMigrator/Dockerfile
             image: database-migrator
+            tag: ghcr.io/nmshd/backbone-database-migrator:test
+            platforms: linux/amd64
+            
           - dockerfile: EventHandlerService/src/EventHandlerService/Dockerfile
             image: event-handler-service
+            tag: ghcr.io/nmshd/backbone-event-handler:test
+            platforms: linux/amd64
+            
+          - dockerfile: Modules/Files/src/Files.Jobs.SanityCheck/Dockerfile
+            image: files-sanity-check
+            tag: ghcr.io/nmshd/backbone-files-sanity-check:test
+            platforms: linux/amd64
+            
+          - dockerfile: DatabaseMigrator/Dockerfile
+            image: database-migrator
+            tag: ghcr.io/nmshd/backbone-database-migrator:test
+            platforms: linux/amd64
+            
+          - dockerfile: Jobs/src/Job.IdentityDeletion/Dockerfile
+            image: identity-deletion-jobs
+            tag: ghcr.io/nmshd/backbone-identity-deletion-jobs:test
+            platforms: linux/amd64
+            
+          - dockerfile: SseServer/src/SseServer/Dockerfile
+            image: sse-server
+            tag: ghcr.io/nmshd/backbone-sse-server:test
+            platforms: linux/amd64
     
     steps:
       - name: Checkout
@@ -155,8 +189,12 @@ jobs:
           file: ${{ matrix.dockerfile }}
           cache-from: type=local,src=/tmp/.buildx-${{ matrix.image }}-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-${{ matrix.image }}-cache-new
-          load: false
           outputs: type=docker,dest=/tmp/${{ matrix.image }}.tar
+          push: true
+          provenance: true
+          sbom: true
+          tags: ${{ matrix.tag }}
+          platforms: ${{ matrix.platforms }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -408,130 +446,130 @@ jobs:
         env:
           VERSION: 0.0.0
 
-  build-capi-container-image:
-    name: Build Consumer API Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/capi/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
-
-  build-eh-container-image:
-    name: Build Event Handler Service Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/eh/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
-
-  build-dbm-container-image:
-    name: Build Database Migrator Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/dbm/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
-
-  build-idj-container-image:
-    name: Build Identity Deletion Jobs Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/idj/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
-
-  build-aui-container-image:
-    name: Build Admin UI Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/aui/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
-
-  build-acli-container-image:
-    name: Build Admin CLI Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/acli/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
-
-  build-sses-container-image:
-    name: Build SSE Server Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/sses/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
-
-  build-fsc-container-image:
-    name: Build Files Sanity Check Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/fsc/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
+#  build-capi-container-image:
+#    name: Build Consumer API Container Image
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#      - name: Install script dependencies
+#        run: npm install --prefix ./.ci
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#      - name: Build image
+#        run: ./.ci/capi/buildContainerImage.js
+#        env:
+#          TAG: test
+#          PLATFORMS: linux/amd64
+#
+#  build-eh-container-image:
+#    name: Build Event Handler Service Container Image
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#      - name: Install script dependencies
+#        run: npm install --prefix ./.ci
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#      - name: Build image
+#        run: ./.ci/eh/buildContainerImage.js
+#        env:
+#          TAG: test
+#          PLATFORMS: linux/amd64
+#
+#  build-dbm-container-image:
+#    name: Build Database Migrator Container Image
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#      - name: Install script dependencies
+#        run: npm install --prefix ./.ci
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#      - name: Build image
+#        run: ./.ci/dbm/buildContainerImage.js
+#        env:
+#          TAG: test
+#          PLATFORMS: linux/amd64
+#
+#  build-idj-container-image:
+#    name: Build Identity Deletion Jobs Container Image
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#      - name: Install script dependencies
+#        run: npm install --prefix ./.ci
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#      - name: Build image
+#        run: ./.ci/idj/buildContainerImage.js
+#        env:
+#          TAG: test
+#          PLATFORMS: linux/amd64
+#
+#  build-aui-container-image:
+#    name: Build Admin UI Container Image
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#      - name: Install script dependencies
+#        run: npm install --prefix ./.ci
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#      - name: Build image
+#        run: ./.ci/aui/buildContainerImage.js
+#        env:
+#          TAG: test
+#          PLATFORMS: linux/amd64
+#
+#  build-acli-container-image:
+#    name: Build Admin CLI Container Image
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#      - name: Install script dependencies
+#        run: npm install --prefix ./.ci
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#      - name: Build image
+#        run: ./.ci/acli/buildContainerImage.js
+#        env:
+#          TAG: test
+#          PLATFORMS: linux/amd64
+#
+#  build-sses-container-image:
+#    name: Build SSE Server Container Image
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#      - name: Install script dependencies
+#        run: npm install --prefix ./.ci
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#      - name: Build image
+#        run: ./.ci/sses/buildContainerImage.js
+#        env:
+#          TAG: test
+#          PLATFORMS: linux/amd64
+#
+#  build-fsc-container-image:
+#    name: Build Files Sanity Check Container Image
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout
+#        uses: actions/checkout@v4
+#      - name: Install script dependencies
+#        run: npm install --prefix ./.ci
+#      - name: Set up Docker Buildx
+#        uses: docker/setup-buildx-action@v3
+#      - name: Build image
+#        run: ./.ci/fsc/buildContainerImage.js
+#        env:
+#          TAG: test
+#          PLATFORMS: linux/amd64
