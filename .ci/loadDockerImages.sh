@@ -6,5 +6,5 @@ set -e
 #done
 
 for f in /tmp/*.txt; do
-    docker load $(cat($f))
+    docker pull $(cat $f)
 done
