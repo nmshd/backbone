@@ -23,8 +23,11 @@ RUN dotnet restore "Modules/Devices/src/Devices.AdminCli/Devices.AdminCli.csproj
 
 COPY . .
 
+ARG VERSION
+
 WORKDIR "/src/Modules/Devices/src/Devices.AdminCli"
 RUN dotnet publish --no-restore -c Release -o /app/publish "Devices.AdminCli.csproj"
+RUN dotnet build --p:Version=${VERSION} "/src/Modules/Devices/src/Devices.AdminCli"
 
 FROM base AS final
 WORKDIR /app

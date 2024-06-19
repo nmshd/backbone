@@ -66,8 +66,11 @@ RUN dotnet restore "DatabaseMigrator/DatabaseMigrator.csproj"
 
 COPY . .
 
+ARG VERSION
+
 WORKDIR "/src/DatabaseMigrator"
 RUN dotnet build "DatabaseMigrator.csproj" -c Release --output /app/build --no-restore
+RUN dotnet build --p:Version=${VERSION} "/src/DatabaseMigrator"
 
 FROM build AS publish
 

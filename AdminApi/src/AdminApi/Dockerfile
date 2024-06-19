@@ -92,8 +92,11 @@ RUN dotnet restore "AdminApi/src/AdminApi/AdminApi.csproj"
 
 COPY . .
 
+ARG VERSION
+
 RUN dotnet publish /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "/src/AdminApi/src/AdminApi/AdminApi.csproj"
 RUN dotnet publish --configuration Release --output /app/publish/health "HealthCheck/HealthCheck.csproj"
+RUN dotnet build --p:Version=${VERSION} "/src/AdminApi/src/AdminApi/AdminApi.csproj"
 
 ### Final ####
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.6-jammy-chiseled
