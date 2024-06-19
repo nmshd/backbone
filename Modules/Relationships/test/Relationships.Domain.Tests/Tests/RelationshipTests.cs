@@ -670,6 +670,64 @@ public class RelationshipTests : AbstractTestsBase
     }
 
     #endregion
+
+    #region DomainEvents
+
+    [Fact]
+    public void Raises_PeerToBeDeletedDeletedDomainEvent()
+    {
+        // Arrange
+        var identityToBeDeleted = TestDataGenerator.CreateRandomIdentityAddress();
+        var peer = TestDataGenerator.CreateRandomIdentityAddress();
+        var relationship = CreateActiveRelationship((peer, identityToBeDeleted));
+
+        // Act
+        relationship.ParticipantIsToBeDeleted(identityToBeDeleted);
+
+        // Assert
+        var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerToBeDeletedDomainEvent>();
+        domainEvent.PeerOfIdentityToBeDeleted.Should().Be(peer);
+        domainEvent.RelationshipId.Should().Be(relationship.Id);
+        domainEvent.IdentityToBeDeleted.Should().Be(identityToBeDeleted);
+    }
+
+    [Fact]
+    public void Raises_PeerDeletionCancelledDomainEvent()
+    {
+        // Arrange
+        var identityToBeDeleted = TestDataGenerator.CreateRandomIdentityAddress();
+        var peer = TestDataGenerator.CreateRandomIdentityAddress();
+        var relationship = CreateActiveRelationship((peer, identityToBeDeleted));
+
+        // Act
+        relationship.DeletionOfParticipantCancelled(identityToBeDeleted);
+
+        // Assert
+        var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerDeletionCancelledDomainEvent>();
+        domainEvent.PeerOfIdentityWithDeletionCancelled.Should().Be(peer);
+        domainEvent.RelationshipId.Should().Be(relationship.Id);
+        domainEvent.IdentityWithDeletionCancelled.Should().Be(identityToBeDeleted);
+    }
+
+    [Fact]
+    public void Raises_PeerDeletedDomainEvent()
+    {
+        // Arrange
+        var identityToBeDeleted = TestDataGenerator.CreateRandomIdentityAddress();
+        var peer = TestDataGenerator.CreateRandomIdentityAddress();
+        var relationship = CreateActiveRelationship((peer, identityToBeDeleted));
+
+        // Act
+        relationship.DeletionOfParticipantStarted(identityToBeDeleted);
+
+        // Assert
+        var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerDeletedDomainEvent>();
+        domainEvent.PeerOfDeletedIdentity.Should().Be(peer);
+        domainEvent.RelationshipId.Should().Be(relationship.Id);
+        domainEvent.DeletedIdentity.Should().Be(identityToBeDeleted);
+    }
+
+    #endregion
 }
 
 #region Extensions

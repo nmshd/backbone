@@ -17,7 +17,7 @@ public class DomainDrivenDesign
             {
                 var constructors = type.GetConstructors();
 
-                if (constructors.All(c => c.Parameters.Count() != 0))
+                if (constructors.All(c => c.Parameters.Any()))
                     return new ConditionResult(type, false, "Entity should have a parameterless constructor");
 
                 return new ConditionResult(type, true);
