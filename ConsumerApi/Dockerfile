@@ -53,12 +53,10 @@ RUN mkdir /rootfs \
 WORKDIR /src
 COPY . .
 
-ARG VERSION
-
 RUN dotnet restore "ConsumerApi/ConsumerApi.csproj"
 RUN dotnet publish --configuration Release --output /app/publish --no-restore "ConsumerApi/ConsumerApi.csproj"
 RUN dotnet publish --configuration Release --output /app/publish/health "HealthCheck/HealthCheck.csproj"
-RUN dotnet build --p:Version=${VERSION} "ConsumerApi/ConsumerApi.csproj"
+RUN dotnet build --p:Version=5.6.0 "ConsumerApi/ConsumerApi.csproj"
 
 ### Final ####
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.6-jammy-chiseled
