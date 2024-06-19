@@ -53,17 +53,16 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
           .map(
             (message) => DataRow2.byIndex(
               index: pageNumber * count + message.$1,
-              specificRowHeight: message.$2.recipients.length > 3 ? 100.0 : null,
+              specificRowHeight: message.$2.recipients.length > 3
+                  ? 100.0
+                  : message.$2.recipients.length == 3
+                      ? 65.0
+                      : null,
               cells: [
                 if (type == 'Outgoing')
-                  if (message.$2.recipients.length > 3)
-                    DataCell(
-                      _RecipientsCell(recipients: message.$2.recipients),
-                    )
-                  else
-                    DataCell(
-                      Text(message.$2.recipients.map((recipient) => recipient.address).join(',')),
-                    ),
+                  DataCell(
+                    _RecipientsCell(recipients: message.$2.recipients),
+                  ),
                 if (type == 'Incoming') DataCell(Text(message.$2.senderAddress)),
                 if (type == 'Incoming') DataCell(Text(message.$2.senderDevice)),
                 DataCell(Text(message.$2.numberOfAttachments.toString())),
