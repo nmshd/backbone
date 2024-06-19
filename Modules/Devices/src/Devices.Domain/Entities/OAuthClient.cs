@@ -1,8 +1,19 @@
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
 namespace Backbone.Modules.Devices.Domain.Entities;
-public class OAuthClient
+
+public class OAuthClient : Entity
 {
+    // ReSharper disable once UnusedMember.Local
+    private OAuthClient()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        ClientId = null!;
+        DisplayName = null!;
+        DefaultTier = null!;
+    }
+
     public OAuthClient(string clientId, string displayName, TierId defaultTier, DateTime createdAt, int? maxIdentities)
     {
         ClientId = clientId;

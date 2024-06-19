@@ -1,12 +1,22 @@
 using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Ids;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Entities;
 
-public class RelationshipTemplateAllocation
+public class RelationshipTemplateAllocation : Entity
 {
+    // ReSharper disable once UnusedMember.Local
+    private RelationshipTemplateAllocation()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        RelationshipTemplateId = null!;
+        AllocatedBy = null!;
+        AllocatedByDevice = null!;
+    }
+
     public RelationshipTemplateAllocation(RelationshipTemplateId relationshipTemplateId, IdentityAddress allocatedBy, DeviceId allocatedByDevice)
     {
         RelationshipTemplateId = relationshipTemplateId;

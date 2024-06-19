@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.Modules.Relationships.Domain.Errors;
 using Backbone.Modules.Relationships.Domain.Ids;
@@ -8,6 +9,7 @@ using Backbone.Modules.Relationships.Domain.Tests.Extensions;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -48,6 +50,20 @@ public class RelationshipTests : AbstractTestsBase
         change.Status.Should().Be(RelationshipChangeStatus.Pending);
 
         change.Response.Should().BeNull();
+    }
+
+    [Fact]
+    public void Raises_RelationshipChangeCreatedDomainEvent_when_creating()
+    {
+        // Act
+        var relationship = new Relationship(TEMPLATE, FROM_IDENTITY, FROM_DEVICE, REQUEST_CONTENT);
+
+        // Assert
+        var change = relationship.Changes.GetOpenCreation()!;
+        var domainEvent = change.Should().HaveASingleDomainEvent<RelationshipChangeCreatedDomainEvent>();
+        domainEvent.ChangeId.Should().Be(change.Id);
+        domainEvent.RelationshipId.Should().Be(relationship.Id);
+        domainEvent.ChangeCreatedBy.Should().Be(change.Request.CreatedBy);
     }
 
     #region Accept Creation
@@ -114,6 +130,25 @@ public class RelationshipTests : AbstractTestsBase
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestCannotBeAcceptedByCreator());
+    }
+
+    [Fact]
+    public void Raises_RelationshipChangeCompletedDomainEvent_when_accepting()
+    {
+        // Arrange
+        var relationship = CreatePendingRelationship();
+        var change = relationship.Changes.GetOpenCreation()!;
+        change.ClearDomainEvents();
+
+        // Act
+        relationship.AcceptChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+
+        // Assert
+        var domainEvent = change.Should().HaveASingleDomainEvent<RelationshipChangeCompletedDomainEvent>();
+        domainEvent.ChangeId.Should().Be(change.Id);
+        domainEvent.RelationshipId.Should().Be(relationship.Id);
+        domainEvent.ChangeCreatedBy.Should().Be(change.Request.CreatedBy);
+        domainEvent.ChangeResult.Should().Be("Accepted");
     }
 
     #endregion
@@ -184,6 +219,25 @@ public class RelationshipTests : AbstractTestsBase
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestCannotBeRejectedByCreator());
     }
 
+    [Fact]
+    public void Raises_RelationshipChangeCompletedDomainEvent_when_rejecting()
+    {
+        // Arrange
+        var relationship = CreatePendingRelationship();
+        var change = relationship.Changes.GetOpenCreation()!;
+        change.ClearDomainEvents();
+
+        // Act
+        relationship.RejectChange(change.Id, TO_IDENTITY, TO_DEVICE, RESPONSE_CONTENT);
+
+        // Assert
+        var domainEvent = change.Should().HaveASingleDomainEvent<RelationshipChangeCompletedDomainEvent>();
+        domainEvent.ChangeId.Should().Be(change.Id);
+        domainEvent.RelationshipId.Should().Be(relationship.Id);
+        domainEvent.ChangeCreatedBy.Should().Be(change.Request.CreatedBy);
+        domainEvent.ChangeResult.Should().Be("Rejected");
+    }
+
     #endregion
 
     #region Revoke Creation
@@ -252,6 +306,25 @@ public class RelationshipTests : AbstractTestsBase
         acting.Should().Throw<DomainException>().WithError(DomainErrors.ChangeRequestCanOnlyBeRevokedByCreator());
     }
 
+    [Fact]
+    public void Raises_RelationshipChangeCompletedDomainEvent_when_revoking()
+    {
+        // Arrange
+        var relationship = CreatePendingRelationship();
+        var change = relationship.Changes.GetOpenCreation()!;
+        change.ClearDomainEvents();
+
+        // Act
+        relationship.RevokeChange(change.Id, FROM_IDENTITY, FROM_DEVICE, RESPONSE_CONTENT);
+
+        // Assert
+        var domainEvent = change.Should().HaveASingleDomainEvent<RelationshipChangeCompletedDomainEvent>();
+        domainEvent.ChangeId.Should().Be(change.Id);
+        domainEvent.RelationshipId.Should().Be(relationship.Id);
+        domainEvent.ChangeCreatedBy.Should().Be(change.Request.CreatedBy);
+        domainEvent.ChangeResult.Should().Be("Revoked");
+    }
+
     #endregion
 
     #endregion
@@ -314,7 +387,7 @@ public class RelationshipTests : AbstractTestsBase
         relationship.Changes.Should().HaveCount(2);
 
         var termination = relationship.Changes.GetOpenTermination()!;
-        termination.Should().NotBeNull();
+        AssertionExtensions.Should(termination).NotBeNull();
         termination.Status.Should().Be(RelationshipChangeStatus.Pending);
         termination.Request.Should().NotBeNull();
         termination.Request.CreatedBy.Should().Be(FROM_IDENTITY);
@@ -594,6 +667,64 @@ public class RelationshipTests : AbstractTestsBase
 
         relationship.RequestTermination(FROM_IDENTITY, FROM_DEVICE);
         return relationship;
+    }
+
+    #endregion
+
+    #region DomainEvents
+
+    [Fact]
+    public void Raises_PeerToBeDeletedDeletedDomainEvent()
+    {
+        // Arrange
+        var identityToBeDeleted = TestDataGenerator.CreateRandomIdentityAddress();
+        var peer = TestDataGenerator.CreateRandomIdentityAddress();
+        var relationship = CreateActiveRelationship((peer, identityToBeDeleted));
+
+        // Act
+        relationship.ParticipantIsToBeDeleted(identityToBeDeleted);
+
+        // Assert
+        var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerToBeDeletedDomainEvent>();
+        domainEvent.PeerOfIdentityToBeDeleted.Should().Be(peer);
+        domainEvent.RelationshipId.Should().Be(relationship.Id);
+        domainEvent.IdentityToBeDeleted.Should().Be(identityToBeDeleted);
+    }
+
+    [Fact]
+    public void Raises_PeerDeletionCancelledDomainEvent()
+    {
+        // Arrange
+        var identityToBeDeleted = TestDataGenerator.CreateRandomIdentityAddress();
+        var peer = TestDataGenerator.CreateRandomIdentityAddress();
+        var relationship = CreateActiveRelationship((peer, identityToBeDeleted));
+
+        // Act
+        relationship.DeletionOfParticipantCancelled(identityToBeDeleted);
+
+        // Assert
+        var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerDeletionCancelledDomainEvent>();
+        domainEvent.PeerOfIdentityWithDeletionCancelled.Should().Be(peer);
+        domainEvent.RelationshipId.Should().Be(relationship.Id);
+        domainEvent.IdentityWithDeletionCancelled.Should().Be(identityToBeDeleted);
+    }
+
+    [Fact]
+    public void Raises_PeerDeletedDomainEvent()
+    {
+        // Arrange
+        var identityToBeDeleted = TestDataGenerator.CreateRandomIdentityAddress();
+        var peer = TestDataGenerator.CreateRandomIdentityAddress();
+        var relationship = CreateActiveRelationship((peer, identityToBeDeleted));
+
+        // Act
+        relationship.DeletionOfParticipantStarted(identityToBeDeleted);
+
+        // Assert
+        var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerDeletedDomainEvent>();
+        domainEvent.PeerOfDeletedIdentity.Should().Be(peer);
+        domainEvent.RelationshipId.Should().Be(relationship.Id);
+        domainEvent.DeletedIdentity.Should().Be(identityToBeDeleted);
     }
 
     #endregion

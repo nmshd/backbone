@@ -1,9 +1,7 @@
 using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Entities;
 using MediatR;
 
@@ -11,7 +9,6 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Crea
 
 public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelationshipResponse>
 {
-    private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
@@ -21,13 +18,12 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
     private RelationshipTemplate _template;
     private Relationship _relationship;
 
-    public Handler(IUserContext userContext, IMapper mapper, IEventBus eventBus, IRelationshipsRepository relationshipsRepository, IRelationshipTemplatesRepository relationshipTemplatesRepository)
+    public Handler(IUserContext userContext, IMapper mapper, IRelationshipsRepository relationshipsRepository, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
         _userContext = userContext;
         _mapper = mapper;
         _relationshipsRepository = relationshipsRepository;
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
-        _eventBus = eventBus;
 
         _request = null!;
         _template = null!;
@@ -42,7 +38,6 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
         await ReadTemplateFromDb();
         await EnsureRelationshipCanBeEstablished();
         await CreateAndSaveRelationship();
-        PublishDomainEvent();
 
         return CreateResponse();
     }
@@ -81,13 +76,6 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
             _request.Content);
 
         await _relationshipsRepository.Add(_relationship, _cancellationToken);
-    }
-
-    private void PublishDomainEvent()
-    {
-        var change = _relationship.Changes.First(); // there is always one change, because the relationship was just created
-        var evt = new RelationshipChangeCreatedDomainEvent(change);
-        _eventBus.Publish(evt);
     }
 
     private CreateRelationshipResponse CreateResponse()

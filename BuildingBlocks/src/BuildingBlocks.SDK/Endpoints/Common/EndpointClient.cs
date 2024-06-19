@@ -5,7 +5,6 @@ using System.Text;
 using System.Text.Json;
 using System.Web;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.Tooling.JsonConverters;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Backbone.BuildingBlocks.SDK.Endpoints.Common;
@@ -34,7 +33,6 @@ public class EndpointClient
         _httpClient = httpClient;
         _authenticator = authenticator;
         _jsonSerializerOptions = jsonSerializerOptions;
-        jsonSerializerOptions.Converters.Add(new UrlSafeBase64ToByteArrayJsonConverter());
     }
 
     public async Task<ApiResponse<T>> Post<T>(string url, object? requestContent = null)

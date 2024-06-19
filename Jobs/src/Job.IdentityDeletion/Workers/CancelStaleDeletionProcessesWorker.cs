@@ -51,7 +51,7 @@ internal static partial class CancelIdentityDeletionProcessWorkerLogs
         EventId = 440986,
         EventName = "Job.CancelIdentityDeletionProcessWorker.CompletedWithResults",
         Level = LogLevel.Information,
-        Message = "Automatically canceled identity deletion processes: {concatenatedProcessIds}")]
+        Message = "Automatically cancelled identity deletion processes: {concatenatedProcessIds}")]
     public static partial void WorkerCompletedWithResults(this ILogger logger, string concatenatedProcessIds);
 
     [LoggerMessage(
