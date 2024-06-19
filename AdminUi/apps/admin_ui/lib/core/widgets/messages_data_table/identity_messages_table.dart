@@ -1,3 +1,4 @@
+import 'package:admin_ui/core/extensions.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 
@@ -55,18 +56,18 @@ class _IdentityMessagesTableState extends State<IdentityMessagesTable> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text('An error occurred loading the data.'),
+                      Text(context.l10n.error_loading_data),
                       Gaps.h16,
-                      FilledButton(onPressed: widget.dataSource.refreshDatasource, child: const Text('Retry')),
+                      FilledButton(onPressed: widget.dataSource.refreshDatasource, child: Text(context.l10n.retry)),
                     ],
                   ),
                 ),
                 columns: <DataColumn2>[
-                  if (widget.type == 'Outgoing') const DataColumn2(label: Text('Recipients'), size: ColumnSize.L),
-                  if (widget.type == 'Incoming') const DataColumn2(label: Text('Sender Address')),
-                  if (widget.type == 'Incoming') const DataColumn2(label: Text('Sender Device'), size: ColumnSize.S),
-                  const DataColumn2(label: Text('Send Date'), size: ColumnSize.S),
-                  const DataColumn2(label: Text('Number of Attachments')),
+                  if (widget.type == 'Outgoing') DataColumn2(label: Text(context.l10n.recipients), size: ColumnSize.L),
+                  if (widget.type == 'Incoming') DataColumn2(label: Text(context.l10n.senderAddress)),
+                  if (widget.type == 'Incoming') DataColumn2(label: Text(context.l10n.senderDevice), size: ColumnSize.S),
+                  DataColumn2(label: Text(context.l10n.sendDate), size: ColumnSize.S),
+                  DataColumn2(label: Text(context.l10n.numberOfAttachments)),
                 ],
               ),
             ),

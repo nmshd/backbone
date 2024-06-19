@@ -1,6 +1,8 @@
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
 
+import '../../extensions.dart';
+
 class RecipientsButton extends StatelessWidget {
   final List<MessageRecipients> recipients;
 
@@ -10,7 +12,8 @@ class RecipientsButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(4),
-      child: ElevatedButton(
+      child: FilledButton(
+        style: ButtonStyle(),
         onPressed: () {
           showDialog<Widget>(
             context: context,
@@ -33,7 +36,7 @@ class _RecipientsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('List of all Recipients'),
+      title: Text(context.l10n.listOfAllRecipients),
       content: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
@@ -51,7 +54,7 @@ class _RecipientsDialog extends StatelessWidget {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('Close'),
+          child: Text(context.l10n.close),
         ),
       ],
     );

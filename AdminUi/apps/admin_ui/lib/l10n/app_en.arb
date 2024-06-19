@@ -3,5 +3,13 @@
     "cancel": "Cancel",
     "close": "Close",
     "save": "Save",
-    "yes": "Yes"
+    "yes": "Yes",
+    "retry": "Retry",
+    "recipients": "Recipients",
+    "senderAddress": "Sender Address",
+    "senderDevice": "Sender Device",
+    "sendDate": "Send Date",
+    "numberOfAttachments": "Number of Attachments",
+    "listOfAllRecipients": "List of all Recipients",
+    "error_loading_data": "An error occurred loading data."
 }
