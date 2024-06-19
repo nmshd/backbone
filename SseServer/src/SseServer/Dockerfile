@@ -53,12 +53,9 @@ RUN mkdir /rootfs \
 WORKDIR /src
 COPY . .
 
-ARG VERSION
-
 RUN dotnet restore "SseServer/src/SseServer/SseServer.csproj"
 RUN dotnet publish --configuration Release --output /app/publish --no-restore "SseServer/src/SseServer/SseServer.csproj"
 RUN dotnet publish --configuration Release --output /app/publish/health "HealthCheck/HealthCheck.csproj"
-RUN dotnet build --p:Version=${VERSION} "SseServer/src/SseServer/SseServer.csproj"
 
 ### Final ####
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.6-jammy-chiseled

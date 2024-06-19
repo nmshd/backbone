@@ -70,11 +70,8 @@ RUN dotnet restore "Jobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj"
 
 COPY . .
 
-ARG VERSION
-
 WORKDIR "/src/Jobs/src/Job.IdentityDeletion"
 RUN dotnet build "Job.IdentityDeletion.csproj" -c Release --output /app/build --no-restore
-RUN dotnet build --p:Version=${VERSION} "Job.IdentityDeletion.csproj"
 
 FROM build AS publish
 RUN dotnet publish -c Release --output /app/publish --no-restore "Job.IdentityDeletion.csproj" 
