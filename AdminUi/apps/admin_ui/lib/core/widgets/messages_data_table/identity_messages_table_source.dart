@@ -6,6 +6,8 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
+import 'recipients_button.dart';
+
 class IdentityMessagesTableSource extends AsyncDataTableSource {
   Pagination? _pagination;
 
@@ -51,8 +53,17 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
           .map(
             (message) => DataRow2.byIndex(
               index: pageNumber * count + message.$1,
+              specificRowHeight: message.$2.recipients.length > 3 ? 100.0 : null,
               cells: [
-                if (type == 'Outgoing') DataCell(Text(message.$2.recipients.map((recipient) => recipient.address).join(', '))),
+                if (type == 'Outgoing')
+                  if (message.$2.recipients.length > 3)
+                    DataCell(
+                      _RecipientsCell(recipients: message.$2.recipients),
+                    )
+                  else
+                    DataCell(
+                      Text(message.$2.recipients.map((recipient) => recipient.address).join(',')),
+                    ),
                 if (type == 'Incoming') DataCell(Text(message.$2.senderAddress)),
                 if (type == 'Incoming') DataCell(Text(message.$2.senderDevice)),
                 DataCell(Text(message.$2.numberOfAttachments.toString())),
@@ -76,5 +87,29 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
   int _totalPages(int count, List<MessageOverview>? data) {
     if (data == null || data.isEmpty) return 1;
     return (data.length / count).ceil();
+  }
+}
+
+class _RecipientsCell extends StatelessWidget {
+  final List<MessageRecipients> recipients;
+
+  const _RecipientsCell({required this.recipients});
+
+  @override
+  Widget build(BuildContext context) {
+    final displayedRecipients = recipients.length > 3 ? recipients.sublist(0, 3) : recipients;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ...displayedRecipients.map((recipient) => Text(recipient.address)).toList(),
+        if (recipients.length > 3)
+          Row(
+            children: [
+              RecipientsButton(recipients: recipients),
+            ],
+          ),
+      ],
+    );
   }
 }
