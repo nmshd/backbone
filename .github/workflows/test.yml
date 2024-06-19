@@ -138,11 +138,6 @@ jobs:
             tag: ghcr.io/nmshd/backbone-files-sanity-check:test
             platforms: linux/amd64
             
-          - dockerfile: DatabaseMigrator/Dockerfile
-            image: database-migrator
-            tag: ghcr.io/nmshd/backbone-database-migrator:test
-            platforms: linux/amd64
-            
           - dockerfile: Jobs/src/Job.IdentityDeletion/Dockerfile
             image: identity-deletion-jobs
             tag: ghcr.io/nmshd/backbone-identity-deletion-jobs:test
