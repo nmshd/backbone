@@ -305,6 +305,8 @@ public class Relationship : Entity
             FromHasDecomposed = true;
         else
             ToHasDecomposed = true;
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
     private void DecomposeAsSecondParticipant(IdentityAddress activeIdentity, DeviceId activeDevice)
@@ -324,6 +326,8 @@ public class Relationship : Entity
 
         FromHasDecomposed = true;
         ToHasDecomposed = true;
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
     private void EnsureRelationshipNotDecomposedBy(IdentityAddress activeIdentity)
