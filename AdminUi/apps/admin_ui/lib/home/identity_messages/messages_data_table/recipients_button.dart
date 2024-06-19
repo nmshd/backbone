@@ -1,7 +1,7 @@
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/extensions.dart';
+import '../../../core/extensions.dart';
 
 class RecipientsButton extends StatelessWidget {
   final List<MessageRecipients> recipients;
