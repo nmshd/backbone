@@ -47,7 +47,8 @@ static IHostBuilder CreateHostBuilder(string[] args)
             configuration
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
+                .AddJsonFile(Path.GetFullPath("../appsettings.override.json"), optional: true,
+                    reloadOnChange: true); //TODO: Timo (Is there another possibility than to get the full path, without it, it doesn't find the file)
 
             if (env.IsDevelopment())
             {
