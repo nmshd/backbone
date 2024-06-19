@@ -193,18 +193,28 @@ jobs:
           file: ${{ matrix.dockerfile }}
           cache-from: type=local,src=/tmp/.buildx-${{ matrix.image }}-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-${{ matrix.image }}-cache-new
-          outputs: type=oci,dest=/tmp/${{ matrix.image }}.tar
+          #outputs: type=oci,dest=/tmp/${{ matrix.image }}.tar
           push: true
           provenance: true
           sbom: true
           tags: ${{ matrix.tag }}
           platforms: ${{ matrix.platforms }}
 
+#      - name: Upload artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: docker-${{ matrix.image }}
+#          path: /tmp/${{ matrix.image }}.tar
+#          retention-days: 1
+      
+      - name: Create artifact
+        run: echo ${{ matrix.tag }} > /tmp/${{ matrix.image }}.txt
+      
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: docker-${{ matrix.image }}
-          path: /tmp/${{ matrix.image }}.tar
+          path: /tmp/${{ matrix.image }}.txt
           retention-days: 1
 
       # Temp fix
