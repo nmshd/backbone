@@ -102,7 +102,7 @@ class _RecipientsCell extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ...displayedRecipients.map((recipient) => Text(recipient.address)).toList(),
+        ...displayedRecipients.map((recipient) => Text(recipient.address)),
         if (recipients.length > 3)
           Row(
             children: [

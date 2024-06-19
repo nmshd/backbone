@@ -39,10 +39,12 @@ class _RecipientsDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: recipients
-              .map((recipient) => Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Text(recipient.address),
-                  ))
+              .map(
+                (recipient) => Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: Text(recipient.address),
+                ),
+              )
               .toList(),
         ),
       ),
