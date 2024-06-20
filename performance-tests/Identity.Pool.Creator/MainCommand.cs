@@ -3,6 +3,7 @@ using System.Text.Json;
 using Backbone.Identity.Pool.Creator.Application.MessageDistributor;
 using Backbone.Identity.Pool.Creator.Application.Printer;
 using Backbone.Identity.Pool.Creator.Application.RelationshipDistributor;
+using Backbone.Identity.Pool.Creator.GraphPoolsGenerator;
 using Backbone.Identity.Pool.Creator.PoolsFile;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -50,6 +51,15 @@ public class GenerateCommand : Command
 
             );
 
+        var graphGenerator = new GraphPoolsGenerator.GraphPoolsGenerator(
+            baseAddress,
+            clientId,
+            clientSecret,
+            poolsConfiguration,
+            printer: serviceProvider.GetRequiredService<IPrinter>()
+        );
+
+        //await graphGenerator.CreatePools();
         await generator.CreatePools();
     }
 
@@ -57,7 +67,7 @@ public class GenerateCommand : Command
     {
         var services = new ServiceCollection();
 
-        services.AddSingleton<IRelationshipDistributor, RelationshipDistributorV2>();
+        services.AddSingleton<IRelationshipDistributor, RelationshipDistributorV3>();
 
         services.AddSingleton<IMessageDistributor, MessageDistributorV2>();
 
