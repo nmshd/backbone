@@ -109,6 +109,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
         var logger = A.Dummy<ILogger<ActualDeletionWorker>>();
         deletionProcessLogger ??= A.Dummy<IDeletionProcessLogger>();
-        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, eventBus, logger, deletionProcessLogger);
+        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, logger, deletionProcessLogger);
     }
 }
