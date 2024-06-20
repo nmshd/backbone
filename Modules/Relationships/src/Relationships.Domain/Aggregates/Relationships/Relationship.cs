@@ -42,6 +42,8 @@ public class Relationship : Entity
         {
             new(RelationshipAuditLogEntryReason.Creation, null, RelationshipStatus.Pending, activeIdentity, activeDevice)
         };
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
     public RelationshipId Id { get; }
