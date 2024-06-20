@@ -12,13 +12,13 @@ public class MetricsRepository : IMetricsRepository
     {
         _metrics =
         [
-            new(MetricKey.NumberOfSentMessages, "Number of Sent Messages"),
-            new(MetricKey.NumberOfRelationships, "Number of Relationships"),
-            new(MetricKey.NumberOfRelationshipTemplates, "Number of Relationship Templates"),
-            new(MetricKey.NumberOfFiles, "Number of Files"),
-            new(MetricKey.NumberOfTokens, "Number of Tokens"),
-            new(MetricKey.UsedFileStorageSpace, "File Storage Capacity (in Megabytes)"),
-            new (MetricKey.NumberOfStartedDeletionProcesses, "Number of Started Deletion Processes")
+            new Metric(MetricKey.NumberOfSentMessages, "Number of Sent Messages"),
+            new Metric(MetricKey.NumberOfRelationships, "Number of Relationships"),
+            new Metric(MetricKey.NumberOfRelationshipTemplates, "Number of Relationship Templates"),
+            new Metric(MetricKey.NumberOfFiles, "Number of Files"),
+            new Metric(MetricKey.NumberOfTokens, "Number of Tokens"),
+            new Metric(MetricKey.UsedFileStorageSpace, "File Storage Capacity (in Megabytes)"),
+            new Metric(MetricKey.NumberOfStartedDeletionProcesses, "Number of Started Deletion Processes")
         ];
     }
 

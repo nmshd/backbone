@@ -492,6 +492,21 @@ public class MetricCalculatorFactoryStub : MetricCalculatorFactory
     {
         return _calculator;
     }
+
+    protected override IMetricCalculator CreateNumberOfCreatedDatawalletModificationsCalculator()
+    {
+        return _calculator;
+    }
+
+    protected override IMetricCalculator CreateNumberOfCreatedDevicesCalculator()
+    {
+        return _calculator;
+    }
+
+    protected override IMetricCalculator CreateNumberOfCreatedChallengesCalculator()
+    {
+        return _calculator;
+    }
 }
 
 public class MetricCalculatorStub : IMetricCalculator

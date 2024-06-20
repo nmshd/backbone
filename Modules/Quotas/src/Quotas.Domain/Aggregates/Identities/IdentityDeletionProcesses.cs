@@ -1,4 +1,4 @@
-﻿namespace Backbone.Modules.Quotas.Domain.Aggregates.StartedDeletionProcesses;
+﻿namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public class IdentityDeletionProcesses : ICreatedAt
 {

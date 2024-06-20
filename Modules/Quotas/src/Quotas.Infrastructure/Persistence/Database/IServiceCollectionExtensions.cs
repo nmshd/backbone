@@ -52,6 +52,7 @@ public static class IServiceCollectionExtensions
                         throw new Exception($"Unsupported database provider: {options.Provider}");
                 }
             });
+
         services.AddTransient<IIdentitiesRepository, IdentitiesRepository>();
         services.AddTransient<IMessagesRepository, MessagesRepository>();
         services.AddTransient<IFilesRepository, FilesRepository>();
@@ -61,7 +62,9 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IRelationshipTemplatesRepository, RelationshipTemplatesRepository>();
         services.AddTransient<ITokensRepository, TokensRepository>();
         services.AddTransient<MetricCalculatorFactory, ServiceProviderMetricCalculatorFactory>();
-        services.AddTransient<IStartedDeletionProcessesRepository, StartedDeletionProcessesRepository>();
+        services.AddTransient<IIdentityDeletionProcessesRepository, IdentityDeletionProcessesRepository>();
+        services.AddTransient<IChallengesRepository, ChallengesRepository>();
+        services.AddTransient<IDatawalletModificationsRepository, DatawalletModificationsRepository>();
     }
 
     public class DbOptions

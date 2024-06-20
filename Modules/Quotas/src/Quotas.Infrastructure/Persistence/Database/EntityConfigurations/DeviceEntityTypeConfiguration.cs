@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.EntityConfigurations;
 
-public class IdentityDeletionProcessesEntityTypeConfiguration : IEntityTypeConfiguration<IdentityDeletionProcesses>
+public class DeviceEntityTypeConfiguration : IEntityTypeConfiguration<Device>
 {
-    public void Configure(EntityTypeBuilder<IdentityDeletionProcesses> builder)
+    public void Configure(EntityTypeBuilder<Device> builder)
     {
-        builder.ToTable(nameof(IdentityDeletionProcesses), "Devices", x => x.ExcludeFromMigrations());
+        builder.ToTable(nameof(Device), "Devices", x => x.ExcludeFromMigrations());
         builder.HasKey(x => x.Id);
     }
 }
