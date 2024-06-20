@@ -20,7 +20,6 @@ public class Tier : Entity
 
     public Tier(TierName name) : this(TierId.Generate(), name, true, true)
     {
-        RaiseDomainEvent(new TierCreatedDomainEvent(this));
     }
 
     private Tier(TierId id, TierName name, bool canBeUsedAsDefaultForClient, bool canBeManuallyAssigned)
@@ -29,6 +28,7 @@ public class Tier : Entity
         Name = name;
         CanBeUsedAsDefaultForClient = canBeUsedAsDefaultForClient;
         CanBeManuallyAssigned = canBeManuallyAssigned;
+        RaiseDomainEvent(new TierCreatedDomainEvent(this));
     }
 
     public TierId Id { get; }
