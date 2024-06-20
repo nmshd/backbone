@@ -49,7 +49,7 @@ class IdentityQuotaListState extends State<IdentityQuotaList> {
                       DataColumn2(label: Text(context.l10n.period), size: ColumnSize.S),
                       const DataColumn2(label: Text(''), size: ColumnSize.S),
                     ],
-                    empty: Text(context.l10n.noQuotasAppliedForIdentity),
+                    empty: Text(context.l10n.no_quotas_applied_for_identity),
                     rows: groupedQuotas.entries.expand((entry) {
                       final metricName = entry.key;
                       final quotas = entry.value;
@@ -71,7 +71,7 @@ class IdentityQuotaListState extends State<IdentityQuotaList> {
                           (quota) {
                             final isTierQuota = quota.source == context.l10n.tier;
                             final shouldDisable = isTierQuota && hasIndividualQuota;
-                            final tooltipMessage = shouldDisable ? context.l10n.tierQuotaEffectMessage : null;
+                            final tooltipMessage = shouldDisable ? context.l10n.tier_quota_effect_message : null;
 
                             return DataRow2(
                               selected: _selectedQuotas.contains(quota.id),

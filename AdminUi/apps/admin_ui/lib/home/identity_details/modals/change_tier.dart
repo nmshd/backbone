@@ -88,7 +88,7 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
     if (response.hasError) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(context.l10n.failedToUpdateIdentityMessage),
+          content: Text(context.l10n.failed_to_update_identity_message),
           duration: const Duration(seconds: 3),
         ),
       );
@@ -100,7 +100,7 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(context.l10n.identityUpdatedMessage),
+        content: Text(context.l10n.identity_updated_message),
         duration: const Duration(seconds: 3),
       ),
     );

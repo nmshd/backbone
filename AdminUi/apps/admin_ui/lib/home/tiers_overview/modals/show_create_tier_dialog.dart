@@ -53,7 +53,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
             : Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Text(context.l10n.formMessageForTier),
+                  Text(context.l10n.form_message_for_tier),
                   Gaps.h16,
                   TextField(
                     controller: _tierNameController,
@@ -93,7 +93,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
 
   Future<void> _onSubmitted(String name) async {
     if (name.isEmpty) {
-      _setErrorMessage(context.l10n.nameCannotBeEmptyMessage);
+      _setErrorMessage(context.l10n.name_cannot_be_empty_message);
       _focusNode.requestFocus();
       return;
     }

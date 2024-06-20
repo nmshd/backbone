@@ -68,8 +68,8 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                 obscureText: _isClientSecretVisible,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: context.l10n.clientSecret,
-                  helperText: context.l10n.clientDataMessage(context.l10n.clientSecret),
+                  labelText: context.l10n.client_secret,
+                  helperText: context.l10n.clientDataMessage(context.l10n.client_secret),
                   suffixIcon: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
@@ -81,9 +81,9 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                         ),
                         Gaps.w4,
                         CopyToClipboardButton(
-                          tooltip: context.l10n.copyToClipboard,
+                          tooltip: context.l10n.copy_to_clipboard,
                           clipboardText: _newClientSecretController.text,
-                          successMessage: context.l10n.copyToClipboardMessage,
+                          successMessage: context.l10n.copy_to_clipboard_message,
                         ),
                       ],
                     ),
@@ -94,7 +94,7 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
-                    context.l10n.saveTheClientSecretMessage,
+                    context.l10n.save_the_client_secret_message,
                     style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),

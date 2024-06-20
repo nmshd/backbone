@@ -81,9 +81,9 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                     });
                   },
                   columns: <DataColumn2>[
-                    DataColumn2(label: Text(context.l10n.clientID), size: ColumnSize.L),
-                    DataColumn2(label: Text(context.l10n.displayName), size: ColumnSize.L),
-                    DataColumn2(label: Text(context.l10n.defaultTier)),
+                    DataColumn2(label: Text(context.l10n.client_ID), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.display_name), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.default_tier)),
                     DataColumn2(label: Text(context.l10n.numberOfEntities('Identities')), size: ColumnSize.L),
                     DataColumn2(label: Text(context.l10n.createdAt)),
                     const DataColumn2(label: Text(''), size: ColumnSize.L),
@@ -154,7 +154,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     final confirmed = await showConfirmationDialog(
       context: context,
       title: context.l10n.removeEntities('Clients'),
-      message: context.l10n.removeClientsMessage,
+      message: context.l10n.remove_clients_message,
     );
 
     if (!confirmed) return;

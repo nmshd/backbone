@@ -123,7 +123,7 @@ class _QuotaListState extends State<_QuotaList> {
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         title: Text(context.l10n.quotas),
-        subtitle: isQueuedForDeletionTier ? Text(context.l10n.viewQuotasForTheTier) : Text(context.l10n.viewAndAssignQuotasForEntity('tier')),
+        subtitle: isQueuedForDeletionTier ? Text(context.l10n.view_quotas_for_the_tier) : Text(context.l10n.viewAndAssignQuotasForEntity('tier')),
         children: [
           Card(
             child: Column(
@@ -143,7 +143,7 @@ class _QuotaListState extends State<_QuotaList> {
                       DataColumn(label: Text(context.l10n.max)),
                       DataColumn(label: Text(context.l10n.period)),
                     ],
-                    empty: Text(context.l10n.noQuotasAddedForTier),
+                    empty: Text(context.l10n.no_quotas_added_for_tier),
                     rows: widget.tierDetails.quotas
                         .map(
                           (quota) => DataRow2(
@@ -217,7 +217,7 @@ class _IdentitiesListState extends State<_IdentitiesList> {
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         title: Text(context.l10n.identities),
-        subtitle: Text(context.l10n.viewIdentitiesAssociatedWithTier),
+        subtitle: Text(context.l10n.view_identities_associated_with_tier),
         children: [
           Card(
             child: Column(

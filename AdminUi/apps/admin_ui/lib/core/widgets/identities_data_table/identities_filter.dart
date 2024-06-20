@@ -111,7 +111,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             ),
             Gaps.w16,
             DateFilter(
-              label: context.l10n.lastLoginAt,
+              label: context.l10n.last_login_at,
               onFilterSelected: (FilterOperator operator, DateTime? selectedDate) {
                 final lastLoginAt = FilterOperatorValue(operator, selectedDate != null ? DateFormat('yyyy-MM-dd').format(selectedDate) : '');
                 _filter = _filter.copyWith(lastLoginAt: lastLoginAt.value.isEmpty ? const Optional.absent() : Optional(lastLoginAt));

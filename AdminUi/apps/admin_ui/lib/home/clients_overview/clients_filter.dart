@@ -123,7 +123,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
           mainAxisSize: MainAxisSize.min,
           children: [
             InputField(
-              label: context.l10n.clientID,
+              label: context.l10n.client_ID,
               onEnteredText: (String enteredText) {
                 filter = filter.copyWith(clientId: enteredText.isEmpty ? const Optional.absent() : Optional(enteredText));
 
@@ -132,7 +132,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             ),
             Gaps.w16,
             InputField(
-              label: context.l10n.displayName,
+              label: context.l10n.display_name,
               onEnteredText: (String enteredText) {
                 filter = filter.copyWith(displayName: enteredText.isEmpty ? const Optional.absent() : Optional(enteredText));
 
@@ -141,7 +141,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             ),
             Gaps.w16,
             MultiSelectFilter(
-              label: context.l10n.defaultTier,
+              label: context.l10n.default_tier,
               searchLabel: context.l10n.searchEntities('Tiers'),
               controller: _tierController,
               onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
