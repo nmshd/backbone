@@ -127,7 +127,7 @@ class _IdentityDetailsCard extends StatelessWidget {
                       Gaps.w16,
                       CopyToClipboardButton(
                         clipboardText: identityDetails.address,
-                        successMessage: context.l10n.identityCopiedToClipboardMessage,
+                        successMessage: context.l10n.identity_copied_to_clipboard_message,
                       ),
                     ],
                   ),
@@ -138,18 +138,18 @@ class _IdentityDetailsCard extends StatelessWidget {
                     runSpacing: 8,
                     children: [
                       _IdentityDetails(
-                        title: context.l10n.clientID,
+                        title: context.l10n.client_ID,
                         value: identityDetails.clientId,
                       ),
                       _IdentityDetails(
-                        title: context.l10n.publicKey,
+                        title: context.l10n.public_key,
                         value: identityDetails.publicKey.ellipsize(20),
                         onIconPressed: () => context.setClipboardDataWithSuccessNotification(
                           clipboardText: identityDetails.publicKey,
-                          successMessage: context.l10n.publicKeyCopiedToClipboardMessage,
+                          successMessage: context.l10n.public_key_copied_to_clipboard_message,
                         ),
                         icon: Icons.copy,
-                        tooltipMessage: context.l10n.copyPublicKey,
+                        tooltipMessage: context.l10n.copy_public_key,
                       ),
                       _IdentityDetails(
                         title: context.l10n.createdAt,
