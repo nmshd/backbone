@@ -213,7 +213,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         {
             { "Challenges", MessageKey.Challenges },
             { "PnsRegistrations", MessageKey.PnsRegistrations },
-            { "Identity", MessageKey.Identities },
+            { "Identities", MessageKey.Identities },
             { "Files", MessageKey.Files },
             { "Messages", MessageKey.Messages },
             { "QuotaIdentities", MessageKey.QuotaIdentities },
