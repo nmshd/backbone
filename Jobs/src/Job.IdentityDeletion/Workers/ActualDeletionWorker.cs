@@ -77,10 +77,16 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task Delete(IdentityAddress identityAddress)
     {
-        foreach (var identityDeleter in _identityDeleters)
+
+        var identityDeletersWithoutDevices = _identityDeleters.Where(i => i.GetType() != typeof(Backbone.Modules.Devices.Application.Identities.IdentityDeleter));
+        var deviceIdentityDeleter = _identityDeleters.FirstOrDefault(i => !identityDeletersWithoutDevices.Contains(i));
+
+        foreach (var identityDeleter in identityDeletersWithoutDevices)
         {
             await identityDeleter.Delete(identityAddress, _deletionProcessLogger);
         }
+
+        await deviceIdentityDeleter!.Delete(identityAddress, _deletionProcessLogger);
     }
 
     private void LogErroringDeletionTriggers(IEnumerable<KeyValuePair<IdentityAddress, UnitResult<DomainError>>> erroringDeletionTriggers)
