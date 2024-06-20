@@ -23,7 +23,8 @@ public class PoolsGenerator
     private readonly PoolsOffset _poolsOffset;
     private readonly ClientCredentials _clientCredentials;
 
-    public PoolsGenerator(string baseAddress,
+    public PoolsGenerator(
+        string baseAddress,
         string clientId,
         string clientSecret,
         PoolFileRoot configuration,
@@ -32,10 +33,10 @@ public class PoolsGenerator
         IPrinter printer)
     {
         _baseAddress = baseAddress;
+        _clientCredentials = new ClientCredentials(clientId, clientSecret);
         _relationshipDistributor = relationshipDistributor;
         _messageDistributor = messageDistributor;
         _printer = printer;
-        _clientCredentials = new ClientCredentials(clientId, clientSecret);
         _pools = configuration.Pools.ToList();
 
         MessageDistributorTools.CalculateSentAndReceivedMessages(_pools, configuration.Configuration);
@@ -54,9 +55,12 @@ public class PoolsGenerator
         RelationshipDistributorTools.EstablishMessagesOffsetPoolsRelationships(_pools);
 
         _relationshipDistributor.Distribute(_pools);
-        _printer.PrintRelationships(_pools, summaryOnly: true);
-
         _messageDistributor.Distribute(_pools);
+
+        _printer.PrintRelationships(_pools, summaryOnly: true);
+        Console.WriteLine($"Removed {TrimUnusedRelationships()} unused relationships.");
+
+        _printer.PrintRelationships(_pools, summaryOnly: true);
         _printer.PrintMessages(_pools, summaryOnly: true);
 
         //await CreateRelationshipTemplates();
@@ -65,6 +69,29 @@ public class PoolsGenerator
         //await CreateDatawalletModifications();
 
         OutputAll();
+    }
+
+    private uint TrimUnusedRelationships()
+    {
+        var allIdentites = _pools.SelectMany(p => p.Identities);
+
+        uint removedCount = 0;
+
+        foreach (var identity in allIdentites)
+        {
+            for (var i = 0; i < identity.IdentitiesToEstablishRelationshipsWith.Count; i++)
+            {
+                var relationshipIdentity = identity.IdentitiesToEstablishRelationshipsWith[i];
+                if (!identity.IdentitiesToSendMessagesTo.Contains(relationshipIdentity))
+                {
+                    identity.IdentitiesToEstablishRelationshipsWith.Remove(relationshipIdentity);
+                    removedCount++;
+                    i--;
+                }
+            }
+        }
+
+        return removedCount;
     }
 
     /// <summary>

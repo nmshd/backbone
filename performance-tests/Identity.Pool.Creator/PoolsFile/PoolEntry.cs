@@ -48,7 +48,7 @@ public static class PoolEntryExtensionMethods
         return appRelationshipsCount;
     }
 
-    public static long ExpectedNumberOfMessages(this IList<PoolEntry> pools)
+    public static long ExpectedNumberOfSentMessages(this IList<PoolEntry> pools)
     {
         var appMessagesCount = pools.Where(p => p.IsApp()).Sum(p => p.NumberOfSentMessages * p.Amount);
         var connectorMessageCount = pools.Where(p => p.IsConnector()).Sum(p => p.NumberOfSentMessages * p.Amount);
@@ -62,5 +62,10 @@ public static class PoolEntryExtensionMethods
         var connectorMessageCount = pools.Where(p => p.IsConnector()).SelectMany(p => p.Identities).Sum(i => i.IdentitiesToSendMessagesTo.Count);
 
         return appMessagesCount + connectorMessageCount;
+    }
+
+    public static long NumberOfEstablishedRelationships(this IList<PoolEntry> pools)
+    {
+        return pools.SelectMany(p => p.Identities).SelectMany(i => i.IdentitiesToEstablishRelationshipsWith).Distinct().Count() / 2;
     }
 }

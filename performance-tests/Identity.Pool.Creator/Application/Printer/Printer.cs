@@ -21,7 +21,7 @@ public class Printer : IPrinter
 
     public void PrintMessages(IList<PoolEntry> pools, bool summaryOnly = false)
     {
-        Console.WriteLine($"{pools.ExpectedNumberOfMessages()} messages expected.");
+        Console.WriteLine($"{pools.ExpectedNumberOfSentMessages()} messages expected.");
         Console.WriteLine($"{pools.NumberOfSentMessages()} messages sent.");
 
         var appIdentities = pools.Where(p => p.IsApp()).SelectMany(p => p.Identities).ToList();

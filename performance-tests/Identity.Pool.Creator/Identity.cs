@@ -45,13 +45,13 @@ public class Identity
 
     public bool HasAvailabilityForNewRelationships() => RelationshipsCapacity > 0;
 
-    public bool AddIdentityToEstablishRelationshipsWith(Identity identity, bool isRecursiveCall = false)
+    public bool AddIdentityToEstablishRelationshipsWith(Identity identity, bool skipCapacityCheck = false, bool isRecursiveCall = false)
     {
-        if (!HasAvailabilityForNewRelationships() || !isRecursiveCall && !identity.HasAvailabilityForNewRelationships()) return false;
+        if (!skipCapacityCheck && (!HasAvailabilityForNewRelationships() || !isRecursiveCall && !identity.HasAvailabilityForNewRelationships())) return false;
 
         IdentitiesToEstablishRelationshipsWith.Add(identity);
         RelationshipsCapacity--;
-        if (!isRecursiveCall) identity.AddIdentityToEstablishRelationshipsWith(this, true);
+        if (!isRecursiveCall) identity.AddIdentityToEstablishRelationshipsWith(this, skipCapacityCheck: skipCapacityCheck, isRecursiveCall: true);
 
         return true;
     }
