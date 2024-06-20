@@ -15,12 +15,12 @@ public class IdentityDeleterTests : AbstractTestsBase
     {
         // Arrange
         var mockMediator = A.Fake<IMediator>();
-        var mockIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
+        var dummyIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
         var identityAddress = CreateRandomIdentityAddress();
         var deleter = new IdentityDeleter(mockMediator);
 
         // Act
-        await deleter.Delete(identityAddress, mockIDeletionProcessLogger);
+        await deleter.Delete(identityAddress, dummyIDeletionProcessLogger);
 
         // Assert
         A.CallTo(() => mockMediator.Send(A<DeleteChallengesOfIdentityCommand>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
