@@ -104,7 +104,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: context.l10n.maxEntities('Amount'),
-                  helperText: context.l10n.maxAmountMessage,
+                  helperText: context.l10n.max_amount_message,
                 ),
                 inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
                 keyboardType: TextInputType.number,
@@ -153,7 +153,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
   Future<void> _addQuota() async {
     setState(() => _saving = true);
 
-    assert(_selectedMetric != null && _maxAmount != null && _selectedPeriod != null, context.l10n.invalidState);
+    assert(_selectedMetric != null && _maxAmount != null && _selectedPeriod != null, 'Invalid State');
 
     final response = await widget.addQuota(
       metricKey: _selectedMetric!,
