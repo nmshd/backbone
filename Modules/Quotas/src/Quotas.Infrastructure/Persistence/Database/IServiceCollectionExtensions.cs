@@ -65,6 +65,7 @@ public static class IServiceCollectionExtensions
         services.AddTransient<IIdentityDeletionProcessesRepository, IdentityDeletionProcessesRepository>();
         services.AddTransient<IChallengesRepository, ChallengesRepository>();
         services.AddTransient<IDatawalletModificationsRepository, DatawalletModificationsRepository>();
+        services.AddTransient<IDevicesRepository, DevicesRepository>();
     }
 
     public class DbOptions

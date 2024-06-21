@@ -8,7 +8,7 @@ public class DeviceEntityTypeConfiguration : IEntityTypeConfiguration<Device>
 {
     public void Configure(EntityTypeBuilder<Device> builder)
     {
-        builder.ToTable(nameof(Device), "Devices", x => x.ExcludeFromMigrations());
+        builder.ToTable($"{nameof(Device)}s", "Devices", x => x.ExcludeFromMigrations());
         builder.HasKey(x => x.Id);
     }
 }

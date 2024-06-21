@@ -8,7 +8,7 @@ public class DatawalletModificationEntityTypeConfiguration : IEntityTypeConfigur
 {
     public void Configure(EntityTypeBuilder<DatawalletModification> builder)
     {
-        builder.ToTable(nameof(DatawalletModification), "Synchronization", x => x.ExcludeFromMigrations());
+        builder.ToTable($"{nameof(DatawalletModification)}s", "Synchronization", x => x.ExcludeFromMigrations());
         builder.HasKey(x => x.Id);
     }
 }

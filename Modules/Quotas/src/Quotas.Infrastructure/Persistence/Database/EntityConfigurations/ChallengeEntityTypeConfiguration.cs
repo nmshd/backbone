@@ -8,7 +8,7 @@ public class ChallengeEntityTypeConfiguration : IEntityTypeConfiguration<Challen
 {
     public void Configure(EntityTypeBuilder<Challenge> builder)
     {
-        builder.ToTable(nameof(Challenge), "Challenges", x => x.ExcludeFromMigrations());
+        builder.ToTable($"{nameof(Challenge)}s", "Challenges", x => x.ExcludeFromMigrations());
         builder.HasKey(x => x.Id);
     }
 }
