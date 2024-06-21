@@ -207,15 +207,15 @@ jobs:
 #          path: /tmp/${{ matrix.image }}.tar
 #          retention-days: 1
       
-      - name: Create artifact
-        run: echo ${{ matrix.tag }} > /tmp/${{ matrix.image }}.txt
-      
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: docker-${{ matrix.image }}
-          path: /tmp/${{ matrix.image }}.txt
-          retention-days: 1
+#      - name: Create artifact
+#        run: echo ${{ matrix.tag }} > /tmp/${{ matrix.image }}.txt
+#      
+#      - name: Upload artifact
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: docker-${{ matrix.image }}
+#          path: /tmp/${{ matrix.image }}.txt
+#          retention-days: 1
 
       # Temp fix
       # https://github.com/docker/build-push-action/issues/252
@@ -247,15 +247,15 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
         
-      - name: Download cached Docker images
-        uses: actions/download-artifact@v4
-        with:
-          path: /tmp
-          pattern: docker-*
-          merge-multiple: true
-
-      - name: Load Docker images
-        run: ./.ci/loadDockerImages.sh
+#      - name: Download cached Docker images
+#        uses: actions/download-artifact@v4
+#        with:
+#          path: /tmp
+#          pattern: docker-*
+#          merge-multiple: true
+#
+#      - name: Load Docker images
+#        run: ./.ci/loadDockerImages.sh
       
       - name: Run integration tests
         run: ./.ci/integrationTest.sqlserver.sh
