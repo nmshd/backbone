@@ -54,6 +54,7 @@ WORKDIR /src
 COPY . .
 
 ARG VERSION
+RUN echo $VERSION
 
 RUN dotnet restore "ConsumerApi/ConsumerApi.csproj"
 RUN dotnet publish --configuration Release --output /app/publish --no-restore "ConsumerApi/ConsumerApi.csproj"
