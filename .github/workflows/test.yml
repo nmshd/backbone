@@ -187,25 +187,26 @@ jobs:
         run: npm install --prefix ./.ci
         
       - name: Build Image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           file: ${{ matrix.dockerfile }}
           cache-from: type=local,src=/tmp/.buildx-${{ matrix.image }}-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-${{ matrix.image }}-cache-new
           #outputs: type=oci,dest=/tmp/${{ matrix.image }}.tar
+          outputs: type=registry,type=docker,dest=/tmp/${{ matrix.image }}.tar
           push: true
           provenance: true
           sbom: true
           tags: ${{ matrix.tag }}
           platforms: ${{ matrix.platforms }}
 
-#      - name: Upload artifact
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: docker-${{ matrix.image }}
-#          path: /tmp/${{ matrix.image }}.tar
-#          retention-days: 1
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-${{ matrix.image }}
+          path: /tmp/${{ matrix.image }}.tar
+          retention-days: 1
       
 #      - name: Create artifact
 #        run: echo ${{ matrix.tag }} > /tmp/${{ matrix.image }}.txt
@@ -247,15 +248,15 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
         
-#      - name: Download cached Docker images
-#        uses: actions/download-artifact@v4
-#        with:
-#          path: /tmp
-#          pattern: docker-*
-#          merge-multiple: true
-#
-#      - name: Load Docker images
-#        run: ./.ci/loadDockerImages.sh
+      - name: Download cached Docker images
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp
+          pattern: docker-*
+          merge-multiple: true
+
+      - name: Load Docker images
+        run: ./.ci/loadDockerImages.sh
       
       - name: Run integration tests
         run: ./.ci/integrationTest.sqlserver.sh
