@@ -214,7 +214,7 @@ jobs:
       - name: Build image
         run: ./.ci/capi/buildContainerImage.js
         env:
-          TAG: test
+          TAG: 1.0.0.0
           PLATFORMS: linux/amd64
 
   build-eh-container-image:
@@ -230,7 +230,7 @@ jobs:
       - name: Build image
         run: ./.ci/eh/buildContainerImage.js
         env:
-          TAG: test
+          TAG: 1.0.0.0
           PLATFORMS: linux/amd64
 
   build-dbm-container-image:
@@ -246,7 +246,7 @@ jobs:
       - name: Build image
         run: ./.ci/dbm/buildContainerImage.js
         env:
-          TAG: test
+          TAG: 1.0.0.0
           PLATFORMS: linux/amd64
 
   build-idj-container-image:
@@ -262,7 +262,7 @@ jobs:
       - name: Build image
         run: ./.ci/idj/buildContainerImage.js
         env:
-          TAG: test
+          TAG: 1.0.0.0
           PLATFORMS: linux/amd64
 
   build-aui-container-image:
@@ -278,7 +278,7 @@ jobs:
       - name: Build image
         run: ./.ci/aui/buildContainerImage.js
         env:
-          TAG: test
+          TAG: 1.0.0.0
           PLATFORMS: linux/amd64
 
   build-acli-container-image:
@@ -294,7 +294,7 @@ jobs:
       - name: Build image
         run: ./.ci/acli/buildContainerImage.js
         env:
-          TAG: test
+          TAG: 1.0.0.0
           PLATFORMS: linux/amd64
 
   build-sses-container-image:
@@ -310,7 +310,7 @@ jobs:
       - name: Build image
         run: ./.ci/sses/buildContainerImage.js
         env:
-          TAG: test
+          TAG: 1.0.0.0
           PLATFORMS: linux/amd64
 
   build-fsc-container-image:
@@ -326,5 +326,5 @@ jobs:
       - name: Build image
         run: ./.ci/fsc/buildContainerImage.js
         env:
-          TAG: test
+          TAG: 1.0.0.0
           PLATFORMS: linux/amd64
