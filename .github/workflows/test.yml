@@ -110,43 +110,27 @@ jobs:
         include:
           - dockerfile: ConsumerApi/Dockerfile
             image: consumer-api
-            tag: ghcr.io/nmshd/backbone-consumer-api:test
-            platforms: linux/amd64
             
           - dockerfile: AdminApi/src/AdminApi/Dockerfile
             image: admin-ui
-            tag: ghcr.io/nmshd/backbone-admin-ui:test
-            platforms: linux/amd64
             
           - dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
             image: seed-client
-            tag: ghcr.io/nmshd/backbone-admin-cli:test
-            platforms: linux/amd64
             
           - dockerfile: DatabaseMigrator/Dockerfile
             image: database-migrator
-            tag: ghcr.io/nmshd/backbone-database-migrator:test
-            platforms: linux/amd64
             
           - dockerfile: EventHandlerService/src/EventHandlerService/Dockerfile
             image: event-handler-service
-            tag: ghcr.io/nmshd/backbone-event-handler:test
-            platforms: linux/amd64
             
           - dockerfile: Modules/Files/src/Files.Jobs.SanityCheck/Dockerfile
             image: files-sanity-check
-            tag: ghcr.io/nmshd/backbone-files-sanity-check:test
-            platforms: linux/amd64
             
           - dockerfile: Jobs/src/Job.IdentityDeletion/Dockerfile
             image: identity-deletion-jobs
-            tag: ghcr.io/nmshd/backbone-identity-deletion-jobs:test
-            platforms: linux/amd64
             
           - dockerfile: SseServer/src/SseServer/Dockerfile
             image: sse-server
-            tag: ghcr.io/nmshd/backbone-sse-server:test
-            platforms: linux/amd64
     
     steps:
       - name: Checkout
@@ -162,13 +146,6 @@ jobs:
         uses: docker/setup-buildx-action@v3
         with:
           driver: docker-container
-      
-      - name: Login to GHCR
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup NuGet
         uses: actions/setup-dotnet@v4
@@ -194,11 +171,7 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-${{ matrix.image }}-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-${{ matrix.image }}-cache-new
           outputs: type=docker,dest=/tmp/${{ matrix.image }}.tar
-#          push: true
-#          provenance: true
-#          sbom: true
-          tags: ${{ matrix.image }}
-#          platforms: ${{ matrix.platforms }}
+          tags: ${{ matrix.image }}:test
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
@@ -206,16 +179,6 @@ jobs:
           name: docker-${{ matrix.image }}
           path: /tmp/${{ matrix.image }}.tar
           retention-days: 1
-      
-#      - name: Create artifact
-#        run: echo ${{ matrix.tag }} > /tmp/${{ matrix.image }}.txt
-#      
-#      - name: Upload artifact
-#        uses: actions/upload-artifact@v4
-#        with:
-#          name: docker-${{ matrix.image }}
-#          path: /tmp/${{ matrix.image }}.txt
-#          retention-days: 1
 
       # Temp fix
       # https://github.com/docker/build-push-action/issues/252
