@@ -1,5 +1,8 @@
+using System.ComponentModel.DataAnnotations;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.Ionos;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,6 +12,7 @@ public static class BlobStorageServiceCollectionExtensions
 {
     public const string AZURE_CLOUD_PROVIDER = "Azure";
     public const string GOOGLE_CLOUD_PROVIDER = "GoogleCloud";
+    public const string IONOS_CLOUD_PROVIDER = "Ionos";
 
     public static void AddBlobStorage(this IServiceCollection services, Action<BlobStorageOptions> setupOptions)
     {
@@ -31,6 +35,19 @@ public static class BlobStorageServiceCollectionExtensions
                 googleCloudStorageOptions.GcpAuthJson = options.ConnectionInfo;
                 googleCloudStorageOptions.BucketName = options.Container;
             });
+        else if (options.CloudProvider == IONOS_CLOUD_PROVIDER)
+        {
+            services.Configure<IonosS3Options>(opt =>
+            {
+                opt.ServiceUrl = options.IonosS3Config.ServiceUrl;
+                opt.AccessKey = options.IonosS3Config.AccessKey;
+                opt.SecretKey = options.IonosS3Config.SecretKey;
+                opt.BucketName = options.IonosS3Config.BucketName;
+            });
+
+            services.AddSingleton<IonosS3ClientFactory>();
+            services.AddScoped<IBlobStorage, IonosS3BlobStorage>();
+        }
         else if (options.CloudProvider.IsNullOrEmpty())
             throw new NotSupportedException("No cloud provider was specified.");
         else
@@ -41,9 +58,29 @@ public static class BlobStorageServiceCollectionExtensions
 
 public class BlobStorageOptions
 {
-    public string CloudProvider { get; set; } = null!;
+    [Required]
+    [MinLength(1)]
+    [RegularExpression("Azure|GoogleCloud|Ionos")]
+    public string CloudProvider { get; set; } = string.Empty;
 
-    public string Container { get; set; } = null!;
+    public string? ConnectionInfo { get; set; } = string.Empty;
+    public string? Container { get; set; } = string.Empty;
 
-    public string? ConnectionInfo { get; set; } = null;
+    public IonosS3Config? IonosS3Config { get; set; } = new IonosS3Config();
 }
+
+public class IonosS3Config
+{
+    [Required]
+    public string ServiceUrl { get; set; } = string.Empty;
+
+    [Required]
+    public string AccessKey { get; set; } = string.Empty;
+
+    [Required]
+    public string SecretKey { get; set; } = string.Empty;
+
+    [Required]
+    public string BucketName { get; set; } = string.Empty;
+}
+
