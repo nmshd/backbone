@@ -197,7 +197,7 @@ jobs:
 #          push: true
 #          provenance: true
 #          sbom: true
-#          tags: ${{ matrix.tag }}
+          tags: ${{ matrix.image }}
 #          platforms: ${{ matrix.platforms }}
 
       - name: Upload artifact
