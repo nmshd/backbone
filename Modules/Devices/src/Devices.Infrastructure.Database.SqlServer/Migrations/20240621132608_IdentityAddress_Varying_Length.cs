@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
     public partial class IdentityAddress_Varying_Length : Migration
@@ -29,12 +29,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 name: "IdentityAddress",
                 schema: "Devices",
                 table: "PnsRegistrations",
-                type: "character varying(80)",
+                type: "varchar(80)",
                 unicode: false,
                 maxLength: 80,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(80)",
+                oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 80);
@@ -43,12 +43,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 name: "IdentityAddress",
                 schema: "Devices",
                 table: "IdentityDeletionProcesses",
-                type: "character varying(80)",
+                type: "varchar(80)",
                 unicode: false,
                 maxLength: 80,
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "character(80)",
+                oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 80,
@@ -58,12 +58,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 name: "Address",
                 schema: "Devices",
                 table: "Identities",
-                type: "character varying(80)",
+                type: "varchar(80)",
                 unicode: false,
                 maxLength: 80,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(80)",
+                oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 80);
@@ -72,12 +72,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 name: "IdentityAddress",
                 schema: "Devices",
                 table: "Devices",
-                type: "character varying(80)",
+                type: "varchar(80)",
                 unicode: false,
                 maxLength: 80,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character(80)",
+                oldType: "char(80)",
                 oldUnicode: false,
                 oldFixedLength: true,
                 oldMaxLength: 80);
@@ -130,13 +130,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 name: "IdentityAddress",
                 schema: "Devices",
                 table: "PnsRegistrations",
-                type: "character(80)",
+                type: "char(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 80,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character varying(80)",
+                oldType: "varchar(80)",
                 oldUnicode: false,
                 oldMaxLength: 80);
 
@@ -144,13 +144,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 name: "IdentityAddress",
                 schema: "Devices",
                 table: "IdentityDeletionProcesses",
-                type: "character(80)",
+                type: "char(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 80,
                 nullable: true,
                 oldClrType: typeof(string),
-                oldType: "character varying(80)",
+                oldType: "varchar(80)",
                 oldUnicode: false,
                 oldMaxLength: 80,
                 oldNullable: true);
@@ -159,13 +159,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 name: "Address",
                 schema: "Devices",
                 table: "Identities",
-                type: "character(80)",
+                type: "char(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 80,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character varying(80)",
+                oldType: "varchar(80)",
                 oldUnicode: false,
                 oldMaxLength: 80);
 
@@ -173,13 +173,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 name: "IdentityAddress",
                 schema: "Devices",
                 table: "Devices",
-                type: "character(80)",
+                type: "char(80)",
                 unicode: false,
                 fixedLength: true,
                 maxLength: 80,
                 nullable: false,
                 oldClrType: typeof(string),
-                oldType: "character varying(80)",
+                oldType: "varchar(80)",
                 oldUnicode: false,
                 oldMaxLength: 80);
 
