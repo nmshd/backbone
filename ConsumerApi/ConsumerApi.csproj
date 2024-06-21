@@ -2,6 +2,8 @@
 
 	<PropertyGroup>
 		<UserSecretsId>f114fba8-95dd-4fee-8385-af8e8a343c68</UserSecretsId>
+        <Version>$(Version)</Version>
+        <NuGetVersion>$(Version)</NuGetVersion>
 	</PropertyGroup>
 
 	<ItemGroup>
