@@ -59,8 +59,8 @@ public class GenerateCommand : Command
             printer: serviceProvider.GetRequiredService<IPrinter>()
         );
 
-        //await graphGenerator.CreatePools();
-        await generator.CreatePools();
+        await graphGenerator.CreatePools();
+        //await generator.CreatePools();
     }
 
     private static ServiceProvider ConfigureServices()

@@ -1,8 +1,7 @@
 ﻿using Backbone.ConsumerApi.Sdk.Authentication;
-using Backbone.Identity.Pool.Creator.Application.MessageDistributor;
 using Backbone.Identity.Pool.Creator.Application.Printer;
-using Backbone.Identity.Pool.Creator.Application.RelationshipDistributor;
 using Backbone.Identity.Pool.Creator.PoolsFile;
+using Backbone.Identity.Pool.Creator.PoolsGenerator;
 using Backbone.Tooling;
 
 namespace Backbone.Identity.Pool.Creator.GraphPoolsGenerator;
@@ -38,15 +37,18 @@ public class GraphPoolsGenerator
     public async Task CreatePools()
     {
         CreateInitialNodes();
-        _printer.PrintRelationships(_pools, summaryOnly: false);
+
+        PoolsOffset.CreateOffsetPools(_pools);
+
+        _printer.PrintRelationships(_pools, summaryOnly: true);
         _printer.PrintMessages(_pools, summaryOnly: true);
 
         DeepGenerate();
 
-        _printer.PrintRelationships(_pools, summaryOnly: false);
+        _printer.PrintRelationships(_pools, summaryOnly: true);
         _printer.PrintMessages(_pools, summaryOnly: true);
     }
-
+    
     private void DeepGenerate()
     {
         Console.WriteLine($"Got called with {_pools.NumberOfEstablishedRelationships()} relationships already established and {_pools.NumberOfSentMessages()} messages sent.");
@@ -56,14 +58,53 @@ public class GraphPoolsGenerator
 
         Console.WriteLine($"Targets are {enr} relationships and {enm} messages sent.");
 
-        //SendMessagesRecursive();        
-        
+
+        while (true)
+        {
+            var identities = _pools.SelectMany(p => p.Identities).OrderBy(i => i.GraphAlgorithmVisitCount).ToList();
+
+            uint createdSum = 0;
+            foreach (var identity in identities)
+            {
+                createdSum += SendMessagesRecursive(identity);
+            }
+
+            createdSum += AddRelationship();
+
+            if (createdSum == 0)
+                break;
+        }
+
     }
 
-    private void SendMessagesRecursive(Identity i)
+    private uint AddRelationship()
     {
-        var relatedIdentities = i.IdentitiesToEstablishRelationshipsWith;
+        var appIdentityWithTheHighestRelationshipCapacity = _pools.GetAppPools().SelectMany(p => p.Identities).Where(i => i.HasAvailabilityForNewRelationships()).MaxBy(i => i.Pool.NumberOfRelationships);
+        var connectorIdentityWithTheHighestRelationshipCapacity = _pools.GetConnectorPools().SelectMany(p => p.Identities).Where(i => i.HasAvailabilityForNewRelationships()).MaxBy(i => i.Pool.NumberOfRelationships);
 
+        if (appIdentityWithTheHighestRelationshipCapacity is null || connectorIdentityWithTheHighestRelationshipCapacity is null) return 0;
+
+        return appIdentityWithTheHighestRelationshipCapacity.AddIdentityToEstablishRelationshipsWith(connectorIdentityWithTheHighestRelationshipCapacity) ? 1u : 0u;
+    }
+
+    private uint SendMessagesRecursive(Identity i, Identity? callingIdentity = null)
+    {
+        i.GraphAlgorithmVisitCount++;
+        uint createdMessages = 0;
+        var relatedIdentities = i.IdentitiesToEstablishRelationshipsWith.Except([callingIdentity]) as IEnumerable<Identity>;
+
+        foreach (var relatedIdentity in relatedIdentities)
+        {
+            if (i.HasAvailabilityToSendNewMessages() && relatedIdentity.HasAvailabilityToReceiveNewMessages())
+            {
+                i.SendMessageTo(relatedIdentity);
+                createdMessages++;
+            }
+
+            if(relatedIdentity.HasAvailabilityToSendNewMessages() && relatedIdentity.HasAvailabilityToReceiveNewMessages())
+                createdMessages += SendMessagesRecursive(relatedIdentity, i);
+        }
+        return createdMessages;
     }
 
     private void CreateInitialNodes()
@@ -71,7 +112,17 @@ public class GraphPoolsGenerator
         // create a single identity for each pool
         foreach (var poolEntry in _pools.Where(p => p.Amount > 0))
         {
-            poolEntry.Identities.Add(new Identity(new("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)), "ID1" + PasswordHelper.GeneratePassword(16, 16), "DVC" + PasswordHelper.GeneratePassword(8, 8), poolEntry, 0));
+            for (uint i = 0; i < poolEntry.Amount; i++)
+            {
+                poolEntry.Identities.Add(new Identity(
+                      new UserCredentials("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)),
+                      "ID1" + PasswordHelper.GeneratePassword(16, 16),
+                      "DVC" + PasswordHelper.GeneratePassword(8, 8),
+                      poolEntry,
+                      i
+                    )
+              );
+            }
         }
 
         var appPools = _pools.Where(p => p.IsApp() && p.NumberOfRelationships > 0).ToList();
@@ -79,8 +130,8 @@ public class GraphPoolsGenerator
 
         foreach (var appPool in appPools)
         {
-            var connectorIdentityWithCapacityForRelationships = connectorPools.SelectMany(p => p.Identities).Where(i => i.RelationshipsCapacity > 0 && i.IdentitiesToEstablishRelationshipsWith.Count == 0).FirstOrDefault();
-            if (connectorIdentityWithCapacityForRelationships is not null) 
+            var connectorIdentityWithCapacityForRelationships = connectorPools.SelectMany(p => p.Identities).FirstOrDefault(i => i is { RelationshipsCapacity: > 0, IdentitiesToEstablishRelationshipsWith.Count: 0 });
+            if (connectorIdentityWithCapacityForRelationships is not null)
                 appPool.Identities.First().AddIdentityToEstablishRelationshipsWith(connectorIdentityWithCapacityForRelationships);
         }
     }

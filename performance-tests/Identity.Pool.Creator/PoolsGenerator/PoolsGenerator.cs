@@ -45,7 +45,7 @@ public class PoolsGenerator
 
     public async Task CreatePools()
     {
-        CreateOffsetPools();
+        PoolsOffset.CreateOffsetPools(_pools, _poolsOffset);
 
         CheckPoolsConfiguration();
 
@@ -292,61 +292,6 @@ public class PoolsGenerator
     {
         var dir = Path.GetFullPath(@"..\..\..");
         return dir;
-    }
-
-    #endregion
-
-    #region Offsets
-
-    private void CreateOffsetPools()
-    {
-        if (_poolsOffset.RelationshipsOffset != 0)
-        {
-            var avgCeiling = Convert.ToUInt32(Math.Ceiling(_pools.Where(p => p.NumberOfRelationships > 0).Average(p => p.NumberOfRelationships)));
-            var otherPoolsRelationshipsAverage = avgCeiling % 2 == 0 ? avgCeiling : avgCeiling - 1;
-            if (_poolsOffset.RelationshipsOffset < otherPoolsRelationshipsAverage / 2)
-            {
-                otherPoolsRelationshipsAverage = Convert.ToUInt32(_poolsOffset.RelationshipsOffset / 10);
-            }
-
-            _pools.Add(new PoolEntry
-            {
-                Name = $"{(_poolsOffset.RelationshipsOffsetPendingTo == OffsetDirections.App ? "Connector" : "App")} Offset Pool for Relationships",
-                NumberOfDevices = 1,
-                Amount = Convert.ToUInt32(_poolsOffset.RelationshipsOffset / otherPoolsRelationshipsAverage),
-                Alias = _poolsOffset.RelationshipsOffsetPendingTo == OffsetDirections.App ? "c0r" : "a0r",
-                NumberOfRelationships = otherPoolsRelationshipsAverage,
-                Type = _poolsOffset.RelationshipsOffsetPendingTo == OffsetDirections.App ? "connector" : "app"
-            });
-        }
-
-        if (_poolsOffset.MessagesOffset != 0)
-        {
-            var messagesOffsetPool1 = new PoolEntry
-            {
-                Name = $"{(_poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "Connector" : "App")} Offset Pool for Messages",
-                NumberOfDevices = 1,
-                Amount = 1,
-                Alias = _poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "c0m" : "a0m",
-                NumberOfRelationships = 1,
-                TotalNumberOfMessages = Convert.ToUInt32(_poolsOffset.MessagesOffset),
-                Type = _poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "connector" : "app"
-            };
-
-            // this pool is created simply to balance the 1 relationship created by the Pool above.
-            var messagesOffsetPool2 = new PoolEntry
-            {
-                Name = $"{(_poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "App" : "Connector")} Compensation Offset Pool for Messages",
-                NumberOfDevices = 1,
-                Amount = 1,
-                Alias = _poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "a0mc" : "c0mc",
-                NumberOfRelationships = 1,
-                Type = _poolsOffset.MessagesOffsetPendingTo == OffsetDirections.App ? "app" : "connector"
-            };
-
-            _pools.Add(messagesOffsetPool1);
-            _pools.Add(messagesOffsetPool2);
-        }
     }
 
     #endregion

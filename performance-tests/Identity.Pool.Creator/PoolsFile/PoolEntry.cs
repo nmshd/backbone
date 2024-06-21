@@ -68,4 +68,14 @@ public static class PoolEntryExtensionMethods
     {
         return pools.SelectMany(p => p.Identities).SelectMany(i => i.IdentitiesToEstablishRelationshipsWith).Distinct().Count() / 2;
     }
+
+    public static IList<PoolEntry> GetAppPools(this IList<PoolEntry> pools)
+    {
+        return pools.Where(p => p.IsApp() && p.NumberOfRelationships > 0).ToList();
+    }
+
+    public static IList<PoolEntry> GetConnectorPools(this IList<PoolEntry> pools)
+    {
+        return pools.Where(p => p.IsConnector() && p.NumberOfRelationships > 0).ToList();
+    }
 }

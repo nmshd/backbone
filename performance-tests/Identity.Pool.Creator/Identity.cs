@@ -35,8 +35,9 @@ public class Identity
 
 
 
-    public string Nickname { get; private set; }
+    public string Nickname { get; }
     public string PoolType { get; }
+    public uint GraphAlgorithmVisitCount { get; set; } = 0;
 
     public void AddDevice(string deviceId)
     {
