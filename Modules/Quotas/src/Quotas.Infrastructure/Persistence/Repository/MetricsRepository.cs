@@ -18,7 +18,10 @@ public class MetricsRepository : IMetricsRepository
             new Metric(MetricKey.NumberOfFiles, "Number of Files"),
             new Metric(MetricKey.NumberOfTokens, "Number of Tokens"),
             new Metric(MetricKey.UsedFileStorageSpace, "File Storage Capacity (in Megabytes)"),
-            new Metric(MetricKey.NumberOfStartedDeletionProcesses, "Number of Started Deletion Processes")
+            new Metric(MetricKey.NumberOfStartedDeletionProcesses, "Number of Started Deletion Processes"),
+            new Metric(MetricKey.NumberOfCreatedChallenges, "Number of Created Challenges"),
+            new Metric(MetricKey.NumberOfCreatedDatawalletModifications, "Number of Created Datawallet Modifications"),
+            new Metric(MetricKey.NumberOfCreatedDevices, "Number of Created Devices")
         ];
     }
 
