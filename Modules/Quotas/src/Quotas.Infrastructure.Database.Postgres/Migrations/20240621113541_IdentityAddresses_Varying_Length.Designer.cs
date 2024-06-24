@@ -3,40 +3,43 @@ using System;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Quotas.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(QuotasDbContext))]
-    partial class QuotasDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240621113541_IdentityAddresses_Varying_Length")]
+    partial class IdentityAddresses_Varying_Length
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Quotas")
                 .HasAnnotation("ProductVersion", "8.0.6")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata.FileMetadata", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<long>("CipherSize")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -51,14 +54,14 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("Address")
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)")
+                        .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
 
                     b.Property<string>("TierId")
                         .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.HasKey("Address");
@@ -73,25 +76,25 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<string>("ApplyTo")
                         .IsRequired()
-                        .HasColumnType("varchar(80)");
+                        .HasColumnType("character varying(80)");
 
                     b.Property<int>("Max")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("MetricKey")
                         .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("character varying(50)")
                         .IsFixedLength(false);
 
                     b.Property<int>("Period")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("Id");
 
@@ -103,23 +106,23 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.MetricStatus", b =>
                 {
                     b.Property<string>("Owner")
-                        .HasColumnType("varchar(80)");
+                        .HasColumnType("character varying(80)");
 
                     b.Property<string>("MetricKey")
                         .HasMaxLength(50)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("character varying(50)")
                         .IsFixedLength(false);
 
                     b.Property<DateTime>("IsExhaustedUntil")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Owner", "MetricKey");
 
                     b.HasIndex("MetricKey")
-                        .HasAnnotation("Npgsql:IndexInclude", new[] { "IsExhaustedUntil" });
+                        .HasAnnotation("SqlServer:Include", new[] { "IsExhaustedUntil" });
 
-                    SqlServerIndexBuilderExtensions.IncludeProperties(b.HasIndex("MetricKey"), new[] { "IsExhaustedUntil" });
+                    NpgsqlIndexBuilderExtensions.IncludeProperties(b.HasIndex("MetricKey"), new[] { "IsExhaustedUntil" });
 
                     b.ToTable("MetricStatuses", "Quotas");
                 });
@@ -129,17 +132,17 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<string>("ApplyTo")
                         .IsRequired()
-                        .HasColumnType("varchar(80)");
+                        .HasColumnType("character varying(80)");
 
                     b.Property<string>("_definitionId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .HasColumnName("DefinitionId")
                         .IsFixedLength();
 
@@ -155,14 +158,14 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Messages.Message", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -175,27 +178,27 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Relationships.Relationship", b =>
                 {
                     b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("From")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("FromHasDecomposed")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("To")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<bool>("ToHasDecomposed")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
@@ -208,11 +211,11 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Relationships.RelationshipTemplate", b =>
                 {
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.ToTable("RelationshipTemplates", "Relationships", t =>
                         {
@@ -225,14 +228,14 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(30)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(30)")
+                        .HasColumnType("character varying(30)")
                         .IsFixedLength(false);
 
                     b.HasKey("Id");
@@ -245,26 +248,26 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<int>("Max")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("MetricKey")
                         .IsRequired()
                         .HasMaxLength(50)
                         .IsUnicode(true)
-                        .HasColumnType("nvarchar(50)")
+                        .HasColumnType("character varying(50)")
                         .IsFixedLength(false);
 
                     b.Property<int>("Period")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("TierId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -277,11 +280,11 @@ namespace Quotas.Infrastructure.Database.SqlServer.Migrations
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Tokens.Token", b =>
                 {
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.ToTable("Tokens", "Tokens", t =>
                         {

@@ -18,7 +18,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Devices")
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -56,8 +56,8 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -190,6 +190,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(2)
+                        .IsUnicode(false)
                         .HasColumnType("character(2)")
                         .HasDefaultValue("en")
                         .IsFixedLength();
@@ -217,8 +218,8 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.HasKey("Id");
 
@@ -232,8 +233,8 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("Address")
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("ClientId")
                         .HasMaxLength(200)
@@ -333,8 +334,8 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<string>("IdentityAddress")
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<DateTime?>("RejectedAt")
                         .HasColumnType("timestamp with time zone");
