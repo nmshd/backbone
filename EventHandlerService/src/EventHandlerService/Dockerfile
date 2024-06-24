@@ -71,6 +71,8 @@ RUN dotnet restore "EventHandlerService/src/EventHandlerService/EventHandlerServ
 
 COPY . .
 
+ARG VERSION
+
 WORKDIR "/src/EventHandlerService/src/EventHandlerService"
 RUN dotnet build "EventHandlerService.csproj" -c Release -o /app/build --no-restore
 
