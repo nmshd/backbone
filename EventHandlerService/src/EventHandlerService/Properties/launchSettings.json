@@ -4,7 +4,9 @@
     "Default": {
       "commandName": "Project",
       "environmentVariables": {
-      }
+      },
+      "workingDirectory": "bin/Debug/net8.0"
+      //TODO: Timo (The current solution is to set the working directory to the bin directory)
     }
   }
 }
