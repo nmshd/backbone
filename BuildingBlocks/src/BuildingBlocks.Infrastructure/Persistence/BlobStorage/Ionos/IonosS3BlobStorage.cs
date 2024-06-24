@@ -212,11 +212,3 @@ public class IonosS3BlobStorage : IBlobStorage, IDisposable
 
     private record RemovedBlob(string Folder, string Name);
 }
-
-public class IonosS3Config
-{
-    public string? ServiceUrl { get; set; }
-    public string? AccessKey { get; set; }
-    public string? SecretKey { get; set; }
-    public string? BucketName { get; set; }
-}
