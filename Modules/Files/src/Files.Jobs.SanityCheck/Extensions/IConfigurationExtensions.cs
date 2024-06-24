@@ -43,8 +43,15 @@ public class BlobStorageConfiguration
 
 public class IonosS3Config
 {
-    public string? ServiceUrl { get; set; }
-    public string? AccessKey { get; set; }
-    public string? SecretKey { get; set; }
-    public string? BucketName { get; set; }
+    [Required]
+    public string ServiceUrl { get; set; } = string.Empty;
+
+    [Required]
+    public string AccessKey { get; set; } = string.Empty;
+
+    [Required]
+    public string SecretKey { get; set; } = string.Empty;
+
+    [Required]
+    public string BucketName { get; set; } = string.Empty;
 }
