@@ -24,7 +24,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     public async Task Proxies_triggering_the_deletion_processes_to_command_handler()
     {
         // Arrange
-        var mockMediator = A.Fake<IMediator>()
+        var mockMediator = A.Fake<IMediator>();
         SetupRipeDeletionProcessesCommand(mockMediator);
 
         var dummyDevicesIdentityDeleter = new IdentityDeleter(mockMediator);
