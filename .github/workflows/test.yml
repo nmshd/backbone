@@ -171,7 +171,7 @@ jobs:
           cache-from: type=local,src=/tmp/.buildx-${{ matrix.image }}-cache
           cache-to: type=local,mode=max,dest=/tmp/.buildx-${{ matrix.image }}-cache-new
           outputs: type=docker,dest=/tmp/${{ matrix.image }}.tar
-          tags: ${{ matrix.image }}:test
+          tags: ${{ matrix.image }}:0.0.1
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
