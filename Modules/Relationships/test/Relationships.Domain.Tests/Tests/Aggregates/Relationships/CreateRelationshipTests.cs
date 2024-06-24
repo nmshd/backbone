@@ -1,8 +1,10 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Tests.Extensions;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
@@ -29,6 +31,23 @@ public class CreateRelationshipTests : AbstractTestsBase
         relationship.RelationshipTemplate.Should().Be(RELATIONSHIP_TEMPLATE_OF_2);
         relationship.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
         relationship.CreationContent.Should().Equal([0, 1, 2]);
+    }
+
+    [Fact]
+    public void Raises_RelationshipStatusChangedDomainEvent()
+    {
+        // Arrange
+        SystemTime.Set("2000-01-01");
+
+        // Act
+        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, [0, 1, 2], []);
+
+        // Assert
+        var domainEvent = relationship.Should().HaveASingleDomainEvent<RelationshipStatusChangedDomainEvent>();
+        domainEvent.RelationshipId.Should().Be(relationship.Id);
+        domainEvent.Status.Should().Be("Pending");
+        domainEvent.Initiator.Should().Be(IDENTITY_1);
+        domainEvent.Peer.Should().Be(IDENTITY_2);
     }
 
     [Fact]

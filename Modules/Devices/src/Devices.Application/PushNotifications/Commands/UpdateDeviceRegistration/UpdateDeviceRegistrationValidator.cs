@@ -9,7 +9,7 @@ public class UpdateDeviceRegistrationValidator : AbstractValidator<UpdateDeviceR
 {
     public UpdateDeviceRegistrationValidator()
     {
-        RuleFor(dto => dto.Platform).In("fcm", "apns", "dummy");
+        RuleFor(dto => dto.Platform).In("fcm", "apns", "dummy", "sse");
 
         RuleFor(dto => dto.Environment).In("Development", "Production").When(dto => dto.Environment != null);
 

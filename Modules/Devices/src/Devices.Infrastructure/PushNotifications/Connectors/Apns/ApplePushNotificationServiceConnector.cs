@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -58,7 +59,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
     {
         var (notificationTitle, notificationBody) = await _notificationTextProvider.GetNotificationTextForDeviceId(notification.GetType(), registration.DeviceId);
         var notificationId = GetNotificationId(notification);
-        var notificationContent = new NotificationContent(registration.DevicePushIdentifier, notification);
+        var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
 
         var keyInformation = _options.GetKeyInformationForBundleId(registration.AppId);
         var jwt = _jwtGenerator.Generate(keyInformation.PrivateKey, keyInformation.KeyId, keyInformation.TeamId, registration.AppId);
@@ -69,7 +70,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             .SetNotificationId(notificationId)
             .Build();
 
-        _logger.LogDebug("Sending push notification (type '{eventName}') to '{address}' with handle '{handle}'.", notificationContent.EventName, registration.IdentityAddress, registration.Handle);
+        _logger.Sending(notificationContent.EventName, registration.IdentityAddress, registration.Handle.Value);
 
         var response = await _httpClient.SendAsync(request);
 
@@ -102,4 +103,14 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         var attribute = pushNotification.GetType().GetCustomAttribute<NotificationIdAttribute>();
         return attribute?.Value ?? 0;
     }
+}
+
+internal static partial class ApplePushNotificationServiceConnectorLogs
+{
+    [LoggerMessage(
+        EventId = 770700,
+        EventName = "ApplePushNotificationServiceConnector.Sending",
+        Level = LogLevel.Debug,
+        Message = "Sending push notification (type '{eventName}') to '{address}' with handle '{handle}'.")]
+    public static partial void Sending(this ILogger logger, string eventName, string address, string handle);
 }

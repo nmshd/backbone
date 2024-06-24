@@ -1,12 +1,14 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
-public class PnsRegistrationEntityTypeConfiguration : IEntityTypeConfiguration<PnsRegistration>
+
+public class PnsRegistrationEntityTypeConfiguration : EntityEntityTypeConfiguration<PnsRegistration>
 {
-    public void Configure(EntityTypeBuilder<PnsRegistration> builder)
+    public override void Configure(EntityTypeBuilder<PnsRegistration> builder)
     {
+        base.Configure(builder);
         builder.HasKey(x => x.DeviceId);
         builder.Property(x => x.IdentityAddress).IsRequired();
         builder.Property(x => x.DevicePushIdentifier);

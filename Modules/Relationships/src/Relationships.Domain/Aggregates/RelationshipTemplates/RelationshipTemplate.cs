@@ -2,11 +2,12 @@ using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
-public class RelationshipTemplate
+public class RelationshipTemplate : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private RelationshipTemplate()
@@ -27,6 +28,8 @@ public class RelationshipTemplate
         MaxNumberOfAllocations = maxNumberOfAllocations;
         ExpiresAt = expiresAt;
         Content = content;
+
+        RaiseDomainEvent(new RelationshipTemplateCreatedDomainEvent(this));
     }
 
     public RelationshipTemplateId Id { get; set; }

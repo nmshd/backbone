@@ -64,7 +64,7 @@ public class DatawalletTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Upgrade_should_set_version_to_target_version()
+    public void Upgrade_sets_version_to_target_version()
     {
         var datawallet = CreateDatawallet(new Datawallet.DatawalletVersion(1));
 
@@ -82,6 +82,17 @@ public class DatawalletTests : AbstractTestsBase
         var domainEvent = datawallet.Should().HaveASingleDomainEvent<DatawalletModifiedDomainEvent>();
         domainEvent.Identity.Should().Be(datawallet.Owner);
         domainEvent.ModifiedByDevice.Should().Be(modification.CreatedByDevice);
+    }
+
+    [Fact]
+    public void Adding_multiple_modifications_only_raises_single_domain_event()
+    {
+        var datawallet = CreateDatawallet();
+
+        AddModificationToDatawallet(datawallet);
+        AddModificationToDatawallet(datawallet);
+
+        datawallet.DomainEvents.Should().HaveCount(1);
     }
 
     private static Datawallet CreateDatawallet()

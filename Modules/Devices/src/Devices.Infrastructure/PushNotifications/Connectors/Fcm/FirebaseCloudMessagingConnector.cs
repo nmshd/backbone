@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 using FirebaseAdmin.Messaging;
 using Microsoft.Extensions.Logging;
@@ -44,7 +45,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
     {
         var (notificationTitle, notificationBody) = await _notificationTextProvider.GetNotificationTextForDeviceId(notification.GetType(), registration.DeviceId);
         var notificationId = GetNotificationId(notification);
-        var notificationContent = new NotificationContent(registration.DevicePushIdentifier, notification);
+        var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
 
         var message = new FcmMessageBuilder()
             .AddContent(notificationContent)
@@ -53,8 +54,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
             .SetToken(registration.Handle.Value)
             .Build();
 
-        _logger.LogDebug("Sending push notification (type '{eventName}') to device '{deviceId}' of '{address}' with handle '{handle}'.",
-            notificationContent.EventName, registration.DeviceId, registration.IdentityAddress, registration.Handle.Value);
+        _logger.Sending(notificationContent.EventName, registration.DeviceId, registration.IdentityAddress, registration.Handle.Value);
 
         var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(registration.AppId);
         try
@@ -95,4 +95,14 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
         var attribute = pushNotification.GetType().GetCustomAttribute<NotificationIdAttribute>();
         return attribute?.Value ?? 0;
     }
+}
+
+internal static partial class FirebaseCloudMessagingConnectorLogs
+{
+    [LoggerMessage(
+        EventId = 227730,
+        EventName = "FirebaseCloudMessagingConnector.Sending",
+        Level = LogLevel.Debug,
+        Message = "Sending push notification (type '{eventName}') to device '{deviceId}' of '{address}' with handle '{handle}'.")]
+    public static partial void Sending(this ILogger logger, string eventName, string deviceId, string address, string handle);
 }

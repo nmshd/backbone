@@ -2,11 +2,12 @@ using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-public class Relationship
+public class Relationship : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private Relationship()
@@ -41,6 +42,8 @@ public class Relationship
         {
             new(RelationshipAuditLogEntryReason.Creation, null, RelationshipStatus.Pending, activeIdentity, activeDevice)
         };
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
     public RelationshipId Id { get; }
@@ -95,6 +98,8 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
     private void EnsureStatus(params RelationshipStatus[] statuses)
@@ -125,6 +130,8 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
     public void Revoke(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
@@ -143,6 +150,8 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
     private void EnsureRelationshipRequestIsCreatedBySelf(IdentityAddress activeIdentity)
@@ -165,6 +174,8 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
     public void RequestReactivation(IdentityAddress activeIdentity, DeviceId activeDevice)
@@ -180,6 +191,8 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipReactivationRequestedDomainEvent(this, activeIdentity, GetPeer(activeIdentity)));
     }
 
     private void EnsureThereIsNoOpenReactivationRequest()
@@ -204,6 +217,8 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeer(activeIdentity)));
     }
 
     private void EnsureAcceptableReactivationRequestExistsFor(IdentityAddress activeIdentity)
@@ -225,6 +240,8 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeer(activeIdentity)));
     }
 
     private void EnsureRejectableRelationshipReactivationRequestExistsFor(IdentityAddress activeIdentity)
@@ -246,6 +263,8 @@ public class Relationship
             activeDevice
         );
         AuditLog.Add(auditLogEntry);
+
+        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeer(activeIdentity)));
     }
 
     private void EnsureRevocableReactivationRequestExistsFor(IdentityAddress activeIdentity)
@@ -265,6 +284,8 @@ public class Relationship
             DecomposeAsFirstParticipant(activeIdentity, activeDevice);
         else
             DecomposeAsSecondParticipant(activeIdentity, activeDevice);
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
     private void DecomposeAsFirstParticipant(IdentityAddress activeIdentity, DeviceId activeDevice)

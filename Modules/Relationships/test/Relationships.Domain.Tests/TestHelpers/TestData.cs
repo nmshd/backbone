@@ -20,7 +20,9 @@ public static class TestData
         to ??= IDENTITY_2;
         from ??= IDENTITY_1;
         var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
-        return new Relationship(template, from, DEVICE_1, [], []);
+        var relationship = new Relationship(template, from, DEVICE_1, [], []);
+        relationship.ClearDomainEvents();
+        return relationship;
     }
 
     public static Relationship CreateActiveRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
@@ -29,6 +31,7 @@ public static class TestData
         var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
         var relationship = new Relationship(template, from ?? IDENTITY_1, DEVICE_1, [], []);
         relationship.Accept(to, DEVICE_2, []);
+        relationship.ClearDomainEvents();
         return relationship;
     }
 
@@ -36,6 +39,7 @@ public static class TestData
     {
         var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, [], []);
         relationship.Reject(IDENTITY_2, DEVICE_2, null);
+        relationship.ClearDomainEvents();
         return relationship;
     }
 
@@ -43,6 +47,7 @@ public static class TestData
     {
         var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, [], []);
         relationship.Revoke(IDENTITY_1, DEVICE_1, null);
+        relationship.ClearDomainEvents();
         return relationship;
     }
 
@@ -50,6 +55,7 @@ public static class TestData
     {
         var relationship = CreateActiveRelationship(from, to);
         relationship.Terminate(IDENTITY_1, DEVICE_1);
+        relationship.ClearDomainEvents();
         return relationship;
     }
 
@@ -57,6 +63,7 @@ public static class TestData
     {
         var relationship = CreateTerminatedRelationship(from, to);
         relationship.RequestReactivation(reactivationRequestedBy, DEVICE_1);
+        relationship.ClearDomainEvents();
         return relationship;
     }
 
@@ -68,6 +75,7 @@ public static class TestData
 
         var relationship = CreateTerminatedRelationship(from, to);
         relationship.Decompose(decomposedBy, DEVICE_1);
+        relationship.ClearDomainEvents();
         return relationship;
     }
 
@@ -76,6 +84,8 @@ public static class TestData
         var relationship = CreateTerminatedRelationship(from, to);
 
         relationship.Decompose(from, DEVICE_1);
+
+        relationship.ClearDomainEvents();
 
         return relationship;
     }

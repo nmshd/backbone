@@ -1,9 +1,10 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-public class RelationshipAuditLogEntry
+public class RelationshipAuditLogEntry : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private RelationshipAuditLogEntry()

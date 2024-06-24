@@ -1,11 +1,13 @@
 using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 
-public class Message : IIdentifiable<MessageId>
+public class Message : Entity, IIdentifiable<MessageId>
 {
     // ReSharper disable once UnusedMember.Local
     private Message()
@@ -29,6 +31,8 @@ public class Message : IIdentifiable<MessageId>
         CreatedByDevice = createdByDevice;
         Body = body;
         Attachments = attachments.ToList();
+
+        RaiseDomainEvent(new MessageCreatedDomainEvent(this));
     }
 
     public MessageId Id { get; }

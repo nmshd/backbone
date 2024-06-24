@@ -6,7 +6,6 @@ using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repo
 using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
@@ -120,43 +119,6 @@ public class HandlerTests : AbstractTestsBase
         acting.Should().AwaitThrowAsync<NotFoundException, CreateRelationshipResponse>().Which.Message.Should().Contain("RelationshipTemplate");
     }
 
-    [Fact]
-    public async Task Publishes_RelationshipStatusChangedDomainEvent()
-    {
-        // Arrange
-        SystemTime.Set("2020-01-01");
-        var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
-
-        var fakeRelationshipTemplatesRepository = A.Fake<IRelationshipTemplatesRepository>();
-        var relationshipTemplate = new RelationshipTemplate(
-            TestDataGenerator.CreateRandomIdentityAddress(),
-            TestDataGenerator.CreateRandomDeviceId(),
-            1,
-            DateTime.Parse("2021-01-01"),
-            []
-        );
-        A.CallTo(() => fakeRelationshipTemplatesRepository.Find(relationshipTemplate.Id, activeIdentity, A<CancellationToken>._, A<bool>._))
-            .Returns(relationshipTemplate);
-
-        var fakeUserContext = A.Fake<IUserContext>();
-        A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
-        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
-
-        var mockEventBus = A.Fake<IEventBus>();
-
-        var handler = CreateHandler(fakeRelationshipTemplatesRepository, fakeUserContext, mockEventBus);
-
-        // Act
-        await handler.Handle(new CreateRelationshipCommand
-        {
-            RelationshipTemplateId = relationshipTemplate.Id
-        }, CancellationToken.None);
-
-        // Assert
-        A.CallTo(() => mockEventBus.Publish(A<RelationshipStatusChangedDomainEvent>.That.Matches(e => e.Initiator == activeIdentity, relationshipTemplate.CreatedBy))).MustHaveHappenedOnceExactly();
-    }
-
     private static Handler CreateHandler(IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
         return CreateHandler(relationshipTemplatesRepository, null, null, null);
@@ -181,10 +143,9 @@ public class HandlerTests : AbstractTestsBase
         IRelationshipsRepository? relationshipsRepository)
     {
         userContext ??= A.Dummy<IUserContext>();
-        eventBus ??= A.Dummy<IEventBus>();
         relationshipsRepository ??= A.Dummy<IRelationshipsRepository>();
 
-        var handler = new Handler(userContext, eventBus, relationshipsRepository, relationshipTemplatesRepository);
+        var handler = new Handler(userContext, relationshipsRepository, relationshipTemplatesRepository);
         return handler;
     }
 }

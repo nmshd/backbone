@@ -32,8 +32,6 @@ public class Handler : IRequestHandler<RequestRelationshipReactivationCommand, R
 
         await _relationshipsRepository.Update(relationship);
 
-        _eventBus.Publish(new RelationshipReactivationRequestedDomainEvent(relationship, _activeIdentity, relationship.GetPeer(_activeIdentity)));
-
         return new RequestRelationshipReactivationResponse(relationship);
     }
 }

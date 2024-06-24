@@ -12,6 +12,7 @@ using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
+
 public class RelationshipsRepository : IRelationshipsRepository
 {
     private readonly DbSet<Relationship> _relationships;
@@ -23,6 +24,15 @@ public class RelationshipsRepository : IRelationshipsRepository
         _relationships = dbContext.Relationships;
         _readOnlyRelationships = dbContext.Relationships.AsNoTracking();
         _dbContext = dbContext;
+    }
+
+    public async Task<IdentityAddress> FindRelationshipPeer(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken)
+    {
+        var relationship = await _readOnlyRelationships
+            .WithParticipant(identityAddress)
+            .FirstWithId(id, cancellationToken);
+
+        return relationship.To != identityAddress ? relationship.To : relationship.From;
     }
 
     public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress,
