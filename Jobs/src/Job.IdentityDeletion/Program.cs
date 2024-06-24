@@ -5,7 +5,6 @@ using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Job.IdentityDeletion;
 using Backbone.Modules.Challenges.ConsumerApi;
-using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdentityDeletionProcesses;
 using Backbone.Modules.Devices.ConsumerApi;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Files.ConsumerApi;
@@ -63,7 +62,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
             configuration
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                .AddJsonFile(Path.GetFullPath("../../../appsettings.override.json"), optional: true, reloadOnChange: true);
+                .AddJsonFile("appsettings.override.json", optional: true, reloadOnChange: true);
 
             if (env.IsDevelopment())
             {
