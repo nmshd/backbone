@@ -12,13 +12,15 @@ namespace Backbone.Job.IdentityDeletion.Workers;
 public class ActualDeletionWorker : IHostedService
 {
     private readonly IHostApplicationLifetime _host;
-    private readonly IEnumerable<IIdentityDeleter> _identityDeleters;
     private readonly IMediator _mediator;
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<ActualDeletionWorker> _logger;
     private readonly IDeletionProcessLogger _deletionProcessLogger;
+    private readonly List<IIdentityDeleter> _remainingIdentityDeleters;
+    private readonly IIdentityDeleter? _deviceIdentityDeleter;
 
-    public ActualDeletionWorker(IHostApplicationLifetime host,
+    public ActualDeletionWorker(
+        IHostApplicationLifetime host,
         IEnumerable<IIdentityDeleter> identityDeleters,
         IMediator mediator,
         IPushNotificationSender pushNotificationSender,
@@ -26,7 +28,9 @@ public class ActualDeletionWorker : IHostedService
         IDeletionProcessLogger deletionProcessLogger)
     {
         _host = host;
-        _identityDeleters = identityDeleters;
+        _remainingIdentityDeleters = identityDeleters.ToList();
+        _deviceIdentityDeleter = _remainingIdentityDeleters.First(i => i.GetType() == typeof(Modules.Devices.Application.Identities.IdentityDeleter));
+        _remainingIdentityDeleters.Remove(_deviceIdentityDeleter);
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
         _logger = logger;
@@ -68,6 +72,7 @@ public class ActualDeletionWorker : IHostedService
     {
         await NotifyIdentityAboutStartingDeletion(cancellationToken, identityAddress);
         await Delete(identityAddress);
+        await _deviceIdentityDeleter!.Delete(identityAddress, _deletionProcessLogger);
     }
 
     private async Task NotifyIdentityAboutStartingDeletion(CancellationToken cancellationToken, IdentityAddress identityAddress)
@@ -77,16 +82,10 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task Delete(IdentityAddress identityAddress)
     {
-
-        var identityDeletersWithoutDevices = _identityDeleters.Where(i => i.GetType() != typeof(Backbone.Modules.Devices.Application.Identities.IdentityDeleter));
-        var deviceIdentityDeleter = _identityDeleters.FirstOrDefault(i => !identityDeletersWithoutDevices.Contains(i));
-
-        foreach (var identityDeleter in identityDeletersWithoutDevices)
+        foreach (var identityDeleter in _remainingIdentityDeleters)
         {
             await identityDeleter.Delete(identityAddress, _deletionProcessLogger);
         }
-
-        await deviceIdentityDeleter!.Delete(identityAddress, _deletionProcessLogger);
     }
 
     private void LogErroringDeletionTriggers(IEnumerable<KeyValuePair<IdentityAddress, UnitResult<DomainError>>> erroringDeletionTriggers)
