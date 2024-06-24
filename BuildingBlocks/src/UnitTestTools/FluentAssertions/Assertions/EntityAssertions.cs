@@ -5,7 +5,7 @@ using FluentAssertions.Primitives;
 
 namespace Backbone.UnitTestTools.FluentAssertions.Assertions;
 
-public class EntityAssertions : ReferenceTypeAssertions<Entity, EntityAssertions>
+public class EntityAssertions : ObjectAssertions<Entity, EntityAssertions>
 {
     public EntityAssertions(Entity instance) : base(instance)
     {
