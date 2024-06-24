@@ -4,7 +4,7 @@
 # (see https://github.com/dotnet/dotnet-docker/discussions/4527).
 # They are copied from https://github.com/ubuntu-rocks/dotnet/issues/21
 ################################################################################################################
-FROM golang:1.22 as chisel
+FROM golang:1.22 AS chisel
 
 RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
 WORKDIR /opt/chisel
@@ -52,6 +52,8 @@ RUN mkdir /rootfs \
 
 WORKDIR /src
 COPY . .
+
+ARG VERSION
 
 RUN dotnet restore "ConsumerApi/ConsumerApi.csproj"
 RUN dotnet publish --configuration Release --output /app/publish --no-restore "ConsumerApi/ConsumerApi.csproj"
