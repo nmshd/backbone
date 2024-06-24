@@ -66,21 +66,14 @@ public class BlobStorageOptions
     public string? ConnectionInfo { get; set; } = string.Empty;
     public string? Container { get; set; } = string.Empty;
 
-    public IonosS3Config? IonosS3Config { get; set; } = new();
+    public IonosS3Config? IonosS3Config { get; set; }
 }
 
 public class IonosS3Config
 {
-    [Required]
-    public string ServiceUrl { get; set; } = string.Empty;
-
-    [Required]
-    public string AccessKey { get; set; } = string.Empty;
-
-    [Required]
-    public string SecretKey { get; set; } = string.Empty;
-
-    [Required]
-    public string BucketName { get; set; } = string.Empty;
+    public required string ServiceUrl { get; set; }
+    public required string AccessKey { get; set; }
+    public required string SecretKey { get; set; }
+    public required string BucketName { get; set; }
 }
 
