@@ -170,10 +170,7 @@ public class IonosS3BlobStorage : IBlobStorage, IDisposable
             _logger.LogError("A blob with key '{blobName}' already exists.", key);
             throw new BlobAlreadyExistsException(key);
         }
-        catch (AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound)
-        {
-            return;
-        }
+        catch (AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound) { }
     }
 
     private async Task DeleteRemovedBlobs()
@@ -218,8 +215,8 @@ public class IonosS3BlobStorage : IBlobStorage, IDisposable
 
 public class IonosS3Config
 {
-    public required string ServiceUrl { get; set; }
-    public required string AccessKey { get; set; }
-    public required string SecretKey { get; set; }
-    public required string BucketName { get; set; }
+    public string? ServiceUrl { get; set; }
+    public string? AccessKey { get; set; }
+    public string? SecretKey { get; set; }
+    public string? BucketName { get; set; }
 }
