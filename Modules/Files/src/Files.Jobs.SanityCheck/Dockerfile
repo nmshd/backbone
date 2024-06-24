@@ -22,6 +22,8 @@ RUN dotnet restore "Modules/Files/src/Files.Jobs.SanityCheck/Files.Jobs.SanityCh
 
 COPY . .
 
+ARG VERSION
+
 WORKDIR "/src/Modules/Files/src/Files.Jobs.SanityCheck"
 RUN dotnet build "Files.Jobs.SanityCheck.csproj" --configuration Release --output /app/build --no-restore
 
