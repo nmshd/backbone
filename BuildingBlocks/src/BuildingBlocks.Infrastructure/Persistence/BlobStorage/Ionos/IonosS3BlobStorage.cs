@@ -14,7 +14,6 @@ public class IonosS3BlobStorage : IBlobStorage, IDisposable
     private readonly List<ChangedBlob> _changedBlobs;
     private readonly IList<RemovedBlob> _removedBlobs;
     private readonly string _bucketName;
-    private readonly IonosS3Options _config;
     private readonly ILogger<IonosS3BlobStorage> _logger;
 
     public IonosS3BlobStorage(IOptions<IonosS3Options> config, ILogger<IonosS3BlobStorage> logger)

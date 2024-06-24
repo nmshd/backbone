@@ -33,13 +33,13 @@ public static class BlobStorageServiceCollectionExtensions
             services.AddGoogleCloudStorage(googleCloudStorageOptions =>
             {
                 googleCloudStorageOptions.GcpAuthJson = options.ConnectionInfo;
-                googleCloudStorageOptions.BucketName = options.Container;
+                googleCloudStorageOptions.BucketName = options.Container!;
             });
         else if (options.CloudProvider == IONOS_CLOUD_PROVIDER)
         {
             services.Configure<IonosS3Options>(opt =>
             {
-                opt.ServiceUrl = options.IonosS3Config.ServiceUrl;
+                opt.ServiceUrl = options.IonosS3Config!.ServiceUrl;
                 opt.AccessKey = options.IonosS3Config.AccessKey;
                 opt.SecretKey = options.IonosS3Config.SecretKey;
                 opt.BucketName = options.IonosS3Config.BucketName;
@@ -66,7 +66,7 @@ public class BlobStorageOptions
     public string? ConnectionInfo { get; set; } = string.Empty;
     public string? Container { get; set; } = string.Empty;
 
-    public IonosS3Config? IonosS3Config { get; set; } = new IonosS3Config();
+    public IonosS3Config? IonosS3Config { get; set; } = new();
 }
 
 public class IonosS3Config
