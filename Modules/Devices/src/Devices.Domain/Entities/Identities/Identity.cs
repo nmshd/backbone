@@ -3,16 +3,30 @@ using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 using CSharpFunctionalExtensions;
+using Entity = Backbone.BuildingBlocks.Domain.Entity;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
-public class Identity
+public class Identity : Entity
 {
     private readonly List<IdentityDeletionProcess> _deletionProcesses;
+    private TierId? _tierId;
 
-    public Identity(string? clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion)
+    // ReSharper disable once UnusedMember.Local
+    private Identity()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        ClientId = null!;
+        Address = null!;
+        PublicKey = null!;
+        Devices = null!;
+        _deletionProcesses = null!;
+    }
+
+    public Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion)
     {
         ClientId = clientId;
         Address = address;
@@ -23,6 +37,8 @@ public class Identity
         TierId = tierId;
         Status = IdentityStatus.Active;
         _deletionProcesses = [];
+
+        RaiseDomainEvent(new IdentityCreatedDomainEvent(this));
     }
 
     public string? ClientId { get; }
@@ -36,7 +52,23 @@ public class Identity
     public byte IdentityVersion { get; private set; }
 
     public TierId? TierIdBeforeDeletion { get; private set; }
-    public TierId TierId { get; private set; }
+
+    public TierId TierId
+    {
+        get => _tierId!; // the only time the backing field is null is within the constructor, so we can suppress the warning
+        private set
+        {
+            if (value == _tierId) return;
+
+            var oldTier = _tierId;
+
+            _tierId = value;
+
+            // if the oldTier was null, we don't consider it a change
+            if (oldTier != null)
+                RaiseDomainEvent(new TierOfIdentityChangedDomainEvent(this, oldTier, value));
+        }
+    }
 
     public IReadOnlyList<IdentityDeletionProcess> DeletionProcesses => _deletionProcesses;
 
@@ -146,7 +178,7 @@ public class Identity
         var deletionProcess = DeletionProcesses.SingleOrDefault(dp => dp.Status == DeletionProcessStatus.Approved)
                               ?? throw new DomainException(DomainErrors.DeletionProcessMustBeInStatus(DeletionProcessStatus.Approved));
 
-        deletionProcess.DeletionStarted();
+        deletionProcess.DeletionStarted(Address);
         Status = IdentityStatus.Deleting;
     }
 

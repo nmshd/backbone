@@ -1,0 +1,100 @@
+{{- if eq ((((.Values.global.configuration.modules.devices.infrastructure).pushNotifications).providers).sse).enabled true }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.sseserver.name }}
+  labels:
+    {{- include "global.labels" . | nindent 4 }}
+    app: {{ .Values.sseserver.name }}
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: {{ .Values.sseserver.name }}
+  template:
+    metadata:
+      annotations:
+        checksum/config: {{ .Values.global.configuration | toString | sha256sum }}
+        {{- with .Values.sseserver.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "global.labels" . | nindent 8 }}
+        app: {{ .Values.sseserver.name }}
+    spec:
+      {{- with .Values.global.serviceAccount.name}}
+      serviceAccountName: {{ . }}
+      {{- end }}
+      {{- with .Values.sseserver.podSecurityContext }}
+      securityContext:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.sseserver.image.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.sseserver.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      volumes:
+        - name: settings-override
+          configMap:
+            name: configuration
+      containers:
+        - name: {{ .Values.sseserver.name }}
+          {{- with .Values.sseserver.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 8 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.sseserver.resources | nindent 12 }}
+          image: "{{ .Values.sseserver.image.repository }}:{{- default .Chart.AppVersion .Values.sseserver.image.tagOverride }}"
+          imagePullPolicy: {{ .Values.sseserver.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+            - name: settings-override
+              mountPath: /app/appsettings.override.json
+              subPath: appsettings.override.json
+              readOnly: true
+          env:
+            {{- with .Values.sseserver.env }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: {{ .Values.sseserver.livenessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.sseserver.livenessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.sseserver.livenessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.sseserver.livenessProbe.failureThreshold }}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8080
+            initialDelaySeconds: {{ .Values.sseserver.readinessProbe.initialDelaySeconds }}
+            periodSeconds: {{ .Values.sseserver.readinessProbe.periodSeconds }}
+            timeoutSeconds: {{ .Values.sseserver.readinessProbe.timeoutSeconds }}
+            failureThreshold: {{ .Values.sseserver.readinessProbe.failureThreshold }}
+      {{- with .Values.sseserver.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.sseserver.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.sseserver.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

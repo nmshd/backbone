@@ -1,13 +1,16 @@
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 
-public class RelationshipTemplateAllocationEntityTypeConfiguration : IEntityTypeConfiguration<RelationshipTemplateAllocation>
+public class RelationshipTemplateAllocationEntityTypeConfiguration : EntityEntityTypeConfiguration<RelationshipTemplateAllocation>
 {
-    public void Configure(EntityTypeBuilder<RelationshipTemplateAllocation> builder)
+    public override void Configure(EntityTypeBuilder<RelationshipTemplateAllocation> builder)
     {
+        base.Configure(builder);
+
         builder.ToTable(nameof(RelationshipTemplateAllocation) + "s");
 
         builder.HasKey(x => x.Id);

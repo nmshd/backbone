@@ -18,7 +18,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Messages")
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -62,8 +62,8 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
                         .IsRequired()
@@ -91,8 +91,8 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.Property<byte[]>("EncryptedKey")
                         .IsRequired()
@@ -149,8 +149,8 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
@@ -159,8 +159,8 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.HasKey("Id");
 

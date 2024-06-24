@@ -88,7 +88,7 @@ public class DeviceTests : AbstractTestsBase
     public void An_unOnboarded_device_can_be_deleted()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentity();
+        var identity = TestDataGenerator.CreateIdentityWithoutDevice();
 
         var activeDevice = CreateOnboardedDevice(identity);
         var unOnboardedDevice = CreateUnonboardedDevice(identity);
@@ -123,7 +123,7 @@ public class DeviceTests : AbstractTestsBase
     {
         // Arrange
         var activeIdentity = TestDataGenerator.CreateIdentity();
-        var otherIdentity = TestDataGenerator.CreateIdentity();
+        var otherIdentity = TestDataGenerator.CreateIdentityWithoutDevice();
 
         var activeDevice = CreateOnboardedDevice(activeIdentity);
         var unOnboardedDeviceOfOtherIdentity = CreateUnonboardedDevice(otherIdentity);

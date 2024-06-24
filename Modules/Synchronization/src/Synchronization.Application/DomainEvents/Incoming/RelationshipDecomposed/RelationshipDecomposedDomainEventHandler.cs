@@ -2,7 +2,6 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipDecomposed;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
@@ -11,13 +10,11 @@ namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.Rel
 public class RelationshipDecomposedDomainEventHandler : IDomainEventHandler<RelationshipDecomposedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IEventBus _eventBus;
     private readonly ILogger<RelationshipDecomposedDomainEventHandler> _logger;
 
-    public RelationshipDecomposedDomainEventHandler(ISynchronizationDbContext dbContext, IEventBus eventBus, ILogger<RelationshipDecomposedDomainEventHandler> logger)
+    public RelationshipDecomposedDomainEventHandler(ISynchronizationDbContext dbContext, ILogger<RelationshipDecomposedDomainEventHandler> logger)
     {
         _dbContext = dbContext;
-        _eventBus = eventBus;
         _logger = logger;
     }
 
@@ -33,8 +30,7 @@ public class RelationshipDecomposedDomainEventHandler : IDomainEventHandler<Rela
 #pragma warning restore IDE0037
         try
         {
-            var externalEvent = await _dbContext.CreateExternalEvent(IdentityAddress.Parse(@event.Peer), ExternalEventType.RelationshipDecomposedByPeer, payload);
-            _eventBus.Publish(new ExternalEventCreatedDomainEvent(externalEvent));
+            await _dbContext.CreateExternalEvent(IdentityAddress.Parse(@event.Peer), ExternalEventType.RelationshipDecomposedByPeer, payload);
         }
         catch (Exception ex)
         {

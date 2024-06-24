@@ -1,5 +1,4 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Identities.Commands.ApproveDeletionProcess;
@@ -86,15 +85,9 @@ public class HandlerTests : AbstractTestsBase
         acting.Should().AwaitThrowAsync<NotFoundException, ApproveDeletionProcessResponse>().Which.Message.Should().Contain("Identity");
     }
 
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus? eventBus = null, IPushNotificationSender? pushNotificationSender = null)
+    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender? pushNotificationSender = null)
     {
-        eventBus ??= A.Dummy<IEventBus>();
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
-        return new Handler(identitiesRepository, userContext, eventBus, pushNotificationSender);
-    }
-
-    private static Handler CreateHandler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender pushNotificationSender)
-    {
-        return CreateHandler(identitiesRepository, userContext, null, pushNotificationSender);
+        return new Handler(identitiesRepository, userContext, pushNotificationSender);
     }
 }

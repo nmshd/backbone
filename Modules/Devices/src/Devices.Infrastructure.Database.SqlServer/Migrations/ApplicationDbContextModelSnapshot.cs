@@ -18,7 +18,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Devices")
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -56,8 +56,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -191,7 +191,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(2)
-                        .HasColumnType("nchar(2)")
+                        .IsUnicode(false)
+                        .HasColumnType("char(2)")
                         .HasDefaultValue("en")
                         .IsFixedLength();
 
@@ -218,8 +219,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.HasKey("Id");
 
@@ -233,8 +234,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("Address")
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("ClientId")
                         .HasMaxLength(200)
@@ -334,8 +335,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("IdentityAddress")
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("char(80)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.Property<DateTime?>("RejectedAt")
                         .HasColumnType("datetime2");

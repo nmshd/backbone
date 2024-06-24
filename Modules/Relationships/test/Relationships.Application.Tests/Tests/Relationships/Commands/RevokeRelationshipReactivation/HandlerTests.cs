@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipReactivation;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -72,9 +71,8 @@ public class HandlerTests : AbstractTestsBase
             .MustHaveHappenedOnceExactly();
     }
 
-    private static Handler CreateHandler(IUserContext userContext, IRelationshipsRepository relationshipsRepository, IEventBus? eventBus = null)
+    private static Handler CreateHandler(IUserContext userContext, IRelationshipsRepository relationshipsRepository)
     {
-        eventBus ??= A.Fake<IEventBus>();
-        return new Handler(relationshipsRepository, userContext, eventBus);
+        return new Handler(relationshipsRepository, userContext);
     }
 }

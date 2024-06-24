@@ -18,7 +18,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Relationships")
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -41,8 +41,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
                         .IsRequired()
@@ -80,8 +80,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("AllocatedByDevice")
                         .IsRequired()
@@ -125,8 +125,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<bool>("FromHasDecomposed")
                         .HasColumnType("boolean");
@@ -145,8 +145,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<bool>("ToHasDecomposed")
                         .HasColumnType("boolean");
@@ -177,8 +177,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
                         .IsRequired()

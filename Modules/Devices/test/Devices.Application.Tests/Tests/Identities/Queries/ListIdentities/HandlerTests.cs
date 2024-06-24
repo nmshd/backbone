@@ -1,10 +1,7 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
-using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
-using FluentAssertions.Execution;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
@@ -12,32 +9,25 @@ namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.Li
 
 public class HandlerTests : AbstractTestsBase
 {
-    public HandlerTests()
-    {
-        AssertionScope.Current.FormattingOptions.MaxLines = 1000;
-    }
-
     [Fact]
     public async Task Returns_an_empty_list_when_no_identities_exist()
     {
         // Arrange
-        var identitiesList = new List<Identity>();
-        var request = new PaginationFilter() { PageSize = 5 };
-        var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(identitiesList)));
+        var identities = new List<Identity>();
+        var handler = CreateHandler(new FindAllStubRepository(identities));
 
         // Act
-        var result = await handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
+        var result = await handler.Handle(new ListIdentitiesQuery(), CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(0);
+        result.Should().HaveCount(identities.Count);
     }
 
     [Fact]
-    public async Task Returns_a_list_of_all_existing_identities()
+    public async Task? Returns_a_list_of_all_existing_identities()
     {
         // Arrange
-        var request = new PaginationFilter();
-        List<Identity> identitiesList =
+        List<Identity> identities =
         [
             new Identity(CreateRandomDeviceId(),
                 CreateRandomIdentityAddress(),
@@ -51,30 +41,28 @@ public class HandlerTests : AbstractTestsBase
                 TestDataGenerator.CreateRandomTierId(),
                 1)
         ];
-
-        var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(identitiesList)));
+        var handler = CreateHandler(new FindAllStubRepository(identities));
 
         // Act
-        var result = await handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
+        var result = await handler.Handle(new ListIdentitiesQuery(), CancellationToken.None);
 
         // Assert
-        result.Should().HaveCount(2);
+        result.Should().HaveCount(identities.Count);
     }
 
     [Fact]
     public async Task Returned_identities_have_all_properties_filled_as_expected()
     {
         // Arrange
-        var request = new PaginationFilter();
         var expectedClientId = CreateRandomDeviceId();
         var expectedAddress = CreateRandomIdentityAddress();
         var expectedTierId = TestDataGenerator.CreateRandomTierId();
-        List<Identity> identitiesList = [new(expectedClientId, expectedAddress, [], expectedTierId, 1)];
+        List<Identity> identities = [new Identity(expectedClientId, expectedAddress, [], expectedTierId, 1)];
 
-        var handler = CreateHandler(new FindAllStubRepository(MakeDbPaginationResult(identitiesList)));
+        var handler = CreateHandler(new FindAllStubRepository(identities));
 
         // Act
-        var result = await handler.Handle(new ListIdentitiesQuery(request), CancellationToken.None);
+        var result = await handler.Handle(new ListIdentitiesQuery(), CancellationToken.None);
 
         // Assert
         result.Should().HaveCount(1);
@@ -82,16 +70,12 @@ public class HandlerTests : AbstractTestsBase
         result.First().Address.Should().Be(expectedAddress);
         result.First().PublicKey.Should().BeEquivalentTo(Array.Empty<byte>());
         result.First().TierId.Should().BeEquivalentTo(expectedTierId);
+        result.First().Status.Should().Be(IdentityStatus.Active);
         result.First().IdentityVersion.Should().Be(1);
     }
 
     private Handler CreateHandler(FindAllStubRepository findAllStubRepository)
     {
         return new Handler(findAllStubRepository);
-    }
-
-    private DbPaginationResult<Identity> MakeDbPaginationResult(List<Identity> identities)
-    {
-        return new DbPaginationResult<Identity>(identities, identities.Count);
     }
 }

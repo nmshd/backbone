@@ -5,6 +5,7 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Metrics;
+
 public class UsedFileStorageSpaceMetricCalculatorTests : AbstractTestsBase
 {
     [Fact]
@@ -37,8 +38,7 @@ public class UsedFileStorageSpaceMetricCalculatorTests : AbstractTestsBase
 
         public Task<uint> Count(string uploader, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
     }
 }
-

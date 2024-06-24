@@ -1,5 +1,6 @@
 using System.Data;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -128,6 +129,42 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         return GetAppIdsForWhichNoConfigurationExists("apns", supportedAppIds);
     }
 
+    public override int SaveChanges()
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChanges();
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
+    public override int SaveChanges(bool acceptAllChangesOnSuccess)
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChanges(acceptAllChangesOnSuccess);
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new())
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChangesAsync(cancellationToken);
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
+    public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new())
+    {
+        var entities = GetChangedEntities();
+        var result = base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        PublishDomainEvents(entities);
+
+        return result;
+    }
+
     private List<string> GetAppIdsForWhichNoConfigurationExists(string platform, ICollection<string> supportedAppIds)
     {
         var query = PnsRegistrations.FromSqlRaw(
@@ -154,7 +191,7 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     {
         base.ConfigureConventions(configurationBuilder);
 
-        configurationBuilder.Properties<IdentityAddress>().AreUnicode(false).AreFixedLength()
+        configurationBuilder.Properties<IdentityAddress>().AreUnicode(false).AreFixedLength(false)
             .HaveMaxLength(IdentityAddress.MAX_LENGTH).HaveConversion<IdentityAddressValueConverter>();
         configurationBuilder.Properties<DeviceId>().AreUnicode(false).AreFixedLength()
             .HaveMaxLength(DeviceId.MAX_LENGTH).HaveConversion<DeviceIdValueConverter>();
@@ -186,5 +223,20 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
         builder.HasDefaultSchema("Devices");
 
         builder.ApplyConfigurationsFromAssembly(typeof(DeviceEntityTypeConfiguration).Assembly);
+    }
+
+    private List<Entity> GetChangedEntities() => ChangeTracker
+        .Entries()
+        .Where(x => x.Entity is Entity)
+        .Select(x => (Entity)x.Entity)
+        .ToList();
+
+    private void PublishDomainEvents(List<Entity> entities)
+    {
+        foreach (var e in entities)
+        {
+            _eventBus.Publish(e.DomainEvents);
+            e.ClearDomainEvents();
+        }
     }
 }

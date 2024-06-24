@@ -1,8 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Relationships.Domain.Tests.Extensions;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
@@ -47,6 +49,24 @@ public class TerminateRelationshipTests : AbstractTestsBase
         auditLogEntry.CreatedBy.Should().Be(IDENTITY_2);
         auditLogEntry.CreatedByDevice.Should().Be(DEVICE_2);
         auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
+    }
+
+    [Fact]
+    public void Raises_RelationshipStatusChangedDomainEvent()
+    {
+        // Assert
+        var relationship = CreateActiveRelationship();
+        relationship.ClearDomainEvents();
+
+        // Act
+        relationship.Terminate(IDENTITY_2, DEVICE_2);
+
+        // Assert
+        var domainEvent = relationship.Should().HaveASingleDomainEvent<RelationshipStatusChangedDomainEvent>();
+        domainEvent.RelationshipId.Should().Be(relationship.Id);
+        domainEvent.Status.Should().Be(relationship.Status.ToString());
+        domainEvent.Initiator.Should().Be(relationship.LastModifiedBy);
+        domainEvent.Peer.Should().Be(relationship.GetPeer(relationship.LastModifiedBy));
     }
 
     [Fact]

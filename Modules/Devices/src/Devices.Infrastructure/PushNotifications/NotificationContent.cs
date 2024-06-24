@@ -1,4 +1,6 @@
 using System.Text.Json.Serialization;
+using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Tooling;
 
@@ -6,25 +8,17 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications;
 
 public class NotificationContent
 {
-    private const string PUSH_NOTIFICATION_POSTFIX = "PushNotification";
-
-    public NotificationContent(DevicePushIdentifier devicePushIdentifier, object pushNotification)
+    public NotificationContent(IdentityAddress recipient, DevicePushIdentifier devicePushIdentifier, IPushNotification pushNotification)
     {
-        EventName = DetermineEventName(pushNotification);
+        EventName = pushNotification.GetEventName();
+        AccountReference = recipient;
         DevicePushIdentifier = devicePushIdentifier;
         Payload = pushNotification;
         SentAt = SystemTime.UtcNow;
     }
 
-    private string DetermineEventName(object pushNotification)
-    {
-        var notificationTypeName = pushNotification.GetType().Name;
-
-        if (notificationTypeName.Contains(PUSH_NOTIFICATION_POSTFIX))
-            return notificationTypeName.Replace(PUSH_NOTIFICATION_POSTFIX, "");
-
-        return "dynamic";
-    }
+    [JsonPropertyName("accRef")]
+    public string AccountReference { get; }
 
     [JsonPropertyName("devicePushIdentifier")]
     public string DevicePushIdentifier { get; }

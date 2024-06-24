@@ -2,10 +2,8 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationship;
-using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
-using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using FakeItEasy;
@@ -73,42 +71,6 @@ public class HandlerTests : AbstractTestsBase
                 () => mockRelationshipsRepository.Update(
                     A<Relationship>.That.Matches(r => r.Id == relationship.Id && r.Status == RelationshipStatus.Revoked))
             )
-            .MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
-    public async Task Publishes_RelationshipStatusChangedDomainEvent()
-    {
-        // Arrange
-        var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
-
-        var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
-        var relationship = TestData.CreatePendingRelationship(from: activeIdentity);
-        A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
-
-        var fakeUserContext = A.Fake<IUserContext>();
-        A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
-        A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
-
-        var mockEventBus = A.Fake<IEventBus>();
-
-        var handler = CreateHandler(fakeUserContext, fakeRelationshipsRepository, mockEventBus);
-
-        // Act
-        await handler.Handle(new RevokeRelationshipCommand
-        {
-            RelationshipId = relationship.Id
-        }, CancellationToken.None);
-
-        // Assert
-        A.CallTo(
-                () => mockEventBus.Publish(A<RelationshipStatusChangedDomainEvent>.That.Matches(e =>
-                    e.RelationshipId == relationship.Id &&
-                    e.Status == RelationshipStatus.Revoked.ToDtoString() &&
-                    e.Initiator == activeIdentity &&
-                    e.Peer == relationship.To)
-                ))
             .MustHaveHappenedOnceExactly();
     }
 
