@@ -30,8 +30,8 @@ public static class IonosS3ServiceCollectionExtensions
 
 public class IonosS3Options
 {
-    public string ServiceUrl { get; set; } = string.Empty;
-    public string AccessKey { get; set; } = string.Empty;
-    public string SecretKey { get; set; } = string.Empty;
-    public string BucketName { get; set; } = string.Empty;
+    public string? ServiceUrl { get; set; }
+    public string? AccessKey { get; set; }
+    public string? SecretKey { get; set; }
+    public string? BucketName { get; set; }
 }
