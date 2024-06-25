@@ -4,7 +4,7 @@
 # (see https://github.com/dotnet/dotnet-docker/discussions/4527).
 # They are copied from https://github.com/ubuntu-rocks/dotnet/issues/21
 ################################################################################################################
-FROM golang:1.22 as chisel
+FROM golang:1.22 AS chisel
 
 RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
 WORKDIR /opt/chisel
@@ -91,6 +91,8 @@ COPY ["AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/AdminApi.Infrastr
 RUN dotnet restore "AdminApi/src/AdminApi/AdminApi.csproj"
 
 COPY . .
+
+ARG VERSION
 
 RUN dotnet publish /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "/src/AdminApi/src/AdminApi/AdminApi.csproj"
 RUN dotnet publish --configuration Release --output /app/publish/health "HealthCheck/HealthCheck.csproj"
