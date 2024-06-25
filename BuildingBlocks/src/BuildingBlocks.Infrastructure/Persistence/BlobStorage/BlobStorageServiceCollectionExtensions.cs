@@ -58,10 +58,13 @@ public static class BlobStorageServiceCollectionExtensions
 
 public class BlobStorageOptions
 {
-    public string CloudProvider { get; set; } = null!;
+    [Required]
+    [MinLength(1)]
+    [RegularExpression("Azure|GoogleCloud|Ionos")]
+    public string CloudProvider { get; set; } = string.Empty;
 
-    public string Container { get; set; } = null!;
-    public string? ConnectionInfo { get; set; } = null;
+    public string? ConnectionInfo { get; set; } = string.Empty;
+    public string? Container { get; set; } = string.Empty;
 
     public IonosS3Config? IonosS3Config { get; set; }
 }
