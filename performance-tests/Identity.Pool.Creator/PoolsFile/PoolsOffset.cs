@@ -1,6 +1,4 @@
-﻿using Backbone.Identity.Pool.Creator.PoolsFile;
-
-namespace Backbone.Identity.Pool.Creator.PoolsGenerator;
+﻿namespace Backbone.Identity.Pool.Creator.PoolsFile;
 internal record PoolsOffset
 {
     public OffsetDirections? MessagesOffsetPendingTo { get; private set; }

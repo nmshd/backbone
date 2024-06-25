@@ -3,7 +3,6 @@ using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.Identity.Pool.Creator.Application.Checkers;
 using Backbone.Identity.Pool.Creator.Application.Printer;
 using Backbone.Identity.Pool.Creator.PoolsFile;
-using Backbone.Identity.Pool.Creator.PoolsGenerator;
 using Backbone.Tooling;
 
 namespace Backbone.Identity.Pool.Creator.GraphPoolsGenerator;
