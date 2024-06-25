@@ -12,7 +12,7 @@ public class RelationshipStatusChangedDomainEvent : DomainEvent
         RelationshipId = relationship.Id;
         Status = relationship.Status.ToString();
         Initiator = relationship.LastModifiedBy;
-        Peer = relationship.GetPeer(relationship.LastModifiedBy);
+        Peer = relationship.GetPeerOf(relationship.LastModifiedBy);
     }
 
     public string RelationshipId { get; set; }

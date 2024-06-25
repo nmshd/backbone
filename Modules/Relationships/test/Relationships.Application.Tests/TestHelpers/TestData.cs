@@ -27,6 +27,8 @@ public static class TestData
         var relationship = new Relationship(CreateRelationshipTemplate(createdBy: to), from, TestDataGenerator.CreateRandomDeviceId(), null, []);
         relationship.Accept(to, TestDataGenerator.CreateRandomDeviceId(), null);
 
+        relationship.ClearDomainEvents();
+        
         return relationship;
     }
 

@@ -32,7 +32,7 @@ public class RelationshipsRepository : IRelationshipsRepository
             .WithParticipant(identityAddress)
             .FirstWithId(id, cancellationToken);
 
-        return relationship.GetPeer(identityAddress);
+        return relationship.GetPeerOf(identityAddress);
     }
 
     public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress,
@@ -66,6 +66,11 @@ public class RelationshipsRepository : IRelationshipsRepository
         await _dbContext.SaveChangesAsync();
     }
 
+    public async Task Update(IEnumerable<Relationship> relationships)
+    {
+        _relationships.UpdateRange(relationships);
+        await _dbContext.SaveChangesAsync();
+    }
 
     public async Task Add(Relationship relationship, CancellationToken cancellationToken)
     {

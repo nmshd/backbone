@@ -236,6 +236,7 @@ jobs:
       - publish-event-handler
       - publish-database-migrator
       - publish-identity-deletion-jobs
+      - publish-sse-server
     steps:
       - name: Checkout
         uses: actions/checkout@v4

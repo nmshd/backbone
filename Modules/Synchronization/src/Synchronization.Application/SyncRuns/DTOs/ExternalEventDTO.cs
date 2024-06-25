@@ -22,7 +22,6 @@ public class ExternalEventDTO : IHaveCustomMapping
             ExternalEventType.RelationshipStatusChanged => "RelationshipStatusChanged",
             ExternalEventType.IdentityDeletionProcessStarted => "IdentityDeletionProcessStarted",
             ExternalEventType.IdentityDeletionProcessStatusChanged => "IdentityDeletionProcessStatusChanged",
-            ExternalEventType.RelationshipTerminated => "RelationshipTerminated",
             ExternalEventType.RelationshipReactivationRequested => "RelationshipReactivationRequested",
             ExternalEventType.RelationshipReactivationCompleted => "RelationshipReactivationCompleted",
             ExternalEventType.RelationshipDecomposedByPeer => "RelationshipDecomposedByPeer",

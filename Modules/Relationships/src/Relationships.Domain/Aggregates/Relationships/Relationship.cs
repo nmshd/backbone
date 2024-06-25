@@ -65,7 +65,7 @@ public class Relationship : Entity
     public bool FromHasDecomposed { get; private set; }
     public bool ToHasDecomposed { get; private set; }
 
-    public IdentityAddress GetPeer(IdentityAddress activeIdentity)
+    public IdentityAddress GetPeerOf(IdentityAddress activeIdentity)
     {
         return From == activeIdentity ? To : From;
     }
@@ -192,7 +192,7 @@ public class Relationship : Entity
         );
         AuditLog.Add(auditLogEntry);
 
-        RaiseDomainEvent(new RelationshipReactivationRequestedDomainEvent(this, activeIdentity, GetPeer(activeIdentity)));
+        RaiseDomainEvent(new RelationshipReactivationRequestedDomainEvent(this, activeIdentity, GetPeerOf(activeIdentity)));
     }
 
     private void EnsureThereIsNoOpenReactivationRequest()
@@ -218,7 +218,7 @@ public class Relationship : Entity
         );
         AuditLog.Add(auditLogEntry);
 
-        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeer(activeIdentity)));
+        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeerOf(activeIdentity)));
     }
 
     private void EnsureAcceptableReactivationRequestExistsFor(IdentityAddress activeIdentity)
@@ -241,7 +241,7 @@ public class Relationship : Entity
         );
         AuditLog.Add(auditLogEntry);
 
-        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeer(activeIdentity)));
+        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeerOf(activeIdentity)));
     }
 
     private void EnsureRejectableRelationshipReactivationRequestExistsFor(IdentityAddress activeIdentity)
@@ -264,7 +264,7 @@ public class Relationship : Entity
         );
         AuditLog.Add(auditLogEntry);
 
-        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeer(activeIdentity)));
+        RaiseDomainEvent(new RelationshipReactivationCompletedDomainEvent(this, GetPeerOf(activeIdentity)));
     }
 
     private void EnsureRevocableReactivationRequestExistsFor(IdentityAddress activeIdentity)
@@ -338,6 +338,27 @@ public class Relationship : Entity
     {
         if (From != activeIdentity && To != activeIdentity)
             throw new DomainException(DomainErrors.RequestingIdentityDoesNotBelongToRelationship());
+    }
+
+    public void ParticipantIsToBeDeleted(string identityToBeDeleted)
+    {
+        var peer = GetPeerOf(identityToBeDeleted);
+
+        RaiseDomainEvent(new PeerToBeDeletedDomainEvent(peer, Id, identityToBeDeleted));
+    }
+
+    public void DeletionOfParticipantCancelled(string identityWithDeletionCancelled)
+    {
+        var peer = GetPeerOf(identityWithDeletionCancelled);
+
+        RaiseDomainEvent(new PeerDeletionCancelledDomainEvent(peer, Id, identityWithDeletionCancelled));
+    }
+
+    public void DeletionOfParticipantStarted(string deletedIdentity)
+    {
+        var peer = GetPeerOf(deletedIdentity);
+
+        RaiseDomainEvent(new PeerDeletedDomainEvent(peer, Id, deletedIdentity));
     }
 
     #region Expressions

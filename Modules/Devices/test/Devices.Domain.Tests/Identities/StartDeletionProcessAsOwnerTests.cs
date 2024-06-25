@@ -1,10 +1,12 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -84,6 +86,27 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
+    }
+
+    [Fact]
+    public void Raises_domain_events()
+    {
+        //Arrange
+        var activeIdentity = TestDataGenerator.CreateIdentity();
+        var tierBeforeDeletion = activeIdentity.TierId;
+        var activeDevice = activeIdentity.Devices[0];
+
+        //Act
+        activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id);
+
+        //Assert
+        var (tierOfIdentityChangedDomainEvent, identityToBeDeletedDomainEvent) = activeIdentity.Should().HaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityToBeDeletedDomainEvent>();
+
+        tierOfIdentityChangedDomainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
+        tierOfIdentityChangedDomainEvent.OldTierId.Should().Be(tierBeforeDeletion);
+        tierOfIdentityChangedDomainEvent.NewTierId.Should().Be(Tier.QUEUED_FOR_DELETION.Id);
+
+        identityToBeDeletedDomainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
     }
 
     private static void AssertDeletionProcessWasStarted(Identity activeIdentity)

@@ -66,7 +66,7 @@ public class RevokeRelationshipTests : AbstractTestsBase
         domainEvent.RelationshipId.Should().Be(relationship.Id);
         domainEvent.Status.Should().Be(relationship.Status.ToString());
         domainEvent.Initiator.Should().Be(relationship.LastModifiedBy);
-        domainEvent.Peer.Should().Be(relationship.GetPeer(relationship.LastModifiedBy));
+        domainEvent.Peer.Should().Be(relationship.GetPeerOf(relationship.LastModifiedBy));
     }
 
     [Fact]

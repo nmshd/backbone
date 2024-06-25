@@ -19,10 +19,9 @@ public class HandlerTests : AbstractTestsBase
         var mockIdentitiesRepository = CreateFakeIdentitiesRepository(0, out _);
 
         var handler = CreateHandler(mockIdentitiesRepository);
-        var command = new TriggerRipeDeletionProcessesCommand();
 
         // Act
-        var response = await handler.Handle(command, CancellationToken.None);
+        var response = await handler.Handle(new TriggerRipeDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
         response.Results.Should().BeEmpty();
@@ -38,10 +37,9 @@ public class HandlerTests : AbstractTestsBase
         anIdentity.StartDeletionProcessAsOwner(anIdentity.Devices.First().Id);
 
         var handler = CreateHandler(identitiesRepository);
-        var command = new TriggerRipeDeletionProcessesCommand();
 
         // Act
-        var response = await handler.Handle(command, CancellationToken.None);
+        var response = await handler.Handle(new TriggerRipeDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
         response.Results.Should().HaveCount(1);
@@ -60,10 +58,9 @@ public class HandlerTests : AbstractTestsBase
         SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod + 1));
 
         var handler = CreateHandler(identitiesRepository);
-        var command = new TriggerRipeDeletionProcessesCommand();
 
         // Act
-        var response = await handler.Handle(command, CancellationToken.None);
+        var response = await handler.Handle(new TriggerRipeDeletionProcessesCommand(), CancellationToken.None);
 
         // Assert
         response.Results.Should().HaveCount(1);

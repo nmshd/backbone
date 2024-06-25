@@ -62,11 +62,15 @@ public enum ExternalEventType
 {
     MessageReceived = 0,
     MessageDelivered = 1,
-    RelationshipStatusChanged = 2,
-    IdentityDeletionProcessStarted = 3,
-    IdentityDeletionProcessStatusChanged = 4,
-    RelationshipTerminated = 5,
-    RelationshipReactivationRequested = 6,
-    RelationshipReactivationCompleted = 7,
-    RelationshipDecomposedByPeer = 8
+
+    RelationshipStatusChanged = 10,
+    RelationshipReactivationRequested = 12,
+    RelationshipReactivationCompleted = 13,
+    RelationshipDecomposedByPeer = 14,
+
+    IdentityDeletionProcessStarted = 20,
+    IdentityDeletionProcessStatusChanged = 21,
+    PeerToBeDeleted = 22,
+    PeerDeletionCancelled = 23,
+    PeerDeleted = 24
 }
