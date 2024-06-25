@@ -10,8 +10,13 @@ public class Challenge
     public required DateTime ExpiresAt { get; set; }
     public required string? CreatedBy { get; set; }
 
+    public DateTime GetDateOfCreation()
+    {
+        return ExpiresAt.AddMinutes(-EXPIRY_TIME_IN_MINUTES);
+    }
+
     public static Expression<Func<Challenge, bool>> WasCreatedInIntervalBy(DateTime from, DateTime to, string identityAddress)
     {
-        return c => c.ExpiresAt.AddMinutes(-EXPIRY_TIME_IN_MINUTES) > from && c.ExpiresAt.AddMinutes(-EXPIRY_TIME_IN_MINUTES) < to && c.CreatedBy == identityAddress;
+        return c => c.GetDateOfCreation() > from && c.GetDateOfCreation() < to && c.CreatedBy == identityAddress;
     }
 }
