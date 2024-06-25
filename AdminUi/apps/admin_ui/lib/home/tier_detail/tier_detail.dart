@@ -64,8 +64,9 @@ class _TierDetailState extends State<TierDetail> {
                             TextSpan(
                               children: [
                                 TextSpan(
-                                    text: '${context.l10n.id}: ',
-                                    style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
+                                  text: '${context.l10n.id}: ',
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                                ),
                                 TextSpan(text: tierDetails.id, style: Theme.of(context).textTheme.bodyLarge),
                               ],
                             ),
