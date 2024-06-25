@@ -1,11 +1,10 @@
-﻿using System.Collections;
-using Backbone.ConsumerApi.Sdk.Authentication;
+﻿using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.Identity.Pool.Creator.Application.Checkers;
 using Backbone.Identity.Pool.Creator.Application.Printer;
 using Backbone.Identity.Pool.Creator.PoolsFile;
 using Backbone.Tooling;
 
-namespace Backbone.Identity.Pool.Creator.GraphPoolsGenerator;
+namespace Backbone.Identity.Pool.Creator.PoolsGenerator;
 
 /// <summary>
 /// We use a different approach here. Instead of creating all identities, then their relationships and lastly their messages,
