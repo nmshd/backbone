@@ -1,4 +1,4 @@
-﻿using MediatR;
+using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Queries.GetPeerOfActiveIdentityInRelationship;
 

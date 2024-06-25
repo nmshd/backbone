@@ -10,8 +10,10 @@ public interface IRelationshipsRepository
 {
     Task<DbPaginationResult<Relationship>> FindRelationshipsWithIds(IEnumerable<RelationshipId> ids, IdentityAddress identityAddress, PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false);
+
     Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false);
     Task<IdentityAddress> FindRelationshipPeer(RelationshipId id, IdentityAddress identityAddress, CancellationToken cancellationToken);
+
     Task Add(Relationship relationship, CancellationToken cancellationToken);
     Task Update(Relationship relationship);
     Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken);

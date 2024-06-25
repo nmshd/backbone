@@ -9,7 +9,7 @@ using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Apns;
+namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
 
 public class ApnsMessageBuilderTests : AbstractTestsBase
 {

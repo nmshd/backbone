@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;

@@ -10,6 +10,8 @@ public class RelationshipEntityTypeConfiguration : EntityEntityTypeConfiguration
     {
         base.Configure(builder);
 
+        base.Configure(builder);
+
         builder.HasIndex(x => x.From);
         builder.HasIndex(x => x.To);
 

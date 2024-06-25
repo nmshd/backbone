@@ -32,7 +32,7 @@ public class RelationshipsRepository : IRelationshipsRepository
             .WithParticipant(identityAddress)
             .FirstWithId(id, cancellationToken);
 
-        return relationship.To != identityAddress ? relationship.To : relationship.From;
+        return relationship.GetPeer(identityAddress);
     }
 
     public async Task<Relationship> FindRelationship(RelationshipId id, IdentityAddress identityAddress,

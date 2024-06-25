@@ -11,6 +11,8 @@ public class RelationshipTemplateAllocationEntityTypeConfiguration : EntityEntit
     {
         base.Configure(builder);
 
+        base.Configure(builder);
+
         builder.ToTable(nameof(RelationshipTemplateAllocation) + "s");
 
         builder.HasKey(x => x.Id);

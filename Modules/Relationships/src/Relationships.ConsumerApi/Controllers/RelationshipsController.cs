@@ -12,9 +12,7 @@ using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRe
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipReactivation;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RequestRelationshipReactivation;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipReactivation;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.TerminateRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.GetPeerOfActiveIdentityInRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.GetRelationship;
@@ -106,19 +104,6 @@ public class RelationshipsController : ApiControllerBase
         return Ok(response);
     }
 
-    [HttpPut("{id}/Revoke")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RevokeRelationshipResponse>), StatusCodes.Status200OK)]
-    [ProducesError(StatusCodes.Status400BadRequest)]
-    [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> RevokeRelationship([FromRoute] string id, [FromBody] RevokeRelationshipRequest request, CancellationToken cancellationToken)
-    {
-        var peerOfActiveIdentityInRelationshipResponse = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = id }, cancellationToken);
-        await EnsurePeerIsNotToBeDeleted(peerOfActiveIdentityInRelationshipResponse.IdentityAddress, cancellationToken);
-
-        var response = await _mediator.Send(new RevokeRelationshipCommand { RelationshipId = id, CreationResponseContent = request.CreationResponseContent }, cancellationToken);
-        return Ok(response);
-    }
-
     [HttpPut("{id}/Reactivate")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RequestRelationshipReactivationResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
@@ -143,19 +128,6 @@ public class RelationshipsController : ApiControllerBase
 
         var response = await _mediator.Send(new RevokeRelationshipReactivationCommand { RelationshipId = id }, cancellationToken);
         return Ok(response);
-    }
-
-    [HttpPut("{id}/Terminate")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipDTO>), StatusCodes.Status200OK)]
-    [ProducesError(StatusCodes.Status400BadRequest)]
-    [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> TerminateRelationship([FromRoute] string id, CancellationToken cancellationToken)
-    {
-        var peerOfActiveIdentityInRelationshipResponse = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = id }, cancellationToken);
-        await EnsurePeerIsNotToBeDeleted(peerOfActiveIdentityInRelationshipResponse.IdentityAddress, cancellationToken);
-
-        var relationship = await _mediator.Send(new TerminateRelationshipCommand { RelationshipId = id }, cancellationToken);
-        return Ok(relationship);
     }
 
     [HttpPut("{id}/Reactivate/Accept")]
