@@ -23,9 +23,9 @@ internal class RelationshipsStepDefinitions
     private readonly HttpClient _httpClient;
     private ApiResponse<CreateRelationshipTemplateResponse>? _relationshipTemplateResponse;
     private ApiResponse<RelationshipMetadata>? _createRelationshipResponse;
-    private ApiResponse<RelationshipMetadata>? _acceptRelationshipChangeResponse;
-    private ApiResponse<RelationshipMetadata>? _rejectRelationshipChangeResponse;
-    private ApiResponse<RelationshipMetadata>? _revokeRelationshipChangeResponse;
+    private ApiResponse<RelationshipMetadata>? _acceptRelationshipResponse;
+    private ApiResponse<RelationshipMetadata>? _rejectRelationshipResponse;
+    private ApiResponse<RelationshipMetadata>? _revokeRelationshipResponse;
     private string _relationshipId = string.Empty;
 
     public RelationshipsStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
@@ -92,7 +92,7 @@ internal class RelationshipsStepDefinitions
         {
             CreationResponseContent = "AAA".GetBytes()
         };
-        _acceptRelationshipChangeResponse = await _client1.Relationships.AcceptRelationship(_relationshipId, acceptRelationshipRequest);
+        _acceptRelationshipResponse = await _client1.Relationships.AcceptRelationship(_relationshipId, acceptRelationshipRequest);
     }
 
     [When("a POST request is sent to the /Relationships/{r.Id}/Reject endpoint by i1")]
@@ -102,17 +102,17 @@ internal class RelationshipsStepDefinitions
         {
             CreationResponseContent = "AAA".GetBytes()
         };
-        _rejectRelationshipChangeResponse = await _client1.Relationships.RejectRelationship(_relationshipId, rejectRelationshipRequest);
+        _rejectRelationshipResponse = await _client1.Relationships.RejectRelationship(_relationshipId, rejectRelationshipRequest);
     }
 
-    [When("a POST request is sent to the /Relationships/{r.Id}/Changes/{r.Changes.Id}/Revoke endpoint by i1")]
+    [When("a POST request is sent to the /Relationships/{r.Id}/Revoke endpoint by i1")]
     public async Task WhenAPostRequestIsSentToTheRevokeRelationshipChangeEndpointByI2()
     {
         var revokeRelationshipRequest = new RevokeRelationshipRequest
         {
             CreationResponseContent = "AAA".GetBytes()
         };
-        _revokeRelationshipChangeResponse = await _client1.Relationships.RevokeRelationship(_relationshipId, revokeRelationshipRequest);
+        _revokeRelationshipResponse = await _client1.Relationships.RevokeRelationship(_relationshipId, revokeRelationshipRequest);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
@@ -121,14 +121,14 @@ internal class RelationshipsStepDefinitions
         if (_createRelationshipResponse != null)
             ((int)_createRelationshipResponse!.Status).Should().Be(expectedStatusCode);
 
-        if (_acceptRelationshipChangeResponse != null)
-            ((int)_acceptRelationshipChangeResponse!.Status).Should().Be(expectedStatusCode);
+        if (_acceptRelationshipResponse != null)
+            ((int)_acceptRelationshipResponse!.Status).Should().Be(expectedStatusCode);
 
-        if (_rejectRelationshipChangeResponse != null)
-            ((int)_rejectRelationshipChangeResponse!.Status).Should().Be(expectedStatusCode);
+        if (_rejectRelationshipResponse != null)
+            ((int)_rejectRelationshipResponse!.Status).Should().Be(expectedStatusCode);
 
-        if (_revokeRelationshipChangeResponse != null)
-            ((int)_revokeRelationshipChangeResponse!.Status).Should().Be(expectedStatusCode);
+        if (_revokeRelationshipResponse != null)
+            ((int)_revokeRelationshipResponse!.Status).Should().Be(expectedStatusCode);
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]*)""")]
@@ -140,51 +140,51 @@ internal class RelationshipsStepDefinitions
             _createRelationshipResponse.Error!.Code.Should().Be(errorCode);
         }
 
-        if (_acceptRelationshipChangeResponse != null)
+        if (_acceptRelationshipResponse != null)
         {
-            _acceptRelationshipChangeResponse!.Error.Should().NotBeNull();
-            _acceptRelationshipChangeResponse.Error!.Code.Should().Be(errorCode);
+            _acceptRelationshipResponse!.Error.Should().NotBeNull();
+            _acceptRelationshipResponse.Error!.Code.Should().Be(errorCode);
         }
 
-        if (_rejectRelationshipChangeResponse != null)
+        if (_rejectRelationshipResponse != null)
         {
-            _rejectRelationshipChangeResponse!.Error.Should().NotBeNull();
-            _rejectRelationshipChangeResponse.Error!.Code.Should().Be(errorCode);
+            _rejectRelationshipResponse!.Error.Should().NotBeNull();
+            _rejectRelationshipResponse.Error!.Code.Should().Be(errorCode);
         }
 
-        if (_revokeRelationshipChangeResponse != null)
+        if (_revokeRelationshipResponse != null)
         {
-            _revokeRelationshipChangeResponse!.Error.Should().NotBeNull();
-            _revokeRelationshipChangeResponse.Error!.Code.Should().Be(errorCode);
+            _revokeRelationshipResponse!.Error.Should().NotBeNull();
+            _revokeRelationshipResponse.Error!.Code.Should().Be(errorCode);
         }
     }
 
     [Then("the response contains a Relationship")]
     public void ThenTheResponseContainsARelationship()
     {
-        _createRelationshipResponse!.Should().BeASuccess();
-        _createRelationshipResponse!.Should().ComplyWithSchema();
-    }
+        if (_createRelationshipResponse != null)
+        {
+            _createRelationshipResponse!.Should().BeASuccess();
+            _createRelationshipResponse!.Should().ComplyWithSchema();
+        }
 
-    [Then("the response contains an AcceptRelationshipChangeResponse")]
-    public void ThenTheResponseContainsAnAcceptRelationshipChangeResponse()
-    {
-        _acceptRelationshipChangeResponse!.Should().BeASuccess();
-        _acceptRelationshipChangeResponse!.Should().ComplyWithSchema();
-    }
+        if (_acceptRelationshipResponse != null)
+        {
+            _acceptRelationshipResponse!.Should().BeASuccess();
+            _acceptRelationshipResponse!.Should().ComplyWithSchema();
+        }
 
-    [Then("the response contains an RejectRelationshipChangeResponse")]
-    public void ThenTheResponseContainsAnRejectRelationshipChangeResponse()
-    {
-        _rejectRelationshipChangeResponse!.Should().BeASuccess();
-        _rejectRelationshipChangeResponse!.Should().ComplyWithSchema();
-    }
+        if (_rejectRelationshipResponse != null)
+        {
+            _rejectRelationshipResponse!.Should().BeASuccess();
+            _rejectRelationshipResponse!.Should().ComplyWithSchema();
+        }
 
-    [Then("the response contains an RevokeRelationshipChangeResponse")]
-    public void ThenTheResponseContainsAnRevokeRelationshipChangeResponse()
-    {
-        _revokeRelationshipChangeResponse!.Should().BeASuccess();
-        _revokeRelationshipChangeResponse!.Should().ComplyWithSchema();
+        if (_revokeRelationshipResponse != null)
+        {
+            _revokeRelationshipResponse!.Should().BeASuccess();
+            _revokeRelationshipResponse!.Should().ComplyWithSchema();
+        }
     }
 
     private async Task<ApiResponse<CreateRelationshipTemplateResponse>> CreateRelationshipTemplate(Client client)
