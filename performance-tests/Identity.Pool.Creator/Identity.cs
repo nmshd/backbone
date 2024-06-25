@@ -33,8 +33,6 @@ public class Identity
         Pool = pool;
     }
 
-
-
     public string Nickname { get; }
     public string PoolType { get; }
     public uint GraphAlgorithmVisitCount { get; set; } = 0;
@@ -48,7 +46,8 @@ public class Identity
 
     public bool AddIdentityToEstablishRelationshipsWith(Identity identity, bool skipCapacityCheck = false, bool isRecursiveCall = false)
     {
-        if (!skipCapacityCheck && (!HasAvailabilityForNewRelationships() || !isRecursiveCall && !identity.HasAvailabilityForNewRelationships())) return false;
+        if (skipCapacityCheck && (!HasAvailabilityForNewRelationships() || !isRecursiveCall && !identity.HasAvailabilityForNewRelationships())) return false;
+        if (IdentitiesToEstablishRelationshipsWith.Contains(identity)) return false;
 
         IdentitiesToEstablishRelationshipsWith.Add(identity);
         RelationshipsCapacity--;
@@ -64,7 +63,7 @@ public class Identity
             throw new Exception("Cannot send message to identity which does not have a relationship with this one.");
         }
 
-        if (SentMessagesCapacity == 0)
+        if (SentMessagesCapacity == 0 || !recipient.HasAvailabilityToReceiveNewMessages())
         {
             throw new Exception("There is no capacity to send this message.");
         }
@@ -73,9 +72,17 @@ public class Identity
             throw new Exception($"Cannot send message from identity of type {Nickname.First()} to identity of the same type.");
 
         IdentitiesToSendMessagesTo.Add(recipient);
+        recipient.ReceiveMessageFrom(this);
         SentMessagesCapacity--;
+    }
+
+    private void ReceiveMessageFrom(Identity identity)
+    {
+        ReceivedMessagesCapacity--;
     }
 
     public bool HasAvailabilityToReceiveNewMessages() => ReceivedMessagesCapacity > 0;
     public bool HasAvailabilityToSendNewMessages() => SentMessagesCapacity > 0;
+
+    public override string ToString() => Nickname;
 }

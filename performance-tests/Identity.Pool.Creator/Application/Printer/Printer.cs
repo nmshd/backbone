@@ -14,7 +14,7 @@ public class Printer : IPrinter
         {
             Console.WriteLine($"Identity {appPoolIdentity.Nickname} of type App establishes {appPoolIdentity.IdentitiesToEstablishRelationshipsWith.Count} relationships:");
             foreach (var relatedIdentity in appPoolIdentity.IdentitiesToEstablishRelationshipsWith)
-                Console.WriteLine($"\t- with connector {relatedIdentity.Nickname}");
+                Console.WriteLine($"\t- with connector {relatedIdentity}");
         }
 
     }
@@ -41,10 +41,10 @@ public class Printer : IPrinter
 
         foreach (var identity in connectorIdentities.Union(appIdentities))
         {
-            Console.WriteLine($"Identity {identity.Nickname} sends {identity.IdentitiesToSendMessagesTo.Count} messages (used {identity.Pool.NumberOfSentMessages - identity.SentMessagesCapacity} of {identity.Pool.NumberOfSentMessages}):");
+            Console.WriteLine($"Identity {identity} sends {identity.IdentitiesToSendMessagesTo.Count} messages (used {identity.Pool.NumberOfSentMessages - identity.SentMessagesCapacity} of {identity.Pool.NumberOfSentMessages}):");
             foreach (var recipientIdentity in identity.IdentitiesToSendMessagesTo)
             {
-                Console.WriteLine($"\t - {recipientIdentity.Nickname} (used {recipientIdentity.Pool.NumberOfReceivedMessages - recipientIdentity.ReceivedMessagesCapacity} of {recipientIdentity.Pool.NumberOfReceivedMessages})");
+                Console.WriteLine($"\t - {recipientIdentity} (used {recipientIdentity.Pool.NumberOfReceivedMessages - recipientIdentity.ReceivedMessagesCapacity} of {recipientIdentity.Pool.NumberOfReceivedMessages})");
             }
         }
     }
