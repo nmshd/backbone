@@ -1,6 +1,9 @@
 # Build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
 WORKDIR /src
+
+ARG VERSION
+
 COPY . .
 RUN dotnet restore "Challenges.Jobs.Cleanup/Challenges.Jobs.Cleanup.csproj"
 

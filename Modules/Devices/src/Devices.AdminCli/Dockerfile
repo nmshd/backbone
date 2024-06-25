@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/runtime:8.0.6 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0.302 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.302-1 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
@@ -22,6 +22,8 @@ COPY ["Modules/Devices/src/Devices.Domain/Devices.Domain.csproj", "Modules/Devic
 RUN dotnet restore "Modules/Devices/src/Devices.AdminCli/Devices.AdminCli.csproj"
 
 COPY . .
+
+ARG VERSION
 
 WORKDIR "/src/Modules/Devices/src/Devices.AdminCli"
 RUN dotnet publish --no-restore -c Release -o /app/publish "Devices.AdminCli.csproj"
