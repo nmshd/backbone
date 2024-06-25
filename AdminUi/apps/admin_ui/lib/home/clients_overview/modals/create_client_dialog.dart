@@ -142,7 +142,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 isExpanded: true,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: context.l10n.default_tier,
+                  labelText: '${context.l10n.default_tier}*',
                 ),
                 value: _chosenDefaultTier,
                 onChanged: _saveSucceeded ? null : (tier) => setState(() => _chosenDefaultTier = tier),
