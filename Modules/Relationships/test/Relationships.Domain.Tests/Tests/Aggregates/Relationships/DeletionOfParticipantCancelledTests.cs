@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
@@ -7,7 +8,7 @@ using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relationships;
 
-public class DeletionOfParticipantCancelledTests
+public class DeletionOfParticipantCancelledTests : AbstractTestsBase
 {
     [Fact]
     public void Raises_PeerDeletionCancelledDomainEvent()

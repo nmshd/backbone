@@ -28,7 +28,7 @@ public static class TestData
         relationship.Accept(to, TestDataGenerator.CreateRandomDeviceId(), null);
 
         relationship.ClearDomainEvents();
-        
+
         return relationship;
     }
 
