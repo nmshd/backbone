@@ -1,6 +1,9 @@
-﻿namespace Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+﻿using System.Linq.Expressions;
+using Backbone.Modules.Quotas.Domain.Aggregates.Challenges;
+
+namespace Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 
 public interface IChallengesRepository
 {
-    Task<uint> Count(string identityAddress, DateTime from, DateTime to, CancellationToken cancellationToken);
+    Task<uint> Count(Expression<Func<Challenge, bool>> filter, CancellationToken cancellationToken);
 }

@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+﻿using System.Linq.Expressions;
+using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Challenges;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
@@ -14,12 +15,9 @@ public class ChallengesRepository : IChallengesRepository
         _readOnlyChallenges = dbContext.Challenges.AsNoTracking();
     }
 
-    public async Task<uint> Count(string identityAddress, DateTime from, DateTime to, CancellationToken cancellationToken)
+    public async Task<uint> Count(Expression<Func<Challenge, bool>> filter, CancellationToken cancellationToken)
     {
-        var count = await _readOnlyChallenges
-            .CountAsync(c => c.ExpiresAt.AddMinutes(-Challenge.EXPIRY_TIME_IN_MINUTES) > from && c.ExpiresAt.AddMinutes(-Challenge.EXPIRY_TIME_IN_MINUTES) < to && c.CreatedBy == identityAddress,
-                cancellationToken);
-
+        var count = await _readOnlyChallenges.CountAsync(filter, cancellationToken);
         return (uint)count;
     }
 }
