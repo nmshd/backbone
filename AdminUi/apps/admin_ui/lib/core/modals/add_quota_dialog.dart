@@ -94,7 +94,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
                 onChanged: _saving ? null : (String? selected) => setState(() => _selectedMetric = selected),
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: context.l10n.metric,
+                  labelText: '${context.l10n.metric}*',
                 ),
               ),
               Gaps.h24,
@@ -103,7 +103,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
                 enabled: !_saving,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: context.l10n.maxEntities('Amount'),
+                  labelText: '${context.l10n.maxEntities('Amount')}*',
                   helperText: context.l10n.max_amount_message,
                 ),
                 inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
@@ -120,9 +120,9 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
                   DropdownMenuItem(value: 'Year', child: Text(context.l10n.year)),
                 ],
                 onChanged: _saving ? null : (String? selected) => setState(() => _selectedPeriod = selected),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Period*',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: '${context.l10n.period}*',
                 ),
               ),
               if (_errorMessage != null)
