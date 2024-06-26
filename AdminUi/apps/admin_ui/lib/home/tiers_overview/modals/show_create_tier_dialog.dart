@@ -48,10 +48,11 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
           borderRadius: BorderRadius.circular(8),
         ),
         title: const Center(
-            child: Padding(
-          padding: EdgeInsets.all(16),
-          child: Text('Create Tier'),
-        )),
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Text('Create Tier'),
+          ),
+        ),
         content: _isLoading
             ? const Padding(
                 padding: EdgeInsets.all(16),
