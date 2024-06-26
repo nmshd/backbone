@@ -164,7 +164,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
               ],
-              Gaps.h32
+              Gaps.h32,
             ],
           ),
         ),
