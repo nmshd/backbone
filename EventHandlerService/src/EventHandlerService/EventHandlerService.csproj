@@ -26,8 +26,8 @@
         <ProjectReference Include="..\..\..\Modules\Tokens\src\Tokens.ConsumerApi\Tokens.ConsumerApi.csproj"/>
     </ItemGroup>
 
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-        <Exec Command="cp &quot;$(SolutionDir)/appsettings.override.json&quot; ." WorkingDirectory="$(OutDir)" Condition="'$(Configuration)' == 'Debug'"/>
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(NO_APPSETTINGS_OVERRIDE)' == ''">
+        <Exec Command="cp &quot;$(SolutionDir)/appsettings.override.json&quot; ." WorkingDirectory="$(OutDir)"/>
     </Target>
 
 </Project>
