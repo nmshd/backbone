@@ -115,7 +115,7 @@ jobs:
             image: admin-ui
             
           - dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
-            image: seed-client
+            image: admin-cli
             
           - dockerfile: DatabaseMigrator/Dockerfile
             image: database-migrator
