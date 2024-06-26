@@ -165,6 +165,8 @@ jobs:
         
       - name: Build Image
         uses: docker/build-push-action@v6
+        env:
+          DOCKER_BUILD_NO_SUMMARY: true
         with:
           context: .
           file: ${{ matrix.dockerfile }}
