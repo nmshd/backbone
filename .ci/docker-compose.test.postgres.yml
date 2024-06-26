@@ -24,7 +24,7 @@ services:
       - PGPASSWORD=Passw0rd
     command: psql -h postgres -U postgres -d enmeshed -f /app/setup-db/setup-postgres.sql
 
-  seed-client:
+  admin-cli:
     environment:
       Database__Provider: Postgres
       Database__ConnectionString: "Server=postgres;Database=enmeshed;User Id=devices;Password=Passw0rd;Port=5432"
