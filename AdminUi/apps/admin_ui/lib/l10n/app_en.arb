@@ -1,7 +1,9 @@
 {
     "@@locale": "en",
+    "assign": "Assign",
     "cancel": "Cancel",
     "close": "Close",
+    "create": "Create",
     "save": "Save",
     "yes": "Yes"
 }

@@ -72,6 +72,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Gaps.h32,
               TextField(
                 controller: _clientIdController,
                 readOnly: _saveSucceeded,
@@ -163,6 +164,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
               ],
+              Gaps.h32
             ],
           ),
         ),
@@ -171,7 +173,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
           if (!_saveSucceeded)
             FilledButton(
               onPressed: _chosenDefaultTier != null && !_saveSucceeded && !_saving ? _createClient : null,
-              child: Text(context.l10n.save),
+              child: Text(context.l10n.create),
             ),
         ],
       ),

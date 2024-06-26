@@ -22,7 +22,7 @@ Future<void> showAddQuotaDialog({
 
   await showDialog<void>(
     context: context,
-    builder: (BuildContext context) => _AddQuotaDialog(
+    builder: (BuildContext context) => _AssignQuotaDialog(
       availableMetrics: metrics.data,
       addQuota: ({required String metricKey, required int max, required String period}) {
         if (tierId != null) {
@@ -36,22 +36,22 @@ Future<void> showAddQuotaDialog({
   );
 }
 
-class _AddQuotaDialog extends StatefulWidget {
+class _AssignQuotaDialog extends StatefulWidget {
   final List<Metric> availableMetrics;
   final Future<ApiResponse<dynamic>> Function({required String metricKey, required int max, required String period}) addQuota;
   final VoidCallback onQuotaAdded;
 
-  const _AddQuotaDialog({
+  const _AssignQuotaDialog({
     required this.availableMetrics,
     required this.addQuota,
     required this.onQuotaAdded,
   });
 
   @override
-  State<_AddQuotaDialog> createState() => _AddQuotaDialogState();
+  State<_AssignQuotaDialog> createState() => _AssignQuotaDialogState();
 }
 
-class _AddQuotaDialogState extends State<_AddQuotaDialog> {
+class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
   final _maxAmountController = TextEditingController();
 
   bool _saving = false;
@@ -85,7 +85,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        title: const Center(child: Text('Add Quota')),
+        title: const Center(child: Text('Assign Quota')),
         content: SizedBox(
           width: 500,
           child: Column(
@@ -148,7 +148,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
           ),
           FilledButton(
             onPressed: _isValid && !_saving ? _addQuota : null,
-            child: const Text('Add'),
+            child: Text(context.l10n.assign),
           ),
         ],
       ),
