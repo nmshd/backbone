@@ -82,12 +82,16 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        title: const Text('Add Quota'),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        title: const Center(child: Text('Add Quota')),
         content: SizedBox(
           width: 500,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Gaps.h32,
               DropdownButtonFormField(
                 value: _selectedMetric,
                 items: widget.availableMetrics.map((metric) => DropdownMenuItem(value: metric.key, child: Text(metric.displayName))).toList(),
@@ -133,6 +137,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
                     style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                 ),
+              Gaps.h32,
             ],
           ),
         ),

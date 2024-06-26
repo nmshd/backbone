@@ -44,38 +44,49 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
     return PopScope(
       canPop: !_isLoading,
       child: AlertDialog(
-        title: const Text('Create Tier'),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        title: const Center(
+            child: Padding(
+          padding: EdgeInsets.all(16),
+          child: Text('Create Tier'),
+        )),
         content: _isLoading
             ? const Padding(
                 padding: EdgeInsets.all(16),
                 child: Wrap(alignment: WrapAlignment.center, children: [CircularProgressIndicator()]),
               )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  const Text('Please fill the form below to create your Tier'),
-                  Gaps.h16,
-                  TextField(
-                    controller: _tierNameController,
-                    focusNode: _focusNode,
-                    onChanged: (_) {
-                      if (_errorMessage == null) return;
-                      setState(() => _errorMessage = null);
-                    },
-                    onSubmitted: _onSubmitted,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: 'Name',
-                      error: _errorMessage != null
-                          ? Text(
-                              _errorMessage!,
-                              style: Theme.of(context).textTheme.labelSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-                              textAlign: TextAlign.left,
-                            )
-                          : null,
+            : SizedBox(
+                width: 500,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Gaps.h16,
+                    TextField(
+                      controller: _tierNameController,
+                      focusNode: _focusNode,
+                      onChanged: (_) {
+                        if (_errorMessage == null) return;
+                        setState(() => _errorMessage = null);
+                      },
+                      onSubmitted: _onSubmitted,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: 'Name',
+                        helperText: 'Enter a name to create your Tier.',
+                        error: _errorMessage != null
+                            ? Text(
+                                _errorMessage!,
+                                style: Theme.of(context).textTheme.labelSmall!.copyWith(color: Theme.of(context).colorScheme.error),
+                                textAlign: TextAlign.left,
+                              )
+                            : null,
+                      ),
                     ),
-                  ),
-                ],
+                    Gaps.h32,
+                  ],
+                ),
               ),
         actions: <Widget>[
           OutlinedButton(

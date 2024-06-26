@@ -63,6 +63,9 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
         title: const Text('Create Client', textAlign: TextAlign.center),
         content: SizedBox(
           width: 500,
