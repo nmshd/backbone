@@ -96,9 +96,9 @@ services:
       database:
         condition: service_healthy
 
-  seed-client:
-    container_name: seed-client-test
-    image: seed-client:0.0.1
+  admin-cli:
+    container_name: admin-cli-test
+    image: admin-cli:0.0.1
     depends_on:
       consumer-api:
         condition: service_healthy
