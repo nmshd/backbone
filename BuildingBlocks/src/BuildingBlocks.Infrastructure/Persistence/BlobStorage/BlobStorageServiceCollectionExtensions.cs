@@ -39,10 +39,10 @@ public static class BlobStorageServiceCollectionExtensions
         {
             services.Configure<IonosS3Options>(opt =>
             {
-                opt.ServiceUrl = options.IonosS3Config.ServiceUrl;
-                opt.AccessKey = options.IonosS3Config.AccessKey;
-                opt.SecretKey = options.IonosS3Config.SecretKey;
-                opt.BucketName = options.IonosS3Config.BucketName;
+                opt.ServiceUrl = options.IonosS3Config!.ServiceUrl;
+                opt.AccessKey = options.IonosS3Config!.AccessKey;
+                opt.SecretKey = options.IonosS3Config!.SecretKey;
+                opt.BucketName = options.IonosS3Config!.BucketName;
             });
 
             services.AddSingleton<IonosS3ClientFactory>();
@@ -81,9 +81,8 @@ public class IonosS3Config
     public string ServiceUrl { get; set; } = string.Empty;
     [Required]
     public string AccessKey { get; set; } = string.Empty;
-    [Required] 
+    [Required]
     public string SecretKey { get; set; } = string.Empty;
-    [Required] 
+    [Required]
     public string BucketName { get; set; } = string.Empty;
 }
-
