@@ -115,7 +115,7 @@ jobs:
             image: admin-ui
 
           - dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
-            image: seed-client
+            image: admin-cli
 
           - dockerfile: DatabaseMigrator/Dockerfile
             image: database-migrator
@@ -165,6 +165,8 @@ jobs:
 
       - name: Build Image
         uses: docker/build-push-action@v6
+        env:
+          DOCKER_BUILD_NO_SUMMARY: true
         with:
           context: .
           file: ${{ matrix.dockerfile }}

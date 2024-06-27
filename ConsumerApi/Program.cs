@@ -131,6 +131,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<BackboneConfiguration>>().Value;
 #pragma warning restore ASP0000
 
+    services.AddSingleton<VersionService>();
+
     services.AddSaveChangesTimeInterceptor();
 
     services.AddTransient<DevicesDbContextSeeder>();
