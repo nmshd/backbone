@@ -84,7 +84,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                     DataColumn2(label: Text(context.l10n.client_ID), size: ColumnSize.L),
                     DataColumn2(label: Text(context.l10n.display_name), size: ColumnSize.L),
                     DataColumn2(label: Text(context.l10n.default_tier)),
-                    DataColumn2(label: Text(context.l10n.numberOfEntities(context.l10n.identities)), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.number_of_identities), size: ColumnSize.L),
                     DataColumn2(label: Text(context.l10n.createdAt)),
                     const DataColumn2(label: Text(''), size: ColumnSize.L),
                   ],
@@ -121,7 +121,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                                 style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),
                                 onPressed: () => showChangeClientSecretDialog(context: context, clientId: client.clientId),
                                 child: Text(
-                                  context.l10n.changeClientSecret,
+                                  context.l10n.change_client_secret,
                                   style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
                                   textAlign: TextAlign.center,
                                 ),
@@ -153,7 +153,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   Future<void> _removeSelectedClients() async {
     final confirmed = await showConfirmationDialog(
       context: context,
-      title: context.l10n.removeEntities(context.l10n.clients),
+      title: context.l10n.remove_clients,
       message: context.l10n.remove_clients_message,
     );
 

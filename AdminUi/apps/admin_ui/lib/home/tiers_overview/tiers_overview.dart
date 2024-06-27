@@ -91,7 +91,7 @@ class _TiersOverviewState extends State<TiersOverview> {
                     empty: Text(context.l10n.noEntitiesFound(context.l10n.tiers)),
                     columns: [
                       DataColumn2(label: Text(context.l10n.name), size: ColumnSize.L),
-                      DataColumn2(label: Text(context.l10n.numberOfEntities(context.l10n.identities)), size: ColumnSize.L),
+                      DataColumn2(label: Text(context.l10n.number_of_identities), size: ColumnSize.L),
                     ],
                     rows: _tiers!
                         .map(

@@ -63,7 +63,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
   Future<void> _removeSelectedQuotas() async {
     final confirmed = await showConfirmationDialog(
       context: context,
-      title: context.l10n.removeEntities(context.l10n.quotas),
+      title: context.l10n.remove_quotas,
       message:
           '${context.l10n.deletion_of_quota_message} ${widget.identityAddress != null ? '${context.l10n.theIdentity} "${widget.identityAddress}"' : '${context.l10n.the_tier} "${widget.tierId}"'}?',
     );

@@ -168,7 +168,7 @@ class _IdentityDetailsCard extends StatelessWidget {
                                 )
                             : null,
                         icon: Icons.edit,
-                        tooltipMessage: context.l10n.changeTier,
+                        tooltipMessage: context.l10n.change_tier,
                       ),
                     ],
                   ),

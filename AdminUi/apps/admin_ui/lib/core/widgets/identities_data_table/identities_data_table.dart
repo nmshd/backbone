@@ -52,11 +52,11 @@ class _IdentitiesDataTableState extends State<IdentitiesDataTable> {
         DataColumn2(label: Text(context.l10n.address), size: ColumnSize.L, onSort: _sort),
         if (!widget.hideTierColumn) DataColumn2(label: Text(context.l10n.tier), size: ColumnSize.S),
         DataColumn2(label: Text(context.l10n.created_with_client), onSort: _sort),
-        DataColumn2(label: Text(context.l10n.numberOfEntities(context.l10n.devices)), onSort: _sort),
+        DataColumn2(label: Text(context.l10n.number_of_devices), onSort: _sort),
         DataColumn2(label: Text(context.l10n.createdAt), size: ColumnSize.S, onSort: _sort),
         DataColumn2(label: Text(context.l10n.last_login_at), size: ColumnSize.S, onSort: _sort),
-        DataColumn2(label: Text(context.l10n.entityVersion(context.l10n.datawallet)), onSort: _sort),
-        DataColumn2(label: Text(context.l10n.entityVersion(context.l10n.identity)), onSort: _sort),
+        DataColumn2(label: Text(context.l10n.datawallet_version), onSort: _sort),
+        DataColumn2(label: Text(context.l10n.identity_version), onSort: _sort),
       ],
     );
   }

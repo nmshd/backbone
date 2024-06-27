@@ -93,7 +93,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             ),
             Gaps.w16,
             NumberFilter(
-              label: context.l10n.numberOfEntities(context.l10n.devices),
+              label: context.l10n.number_of_devices,
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 final numberOfDevices = FilterOperatorValue(operator, enteredValue);
                 _filter = _filter.copyWith(numberOfDevices: numberOfDevices.value.isEmpty ? const Optional.absent() : Optional(numberOfDevices));
@@ -120,7 +120,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             ),
             Gaps.w16,
             NumberFilter(
-              label: context.l10n.entityVersion(context.l10n.datawallet),
+              label: context.l10n.datawallet_version,
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 final datawalletVersion = FilterOperatorValue(operator, enteredValue);
                 _filter =
@@ -130,7 +130,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             ),
             Gaps.w16,
             NumberFilter(
-              label: context.l10n.entityVersion(context.l10n.identity),
+              label: context.l10n.identity_version,
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 final identityVersion = FilterOperatorValue(operator, enteredValue);
                 _filter = _filter.copyWith(identityVersion: identityVersion.value.isEmpty ? const Optional.absent() : Optional(identityVersion));

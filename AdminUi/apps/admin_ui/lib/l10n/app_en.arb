@@ -3,13 +3,13 @@
   "add": "Add",
   "addQuota": "Add Quota",
   "address": "Address",
-  "amount": "Amount",
   "cancel": "Cancel",
-  "changeClientSecret": "Change Client Secret",
-  "changeTier": "Change Tier",
+  "change_client_secret": "Change Client Secret",
+  "change_tier": "Change Tier",
   "client_ID": "Client ID",
   "client_secret": "Client Secret",
-  "client": "Client",
+  "create_client": "Create Client",
+  "create_tier": "Create Tier",
   "clients": "Clients",
   "clients_lc": "clients",
   "client_lc": "client",
@@ -22,7 +22,7 @@
   "created_with_client": "Created with Client",
   "dark": "Dark",
   "day": "Day",
-  "datawallet": "Datawallet",
+  "datawallet_version": "Datawallet Version",
   "default_tier": "Default Tier",
   "devices": "Devices",
   "display_name": "Display Name",
@@ -30,17 +30,24 @@
   "id": "ID",
   "identities": "Identities",
   "identity": "Identity",
+  "identity_version": "Identity Version",
   "individual": "Individual",
   "last_login_at": "Last Login at",
   "light": "Light",
   "max": "Max",
+  "max_amount": "Max Amount",
+  "max_identities": "Max Identities",
   "metric": "Metric",
   "month": "Month",
   "name": "Name",
+  "number_of_devices": "Number of Devices",
+  "number_of_identities": "Number of Identities",
   "period": "Period",
   "public_key": "Public Key",
   "quotas": "Quotas",
   "retry": "Retry",
+  "remove_quotas": "Remove Quotas",
+  "remove_clients": "Remove Clients",
   "save": "Save",
   "settings": "Settings",
   "source": "Source",
@@ -81,38 +88,6 @@
   "tier_quota_effect_message": "Tier quotas do not take effect if there is an individual quota.",
   "view_quotas_for_the_tier": "View quotas for this tier. This tier is managed by the system and therefore read-only.",
   "view_identities_associated_with_tier": "View Identities associated with this Tier.",
-  "createEntity": "Create {entityName}",
-  "@createEntity": {
-    "placeholders": {
-      "entityName": {
-        "type": "String"
-      }
-    }
-  },
-  "removeEntities": "Remove {entityName}",
-  "@removeEntities": {
-    "placeholders": {
-      "entityName": {
-        "type": "String"
-      }
-    }
-  },
-  "entityVersion": "{entityName} Version",
-   "@entityVersion": {
-    "placeholders": {
-      "entityName": {
-        "type": "String"
-      }
-    }
-  },
-  "numberOfEntities": "Number of {entityName}",
-  "@numberOfEntities": {
-    "placeholders": {
-      "entityName": {
-        "type": "String"
-      }
-    }
-  },
   "clientDataMessage": "A {entityName} will be generated if this field is left blank.",
   "@clientDataMessage": {
     "placeholders": {
@@ -139,14 +114,6 @@
   },
   "viewAndAssignQuotasForEntity": "View and assign quotas for this {entityName}.",
   "@viewAndAssignQuotasForEntity": {
-    "placeholders": {
-      "entityName": {
-        "type": "String"
-      }
-    }
-  },
-  "maxEntities": "Max {entityName}",
-  "@maxEntities": {
     "placeholders": {
       "entityName": {
         "type": "String"

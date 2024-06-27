@@ -55,7 +55,7 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        title: Text(context.l10n.changeClientSecret, textAlign: TextAlign.center),
+        title: Text(context.l10n.change_client_secret, textAlign: TextAlign.center),
         content: SizedBox(
           width: 500,
           child: Column(

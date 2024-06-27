@@ -52,7 +52,7 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        title: Text(context.l10n.changeTier, textAlign: TextAlign.center),
+        title: Text(context.l10n.change_tier, textAlign: TextAlign.center),
         content: DropdownButtonFormField<String>(
           value: selectedTier,
           decoration: const InputDecoration(border: OutlineInputBorder()),

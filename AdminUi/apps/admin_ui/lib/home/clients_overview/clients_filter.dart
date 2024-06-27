@@ -154,7 +154,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             ),
             Gaps.w16,
             NumberFilter(
-              label: context.l10n.numberOfEntities(context.l10n.identities),
+              label: context.l10n.number_of_identities,
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 filter = filter.copyWith(
                   numberOfIdentities: enteredValue.isEmpty ? const Optional.absent() : Optional((operator, int.parse(enteredValue))),

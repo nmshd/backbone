@@ -44,7 +44,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
     return PopScope(
       canPop: !_isLoading,
       child: AlertDialog(
-        title: Text(context.l10n.createEntity(context.l10n.tier)),
+        title: Text(context.l10n.create_tier),
         content: _isLoading
             ? const Padding(
                 padding: EdgeInsets.all(16),
