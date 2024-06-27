@@ -11,8 +11,6 @@
   "create_client": "Create Client",
   "create_tier": "Create Tier",
   "clients": "Clients",
-  "clients_lc": "clients",
-  "client_lc": "client",
   "close": "Close",
   "confirm": "Confirm",
   "copy_public_key": "Copy public key",
@@ -29,7 +27,6 @@
   "hour": "Hour",
   "id": "ID",
   "identities": "Identities",
-  "identity": "Identity",
   "identity_version": "Identity Version",
   "individual": "Individual",
   "last_login_at": "Last Login at",
@@ -50,26 +47,30 @@
   "remove_clients": "Remove Clients",
   "save": "Save",
   "settings": "Settings",
+  "search_clients": "Search Clients",
+  "search_tiers": "Search Tiers",
   "source": "Source",
   "system": "System",
-  "theIdentity": "the identity",
+  "the_identity": "the identity",
   "the_tier": "the tier",
   "theme": "Theme",
   "tier": "Tier",
-  "tier_lc": "tier",
   "tiers": "Tiers",
-  "tiers_lc": "tiers",
   "usage": "Usage",
   "used": "Used",
   "quotas": "Quotas",
-  "quota_lc": "quota",
   "week": "Week",
   "year": "Year",
   "yes": "Yes",
   "error_data_load_failed": "Failed to load data",
   "error_loading_data": "An error occurred loading the data.",
+  "error_deleting_quota": "An error occurred while deleting the quota(s). Please try again.",
+  "error_deleting_client": "An error occurred while deleting the client(s). Please try again.",
   "no_quotas_applied_for_identity": "No quotas applied for this identity.",
   "no_quotas_added_for_tier": "No quotas added to this tier.",
+  "no_identities_found": "No identities found.",
+  "no_clients_found": "No clients found.",
+  "no_tiers_found": "No tiers found.",
   "copy_to_clipboard_message": "Client Secret copied to clipboard.",
   "deletion_of_quota_message": "Are you sure you want to remove the selected quotas from",
   "display_name_message": "Client ID will be used as a Display Name if no value is provided.",
@@ -83,65 +84,18 @@
   "no_identity_limit_message": "No Identity limit will be assigned if this field is left blank.",
   "public_key_copied_to_clipboard_message": "Public key copied to clipboard.",
   "remove_clients_message": "Are you sure you want to remove the selected clients?",
+  "list_of_all_clients": "A list of existing clients",
+  "list_of_all_identities": "A list of existing identities",
+  "list_of_all_tiers": "A list of existing tiers",
   "save_the_client_secret_message": "Please save the Client Secret since it will be inaccessible after exiting.",
+  "selected_quota_removed": "Selected quota(s) have been removed.",
+  "selected_client_removed": "Selected client(s) have been removed.",
   "tier_created_successfully_message": "Tier was created successfully.",
   "tier_quota_effect_message": "Tier quotas do not take effect if there is an individual quota.",
   "view_quotas_for_the_tier": "View quotas for this tier. This tier is managed by the system and therefore read-only.",
+  "view_and_assign_quota_for_identity": "View and assign quotas for this identity.",
+  "view_and_assign_quota_for_tier": "View and assign quotas for this tier.",
   "view_identities_associated_with_tier": "View Identities associated with this Tier.",
-  "clientDataMessage": "A {entityName} will be generated if this field is left blank.",
-  "@clientDataMessage": {
-    "placeholders": {
-      "entityName": {
-        "type": "String"
-      }
-    }
-  },
-  "searchEntities": "Search {entityName}",
-  "@searchEntities": {
-    "placeholders": {
-      "entityName": {
-        "type": "String"
-      }
-    }
-  },
-  "errorOccurredWhileDeletingEntities": "An error occurred while deleting the {entityName}. Please try again.",
-  "@errorOccurredWhileDeletingEntities": {
-    "placeholders": {
-      "entityName": {
-        "type": "String"
-      }
-    }
-  },
-  "viewAndAssignQuotasForEntity": "View and assign quotas for this {entityName}.",
-  "@viewAndAssignQuotasForEntity": {
-    "placeholders": {
-      "entityName": {
-        "type": "String"
-      }
-    }
-  },
-  "noEntitiesFound": "No {entityName} found.",
-  "@noEntitiesFound": {
-    "placeholders": {
-      "entityName": {
-        "type": "String"
-      }
-    }
-  },
-  "listOfExistingEntities": "A list of existing {entityName}",
-  "@listOfExistingEntities": {
-    "placeholders": {
-      "entityName": {
-        "type": "String"
-      }
-    }
-  },
-  "selectedEntityWasRemoved": "Selected {entityName} have been removed.",
-  "@selectedEntityWasRemoved": {
-    "placeholders": {
-      "entityName": {
-        "type": "String"
-      }
-    }
-  }
+  "client_secret_generated_message": "A client secret will be generated if this field is left blank.",
+  "client_id_generated_message": "A client ID will be generated if this field is left blank."
 }

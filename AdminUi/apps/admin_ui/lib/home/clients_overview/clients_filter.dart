@@ -142,7 +142,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             Gaps.w16,
             MultiSelectFilter(
               label: context.l10n.default_tier,
-              searchLabel: context.l10n.searchEntities(context.l10n.tiers),
+              searchLabel: context.l10n.search_tiers,
               controller: _tierController,
               onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
                 filter = filter.copyWith(

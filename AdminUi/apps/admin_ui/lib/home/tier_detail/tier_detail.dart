@@ -126,9 +126,7 @@ class _QuotaListState extends State<_QuotaList> {
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         title: Text(context.l10n.quotas),
-        subtitle: isQueuedForDeletionTier
-            ? Text(context.l10n.view_quotas_for_the_tier)
-            : Text(context.l10n.viewAndAssignQuotasForEntity(context.l10n.tier_lc)),
+        subtitle: isQueuedForDeletionTier ? Text(context.l10n.view_quotas_for_the_tier) : Text(context.l10n.view_and_assign_quota_for_tier),
         children: [
           Card(
             child: Column(

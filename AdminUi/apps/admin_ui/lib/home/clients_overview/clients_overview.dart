@@ -33,7 +33,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.listOfExistingEntities(context.l10n.clients))),
+      appBar: AppBar(title: Text(context.l10n.list_of_all_clients)),
       body: Card(
         child: Padding(
           padding: const EdgeInsets.all(8),
@@ -68,7 +68,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
               Expanded(
                 child: DataTable2(
                   isVerticalScrollBarVisible: true,
-                  empty: Text(context.l10n.noEntitiesFound(context.l10n.clients_lc)),
+                  empty: Text(context.l10n.no_clients_found),
                   onSelectAll: (selected) {
                     if (selected == null) return;
 
@@ -164,7 +164,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
       if (result.hasError && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${context.l10n.errorOccurredWhileDeletingEntities(context.l10n.client_lc)}(s)'),
+            content: Text(context.l10n.error_deleting_client),
             showCloseIcon: true,
           ),
         );
@@ -179,7 +179,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(context.l10n.selectedEntityWasRemoved(context.l10n.clients_lc)),
+          content: Text(context.l10n.selected_client_removed),
           showCloseIcon: true,
         ),
       );

@@ -71,7 +71,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               Gaps.w16,
               MultiSelectFilter(
                 label: context.l10n.tiers,
-                searchLabel: context.l10n.searchEntities(context.l10n.tiers),
+                searchLabel: context.l10n.search_tiers,
                 controller: _tierController,
                 onOptionSelected: (List<ValueItem<String>> selectedOptions) {
                   final selectedTiers = selectedOptions.map((item) => item.value!).toList();
@@ -83,7 +83,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             Gaps.w16,
             MultiSelectFilter(
               label: context.l10n.clients,
-              searchLabel: context.l10n.searchEntities(context.l10n.clients),
+              searchLabel: context.l10n.search_clients,
               controller: _clientController,
               onOptionSelected: (List<ValueItem<String>> selectedOptions) {
                 final selectedClients = selectedOptions.map((item) => item.value!).toList();

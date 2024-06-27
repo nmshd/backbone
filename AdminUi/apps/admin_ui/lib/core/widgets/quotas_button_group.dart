@@ -65,7 +65,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
       context: context,
       title: context.l10n.remove_quotas,
       message:
-          '${context.l10n.deletion_of_quota_message} ${widget.identityAddress != null ? '${context.l10n.theIdentity} "${widget.identityAddress}"' : '${context.l10n.the_tier} "${widget.tierId}"'}?',
+          '${context.l10n.deletion_of_quota_message} ${widget.identityAddress != null ? '${context.l10n.the_identity} "${widget.identityAddress}"' : '${context.l10n.the_tier} "${widget.tierId}"'}?',
     );
 
     if (!confirmed) return;
@@ -75,7 +75,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
       if (result.hasError && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('${context.l10n.errorOccurredWhileDeletingEntities(context.l10n.quota_lc)}(s)'),
+            content: Text(context.l10n.error_deleting_quota),
             showCloseIcon: true,
           ),
         );
@@ -89,7 +89,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('${context.l10n.selectedEntityWasRemoved(context.l10n.quota_lc)}(s)'),
+          content: Text(context.l10n.selected_quota_removed),
           showCloseIcon: true,
         ),
       );

@@ -69,7 +69,7 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
                   labelText: context.l10n.client_secret,
-                  helperText: context.l10n.clientDataMessage(context.l10n.client_secret),
+                  helperText: context.l10n.client_secret_generated_message,
                   suffixIcon: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
