@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<root>
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
+        <xsd:element name="root" msdata:IsDataSet="true">
+
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>1.3</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    </resheader>
+    <data name="DatawalletModificationsCreatedPushNotification.Body" xml:space="preserve">
+        <value>Es sind Neuigkeiten in der App verfügbar.</value>
+    </data>
+    <data name="DatawalletModificationsCreatedPushNotification.Title" xml:space="preserve">
+        <value>Neuigkeiten verfügbar</value>
+    </data>
+    <data name="DeletionProcessApprovedNotification.Body" xml:space="preserve">
+        <value>Ein Löschvorgang einer deiner Identitäten wurde bestätigt und wird in Kürze prozessiert.</value>
+    </data>
+    <data name="DeletionProcessApprovedNotification.Title" xml:space="preserve">
+        <value>Löschvorgang bestätigt</value>
+    </data>
+    <data name="DeletionProcessCancelledByOwnerNotification.Title" xml:space="preserve">
+        <value>Löschvorgang abgebrochen</value>
+    </data>
+    <data name="DeletionProcessCancelledByOwnerNotification.Body" xml:space="preserve">
+        <value>Ein Löschvorgang einer deiner Identitäten wurde von dir abgebrochen.</value>
+    </data>
+    <data name="DeletionProcessCancelledBySupportNotification.Body" xml:space="preserve">
+        <value>Ein Löschvorgang einer deiner Identitäten wurde von unserem Support Team abgebrochen.</value>
+    </data>
+    <data name="DeletionProcessCancelledBySupportNotification.Title" xml:space="preserve">
+        <value>Löschvorgang abgebrochen</value>
+    </data>
+    <data name="DeletionProcessGracePeriodReminderPushNotification.Body" xml:space="preserve">
+        <value>Deine Identität wird in ein paar Tagen gelöscht. Bis dahin hast du die Möglichkeit, diesen Vorgang abzubrechen.</value>
+    </data>
+    <data name="DeletionProcessGracePeriodReminderPushNotification.Title" xml:space="preserve">
+        <value>Deine Identität wird gelöscht</value>
+    </data>
+    <data name="DeletionProcessStartedPushNotification.Body" xml:space="preserve">
+        <value>Ein Löschvorgang wurde für eine deiner Identitäten gestartet.</value>
+    </data>
+    <data name="DeletionProcessStartedPushNotification.Title" xml:space="preserve">
+        <value>Löschvorgang gestartet</value>
+    </data>
+    <data name="DeletionProcessWaitingForApprovalReminderPushNotification.Body" xml:space="preserve">
+        <value>Ein Löschvorgang einer deiner Identitäten wartet auf eine Bestätigung. Falls du nicht innerhalb weniger Tage bestätigst, wird der Löschvorgang abgebrochen.</value>
+    </data>
+    <data name="DeletionProcessWaitingForApprovalReminderPushNotification.Title" xml:space="preserve">
+        <value>Löschvorgang wartet auf Bestätigung</value>
+    </data>
+    <data name="DeletionStartsPushNotification.Body" xml:space="preserve">
+        <value>Die Löschung deiner Identität ist erfolgt.</value>
+    </data>
+    <data name="DeletionStartsPushNotification.Title" xml:space="preserve">
+        <value>Deine Identität ist jetzt gelöscht.</value>
+    </data>
+    <data name="ExternalEventCreatedPushNotification.Body" xml:space="preserve">
+        <value>Es sind Neuigkeiten in der App verfügbar.</value>
+    </data>
+    <data name="ExternalEventCreatedPushNotification.Title" xml:space="preserve">
+        <value>Neuigkeiten verfügbar</value>
+    </data>
+    <data name="TestPushNotification.Body" xml:space="preserve">
+        <value>Das ist ein Test.</value>
+    </data>
+    <data name="TestPushNotification.Title" xml:space="preserve">
+        <value>Test</value>
+    </data>
+</root>
