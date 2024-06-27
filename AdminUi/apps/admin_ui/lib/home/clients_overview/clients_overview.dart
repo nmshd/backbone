@@ -33,7 +33,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.listOfExistingEntities('Clients'))),
+      appBar: AppBar(title: Text(context.l10n.listOfExistingEntities(context.l10n.clients))),
       body: Card(
         child: Padding(
           padding: const EdgeInsets.all(8),
@@ -68,7 +68,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
               Expanded(
                 child: DataTable2(
                   isVerticalScrollBarVisible: true,
-                  empty: Text(context.l10n.noEntitiesFound('clients')),
+                  empty: Text(context.l10n.noEntitiesFound(context.l10n.clients_lc)),
                   onSelectAll: (selected) {
                     if (selected == null) return;
 
@@ -84,7 +84,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                     DataColumn2(label: Text(context.l10n.client_ID), size: ColumnSize.L),
                     DataColumn2(label: Text(context.l10n.display_name), size: ColumnSize.L),
                     DataColumn2(label: Text(context.l10n.default_tier)),
-                    DataColumn2(label: Text(context.l10n.numberOfEntities('Identities')), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.numberOfEntities(context.l10n.identities)), size: ColumnSize.L),
                     DataColumn2(label: Text(context.l10n.createdAt)),
                     const DataColumn2(label: Text(''), size: ColumnSize.L),
                   ],
@@ -153,7 +153,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   Future<void> _removeSelectedClients() async {
     final confirmed = await showConfirmationDialog(
       context: context,
-      title: context.l10n.removeEntities('Clients'),
+      title: context.l10n.removeEntities(context.l10n.clients),
       message: context.l10n.remove_clients_message,
     );
 
@@ -164,7 +164,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
       if (result.hasError && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(context.l10n.errorOccurredWhileDeletingEntities('client(s)')),
+            content: Text('${context.l10n.errorOccurredWhileDeletingEntities(context.l10n.client_lc)}(s)'),
             showCloseIcon: true,
           ),
         );
@@ -179,7 +179,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(context.l10n.selectedEntityWasRemoved('clients')),
+          content: Text(context.l10n.selectedEntityWasRemoved(context.l10n.clients_lc)),
           showCloseIcon: true,
         ),
       );

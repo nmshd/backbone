@@ -27,7 +27,7 @@ class IdentityQuotaListState extends State<IdentityQuotaList> {
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         title: Text(context.l10n.quotas),
-        subtitle: Text(context.l10n.viewAndAssignQuotasForEntity('identity')),
+        subtitle: Text(context.l10n.viewAndAssignQuotasForEntity(context.l10n.identity)),
         children: [
           Card(
             child: Column(
@@ -45,7 +45,7 @@ class IdentityQuotaListState extends State<IdentityQuotaList> {
                     columns: [
                       DataColumn2(label: Text(context.l10n.metric)),
                       DataColumn2(label: Text(context.l10n.source), size: ColumnSize.S),
-                      DataColumn2(label: Text(context.l10n.usage), size: ColumnSize.L),
+                      DataColumn2(label: Text('${context.l10n.usage} (${context.l10n.used}/${context.l10n.max})'), size: ColumnSize.L),
                       DataColumn2(label: Text(context.l10n.period), size: ColumnSize.S),
                       const DataColumn2(label: Text(''), size: ColumnSize.S),
                     ],

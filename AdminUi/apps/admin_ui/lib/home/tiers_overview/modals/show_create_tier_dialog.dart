@@ -44,7 +44,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
     return PopScope(
       canPop: !_isLoading,
       child: AlertDialog(
-        title: Text(context.l10n.createEntity('Tier')),
+        title: Text(context.l10n.createEntity(context.l10n.tier)),
         content: _isLoading
             ? const Padding(
                 padding: EdgeInsets.all(16),
@@ -118,13 +118,13 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
       });
 
   void _showSuccessSnackbar() {
-    const snackBar = SnackBar(
+    final snackBar = SnackBar(
       content: Text(
-        'Tier was created successfully.',
-        style: TextStyle(color: Colors.white),
+        context.l10n.tier_created_successfully_message,
+        style: const TextStyle(color: Colors.white),
       ),
       backgroundColor: Colors.green,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
       showCloseIcon: true,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
