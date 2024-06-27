@@ -1,6 +1,6 @@
 ﻿namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
-public class IdentityDeletionProcesses : ICreatedAt
+public class IdentityDeletionProcess : ICreatedAt
 {
     public required string Id { get; set; }
     public required DeletionProcessStatus Status { get; set; }

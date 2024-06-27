@@ -8,7 +8,7 @@ namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 
 public class IdentityDeletionProcessesRepository : IIdentityDeletionProcessesRepository
 {
-    private readonly IQueryable<IdentityDeletionProcesses> _readOnlyIdentityDeletionProcesses;
+    private readonly IQueryable<IdentityDeletionProcess> _readOnlyIdentityDeletionProcesses;
 
     public IdentityDeletionProcessesRepository(QuotasDbContext dbContext)
     {

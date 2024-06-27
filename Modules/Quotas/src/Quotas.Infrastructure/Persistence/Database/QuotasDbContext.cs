@@ -43,7 +43,7 @@ public class QuotasDbContext : AbstractDbContextBase
 
     public DbSet<Token> Tokens { get; set; } = null!;
 
-    public DbSet<IdentityDeletionProcesses> IdentityDeletionProcesses { get; set; } = null!;
+    public DbSet<IdentityDeletionProcess> IdentityDeletionProcesses { get; set; } = null!;
 
     public DbSet<Challenge> Challenges { get; set; } = null!;
 
