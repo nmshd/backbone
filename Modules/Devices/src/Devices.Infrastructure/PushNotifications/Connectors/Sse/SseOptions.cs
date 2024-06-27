@@ -12,5 +12,5 @@ public class SseOptions
 
     [Url]
     [Required]
-    public required string SseServerBaseAddress { get; set; } = "";
+    public required string SseServerBaseAddress { get; set; }
 }
