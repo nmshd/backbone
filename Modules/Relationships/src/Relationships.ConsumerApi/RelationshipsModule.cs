@@ -29,7 +29,10 @@ public class RelationshipsModule : AbstractModule
             options.DbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
         });
 
-        services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
+        services.AddSqlDatabaseHealthCheck(Name,
+            parsedConfiguration.Infrastructure.SqlDatabase.Provider,
+            parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString,
+            parsedConfiguration.Infrastructure.SqlDatabase.EnableHealthCheck);
     }
 
     public override void ConfigureEventBus(IEventBus eventBus)
