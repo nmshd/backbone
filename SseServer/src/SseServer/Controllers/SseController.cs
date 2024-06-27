@@ -47,6 +47,8 @@ public class SseController : ControllerBase
         {
             _eventQueue.Register(address);
 
+            await streamWriter.SendServerSentEvent("ConnectionOpened");
+
             await foreach (var eventName in _eventQueue.DequeueFor(address, HttpContext.RequestAborted))
             {
                 await streamWriter.SendServerSentEvent(eventName);
