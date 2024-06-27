@@ -27,8 +27,7 @@ public class Handler : IRequestHandler<SeedQueuedForDeletionTierCommand>
         }
 
         var metrics = await _metricsRepository.FindAll(CancellationToken.None);
-        queuedForDeletionTier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics.Where(m => m.Key != MetricKey.NumberOfCreatedDatawalletModifications
-                                                                                          && m.Key != MetricKey.NumberOfStartedDeletionProcesses));
+        queuedForDeletionTier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics.Where(m => m.Key != MetricKey.NumberOfCreatedDatawalletModifications && m.Key != MetricKey.NumberOfStartedDeletionProcesses));
         await _tiersRepository.Update(queuedForDeletionTier, CancellationToken.None);
     }
 }
