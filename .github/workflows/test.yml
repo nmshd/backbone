@@ -38,12 +38,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "npm"
+          cache-dependency-path: "**/package.json"
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ./runtime/node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
       - name: Check formatting
         run: ./.ci/checkFormatting.sh
 
@@ -53,28 +72,161 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "npm"
+          cache-dependency-path: "**/package.json"
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ./runtime/node_modules
+          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-npm-
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: "8.0.x"
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
       - name: Run tests
         run: ./.ci/test.sh
         env:
           DOTNET_CONSOLE_ANSI_COLOR: true
 
-  integration-test-sqlserver:
-    name: Run Integration Tests (on SQL Server)
+  image-test-builds:
+    name: Build ${{matrix.image}} Image
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - dockerfile: ConsumerApi/Dockerfile
+            image: consumer-api
+
+          - dockerfile: AdminApi/src/AdminApi/Dockerfile
+            image: admin-ui
+
+          - dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
+            image: seed-client
+
+          - dockerfile: DatabaseMigrator/Dockerfile
+            image: database-migrator
+
+          - dockerfile: EventHandlerService/src/EventHandlerService/Dockerfile
+            image: event-handler-service
+
+          - dockerfile: Modules/Files/src/Files.Jobs.SanityCheck/Dockerfile
+            image: files-sanity-check
+
+          - dockerfile: Jobs/src/Job.IdentityDeletion/Dockerfile
+            image: identity-deletion-jobs
+
+          - dockerfile: SseServer/src/SseServer/Dockerfile
+            image: sse-server
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+
+      - name: Setup Docker
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver: docker-container
+
+      - name: Setup NuGet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      - name: Cache Image
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-${{ matrix.image }}-cache
+          key: buildx-${{ matrix.image }}-cache-${{ hashFiles(matrix.dockerfile) }}
+          restore-keys: |
+            buildx-${{ matrix.image }}-cache-
+
       - name: Install script dependencies
         run: npm install --prefix ./.ci
+
+      - name: Build Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          cache-from: type=local,src=/tmp/.buildx-${{ matrix.image }}-cache
+          cache-to: type=local,mode=max,dest=/tmp/.buildx-${{ matrix.image }}-cache-new
+          outputs: type=docker,dest=/tmp/${{ matrix.image }}.tar
+          tags: ${{ matrix.image }}:0.0.1
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: docker-${{ matrix.image }}
+          path: /tmp/${{ matrix.image }}.tar
+          retention-days: 1
+
+      # Temp fix
+      # https://github.com/docker/build-push-action/issues/252
+      # https://github.com/moby/buildkit/issues/1896
+      - name: Move cache
+        run: |
+          rm -rf /tmp/.buildx-${{ matrix.image }}-cache
+          mv /tmp/.buildx-${{ matrix.image }}-cache-new /tmp/.buildx-${{ matrix.image }}-cache
+
+  integration-test-sqlserver:
+    name: Run Integration Tests (on SQL Server)
+    runs-on: ubuntu-latest
+    needs: image-test-builds
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+
+      - name: Setup NuGet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+
+      - name: Download cached Docker images
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp
+          pattern: docker-*
+          merge-multiple: true
+
+      - name: Load Docker images
+        run: ./.ci/loadDockerImages.sh
+
       - name: Run integration tests
         run: ./.ci/integrationTest.sqlserver.sh
+
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.sqlserver.yml logs > docker-log.txt
+
       - name: Archive logs
         if: failure()
         uses: actions/upload-artifact@v4
@@ -87,16 +239,42 @@ jobs:
   integration-test-postgres:
     name: Run Integration Tests (on Postgres)
     runs-on: ubuntu-latest
+    needs: image-test-builds
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+
+      - name: Setup NuGet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
       - name: Install script dependencies
         run: npm install --prefix ./.ci
+
+      - name: Download cached Docker images
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp
+          pattern: docker-*
+          merge-multiple: true
+
+      - name: Load Docker images
+        run: ./.ci/loadDockerImages.sh
+
       - name: Run integration tests
         run: ./.ci/integrationTest.postgres.sh
+
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./.ci/docker-compose.test.yml -f ./.ci/docker-compose.test.postgres.yml logs > docker-log.txt
+
       - name: Archive logs
         if: failure()
         uses: actions/upload-artifact@v4
@@ -109,24 +287,43 @@ jobs:
   transport-test-sqlserver:
     name: Run transport Tests (on SQL Server)
     runs-on: ubuntu-latest
+    needs: image-test-builds
     steps:
       - name: Checkout backbone repository
         uses: actions/checkout@v4
         with:
           path: backbone
+
       - name: Checkout runtime repository
         uses: actions/checkout@v4
         with:
           repository: nmshd/runtime
           path: runtime
           ref: release/v5
-      - name: Build Consumer API and Admin API
-        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml build --parallel
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+
+      - name: Download cached Docker images
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp
+          pattern: docker-*
+          merge-multiple: true
+
+      - name: Load Docker images
+        run: ./backbone/.ci/loadDockerImages.sh
+
       - name: Run Consumer API & Admin API
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml up -d --no-build
+
       - name: Install runtime dependencies
         working-directory: ./runtime
         run: npm install
+
       - name: Run transport Tests
         working-directory: ./runtime/packages/transport
         env:
@@ -136,39 +333,61 @@ jobs:
           NMSHD_TEST_BASEURL_ADMIN_API: http://localhost:5173
           NMSHD_TEST_ADMIN_API_KEY: test
         run: npm run test:local:lokijs
+
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml logs > docker-log.txt
+
       - name: Archive logs
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: transport-test-sqlserver-docker-logs
           path: docker-log.txt
+
       - name: Stop Consumer API
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.sqlserver.yml down
 
   transport-test-postgres:
     name: Run transport Tests (on Postgres)
     runs-on: ubuntu-latest
+    needs: image-test-builds
     steps:
       - name: Checkout backbone repository
         uses: actions/checkout@v4
         with:
           path: backbone
+
       - name: Checkout runtime repository
         uses: actions/checkout@v4
         with:
           repository: nmshd/runtime
           path: runtime
           ref: release/v5
-      - name: Build Consumer API and Admin API
-        run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml build --parallel
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+
+      - name: Download cached Docker images
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp
+          pattern: docker-*
+          merge-multiple: true
+
+      - name: Load Docker images
+        run: ./backbone/.ci/loadDockerImages.sh
+
       - name: Run Consumer API & Admin API
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml up -d --no-build
+
       - name: Install runtime dependencies
         working-directory: ./runtime
         run: npm install
+
       - name: Run transport Tests
         working-directory: ./runtime/packages/transport
         env:
@@ -178,15 +397,18 @@ jobs:
           NMSHD_TEST_BASEURL_ADMIN_API: http://localhost:5173
           NMSHD_TEST_ADMIN_API_KEY: test
         run: npm run test:local:lokijs
+
       - name: Save Docker Logs
         if: failure()
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml logs > docker-log.txt
+
       - name: Archive logs
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: transport-test-postgres-docker-logs
           path: docker-log.txt
+
       - name: Stop Consumer API
         run: docker compose -f ./backbone/.ci/docker-compose.test.yml -f ./backbone/.ci/docker-compose.test.postgres.yml down
 
@@ -202,131 +424,3 @@ jobs:
         run: ./.ci/helm/buildChart.js
         env:
           VERSION: 0.0.0
-
-  build-capi-container-image:
-    name: Build Consumer API Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/capi/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
-
-  build-eh-container-image:
-    name: Build Event Handler Service Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/eh/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
-
-  build-dbm-container-image:
-    name: Build Database Migrator Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/dbm/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
-
-  build-idj-container-image:
-    name: Build Identity Deletion Jobs Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/idj/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
-
-  build-aui-container-image:
-    name: Build Admin UI Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/aui/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
-
-  build-acli-container-image:
-    name: Build Admin CLI Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/acli/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
-
-  build-sses-container-image:
-    name: Build SSE Server Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/sses/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
-
-  build-fsc-container-image:
-    name: Build Files Sanity Check Container Image
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-      - name: Build image
-        run: ./.ci/fsc/buildContainerImage.js
-        env:
-          TAG: test
-          PLATFORMS: linux/amd64
