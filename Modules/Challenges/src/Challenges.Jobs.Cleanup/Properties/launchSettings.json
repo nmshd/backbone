@@ -1,8 +1,9 @@
 {
-    "$schema": "http://json.schemastore.org/launchsettings.json",
-    "profiles": {
-        "Default": {
-            "commandName": "Project"
-        }
+  "$schema": "http://json.schemastore.org/launchsettings.json",
+  "profiles": {
+    "Default": {
+      "commandName": "Project",
+      "workingDirectory": "bin/Debug/net8.0"
     }
+  }
 }
