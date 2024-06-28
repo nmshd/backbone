@@ -74,10 +74,10 @@ COPY . .
 ARG VERSION
 
 WORKDIR "/src/EventHandlerService/src/EventHandlerService"
-RUN dotnet build "EventHandlerService.csproj" -c Release -o /app/build --no-restore /p:NO_APPSETTINGS_OVERRIDE=true
+RUN dotnet build "EventHandlerService.csproj" -c Release -o /app/build --no-restore
 
 FROM build AS publish
-RUN dotnet publish -c Release -o /app/publish --no-restore "EventHandlerService.csproj" /p:NO_APPSETTINGS_OVERRIDE=true
+RUN dotnet publish -c Release -o /app/publish --no-restore "EventHandlerService.csproj" 
 
 FROM base AS final
 
