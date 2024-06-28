@@ -15,7 +15,9 @@
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj"/>
         <ProjectReference Include="..\Files.Application\Files.Application.csproj"/>
         <ProjectReference Include="..\Files.Infrastructure\Files.Infrastructure.csproj"/>
+    </ItemGroup>
 
+    <ItemGroup>
         <Content Include="..\..\..\..\appsettings.override.json" Condition="$(Configuration) == Debug">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>

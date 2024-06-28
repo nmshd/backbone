@@ -36,7 +36,9 @@
         <ProjectReference Include="..\..\..\Modules\Devices\src\Devices.Application\Devices.Application.csproj"/>
         <ProjectReference Include="..\..\..\Modules\Devices\src\Devices.ConsumerApi\Devices.ConsumerApi.csproj"/>
         <ProjectReference Include="..\..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj"/>
+    </ItemGroup>
 
+    <ItemGroup>
         <Content Include="..\..\..\appsettings.override.json" Condition="$(Configuration) == Debug">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>

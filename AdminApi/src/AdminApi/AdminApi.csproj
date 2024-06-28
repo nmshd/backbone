@@ -47,10 +47,6 @@
         <ProjectReference Include="..\AdminApi.Infrastructure.Database.Postgres\AdminApi.Infrastructure.Database.Postgres.csproj"/>
         <ProjectReference Include="..\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj"/>
         <ProjectReference Include="..\AdminApi.Infrastructure\AdminApi.Infrastructure.csproj"/>
-
-        <Content Include="..\..\..\appsettings.override.json" Condition="$(Configuration) == Debug">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
     </ItemGroup>
     <ItemGroup>
         <!-- Don't publish the SPA source files, but do show them in the project files list -->
@@ -60,6 +56,11 @@
     </ItemGroup>
     <ItemGroup>
         <Folder Include="ClientApp\src\"/>
+    </ItemGroup>
+    <ItemGroup>
+        <Content Include="..\..\..\appsettings.override.json" Condition="$(Configuration) == Debug">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

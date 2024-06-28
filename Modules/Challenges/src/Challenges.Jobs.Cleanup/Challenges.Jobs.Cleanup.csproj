@@ -11,7 +11,9 @@
     <ItemGroup>
         <ProjectReference Include="..\Challenges.Application\Challenges.Application.csproj"/>
         <ProjectReference Include="..\Challenges.Infrastructure\Challenges.Infrastructure.csproj"/>
+    </ItemGroup>
 
+    <ItemGroup>
         <Content Include="..\..\..\..\appsettings.override.json" Condition="$(Configuration) == Debug">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>

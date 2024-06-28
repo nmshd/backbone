@@ -52,7 +52,9 @@
         <ProjectReference Include="..\Modules\Tokens\src\Tokens.Infrastructure.Database.Postgres\Tokens.Infrastructure.Database.Postgres.csproj"/>
         <ProjectReference Include="..\Modules\Tokens\src\Tokens.Infrastructure.Database.SqlServer\Tokens.Infrastructure.Database.SqlServer.csproj"/>
         <ProjectReference Include="..\Modules\Tokens\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj"/>
+    </ItemGroup>
 
+    <ItemGroup>
         <Content Include="..\appsettings.override.json" Condition="$(Configuration) == Debug">
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </Content>
