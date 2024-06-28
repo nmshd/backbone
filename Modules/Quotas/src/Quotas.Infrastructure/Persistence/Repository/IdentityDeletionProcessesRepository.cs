@@ -15,11 +15,11 @@ public class IdentityDeletionProcessesRepository : IIdentityDeletionProcessesRep
         _readOnlyIdentityDeletionProcesses = dbContext.IdentityDeletionProcesses.AsNoTracking();
     }
 
-    public async Task<uint> CountInStatus(string createdBy, DateTime createdAtFrom, DateTime createdAtTo, DeletionProcessStatus status, CancellationToken cancellationToken)
+    public async Task<uint> CountInStatus(string createdBy, DateTime createdAtFrom, DateTime createdAtTo, CancellationToken cancellationToken)
     {
         var count = await _readOnlyIdentityDeletionProcesses
             .CreatedInInterval(createdAtFrom, createdAtTo)
-            .CountAsync(p => p.Status == status, cancellationToken);
+            .CountAsync(p => p.IdentityAddress == createdBy, cancellationToken);
 
         return (uint)count;
     }
