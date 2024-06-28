@@ -109,7 +109,12 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 
-    services.AddHealthChecks();
+    var enableHealthCheck = configuration.GetValue<bool>("Modules:Devices:Infrastructure:SqlDatabase:EnableHealthCheck");
+
+    if (enableHealthCheck)
+    {
+        services.AddHealthChecks();
+    }
 
     services.Configure<ForwardedHeadersOptions>(options =>
     {
@@ -148,10 +153,16 @@ static void Configure(WebApplication app)
     app.UseAuthentication().UseAuthorization();
 
     app.MapControllers();
-    app.MapHealthChecks("/health", new HealthCheckOptions
+
+    var enableHealthCheck = app.Configuration.GetValue<bool>("Modules:Devices:Infrastructure:SqlDatabase:EnableHealthCheck");
+
+    if (enableHealthCheck)
     {
-        ResponseWriter = HealthCheckWriter.WriteResponse
-    });
+        app.MapHealthChecks("/health", new HealthCheckOptions
+        {
+            ResponseWriter = HealthCheckWriter.WriteResponse
+        });
+    }
 
     app.UseResponseCaching();
 }
