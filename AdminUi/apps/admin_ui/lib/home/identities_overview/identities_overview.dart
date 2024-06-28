@@ -12,7 +12,15 @@ class IdentitiesOverview extends StatefulWidget {
 }
 
 class _IdentitiesOverviewState extends State<IdentitiesOverview> {
+  late final ScrollController _scrollController;
   late IdentityDataTableSource _dataSource;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _scrollController = ScrollController();
+  }
 
   @override
   void didChangeDependencies() {
@@ -36,20 +44,31 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('A list of existing Identities')),
-      body: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8),
+      body: Scrollbar(
+        controller: _scrollController,
+        child: SingleChildScrollView(
+          controller: _scrollController,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              IdentitiesFilter(
-                onFilterChanged: ({IdentityOverviewFilter? filter}) async {
-                  _dataSource
-                    ..filter = filter
-                    ..refreshDatasource();
-                },
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IdentitiesFilter(
+                        onFilterChanged: ({IdentityOverviewFilter? filter}) async {
+                          _dataSource
+                            ..filter = filter
+                            ..refreshDatasource();
+                        },
+                      ),
+                      Expanded(child: IdentitiesDataTable(dataSource: _dataSource)),
+                    ],
+                  ),
+                ),
               ),
-              Expanded(child: IdentitiesDataTable(dataSource: _dataSource)),
             ],
           ),
         ),
