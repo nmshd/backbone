@@ -24,10 +24,10 @@
         <ProjectReference Include="..\..\..\Modules\Relationships\src\Relationships.ConsumerApi\Relationships.ConsumerApi.csproj"/>
         <ProjectReference Include="..\..\..\Modules\Synchronization\src\Synchronization.ConsumerApi\Synchronization.ConsumerApi.csproj"/>
         <ProjectReference Include="..\..\..\Modules\Tokens\src\Tokens.ConsumerApi\Tokens.ConsumerApi.csproj"/>
-    </ItemGroup>
 
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(NO_APPSETTINGS_OVERRIDE)' == ''">
-        <Exec Command="cp &quot;$(SolutionDir)/appsettings.override.json&quot; ." WorkingDirectory="$(OutDir)"/>
-    </Target>
+        <Content Include="..\..\..\appsettings.override.json" Condition="$(Configuration) == Debug">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 
 </Project>
