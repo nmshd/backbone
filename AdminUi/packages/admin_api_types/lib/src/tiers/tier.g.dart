@@ -11,7 +11,7 @@ Tiers _$TiersFromJson(Map<String, dynamic> json) => Tiers(
       name: json['name'] as String,
       canBeUsedAsDefaultForClient: json['canBeUsedAsDefaultForClient'] as bool,
       canBeManuallyAssigned: json['canBeManuallyAssigned'] as bool,
-      numberOfIdentities: json['numberOfIdentities'] as int,
+      numberOfIdentities: (json['numberOfIdentities'] as num).toInt(),
     );
 
 Map<String, dynamic> _$TiersToJson(Tiers instance) => <String, dynamic>{
@@ -47,7 +47,7 @@ Map<String, dynamic> _$TierDetailsToJson(TierDetails instance) => <String, dynam
 TierOverview _$TierOverviewFromJson(Map<String, dynamic> json) => TierOverview(
       id: json['id'] as String,
       name: json['name'] as String,
-      numberOfIdentities: json['numberOfIdentities'] as int,
+      numberOfIdentities: (json['numberOfIdentities'] as num).toInt(),
       canBeUsedAsDefaultForClient: json['canBeUsedAsDefaultForClient'] as bool,
       canBeManuallyAssigned: json['canBeManuallyAssigned'] as bool,
     );
