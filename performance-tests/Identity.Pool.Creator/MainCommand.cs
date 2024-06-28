@@ -59,7 +59,9 @@ public class GenerateCommand : Command
             printer: serviceProvider.GetRequiredService<IPrinter>()
         );
 
-        await graphGenerator.CreatePools();
+        var saGenerator = new SimulatedAnnealingPoolsGenerator(baseAddress, clientId, clientSecret, poolsConfiguration, printer: serviceProvider.GetRequiredService<IPrinter>());
+
+        await saGenerator.CreatePools();
         //await generator.CreatePools();
     }
 
