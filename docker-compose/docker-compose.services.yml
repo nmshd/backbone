@@ -1,11 +1,9 @@
 services:
   consumer-api:
-    image: ghcr.io/nmshd/backbone-consumer-api:v4.4.0
+    image: ghcr.io/nmshd/backbone-consumer-api:${BACKBONE_VERSION}
     container_name: consumerApi
     hostname: consumerApi
     environment:
-      - ASPNETCORE_ENVIRONMENT=Local
-
       - Modules__Files__Infrastructure__BlobStorage__ConnectionInfo="DefaultEndpointsProtocol=http;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://azurite:10000/devstoreaccount1;"
 
     ports:
@@ -20,7 +18,7 @@ services:
       - ./appsettings.override.json:/app/appsettings.override.json
 
   admin-ui:
-    image: ghcr.io/nmshd/backbone-admin-ui:v2.5.0
+    image: ghcr.io/nmshd/backbone-admin-ui:${BACKBONE_VERSION}
     container_name: admin-ui
     hostname: adminUi
     ports:
