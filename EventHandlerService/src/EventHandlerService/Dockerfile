@@ -77,7 +77,7 @@ WORKDIR "/src/EventHandlerService/src/EventHandlerService"
 RUN dotnet build "EventHandlerService.csproj" -c Release -o /app/build --no-restore
 
 FROM build AS publish
-RUN dotnet publish -c Release -o /app/publish --no-restore "EventHandlerService.csproj" 
+RUN dotnet publish -c Release -o /app/publish --no-restore "EventHandlerService.csproj"
 
 FROM base AS final
 
