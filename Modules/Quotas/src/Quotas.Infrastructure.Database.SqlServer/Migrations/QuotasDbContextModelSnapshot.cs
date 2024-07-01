@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Quotas.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.Modules.Quotas.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(QuotasDbContext))]
     partial class QuotasDbContextModelSnapshot : ModelSnapshot

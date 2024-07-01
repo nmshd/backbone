@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Quotas.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(QuotasDbContext))]
     partial class QuotasDbContextModelSnapshot : ModelSnapshot
