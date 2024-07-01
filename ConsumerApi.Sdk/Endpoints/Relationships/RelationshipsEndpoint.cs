@@ -33,52 +33,48 @@ public class RelationshipsEndpoint(EndpointClient client) : ConsumerApiEndpoint(
         return await _client.Post<RelationshipMetadata>($"api/{API_VERSION}/Relationships", request);
     }
 
-    public async Task<ApiResponse<ListRelationshipChangesResponse>> ListChanges(
-        PaginationFilter? pagination = null, IEnumerable<string>? ids = null, OptionalDateRange? createdAt = null, OptionalDateRange? completedAt = null,
-        OptionalDateRange? modifiedAt = null, bool? onlyPeerChanges = null, string? createdBy = null, string? completedBy = null, string? status = null,
-        string? type = null
-    )
+    public async Task<ApiResponse<RelationshipMetadata>> AcceptRelationship(string relationshipId, AcceptRelationshipRequest request)
     {
-        var builder = _client
-            .Request<ListRelationshipChangesResponse>(HttpMethod.Get, $"api/{API_VERSION}/Relationships/Changes")
-            .Authenticate()
-            .WithPagination(pagination);
-
-        if (ids != null)
-        {
-            var arr = ids.ToArray();
-            if (arr.Length != 0) builder.AddQueryParameter("ids", arr);
-        }
-
-        if (createdAt != null) builder.AddQueryParameter("createdAt", createdAt);
-        if (completedAt != null) builder.AddQueryParameter("completedAt", completedAt);
-        if (modifiedAt != null) builder.AddQueryParameter("modifiedAt", modifiedAt);
-        if (onlyPeerChanges != null) builder.AddQueryParameter("onlyPeerChanges", onlyPeerChanges);
-        if (createdBy != null) builder.AddQueryParameter("createdBy", createdBy);
-        if (completedBy != null) builder.AddQueryParameter("completedBy", completedBy);
-        if (status != null) builder.AddQueryParameter("status", status);
-        if (type != null) builder.AddQueryParameter("type", type);
-
-        return await builder.Execute();
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Accept", request);
     }
 
-    public async Task<ApiResponse<RelationshipChange>> GetChange(string id)
+    public async Task<ApiResponse<RelationshipMetadata>> RejectRelationship(string relationshipId, RejectRelationshipRequest request)
     {
-        return await _client.Get<RelationshipChange>($"api/{API_VERSION}/Relationships/Changes/{id}");
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Reject", request);
     }
 
-    public async Task<ApiResponse<RelationshipMetadata>> AcceptChange(string relationshipId, string changeId, CompleteRelationshipChangeRequest request)
+    public async Task<ApiResponse<RelationshipMetadata>> RevokeRelationship(string relationshipId, RevokeRelationshipRequest request)
     {
-        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Changes/{changeId}/Accept", request);
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Revoke", request);
     }
 
-    public async Task<ApiResponse<RelationshipMetadata>> RejectChange(string relationshipId, string changeId, CompleteRelationshipChangeRequest request)
+    public async Task<ApiResponse<RelationshipMetadata>> RevokeRelationshipReactivation(string relationshipId)
     {
-        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Changes/{changeId}/Reject", request);
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Reactivate/Revoke");
     }
 
-    public async Task<ApiResponse<RelationshipMetadata>> RevokeChange(string relationshipId, string changeId, CompleteRelationshipChangeRequest request)
+    public async Task<ApiResponse<Relationship>> TerminateRelationship(string relationshipId)
     {
-        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Changes/{changeId}/Revoke", request);
+        return await _client.Put<Relationship>($"api/{API_VERSION}/Relationships/{relationshipId}/Terminate");
+    }
+
+    public async Task<ApiResponse<RelationshipMetadata>> RelationshipReactivationRequest(string relationshipId)
+    {
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Reactivate");
+    }
+
+    public async Task<ApiResponse<RelationshipMetadata>> AcceptReactivationOfRelationship(string relationshipId)
+    {
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Reactivate/Accept");
+    }
+
+    public async Task<ApiResponse<RelationshipMetadata>> RejectReactivationOfRelationship(string relationshipId)
+    {
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Reactivate/Reject");
+    }
+
+    public async Task<ApiResponse<RelationshipMetadata>> DecomposeRelationship(string relationshipId)
+    {
+        return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Decompose");
     }
 }

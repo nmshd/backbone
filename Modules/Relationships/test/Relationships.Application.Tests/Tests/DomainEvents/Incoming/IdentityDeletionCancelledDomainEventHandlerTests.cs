@@ -2,9 +2,9 @@
 using Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityDeletionCancelled;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
-using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;

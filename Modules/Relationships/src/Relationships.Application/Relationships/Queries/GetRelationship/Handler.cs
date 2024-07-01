@@ -23,6 +23,6 @@ public class Handler : IRequestHandler<GetRelationshipQuery, RelationshipDTO>
     {
         var relationship = await _relationshipsRepository.FindRelationship(request.Id, _userContext.GetAddress(), cancellationToken, track: false);
 
-        return _mapper.Map<RelationshipDTO>(relationship);
+        return new RelationshipDTO(relationship);
     }
 }

@@ -34,7 +34,7 @@ public class TierQuotaDefinitionDeletedDomainEventHandler : IDomainEventHandler<
 
         await _metricStatusesService.RecalculateMetricStatuses(
             identitiesWithTier.Select(i => i.Address).ToList(),
-            MetricKey.GetSupportedMetricKeyValues().ToList(),
+            MetricKey.GetSupportedMetricKeys().ToList(),
             CancellationToken.None
         );
     }
