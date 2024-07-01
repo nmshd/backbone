@@ -1,5 +1,5 @@
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,6 +9,8 @@ public class RelationshipTemplateAllocationEntityTypeConfiguration : EntityEntit
 {
     public override void Configure(EntityTypeBuilder<RelationshipTemplateAllocation> builder)
     {
+        base.Configure(builder);
+
         base.Configure(builder);
 
         builder.ToTable(nameof(RelationshipTemplateAllocation) + "s");

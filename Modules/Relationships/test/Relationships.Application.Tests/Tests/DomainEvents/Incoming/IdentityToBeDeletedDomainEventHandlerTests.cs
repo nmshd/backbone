@@ -1,16 +1,16 @@
 ﻿using System.Linq.Expressions;
 using Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityToBeDeleted;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
-using Backbone.Modules.Relationships.Domain.Entities;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
+using static Backbone.Modules.Relationships.Application.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.DomainEvents.Incoming;
 
@@ -25,8 +25,8 @@ public class IdentityToBeDeletedDomainEventHandlerTests : AbstractTestsBase
         var peer1 = TestDataGenerator.CreateRandomIdentityAddress();
         var peer2 = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var relationshipToPeer1 = TestData.CreateActiveRelationship(peer1, identityToBeDeleted);
-        var relationshipToPeer2 = TestData.CreateActiveRelationship(peer2, identityToBeDeleted);
+        var relationshipToPeer1 = CreateActiveRelationship(peer1, identityToBeDeleted);
+        var relationshipToPeer2 = CreateActiveRelationship(peer2, identityToBeDeleted);
 
         var fakeRelationshipsRepository = A.Dummy<IRelationshipsRepository>();
 
