@@ -96,7 +96,7 @@ internal class RelationshipsStepDefinitions
     }
 
     [When("a POST request is sent to the /Relationships/{r.Id}/Reject endpoint by i1")]
-    public async Task WhenAPostRequestIsSentToTheRejectRelationshipChangeEndpointByI1()
+    public async Task WhenAPostRequestIsSentToTheRejectRelationshipEndpointByI1()
     {
         var rejectRelationshipRequest = new RejectRelationshipRequest
         {
@@ -106,7 +106,7 @@ internal class RelationshipsStepDefinitions
     }
 
     [When("a POST request is sent to the /Relationships/{r.Id}/Revoke endpoint by i1")]
-    public async Task WhenAPostRequestIsSentToTheRevokeRelationshipChangeEndpointByI2()
+    public async Task WhenAPostRequestIsSentToTheRevokeRelationshipEndpointByI2()
     {
         var revokeRelationshipRequest = new RevokeRelationshipRequest
         {
