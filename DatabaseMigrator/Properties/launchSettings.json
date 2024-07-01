@@ -3,7 +3,8 @@
   "profiles": {
     "Default": {
       "commandName": "Project",
-      "environmentVariables": {}
+      "environmentVariables": {},
+      "workingDirectory": "bin/Debug/$(TargetFramework)"
     }
   }
 }

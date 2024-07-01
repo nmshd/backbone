@@ -24,4 +24,10 @@
         <ProjectReference Include="..\..\..\Modules\Devices\src\Devices.ConsumerApi\Devices.ConsumerApi.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="..\..\..\appsettings.override.json" Condition="$(Configuration) == Debug">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+
 </Project>
