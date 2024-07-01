@@ -3,17 +3,17 @@
     "Job.IdentityDeletion.CancelStaleDeletionProcesses": {
       "commandName": "Project",
       "commandLineArgs": "--Worker CancelStaleDeletionProcessesWorker",
-      "workingDirectory": "bin/Debug/net8.0"
+      "workingDirectory": "bin/Debug/$(TargetFramework)"
     },
     "Job.IdentityDeletion.ActualDeletion": {
       "commandName": "Project",
       "commandLineArgs": "--Worker ActualDeletionWorker",
-      "workingDirectory": "bin/Debug/net8.0"
+      "workingDirectory": "bin/Debug/$(TargetFramework)"
     },
     "Job.IdentityDeletion.SendGracePeriodAndApprovalReminders": {
       "commandName": "Project",
       "commandLineArgs": "--Worker SendGracePeriodAndApprovalRemindersWorker",
-      "workingDirectory": "bin/Debug/net8.0"
+      "workingDirectory": "bin/Debug/$(TargetFramework)"
     }
   }
 }

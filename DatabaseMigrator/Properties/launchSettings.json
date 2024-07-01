@@ -4,7 +4,7 @@
     "Default": {
       "commandName": "Project",
       "environmentVariables": {},
-      "workingDirectory": "bin/Debug/net8.0"
+      "workingDirectory": "bin/Debug/$(TargetFramework)"
     }
   }
 }

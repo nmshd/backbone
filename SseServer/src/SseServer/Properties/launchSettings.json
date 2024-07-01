@@ -7,7 +7,7 @@
         "ASPNETCORE_ENVIRONMENT": "Local",
         "ASPNETCORE_URLS": "http://*:8083"
       },
-      "workingDirectory": "bin/Debug/net8.0"
+      "workingDirectory": "bin/Debug/$(TargetFramework)"
     }
   }
 }

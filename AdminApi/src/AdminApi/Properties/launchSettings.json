@@ -8,7 +8,7 @@
         "ASPNETCORE_HOSTINGSTARTUPASSEMBLIES": "Microsoft.AspNetCore.SpaProxy",
         "ASPNETCORE_URLS": "http://*:8082"
       },
-      "workingDirectory": "bin/Debug/net8.0"
+      "workingDirectory": "bin/Debug/$(TargetFramework)"
     }
   }
 }

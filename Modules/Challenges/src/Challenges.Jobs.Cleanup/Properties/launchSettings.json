@@ -3,7 +3,7 @@
   "profiles": {
     "Default": {
       "commandName": "Project",
-      "workingDirectory": "bin/Debug/net8.0"
+      "workingDirectory": "bin/Debug/$(TargetFramework)"
     }
   }
 }

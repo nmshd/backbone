@@ -6,7 +6,7 @@
         "DOTNET_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true,
-      "workingDirectory": "bin/Debug/net8.0"
+      "workingDirectory": "bin/Debug/$(TargetFramework)"
     },
     "Docker": {
       "commandName": "Docker"
