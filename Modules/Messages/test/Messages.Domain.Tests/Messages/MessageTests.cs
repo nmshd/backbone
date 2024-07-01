@@ -16,7 +16,7 @@ public class MessageTests : AbstractTestsBase
     {
         // Arrange
         var sender = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipient = new RecipientInformation(TestDataGenerator.CreateRandomIdentityAddress(), RelationshipId.New(), []);
+        var recipient = new RecipientInformation(TestDataGenerator.CreateRandomIdentityAddress(), []);
 
         // Act
         var message = new Message(
