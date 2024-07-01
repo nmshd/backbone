@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Challenges.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Challenges.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(ChallengesDbContext))]
     partial class ChallengesDbContextModelSnapshot : ModelSnapshot

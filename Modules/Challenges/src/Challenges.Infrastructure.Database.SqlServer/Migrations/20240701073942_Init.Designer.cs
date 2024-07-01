@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Challenges.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(ChallengesDbContext))]
-    [Migration("20240621132736_IdentityAddress_Varying_Length")]
-    partial class IdentityAddress_Varying_Length
+    [Migration("20240701073942_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
