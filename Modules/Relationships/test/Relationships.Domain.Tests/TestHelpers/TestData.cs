@@ -6,10 +6,10 @@ namespace Backbone.Modules.Relationships.Domain.Tests.TestHelpers;
 
 public static class TestData
 {
-    public static readonly IdentityAddress IDENTITY_1 = IdentityAddress.Create([1, 1, 1], "id1");
+    public static readonly IdentityAddress IDENTITY_1 = IdentityAddress.Create([1, 1, 1], "localhost");
     public static readonly DeviceId DEVICE_1 = DeviceId.New();
 
-    public static readonly IdentityAddress IDENTITY_2 = IdentityAddress.Create([2, 2, 2], "id1");
+    public static readonly IdentityAddress IDENTITY_2 = IdentityAddress.Create([2, 2, 2], "localhost");
     public static readonly DeviceId DEVICE_2 = DeviceId.New();
 
     public static readonly RelationshipTemplate RELATIONSHIP_TEMPLATE_OF_1 = new(IDENTITY_1, DEVICE_1, 1, null, []);

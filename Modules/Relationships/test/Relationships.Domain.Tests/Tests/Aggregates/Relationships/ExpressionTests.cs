@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.Tests.TestHelpers;
 using Backbone.UnitTestTools.BaseClasses;
+using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Domain.Tests.Tests.Aggregates.Relationships;
@@ -60,7 +61,7 @@ public class ExpressionTests : AbstractTestsBase
 
         var result = relationship.EvaluateHasParticipantExpression(relationship.From);
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
     [Fact]
@@ -70,7 +71,7 @@ public class ExpressionTests : AbstractTestsBase
 
         var result = relationship.EvaluateHasParticipantExpression(relationship.To);
 
-        Assert.True(result);
+        result.Should().BeTrue();
     }
 
     [Fact]
@@ -78,9 +79,9 @@ public class ExpressionTests : AbstractTestsBase
     {
         var relationship = TestData.CreateActiveRelationship();
 
-        var result = relationship.EvaluateHasParticipantExpression("id1");
+        var result = relationship.EvaluateHasParticipantExpression("did:e:localhost:dids:1111111111111111111111");
 
-        Assert.False(result);
+        result.Should().BeFalse();
     }
 
     #endregion

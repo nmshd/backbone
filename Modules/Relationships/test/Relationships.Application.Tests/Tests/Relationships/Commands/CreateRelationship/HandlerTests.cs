@@ -23,7 +23,7 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         SystemTime.Set("2020-01-01");
-        var activeIdentity = IdentityAddress.Create([0], "id1");
+        var activeIdentity = IdentityAddress.Create([0], "localhost");
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
         var fakeRelationshipTemplatesRepository = A.Fake<IRelationshipTemplatesRepository>();
@@ -60,7 +60,7 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         SystemTime.Set("2020-01-01");
-        var activeIdentity = IdentityAddress.Create([0], "id1");
+        var activeIdentity = IdentityAddress.Create([0], "localhost");
         var activeDevice = TestDataGenerator.CreateRandomDeviceId();
 
         var fakeRelationshipTemplatesRepository = A.Fake<IRelationshipTemplatesRepository>();
@@ -101,7 +101,7 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         var relationshipTemplateId = RelationshipTemplateId.Parse("RLTNonExistingReltId");
-        var address = IdentityAddress.Create([0], "id1");
+        var address = IdentityAddress.Create([0], "localhost");
 
         var relationshipTemplatesRepository = A.Fake<IRelationshipTemplatesRepository>();
         A.CallTo(() => relationshipTemplatesRepository.Find(relationshipTemplateId, address, A<CancellationToken>._, A<bool>._))
