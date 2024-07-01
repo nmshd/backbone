@@ -12,15 +12,16 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(AdminApiDbContext))]
-    [Migration("20240412142551_RelationshipsRevamp")]
-    partial class RelationshipsRevamp
+    [Migration("20240701060446_Init")]
+    partial class Init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasDefaultSchema("AdminUi")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -47,7 +48,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("ClientOverviews", (string)null);
+                    b.ToView("ClientOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.IdentityOverview", b =>
@@ -77,7 +78,59 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("IdentityOverviews", (string)null);
+                    b.ToView("IdentityOverviews", "AdminUi");
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.MessageOverview", b =>
+                {
+                    b.Property<string>("MessageId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("NumberOfAttachments")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("SendDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("SenderAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SenderDevice")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("MessageId");
+
+                    b.ToTable((string)null);
+
+                    b.ToView("MessageOverviews", "AdminUi");
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.MessageRecipient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MessageId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MessageId");
+
+                    b.ToTable("RecipientInformation", "Messages", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
                 });
 
             modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.RelationshipOverview", b =>
@@ -112,7 +165,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("RelationshipOverviews", (string)null);
+                    b.ToView("RelationshipOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.TierOverview", b =>
@@ -135,7 +188,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
 
                     b.ToTable((string)null);
 
-                    b.ToView("TierOverviews", (string)null);
+                    b.ToView("TierOverviews", "AdminUi");
                 });
 
             modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.ClientOverview", b =>
@@ -159,7 +212,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
 
                             b1.ToTable((string)null);
 
-                            b1.ToView("ClientOverviews");
+                            b1.ToView("ClientOverviews", "AdminUi");
 
                             b1.WithOwner()
                                 .HasForeignKey("ClientOverviewClientId");
@@ -190,7 +243,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
 
                             b1.ToTable((string)null);
 
-                            b1.ToView("IdentityOverviews");
+                            b1.ToView("IdentityOverviews", "AdminUi");
 
                             b1.WithOwner()
                                 .HasForeignKey("IdentityOverviewAddress");
@@ -198,6 +251,20 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
 
                     b.Navigation("Tier")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.MessageRecipient", b =>
+                {
+                    b.HasOne("Backbone.AdminApi.Infrastructure.DTOs.MessageOverview", null)
+                        .WithMany("Recipients")
+                        .HasForeignKey("MessageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Backbone.AdminApi.Infrastructure.DTOs.MessageOverview", b =>
+                {
+                    b.Navigation("Recipients");
                 });
 #pragma warning restore 612, 618
         }
