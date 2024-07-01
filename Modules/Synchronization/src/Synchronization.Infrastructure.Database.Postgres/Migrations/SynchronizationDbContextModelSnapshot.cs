@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Synchronization.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(SynchronizationDbContext))]
     partial class SynchronizationDbContextModelSnapshot : ModelSnapshot
