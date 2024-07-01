@@ -5,6 +5,7 @@ using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
+using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Devices.ConsumerApi;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.SseServer.Controllers;
@@ -105,6 +106,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddCustomAspNetCore(parsedConfiguration, environment);
 
     services.AddScoped<IQuotaChecker, AlwaysSuccessQuotaChecker>();
+
+    services.AddEventBus(parsedConfiguration.Infrastructure.EventBus);
 
     services.AddHealthChecks();
 
