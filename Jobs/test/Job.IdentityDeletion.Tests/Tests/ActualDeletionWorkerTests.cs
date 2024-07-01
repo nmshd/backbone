@@ -28,10 +28,10 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         SetupRipeDeletionProcessesCommand(mockMediator);
 
         var dummyDevicesIdentityDeleter = new IdentityDeleter(mockMediator);
-        var mockIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
+        var dummyIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
         var identityDeleters = new List<IIdentityDeleter> { dummyDevicesIdentityDeleter };
 
-        var worker = CreateWorker(mediator: mockMediator, identityDeleters, deletionProcessLogger: mockIDeletionProcessLogger);
+        var worker = CreateWorker(mediator: mockMediator, identityDeleters, deletionProcessLogger: dummyIDeletionProcessLogger);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -51,11 +51,11 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
         var mockIdentityDeleter = A.Fake<IIdentityDeleter>();
         var dummyDevicesIdentityDeleter = new IdentityDeleter(mockMediator);
-        var mockIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
+        var dummyIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
 
         var identityDeleters = new List<IIdentityDeleter> { mockIdentityDeleter, dummyDevicesIdentityDeleter };
 
-        var worker = CreateWorker(mediator: mockMediator, identityDeleters, deletionProcessLogger: mockIDeletionProcessLogger);
+        var worker = CreateWorker(mediator: mockMediator, identityDeleters, deletionProcessLogger: dummyIDeletionProcessLogger);
 
         A.CallTo(() => mockMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._))
             .Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
@@ -64,8 +64,8 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         await worker.StartProcessing(CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockIdentityDeleter.Delete(identityAddress1, mockIDeletionProcessLogger)).MustHaveHappenedOnceExactly();
-        A.CallTo(() => mockIdentityDeleter.Delete(identityAddress2, mockIDeletionProcessLogger)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentityDeleter.Delete(identityAddress1, dummyIDeletionProcessLogger)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentityDeleter.Delete(identityAddress2, dummyIDeletionProcessLogger)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -83,9 +83,9 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var dummyDevicesIdentityDeleter = new IdentityDeleter(mockMediator);
 
         var identityDeleters = new List<IIdentityDeleter> { dummyDevicesIdentityDeleter };
-        var mockIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
+        var dummyIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
 
-        var worker = CreateWorker(mediator: mockMediator, identityDeleters, deletionProcessLogger: mockIDeletionProcessLogger, pushNotificationSender: mockPushNotificationSender);
+        var worker = CreateWorker(mediator: mockMediator, identityDeleters, deletionProcessLogger: dummyIDeletionProcessLogger, pushNotificationSender: mockPushNotificationSender);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
