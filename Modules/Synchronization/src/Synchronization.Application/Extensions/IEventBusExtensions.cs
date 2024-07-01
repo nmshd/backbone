@@ -5,16 +5,18 @@ using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.Message
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeleted;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeletionCancelled;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerToBeDeleted;
-using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipChangeCompleted;
-using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipChangeCreated;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationCompleted;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationRequested;
+using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipStatusChanged;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStatusChanged;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeleted;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeletionCancelled;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerToBeDeleted;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipChangeCompleted;
-using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipChangeCreated;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationCompleted;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationRequested;
+using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipStatusChanged;
 
 namespace Backbone.Modules.Synchronization.Application.Extensions;
 
@@ -38,8 +40,9 @@ public static class IEventBusExtensions
 
     private static void SubscribeToRelationshipsEvents(IEventBus eventBus)
     {
-        eventBus.Subscribe<RelationshipChangeCompletedDomainEvent, RelationshipChangeCompletedDomainEventHandler>();
-        eventBus.Subscribe<RelationshipChangeCreatedDomainEvent, RelationshipChangeCreatedDomainEventHandler>();
+        eventBus.Subscribe<RelationshipStatusChangedDomainEvent, RelationshipStatusChangedDomainEventHandler>();
+        eventBus.Subscribe<RelationshipReactivationRequestedDomainEvent, RelationshipReactivationRequestedDomainEventHandler>();
+        eventBus.Subscribe<RelationshipReactivationCompletedDomainEvent, RelationshipReactivationCompletedDomainEventHandler>();
         eventBus.Subscribe<PeerToBeDeletedDomainEvent, PeerToBeDeletedDomainEventHandler>();
         eventBus.Subscribe<PeerDeletionCancelledDomainEvent, PeerDeletionCancelledDomainEventHandler>();
         eventBus.Subscribe<PeerDeletedDomainEvent, PeerDeletedDomainEventHandler>();
