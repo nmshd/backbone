@@ -12,6 +12,6 @@ public static class RelationshipsQueryableExtensions
 
     public static IQueryable<Relationship> Active(this IQueryable<Relationship> query)
     {
-        return query.Where(r => r.Status == RelationshipStatus.Active || r.Status == RelationshipStatus.Terminating);
+        return query.Where(r => r.Status == RelationshipStatus.Active);
     }
 }

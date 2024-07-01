@@ -191,7 +191,7 @@ public class DevicesDbContext : IdentityDbContext<ApplicationUser>, IDevicesDbCo
     {
         base.ConfigureConventions(configurationBuilder);
 
-        configurationBuilder.Properties<IdentityAddress>().AreUnicode(false).AreFixedLength()
+        configurationBuilder.Properties<IdentityAddress>().AreUnicode(false).AreFixedLength(false)
             .HaveMaxLength(IdentityAddress.MAX_LENGTH).HaveConversion<IdentityAddressValueConverter>();
         configurationBuilder.Properties<DeviceId>().AreUnicode(false).AreFixedLength()
             .HaveMaxLength(DeviceId.MAX_LENGTH).HaveConversion<DeviceIdValueConverter>();

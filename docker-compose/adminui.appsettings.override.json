@@ -30,12 +30,6 @@
     },
     "Modules": {
         "Challenges": {
-            "Application": {
-                "Pagination": {
-                    "DefaultPageSize": 50,
-                    "MaxPageSize": 200
-                }
-            },
             "Infrastructure": {
                 "SqlDatabase": {
                     "Provider": "Postgres",
@@ -46,11 +40,7 @@
         },
         "Devices": {
             "Application": {
-                "AddressPrefix": "id1",
-                "Pagination": {
-                    "DefaultPageSize": 50,
-                    "MaxPageSize": 200
-                }
+                "InstanceUrl": "localhost"
             },
             "Infrastructure": {
                 "SqlDatabase": {
@@ -68,12 +58,6 @@
             }
         },
         "Quotas": {
-            "Application": {
-                "Pagination": {
-                    "DefaultPageSize": 50,
-                    "MaxPageSize": 200
-                }
-            },
             "Infrastructure": {
                 "SqlDatabase": {
                     "Provider": "Postgres",
