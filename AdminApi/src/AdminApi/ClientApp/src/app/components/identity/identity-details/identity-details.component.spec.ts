@@ -1,10 +1,10 @@
-import {HttpClientTestingModule, HttpTestingController} from "@angular/common/http/testing";
-import {TestBed} from "@angular/core/testing";
-import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
-import {BehaviorSubject} from "rxjs";
-import {Identity} from "../../../../services/identity-service/identity.service";
-import {TierOverview, TierService} from "../../../../services/tier-service/tier.service";
-import {IdentityDetailsComponent, TierUtils} from "./identity-details.component";
+import { HttpClientTestingModule, HttpTestingController } from "@angular/common/http/testing";
+import { TestBed } from "@angular/core/testing";
+import { ActivatedRoute, NavigationEnd, Router } from "@angular/router";
+import { BehaviorSubject } from "rxjs";
+import { Identity } from "../../../../services/identity-service/identity.service";
+import { TierOverview, TierService } from "../../../../services/tier-service/tier.service";
+import { IdentityDetailsComponent, TierUtils } from "./identity-details.component";
 
 class MockActivatedRoute {
     private readonly subject = new BehaviorSubject(this.testParams);
@@ -38,10 +38,14 @@ describe("IdentityDetailsComponent", function () {
         TestBed.configureTestingModule({
             declarations: [IdentityDetailsComponent],
             imports: [HttpClientTestingModule],
-            providers: [TierService, {provide: Router, useValue: mockRouter}, {
-                provide: ActivatedRoute,
-                useValue: mockActivatedRoute
-            }]
+            providers: [
+                TierService,
+                { provide: Router, useValue: mockRouter },
+                {
+                    provide: ActivatedRoute,
+                    useValue: mockActivatedRoute
+                }
+            ]
         });
 
         tierService = TestBed.inject(TierService);

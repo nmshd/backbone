@@ -61,7 +61,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
                         LEFT JOIN "Relationships"."RelationshipAuditLog" AS "AuditLog2"
                             ON "Relationships"."Id" = "AuditLog2"."RelationshipId" AND "AuditLog2"."Reason" = 1
                 """);
-            
+
             migrationBuilder.Sql(
                 """
                     CREATE VIEW "AdminUi"."TierOverviews" AS
@@ -76,7 +76,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
                         ON IDENTITIES."TierId" = TIERS."Id"
                         GROUP BY TIERS."Id", TIERS."Name", TIERS."CanBeUsedAsDefaultForClient", TIERS."CanBeManuallyAssigned"
                  """);
-            
+
             migrationBuilder.Sql(
                 """
                     CREATE VIEW "AdminUi"."MessageOverviews" AS
@@ -95,7 +95,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
                         GROUP BY
                             "Messages"."Id", "Messages"."CreatedBy", "Messages"."CreatedByDevice", "Messages"."CreatedAt"
                 """);
-            
+
             migrationBuilder.Sql(
                 """
                     CREATE VIEW "AdminUi"."ClientOverviews" AS
@@ -118,4 +118,4 @@ namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
         }
     }
 }
-                                 
+

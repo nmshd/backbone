@@ -42,7 +42,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
                         LEFT JOIN Synchronization.Datawallets DATAWALLETS ON DATAWALLETS.Owner = IDENTITIES.Address
                         LEFT JOIN Devices.Tiers TIERS ON TIERS.Id = IDENTITIES.TierId
                 """);
-            
+
             migrationBuilder.Sql(
                 """
                     CREATE VIEW [AdminUi].[RelationshipOverviews] AS
@@ -66,7 +66,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
                         ON 
                             [RELATIONSHIPS].[Id] = [AUDITLOG2].[RelationshipId] AND [AUDITLOG2].[Reason] = 1
                 """);
-            
+
             migrationBuilder.Sql(
                 """
                     CREATE VIEW AdminUi.TierOverviews AS
@@ -81,7 +81,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
                         ON IDENTITIES.TierId = TIERS.Id
                         GROUP BY TIERS.Id, TIERS.Name, TIERS.CanBeUsedAsDefaultForClient, TIERS.CanBeManuallyAssigned
                 """);
-            
+
             migrationBuilder.Sql(
                 """
                     CREATE VIEW AdminUi.MessageOverviews AS
@@ -100,7 +100,7 @@ namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
                         GROUP BY
                             [MESSAGES].[Id], [MESSAGES].[CreatedBy], [MESSAGES].[CreatedByDevice], [MESSAGES].[CreatedAt]
                 """);
-            
+
             migrationBuilder.Sql(
                 """
                     CREATE VIEW AdminUi.ClientOverviews AS
