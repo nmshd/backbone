@@ -19,10 +19,12 @@ public class ExternalEventDTO : IHaveCustomMapping
         {
             ExternalEventType.MessageDelivered => "MessageDelivered",
             ExternalEventType.MessageReceived => "MessageReceived",
-            ExternalEventType.RelationshipChangeCreated => "RelationshipChangeCreated",
-            ExternalEventType.RelationshipChangeCompleted => "RelationshipChangeCompleted",
+            ExternalEventType.RelationshipStatusChanged => "RelationshipStatusChanged",
             ExternalEventType.IdentityDeletionProcessStarted => "IdentityDeletionProcessStarted",
             ExternalEventType.IdentityDeletionProcessStatusChanged => "IdentityDeletionProcessStatusChanged",
+            ExternalEventType.RelationshipReactivationRequested => "RelationshipReactivationRequested",
+            ExternalEventType.RelationshipReactivationCompleted => "RelationshipReactivationCompleted",
+            ExternalEventType.RelationshipDecomposedByPeer => "RelationshipDecomposedByPeer",
             _ => throw new ArgumentOutOfRangeException(nameof(externalEventType), externalEventType, null)
         });
         configuration.CreateMap<ExternalEvent, ExternalEventDTO>();
