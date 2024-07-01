@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Quotas.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Quotas.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(QuotasDbContext))]
     partial class QuotasDbContextModelSnapshot : ModelSnapshot
@@ -18,7 +18,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Quotas")
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -49,10 +49,10 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.Identity", b =>
                 {
                     b.Property<string>("Address")
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("TierId")
                         .IsRequired()
@@ -78,7 +78,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("ApplyTo")
                         .IsRequired()
-                        .HasColumnType("character(36)");
+                        .HasColumnType("character varying(80)");
 
                     b.Property<int>("Max")
                         .HasColumnType("integer");
@@ -103,7 +103,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("Backbone.Modules.Quotas.Domain.Aggregates.Identities.MetricStatus", b =>
                 {
                     b.Property<string>("Owner")
-                        .HasColumnType("character(36)");
+                        .HasColumnType("character varying(80)");
 
                     b.Property<string>("MetricKey")
                         .HasMaxLength(50)
@@ -134,7 +134,7 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("ApplyTo")
                         .IsRequired()
-                        .HasColumnType("character(36)");
+                        .HasColumnType("character varying(80)");
 
                     b.Property<string>("_definitionId")
                         .HasMaxLength(20)
@@ -184,12 +184,18 @@ namespace Quotas.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<bool>("FromHasDecomposed")
+                        .HasColumnType("boolean");
+
                     b.Property<int>("Status")
                         .HasColumnType("integer");
 
                     b.Property<string>("To")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<bool>("ToHasDecomposed")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 

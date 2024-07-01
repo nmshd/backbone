@@ -33,7 +33,7 @@ public class IdentityDeletionProcessStartedDomainEventHandler : IDomainEventHand
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while processing an domain event.");
+            _logger.LogError(ex, "An error occured while processing a domain event.");
             throw;
         }
     }

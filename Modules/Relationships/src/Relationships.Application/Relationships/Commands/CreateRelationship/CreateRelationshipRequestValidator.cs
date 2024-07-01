@@ -10,6 +10,6 @@ public class CreateRelationshipCommandValidator : AbstractValidator<CreateRelati
     public CreateRelationshipCommandValidator()
     {
         RuleFor(c => c.RelationshipTemplateId).DetailedNotEmpty();
-        RuleFor(c => c.Content).NumberOfBytes(0, 10.Mebibytes());
+        RuleFor(c => c.CreationContent).NumberOfBytes(0, 10.Mebibytes());
     }
 }
