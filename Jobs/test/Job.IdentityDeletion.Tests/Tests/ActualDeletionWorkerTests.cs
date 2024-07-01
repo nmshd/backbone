@@ -28,10 +28,9 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         SetupRipeDeletionProcessesCommand(mockMediator);
 
         var dummyDevicesIdentityDeleter = new IdentityDeleter(mockMediator);
-        var dummyIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
         var identityDeleters = new List<IIdentityDeleter> { dummyDevicesIdentityDeleter };
 
-        var worker = CreateWorker(mediator: mockMediator, identityDeleters, deletionProcessLogger: dummyIDeletionProcessLogger);
+        var worker = CreateWorker(mediator: mockMediator, identityDeleters);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -81,11 +80,9 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
         var mockPushNotificationSender = A.Dummy<IPushNotificationSender>();
         var dummyDevicesIdentityDeleter = new IdentityDeleter(mockMediator);
-
         var identityDeleters = new List<IIdentityDeleter> { dummyDevicesIdentityDeleter };
-        var dummyIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
 
-        var worker = CreateWorker(mediator: mockMediator, identityDeleters, deletionProcessLogger: dummyIDeletionProcessLogger, pushNotificationSender: mockPushNotificationSender);
+        var worker = CreateWorker(mediator: mockMediator, identityDeleters, pushNotificationSender: mockPushNotificationSender);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
