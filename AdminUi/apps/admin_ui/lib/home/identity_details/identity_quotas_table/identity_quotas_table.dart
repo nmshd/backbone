@@ -46,10 +46,11 @@ class IdentityQuotaListState extends State<IdentityQuotaList> {
                       DataColumn2(label: Text(context.l10n.metric)),
                       DataColumn2(label: Text(context.l10n.source), size: ColumnSize.S),
                       DataColumn2(
-                          label: Text(
-                            '${context.l10n.usage} (${context.l10n.used}/${context.l10n.max})',
-                          ),
-                          size: ColumnSize.L),
+                        label: Text(
+                          '${context.l10n.usage} (${context.l10n.used}/${context.l10n.max})',
+                        ),
+                        size: ColumnSize.L,
+                      ),
                       DataColumn2(label: Text(context.l10n.period), size: ColumnSize.S),
                       const DataColumn2(label: Text(''), size: ColumnSize.S),
                     ],
