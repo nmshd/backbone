@@ -3,116 +3,111 @@ using System;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Backbone.Modules.Files.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Files.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(FilesDbContext))]
-    [Migration("20240321084224_IdentityAddress80")]
-    partial class IdentityAddress80
+    partial class FilesDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Files")
-                .HasAnnotation("ProductVersion", "8.0.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("Backbone.Modules.Files.Domain.Entities.File", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("character(20)")
+                        .HasColumnType("char(20)")
                         .IsFixedLength();
 
                     b.Property<byte[]>("CipherHash")
                         .IsRequired()
-                        .HasColumnType("bytea");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<long>("CipherSize")
                         .HasColumnType("bigint");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
                         .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("character(20)")
+                        .HasColumnType("char(20)")
                         .IsFixedLength();
 
                     b.Property<DateTime?>("DeletedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("DeletedBy")
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("DeletedByDevice")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("character(20)")
+                        .HasColumnType("char(20)")
                         .IsFixedLength();
 
                     b.Property<byte[]>("EncryptedProperties")
                         .IsRequired()
-                        .HasColumnType("bytea");
+                        .HasColumnType("varbinary(max)");
 
                     b.Property<DateTime>("ExpiresAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("ModifiedAt")
-                        .HasColumnType("timestamp with time zone");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("ModifiedBy")
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("ModifiedByDevice")
                         .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("character(20)")
+                        .HasColumnType("char(20)")
                         .IsFixedLength();
 
                     b.Property<string>("Owner")
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(80)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.Property<byte[]>("OwnerSignature")
                         .IsRequired()
-                        .HasColumnType("bytea");
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
-
-                    b.ToTable("FileMetadata", (string)null);
+                    b.ToTable("FileMetadata", "Files");
                 });
 #pragma warning restore 612, 618
         }
