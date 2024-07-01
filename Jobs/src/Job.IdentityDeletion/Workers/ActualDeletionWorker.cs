@@ -72,7 +72,7 @@ public class ActualDeletionWorker : IHostedService
     {
         await NotifyIdentityAboutStartingDeletion(cancellationToken, identityAddress);
         await Delete(identityAddress);
-        await _deviceIdentityDeleter!.Delete(identityAddress, _deletionProcessLogger);
+        await DeleteDeviceIdentity(identityAddress);
     }
 
     private async Task NotifyIdentityAboutStartingDeletion(CancellationToken cancellationToken, IdentityAddress identityAddress)
@@ -86,6 +86,11 @@ public class ActualDeletionWorker : IHostedService
         {
             await identityDeleter.Delete(identityAddress, _deletionProcessLogger);
         }
+    }
+
+    private async Task DeleteDeviceIdentity(IdentityAddress identityAddress)
+    {
+        await _deviceIdentityDeleter!.Delete(identityAddress, _deletionProcessLogger);
     }
 
     private void LogErroringDeletionTriggers(IEnumerable<KeyValuePair<IdentityAddress, UnitResult<DomainError>>> erroringDeletionTriggers)
