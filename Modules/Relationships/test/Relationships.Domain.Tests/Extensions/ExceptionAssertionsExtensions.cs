@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Domain;
-using Backbone.BuildingBlocks.Domain.Errors;
 using FluentAssertions;
 using FluentAssertions.Specialized;
 
@@ -7,8 +6,13 @@ namespace Backbone.Modules.Relationships.Domain.Tests.Extensions;
 
 public static class ExceptionAssertionsExtensions
 {
-    public static void WithError<T>(this ExceptionAssertions<T> exceptionAssertions, DomainError error) where T : DomainException
+    public static void WithError<T>(this ExceptionAssertions<T> exceptionAssertions, string code, string? messagePart = null) where T : DomainException
     {
-        exceptionAssertions.Which.Code.Should().Be(error.Code);
+        var exception = exceptionAssertions.Which;
+
+        exception.Code.Should().Be(code);
+
+        if (messagePart != null)
+            exception.Message.Should().Contain(messagePart);
     }
 }

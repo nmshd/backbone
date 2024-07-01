@@ -60,9 +60,9 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 
         foreach (var recipientDto in request.Recipients)
         {
-            var idOfRelationshipBetweenSenderAndRecipient = await _relationshipsRepository.GetIdOfRelationshipBetweenSenderAndRecipient(sender, recipientDto.Address);
+            var relationshipBetweenSenderAndRecipient = await _relationshipsRepository.FindYoungestRelationship(sender, recipientDto.Address, cancellationToken);
 
-            if (idOfRelationshipBetweenSenderAndRecipient == null)
+            if (relationshipBetweenSenderAndRecipient == null)
             {
                 _logger.LogInformation("Sending message aborted. There is no relationship between sender ({sender}) and recipient ({recipient}).", sender, recipientDto.Address);
                 throw new OperationFailedException(ApplicationErrors.NoRelationshipToRecipientExists(recipientDto.Address));
@@ -70,14 +70,9 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 
             var numberOfUnreceivedMessagesFromActiveIdentity = await _messagesRepository.CountUnreceivedMessagesFromSenderToRecipient(sender, recipientDto.Address, cancellationToken);
 
-            if (numberOfUnreceivedMessagesFromActiveIdentity >= _options.MaxNumberOfUnreceivedMessagesFromOneSender)
-            {
-                _logger.LogInformation(
-                    "Sending message aborted. Recipient '{recipient}' already has '{numberOfUnreceivedMessagesFromActiveIdentity}' unreceived messages from sender '{sender}', which is more than the maximum ({maxNumberOfUnreceivedMessagesFromOneSender}).",
-                    recipientDto.Address, numberOfUnreceivedMessagesFromActiveIdentity, sender, _options.MaxNumberOfUnreceivedMessagesFromOneSender);
-
-                throw new OperationFailedException(ApplicationErrors.MaxNumberOfUnreceivedMessagesReached(recipientDto.Address));
-            }
+            relationshipBetweenSenderAndRecipient.EnsureSendingMessagesIsAllowed(
+                numberOfUnreceivedMessagesFromActiveIdentity,
+                _options.MaxNumberOfUnreceivedMessagesFromOneSender);
 
             var recipient = new RecipientInformation(recipientDto.Address, recipientDto.EncryptedKey);
 

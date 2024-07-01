@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
-using Backbone.Modules.Relationships.Domain.Entities;
 
 namespace Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityToBeDeleted;
 
