@@ -85,7 +85,7 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        title: const Center(child: Text('Assign Quota')),
+        title: const Text('Assign Quota', textAlign: TextAlign.center),
         content: SizedBox(
           width: 500,
           child: Column(

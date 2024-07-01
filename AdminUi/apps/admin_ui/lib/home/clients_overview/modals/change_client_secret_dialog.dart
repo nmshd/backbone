@@ -55,12 +55,16 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
         title: const Text('Change Client Secret', textAlign: TextAlign.center),
         content: SizedBox(
           width: 500,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Gaps.h32,
               TextField(
                 controller: _newClientSecretController,
                 focusNode: _focusNode,
@@ -106,6 +110,7 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                     style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
                 ),
+              Gaps.h32,
             ],
           ),
         ),

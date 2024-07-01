@@ -47,12 +47,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        title: const Center(
-          child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Text('Create Tier'),
-          ),
-        ),
+        title: const Text('Create Tier', textAlign: TextAlign.center),
         content: _isLoading
             ? const Padding(
                 padding: EdgeInsets.all(16),
@@ -63,7 +58,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    Gaps.h16,
+                    Gaps.h32,
                     TextField(
                       controller: _tierNameController,
                       focusNode: _focusNode,
