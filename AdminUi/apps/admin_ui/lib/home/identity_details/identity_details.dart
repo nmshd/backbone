@@ -127,7 +127,7 @@ class _IdentityDetailsCard extends StatelessWidget {
                       Gaps.w16,
                       CopyToClipboardButton(
                         clipboardText: identityDetails.address,
-                        successMessage: context.l10n.identity_copied_to_clipboard_message,
+                        successMessage: context.l10n.identityDetails_card_identityClipboardMessage,
                       ),
                     ],
                   ),
@@ -138,18 +138,18 @@ class _IdentityDetailsCard extends StatelessWidget {
                     runSpacing: 8,
                     children: [
                       _IdentityDetails(
-                        title: context.l10n.client_ID,
+                        title: context.l10n.clientID,
                         value: identityDetails.clientId,
                       ),
                       _IdentityDetails(
-                        title: context.l10n.public_key,
+                        title: context.l10n.identityDetails_card_publicKey,
                         value: identityDetails.publicKey.ellipsize(20),
                         onIconPressed: () => context.setClipboardDataWithSuccessNotification(
                           clipboardText: identityDetails.publicKey,
-                          successMessage: context.l10n.public_key_copied_to_clipboard_message,
+                          successMessage: context.l10n.identityDetails_card_publicKey_copyToClipboardMessage,
                         ),
                         icon: Icons.copy,
-                        tooltipMessage: context.l10n.copy_public_key,
+                        tooltipMessage: context.l10n.identityDetails_card_publicKey_tooltipMessage,
                       ),
                       _IdentityDetails(
                         title: context.l10n.createdAt,
@@ -168,7 +168,7 @@ class _IdentityDetailsCard extends StatelessWidget {
                                 )
                             : null,
                         icon: Icons.edit,
-                        tooltipMessage: context.l10n.change_tier,
+                        tooltipMessage: context.l10n.changeTier,
                       ),
                     ],
                   ),

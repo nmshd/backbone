@@ -103,8 +103,8 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
                 enabled: !_saving,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: '${context.l10n.max_amount}*',
-                  helperText: context.l10n.max_amount_message,
+                  labelText: '${context.l10n.maxAmount}*',
+                  helperText: context.l10n.addQuotaDialog_maxAmount_message,
                 ),
                 inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
                 keyboardType: TextInputType.number,

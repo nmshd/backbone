@@ -63,7 +63,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        title: Text(context.l10n.create_client, textAlign: TextAlign.center),
+        title: Text(context.l10n.createClientDialog_title, textAlign: TextAlign.center),
         content: SizedBox(
           width: 500,
           child: Column(
@@ -74,8 +74,8 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 readOnly: _saveSucceeded,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: context.l10n.client_ID,
-                  helperText: context.l10n.client_id_generated_message,
+                  labelText: context.l10n.clientID,
+                  helperText: context.l10n.createClientDialog_clientID_message,
                 ),
               ),
               Gaps.h24,
@@ -84,8 +84,8 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 readOnly: _saveSucceeded,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: context.l10n.display_name,
-                  helperText: context.l10n.display_name_message,
+                  labelText: context.l10n.displayName,
+                  helperText: context.l10n.createClientDialog_displayName_message,
                 ),
               ),
               Gaps.h24,
@@ -95,8 +95,8 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 obscureText: _isClientSecretVisible,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: context.l10n.client_secret,
-                  helperText: context.l10n.client_secret_generated_message,
+                  labelText: context.l10n.clientSecret,
+                  helperText: context.l10n.clientSecret_message,
                   suffixIcon: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
@@ -108,9 +108,9 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                         ),
                         Gaps.w4,
                         CopyToClipboardButton(
-                          tooltip: context.l10n.copy_to_clipboard,
+                          tooltip: context.l10n.createClientDialog_clientSecret_copyToClipboard,
                           clipboardText: _clientSecretController.text,
-                          successMessage: context.l10n.copy_to_clipboard_message,
+                          successMessage: context.l10n.clientSecret_copiedToClipboard,
                         ),
                       ],
                     ),
@@ -120,7 +120,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
               if (_saveSucceeded) ...[
                 Gaps.h16,
                 Text(
-                  context.l10n.save_the_client_secret_message,
+                  context.l10n.clientSecret_save_message,
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ],
@@ -130,9 +130,9 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 readOnly: _saveSucceeded,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: context.l10n.max_identities,
-                  helperText: '${context.l10n.max_identities_message}'
-                      '\n${context.l10n.no_identity_limit_message}',
+                  labelText: context.l10n.maxIdentities,
+                  helperText: '${context.l10n.createClientDialog_maxIdentities_message}'
+                      '\n${context.l10n.createClientDialog_maxIdentities_noLimit_message}',
                 ),
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 keyboardType: TextInputType.number,
@@ -142,7 +142,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 isExpanded: true,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: '${context.l10n.default_tier}*',
+                  labelText: '${context.l10n.defaultTier}*',
                 ),
                 value: _chosenDefaultTier,
                 onChanged: _saveSucceeded ? null : (tier) => setState(() => _chosenDefaultTier = tier),

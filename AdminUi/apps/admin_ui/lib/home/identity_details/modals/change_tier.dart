@@ -52,7 +52,7 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        title: Text(context.l10n.change_tier, textAlign: TextAlign.center),
+        title: Text(context.l10n.changeTier, textAlign: TextAlign.center),
         content: DropdownButtonFormField<String>(
           value: selectedTier,
           decoration: const InputDecoration(border: OutlineInputBorder()),
@@ -88,7 +88,7 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
     if (response.hasError) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(context.l10n.failed_to_update_identity_message),
+          content: Text(context.l10n.changeTierDialog_error),
           duration: const Duration(seconds: 3),
         ),
       );
@@ -100,7 +100,7 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(context.l10n.identity_updated_message),
+        content: Text(context.l10n.changeTierDialog_success),
         duration: const Duration(seconds: 3),
       ),
     );

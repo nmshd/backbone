@@ -123,7 +123,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
           mainAxisSize: MainAxisSize.min,
           children: [
             InputField(
-              label: context.l10n.client_ID,
+              label: context.l10n.clientID,
               onEnteredText: (String enteredText) {
                 filter = filter.copyWith(clientId: enteredText.isEmpty ? const Optional.absent() : Optional(enteredText));
 
@@ -132,7 +132,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             ),
             Gaps.w16,
             InputField(
-              label: context.l10n.display_name,
+              label: context.l10n.displayName,
               onEnteredText: (String enteredText) {
                 filter = filter.copyWith(displayName: enteredText.isEmpty ? const Optional.absent() : Optional(enteredText));
 
@@ -141,8 +141,8 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             ),
             Gaps.w16,
             MultiSelectFilter(
-              label: context.l10n.default_tier,
-              searchLabel: context.l10n.search_tiers,
+              label: context.l10n.defaultTier,
+              searchLabel: context.l10n.searchTiers,
               controller: _tierController,
               onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
                 filter = filter.copyWith(
@@ -154,7 +154,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             ),
             Gaps.w16,
             NumberFilter(
-              label: context.l10n.number_of_identities,
+              label: context.l10n.numberOfIdentities,
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 filter = filter.copyWith(
                   numberOfIdentities: enteredValue.isEmpty ? const Optional.absent() : Optional((operator, int.parse(enteredValue))),

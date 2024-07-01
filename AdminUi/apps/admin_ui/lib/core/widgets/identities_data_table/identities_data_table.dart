@@ -37,12 +37,12 @@ class _IdentitiesDataTableState extends State<IdentitiesDataTable> {
       isVerticalScrollBarVisible: true,
       renderEmptyRowsInTheEnd: false,
       availableRowsPerPage: const [5, 10, 25, 50, 100],
-      empty: Text(context.l10n.no_identities_found),
+      empty: Text(context.l10n.identitiesDataTable_noIdentitiesFound),
       errorBuilder: (error) => Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(context.l10n.error_data_load_failed),
+            Text(context.l10n.identitiesDataTable_failedToLoadData),
             Gaps.h16,
             FilledButton(onPressed: widget.dataSource.refreshDatasource, child: Text(context.l10n.retry)),
           ],
@@ -51,12 +51,12 @@ class _IdentitiesDataTableState extends State<IdentitiesDataTable> {
       columns: <DataColumn2>[
         DataColumn2(label: Text(context.l10n.address), size: ColumnSize.L, onSort: _sort),
         if (!widget.hideTierColumn) DataColumn2(label: Text(context.l10n.tier), size: ColumnSize.S),
-        DataColumn2(label: Text(context.l10n.created_with_client), onSort: _sort),
-        DataColumn2(label: Text(context.l10n.number_of_devices), onSort: _sort),
+        DataColumn2(label: Text(context.l10n.identitiesDataTable_createdWithClient), onSort: _sort),
+        DataColumn2(label: Text(context.l10n.numberOfDevices), onSort: _sort),
         DataColumn2(label: Text(context.l10n.createdAt), size: ColumnSize.S, onSort: _sort),
-        DataColumn2(label: Text(context.l10n.last_login_at), size: ColumnSize.S, onSort: _sort),
-        DataColumn2(label: Text(context.l10n.datawallet_version), onSort: _sort),
-        DataColumn2(label: Text(context.l10n.identity_version), onSort: _sort),
+        DataColumn2(label: Text(context.l10n.lastLoginAt), size: ColumnSize.S, onSort: _sort),
+        DataColumn2(label: Text(context.l10n.datawalletVersion), onSort: _sort),
+        DataColumn2(label: Text(context.l10n.identityVersion), onSort: _sort),
       ],
     );
   }

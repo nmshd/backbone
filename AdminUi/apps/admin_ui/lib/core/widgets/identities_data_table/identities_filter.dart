@@ -71,7 +71,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               Gaps.w16,
               MultiSelectFilter(
                 label: context.l10n.tiers,
-                searchLabel: context.l10n.search_tiers,
+                searchLabel: context.l10n.searchTiers,
                 controller: _tierController,
                 onOptionSelected: (List<ValueItem<String>> selectedOptions) {
                   final selectedTiers = selectedOptions.map((item) => item.value!).toList();
@@ -83,7 +83,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             Gaps.w16,
             MultiSelectFilter(
               label: context.l10n.clients,
-              searchLabel: context.l10n.search_clients,
+              searchLabel: context.l10n.identitiesFilter_searchClients,
               controller: _clientController,
               onOptionSelected: (List<ValueItem<String>> selectedOptions) {
                 final selectedClients = selectedOptions.map((item) => item.value!).toList();
@@ -93,7 +93,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             ),
             Gaps.w16,
             NumberFilter(
-              label: context.l10n.number_of_devices,
+              label: context.l10n.numberOfDevices,
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 final numberOfDevices = FilterOperatorValue(operator, enteredValue);
                 _filter = _filter.copyWith(numberOfDevices: numberOfDevices.value.isEmpty ? const Optional.absent() : Optional(numberOfDevices));
@@ -111,7 +111,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             ),
             Gaps.w16,
             DateFilter(
-              label: context.l10n.last_login_at,
+              label: context.l10n.lastLoginAt,
               onFilterSelected: (FilterOperator operator, DateTime? selectedDate) {
                 final lastLoginAt = FilterOperatorValue(operator, selectedDate != null ? DateFormat('yyyy-MM-dd').format(selectedDate) : '');
                 _filter = _filter.copyWith(lastLoginAt: lastLoginAt.value.isEmpty ? const Optional.absent() : Optional(lastLoginAt));
@@ -120,7 +120,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             ),
             Gaps.w16,
             NumberFilter(
-              label: context.l10n.datawallet_version,
+              label: context.l10n.datawalletVersion,
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 final datawalletVersion = FilterOperatorValue(operator, enteredValue);
                 _filter =
@@ -130,7 +130,7 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             ),
             Gaps.w16,
             NumberFilter(
-              label: context.l10n.identity_version,
+              label: context.l10n.identityVersion,
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 final identityVersion = FilterOperatorValue(operator, enteredValue);
                 _filter = _filter.copyWith(identityVersion: identityVersion.value.isEmpty ? const Optional.absent() : Optional(identityVersion));

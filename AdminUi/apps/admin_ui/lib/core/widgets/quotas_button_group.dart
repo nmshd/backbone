@@ -63,9 +63,9 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
   Future<void> _removeSelectedQuotas() async {
     final confirmed = await showConfirmationDialog(
       context: context,
-      title: context.l10n.remove_quotas,
+      title: context.l10n.quotaButtonGroup_removeQuotas_title,
       message:
-          '${context.l10n.deletion_of_quota_message} ${widget.identityAddress != null ? '${context.l10n.the_identity} "${widget.identityAddress}"' : '${context.l10n.the_tier} "${widget.tierId}"'}?',
+          '${context.l10n.quotaButtonGroup_deletionMessage} ${widget.identityAddress != null ? '${context.l10n.quotaButtonGroup_theIdentity} "${widget.identityAddress}"' : '${context.l10n.quotaButtonGroup_theTier} "${widget.tierId}"'}?',
     );
 
     if (!confirmed) return;
@@ -75,7 +75,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
       if (result.hasError && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(context.l10n.error_deleting_quota),
+            content: Text(context.l10n.quotaButtonGroup_errorDeletingQuota),
             showCloseIcon: true,
           ),
         );
@@ -89,7 +89,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(context.l10n.selected_quota_removed),
+          content: Text(context.l10n.quotaButtonGroup_selectedQuotaRemoved),
           showCloseIcon: true,
         ),
       );

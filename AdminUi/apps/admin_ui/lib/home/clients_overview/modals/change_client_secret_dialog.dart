@@ -55,7 +55,7 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        title: Text(context.l10n.change_client_secret, textAlign: TextAlign.center),
+        title: Text(context.l10n.changeClientSecret, textAlign: TextAlign.center),
         content: SizedBox(
           width: 500,
           child: Column(
@@ -68,8 +68,8 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                 obscureText: _isClientSecretVisible,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: context.l10n.client_secret,
-                  helperText: context.l10n.client_secret_generated_message,
+                  labelText: context.l10n.clientSecret,
+                  helperText: context.l10n.clientSecret_message,
                   suffixIcon: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
@@ -81,9 +81,9 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                         ),
                         Gaps.w4,
                         CopyToClipboardButton(
-                          tooltip: context.l10n.copy_to_clipboard,
+                          tooltip: context.l10n.changeClientSecretDialog_copyToClipboard,
                           clipboardText: _newClientSecretController.text,
-                          successMessage: context.l10n.copy_to_clipboard_message,
+                          successMessage: context.l10n.clientSecret_copiedToClipboard,
                         ),
                       ],
                     ),
@@ -94,7 +94,7 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
-                    context.l10n.save_the_client_secret_message,
+                    context.l10n.clientSecret_save_message,
                     style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),

@@ -44,7 +44,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
     return PopScope(
       canPop: !_isLoading,
       child: AlertDialog(
-        title: Text(context.l10n.create_tier),
+        title: Text(context.l10n.createTierDialog_title),
         content: _isLoading
             ? const Padding(
                 padding: EdgeInsets.all(16),
@@ -53,7 +53,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
             : Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  Text(context.l10n.form_message_for_tier),
+                  Text(context.l10n.createTierDialog_formMessage),
                   Gaps.h16,
                   TextField(
                     controller: _tierNameController,
@@ -93,7 +93,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
 
   Future<void> _onSubmitted(String name) async {
     if (name.isEmpty) {
-      _setErrorMessage(context.l10n.name_cannot_be_empty_message);
+      _setErrorMessage(context.l10n.createTierDialog_nameCannotBeEmpty);
       _focusNode.requestFocus();
       return;
     }
@@ -120,7 +120,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
   void _showSuccessSnackbar() {
     final snackBar = SnackBar(
       content: Text(
-        context.l10n.tier_created_successfully_message,
+        context.l10n.createTierDialog_tierCreatedSuccess,
         style: const TextStyle(color: Colors.white),
       ),
       backgroundColor: Colors.green,

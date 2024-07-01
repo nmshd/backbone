@@ -33,7 +33,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.list_of_all_clients)),
+      appBar: AppBar(title: Text(context.l10n.clientsOverview_title)),
       body: Card(
         child: Padding(
           padding: const EdgeInsets.all(8),
@@ -68,7 +68,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
               Expanded(
                 child: DataTable2(
                   isVerticalScrollBarVisible: true,
-                  empty: Text(context.l10n.no_clients_found),
+                  empty: Text(context.l10n.clientsOverview_noClientsFound),
                   onSelectAll: (selected) {
                     if (selected == null) return;
 
@@ -81,10 +81,10 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                     });
                   },
                   columns: <DataColumn2>[
-                    DataColumn2(label: Text(context.l10n.client_ID), size: ColumnSize.L),
-                    DataColumn2(label: Text(context.l10n.display_name), size: ColumnSize.L),
-                    DataColumn2(label: Text(context.l10n.default_tier)),
-                    DataColumn2(label: Text(context.l10n.number_of_identities), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.clientID), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.displayName), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.defaultTier)),
+                    DataColumn2(label: Text(context.l10n.numberOfIdentities), size: ColumnSize.L),
                     DataColumn2(label: Text(context.l10n.createdAt)),
                     const DataColumn2(label: Text(''), size: ColumnSize.L),
                   ],
@@ -121,7 +121,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                                 style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),
                                 onPressed: () => showChangeClientSecretDialog(context: context, clientId: client.clientId),
                                 child: Text(
-                                  context.l10n.change_client_secret,
+                                  context.l10n.changeClientSecret,
                                   style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
                                   textAlign: TextAlign.center,
                                 ),
@@ -153,8 +153,8 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   Future<void> _removeSelectedClients() async {
     final confirmed = await showConfirmationDialog(
       context: context,
-      title: context.l10n.remove_clients,
-      message: context.l10n.remove_clients_message,
+      title: context.l10n.clientsOverview_removeSelectedClients_title,
+      message: context.l10n.clientsOverview_removeSelectedClients_message,
     );
 
     if (!confirmed) return;
@@ -164,7 +164,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
       if (result.hasError && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(context.l10n.error_deleting_client),
+            content: Text(context.l10n.clientsOverview_removeSelectedClients_error),
             showCloseIcon: true,
           ),
         );
@@ -179,7 +179,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(context.l10n.selected_client_removed),
+          content: Text(context.l10n.clientsOverview_removeSelectedClients_success),
           showCloseIcon: true,
         ),
       );
