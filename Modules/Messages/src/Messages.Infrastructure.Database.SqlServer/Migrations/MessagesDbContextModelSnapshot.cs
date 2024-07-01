@@ -4,7 +4,6 @@ using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,16 +11,14 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(MessagesDbContext))]
-    [Migration("20240315141840_RemoveDoNotSendBefore")]
-    partial class RemoveDoNotSendBefore
+    partial class MessagesDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Messages")
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -63,10 +60,10 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("char(36)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
                         .IsRequired()
@@ -77,8 +74,6 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedAt");
-
                     b.HasIndex("CreatedBy");
 
                     b.ToTable("Messages", "Messages");
@@ -86,21 +81,29 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.RecipientInformation", b =>
                 {
-                    b.Property<string>("Address")
-                        .HasMaxLength(36)
-                        .IsUnicode(false)
-                        .HasColumnType("char(36)")
-                        .IsFixedLength();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
 
-                    b.Property<string>("MessageId")
-                        .HasMaxLength(20)
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.Property<byte[]>("EncryptedKey")
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("MessageId")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
 
                     b.Property<DateTime?>("ReceivedAt")
                         .HasColumnType("datetime2");
@@ -118,13 +121,15 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
-                    b.HasKey("Address", "MessageId");
+                    b.HasKey("Id");
 
                     b.HasIndex("MessageId");
 
                     b.HasIndex("ReceivedAt");
 
                     b.HasIndex("RelationshipId");
+
+                    b.HasIndex("Address", "MessageId");
 
                     b.ToTable("RecipientInformation", "Messages");
                 });
@@ -142,17 +147,20 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
                     b.Property<string>("From")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("char(36)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<string>("To")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("char(36)")
-                        .IsFixedLength();
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
 
                     b.HasKey("Id");
 
