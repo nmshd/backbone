@@ -1,5 +1,5 @@
 using Backbone.BuildingBlocks.Domain.Events;
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
 namespace Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 

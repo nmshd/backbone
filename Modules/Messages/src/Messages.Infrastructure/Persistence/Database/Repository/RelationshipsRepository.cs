@@ -1,10 +1,12 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
+
 public class RelationshipsRepository : IRelationshipsRepository
 {
     private readonly MessagesDbContext _dbContext;
@@ -21,5 +23,14 @@ public class RelationshipsRepository : IRelationshipsRepository
             .WithParticipants(sender, recipient)
             .Select(r => r.Id)
             .FirstOrDefaultAsync();
+    }
+
+    public Task<Relationship?> FindYoungestRelationship(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
+    {
+        return _dbContext.Relationships
+            .AsNoTracking()
+            .WithParticipants(sender, recipient)
+            .OrderByDescending(r => r.CreatedAt)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

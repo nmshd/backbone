@@ -95,7 +95,7 @@ public class AbstractDbContextBase : DbContext, IDbContext
     {
         base.ConfigureConventions(configurationBuilder);
 
-        configurationBuilder.Properties<IdentityAddress>().AreUnicode(false).AreFixedLength().HaveMaxLength(IdentityAddress.MAX_LENGTH).HaveConversion<IdentityAddressValueConverter>();
+        configurationBuilder.Properties<IdentityAddress>().AreUnicode(false).AreFixedLength(false).HaveMaxLength(IdentityAddress.MAX_LENGTH).HaveConversion<IdentityAddressValueConverter>();
         configurationBuilder.Properties<DeviceId>().AreUnicode(false).AreFixedLength().HaveMaxLength(DeviceId.MAX_LENGTH).HaveConversion<DeviceIdValueConverter>();
         configurationBuilder.Properties<Username>().AreUnicode(false).AreFixedLength().HaveMaxLength(Username.MAX_LENGTH).HaveConversion<UsernameValueConverter>();
 

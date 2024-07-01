@@ -35,6 +35,26 @@ public abstract class MetricCalculatorFactory
             return CreateUsedFileStorageSpaceCalculator();
         }
 
+        if (metricKey == MetricKey.NumberOfStartedDeletionProcesses)
+        {
+            return CreateNumberOfStartedDeletionProcessesCalculator();
+        }
+
+        if (metricKey == MetricKey.NumberOfCreatedChallenges)
+        {
+            return CreateNumberOfCreatedChallengesCalculator();
+        }
+
+        if (metricKey == MetricKey.NumberOfCreatedDevices)
+        {
+            return CreateNumberOfCreatedDevicesCalculator();
+        }
+
+        if (metricKey == MetricKey.NumberOfCreatedDatawalletModifications)
+        {
+            return CreateNumberOfCreatedDatawalletModificationsCalculator();
+        }
+
         throw new NotSupportedException($"There is currently no {nameof(IMetricCalculator)} for the Metric with the key '{metricKey}'.");
     }
 
@@ -44,4 +64,8 @@ public abstract class MetricCalculatorFactory
     protected abstract IMetricCalculator CreateNumberOfRelationshipTemplatesMetricCalculator();
     protected abstract IMetricCalculator CreateNumberOfTokensMetricCalculator();
     protected abstract IMetricCalculator CreateUsedFileStorageSpaceCalculator();
+    protected abstract IMetricCalculator CreateNumberOfStartedDeletionProcessesCalculator();
+    protected abstract IMetricCalculator CreateNumberOfCreatedDatawalletModificationsCalculator();
+    protected abstract IMetricCalculator CreateNumberOfCreatedDevicesCalculator();
+    protected abstract IMetricCalculator CreateNumberOfCreatedChallengesCalculator();
 }
