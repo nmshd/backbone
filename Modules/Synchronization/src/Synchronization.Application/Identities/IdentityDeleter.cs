@@ -17,11 +17,11 @@ public class IdentityDeleter : IIdentityDeleter
 
     public async Task Delete(IdentityAddress identityAddress, IDeletionProcessLogger deletionProcessLogger)
     {
-        await _mediator.Send(new DeleteExternalEventsOfIdentityCommand(identityAddress));
         await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.ExternalEvents);
-        await _mediator.Send(new DeleteSyncRunsOfIdentityCommand(identityAddress));
+        await _mediator.Send(new DeleteExternalEventsOfIdentityCommand(identityAddress));
         await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.SyncRuns);
-        await _mediator.Send(new DeleteDatawalletsOfIdentityCommand(identityAddress));
+        await _mediator.Send(new DeleteSyncRunsOfIdentityCommand(identityAddress));
         await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Datawallets);
+        await _mediator.Send(new DeleteDatawalletsOfIdentityCommand(identityAddress));
     }
 }
