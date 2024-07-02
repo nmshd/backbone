@@ -16,7 +16,7 @@ public class IdentityEntityTypeConfiguration : EntityEntityTypeConfiguration<Ide
         builder.HasOne<Tier>().WithMany().HasForeignKey(x => x.TierId).OnDelete(DeleteBehavior.NoAction);
         builder.HasMany(x => x.TierQuotas).WithOne().HasForeignKey(x => x.ApplyTo);
         builder.HasMany(x => x.IndividualQuotas).WithOne().HasForeignKey(x => x.ApplyTo);
-        builder.Property(x => x.Address).IsUnicode(false).IsFixedLength().HasMaxLength(IdentityAddress.MAX_LENGTH);
+        builder.Property(x => x.Address).IsUnicode(false).IsFixedLength(false).HasMaxLength(IdentityAddress.MAX_LENGTH);
         builder.Property(x => x.TierId).IsUnicode(false).IsFixedLength().HasMaxLength(20);
     }
 }

@@ -5,12 +5,12 @@ namespace Backbone.Modules.Devices.Application;
 public class ApplicationOptions
 {
     [Required]
-    [MinLength(3)]
-    [MaxLength(3)]
-    public string AddressPrefix { get; set; } = null!;
+    public PaginationOptions Pagination { get; set; } = new();
 
     [Required]
-    public PaginationOptions Pagination { get; set; } = new();
+    [MinLength(3)]
+    [MaxLength(45)]
+    public string DidDomainName { get; set; } = null!;
 }
 
 public class PaginationOptions

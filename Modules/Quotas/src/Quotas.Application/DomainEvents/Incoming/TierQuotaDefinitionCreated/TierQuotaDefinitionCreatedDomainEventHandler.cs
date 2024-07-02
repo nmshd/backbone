@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Application.Metrics;
+using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.DomainEvents.Outgoing;
 using Microsoft.Extensions.Logging;
@@ -45,7 +46,7 @@ public class TierQuotaDefinitionCreatedDomainEventHandler : IDomainEventHandler<
         await _identitiesRepository.Update(identitiesWithTier, CancellationToken.None);
 
         var identityAddresses = identitiesWithTier.Select(i => i.Address).ToList();
-        var metrics = new List<string> { tierQuotaDefinition.MetricKey.Value };
+        var metrics = new List<MetricKey> { tierQuotaDefinition.MetricKey };
         await _metricStatusesService.RecalculateMetricStatuses(identityAddresses, metrics, CancellationToken.None);
 
         _logger.LogInformation("Successfully created quotas for Identities.");
