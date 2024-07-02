@@ -21,7 +21,7 @@
         },
         "Devices": {
             "Application": {
-                "InstanceUrl": "localhost"
+                "DidDomainName": "localhost"
             },
             "Infrastructure": {
                 "SqlDatabase": {
@@ -38,7 +38,7 @@
         },
         "Messages": {
             "Application": {
-                "InstanceUrl": "localhost"
+                "DidDomainName": "localhost"
             },
             "Infrastructure": {
                 "SqlDatabase": {
