@@ -10,13 +10,13 @@ public class RelationshipStatusChangedDomainEvent : DomainEvent
         $"{relationship.Id}/StatusChanged/{relationship.AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedAt.ToUniversalString()}")
     {
         RelationshipId = relationship.Id;
-        Status = relationship.Status.ToString();
+        NewStatus = relationship.Status.ToString();
         Initiator = relationship.LastModifiedBy;
         Peer = relationship.GetPeerOf(relationship.LastModifiedBy);
     }
 
     public string RelationshipId { get; set; }
-    public string Status { get; set; }
+    public string NewStatus { get; set; }
     public string Initiator { get; set; }
     public string Peer { get; set; }
 }
