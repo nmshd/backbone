@@ -63,12 +63,16 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
         title: const Text('Create Client', textAlign: TextAlign.center),
         content: SizedBox(
           width: 500,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Gaps.h32,
               TextField(
                 controller: _clientIdController,
                 readOnly: _saveSucceeded,
@@ -160,6 +164,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                   style: TextStyle(color: Theme.of(context).colorScheme.error),
                 ),
               ],
+              Gaps.h32,
             ],
           ),
         ),
@@ -168,7 +173,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
           if (!_saveSucceeded)
             FilledButton(
               onPressed: _chosenDefaultTier != null && !_saveSucceeded && !_saving ? _createClient : null,
-              child: Text(context.l10n.save),
+              child: Text(context.l10n.create),
             ),
         ],
       ),

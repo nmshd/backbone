@@ -17,11 +17,15 @@ class _SettingsDialog extends StatelessWidget with WatchItMixin {
     final themeMode = watchValue((ThemeModeModel x) => x.themeMode);
 
     return AlertDialog(
-      title: const Text('Settings'),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      title: const Text('Settings', textAlign: TextAlign.center),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Gaps.h8,
           Text('Theme', style: Theme.of(context).textTheme.bodyLarge),
           Gaps.h4,
           SegmentedButton(
@@ -34,6 +38,7 @@ class _SettingsDialog extends StatelessWidget with WatchItMixin {
             selected: {themeMode},
             onSelectionChanged: (selected) => GetIt.I<ThemeModeModel>().setThemeMode(selected.first),
           ),
+          Gaps.h16
         ],
       ),
       actions: [FilledButton(onPressed: () => context.pop(), child: const Text('Close'))],

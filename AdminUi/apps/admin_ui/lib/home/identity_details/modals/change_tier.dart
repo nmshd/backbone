@@ -52,17 +52,26 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
         title: const Text('Change Tier', textAlign: TextAlign.center),
-        content: DropdownButtonFormField<String>(
-          value: selectedTier,
-          decoration: const InputDecoration(border: OutlineInputBorder()),
-          onChanged: _saving ? null : (String? newValue) => setState(() => selectedTier = newValue!),
-          items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned).map((TierOverview tier) {
-            return DropdownMenuItem<String>(
-              value: tier.id,
-              child: Text(tier.name),
-            );
-          }).toList(),
+        content: SizedBox(
+          width: 500,
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 32, top: 32),
+            child: DropdownButtonFormField<String>(
+              value: selectedTier,
+              decoration: const InputDecoration(border: OutlineInputBorder()),
+              onChanged: _saving ? null : (String? newValue) => setState(() => selectedTier = newValue!),
+              items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned).map((TierOverview tier) {
+                return DropdownMenuItem<String>(
+                  value: tier.id,
+                  child: Text(tier.name),
+                );
+              }).toList(),
+            ),
+          ),
         ),
         actions: [
           OutlinedButton(

@@ -22,8 +22,14 @@ class _ConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title),
-      content: Text(message),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
+      title: Text(title, textAlign: TextAlign.center),
+      content: Padding(
+        padding: const EdgeInsets.only(bottom: 32, top: 32),
+        child: Text(message),
+      ),
       actions: [
         OutlinedButton(
           onPressed: () => Navigator.of(context).pop(false),
@@ -31,7 +37,7 @@ class _ConfirmationDialog extends StatelessWidget {
         ),
         FilledButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: const Text('Confirm'),
+          child: const Text('Remove'),
         ),
       ],
     );
