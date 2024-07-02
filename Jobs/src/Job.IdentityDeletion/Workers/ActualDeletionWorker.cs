@@ -16,7 +16,7 @@ public class ActualDeletionWorker : IHostedService
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<ActualDeletionWorker> _logger;
     private readonly IDeletionProcessLogger _deletionProcessLogger;
-    private readonly List<IIdentityDeleter> _remainingIdentityDeleters;
+    private readonly List<IIdentityDeleter> _nonDeviceIdentityDeleters;
     private readonly IIdentityDeleter? _deviceIdentityDeleter;
 
     public ActualDeletionWorker(
@@ -28,9 +28,9 @@ public class ActualDeletionWorker : IHostedService
         IDeletionProcessLogger deletionProcessLogger)
     {
         _host = host;
-        _remainingIdentityDeleters = identityDeleters.ToList();
-        _deviceIdentityDeleter = _remainingIdentityDeleters.First(i => i.GetType() == typeof(Modules.Devices.Application.Identities.IdentityDeleter));
-        _remainingIdentityDeleters.Remove(_deviceIdentityDeleter);
+        _nonDeviceIdentityDeleters = identityDeleters.ToList();
+        _deviceIdentityDeleter = _nonDeviceIdentityDeleters.First(i => i.GetType() == typeof(Modules.Devices.Application.Identities.IdentityDeleter));
+        _nonDeviceIdentityDeleters.Remove(_deviceIdentityDeleter);
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
         _logger = logger;
@@ -82,7 +82,7 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task Delete(IdentityAddress identityAddress)
     {
-        foreach (var identityDeleter in _remainingIdentityDeleters)
+        foreach (var identityDeleter in _nonDeviceIdentityDeleters)
         {
             await identityDeleter.Delete(identityAddress, _deletionProcessLogger);
         }
