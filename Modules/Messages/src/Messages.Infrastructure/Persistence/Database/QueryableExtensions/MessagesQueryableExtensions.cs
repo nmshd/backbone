@@ -29,6 +29,11 @@ public static class MessagesQueryableExtensions
         return query.Where(m => m.Recipients.Any(r => r.Address == recipient && !r.ReceivedAt.HasValue));
     }
 
+    public static IQueryable<Message> WithASpecificRecipient(this IQueryable<Message> query, IdentityAddress recipient)
+    {
+        return query.Where(m => m.Recipients.Any(r => r.Address == recipient));
+    }
+
     public static IQueryable<Message> FromASpecificSender(this IQueryable<Message> query, IdentityAddress sender)
     {
         return query.Where(m => m.CreatedBy == sender);

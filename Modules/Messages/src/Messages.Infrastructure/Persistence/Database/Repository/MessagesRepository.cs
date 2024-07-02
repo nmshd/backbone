@@ -82,4 +82,12 @@ public class MessagesRepository : IMessagesRepository
             .Where(expression)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IEnumerable<Message>> FindMessagesFromSenderToRecipient(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
+    {
+        return await _messages.IncludeAll(_dbContext)
+            .FromASpecificSender(sender)
+            .WithASpecificRecipient(recipient)
+            .ToListAsync(cancellationToken);
+    }
 }
