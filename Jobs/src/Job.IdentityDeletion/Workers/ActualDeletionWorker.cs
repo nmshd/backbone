@@ -12,22 +12,29 @@ namespace Backbone.Job.IdentityDeletion.Workers;
 public class ActualDeletionWorker : IHostedService
 {
     private readonly IHostApplicationLifetime _host;
-    private readonly IEnumerable<IIdentityDeleter> _identityDeleters;
     private readonly IMediator _mediator;
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<ActualDeletionWorker> _logger;
+    private readonly IDeletionProcessLogger _deletionProcessLogger;
+    private readonly List<IIdentityDeleter> _nonDeviceIdentityDeleters;
+    private readonly IIdentityDeleter? _deviceIdentityDeleter;
 
-    public ActualDeletionWorker(IHostApplicationLifetime host,
+    public ActualDeletionWorker(
+        IHostApplicationLifetime host,
         IEnumerable<IIdentityDeleter> identityDeleters,
         IMediator mediator,
         IPushNotificationSender pushNotificationSender,
-        ILogger<ActualDeletionWorker> logger)
+        ILogger<ActualDeletionWorker> logger,
+        IDeletionProcessLogger deletionProcessLogger)
     {
         _host = host;
-        _identityDeleters = identityDeleters;
+        _nonDeviceIdentityDeleters = identityDeleters.ToList();
+        _deviceIdentityDeleter = _nonDeviceIdentityDeleters.First(i => i.GetType() == typeof(Modules.Devices.Application.Identities.IdentityDeleter));
+        _nonDeviceIdentityDeleters.Remove(_deviceIdentityDeleter);
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
         _logger = logger;
+        _deletionProcessLogger = deletionProcessLogger;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -65,6 +72,7 @@ public class ActualDeletionWorker : IHostedService
     {
         await NotifyIdentityAboutStartingDeletion(cancellationToken, identityAddress);
         await Delete(identityAddress);
+        await DeleteDeviceIdentity(identityAddress);
     }
 
     private async Task NotifyIdentityAboutStartingDeletion(CancellationToken cancellationToken, IdentityAddress identityAddress)
@@ -74,10 +82,15 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task Delete(IdentityAddress identityAddress)
     {
-        foreach (var identityDeleter in _identityDeleters)
+        foreach (var identityDeleter in _nonDeviceIdentityDeleters)
         {
-            await identityDeleter.Delete(identityAddress);
+            await identityDeleter.Delete(identityAddress, _deletionProcessLogger);
         }
+    }
+
+    private async Task DeleteDeviceIdentity(IdentityAddress identityAddress)
+    {
+        await _deviceIdentityDeleter!.Delete(identityAddress, _deletionProcessLogger);
     }
 
     private void LogErroringDeletionTriggers(IEnumerable<KeyValuePair<IdentityAddress, UnitResult<DomainError>>> erroringDeletionTriggers)

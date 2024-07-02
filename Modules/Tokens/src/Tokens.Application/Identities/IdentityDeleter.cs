@@ -13,8 +13,9 @@ public class IdentityDeleter : IIdentityDeleter
         _mediator = mediator;
     }
 
-    public async Task Delete(IdentityAddress identityAddress)
+    public async Task Delete(IdentityAddress identityAddress, IDeletionProcessLogger deletionProcessLogger)
     {
+        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Tokens);
         await _mediator.Send(new DeleteTokensOfIdentityCommand(identityAddress));
     }
 }

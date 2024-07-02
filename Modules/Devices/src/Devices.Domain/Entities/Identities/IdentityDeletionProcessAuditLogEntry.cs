@@ -191,6 +191,43 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
             DeletionProcessStatus.Approved
         );
     }
+
+    public static IdentityDeletionProcessAuditLogEntry DataDeleted(IdentityDeletionProcessId processId, IdentityAddress identityAddress, string aggregateType)
+    {
+        if (!TryGetMessageKey(aggregateType, out var messageKey))
+            throw new ArgumentException("Invalid aggregateType", nameof(aggregateType));
+
+        return new IdentityDeletionProcessAuditLogEntry(
+            processId,
+            messageKey,
+            Hasher.HashUtf8(identityAddress.Value),
+            null,
+            DeletionProcessStatus.Deleting,
+            DeletionProcessStatus.Deleting
+        );
+    }
+
+    private static bool TryGetMessageKey(string aggregateType, out MessageKey messageKey)
+    {
+        var messageKeyMappings = new Dictionary<string, MessageKey>
+        {
+            { "Challenges", MessageKey.ChallengesDeleted },
+            { "PnsRegistrations", MessageKey.PnsRegistrationsDeleted },
+            { "Identities", MessageKey.IdentitiesDeleted },
+            { "Files", MessageKey.FilesDeleted },
+            { "Messages", MessageKey.MessagesDeleted },
+            { "QuotaIdentities", MessageKey.QuotaIdentitiesDeleted },
+            { "Relationships", MessageKey.RelationshipsDeleted },
+            { "RelationshipTemplates", MessageKey.RelationshipTemplatesDeleted },
+            { "RelationshipTemplateAllocations", MessageKey.RelationshipTemplateAllocationsDeleted },
+            { "ExternalEvents", MessageKey.ExternalEventsDeleted },
+            { "SyncRuns", MessageKey.SyncRunsDeleted },
+            { "Datawallets", MessageKey.DatawalletsDeleted },
+            { "Tokens", MessageKey.TokensDeleted }
+        };
+
+        return messageKeyMappings.TryGetValue(aggregateType, out messageKey);
+    }
 }
 
 public enum MessageKey
@@ -207,5 +244,18 @@ public enum MessageKey
     ApprovalReminder3Sent = 10,
     GracePeriodReminder1Sent = 11,
     GracePeriodReminder2Sent = 12,
-    GracePeriodReminder3Sent = 13
+    GracePeriodReminder3Sent = 13,
+    ChallengesDeleted = 14,
+    PnsRegistrationsDeleted = 15,
+    IdentitiesDeleted = 16,
+    FilesDeleted = 17,
+    MessagesDeleted = 18,
+    QuotaIdentitiesDeleted = 19,
+    RelationshipsDeleted = 20,
+    RelationshipTemplatesDeleted = 21,
+    RelationshipTemplateAllocationsDeleted = 22,
+    ExternalEventsDeleted = 23,
+    SyncRunsDeleted = 24,
+    DatawalletsDeleted = 25,
+    TokensDeleted = 26
 }

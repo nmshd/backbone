@@ -205,4 +205,9 @@ public class IdentityDeletionProcess : Entity
         Status = newStatus;
         RaiseDomainEvent(new IdentityDeletionProcessStatusChangedDomainEvent(address, Id, initiator));
     }
+
+    public void LogDeletedData(IdentityAddress address, string aggregateType)
+    {
+        _auditLog.Add(IdentityDeletionProcessAuditLogEntry.DataDeleted(Id, address, aggregateType));
+    }
 }
