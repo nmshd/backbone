@@ -10,7 +10,7 @@ public class ApplicationOptions
     [Required]
     [MinLength(3)]
     [MaxLength(45)]
-    public string InstanceUrl { get; set; } = null!;
+    public string DidDomainName { get; set; } = null!;
 }
 
 public class PaginationOptions
