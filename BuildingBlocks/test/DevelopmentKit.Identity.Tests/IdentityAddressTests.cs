@@ -47,7 +47,7 @@ public class IdentityAddressTests : AbstractTestsBase
     public void AddressIsCreatedCorrectly()
     {
         var testData = TestData.Valid();
-        var address = IdentityAddress.Create(testData.PublicKey, testData.InstanceUrl);
+        var address = IdentityAddress.Create(testData.PublicKey, testData.DidDomainName);
 
         address.Value.Should().Be(testData.Address);
     }
@@ -56,7 +56,7 @@ public class IdentityAddressTests : AbstractTestsBase
     public void EfConverterWorksCorrectly()
     {
         var testData = TestData.Valid();
-        var address = IdentityAddress.Create(testData.PublicKey, testData.InstanceUrl);
+        var address = IdentityAddress.Create(testData.PublicKey, testData.DidDomainName);
 
         address.Value.Should().Be(testData.Address);
     }
@@ -91,7 +91,7 @@ public class IdentityAddressTests : AbstractTestsBase
 
 internal class TestData
 {
-    public required string InstanceUrl { get; set; }
+    public required string DidDomainName { get; set; }
     public required byte[] PublicKey { get; set; }
 
     public required string Address { get; set; }
@@ -105,7 +105,7 @@ internal class TestData
             Address = "did:e:prod.enmeshed.eu:dids:56b3f2a0c202e27229aa87",
             PublicKey = Convert.FromBase64String("tB9KFp/YqHrom3m5qUuZsd6l30DkaNjN14SxRw7YZuI="),
             Checksum = "87",
-            InstanceUrl = "prod.enmeshed.eu"
+            DidDomainName = "prod.enmeshed.eu"
         };
     }
 
@@ -116,7 +116,7 @@ internal class TestData
             Address = "did:e:prod.enmeshed.eu:dids:56b3f2a0c202e27d39aa87",
             PublicKey = Convert.FromBase64String("tB9KFp/YqHrom3m5qUuZsd6l30DkaNjN14SxRw7YZuI="),
             Checksum = "87",
-            InstanceUrl = "prod.enmeshed.eu"
+            DidDomainName = "prod.enmeshed.eu"
         };
     }
 
@@ -127,7 +127,7 @@ internal class TestData
             Address = "did:e:prod.enmeshed.eu:dids:56b3f2a0c202e27229aa55",
             PublicKey = Convert.FromBase64String("tB9KFp/YqHrom3m5qUuZsd6l30DkaNjN14SxRw7YZuI="),
             Checksum = "55",
-            InstanceUrl = "prod.enmeshed.eu"
+            DidDomainName = "prod.enmeshed.eu"
         };
     }
 }
