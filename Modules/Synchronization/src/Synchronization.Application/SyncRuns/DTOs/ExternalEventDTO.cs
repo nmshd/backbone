@@ -17,9 +17,13 @@ public class ExternalEventDTO : IHaveCustomMapping
     {
         configuration.CreateMap<ExternalEventType, string>().ConvertUsing((externalEventType, _) => externalEventType switch
         {
-            ExternalEventType.MessageDelivered => "MessageDelivered",
             ExternalEventType.MessageReceived => "MessageReceived",
+            ExternalEventType.MessageDelivered => "MessageDelivered",
+
             ExternalEventType.RelationshipStatusChanged => "RelationshipStatusChanged",
+            ExternalEventType.RelationshipReactivationRequested => "RelationshipReactivationRequested",
+            ExternalEventType.RelationshipReactivationCompleted => "RelationshipReactivationCompleted",
+
             ExternalEventType.IdentityDeletionProcessStarted => "IdentityDeletionProcessStarted",
             ExternalEventType.IdentityDeletionProcessStatusChanged => "IdentityDeletionProcessStatusChanged",
             ExternalEventType.RelationshipReactivationRequested => "RelationshipReactivationRequested",
