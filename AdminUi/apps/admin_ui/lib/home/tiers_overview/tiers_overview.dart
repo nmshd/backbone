@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
+import '/core/core.dart';
 import 'modals/show_create_tier_dialog.dart';
 
 class TiersOverview extends StatefulWidget {
@@ -50,11 +51,11 @@ class _TiersOverviewState extends State<TiersOverview> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Tiers',
+                    context.l10n.tiers,
                     style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontSize: 30),
                   ),
                   Text(
-                    'A list of all Tiers',
+                    context.l10n.tiersOverview_title_description,
                     style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontSize: 13),
                   ),
                 ],
@@ -87,10 +88,10 @@ class _TiersOverviewState extends State<TiersOverview> {
                   child: DataTable2(
                     isVerticalScrollBarVisible: true,
                     showCheckboxColumn: false,
-                    empty: const Text('No tiers found.'),
-                    columns: const [
-                      DataColumn2(label: Text('Name'), size: ColumnSize.L),
-                      DataColumn2(label: Text('Number of Identities'), size: ColumnSize.L),
+                    empty: Text(context.l10n.tiersOverview_noTiersFound),
+                    columns: [
+                      DataColumn2(label: Text(context.l10n.name), size: ColumnSize.L),
+                      DataColumn2(label: Text(context.l10n.numberOfIdentities), size: ColumnSize.L),
                     ],
                     rows: _tiers!
                         .map(

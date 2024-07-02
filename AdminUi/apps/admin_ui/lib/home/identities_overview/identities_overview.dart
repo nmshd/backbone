@@ -35,7 +35,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('A list of existing Identities')),
+      appBar: AppBar(title: Text(context.l10n.identityOverview_title)),
       body: Card(
         child: Padding(
           padding: const EdgeInsets.all(8),

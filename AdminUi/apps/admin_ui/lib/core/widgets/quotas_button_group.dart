@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
 import '../constants.dart';
+import '../extensions.dart';
 import '../modals/modals.dart';
 
 class QuotasButtonGroup extends StatefulWidget {
@@ -62,9 +63,9 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
   Future<void> _removeSelectedQuotas() async {
     final confirmed = await showConfirmationDialog(
       context: context,
-      title: 'Remove Quotas',
+      title: context.l10n.quotaButtonGroup_removeQuotas_title,
       message:
-          'Are you sure you want to remove the selected quotas from ${widget.identityAddress != null ? 'the identity "${widget.identityAddress}"' : 'the tier "${widget.tierId}"'}?',
+          '${context.l10n.quotaButtonGroup_deletionMessage} ${widget.identityAddress != null ? '${context.l10n.quotaButtonGroup_theIdentity} "${widget.identityAddress}"' : '${context.l10n.quotaButtonGroup_theTier} "${widget.tierId}"'}?',
     );
 
     if (!confirmed) return;
@@ -73,8 +74,8 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
       final result = await _deleteQuota(quota);
       if (result.hasError && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An error occurred while deleting the quota(s). Please try again.'),
+          SnackBar(
+            content: Text(context.l10n.quotaButtonGroup_errorDeletingQuota),
             showCloseIcon: true,
           ),
         );
@@ -87,8 +88,8 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
     widget.selectedQuotas.clear();
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Selected quota(s) have been removed.'),
+        SnackBar(
+          content: Text(context.l10n.quotaButtonGroup_selectedQuotaRemoved),
           showCloseIcon: true,
         ),
       );

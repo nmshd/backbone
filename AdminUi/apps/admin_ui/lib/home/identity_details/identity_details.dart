@@ -127,7 +127,7 @@ class _IdentityDetailsCard extends StatelessWidget {
                       Gaps.w16,
                       CopyToClipboardButton(
                         clipboardText: identityDetails.address,
-                        successMessage: 'Identity address copied to clipboard.',
+                        successMessage: context.l10n.identityDetails_card_identityClipboardMessage,
                       ),
                     ],
                   ),
@@ -138,26 +138,26 @@ class _IdentityDetailsCard extends StatelessWidget {
                     runSpacing: 8,
                     children: [
                       _IdentityDetails(
-                        title: 'Client ID',
+                        title: context.l10n.clientID,
                         value: identityDetails.clientId,
                       ),
                       _IdentityDetails(
-                        title: 'Public Key',
+                        title: context.l10n.identityDetails_card_publicKey,
                         value: identityDetails.publicKey.ellipsize(20),
                         onIconPressed: () => context.setClipboardDataWithSuccessNotification(
                           clipboardText: identityDetails.publicKey,
-                          successMessage: 'Public key copied to clipboard.',
+                          successMessage: context.l10n.identityDetails_card_publicKey_copyToClipboardMessage,
                         ),
                         icon: Icons.copy,
-                        tooltipMessage: 'Copy public key',
+                        tooltipMessage: context.l10n.identityDetails_card_publicKey_tooltipMessage,
                       ),
                       _IdentityDetails(
-                        title: 'Created at',
+                        title: context.l10n.createdAt,
                         value:
                             '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(identityDetails.createdAt)} ${DateFormat.Hms().format(identityDetails.createdAt)}',
                       ),
                       _IdentityDetails(
-                        title: 'Tier',
+                        title: context.l10n.tier,
                         value: currentTier.name,
                         onIconPressed: currentTier.canBeManuallyAssigned
                             ? () => showChangeTierDialog(
@@ -168,7 +168,7 @@ class _IdentityDetailsCard extends StatelessWidget {
                                 )
                             : null,
                         icon: Icons.edit,
-                        tooltipMessage: 'Change tier',
+                        tooltipMessage: context.l10n.changeTier,
                       ),
                     ],
                   ),
