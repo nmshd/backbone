@@ -211,19 +211,19 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     {
         var messageKeyMappings = new Dictionary<string, MessageKey>
         {
-            { "Challenges", MessageKey.Challenges },
-            { "PnsRegistrations", MessageKey.PnsRegistrations },
-            { "Identities", MessageKey.Identities },
-            { "Files", MessageKey.Files },
-            { "Messages", MessageKey.Messages },
-            { "QuotaIdentities", MessageKey.QuotaIdentities },
-            { "Relationships", MessageKey.Relationships },
-            { "RelationshipTemplates", MessageKey.RelationshipTemplates },
-            { "RelationshipTemplateAllocations", MessageKey.RelationshipTemplateAllocations },
-            { "ExternalEvents", MessageKey.ExternalEvents },
-            { "SyncRuns", MessageKey.SyncRuns },
-            { "Datawallets", MessageKey.Datawallets },
-            { "Tokens", MessageKey.Tokens }
+            { "Challenges", MessageKey.ChallengesDeleted },
+            { "PnsRegistrations", MessageKey.PnsRegistrationsDeleted },
+            { "Identities", MessageKey.IdentitiesDeleted },
+            { "Files", MessageKey.FilesDeleted },
+            { "Messages", MessageKey.MessagesDeleted },
+            { "QuotaIdentities", MessageKey.QuotaIdentitiesDeleted },
+            { "Relationships", MessageKey.RelationshipsDeleted },
+            { "RelationshipTemplates", MessageKey.RelationshipTemplatesDeleted },
+            { "RelationshipTemplateAllocations", MessageKey.RelationshipTemplateAllocationsDeleted },
+            { "ExternalEvents", MessageKey.ExternalEventsDeleted },
+            { "SyncRuns", MessageKey.SyncRunsDeleted },
+            { "Datawallets", MessageKey.DatawalletsDeleted },
+            { "Tokens", MessageKey.TokensDeleted }
         };
 
         return messageKeyMappings.TryGetValue(aggregateType, out messageKey);
@@ -245,17 +245,17 @@ public enum MessageKey
     GracePeriodReminder1Sent = 11,
     GracePeriodReminder2Sent = 12,
     GracePeriodReminder3Sent = 13,
-    Challenges = 14,
-    PnsRegistrations = 15,
-    Identities = 16,
-    Files = 17,
-    Messages = 18,
-    QuotaIdentities = 19,
-    Relationships = 20,
-    RelationshipTemplates = 21,
-    RelationshipTemplateAllocations = 22,
-    ExternalEvents = 23,
-    SyncRuns = 24,
-    Datawallets = 25,
-    Tokens = 26
+    ChallengesDeleted = 14,
+    PnsRegistrationsDeleted = 15,
+    IdentitiesDeleted = 16,
+    FilesDeleted = 17,
+    MessagesDeleted = 18,
+    QuotaIdentitiesDeleted = 19,
+    RelationshipsDeleted = 20,
+    RelationshipTemplatesDeleted = 21,
+    RelationshipTemplateAllocationsDeleted = 22,
+    ExternalEventsDeleted = 23,
+    SyncRunsDeleted = 24,
+    DatawalletsDeleted = 25,
+    TokensDeleted = 26
 }
