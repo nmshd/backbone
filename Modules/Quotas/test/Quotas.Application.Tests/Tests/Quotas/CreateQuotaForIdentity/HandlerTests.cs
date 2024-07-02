@@ -14,6 +14,7 @@ using FakeItEasy;
 using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
+using static Backbone.UnitTestTools.Data.TestDataGenerator;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Quotas.CreateQuotaForIdentity;
@@ -27,13 +28,13 @@ public class HandlerTests : AbstractTestsBase
         const int max = 5;
         const QuotaPeriod period = QuotaPeriod.Month;
         var metricKey = MetricKey.NumberOfSentMessages.Value;
-        var identityAddress = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
+
         var tierId = TierId.Parse("TIRsomeTierId1111111");
-        var command = new CreateQuotaForIdentityCommand(identityAddress, metricKey, max, period);
-        var identity = new Identity("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", tierId);
+        var identity = new Identity(CreateRandomIdentityAddress(), tierId);
+        var command = new CreateQuotaForIdentityCommand(identity.Address, metricKey, max, period);
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.Find(identityAddress, A<CancellationToken>._, A<bool>._)).Returns(identity);
+        A.CallTo(() => identitiesRepository.Find(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
         var handler = CreateHandler(identitiesRepository, metricsRepository);
@@ -48,7 +49,7 @@ public class HandlerTests : AbstractTestsBase
         response.Metric.Key.Should().Be(metricKey);
 
         A.CallTo(() => identitiesRepository.Update(A<Identity>.That.Matches(t =>
-                t.Address == identityAddress &&
+                t.Address == identity.Address &&
                 t.TierId == tierId &&
                 t.IndividualQuotas.Count == 1)
             , CancellationToken.None)
@@ -59,12 +60,13 @@ public class HandlerTests : AbstractTestsBase
     public void Create_quota_with_invalid_metric_key_throws_domain_exception()
     {
         // Arrange
-        var command = new CreateQuotaForIdentityCommand(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
-        var identity = new Identity("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", TierId.Parse("TIRsomeTierId1111111"));
-        var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.Find("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", A<CancellationToken>._, A<bool>._)).Returns(identity);
-
+        var identity = new Identity(CreateRandomIdentityAddress(), TierId.Parse("TIRsomeTierId1111111"));
+        var command = new CreateQuotaForIdentityCommand(identity.Address, "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
+
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.Find(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
+
         var handler = CreateHandler(identitiesRepository, metricsRepository);
 
         // Act
@@ -78,7 +80,7 @@ public class HandlerTests : AbstractTestsBase
     public void Create_quota_for_non_existent_identity_throws_not_found_exception()
     {
         // Arrange
-        var command = new CreateQuotaForIdentityCommand(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
+        var command = new CreateQuotaForIdentityCommand(IdentityAddress.Parse(CreateRandomIdentityAddress()), "An-Invalid-Metric-Key", 5, QuotaPeriod.Month);
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Find(A<string>._, A<CancellationToken>._, A<bool>._)).Returns((Identity?)null);
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
@@ -97,13 +99,13 @@ public class HandlerTests : AbstractTestsBase
     public async Task Updates_metric_statuses_after_creating_quota_for_identity()
     {
         // Arrange
-        var metricKey = MetricKey.NumberOfSentMessages.Value;
-        var identityAddress = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
-        var command = new CreateQuotaForIdentityCommand(identityAddress, metricKey, 5, QuotaPeriod.Month);
-        var identity = new Identity("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j", TierId.Parse("TIRsomeTierId1111111"));
+        var metricKey = MetricKey.NumberOfSentMessages;
+        var tierId = TierId.Parse("TIRsomeTierId1111111");
+        var identity = new Identity(CreateRandomIdentityAddress(), tierId);
+        var command = new CreateQuotaForIdentityCommand(identity.Address, metricKey.Value, 5, QuotaPeriod.Month);
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.Find(identityAddress, A<CancellationToken>._, A<bool>._)).Returns(identity);
+        A.CallTo(() => identitiesRepository.Find(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
         var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
         var metricStatusesService = A.Fake<IMetricStatusesService>();
         var handler = CreateHandler(identitiesRepository, metricsRepository, metricStatusesService);
@@ -113,8 +115,8 @@ public class HandlerTests : AbstractTestsBase
 
         // Assert
         A.CallTo(() => metricStatusesService.RecalculateMetricStatuses(
-            A<List<string>>.That.Matches(x => x.Contains(identityAddress.Value)),
-            A<List<string>>.That.Contains(metricKey),
+            A<List<string>>.That.Matches(x => x.Contains(identity.Address)),
+            A<List<MetricKey>>.That.Contains(metricKey),
             A<CancellationToken>._)
         ).MustHaveHappened();
     }
