@@ -3,5 +3,18 @@
     "cancel": "Cancel",
     "close": "Close",
     "save": "Save",
-    "yes": "Yes"
+    "yes": "Yes",
+    "peer": "Peer",
+    "requestedBy": "Requested By",
+    "templateId": "Template ID",
+    "status": "Status",
+    "creationDate": "Creation Date",
+    "answeredAt": "Answered At",
+    "createdByDevice": "Created By Device",
+    "answeredByDevice": "Answered By Device",
+    "empty_relationship_table": "No relationships for this identity found.",
+    "retry": "Retry",
+    "relationships": "Relationships",
+    "view_identity_relationships": "View relationships of this identity",
+    "error_loading_data": "An error occurred loading data."
 }
