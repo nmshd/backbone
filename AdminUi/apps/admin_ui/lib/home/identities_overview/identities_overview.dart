@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
+import 'deletion_process_audit_logs/deletion_process_audit_logs.dart';
 
 class IdentitiesOverview extends StatefulWidget {
   const IdentitiesOverview({super.key});
@@ -12,8 +13,8 @@ class IdentitiesOverview extends StatefulWidget {
 }
 
 class _IdentitiesOverviewState extends State<IdentitiesOverview> {
-  late final ScrollController _scrollController;
   late IdentityDataTableSource _dataSource;
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
@@ -49,7 +50,6 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
         child: SingleChildScrollView(
           controller: _scrollController,
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Card(
                 child: Padding(
@@ -64,11 +64,16 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
                             ..refreshDatasource();
                         },
                       ),
-                      Expanded(child: IdentitiesDataTable(dataSource: _dataSource)),
+                      SizedBox(
+                        height: 700,
+                        child: IdentitiesDataTable(dataSource: _dataSource),
+                      ),
                     ],
                   ),
                 ),
               ),
+              Gaps.h16,
+              const DeletionProcessAuditLogs(),
             ],
           ),
         ),
