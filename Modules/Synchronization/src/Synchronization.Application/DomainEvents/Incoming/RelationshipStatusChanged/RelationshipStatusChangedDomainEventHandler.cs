@@ -19,6 +19,12 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
 
     public async Task Handle(RelationshipStatusChangedDomainEvent @event)
     {
+        // if the relationship is in status "ReadyForDeletion", the peer doesn't know anything about it; therefore we must not create an external event
+        if (@event.NewStatus == "ReadyForDeletion")
+        {
+            return;
+        }
+
 #pragma warning disable IDE0037
         var payload = new { RelationshipId = @event.RelationshipId };
 #pragma warning restore IDE0037
