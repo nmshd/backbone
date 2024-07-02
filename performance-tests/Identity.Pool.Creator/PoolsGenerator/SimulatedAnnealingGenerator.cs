@@ -1,4 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Diagnostics.Metrics;
+using System.Diagnostics.SymbolStore;
+using System.Linq;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.Identity.Pool.Creator.Application.Checkers;
 using Backbone.Identity.Pool.Creator.Application.Printer;
@@ -23,7 +27,10 @@ public class SimulatedAnnealingPoolsGenerator
     private List<PoolEntry> Pools { get; }
     private List<Identity> Identities { get; }
 
-    private readonly Dictionary<string, Identity> _identitiesDictionary;
+    private readonly Dictionary<uint, Identity> _identitiesDictionary;
+    private readonly Dictionary<uint, Identity> _appIdentitiesDictionary;
+    private readonly Dictionary<uint, Identity> _connectorIdentitiesDictionary;
+
 
     private const bool P = false;
 
@@ -43,7 +50,9 @@ public class SimulatedAnnealingPoolsGenerator
 
         _localRandom = new Random();
         Identities = Pools.SelectMany(p => p.Identities).ToList();
-        _identitiesDictionary = Identities.ToDictionary(i => i.Address);
+        _identitiesDictionary = Identities.ToDictionary(i => i.Uon);
+        _appIdentitiesDictionary = Identities.Where(i => i.Pool.IsApp()).ToDictionary(i => i.Uon);
+        _connectorIdentitiesDictionary = Identities.Where(i => i.Pool.IsConnector()).ToDictionary(i => i.Uon);
     }
 
     private readonly Random _localRandom;
@@ -52,35 +61,37 @@ public class SimulatedAnnealingPoolsGenerator
     {
         Generate();
 
-        var (success, messages) = Pools.CheckSolution();
-        if (!success)
-        {
-            Console.WriteLine("Solution validation failed.");
+        //var (success, messages) = Pools.CheckSolution();
+        //if (!success)
+        //{
+        //    Console.WriteLine("Solution validation failed.");
 
-            foreach (var message in messages)
-            {
-                Console.WriteLine(message);
-            }
-        }
+        //    foreach (var message in messages)
+        //    {
+        //        Console.WriteLine(message);
+        //    }
+        //}
 
-        _printer.PrintRelationships(Pools, summaryOnly: false);
-        _printer.PrintMessages(Pools, summaryOnly: false);
+        //_printer.PrintRelationships(Pools, summaryOnly: false);
+        //_printer.PrintMessages(Pools, summaryOnly: false);
     }
 
-    public void Generate(double initialTemperature = 1500d, ulong maxIterations = 500000)
+    public void Generate(double initialTemperature = 20d, ulong maxIterations = 5000000)
     {
         var currentSolution = GenerateInitialSolution();
 
-        var currentScore = CalculateCore(currentSolution);
+        var currentScore = CalculateCore(currentSolution, _identitiesDictionary);
         var temperature = initialTemperature;
 
         for (ulong i = 0; i < maxIterations; i++)
         {
+            if (P) Console.Write($"Temp: {temperature:F3} Score:{currentScore}, solution m: {currentSolution.GetSentMessagesCount():D4}, r:{currentSolution.GetRelationshipCount():D4}. Next action: ");
+
             var nextSolution = GetNextState(currentSolution);
             if (nextSolution is null) continue;
-            var nextScore = CalculateCore(nextSolution);
+            var nextScore = CalculateCore(nextSolution, _identitiesDictionary);
 
-            if (P) Console.Write($"\n\tTemp: {temperature} Score:{currentScore}, next action: ");
+            if (P) Console.Write($" Next score is {nextScore}");
 
             // Positive delta means the next solution is better than the previous
             var delta = nextScore - currentScore;
@@ -93,10 +104,10 @@ public class SimulatedAnnealingPoolsGenerator
             }
             else
             {
-                var probability = delta == 0 ? 0 : Math.Exp(delta / temperature);
+                var probability = delta == 0 ? 0.4 : Math.Exp(delta / temperature);
                 var randomProbabilityAcceptance = _localRandom.NextDouble();
 
-                if (probability > randomProbabilityAcceptance)
+                if (probability / 2 > randomProbabilityAcceptance)
                 {
                     currentScore = nextScore;
                     currentSolution = nextSolution;
@@ -104,82 +115,112 @@ public class SimulatedAnnealingPoolsGenerator
                 }
                 else
                 {
-                    if (P) Console.WriteLine(" - rejected");
+                    if (P) Console.WriteLine(" - rejected due to probability");
                 }
             }
 
             temperature = initialTemperature * Math.Pow(1 / initialTemperature, i / (double)maxIterations);
         }
 
-        currentSolution.Print(_identitiesDictionary);
+        currentSolution.Print(_identitiesDictionary, Pools);
     }
 
     private SolutionRepresentation? GetNextState(SolutionRepresentation currentSolution)
     {
-        if (P) Console.Write("Next move is: ");
         if (currentSolution.Clone() is not SolutionRepresentation solution || solution.GetType() != typeof(SolutionRepresentation))
             return null;
 
         if (_localRandom.NextBoolean())
         {
             // Will mess with messages
-            if (_localRandom.NextBoolean())
+            if (_localRandom.NextDouble() > 0.80)
             {
                 // will remove a message
                 solution.RemoveRandomMessage();
-                if (P) Console.Write("remove message");
+                if (P) Console.Write("rmv msg");
             }
             else
             {
                 // will add a message
-                solution.SendMessage(_localRandom.GetRandomElement(Identities).Address, _localRandom.GetRandomElement(Identities).Address);
-                if (P) Console.Write("add message");
+                if (_localRandom.NextBoolean())
+                    solution.SendMessage(_localRandom.GetRandomElement(_appIdentitiesDictionary).Uon, _localRandom.GetRandomElement(_connectorIdentitiesDictionary).Uon);
+                else
+                    solution.SendMessage(_localRandom.GetRandomElement(_connectorIdentitiesDictionary).Uon, _localRandom.GetRandomElement(_appIdentitiesDictionary).Uon);
+
+                if (P) Console.Write("add msg");
             }
         }
         else
         {
             // Will mess with relationships
-            if (_localRandom.NextBoolean())
+            if (_localRandom.NextDouble() > 0.80)
             {
                 // will remove a relationship
                 solution.RemoveRandomRelationship();
-                if (P) Console.Write("remove relationship");
+                if (P) Console.Write("rmv rel");
             }
             else
             {
                 // will add a relationship
-                solution.EstablishRelationship(_localRandom.GetRandomElement(Identities).Address, _localRandom.GetRandomElement(Identities).Address);
-                if (P) Console.Write("add relationship");
+                var flag = false;
+                var i = 0;
+                do
+                {
+                    var i1 = _localRandom.GetRandomElement(_appIdentitiesDictionary);
+                    if (i1.Pool.NumberOfRelationships * TOLERANCE <= solution.GetNumberOfRelatedIdentities(i1.Uon)) continue;
+
+                    // if the selected identity has capacity for further relationships
+                    var i2 = _localRandom.GetRandomElement(_connectorIdentitiesDictionary);
+
+                    solution.EstablishRelationship(i1.Uon, i2.Uon);
+                    flag = true;
+
+                } while (!flag && i++ < 20);
+
+                if (P) Console.Write("add rel");
             }
         }
 
         return solution;
     }
 
-    private long CalculateCore(SolutionRepresentation solution)
+    private const double TOLERANCE = 1.05;
+
+    private long CalculateCore(SolutionRepresentation solution, IDictionary<uint, Identity> identities)
     {
         var relationshipsTarget = Pools.ExpectedNumberOfRelationships();
         var sentMessagesTarget = Pools.ExpectedNumberOfSentMessages();
 
-        var validMessageCount = solution.GetNumberOfMessagesSentWithinRelationship();
-        var invalidMessageCount = solution.GetNumberOfMessagesSentOutsideRelationship();
+        var messagesScore = 0;
+        var messageSentCountByIdentity = solution.GetMessageSendCountByIdentity();
+
+        foreach (var (identity, messageSentCount) in messageSentCountByIdentity)
+        {
+
+            var diff = Convert.ToInt32(messageSentCount) - Convert.ToInt32(identities[identity].Pool.NumberOfSentMessages);
+            if (diff > 0)
+            {
+                messagesScore -= 3 * diff;
+            }
+        }
 
         var invalidRelationshipCount = solution.GetInvalidRelationshipCount(_identitiesDictionary);
         var validRelationshipCount = solution.GetRelationshipCount() - invalidRelationshipCount;
 
-        return -10 * invalidMessageCount + 5 * validMessageCount +
-               -8 * invalidRelationshipCount + 3 * validRelationshipCount;
+        return -8 * invalidRelationshipCount + 3 * validRelationshipCount - 4 * Math.Abs(relationshipsTarget - solution.GetRelationshipCount()) - 8 * Math.Abs(sentMessagesTarget - solution.GetSentMessagesCount()) + messagesScore;
     }
 
     private SolutionRepresentation GenerateInitialSolution()
     {
         var solution = new SolutionRepresentation();
-        solution.EstablishRelationship(_localRandom.GetRandomElement(Identities).Address, _localRandom.GetRandomElement(Identities).Address);
+        solution.EstablishRelationship(_localRandom.GetRandomElement(Identities).Uon, _localRandom.GetRandomElement(Identities).Uon);
         return solution;
     }
 
     private void CreateIdentities()
     {
+        uint globalIterator = 0;
+
         foreach (var poolEntry in Pools.Where(p => p.Amount > 0))
         {
             for (uint i = 0; i < poolEntry.Amount; i++)
@@ -189,7 +230,8 @@ public class SimulatedAnnealingPoolsGenerator
                         "ID1" + PasswordHelper.GeneratePassword(16, 16),
                         "DVC" + PasswordHelper.GeneratePassword(8, 8),
                         poolEntry,
-                        i
+                        i,
+                        globalIterator++
                     )
                 );
             }
@@ -199,205 +241,137 @@ public class SimulatedAnnealingPoolsGenerator
 
 public class SolutionRepresentation : ICloneable
 {
-    private Stopwatch CreatedAt = Stopwatch.StartNew();
+    private readonly Stopwatch _createdAt = Stopwatch.StartNew();
 
-    private ulong RelationshipCount = 0;
-    private ulong MessagesCount = 0;
+    private ulong _relationshipCount = 0;
+    private ulong _messagesCount = 0;
 
-    private Dictionary<string, bool> Relationships { get; } = new();
-
-    private Dictionary<string, IList<string>?> Messages { get; } = new();
+    /// <summary>
+    /// Relationships & Messages
+    /// The key represents a pair of identities by their UON.
+    /// The value determines the number of messages exchanged between a & b.
+    /// Reflection is an issue and must be handled carefully.
+    /// This can never happen:  a == b
+    /// This approach ensures that messages can only be sent in the context of a relationship (a mandatory requisite).
+    /// </summary>
+    /// <see cref="Identity.Uon"/>
+    private Dictionary<(uint a, uint b), uint> RaM { get; } = new();
 
     private readonly Random _localRandom = new();
 
-    public bool EstablishRelationship(string identity1, string identity2)
+    public SolutionRepresentation(Dictionary<(uint a, uint b), uint>? ram = null, Stopwatch? createdAt = null, (ulong relationshipCount, ulong messagesCount)? counters = null)
     {
-        var identityPairRepresentation = GetIdentityPairRepresentation(identity1, identity2);
-        return EstablishRelationship(identityPairRepresentation);
+        if (ram is not null) RaM = ram.ToDictionary(entry => entry.Key, entry => entry.Value);
+        if (counters.HasValue)
+        {
+            _relationshipCount = counters.Value.relationshipCount;
+            _messagesCount = counters.Value.messagesCount;
+        }
+
+        if (createdAt is not null) _createdAt = createdAt;
     }
 
-    public TimeSpan GetTimeSinceStart() => CreatedAt.Elapsed;
-    public bool RemoveRelationship(string identity1, string identity2)
+    public bool EstablishRelationship(uint identity1, uint identity2)
     {
-        if (RelationshipCount <= 0)
+        if (RaM.ContainsKey((identity1, identity2)))
+        {
+            // relationship already exists
+            return false;
+        }
+
+        if (identity1 == identity2)
             return false;
 
-        var identityPairRepresentation = GetIdentityPairRepresentation(identity1, identity2);
+        RaM[(identity1, identity2)] = 0;
+        RaM[(identity2, identity1)] = 0;
 
-        if (!Relationships.ContainsKey(identityPairRepresentation) || Relationships[identityPairRepresentation] == false)
-            return false;
-
-        Relationships[identityPairRepresentation] = false;
-
-        RelationshipCount--;
-
+        _relationshipCount++;
         return true;
     }
 
+    public TimeSpan GetTimeSinceStart() => _createdAt.Elapsed;
 
-    public bool SendMessage(string identityFrom, string identityTo)
+    /// <summary></summary>
+    /// <param name="identity1"></param>
+    /// <param name="identity2"></param>
+    /// <returns>
+    /// -1 in case of error. Otherwise, the number of messages deleted along with the relationship.
+    /// </returns>
+    public int RemoveRelationship(uint identity1, uint identity2)
     {
-        //if (!Relationships.ContainsKey(GetIdentityPairRepresentation(identityFrom, identityTo)))
-        //    return false;
+        if (_relationshipCount <= 0 || !RaM.ContainsKey((identity1, identity2)))
+            return -1;
 
-        InsertIntoDictionaryOfLists(identityFrom, identityTo);
+        var messageCount = RaM[(identity1, identity2)] + RaM[(identity2, identity1)];
 
-        MessagesCount++;
+        RaM.Remove((identity1, identity2));
+        RaM.Remove((identity2, identity1));
+        _messagesCount -= messageCount;
+        _relationshipCount--;
+        return Convert.ToInt32(messageCount);
+    }
 
+    public bool SendMessage(uint identityFrom, uint identityTo)
+    {
+        if (!EstablishRelationship(identityFrom, identityTo)) return false;
+
+        RaM[(identityFrom, identityTo)]++;
+        _messagesCount++;
         return true;
     }
 
-    public bool RemoveMessage(string identityFrom, string identityTo)
+    public bool RemoveMessage(uint identityFrom, uint identityTo)
     {
-        if (!Messages.ContainsKey(identityFrom) && !Messages[identityFrom]!.Contains(identityTo))
+        if (!RaM.ContainsKey((identityFrom, identityTo)))
             return false;
 
-        MessagesCount--;
-
-        return Messages[identityFrom]!.Remove(identityTo);
-    }
-
-    private void InsertIntoDictionaryOfLists(string identityFrom, string identityTo)
-    {
-        if (!Messages.TryAdd(identityFrom, new List<string> { identityTo }))
-        {
-            Messages[identityFrom]!.Add(identityTo);
-        }
-    }
-
-    private static string GetIdentityPairRepresentation(string identity1, string identity2)
-    {
-        return string.CompareOrdinal(identity1, identity2) > 0 ? identity2 + identity1 : identity1 + identity2;
-    }
-
-    private static (string, string) ReverseIdentityPairRepresentation(string identityPairRepresentation)
-    {
-        var length = identityPairRepresentation.Length;
-        var half = length / 2;
-        return (identityPairRepresentation[..half], identityPairRepresentation[half..]);
-    }
-
-    public long GetNumberOfSentMessages()
-    {
-        return Messages.Where(m => m.Value is not null).SelectMany(m => m.Value!).Count();
-    }
-
-    public long GetNumberOfMessagesSentWithinRelationship()
-    {
-        var res = 0;
-
-        foreach (var (sender, recipients) in Messages)
-        {
-            if (recipients is null || recipients.Count == 0) continue;
-
-            foreach (var recipient in recipients)
-            {
-                if (Relationships.TryGetValue(GetIdentityPairRepresentation(sender, recipient), out var hasRelationship) && hasRelationship)
-                    res++;
-            }
-        }
-
-        return res;
-    }
-
-    public long GetNumberOfMessagesSentOutsideRelationship()
-    {
-        var res = 0;
-
-        foreach (var (sender, recipients) in Messages)
-        {
-            if (recipients is null || recipients.Count == 0) continue;
-
-            foreach (var recipient in recipients)
-            {
-                if (!Relationships.TryGetValue(GetIdentityPairRepresentation(sender, recipient), out var hasRelationship) || !hasRelationship)
-                    res++;
-            }
-        }
-
-        return res;
+        RaM[(identityFrom, identityTo)]--;
+        _messagesCount--;
+        return true;
     }
 
     public object Clone()
     {
-        var ret = new SolutionRepresentation();
-
-        foreach (var relationship in Relationships)
-        {
-            ret.EstablishRelationship(relationship.Key);
-        }
-
-        foreach (var message in Messages)
-        {
-            if (message.Value is null) continue;
-            foreach (var recipient in message.Value)
-            {
-                ret.SendMessage(message.Key, recipient);
-            }
-        }
-
+        var ret = new SolutionRepresentation(RaM, counters: (relationshipCount: _relationshipCount, messagesCount: _messagesCount));
         return ret;
     }
 
     public void RemoveRandomMessage()
     {
-        if (MessagesCount <= 0) return;
+        if (_messagesCount <= 0) return;
 
-        var validMessages = Messages.Where(m => m.Value is not null && m.Value.Count > 0).ToList();
-        var it = _localRandom.GetRandomElement(validMessages);
-        RemoveMessage(it.Key, _localRandom.GetRandomElement(it.Value!));
+        var raMWithMessages = RaM.Where(m => m.Value > 0).ToDictionary();
+        var tuple = _localRandom.GetRandomKey(raMWithMessages);
+        RemoveMessage(tuple.a, tuple.b);
     }
 
-    public bool RemoveRandomRelationship()
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <returns>
+    /// -1 in case of error. Otherwise, the number of messages deleted along with the relationship.
+    /// </returns>
+    public int RemoveRandomRelationship()
     {
-        if (RelationshipCount <= 0) return false;
+        if (_relationshipCount <= 0) return -1;
 
-        var establishedRelationships = Relationships.Where(r => r.Value).ToList();
-        var it = _localRandom.GetRandomElement(establishedRelationships);
-        return RemoveRelationship(it.Key);
+        var tuple = _localRandom.GetRandomKey(RaM);
+        return RemoveRelationship(tuple.a, tuple.b);
     }
 
-    private bool EstablishRelationship(string identityPairRepresentation)
-    {
-        if (Relationships.TryAdd(identityPairRepresentation, true))
-        {
-            RelationshipCount++;
-            return true;
-        }
-
-        if (Relationships[identityPairRepresentation])
-            return false;
-
-        Relationships[identityPairRepresentation] = true;
-        RelationshipCount++;
-        return true;
-    }
-
-
-    private bool RemoveRelationship(string identityPairRepresentation)
-    {
-        if (RelationshipCount <= 0) return false;
-        if (Relationships.TryAdd(identityPairRepresentation, false)) return true;
-
-        if (Relationships[identityPairRepresentation] == false)
-            return false;
-
-        Relationships[identityPairRepresentation] = false;
-        return true;
-    }
-
-    public long GetInvalidRelationshipCount(Dictionary<string, Identity> identities)
+    public long GetInvalidRelationshipCount(Dictionary<uint, Identity> identities)
     {
         var res = 0;
-        foreach (var (fromTo, _) in Relationships.Where(r => r.Value))
+        foreach (var ((from, to), messageCount) in RaM)
         {
-            var (identity1, identity2) = ReverseIdentityPairRepresentation(fromTo);
-            var i1Pool = identities[identity1].Pool;
-            var i2Pool = identities[identity2].Pool;
-            if (i1Pool.Type != i2Pool.Type &&
-                (i1Pool.IsApp() || i1Pool.IsConnector()) &&
-                (i2Pool.IsApp() || i2Pool.IsConnector())
-                )
+            if (from == to)
+            {
+                res++;
+                continue;
+            }
+            var i1Pool = identities[from].Pool;
+            var i2Pool = identities[to].Pool;
+            if (i1Pool.Type == i2Pool.Type || !i1Pool.IsApp() && !i2Pool.IsApp() || !i1Pool.IsConnector() && !i2Pool.IsConnector())
                 res++;
         }
 
@@ -406,25 +380,72 @@ public class SolutionRepresentation : ICloneable
 
     public long GetRelationshipCount()
     {
-        return Convert.ToInt64(RelationshipCount);
+        return Convert.ToInt64(_relationshipCount);
     }
 
-    public void Print(Dictionary<string, Identity> identities)
+    public long GetSentMessagesCount()
+    {
+        return Convert.ToInt64(_messagesCount);
+    }
+
+    public void Print(Dictionary<uint, Identity> identities, List<PoolEntry> pools)
     {
         Console.WriteLine(" ========= SOLUTION OUTPUT =========");
         Console.WriteLine($" =====> EXECUTION TIME: {GetTimeSinceStart()}");
+        Console.WriteLine($" ==> Expected relationships: {pools.ExpectedNumberOfRelationships()}");
+        Console.WriteLine($" ==> Expected sent messages: {pools.ExpectedNumberOfSentMessages()}");
         Console.WriteLine(" =====> ESTABLISHED RELATIONSHIPS");
-        foreach (var (fromTo, _) in Relationships.Where((r) => r.Value))
-        {
-            var (identity1Address, identity2Address) = ReverseIdentityPairRepresentation(fromTo);
-            var identity1 = identities[identity1Address];
-            var identity2 = identities[identity2Address];
 
-            Console.WriteLine($"{identity1} is related to {identity2}");
+        if (RaM.Count / 2 != GetRelationshipCount())
+            Console.WriteLine("==[ERROR]=> Relationship Count mismatch.");
+
+        if (RaM.Sum(x => x.Value) != GetSentMessagesCount())
+            Console.WriteLine("==[ERROR]=> Message Count mismatch.");
+
+        Console.WriteLine($" - Counted {RaM.Count} entries, meaning there are {RaM.Count / 2} relationships.");
+        Console.WriteLine($" - Counted {RaM.Sum(x => x.Value)} messages.");
+
+        var i = 0;
+        foreach (var ((from, to), _) in RaM.OrderBy(x => x.Key.a).ThenBy(x => x.Key.b))
+        {
+            var identity1 = identities[from];
+            var identity2 = identities[to];
+            if (identity1.Uon < identity2.Uon)
+            {
+                Console.WriteLine($"{++i}: {identity1} is related to {identity2}");
+
+                //var messageCount = RaM[(identity1.Uon, identity2.Uon)];
+                //if (messageCount > 0)
+                //    Console.WriteLine($"\t {identity1} sends {messageCount} messages to {identity2}.");
+                //messageCount = RaM[(identity2.Uon, identity1.Uon)];
+                //if (messageCount > 0)
+                //    Console.WriteLine($"\t {identity2} sends {messageCount} messages to {identity1}.");
+            }
+        }
+    }
+
+    // reflections may be counted twice here
+    public uint GetNumberOfRelatedIdentities(uint identity)
+    {
+        return (uint)RaM.Count(r =>
+        {
+            var ((a, b), _) = r;
+            return a == identity || b == identity;
+        });
+    }
+
+    public Dictionary<uint, uint> GetMessageSendCountByIdentity()
+    {
+        var res = new Dictionary<uint, uint>();
+        foreach (var ((a, b), c) in RaM)
+        {
+            if (!res.TryAdd(a, c))
+            {
+                res[a] += c;
+            }
         }
 
-
-
+        return res;
     }
 }
 
@@ -435,10 +456,21 @@ public static class RandomMethodExtensions
         return random.NextDouble() <= 0.5;
     }
 
-    public static T GetRandomElement<T>(this Random random, IList<T> list)
+    public static TU GetRandomElement<TU>(this Random random, IList<TU> list)
     {
         var randomElementIndex = Convert.ToInt32(random.NextInt64() % list.Count);
         return list[randomElementIndex];
+    }
+
+    public static T GetRandomElement<T, TU>(this Random random, IDictionary<TU, T> dictionary)
+    {
+        var randomElementIndex = Convert.ToInt32(random.NextInt64() % dictionary.Count);
+        return dictionary[dictionary.Keys.Skip(randomElementIndex - 1).First()];
+    }
+
+    public static TK GetRandomKey<TK, TV>(this Random random, IDictionary<TK, TV> dictionary)
+    {
+        return random.GetRandomElement(dictionary.Select(r => r.Key).ToList());
     }
 
 }

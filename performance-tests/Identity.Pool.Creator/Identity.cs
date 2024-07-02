@@ -6,6 +6,11 @@ namespace Backbone.Identity.Pool.Creator;
 public class Identity
 {
     public readonly UserCredentials UserCredentials;
+    
+    /// <summary>
+    /// Unique Order Number
+    /// </summary>
+    internal readonly uint Uon;
 
     public List<string> DeviceIds { get; } = [];
     public string Address { private set; get; }
@@ -18,7 +23,7 @@ public class Identity
 
     public PoolEntry Pool { get; private set; }
 
-    public Identity(UserCredentials userCredentials, string address, string deviceId, PoolEntry pool, uint orderNumber)
+    public Identity(UserCredentials userCredentials, string address, string deviceId, PoolEntry pool, uint orderNumber, uint? uniqueOrderNumber = null)
     {
         Address = address;
         UserCredentials = userCredentials;
@@ -31,6 +36,7 @@ public class Identity
         Nickname = pool.Alias + orderNumber;
         PoolType = pool.Type;
         Pool = pool;
+        Uon = uniqueOrderNumber ?? 0;
     }
 
     public string Nickname { get; }
