@@ -25,6 +25,7 @@ public class Relationship : Entity
     {
         EnsureTargetIsNotSelf(relationshipTemplate, activeIdentity);
         EnsureNoOtherRelationshipToPeerExists(relationshipTemplate.CreatedBy, existingRelationships);
+        EnsureActiveIdentityDecomposedOldRelationship(activeIdentity, existingRelationships);
 
         Id = RelationshipId.New();
         RelationshipTemplateId = relationshipTemplate.Id;
@@ -80,6 +81,12 @@ public class Relationship : Entity
     {
         if (existingRelationshipsToPeer.Any(r => r.Status is RelationshipStatus.Active or RelationshipStatus.Pending or RelationshipStatus.Terminated))
             throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
+    }
+
+    private void EnsureActiveIdentityDecomposedOldRelationship(IdentityAddress activeIdentity, List<Relationship> existingRelationships)
+    {
+        if (existingRelationships.Any(r => r.FromHasDecomposed == false))
+            throw new DomainException(DomainErrors.OldRelationshipNotDecomposed());
     }
 
     public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)

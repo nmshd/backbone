@@ -76,4 +76,10 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.relationshipRequest.relationshipAlreadyDecomposed",
             $"You already decomposed this Relationship.");
     }
+
+    public static DomainError OldRelationshipNotDecomposed()
+    {
+        return new DomainError("error.platform.validation.relationshipRequest.oldRelationshipNotDecomposed",
+            $"You haven't decomposed the old relationship.");
+    }
 }
