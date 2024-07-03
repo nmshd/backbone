@@ -4,8 +4,16 @@ using Backbone.Modules.Quotas.Domain.Metrics;
 namespace Backbone.Modules.Quotas.Application.Tests;
 
 public class FakeMetricCalculatorFactory(
-        int? numberOfFiles = null, int? numberOfSentMessages = null, int? numberOfRelationships = null,
-        int? numberOfRelationshipTemplates = null, int? numberOfTokens = null, int? amountOfUsedFileStorageSpace = null) : MetricCalculatorFactory
+    int? numberOfFiles = null,
+    int? numberOfSentMessages = null,
+    int? numberOfRelationships = null,
+    int? numberOfRelationshipTemplates = null,
+    int? numberOfTokens = null,
+    int? amountOfUsedFileStorageSpace = null,
+    int? numberOfStartedDeletionProcesses = null,
+    int? numberOfDatawalletModifications = null,
+    int? numberOfCreatedDevices = null,
+    int? numberOfCreatedChallenges = null) : MetricCalculatorFactory
 {
     protected override IMetricCalculator CreateNumberOfFilesMetricCalculator()
     {
@@ -35,6 +43,26 @@ public class FakeMetricCalculatorFactory(
     protected override IMetricCalculator CreateUsedFileStorageSpaceCalculator()
     {
         return amountOfUsedFileStorageSpace.HasValue ? new FakeMetricCalculator(amountOfUsedFileStorageSpace.Value) : throw new ArgumentNullException(nameof(amountOfUsedFileStorageSpace));
+    }
+
+    protected override IMetricCalculator CreateNumberOfStartedDeletionProcessesCalculator()
+    {
+        return numberOfStartedDeletionProcesses.HasValue ? new FakeMetricCalculator(numberOfStartedDeletionProcesses.Value) : throw new ArgumentNullException(nameof(numberOfStartedDeletionProcesses));
+    }
+
+    protected override IMetricCalculator CreateNumberOfCreatedDatawalletModificationsCalculator()
+    {
+        return numberOfDatawalletModifications.HasValue ? new FakeMetricCalculator(numberOfDatawalletModifications.Value) : throw new ArgumentNullException(nameof(numberOfDatawalletModifications));
+    }
+
+    protected override IMetricCalculator CreateNumberOfCreatedDevicesCalculator()
+    {
+        return numberOfCreatedDevices.HasValue ? new FakeMetricCalculator(numberOfCreatedDevices.Value) : throw new ArgumentNullException(nameof(numberOfCreatedDevices));
+    }
+
+    protected override IMetricCalculator CreateNumberOfCreatedChallengesCalculator()
+    {
+        return numberOfCreatedChallenges.HasValue ? new FakeMetricCalculator(numberOfCreatedChallenges.Value) : throw new ArgumentNullException(nameof(numberOfCreatedChallenges));
     }
 }
 

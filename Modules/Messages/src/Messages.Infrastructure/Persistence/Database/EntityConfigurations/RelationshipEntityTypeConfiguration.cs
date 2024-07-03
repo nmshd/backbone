@@ -18,5 +18,6 @@ public class RelationshipEntityTypeConfiguration : EntityEntityTypeConfiguration
         builder.Property(x => x.CreatedAt);
         builder.Property(x => x.From);
         builder.Property(x => x.To);
+        builder.Property(x => x.Status);
     }
 }
