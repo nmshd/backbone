@@ -68,8 +68,8 @@ public class Message : Entity, IIdentifiable<MessageId>
         recipient?.UpdateAddress(newIdentityAddress);
     }
 
-    public static Expression<Func<Message, bool>> WasCreatedBy(IdentityAddress identityAddress)
+    public static Expression<Func<Message, bool>> HasParticipant(IdentityAddress identityAddress)
     {
-        return i => i.CreatedBy == identityAddress.ToString();
+        return i => i.CreatedBy == identityAddress || i.Recipients.Any(r => r.Address == identityAddress);
     }
 }
