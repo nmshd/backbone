@@ -25,7 +25,7 @@ public class Relationship : Entity
     {
         EnsureTargetIsNotSelf(relationshipTemplate, activeIdentity);
         EnsureNoOtherRelationshipToPeerExists(relationshipTemplate.CreatedBy, existingRelationships);
-        EnsureActiveIdentityDecomposedOldRelationship(activeIdentity, existingRelationships);
+        EnsureActiveIdentityDecomposedOldRelationship(existingRelationships);
 
         Id = RelationshipId.New();
         RelationshipTemplateId = relationshipTemplate.Id;
@@ -83,7 +83,7 @@ public class Relationship : Entity
             throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
     }
 
-    private void EnsureActiveIdentityDecomposedOldRelationship(IdentityAddress activeIdentity, List<Relationship> existingRelationships)
+    private void EnsureActiveIdentityDecomposedOldRelationship(List<Relationship> existingRelationships)
     {
         if (existingRelationships.Any(r => r.FromHasDecomposed == false && (r.Status == RelationshipStatus.DeletionProposed || r.Status == RelationshipStatus.ReadyForDeletion)))
             throw new DomainException(DomainErrors.OldRelationshipNotDecomposed());
