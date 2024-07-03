@@ -4,6 +4,7 @@ using Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteChalleng
 using MediatR;
 
 namespace Backbone.Modules.Challenges.Application.Identities;
+
 public class IdentityDeleter : IIdentityDeleter
 {
     private readonly IMediator _mediator;
@@ -15,7 +16,7 @@ public class IdentityDeleter : IIdentityDeleter
 
     public async Task Delete(IdentityAddress identityAddress, IDeletionProcessLogger deletionProcessLogger)
     {
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Challenges);
         await _mediator.Send(new DeleteChallengesOfIdentityCommand(identityAddress));
+        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Challenges);
     }
 }

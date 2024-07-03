@@ -6,6 +6,7 @@ using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.DeleteSyncR
 using MediatR;
 
 namespace Backbone.Modules.Synchronization.Application.Identities;
+
 public class IdentityDeleter : IIdentityDeleter
 {
     private readonly IMediator _mediator;
@@ -17,11 +18,11 @@ public class IdentityDeleter : IIdentityDeleter
 
     public async Task Delete(IdentityAddress identityAddress, IDeletionProcessLogger deletionProcessLogger)
     {
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.ExternalEvents);
         await _mediator.Send(new DeleteExternalEventsOfIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.SyncRuns);
+        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.ExternalEvents);
         await _mediator.Send(new DeleteSyncRunsOfIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Datawallets);
+        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.SyncRuns);
         await _mediator.Send(new DeleteDatawalletsOfIdentityCommand(identityAddress));
+        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Datawallets);
     }
 }

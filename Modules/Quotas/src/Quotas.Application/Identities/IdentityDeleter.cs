@@ -4,6 +4,7 @@ using Backbone.Modules.Quotas.Application.Identities.Commands.DeleteIdentity;
 using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Identities;
+
 public class IdentityDeleter : IIdentityDeleter
 {
     private readonly IMediator _mediator;
@@ -15,7 +16,7 @@ public class IdentityDeleter : IIdentityDeleter
 
     public async Task Delete(IdentityAddress identityAddress, IDeletionProcessLogger deletionProcessLogger)
     {
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.QuotaIdentities);
         await _mediator.Send(new DeleteIdentityCommand(identityAddress));
+        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.QuotaIdentities);
     }
 }
