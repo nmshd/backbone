@@ -4,6 +4,7 @@ using Backbone.Modules.Messages.Application.Messages.Commands.AnonymizeMessagesO
 using MediatR;
 
 namespace Backbone.Modules.Messages.Application.Identities;
+
 public class IdentityDeleter : IIdentityDeleter
 {
     private readonly IMediator _mediator;
