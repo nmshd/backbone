@@ -15,7 +15,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         IdentityAddressHash = null!;
     }
 
-    private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId processId, MessageKey messageKey, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus,
+    private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId? processId, MessageKey messageKey, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus,
         DeletionProcessStatus newStatus)
     {
         Id = IdentityDeletionProcessAuditLogEntryId.Generate();
@@ -29,7 +29,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     }
 
     public IdentityDeletionProcessAuditLogEntryId Id { get; }
-    public IdentityDeletionProcessId ProcessId { get; }
+    public IdentityDeletionProcessId? ProcessId { get; }
     public DateTime CreatedAt { get; }
     public MessageKey MessageKey { get; }
     public byte[] IdentityAddressHash { get; }
@@ -192,13 +192,13 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         );
     }
 
-    public static IdentityDeletionProcessAuditLogEntry DataDeleted(IdentityDeletionProcessId processId, IdentityAddress identityAddress, string aggregateType)
+    public static IdentityDeletionProcessAuditLogEntry DataDeleted(IdentityAddress identityAddress, string aggregateType)
     {
         if (!TryGetMessageKey(aggregateType, out var messageKey))
             throw new ArgumentException("Invalid aggregateType", nameof(aggregateType));
 
         return new IdentityDeletionProcessAuditLogEntry(
-            processId,
+            null,
             messageKey,
             Hasher.HashUtf8(identityAddress.Value),
             null,

@@ -298,14 +298,6 @@ public class Identity : Entity
     {
         return DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
     }
-
-    public void LogDeletedData(string aggregateType)
-    {
-        EnsureDeletionProcessInStatusExists(DeletionProcessStatus.Deleting);
-
-        var activeDeletionProcess = DeletionProcesses.First(d => d.Status == DeletionProcessStatus.Deleting);
-        activeDeletionProcess.LogDeletedData(Address, aggregateType);
-    }
 }
 
 public enum DeletionProcessStatus
