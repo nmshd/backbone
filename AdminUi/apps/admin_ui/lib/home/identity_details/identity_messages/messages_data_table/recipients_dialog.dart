@@ -4,10 +4,10 @@ import 'package:go_router/go_router.dart';
 
 import '/core/extensions.dart';
 
-class RecipientsButton extends StatelessWidget {
+class RecipientsDialog extends StatelessWidget {
   final List<MessageRecipients> recipients;
 
-  const RecipientsButton({required this.recipients, super.key});
+  const RecipientsDialog({required this.recipients, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class _RecipientsDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(
-        context.l10n.listOfAllRecipients,
+        context.l10n.recipientsDialog_listOfAllRecipients,
         textAlign: TextAlign.center,
       ),
       shape: RoundedRectangleBorder(

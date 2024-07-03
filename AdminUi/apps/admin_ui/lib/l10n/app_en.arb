@@ -5,35 +5,17 @@
     "save": "Save",
     "yes": "Yes",
     "retry": "Retry",
-    "recipients": "Recipients",
-    "senderAddress": "Sender Address",
-    "senderDevice": "Sender Device",
-    "sendDate": "Send Date",
-    "numberOfAttachments": "Number of Attachments",
-    "listOfAllRecipients": "List of all Recipients",
-    "error_loading_data": "An error occurred loading data.",
-    "messages_title": "{title} Messages",
-    "@messages_title": {
-        "placeholders": {
-            "title": {
-                "type": "String"
-            }
-        }
-    },
-    "messages_subtitle": "View messages {subtitle} by this identity.",
-    "@messages_subtitle": {
-        "placeholders": {
-            "subtitle": {
-                "type": "String"
-            }
-        }
-    },
-    "no_messages_found": "No {text} messages found.",
-    "@no_messages_found": {
-        "placeholders": {
-            "text": {
-                "type": "String"
-            }
-        }
-    }
+    "identityDetails_receivedMessages_title": "Received Messages",
+    "identityDetails_receivedMessages_subtitle": "View messages received by this identity.",
+    "identityDetails_noReceivedMessagesFound": "No received messages found.",
+    "identityDetails_sentMessages_title": "Sent Messages",
+    "identityDetails_sentMessages_subtitle": "View messages sent by this identity.",
+    "identityDetails_noSentMessagesFound": "No sent messages found.",
+    "identityMessageTable_recipients": "Recipients",
+    "identityMessageTable_senderAddress": "Sender Address",
+    "identityMessageTable_senderDevice": "Sender Device",
+    "identityMessageTable_sendDate": "Send Date",
+    "identityMessageTable_numberOfAttachments": "Number of Attachments",
+    "recipientsDialog_listOfAllRecipients": "List of all Recipients",
+    "identityMessageTable_errorLoadingData": "An error occurred loading data."
 }

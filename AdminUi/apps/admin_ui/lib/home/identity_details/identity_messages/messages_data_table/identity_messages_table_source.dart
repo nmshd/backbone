@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
-import 'recipients_button.dart';
+import 'recipients_dialog.dart';
 
 class IdentityMessagesTableSource extends AsyncDataTableSource {
   Pagination? _pagination;
@@ -102,14 +102,16 @@ class _RecipientsCell extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ...displayedRecipients.map((recipient) => InkWell(
-              onTap: () => context.push('/identities/${recipient.address}'),
-              child: Text(recipient.address),
-            )),
+        ...displayedRecipients.map(
+          (recipient) => InkWell(
+            onTap: () => context.push('/identities/${recipient.address}'),
+            child: Text(recipient.address),
+          ),
+        ),
         if (recipients.length > 3)
           Row(
             children: [
-              RecipientsButton(recipients: recipients),
+              RecipientsDialog(recipients: recipients),
             ],
           ),
       ],
