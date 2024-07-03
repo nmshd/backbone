@@ -67,13 +67,13 @@ public partial record IdentityAddress : StronglyTypedId
         return checksumIsValid;
     }
 
-    public static IdentityAddress Create(byte[] publicKey, string instanceUrl)
+    public static IdentityAddress Create(byte[] publicKey, string didDomainName)
     {
         var hashedPublicKey = SHA256.HashData(SHA512.HashData(publicKey))[..10];
 
         var identitySpecificPart = Hex(hashedPublicKey);
 
-        var mainPhrase = $"did:e:{instanceUrl}:dids:{identitySpecificPart}";
+        var mainPhrase = $"did:e:{didDomainName}:dids:{identitySpecificPart}";
         var checksum = CalculateChecksum(mainPhrase);
 
         return new IdentityAddress((mainPhrase + checksum).ToLower());
@@ -124,7 +124,7 @@ public partial record IdentityAddress : StronglyTypedId
         return ParseUnsafe(stringValue);
     }
 
-    [GeneratedRegex($@"^(?<addressWithoutChecksum>did:e:(?<instanceUrl>(?:[a-z0-9]+\.)*[a-z]{{2,}}):dids:(?<identitySpecificPart>[0-9a-f]{{20}}))(?<checksum>[0-9a-f]{{{CHECKSUM_LENGTH_S}}})$")]
+    [GeneratedRegex($@"^(?<addressWithoutChecksum>did:e:(?<didDomainName>(?:[a-z0-9]+\.)*[a-z]{{2,}}):dids:(?<identitySpecificPart>[0-9a-f]{{20}}))(?<checksum>[0-9a-f]{{{CHECKSUM_LENGTH_S}}})$")]
     private static partial Regex IdentityAddressValidatorRegex();
 
     #endregion
