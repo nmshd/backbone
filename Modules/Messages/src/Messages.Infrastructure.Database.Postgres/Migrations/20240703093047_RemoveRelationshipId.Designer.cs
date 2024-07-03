@@ -3,38 +3,41 @@ using System;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(MessagesDbContext))]
-    partial class MessagesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240703093047_RemoveRelationshipId")]
+    partial class RemoveRelationshipId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Messages")
                 .HasAnnotation("ProductVersion", "8.0.6")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Backbone.Modules.Messages.Domain.Entities.Attachment", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<string>("MessageId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.HasKey("Id", "MessageId");
@@ -49,27 +52,27 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<byte[]>("Body")
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("bytea");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)")
+                        .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
                         .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -83,35 +86,35 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)")
+                        .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
 
                     b.Property<byte[]>("EncryptedKey")
                         .IsRequired()
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("bytea");
 
                     b.Property<string>("MessageId")
                         .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<DateTime?>("ReceivedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ReceivedByDevice")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -130,27 +133,27 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("From")
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)")
+                        .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("To")
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)")
+                        .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
 
                     b.HasKey("Id");
