@@ -59,17 +59,38 @@ public class Message : Entity, IIdentifiable<MessageId>
     public void ReplaceIdentityAddress(IdentityAddress oldIdentityAddress, IdentityAddress newIdentityAddress)
     {
         if (CreatedBy == oldIdentityAddress)
-        {
-            CreatedBy = newIdentityAddress;
-        }
+            AnonymizeSender(newIdentityAddress);
 
-        var recipient = Recipients.FirstOrDefault(r => r.Address == oldIdentityAddress);
-
-        recipient?.UpdateAddress(newIdentityAddress);
+        AnonymizeRecipient(oldIdentityAddress, newIdentityAddress);
     }
 
     public static Expression<Func<Message, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
         return i => i.CreatedBy == identityAddress.ToString();
+    }
+
+    public void SanitizeAfterRelationshipDeleted(string participantOne, string participantTwo, IdentityAddress anonymizedIdentityAddress)
+    {
+        AnonymizeRecipient(participantOne, anonymizedIdentityAddress);
+        AnonymizeRecipient(participantTwo, anonymizedIdentityAddress);
+
+        if (CanAnonymizeSender(anonymizedIdentityAddress))
+            AnonymizeSender(anonymizedIdentityAddress);
+    }
+
+    private void AnonymizeRecipient(string participantAddress, IdentityAddress anonymizedIdentityAddress)
+    {
+        var recipient = Recipients.FirstOrDefault(r => r.Address == participantAddress);
+        recipient?.UpdateAddress(anonymizedIdentityAddress);
+    }
+
+    private bool CanAnonymizeSender(IdentityAddress anonymizedIdentityAddress)
+    {
+        return Recipients.All(r => r.Address == anonymizedIdentityAddress);
+    }
+
+    private void AnonymizeSender(IdentityAddress anonymizedIdentityAddress)
+    {
+        CreatedBy = anonymizedIdentityAddress;
     }
 }

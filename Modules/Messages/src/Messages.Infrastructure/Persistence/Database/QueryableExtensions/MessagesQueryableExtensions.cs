@@ -29,9 +29,11 @@ public static class MessagesQueryableExtensions
         return query.Where(m => m.Recipients.Any(r => r.Address == recipient && !r.ReceivedAt.HasValue));
     }
 
-    public static IQueryable<Message> WithASpecificRecipient(this IQueryable<Message> query, IdentityAddress recipient)
+    public static IQueryable<Message> ExchangedBetween(this IQueryable<Message> query, IdentityAddress participantOne, IdentityAddress participantTwo)
     {
-        return query.Where(m => m.Recipients.Any(r => r.Address == recipient));
+        return query.Where(m =>
+            (m.CreatedBy == participantOne && m.Recipients.Any(r => r.Address == participantTwo)) ||
+            (m.CreatedBy == participantTwo && m.Recipients.Any(r => r.Address == participantOne)));
     }
 
     public static IQueryable<Message> FromASpecificSender(this IQueryable<Message> query, IdentityAddress sender)

@@ -83,11 +83,10 @@ public class MessagesRepository : IMessagesRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Message>> FindMessagesFromSenderToRecipient(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
+    public async Task<IEnumerable<Message>> FindMessagesExchangedBetween(IdentityAddress participantOne, IdentityAddress participantTwo, CancellationToken cancellationToken)
     {
         return await _messages.IncludeAll(_dbContext)
-            .FromASpecificSender(sender)
-            .WithASpecificRecipient(recipient)
+            .ExchangedBetween(participantTwo, participantTwo)
             .ToListAsync(cancellationToken);
     }
 }
