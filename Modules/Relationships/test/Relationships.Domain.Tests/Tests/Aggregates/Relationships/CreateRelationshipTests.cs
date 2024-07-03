@@ -149,7 +149,7 @@ public class CreateRelationshipTests : AbstractTestsBase
     }
 
     [Fact]
-    public void P1_active_identity_P1_has_not_decomposed_and_P2_has_not_decomposed()
+    public void P1_active_identity_P1_and_P2_not_decomposed()
     {
         // Arrange
         var existingRelationships = new List<Relationship>
@@ -165,7 +165,7 @@ public class CreateRelationshipTests : AbstractTestsBase
     }
 
     [Fact]
-    public void P1_active_identity_P1_has_decomposed_and_P2_has_not_decomposed()
+    public void P1_active_identity_P1_decomposed_P2_not_decomposed()
     {
         // Arrange
         var existingRelationships = new List<Relationship>
@@ -184,7 +184,7 @@ public class CreateRelationshipTests : AbstractTestsBase
     }
 
     [Fact]
-    public void P1_active_identity_P1_has_not_decomposed_and_P2_has_decomposed()
+    public void P1_active_identity_P1_not_decomposed_P2_decomposed()
     {
         // Arrange
         var existingRelationships = new List<Relationship>
@@ -204,7 +204,7 @@ public class CreateRelationshipTests : AbstractTestsBase
 
 
     [Fact]
-    public void P1_active_identity_P1_has_decomposed_and_P2_has_decomposed()
+    public void P1_active_identity_P1_and_P2_decomposed()
     {
         // Arrange
         var existingRelationships = new List<Relationship>
@@ -216,7 +216,6 @@ public class CreateRelationshipTests : AbstractTestsBase
         existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
         existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
 
-
         // Act
         var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, existingRelationships);
 
@@ -225,7 +224,7 @@ public class CreateRelationshipTests : AbstractTestsBase
     }
 
     [Fact]
-    public void P2_active_identity_P1_has_not_decomposed_and_P2_has_not_decomposed()
+    public void P2_active_identity_P1_and_P2_not_decomposed()
     {
         // Arrange
         var existingRelationships = new List<Relationship>
@@ -241,7 +240,7 @@ public class CreateRelationshipTests : AbstractTestsBase
     }
 
     [Fact]
-    public void P2_active_identity_P1_has_decomposed_and_P2_has_not_decomposed()
+    public void P2_active_identity_P1_decomposed_P2_not_decomposed()
     {
         // Arrange
         var existingRelationships = new List<Relationship>
@@ -260,7 +259,7 @@ public class CreateRelationshipTests : AbstractTestsBase
     }
 
     [Fact]
-    public void P2_active_identity_P1_has_not_decomposed_and_P2_has_decomposed()
+    public void P2_active_identity_P1_not_decomposed_P2_has_decomposed()
     {
         // Arrange
         var existingRelationships = new List<Relationship>
@@ -280,7 +279,7 @@ public class CreateRelationshipTests : AbstractTestsBase
 
 
     [Fact]
-    public void P2_active_identity_P1_has_decomposed_and_P2_has_decomposed()
+    public void P2_active_identity_P1_and_P2_decomposed()
     {
         // Arrange
         var existingRelationships = new List<Relationship>
@@ -291,7 +290,6 @@ public class CreateRelationshipTests : AbstractTestsBase
         existingRelationships.First().Terminate(IDENTITY_2, DEVICE_2);
         existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
         existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
-
 
         // Act
         var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
