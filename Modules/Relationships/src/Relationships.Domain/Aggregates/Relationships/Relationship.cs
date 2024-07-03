@@ -85,7 +85,7 @@ public class Relationship : Entity
 
     private void EnsureActiveIdentityDecomposedOldRelationship(IdentityAddress activeIdentity, List<Relationship> existingRelationships)
     {
-        if (existingRelationships.Any(r => r.FromHasDecomposed == false))
+        if (existingRelationships.Any(r => r.FromHasDecomposed == false && (r.Status == RelationshipStatus.DeletionProposed || r.Status == RelationshipStatus.ReadyForDeletion)))
             throw new DomainException(DomainErrors.OldRelationshipNotDecomposed());
     }
 
