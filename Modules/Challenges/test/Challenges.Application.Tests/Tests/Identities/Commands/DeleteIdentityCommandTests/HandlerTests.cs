@@ -7,13 +7,14 @@ using FakeItEasy;
 using Xunit;
 
 namespace Backbone.Modules.Challenges.Application.Tests.Tests.Identities.Commands.DeleteIdentityCommandTests;
+
 public class HandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Handler_calls_deletion_method_on_repository()
     {
         // Arrange
-        var identityAddress = "identity-address";
+        const string identityAddress = "identity-address";
         var mockChallengesRepository = A.Fake<IChallengesRepository>();
         var handler = CreateHandler(mockChallengesRepository);
 

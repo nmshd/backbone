@@ -311,6 +311,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SseServerTests", "SseServer
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Application.Tests", "Modules\Challenges\test\Challenges.Application.Tests\Challenges.Application.Tests.csproj", "{EAA10D43-BD28-40D8-BE07-B8F6DE47C156}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Job.IdentityDeletion.Tests.Integration", "Jobs\test\Job.IdentityDeletion.Tests.Integration\Job.IdentityDeletion.Tests.Integration.csproj", "{63BC08F3-5DA8-4AC5-877A-89B6ABA05F44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -745,6 +747,10 @@ Global
 		{EAA10D43-BD28-40D8-BE07-B8F6DE47C156}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EAA10D43-BD28-40D8-BE07-B8F6DE47C156}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAA10D43-BD28-40D8-BE07-B8F6DE47C156}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63BC08F3-5DA8-4AC5-877A-89B6ABA05F44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63BC08F3-5DA8-4AC5-877A-89B6ABA05F44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63BC08F3-5DA8-4AC5-877A-89B6ABA05F44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63BC08F3-5DA8-4AC5-877A-89B6ABA05F44}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -885,6 +891,7 @@ Global
 		{824495A9-A255-487D-AF26-6F6CA92BC715} = {4C2E211B-37C8-4449-9595-7D019AC92AC3}
 		{94A32246-991D-483D-8241-E1E4DD6DE145} = {824495A9-A255-487D-AF26-6F6CA92BC715}
 		{EAA10D43-BD28-40D8-BE07-B8F6DE47C156} = {EFC1F89E-1C44-4385-A0F6-1F2124260561}
+		{63BC08F3-5DA8-4AC5-877A-89B6ABA05F44} = {4F812E23-62EB-4B79-8ECA-5CA72CF5D3BC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}
