@@ -38,7 +38,7 @@ class _SettingsDialog extends StatelessWidget with WatchItMixin {
             selected: {themeMode},
             onSelectionChanged: (selected) => GetIt.I<ThemeModeModel>().setThemeMode(selected.first),
           ),
-          Gaps.h16
+          Gaps.h16,
         ],
       ),
       actions: [FilledButton(onPressed: () => context.pop(), child: const Text('Close'))],
