@@ -1,7 +1,8 @@
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-import '../../../../core/extensions.dart';
+import '/core/extensions.dart';
 
 class RecipientsButton extends StatelessWidget {
   final List<MessageRecipients> recipients;
@@ -35,7 +36,13 @@ class _RecipientsDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(context.l10n.listOfAllRecipients),
+      title: Text(
+        context.l10n.listOfAllRecipients,
+        textAlign: TextAlign.center,
+      ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+      ),
       content: Padding(
         padding: const EdgeInsets.all(8),
         child: Column(
@@ -44,7 +51,13 @@ class _RecipientsDialog extends StatelessWidget {
               .map(
                 (recipient) => Padding(
                   padding: const EdgeInsets.all(4),
-                  child: Text(recipient.address),
+                  child: InkWell(
+                    onTap: () {
+                      context.push('/identities/${recipient.address}');
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(recipient.address),
+                  ),
                 ),
               )
               .toList(),

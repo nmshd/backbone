@@ -2,7 +2,7 @@ import 'package:admin_ui/core/extensions.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../core/constants.dart';
+import '/core/constants.dart';
 import 'identity_messages_table_source.dart';
 
 export 'identity_messages_table_source.dart';

@@ -3,6 +3,7 @@ import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
@@ -12,7 +13,6 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
   Pagination? _pagination;
 
   final Locale locale;
-  final bool hideTierColumn;
   final String address;
   final String type;
 
@@ -20,7 +20,6 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
     required this.address,
     required this.type,
     required this.locale,
-    this.hideTierColumn = false,
   });
 
   @override
@@ -61,9 +60,11 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
               cells: [
                 if (type == 'Outgoing')
                   DataCell(
-                    _RecipientsCell(recipients: message.$2.recipients),
+                    _RecipientsCell(
+                      recipients: message.$2.recipients,
+                    ),
                   ),
-                if (type == 'Incoming') DataCell(Text(message.$2.senderAddress)),
+                if (type == 'Incoming') DataCell(_SenderAddressCell(senderAddress: message.$2.senderAddress)),
                 if (type == 'Incoming') DataCell(Text(message.$2.senderDevice)),
                 DataCell(Text(message.$2.numberOfAttachments.toString())),
                 DataCell(
@@ -101,7 +102,10 @@ class _RecipientsCell extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ...displayedRecipients.map((recipient) => Text(recipient.address)),
+        ...displayedRecipients.map((recipient) => InkWell(
+              onTap: () => context.push('/identities/${recipient.address}'),
+              child: Text(recipient.address),
+            )),
         if (recipients.length > 3)
           Row(
             children: [
@@ -110,5 +114,16 @@ class _RecipientsCell extends StatelessWidget {
           ),
       ],
     );
+  }
+}
+
+class _SenderAddressCell extends StatelessWidget {
+  final String senderAddress;
+
+  const _SenderAddressCell({required this.senderAddress});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(onTap: () => context.push('/identities/$senderAddress'), child: Text(senderAddress));
   }
 }
