@@ -3,7 +3,7 @@
     <PropertyGroup>
         <UserSecretsId>f114fba8-95dd-4fee-8385-af8e8a343c68</UserSecretsId>
     </PropertyGroup>
-
+    
     <ItemGroup>
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2"/>
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0"/>
@@ -44,4 +44,9 @@
         <ProjectReference Include="..\Modules\Tokens\src\Tokens.ConsumerApi\Tokens.ConsumerApi.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="..\appsettings.override.json" Condition="$(Configuration) == Debug">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 </Project>
