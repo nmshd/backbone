@@ -18,7 +18,5 @@ public class RecipientInformationEntityTypeConfiguration : EntityEntityTypeConfi
         builder
             .Property(r => r.EncryptedKey)
             .IsRequired();
-
-        builder.HasOne<Relationship>().WithMany();
     }
 }
