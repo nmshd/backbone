@@ -11,7 +11,7 @@ AuditLogs _$AuditLogsFromJson(Map<String, dynamic> json) => AuditLogs(
       createdAt: DateTime.parse(json['createdAt'] as String),
       messageKey: json['messageKey'] as String,
       newStatus: json['newStatus'] as String,
-      oldStatus: json['oldStatus'] as String,
+      oldStatus: json['oldStatus'] as String?,
     );
 
 Map<String, dynamic> _$AuditLogsToJson(AuditLogs instance) => <String, dynamic>{

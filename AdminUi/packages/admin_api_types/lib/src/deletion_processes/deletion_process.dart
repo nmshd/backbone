@@ -7,7 +7,7 @@ class AuditLogs {
   final String id;
   final DateTime createdAt;
   final String messageKey;
-  final String oldStatus;
+  final String? oldStatus;
   final String newStatus;
 
   AuditLogs({
@@ -15,7 +15,7 @@ class AuditLogs {
     required this.createdAt,
     required this.messageKey,
     required this.newStatus,
-    required this.oldStatus,
+    this.oldStatus,
   });
 
   factory AuditLogs.fromJson(dynamic json) => _$AuditLogsFromJson(json as Map<String, dynamic>);
