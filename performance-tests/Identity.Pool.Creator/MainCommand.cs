@@ -51,25 +51,25 @@ public class GenerateCommand : Command
 
             );
 
-        var graphGenerator = new GraphPoolsGenerator(
-            baseAddress,
-            clientId,
-            clientSecret,
-            poolsConfiguration,
-            printer: serviceProvider.GetRequiredService<IPrinter>()
-        );
+        //var graphGenerator = new GraphPoolsGenerator(
+        //    baseAddress,
+        //    clientId,
+        //    clientSecret,
+        //    poolsConfiguration,
+        //    printer: serviceProvider.GetRequiredService<IPrinter>()
+        //);
+
+        await generator.CreatePools();
 
         var saGenerator = new SimulatedAnnealingPoolsGenerator(baseAddress, clientId, clientSecret, poolsConfiguration, printer: serviceProvider.GetRequiredService<IPrinter>());
-
         await saGenerator.CreatePools();
-        //await generator.CreatePools();
     }
 
     private static ServiceProvider ConfigureServices()
     {
         var services = new ServiceCollection();
 
-        services.AddSingleton<IRelationshipDistributor, RelationshipDistributorV3>();
+        services.AddSingleton<IRelationshipDistributor, RelationshipDistributorV4>();
 
         services.AddSingleton<IMessageDistributor, MessageDistributorV2>();
 

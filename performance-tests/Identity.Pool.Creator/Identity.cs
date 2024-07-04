@@ -1,6 +1,5 @@
 ﻿using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.Identity.Pool.Creator.PoolsFile;
-using Org.BouncyCastle.Asn1.Cms;
 
 namespace Backbone.Identity.Pool.Creator;
 public class Identity
@@ -10,7 +9,7 @@ public class Identity
     /// <summary>
     /// Unique Order Number
     /// </summary>
-    internal readonly uint Uon;
+    public uint Uon;
 
     public List<string> DeviceIds { get; } = [];
     public string Address { private set; get; }

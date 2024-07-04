@@ -1,10 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Diagnostics.Metrics;
-using System.Diagnostics.SymbolStore;
-using System.Linq;
+﻿using System.Diagnostics;
 using Backbone.ConsumerApi.Sdk.Authentication;
-using Backbone.Identity.Pool.Creator.Application.Checkers;
 using Backbone.Identity.Pool.Creator.Application.Printer;
 using Backbone.Identity.Pool.Creator.PoolsFile;
 using Backbone.Tooling;
@@ -46,7 +41,8 @@ public class SimulatedAnnealingPoolsGenerator
         _printer = printer;
         Pools = configuration.Pools.ToList();
 
-        CreateIdentities();
+        if(!configuration.Pools.SelectMany(p => p.Identities).Any()) CreateIdentities();
+        Pools.AddUonsIfMissing();
 
         _localRandom = new Random();
         Identities = Pools.SelectMany(p => p.Identities).ToList();
@@ -76,10 +72,10 @@ public class SimulatedAnnealingPoolsGenerator
         //_printer.PrintMessages(Pools, summaryOnly: false);
     }
 
-    public void Generate(double initialTemperature = 20d, ulong maxIterations = 5000000)
+    public void Generate(double initialTemperature = 20d, ulong maxIterations = 5000)
     {
-        var currentSolution = GenerateInitialSolution();
-
+        var currentSolution = GenerateSolutionFromPools(Pools);
+        
         var currentScore = CalculateCore(currentSolution, _identitiesDictionary);
         var temperature = initialTemperature;
 
@@ -123,6 +119,29 @@ public class SimulatedAnnealingPoolsGenerator
         }
 
         currentSolution.Print(_identitiesDictionary, Pools);
+    }
+
+    private SolutionRepresentation GenerateSolutionFromPools(List<PoolEntry> pools)
+    {
+        var res = new SolutionRepresentation();
+
+        foreach (var pool in pools)
+        {
+            foreach (var identity in pool.Identities)
+            {
+                foreach (var relatedIdentity in identity.IdentitiesToEstablishRelationshipsWith)
+                {
+                    res.EstablishRelationship(identity.Uon, relatedIdentity.Uon);
+                }
+
+                foreach (var relatedIdentity in identity.IdentitiesToSendMessagesTo)
+                {
+                    res.SendMessage(identity.Uon, relatedIdentity.Uon);
+                }
+            }
+        }
+
+        return res;
     }
 
     private SolutionRepresentation? GetNextState(SolutionRepresentation currentSolution)
@@ -251,7 +270,7 @@ public class SolutionRepresentation : ICloneable
     /// The key represents a pair of identities by their UON.
     /// The value determines the number of messages exchanged between a & b.
     /// Reflection is an issue and must be handled carefully.
-    /// This can never happen:  a == b
+    /// This can never happen: a == b
     /// This approach ensures that messages can only be sent in the context of a relationship (a mandatory requisite).
     /// </summary>
     /// <see cref="Identity.Uon"/>
@@ -313,8 +332,7 @@ public class SolutionRepresentation : ICloneable
 
     public bool SendMessage(uint identityFrom, uint identityTo)
     {
-        if (!EstablishRelationship(identityFrom, identityTo)) return false;
-
+        EstablishRelationship(identityFrom, identityTo);
         RaM[(identityFrom, identityTo)]++;
         _messagesCount++;
         return true;
@@ -332,7 +350,7 @@ public class SolutionRepresentation : ICloneable
 
     public object Clone()
     {
-        var ret = new SolutionRepresentation(RaM, counters: (relationshipCount: _relationshipCount, messagesCount: _messagesCount));
+        var ret = new SolutionRepresentation(RaM, counters: (relationshipCount: _relationshipCount, messagesCount: _messagesCount), createdAt: _createdAt);
         return ret;
     }
 
@@ -405,23 +423,23 @@ public class SolutionRepresentation : ICloneable
         Console.WriteLine($" - Counted {RaM.Count} entries, meaning there are {RaM.Count / 2} relationships.");
         Console.WriteLine($" - Counted {RaM.Sum(x => x.Value)} messages.");
 
-        var i = 0;
-        foreach (var ((from, to), _) in RaM.OrderBy(x => x.Key.a).ThenBy(x => x.Key.b))
-        {
-            var identity1 = identities[from];
-            var identity2 = identities[to];
-            if (identity1.Uon < identity2.Uon)
-            {
-                Console.WriteLine($"{++i}: {identity1} is related to {identity2}");
+        //var i = 0;
+        //foreach (var ((from, to), _) in RaM.OrderBy(x => x.Key.a).ThenBy(x => x.Key.b))
+        //{
+        //    var identity1 = identities[from];
+        //    var identity2 = identities[to];
+        //    if (identity1.Uon < identity2.Uon)
+        //    {
+        //        Console.WriteLine($"{++i}: {identity1} is related to {identity2}");
 
-                //var messageCount = RaM[(identity1.Uon, identity2.Uon)];
-                //if (messageCount > 0)
-                //    Console.WriteLine($"\t {identity1} sends {messageCount} messages to {identity2}.");
-                //messageCount = RaM[(identity2.Uon, identity1.Uon)];
-                //if (messageCount > 0)
-                //    Console.WriteLine($"\t {identity2} sends {messageCount} messages to {identity1}.");
-            }
-        }
+        //        //var messageCount = RaM[(identity1.Uon, identity2.Uon)];
+        //        //if (messageCount > 0)
+        //        //    Console.WriteLine($"\t {identity1} sends {messageCount} messages to {identity2}.");
+        //        //messageCount = RaM[(identity2.Uon, identity1.Uon)];
+        //        //if (messageCount > 0)
+        //        //    Console.WriteLine($"\t {identity2} sends {messageCount} messages to {identity1}.");
+        //    }
+        //}
     }
 
     // reflections may be counted twice here

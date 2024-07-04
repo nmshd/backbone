@@ -9,20 +9,31 @@ public class MessageDistributorV2 : IMessageDistributor
     {
         var appAndConnectorIdentities = pools.Where(p => p.IsApp() || p.IsConnector()).SelectMany(p => p.Identities).ToList();
 
-        foreach (var identity in appAndConnectorIdentities)
-        {
-            using var relatedIdentitiesIterator = identity.IdentitiesToEstablishRelationshipsWith.AsEnumerable().GetEnumerator();
-            var endReached = false;
-            while (identity.HasAvailabilityToSendNewMessages() && !endReached)
-            {
-                var peerIdentity = relatedIdentitiesIterator.NextOrFirst();
-                
-                if (peerIdentity.HasAvailabilityToReceiveNewMessages())
-                    identity.SendMessageTo(peerIdentity);
+        uint sentMessages;
+        var loops = 0;
 
-                if (peerIdentity == identity.IdentitiesToEstablishRelationshipsWith.Last())
-                    endReached = true;
+        do
+        {
+            sentMessages = 0;
+            loops++;
+            foreach (var identity in appAndConnectorIdentities)
+            {
+                using var relatedIdentitiesIterator = identity.IdentitiesToEstablishRelationshipsWith.AsEnumerable().GetEnumerator();
+                var endReached = false;
+                while (identity.HasAvailabilityToSendNewMessages() && !endReached)
+                {
+                    var peerIdentity = relatedIdentitiesIterator.NextOrFirst();
+
+                    if (peerIdentity.HasAvailabilityToReceiveNewMessages())
+                    {
+                        identity.SendMessageTo(peerIdentity);
+                        sentMessages++;
+                    }
+
+                    if (peerIdentity == identity.IdentitiesToEstablishRelationshipsWith.Last())
+                        endReached = true;
+                }
             }
-        }
+        } while (sentMessages > 0);
     }
 }

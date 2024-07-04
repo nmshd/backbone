@@ -10,9 +10,10 @@ public class Printer : IPrinter
 
         if (summaryOnly) return;
 
+
         foreach (var appPoolIdentity in pools.Where(p => p.IsApp()).SelectMany(p => p.Identities))
         {
-            Console.WriteLine($"Identity {appPoolIdentity.Nickname} of type App establishes {appPoolIdentity.IdentitiesToEstablishRelationshipsWith.Count} relationships:");
+            Console.WriteLine($"Identity {appPoolIdentity.Nickname} of type App establishes {appPoolIdentity.IdentitiesToEstablishRelationshipsWith.Count} (of {appPoolIdentity.Pool.NumberOfRelationships}) relationships:");
             foreach (var relatedIdentity in appPoolIdentity.IdentitiesToEstablishRelationshipsWith)
                 Console.WriteLine($"\t- with connector {relatedIdentity}");
         }

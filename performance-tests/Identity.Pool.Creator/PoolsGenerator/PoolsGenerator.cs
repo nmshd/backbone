@@ -55,6 +55,7 @@ public class PoolsGenerator
         RelationshipDistributorTools.EstablishMessagesOffsetPoolsRelationships(_pools);
 
         _relationshipDistributor.Distribute(_pools);
+        _printer.PrintRelationships(_pools, summaryOnly: true);
         _messageDistributor.Distribute(_pools);
 
         _printer.PrintRelationships(_pools, summaryOnly: true);
@@ -116,11 +117,12 @@ public class PoolsGenerator
 
     private void CreateFakeIdentities()
     {
+        uint uon = 0;
         foreach (var pool in _pools)
         {
             for (uint i = 0; i < pool.Amount; i++)
             {
-                var createdIdentity = new Identity(new("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)), "ID1" + PasswordHelper.GeneratePassword(16, 16), "DVC" + PasswordHelper.GeneratePassword(8, 8), pool, i + 1);
+                var createdIdentity = new Identity(new("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)), "ID1" + PasswordHelper.GeneratePassword(16, 16), "DVC" + PasswordHelper.GeneratePassword(8, 8), pool, uon++);
 
                 if (pool.NumberOfDevices > 1)
                 {

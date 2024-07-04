@@ -78,4 +78,16 @@ public static class PoolEntryExtensionMethods
     {
         return pools.Where(p => p.IsConnector() && p.NumberOfRelationships > 0).ToList();
     }
+
+    public static void AddUonsIfMissing(this IList<PoolEntry> pools)
+    {
+        if (pools.SelectMany(p => p.Identities).Select(i => i.Uon).Distinct().Count() == 1)
+        {
+            uint i = 0;
+            foreach (var identity in pools.SelectMany(p => p.Identities))
+            {
+                identity.Uon = ++i;
+            }
+        }
+    }
 }
