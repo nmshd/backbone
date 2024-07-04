@@ -51,8 +51,6 @@ jobs:
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
@@ -85,8 +83,6 @@ jobs:
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-npm-
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
@@ -160,9 +156,6 @@ jobs:
           restore-keys: |
             buildx-${{ matrix.image }}-cache-
 
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-
       - name: Build Image
         uses: docker/build-push-action@v6
         env:
@@ -209,9 +202,6 @@ jobs:
         with:
           dotnet-version: 8.x
 
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
-
       - name: Download cached Docker images
         uses: actions/download-artifact@v4
         with:
@@ -256,9 +246,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.x
-
-      - name: Install script dependencies
-        run: npm install --prefix ./.ci
 
       - name: Download cached Docker images
         uses: actions/download-artifact@v4
