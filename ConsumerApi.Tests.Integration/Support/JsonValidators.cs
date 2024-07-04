@@ -1,22 +1,29 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
+//using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Serialization;
 using NJsonSchema.NewtonsoftJson.Generation;
+using JsonSchema = NJsonSchema.JsonSchema;
 using JsonSchemaGenerator = NJsonSchema.Generation.JsonSchemaGenerator;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Support;
 
 public class JsonValidators
 {
-    private static readonly Dictionary<Type, JSchema> CACHED_SCHEMAS = new();
+    private static readonly Dictionary<Type, JsonSchema> CACHED_SCHEMAS = new();
 
-    public static bool ValidateJsonSchema<T>(string json, out IList<string> errors)
+    public static async Task<(bool IsValid, IList<string> Errors)> ValidateJsonSchema<T>(string json)
     {
+        var errors = new List<string>();
+
         if (CACHED_SCHEMAS.TryGetValue(typeof(T), out var schema))
         {
-            var parsedJson = JObject.Parse(json);
-            return parsedJson.IsValid(schema, out errors);
+            var parsedJson = JToken.Parse(json);
+            var validationResults = schema.Validate(parsedJson);
+
+            errors.AddRange(validationResults.Select(validationResult => validationResult.ToString()));
+
+            return (validationResults.Count == 0, errors);
         }
 
         var settings = new NewtonsoftJsonSchemaGeneratorSettings
@@ -33,14 +40,17 @@ public class JsonValidators
 
         var generatedSchema = schemaJson.ToJson();
 
-        schema = JSchema.Parse(generatedSchema);
+        schema = await JsonSchema.FromJsonAsync(generatedSchema);
 
         schema.AllowAdditionalProperties = true;
 
         CACHED_SCHEMAS.Add(typeof(T), schema);
 
-        var responseJson = JObject.Parse(json);
+        var responseJson = JToken.Parse(json);
+        var validationErrors = schema.Validate(responseJson);
 
-        return responseJson.IsValid(schema, out errors);
+        errors.AddRange(validationErrors.Select(validationError => validationError.ToString()));
+
+        return (validationErrors.Count == 0, errors);
     }
 }
