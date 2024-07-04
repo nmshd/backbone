@@ -26,10 +26,10 @@ public class ApiResponseAssertions<T> : ReferenceTypeAssertions<ApiResponse<T>, 
         if (Subject.Result != null)
         {
             var resultJson = JsonConvert.SerializeObject(Subject.Result);
-            var validationResult = await JsonValidators.ValidateJsonSchema<T>(resultJson);
+            var (isValid, errors) = await JsonValidators.ValidateJsonSchema<T>(resultJson);
 
-            assertion.ForCondition(_ => validationResult.IsValid)
-                .FailWith($"Response content does not comply with the {typeof(T).FullName} schema: {string.Join(", ", validationResult.Errors)}");
+            assertion.ForCondition(_ => isValid)
+                .FailWith($"Response content does not comply with the {typeof(T).FullName} schema: {string.Join(", ", Errors)}");
         }
     }
 
