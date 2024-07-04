@@ -22,7 +22,7 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
 
     public async Task Handle(RelationshipStatusChangedDomainEvent @event)
     {
-        if (@event.Status != RelationshipStatus.ReadyForDeletion.ToString())
+        if (@event.NewStatus != RelationshipStatus.ReadyForDeletion.ToString())
             return;
 
         var anonymizedIdentityAddress = IdentityAddress.Create(Encoding.Unicode.GetBytes(DELETED_IDENTITY_STRING), _applicationOptions.DidDomainName);
