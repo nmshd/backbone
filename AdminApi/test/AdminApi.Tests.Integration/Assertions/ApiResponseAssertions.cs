@@ -26,7 +26,7 @@ public class ApiResponseAssertions<T> : ReferenceTypeAssertions<ApiResponse<T>, 
         if (Subject.Result != null)
         {
             var resultJson = JsonConvert.SerializeObject(Subject.Result);
-            var (isValid, errors) = await JsonValidators.ValidateJsonSchema<T>(resultJson);
+            var (isValid, errors) = await JsonValidator.ValidateJsonSchema<T>(resultJson);
 
             assertion.ForCondition(_ => isValid)
                 .FailWith($"Response content does not comply with the {typeof(T).FullName} schema: {string.Join(", ", errors)}");

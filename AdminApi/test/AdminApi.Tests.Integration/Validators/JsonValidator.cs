@@ -6,7 +6,7 @@ using JsonSchemaGenerator = NJsonSchema.Generation.JsonSchemaGenerator;
 
 namespace Backbone.AdminApi.Tests.Integration.Validators;
 
-public class JsonValidators
+public class JsonValidator
 {
     private static readonly Dictionary<Type, JsonSchema> CACHED_SCHEMAS = new();
 
