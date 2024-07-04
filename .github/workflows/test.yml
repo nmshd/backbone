@@ -225,8 +225,8 @@ jobs:
       - name: Restart compose stack
         id: restart-compose-stack-1
         run: |
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.sqlserver.yml -f ./.ci/compose.test.aui.yml down -v;
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.sqlserver.yml -f ./.ci/compose.test.aui.yml up -d --no-build
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.sqlserver.yml -f ./.ci/compose.test.aui.yml down -v
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.sqlserver.yml -f ./.ci/compose.test.aui.yml up --no-build --wait -d
 
       - name: Run Admin UI integration tests
         id: run-aui-integration-tests
@@ -245,8 +245,8 @@ jobs:
         id: restart-compose-stack-2
         if: success() || failure()
         run: |
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.sqlserver.yml -f ./.ci/compose.test.capi.yml down -v;
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.sqlserver.yml -f ./.ci/compose.test.capi.yml up -d --no-build
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.sqlserver.yml -f ./.ci/compose.test.capi.yml down -v
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.sqlserver.yml -f ./.ci/compose.test.capi.yml up --no-build --wait -d
 
       - name: Run Consumer API integration tests
         id: run-capi-integration-tests
@@ -265,15 +265,15 @@ jobs:
         id: restart-compose-stack-3
         if: success() || failure()
         run: |
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.sqlserver.yml down -v;
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.sqlserver.yml up -d --no-build
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.sqlserver.yml down -v
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.sqlserver.yml up --no-build --wait -d
 
       - name: Run Identity Deletion Job integration tests
         id: run-idj-integration-tests
         if: (success() || failure()) && (steps.restart-compose-stack-3.outcome == 'success')
         run: |
           mv Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json ./Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json.bak
-          cp .ci/appsettings.override.postgres.local.json Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json
+          cp .ci/appsettings.override.sqlserver.local.json Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json
           dotnet build --no-restore Jobs/test/Job.IdentityDeletion.Tests.Integration
           dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false" Jobs/test/Job.IdentityDeletion.Tests.Integration
 
@@ -328,8 +328,8 @@ jobs:
       - name: Restart compose stack
         id: restart-compose-stack-1
         run: |
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.postgres.yml -f ./.ci/compose.test.aui.yml down -v;
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.postgres.yml -f ./.ci/compose.test.aui.yml up -d --no-build
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.postgres.yml -f ./.ci/compose.test.aui.yml down -v
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.postgres.yml -f ./.ci/compose.test.aui.yml up --no-build --wait -d
 
       - name: Run Admin UI integration tests
         id: run-aui-integration-tests
@@ -348,8 +348,8 @@ jobs:
         id: restart-compose-stack-2
         if: success() || failure()
         run: |
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.postgres.yml -f ./.ci/compose.test.capi.yml down -v;
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.postgres.yml -f ./.ci/compose.test.capi.yml up -d --no-build
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.postgres.yml -f ./.ci/compose.test.capi.yml down -v
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.postgres.yml -f ./.ci/compose.test.capi.yml up --no-build --wait -d
 
       - name: Run Consumer API integration tests
         id: run-capi-integration-tests
@@ -368,8 +368,8 @@ jobs:
         id: restart-compose-stack-3
         if: success() || failure()
         run: |
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.postgres.yml down -v;
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.postgres.yml up -d --no-build
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.postgres.yml down -v
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.postgres.yml up --no-build --wait -d
 
       - name: Run Identity Deletion Job integration tests
         id: run-idj-integration-tests
@@ -423,7 +423,7 @@ jobs:
         run: ./backbone/.ci/loadDockerImages.sh
 
       - name: Run Consumer API & Admin API
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.sqlserver.yml -f ./backbone/.ci/compose.test.capi.yml up -d --no-build
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.sqlserver.yml -f ./backbone/.ci/compose.test.capi.yml up --no-build --wait -d
 
       - name: Install runtime dependencies
         working-directory: ./runtime
@@ -487,7 +487,7 @@ jobs:
         run: ./backbone/.ci/loadDockerImages.sh
 
       - name: Run Consumer API & Admin API
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.postgres.yml -f ./backbone/.ci/compose.test.capi.yml up -d --no-build
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.postgres.yml -f ./backbone/.ci/compose.test.capi.yml up --no-build --wait -d
 
       - name: Install runtime dependencies
         working-directory: ./runtime
