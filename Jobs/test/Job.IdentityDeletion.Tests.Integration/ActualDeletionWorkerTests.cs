@@ -27,9 +27,6 @@ public class ActualDeletionWorkerTests
         var hostBuilder = Program.CreateHostBuilder(["--Worker", "ActualDeletionWorker"]);
 
         _host = hostBuilder.Build();
-
-        GetService<RelationshipsDbContext>().Database.Migrate();
-        GetService<MessagesDbContext>().Database.Migrate();
     }
 
     [Fact]
