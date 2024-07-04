@@ -64,11 +64,6 @@ public class Message : Entity, IIdentifiable<MessageId>
         AnonymizeRecipient(oldIdentityAddress, newIdentityAddress);
     }
 
-    public static Expression<Func<Message, bool>> WasCreatedBy(IdentityAddress identityAddress)
-    {
-        return i => i.CreatedBy == identityAddress.ToString();
-    }
-
     public void SanitizeAfterRelationshipDeleted(string participantOne, string participantTwo, IdentityAddress anonymizedIdentityAddress)
     {
         AnonymizeRecipient(participantOne, anonymizedIdentityAddress);
@@ -76,6 +71,18 @@ public class Message : Entity, IIdentifiable<MessageId>
 
         if (CanAnonymizeSender(anonymizedIdentityAddress))
             AnonymizeSender(anonymizedIdentityAddress);
+    }
+
+    public static Expression<Func<Message, bool>> WasCreatedBy(IdentityAddress identityAddress)
+    {
+        return i => i.CreatedBy == identityAddress.ToString();
+    }
+
+    public static Expression<Func<Message, bool>> WasExchangedBetween(IdentityAddress identityAddressOne, IdentityAddress identityAddressTwo)
+    {
+        return m =>
+            (m.CreatedBy == identityAddressOne && m.Recipients.Any(r => r.Address == identityAddressTwo)) ||
+            (m.CreatedBy == identityAddressTwo && m.Recipients.Any(r => r.Address == identityAddressOne));
     }
 
     private void AnonymizeRecipient(string participantAddress, IdentityAddress anonymizedIdentityAddress)

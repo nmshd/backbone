@@ -26,7 +26,7 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
             return;
 
         var anonymizedIdentityAddress = IdentityAddress.Create(Encoding.Unicode.GetBytes(DELETED_IDENTITY_STRING), _applicationOptions.DidDomainName);
-        var messagesExchangedBetweenRelationshipParticipants = (await _messagesRepository.FindMessagesExchangedBetween(@event.Initiator, @event.Peer, CancellationToken.None)).ToList();
+        var messagesExchangedBetweenRelationshipParticipants = (await _messagesRepository.Find(Message.WasExchangedBetween(@event.Initiator, @event.Peer), CancellationToken.None)).ToList();
         foreach (var message in messagesExchangedBetweenRelationshipParticipants)
         {
             message.SanitizeAfterRelationshipDeleted(@event.Initiator, @event.Peer, anonymizedIdentityAddress);
