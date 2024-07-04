@@ -18,11 +18,7 @@ public class JsonValidator
         if (CACHED_SCHEMAS.TryGetValue(typeof(T), out var schema))
         {
             var parsedJson = JToken.Parse(json);
-            var validationResults = schema.Validate(parsedJson);
-
-            errors.AddRange(validationResults.Select(validationResult => validationResult.ToString()));
-
-            return (validationResults.Count == 0, errors);
+            return CreateValueTupleResult(schema, parsedJson, errors);
         }
 
         var settings = new NewtonsoftJsonSchemaGeneratorSettings
@@ -46,10 +42,16 @@ public class JsonValidator
         CACHED_SCHEMAS.Add(typeof(T), schema);
 
         var responseJson = JToken.Parse(json);
-        var validationErrors = schema.Validate(responseJson);
 
-        errors.AddRange(validationErrors.Select(validationError => validationError.ToString()));
+        return CreateValueTupleResult(schema, responseJson, errors);
+    }
 
-        return (validationErrors.Count == 0, errors);
+    private static (bool IsValid, IList<string> Errors) CreateValueTupleResult(JsonSchema schema, JToken parsedJson, List<string> errors)
+    {
+        var validationResults = schema.Validate(parsedJson);
+
+        errors.AddRange(validationResults.Select(validationResult => validationResult.ToString()));
+
+        return (validationResults.Count == 0, errors);
     }
 }

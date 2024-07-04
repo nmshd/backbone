@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using NJsonSchema;
 using NJsonSchema.NewtonsoftJson.Generation;
 using JsonSchemaGenerator = NJsonSchema.Generation.JsonSchemaGenerator;
@@ -16,27 +17,17 @@ public class JsonValidator
 
         if (CACHED_SCHEMAS.TryGetValue(typeof(T), out var schema))
         {
-            try
-            {
-                var parsedJson = JObject.Parse(json);
-                var validationResults = schema.Validate(parsedJson);
-
-                errors.AddRange(validationResults.Select(validationResult => validationResult.ToString()));
-
-                return (validationResults.Count == 0, errors);
-            }
-            catch (JsonReaderException)
-            {
-                var parsedJson = JArray.Parse(json);
-                var validationResults = schema.Validate(parsedJson);
-
-                errors.AddRange(validationResults.Select(validationResult => validationResult.ToString()));
-
-                return (validationResults.Count == 0, errors);
-            }
+            var parsedJson = JToken.Parse(json);
+            return CreateValueTupleResult(schema, parsedJson, errors);
         }
 
-        var settings = new NewtonsoftJsonSchemaGeneratorSettings();
+        var settings = new NewtonsoftJsonSchemaGeneratorSettings
+        {
+            SerializerSettings = new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            }
+        };
 
         var generator = new JsonSchemaGenerator(settings);
 
@@ -50,23 +41,17 @@ public class JsonValidator
 
         CACHED_SCHEMAS.Add(typeof(T), schema);
 
-        try
-        {
-            var responseJson = JObject.Parse(json);
-            var validationResults = schema.Validate(responseJson);
+        var responseJson = JToken.Parse(json);
 
-            errors.AddRange(validationResults.Select(validationResult => validationResult.ToString()));
+        return CreateValueTupleResult(schema, responseJson, errors);
+    }
 
-            return (validationResults.Count == 0, errors);
-        }
-        catch (JsonReaderException)
-        {
-            var responseJson = JArray.Parse(json);
-            var validationResults = schema.Validate(responseJson);
+    private static (bool IsValid, IList<string> Errors) CreateValueTupleResult(JsonSchema schema, JToken parsedJson, List<string> errors)
+    {
+        var validationResults = schema.Validate(parsedJson);
 
-            errors.AddRange(validationResults.Select(validationResult => validationResult.ToString()));
+        errors.AddRange(validationResults.Select(validationResult => validationResult.ToString()));
 
-            return (validationResults.Count == 0, errors);
-        }
+        return (validationResults.Count == 0, errors);
     }
 }
