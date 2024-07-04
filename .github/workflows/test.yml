@@ -423,7 +423,7 @@ jobs:
         run: ./backbone/.ci/loadDockerImages.sh
 
       - name: Run Consumer API & Admin API
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.sqlserver.yml -f ./.ci/compose.test.capi.yml up -d --no-build
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.sqlserver.yml -f ./backbone/.ci/compose.test.capi.yml up -d --no-build
 
       - name: Install runtime dependencies
         working-directory: ./runtime
@@ -451,7 +451,7 @@ jobs:
           path: docker-log.txt
 
       - name: Stop Consumer API
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.sqlserver.yml -f ./.ci/compose.test.capi.yml down
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.sqlserver.yml -f ./backbone/.ci/compose.test.capi.yml down
 
   transport-test-postgres:
     name: Run transport Tests (on Postgres)
@@ -487,7 +487,7 @@ jobs:
         run: ./backbone/.ci/loadDockerImages.sh
 
       - name: Run Consumer API & Admin API
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.postgres.yml -f ./.ci/compose.test.capi.yml up -d --no-build
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.postgres.yml -f ./backbone/.ci/compose.test.capi.yml up -d --no-build
 
       - name: Install runtime dependencies
         working-directory: ./runtime
@@ -515,7 +515,7 @@ jobs:
           path: docker-log.txt
 
       - name: Stop Consumer API
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.postgres.yml -f ./.ci/compose.test.capi.yml down
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.postgres.yml -f ./backbone/.ci/compose.test.capi.yml down
 
   build-helm-chart:
     name: Build Helm Chart
