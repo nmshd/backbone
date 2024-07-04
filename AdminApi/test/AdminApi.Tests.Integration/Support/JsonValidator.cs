@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Serialization;
 using NJsonSchema;
 using NJsonSchema.NewtonsoftJson.Generation;
 using JsonSchemaGenerator = NJsonSchema.Generation.JsonSchemaGenerator;
@@ -17,17 +16,19 @@ public class JsonValidator
 
         if (CACHED_SCHEMAS.TryGetValue(typeof(T), out var schema))
         {
-            var parsedJson = JArray.Parse(json);
-            return CreateValueTupleResult(schema, parsedJson, errors);
+            try
+            {
+                var parsedJson = JObject.Parse(json);
+                return CreateValueTupleResult(schema, parsedJson, errors);
+            }
+            catch (JsonReaderException)
+            {
+                var parsedJson = JArray.Parse(json);
+                return CreateValueTupleResult(schema, parsedJson, errors);
+            }
         }
 
-        var settings = new NewtonsoftJsonSchemaGeneratorSettings
-        {
-            SerializerSettings = new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            }
-        };
+        var settings = new NewtonsoftJsonSchemaGeneratorSettings();
 
         var generator = new JsonSchemaGenerator(settings);
 
@@ -41,9 +42,16 @@ public class JsonValidator
 
         CACHED_SCHEMAS.Add(typeof(T), schema);
 
-        var responseJson = JArray.Parse(json);
-
-        return CreateValueTupleResult(schema, responseJson, errors);
+        try
+        {
+            var responseJson = JObject.Parse(json);
+            return CreateValueTupleResult(schema, responseJson, errors);
+        }
+        catch (JsonReaderException)
+        {
+            var responseJson = JArray.Parse(json);
+            return CreateValueTupleResult(schema, responseJson, errors);
+        }
     }
 
     private static (bool IsValid, IList<string> Errors) CreateValueTupleResult(JsonSchema schema, JToken parsedJson, List<string> errors)
