@@ -36,7 +36,7 @@ services:
 
 configs:
   Config:
-    file: appsettings.override.postgres.json
+    file: appsettings.override.postgres.docker.json
 
 networks:
   default:
