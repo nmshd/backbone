@@ -20,6 +20,6 @@ wait
 export CONSUMER_API_BASE_ADDRESS="http://localhost:5000"
 export ADMIN_API_BASE_ADDRESS="http://localhost:5173"
 
+dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false" Jobs/test/Job.IdentityDeletion.Tests.Integration
 dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false" AdminApi/test/AdminApi.Tests.Integration
 dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false" ConsumerApi.Tests.Integration
-dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false" Jobs/test/Job.IdentityDeletion.Tests.Integration
