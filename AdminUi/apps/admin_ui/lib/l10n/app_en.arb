@@ -2,6 +2,7 @@
     "@@locale": "en",
     "cancel": "Cancel",
     "close": "Close",
+    "find": "Find",
     "save": "Save",
     "yes": "Yes",
     "deletionProcessAuditLogs_title": "Identity deletion process audit logs",
