@@ -183,6 +183,75 @@ jobs:
           rm -rf /tmp/.buildx-${{ matrix.image }}-cache
           mv /tmp/.buildx-${{ matrix.image }}-cache-new /tmp/.buildx-${{ matrix.image }}-cache
 
+  integration-test:
+    name: Run ${{matrix.test-project}} on ${{matrix.database}}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        database: [sqlserver, postgres]
+        test-project:
+          - name: AdminApi/test/AdminApi.Tests.Integration
+            additional-compose-files: -f ./.ci/compose.test.aui.yml
+          # - ConsumerApi.Tests.Integration
+          # - Job.IdentityDeletion.Tests.Integration
+    needs: image-test-builds
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: latest
+          cache: "npm"
+          cache-dependency-path: "**/package-lock.json"
+
+      - name: Setup NuGet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+
+      - name: Download cached Docker images
+        uses: actions/download-artifact@v4
+        with:
+          path: /tmp
+          pattern: docker-*
+          merge-multiple: true
+
+      - name: Load Docker images and build test code
+        run: |
+          {
+            ./.ci/loadDockerImages.sh
+          } &
+          {
+            dotnet restore Backbone.sln
+            mv Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json ./Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json.bak
+            cp .ci/appsettings.override.sqlserver.local.json Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json
+            dotnet build --no-restore Backbone.sln
+          }
+          wait
+
+      - name: Start compose stack
+        run: |
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml ${{matrix.test-project.additional-compose-files}} down -v
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml ${{matrix.test-project.additional-compose-files}} up --no-build --wait -d
+
+      - name: Run integration tests
+        run: dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false" ${{matrix.test-project.name}}
+        env:
+          ADMIN_API_BASE_ADDRESS: "http://localhost:5173"
+          CONSUMER_API_BASE_ADDRESS: "http://localhost:5000"
+
+      # - name: Save Docker Logs
+      #   if: failure()
+      #   run: docker compose -f ./.ci/compose.test.aui.yml logs > aui.integration-test.${{matrix.database}}.txt
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
+
   integration-test-sqlserver:
     name: Run Integration Tests (on SQL Server)
     runs-on: ubuntu-latest
