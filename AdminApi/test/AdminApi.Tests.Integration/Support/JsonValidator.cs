@@ -17,7 +17,7 @@ public class JsonValidator
 
         if (CACHED_SCHEMAS.TryGetValue(typeof(T), out var schema))
         {
-            var parsedJson = JToken.Parse(json);
+            var parsedJson = JArray.Parse(json);
             return CreateValueTupleResult(schema, parsedJson, errors);
         }
 
@@ -41,7 +41,7 @@ public class JsonValidator
 
         CACHED_SCHEMAS.Add(typeof(T), schema);
 
-        var responseJson = JToken.Parse(json);
+        var responseJson = JArray.Parse(json);
 
         return CreateValueTupleResult(schema, responseJson, errors);
     }
