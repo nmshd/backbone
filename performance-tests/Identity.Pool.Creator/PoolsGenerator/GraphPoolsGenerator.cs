@@ -19,7 +19,7 @@ public class GraphPoolsGenerator
     private readonly string _baseAddress;
     private readonly ClientCredentials _clientCredentials;
     private readonly IPrinter _printer;
-    private readonly List<PoolEntry> _pools;
+    private List<PoolEntry> _pools;
 
     public GraphPoolsGenerator(
         string baseAddress,
@@ -38,7 +38,7 @@ public class GraphPoolsGenerator
     {
         CreateInitialNodes();
 
-        PoolsOffset.CreateOffsetPools(_pools);
+        _pools = PoolsOffset.CreateOffsetPools(_pools);
 
         DeepGenerateV2();
 

@@ -66,7 +66,7 @@ internal record PoolsOffset
         return offset > 0 ? OffsetDirections.App : OffsetDirections.Connector;
     }
 
-    public static void CreateOffsetPools(IList<PoolEntry> pools, PoolsOffset? offset = null)
+    public static List<PoolEntry> CreateOffsetPools(List<PoolEntry> pools, PoolsOffset? offset = null)
     {
         offset ??= CalculatePoolOffsets(pools);
 
@@ -117,6 +117,8 @@ internal record PoolsOffset
             pools.Add(messagesOffsetPool1);
             pools.Add(messagesOffsetPool2);
         }
+
+        return pools;
     }
 }
 

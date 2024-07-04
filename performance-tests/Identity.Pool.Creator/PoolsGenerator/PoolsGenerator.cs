@@ -1,9 +1,7 @@
 ﻿using System.Text;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
-using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
-using Backbone.Crypto;
 using Backbone.Identity.Pool.Creator.Application.MessageDistributor;
 using Backbone.Identity.Pool.Creator.Application.Printer;
 using Backbone.Identity.Pool.Creator.Application.RelationshipDistributor;
@@ -19,9 +17,10 @@ public class PoolsGenerator
     private readonly IRelationshipDistributor _relationshipDistributor;
     private readonly IMessageDistributor _messageDistributor;
     private readonly IPrinter _printer;
-    private readonly IList<PoolEntry> _pools;
+    private List<PoolEntry> _pools;
     private readonly PoolsOffset _poolsOffset;
     private readonly ClientCredentials _clientCredentials;
+    private readonly PoolFileRoot _config;
 
     public PoolsGenerator(
         string baseAddress,
@@ -38,6 +37,7 @@ public class PoolsGenerator
         _messageDistributor = messageDistributor;
         _printer = printer;
         _pools = configuration.Pools.ToList();
+        _config = configuration;
 
         MessageDistributorTools.CalculateSentAndReceivedMessages(_pools, configuration.Configuration);
         _poolsOffset = PoolsOffset.CalculatePoolOffsets(_pools.ToArray());
@@ -45,7 +45,7 @@ public class PoolsGenerator
 
     public async Task CreatePools()
     {
-        PoolsOffset.CreateOffsetPools(_pools, _poolsOffset);
+        _pools = PoolsOffset.CreateOffsetPools(_pools, _poolsOffset);
 
         CheckPoolsConfiguration();
 
@@ -70,15 +70,16 @@ public class PoolsGenerator
         //await CreateDatawalletModifications();
 
         OutputAll();
+        _config.Pools = _pools.ToArray();
     }
 
     private uint TrimUnusedRelationships()
     {
-        var allIdentites = _pools.SelectMany(p => p.Identities);
+        var allIdentities = _pools.SelectMany(p => p.Identities);
 
         uint removedCount = 0;
 
-        foreach (var identity in allIdentites)
+        foreach (var identity in allIdentities)
         {
             for (var i = 0; i < identity.IdentitiesToEstablishRelationshipsWith.Count; i++)
             {
@@ -122,7 +123,7 @@ public class PoolsGenerator
         {
             for (uint i = 0; i < pool.Amount; i++)
             {
-                var createdIdentity = new Identity(new("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)), "ID1" + PasswordHelper.GeneratePassword(16, 16), "DVC" + PasswordHelper.GeneratePassword(8, 8), pool, uon++);
+                var createdIdentity = new Identity(new("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)), "ID1" + PasswordHelper.GeneratePassword(16, 16), "DVC" + PasswordHelper.GeneratePassword(8, 8), pool, i+1, uon++);
 
                 if (pool.NumberOfDevices > 1)
                 {
