@@ -4,7 +4,7 @@ using NJsonSchema;
 using NJsonSchema.NewtonsoftJson.Generation;
 using JsonSchemaGenerator = NJsonSchema.Generation.JsonSchemaGenerator;
 
-namespace Backbone.AdminApi.Tests.Integration.Validators;
+namespace Backbone.AdminApi.Tests.Integration.Support;
 
 public class JsonValidator
 {

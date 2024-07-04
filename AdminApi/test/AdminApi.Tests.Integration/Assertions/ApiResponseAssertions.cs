@@ -1,4 +1,4 @@
-﻿using Backbone.AdminApi.Tests.Integration.Validators;
+﻿using Backbone.AdminApi.Tests.Integration.Support;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
