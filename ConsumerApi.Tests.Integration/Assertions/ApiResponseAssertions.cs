@@ -29,9 +29,8 @@ public class ApiResponseAssertions<T> : ReferenceTypeAssertions<ApiResponse<T>, 
             var (isValid, errors) = await JsonValidators.ValidateJsonSchema<T>(resultJson);
 
             assertion.ForCondition(_ => isValid)
-                .FailWith($"Response content does not comply with the {typeof(T).FullName} schema: {string.Join(", ", Errors)}");
+                .FailWith($"Response content does not comply with the {typeof(T).FullName} schema: {string.Join(", ", errors)}");
         }
-
     }
 
     public void BeASuccess(string because = "", params object[] becauseArgs)
