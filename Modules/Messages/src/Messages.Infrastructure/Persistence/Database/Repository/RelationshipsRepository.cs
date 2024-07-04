@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Domain.Entities;
@@ -31,17 +30,5 @@ public class RelationshipsRepository : IRelationshipsRepository
             .WithParticipants(sender, recipient)
             .OrderByDescending(r => r.CreatedAt)
             .FirstOrDefaultAsync(cancellationToken);
-    }
-
-    public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
-    {
-        return await _readOnlyRelationships.Where(filter).ToListAsync(cancellationToken);
-    }
-
-    public Task<int> CountActiveRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
-    {
-        return _readOnlyRelationships
-            .Where(filter)
-            .CountAsync(cancellationToken);
     }
 }
