@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json.Schema;
+using NJsonSchema;
 using NJsonSchema.NewtonsoftJson.Generation;
 using JsonSchemaGenerator = NJsonSchema.Generation.JsonSchemaGenerator;
 
@@ -8,21 +8,31 @@ namespace Backbone.AdminApi.Tests.Integration.Validators;
 
 public class JsonValidators
 {
-    private static readonly Dictionary<Type, JSchema> CACHED_SCHEMAS = new();
+    private static readonly Dictionary<Type, JsonSchema> CACHED_SCHEMAS = new();
 
-    public static bool ValidateJsonSchema<T>(string json, out IList<string> errors)
+    public static async Task<(bool IsValid, IList<string> Errors)> ValidateJsonSchema<T>(string json)
     {
+        var errors = new List<string>();
+
         if (CACHED_SCHEMAS.TryGetValue(typeof(T), out var schema))
         {
             try
             {
                 var parsedJson = JObject.Parse(json);
-                return parsedJson.IsValid(schema, out errors);
+                var validationResults = schema.Validate(parsedJson);
+
+                errors.AddRange(validationResults.Select(validationResult => validationResult.ToString()));
+
+                return (validationResults.Count == 0, errors);
             }
             catch (JsonReaderException)
             {
                 var parsedJson = JArray.Parse(json);
-                return parsedJson.IsValid(schema, out errors);
+                var validationResults = schema.Validate(parsedJson);
+
+                errors.AddRange(validationResults.Select(validationResult => validationResult.ToString()));
+
+                return (validationResults.Count == 0, errors);
             }
         }
 
@@ -34,7 +44,7 @@ public class JsonValidators
 
         var generatedSchema = schemaJson.ToJson();
 
-        schema = JSchema.Parse(generatedSchema);
+        schema = await JsonSchema.FromJsonAsync(generatedSchema);
 
         schema.AllowAdditionalProperties = true;
 
@@ -43,12 +53,20 @@ public class JsonValidators
         try
         {
             var responseJson = JObject.Parse(json);
-            return responseJson.IsValid(schema, out errors);
+            var validationResults = schema.Validate(responseJson);
+
+            errors.AddRange(validationResults.Select(validationResult => validationResult.ToString()));
+
+            return (validationResults.Count == 0, errors);
         }
         catch (JsonReaderException)
         {
             var responseJson = JArray.Parse(json);
-            return responseJson.IsValid(schema, out errors);
+            var validationResults = schema.Validate(responseJson);
+
+            errors.AddRange(validationResults.Select(validationResult => validationResult.ToString()));
+
+            return (validationResults.Count == 0, errors);
         }
     }
 }

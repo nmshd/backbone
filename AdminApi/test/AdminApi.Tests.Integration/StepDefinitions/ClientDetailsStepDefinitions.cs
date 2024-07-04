@@ -63,14 +63,14 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
     }
 
     [Then("the response contains Client c")]
-    public void ThenTheResponseContainsAClient()
+    public async Task ThenTheResponseContainsAClient()
     {
         _response!.Result!.Should().NotBeNull();
         _response!.Result!.ClientId.Should().Be(_clientId);
         _response!.Result!.DefaultTier.Should().Be(_tierId);
         _response!.Result!.MaxIdentities.Should().Be(_maxIdentities);
         _response!.ContentType.Should().StartWith("application/json");
-        _response!.Should().ComplyWithSchema();
+        await _response!.Should().ComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
