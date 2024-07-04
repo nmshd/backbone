@@ -1,40 +1,4 @@
 services:
-  consumer-api:
-    container_name: consumer-api-test
-    hostname: consumer-api
-    image: consumer-api:0.0.1
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "5000:8080"
-    depends_on:
-      database-migrator:
-        condition: service_completed_successfully
-      rabbitmq:
-        condition: service_started
-      azure-storage-emulator:
-        condition: service_started
-    configs:
-      - source: Config
-        target: app/appsettings.override.json
-
-  admin-ui:
-    container_name: admin-ui-test
-    hostname: admin-ui
-    image: admin-ui:0.0.1
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Development
-    ports:
-      - "5173:8080"
-    depends_on:
-      database-migrator:
-        condition: service_completed_successfully
-      rabbitmq:
-        condition: service_started
-    configs:
-      - source: Config
-        target: app/appsettings.override.json
-
   event-handler-service:
     container_name: event-handler-service-test
     image: event-handler-service:0.0.1
