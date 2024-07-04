@@ -63,9 +63,6 @@ services:
   admin-cli:
     container_name: admin-cli-test
     image: admin-cli:0.0.1
-    depends_on:
-      consumer-api:
-        condition: service_healthy
     command: backbone client create --clientId test --clientSecret test --defaultTier Basic
 
 networks:
