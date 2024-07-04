@@ -441,7 +441,7 @@ jobs:
 
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./.ci/compose.test.capi.yml logs > docker-log.txt
+        run: docker compose -f ./backbone/.ci/compose.test.capi.yml logs > docker-log.txt
 
       - name: Archive logs
         if: failure()
@@ -505,7 +505,7 @@ jobs:
 
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./.ci/compose.test.capi.yml logs > docker-log.txt
+        run: docker compose -f ./backbone/.ci/compose.test.capi.yml logs > docker-log.txt
 
       - name: Archive logs
         if: failure()
