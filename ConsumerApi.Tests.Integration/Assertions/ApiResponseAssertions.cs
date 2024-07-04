@@ -16,7 +16,6 @@ public class ApiResponseAssertions<T> : ReferenceTypeAssertions<ApiResponse<T>, 
 
     public async Task ComplyWithSchema(string because = "", params object[] becauseArgs)
     {
-        IList<string> errors = [];
         var assertion = Execute.Assertion
             .BecauseOf(because, becauseArgs)
             .Given(() => Subject.Result!)

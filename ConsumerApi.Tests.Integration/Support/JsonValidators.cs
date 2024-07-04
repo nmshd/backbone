@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-//using Newtonsoft.Json.Schema;
 using Newtonsoft.Json.Serialization;
 using NJsonSchema.NewtonsoftJson.Generation;
 using JsonSchema = NJsonSchema.JsonSchema;
