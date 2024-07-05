@@ -316,6 +316,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Others", "Others", "{8B8EE965-0373-46D6-BB30-7C131EE524E4}"
 	ProjectSection(SolutionItems) = preProject
 		appsettings.override.json = appsettings.override.json
+		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
 Global
