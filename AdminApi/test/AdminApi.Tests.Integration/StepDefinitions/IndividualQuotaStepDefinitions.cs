@@ -91,11 +91,11 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
     }
 
     [Then("the response contains an IndividualQuota")]
-    public void ThenTheResponseContainsAnIndividualQuota()
+    public async Task ThenTheResponseContainsAnIndividualQuota()
     {
         _createQuotaResponse!.Result!.Should().NotBeNull();
         _createQuotaResponse!.ContentType.Should().StartWith("application/json");
-        _createQuotaResponse.Should().ComplyWithSchema();
+        await _createQuotaResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
