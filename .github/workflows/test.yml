@@ -184,14 +184,14 @@ jobs:
           mv /tmp/.buildx-${{ matrix.image }}-cache-new /tmp/.buildx-${{ matrix.image }}-cache
 
   integration-test:
-    name: Run ${{matrix.test-project.name}} on ${{matrix.database}}
+    name: Run ${{matrix.test-project.path}} on ${{matrix.database}}
     runs-on: ubuntu-latest
     strategy:
       matrix:
         database: [sqlserver, postgres]
         test-project:
           - display-name: AdminApi
-          - path: AdminApi/test/AdminApi.Tests.Integration
+            path: AdminApi/test/AdminApi.Tests.Integration
             additional-compose-files: -f ./.ci/compose.test.aui.yml
           # - ConsumerApi.Tests.Integration
           # - Job.IdentityDeletion.Tests.Integration
