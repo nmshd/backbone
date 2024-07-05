@@ -185,23 +185,19 @@ jobs:
           mv /tmp/.buildx-${{ matrix.image }}-cache-new /tmp/.buildx-${{ matrix.image }}-cache
 
   integration-test:
-    name: Run ${{matrix.test-project.path}} on ${{matrix.database}}
+    name: Run ${{matrix.test-project.display-name}} integration tests on ${{matrix.database}}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         database: [sqlserver, postgres]
         test-project:
-          - display-name: AdminApi
+          - display-name: admin-api
             path: AdminApi/test/AdminApi.Tests.Integration
-            additional-compose-files: -f ./.ci/compose.test.aui.yml -f ./.ci/compose.test.capi.yml
-          - display-name: ConsumerApi
+          - display-name: consumer-api
             path: ConsumerApi.Tests.Integration
-            additional-compose-files: -f ./.ci/compose.test.aui.yml -f ./.ci/compose.test.capi.yml
-          - display-name: IdentityDeletionJob
+          - display-name: identity-deletion-job
             path: Jobs/test/Job.IdentityDeletion.Tests.Integration
-          # - ConsumerApi.Tests.Integration
-          # - Job.IdentityDeletion.Tests.Integration
     needs: image-test-builds
     steps:
       - name: Checkout
@@ -239,26 +235,29 @@ jobs:
           } &
           {
             dotnet restore Backbone.sln
+
+            # The following two lines are for the identity deletion job only
             mv Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json ./Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json.bak
             cp .ci/appsettings.override.${{matrix.database}}.local.json Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json
+
             dotnet build --no-restore Backbone.sln
           }
           wait
 
       - name: Start compose stack
         run: |
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml ${{matrix.test-project.additional-compose-files}} down -v
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml ${{matrix.test-project.additional-compose-files}} up --no-build --wait -d
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml -f ./.ci/compose.test.aui.yml -f ./.ci/compose.test.capi.yml down -v
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml -f ./.ci/compose.test.aui.yml -f ./.ci/compose.test.capi.yml up --no-build --wait -d
 
       - name: Run integration tests
-        run: dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false" ${{matrix.test-project.name}}
+        run: dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false" ${{matrix.test-project.path}}
         env:
           ADMIN_API_BASE_ADDRESS: "http://localhost:5173"
           CONSUMER_API_BASE_ADDRESS: "http://localhost:5000"
 
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml ${{matrix.test-project.additional-compose-files}} logs > logs.txt
+        run: docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml -f ./.ci/compose.test.aui.yml -f ./.ci/compose.test.capi.yml logs > logs.txt
 
       - name: Archive logs
         if: failure()
