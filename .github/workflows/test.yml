@@ -12,7 +12,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  run-adminUi-checks:
+  adminui-checks:
     runs-on: ubuntu-latest
     name: Run Admin UI Checks
     steps:
@@ -21,7 +21,7 @@ jobs:
       - name: Run Checks
         run: ./.ci/aui/runChecks.sh
 
-  run-adminUi-flutter-checks:
+  adminui-flutter-checks:
     runs-on: ubuntu-latest
     name: Run Admin UI Flutter Checks
     steps:
@@ -197,7 +197,7 @@ jobs:
             additional-compose-files: -f ./.ci/compose.test.aui.yml -f ./.ci/compose.test.capi.yml
           - display-name: ConsumerApi
             path: ConsumerApi.Tests.Integration
-            additional-compose-files: -f ./.ci/compose.test.capi.yml
+            additional-compose-files: -f ./.ci/compose.test.aui.yml -f ./.ci/compose.test.capi.yml
           - display-name: IdentityDeletionJob
             path: Jobs/test/Job.IdentityDeletion.Tests.Integration
           # - ConsumerApi.Tests.Integration
