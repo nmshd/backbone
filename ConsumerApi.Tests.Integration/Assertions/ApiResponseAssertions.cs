@@ -14,17 +14,23 @@ public class ApiResponseAssertions<T> : ReferenceTypeAssertions<ApiResponse<T>, 
 
     protected override string Identifier => "ApiResponse";
 
-    public void ComplyWithSchema(string because = "", params object[] becauseArgs)
+    public async Task ComplyWithSchema(string because = "", params object[] becauseArgs)
     {
-        IList<string> errors = [];
-        Execute.Assertion
+        var assertion = Execute.Assertion
             .BecauseOf(because, becauseArgs)
             .Given(() => Subject.Result!)
             .ForCondition(result => result != null)
             .FailWith("You can't validate the JSON schema of a NULL object")
-            .Then
-            .ForCondition(result => JsonValidators.ValidateJsonSchema<T>(JsonConvert.SerializeObject(result), out errors))
-            .FailWith($"Response content does not comply with the {typeof(T).FullName} schema: {string.Join(", ", errors)}");
+            .Then;
+
+        if (Subject.Result != null)
+        {
+            var resultJson = JsonConvert.SerializeObject(Subject.Result);
+            var (isValid, errors) = await JsonValidator.ValidateJsonSchema<T>(resultJson);
+
+            assertion.ForCondition(_ => isValid)
+                .FailWith($"Response content does not comply with the {typeof(T).FullName} schema: {string.Join(", ", errors)}");
+        }
     }
 
     public void BeASuccess(string because = "", params object[] becauseArgs)

@@ -100,11 +100,11 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     }
 
     [Then("the response contains a TierQuota")]
-    public void ThenTheResponseContainsATierQuotaDefinition()
+    public async Task ThenTheResponseContainsATierQuotaDefinition()
     {
         _createTierQuotaResponse!.Should().BeASuccess();
         _createTierQuotaResponse!.ContentType.Should().StartWith("application/json");
-        _createTierQuotaResponse.Should().ComplyWithSchema();
+        await _createTierQuotaResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
