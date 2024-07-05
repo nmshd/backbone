@@ -447,4 +447,6 @@ jobs:
           echo Ignored Packages:
           cat ./.ci/ignoredPackages.json
       - name: Validate Licenses
-        run: nuget-license -i ./DatabaseMigrator/DatabaseMigrator.csproj -a ./.ci/allowedLicenses.json -ignore ./.ci/ignoredPackages.json -o jsonPretty
+        run: |
+          dotnet restore ./Backbone.sln
+          nuget-license -i ./Backbone.sln -a ./.ci/allowedLicenses.json -ignore ./.ci/ignoredPackages.json -o jsonPretty
