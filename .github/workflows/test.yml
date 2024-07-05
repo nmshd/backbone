@@ -426,3 +426,24 @@ jobs:
         run: ./.ci/helm/buildChart.js
         env:
           VERSION: 0.0.0
+
+  validate-licenses:
+    name: Validate OpenSource Licenses
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Dotnet
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.x
+      - name: Install nuget-licenses tool
+        run: dotnet tool install --global nuget-license
+      - name: Show Allowed Licenses and ignored Packages
+        run: |
+          echo Allowed Licenses
+          cat ./.ci/allowedLicenses.json
+          echo Ignored Packages
+          cat ./.ci/ignoredPackages.json
+      - name: Validate Licenses
+        run: nuget-license -i ./Backbone.sln -t -a ./.ci/allowedLicenses.json -ignore ./.ci/ignoredPackages.json -o jsonPretty
