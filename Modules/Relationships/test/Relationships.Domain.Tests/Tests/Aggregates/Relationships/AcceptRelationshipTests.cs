@@ -112,4 +112,87 @@ public class AcceptRelationshipTests : AbstractTestsBase
         domainEvent.Initiator.Should().Be(relationship.LastModifiedBy);
         domainEvent.Peer.Should().Be(relationship.GetPeerOf(relationship.LastModifiedBy));
     }
+
+    [Fact]
+    public void P1_active_identity_P1_not_decomposed_P2_decomposed()
+    {
+        // Arrange
+        var existingRelationships = CreateRelationships();
+
+        existingRelationships.First().Terminate(IDENTITY_2, DEVICE_2);
+        existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
+
+        // Act
+        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
+
+        var acting = () => newRelationship.Accept(IDENTITY_1, DEVICE_1, [], existingRelationships);
+
+        // Assert
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.oldRelationshipNotDecomposed");
+    }
+
+    [Fact]
+    public void P1_active_identity_P1_decomposed_P2_not_decomposed()
+    {
+        // Arrange
+        var existingRelationships = CreateRelationships();
+
+        existingRelationships.First().Terminate(IDENTITY_2, DEVICE_2);
+        existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
+
+        // Act
+        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
+
+        existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
+        newRelationship.Accept(IDENTITY_1, DEVICE_1, [], existingRelationships);
+
+        // Assert
+        newRelationship.Status.Should().Be(RelationshipStatus.Active);
+    }
+
+    [Fact]
+    public void P2_active_identity_P1_not_decomposed_P2_decomposed()
+    {
+        // Arrange
+        var existingRelationships = CreateRelationships();
+
+        existingRelationships.First().Terminate(IDENTITY_1, DEVICE_1);
+        existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
+
+        // Act
+        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, existingRelationships);
+
+        var acting = () => newRelationship.Accept(IDENTITY_2, DEVICE_2, [], existingRelationships);
+
+        // Assert
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.oldRelationshipNotDecomposed");
+    }
+
+    [Fact]
+    public void P2_active_identity_P1_decomposed_P2_not_decomposed()
+    {
+        // Arrange
+        var existingRelationships = CreateRelationships();
+
+        existingRelationships.First().Terminate(IDENTITY_1, DEVICE_1);
+        existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
+
+        // Act
+        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, existingRelationships);
+
+        existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
+        newRelationship.Accept(IDENTITY_2, DEVICE_2, [], existingRelationships);
+
+        // Assert
+        newRelationship.Status.Should().Be(RelationshipStatus.Active);
+    }
+
+    private static List<Relationship> CreateRelationships()
+    {
+        var existingRelationships = new List<Relationship>
+        {
+            CreateActiveRelationship(IDENTITY_1, IDENTITY_2)
+        };
+        return existingRelationships;
+    }
 }
