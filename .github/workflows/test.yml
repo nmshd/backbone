@@ -246,18 +246,18 @@ jobs:
 
       - name: Start compose stack
         run: |
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml -f ./.ci/compose.test.aui.yml -f ./.ci/compose.test.capi.yml down -v
-          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml -f ./.ci/compose.test.aui.yml -f ./.ci/compose.test.capi.yml up --no-build --wait -d
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml down -v
+          docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml up --no-build --wait -d
 
       - name: Run integration tests
-        run: dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false" ${{matrix.test-project.path}}
+        run: dotnet test --no-restore --no-build --logger "GitHubActions;summary.includeNotFoundTests=false;summary.includeSkippedTests=false;summary.includePassedTests=false" ${{matrix.test-project.path}}
         env:
           ADMIN_API_BASE_ADDRESS: "http://localhost:5173"
           CONSUMER_API_BASE_ADDRESS: "http://localhost:5000"
 
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml -f ./.ci/compose.test.aui.yml -f ./.ci/compose.test.capi.yml logs > logs.txt
+        run: docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml logs > logs.txt
 
       - name: Archive logs
         if: failure()
@@ -304,7 +304,7 @@ jobs:
         run: ./backbone/.ci/loadDockerImages.sh
 
       - name: Start compose stack
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.${{matrix.database}}.yml -f ./backbone/.ci/compose.test.capi.yml up --no-build --wait -d
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.${{matrix.database}}.yml up --no-build --wait -d
 
       - name: Install runtime dependencies
         working-directory: ./runtime
