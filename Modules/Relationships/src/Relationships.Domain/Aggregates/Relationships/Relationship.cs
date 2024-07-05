@@ -25,7 +25,7 @@ public class Relationship : Entity
     {
         EnsureTargetIsNotSelf(relationshipTemplate, activeIdentity);
         EnsureNoOtherRelationshipToPeerExists(relationshipTemplate.CreatedBy, existingRelationships);
-        EnsureActiveIdentityDecomposedOldRelationship(existingRelationships);
+        EnsureActiveIdentityDecomposedOldRelationship(activeIdentity, existingRelationships);
 
         Id = RelationshipId.New();
         RelationshipTemplateId = relationshipTemplate.Id;
@@ -83,10 +83,13 @@ public class Relationship : Entity
             throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
     }
 
-    private void EnsureActiveIdentityDecomposedOldRelationship(List<Relationship> existingRelationships)
+    private void EnsureActiveIdentityDecomposedOldRelationship(IdentityAddress activeIdentity, List<Relationship> existingRelationships)
     {
-        if (existingRelationships.Any(r => r.FromHasDecomposed == false && (r.Status == RelationshipStatus.DeletionProposed || r.Status == RelationshipStatus.ReadyForDeletion)))
-            throw new DomainException(DomainErrors.OldRelationshipNotDecomposed());
+        if (existingRelationships.Any(r => r.From == activeIdentity && !r.FromHasDecomposed && (r.Status == RelationshipStatus.DeletionProposed || r.Status == RelationshipStatus.ReadyForDeletion)))
+                throw new DomainException(DomainErrors.OldRelationshipNotDecomposed());
+
+        if (existingRelationships.Any(r => r.To == activeIdentity && !r.ToHasDecomposed && (r.Status == RelationshipStatus.DeletionProposed || r.Status == RelationshipStatus.ReadyForDeletion)))
+                throw new DomainException(DomainErrors.OldRelationshipNotDecomposed());
     }
 
     public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
