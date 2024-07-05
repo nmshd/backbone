@@ -1,6 +1,7 @@
 ﻿using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
+using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
@@ -12,31 +13,35 @@ public class ExpressionTests : AbstractTestsBase
     [Fact]
     public void WasExchangedBetween_with_true_assertion()
     {
-        var identityOne = TestDataGenerator.CreateRandomIdentityAddress();
-        var identityTwo = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipient = new RecipientInformation(identityTwo, []);
-        var messageFromIdentityOneToIdentityTwo = new Message(identityOne, TestDataGenerator.CreateRandomDeviceId(), [], [], [recipient]);
+        // Arrange
+        var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var recipient = new RecipientInformation(recipientAddress, []);
+        var message = new Message(senderAddress, TestDataGenerator.CreateRandomDeviceId(), [], [], [recipient]);
 
+        // Act
+        var resultOne = message.EvaluateWasExchangedBetweenExpression(senderAddress, recipientAddress);
+        var resultTwo = message.EvaluateWasExchangedBetweenExpression(recipientAddress, senderAddress);
 
-        var resultOne = messageFromIdentityOneToIdentityTwo.EvaluateWasExchangedBetweenExpression(identityOne, identityTwo);
-        var resultTwo = messageFromIdentityOneToIdentityTwo.EvaluateWasExchangedBetweenExpression(identityTwo, identityOne);
-
-        Assert.True(resultOne);
-        Assert.True(resultTwo);
+        // Assert
+        resultOne.Should().BeTrue();
+        resultTwo.Should().BeTrue();
     }
 
     [Fact]
     public void WasExchangedBetween_with_false_assertion()
     {
-        var sender = TestDataGenerator.CreateRandomIdentityAddress();
+        // Arrange
+        var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var recipient = new RecipientInformation(recipientAddress, []);
-        var message = new Message(sender, TestDataGenerator.CreateRandomDeviceId(), [], [], [recipient]);
+        var message = new Message(senderAddress, TestDataGenerator.CreateRandomDeviceId(), [], [], [recipient]);
 
+        // Act
+        var result = message.EvaluateWasExchangedBetweenExpression(senderAddress, TestDataGenerator.CreateRandomIdentityAddress());
 
-        var result = message.EvaluateWasExchangedBetweenExpression(sender, TestDataGenerator.CreateRandomIdentityAddress());
-
-        Assert.False(result);
+        // Assert
+        result.Should().BeFalse();
     }
 
     #endregion
