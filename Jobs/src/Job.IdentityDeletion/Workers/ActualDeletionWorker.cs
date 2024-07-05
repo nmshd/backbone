@@ -16,8 +16,7 @@ public class ActualDeletionWorker : IHostedService
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<ActualDeletionWorker> _logger;
     private readonly IDeletionProcessLogger _deletionProcessLogger;
-    private readonly List<IIdentityDeleter> _nonDeviceIdentityDeleters;
-    private readonly IIdentityDeleter? _deviceIdentityDeleter;
+    private readonly List<IIdentityDeleter> _identityDeleters;
 
     public ActualDeletionWorker(
         IHostApplicationLifetime host,
@@ -28,9 +27,7 @@ public class ActualDeletionWorker : IHostedService
         IDeletionProcessLogger deletionProcessLogger)
     {
         _host = host;
-        _nonDeviceIdentityDeleters = identityDeleters.ToList();
-        _deviceIdentityDeleter = _nonDeviceIdentityDeleters.First(i => i.GetType() == typeof(Modules.Devices.Application.Identities.IdentityDeleter));
-        _nonDeviceIdentityDeleters.Remove(_deviceIdentityDeleter);
+        _identityDeleters = identityDeleters.ToList();
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
         _logger = logger;
@@ -72,7 +69,6 @@ public class ActualDeletionWorker : IHostedService
     {
         await NotifyIdentityAboutStartingDeletion(cancellationToken, identityAddress);
         await Delete(identityAddress);
-        await DeleteDeviceIdentity(identityAddress);
     }
 
     private async Task NotifyIdentityAboutStartingDeletion(CancellationToken cancellationToken, IdentityAddress identityAddress)
@@ -82,15 +78,10 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task Delete(IdentityAddress identityAddress)
     {
-        foreach (var identityDeleter in _nonDeviceIdentityDeleters)
+        foreach (var identityDeleter in _identityDeleters)
         {
             await identityDeleter.Delete(identityAddress, _deletionProcessLogger);
         }
-    }
-
-    private async Task DeleteDeviceIdentity(IdentityAddress identityAddress)
-    {
-        await _deviceIdentityDeleter!.Delete(identityAddress, _deletionProcessLogger);
     }
 
     private void LogErroringDeletionTriggers(IEnumerable<KeyValuePair<IdentityAddress, UnitResult<DomainError>>> erroringDeletionTriggers)
