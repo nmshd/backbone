@@ -207,21 +207,21 @@ internal class TokensApiStepDefinitions
     }
 
     [Then("the response contains a CreateTokenResponse")]
-    public void ThenTheResponseContainsACreateTokenResponse()
+    public async Task ThenTheResponseContainsACreateTokenResponse()
     {
         _createTokenResponse!.Should().NotBeNull();
         _createTokenResponse!.Should().BeASuccess();
         _createTokenResponse!.ContentType.Should().Be("application/json");
-        _createTokenResponse!.Should().ComplyWithSchema();
+        await _createTokenResponse!.Should().ComplyWithSchema();
     }
 
     [Then("the response contains a Token")]
-    public void ThenTheResponseContainsAToken()
+    public async Task ThenTheResponseContainsAToken()
     {
         _tokenResponse!.Should().NotBeNull();
         _tokenResponse!.Should().BeASuccess();
         _tokenResponse!.ContentType.Should().Be("application/json");
-        _tokenResponse!.Should().ComplyWithSchema();
+        await _tokenResponse!.Should().ComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
