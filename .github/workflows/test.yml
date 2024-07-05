@@ -192,7 +192,7 @@ jobs:
         test-project:
           - display-name: AdminApi
             path: AdminApi/test/AdminApi.Tests.Integration
-            additional-compose-files: -f ./.ci/compose.test.aui.yml
+            additional-compose-files: -f ./.ci/compose.test.aui.yml -f ./.ci/compose.test.capi.yml
           # - ConsumerApi.Tests.Integration
           # - Job.IdentityDeletion.Tests.Integration
     needs: image-test-builds
