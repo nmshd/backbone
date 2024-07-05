@@ -449,4 +449,4 @@ jobs:
       - name: Validate Licenses
         run: |
           dotnet restore ./Backbone.sln
-          nuget-license -i ./Backbone.sln -a -t ./.ci/allowedLicenses.json -ignore ./.ci/ignoredPackages.json -o jsonPretty
+          nuget-license -i ./Backbone.sln -t -a ./.ci/allowedLicenses.json -ignore ./.ci/ignoredPackages.json -o jsonPretty
