@@ -143,12 +143,13 @@ public class ActualDeletionWorkerTests
         templatesAfterAct.Should().BeEmpty();
     }
 
+    #region Seeders
+
     private async Task<Message> SeedDatabaseWithMessage(IdentityAddress from, IdentityAddress to)
     {
         var dbContext = GetService<MessagesDbContext>();
 
         var recipient = new RecipientInformation(to, []);
-
         var message = new Message(from, DeviceId.New(), [], [], [recipient]);
 
         await dbContext.SaveEntity(message);
@@ -158,17 +159,21 @@ public class ActualDeletionWorkerTests
 
     private async Task SeedDatabaseWithActiveRelationshipBetween(IdentityAddress from, IdentityAddress to)
     {
+        var dbContext = GetService<RelationshipsDbContext>();
+
         var template = new RelationshipTemplate(from, DeviceId.New(), null, null, []);
         var relationship = new Relationship(template, to, DeviceId.New(), [], []);
         relationship.Accept(from, DeviceId.New(), []);
-        var dbContext = GetService<RelationshipsDbContext>();
+
         await dbContext.SaveEntity(relationship);
     }
 
     private async Task SeedDatabaseWithRelationshipTemplateOf(IdentityAddress owner)
     {
-        var template = new RelationshipTemplate(owner, DeviceId.New(), null, null, []);
         var dbContext = GetService<RelationshipsDbContext>();
+
+        var template = new RelationshipTemplate(owner, DeviceId.New(), null, null, []);
+
         await dbContext.SaveEntity(template);
     }
 
@@ -189,6 +194,8 @@ public class ActualDeletionWorkerTests
 
         return identity;
     }
+
+    #endregion
 
     private T GetService<T>() where T : notnull
     {
