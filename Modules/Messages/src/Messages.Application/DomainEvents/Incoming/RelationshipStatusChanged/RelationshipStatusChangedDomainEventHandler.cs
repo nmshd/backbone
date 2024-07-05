@@ -28,7 +28,7 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
     {
         if (@event.NewStatus != RelationshipStatus.ReadyForDeletion.ToString())
         {
-            _logger.LogTrace($"Relationship status changed to {@event.NewStatus}. No Message anonymization required.");
+            _logger.RelationshipStatusChanged();
             return;
         }
 
@@ -41,4 +41,13 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
 
         await _messagesRepository.Update(messagesExchangedBetweenRelationshipParticipants);
     }
+}
+
+internal static partial class RelationshipStatusChangedLogs
+{
+    [LoggerMessage(
+        EventName = "Messages.RelationshipStatusChangedDomainEventHandler.RelationshipStatusChanged",
+        Level = LogLevel.Debug,
+        Message = "Relationship status changed to {newStatus}. No Message anonymization required.")]
+    public static partial void RelationshipStatusChanged(this ILogger logger, string newStatus);
 }
