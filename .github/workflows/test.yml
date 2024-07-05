@@ -233,7 +233,7 @@ jobs:
           {
             dotnet restore Backbone.sln
             mv Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json ./Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json.bak
-            cp .ci/appsettings.override.sqlserver.local.json Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json
+            cp .ci/appsettings.override.${{matrix.database}}.local.json Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json
             dotnet build --no-restore Backbone.sln
           }
           wait
