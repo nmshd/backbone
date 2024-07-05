@@ -313,6 +313,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Application.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Job.IdentityDeletion.Tests.Integration", "Jobs\test\Job.IdentityDeletion.Tests.Integration\Job.IdentityDeletion.Tests.Integration.csproj", "{63BC08F3-5DA8-4AC5-877A-89B6ABA05F44}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Others", "Others", "{8B8EE965-0373-46D6-BB30-7C131EE524E4}"
+	ProjectSection(SolutionItems) = preProject
+		appsettings.override.json = appsettings.override.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
