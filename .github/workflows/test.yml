@@ -441,9 +441,10 @@ jobs:
         run: dotnet tool install --global nuget-license
       - name: Show Allowed Licenses and ignored Packages
         run: |
-          echo Allowed Licenses
+          echo Allowed Licenses:
           cat ./.ci/allowedLicenses.json
-          echo Ignored Packages
+          echo ""
+          echo Ignored Packages:
           cat ./.ci/ignoredPackages.json
       - name: Validate Licenses
-        run: nuget-license -i ./Backbone.sln -t -a ./.ci/allowedLicenses.json -ignore ./.ci/ignoredPackages.json -o jsonPretty
+        run: nuget-license -i ./DatabaseMigrator/DatabaseMigrator.csproj -a ./.ci/allowedLicenses.json -ignore ./.ci/ignoredPackages.json -o jsonPretty
