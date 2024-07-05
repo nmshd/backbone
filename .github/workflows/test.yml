@@ -184,7 +184,7 @@ jobs:
           mv /tmp/.buildx-${{ matrix.image }}-cache-new /tmp/.buildx-${{ matrix.image }}-cache
 
   integration-test:
-    name: Run ${{matrix.test-project}} on ${{matrix.database}}
+    name: Run ${{matrix.test-project.name}} on ${{matrix.database}}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -209,6 +209,13 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.x
+
+      - name: Cache NuGet packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+          restore-keys: ${{ runner.os }}-nuget-
 
       - name: Download cached Docker images
         uses: actions/download-artifact@v4
@@ -241,16 +248,9 @@ jobs:
           ADMIN_API_BASE_ADDRESS: "http://localhost:5173"
           CONSUMER_API_BASE_ADDRESS: "http://localhost:5000"
 
-      # - name: Save Docker Logs
-      #   if: failure()
-      #   run: docker compose -f ./.ci/compose.test.aui.yml logs > aui.integration-test.${{matrix.database}}.txt
-
-      - name: Cache NuGet packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.nuget/packages
-          key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
-          restore-keys: ${{ runner.os }}-nuget-
+      - name: Save Docker Logs
+        if: failure()
+        run: docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml ${{matrix.test-project.additional-compose-files}} logs > ${{matrix.test-project.name}}.${{matrix.database}}.txt
 
   transport-test-sqlserver:
     name: Run transport Tests (on SQL Server)
