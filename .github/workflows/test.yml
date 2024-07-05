@@ -190,7 +190,8 @@ jobs:
       matrix:
         database: [sqlserver, postgres]
         test-project:
-          - name: AdminApi/test/AdminApi.Tests.Integration
+          - display-name: AdminApi
+          - path: AdminApi/test/AdminApi.Tests.Integration
             additional-compose-files: -f ./.ci/compose.test.aui.yml
           # - ConsumerApi.Tests.Integration
           # - Job.IdentityDeletion.Tests.Integration
@@ -250,7 +251,14 @@ jobs:
 
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml ${{matrix.test-project.additional-compose-files}} logs > ${{matrix.test-project.name}}.${{matrix.database}}.txt
+        run: docker compose -f ./.ci/compose.test.yml -f ./.ci/compose.test.${{matrix.database}}.yml ${{matrix.test-project.additional-compose-files}} logs > logs.txt
+
+      - name: Archive logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{matrix.test-project.display-name}}-${{matrix.database}}
+          path: logs.txt
 
   transport-test-sqlserver:
     name: Run transport Tests (on SQL Server)
@@ -285,7 +293,7 @@ jobs:
       - name: Load Docker images
         run: ./backbone/.ci/loadDockerImages.sh
 
-      - name: Run Consumer API & Admin API
+      - name: Start compose stack
         run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.sqlserver.yml -f ./backbone/.ci/compose.test.capi.yml up --no-build --wait -d
 
       - name: Install runtime dependencies
@@ -304,7 +312,7 @@ jobs:
 
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./backbone/.ci/compose.test.capi.yml logs > docker-log.txt
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.sqlserver.yml -f ./backbone/.ci/compose.test.capi.yml logs > docker-log.txt
 
       - name: Archive logs
         if: failure()
@@ -313,7 +321,7 @@ jobs:
           name: transport-test-sqlserver-docker-logs
           path: docker-log.txt
 
-      - name: Stop Consumer API
+      - name: Stop compose stack
         run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.sqlserver.yml -f ./backbone/.ci/compose.test.capi.yml down
 
   transport-test-postgres:
@@ -349,7 +357,7 @@ jobs:
       - name: Load Docker images
         run: ./backbone/.ci/loadDockerImages.sh
 
-      - name: Run Consumer API & Admin API
+      - name: Run compose stack
         run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.postgres.yml -f ./backbone/.ci/compose.test.capi.yml up --no-build --wait -d
 
       - name: Install runtime dependencies
@@ -368,7 +376,7 @@ jobs:
 
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./backbone/.ci/compose.test.capi.yml logs > docker-log.txt
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.postgres.yml -f ./backbone/.ci/compose.test.capi.yml logs > docker-log.txt
 
       - name: Archive logs
         if: failure()
@@ -377,7 +385,7 @@ jobs:
           name: transport-test-postgres-docker-logs
           path: docker-log.txt
 
-      - name: Stop Consumer API
+      - name: Stop compose stack
         run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.postgres.yml -f ./backbone/.ci/compose.test.capi.yml down
 
   build-helm-chart:
