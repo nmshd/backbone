@@ -4,6 +4,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Domain.DomainEvents.Incoming;
 using Backbone.Modules.Messages.Domain.Entities;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Messages.Application.DomainEvents.Incoming.RelationshipStatusChanged;
@@ -12,18 +13,24 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
 {
     private const string DELETED_IDENTITY_STRING = "deleted identity";
     private readonly IMessagesRepository _messagesRepository;
+    private readonly ILogger<RelationshipStatusChangedDomainEventHandler> _logger;
     private readonly ApplicationOptions _applicationOptions;
 
-    public RelationshipStatusChangedDomainEventHandler(IMessagesRepository messagesRepository, IOptions<ApplicationOptions> applicationOptions)
+    public RelationshipStatusChangedDomainEventHandler(IMessagesRepository messagesRepository, IOptions<ApplicationOptions> applicationOptions,
+        ILogger<RelationshipStatusChangedDomainEventHandler> logger)
     {
         _messagesRepository = messagesRepository;
+        _logger = logger;
         _applicationOptions = applicationOptions.Value;
     }
 
     public async Task Handle(RelationshipStatusChangedDomainEvent @event)
     {
         if (@event.NewStatus != RelationshipStatus.ReadyForDeletion.ToString())
+        {
+            _logger.LogTrace($"Relationship status changed to {@event.NewStatus}. No Message anonymization required.");
             return;
+        }
 
         var anonymizedIdentityAddress = IdentityAddress.Create(Encoding.Unicode.GetBytes(DELETED_IDENTITY_STRING), _applicationOptions.DidDomainName);
         var messagesExchangedBetweenRelationshipParticipants = (await _messagesRepository.Find(Message.WasExchangedBetween(@event.Initiator, @event.Peer), CancellationToken.None)).ToList();

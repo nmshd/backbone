@@ -78,11 +78,11 @@ public class Message : Entity, IIdentifiable<MessageId>
         return i => i.CreatedBy == identityAddress.ToString();
     }
 
-    public static Expression<Func<Message, bool>> WasExchangedBetween(IdentityAddress identityAddressOne, IdentityAddress identityAddressTwo)
+    public static Expression<Func<Message, bool>> WasExchangedBetween(IdentityAddress identityAddress1, IdentityAddress identityAddress2)
     {
         return m =>
-            (m.CreatedBy == identityAddressOne && m.Recipients.Any(r => r.Address == identityAddressTwo)) ||
-            (m.CreatedBy == identityAddressTwo && m.Recipients.Any(r => r.Address == identityAddressOne));
+            (m.CreatedBy == identityAddress1 && m.Recipients.Any(r => r.Address == identityAddress2)) ||
+            (m.CreatedBy == identityAddress2 && m.Recipients.Any(r => r.Address == identityAddress1));
     }
 
     private void AnonymizeRecipient(string participantAddress, IdentityAddress anonymizedIdentityAddress)
