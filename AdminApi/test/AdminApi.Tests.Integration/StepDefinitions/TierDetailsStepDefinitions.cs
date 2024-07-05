@@ -38,12 +38,12 @@ internal class TierDetailsStepDefinitions : BaseStepDefinitions
     }
 
     [Then("the response contains Tier t")]
-    public void ThenTheResponseContainsATier()
+    public async Task ThenTheResponseContainsATier()
     {
         _tierDetailsResponse!.Result!.Should().NotBeNull();
         _tierDetailsResponse!.Result!.Id.Should().Be(_tierId);
         _tierDetailsResponse!.ContentType.Should().StartWith("application/json");
-        _tierDetailsResponse.Should().ComplyWithSchema();
+        await _tierDetailsResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
