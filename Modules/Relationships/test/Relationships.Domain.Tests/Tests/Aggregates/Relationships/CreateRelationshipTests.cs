@@ -193,7 +193,6 @@ public class CreateRelationshipTests : AbstractTestsBase
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.oldRelationshipNotDecomposed");
     }
 
-
     [Fact]
     public void P1_active_identity_P1_and_P2_decomposed()
     {
@@ -234,10 +233,11 @@ public class CreateRelationshipTests : AbstractTestsBase
         existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
 
         // Act
-        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
+        
+        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
 
         // Assert
-        newRelationship.Status.Should().Be(RelationshipStatus.Pending);
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.oldRelationshipNotDecomposed");
     }
 
     [Fact]
@@ -250,12 +250,11 @@ public class CreateRelationshipTests : AbstractTestsBase
         existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
 
         // Act
-        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
+        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.oldRelationshipNotDecomposed");
+        newRelationship.Status.Should().Be(RelationshipStatus.Pending);
     }
-
 
     [Fact]
     public void P2_active_identity_P1_and_P2_decomposed()
