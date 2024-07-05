@@ -13,41 +13,53 @@ public class ExpressionTests : AbstractTestsBase
     [Fact]
     public void CountsAsActive_with_status_Pending()
     {
+        // Arrange
         var pendingRelationship = TestData.CreatePendingRelationship();
 
+        // Act
         var result = pendingRelationship.EvaluateCountsAsActiveExpression();
 
-        Assert.True(result);
+        // Assert
+        result.Should().BeTrue();
     }
 
     [Fact]
     public void CountsAsActive_with_status_Active()
     {
+        // Arrange
         var activeRelationship = TestData.CreateActiveRelationship();
 
+        // Act
         var result = activeRelationship.EvaluateCountsAsActiveExpression();
 
-        Assert.True(result);
+        // Assert
+        result.Should().BeTrue();
     }
 
     [Fact]
     public void CountsAsActive_with_status_Rejected()
     {
+        // Arrange
         var rejectedRelationship = TestData.CreateRejectedRelationship();
 
+        // Act
         var result = rejectedRelationship.EvaluateCountsAsActiveExpression();
 
-        Assert.False(result);
+        // Assert
+        result.Should().BeFalse();
     }
 
     [Fact]
     public void CountsAsActive_with_status_Revoked()
     {
+        // Arrange
         var revokedRelationship = TestData.CreateRevokedRelationship();
 
+        // Act
         var result = revokedRelationship.EvaluateCountsAsActiveExpression();
 
-        Assert.False(result);
+        // Assert
+        result.Should().BeFalse();
     }
 
     #endregion
@@ -57,30 +69,39 @@ public class ExpressionTests : AbstractTestsBase
     [Fact]
     public void HasParticipant_recognizes_from_address()
     {
+        // Arrange
         var relationship = TestData.CreateActiveRelationship();
 
+        // Act
         var result = relationship.EvaluateHasParticipantExpression(relationship.From);
 
+        // Assert
         result.Should().BeTrue();
     }
 
     [Fact]
     public void HasParticipant_recognizes_to_address()
     {
+        // Arrange
         var relationship = TestData.CreateActiveRelationship();
 
+        // Act
         var result = relationship.EvaluateHasParticipantExpression(relationship.To);
 
+        // Assert
         result.Should().BeTrue();
     }
 
     [Fact]
     public void HasParticipant_recognizes_foreign_addresses()
     {
+        // Arrange
         var relationship = TestData.CreateActiveRelationship();
 
+        // Act
         var result = relationship.EvaluateHasParticipantExpression("did:e:localhost:dids:1111111111111111111111");
 
+        // Assert
         result.Should().BeFalse();
     }
 
