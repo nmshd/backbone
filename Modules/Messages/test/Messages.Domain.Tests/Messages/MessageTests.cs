@@ -37,7 +37,7 @@ public class MessageTests : AbstractTestsBase
     }
 
     [Fact]
-    public void SanitizeAfterRelationshipDeleted_anonymizes_recipient_and_sender_when_no_other_recipient()
+    public void SanitizeAfterRelationshipDeleted_anonymizes_recipient_and_sender_when_there_is_only_one_recipient()
     {
         // Arrange
         var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
@@ -52,38 +52,39 @@ public class MessageTests : AbstractTestsBase
     }
 
     [Fact]
-    public void SanitizeAfterRelationshipDeleted_only_anonymizes_first_recipient_and_not_sender_when_other_recipients_exist()
+    public void SanitizeAfterRelationshipDeleted_does_not_anonymize_sender_as_long_as_there_are_still_unanonymized_recipients()
     {
         // Arrange
         var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var message = TestData.CreateMessageWithTwoRecipients(senderAddress, recipient1Address: recipientAddress);
+        var message = TestData.CreateMessageWithTwoRecipients(senderAddress);
 
         // Act
-        message.SanitizeAfterRelationshipDeleted(senderAddress, recipientAddress, anonymizedAddress);
+        message.SanitizeAfterRelationshipDeleted(senderAddress, message.Recipients.First().Address, anonymizedAddress);
 
         // Assert
         message.CreatedBy.Should().Be(senderAddress);
+
         message.Recipients.First().Address.Should().Be(anonymizedAddress);
-        message.Recipients.Second().Address.Should().NotBe(anonymizedAddress);
     }
 
     [Fact]
-    public void SanitizeAfterRelationshipDeleted_only_anonymizes_second_recipient_and_not_sender_when_other_recipients_exist()
+    public void SanitizeAfterRelationshipDeleted_anonymizes_sender_when_there_are_no_more_unanonymized_recipients()
     {
         // Arrange
         var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var message = TestData.CreateMessageWithTwoRecipients(senderAddress, recipient2Address: recipientAddress);
+        var message = TestData.CreateMessageWithTwoRecipients(senderAddress);
+
+        message.SanitizeAfterRelationshipDeleted(senderAddress, message.Recipients.First().Address, anonymizedAddress);
 
         // Act
-        message.SanitizeAfterRelationshipDeleted(senderAddress, recipientAddress, anonymizedAddress);
+        message.SanitizeAfterRelationshipDeleted(senderAddress, message.Recipients.Second().Address, anonymizedAddress);
 
         // Assert
-        message.CreatedBy.Should().Be(senderAddress);
-        message.Recipients.First().Address.Should().NotBe(anonymizedAddress);
+        message.CreatedBy.Should().Be(anonymizedAddress);
+
+        message.Recipients.First().Address.Should().Be(anonymizedAddress);
         message.Recipients.Second().Address.Should().Be(anonymizedAddress);
     }
 }
