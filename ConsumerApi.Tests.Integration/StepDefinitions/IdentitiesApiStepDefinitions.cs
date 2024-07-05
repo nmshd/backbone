@@ -99,19 +99,19 @@ internal class IdentitiesApiStepDefinitions
     }
 
     [Then("the response contains a Deletion Process")]
-    public void ThenTheResponseContainsADeletionProcess()
+    public async Task ThenTheResponseContainsADeletionProcess()
     {
         _startDeletionProcessResponse!.Result.Should().NotBeNull();
         _startDeletionProcessResponse.Should().BeASuccess();
-        _startDeletionProcessResponse.Should().ComplyWithSchema();
+        await _startDeletionProcessResponse.Should().ComplyWithSchema();
     }
 
     [Then("the response contains a CreateIdentityResponse")]
-    public void ThenTheResponseContainsACreateIdentityResponse()
+    public async Task ThenTheResponseContainsACreateIdentityResponse()
     {
         _identityResponse!.Should().NotBeNull();
         _identityResponse!.Should().BeASuccess();
-        _identityResponse!.Should().ComplyWithSchema();
+        await _identityResponse!.Should().ComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

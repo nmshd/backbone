@@ -160,30 +160,30 @@ internal class RelationshipsStepDefinitions
     }
 
     [Then("the response contains a Relationship")]
-    public void ThenTheResponseContainsARelationship()
+    public async Task ThenTheResponseContainsARelationship()
     {
         if (_createRelationshipResponse != null)
         {
             _createRelationshipResponse!.Should().BeASuccess();
-            _createRelationshipResponse!.Should().ComplyWithSchema();
+            await _createRelationshipResponse!.Should().ComplyWithSchema();
         }
 
         if (_acceptRelationshipResponse != null)
         {
             _acceptRelationshipResponse!.Should().BeASuccess();
-            _acceptRelationshipResponse!.Should().ComplyWithSchema();
+            await _acceptRelationshipResponse!.Should().ComplyWithSchema();
         }
 
         if (_rejectRelationshipResponse != null)
         {
             _rejectRelationshipResponse!.Should().BeASuccess();
-            _rejectRelationshipResponse!.Should().ComplyWithSchema();
+            await _rejectRelationshipResponse!.Should().ComplyWithSchema();
         }
 
         if (_revokeRelationshipResponse != null)
         {
             _revokeRelationshipResponse!.Should().BeASuccess();
-            _revokeRelationshipResponse!.Should().ComplyWithSchema();
+            await _revokeRelationshipResponse!.Should().ComplyWithSchema();
         }
     }
 
