@@ -267,9 +267,13 @@ jobs:
           name: ${{matrix.test-project.display-name}}-${{matrix.database}}
           path: logs.txt
 
-  transport-test-sqlserver:
-    name: Run transport Tests (on SQL Server)
+  transport-test:
+    name: Run transport tests on ${{matrix.database}}
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        database: [sqlserver, postgres]
     needs: image-test-builds
     steps:
       - name: Checkout backbone repository
@@ -301,7 +305,7 @@ jobs:
         run: ./backbone/.ci/loadDockerImages.sh
 
       - name: Start compose stack
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.sqlserver.yml -f ./backbone/.ci/compose.test.capi.yml up --no-build --wait -d
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.${{matrix.database}}.yml -f ./backbone/.ci/compose.test.capi.yml up --no-build --wait -d
 
       - name: Install runtime dependencies
         working-directory: ./runtime
@@ -319,81 +323,17 @@ jobs:
 
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.sqlserver.yml -f ./backbone/.ci/compose.test.capi.yml logs > docker-log.txt
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.${{matrix.database}}.yml -f ./backbone/.ci/compose.test.capi.yml logs > logs.txt
 
       - name: Archive logs
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: transport-test-sqlserver-docker-logs
-          path: docker-log.txt
+          name: transport-test-${{matrix.database}}-docker-logs
+          path: logs.txt
 
       - name: Stop compose stack
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.sqlserver.yml -f ./backbone/.ci/compose.test.capi.yml down
-
-  transport-test-postgres:
-    name: Run transport Tests (on Postgres)
-    runs-on: ubuntu-latest
-    needs: image-test-builds
-    steps:
-      - name: Checkout backbone repository
-        uses: actions/checkout@v4
-        with:
-          path: backbone
-
-      - name: Checkout runtime repository
-        uses: actions/checkout@v4
-        with:
-          repository: nmshd/runtime
-          path: runtime
-          ref: release/v5
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: latest
-          cache: "npm"
-          cache-dependency-path: "**/package-lock.json"
-
-      - name: Download cached Docker images
-        uses: actions/download-artifact@v4
-        with:
-          path: /tmp
-          pattern: docker-*
-          merge-multiple: true
-
-      - name: Load Docker images
-        run: ./backbone/.ci/loadDockerImages.sh
-
-      - name: Run compose stack
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.postgres.yml -f ./backbone/.ci/compose.test.capi.yml up --no-build --wait -d
-
-      - name: Install runtime dependencies
-        working-directory: ./runtime
-        run: npm install
-
-      - name: Run transport Tests
-        working-directory: ./runtime/packages/transport
-        env:
-          NMSHD_TEST_BASEURL: http://localhost:5000
-          NMSHD_TEST_CLIENTID: test
-          NMSHD_TEST_CLIENTSECRET: test
-          NMSHD_TEST_BASEURL_ADMIN_API: http://localhost:5173
-          NMSHD_TEST_ADMIN_API_KEY: test
-        run: npm run test:local:lokijs
-
-      - name: Save Docker Logs
-        if: failure()
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.postgres.yml -f ./backbone/.ci/compose.test.capi.yml logs > docker-log.txt
-
-      - name: Archive logs
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: transport-test-postgres-docker-logs
-          path: docker-log.txt
-
-      - name: Stop compose stack
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.postgres.yml -f ./backbone/.ci/compose.test.capi.yml down
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.${{matrix.database}}.yml -f ./backbone/.ci/compose.test.capi.yml down
 
   build-helm-chart:
     name: Build Helm Chart
