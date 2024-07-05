@@ -180,7 +180,7 @@ jobs:
           mv /tmp/.buildx-${{ matrix.image }}-cache-new /tmp/.buildx-${{ matrix.image }}-cache
 
   integration-test:
-    name: Run ${{matrix.test-project.display-name}} integration tests on ${{matrix.database}}
+    name: Run ${{matrix.test-project.display-name}} Integration Tests (on ${{matrix.database}})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -262,7 +262,7 @@ jobs:
           path: logs.txt
 
   transport-test:
-    name: Run transport tests on ${{matrix.database}}
+    name: Run transport Tests (on ${{matrix.database}})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
