@@ -439,14 +439,11 @@ jobs:
           dotnet-version: 8.x
       - name: Install nuget-licenses tool
         run: dotnet tool install --global nuget-license
-      - name: Show Allowed Licenses and ignored Packages
-        run: |
-          echo Allowed Licenses:
-          cat ./.ci/allowedLicenses.json
-          echo ""
-          echo Ignored Packages:
-          cat ./.ci/ignoredPackages.json
+      - name: Show Allowed Licenses
+        run: cat ./.ci/allowedLicenses.json
+      - name: Show Ignored Packages
+        run: cat ./.ci/ignoredPackages.json
+      - name: Restore Solution
+        run: dotnet restore ./Backbone.sln
       - name: Validate Licenses
-        run: |
-          dotnet restore ./Backbone.sln
-          nuget-license -i ./Backbone.sln -t -a ./.ci/allowedLicenses.json -ignore ./.ci/ignoredPackages.json -o jsonPretty
+        run: nuget-license -i ./Backbone.sln -a ./.ci/allowedLicenses.json -ignore ./.ci/ignoredPackages.json -o jsonPretty
