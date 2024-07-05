@@ -428,7 +428,7 @@ jobs:
           VERSION: 0.0.0
 
   validate-licenses:
-    name: Validate OpenSource Licenses
+    name: Validate Open Source Licenses
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -446,4 +446,4 @@ jobs:
       - name: Restore Solution
         run: dotnet restore ./Backbone.sln
       - name: Validate Licenses
-        run: nuget-license -i ./Backbone.sln -a ./.ci/allowedLicenses.json -ignore ./.ci/ignoredPackages.json -o jsonPretty
+        run: nuget-license --input ./Backbone.sln --allowed-license-types ./.ci/allowedLicenses.json --ignored-packages ./.ci/ignoredPackages.json --output table --error-only
