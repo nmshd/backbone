@@ -1,5 +1,6 @@
 {
     "@@locale": "en",
+    "address": "Address",
     "cancel": "Cancel",
     "close": "Close",
     "find": "Find",
