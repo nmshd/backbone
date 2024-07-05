@@ -46,15 +46,13 @@ jobs:
       - name: Cache npm dependencies
         uses: actions/cache@v4
         with:
-          path: |
-            ./runtime/node_modules
+          path: ./runtime/node_modules
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
+          restore-keys: ${{ runner.os }}-npm-
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "8.x"
       - name: Cache NuGet packages
         uses: actions/cache@v4
         with:
@@ -78,15 +76,13 @@ jobs:
       - name: Cache npm dependencies
         uses: actions/cache@v4
         with:
-          path: |
-            ./runtime/node_modules
+          path: ./runtime/node_modules
           key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
+          restore-keys: ${{ runner.os }}-npm-
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.0.x"
+          dotnet-version: "8.x"
       - name: Cache NuGet packages
         uses: actions/cache@v4
         with:
@@ -154,8 +150,7 @@ jobs:
         with:
           path: /tmp/.buildx-${{ matrix.image }}-cache
           key: buildx-${{ matrix.image }}-cache-${{ hashFiles(matrix.dockerfile) }}
-          restore-keys: |
-            buildx-${{ matrix.image }}-cache-
+          restore-keys: buildx-${{ matrix.image }}-cache-
 
       - name: Build Image
         uses: docker/build-push-action@v6
@@ -322,7 +317,7 @@ jobs:
 
       - name: Save Docker Logs
         if: failure()
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.${{matrix.database}}.yml -f ./backbone/.ci/compose.test.capi.yml logs > logs.txt
+        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.${{matrix.database}}.yml logs > logs.txt
 
       - name: Archive logs
         if: failure()
@@ -332,7 +327,7 @@ jobs:
           path: logs.txt
 
       - name: Stop compose stack
-        run: docker compose -f ./backbone/.ci/compose.test.yml -f ./backbone/.ci/compose.test.${{matrix.database}}.yml -f ./backbone/.ci/compose.test.capi.yml down
+        run: docker compose -f ./backbone/.ci/compose.test.${{matrix.database}}.yml -f ./backbone/.ci/compose.test.yml down
 
   build-helm-chart:
     name: Build Helm Chart
