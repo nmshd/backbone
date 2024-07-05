@@ -28,7 +28,7 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
     {
         if (@event.NewStatus != RelationshipStatus.ReadyForDeletion.ToString())
         {
-            _logger.RelationshipStatusChanged();
+            _logger.LogTrace("Relationship status changed to {newStatus}. No Message anonymization required.", @event.NewStatus);
             return;
         }
 
