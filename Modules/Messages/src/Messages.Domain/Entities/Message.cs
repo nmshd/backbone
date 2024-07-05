@@ -59,17 +59,45 @@ public class Message : Entity, IIdentifiable<MessageId>
     public void ReplaceIdentityAddress(IdentityAddress oldIdentityAddress, IdentityAddress newIdentityAddress)
     {
         if (CreatedBy == oldIdentityAddress)
-        {
-            CreatedBy = newIdentityAddress;
-        }
+            AnonymizeSender(newIdentityAddress);
 
-        var recipient = Recipients.FirstOrDefault(r => r.Address == oldIdentityAddress);
+        AnonymizeRecipient(oldIdentityAddress, newIdentityAddress);
+    }
 
-        recipient?.UpdateAddress(newIdentityAddress);
+    public void SanitizeAfterRelationshipDeleted(string participantOne, string participantTwo, IdentityAddress anonymizedIdentityAddress)
+    {
+        AnonymizeRecipient(participantOne, anonymizedIdentityAddress);
+        AnonymizeRecipient(participantTwo, anonymizedIdentityAddress);
+
+        if (CanAnonymizeSender(anonymizedIdentityAddress))
+            AnonymizeSender(anonymizedIdentityAddress);
     }
 
     public static Expression<Func<Message, bool>> HasParticipant(IdentityAddress identityAddress)
     {
         return i => i.CreatedBy == identityAddress || i.Recipients.Any(r => r.Address == identityAddress);
+    }
+
+    public static Expression<Func<Message, bool>> WasExchangedBetween(IdentityAddress identityAddress1, IdentityAddress identityAddress2)
+    {
+        return m =>
+            (m.CreatedBy == identityAddress1 && m.Recipients.Any(r => r.Address == identityAddress2)) ||
+            (m.CreatedBy == identityAddress2 && m.Recipients.Any(r => r.Address == identityAddress1));
+    }
+
+    private void AnonymizeRecipient(string participantAddress, IdentityAddress anonymizedIdentityAddress)
+    {
+        var recipient = Recipients.FirstOrDefault(r => r.Address == participantAddress);
+        recipient?.UpdateAddress(anonymizedIdentityAddress);
+    }
+
+    private bool CanAnonymizeSender(IdentityAddress anonymizedIdentityAddress)
+    {
+        return Recipients.All(r => r.Address == anonymizedIdentityAddress);
+    }
+
+    private void AnonymizeSender(IdentityAddress anonymizedIdentityAddress)
+    {
+        CreatedBy = anonymizedIdentityAddress;
     }
 }
