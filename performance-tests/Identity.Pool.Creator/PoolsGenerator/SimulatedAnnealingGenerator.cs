@@ -1,6 +1,5 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Runtime;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.Identity.Pool.Creator.Application.Printer;
 using Backbone.Identity.Pool.Creator.PoolsFile;
@@ -62,7 +61,7 @@ public class SimulatedAnnealingPoolsGenerator
         Generate();
     }
 
-    public void Generate(double initialTemperature = 20d, ulong maxIterations = 20000)
+    public void Generate(double initialTemperature = 20d, ulong maxIterations = 25000)
     {
         var progress = new ProgressBar(Convert.ToInt64(maxIterations));
         var currentSolution = GenerateSolutionFromPools(Pools);
@@ -75,19 +74,21 @@ public class SimulatedAnnealingPoolsGenerator
             if (P) Console.Write($"Temp: {temperature:F3} Score:{currentScore}, solution m: {currentSolution.GetSentMessagesCount():D4}, r:{currentSolution.GetRelationshipCount():D4}. Next action: ");
 
             var solutions = new ConcurrentBag<SolutionRepresentation>();
-            Parallel.For(0, Environment.ProcessorCount, count => {
+            Parallel.For(0, Environment.ProcessorCount - 2, count =>
+            {
                 var nextSolution = currentSolution.Clone() as SolutionRepresentation;
-                for (var si = 0; si < 50; si++)
+                for (var si = 0; si < 6; si++)
                 {
-                    nextSolution = GetNextState(nextSolution, _connectorMessageRatio);
-                    if (P && si != 9) Console.Write(", ");
+                    nextSolution = GetNextState(nextSolution!, _connectorMessageRatio);
+                    if (P && si != 6 - 1) Console.Write(", ");
                 }
 
                 if (nextSolution != null) solutions.Add(nextSolution);
             });
-            var nextSolution = solutions.OrderByDescending(s => CalculateScore(s, _identitiesDictionary)).First();
+            var scoredSolutions = solutions.Select(s => new { Solution = s, Score = CalculateScore(s, _identitiesDictionary) }).OrderByDescending(s => s.Score).First();
 
-            var nextScore = CalculateScore(nextSolution, _identitiesDictionary);
+            var nextSolution = scoredSolutions.Solution;
+            var nextScore = scoredSolutions.Score;
 
             if (P) Console.Write($" Next score is {nextScore}");
 
@@ -148,10 +149,10 @@ public class SimulatedAnnealingPoolsGenerator
         return res;
     }
 
-    private SolutionRepresentation? GetNextState(SolutionRepresentation currentSolution, decimal connectorMessageRatio = 0.75m)
+    private SolutionRepresentation GetNextState(SolutionRepresentation currentSolution, decimal connectorMessageRatio = 0.75m)
     {
         if (currentSolution.Clone() is not SolutionRepresentation solution || solution.GetType() != typeof(SolutionRepresentation))
-            return null;
+            throw new Exception("clone failed");
 
         if (_localRandom.NextBoolean())
         {
