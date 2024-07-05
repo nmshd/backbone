@@ -24,11 +24,11 @@ internal class MetricsStepDefinitions : BaseStepDefinitions
     }
 
     [Then("the response contains a list of Metrics")]
-    public void ThenTheResponseContainsAListOfMetrics()
+    public async Task ThenTheResponseContainsAListOfMetrics()
     {
         _metricsResponse!.Result!.Should().NotBeNullOrEmpty();
         _metricsResponse!.ContentType.Should().StartWith("application/json");
-        _metricsResponse.Should().ComplyWithSchema();
+        await _metricsResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

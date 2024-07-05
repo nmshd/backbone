@@ -3,24 +3,25 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Relationships.Application;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationshipChangeRequest;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationshipReactivation;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipChangeRequest;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipChangeRequest;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationshipReactivation;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RequestRelationshipReactivation;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipReactivation;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.TerminateRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
-using Backbone.Modules.Relationships.Application.Relationships.Queries.GetChange;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.GetPeerOfActiveIdentityInRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.GetRelationship;
-using Backbone.Modules.Relationships.Application.Relationships.Queries.ListChanges;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.GetRelationshipTemplate;
-using Backbone.Modules.Relationships.Common;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -67,53 +68,10 @@ public class RelationshipsController : ApiControllerBase
         return Paged(relationships);
     }
 
-    [HttpGet("Changes")]
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListChangesResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ListChanges(
-        [FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] IEnumerable<RelationshipChangeId> ids,
-        [FromQuery] OptionalDateRange? createdAt,
-        [FromQuery] OptionalDateRange? completedAt,
-        [FromQuery] OptionalDateRange? modifiedAt,
-        [FromQuery] bool? onlyPeerChanges,
-        [FromQuery] IdentityAddress? createdBy,
-        [FromQuery] IdentityAddress? completedBy,
-        [FromQuery] string? status,
-        [FromQuery] string? type, CancellationToken cancellationToken)
-    {
-        var query = new ListChangesQuery(
-            paginationFilter,
-            ids,
-            createdAt,
-            completedAt,
-            modifiedAt,
-            status == null ? null : Enum.Parse<RelationshipChangeStatus>(status),
-            type == null ? null : Enum.Parse<RelationshipChangeType>(type),
-            createdBy,
-            completedBy,
-            onlyPeerChanges ?? false);
-
-        query.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
-
-        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
-
-        var changes = await _mediator.Send(query, cancellationToken);
-        return Paged(changes);
-    }
-
-    [HttpGet("Changes/{id}")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipChangeDTO>), StatusCodes.Status200OK)]
-    [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetChangeById(RelationshipChangeId id, CancellationToken cancellationToken)
-    {
-        var relationship = await _mediator.Send(new GetChangeQuery { Id = id }, cancellationToken);
-        return Ok(relationship);
-    }
-
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateRelationship(CreateRelationshipCommand request, CancellationToken cancellationToken)
     {
         var relationshipTemplate = await _mediator.Send(new GetRelationshipTemplateQuery { Id = request.RelationshipTemplateId }, cancellationToken);
@@ -123,58 +81,118 @@ public class RelationshipsController : ApiControllerBase
         return Created(relationship);
     }
 
-    [HttpPut("{relationshipId}/Changes/{changeId}/Accept")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipChangeDTO>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> AcceptRelationshipChange([FromRoute] RelationshipId relationshipId,
-        [FromRoute] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request, CancellationToken cancellationToken)
+    [HttpPut("{id}/Accept")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<AcceptRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AcceptRelationship([FromRoute] string id, [FromBody] AcceptRelationshipRequest request, CancellationToken cancellationToken)
     {
-        var peerOfActiveIdentityInRelationshipResponse = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = relationshipId }, cancellationToken);
+        var peerOfActiveIdentityInRelationshipResponse = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = id }, cancellationToken);
         await EnsurePeerIsNotToBeDeleted(peerOfActiveIdentityInRelationshipResponse.IdentityAddress, cancellationToken);
 
-        var change = await _mediator.Send(new AcceptRelationshipChangeRequestCommand
-        {
-            Id = relationshipId,
-            ChangeId = changeId,
-            ResponseContent = request.Content
-        }, cancellationToken);
-
-        return Ok(change);
+        var response = await _mediator.Send(new AcceptRelationshipCommand { RelationshipId = id, CreationResponseContent = request.CreationResponseContent }, cancellationToken);
+        return Ok(response);
     }
 
-    [HttpPut("{relationshipId}/Changes/{changeId}/Reject")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipChangeDTO>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> RejectRelationshipChange([FromRoute] RelationshipId relationshipId,
-        [FromRoute(Name = "changeId")] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request, CancellationToken cancellationToken)
+    [HttpPut("{id}/Reject")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RejectRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RejectRelationship([FromRoute] string id, [FromBody] RejectRelationshipRequest request, CancellationToken cancellationToken)
     {
-        var peerOfActiveIdentityInRelationshipResponse = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = relationshipId }, cancellationToken);
+        var peerOfActiveIdentityInRelationshipResponse = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = id }, cancellationToken);
         await EnsurePeerIsNotToBeDeleted(peerOfActiveIdentityInRelationshipResponse.IdentityAddress, cancellationToken);
 
-        var change = await _mediator.Send(new RejectRelationshipChangeRequestCommand
-        {
-            Id = relationshipId,
-            ChangeId = changeId,
-            ResponseContent = request.Content
-        }, cancellationToken);
-
-        return Ok(change);
+        var response = await _mediator.Send(new RejectRelationshipCommand { RelationshipId = id, CreationResponseContent = request.CreationResponseContent }, cancellationToken);
+        return Ok(response);
     }
 
-    [HttpPut("{relationshipId}/Changes/{changeId}/Revoke")]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipChangeDTO>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> RevokeRelationshipChange([FromRoute] RelationshipId relationshipId,
-        [FromRoute(Name = "changeId")] RelationshipChangeId changeId, CompleteRelationshipChangeRequest request, CancellationToken cancellationToken)
+    [HttpPut("{id}/Revoke")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RevokeRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RevokeRelationship([FromRoute] string id, [FromBody] RevokeRelationshipRequest request, CancellationToken cancellationToken)
     {
-        var peerOfActiveIdentityInRelationshipResponse = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = relationshipId }, cancellationToken);
+        var peerOfActiveIdentityInRelationshipResponse = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = id }, cancellationToken);
         await EnsurePeerIsNotToBeDeleted(peerOfActiveIdentityInRelationshipResponse.IdentityAddress, cancellationToken);
 
-        var change = await _mediator.Send(new RevokeRelationshipChangeRequestCommand
-        {
-            Id = relationshipId,
-            ChangeId = changeId,
-            ResponseContent = request.Content
-        }, cancellationToken);
+        var response = await _mediator.Send(new RevokeRelationshipCommand { RelationshipId = id, CreationResponseContent = request.CreationResponseContent }, cancellationToken);
+        return Ok(response);
+    }
 
-        return Ok(change);
+    [HttpPut("{id}/Terminate")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipDTO>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> TerminateRelationship([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var peerOfActiveIdentityInRelationshipResponse = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = id }, cancellationToken);
+        await EnsurePeerIsNotToBeDeleted(peerOfActiveIdentityInRelationshipResponse.IdentityAddress, cancellationToken);
+
+        var relationship = await _mediator.Send(new TerminateRelationshipCommand { RelationshipId = id }, cancellationToken);
+        return Ok(relationship);
+    }
+
+    [HttpPut("{id}/Reactivate")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RequestRelationshipReactivationResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RelationshipReactivationRequest([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var peerOfActiveIdentityInRelationshipResponse = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = id }, cancellationToken);
+        await EnsurePeerIsNotToBeDeleted(peerOfActiveIdentityInRelationshipResponse.IdentityAddress, cancellationToken);
+
+        var response = await _mediator.Send(new RequestRelationshipReactivationCommand { RelationshipId = id }, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpPut("{id}/Reactivate/Revoke")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RevokeRelationshipReactivationResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RevokeRelationshipReactivation([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var peerOfActiveIdentityInRelationshipResponse = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = id }, cancellationToken);
+        await EnsurePeerIsNotToBeDeleted(peerOfActiveIdentityInRelationshipResponse.IdentityAddress, cancellationToken);
+
+        var response = await _mediator.Send(new RevokeRelationshipReactivationCommand { RelationshipId = id }, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpPut("{id}/Reactivate/Accept")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<AcceptRelationshipReactivationResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> AcceptReactivationOfRelationship([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var peerOfActiveIdentityInRelationshipResponse = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = id }, cancellationToken);
+        await EnsurePeerIsNotToBeDeleted(peerOfActiveIdentityInRelationshipResponse.IdentityAddress, cancellationToken);
+
+        var response = await _mediator.Send(new AcceptRelationshipReactivationCommand { RelationshipId = id }, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpPut("{id}/Reactivate/Reject")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RejectRelationshipReactivationResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> RejectReactivationOfRelationship([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var peerOfActiveIdentityInRelationshipResponse = await _mediator.Send(new GetPeerOfActiveIdentityInRelationshipQuery { Id = id }, cancellationToken);
+        await EnsurePeerIsNotToBeDeleted(peerOfActiveIdentityInRelationshipResponse.IdentityAddress, cancellationToken);
+
+        var response = await _mediator.Send(new RejectRelationshipReactivationCommand { RelationshipId = id }, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpPut("{id}/Decompose")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<DecomposeRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DecomposeRelationship([FromRoute] string id, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new DecomposeRelationshipCommand { RelationshipId = id }, cancellationToken);
+        return Ok(response);
     }
 
     private async Task EnsurePeerIsNotToBeDeleted(string peerIdentityAddress, CancellationToken cancellationToken)
@@ -185,12 +203,17 @@ public class RelationshipsController : ApiControllerBase
     }
 }
 
-public class CreateRelationshipChangeRequest
+public class AcceptRelationshipRequest
 {
-    public RelationshipChangeType Type { get; set; }
+    public byte[]? CreationResponseContent { get; set; } = Array.Empty<byte>();
 }
 
-public class CompleteRelationshipChangeRequest
+public class RejectRelationshipRequest
 {
-    public byte[] Content { get; set; } = Array.Empty<byte>();
+    public byte[]? CreationResponseContent { get; set; } = Array.Empty<byte>();
+}
+
+public class RevokeRelationshipRequest
+{
+    public byte[]? CreationResponseContent { get; set; } = Array.Empty<byte>();
 }

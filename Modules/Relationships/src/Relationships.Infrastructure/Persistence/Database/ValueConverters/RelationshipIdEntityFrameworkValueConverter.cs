@@ -1,4 +1,4 @@
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.ValueConverters;

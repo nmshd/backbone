@@ -39,12 +39,12 @@ internal class MessagesStepDefinitions : BaseStepDefinitions
     }
 
     [Then(@"the response contains a paginated list of Messages")]
-    public void ThenTheResponseContainsAListOfMessages()
+    public async Task ThenTheResponseContainsAListOfMessages()
     {
         _messagesResponse!.Result.Should().NotBeNull();
         _messagesResponse!.Should().BeASuccess();
         _messagesResponse!.ContentType.Should().StartWith("application/json");
-        _messagesResponse.Should().ComplyWithSchema();
+        await _messagesResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]

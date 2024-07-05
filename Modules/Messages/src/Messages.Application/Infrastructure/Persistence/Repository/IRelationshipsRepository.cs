@@ -1,9 +1,9 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Domain.Entities;
 
 namespace Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 
 public interface IRelationshipsRepository
 {
-    Task<RelationshipId?> GetIdOfRelationshipBetweenSenderAndRecipient(IdentityAddress identityA, IdentityAddress identityB);
+    Task<Relationship?> FindYoungestRelationship(IdentityAddress identityA, IdentityAddress identityB, CancellationToken cancellationToken);
 }
