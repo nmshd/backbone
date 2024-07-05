@@ -71,35 +71,35 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     }
 
     [Then("the response contains a list of Identities")]
-    public void ThenTheResponseContainsAListOfIdentities()
+    public async Task ThenTheResponseContainsAListOfIdentities()
     {
         _identityOverviewsResponse!.Result!.Should().NotBeNull();
         _identityOverviewsResponse!.ContentType.Should().StartWith("application/json");
-        _identityOverviewsResponse.Should().ComplyWithSchema();
+        await _identityOverviewsResponse.Should().ComplyWithSchema();
     }
 
     [Then("the response contains a list of Identity Deletion Process Audit Logs")]
-    public void ThenTheResponseContainsAListOfIdentityDeletionProcessAuditLogs()
+    public async Task ThenTheResponseContainsAListOfIdentityDeletionProcessAuditLogs()
     {
         _identityDeletionProcessAuditLogsResponse!.Result!.Should().NotBeNull();
         _identityDeletionProcessAuditLogsResponse!.ContentType.Should().StartWith("application/json");
-        _identityDeletionProcessAuditLogsResponse.Should().ComplyWithSchema();
+        await _identityDeletionProcessAuditLogsResponse.Should().ComplyWithSchema();
     }
 
     [Then("the response contains a Deletion Process")]
-    public void ThenTheResponseContainsADeletionProcess()
+    public async Task ThenTheResponseContainsADeletionProcess()
     {
         _identityDeletionProcessResponse!.Result!.Should().NotBeNull();
         _identityDeletionProcessResponse!.ContentType.Should().StartWith("application/json");
-        _identityDeletionProcessResponse.Should().ComplyWithSchema();
+        await _identityDeletionProcessResponse.Should().ComplyWithSchema();
     }
 
     [Then("the response contains Identity i")]
-    public void ThenTheResponseContainsAnIdentity()
+    public async Task ThenTheResponseContainsAnIdentity()
     {
         _identityResponse!.Result!.Should().NotBeNull();
         _identityResponse!.ContentType.Should().StartWith("application/json");
-        _identityResponse.Should().ComplyWithSchema();
+        await _identityResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
