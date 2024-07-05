@@ -102,6 +102,7 @@ jobs:
     name: Build ${{matrix.image}} Image
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         include:
           - dockerfile: ConsumerApi/Dockerfile
@@ -187,6 +188,7 @@ jobs:
     name: Run ${{matrix.test-project.path}} on ${{matrix.database}}
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         database: [sqlserver, postgres]
         test-project:
