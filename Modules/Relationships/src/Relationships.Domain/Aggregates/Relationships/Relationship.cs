@@ -86,10 +86,10 @@ public class Relationship : Entity
     private void EnsureActiveIdentityDecomposedOldRelationship(IdentityAddress activeIdentity, List<Relationship> existingRelationships)
     {
         if (existingRelationships.Any(r => r.From == activeIdentity && !r.FromHasDecomposed && (r.Status == RelationshipStatus.DeletionProposed || r.Status == RelationshipStatus.ReadyForDeletion)))
-                throw new DomainException(DomainErrors.OldRelationshipNotDecomposed());
+            throw new DomainException(DomainErrors.OldRelationshipNotDecomposed());
 
         if (existingRelationships.Any(r => r.To == activeIdentity && !r.ToHasDecomposed && (r.Status == RelationshipStatus.DeletionProposed || r.Status == RelationshipStatus.ReadyForDeletion)))
-                throw new DomainException(DomainErrors.OldRelationshipNotDecomposed());
+            throw new DomainException(DomainErrors.OldRelationshipNotDecomposed());
     }
 
     public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)

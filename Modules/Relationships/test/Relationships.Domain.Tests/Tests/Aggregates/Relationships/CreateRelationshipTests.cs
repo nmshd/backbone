@@ -217,7 +217,7 @@ public class CreateRelationshipTests : AbstractTestsBase
         existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
 
         // Act
-        
+
         var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
 
         // Assert
