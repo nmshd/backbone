@@ -19,7 +19,7 @@ public class IdentityDeleterTests : AbstractTestsBase
         var mockMediator = A.Fake<IMediator>();
         var deleter = new IdentityDeleter(mockMediator);
         var identityAddress = CreateRandomIdentityAddress();
-        var dummyIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
+        var dummyIDeletionProcessLogger = A.Dummy<IDeletionProcessLogger>();
 
         // Act
         await deleter.Delete(identityAddress, dummyIDeletionProcessLogger);
@@ -41,7 +41,7 @@ public class IdentityDeleterTests : AbstractTestsBase
     public async Task Deleter_correctly_creates_audit_log()
     {
         // Arrange
-        var dummyMediator = A.Fake<IMediator>();
+        var dummyMediator = A.Dummy<IMediator>();
         var deleter = new IdentityDeleter(dummyMediator);
         var identityAddress = CreateRandomIdentityAddress();
         var mockIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
