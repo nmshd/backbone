@@ -3,10 +3,8 @@ using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.ConsumerApi;
-using Backbone.Modules.Devices.Application.Identities.Commands.LogDeletionProcess;
 using Backbone.Modules.Devices.ConsumerApi;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Files.ConsumerApi;
@@ -16,7 +14,6 @@ using Backbone.Modules.Relationships.ConsumerApi;
 using Backbone.Modules.Synchronization.ConsumerApi;
 using Backbone.Modules.Tokens.ConsumerApi;
 using FluentValidation.AspNetCore;
-using MediatR;
 using Microsoft.Extensions.Options;
 using Serilog;
 using Serilog.Exceptions;
@@ -131,20 +128,5 @@ public class Program
                     .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() })
                 )
             );
-    }
-}
-
-public class DeletionProcessLogger : IDeletionProcessLogger
-{
-    private readonly IMediator _mediator;
-
-    public DeletionProcessLogger(IMediator mediator)
-    {
-        _mediator = mediator;
-    }
-
-    public async Task LogDeletion(IdentityAddress identityAddress, string aggregateType)
-    {
-        await _mediator.Send(new LogDeletionProcessCommand(identityAddress, aggregateType));
     }
 }

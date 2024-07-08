@@ -10,19 +10,21 @@ namespace Backbone.Modules.Relationships.Application.Identities;
 public class IdentityDeleter : IIdentityDeleter
 {
     private readonly IMediator _mediator;
+    private readonly IDeletionProcessLogger _deletionProcessLogger;
 
-    public IdentityDeleter(IMediator mediator)
+    public IdentityDeleter(IMediator mediator, IDeletionProcessLogger deletionProcessLogger)
     {
         _mediator = mediator;
+        _deletionProcessLogger = deletionProcessLogger;
     }
 
-    public async Task Delete(IdentityAddress identityAddress, IDeletionProcessLogger deletionProcessLogger)
+    public async Task Delete(IdentityAddress identityAddress)
     {
         await _mediator.Send(new DeleteRelationshipsOfIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, "Relationships");
+        await _deletionProcessLogger.LogDeletion(identityAddress, "Relationships");
         await _mediator.Send(new DeleteRelationshipTemplatesOfIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, "RelationshipTemplates");
+        await _deletionProcessLogger.LogDeletion(identityAddress, "RelationshipTemplates");
         await _mediator.Send(new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, "RelationshipTemplateAllocations");
+        await _deletionProcessLogger.LogDeletion(identityAddress, "RelationshipTemplateAllocations");
     }
 }

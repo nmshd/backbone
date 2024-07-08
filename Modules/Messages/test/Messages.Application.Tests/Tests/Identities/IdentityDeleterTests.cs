@@ -8,6 +8,7 @@ using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Messages.Application.Tests.Tests.Identities;
+
 public class IdentityDeleterTests : AbstractTestsBase
 {
     [Fact]
@@ -15,12 +16,12 @@ public class IdentityDeleterTests : AbstractTestsBase
     {
         // Arrange
         var mockMediator = A.Fake<IMediator>();
-        var deleter = new IdentityDeleter(mockMediator);
+        var dummyIDeletionProcessLogger = A.Dummy<IDeletionProcessLogger>();
+        var deleter = new IdentityDeleter(mockMediator, dummyIDeletionProcessLogger);
         var identityAddress = CreateRandomIdentityAddress();
-        var dummyIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
 
         // Act
-        await deleter.Delete(identityAddress, dummyIDeletionProcessLogger);
+        await deleter.Delete(identityAddress);
 
         // Assert
         A.CallTo(() => mockMediator.Send(A<AnonymizeMessagesOfIdentityCommand>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
@@ -30,15 +31,15 @@ public class IdentityDeleterTests : AbstractTestsBase
     public async Task Deleter_correctly_creates_audit_log()
     {
         // Arrange
-        var dummyMediator = A.Fake<IMediator>();
-        var deleter = new IdentityDeleter(dummyMediator);
-        var identityAddress = CreateRandomIdentityAddress();
+        var dummyMediator = A.Dummy<IMediator>();
         var mockIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
+        var deleter = new IdentityDeleter(dummyMediator, mockIDeletionProcessLogger);
+        var identityAddress = CreateRandomIdentityAddress();
 
         // Act
-        await deleter.Delete(identityAddress, mockIDeletionProcessLogger);
+        await deleter.Delete(identityAddress);
 
         // Assert
-        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, AggregateType.Messages)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, "Messages")).MustHaveHappenedOnceExactly();
     }
 }

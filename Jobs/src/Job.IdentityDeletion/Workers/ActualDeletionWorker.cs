@@ -15,7 +15,6 @@ public class ActualDeletionWorker : IHostedService
     private readonly IMediator _mediator;
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<ActualDeletionWorker> _logger;
-    private readonly IDeletionProcessLogger _deletionProcessLogger;
     private readonly List<IIdentityDeleter> _identityDeleters;
 
     public ActualDeletionWorker(
@@ -23,15 +22,13 @@ public class ActualDeletionWorker : IHostedService
         IEnumerable<IIdentityDeleter> identityDeleters,
         IMediator mediator,
         IPushNotificationSender pushNotificationSender,
-        ILogger<ActualDeletionWorker> logger,
-        IDeletionProcessLogger deletionProcessLogger)
+        ILogger<ActualDeletionWorker> logger)
     {
         _host = host;
         _identityDeleters = identityDeleters.ToList();
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
         _logger = logger;
-        _deletionProcessLogger = deletionProcessLogger;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -80,7 +77,7 @@ public class ActualDeletionWorker : IHostedService
     {
         foreach (var identityDeleter in _identityDeleters)
         {
-            await identityDeleter.Delete(identityAddress, _deletionProcessLogger);
+            await identityDeleter.Delete(identityAddress);
         }
     }
 

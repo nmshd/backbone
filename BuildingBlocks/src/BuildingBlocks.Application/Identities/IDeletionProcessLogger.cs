@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 
 namespace Backbone.BuildingBlocks.Application.Identities;
-public interface IIdentityDeleter
+public interface IDeletionProcessLogger
 {
-    Task Delete(IdentityAddress identityAddress);
+    Task LogDeletion(IdentityAddress identityAddress, string aggregateType);
 }

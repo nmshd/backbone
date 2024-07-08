@@ -45,7 +45,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         SetupRipeDeletionProcessesCommand(mockMediator, identityAddress1, identityAddress2);
 
         var mockIdentityDeleter = A.Fake<IIdentityDeleter>();
-        var dummyIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
+        var dummyIDeletionProcessLogger = A.Dummy<IDeletionProcessLogger>();
 
         var worker = CreateWorker(mediator: mockMediator, [mockIdentityDeleter], deletionProcessLogger: dummyIDeletionProcessLogger);
 
