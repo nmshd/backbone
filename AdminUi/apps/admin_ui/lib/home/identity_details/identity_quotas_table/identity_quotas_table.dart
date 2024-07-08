@@ -26,8 +26,8 @@ class IdentityQuotaListState extends State<IdentityQuotaList> {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        title: const Text('Quotas'),
-        subtitle: const Text('View and assign quotas for this identity.'),
+        title: Text(context.l10n.quotas),
+        subtitle: Text(context.l10n.identityQuotaTable_title_description),
         children: [
           Card(
             child: Column(
@@ -42,19 +42,24 @@ class IdentityQuotaListState extends State<IdentityQuotaList> {
                   width: double.infinity,
                   height: 500,
                   child: DataTable2(
-                    columns: const [
-                      DataColumn2(label: Text('Metric')),
-                      DataColumn2(label: Text('Source'), size: ColumnSize.S),
-                      DataColumn2(label: Text('Usage (Used/Max)'), size: ColumnSize.L),
-                      DataColumn2(label: Text('Period'), size: ColumnSize.S),
-                      DataColumn2(label: Text(''), size: ColumnSize.S),
+                    columns: [
+                      DataColumn2(label: Text(context.l10n.metric)),
+                      DataColumn2(label: Text(context.l10n.source), size: ColumnSize.S),
+                      DataColumn2(
+                        label: Text(
+                          '${context.l10n.usage} (${context.l10n.used}/${context.l10n.max})',
+                        ),
+                        size: ColumnSize.L,
+                      ),
+                      DataColumn2(label: Text(context.l10n.period), size: ColumnSize.S),
+                      const DataColumn2(label: Text(''), size: ColumnSize.S),
                     ],
-                    empty: const Text('No quotas applied for this identity.'),
+                    empty: Text(context.l10n.identityQuotaTable_noQuotaApplied),
                     rows: groupedQuotas.entries.expand((entry) {
                       final metricName = entry.key;
                       final quotas = entry.value;
 
-                      final hasIndividualQuota = quotas.any((quota) => quota.source == 'Individual');
+                      final hasIndividualQuota = quotas.any((quota) => quota.source == context.l10n.identityQuotaTable_individual);
 
                       return [
                         DataRow2(
@@ -71,7 +76,7 @@ class IdentityQuotaListState extends State<IdentityQuotaList> {
                           (quota) {
                             final isTierQuota = quota.source == 'Tier';
                             final shouldDisable = isTierQuota && hasIndividualQuota;
-                            final tooltipMessage = shouldDisable ? 'Tier quotas do not take effect if there is an individual quota.' : null;
+                            final tooltipMessage = shouldDisable ? context.l10n.identityQuotaTable_tierQuotaEffectMessage : null;
 
                             return DataRow2(
                               selected: _selectedQuotas.contains(quota.id),
