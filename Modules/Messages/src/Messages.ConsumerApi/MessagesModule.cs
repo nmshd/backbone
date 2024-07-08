@@ -4,7 +4,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Messages.Application;
 using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Infrastructure.Persistence;
-using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -38,5 +37,6 @@ public class MessagesModule : AbstractModule
 
     public override void ConfigureEventBus(IEventBus eventBus)
     {
+        eventBus.AddMessagesDomainEventSubscriptions();
     }
 }
