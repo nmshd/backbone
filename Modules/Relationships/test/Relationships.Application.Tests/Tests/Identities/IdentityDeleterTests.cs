@@ -10,6 +10,7 @@ using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Identities;
+
 public class IdentityDeleterTests : AbstractTestsBase
 {
     [Fact]
@@ -50,8 +51,8 @@ public class IdentityDeleterTests : AbstractTestsBase
         await deleter.Delete(identityAddress, mockIDeletionProcessLogger);
 
         // Assert
-        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, AggregateType.Relationships)).MustHaveHappenedOnceExactly();
-        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, AggregateType.RelationshipTemplates)).MustHaveHappenedOnceExactly();
-        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, AggregateType.RelationshipTemplateAllocations)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, "Relationships")).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, "RelationshipTemplates")).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, "RelationshipTemplateAllocations")).MustHaveHappenedOnceExactly();
     }
 }

@@ -8,6 +8,7 @@ using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Files.Application.Tests.Tests.Identities;
+
 public class IdentityDeleterTests : AbstractTestsBase
 {
     [Fact]
@@ -39,6 +40,6 @@ public class IdentityDeleterTests : AbstractTestsBase
         await deleter.Delete(identityAddress, mockIDeletionProcessLogger);
 
         // Assert
-        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, AggregateType.Files)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, "Files")).MustHaveHappenedOnceExactly();
     }
 }
