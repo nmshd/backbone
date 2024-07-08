@@ -18,12 +18,12 @@ public class IdentityDeleterTests : AbstractTestsBase
     {
         // Arrange
         var mockMediator = A.Fake<IMediator>();
-        var deleter = new IdentityDeleter(mockMediator);
+        var mockIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
+        var deleter = new IdentityDeleter(mockMediator, mockIDeletionProcessLogger);
         var identityAddress = CreateRandomIdentityAddress();
-        var dummyIDeletionProcessLogger = A.Dummy<IDeletionProcessLogger>();
 
         // Act
-        await deleter.Delete(identityAddress, dummyIDeletionProcessLogger);
+        await deleter.Delete(identityAddress);
 
         // Assert
         A.CallTo(() => mockMediator.Send(
@@ -43,12 +43,12 @@ public class IdentityDeleterTests : AbstractTestsBase
     {
         // Arrange
         var dummyMediator = A.Dummy<IMediator>();
-        var deleter = new IdentityDeleter(dummyMediator);
-        var identityAddress = CreateRandomIdentityAddress();
         var mockIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
+        var deleter = new IdentityDeleter(dummyMediator, mockIDeletionProcessLogger);
+        var identityAddress = CreateRandomIdentityAddress();
 
         // Act
-        await deleter.Delete(identityAddress, mockIDeletionProcessLogger);
+        await deleter.Delete(identityAddress);
 
         // Assert
         A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, "Relationships")).MustHaveHappenedOnceExactly();

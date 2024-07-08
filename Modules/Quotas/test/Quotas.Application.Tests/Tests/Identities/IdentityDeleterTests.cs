@@ -16,12 +16,12 @@ public class IdentityDeleterTests : AbstractTestsBase
     {
         // Arrange
         var mockMediator = A.Fake<IMediator>();
-        var deleter = new IdentityDeleter(mockMediator);
-        var identityAddress = CreateRandomIdentityAddress();
         var dummyIDeletionProcessLogger = A.Dummy<IDeletionProcessLogger>();
+        var deleter = new IdentityDeleter(mockMediator, dummyIDeletionProcessLogger);
+        var identityAddress = CreateRandomIdentityAddress();
 
         // Act
-        await deleter.Delete(identityAddress, dummyIDeletionProcessLogger);
+        await deleter.Delete(identityAddress);
 
         // Assert
         A.CallTo(() => mockMediator.Send(A<DeleteIdentityCommand>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
@@ -32,12 +32,12 @@ public class IdentityDeleterTests : AbstractTestsBase
     {
         // Arrange
         var dummyMediator = A.Dummy<IMediator>();
-        var deleter = new IdentityDeleter(dummyMediator);
-        var identityAddress = CreateRandomIdentityAddress();
         var mockIDeletionProcessLogger = A.Fake<IDeletionProcessLogger>();
+        var deleter = new IdentityDeleter(dummyMediator, mockIDeletionProcessLogger);
+        var identityAddress = CreateRandomIdentityAddress();
 
         // Act
-        await deleter.Delete(identityAddress, mockIDeletionProcessLogger);
+        await deleter.Delete(identityAddress);
 
         // Assert
         A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, "QuotaIdentities")).MustHaveHappenedOnceExactly();
