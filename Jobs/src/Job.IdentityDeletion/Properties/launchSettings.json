@@ -2,15 +2,18 @@
   "profiles": {
     "Job.IdentityDeletion.CancelStaleDeletionProcesses": {
       "commandName": "Project",
-      "commandLineArgs": "--Worker CancelStaleDeletionProcessesWorker"
+      "commandLineArgs": "--Worker CancelStaleDeletionProcessesWorker",
+      "workingDirectory": "bin/Debug/$(TargetFramework)"
     },
     "Job.IdentityDeletion.ActualDeletion": {
       "commandName": "Project",
-      "commandLineArgs": "--Worker ActualDeletionWorker"
+      "commandLineArgs": "--Worker ActualDeletionWorker",
+      "workingDirectory": "bin/Debug/$(TargetFramework)"
     },
     "Job.IdentityDeletion.SendGracePeriodAndApprovalReminders": {
       "commandName": "Project",
-      "commandLineArgs": "--Worker SendGracePeriodAndApprovalRemindersWorker"
+      "commandLineArgs": "--Worker SendGracePeriodAndApprovalRemindersWorker",
+      "workingDirectory": "bin/Debug/$(TargetFramework)"
     }
   }
 }
