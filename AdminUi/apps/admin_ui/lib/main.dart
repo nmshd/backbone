@@ -8,6 +8,7 @@ import 'package:watch_it/watch_it.dart';
 import 'core/models/models.dart';
 import 'core/theme/theme.dart';
 import 'home/home.dart';
+import 'home/identities_overview/deletion_process_audit_logs/deletion_process_auditlogs_details.dart';
 import 'screens/screens.dart';
 import 'setup/setup_desktop.dart' if (dart.library.html) 'setup/setup_web.dart';
 
@@ -54,6 +55,15 @@ final _router = GoRouter(
               parentNavigatorKey: _shellNavigatorKey,
               path: ':address',
               pageBuilder: (context, state) => NoTransitionPage(child: IdentityDetails(address: state.pathParameters['address']!)),
+            ),
+            GoRoute(
+              parentNavigatorKey: _shellNavigatorKey,
+              path: ':address/deletion-process-audit-logs',
+              pageBuilder: (context, state) => NoTransitionPage(
+                  child: DeletionProcessAuditLogsDetails(
+                identityAddress: state.pathParameters['address']!,
+                locale: Localizations.localeOf(context),
+              )),
             ),
           ],
         ),
