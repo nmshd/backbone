@@ -10,19 +10,21 @@ namespace Backbone.Modules.Synchronization.Application.Identities;
 public class IdentityDeleter : IIdentityDeleter
 {
     private readonly IMediator _mediator;
+    private readonly IDeletionProcessLogger _deletionProcessLogger;
 
-    public IdentityDeleter(IMediator mediator)
+    public IdentityDeleter(IMediator mediator, IDeletionProcessLogger deletionProcessLogger)
     {
         _mediator = mediator;
+        _deletionProcessLogger = deletionProcessLogger;
     }
 
-    public async Task Delete(IdentityAddress identityAddress, IDeletionProcessLogger deletionProcessLogger)
+    public async Task Delete(IdentityAddress identityAddress)
     {
         await _mediator.Send(new DeleteExternalEventsOfIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.ExternalEvents);
+        await _deletionProcessLogger.LogDeletion(identityAddress, AggregateType.ExternalEvents);
         await _mediator.Send(new DeleteSyncRunsOfIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.SyncRuns);
+        await _deletionProcessLogger.LogDeletion(identityAddress, AggregateType.SyncRuns);
         await _mediator.Send(new DeleteDatawalletsOfIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Datawallets);
+        await _deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Datawallets);
     }
 }

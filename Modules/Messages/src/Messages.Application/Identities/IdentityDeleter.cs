@@ -8,15 +8,17 @@ namespace Backbone.Modules.Messages.Application.Identities;
 public class IdentityDeleter : IIdentityDeleter
 {
     private readonly IMediator _mediator;
+    private readonly IDeletionProcessLogger _deletionProcessLogger;
 
-    public IdentityDeleter(IMediator mediator)
+    public IdentityDeleter(IMediator mediator, IDeletionProcessLogger deletionProcessLogger)
     {
         _mediator = mediator;
+        _deletionProcessLogger = deletionProcessLogger;
     }
 
-    public async Task Delete(IdentityAddress identityAddress, IDeletionProcessLogger deletionProcessLogger)
+    public async Task Delete(IdentityAddress identityAddress)
     {
         await _mediator.Send(new AnonymizeMessagesOfIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Messages);
+        await _deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Messages);
     }
 }

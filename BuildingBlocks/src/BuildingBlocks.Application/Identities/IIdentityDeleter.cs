@@ -3,5 +3,5 @@
 namespace Backbone.BuildingBlocks.Application.Identities;
 public interface IIdentityDeleter
 {
-    Task Delete(IdentityAddress identityAddress, IDeletionProcessLogger deletionProcessLogger);
+    Task Delete(IdentityAddress identityAddress);
 }
