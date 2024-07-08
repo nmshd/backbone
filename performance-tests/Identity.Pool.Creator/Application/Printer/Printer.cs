@@ -1,4 +1,6 @@
-﻿using Backbone.Identity.Pool.Creator.PoolsFile;
+﻿using System.Text;
+using Backbone.Identity.Pool.Creator.PoolsFile;
+using Backbone.Tooling;
 
 namespace Backbone.Identity.Pool.Creator.Application.Printer;
 public class Printer : IPrinter
@@ -50,6 +52,44 @@ public class Printer : IPrinter
         }
     }
 
+    public void OutputAll(IList<PoolEntry> pools)
+    {
+        var outputDirName = $@"{GetProjectPath()}\poolCreator.{SystemTime.UtcNow:yyyyMMdd-HHmmss}";
+        Directory.CreateDirectory(outputDirName);
+
+        OutputIdentities(outputDirName, pools);
+        //OutputRelationshipsAndMessages(outputDirName, pools);
+    }
+
+    private void OutputIdentities(string outputDirName, IList<PoolEntry> pools)
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine("Address;DeviceId;Username;Password;Alias");
+        foreach (var pool in pools)
+        {
+            foreach (var identity in pool.Identities)
+            {
+                foreach (var deviceId in identity.DeviceIds)
+                {
+                    stringBuilder.AppendLine($"""{identity.Address};{deviceId};{identity.UserCredentials.Username};"{identity.UserCredentials.Password}";{pool.Alias}""");
+                }
+            }
+        }
+        File.WriteAllTextAsync($@"{outputDirName}\identities.csv", stringBuilder.ToString());
+    }
+
+    private static string GetProjectPath()
+    {
+        var dir = Path.GetFullPath(@"..\..\..");
+        return dir;
+    }
+
+    public void PrintString(string value, string filename)
+    {
+        var outputDirName = $@"{GetProjectPath()}\poolCreator.{SystemTime.UtcNow:yyyyMMdd-HHmmss}";
+        Directory.CreateDirectory(outputDirName);
+        File.WriteAllTextAsync($@"{outputDirName}\{filename}.csv", value);
+    }
 }
 
 public interface IPrinter
@@ -57,6 +97,7 @@ public interface IPrinter
 {
     protected internal void PrintRelationships(IList<PoolEntry> pools, bool summaryOnly = false);
     protected internal void PrintMessages(IList<PoolEntry> pools, bool summaryOnly = false);
+    void PrintString(string value, string filename);
 }
 
 

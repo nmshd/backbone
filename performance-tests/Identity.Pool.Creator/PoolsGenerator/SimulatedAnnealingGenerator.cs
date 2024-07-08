@@ -1,5 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Text;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.Identity.Pool.Creator.Application.Printer;
 using Backbone.Identity.Pool.Creator.PoolsFile;
@@ -58,10 +59,10 @@ public class SimulatedAnnealingPoolsGenerator
 
     public async Task CreatePools()
     {
-        Generate();
+        _printer.PrintString(Generate().GetAsCSV(), "ram");
     }
 
-    public void Generate(double initialTemperature = 20d, ulong maxIterations = 25000)
+    public SolutionRepresentation Generate(double initialTemperature = 20d, ulong maxIterations = 125000)
     {
         var progress = new ProgressBar(Convert.ToInt64(maxIterations));
         var currentSolution = GenerateSolutionFromPools(Pools);
@@ -74,12 +75,14 @@ public class SimulatedAnnealingPoolsGenerator
             if (P) Console.Write($"Temp: {temperature:F3} Score:{currentScore}, solution m: {currentSolution.GetSentMessagesCount():D4}, r:{currentSolution.GetRelationshipCount():D4}. Next action: ");
 
             var solutions = new ConcurrentBag<SolutionRepresentation>();
-            Parallel.For(0, Environment.ProcessorCount - 2, count =>
+            var forMax = Convert.ToUInt32(Environment.ProcessorCount) - 2;
+
+            Parallel.For(0, forMax, count =>
             {
                 var nextSolution = currentSolution.Clone() as SolutionRepresentation;
-                for (var si = 0; si < 6; si++)
+                for (uint si = 0; si < 6; si++)
                 {
-                    nextSolution = GetNextState(nextSolution!, _connectorMessageRatio);
+                    nextSolution = GetNextState(nextSolution!, _connectorMessageRatio, si, 6);
                     if (P && si != 6 - 1) Console.Write(", ");
                 }
 
@@ -124,6 +127,7 @@ public class SimulatedAnnealingPoolsGenerator
         }
 
         currentSolution.Print(_identitiesDictionary, Pools);
+        return currentSolution;
     }
 
     private SolutionRepresentation GenerateSolutionFromPools(List<PoolEntry> pools)
@@ -149,12 +153,24 @@ public class SimulatedAnnealingPoolsGenerator
         return res;
     }
 
-    private SolutionRepresentation GetNextState(SolutionRepresentation currentSolution, decimal connectorMessageRatio = 0.75m)
+    /// <summary>
+    /// Randomly generates a new solution. If I and maxI are provided, certain operations are preferred in the first iterations.
+    /// </summary>
+    /// <param name="currentSolution"></param>
+    /// <param name="connectorMessageRatio"></param>
+    /// <param name="i"></param>
+    /// <param name="maxI"></param>
+    /// <returns></returns>
+    /// <exception cref="Exception"></exception>
+    private SolutionRepresentation GetNextState(SolutionRepresentation currentSolution, decimal connectorMessageRatio = 0.75m, uint i = 0, uint maxI = 0)
     {
         if (currentSolution.Clone() is not SolutionRepresentation solution || solution.GetType() != typeof(SolutionRepresentation))
             throw new Exception("clone failed");
 
-        if (_localRandom.NextBoolean())
+        // -1 means random
+        var progress = i >= 0 && maxI > i ? Convert.ToDouble(i) / maxI : -1;
+
+        if (progress > 0.3 || _localRandom.NextBoolean())
         {
             // Will mess with messages
             if (_localRandom.NextDouble() > 0.70)
@@ -195,7 +211,7 @@ public class SimulatedAnnealingPoolsGenerator
         else
         {
             // Will mess with relationships
-            if (_localRandom.NextDouble() > 0.70)
+            if (_localRandom.NextDouble() > 0.60)
             {
                 // will remove a relationship
                 solution.RemoveRandomRelationship();
@@ -205,7 +221,7 @@ public class SimulatedAnnealingPoolsGenerator
             {
                 // will add a relationship
                 var flag = false;
-                var i = 0;
+                var iter = 0;
                 do
                 {
                     var i1 = _localRandom.GetRandomElement(_appIdentitiesDictionary);
@@ -217,7 +233,7 @@ public class SimulatedAnnealingPoolsGenerator
                     solution.EstablishRelationship(i1.Uon, i2.Uon);
                     flag = true;
 
-                } while (!flag && i++ < 20);
+                } while (!flag && iter++ < 20);
 
                 if (P) Console.Write("add rel");
             }
@@ -502,6 +518,19 @@ public class SolutionRepresentation : ICloneable
     public IEnumerable<(uint relatedIdentity, uint messageCount)> GetRelationshipsAndMessageSentCountByIdentity(uint uon)
     {
         return RaM.Where(it => it.Key.a == uon).Select(it => (it.Key.b, it.Value)).ToList();
+    }
+
+    public string GetAsCSV()
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine("Identity1;Identity2;MessageCount");
+        
+        foreach (var ((a, b), c) in RaM)
+        {
+            stringBuilder.AppendLine($"{a};{b};{c}");
+        }
+        
+        return stringBuilder.ToString();
     }
 }
 

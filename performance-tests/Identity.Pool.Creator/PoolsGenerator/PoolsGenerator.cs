@@ -69,7 +69,6 @@ public class PoolsGenerator
         //await CreateMessages();
         //await CreateDatawalletModifications();
 
-        OutputAll();
         _config.Pools = _pools.ToArray();
     }
 
@@ -260,41 +259,6 @@ public class PoolsGenerator
                 }
             }
         }
-    }
-
-    #endregion
-
-    #region Outputters
-
-    private void OutputAll()
-    {
-        var outputDirName = $@"{GetProjectPath()}\poolCreator.{SystemTime.UtcNow:yyyyMMdd-HHmmss}";
-        Directory.CreateDirectory(outputDirName);
-
-        OutputIdentities(outputDirName);
-    }
-
-    private void OutputIdentities(string outputDirName)
-    {
-        var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("DeviceId;Username;Password;Alias");
-        foreach (var pool in _pools)
-        {
-            foreach (var identity in pool.Identities)
-            {
-                foreach (var deviceId in identity.DeviceIds)
-                {
-                    stringBuilder.AppendLine($"""{deviceId};{identity.UserCredentials.Username};"{identity.UserCredentials.Password}";{pool.Alias}""");
-                }
-            }
-        }
-        File.WriteAllTextAsync($@"{outputDirName}\identities.csv", stringBuilder.ToString());
-    }
-
-    private static string GetProjectPath()
-    {
-        var dir = Path.GetFullPath(@"..\..\..");
-        return dir;
     }
 
     #endregion
