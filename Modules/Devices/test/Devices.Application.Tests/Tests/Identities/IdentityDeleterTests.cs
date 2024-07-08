@@ -9,6 +9,7 @@ using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities;
+
 public class IdentityDeleterTests : AbstractTestsBase
 {
     [Fact]
@@ -41,7 +42,7 @@ public class IdentityDeleterTests : AbstractTestsBase
         await deleter.Delete(identityAddress, mockIDeletionProcessLogger);
 
         // Assert
-        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, AggregateType.Identities)).MustHaveHappenedOnceExactly();
-        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, AggregateType.PnsRegistrations)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, "Identities")).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIDeletionProcessLogger.LogDeletion(identityAddress, "PnsRegistrations")).MustHaveHappenedOnceExactly();
     }
 }
