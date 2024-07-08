@@ -73,9 +73,9 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             Gaps.h16,
             IdentityRelationshipOverview(
               address: identityDetails.address,
-              title: context.l10n.relationships,
-              subtitle: context.l10n.view_identity_relationships,
-              emptyTableMessage: context.l10n.empty_relationship_table,
+              title: context.l10n.identityRelationshipTable_relationships,
+              subtitle: context.l10n.identityRelationshipTable_viewIdentityRelationships,
+              emptyTableMessage: context.l10n.identityRelationshipTable_emptyRelationshipTable,
             ),
           ],
         ),
