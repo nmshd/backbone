@@ -267,7 +267,8 @@ export interface UpdateTierRequest {
 export interface DeletionProcessAuditLog {
     id: string;
     createdAt: string;
-    message: string;
+    messageKey: string;
+    additionalData: Record<string, string>;
     oldStatus: number;
     newStatus: number;
 }
