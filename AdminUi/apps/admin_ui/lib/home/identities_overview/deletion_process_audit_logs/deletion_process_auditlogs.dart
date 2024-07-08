@@ -45,7 +45,7 @@ class _DeletionProcessAuditLogsState extends State<DeletionProcessAuditLogs> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 8),
+            Gaps.h8,
             Row(
               children: [
                 SizedBox(
