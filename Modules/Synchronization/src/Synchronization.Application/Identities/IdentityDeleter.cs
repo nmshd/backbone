@@ -19,10 +19,10 @@ public class IdentityDeleter : IIdentityDeleter
     public async Task Delete(IdentityAddress identityAddress, IDeletionProcessLogger deletionProcessLogger)
     {
         await _mediator.Send(new DeleteExternalEventsOfIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.ExternalEvents);
+        await deletionProcessLogger.LogDeletion(identityAddress, "ExternalEvents");
         await _mediator.Send(new DeleteSyncRunsOfIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.SyncRuns);
+        await deletionProcessLogger.LogDeletion(identityAddress, "SyncRuns");
         await _mediator.Send(new DeleteDatawalletsOfIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Datawallets);
+        await deletionProcessLogger.LogDeletion(identityAddress, "Datawallets");
     }
 }

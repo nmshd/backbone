@@ -19,10 +19,10 @@ public class IdentityDeleter : IIdentityDeleter
     public async Task Delete(IdentityAddress identityAddress, IDeletionProcessLogger deletionProcessLogger)
     {
         await _mediator.Send(new DeleteRelationshipsOfIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Relationships);
+        await deletionProcessLogger.LogDeletion(identityAddress, "Relationships");
         await _mediator.Send(new DeleteRelationshipTemplatesOfIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.RelationshipTemplates);
+        await deletionProcessLogger.LogDeletion(identityAddress, "RelationshipTemplates");
         await _mediator.Send(new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(identityAddress));
-        await deletionProcessLogger.LogDeletion(identityAddress, AggregateType.RelationshipTemplateAllocations);
+        await deletionProcessLogger.LogDeletion(identityAddress, "RelationshipTemplateAllocations");
     }
 }

@@ -8,22 +8,5 @@ public interface IIdentityDeleter
 
 public interface IDeletionProcessLogger
 {
-    Task LogDeletion(IdentityAddress identityAddress, AggregateType aggregateType);
-}
-
-public enum AggregateType
-{
-    Challenges,
-    PnsRegistrations,
-    Identities,
-    Files,
-    Messages,
-    QuotaIdentities,
-    Relationships,
-    RelationshipTemplates,
-    RelationshipTemplateAllocations,
-    ExternalEvents,
-    SyncRuns,
-    Datawallets,
-    Tokens
+    Task LogDeletion(IdentityAddress identityAddress, string aggregateType);
 }

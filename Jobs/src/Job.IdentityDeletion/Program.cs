@@ -143,7 +143,7 @@ public class DeletionProcessLogger : IDeletionProcessLogger
         _mediator = mediator;
     }
 
-    public async Task LogDeletion(IdentityAddress identityAddress, AggregateType aggregateType)
+    public async Task LogDeletion(IdentityAddress identityAddress, string aggregateType)
     {
         await _mediator.Send(new LogDeletionProcessCommand(identityAddress, aggregateType));
     }
