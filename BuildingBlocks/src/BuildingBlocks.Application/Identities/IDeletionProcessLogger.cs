@@ -3,5 +3,5 @@
 namespace Backbone.BuildingBlocks.Application.Identities;
 public interface IDeletionProcessLogger
 {
-    Task LogDeletion(IdentityAddress identityAddress, AggregateType aggregateType);
+    Task LogDeletion(IdentityAddress identityAddress, string aggregateType);
 }
