@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../extensions.dart';
+
 Future<bool> showConfirmationDialog({
   required BuildContext context,
   required String title,
@@ -33,7 +35,7 @@ class _ConfirmationDialog extends StatelessWidget {
       actions: [
         OutlinedButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: const Text('Cancel'),
+          child: Text(context.l10n.cancel),
         ),
         FilledButton(
           onPressed: () => Navigator.of(context).pop(true),

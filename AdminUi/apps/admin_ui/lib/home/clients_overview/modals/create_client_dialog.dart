@@ -66,7 +66,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        title: const Text('Create Client', textAlign: TextAlign.center),
+        title: Text(context.l10n.createClientDialog_title, textAlign: TextAlign.center),
         content: SizedBox(
           width: 500,
           child: Column(
@@ -76,20 +76,20 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
               TextField(
                 controller: _clientIdController,
                 readOnly: _saveSucceeded,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Client ID',
-                  helperText: 'A Client ID will be generated if this field is left blank.',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: context.l10n.clientID,
+                  helperText: context.l10n.createClientDialog_clientID_message,
                 ),
               ),
               Gaps.h24,
               TextField(
                 controller: _displayNameController,
                 readOnly: _saveSucceeded,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Display Name',
-                  helperText: 'Client ID will be used as a Display Name if no value is provided.',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: context.l10n.displayName,
+                  helperText: context.l10n.createClientDialog_displayName_message,
                 ),
               ),
               Gaps.h24,
@@ -99,8 +99,8 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                 obscureText: _isClientSecretVisible,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: 'Client Secret',
-                  helperText: 'A Client Secret will be generated if this field is left blank.',
+                  labelText: context.l10n.clientSecret,
+                  helperText: context.l10n.clientSecret_message,
                   suffixIcon: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
@@ -112,9 +112,9 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                         ),
                         Gaps.w4,
                         CopyToClipboardButton(
-                          tooltip: 'Copy to clipboard.',
+                          tooltip: context.l10n.createClientDialog_clientSecret_copyToClipboard,
                           clipboardText: _clientSecretController.text,
-                          successMessage: 'Client Secret copied to clipboard.',
+                          successMessage: context.l10n.clientSecret_copiedToClipboard,
                         ),
                       ],
                     ),
@@ -124,7 +124,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
               if (_saveSucceeded) ...[
                 Gaps.h16,
                 Text(
-                  'Please save the Client Secret since it will be inaccessible after exiting.',
+                  context.l10n.clientSecret_save_message,
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ],
@@ -132,11 +132,11 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
               TextField(
                 controller: _maxIdentitiesController,
                 readOnly: _saveSucceeded,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Max Identities',
-                  helperText: 'The maximum number of Identities that can be created with this Client.'
-                      '\nNo Identity limit will be assigned if this field is left blank.',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: context.l10n.maxIdentities,
+                  helperText: '${context.l10n.createClientDialog_maxIdentities_message}'
+                      '\n${context.l10n.createClientDialog_maxIdentities_noLimit_message}',
                 ),
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 keyboardType: TextInputType.number,
@@ -144,9 +144,9 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
               Gaps.h24,
               DropdownButtonFormField<String>(
                 isExpanded: true,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Default Tier*',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: '${context.l10n.defaultTier}*',
                 ),
                 value: _chosenDefaultTier,
                 onChanged: _saveSucceeded ? null : (tier) => setState(() => _chosenDefaultTier = tier),

@@ -55,7 +55,7 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        title: const Text('Change Tier', textAlign: TextAlign.center),
+        title: Text(context.l10n.changeTier, textAlign: TextAlign.center),
         content: SizedBox(
           width: 500,
           child: Padding(
@@ -96,9 +96,9 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
 
     if (response.hasError) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to update identity. Please try again.'),
-          duration: Duration(seconds: 3),
+        SnackBar(
+          content: Text(context.l10n.changeTierDialog_error),
+          duration: const Duration(seconds: 3),
         ),
       );
 
@@ -108,9 +108,9 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Identity updated successfully.'),
-        duration: Duration(seconds: 3),
+      SnackBar(
+        content: Text(context.l10n.changeTierDialog_success),
+        duration: const Duration(seconds: 3),
       ),
     );
 

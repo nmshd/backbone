@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:watch_it/watch_it.dart';
 
 import '../constants.dart';
+import '../extensions.dart';
 import '../models/models.dart';
 
 Future<void> openSettingsDialog(BuildContext context) async {
@@ -20,20 +21,20 @@ class _SettingsDialog extends StatelessWidget with WatchItMixin {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
       ),
-      title: const Text('Settings', textAlign: TextAlign.center),
+      title: Text(context.l10n.settings, textAlign: TextAlign.center),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Gaps.h8,
-          Text('Theme', style: Theme.of(context).textTheme.bodyLarge),
+          Text(context.l10n.theme, style: Theme.of(context).textTheme.bodyLarge),
           Gaps.h4,
           SegmentedButton(
             showSelectedIcon: false,
-            segments: const [
-              ButtonSegment(value: ThemeMode.light, icon: Icon(Icons.light_mode), label: Text('Light')),
-              ButtonSegment(value: ThemeMode.system, icon: Icon(Icons.settings), label: Text('System')),
-              ButtonSegment(value: ThemeMode.dark, icon: Icon(Icons.dark_mode), label: Text('Dark')),
+            segments: [
+              ButtonSegment(value: ThemeMode.light, icon: const Icon(Icons.light_mode), label: Text(context.l10n.light)),
+              ButtonSegment(value: ThemeMode.system, icon: const Icon(Icons.settings), label: Text(context.l10n.system)),
+              ButtonSegment(value: ThemeMode.dark, icon: const Icon(Icons.dark_mode), label: Text(context.l10n.dark)),
             ],
             selected: {themeMode},
             onSelectionChanged: (selected) => GetIt.I<ThemeModeModel>().setThemeMode(selected.first),
@@ -41,7 +42,7 @@ class _SettingsDialog extends StatelessWidget with WatchItMixin {
           Gaps.h16,
         ],
       ),
-      actions: [FilledButton(onPressed: () => context.pop(), child: const Text('Close'))],
+      actions: [FilledButton(onPressed: () => context.pop(), child: Text(context.l10n.close))],
     );
   }
 }

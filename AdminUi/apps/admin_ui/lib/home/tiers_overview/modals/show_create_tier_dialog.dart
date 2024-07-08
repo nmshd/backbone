@@ -47,7 +47,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8),
         ),
-        title: const Text('Create Tier', textAlign: TextAlign.center),
+        title: Text(context.l10n.createTierDialog_title, textAlign: TextAlign.center),
         content: _isLoading
             ? const Padding(
                 padding: EdgeInsets.all(16),
@@ -69,8 +69,8 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
                       onSubmitted: _onSubmitted,
                       decoration: InputDecoration(
                         border: const OutlineInputBorder(),
-                        labelText: 'Name',
-                        helperText: 'Enter a name to create your Tier.',
+                        labelText: context.l10n.name,
+                        helperText: context.l10n.createTierDialog_formMessage,
                         error: _errorMessage != null
                             ? Text(
                                 _errorMessage!,
@@ -100,7 +100,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
 
   Future<void> _onSubmitted(String name) async {
     if (name.isEmpty) {
-      _setErrorMessage('Name cannot be empty.');
+      _setErrorMessage(context.l10n.createTierDialog_nameCannotBeEmpty);
       _focusNode.requestFocus();
       return;
     }
@@ -125,13 +125,13 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
       });
 
   void _showSuccessSnackbar() {
-    const snackBar = SnackBar(
+    final snackBar = SnackBar(
       content: Text(
-        'Tier was created successfully.',
-        style: TextStyle(color: Colors.white),
+        context.l10n.createTierDialog_tierCreatedSuccess,
+        style: const TextStyle(color: Colors.white),
       ),
       backgroundColor: Colors.green,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
       showCloseIcon: true,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
