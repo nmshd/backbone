@@ -67,7 +67,7 @@ export class DeletionProcessAuditLogsDetailsComponent implements OnInit {
         return status;
     }
 
-    public getFormattedMessage(messageKey: string, additionalData: { [key: string]: string }): string {
+    public getFormattedMessage(messageKey: string, additionalData: Record<string, string>): string {
         let messageTemplate: string;
 
         switch (messageKey) {

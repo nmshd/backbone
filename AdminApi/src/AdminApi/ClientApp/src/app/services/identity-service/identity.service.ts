@@ -268,7 +268,7 @@ export interface DeletionProcessAuditLog {
     id: string;
     createdAt: string;
     messageKey: string;
-    additionalData: { [key: string]: string };
+    additionalData: Record<string, string>;
     oldStatus: number;
     newStatus: number;
 }
