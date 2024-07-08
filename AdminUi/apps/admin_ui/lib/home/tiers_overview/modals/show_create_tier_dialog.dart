@@ -44,7 +44,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
     return PopScope(
       canPop: !_isLoading,
       child: AlertDialog(
-        title: const Text('Create Tier'),
+        title: Text(context.l10n.createTierDialog_title),
         content: _isLoading
             ? const Padding(
                 padding: EdgeInsets.all(16),
@@ -53,7 +53,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
             : Column(
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
-                  const Text('Please fill the form below to create your Tier'),
+                  Text(context.l10n.createTierDialog_formMessage),
                   Gaps.h16,
                   TextField(
                     controller: _tierNameController,
@@ -65,7 +65,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
                     onSubmitted: _onSubmitted,
                     decoration: InputDecoration(
                       border: const OutlineInputBorder(),
-                      labelText: 'Name',
+                      labelText: context.l10n.name,
                       error: _errorMessage != null
                           ? Text(
                               _errorMessage!,
@@ -84,7 +84,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
           ),
           FilledButton(
             onPressed: _isLoading ? null : () => _onSubmitted(_tierNameController.text),
-            child: const Text('Create'),
+            child: Text(context.l10n.create),
           ),
         ],
       ),
@@ -93,7 +93,7 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
 
   Future<void> _onSubmitted(String name) async {
     if (name.isEmpty) {
-      _setErrorMessage('Name cannot be empty.');
+      _setErrorMessage(context.l10n.createTierDialog_nameCannotBeEmpty);
       _focusNode.requestFocus();
       return;
     }
@@ -118,13 +118,13 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
       });
 
   void _showSuccessSnackbar() {
-    const snackBar = SnackBar(
+    final snackBar = SnackBar(
       content: Text(
-        'Tier was created successfully.',
-        style: TextStyle(color: Colors.white),
+        context.l10n.createTierDialog_tierCreatedSuccess,
+        style: const TextStyle(color: Colors.white),
       ),
       backgroundColor: Colors.green,
-      duration: Duration(seconds: 3),
+      duration: const Duration(seconds: 3),
       showCloseIcon: true,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);

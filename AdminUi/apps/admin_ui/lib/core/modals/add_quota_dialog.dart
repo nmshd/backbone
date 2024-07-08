@@ -82,7 +82,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        title: const Text('Add Quota'),
+        title: Text(context.l10n.addQuota),
         content: SizedBox(
           width: 500,
           child: Column(
@@ -92,19 +92,19 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
                 value: _selectedMetric,
                 items: widget.availableMetrics.map((metric) => DropdownMenuItem(value: metric.key, child: Text(metric.displayName))).toList(),
                 onChanged: _saving ? null : (String? selected) => setState(() => _selectedMetric = selected),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Metric*',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: '${context.l10n.metric}*',
                 ),
               ),
               Gaps.h24,
               TextField(
                 controller: _maxAmountController,
                 enabled: !_saving,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Max Amount*',
-                  helperText: 'Only numbers greater or equal to 0 are valid.',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: '${context.l10n.maxAmount}*',
+                  helperText: context.l10n.addQuotaDialog_maxAmount_message,
                 ),
                 inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
                 keyboardType: TextInputType.number,
@@ -112,17 +112,17 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
               Gaps.h24,
               DropdownButtonFormField(
                 value: _selectedPeriod,
-                items: const [
-                  DropdownMenuItem(value: 'Hour', child: Text('Hour')),
-                  DropdownMenuItem(value: 'Day', child: Text('Day')),
-                  DropdownMenuItem(value: 'Week', child: Text('Week')),
-                  DropdownMenuItem(value: 'Month', child: Text('Month')),
-                  DropdownMenuItem(value: 'Year', child: Text('Year')),
+                items: [
+                  DropdownMenuItem(value: 'Hour', child: Text(context.l10n.hour)),
+                  DropdownMenuItem(value: 'Day', child: Text(context.l10n.day)),
+                  DropdownMenuItem(value: 'Week', child: Text(context.l10n.week)),
+                  DropdownMenuItem(value: 'Month', child: Text(context.l10n.month)),
+                  DropdownMenuItem(value: 'Year', child: Text(context.l10n.year)),
                 ],
                 onChanged: _saving ? null : (String? selected) => setState(() => _selectedPeriod = selected),
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Period*',
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: '${context.l10n.period}*',
                 ),
               ),
               if (_errorMessage != null)
@@ -143,7 +143,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
           ),
           FilledButton(
             onPressed: _isValid && !_saving ? _addQuota : null,
-            child: const Text('Add'),
+            child: Text(context.l10n.add),
           ),
         ],
       ),
@@ -153,7 +153,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
   Future<void> _addQuota() async {
     setState(() => _saving = true);
 
-    assert(_selectedMetric != null && _maxAmount != null && _selectedPeriod != null, 'Invalid state');
+    assert(_selectedMetric != null && _maxAmount != null && _selectedPeriod != null, 'Invalid State');
 
     final response = await widget.addQuota(
       metricKey: _selectedMetric!,
