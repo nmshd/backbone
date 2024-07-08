@@ -60,10 +60,11 @@ final _router = GoRouter(
               parentNavigatorKey: _shellNavigatorKey,
               path: ':address/deletion-process-audit-logs',
               pageBuilder: (context, state) => NoTransitionPage(
-                  child: DeletionProcessAuditLogsDetails(
-                identityAddress: state.pathParameters['address']!,
-                locale: Localizations.localeOf(context),
-              )),
+                child: DeletionProcessAuditLogsDetails(
+                  identityAddress: state.pathParameters['address']!,
+                  locale: Localizations.localeOf(context),
+                ),
+              ),
             ),
           ],
         ),
