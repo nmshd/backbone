@@ -9,17 +9,16 @@ namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Reposito
 
 public class RelationshipsRepository : IRelationshipsRepository
 {
-    private readonly MessagesDbContext _dbContext;
+    private readonly IQueryable<Relationship> _readOnlyRelationships;
 
     public RelationshipsRepository(MessagesDbContext dbContext)
     {
-        _dbContext = dbContext;
+        _readOnlyRelationships = dbContext.Relationships.AsNoTracking();
     }
 
     public Task<RelationshipId?> GetIdOfRelationshipBetweenSenderAndRecipient(IdentityAddress sender, IdentityAddress recipient)
     {
-        return _dbContext.Relationships
-            .AsNoTracking()
+        return _readOnlyRelationships
             .WithParticipants(sender, recipient)
             .Select(r => r.Id)
             .FirstOrDefaultAsync();
@@ -27,8 +26,7 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     public Task<Relationship?> FindYoungestRelationship(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
     {
-        return _dbContext.Relationships
-            .AsNoTracking()
+        return _readOnlyRelationships
             .WithParticipants(sender, recipient)
             .OrderByDescending(r => r.CreatedAt)
             .FirstOrDefaultAsync(cancellationToken);

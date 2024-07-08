@@ -114,20 +114,11 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
-                    b.Property<string>("RelationshipId")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("char(20)")
-                        .IsFixedLength();
-
                     b.HasKey("Id");
 
                     b.HasIndex("MessageId");
 
                     b.HasIndex("ReceivedAt");
-
-                    b.HasIndex("RelationshipId");
 
                     b.HasIndex("Address", "MessageId");
 
@@ -184,12 +175,6 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                     b.HasOne("Backbone.Modules.Messages.Domain.Entities.Message", null)
                         .WithMany("Recipients")
                         .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backbone.Modules.Messages.Domain.Entities.Relationship", null)
-                        .WithMany()
-                        .HasForeignKey("RelationshipId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

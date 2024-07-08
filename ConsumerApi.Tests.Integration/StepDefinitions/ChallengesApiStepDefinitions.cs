@@ -75,12 +75,12 @@ internal class ChallengesApiStepDefinitions
     }
 
     [Then("the response contains a Challenge")]
-    public void ThenTheResponseContainsAChallenge()
+    public async Task ThenTheResponseContainsAChallenge()
     {
         _response!.Should().NotBeNull();
         _response!.Should().BeASuccess();
         _response!.ContentType.Should().Be("application/json");
-        _response.Should().ComplyWithSchema();
+        await _response.Should().ComplyWithSchema();
         AssertExpirationDateIsInFuture();
     }
 
