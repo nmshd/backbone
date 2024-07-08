@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
@@ -16,7 +16,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     }
 
     private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId? processId, MessageKey messageKey, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus,
-        DeletionProcessStatus newStatus)
+        DeletionProcessStatus newStatus, Dictionary<string, string>? additionalData = null)
     {
         Id = IdentityDeletionProcessAuditLogEntryId.Generate();
         ProcessId = processId;
@@ -26,6 +26,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         DeviceIdHash = deviceIdHash;
         OldStatus = oldStatus;
         NewStatus = newStatus;
+        AdditionalData = additionalData;
     }
 
     public IdentityDeletionProcessAuditLogEntryId Id { get; }
@@ -36,6 +37,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     public byte[]? DeviceIdHash { get; }
     public DeletionProcessStatus? OldStatus { get; }
     public DeletionProcessStatus NewStatus { get; }
+    public Dictionary<string, string>? AdditionalData { get; }
 
     public static IdentityDeletionProcessAuditLogEntry ProcessStartedByOwner(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
     {
