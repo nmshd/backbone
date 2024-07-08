@@ -19,6 +19,6 @@ public class IdentityDeleter : IIdentityDeleter
     public async Task Delete(IdentityAddress identityAddress)
     {
         await _mediator.Send(new DeleteFilesOfIdentityCommand(identityAddress));
-        await _deletionProcessLogger.LogDeletion(identityAddress, AggregateType.Files);
+        await _deletionProcessLogger.LogDeletion(identityAddress, "Files");
     }
 }

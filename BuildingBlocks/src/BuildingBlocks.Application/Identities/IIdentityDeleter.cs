@@ -3,5 +3,79 @@
 namespace Backbone.BuildingBlocks.Application.Identities;
 public interface IIdentityDeleter
 {
-    Task Delete(IdentityAddress identityAddress);
+    Task Delete(IdentityAddress identityAddress, IDeletionProcessLogger deletionProcessLogger);
+}
+
+public interface IDeletionProcessLogger
+{
+    Task LogDeletion(IdentityAddress identityAddress, string aggregateType);
+}
+
+public enum AggregateType
+{
+    Challenges,
+    PnsRegistrations,
+    Identities,
+    Files,
+    Messages,
+    QuotaIdentities,
+    Relationships,
+    RelationshipTemplates,
+    RelationshipTemplateAllocations,
+    ExternalEvents,
+    SyncRuns,
+    Datawallets,
+    Tokens
+}
+
+public enum AggregateType
+{
+    Challenges,
+    PnsRegistrations,
+    Identities,
+    Files,
+    Messages,
+    QuotaIdentities,
+    Relationships,
+    RelationshipTemplates,
+    RelationshipTemplateAllocations,
+    ExternalEvents,
+    SyncRuns,
+    Datawallets,
+    Tokens
+}
+
+public enum AggregateType
+{
+    Challenges,
+    PnsRegistrations,
+    Identities,
+    Files,
+    Messages,
+    QuotaIdentities,
+    Relationships,
+    RelationshipTemplates,
+    RelationshipTemplateAllocations,
+    ExternalEvents,
+    SyncRuns,
+    Datawallets,
+    Tokens
+}
+
+
+public enum AggregateType
+{
+    Challenges,
+    PnsRegistrations,
+    Identities,
+    Files,
+    Messages,
+    QuotaIdentities,
+    Relationships,
+    RelationshipTemplates,
+    RelationshipTemplateAllocations,
+    ExternalEvents,
+    SyncRuns,
+    Datawallets,
+    Tokens
 }

@@ -42,20 +42,31 @@ public class ActualDeletionWorkerTests
         var assertionContext = GetService<DevicesDbContext>();
 
         var auditLogEntries = await assertionContext.IdentityDeletionProcessAuditLogs.Where(a => a.IdentityAddressHash == Hasher.HashUtf8(identity.Address)).ToListAsync();
-        auditLogEntries.Should().HaveCount(14);
-        auditLogEntries.Should().Contain(a => a.MessageKey == MessageKey.ChallengesDeleted);
-        auditLogEntries.Should().Contain(a => a.MessageKey == MessageKey.PnsRegistrationsDeleted);
-        auditLogEntries.Should().Contain(a => a.MessageKey == MessageKey.IdentitiesDeleted);
-        auditLogEntries.Should().Contain(a => a.MessageKey == MessageKey.FilesDeleted);
-        auditLogEntries.Should().Contain(a => a.MessageKey == MessageKey.MessagesDeleted);
-        auditLogEntries.Should().Contain(a => a.MessageKey == MessageKey.QuotaIdentitiesDeleted);
-        auditLogEntries.Should().Contain(a => a.MessageKey == MessageKey.RelationshipsDeleted);
-        auditLogEntries.Should().Contain(a => a.MessageKey == MessageKey.RelationshipTemplatesDeleted);
-        auditLogEntries.Should().Contain(a => a.MessageKey == MessageKey.RelationshipTemplateAllocationsDeleted);
-        auditLogEntries.Should().Contain(a => a.MessageKey == MessageKey.ExternalEventsDeleted);
-        auditLogEntries.Should().Contain(a => a.MessageKey == MessageKey.SyncRunsDeleted);
-        auditLogEntries.Should().Contain(a => a.MessageKey == MessageKey.DatawalletsDeleted);
-        auditLogEntries.Should().Contain(a => a.MessageKey == MessageKey.TokensDeleted);
+
+        var auditLogEntriesForDeletedData = auditLogEntries.Where(e => e.MessageKey == MessageKey.DataDeleted).ToList();
+
+        auditLogEntriesForDeletedData.Should().HaveCount(13);
+
+        auditLogEntriesForDeletedData.Should().AllSatisfy(e =>
+        {
+            e.AdditionalData.Should().HaveCount(1);
+            e.AdditionalData!.First().Key.Should().Be("aggregateType");
+        });
+
+        var deletedAggregates = auditLogEntriesForDeletedData.SelectMany(e => e.AdditionalData!.Values).ToList();
+        deletedAggregates.Should().Contain("Challenges");
+        deletedAggregates.Should().Contain("PnsRegistrations");
+        deletedAggregates.Should().Contain("Identities");
+        deletedAggregates.Should().Contain("Files");
+        deletedAggregates.Should().Contain("Messages");
+        deletedAggregates.Should().Contain("QuotaIdentities");
+        deletedAggregates.Should().Contain("Relationships");
+        deletedAggregates.Should().Contain("RelationshipTemplates");
+        deletedAggregates.Should().Contain("RelationshipTemplateAllocations");
+        deletedAggregates.Should().Contain("ExternalEvents");
+        deletedAggregates.Should().Contain("SyncRuns");
+        deletedAggregates.Should().Contain("Datawallets");
+        deletedAggregates.Should().Contain("Tokens");
     }
 
     [Fact]

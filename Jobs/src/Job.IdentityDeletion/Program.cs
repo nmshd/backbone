@@ -130,3 +130,18 @@ public class Program
             );
     }
 }
+
+public class DeletionProcessLogger : IDeletionProcessLogger
+{
+    private readonly IMediator _mediator;
+
+    public DeletionProcessLogger(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+
+    public async Task LogDeletion(IdentityAddress identityAddress, string aggregateType)
+    {
+        await _mediator.Send(new LogDeletionProcessCommand(identityAddress, aggregateType));
+    }
+}

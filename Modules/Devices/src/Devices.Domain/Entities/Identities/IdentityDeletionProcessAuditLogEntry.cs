@@ -16,7 +16,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     }
 
     private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId? processId, MessageKey messageKey, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus,
-        DeletionProcessStatus newStatus)
+        DeletionProcessStatus newStatus, Dictionary<string, string>? additionalData = null)
     {
         Id = IdentityDeletionProcessAuditLogEntryId.Generate();
         ProcessId = processId;
@@ -26,6 +26,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         DeviceIdHash = deviceIdHash;
         OldStatus = oldStatus;
         NewStatus = newStatus;
+        AdditionalData = additionalData;
     }
 
     public IdentityDeletionProcessAuditLogEntryId Id { get; }
@@ -36,6 +37,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     public byte[]? DeviceIdHash { get; }
     public DeletionProcessStatus? OldStatus { get; }
     public DeletionProcessStatus NewStatus { get; }
+    public Dictionary<string, string>? AdditionalData { get; }
 
     public static IdentityDeletionProcessAuditLogEntry ProcessStartedByOwner(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
     {
@@ -194,39 +196,18 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
 
     public static IdentityDeletionProcessAuditLogEntry DataDeleted(IdentityAddress identityAddress, string aggregateType)
     {
-        if (!TryGetMessageKey(aggregateType, out var messageKey))
-            throw new ArgumentException("Invalid aggregateType", nameof(aggregateType));
-
         return new IdentityDeletionProcessAuditLogEntry(
             null,
-            messageKey,
+            MessageKey.DataDeleted,
             Hasher.HashUtf8(identityAddress.Value),
             null,
             DeletionProcessStatus.Deleting,
-            DeletionProcessStatus.Deleting
+            DeletionProcessStatus.Deleting,
+            new Dictionary<string, string>
+            {
+                { "aggregateType", aggregateType }
+            }
         );
-    }
-
-    private static bool TryGetMessageKey(string aggregateType, out MessageKey messageKey)
-    {
-        var messageKeyMappings = new Dictionary<string, MessageKey>
-        {
-            { "Challenges", MessageKey.ChallengesDeleted },
-            { "PnsRegistrations", MessageKey.PnsRegistrationsDeleted },
-            { "Identities", MessageKey.IdentitiesDeleted },
-            { "Files", MessageKey.FilesDeleted },
-            { "Messages", MessageKey.MessagesDeleted },
-            { "QuotaIdentities", MessageKey.QuotaIdentitiesDeleted },
-            { "Relationships", MessageKey.RelationshipsDeleted },
-            { "RelationshipTemplates", MessageKey.RelationshipTemplatesDeleted },
-            { "RelationshipTemplateAllocations", MessageKey.RelationshipTemplateAllocationsDeleted },
-            { "ExternalEvents", MessageKey.ExternalEventsDeleted },
-            { "SyncRuns", MessageKey.SyncRunsDeleted },
-            { "Datawallets", MessageKey.DatawalletsDeleted },
-            { "Tokens", MessageKey.TokensDeleted }
-        };
-
-        return messageKeyMappings.TryGetValue(aggregateType, out messageKey);
     }
 }
 
@@ -245,17 +226,5 @@ public enum MessageKey
     GracePeriodReminder1Sent = 11,
     GracePeriodReminder2Sent = 12,
     GracePeriodReminder3Sent = 13,
-    ChallengesDeleted = 14,
-    PnsRegistrationsDeleted = 15,
-    IdentitiesDeleted = 16,
-    FilesDeleted = 17,
-    MessagesDeleted = 18,
-    QuotaIdentitiesDeleted = 19,
-    RelationshipsDeleted = 20,
-    RelationshipTemplatesDeleted = 21,
-    RelationshipTemplateAllocationsDeleted = 22,
-    ExternalEventsDeleted = 23,
-    SyncRunsDeleted = 24,
-    DatawalletsDeleted = 25,
-    TokensDeleted = 26
+    DataDeleted = 14
 }
