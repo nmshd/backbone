@@ -22,6 +22,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     private readonly DbSet<Device> _devices;
     private readonly IQueryable<Device> _readonlyDevices;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly DbSet<IdentityDeletionProcessAuditLogEntry> _identityDeletionProcessAuditLogs;
     private readonly IQueryable<IdentityDeletionProcessAuditLogEntry> _readonlyIdentityDeletionProcessAuditLogs;
 
     public IdentitiesRepository(DevicesDbContext dbContext, UserManager<ApplicationUser> userManager)
@@ -31,6 +32,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         _dbContext = dbContext;
         _devices = dbContext.Devices;
         _readonlyDevices = dbContext.Devices.AsNoTracking();
+        _identityDeletionProcessAuditLogs = dbContext.IdentityDeletionProcessAuditLogs;
         _readonlyIdentityDeletionProcessAuditLogs = dbContext.IdentityDeletionProcessAuditLogs.AsNoTracking();
         _userManager = userManager;
     }
@@ -118,5 +120,11 @@ public class IdentitiesRepository : IIdentitiesRepository
     public async Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
     {
         await _identities.Where(filter).ExecuteDeleteAsync(cancellationToken);
+    }
+
+    public async Task AddDeletionProcessAuditLogEntry(IdentityDeletionProcessAuditLogEntry auditLogEntry)
+    {
+        _identityDeletionProcessAuditLogs.Add(auditLogEntry);
+        await _dbContext.SaveChangesAsync();
     }
 }
