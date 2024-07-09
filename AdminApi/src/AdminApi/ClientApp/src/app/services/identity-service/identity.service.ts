@@ -26,6 +26,39 @@ export class IdentityService {
         this.odataUrl = `${environment.odataUrl}/Identities`;
     }
 
+    // eslint-disable-next-line
+    public readonly messageTemplates: Record<string, string> = {
+        StartedByOwner: "The deletion process was started by the owner. It was automatically approved.",
+        StartedBySupport: "The deletion process was started by support. It is now waiting for approval.",
+        Approved: "The deletion process was approved.",
+        Rejected: "The deletion process was rejected.",
+        CancelledByOwner: "The deletion process was cancelled by the owner of the identity.",
+        CancelledBySupport: "The deletion process was cancelled by a support employee.",
+        CancelledAutomatically: "The deletion process was cancelled automatically, because it wasn't approved by the owner within the approval period.",
+        ApprovalReminder1Sent: "The first approval reminder notification has been sent.",
+        approvalReminder2Sent: "The second approval reminder notification has been sent.",
+        approvalReminder3Sent: "The third approval reminder notification has been sent.",
+        gracePeriodReminder1Sent: "The first grace period reminder notification has been sent.",
+        gracePeriodReminder2Sent: "The second grace period reminder notification has been sent.",
+        gracePeriodReminder3Sent: "The third grace period reminder notification has been sent.",
+        dataDeleted: "All {aggregateType} have been deleted."
+    };
+
+     public getFormattedMessage(messageKey: string, additionalData: Record<string, string>): string {
+        let messageTemplate = this.messageTemplates[messageKey];
+
+        if (!messageTemplate) {
+            return "Unknown message key.";
+        }
+
+        Object.keys(additionalData).forEach((key) => {
+            const placeholder = `{${key}}`;
+            messageTemplate = messageTemplate.replace(new RegExp(placeholder, "g"), additionalData[key]);
+        });
+
+        return messageTemplate;
+    }
+
     public getIdentities(filter: IdentityOverviewFilter, pageNumber: number, pageSize: number): Observable<ODataResponseEnvelope<IdentityOverview[]>> {
         const paginationFilter = `$top=${pageSize}&$skip=${pageNumber * pageSize}&$count=true`;
         return this.http.get<any>(`${this.odataUrl}${this.buildODataFilter(filter, paginationFilter)}${this.buildODataExpand()}`).pipe(

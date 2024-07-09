@@ -22,23 +22,6 @@ export class DeletionProcessAuditLogsDetailsComponent implements OnInit {
 
     public identityDeletionProcessAuditLogs: DeletionProcessAuditLog[] = [];
 
-    private readonly messageTemplates: Record<string, string> = {
-        startedByOwner: "The deletion process was started by the owner. It was automatically approved.",
-        startedBySupport: "The deletion process was started by support. It is now waiting for approval.",
-        approved: "The deletion process was approved.",
-        rejected: "The deletion process was rejected.",
-        cancelledByOwner: "The deletion process was cancelled by the owner of the identity.",
-        cancelledBySupport: "The deletion process was cancelled by a support employee.",
-        cancelledAutomatically: "The deletion process was cancelled automatically, because it wasn't approved by the owner within the approval period.",
-        approvalReminder1Sent: "The first approval reminder notification has been sent.",
-        approvalReminder2Sent: "The second approval reminder notification has been sent.",
-        approvalReminder3Sent: "The third approval reminder notification has been sent.",
-        gracePeriodReminder1Sent: "The first grace period reminder notification has been sent.",
-        gracePeriodReminder2Sent: "The second grace period reminder notification has been sent.",
-        gracePeriodReminder3Sent: "The third grace period reminder notification has been sent.",
-        dataDeleted: "All {aggregateType} have been deleted."
-    };
-
     public constructor(
         private readonly identityService: IdentityService,
         private readonly snackBar: MatSnackBar,
@@ -85,22 +68,6 @@ export class DeletionProcessAuditLogsDetailsComponent implements OnInit {
     }
 
     public getFormattedMessage(messageKey: string, additionalData: Record<string, string>): string {
-        const camelCaseMessageKey = this.toCamelCase(messageKey);
-        let messageTemplate = this.messageTemplates[camelCaseMessageKey];
-
-        if (!messageTemplate) {
-            return "Unknown message key.";
-        }
-
-        Object.keys(additionalData).forEach((key) => {
-            const placeholder = `{${key}}`;
-            messageTemplate = messageTemplate.replace(new RegExp(placeholder, "g"), additionalData[key]);
-        });
-
-        return messageTemplate;
-    }
-
-    private toCamelCase(str: string): string {
-        return str.charAt(0).toLowerCase() + str.slice(1).replace(/([-_][a-z])/gi, (match) => match.toUpperCase().replace("-", "").replace("_", ""));
+        return this.identityService.getFormattedMessage(messageKey, additionalData);
     }
 }
