@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.Extensions;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
 using FluentAssertions;
@@ -31,8 +32,8 @@ public class HandlerTests : AbstractTestsBase
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
         TestDataGenerator.CreateCancelledDeletionProcessFor(identity);
 
-        _arrangeDbContext.SaveEntity(identity);
-        _arrangeDbContext.RemoveEntity(identity);
+        await _arrangeDbContext.SaveEntity(identity);
+        await _arrangeDbContext.RemoveEntity(identity);
 
         var handler = CreateHandler(_actDbContext);
 
@@ -50,7 +51,7 @@ public class HandlerTests : AbstractTestsBase
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
         TestDataGenerator.CreateCancelledDeletionProcessFor(identity);
 
-        _arrangeDbContext.SaveEntity(identity);
+        await _arrangeDbContext.SaveEntity(identity);
 
         var handler = CreateHandler(_actDbContext);
 
@@ -70,8 +71,8 @@ public class HandlerTests : AbstractTestsBase
         TestDataGenerator.CreateRejectedDeletionProcessFor(identity, identity.Devices.First().Id);
         TestDataGenerator.CreateApprovedDeletionProcessFor(identity, identity.Devices.First().Id);
 
-        _arrangeDbContext.SaveEntity(identity);
-        _arrangeDbContext.RemoveEntity(identity);
+        await _arrangeDbContext.SaveEntity(identity);
+        await _arrangeDbContext.RemoveEntity(identity);
 
         var handler = CreateHandler(_actDbContext);
 
@@ -89,8 +90,8 @@ public class HandlerTests : AbstractTestsBase
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
         TestDataGenerator.CreateDeletingDeletionProcessFor(identity, identity.Devices.First().Id);
 
-        _arrangeDbContext.SaveEntity(identity);
-        _arrangeDbContext.RemoveEntity(identity);
+        await _arrangeDbContext.SaveEntity(identity);
+        await _arrangeDbContext.RemoveEntity(identity);
 
         var handler = CreateHandler(_actDbContext);
 
@@ -108,8 +109,8 @@ public class HandlerTests : AbstractTestsBase
         var identity = TestDataGenerator.CreateIdentityWithOneDevice();
         TestDataGenerator.CreateDeletingDeletionProcessFor(identity, identity.Devices.First().Id);
 
-        _arrangeDbContext.SaveEntity(identity);
-        _arrangeDbContext.RemoveEntity(identity);
+        await _arrangeDbContext.SaveEntity(identity);
+        await _arrangeDbContext.RemoveEntity(identity);
 
         var handler = CreateHandler(_actDbContext);
 

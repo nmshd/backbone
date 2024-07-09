@@ -111,36 +111,7 @@ export class DeletionProcessDetailsComponent {
         });
     }
 
-    public replaceMessageKeyWithCorrespondingText(messageKey: string): string {
-        switch (messageKey) {
-            case "StartedByOwner":
-                return "The deletion process was started by the owner. It was automatically approved.";
-            case "StartedBySupport":
-                return "The deletion process was started by support. It is now waiting for approval.";
-            case "Approved":
-                return "The deletion process was approved.";
-            case "Rejected":
-                return "The deletion process was rejected.";
-            case "CancelledByOwner":
-                return "The deletion process was cancelled by the owner of the identity.";
-            case "CancelledBySupport":
-                return "The deletion process was cancelled by a support employee.";
-            case "CancelledAutomatically":
-                return "The deletion process was cancelled automatically, because it wasn't approved by the owner within the approval period.";
-            case "ApprovalReminder1Sent":
-                return "The first approval reminder notification has been sent.";
-            case "ApprovalReminder2Sent":
-                return "The second approval reminder notification has been sent.";
-            case "ApprovalReminder3Sent":
-                return "The third approval reminder notification has been sent.";
-            case "GracePeriodReminder1Sent":
-                return "The first grace period reminder notification has been sent.";
-            case "GracePeriodReminder2Sent":
-                return "The second grace period reminder notification has been sent.";
-            case "GracePeriodReminder3Sent":
-                return "The third grace period reminder notification has been sent.";
-            default:
-                return "Unknown message key.";
-        }
+    public getFormattedMessage(messageKey: string, additionalData: Record<string, string>): string {
+        return this.identityService.getMessageForDeletionProcessAuditLog(messageKey, additionalData);
     }
 }

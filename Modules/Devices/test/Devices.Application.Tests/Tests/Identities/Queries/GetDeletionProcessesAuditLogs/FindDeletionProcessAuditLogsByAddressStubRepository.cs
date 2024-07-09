@@ -61,6 +61,11 @@ public class FindDeletionProcessAuditLogsByAddressStubRepository : IIdentitiesRe
         return Task.FromResult(_identityDeletionProcessAuditLogs);
     }
 
+    public Task AddDeletionProcessAuditLogEntry(IdentityDeletionProcessAuditLogEntry auditLogEntry)
+    {
+        throw new NotSupportedException();
+    }
+
     public Task Update(Identity identity, CancellationToken cancellationToken)
     {
         throw new NotSupportedException();
