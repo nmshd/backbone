@@ -27,7 +27,7 @@ export class IdentityService {
     }
 
     /* eslint-disable @typescript-eslint/naming-convention */
-    public readonly messageTemplates: Record<string, string> = {
+    private readonly messageTemplates: Record<string, string> = {
         StartedByOwner: "The deletion process was started by the owner. It was automatically approved.",
         StartedBySupport: "The deletion process was started by support. It is now waiting for approval.",
         Approved: "The deletion process was approved.",
@@ -43,6 +43,7 @@ export class IdentityService {
         GracePeriodReminder3Sent: "The third grace period reminder notification has been sent.",
         DataDeleted: "All {aggregateType} have been deleted."
     };
+    /* eslint-enable @typescript-eslint/naming-convention */
 
     public getFormattedMessage(messageKey: string, additionalData: Record<string, string>): string {
         let messageTemplate = this.messageTemplates[messageKey];
