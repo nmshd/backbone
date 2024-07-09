@@ -12,8 +12,8 @@ Identity _$IdentityFromJson(Map<String, dynamic> json) => Identity(
       publicKey: json['publicKey'] as String,
       tierId: json['tierId'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      identityVersion: json['identityVersion'] as int,
-      numberOfDevices: json['numberOfDevices'] as int,
+      identityVersion: (json['identityVersion'] as num).toInt(),
+      numberOfDevices: (json['numberOfDevices'] as num).toInt(),
       devices: (json['devices'] as List<dynamic>?)?.map(Device.fromJson).toList(),
       quotas: (json['quotas'] as List<dynamic>?)?.map(IdentityQuota.fromJson).toList(),
     );
@@ -50,8 +50,8 @@ IdentityQuota _$IdentityQuotaFromJson(Map<String, dynamic> json) => IdentityQuot
       id: json['id'] as String,
       source: json['source'] as String,
       metric: Metric.fromJson(json['metric']),
-      max: json['max'] as int,
-      usage: json['usage'] as int,
+      max: (json['max'] as num).toInt(),
+      usage: (json['usage'] as num).toInt(),
       period: json['period'] as String,
     );
 
@@ -68,11 +68,11 @@ IdentityOverview _$IdentityOverviewFromJson(Map<String, dynamic> json) => Identi
       address: json['address'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       createdWithClient: json['createdWithClient'] as String,
-      identityVersion: json['identityVersion'] as int,
-      numberOfDevices: json['numberOfDevices'] as int,
+      identityVersion: (json['identityVersion'] as num).toInt(),
+      numberOfDevices: (json['numberOfDevices'] as num).toInt(),
       tier: Tier.fromJson(json['tier']),
       lastLoginAt: json['lastLoginAt'] == null ? null : DateTime.parse(json['lastLoginAt'] as String),
-      datawalletVersion: json['datawalletVersion'] as int?,
+      datawalletVersion: (json['datawalletVersion'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$IdentityOverviewToJson(IdentityOverview instance) => <String, dynamic>{
@@ -84,4 +84,56 @@ Map<String, dynamic> _$IdentityOverviewToJson(IdentityOverview instance) => <Str
       'tier': instance.tier,
       'lastLoginAt': instance.lastLoginAt?.toIso8601String(),
       'datawalletVersion': instance.datawalletVersion,
+    };
+
+DeletionProcess _$DeletionProcessFromJson(Map<String, dynamic> json) => DeletionProcess(
+      id: json['id'] as String,
+      status: json['status'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      approvalPeriodEndsAt: DateTime.parse(json['approvalPeriodEndsAt'] as String),
+      approvalReminder1SentAt: json['approvalReminder1SentAt'] == null ? null : DateTime.parse(json['approvalReminder1SentAt'] as String),
+      approvalReminder2SentAt: json['approvalReminder2SentAt'] == null ? null : DateTime.parse(json['approvalReminder2SentAt'] as String),
+      approvalReminder3SentAt: json['approvalReminder3SentAt'] == null ? null : DateTime.parse(json['approvalReminder3SentAt'] as String),
+      approvedAt: json['approvedAt'] == null ? null : DateTime.parse(json['approvedAt'] as String),
+      approvedByDevice: json['approvedByDevice'] as String?,
+      gracePeriodEndsAt: json['gracePeriodEndsAt'] == null ? null : DateTime.parse(json['gracePeriodEndsAt'] as String),
+      gracePeriodReminder1SentAt: json['gracePeriodReminder1SentAt'] == null ? null : DateTime.parse(json['gracePeriodReminder1SentAt'] as String),
+      gracePeriodReminder2SentAt: json['gracePeriodReminder2SentAt'] == null ? null : DateTime.parse(json['gracePeriodReminder2SentAt'] as String),
+      gracePeriodReminder3SentAt: json['gracePeriodReminder3SentAt'] == null ? null : DateTime.parse(json['gracePeriodReminder3SentAt'] as String),
+      auditLogs: (json['auditLogs'] as List<dynamic>?)?.map(AuditLog.fromJson).toList(),
+    );
+
+Map<String, dynamic> _$DeletionProcessToJson(DeletionProcess instance) => <String, dynamic>{
+      'id': instance.id,
+      'status': instance.status,
+      'createdAt': instance.createdAt.toIso8601String(),
+      'approvalPeriodEndsAt': instance.approvalPeriodEndsAt.toIso8601String(),
+      'approvalReminder1SentAt': instance.approvalReminder1SentAt?.toIso8601String(),
+      'approvalReminder2SentAt': instance.approvalReminder2SentAt?.toIso8601String(),
+      'approvalReminder3SentAt': instance.approvalReminder3SentAt?.toIso8601String(),
+      'approvedAt': instance.approvedAt?.toIso8601String(),
+      'approvedByDevice': instance.approvedByDevice,
+      'gracePeriodEndsAt': instance.gracePeriodEndsAt?.toIso8601String(),
+      'gracePeriodReminder1SentAt': instance.gracePeriodReminder1SentAt?.toIso8601String(),
+      'gracePeriodReminder2SentAt': instance.gracePeriodReminder2SentAt?.toIso8601String(),
+      'gracePeriodReminder3SentAt': instance.gracePeriodReminder3SentAt?.toIso8601String(),
+      'auditLogs': instance.auditLogs,
+    };
+
+AuditLog _$AuditLogFromJson(Map<String, dynamic> json) => AuditLog(
+      id: json['id'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      newStatus: json['newStatus'] as String,
+      messageKey: json['messageKey'] as String,
+      oldStatus: json['oldStatus'] as String?,
+      additionalData: json['additionalData'] as Map<String, dynamic>?,
+    );
+
+Map<String, dynamic> _$AuditLogToJson(AuditLog instance) => <String, dynamic>{
+      'id': instance.id,
+      'createdAt': instance.createdAt.toIso8601String(),
+      'oldStatus': instance.oldStatus,
+      'newStatus': instance.newStatus,
+      'additionalData': instance.additionalData,
+      'messageKey': instance.messageKey,
     };
