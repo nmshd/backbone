@@ -37,12 +37,12 @@ public static class PoolEntryExtensionMethods
         return pools.Any(p => p.Alias.EndsWith("0mc"));
     }
 
-    public static long ExpectedNumberOfRelationships(this IList<PoolEntry> pools, bool noError = false)
+    public static long ExpectedNumberOfRelationships(this IList<PoolEntry> pools, bool returnErrorOnMismatch = false)
     {
         var appRelationshipsCount = pools.Where(p => p.IsApp()).Sum(p => p.NumberOfRelationships * p.Amount);
         var connectorRelationshipsCount = pools.Where(p => p.IsConnector()).Sum(p => p.NumberOfRelationships * p.Amount);
 
-        if (noError && appRelationshipsCount != connectorRelationshipsCount)
+        if (returnErrorOnMismatch && appRelationshipsCount != connectorRelationshipsCount)
             return -1;
 
         return appRelationshipsCount > connectorRelationshipsCount ? appRelationshipsCount : connectorRelationshipsCount;

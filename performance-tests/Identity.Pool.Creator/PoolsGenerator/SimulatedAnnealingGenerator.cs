@@ -59,10 +59,10 @@ public class SimulatedAnnealingPoolsGenerator
 
     public async Task CreatePools()
     {
-        _printer.PrintString(Generate().GetAsCSV(), "ram");
+        _printer.PrintString(Generate().GetAsCSV(_identitiesDictionary), "ram");
     }
 
-    public SolutionRepresentation Generate(double initialTemperature = 20d, ulong maxIterations = 125000)
+    public SolutionRepresentation Generate(double initialTemperature = 20d, ulong maxIterations = 200000)
     {
         var progress = new ProgressBar(Convert.ToInt64(maxIterations));
         var currentSolution = GenerateSolutionFromPools(Pools);
@@ -246,7 +246,7 @@ public class SimulatedAnnealingPoolsGenerator
 
     private long CalculateScore(SolutionRepresentation solution, IDictionary<uint, Identity> identities)
     {
-        var relationshipsTarget = Pools.ExpectedNumberOfRelationships(noError: false);
+        var relationshipsTarget = Pools.ExpectedNumberOfRelationships();
         var sentMessagesTarget = Pools.ExpectedNumberOfSentMessages();
 
         var messagesScore = 0;
@@ -404,8 +404,8 @@ public class SolutionRepresentation : ICloneable
         if (_messagesCount <= 0) return;
 
         var raMWithMessages = RaM.Where(m => m.Value > 0).ToDictionary();
-        var tuple = _localRandom.GetRandomKey(raMWithMessages);
-        RemoveMessage(tuple.a, tuple.b);
+        var (a, b) = _localRandom.GetRandomKey(raMWithMessages);
+        RemoveMessage(a, b);
     }
 
     /// <summary>
@@ -418,8 +418,8 @@ public class SolutionRepresentation : ICloneable
     {
         if (_relationshipCount <= 0) return -1;
 
-        var tuple = _localRandom.GetRandomKey(RaM);
-        return RemoveRelationship(tuple.a, tuple.b);
+        var (a, b) = _localRandom.GetRandomKey(RaM);
+        return RemoveRelationship(a, b);
     }
 
     public long GetInvalidRelationshipCount(Dictionary<uint, Identity> identities)
@@ -520,14 +520,16 @@ public class SolutionRepresentation : ICloneable
         return RaM.Where(it => it.Key.a == uon).Select(it => (it.Key.b, it.Value)).ToList();
     }
 
-    public string GetAsCSV()
+    public string GetAsCSV(Dictionary<uint, Identity> identitiesDictionary)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("Identity1;Identity2;MessageCount");
+        stringBuilder.AppendLine("Identity1;Identity1Pool;Identity2;Identity2Pool;MessageCount");
         
         foreach (var ((a, b), c) in RaM)
         {
-            stringBuilder.AppendLine($"{a};{b};{c}");
+            var identity1Pool = identitiesDictionary[a].Pool.Alias;
+            var identity2Pool = identitiesDictionary[b].Pool.Alias;
+            stringBuilder.AppendLine($"{a};{identity1Pool};{b};{identity2Pool};{c}");
         }
         
         return stringBuilder.ToString();
