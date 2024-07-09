@@ -36,15 +36,16 @@ export class IdentityService {
         CancelledBySupport: "The deletion process was cancelled by a support employee.",
         CancelledAutomatically: "The deletion process was cancelled automatically, because it wasn't approved by the owner within the approval period.",
         ApprovalReminder1Sent: "The first approval reminder notification has been sent.",
-        approvalReminder2Sent: "The second approval reminder notification has been sent.",
-        approvalReminder3Sent: "The third approval reminder notification has been sent.",
-        gracePeriodReminder1Sent: "The first grace period reminder notification has been sent.",
-        gracePeriodReminder2Sent: "The second grace period reminder notification has been sent.",
-        gracePeriodReminder3Sent: "The third grace period reminder notification has been sent.",
-        dataDeleted: "All {aggregateType} have been deleted."
+        ApprovalReminder2Sent: "The second approval reminder notification has been sent.",
+        ApprovalReminder3Sent: "The third approval reminder notification has been sent.",
+        GracePeriodReminder1Sent: "The first grace period reminder notification has been sent.",
+        GracePeriodReminder2Sent: "The second grace period reminder notification has been sent.",
+        GracePeriodReminder3Sent: "The third grace period reminder notification has been sent.",
+        DataDeleted: "All {aggregateType} have been deleted."
     };
 
-     public getFormattedMessage(messageKey: string, additionalData: Record<string, string>): string {
+    public getFormattedMessage(messageKey: string, additionalData: Record<string, string>): string {
+        console.log(messageKey);
         let messageTemplate = this.messageTemplates[messageKey];
 
         if (!messageTemplate) {
