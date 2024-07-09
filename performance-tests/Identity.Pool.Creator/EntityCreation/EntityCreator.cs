@@ -12,7 +12,7 @@ public class EntityCreator
 {
     private readonly string _baseAddress;
     
-    private readonly IEnumerable<PoolEntry> _pools;
+    private readonly IList<PoolEntry> _pools;
     private readonly SolutionRepresentation _ram;
     private readonly ClientCredentials _clientCredentials;
 
@@ -20,7 +20,7 @@ public class EntityCreator
     {
         _baseAddress = baseAddress;
         _clientCredentials = new ClientCredentials(clientId, clientSecret);
-        _pools = pools;
+        _pools = pools.ToList();
         _ram = ram;
     }
 
@@ -49,12 +49,14 @@ public class EntityCreator
             foreach (var identity in pool.Identities)
             {
                 var res =_ram.GetRelationshipsAndMessageSentCountByIdentity(identity.Uon);
-                foreach (var (relatedIdentity, messageCount)  in res)
+                foreach (var (relatedIdentity, messageCount) in res)
                 {
                     identity.AddIdentityToEstablishRelationshipsWith(dict[relatedIdentity]);
-                    identity.SendMessageTo(dict[relatedIdentity], true);
+                    for (var i = 0; i < messageCount; i++)
+                    {
+                        identity.SendMessageTo(dict[relatedIdentity], true);
+                    }
                 }
-
             }
         }
     }
