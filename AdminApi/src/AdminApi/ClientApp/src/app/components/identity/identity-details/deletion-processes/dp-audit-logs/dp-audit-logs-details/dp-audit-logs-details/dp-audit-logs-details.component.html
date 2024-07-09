@@ -35,7 +35,7 @@
                     <ng-container matColumnDef="message">
                         <th mat-header-cell *matHeaderCellDef>Message</th>
                         <td mat-cell *matCellDef="let AuditLog" data-label="Message:">
-                            {{ replaceMessageKeyWithCorrespondingText(AuditLog.messageKey) }}
+                            {{ getFormattedMessage(AuditLog.messageKey, AuditLog.additionalData) }}
                         </td>
                     </ng-container>
                     <ng-container matColumnDef="oldStatus">
