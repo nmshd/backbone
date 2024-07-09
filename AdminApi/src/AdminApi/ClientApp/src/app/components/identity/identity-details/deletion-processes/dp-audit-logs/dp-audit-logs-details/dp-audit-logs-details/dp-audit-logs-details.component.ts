@@ -86,7 +86,6 @@ export class DeletionProcessAuditLogsDetailsComponent implements OnInit {
 
     public getFormattedMessage(messageKey: string, additionalData: Record<string, string>): string {
         const camelCaseMessageKey = this.toCamelCase(messageKey);
-        console.log(camelCaseMessageKey);
         let messageTemplate = this.messageTemplates[camelCaseMessageKey];
 
         if (!messageTemplate) {
