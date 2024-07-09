@@ -45,7 +45,6 @@ export class IdentityService {
     };
 
     public getFormattedMessage(messageKey: string, additionalData: Record<string, string>): string {
-        console.log(messageKey);
         let messageTemplate = this.messageTemplates[messageKey];
 
         if (!messageTemplate) {
