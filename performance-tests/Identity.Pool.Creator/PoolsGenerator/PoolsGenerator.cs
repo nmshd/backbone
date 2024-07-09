@@ -13,26 +13,19 @@ using Backbone.Tooling.Extensions;
 namespace Backbone.Identity.Pool.Creator.PoolsGenerator;
 public class PoolsGenerator
 {
-    private readonly string _baseAddress;
     private readonly IRelationshipDistributor _relationshipDistributor;
     private readonly IMessageDistributor _messageDistributor;
     private readonly IPrinter _printer;
     private List<PoolEntry> _pools;
     private readonly PoolsOffset _poolsOffset;
-    private readonly ClientCredentials _clientCredentials;
     private readonly PoolFileRoot _config;
 
     public PoolsGenerator(
-        string baseAddress,
-        string clientId,
-        string clientSecret,
         PoolFileRoot configuration,
         IRelationshipDistributor relationshipDistributor,
         IMessageDistributor messageDistributor,
         IPrinter printer)
     {
-        _baseAddress = baseAddress;
-        _clientCredentials = new ClientCredentials(clientId, clientSecret);
         _relationshipDistributor = relationshipDistributor;
         _messageDistributor = messageDistributor;
         _printer = printer;
@@ -133,133 +126,4 @@ public class PoolsGenerator
             }
         }
     }
-
-
-    #region Creators
-
-    private async Task CreateMessages()
-    {
-        var connectorPools = _pools.Where(p => p.IsConnector()).ToList();
-        var remainingPools = _pools.Except(connectorPools).ToList();
-
-        foreach (var connectorPool in connectorPools)
-        {
-            foreach (var connectorPoolIdentity in connectorPool.Identities)
-            {
-                for (var i = 0; i < connectorPool.NumberOfSentMessages; i++)
-                {
-                    var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, connectorPoolIdentity.UserCredentials);
-                    //var candidateRecipientIdentity = remainingPools.SelectMany(p => p.Identities.Where(id => !id.HasBeenUsedAsMessageRecipient)).First();
-                    //candidateRecipientIdentity.UseAsMessageRecipient();
-                    //await sdk.Messages.SendMessage(new()
-                    //{
-                    //    Recipients = [new SendMessageRequestRecipientInformation { Address = candidateRecipientIdentity.Address, EncryptedKey = ConvertibleString.FromUtf8(new string('A', 152)).BytesRepresentation }],
-                    //    Attachments = [],
-                    //    Body = []
-                    //});
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// Creates identities pertaining to each pool.
-    /// </summary>
-    private async Task CreateIdentities()
-    {
-        Console.Write("Creating Identities... ");
-        using var progress = new ProgressBar(_pools.Sum(p => p.Amount));
-
-        foreach (var pool in _pools)
-        {
-            for (uint i = 0; i < pool.Amount; i++)
-            {
-                var sdk = await Client.CreateForNewIdentity(_baseAddress, _clientCredentials, PasswordHelper.GeneratePassword(18, 24));
-                if (sdk.DeviceData is null)
-                    throw new Exception("The SDK could not be used to create a new Identity.");
-
-                var createdIdentity = new Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
-
-                if (pool.NumberOfDevices > 1)
-                {
-                    for (uint j = 1; j < pool.NumberOfDevices; j++)
-                    {
-                        var newDevice = await sdk.OnboardNewDevice(PasswordHelper.GeneratePassword(18, 24));
-                        if (newDevice.DeviceData is null)
-                            throw new Exception("The SDK could not be used to create a new Identity.");
-                        createdIdentity.AddDevice(newDevice.DeviceData.DeviceId);
-                    }
-                }
-
-                pool.Identities.Add(createdIdentity);
-                progress.Increment();
-            }
-        }
-    }
-
-    private async Task CreateRelationshipTemplates()
-    {
-        Console.Write("Creating RelationshipTemplates... ");
-        using var progress = new ProgressBar(_pools.Sum(p => p.NumberOfRelationshipTemplates * p.Amount));
-        foreach (var pool in _pools.Where(p => p.NumberOfRelationshipTemplates > 0))
-        {
-            foreach (var identity in pool.Identities)
-            {
-                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
-                for (uint i = 0; i < pool.NumberOfRelationshipTemplates; i++)
-                {
-                    await sdk.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest
-                    {
-                        Content = [],
-                        ExpiresAt = DateTime.Now.EndOfYear(),
-                        MaxNumberOfAllocations = 10
-                    });
-                    progress.Increment();
-                }
-            }
-        }
-    }
-
-    private async Task CreateChallenges()
-    {
-        Console.Write("Creating Challenges... ");
-        using var progress = new ProgressBar(_pools.Sum(p => p.NumberOfChallenges * p.Amount));
-
-        foreach (var pool in _pools.Where(p => p.NumberOfChallenges > 0))
-        {
-            foreach (var identity in pool.Identities)
-            {
-                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
-                for (var i = 0; i < pool.NumberOfChallenges; i++)
-                {
-                    await sdk.Challenges.CreateChallenge();
-                    progress.Increment();
-                }
-            }
-        }
-    }
-
-    private async Task CreateDatawalletModifications()
-    {
-        Console.Write("Creating DataWalletModifications... ");
-        using var progress = new ProgressBar(_pools.Sum(p => p.NumberOfDatawalletModifications * p.Amount));
-        foreach (var pool in _pools.Where(p => p.NumberOfDatawalletModifications > 0))
-        {
-            foreach (var identity in pool.Identities)
-            {
-                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
-                for (uint i = 0; i < pool.NumberOfDatawalletModifications; i++)
-                {
-                    await sdk.Datawallet.PushDatawalletModifications(new()
-                    {
-                        LocalIndex = 0,
-                        Modifications = []
-                    }, 0);
-                    progress.Increment();
-                }
-            }
-        }
-    }
-
-    #endregion
 }

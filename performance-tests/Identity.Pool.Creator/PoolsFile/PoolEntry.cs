@@ -3,9 +3,9 @@
 namespace Backbone.Identity.Pool.Creator.PoolsFile;
 public record PoolEntry
 {
-    public string Type { get; set; }
-    public string Name { get; set; }
-    public string Alias { get; set; }
+    public required string Type { get; set; }
+    public required string Name { get; set; }
+    public required string Alias { get; set; }
 
     /// <summary>
     /// The number of <strong>Identities</strong> to be created in this pool.

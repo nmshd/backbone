@@ -18,8 +18,6 @@ namespace Backbone.Identity.Pool.Creator.PoolsGenerator;
 /// </summary>
 public class SimulatedAnnealingPoolsGenerator
 {
-    private readonly string _baseAddress;
-    private readonly ClientCredentials _clientCredentials;
     private readonly IPrinter _printer;
 
     private List<PoolEntry> Pools { get; }
@@ -32,14 +30,9 @@ public class SimulatedAnnealingPoolsGenerator
     private const bool P = false;
 
     public SimulatedAnnealingPoolsGenerator(
-        string baseAddress,
-        string clientId,
-        string clientSecret,
         PoolFileRoot configuration,
         IPrinter printer)
     {
-        _baseAddress = baseAddress;
-        _clientCredentials = new ClientCredentials(clientId, clientSecret);
         _printer = printer;
         Pools = configuration.Pools.ToList();
 
@@ -62,7 +55,7 @@ public class SimulatedAnnealingPoolsGenerator
         _printer.PrintString(Generate().GetAsCSV(_identitiesDictionary), "ram");
     }
 
-    public SolutionRepresentation Generate(double initialTemperature = 20d, ulong maxIterations = 200000)
+    public SolutionRepresentation Generate(double initialTemperature = 20d, ulong maxIterations = 200)
     {
         var progress = new ProgressBar(Convert.ToInt64(maxIterations));
         var currentSolution = GenerateSolutionFromPools(Pools);

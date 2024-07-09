@@ -99,5 +99,3 @@ public interface IPrinter
     protected internal void PrintMessages(IList<PoolEntry> pools, bool summaryOnly = false);
     void PrintString(string value, string filename);
 }
-
-

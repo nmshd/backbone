@@ -61,14 +61,14 @@ public class Identity
         return true;
     }
 
-    public void SendMessageTo(Identity recipient)
+    public void SendMessageTo(Identity recipient, bool skipCheck = false)
     {
         if (!IdentitiesToEstablishRelationshipsWith.Contains(recipient))
         {
             throw new Exception("Cannot send message to identity which does not have a relationship with this one.");
         }
 
-        if (SentMessagesCapacity == 0 || !recipient.HasAvailabilityToReceiveNewMessages())
+        if (!skipCheck && (SentMessagesCapacity == 0 || !recipient.HasAvailabilityToReceiveNewMessages()))
         {
             throw new Exception("There is no capacity to send this message.");
         }

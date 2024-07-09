@@ -1,16 +1,24 @@
 {
   "profiles": {
-    "CLI": {
+    "Pool Generator": {
       "commandName": "Project",
-      "commandLineArgs": "GeneratePools --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools.json"
+      "commandLineArgs": "GeneratePools --poolsFile pools.json"
     },
-    "CLI Light": {
+    "Pool Generator Light": {
       "commandName": "Project",
-      "commandLineArgs": "GeneratePools --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools_light.json"
+      "commandLineArgs": "GeneratePools --poolsFile pools_light.json"
     },
-    "CLI Light 2": {
+    "Pool Generator Light 2": {
       "commandName": "Project",
-      "commandLineArgs": "GeneratePools --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools_light_2.json"
+      "commandLineArgs": "GeneratePools --poolsFile pools_light_2.json"
+    },
+    "Generate Entities": {
+      "commandName": "Project",
+      "commandLineArgs": "CreateEntities --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools.json --ram selected-solution\\ram.csv"
+    },
+    "Generate Entities Light": {
+      "commandName": "Project",
+      "commandLineArgs": "CreateEntities --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools_light.json --ram light-solution\\ram.csv"
     }
   }
 }
