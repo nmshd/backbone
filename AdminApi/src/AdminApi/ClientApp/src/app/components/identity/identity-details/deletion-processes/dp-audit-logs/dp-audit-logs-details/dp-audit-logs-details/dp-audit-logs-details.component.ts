@@ -68,6 +68,6 @@ export class DeletionProcessAuditLogsDetailsComponent implements OnInit {
     }
 
     public getFormattedMessage(messageKey: string, additionalData: Record<string, string>): string {
-        return this.identityService.getFormattedMessage(messageKey, additionalData);
+        return this.identityService.getMessageForDeletionProcessAuditLog(messageKey, additionalData);
     }
 }
