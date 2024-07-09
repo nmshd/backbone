@@ -26,7 +26,7 @@ export class IdentityService {
         this.odataUrl = `${environment.odataUrl}/Identities`;
     }
 
-    /* eslint-disable @typescript-eslint/camelcase */
+    /* eslint-disable @typescript-eslint/naming-convention */
     public readonly messageTemplates: Record<string, string> = {
         StartedByOwner: "The deletion process was started by the owner. It was automatically approved.",
         StartedBySupport: "The deletion process was started by support. It is now waiting for approval.",
