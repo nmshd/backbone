@@ -45,7 +45,7 @@ export class IdentityService {
     };
     /* eslint-enable @typescript-eslint/naming-convention */
 
-    public getFormattedMessage(messageKey: string, additionalData: Record<string, string>): string {
+    public getMessageForDeletionProcessAuditLog(messageKey: string, additionalData: Record<string, string>): string {
         let messageTemplate = this.messageTemplates[messageKey];
 
         if (!messageTemplate) {
