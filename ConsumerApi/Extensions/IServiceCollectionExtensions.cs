@@ -100,7 +100,7 @@ public static class IServiceCollectionExtensions
 
         services.AddTransient<IUserContext, AspNetCoreUserContext>();
 
-        if (configuration.Modules.Devices.Infrastructure.PushNotifications.Providers.Sse is { Enabled: true, EnableHealthCheck: true })
+        if (configuration.Modules.Devices.Infrastructure.PushNotifications.Providers.Sse is { Enabled: true })
             services.AddHealthChecks().AddCheck<SseServerHealthCheck>("SseServer");
 
         return services;
