@@ -52,4 +52,20 @@ class IdentitiesEndpoint extends Endpoint {
       pageSize: pageSize,
     );
   }
+
+  Future<ApiResponse<List<DeletionProcess>>> getIdentityDeletionProcesses({
+    required String address,
+  }) =>
+      get(
+        '/api/v1/Identities/$address/DeletionProcesses',
+        transformer: (e) => (e as List).map(DeletionProcess.fromJson).toList(),
+      );
+
+  Future<ApiResponse<List<DeletionProcess>>> getIdentityDeletionProcessDetails({
+    required String address,
+  }) =>
+      get(
+        '/api/v1/Identities/$address/DeletionProcesses',
+        transformer: (e) => (e as List).map(DeletionProcess.fromJson).toList(),
+      );
 }
