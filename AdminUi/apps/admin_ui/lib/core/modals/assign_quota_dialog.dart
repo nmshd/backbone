@@ -90,7 +90,14 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
           width: 500,
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text(
+                  '*${context.l10n.required}',
+                ),
+              ),
               Gaps.h32,
               DropdownButtonFormField(
                 value: _selectedMetric,

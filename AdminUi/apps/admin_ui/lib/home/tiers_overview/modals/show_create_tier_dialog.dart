@@ -57,7 +57,14 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
                 width: 500,
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Text(
+                        '*${context.l10n.required}',
+                      ),
+                    ),
                     Gaps.h32,
                     TextField(
                       controller: _tierNameController,
