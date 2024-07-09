@@ -84,16 +84,6 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
               ),
               Gaps.h24,
               TextField(
-                controller: _displayNameController,
-                readOnly: _saveSucceeded,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: context.l10n.displayName,
-                  helperText: context.l10n.createClientDialog_displayName_message,
-                ),
-              ),
-              Gaps.h24,
-              TextField(
                 controller: _clientSecretController,
                 readOnly: _saveSucceeded,
                 obscureText: _isClientSecretVisible,
@@ -128,6 +118,16 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
               ],
+              Gaps.h24,
+              TextField(
+                controller: _displayNameController,
+                readOnly: _saveSucceeded,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: context.l10n.displayName,
+                  helperText: context.l10n.createClientDialog_displayName_message,
+                ),
+              ),
               Gaps.h24,
               TextField(
                 controller: _maxIdentitiesController,
