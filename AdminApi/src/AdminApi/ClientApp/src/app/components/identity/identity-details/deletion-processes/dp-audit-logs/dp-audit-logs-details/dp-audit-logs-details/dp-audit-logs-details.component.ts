@@ -22,7 +22,7 @@ export class DeletionProcessAuditLogsDetailsComponent implements OnInit {
 
     public identityDeletionProcessAuditLogs: DeletionProcessAuditLog[] = [];
 
-    messageTemplates: Record<string, string> = {
+    private messageTemplates: Record<string, string> = {
         StartedByOwner: "The deletion process was started by the owner. It was automatically approved.",
         StartedBySupport: "The deletion process was started by support. It is now waiting for approval.",
         Approved: "The deletion process was approved.",
