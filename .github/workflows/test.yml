@@ -229,11 +229,11 @@ jobs:
             ./.ci/loadDockerImages.sh
           } &
           {
-            dotnet restore Backbone.sln
-
             # The following two lines are for the identity deletion job only
-            mv Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json ./Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json.bak
-            cp .ci/appsettings.override.${{matrix.database}}.docker.json Jobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json
+            mv appsettings.override.json appsettings.override.json.bak
+            cp .ci/appsettings.override.${{matrix.database}}.docker.json appsettings.override.json
+
+            dotnet restore Backbone.sln
 
             dotnet build --no-restore Backbone.sln
           }
