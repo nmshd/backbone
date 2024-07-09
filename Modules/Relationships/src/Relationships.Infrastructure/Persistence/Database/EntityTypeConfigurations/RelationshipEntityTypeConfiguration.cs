@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.EntityTypeConfigurations;
@@ -22,5 +23,7 @@ public class RelationshipEntityTypeConfiguration : EntityEntityTypeConfiguration
 
         builder.Property(x => x.CreationContent);
         builder.Property(x => x.CreationResponseContent);
+
+        builder.HasMany(r => r.AuditLog).WithOne().OnDelete(DeleteBehavior.Cascade);
     }
 }

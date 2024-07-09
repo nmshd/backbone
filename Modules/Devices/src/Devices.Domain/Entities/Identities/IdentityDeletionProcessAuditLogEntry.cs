@@ -15,8 +15,8 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         IdentityAddressHash = null!;
     }
 
-    private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId processId, MessageKey messageKey, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus,
-        DeletionProcessStatus newStatus)
+    private IdentityDeletionProcessAuditLogEntry(IdentityDeletionProcessId? processId, MessageKey messageKey, byte[] identityAddressHash, byte[]? deviceIdHash, DeletionProcessStatus? oldStatus,
+        DeletionProcessStatus newStatus, Dictionary<string, string>? additionalData = null)
     {
         Id = IdentityDeletionProcessAuditLogEntryId.Generate();
         ProcessId = processId;
@@ -26,16 +26,18 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         DeviceIdHash = deviceIdHash;
         OldStatus = oldStatus;
         NewStatus = newStatus;
+        AdditionalData = additionalData;
     }
 
     public IdentityDeletionProcessAuditLogEntryId Id { get; }
-    public IdentityDeletionProcessId ProcessId { get; }
+    public IdentityDeletionProcessId? ProcessId { get; }
     public DateTime CreatedAt { get; }
     public MessageKey MessageKey { get; }
     public byte[] IdentityAddressHash { get; }
     public byte[]? DeviceIdHash { get; }
     public DeletionProcessStatus? OldStatus { get; }
     public DeletionProcessStatus NewStatus { get; }
+    public Dictionary<string, string>? AdditionalData { get; }
 
     public static IdentityDeletionProcessAuditLogEntry ProcessStartedByOwner(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
     {
@@ -191,6 +193,22 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
             DeletionProcessStatus.Approved
         );
     }
+
+    public static IdentityDeletionProcessAuditLogEntry DataDeleted(IdentityAddress identityAddress, string aggregateType)
+    {
+        return new IdentityDeletionProcessAuditLogEntry(
+            null,
+            MessageKey.DataDeleted,
+            Hasher.HashUtf8(identityAddress.Value),
+            null,
+            DeletionProcessStatus.Deleting,
+            DeletionProcessStatus.Deleting,
+            new Dictionary<string, string>
+            {
+                { "aggregateType", aggregateType }
+            }
+        );
+    }
 }
 
 public enum MessageKey
@@ -207,5 +225,6 @@ public enum MessageKey
     ApprovalReminder3Sent = 10,
     GracePeriodReminder1Sent = 11,
     GracePeriodReminder2Sent = 12,
-    GracePeriodReminder3Sent = 13
+    GracePeriodReminder3Sent = 13,
+    DataDeleted = 14
 }
