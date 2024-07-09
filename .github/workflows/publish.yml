@@ -33,7 +33,7 @@ jobs:
         with:
           version: "lab:latest"
           driver: cloud
-          endpoint: "jssoft/js-soft"
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
       - name: Build and Push Container Image
         run: ./.ci/acli/buildContainerImage.js
         env:
@@ -64,7 +64,7 @@ jobs:
         with:
           version: "lab:latest"
           driver: cloud
-          endpoint: "jssoft/js-soft"
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
       - name: Build and Push Container Image
         run: ./.ci/aui/buildContainerImage.js
         env:
@@ -95,7 +95,7 @@ jobs:
         with:
           version: "lab:latest"
           driver: cloud
-          endpoint: "jssoft/js-soft"
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
       - name: Build and Push Container Image
         run: ./.ci/capi/buildContainerImage.js
         env:
@@ -126,7 +126,7 @@ jobs:
         with:
           version: "lab:latest"
           driver: cloud
-          endpoint: "jssoft/js-soft"
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
       - name: Build and Push Container Image
         run: ./.ci/eh/buildContainerImage.js
         env:
@@ -157,7 +157,7 @@ jobs:
         with:
           version: "lab:latest"
           driver: cloud
-          endpoint: "jssoft/js-soft"
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
       - name: Build and Push Container Image
         run: ./.ci/dbm/buildContainerImage.js
         env:
@@ -165,7 +165,7 @@ jobs:
           PUSH: 1
 
   publish-identity-deletion-jobs:
-    name: Publish Identity Deletion Jobs Image
+    name: Publish Identity Deletion Jobs Container Image
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -188,9 +188,40 @@ jobs:
         with:
           version: "lab:latest"
           driver: cloud
-          endpoint: "jssoft/js-soft"
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
       - name: Build and Push Container Image
         run: ./.ci/idj/buildContainerImage.js
+        env:
+          TAG: ${{ github.ref_name }}
+          PUSH: 1
+
+  publish-sse-server:
+    name: Publish SSE Server Container Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Install script dependencies
+        run: npm install --prefix ./.ci
+      - name: Docker Login
+        uses: docker/login-action@v3.0.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to Docker Hub for accessing the cloud builder
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.CLOUD_BUILDER_USERNAME }}
+          password: ${{ secrets.CLOUD_BUILDER_TOKEN }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          version: "lab:latest"
+          driver: cloud
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
+      - name: Build and Push Container Image
+        run: ./.ci/sses/buildContainerImage.js
         env:
           TAG: ${{ github.ref_name }}
           PUSH: 1
@@ -203,6 +234,9 @@ jobs:
       - publish-admin-ui
       - publish-consumer-api
       - publish-event-handler
+      - publish-database-migrator
+      - publish-identity-deletion-jobs
+      - publish-sse-server
     steps:
       - name: Checkout
         uses: actions/checkout@v4

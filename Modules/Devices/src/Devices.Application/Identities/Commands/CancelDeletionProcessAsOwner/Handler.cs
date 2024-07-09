@@ -15,14 +15,12 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
 {
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IUserContext _userContext;
-    private readonly IEventBus _eventBus;
     private readonly IPushNotificationSender _notificationSender;
 
-    public Handler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IEventBus eventBus, IPushNotificationSender notificationSender)
+    public Handler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender notificationSender)
     {
         _identitiesRepository = identitiesRepository;
         _userContext = userContext;
-        _eventBus = eventBus;
         _notificationSender = notificationSender;
     }
 
@@ -43,9 +41,6 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
 
         await _identitiesRepository.Update(identity, cancellationToken);
         var newTierId = identity.TierId;
-
-        _eventBus.Publish(new TierOfIdentityChangedDomainEvent(identity, oldTierId, newTierId));
-        _eventBus.Publish(new IdentityDeletionProcessStatusChangedDomainEvent(identity.Address, deletionProcess.Id, _userContext.GetAddress()));
 
         await _notificationSender.SendNotification(identity.Address, new DeletionProcessCancelledByOwnerNotification(), cancellationToken);
 

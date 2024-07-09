@@ -32,7 +32,7 @@ public class HandlerTests : AbstractTestsBase
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>._, A<CancellationToken>._))
             .MustNotHaveHappened();
-        A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>._, A<object>._, A<CancellationToken>._))
+        A.CallTo(() => mockPushNotificationSender.SendNotification(A<IdentityAddress>._, A<IPushNotification>._, A<CancellationToken>._))
             .MustNotHaveHappened();
     }
 

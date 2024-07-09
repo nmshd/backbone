@@ -6,7 +6,7 @@ using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
-public class Device
+public class Device : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private Device()
@@ -51,7 +51,7 @@ public class Device
 
     public DateTime CreatedAt { get; set; }
 
-    public CommunicationLanguage CommunicationLanguage { get; set; }
+    public CommunicationLanguage CommunicationLanguage { get; private set; }
 
     public DeviceId CreatedByDevice { get; set; }
 

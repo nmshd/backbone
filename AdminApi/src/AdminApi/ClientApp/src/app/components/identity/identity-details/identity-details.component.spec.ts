@@ -14,6 +14,7 @@ class MockActivatedRoute {
     public get testParams() {
         return this._testParams;
     }
+
     public set testParams(params: {}) {
         this._testParams = params;
         this.subject.next(params);
@@ -37,7 +38,14 @@ describe("IdentityDetailsComponent", function () {
         TestBed.configureTestingModule({
             declarations: [IdentityDetailsComponent],
             imports: [HttpClientTestingModule],
-            providers: [TierService, { provide: Router, useValue: mockRouter }, { provide: ActivatedRoute, useValue: mockActivatedRoute }]
+            providers: [
+                TierService,
+                { provide: Router, useValue: mockRouter },
+                {
+                    provide: ActivatedRoute,
+                    useValue: mockActivatedRoute
+                }
+            ]
         });
 
         tierService = TestBed.inject(TierService);
@@ -79,7 +87,7 @@ describe("IdentityDetailsComponent", function () {
 
         it("should return false if identity is not in a tier that cannot be unassigned", async function () {
             const identity: Identity = {
-                address: "id1",
+                address: "did:e:localhost:dids:1111111111111111111111",
                 clientId: "test",
                 tierId: "1",
                 devices: [],
@@ -94,7 +102,7 @@ describe("IdentityDetailsComponent", function () {
 
         it("should return true if identity is in a tier that cannot be unassigned", async function () {
             const identity: Identity = {
-                address: "id1",
+                address: "did:e:localhost:dids:1111111111111111111111",
                 clientId: "test",
                 tierId: "2",
                 devices: [],
@@ -109,7 +117,7 @@ describe("IdentityDetailsComponent", function () {
 
         it("should return false if tier cannot be manually assigned and is not the identity's tier", async function () {
             const identity: Identity = {
-                address: "id1",
+                address: "did:e:localhost:dids:1111111111111111111111",
                 clientId: "test",
                 tierId: "1",
                 devices: [],

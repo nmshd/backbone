@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.6-alpine3.18 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0.301 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.302-1 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
@@ -69,6 +69,8 @@ COPY ["Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/Devices.Inf
 RUN dotnet restore "Jobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj"
 
 COPY . .
+
+ARG VERSION
 
 WORKDIR "/src/Jobs/src/Job.IdentityDeletion"
 RUN dotnet build "Job.IdentityDeletion.csproj" -c Release --output /app/build --no-restore

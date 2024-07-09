@@ -9,7 +9,6 @@ namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Reposi
 public interface IIdentitiesRepository
 {
     #region Identities
-    Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken);
     Task Update(Identity identity, CancellationToken cancellationToken);
     Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false);
     Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken);
@@ -27,5 +26,9 @@ public interface IIdentitiesRepository
     Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken);
     Task<Device?> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false);
     Task Update(Device device, CancellationToken cancellationToken);
+    #endregion
+
+    #region Deletion Process Audit Logs
+    Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken);
     #endregion
 }

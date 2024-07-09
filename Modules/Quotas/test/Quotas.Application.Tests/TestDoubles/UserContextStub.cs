@@ -7,51 +7,51 @@ internal class UserContextStub : IUserContext
 {
     public IdentityAddress GetAddress()
     {
-        return IdentityAddress.Create([0], "id1");
+        return IdentityAddress.Create([0], "prod.enmeshed.eu");
     }
 
     public IdentityAddress GetAddressOrNull()
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public DeviceId GetDeviceId()
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public DeviceId GetDeviceIdOrNull()
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public IEnumerable<string> GetRoles()
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public SubscriptionPlan GetSubscriptionPlan()
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public string GetUserId()
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public string GetUserIdOrNull()
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public string GetUsername()
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 
     public string GetUsernameOrNull()
     {
-        throw new NotImplementedException();
+        throw new NotSupportedException();
     }
 }

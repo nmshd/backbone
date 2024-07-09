@@ -43,7 +43,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
         {
             DEVELOPMENT_ENVIRONMENT => PushEnvironment.Development,
             PRODUCTION_ENVIRONMENT => PushEnvironment.Production,
-            _ => throw new NotImplementedException($"The environment '{environment}' is invalid.")
+            _ => throw new NotSupportedException($"The environment '{environment}' is invalid.")
         };
     }
 
@@ -53,7 +53,9 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
         {
             "fcm" => PushNotificationPlatform.Fcm,
             "apns" => PushNotificationPlatform.Apns,
-            _ => throw new NotImplementedException($"The platform '{platform}' is invalid.")
+            "dummy" => PushNotificationPlatform.Dummy,
+            "sse" => PushNotificationPlatform.Sse,
+            _ => throw new NotSupportedException($"The platform '{platform}' is invalid.")
         };
     }
 }

@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.6-alpine3.18 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0.301 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.302-1 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
@@ -70,6 +70,8 @@ COPY ["Modules/Tokens/src/Tokens.Infrastructure.Database.SqlServer/Tokens.Infras
 RUN dotnet restore "EventHandlerService/src/EventHandlerService/EventHandlerService.csproj"
 
 COPY . .
+
+ARG VERSION
 
 WORKDIR "/src/EventHandlerService/src/EventHandlerService"
 RUN dotnet build "EventHandlerService.csproj" -c Release -o /app/build --no-restore

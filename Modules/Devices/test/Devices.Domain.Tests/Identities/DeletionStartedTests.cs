@@ -1,7 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -42,7 +44,7 @@ public class DeletionStartedTests : AbstractTestsBase
     public void Fails_to_start_if_no_deletion_process_exists()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        var identity = TestDataGenerator.CreateIdentity();
 
         // Act
         var acting = identity.DeletionStarted;
@@ -55,7 +57,7 @@ public class DeletionStartedTests : AbstractTestsBase
     public void Fails_to_start_if_no_approved_deletion_process_exists()
     {
         // Arrange
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        var identity = TestDataGenerator.CreateIdentity();
         identity.StartDeletionProcessAsSupport();
 
         // Act
@@ -65,10 +67,27 @@ public class DeletionStartedTests : AbstractTestsBase
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
     }
 
+    [Fact]
+    public void Raises_domain_events()
+    {
+        //Arrange
+        var activeIdentity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+
+        SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod).AddDays(1));
+
+        //Act
+        activeIdentity.DeletionStarted();
+
+        //Assert
+        var domainEvent = activeIdentity.Should().HaveASingleDomainEvent<IdentityDeletedDomainEvent>();
+        domainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
+    }
+
     private static Identity CreateIdentityWithApprovedDeletionProcess()
     {
-        var identity = TestDataGenerator.CreateIdentityWithOneDevice();
+        var identity = TestDataGenerator.CreateIdentity();
         identity.StartDeletionProcessAsOwner(identity.Devices.First().Id);
+
         return identity;
     }
 }

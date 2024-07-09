@@ -1,10 +1,12 @@
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -50,6 +52,22 @@ public class StartDeletionProcessAsSupportTests : AbstractTestsBase
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.onlyOneActiveDeletionProcessAllowed");
     }
 
+    [Fact]
+    public void Raises_IdentityDeletionProcessStartedDomainEvent()
+    {
+        //Arrange
+        var activeIdentity = CreateIdentity();
+
+        //Act
+        var deletionProcess = activeIdentity.StartDeletionProcessAsSupport();
+
+        //Assert
+        var domainEvent = deletionProcess.Should().HaveASingleDomainEvent<IdentityDeletionProcessStartedDomainEvent>();
+        domainEvent.Address.Should().Be(activeIdentity.Address);
+        domainEvent.DeletionProcessId.Should().Be(deletionProcess.Id);
+        domainEvent.Initiator.Should().Be(null);
+    }
+
     private static void AssertDeletionProcessWasStarted(Identity activeIdentity)
     {
         activeIdentity.DeletionProcesses.Should().HaveCount(1);
@@ -75,7 +93,7 @@ public class StartDeletionProcessAsSupportTests : AbstractTestsBase
 
     private static Identity CreateIdentity()
     {
-        var address = IdentityAddress.Create(Array.Empty<byte>(), "id1");
+        var address = IdentityAddress.Create(Array.Empty<byte>(), "prod.enmeshed.eu");
         return new Identity("", address, Array.Empty<byte>(), TierId.Generate(), 1);
     }
 }

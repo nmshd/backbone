@@ -1,12 +1,9 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 using CSharpFunctionalExtensions;
 using MediatR;
 
@@ -14,7 +11,6 @@ namespace Backbone.Job.IdentityDeletion.Workers;
 
 public class ActualDeletionWorker : IHostedService
 {
-    private readonly IEventBus _eventBus;
     private readonly IHostApplicationLifetime _host;
     private readonly IEnumerable<IIdentityDeleter> _identityDeleters;
     private readonly IMediator _mediator;
@@ -25,14 +21,12 @@ public class ActualDeletionWorker : IHostedService
         IEnumerable<IIdentityDeleter> identityDeleters,
         IMediator mediator,
         IPushNotificationSender pushNotificationSender,
-        IEventBus eventBus,
         ILogger<ActualDeletionWorker> logger)
     {
         _host = host;
         _identityDeleters = identityDeleters;
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
-        _eventBus = eventBus;
         _logger = logger;
     }
 
@@ -70,23 +64,12 @@ public class ActualDeletionWorker : IHostedService
     private async Task ExecuteDeletion(CancellationToken cancellationToken, IdentityAddress identityAddress)
     {
         await NotifyIdentityAboutStartingDeletion(cancellationToken, identityAddress);
-        await NotifyRelationshipsAboutStartingDeletion(identityAddress, cancellationToken);
         await Delete(identityAddress);
     }
 
     private async Task NotifyIdentityAboutStartingDeletion(CancellationToken cancellationToken, IdentityAddress identityAddress)
     {
         await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsPushNotification(), cancellationToken);
-    }
-
-    private async Task NotifyRelationshipsAboutStartingDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
-    {
-        var relationships = await _mediator.Send(new FindRelationshipsOfIdentityQuery(identityAddress), cancellationToken);
-
-        foreach (var relationship in relationships)
-        {
-            _eventBus.Publish(new PeerIdentityDeletedDomainEvent(relationship.Id, identityAddress));
-        }
     }
 
     private async Task Delete(IdentityAddress identityAddress)

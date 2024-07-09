@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Challenges.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Challenges.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(ChallengesDbContext))]
     partial class ChallengesDbContextModelSnapshot : ModelSnapshot
@@ -18,7 +18,7 @@ namespace Challenges.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Challenges")
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -32,10 +32,10 @@ namespace Challenges.Infrastructure.Database.Postgres.Migrations
                         .IsFixedLength();
 
                     b.Property<string>("CreatedBy")
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
                         .HasMaxLength(20)

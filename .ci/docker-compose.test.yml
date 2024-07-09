@@ -1,11 +1,8 @@
-version: "3.3"
 services:
   consumer-api:
     container_name: consumer-api-test
     hostname: consumer-api
-    build:
-      context: ..
-      dockerfile: ConsumerApi/Dockerfile
+    image: consumer-api:0.0.1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
@@ -24,9 +21,7 @@ services:
   admin-ui:
     container_name: admin-ui-test
     hostname: admin-ui
-    build:
-      context: ..
-      dockerfile: AdminApi/src/AdminApi/Dockerfile
+    image: admin-ui:0.0.1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
@@ -42,9 +37,7 @@ services:
 
   event-handler-service:
     container_name: event-handler-service-test
-    build:
-      context: ..
-      dockerfile: EventHandlerService/src/EventHandlerService/Dockerfile
+    image: event-handler-service:0.0.1
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
@@ -56,11 +49,18 @@ services:
       - source: Config
         target: app/appsettings.override.json
 
+  sse-server:
+    container_name: sse-server-test
+    image: sse-server:0.0.1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    configs:
+      - source: Config
+        target: app/appsettings.override.json
+
   database-migrator:
     container_name: database-migrator-test
-    build:
-      context: ..
-      dockerfile: DatabaseMigrator/Dockerfile
+    image: database-migrator:0.0.1
     depends_on:
       seed-database:
         condition: service_completed_successfully
@@ -96,11 +96,9 @@ services:
       database:
         condition: service_healthy
 
-  seed-client:
-    container_name: seed-client-test
-    build:
-      context: ..
-      dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
+  admin-cli:
+    container_name: admin-cli-test
+    image: admin-cli:0.0.1
     depends_on:
       consumer-api:
         condition: service_healthy

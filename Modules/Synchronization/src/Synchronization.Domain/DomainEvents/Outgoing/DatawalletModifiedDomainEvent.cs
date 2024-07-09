@@ -11,6 +11,6 @@ public class DatawalletModifiedDomainEvent : DomainEvent
         ModifiedByDevice = modifiedByDevice;
     }
 
-    public IdentityAddress Identity { get; }
-    public DeviceId ModifiedByDevice { get; }
+    public string Identity { get; }
+    public string ModifiedByDevice { get; }
 }

@@ -1,10 +1,12 @@
 ﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -83,6 +85,28 @@ public class ApproveDeletionProcessTests : AbstractTestsBase
         exception.Message.Should().Contain("WaitingForApproval");
     }
 
+    [Fact]
+    public void Raises_domain_events()
+    {
+        //Arrange
+        var activeIdentity = TestDataGenerator.CreateIdentity();
+        var activeDevice = activeIdentity.Devices[0];
+        var tierBeforeDeletion = activeIdentity.TierId;
+        var deletionProcess = activeIdentity.StartDeletionProcessAsSupport();
+
+        //Act
+        activeIdentity.ApproveDeletionProcess(deletionProcess.Id, activeDevice.Id);
+
+        //Assert
+        var (tierOfIdentityChangedDomainEvent, identityToBeDeletedDomainEvent) = activeIdentity.Should().HaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityToBeDeletedDomainEvent>();
+
+        tierOfIdentityChangedDomainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
+        tierOfIdentityChangedDomainEvent.OldTierId.Should().Be(tierBeforeDeletion);
+        tierOfIdentityChangedDomainEvent.NewTierId.Should().Be(Tier.QUEUED_FOR_DELETION.Id);
+
+        identityToBeDeletedDomainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
+    }
+
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)
     {
         deletionProcess.AuditLog.Should().HaveCount(2);
@@ -97,7 +121,7 @@ public class ApproveDeletionProcessTests : AbstractTestsBase
 
     private static Identity CreateIdentity()
     {
-        var address = IdentityAddress.Create([], "id1");
+        var address = IdentityAddress.Create([], "prod.enmeshed.eu");
         return new Identity("", address, [], TierId.Generate(), 1);
     }
 

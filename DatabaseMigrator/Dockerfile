@@ -1,7 +1,7 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0.5-alpine3.18 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0.301 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.302-1 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
@@ -65,6 +65,8 @@ COPY ["AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastru
 RUN dotnet restore "DatabaseMigrator/DatabaseMigrator.csproj"
 
 COPY . .
+
+ARG VERSION
 
 WORKDIR "/src/DatabaseMigrator"
 RUN dotnet build "DatabaseMigrator.csproj" -c Release --output /app/build --no-restore

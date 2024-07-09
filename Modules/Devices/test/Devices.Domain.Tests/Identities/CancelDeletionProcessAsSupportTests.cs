@@ -1,11 +1,15 @@
 ﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
+
 public class CancelDeletionProcessAsSupportTests : AbstractTestsBase
 {
     [Fact]
@@ -55,6 +59,30 @@ public class CancelDeletionProcessAsSupportTests : AbstractTestsBase
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.device.deletionProcessIsNotInRequiredStatus");
+    }
+
+    [Fact]
+    public void Raises_domain_events()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
+
+        // Act
+        var deletionProcess = identity.CancelDeletionProcessAsSupport(identity.DeletionProcesses[0].Id);
+
+        // Assert
+        var deletionProcessDomainEvent = deletionProcess.Should().HaveASingleDomainEvent<IdentityDeletionProcessStatusChangedDomainEvent>();
+        deletionProcessDomainEvent.DeletionProcessId.Should().Be(deletionProcess.Id);
+        deletionProcessDomainEvent.Address.Should().Be(identity.Address);
+        deletionProcessDomainEvent.Initiator.Should().Be(null);
+
+        var (tierOfIdentityChangedDomainEvent, identityDeletionCancelledDomainEvent) = identity.Should().HaveDomainEvents<TierOfIdentityChangedDomainEvent, IdentityDeletionCancelledDomainEvent>();
+
+        tierOfIdentityChangedDomainEvent.IdentityAddress.Should().Be(identity.Address);
+        tierOfIdentityChangedDomainEvent.OldTierId.Should().Be(Tier.QUEUED_FOR_DELETION.Id);
+        tierOfIdentityChangedDomainEvent.NewTierId.Should().Be(identity.TierId);
+
+        identityDeletionCancelledDomainEvent.IdentityAddress.Should().Be(identity.Address);
     }
 
     private static void AssertAuditLogEntryWasCreated(IdentityDeletionProcess deletionProcess)

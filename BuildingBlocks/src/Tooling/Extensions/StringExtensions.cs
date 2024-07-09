@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace Backbone.Tooling.Extensions;
@@ -19,5 +20,10 @@ public static class StringExtensions
     {
         var regex = new Regex(regexString);
         return regex.IsMatch(text);
+    }
+
+    public static byte[] GetBytes(this string text)
+    {
+        return Encoding.UTF8.GetBytes(text);
     }
 }

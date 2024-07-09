@@ -1,0 +1,7 @@
+﻿[
+  "Microsoft.AspNet.WebApi.Client",
+  "Microsoft.AspNetCore.Http.Abstractions",
+  "MockQueryable.FakeItEasy",
+  "Serilog.Enrichers.Demystifier",
+  "SpecFlow.NUnit"
+]

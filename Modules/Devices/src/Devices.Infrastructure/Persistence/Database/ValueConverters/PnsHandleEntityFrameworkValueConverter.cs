@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.ValueConverters;
+
 public class PnsHandleEntityFrameworkValueConverter : ValueConverter<PnsHandle, string>
 {
     public PnsHandleEntityFrameworkValueConverter() : this(null)
@@ -24,7 +25,9 @@ public class PnsHandleEntityFrameworkValueConverter : ValueConverter<PnsHandle, 
         {
             PushNotificationPlatform.Fcm => "fcm",
             PushNotificationPlatform.Apns => "apns",
-            _ => throw new NotImplementedException($"The platform '{pnsHandle.Platform}' is invalid.")
+            PushNotificationPlatform.Dummy => "dummy",
+            PushNotificationPlatform.Sse => "sse",
+            _ => throw new NotSupportedException($"The platform '{pnsHandle.Platform}' is invalid.")
         };
 
         return $"{platformAsString}|{pnsHandle.Value}";
@@ -37,7 +40,9 @@ public class PnsHandleEntityFrameworkValueConverter : ValueConverter<PnsHandle, 
         {
             "fcm" => PushNotificationPlatform.Fcm,
             "apns" => PushNotificationPlatform.Apns,
-            _ => throw new NotImplementedException($"The platform '{tokens[0]}' is invalid.")
+            "dummy" => PushNotificationPlatform.Dummy,
+            "sse" => PushNotificationPlatform.Sse,
+            _ => throw new NotSupportedException($"The platform '{tokens[0]}' is invalid.")
         };
         var value = tokens[1];
 

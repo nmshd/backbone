@@ -1,11 +1,13 @@
 using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 
-public class Message : IIdentifiable<MessageId>
+public class Message : Entity, IIdentifiable<MessageId>
 {
     // ReSharper disable once UnusedMember.Local
     private Message()
@@ -29,6 +31,8 @@ public class Message : IIdentifiable<MessageId>
         CreatedByDevice = createdByDevice;
         Body = body;
         Attachments = attachments.ToList();
+
+        RaiseDomainEvent(new MessageCreatedDomainEvent(this));
     }
 
     public MessageId Id { get; }
@@ -55,17 +59,45 @@ public class Message : IIdentifiable<MessageId>
     public void ReplaceIdentityAddress(IdentityAddress oldIdentityAddress, IdentityAddress newIdentityAddress)
     {
         if (CreatedBy == oldIdentityAddress)
-        {
-            CreatedBy = newIdentityAddress;
-        }
+            AnonymizeSender(newIdentityAddress);
 
-        var recipient = Recipients.FirstOrDefault(r => r.Address == oldIdentityAddress);
+        AnonymizeRecipient(oldIdentityAddress, newIdentityAddress);
+    }
 
-        recipient?.UpdateAddress(newIdentityAddress);
+    public void SanitizeAfterRelationshipDeleted(string participantOne, string participantTwo, IdentityAddress anonymizedIdentityAddress)
+    {
+        AnonymizeRecipient(participantOne, anonymizedIdentityAddress);
+        AnonymizeRecipient(participantTwo, anonymizedIdentityAddress);
+
+        if (CanAnonymizeSender(anonymizedIdentityAddress))
+            AnonymizeSender(anonymizedIdentityAddress);
     }
 
     public static Expression<Func<Message, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
         return i => i.CreatedBy == identityAddress.ToString();
+    }
+
+    public static Expression<Func<Message, bool>> WasExchangedBetween(IdentityAddress identityAddress1, IdentityAddress identityAddress2)
+    {
+        return m =>
+            (m.CreatedBy == identityAddress1 && m.Recipients.Any(r => r.Address == identityAddress2)) ||
+            (m.CreatedBy == identityAddress2 && m.Recipients.Any(r => r.Address == identityAddress1));
+    }
+
+    private void AnonymizeRecipient(string participantAddress, IdentityAddress anonymizedIdentityAddress)
+    {
+        var recipient = Recipients.FirstOrDefault(r => r.Address == participantAddress);
+        recipient?.UpdateAddress(anonymizedIdentityAddress);
+    }
+
+    private bool CanAnonymizeSender(IdentityAddress anonymizedIdentityAddress)
+    {
+        return Recipients.All(r => r.Address == anonymizedIdentityAddress);
+    }
+
+    private void AnonymizeSender(IdentityAddress anonymizedIdentityAddress)
+    {
+        CreatedBy = anonymizedIdentityAddress;
     }
 }

@@ -9,7 +9,6 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database.QueryableExtensions;
-using Backbone.Tooling;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +22,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     private readonly DbSet<Device> _devices;
     private readonly IQueryable<Device> _readonlyDevices;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IQueryable<IdentityDeletionProcessAuditLogEntry> _readonlyIdentityDeletionProcessAuditLogs;
 
     public IdentitiesRepository(DevicesDbContext dbContext, UserManager<ApplicationUser> userManager)
     {
@@ -31,15 +31,8 @@ public class IdentitiesRepository : IIdentitiesRepository
         _dbContext = dbContext;
         _devices = dbContext.Devices;
         _readonlyDevices = dbContext.Devices.AsNoTracking();
+        _readonlyIdentityDeletionProcessAuditLogs = dbContext.IdentityDeletionProcessAuditLogs.AsNoTracking();
         _userManager = userManager;
-    }
-
-    public async Task<DbPaginationResult<Identity>> FindAll(PaginationFilter paginationFilter, CancellationToken cancellationToken)
-    {
-        var paginationResult = await _readonlyIdentities
-            .IncludeAll(_dbContext)
-            .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
-        return paginationResult;
     }
 
     public async Task<Identity?> FindByAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
@@ -49,10 +42,16 @@ public class IdentitiesRepository : IIdentitiesRepository
             .FirstWithAddressOrDefault(address, cancellationToken);
     }
 
+    public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken)
+    {
+        return await _readonlyIdentityDeletionProcessAuditLogs
+            .Where(auditLog => auditLog.IdentityAddressHash == identityAddressHash)
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task<bool> Exists(IdentityAddress address, CancellationToken cancellationToken)
     {
-        return await _readonlyIdentities
-            .AnyAsync(i => i.Address == address, cancellationToken);
+        return await _readonlyIdentities.AnyAsync(i => i.Address == address, cancellationToken);
     }
 
     public async Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false)
@@ -65,8 +64,7 @@ public class IdentitiesRepository : IIdentitiesRepository
 
     public async Task<int> CountByClientId(string clientId, CancellationToken cancellationToken)
     {
-        return await _readonlyIdentities
-            .CountAsync(i => i.ClientId == clientId, cancellationToken);
+        return await _readonlyIdentities.CountAsync(i => i.ClientId == clientId, cancellationToken);
     }
 
     public async Task AddUser(ApplicationUser user, string password)
