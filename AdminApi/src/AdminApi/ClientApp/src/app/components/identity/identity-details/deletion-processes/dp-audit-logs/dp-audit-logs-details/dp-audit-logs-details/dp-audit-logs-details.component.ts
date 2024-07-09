@@ -23,20 +23,20 @@ export class DeletionProcessAuditLogsDetailsComponent implements OnInit {
     public identityDeletionProcessAuditLogs: DeletionProcessAuditLog[] = [];
 
     private readonly messageTemplates: Record<string, string> = {
-        StartedByOwner: "The deletion process was started by the owner. It was automatically approved.",
-        StartedBySupport: "The deletion process was started by support. It is now waiting for approval.",
-        Approved: "The deletion process was approved.",
-        Rejected: "The deletion process was rejected.",
-        CancelledByOwner: "The deletion process was cancelled by the owner of the identity.",
-        CancelledBySupport: "The deletion process was cancelled by a support employee.",
-        CancelledAutomatically: "The deletion process was cancelled automatically, because it wasn't approved by the owner within the approval period.",
-        ApprovalReminder1Sent: "The first approval reminder notification has been sent.",
-        ApprovalReminder2Sent: "The second approval reminder notification has been sent.",
-        ApprovalReminder3Sent: "The third approval reminder notification has been sent.",
-        GracePeriodReminder1Sent: "The first grace period reminder notification has been sent.",
-        GracePeriodReminder2Sent: "The second grace period reminder notification has been sent.",
-        GracePeriodReminder3Sent: "The third grace period reminder notification has been sent.",
-        DataDeleted: "All {aggregateType} have been deleted."
+        startedByOwner: "The deletion process was started by the owner. It was automatically approved.",
+        startedBySupport: "The deletion process was started by support. It is now waiting for approval.",
+        approved: "The deletion process was approved.",
+        rejected: "The deletion process was rejected.",
+        cancelledByOwner: "The deletion process was cancelled by the owner of the identity.",
+        cancelledBySupport: "The deletion process was cancelled by a support employee.",
+        cancelledAutomatically: "The deletion process was cancelled automatically, because it wasn't approved by the owner within the approval period.",
+        approvalReminder1Sent: "The first approval reminder notification has been sent.",
+        approvalReminder2Sent: "The second approval reminder notification has been sent.",
+        approvalReminder3Sent: "The third approval reminder notification has been sent.",
+        gracePeriodReminder1Sent: "The first grace period reminder notification has been sent.",
+        gracePeriodReminder2Sent: "The second grace period reminder notification has been sent.",
+        gracePeriodReminder3Sent: "The third grace period reminder notification has been sent.",
+        dataDeleted: "All {aggregateType} have been deleted."
     };
 
     public constructor(
@@ -85,7 +85,9 @@ export class DeletionProcessAuditLogsDetailsComponent implements OnInit {
     }
 
     public getFormattedMessage(messageKey: string, additionalData: Record<string, string>): string {
-        let messageTemplate = this.messageTemplates[messageKey];
+        const camelCaseMessageKey = this.toCamelCase(messageKey);
+        console.log(camelCaseMessageKey);
+        let messageTemplate = this.messageTemplates[camelCaseMessageKey];
 
         if (!messageTemplate) {
             return "Unknown message key.";
@@ -97,5 +99,9 @@ export class DeletionProcessAuditLogsDetailsComponent implements OnInit {
         });
 
         return messageTemplate;
+    }
+
+    private toCamelCase(str: string): string {
+        return str.charAt(0).toLowerCase() + str.slice(1).replace(/([-_][a-z])/gi, (match) => match.toUpperCase().replace("-", "").replace("_", ""));
     }
 }
