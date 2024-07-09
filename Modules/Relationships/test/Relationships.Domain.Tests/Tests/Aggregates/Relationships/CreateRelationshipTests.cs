@@ -45,7 +45,7 @@ public class CreateRelationshipTests : AbstractTestsBase
         // Assert
         var domainEvent = relationship.Should().HaveASingleDomainEvent<RelationshipStatusChangedDomainEvent>();
         domainEvent.RelationshipId.Should().Be(relationship.Id);
-        domainEvent.Status.Should().Be("Pending");
+        domainEvent.NewStatus.Should().Be("Pending");
         domainEvent.Initiator.Should().Be(IDENTITY_1);
         domainEvent.Peer.Should().Be(IDENTITY_2);
     }

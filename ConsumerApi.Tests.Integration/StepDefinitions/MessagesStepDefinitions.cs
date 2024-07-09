@@ -70,11 +70,11 @@ internal class MessagesStepDefinitions
     }
 
     [Then("the response contains a SendMessageResponse")]
-    public void ThenTheResponseContainsASendMessageResponse()
+    public async Task ThenTheResponseContainsASendMessageResponse()
     {
         _sendMessageResponse!.Result.Should().NotBeNull();
         _sendMessageResponse.Should().BeASuccess();
-        _sendMessageResponse.Should().ComplyWithSchema();
+        await _sendMessageResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]*)""")]
