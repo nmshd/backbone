@@ -1,9 +1,9 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationship;
 using Backbone.Modules.Relationships.Application.Tests.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using FakeItEasy;
@@ -29,7 +29,18 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
 
-        var handler = CreateHandler(fakeUserContext, fakeRelationshipsRepository);
+        var fakeRelationshipTemplatesRepository = A.Fake<IRelationshipTemplatesRepository>();
+        var relationshipTemplate = new RelationshipTemplate(
+            activeIdentity,
+            activeDevice,
+            1,
+            DateTime.Parse("2021-01-01"),
+            []
+        );
+        A.CallTo(() => fakeRelationshipTemplatesRepository.Find(relationship.RelationshipTemplateId, activeIdentity, A<CancellationToken>._, A<bool>._))
+            .Returns(relationshipTemplate);
+
+        var handler = CreateHandler(fakeUserContext, fakeRelationshipsRepository, fakeRelationshipTemplatesRepository);
 
         // Act
         var response = await handler.Handle(new RejectRelationshipCommand
@@ -58,7 +69,18 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => fakeUserContext.GetAddress()).Returns(activeIdentity);
         A.CallTo(() => fakeUserContext.GetDeviceId()).Returns(activeDevice);
 
-        var handler = CreateHandler(fakeUserContext, mockRelationshipsRepository);
+        var fakeRelationshipTemplatesRepository = A.Fake<IRelationshipTemplatesRepository>();
+        var relationshipTemplate = new RelationshipTemplate(
+            activeIdentity,
+            activeDevice,
+            1,
+            DateTime.Parse("2021-01-01"),
+            []
+        );
+        A.CallTo(() => fakeRelationshipTemplatesRepository.Find(relationship.RelationshipTemplateId, activeIdentity, A<CancellationToken>._, A<bool>._))
+            .Returns(relationshipTemplate);
+
+        var handler = CreateHandler(fakeUserContext, mockRelationshipsRepository, fakeRelationshipTemplatesRepository);
 
         // Act
         await handler.Handle(new RejectRelationshipCommand
@@ -74,9 +96,8 @@ public class HandlerTests : AbstractTestsBase
             .MustHaveHappenedOnceExactly();
     }
 
-    private static Handler CreateHandler(IUserContext userContext, IRelationshipsRepository relationshipsRepository, IEventBus? eventBus = null)
+    private static Handler CreateHandler(IUserContext userContext, IRelationshipsRepository relationshipsRepository, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
-        eventBus ??= A.Fake<IEventBus>();
-        return new Handler(relationshipsRepository, userContext, eventBus);
+        return new Handler(relationshipsRepository, userContext, relationshipTemplatesRepository);
     }
 }
