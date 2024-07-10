@@ -57,7 +57,7 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
       child: AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         title: Text(context.l10n.changeClientSecret, textAlign: TextAlign.center),
-        contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 32, bottom: 32),
+        contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
         content: SizedBox(
           width: 500,
           child: Column(
