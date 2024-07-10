@@ -1,9 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationship;
@@ -11,16 +11,20 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Reje
 public class Handler : IRequestHandler<RejectRelationshipCommand, RejectRelationshipResponse>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
-    private readonly IEventBus _eventBus;
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
+    private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
 
-    public Handler(IRelationshipsRepository relationshipsRepository, IUserContext userContext, IEventBus eventBus)
+    private RelationshipTemplate _template;
+
+    public Handler(IRelationshipsRepository relationshipsRepository, IUserContext userContext, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
         _relationshipsRepository = relationshipsRepository;
-        _eventBus = eventBus;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
+        _relationshipTemplatesRepository = relationshipTemplatesRepository;
+
+        _template = null!;
     }
 
     public async Task<RejectRelationshipResponse> Handle(RejectRelationshipCommand request, CancellationToken cancellationToken)
@@ -30,7 +34,19 @@ public class Handler : IRequestHandler<RejectRelationshipCommand, RejectRelation
         var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true) ??
                            throw new NotFoundException(nameof(Relationship));
 
-        relationship.Reject(_activeIdentity, _activeDevice, request.CreationResponseContent);
+        var templateId = relationship.RelationshipTemplateId;
+
+        _template = await _relationshipTemplatesRepository.Find(templateId, _activeIdentity, cancellationToken, track: true) ??
+                    throw new NotFoundException(nameof(RelationshipTemplate));
+
+        var existingRelationships = await _relationshipsRepository.FindRelationships(
+            r =>
+                (r.From == _activeIdentity && r.To == _template.CreatedBy) ||
+                (r.From == _template.CreatedBy && r.To == _activeIdentity),
+            cancellationToken
+        );
+
+        relationship.Reject(_activeIdentity, _activeDevice, request.CreationResponseContent, existingRelationships.ToList());
 
         await _relationshipsRepository.Update(relationship);
 
