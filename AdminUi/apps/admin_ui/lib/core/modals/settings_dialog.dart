@@ -18,7 +18,9 @@ class _SettingsDialog extends StatelessWidget with WatchItMixin {
     final themeMode = watchValue((ThemeModeModel x) => x.themeMode);
 
     return AlertDialog(
-      title: Text(context.l10n.settings),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      title: Text(context.l10n.settings, textAlign: TextAlign.center),
+      contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,

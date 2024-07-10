@@ -155,6 +155,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
       context: context,
       title: context.l10n.clientsOverview_removeSelectedClients_title,
       message: context.l10n.clientsOverview_removeSelectedClients_message,
+      actionText: context.l10n.remove,
     );
 
     if (!confirmed) return;
