@@ -29,7 +29,10 @@ public class QuotasModule : AbstractModule
             dbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
         });
 
-        services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
+        if (parsedConfiguration.Infrastructure.SqlDatabase.EnableHealthCheck)
+            services.AddSqlDatabaseHealthCheck(Name,
+                parsedConfiguration.Infrastructure.SqlDatabase.Provider,
+                parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
 
         services.AddResponseCaching();
     }

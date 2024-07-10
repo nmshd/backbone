@@ -36,7 +36,10 @@ public class DevicesModule : AbstractModule
 
         services.AddSingleton<ISignatureHelper, SignatureHelper>(_ => SignatureHelper.CreateEd25519WithRawKeyFormat());
 
-        services.AddSqlDatabaseHealthCheck(Name, parsedConfiguration.Infrastructure.SqlDatabase.Provider, parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
+        if (parsedConfiguration.Infrastructure.SqlDatabase.EnableHealthCheck)
+            services.AddSqlDatabaseHealthCheck(Name,
+                parsedConfiguration.Infrastructure.SqlDatabase.Provider,
+                parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
     public override void ConfigureEventBus(IEventBus eventBus)
