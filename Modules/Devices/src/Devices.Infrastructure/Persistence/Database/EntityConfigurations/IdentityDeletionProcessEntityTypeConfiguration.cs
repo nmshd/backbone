@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
+﻿using System.Text.Json;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -38,5 +39,9 @@ public class IdentityDeletionProcessAuditLogEntryEntityTypeConfiguration : Entit
         builder.Property(x => x.NewStatus);
         builder.Property(x => x.OldStatus);
         builder.Property(x => x.MessageKey).HasConversion<string>();
+        builder.Property(x => x.AdditionalData).HasConversion<string>(
+            v => JsonSerializer.Serialize(v, JsonSerializerOptions.Default),
+            v => JsonSerializer.Deserialize<Dictionary<string, string>>(v, JsonSerializerOptions.Default)
+        );
     }
 }

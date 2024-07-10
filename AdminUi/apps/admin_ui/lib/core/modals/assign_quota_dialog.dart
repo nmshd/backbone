@@ -22,7 +22,7 @@ Future<void> showAddQuotaDialog({
 
   await showDialog<void>(
     context: context,
-    builder: (BuildContext context) => _AddQuotaDialog(
+    builder: (BuildContext context) => _AssignQuotaDialog(
       availableMetrics: metrics.data,
       addQuota: ({required String metricKey, required int max, required String period}) {
         if (tierId != null) {
@@ -36,22 +36,22 @@ Future<void> showAddQuotaDialog({
   );
 }
 
-class _AddQuotaDialog extends StatefulWidget {
+class _AssignQuotaDialog extends StatefulWidget {
   final List<Metric> availableMetrics;
   final Future<ApiResponse<dynamic>> Function({required String metricKey, required int max, required String period}) addQuota;
   final VoidCallback onQuotaAdded;
 
-  const _AddQuotaDialog({
+  const _AssignQuotaDialog({
     required this.availableMetrics,
     required this.addQuota,
     required this.onQuotaAdded,
   });
 
   @override
-  State<_AddQuotaDialog> createState() => _AddQuotaDialogState();
+  State<_AssignQuotaDialog> createState() => _AssignQuotaDialogState();
 }
 
-class _AddQuotaDialogState extends State<_AddQuotaDialog> {
+class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
   final _maxAmountController = TextEditingController();
 
   bool _saving = false;
@@ -82,12 +82,20 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        title: Text(context.l10n.addQuota),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        title: Text(context.l10n.addQuota, textAlign: TextAlign.center),
+        contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
         content: SizedBox(
           width: 500,
           child: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Text('*${context.l10n.required}'),
+              ),
+              Gaps.h32,
               DropdownButtonFormField(
                 value: _selectedMetric,
                 items: widget.availableMetrics.map((metric) => DropdownMenuItem(value: metric.key, child: Text(metric.displayName))).toList(),
@@ -128,10 +136,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
               if (_errorMessage != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 24),
-                  child: Text(
-                    _errorMessage!,
-                    style: TextStyle(color: Theme.of(context).colorScheme.error),
-                  ),
+                  child: Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
                 ),
             ],
           ),
@@ -143,7 +148,7 @@ class _AddQuotaDialogState extends State<_AddQuotaDialog> {
           ),
           FilledButton(
             onPressed: _isValid && !_saving ? _addQuota : null,
-            child: Text(context.l10n.add),
+            child: Text(context.l10n.assign),
           ),
         ],
       ),

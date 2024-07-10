@@ -56,6 +56,11 @@ public class FindAllStubRepository : IIdentitiesRepository
         throw new NotSupportedException();
     }
 
+    public Task AddDeletionProcessAuditLogEntry(IdentityDeletionProcessAuditLogEntry auditLogEntry)
+    {
+        throw new NotSupportedException();
+    }
+
     public Task Update(Identity identity, CancellationToken cancellationToken)
     {
         throw new NotSupportedException();
