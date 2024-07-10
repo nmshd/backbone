@@ -12,11 +12,8 @@ namespace Backbone.BuildingBlocks.API.Extensions;
 public static class ServiceCollectionExtensions
 {
     public static void AddSqlDatabaseHealthCheck(this IServiceCollection services, string name, string provider,
-        string connectionString, bool enableHealthCheck)
+        string connectionString)
     {
-        if (!enableHealthCheck)
-            return;
-
         switch (provider)
         {
             case "SqlServer":

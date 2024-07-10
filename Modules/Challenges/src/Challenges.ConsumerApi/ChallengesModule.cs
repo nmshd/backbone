@@ -29,10 +29,10 @@ public class ChallengesModule : AbstractModule
             dbOptions.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
         });
 
-        services.AddSqlDatabaseHealthCheck(Name,
-            parsedConfiguration.Infrastructure.SqlDatabase.Provider,
-            parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString,
-            parsedConfiguration.Infrastructure.SqlDatabase.EnableHealthCheck);
+        if (parsedConfiguration.Infrastructure.SqlDatabase.EnableHealthCheck)
+            services.AddSqlDatabaseHealthCheck(Name,
+                parsedConfiguration.Infrastructure.SqlDatabase.Provider,
+                parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString);
     }
 
     public override void ConfigureEventBus(IEventBus eventBus)
