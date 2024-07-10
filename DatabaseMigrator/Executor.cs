@@ -1,5 +1,7 @@
 ﻿using System.Data.SqlClient;
+using System.Reflection;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
@@ -44,7 +46,8 @@ public class Executor
 
         try
         {
-            await MigrateDbContext<ChallengesDbContext>();
+            var tree = await ReadMigrations();
+            /*await MigrateDbContext<ChallengesDbContext>();
             await MigrateDbContext<DevicesDbContext>();
             await MigrateDbContext<FilesDbContext>();
             await MigrateDbContext<RelationshipsDbContext>();
@@ -52,7 +55,7 @@ public class Executor
             await MigrateDbContext<MessagesDbContext>();
             await MigrateDbContext<SynchronizationDbContext>();
             await MigrateDbContext<TokensDbContext>();
-            await MigrateDbContext<AdminApiDbContext>();
+            await MigrateDbContext<AdminApiDbContext>();*/
         }
         catch (Exception ex)
         {
@@ -62,6 +65,57 @@ public class Executor
         }
 
         _logger.SuccessfullyAppliedMigrations();
+    }
+
+    private async Task<TreeHandler> ReadMigrations()
+    {
+        Dictionary<Type, ModuleType> modules = new()
+        {
+            { typeof(ChallengesDbContext), ModuleType.Challenges }, { typeof(DevicesDbContext), ModuleType.Devices },
+            { typeof(FilesDbContext), ModuleType.Files }, { typeof(RelationshipsDbContext), ModuleType.Relationships },
+            { typeof(QuotasDbContext), ModuleType.Quotas }, { typeof(MessagesDbContext), ModuleType.Messages },
+            { typeof(SynchronizationDbContext), ModuleType.Synchronization }, { typeof(TokensDbContext), ModuleType.Tokens },
+            { typeof(AdminApiDbContext), ModuleType.AdminApi }
+        };
+        List<MigrationInfo> migrations = [];
+
+        foreach (var (type, moduleType) in modules)
+        {
+            var context = _serviceProvider.GetDbContext(type);
+            var appliedMigrations = await context.Database.GetAppliedMigrationsAsync();
+            var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
+            var currentMigration = await context.GetLastAppliedMigration();
+            var dependencies = LoadMigrationDependencies(type, context.Database.ProviderName?.EndsWith("PostgreSQL") ?? true);
+
+            migrations.AddRange(appliedMigrations.Select(id => new MigrationInfo(moduleType, id, true, dependencies[id])));
+            migrations.AddRange(pendingMigrations.Select(id => new MigrationInfo(moduleType, id, false, dependencies[id])));
+            _migratedDbContexts.Push((type, currentMigration));
+        }
+
+        return new TreeHandler(migrations);
+    }
+
+    private Dictionary<string, IList<MigrationDependency>> LoadMigrationDependencies(Type dbContextType, bool usePostgres)
+    {
+        var assemblyNameSuffix = usePostgres ? "Postgres" : "SqlServer";
+        var assembly = Assembly.Load(new AssemblyName($"{dbContextType.Assembly.GetName().Name}.Database.{assemblyNameSuffix}"));
+        var definedTypes = assembly.DefinedTypes
+            .Where(t => t.BaseType == typeof(Migration));
+        Dictionary<string, IList<MigrationDependency>> ret = [];
+
+        foreach (var type in definedTypes)
+        {
+            var idAttr = type.GetCustomAttribute<MigrationAttribute>();
+            if (idAttr == null) continue;
+
+            var dependencies = type.GetCustomAttributes<DependsOnAttribute>()
+                .Select(attr => new MigrationDependency(attr.Module, attr.MigrationId))
+                .ToList();
+
+            ret[idAttr.Id] = dependencies;
+        }
+
+        return ret;
     }
 
     private async Task MigrateDbContext<TContext>(string? targetMigration = null) where TContext : DbContext
