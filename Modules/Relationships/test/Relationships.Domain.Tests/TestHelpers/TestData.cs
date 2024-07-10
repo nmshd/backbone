@@ -38,7 +38,7 @@ public static class TestData
     public static Relationship CreateRejectedRelationship()
     {
         var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, [], []);
-        relationship.Reject(IDENTITY_2, DEVICE_2, null);
+        relationship.Reject(IDENTITY_2, DEVICE_2, null, [relationship]);
         relationship.ClearDomainEvents();
         return relationship;
     }

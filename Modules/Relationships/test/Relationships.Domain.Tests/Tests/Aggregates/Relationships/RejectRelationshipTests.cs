@@ -21,7 +21,7 @@ public class RejectRelationshipTests : AbstractTestsBase
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Reject(IDENTITY_2, DEVICE_2, null);
+        relationship.Reject(IDENTITY_2, DEVICE_2, null, [relationship]);
 
         // Assert
         relationship.Status.Should().Be(RelationshipStatus.Rejected);
@@ -36,7 +36,7 @@ public class RejectRelationshipTests : AbstractTestsBase
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Reject(IDENTITY_2, DEVICE_2, null);
+        relationship.Reject(IDENTITY_2, DEVICE_2, null, [relationship]);
 
         // Assert
         relationship.AuditLog.Should().HaveCount(2);
@@ -59,7 +59,7 @@ public class RejectRelationshipTests : AbstractTestsBase
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Reject(IDENTITY_2, DEVICE_2, null);
+        relationship.Reject(IDENTITY_2, DEVICE_2, null, [relationship]);
 
         // Assert
         var domainEvent = relationship.Should().HaveASingleDomainEvent<RelationshipStatusChangedDomainEvent>();
@@ -76,7 +76,7 @@ public class RejectRelationshipTests : AbstractTestsBase
         var relationship = CreateActiveRelationship();
 
         // Act
-        var acting = () => relationship.Reject(IDENTITY_2, DEVICE_2, null);
+        var acting = () => relationship.Reject(IDENTITY_2, DEVICE_2, null, [relationship]);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
@@ -92,7 +92,7 @@ public class RejectRelationshipTests : AbstractTestsBase
         var relationship = CreatePendingRelationship();
 
         // Act
-        var acting = () => relationship.Reject(IDENTITY_1, DEVICE_1, null);
+        var acting = () => relationship.Reject(IDENTITY_1, DEVICE_1, null, [relationship]);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
@@ -106,9 +106,94 @@ public class RejectRelationshipTests : AbstractTestsBase
         var foreignAddress = IdentityAddress.ParseUnsafe("some-other-identity");
 
         // Act
-        var acting = () => relationship.Reject(foreignAddress, DeviceId.New(), null);
+        var acting = () => relationship.Reject(foreignAddress, DeviceId.New(), null, [relationship]);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
+    }
+
+    [Fact]
+    public void P1_active_identity_P1_not_decomposed_P2_decomposed()
+    {
+        // Arrange
+        var existingRelationships = CreateRelationships();
+
+        existingRelationships.First().Terminate(IDENTITY_2, DEVICE_2);
+        existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
+
+        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
+
+        // Act
+        var acting = () => newRelationship.Reject(IDENTITY_1, DEVICE_1, [], existingRelationships);
+
+        // Assert
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.oldRelationshipNotDecomposed");
+    }
+
+    [Fact]
+    public void P1_active_identity_P1_decomposed_P2_not_decomposed()
+    {
+        // Arrange
+        var existingRelationships = CreateRelationships();
+
+        existingRelationships.First().Terminate(IDENTITY_2, DEVICE_2);
+        existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
+
+        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
+
+        existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
+
+        // Act
+        newRelationship.Reject(IDENTITY_1, DEVICE_1, [], existingRelationships);
+
+        // Assert
+        newRelationship.Status.Should().Be(RelationshipStatus.Rejected);
+    }
+
+    [Fact]
+    public void P2_active_identity_P1_not_decomposed_P2_decomposed()
+    {
+        // Arrange
+        var existingRelationships = CreateRelationships();
+
+        existingRelationships.First().Terminate(IDENTITY_1, DEVICE_1);
+        existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
+
+        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, existingRelationships);
+
+        // Act
+        var acting = () => newRelationship.Reject(IDENTITY_2, DEVICE_2, [], existingRelationships);
+
+        // Assert
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.oldRelationshipNotDecomposed");
+    }
+
+    [Fact]
+    public void P2_active_identity_P1_decomposed_P2_not_decomposed()
+    {
+        // Arrange
+        var existingRelationships = CreateRelationships();
+
+        existingRelationships.First().Terminate(IDENTITY_1, DEVICE_1);
+        existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
+
+        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, existingRelationships);
+
+        existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
+
+        // Act
+        newRelationship.Reject(IDENTITY_2, DEVICE_2, [], existingRelationships);
+
+        // Assert
+        newRelationship.Status.Should().Be(RelationshipStatus.Rejected);
+    }
+
+    private static List<Relationship> CreateRelationships()
+    {
+        var existingRelationships = new List<Relationship>
+        {
+            CreateActiveRelationship(IDENTITY_1, IDENTITY_2)
+        };
+        return existingRelationships;
     }
 }
