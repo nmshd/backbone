@@ -22,47 +22,26 @@ public class DecomposeForTests
         var recipient1 = input.Message.Recipients.First();
         var recipient2 = input.Message.Recipients.Second();
 
-        recipient1.MessageIsHiddenForRecipient.Should().Be(output.R1_HiddenForRecipient);
-        recipient1.MessageIsHiddenForSender.Should().Be(output.R1_HiddenForSender);
+        recipient1.IsRelationshipDecomposedByRecipient.Should().Be(output.R1_HiddenForRecipient);
+        recipient1.IsRelationshipDecomposedBySender.Should().Be(output.R1_HiddenForSender);
 
-        recipient2.MessageIsHiddenForRecipient.Should().Be(output.R2_HiddenForRecipient);
-        recipient2.MessageIsHiddenForSender.Should().Be(output.R2_HiddenForSender);
-    }
+        recipient2.IsRelationshipDecomposedByRecipient.Should().Be(output.R2_HiddenForRecipient);
+        recipient2.IsRelationshipDecomposedBySender.Should().Be(output.R2_HiddenForSender);
 
-    [Fact]
-    public void When_first_participant_of_relationship_decomposes__recipient_does_not_get_anonymized()
-    {
-        // Arrange
-        var message = TestData.CreateMessageWithTwoRecipients();
-        var recipient1 = message.Recipients.First();
-        var recipient2 = message.Recipients.Second();
-        var sender = message.CreatedBy;
+        if (output.SenderIsAnonymized)
+            input.Message.CreatedBy.Should().Be(ANONYMIZED_ADDRESS);
+        else
+            input.Message.CreatedBy.Should().NotBe(ANONYMIZED_ADDRESS);
 
-        // Act
-        message.DecomposeFor(sender, recipient1.Address, ANONYMIZED_ADDRESS);
+        if (output.R1IsAnonymized)
+            recipient1.Address.Should().Be(ANONYMIZED_ADDRESS);
+        else
+            recipient1.Address.Should().NotBe(ANONYMIZED_ADDRESS);
 
-        // Assert
-        recipient1.Address.Should().NotBe(ANONYMIZED_ADDRESS);
-        recipient2.Address.Should().NotBe(ANONYMIZED_ADDRESS);
-    }
-
-    [Fact]
-    public void When_second_participant_of_relationship_decomposes__recipient_gets_anonymized()
-    {
-        // Arrange
-        var message = TestData.CreateMessageWithTwoRecipients();
-        var recipient1 = message.Recipients.First();
-        var recipient2 = message.Recipients.Second();
-        var sender = message.CreatedBy;
-
-        message.DecomposeFor(recipient1.Address, sender, ANONYMIZED_ADDRESS);
-
-        // Act
-        message.DecomposeFor(sender, recipient1.Address, ANONYMIZED_ADDRESS);
-
-        // Assert
-        recipient1.Address.Should().Be(ANONYMIZED_ADDRESS);
-        recipient2.Address.Should().NotBe(ANONYMIZED_ADDRESS);
+        if (output.R2IsAnonymized)
+            recipient2.Address.Should().Be(ANONYMIZED_ADDRESS);
+        else
+            recipient2.Address.Should().NotBe(ANONYMIZED_ADDRESS);
     }
 
     // [Theory]
@@ -180,45 +159,45 @@ public record TestInput
 }
 
 // ReSharper disable InconsistentNaming
-public record TestOutput(bool R1_HiddenForSender, bool R1_HiddenForRecipient, bool R2_HiddenForSender, bool R2_HiddenForRecipient);
+public record TestOutput(bool R1_HiddenForSender, bool R1_HiddenForRecipient, bool R2_HiddenForSender, bool R2_HiddenForRecipient, bool SenderIsAnonymized, bool R1IsAnonymized, bool R2IsAnonymized);
 // ReSharper restore InconsistentNaming
 
 public class TestDataWithAllCases : TheoryData<TestInput, TestOutput>
 {
     public TestDataWithAllCases()
     {
-        Add(new TestInput(0, Participant.Sender, Participant.Recipient1, false, false, false, false), new TestOutput(true, false, false, false));
-        Add(new TestInput(1, Participant.Recipient1, Participant.Recipient1, false, false, false, false), new TestOutput(false, true, false, false));
-        Add(new TestInput(2, Participant.Sender, Participant.Recipient2, false, false, false, false), new TestOutput(false, false, true, false));
-        Add(new TestInput(3, Participant.Recipient2, Participant.Recipient2, false, false, false, false), new TestOutput(false, false, false, true));
-        Add(new TestInput(5, Participant.Recipient1, Participant.Recipient1, true, false, false, false), new TestOutput(true, true, false, false));
-        Add(new TestInput(6, Participant.Sender, Participant.Recipient2, true, false, false, false), new TestOutput(true, false, true, false));
-        Add(new TestInput(7, Participant.Recipient2, Participant.Recipient2, true, false, false, false), new TestOutput(true, false, false, true));
-        Add(new TestInput(8, Participant.Sender, Participant.Recipient1, false, false, true, false), new TestOutput(true, false, true, false));
-        Add(new TestInput(9, Participant.Recipient1, Participant.Recipient1, false, false, true, false), new TestOutput(false, true, true, false));
-        Add(new TestInput(11, Participant.Recipient2, Participant.Recipient2, false, false, true, false), new TestOutput(false, false, true, true));
-        Add(new TestInput(13, Participant.Recipient1, Participant.Recipient1, true, false, true, false), new TestOutput(true, true, true, false));
-        Add(new TestInput(15, Participant.Recipient2, Participant.Recipient2, true, false, true, false), new TestOutput(true, false, true, true));
-        Add(new TestInput(16, Participant.Sender, Participant.Recipient1, false, true, false, false), new TestOutput(true, true, false, false));
-        Add(new TestInput(18, Participant.Sender, Participant.Recipient2, false, true, false, false), new TestOutput(false, true, true, false));
-        Add(new TestInput(19, Participant.Recipient2, Participant.Recipient2, false, true, false, false), new TestOutput(false, true, false, true));
-        Add(new TestInput(22, Participant.Sender, Participant.Recipient2, true, true, false, false), new TestOutput(true, true, true, false));
-        Add(new TestInput(23, Participant.Recipient2, Participant.Recipient2, true, true, false, false), new TestOutput(true, true, false, true));
-        Add(new TestInput(24, Participant.Sender, Participant.Recipient1, false, true, true, false), new TestOutput(true, true, true, false));
-        Add(new TestInput(27, Participant.Recipient2, Participant.Recipient2, false, true, true, false), new TestOutput(false, true, true, true));
-        Add(new TestInput(31, Participant.Recipient2, Participant.Recipient2, true, true, true, false), new TestOutput(true, true, true, true));
-        Add(new TestInput(32, Participant.Sender, Participant.Recipient1, false, false, false, true), new TestOutput(true, false, false, true));
-        Add(new TestInput(33, Participant.Recipient1, Participant.Recipient1, false, false, false, true), new TestOutput(false, true, false, true));
-        Add(new TestInput(34, Participant.Sender, Participant.Recipient2, false, false, false, true), new TestOutput(false, false, true, true));
-        Add(new TestInput(37, Participant.Recipient1, Participant.Recipient1, true, false, false, true), new TestOutput(true, true, false, true));
-        Add(new TestInput(38, Participant.Sender, Participant.Recipient2, true, false, false, true), new TestOutput(true, false, true, true));
-        Add(new TestInput(40, Participant.Sender, Participant.Recipient1, false, false, true, true), new TestOutput(true, false, true, true));
-        Add(new TestInput(41, Participant.Recipient1, Participant.Recipient1, false, false, true, true), new TestOutput(false, true, true, true));
-        Add(new TestInput(45, Participant.Recipient1, Participant.Recipient1, true, false, true, true), new TestOutput(true, true, true, true));
-        Add(new TestInput(48, Participant.Sender, Participant.Recipient1, false, true, false, true), new TestOutput(true, true, false, true));
-        Add(new TestInput(50, Participant.Sender, Participant.Recipient2, false, true, false, true), new TestOutput(false, true, true, true));
-        Add(new TestInput(54, Participant.Sender, Participant.Recipient2, true, true, false, true), new TestOutput(true, true, true, true));
-        Add(new TestInput(56, Participant.Sender, Participant.Recipient1, false, true, true, true), new TestOutput(true, true, true, true));
+        Add(new TestInput(0, Participant.Sender, Participant.Recipient1, false, false, false, false), new TestOutput(true, false, false, false, false, false, false));
+        Add(new TestInput(1, Participant.Recipient1, Participant.Recipient1, false, false, false, false), new TestOutput(false, true, false, false, false, false, false));
+        Add(new TestInput(2, Participant.Sender, Participant.Recipient2, false, false, false, false), new TestOutput(false, false, true, false, false, false, false));
+        Add(new TestInput(3, Participant.Recipient2, Participant.Recipient2, false, false, false, false), new TestOutput(false, false, false, true, false, false, false));
+        Add(new TestInput(5, Participant.Recipient1, Participant.Recipient1, true, false, false, false), new TestOutput(true, true, false, false, false, true, false));
+        Add(new TestInput(6, Participant.Sender, Participant.Recipient2, true, false, false, false), new TestOutput(true, false, true, false, false, false, false));
+        Add(new TestInput(7, Participant.Recipient2, Participant.Recipient2, true, false, false, false), new TestOutput(true, false, false, true, false, false, false));
+        Add(new TestInput(8, Participant.Sender, Participant.Recipient1, false, false, true, false), new TestOutput(true, false, true, false, false, false, false));
+        Add(new TestInput(9, Participant.Recipient1, Participant.Recipient1, false, false, true, false), new TestOutput(false, true, true, false, false, false, false));
+        Add(new TestInput(11, Participant.Recipient2, Participant.Recipient2, false, false, true, false), new TestOutput(false, false, true, true, false, false, true));
+        Add(new TestInput(13, Participant.Recipient1, Participant.Recipient1, true, false, true, false), new TestOutput(true, true, true, false, false, true, false));
+        Add(new TestInput(15, Participant.Recipient2, Participant.Recipient2, true, false, true, false), new TestOutput(true, false, true, true, false, false, true));
+        Add(new TestInput(16, Participant.Sender, Participant.Recipient1, false, true, false, false), new TestOutput(true, true, false, false, false, true, false));
+        Add(new TestInput(18, Participant.Sender, Participant.Recipient2, false, true, false, false), new TestOutput(false, true, true, false, false, false, false));
+        Add(new TestInput(19, Participant.Recipient2, Participant.Recipient2, false, true, false, false), new TestOutput(false, true, false, true, false, false, false));
+        Add(new TestInput(22, Participant.Sender, Participant.Recipient2, true, true, false, false), new TestOutput(true, true, true, false, false, true, false));
+        Add(new TestInput(23, Participant.Recipient2, Participant.Recipient2, true, true, false, false), new TestOutput(true, true, false, true, false, true, false));
+        Add(new TestInput(24, Participant.Sender, Participant.Recipient1, false, true, true, false), new TestOutput(true, true, true, false, false, true, false));
+        Add(new TestInput(27, Participant.Recipient2, Participant.Recipient2, false, true, true, false), new TestOutput(false, true, true, true, false, false, true));
+        Add(new TestInput(31, Participant.Recipient2, Participant.Recipient2, true, true, true, false), new TestOutput(true, true, true, true, true, true, true));
+        Add(new TestInput(32, Participant.Sender, Participant.Recipient1, false, false, false, true), new TestOutput(true, false, false, true, false, false, false));
+        Add(new TestInput(33, Participant.Recipient1, Participant.Recipient1, false, false, false, true), new TestOutput(false, true, false, true, false, false, false));
+        Add(new TestInput(34, Participant.Sender, Participant.Recipient2, false, false, false, true), new TestOutput(false, false, true, true, false, false, true));
+        Add(new TestInput(37, Participant.Recipient1, Participant.Recipient1, true, false, false, true), new TestOutput(true, true, false, true, false, true, false));
+        Add(new TestInput(38, Participant.Sender, Participant.Recipient2, true, false, false, true), new TestOutput(true, false, true, true, false, false, true));
+        Add(new TestInput(40, Participant.Sender, Participant.Recipient1, false, false, true, true), new TestOutput(true, false, true, true, false, false, true));
+        Add(new TestInput(41, Participant.Recipient1, Participant.Recipient1, false, false, true, true), new TestOutput(false, true, true, true, false, false, true));
+        Add(new TestInput(45, Participant.Recipient1, Participant.Recipient1, true, false, true, true), new TestOutput(true, true, true, true, true, true, true));
+        Add(new TestInput(48, Participant.Sender, Participant.Recipient1, false, true, false, true), new TestOutput(true, true, false, true, false, true, false));
+        Add(new TestInput(50, Participant.Sender, Participant.Recipient2, false, true, false, true), new TestOutput(false, true, true, true, false, false, true));
+        Add(new TestInput(54, Participant.Sender, Participant.Recipient2, true, true, false, true), new TestOutput(true, true, true, true, true, true, true));
+        Add(new TestInput(56, Participant.Sender, Participant.Recipient1, false, true, true, true), new TestOutput(true, true, true, true, true, true, true));
         // Add(new TestInput(4, Participant.Sender, Participant.Recipient1, true, false, false, false), new TestOutput("#", "#", "#", "#"));
         // Add(new TestInput(10, Participant.Sender, Participant.Recipient2, false, false, true, false), new TestOutput("#", "#", "#", "#"));
         // Add(new TestInput(12, Participant.Sender, Participant.Recipient1, true, false, true, false), new TestOutput("#", "#", "#", "#"));

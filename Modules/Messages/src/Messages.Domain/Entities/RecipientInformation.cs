@@ -29,8 +29,9 @@ public class RecipientInformation : Entity
     public DateTime? ReceivedAt { get; private set; }
     public DeviceId? ReceivedByDevice { get; private set; }
     public MessageId MessageId { get; }
-    public bool MessageIsHiddenForRecipient { get; internal set; }
-    public bool MessageIsHiddenForSender { get; internal set; }
+    public bool IsRelationshipDecomposedByRecipient { get; internal set; }
+    public bool IsRelationshipDecomposedBySender { get; internal set; }
+    public bool IsRelationshipFullyDecomposed => IsRelationshipDecomposedByRecipient && IsRelationshipDecomposedBySender;
 
     public void FetchedMessage(DeviceId fetchedByDevice)
     {

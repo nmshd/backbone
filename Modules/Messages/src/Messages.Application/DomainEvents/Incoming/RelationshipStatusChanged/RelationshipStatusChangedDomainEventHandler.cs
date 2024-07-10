@@ -24,9 +24,9 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
 
     public async Task Handle(RelationshipStatusChangedDomainEvent @event)
     {
-        if (@event.NewStatus != RelationshipStatus.ReadyForDeletion.ToString())
+        if (@event.NewStatus != RelationshipStatus.ReadyForDeletion.ToString() && @event.NewStatus != RelationshipStatus.DeletionProposed.ToString())
         {
-            _logger.LogTrace("Relationship status changed to {newStatus}. No Message anonymization required.", @event.NewStatus);
+            _logger.LogTrace("Relationship status changed to {newStatus}. No Message decomposition required.", @event.NewStatus);
             return;
         }
 
@@ -34,18 +34,9 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
         var messagesExchangedBetweenRelationshipParticipants = (await _messagesRepository.Find(Message.WasExchangedBetween(@event.Initiator, @event.Peer), CancellationToken.None)).ToList();
         foreach (var message in messagesExchangedBetweenRelationshipParticipants)
         {
-            message.SanitizeAfterRelationshipDeleted(@event.Initiator, @event.Peer, anonymizedIdentityAddress);
+            message.DecomposeFor(@event.Initiator, @event.Peer, anonymizedIdentityAddress);
         }
 
         await _messagesRepository.Update(messagesExchangedBetweenRelationshipParticipants);
     }
-}
-
-internal static partial class RelationshipStatusChangedLogs
-{
-    [LoggerMessage(
-        EventName = "Messages.RelationshipStatusChangedDomainEventHandler.RelationshipStatusChanged",
-        Level = LogLevel.Debug,
-        Message = "Relationship status changed to {newStatus}. No Message anonymization required.")]
-    public static partial void RelationshipStatusChanged(this ILogger logger, string newStatus);
 }

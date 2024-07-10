@@ -46,15 +46,7 @@ public class Message : Entity, IIdentifiable<MessageId>
     public IReadOnlyCollection<Attachment> Attachments { get; }
     public IReadOnlyCollection<RecipientInformation> Recipients { get; }
 
-    public void LoadBody(byte[] bytes)
-    {
-        if (Body is { Length: > 0 })
-        {
-            throw new InvalidOperationException($"The Body of the message {Id} is already filled. It is not possible to change it.");
-        }
-
-        Body = bytes;
-    }
+    private bool CanAnonymizeSender => Recipients.All(r => r.IsRelationshipFullyDecomposed);
 
     public void ReplaceIdentityAddress(IdentityAddress oldIdentityAddress, IdentityAddress newIdentityAddress)
     {
@@ -64,14 +56,44 @@ public class Message : Entity, IIdentifiable<MessageId>
         AnonymizeRecipient(oldIdentityAddress, newIdentityAddress);
     }
 
-    public void SanitizeAfterRelationshipDeleted(string participantOne, string participantTwo, IdentityAddress anonymizedIdentityAddress)
+    public void DecomposeFor(IdentityAddress decomposerAddress, IdentityAddress peerAddress, IdentityAddress anonymizedAddress)
     {
-        AnonymizeRecipient(participantOne, anonymizedIdentityAddress);
-        AnonymizeRecipient(participantTwo, anonymizedIdentityAddress);
+        var recipient = Recipients.First(r => r.Address == decomposerAddress || r.Address == peerAddress);
 
-        if (CanAnonymizeSender(anonymizedIdentityAddress))
-            AnonymizeSender(anonymizedIdentityAddress);
+        SetDecompositionFlags(decomposerAddress, recipient);
+        AnonymizeParticipants(recipient, anonymizedAddress);
     }
+
+    private void SetDecompositionFlags(IdentityAddress decomposerAddress, RecipientInformation recipient)
+    {
+        if (decomposerAddress == recipient.Address)
+            recipient.IsRelationshipDecomposedByRecipient = true;
+
+        if (decomposerAddress == CreatedBy)
+            recipient.IsRelationshipDecomposedBySender = true;
+    }
+
+    private void AnonymizeParticipants(RecipientInformation recipient, IdentityAddress anonymizedAddress)
+    {
+        if (recipient.IsRelationshipFullyDecomposed)
+            AnonymizeRecipient(recipient.Address, anonymizedAddress);
+
+        if (CanAnonymizeSender)
+            AnonymizeSender(anonymizedAddress);
+    }
+
+    private void AnonymizeRecipient(IdentityAddress participantAddress, IdentityAddress anonymizedIdentityAddress)
+    {
+        var recipient = Recipients.FirstOrDefault(r => r.Address == participantAddress);
+        recipient?.UpdateAddress(anonymizedIdentityAddress);
+    }
+
+    private void AnonymizeSender(IdentityAddress anonymizedIdentityAddress)
+    {
+        CreatedBy = anonymizedIdentityAddress;
+    }
+
+    #region Expressions
 
     public static Expression<Func<Message, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
@@ -85,33 +107,5 @@ public class Message : Entity, IIdentifiable<MessageId>
             (m.CreatedBy == identityAddress2 && m.Recipients.Any(r => r.Address == identityAddress1));
     }
 
-    private void AnonymizeRecipient(string participantAddress, IdentityAddress anonymizedIdentityAddress)
-    {
-        var recipient = Recipients.FirstOrDefault(r => r.Address == participantAddress);
-        recipient?.UpdateAddress(anonymizedIdentityAddress);
-    }
-
-    private bool CanAnonymizeSender(IdentityAddress anonymizedIdentityAddress)
-    {
-        return Recipients.All(r => r.Address == anonymizedIdentityAddress);
-    }
-
-    private void AnonymizeSender(IdentityAddress anonymizedIdentityAddress)
-    {
-        CreatedBy = anonymizedIdentityAddress;
-    }
-
-    public void DecomposeFor(IdentityAddress addressWhichDecomposed, IdentityAddress peerAddress, IdentityAddress anonymizedAddress)
-    {
-        var recipient = Recipients.First(r => r.Address == addressWhichDecomposed || r.Address == peerAddress);
-
-        if (addressWhichDecomposed == recipient.Address)
-            recipient.MessageIsHiddenForRecipient = true;
-
-        if (addressWhichDecomposed == CreatedBy)
-            recipient.MessageIsHiddenForSender = true;
-
-        if (recipient.MessageIsHiddenForRecipient && recipient.MessageIsHiddenForSender)
-            AnonymizeRecipient(recipient.Address, anonymizedAddress);
-    }
+    #endregion
 }
