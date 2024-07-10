@@ -15,17 +15,15 @@ public class Handler : IRequestHandler<AcceptRelationshipCommand, AcceptRelation
     private readonly IdentityAddress _activeIdentity;
     private readonly DeviceId _activeDevice;
     private RelationshipTemplate _template;
-    private readonly CancellationToken _cancellationToken;
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
 
-    public Handler(IRelationshipsRepository relationshipsRepository, IUserContext userContext, IRelationshipTemplatesRepository relationshipTemplatesRepository, CancellationToken cancellationToken)
+    public Handler(IRelationshipsRepository relationshipsRepository, IUserContext userContext, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
         _relationshipsRepository = relationshipsRepository;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
         _template = null!;
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
-        _cancellationToken = cancellationToken;
     }
 
     public async Task<AcceptRelationshipResponse> Handle(AcceptRelationshipCommand request, CancellationToken cancellationToken)
@@ -35,14 +33,14 @@ public class Handler : IRequestHandler<AcceptRelationshipCommand, AcceptRelation
 
         var templateId = relationship.RelationshipTemplateId;
 
-        _template = await _relationshipTemplatesRepository.Find(templateId, _activeIdentity, _cancellationToken, track: true) ??
+        _template = await _relationshipTemplatesRepository.Find(templateId, _activeIdentity, cancellationToken, track: true) ??
                     throw new NotFoundException(nameof(RelationshipTemplate));
 
         var existingRelationships = await _relationshipsRepository.FindRelationships(
             r =>
                 (r.From == _activeIdentity && r.To == _template.CreatedBy) ||
                 (r.From == _template.CreatedBy && r.To == _activeIdentity),
-            _cancellationToken
+            cancellationToken
         );
 
         relationship.Accept(_activeIdentity, _activeDevice, request.CreationResponseContent, existingRelationships.ToList());
