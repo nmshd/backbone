@@ -21,7 +21,7 @@ public class AcceptRelationshipTests : AbstractTestsBase
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Accept(IDENTITY_2, DEVICE_2, [0]);
+        relationship.Accept(IDENTITY_2, DEVICE_2, [0], [relationship]);
 
         // Assert
         relationship.Status.Should().Be(RelationshipStatus.Active);
@@ -37,7 +37,7 @@ public class AcceptRelationshipTests : AbstractTestsBase
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Accept(IDENTITY_2, DEVICE_2, []);
+        relationship.Accept(IDENTITY_2, DEVICE_2, [], [relationship]);
 
         // Assert
         relationship.AuditLog.Should().HaveCount(2);
@@ -60,7 +60,7 @@ public class AcceptRelationshipTests : AbstractTestsBase
         var relationship = CreateActiveRelationship();
 
         // Act
-        var acting = () => relationship.Accept(IDENTITY_2, DEVICE_2, []);
+        var acting = () => relationship.Accept(IDENTITY_2, DEVICE_2, [], [relationship]);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
@@ -76,7 +76,7 @@ public class AcceptRelationshipTests : AbstractTestsBase
         var relationship = CreatePendingRelationship();
 
         // Act
-        var acting = () => relationship.Accept(IDENTITY_1, DEVICE_1, []);
+        var acting = () => relationship.Accept(IDENTITY_1, DEVICE_1, [], [relationship]);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
@@ -90,7 +90,7 @@ public class AcceptRelationshipTests : AbstractTestsBase
         var foreignAddress = IdentityAddress.ParseUnsafe("some-other-identity");
 
         // Act
-        var acting = () => relationship.Accept(foreignAddress, DeviceId.New(), []);
+        var acting = () => relationship.Accept(foreignAddress, DeviceId.New(), [], [relationship]);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
@@ -103,7 +103,7 @@ public class AcceptRelationshipTests : AbstractTestsBase
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Accept(IDENTITY_2, DEVICE_2, []);
+        relationship.Accept(IDENTITY_2, DEVICE_2, [], [relationship]);
 
         // Assert
         var domainEvent = relationship.Should().HaveASingleDomainEvent<RelationshipStatusChangedDomainEvent>();
@@ -122,9 +122,9 @@ public class AcceptRelationshipTests : AbstractTestsBase
         existingRelationships.First().Terminate(IDENTITY_2, DEVICE_2);
         existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
 
-        // Act
         var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
 
+        // Act
         var acting = () => newRelationship.Accept(IDENTITY_1, DEVICE_1, [], existingRelationships);
 
         // Assert
@@ -140,10 +140,11 @@ public class AcceptRelationshipTests : AbstractTestsBase
         existingRelationships.First().Terminate(IDENTITY_2, DEVICE_2);
         existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
 
-        // Act
         var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
 
         existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
+
+        // Act
         newRelationship.Accept(IDENTITY_1, DEVICE_1, [], existingRelationships);
 
         // Assert
@@ -159,9 +160,9 @@ public class AcceptRelationshipTests : AbstractTestsBase
         existingRelationships.First().Terminate(IDENTITY_1, DEVICE_1);
         existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
 
-        // Act
         var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, existingRelationships);
 
+        // Act
         var acting = () => newRelationship.Accept(IDENTITY_2, DEVICE_2, [], existingRelationships);
 
         // Assert
@@ -177,10 +178,11 @@ public class AcceptRelationshipTests : AbstractTestsBase
         existingRelationships.First().Terminate(IDENTITY_1, DEVICE_1);
         existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
 
-        // Act
         var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, existingRelationships);
 
         existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
+
+        // Act
         newRelationship.Accept(IDENTITY_2, DEVICE_2, [], existingRelationships);
 
         // Assert
