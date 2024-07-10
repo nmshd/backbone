@@ -6,10 +6,11 @@ Future<bool> showConfirmationDialog({
   required BuildContext context,
   required String title,
   required String message,
+  required String actionText,
 }) async {
   final result = await showDialog<bool>(
     context: context,
-    builder: (BuildContext context) => _ConfirmationDialog(title: title, message: message),
+    builder: (BuildContext context) => _ConfirmationDialog(title: title, message: message, actionText: actionText),
   );
 
   return result ?? false;
@@ -18,13 +19,16 @@ Future<bool> showConfirmationDialog({
 class _ConfirmationDialog extends StatelessWidget {
   final String title;
   final String message;
+  final String actionText;
 
-  const _ConfirmationDialog({required this.title, required this.message});
+  const _ConfirmationDialog({required this.title, required this.message, required this.actionText});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text(title),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      title: Text(title, textAlign: TextAlign.center),
+      contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
       content: Text(message),
       actions: [
         OutlinedButton(
@@ -33,7 +37,7 @@ class _ConfirmationDialog extends StatelessWidget {
         ),
         FilledButton(
           onPressed: () => Navigator.of(context).pop(true),
-          child: Text(context.l10n.confirm),
+          child: Text(actionText),
         ),
       ],
     );
