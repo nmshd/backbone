@@ -100,4 +100,18 @@ public class Message : Entity, IIdentifiable<MessageId>
     {
         CreatedBy = anonymizedIdentityAddress;
     }
+
+    public void DecomposeFor(IdentityAddress addressWhichDecomposed, IdentityAddress peerAddress, IdentityAddress anonymizedAddress)
+    {
+        var recipient = Recipients.First(r => r.Address == addressWhichDecomposed || r.Address == peerAddress);
+
+        if (addressWhichDecomposed == recipient.Address)
+            recipient.MessageIsHiddenForRecipient = true;
+
+        if (addressWhichDecomposed == CreatedBy)
+            recipient.MessageIsHiddenForSender = true;
+
+        if (recipient.MessageIsHiddenForRecipient && recipient.MessageIsHiddenForSender)
+            AnonymizeRecipient(recipient.Address, anonymizedAddress);
+    }
 }
