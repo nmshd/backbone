@@ -57,6 +57,7 @@ public class ApnsMessageBuilder
     public ApnsMessageBuilder SetNotificationId(int notificationId)
     {
         _notification.NotificationId = notificationId;
+        _request.Headers.Add("apns-collapse-id", notificationId.ToString());
         return this;
     }
 
