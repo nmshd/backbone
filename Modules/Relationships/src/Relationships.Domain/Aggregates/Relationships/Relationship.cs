@@ -126,10 +126,12 @@ public class Relationship : Entity
             throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse());
     }
 
-    public void Reject(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
+    public void Reject(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent, List<Relationship>? existingRelationships)
     {
         EnsureStatus(RelationshipStatus.Pending);
         EnsureRelationshipRequestIsAddressedToSelf(activeIdentity);
+        if (existingRelationships != null)
+            EnsureActiveIdentityDecomposedOldRelationship(activeIdentity, existingRelationships);
 
         CreationResponseContent = creationResponseContent;
         Status = RelationshipStatus.Rejected;
