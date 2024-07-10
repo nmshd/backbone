@@ -90,7 +90,7 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
     }
   }
 
-  int _totalPages(int count, List<MessageOverview>? data) {
+  int _totalPages(int count, List<Message>? data) {
     if (data == null || data.isEmpty) return 1;
     return (data.length / count).ceil();
   }
