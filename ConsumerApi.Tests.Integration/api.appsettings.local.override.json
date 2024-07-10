@@ -47,6 +47,9 @@
             }
         },
         "Relationships": {
+            "Application": {
+                "DidDomainName": "localhost"
+            },
             "Infrastructure": {
                 "SqlDatabase": {
                     "ConnectionString": "Server=localhost;Database=enmeshed;User Id=relationships;Password=Passw0rd;TrustServerCertificate=True"

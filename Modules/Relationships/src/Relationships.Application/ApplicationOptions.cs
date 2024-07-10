@@ -6,6 +6,11 @@ public class ApplicationOptions
 {
     [Required]
     public PaginationOptions Pagination { get; set; } = new();
+
+    [Required]
+    [MinLength(3)]
+    [MaxLength(45)]
+    public string DidDomainName { get; set; } = null!;
 }
 
 public class PaginationOptions
