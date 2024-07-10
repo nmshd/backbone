@@ -68,8 +68,10 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
                       recipients: message.$2.recipients,
                     ),
                   ),
-                if (type == MessageType.incoming) DataCell(_SenderAddressCell(senderAddress: message.$2.senderAddress)),
-                if (type == MessageType.incoming) DataCell(Text(message.$2.senderDevice)),
+                if (type == MessageType.incoming) ...[
+                  DataCell(_SenderAddressCell(senderAddress: message.$2.senderAddress)),
+                  DataCell(Text(message.$2.senderDevice)),
+                ],
                 DataCell(Text(message.$2.numberOfAttachments.toString())),
                 DataCell(
                   Tooltip(
