@@ -23,7 +23,7 @@ Scenario: Accept Relationship
 	And a pending Relationship between i1 and i2 created by i2
 	When a POST request is sent to the /Relationships/{r.Id}/Accept endpoint by i1
 	Then the response status code is 200 (OK)
-	And the response contains an RelationshipResponse
+	And the response contains a RelationshipResponse
 
 Scenario: Accept Relationship to an Identity in status "ToBeDeleted"
 	Given Identities i1 and i2
@@ -38,7 +38,7 @@ Scenario: Reject Relationship
 	And a pending Relationship between i1 and i2 created by i2
 	When a POST request is sent to the /Relationships/{r.Id}/Reject endpoint by i1
 	Then the response status code is 200 (OK)
-	And the response contains an RelationshipResponse
+	And the response contains a RelationshipResponse
 
 Scenario: Reject Relationship to an Identity in status "ToBeDeleted"
 	Given Identities i1 and i2
@@ -53,7 +53,7 @@ Scenario: Revoke Relationship
 	And a pending Relationship between i1 and i2 created by i1
 	When a POST request is sent to the /Relationships/{r.Id}/Revoke endpoint by i1
 	Then the response status code is 200 (OK)
-	And the response contains an RelationshipResponse
+	And the response contains a RelationshipResponse
 
 Scenario: Revoke Relationship to an Identity in status "ToBeDeleted"
 	Given Identities i1 and i2
