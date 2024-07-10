@@ -92,26 +92,6 @@ public class Relationship : Entity
             throw new DomainException(DomainErrors.OldRelationshipNotDecomposed());
     }
 
-    public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
-    {
-        EnsureStatus(RelationshipStatus.Pending);
-        EnsureRelationshipRequestIsAddressedToSelf(activeIdentity);
-
-        Status = RelationshipStatus.Active;
-        CreationResponseContent = creationResponseContent;
-
-        var auditLogEntry = new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.AcceptanceOfCreation,
-            RelationshipStatus.Pending,
-            RelationshipStatus.Active,
-            activeIdentity,
-            activeDevice
-        );
-        AuditLog.Add(auditLogEntry);
-
-        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
-    }
-
     public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent, List<Relationship>? existingRelationships)
     {
         EnsureStatus(RelationshipStatus.Pending);

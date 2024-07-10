@@ -1,8 +1,10 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+﻿using System.Runtime.CompilerServices;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationship;
@@ -10,16 +12,20 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Acce
 public class Handler : IRequestHandler<AcceptRelationshipCommand, AcceptRelationshipResponse>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
-    private readonly IEventBus _eventBus;
     private readonly IdentityAddress _activeIdentity;
     private readonly DeviceId _activeDevice;
+    private RelationshipTemplate _template;
+    private readonly CancellationToken _cancellationToken;
+    private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
 
-    public Handler(IRelationshipsRepository relationshipsRepository, IUserContext userContext, IEventBus eventBus)
+    public Handler(IRelationshipsRepository relationshipsRepository, IUserContext userContext, IRelationshipTemplatesRepository relationshipTemplatesRepository, CancellationToken cancellationToken)
     {
         _relationshipsRepository = relationshipsRepository;
-        _eventBus = eventBus;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
+        _template = null!;
+        _relationshipTemplatesRepository = relationshipTemplatesRepository;
+        _cancellationToken = cancellationToken;
     }
 
     public async Task<AcceptRelationshipResponse> Handle(AcceptRelationshipCommand request, CancellationToken cancellationToken)
@@ -27,7 +33,19 @@ public class Handler : IRequestHandler<AcceptRelationshipCommand, AcceptRelation
         var relationshipId = RelationshipId.Parse(request.RelationshipId);
         var relationship = await _relationshipsRepository.FindRelationship(relationshipId, _activeIdentity, cancellationToken, track: true);
 
-        relationship.Accept(_activeIdentity, _activeDevice, request.CreationResponseContent);
+        var templateId = relationship.RelationshipTemplateId;
+
+        _template = await _relationshipTemplatesRepository.Find(templateId, _activeIdentity, _cancellationToken, track: true) ??
+                    throw new NotFoundException(nameof(RelationshipTemplate));
+
+        var existingRelationships = await _relationshipsRepository.FindRelationships(
+            r =>
+                (r.From == _activeIdentity && r.To == _template.CreatedBy) ||
+                (r.From == _template.CreatedBy && r.To == _activeIdentity),
+            _cancellationToken
+        );
+
+        relationship.Accept(_activeIdentity, _activeDevice, request.CreationResponseContent, existingRelationships.ToList());
 
         await _relationshipsRepository.Update(relationship);
 
