@@ -73,9 +73,9 @@ public class Message : Entity, IIdentifiable<MessageId>
             AnonymizeSender(anonymizedIdentityAddress);
     }
 
-    public static Expression<Func<Message, bool>> WasCreatedBy(IdentityAddress identityAddress)
+    public static Expression<Func<Message, bool>> HasParticipant(IdentityAddress identityAddress)
     {
-        return i => i.CreatedBy == identityAddress.ToString();
+        return i => i.CreatedBy == identityAddress || i.Recipients.Any(r => r.Address == identityAddress);
     }
 
     public static Expression<Func<Message, bool>> WasExchangedBetween(IdentityAddress identityAddress1, IdentityAddress identityAddress2)
