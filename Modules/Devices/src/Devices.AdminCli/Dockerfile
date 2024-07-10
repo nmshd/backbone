@@ -34,4 +34,4 @@ COPY --from=build /app/publish/Backbone.Modules.Devices.AdminCli ./backbone
 
 ENV PATH="$PATH:/app"
 
-LABEL org.opencontainers.image.source = "https://github.com/nmshd/backbone"
+LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
