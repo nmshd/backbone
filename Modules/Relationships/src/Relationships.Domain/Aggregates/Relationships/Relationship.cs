@@ -85,19 +85,19 @@ public class Relationship : Entity
 
     private void EnsureActiveIdentityDecomposedOldRelationship(IdentityAddress activeIdentity, List<Relationship> existingRelationships)
     {
-        if (existingRelationships.Any(r => r.From == activeIdentity && !r.FromHasDecomposed && (r.Status == RelationshipStatus.DeletionProposed || r.Status == RelationshipStatus.ReadyForDeletion)))
+        if (existingRelationships.Any(r =>
+            ((r.From == activeIdentity && !r.FromHasDecomposed) || (r.To == activeIdentity && !r.ToHasDecomposed)) &&
+            (r.Status == RelationshipStatus.DeletionProposed || r.Status == RelationshipStatus.ReadyForDeletion)))
+        {
             throw new DomainException(DomainErrors.OldRelationshipNotDecomposed());
-
-        if (existingRelationships.Any(r => r.To == activeIdentity && !r.ToHasDecomposed && (r.Status == RelationshipStatus.DeletionProposed || r.Status == RelationshipStatus.ReadyForDeletion)))
-            throw new DomainException(DomainErrors.OldRelationshipNotDecomposed());
+        }
     }
 
-    public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent, List<Relationship>? existingRelationships)
+    public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent, List<Relationship> existingRelationships)
     {
         EnsureStatus(RelationshipStatus.Pending);
         EnsureRelationshipRequestIsAddressedToSelf(activeIdentity);
-        if (existingRelationships != null)
-            EnsureActiveIdentityDecomposedOldRelationship(activeIdentity, existingRelationships);
+        EnsureActiveIdentityDecomposedOldRelationship(activeIdentity, existingRelationships);
 
         Status = RelationshipStatus.Active;
         CreationResponseContent = creationResponseContent;
@@ -126,12 +126,11 @@ public class Relationship : Entity
             throw new DomainException(DomainErrors.CannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse());
     }
 
-    public void Reject(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent, List<Relationship>? existingRelationships)
+    public void Reject(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent, List<Relationship> existingRelationships)
     {
         EnsureStatus(RelationshipStatus.Pending);
         EnsureRelationshipRequestIsAddressedToSelf(activeIdentity);
-        if (existingRelationships != null)
-            EnsureActiveIdentityDecomposedOldRelationship(activeIdentity, existingRelationships);
+        EnsureActiveIdentityDecomposedOldRelationship(activeIdentity, existingRelationships);
 
         CreationResponseContent = creationResponseContent;
         Status = RelationshipStatus.Rejected;
