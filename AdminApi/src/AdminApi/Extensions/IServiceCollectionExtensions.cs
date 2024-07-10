@@ -127,6 +127,10 @@ public static class IServiceCollectionExtensions
             var module = configuration.Modules.GetType().GetProperty(moduleName)!.GetValue(configuration.Modules, null)!;
             var provider = GetPropertyValue(module, "Infrastructure.SqlDatabase.Provider") as string;
             var connectionString = (string)GetPropertyValue(module, "Infrastructure.SqlDatabase.ConnectionString");
+            var enableHealthCheck = Convert.ToBoolean(GetPropertyValue(module, "Infrastructure.SqlDatabase.EnableHealthCheck"));
+
+            if (!enableHealthCheck)
+                continue;
 
             switch (provider)
             {
