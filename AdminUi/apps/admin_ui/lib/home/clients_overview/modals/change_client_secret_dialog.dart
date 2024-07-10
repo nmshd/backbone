@@ -57,60 +57,58 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
       child: AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         title: Text(context.l10n.changeClientSecret, textAlign: TextAlign.center),
+        contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 32, bottom: 32),
         content: SizedBox(
           width: 500,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 32, top: 32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: _newClientSecretController,
-                  focusNode: _focusNode,
-                  readOnly: _saveSucceeded,
-                  obscureText: _isClientSecretVisible,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: context.l10n.clientSecret,
-                    helperText: context.l10n.clientSecret_message,
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(_isClientSecretVisible ? Icons.visibility_off : Icons.visibility),
-                            onPressed: () => setState(() => _isClientSecretVisible = !_isClientSecretVisible),
-                          ),
-                          Gaps.w4,
-                          CopyToClipboardButton(
-                            tooltip: context.l10n.changeClientSecretDialog_copyToClipboard,
-                            clipboardText: _newClientSecretController.text,
-                            successMessage: context.l10n.clientSecret_copiedToClipboard,
-                          ),
-                        ],
-                      ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _newClientSecretController,
+                focusNode: _focusNode,
+                readOnly: _saveSucceeded,
+                obscureText: _isClientSecretVisible,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: context.l10n.clientSecret,
+                  helperText: context.l10n.clientSecret_message,
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(_isClientSecretVisible ? Icons.visibility_off : Icons.visibility),
+                          onPressed: () => setState(() => _isClientSecretVisible = !_isClientSecretVisible),
+                        ),
+                        Gaps.w4,
+                        CopyToClipboardButton(
+                          tooltip: context.l10n.changeClientSecretDialog_copyToClipboard,
+                          clipboardText: _newClientSecretController.text,
+                          successMessage: context.l10n.clientSecret_copiedToClipboard,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                if (_saveSucceeded)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Text(
-                      context.l10n.clientSecret_save_message,
-                      style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                    ),
+              ),
+              if (_saveSucceeded)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text(
+                    context.l10n.clientSecret_save_message,
+                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
-                if (_errorMessage != null)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Text(
-                      _errorMessage!,
-                      style: TextStyle(color: Theme.of(context).colorScheme.error),
-                    ),
+                ),
+              if (_errorMessage != null)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text(
+                    _errorMessage!,
+                    style: TextStyle(color: Theme.of(context).colorScheme.error),
                   ),
-              ],
-            ),
+                ),
+            ],
           ),
         ),
         actions: [

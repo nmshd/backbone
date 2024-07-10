@@ -65,103 +65,101 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
       child: AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         title: Text(context.l10n.createClientDialog_title, textAlign: TextAlign.center),
+        contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 32, bottom: 32),
         content: SizedBox(
           width: 500,
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 32, top: 32),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextField(
-                  controller: _clientIdController,
-                  readOnly: _saveSucceeded,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: context.l10n.clientID,
-                    helperText: context.l10n.createClientDialog_clientID_message,
-                  ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _clientIdController,
+                readOnly: _saveSucceeded,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: context.l10n.clientID,
+                  helperText: context.l10n.createClientDialog_clientID_message,
                 ),
-                Gaps.h24,
-                TextField(
-                  controller: _clientSecretController,
-                  readOnly: _saveSucceeded,
-                  obscureText: _isClientSecretVisible,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: context.l10n.clientSecret,
-                    helperText: context.l10n.clientSecret_message,
-                    suffixIcon: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(_isClientSecretVisible ? Icons.visibility_off : Icons.visibility),
-                            onPressed: () => setState(() => _isClientSecretVisible = !_isClientSecretVisible),
-                          ),
-                          Gaps.w4,
-                          CopyToClipboardButton(
-                            tooltip: context.l10n.createClientDialog_clientSecret_copyToClipboard,
-                            clipboardText: _clientSecretController.text,
-                            successMessage: context.l10n.clientSecret_copiedToClipboard,
-                          ),
-                        ],
-                      ),
+              ),
+              Gaps.h24,
+              TextField(
+                controller: _clientSecretController,
+                readOnly: _saveSucceeded,
+                obscureText: _isClientSecretVisible,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: context.l10n.clientSecret,
+                  helperText: context.l10n.clientSecret_message,
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(_isClientSecretVisible ? Icons.visibility_off : Icons.visibility),
+                          onPressed: () => setState(() => _isClientSecretVisible = !_isClientSecretVisible),
+                        ),
+                        Gaps.w4,
+                        CopyToClipboardButton(
+                          tooltip: context.l10n.createClientDialog_clientSecret_copyToClipboard,
+                          clipboardText: _clientSecretController.text,
+                          successMessage: context.l10n.clientSecret_copiedToClipboard,
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                if (_saveSucceeded) ...[
-                  Gaps.h16,
-                  Text(
-                    context.l10n.clientSecret_save_message,
-                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                  ),
-                ],
-                Gaps.h24,
-                TextField(
-                  controller: _displayNameController,
-                  readOnly: _saveSucceeded,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: context.l10n.displayName,
-                    helperText: context.l10n.createClientDialog_displayName_message,
-                  ),
+              ),
+              if (_saveSucceeded) ...[
+                Gaps.h16,
+                Text(
+                  context.l10n.clientSecret_save_message,
+                  style: TextStyle(color: Theme.of(context).colorScheme.primary),
                 ),
-                Gaps.h24,
-                TextField(
-                  controller: _maxIdentitiesController,
-                  readOnly: _saveSucceeded,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: context.l10n.maxIdentities,
-                    helperText: '${context.l10n.createClientDialog_maxIdentities_message}'
-                        '\n${context.l10n.createClientDialog_maxIdentities_noLimit_message}',
-                  ),
-                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                  keyboardType: TextInputType.number,
-                ),
-                Gaps.h24,
-                DropdownButtonFormField<String>(
-                  isExpanded: true,
-                  decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
-                    labelText: '${context.l10n.defaultTier}*',
-                  ),
-                  value: _chosenDefaultTier,
-                  onChanged: _saveSucceeded ? null : (tier) => setState(() => _chosenDefaultTier = tier),
-                  items: widget.defaultTiers.map((tier) {
-                    return DropdownMenuItem<String>(
-                      value: tier.id,
-                      child: Text(tier.name),
-                    );
-                  }).toList(),
-                ),
-                if (_errorMessage != null) ...[
-                  Gaps.h16,
-                  Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
-                ],
               ],
-            ),
+              Gaps.h24,
+              TextField(
+                controller: _displayNameController,
+                readOnly: _saveSucceeded,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: context.l10n.displayName,
+                  helperText: context.l10n.createClientDialog_displayName_message,
+                ),
+              ),
+              Gaps.h24,
+              TextField(
+                controller: _maxIdentitiesController,
+                readOnly: _saveSucceeded,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: context.l10n.maxIdentities,
+                  helperText: '${context.l10n.createClientDialog_maxIdentities_message}'
+                      '\n${context.l10n.createClientDialog_maxIdentities_noLimit_message}',
+                ),
+                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                keyboardType: TextInputType.number,
+              ),
+              Gaps.h24,
+              DropdownButtonFormField<String>(
+                isExpanded: true,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: '${context.l10n.defaultTier}*',
+                ),
+                value: _chosenDefaultTier,
+                onChanged: _saveSucceeded ? null : (tier) => setState(() => _chosenDefaultTier = tier),
+                items: widget.defaultTiers.map((tier) {
+                  return DropdownMenuItem<String>(
+                    value: tier.id,
+                    child: Text(tier.name),
+                  );
+                }).toList(),
+              ),
+              if (_errorMessage != null) ...[
+                Gaps.h16,
+                Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+              ],
+            ],
           ),
         ),
         actions: [
