@@ -98,6 +98,6 @@ public class HandlerTests : AbstractTestsBase
 
     private static Handler CreateHandler(IUserContext userContext, IRelationshipsRepository relationshipsRepository, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
-        return new Handler(relationshipsRepository, userContext, relationshipTemplatesRepository);
+        return new Handler(userContext, relationshipsRepository, relationshipTemplatesRepository);
     }
 }
