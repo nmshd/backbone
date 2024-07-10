@@ -12,11 +12,11 @@
       "commandName": "Project",
       "commandLineArgs": "GeneratePools --poolsFile pools_light_2.json"
     },
-    "Generate Entities": {
+    "Create Entities": {
       "commandName": "Project",
       "commandLineArgs": "CreateEntities --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools.json --ram selected-solution\\ram.csv"
     },
-    "Generate Entities Light": {
+    "Create Entities Light": {
       "commandName": "Project",
       "commandLineArgs": "CreateEntities --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools_light.json --ram light-solution\\ram.csv"
     }

@@ -1,17 +1,21 @@
-﻿using Backbone.ConsumerApi.Sdk;
+﻿using System.Diagnostics;
+using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
+using Backbone.Crypto;
 using Backbone.Identity.Pool.Creator.PoolsFile;
 using Backbone.Identity.Pool.Creator.PoolsGenerator;
 using Backbone.Identity.Pool.Creator.Tools;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
+using Org.BouncyCastle.Tls;
 
 namespace Backbone.Identity.Pool.Creator.EntityCreation;
 public class EntityCreator
 {
     private readonly string _baseAddress;
-    
+
     private readonly IList<PoolEntry> _pools;
     private readonly SolutionRepresentation _ram;
     private readonly ClientCredentials _clientCredentials;
@@ -37,7 +41,33 @@ public class EntityCreator
 
     private async Task CreateRelationships()
     {
-        throw new NotImplementedException();
+        Console.Write("Establishing Relationships... ");
+        using var progress = new ProgressBar(_ram.GetRelationshipCount());
+
+        var establishedRelationships = new HashSet<string>();
+        foreach (var identity in _pools.SelectMany(p => p.Identities))
+        {
+            foreach (var relatedIdentity in identity.IdentitiesToEstablishRelationshipsWith)
+            {
+                if (establishedRelationships.Contains(GetRelationshipRepresentation(identity, relatedIdentity))) continue;
+
+                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
+                var relatedSdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, relatedIdentity.UserCredentials);
+
+                var templateResponse = await sdk.RelationshipTemplates.CreateTemplate(new() { Content = [], ExpiresAt = DateTime.Now.AddYears(2), MaxNumberOfAllocations = 50 });
+                var createRelationshipResponse = await relatedSdk.Relationships.CreateRelationship(new() { RelationshipTemplateId = templateResponse.Result!.Id, Content = [] });
+                var acceptRelationshipResponse = await sdk.Relationships.AcceptRelationship(createRelationshipResponse.Result!.Id, new());
+                var relationshipRepresentation = GetRelationshipRepresentation(identity, relatedIdentity);
+                establishedRelationships.Add(relationshipRepresentation);
+                progress.Increment();
+            }
+        }
+        Console.WriteLine("done.");
+    }
+
+    private static string GetRelationshipRepresentation(Identity identity, Identity relatedIdentity)
+    {
+        return identity.Uon > relatedIdentity.Uon ? $"{identity.Uon}-{relatedIdentity.Uon}" : $"{relatedIdentity.Uon}-{identity.Uon}";
     }
 
     private void LoadRelationshipsAndMessagesConfiguration()
@@ -48,10 +78,10 @@ public class EntityCreator
         {
             foreach (var identity in pool.Identities)
             {
-                var res =_ram.GetRelationshipsAndMessageSentCountByIdentity(identity.Uon);
+                var res = _ram.GetRelationshipsAndMessageSentCountByIdentity(identity.Uon);
                 foreach (var (relatedIdentity, messageCount) in res)
                 {
-                    identity.AddIdentityToEstablishRelationshipsWith(dict[relatedIdentity]);
+                    var success = identity.AddIdentityToEstablishRelationshipsWith(dict[relatedIdentity], skipCapacityCheck: true);
                     for (var i = 0; i < messageCount; i++)
                     {
                         identity.SendMessageTo(dict[relatedIdentity], true);
@@ -63,27 +93,26 @@ public class EntityCreator
 
     private async Task CreateMessages()
     {
-        var connectorPools = _pools.Where(p => p.IsConnector()).ToList();
-        var remainingPools = _pools.Except(connectorPools).ToList();
+        Console.Write("Sendiong Messages... ");
+        using var progress = new ProgressBar(_ram.GetSentMessagesCount());
 
-        foreach (var connectorPool in connectorPools)
+        foreach (var identity in _pools.SelectMany(p => p.Identities))
         {
-            foreach (var connectorPoolIdentity in connectorPool.Identities)
+            foreach (var recipientIdentity in identity.IdentitiesToSendMessagesTo)
             {
-                for (var i = 0; i < connectorPool.NumberOfSentMessages; i++)
+                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
+
+                await sdk.Messages.SendMessage(new()
                 {
-                    var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, connectorPoolIdentity.UserCredentials);
-                    //var candidateRecipientIdentity = remainingPools.SelectMany(p => p.Identities.Where(id => !id.HasBeenUsedAsMessageRecipient)).First();
-                    //candidateRecipientIdentity.UseAsMessageRecipient();
-                    //await sdk.Messages.SendMessage(new()
-                    //{
-                    //    Recipients = [new SendMessageRequestRecipientInformation { Address = candidateRecipientIdentity.Address, EncryptedKey = ConvertibleString.FromUtf8(new string('A', 152)).BytesRepresentation }],
-                    //    Attachments = [],
-                    //    Body = []
-                    //});
-                }
+                    Recipients = [new SendMessageRequestRecipientInformation { Address = recipientIdentity.Address, EncryptedKey = ConvertibleString.FromUtf8(new string('A', 152)).BytesRepresentation }],
+                    Attachments = [],
+                    Body = []
+                });
+                progress.Increment();
             }
         }
+
+        Console.WriteLine("done.");
     }
 
     /// <summary>
@@ -120,6 +149,7 @@ public class EntityCreator
                 progress.Increment();
             }
         }
+        Console.WriteLine("done.");
     }
 
     private async Task CreateRelationshipTemplates()
@@ -131,7 +161,7 @@ public class EntityCreator
             foreach (var identity in pool.Identities)
             {
                 var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
-                for (uint i = 0; i < pool.NumberOfRelationshipTemplates; i++)
+                for (uint i = 0; i < pool.NumberOfRelationshipTemplates - identity.IdentitiesToEstablishRelationshipsWith.Count; i++)
                 {
                     await sdk.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest
                     {
@@ -143,6 +173,7 @@ public class EntityCreator
                 }
             }
         }
+        Console.WriteLine("done.");
     }
 
     private async Task CreateChallenges()

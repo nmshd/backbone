@@ -51,7 +51,7 @@ public class Identity
 
     public bool AddIdentityToEstablishRelationshipsWith(Identity identity, bool skipCapacityCheck = false, bool isRecursiveCall = false)
     {
-        if (skipCapacityCheck && (!HasAvailabilityForNewRelationships() || !isRecursiveCall && !identity.HasAvailabilityForNewRelationships())) return false;
+        if (!skipCapacityCheck && (!HasAvailabilityForNewRelationships() || !isRecursiveCall && !identity.HasAvailabilityForNewRelationships())) return false;
         if (IdentitiesToEstablishRelationshipsWith.Contains(identity)) return false;
 
         IdentitiesToEstablishRelationshipsWith.Add(identity);

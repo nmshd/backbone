@@ -50,7 +50,8 @@ public class CreateEntitiesCommand : Command
             var from = Convert.ToUInt32(values[0]);
             var to = Convert.ToUInt32(values[2]);
             var count = Convert.ToUInt32(values[4]);
-
+            
+            res.EstablishRelationship(from, to);
             for (uint i = 0; i < count; i++)
             {
                 res.SendMessage(from, to);
