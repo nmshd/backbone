@@ -63,7 +63,9 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         title: Text(context.l10n.createClientDialog_title, textAlign: TextAlign.center),
+        contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
         content: SizedBox(
           width: 500,
           child: Column(
@@ -76,16 +78,6 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
                   border: const OutlineInputBorder(),
                   labelText: context.l10n.clientID,
                   helperText: context.l10n.createClientDialog_clientID_message,
-                ),
-              ),
-              Gaps.h24,
-              TextField(
-                controller: _displayNameController,
-                readOnly: _saveSucceeded,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: context.l10n.displayName,
-                  helperText: context.l10n.createClientDialog_displayName_message,
                 ),
               ),
               Gaps.h24,
@@ -126,6 +118,16 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
               ],
               Gaps.h24,
               TextField(
+                controller: _displayNameController,
+                readOnly: _saveSucceeded,
+                decoration: InputDecoration(
+                  border: const OutlineInputBorder(),
+                  labelText: context.l10n.displayName,
+                  helperText: context.l10n.createClientDialog_displayName_message,
+                ),
+              ),
+              Gaps.h24,
+              TextField(
                 controller: _maxIdentitiesController,
                 readOnly: _saveSucceeded,
                 decoration: InputDecoration(
@@ -155,10 +157,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
               ),
               if (_errorMessage != null) ...[
                 Gaps.h16,
-                Text(
-                  _errorMessage!,
-                  style: TextStyle(color: Theme.of(context).colorScheme.error),
-                ),
+                Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
               ],
             ],
           ),
@@ -168,7 +167,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
           if (!_saveSucceeded)
             FilledButton(
               onPressed: _chosenDefaultTier != null && !_saveSucceeded && !_saving ? _createClient : null,
-              child: Text(context.l10n.save),
+              child: Text(context.l10n.create),
             ),
         ],
       ),

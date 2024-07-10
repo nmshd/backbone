@@ -233,7 +233,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                 {
                     b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship", null)
                         .WithMany("AuditLog")
-                        .HasForeignKey("RelationshipId");
+                        .HasForeignKey("RelationshipId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", b =>

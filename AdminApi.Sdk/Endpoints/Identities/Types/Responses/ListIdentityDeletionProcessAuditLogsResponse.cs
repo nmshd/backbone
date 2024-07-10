@@ -2,4 +2,4 @@
 
 namespace Backbone.AdminApi.Sdk.Endpoints.Identities.Types.Responses;
 
-public class ListIdentityDeletionProcessAuditLogsResponse : EnumerableResponseBase<IdentityDeletionProcessAuditLogEntryDTO>;
+public class ListIdentityDeletionProcessAuditLogsResponse : EnumerableResponseBase<IdentityDeletionProcessAuditLogEntry>;

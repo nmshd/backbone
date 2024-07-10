@@ -35,7 +35,7 @@ services:
 
 configs:
   Config:
-    file: appsettings.override.sqlserver.json
+    file: appsettings.override.sqlserver.docker.json
 
 networks:
   default:
