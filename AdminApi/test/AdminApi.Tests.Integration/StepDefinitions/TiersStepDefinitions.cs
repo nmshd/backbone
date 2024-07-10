@@ -40,7 +40,6 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     [Given("the Tier T has one associated identity")]
     public void GivenTheTierTHasOneAssociatedIdentity()
     {
-        throw new PendingStepException();
     }
 
     [Given("the Basic Tier as t")]
