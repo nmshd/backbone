@@ -8,7 +8,7 @@ Scenario: Creating a Relationship
 	And a Relationship Template rt created by i2
 	When a POST request is sent to the /Relationships endpoint by i1 with rt.id
 	Then the response status code is 201 (Created)
-	And the response contains a Relationship
+	And the response contains a RelationshipResponse
 
 Scenario: Creating a Relationship to an Identity in status "ToBeDeleted"
 	Given Identities i1 and i2
