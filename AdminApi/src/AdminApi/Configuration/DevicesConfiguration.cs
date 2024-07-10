@@ -30,6 +30,9 @@ public class DevicesConfiguration
             [Required]
             [MinLength(1)]
             public string ConnectionString { get; set; } = string.Empty;
+
+            [Required]
+            public bool EnableHealthCheck { get; set; } = true;
         }
     }
 }
