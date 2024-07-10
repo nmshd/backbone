@@ -72,7 +72,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             IdentityQuotaList(identityDetails, _reloadIdentity),
             Gaps.h16,
             IdentityMessagesOverview(
-              address: widget.address,
+              participant: widget.address,
               type: MessageType.incoming,
               title: context.l10n.identityDetails_receivedMessages_title,
               subtitle: context.l10n.identityDetails_receivedMessages_subtitle,
@@ -80,7 +80,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             ),
             Gaps.h16,
             IdentityMessagesOverview(
-              address: widget.address,
+              participant: widget.address,
               type: MessageType.outgoing,
               title: context.l10n.identityDetails_sentMessages_title,
               subtitle: context.l10n.identityDetails_sentMessages_subtitle,

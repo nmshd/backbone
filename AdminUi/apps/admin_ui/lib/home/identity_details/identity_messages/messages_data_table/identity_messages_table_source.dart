@@ -14,11 +14,11 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
   Pagination? _pagination;
 
   final Locale locale;
-  final String address;
+  final String participant;
   final MessageType type;
 
   IdentityMessagesTableSource({
-    required this.address,
+    required this.participant,
     required this.type,
     required this.locale,
   });
@@ -36,8 +36,8 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
   Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
     final pageNumber = startIndex ~/ count + 1;
     try {
-      final response = await GetIt.I.get<AdminApiClient>().messages.getMessagesByParticipantAddress(
-            address: address,
+      final response = await GetIt.I.get<AdminApiClient>().messages.getMessagesByParticipant(
+            participant: participant,
             type: type == MessageType.incoming ? 'Incoming' : 'Outgoing',
             pageNumber: pageNumber,
             pageSize: count,

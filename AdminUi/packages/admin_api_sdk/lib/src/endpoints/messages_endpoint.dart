@@ -6,8 +6,8 @@ import 'endpoint.dart';
 class MessagesEndpoint extends Endpoint {
   MessagesEndpoint(super.dio);
 
-  Future<ApiResponse<List<MessageOverview>>> getMessagesByParticipantAddress({
-    required String address,
+  Future<ApiResponse<List<MessageOverview>>> getMessagesByParticipant({
+    required String participant,
     required String type,
     required int pageNumber,
     required int pageSize,
@@ -15,7 +15,7 @@ class MessagesEndpoint extends Endpoint {
       get(
         '/api/v1/Messages',
         query: {
-          'participant': address,
+          'participant': participant,
           'type': type,
           'PageNumber': pageNumber,
           'PageSize': pageSize,

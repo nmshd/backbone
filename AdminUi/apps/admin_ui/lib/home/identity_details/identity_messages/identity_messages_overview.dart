@@ -4,14 +4,14 @@ import '/core/core.dart';
 import 'messages_data_table/identity_messages_table.dart';
 
 class IdentityMessagesOverview extends StatefulWidget {
-  final String address;
+  final String participant;
   final MessageType type;
   final String title;
   final String subtitle;
   final String emptyTableMessage;
 
   const IdentityMessagesOverview({
-    required this.address,
+    required this.participant,
     required this.type,
     required this.title,
     required this.subtitle,
@@ -31,7 +31,7 @@ class _IdentityMessagesOverviewState extends State<IdentityMessagesOverview> {
     super.didChangeDependencies();
 
     _dataSource = IdentityMessagesTableSource(
-      address: widget.address,
+      participant: widget.participant,
       type: widget.type,
       locale: Localizations.localeOf(context),
     );
