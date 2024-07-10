@@ -174,7 +174,7 @@ public class ActualDeletionWorkerTests
 
         var template = new RelationshipTemplate(from, DeviceId.New(), null, null, []);
         var relationship = new Relationship(template, to, DeviceId.New(), [], []);
-        relationship.Accept(from, DeviceId.New(), []);
+        relationship.Accept(from, DeviceId.New(), [], [relationship]);
 
         await dbContext.SaveEntity(relationship);
     }
