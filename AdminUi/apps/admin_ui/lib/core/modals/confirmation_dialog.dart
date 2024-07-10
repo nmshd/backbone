@@ -24,9 +24,7 @@ class _ConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       title: Text(title, textAlign: TextAlign.center),
       content: Padding(
         padding: const EdgeInsets.only(bottom: 32, top: 32),

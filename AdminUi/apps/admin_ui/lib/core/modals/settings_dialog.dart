@@ -18,29 +18,29 @@ class _SettingsDialog extends StatelessWidget with WatchItMixin {
     final themeMode = watchValue((ThemeModeModel x) => x.themeMode);
 
     return AlertDialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       title: Text(context.l10n.settings, textAlign: TextAlign.center),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Gaps.h8,
-          Text(context.l10n.theme, style: Theme.of(context).textTheme.bodyLarge),
-          Gaps.h4,
-          SegmentedButton(
-            showSelectedIcon: false,
-            segments: [
-              ButtonSegment(value: ThemeMode.light, icon: const Icon(Icons.light_mode), label: Text(context.l10n.light)),
-              ButtonSegment(value: ThemeMode.system, icon: const Icon(Icons.settings), label: Text(context.l10n.system)),
-              ButtonSegment(value: ThemeMode.dark, icon: const Icon(Icons.dark_mode), label: Text(context.l10n.dark)),
-            ],
-            selected: {themeMode},
-            onSelectionChanged: (selected) => GetIt.I<ThemeModeModel>().setThemeMode(selected.first),
-          ),
-          Gaps.h16,
-        ],
+      content: Padding(
+        padding: const EdgeInsets.only(bottom: 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Gaps.h8,
+            Text(context.l10n.theme, style: Theme.of(context).textTheme.bodyLarge),
+            Gaps.h4,
+            SegmentedButton(
+              showSelectedIcon: false,
+              segments: [
+                ButtonSegment(value: ThemeMode.light, icon: const Icon(Icons.light_mode), label: Text(context.l10n.light)),
+                ButtonSegment(value: ThemeMode.system, icon: const Icon(Icons.settings), label: Text(context.l10n.system)),
+                ButtonSegment(value: ThemeMode.dark, icon: const Icon(Icons.dark_mode), label: Text(context.l10n.dark)),
+              ],
+              selected: {themeMode},
+              onSelectionChanged: (selected) => GetIt.I<ThemeModeModel>().setThemeMode(selected.first),
+            ),
+          ],
+        ),
       ),
       actions: [FilledButton(onPressed: () => context.pop(), child: Text(context.l10n.close))],
     );

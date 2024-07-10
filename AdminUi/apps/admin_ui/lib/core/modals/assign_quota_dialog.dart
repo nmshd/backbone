@@ -82,70 +82,65 @@ class _AssignQuotaDialogState extends State<_AssignQuotaDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         title: Text(context.l10n.addQuota, textAlign: TextAlign.center),
         content: SizedBox(
           width: 500,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Text(
-                  '*${context.l10n.required}',
-                ),
-              ),
-              Gaps.h32,
-              DropdownButtonFormField(
-                value: _selectedMetric,
-                items: widget.availableMetrics.map((metric) => DropdownMenuItem(value: metric.key, child: Text(metric.displayName))).toList(),
-                onChanged: _saving ? null : (String? selected) => setState(() => _selectedMetric = selected),
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: '${context.l10n.metric}*',
-                ),
-              ),
-              Gaps.h24,
-              TextField(
-                controller: _maxAmountController,
-                enabled: !_saving,
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: '${context.l10n.maxAmount}*',
-                  helperText: context.l10n.addQuotaDialog_maxAmount_message,
-                ),
-                inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
-                keyboardType: TextInputType.number,
-              ),
-              Gaps.h24,
-              DropdownButtonFormField(
-                value: _selectedPeriod,
-                items: [
-                  DropdownMenuItem(value: 'Hour', child: Text(context.l10n.hour)),
-                  DropdownMenuItem(value: 'Day', child: Text(context.l10n.day)),
-                  DropdownMenuItem(value: 'Week', child: Text(context.l10n.week)),
-                  DropdownMenuItem(value: 'Month', child: Text(context.l10n.month)),
-                  DropdownMenuItem(value: 'Year', child: Text(context.l10n.year)),
-                ],
-                onChanged: _saving ? null : (String? selected) => setState(() => _selectedPeriod = selected),
-                decoration: InputDecoration(
-                  border: const OutlineInputBorder(),
-                  labelText: '${context.l10n.period}*',
-                ),
-              ),
-              if (_errorMessage != null)
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 32),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Padding(
-                  padding: const EdgeInsets.only(top: 24),
-                  child: Text(
-                    _errorMessage!,
-                    style: TextStyle(color: Theme.of(context).colorScheme.error),
+                  padding: const EdgeInsets.all(8),
+                  child: Text('*${context.l10n.required}'),
+                ),
+                Gaps.h32,
+                DropdownButtonFormField(
+                  value: _selectedMetric,
+                  items: widget.availableMetrics.map((metric) => DropdownMenuItem(value: metric.key, child: Text(metric.displayName))).toList(),
+                  onChanged: _saving ? null : (String? selected) => setState(() => _selectedMetric = selected),
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: '${context.l10n.metric}*',
                   ),
                 ),
-              Gaps.h32,
-            ],
+                Gaps.h24,
+                TextField(
+                  controller: _maxAmountController,
+                  enabled: !_saving,
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: '${context.l10n.maxAmount}*',
+                    helperText: context.l10n.addQuotaDialog_maxAmount_message,
+                  ),
+                  inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                  keyboardType: TextInputType.number,
+                ),
+                Gaps.h24,
+                DropdownButtonFormField(
+                  value: _selectedPeriod,
+                  items: [
+                    DropdownMenuItem(value: 'Hour', child: Text(context.l10n.hour)),
+                    DropdownMenuItem(value: 'Day', child: Text(context.l10n.day)),
+                    DropdownMenuItem(value: 'Week', child: Text(context.l10n.week)),
+                    DropdownMenuItem(value: 'Month', child: Text(context.l10n.month)),
+                    DropdownMenuItem(value: 'Year', child: Text(context.l10n.year)),
+                  ],
+                  onChanged: _saving ? null : (String? selected) => setState(() => _selectedPeriod = selected),
+                  decoration: InputDecoration(
+                    border: const OutlineInputBorder(),
+                    labelText: '${context.l10n.period}*',
+                  ),
+                ),
+                if (_errorMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24),
+                    child: Text(_errorMessage!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
+                  ),
+              ],
+            ),
           ),
         ),
         actions: [
