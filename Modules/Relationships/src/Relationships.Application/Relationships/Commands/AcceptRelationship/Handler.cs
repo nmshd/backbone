@@ -14,16 +14,18 @@ public class Handler : IRequestHandler<AcceptRelationshipCommand, AcceptRelation
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IdentityAddress _activeIdentity;
     private readonly DeviceId _activeDevice;
-    private RelationshipTemplate _template;
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
+
+    private RelationshipTemplate _template;
 
     public Handler(IRelationshipsRepository relationshipsRepository, IUserContext userContext, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
         _relationshipsRepository = relationshipsRepository;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
-        _template = null!;
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
+
+        _template = null!;
     }
 
     public async Task<AcceptRelationshipResponse> Handle(AcceptRelationshipCommand request, CancellationToken cancellationToken)
