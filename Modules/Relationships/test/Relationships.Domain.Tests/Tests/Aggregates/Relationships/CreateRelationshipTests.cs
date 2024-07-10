@@ -136,10 +136,10 @@ public class CreateRelationshipTests : AbstractTestsBase
     public void P1_active_identity_P1_and_P2_not_decomposed()
     {
         // Arrange
-        var existingRelationships = CreateRelationships();
+        var existingRelationship = CreateActiveRelationship(IDENTITY_1, IDENTITY_2);
 
         // Act
-        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, existingRelationships);
+        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, [existingRelationship]);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists");
@@ -149,13 +149,12 @@ public class CreateRelationshipTests : AbstractTestsBase
     public void P1_active_identity_P1_decomposed_P2_not_decomposed()
     {
         // Arrange
-        var existingRelationships = CreateRelationships();
-
-        existingRelationships.First().Terminate(IDENTITY_1, DEVICE_1);
-        existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
+        var existingRelationship = CreateActiveRelationship(IDENTITY_1, IDENTITY_2);
+        existingRelationship.Terminate(IDENTITY_1, DEVICE_1);
+        existingRelationship.Decompose(IDENTITY_1, DEVICE_1);
 
         // Act
-        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, existingRelationships);
+        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, [existingRelationship]);
 
         // Assert
         newRelationship.Status.Should().Be(RelationshipStatus.Pending);
@@ -165,13 +164,12 @@ public class CreateRelationshipTests : AbstractTestsBase
     public void P1_active_identity_P1_not_decomposed_P2_decomposed()
     {
         // Arrange
-        var existingRelationships = CreateRelationships();
-
-        existingRelationships.First().Terminate(IDENTITY_2, DEVICE_2);
-        existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
+        var existingRelationship = CreateActiveRelationship(IDENTITY_1, IDENTITY_2);
+        existingRelationship.Terminate(IDENTITY_2, DEVICE_2);
+        existingRelationship.Decompose(IDENTITY_2, DEVICE_2);
 
         // Act
-        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, existingRelationships);
+        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, [existingRelationship]);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.oldRelationshipNotDecomposed");
@@ -181,14 +179,13 @@ public class CreateRelationshipTests : AbstractTestsBase
     public void P1_active_identity_P1_and_P2_decomposed()
     {
         // Arrange
-        var existingRelationships = CreateRelationships();
-
-        existingRelationships.First().Terminate(IDENTITY_2, DEVICE_2);
-        existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
-        existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
+        var existingRelationship = CreateActiveRelationship(IDENTITY_1, IDENTITY_2);
+        existingRelationship.Terminate(IDENTITY_2, DEVICE_2);
+        existingRelationship.Decompose(IDENTITY_1, DEVICE_1);
+        existingRelationship.Decompose(IDENTITY_2, DEVICE_2);
 
         // Act
-        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, existingRelationships);
+        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, null, [existingRelationship]);
 
         // Assert
         newRelationship.Status.Should().Be(RelationshipStatus.Pending);
@@ -198,10 +195,10 @@ public class CreateRelationshipTests : AbstractTestsBase
     public void P2_active_identity_P1_and_P2_not_decomposed()
     {
         // Arrange
-        var existingRelationships = CreateRelationships();
+        var existingRelationship = CreateActiveRelationship(IDENTITY_1, IDENTITY_2);
 
         // Act
-        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
+        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, [existingRelationship]);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists");
@@ -211,14 +208,12 @@ public class CreateRelationshipTests : AbstractTestsBase
     public void P2_active_identity_P1_decomposed_P2_not_decomposed()
     {
         // Arrange
-        var existingRelationships = CreateRelationships();
-
-        existingRelationships.First().Terminate(IDENTITY_1, DEVICE_1);
-        existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
+        var existingRelationship = CreateActiveRelationship(IDENTITY_1, IDENTITY_2);
+        existingRelationship.Terminate(IDENTITY_1, DEVICE_1);
+        existingRelationship.Decompose(IDENTITY_1, DEVICE_1);
 
         // Act
-
-        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
+        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, [existingRelationship]);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.oldRelationshipNotDecomposed");
@@ -228,13 +223,12 @@ public class CreateRelationshipTests : AbstractTestsBase
     public void P2_active_identity_P1_not_decomposed_P2_decomposed()
     {
         // Arrange
-        var existingRelationships = CreateRelationships();
-
-        existingRelationships.First().Terminate(IDENTITY_2, DEVICE_2);
-        existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
+        var existingRelationship = CreateActiveRelationship(IDENTITY_1, IDENTITY_2);
+        existingRelationship.Terminate(IDENTITY_2, DEVICE_2);
+        existingRelationship.Decompose(IDENTITY_2, DEVICE_2);
 
         // Act
-        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
+        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, [existingRelationship]);
 
         // Assert
         newRelationship.Status.Should().Be(RelationshipStatus.Pending);
@@ -244,25 +238,15 @@ public class CreateRelationshipTests : AbstractTestsBase
     public void P2_active_identity_P1_and_P2_decomposed()
     {
         // Arrange
-        var existingRelationships = CreateRelationships();
-
-        existingRelationships.First().Terminate(IDENTITY_2, DEVICE_2);
-        existingRelationships.First().Decompose(IDENTITY_1, DEVICE_1);
-        existingRelationships.First().Decompose(IDENTITY_2, DEVICE_2);
+        var existingRelationship = CreateActiveRelationship(IDENTITY_1, IDENTITY_2);
+        existingRelationship.Terminate(IDENTITY_2, DEVICE_2);
+        existingRelationship.Decompose(IDENTITY_1, DEVICE_1);
+        existingRelationship.Decompose(IDENTITY_2, DEVICE_2);
 
         // Act
-        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
+        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, [existingRelationship]);
 
         // Assert
         newRelationship.Status.Should().Be(RelationshipStatus.Pending);
-    }
-
-    private static List<Relationship> CreateRelationships()
-    {
-        var existingRelationships = new List<Relationship>
-        {
-            CreateActiveRelationship(IDENTITY_1, IDENTITY_2)
-        };
-        return existingRelationships;
     }
 }
