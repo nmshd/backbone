@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '/core/core.dart';
 import 'messages_data_table/identity_messages_table.dart';
 
 class IdentityMessagesOverview extends StatefulWidget {
   final String address;
-  final String type;
+  final MessageType type;
   final String title;
   final String subtitle;
   final String emptyTableMessage;

@@ -73,7 +73,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             Gaps.h16,
             IdentityMessagesOverview(
               address: widget.address,
-              type: 'Incoming',
+              type: MessageType.incoming,
               title: context.l10n.identityDetails_receivedMessages_title,
               subtitle: context.l10n.identityDetails_receivedMessages_subtitle,
               emptyTableMessage: context.l10n.identityDetails_noReceivedMessagesFound,
@@ -81,7 +81,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             Gaps.h16,
             IdentityMessagesOverview(
               address: widget.address,
-              type: 'Outgoing',
+              type: MessageType.outgoing,
               title: context.l10n.identityDetails_sentMessages_title,
               subtitle: context.l10n.identityDetails_sentMessages_subtitle,
               emptyTableMessage: context.l10n.identityDetails_noSentMessagesFound,

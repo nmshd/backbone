@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
+import '/core/core.dart';
 import 'recipients_dialog.dart';
 
 class IdentityMessagesTableSource extends AsyncDataTableSource {
@@ -14,7 +15,7 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
 
   final Locale locale;
   final String address;
-  final String type;
+  final MessageType type;
 
   IdentityMessagesTableSource({
     required this.address,
@@ -37,7 +38,7 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
     try {
       final response = await GetIt.I.get<AdminApiClient>().messages.getMessagesByParticipantAddress(
             address: address,
-            type: type,
+            type: type == MessageType.incoming ? 'Incoming' : 'Outgoing',
             pageNumber: pageNumber,
             pageSize: count,
           );
@@ -61,14 +62,14 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
                       ? 65.0
                       : null,
               cells: [
-                if (type == 'Outgoing')
+                if (type == MessageType.outgoing)
                   DataCell(
                     _RecipientsCell(
                       recipients: message.$2.recipients,
                     ),
                   ),
-                if (type == 'Incoming') DataCell(_SenderAddressCell(senderAddress: message.$2.senderAddress)),
-                if (type == 'Incoming') DataCell(Text(message.$2.senderDevice)),
+                if (type == MessageType.incoming) DataCell(_SenderAddressCell(senderAddress: message.$2.senderAddress)),
+                if (type == MessageType.incoming) DataCell(Text(message.$2.senderDevice)),
                 DataCell(Text(message.$2.numberOfAttachments.toString())),
                 DataCell(
                   Tooltip(

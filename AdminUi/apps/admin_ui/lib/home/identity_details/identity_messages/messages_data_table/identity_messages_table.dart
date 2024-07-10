@@ -9,7 +9,7 @@ export 'identity_messages_table_source.dart';
 
 class IdentityMessagesTable extends StatefulWidget {
   final IdentityMessagesTableSource dataSource;
-  final String type;
+  final MessageType type;
   final String title;
   final String subtitle;
   final String emptyTableMessage;
@@ -63,9 +63,10 @@ class _IdentityMessagesTableState extends State<IdentityMessagesTable> {
                   ),
                 ),
                 columns: <DataColumn2>[
-                  if (widget.type == 'Outgoing') DataColumn2(label: Text(context.l10n.identityMessageTable_recipients), size: ColumnSize.L),
-                  if (widget.type == 'Incoming') DataColumn2(label: Text(context.l10n.identityMessageTable_senderAddress)),
-                  if (widget.type == 'Incoming') DataColumn2(label: Text(context.l10n.identityMessageTable_senderDevice), size: ColumnSize.S),
+                  if (widget.type == MessageType.outgoing) DataColumn2(label: Text(context.l10n.identityMessageTable_recipients), size: ColumnSize.L),
+                  if (widget.type == MessageType.incoming) DataColumn2(label: Text(context.l10n.identityMessageTable_senderAddress)),
+                  if (widget.type == MessageType.incoming)
+                    DataColumn2(label: Text(context.l10n.identityMessageTable_senderDevice), size: ColumnSize.S),
                   DataColumn2(label: Text(context.l10n.identityMessageTable_numberOfAttachments)),
                   DataColumn2(label: Text(context.l10n.identityMessageTable_sendDate), size: ColumnSize.S),
                 ],
