@@ -1,4 +1,5 @@
 ﻿using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.Identity.Pool.Creator.PoolsFile;
 
 namespace Backbone.Identity.Pool.Creator;
@@ -10,6 +11,8 @@ public class Identity
     /// Unique Order Number
     /// </summary>
     public uint Uon;
+    
+    public List<Challenge>? Challenges;
 
     public List<string> DeviceIds { get; } = [];
     public string Address { private set; get; }

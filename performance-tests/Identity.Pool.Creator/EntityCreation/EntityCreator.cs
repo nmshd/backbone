@@ -1,6 +1,8 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Concurrent;
+using System.Diagnostics;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.Crypto;
@@ -9,6 +11,7 @@ using Backbone.Identity.Pool.Creator.PoolsGenerator;
 using Backbone.Identity.Pool.Creator.Tools;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
+using Org.BouncyCastle.Bcpg;
 using Org.BouncyCastle.Tls;
 
 namespace Backbone.Identity.Pool.Creator.EntityCreation;
@@ -32,11 +35,14 @@ public class EntityCreator
     {
         await CreateIdentities();
 
+        await CreateChallenges();
+        return;
         LoadRelationshipsAndMessagesConfiguration();
 
         await CreateRelationships();
         await CreateMessages();
         await CreateRelationshipTemplates();
+
     }
 
     private async Task CreateRelationships()
@@ -181,18 +187,28 @@ public class EntityCreator
         Console.Write("Creating Challenges... ");
         using var progress = new ProgressBar(_pools.Sum(p => p.NumberOfChallenges * p.Amount));
 
-        foreach (var pool in _pools.Where(p => p.NumberOfChallenges > 0))
+        var relevantIdentities = _pools.Where(p => p.NumberOfChallenges > 0).SelectMany(p => p.Identities);
+
+        var dictionaryOfBags = new ConcurrentDictionary<uint, ConcurrentBag<Challenge>>();
+
+        foreach (var identity in relevantIdentities) dictionaryOfBags.TryAdd(identity.Uon, []);
+
+        await Parallel.ForEachAsync(relevantIdentities, async (identity, _) =>
         {
-            foreach (var identity in pool.Identities)
+            var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
+            for (var i = 0; i < identity.Pool.NumberOfChallenges; i++)
             {
-                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
-                for (var i = 0; i < pool.NumberOfChallenges; i++)
-                {
-                    await sdk.Challenges.CreateChallenge();
-                    progress.Increment();
-                }
+                var challenge = (await sdk.Challenges.CreateChallenge()).Result;
+                if (challenge is not null) dictionaryOfBags[identity.Uon].Add(challenge);
+                progress.Increment();
             }
+        });
+
+        foreach (var (uon, bag) in dictionaryOfBags)
+        {
+            relevantIdentities.Single(i => i.Uon == uon).Challenges = bag.ToList();
         }
+        Console.WriteLine("done.");
     }
 
     private async Task CreateDatawalletModifications()
