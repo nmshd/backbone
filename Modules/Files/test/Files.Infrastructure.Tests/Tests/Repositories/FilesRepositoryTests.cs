@@ -5,9 +5,9 @@ using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database.Repository;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
+using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
 using Microsoft.Extensions.Options;
-using MockQueryable.FakeItEasy;
 using Xunit;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
@@ -39,11 +39,13 @@ public class FilesRepositoryTests : AbstractTestsBase
 
     private static FilesRepository CreateFilesRepository(List<File> files, IBlobStorage mockBlobStorage)
     {
-        var fakeDbContext = A.Fake<FilesDbContext>();
         var blobStorageOptions = Options.Create(new BlobOptions() { RootFolder = "" });
 
-        fakeDbContext.FileMetadata = files.AsQueryable().BuildMockDbSet();
+        var dbContexts = FakeDbContextFactory.CreateDbContexts<FilesDbContext>();
 
-        return new FilesRepository(fakeDbContext, mockBlobStorage, blobStorageOptions);
+        dbContexts.arrangeContext.AddRange(files);
+        dbContexts.arrangeContext.SaveChanges();
+
+        return new FilesRepository(dbContexts.actContext, mockBlobStorage, blobStorageOptions);
     }
 }
