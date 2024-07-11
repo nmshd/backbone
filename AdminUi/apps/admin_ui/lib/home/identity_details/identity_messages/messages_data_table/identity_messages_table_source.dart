@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
 import '/core/core.dart';
-import 'recipients_dialog.dart';
+import 'modals/show_recipients_dialog.dart';
 
 class IdentityMessagesTableSource extends AsyncDataTableSource {
   Pagination? _pagination;
@@ -62,12 +62,7 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
                       ? 65.0
                       : null,
               cells: [
-                if (type == MessageType.outgoing)
-                  DataCell(
-                    _RecipientsCell(
-                      recipients: message.$2.recipients,
-                    ),
-                  ),
+                if (type == MessageType.outgoing) DataCell(_RecipientsCell(recipients: message.$2.recipients)),
                 if (type == MessageType.incoming) ...[
                   DataCell(_SenderAddressCell(senderAddress: message.$2.senderAddress)),
                   DataCell(Text(message.$2.senderDevice)),
@@ -115,10 +110,9 @@ class _RecipientsCell extends StatelessWidget {
           ),
         ),
         if (recipients.length > 3)
-          Row(
-            children: [
-              RecipientsDialog(recipients: recipients),
-            ],
+          FilledButton(
+            onPressed: () => showRecipientsDialog(context: context, recipients: recipients),
+            child: const Text('...'),
           ),
       ],
     );

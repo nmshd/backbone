@@ -64,7 +64,6 @@ class _IdentityMessagesTableState extends State<IdentityMessagesTable> {
                 ),
                 columns: <DataColumn2>[
                   if (widget.type == MessageType.outgoing) DataColumn2(label: Text(context.l10n.identityMessageTable_recipients), size: ColumnSize.L),
-                  if (widget.type == MessageType.incoming) DataColumn2(label: Text(context.l10n.identityMessageTable_senderAddress)),
                   if (widget.type == MessageType.incoming) ...[
                     DataColumn2(label: Text(context.l10n.identityMessageTable_senderAddress)),
                     DataColumn2(label: Text(context.l10n.identityMessageTable_senderDevice), size: ColumnSize.S),
