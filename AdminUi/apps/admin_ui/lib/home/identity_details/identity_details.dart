@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 
 import '/core/core.dart';
 import 'identity_quotas_table/identity_quotas_table.dart';
-import 'identity_relationship_table/identity_relationship_overview.dart';
+import 'identity_relationship_table/identity_relationship.dart';
 import 'modals/change_tier.dart';
 
 class IdentityDetails extends StatefulWidget {
@@ -71,12 +71,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             Gaps.h16,
             IdentityQuotaList(identityDetails, _reloadIdentity),
             Gaps.h16,
-            IdentityRelationshipOverview(
-              address: identityDetails.address,
-              title: context.l10n.identityRelationshipTable_relationships,
-              subtitle: context.l10n.identityRelationshipTable_viewIdentityRelationships,
-              emptyTableMessage: context.l10n.identityRelationshipTable_emptyRelationshipTable,
-            ),
+            IdentityRelationship(address: identityDetails.address),
           ],
         ),
       ),

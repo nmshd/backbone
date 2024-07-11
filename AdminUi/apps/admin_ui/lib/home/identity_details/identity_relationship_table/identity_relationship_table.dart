@@ -9,15 +9,9 @@ export 'identity_relationship_source.dart';
 
 class IdentityRelationshipTable extends StatefulWidget {
   final IdentityRelationshipSource dataSource;
-  final String title;
-  final String subtitle;
-  final String emptyTableMessage;
 
   const IdentityRelationshipTable({
     required this.dataSource,
-    required this.title,
-    required this.subtitle,
-    required this.emptyTableMessage,
     super.key,
   });
 
@@ -33,8 +27,8 @@ class _IdentityRelationshipTableState extends State<IdentityRelationshipTable> {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        title: Text(widget.title),
-        subtitle: Text(widget.subtitle),
+        title: Text(context.l10n.identityRelationshipTable_relationships),
+        subtitle: Text(context.l10n.identityRelationshipTable_viewIdentityRelationships),
         children: [
           Card(
             child: SizedBox(
@@ -49,7 +43,7 @@ class _IdentityRelationshipTableState extends State<IdentityRelationshipTable> {
                 isVerticalScrollBarVisible: true,
                 renderEmptyRowsInTheEnd: false,
                 availableRowsPerPage: const [5, 10, 25, 50, 100],
-                empty: Text(widget.emptyTableMessage),
+                empty: Text(context.l10n.identityRelationshipTable_emptyRelationshipTable),
                 errorBuilder: (error) => Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
