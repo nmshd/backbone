@@ -16,10 +16,3 @@ Scenario: Deleting the Basic Tier fails
 Scenario: Deleting an inexistent Tier fails
 	When a DELETE request is sent to the /Tiers/{t.Id} endpoint with an inexistent id
 	Then the response status code is 404 (Not Found)
-
-@ignore("skipping_due_to_required_adminAPI_changes")
-Scenario: Deleting a Tier that is in use fails
-	Given a Tier t
-	And the Tier T has one associated identity
-	When a DELETE request is sent to the /Tiers/{t.Id} endpoint
-	Then the response status code is 400 (Bad Request)
