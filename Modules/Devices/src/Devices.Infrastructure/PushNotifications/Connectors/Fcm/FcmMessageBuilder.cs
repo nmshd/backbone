@@ -62,7 +62,7 @@ public class FcmMessageBuilder
 
     public FcmMessageBuilder SetTag(int notificationId)
     {
-        _data["tag"] = notificationId.ToString();
+        _message.Android.Notification.Tag = notificationId.ToString();
         _message.Android.CollapseKey = notificationId.ToString();
         return this;
     }
