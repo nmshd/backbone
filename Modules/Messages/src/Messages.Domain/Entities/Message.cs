@@ -97,7 +97,8 @@ public class Message : Entity, IIdentifiable<MessageId>
 
     public static Expression<Func<Message, bool>> HasParticipant(IdentityAddress identityAddress)
     {
-        return i => i.CreatedBy == identityAddress || i.Recipients.Any(r => r.Address == identityAddress);
+        return i => i.CreatedBy == identityAddress ||
+                    i.Recipients.Any(r => r.Address == identityAddress && !r.IsRelationshipDecomposedByRecipient);
     }
 
     public static Expression<Func<Message, bool>> WasExchangedBetween(IdentityAddress identityAddress1, IdentityAddress identityAddress2)

@@ -1,19 +1,23 @@
 ﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Responses;
+using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.ConsumerApi.Tests.Integration.Support;
 using Backbone.Crypto;
 using Microsoft.Extensions.Options;
+using static Backbone.ConsumerApi.Tests.Integration.Helpers.ThrowHelpers;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "POST Message")]
+[Scope(Feature = "GET Messages")]
 internal class MessagesStepDefinitions
 {
     private Client _client1 = null!;
@@ -22,10 +26,72 @@ internal class MessagesStepDefinitions
     private readonly ClientCredentials _clientCredentials;
     private readonly HttpClient _httpClient;
 
+    private readonly Dictionary<string, Client> _identities = new();
+    private readonly Dictionary<string, Relationship> _relationships = new();
+    private readonly Dictionary<string, Message> _messages = new();
+    private ApiResponse<ListMessagesResponse>? _getMessagesResponse;
+    private IResponse? _whenResponse;
+
     public MessagesStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
     {
         _httpClient = factory.CreateClient();
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
+    }
+
+    [Given(@"Identities ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
+    public void GivenIdentitiesIAndI(string identity1Name, string identity2Name)
+    {
+        _identities[identity1Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
+        _identities[identity2Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
+    }
+
+    [Given(@"a Relationship ([a-zA-Z0-9]+) between ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
+    public async Task GivenARelationshipRBetweenIAndI(string relationshipName, string identity1Name, string identity2Name)
+    {
+        var relationship = await Utils.EstablishRelationshipBetween(_identities[identity1Name], _identities[identity2Name]);
+        _relationships[relationshipName] = relationship;
+    }
+
+    [Given(@"([a-zA-Z0-9]+) has sent a Message ([a-zA-Z0-9]+) to ([a-zA-Z0-9]+)")]
+    public async Task GivenIHasSentMessageToI(string senderName, string messageName, string recipientName)
+    {
+        var sender = _identities[senderName];
+        var recipient = _identities[recipientName];
+        var message = await Utils.SendMessage(sender, recipient);
+        _messages[messageName] = message;
+    }
+
+    [Given(@"([a-zA-Z0-9]+) has decomposed ([a-zA-Z0-9]+)")]
+    public async Task GivenIHasDecomposedItsRelationshipToI(string decomposerName, string peerName)
+    {
+        var decomposer = _identities[decomposerName];
+        var relationship = _relationships[decomposerName];
+
+        var terminateRelationshipResponse = await decomposer.Relationships.TerminateRelationship(relationship.Id);
+        terminateRelationshipResponse.Should().BeASuccess();
+
+        var decomposeRelationshipResponse = await decomposer.Relationships.DecomposeRelationship(relationship.Id);
+        decomposeRelationshipResponse.Should().BeASuccess();
+    }
+
+    [When(@"([a-zA-Z0-9]+) sends a GET request to the /Messages endpoint")]
+    public async Task WhenISendsAGETRequestToTheMessagesEndpoint(string senderName)
+    {
+        var sender = _identities[senderName];
+        var getMessagesResponse = await sender.Messages.ListMessages();
+        _whenResponse = _getMessagesResponse = getMessagesResponse;
+    }
+
+    [Then(@"the response contains the Messages ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
+    public void ThenTheResponseContainsTheMessagesMAndM(string message1Name, string message2Name)
+    {
+        var message1 = _messages[message1Name];
+        var message2 = _messages[message2Name];
+
+        ThrowIfNull(_getMessagesResponse);
+
+        _getMessagesResponse.Result.Should().Contain(m => m.Id == message1.Id);
+        _getMessagesResponse.Result.Should().Contain(m => m.Id == message2.Id);
     }
 
     [Given("Identities i1 and i2 with an established Relationship")]
@@ -60,13 +126,14 @@ internal class MessagesStepDefinitions
                 }
             ]
         };
-        _sendMessageResponse = await _client1.Messages.SendMessage(sendMessageRequest);
+        _whenResponse = _sendMessageResponse = await _client1.Messages.SendMessage(sendMessageRequest);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
-        ((int)_sendMessageResponse!.Status).Should().Be(expectedStatusCode);
+        ThrowIfNull(_whenResponse);
+        ((int)_whenResponse.Status).Should().Be(expectedStatusCode);
     }
 
     [Then("the response contains a SendMessageResponse")]
