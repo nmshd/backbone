@@ -55,9 +55,9 @@ COPY . .
 
 ARG VERSION
 
-RUN dotnet restore "SseServer/src/SseServer/SseServer.csproj"
-RUN dotnet publish --configuration Release --output /app/publish --no-restore "SseServer/src/SseServer/SseServer.csproj"
-RUN dotnet publish --configuration Release --output /app/publish/health "HealthCheck/HealthCheck.csproj"
+RUN dotnet restore "Executables/SseServer/src/SseServer/SseServer.csproj"
+RUN dotnet publish --configuration Release --output /app/publish --no-restore "Executables/SseServer/src/SseServer/SseServer.csproj"
+RUN dotnet publish --configuration Release --output /app/publish/health "Executables/HealthCheck/HealthCheck.csproj"
 
 ### Final ####
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.6-jammy-chiseled

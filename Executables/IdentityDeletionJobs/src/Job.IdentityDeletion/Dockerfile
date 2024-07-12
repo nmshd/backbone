@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0.302-1 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
-COPY ["Jobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj", "Jobs/src/Job.IdentityDeletion/"]
+COPY ["Executables/IdentityDeletionJobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj", "Jobs/src/Job.IdentityDeletion/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.API/BuildingBlocks.API.csproj", "BuildingBlocks/src/BuildingBlocks.API/"]
 COPY ["Modules/Devices/src/Devices.Domain/Devices.Domain.csproj", "Modules/Devices/src/Devices.Domain/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Domain/BuildingBlocks.Domain.csproj", "BuildingBlocks/src/BuildingBlocks.Domain/"]
@@ -66,7 +66,7 @@ COPY ["Modules/Devices/src/Devices.ConsumerApi/Devices.ConsumerApi.csproj", "Mod
 COPY ["Modules/Devices/src/Devices.Infrastructure.Database.Postgres/Devices.Infrastructure.Database.Postgres.csproj", "Modules/Devices/src/Devices.Infrastructure.Database.Postgres/"]
 COPY ["Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/Devices.Infrastructure.Database.SqlServer.csproj", "Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/"]
 
-RUN dotnet restore "Jobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj"
+RUN dotnet restore "Executables/IdentityDeletionJobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj"
 
 COPY . .
 

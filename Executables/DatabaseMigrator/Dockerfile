@@ -6,10 +6,10 @@ WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
 COPY ["Modules/Directory.Build.props", "Modules/"]
-COPY ["DatabaseMigrator/DatabaseMigrator.csproj", "DatabaseMigrator/"]
-COPY ["AdminApi/src/AdminApi.Infrastructure/AdminApi.Infrastructure.csproj", "AdminApi/src/AdminApi.Infrastructure/"]
-COPY ["AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastructure.Database.Postgres.csproj", "AdminApi/src/AdminApi.Infrastructure.Database.Postgres/"]
-COPY ["AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/AdminApi.Infrastructure.Database.SqlServer.csproj", "AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/"]
+COPY ["Executables/DatabaseMigrator/DatabaseMigrator.csproj", "DatabaseMigrator/"]
+COPY ["Executables/AdminApi/src/AdminApi.Infrastructure/AdminApi.Infrastructure.csproj", "AdminApi/src/AdminApi.Infrastructure/"]
+COPY ["Executables/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastructure.Database.Postgres.csproj", "AdminApi/src/AdminApi.Infrastructure.Database.Postgres/"]
+COPY ["Executables/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/AdminApi.Infrastructure.Database.SqlServer.csproj", "AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj", "BuildingBlocks/src/BuildingBlocks.Infrastructure/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Application.Abstractions/BuildingBlocks.Application.Abstractions.csproj", "BuildingBlocks/src/BuildingBlocks.Application.Abstractions/"]
 COPY ["BuildingBlocks/src/DevelopmentKit.Identity/DevelopmentKit.Identity.csproj", "BuildingBlocks/src/DevelopmentKit.Identity/"]
@@ -59,10 +59,10 @@ COPY ["Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/Devices.Inf
 COPY ["Modules/Devices/src/Devices.Infrastructure.Database.Postgres/Devices.Infrastructure.Database.Postgres.csproj", "Modules/Devices/src/Devices.Infrastructure.Database.Postgres/"]
 COPY ["Modules/Challenges/src/Challenges.Infrastructure.Database.SqlServer/Challenges.Infrastructure.Database.SqlServer.csproj", "Modules/Challenges/src/Challenges.Infrastructure.Database.SqlServer/"]
 COPY ["Modules/Challenges/src/Challenges.Infrastructure.Database.Postgres/Challenges.Infrastructure.Database.Postgres.csproj", "Modules/Challenges/src/Challenges.Infrastructure.Database.Postgres/"]
-COPY ["AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/AdminApi.Infrastructure.Database.SqlServer.csproj", "AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/"]
-COPY ["AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastructure.Database.Postgres.csproj", "AdminApi/src/AdminApi.Infrastructure.Database.Postgres/"]
+COPY ["Executables/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/AdminApi.Infrastructure.Database.SqlServer.csproj", "AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/"]
+COPY ["Executables/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastructure.Database.Postgres.csproj", "AdminApi/src/AdminApi.Infrastructure.Database.Postgres/"]
 
-RUN dotnet restore "DatabaseMigrator/DatabaseMigrator.csproj"
+RUN dotnet restore "Executables/DatabaseMigrator/DatabaseMigrator.csproj"
 
 COPY . .
 

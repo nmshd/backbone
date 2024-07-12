@@ -6,7 +6,7 @@ WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
 COPY ["Modules/Directory.Build.props", "Modules/"]
-COPY ["EventHandlerService/src/EventHandlerService/EventHandlerService.csproj", "EventHandlerService/src/EventHandlerService/"]
+COPY ["Executables/EventHandlerService/src/EventHandlerService/EventHandlerService.csproj", "EventHandlerService/src/EventHandlerService/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj", "BuildingBlocks/src/BuildingBlocks.Infrastructure/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Application.Abstractions/BuildingBlocks.Application.Abstractions.csproj", "BuildingBlocks/src/BuildingBlocks.Application.Abstractions/"]
 COPY ["BuildingBlocks/src/DevelopmentKit.Identity/DevelopmentKit.Identity.csproj", "BuildingBlocks/src/DevelopmentKit.Identity/"]
@@ -67,13 +67,13 @@ COPY ["Modules/Tokens/src/Tokens.Infrastructure.Database.Postgres/Tokens.Infrast
 COPY ["Modules/Tokens/src/Tokens.Infrastructure/Tokens.Infrastructure.csproj", "Modules/Tokens/src/Tokens.Infrastructure/"]
 COPY ["Modules/Tokens/src/Tokens.Infrastructure.Database.SqlServer/Tokens.Infrastructure.Database.SqlServer.csproj", "Modules/Tokens/src/Tokens.Infrastructure.Database.SqlServer/"]
 
-RUN dotnet restore "EventHandlerService/src/EventHandlerService/EventHandlerService.csproj"
+RUN dotnet restore "Executables/EventHandlerService/src/EventHandlerService/EventHandlerService.csproj"
 
 COPY . .
 
 ARG VERSION
 
-WORKDIR "/src/EventHandlerService/src/EventHandlerService"
+WORKDIR "/src/Executables/EventHandlerService/src/EventHandlerService"
 RUN dotnet build "EventHandlerService.csproj" -c Release -o /app/build --no-restore
 
 FROM build AS publish
