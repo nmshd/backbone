@@ -41,11 +41,11 @@ public class FilesRepositoryTests : AbstractTestsBase
     {
         var blobStorageOptions = Options.Create(new BlobOptions() { RootFolder = "" });
 
-        var dbContexts = FakeDbContextFactory.CreateDbContexts<FilesDbContext>();
+        var (arrangeContext, actContext, _) = FakeDbContextFactory.CreateDbContexts<FilesDbContext>();
 
-        dbContexts.arrangeContext.AddRange(files);
-        dbContexts.arrangeContext.SaveChanges();
+        arrangeContext.AddRange(files);
+        arrangeContext.SaveChanges();
 
-        return new FilesRepository(dbContexts.actContext, mockBlobStorage, blobStorageOptions);
+        return new FilesRepository(actContext, mockBlobStorage, blobStorageOptions);
     }
 }

@@ -1,13 +1,14 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Tests.TestHelpers;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
 
-public class DecomposeForTests
+public class DecomposeForTests : AbstractTestsBase
 {
     public static readonly IdentityAddress ANONYMIZED_ADDRESS = IdentityAddress.GetAnonymized("localhost");
 
