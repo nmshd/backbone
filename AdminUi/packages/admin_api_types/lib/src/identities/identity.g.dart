@@ -126,7 +126,7 @@ AuditLog _$AuditLogFromJson(Map<String, dynamic> json) => AuditLog(
       newStatus: json['newStatus'] as String,
       messageKey: json['messageKey'] as String,
       oldStatus: json['oldStatus'] as String?,
-      additionalData: json['additionalData'] as Map<String, dynamic>?,
+      additionalData: (json['additionalData'] as List<dynamic>?)?.map(AdditionalData.fromJson).toList(),
     );
 
 Map<String, dynamic> _$AuditLogToJson(AuditLog instance) => <String, dynamic>{
@@ -136,4 +136,14 @@ Map<String, dynamic> _$AuditLogToJson(AuditLog instance) => <String, dynamic>{
       'newStatus': instance.newStatus,
       'additionalData': instance.additionalData,
       'messageKey': instance.messageKey,
+    };
+
+AdditionalData _$AdditionalDataFromJson(Map<String, dynamic> json) => AdditionalData(
+      id: json['id'] as String,
+      value: json['value'] as String,
+    );
+
+Map<String, dynamic> _$AdditionalDataToJson(AdditionalData instance) => <String, dynamic>{
+      'id': instance.id,
+      'value': instance.value,
     };

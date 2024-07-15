@@ -143,7 +143,7 @@ class AuditLog {
   final DateTime createdAt;
   final String? oldStatus;
   final String newStatus;
-  final Map<String, dynamic>? additionalData;
+  final List<AdditionalData>? additionalData;
   final String messageKey;
 
   AuditLog({
@@ -157,4 +157,18 @@ class AuditLog {
 
   factory AuditLog.fromJson(dynamic json) => _$AuditLogFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$AuditLogToJson(this);
+}
+
+@JsonSerializable()
+class AdditionalData {
+  final String id;
+  final String value;
+
+  AdditionalData({
+    required this.id,
+    required this.value,
+  });
+
+  factory AdditionalData.fromJson(dynamic json) => _$AdditionalDataFromJson(json as Map<String, dynamic>);
+  Map<String, dynamic> toJson() => _$AdditionalDataToJson(this);
 }
