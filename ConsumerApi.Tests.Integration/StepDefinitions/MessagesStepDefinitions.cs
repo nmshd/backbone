@@ -21,9 +21,6 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "GET Messages")]
 internal class MessagesStepDefinitions
 {
-    private Client _client1 = null!;
-    private Client _client2 = null!;
-    private ApiResponse<SendMessageResponse>? _sendMessageResponse;
     private readonly ClientCredentials _clientCredentials;
     private readonly HttpClient _httpClient;
 
@@ -31,6 +28,7 @@ internal class MessagesStepDefinitions
     private readonly Dictionary<string, Relationship> _relationships = new();
     private readonly Dictionary<string, Message> _messages = new();
     private ApiResponse<ListMessagesResponse>? _getMessagesResponse;
+    private ApiResponse<SendMessageResponse>? _sendMessageResponse;
     private IResponse? _whenResponse;
 
     public MessagesStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
@@ -39,15 +37,19 @@ internal class MessagesStepDefinitions
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
     }
 
-    [Given(@"Identities (.+)")]
-    public void GivenIdentities(string identityNames)
+    [Given(@"Identities ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
+    public void Given2Identities(string identity1Name, string identity2Name)
     {
-        var splitIdentityNames = SplitNames(identityNames);
+        _identities[identity1Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
+        _identities[identity2Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
+    }
 
-        foreach (var identityName in splitIdentityNames)
-        {
-            _identities[identityName] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
-        }
+    [Given(@"Identities ([a-zA-Z0-9]+), ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
+    public void Given3Identities(string identity1Name, string identity2Name, string identity3Name)
+    {
+        _identities[identity1Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
+        _identities[identity2Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
+        _identities[identity3Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
     }
 
     [Given(@"a Relationship ([a-zA-Z0-9]+) between ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
@@ -57,15 +59,23 @@ internal class MessagesStepDefinitions
         _relationships[relationshipName] = relationship;
     }
 
-    [Given(@"([a-zA-Z0-9]+) has sent a Message ([a-zA-Z0-9]+) to (.+)")]
-    public async Task GivenIHasSentMessageToI(string senderName, string messageName, string recipientNames)
+    [Given(@"([a-zA-Z0-9]+) has sent a Message ([a-zA-Z0-9]+) to ([a-zA-Z0-9]+)")]
+    public async Task GivenIHasSentMessageTo1Recipient(string senderName, string messageName, string recipientName)
     {
-        var splitRecipientNames = SplitNames(recipientNames);
-
         var sender = _identities[senderName];
-        var recipients = _identities.GetMultiple(splitRecipientNames);
+        var recipient = _identities[recipientName];
 
-        _messages[messageName] = await Utils.SendMessage(sender, recipients);
+        _messages[messageName] = await Utils.SendMessage(sender, recipient);
+    }
+
+    [Given(@"([a-zA-Z0-9]+) has sent a Message ([a-zA-Z0-9]+) to ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
+    public async Task GivenIHasSentMessageTo2Recipients(string senderName, string messageName, string recipient1Name, string recipient2Name)
+    {
+        var sender = _identities[senderName];
+        var recipient1 = _identities[recipient1Name];
+        var recipient2 = _identities[recipient2Name];
+
+        _messages[messageName] = await Utils.SendMessage(sender, recipient1, recipient2);
     }
 
     [Given(@"([a-zA-Z0-9]+) has terminated ([a-zA-Z0-9]+)")]
@@ -149,25 +159,20 @@ internal class MessagesStepDefinitions
         recipientAddressesAfterGet.Should().NotContain(addressOfIdentityThatShouldBeAnonymized);
     }
 
-    [Given("Identities i1 and i2 with an established Relationship")]
-    public async Task GivenIdentitiesI1AndI2WithAnEstablishedRelationship()
+    [Given("([a-zA-Z0-9]+) is in status \"ToBeDeleted\"")]
+    public async Task GivenIdentityIIsToBeDeleted(string identityName)
     {
-        _client1 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
-        _client2 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
-
-        await Utils.EstablishRelationshipBetween(_client1, _client2);
-    }
-
-    [Given("i2 is in status \"ToBeDeleted\"")]
-    public async Task GivenIdentityI2IsToBeDeleted()
-    {
-        var startDeletionProcessResponse = await _client2.Identities.StartDeletionProcess();
+        var identity = _identities[identityName];
+        var startDeletionProcessResponse = await identity.Identities.StartDeletionProcess();
         startDeletionProcessResponse.Should().BeASuccess();
     }
 
-    [When("i1 sends a POST request to the /Messages endpoint with i2 as recipient")]
-    public async Task WhenAPostRequestIsSentToTheMessagesEndpoint()
+    [When("([a-zA-Z0-9]+) sends a POST request to the /Messages endpoint with ([a-zA-Z0-9]+) as recipient")]
+    public async Task WhenAPostRequestIsSentToTheMessagesEndpoint(string senderName, string recipientName)
     {
+        var sender = _identities[senderName];
+        var recipient = _identities[recipientName];
+
         var sendMessageRequest = new SendMessageRequest
         {
             Attachments = [],
@@ -176,12 +181,12 @@ internal class MessagesStepDefinitions
             [
                 new SendMessageRequestRecipientInformation
                 {
-                    Address = _client2.IdentityData!.Address,
+                    Address = recipient.IdentityData!.Address,
                     EncryptedKey = ConvertibleString.FromUtf8("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").BytesRepresentation
                 }
             ]
         };
-        _whenResponse = _sendMessageResponse = await _client1.Messages.SendMessage(sendMessageRequest);
+        _whenResponse = _sendMessageResponse = await sender.Messages.SendMessage(sendMessageRequest);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
@@ -194,9 +199,9 @@ internal class MessagesStepDefinitions
     [Then("the response contains a SendMessageResponse")]
     public async Task ThenTheResponseContainsASendMessageResponse()
     {
-        _sendMessageResponse!.Result.Should().NotBeNull();
-        _sendMessageResponse.Should().BeASuccess();
-        await _sendMessageResponse.Should().ComplyWithSchema();
+        _sendMessageResponse?.Should().NotBeNull();
+        _sendMessageResponse?.Should().BeASuccess();
+        await _sendMessageResponse!.Should().ComplyWithSchema();
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]*)""")]
@@ -206,25 +211,13 @@ internal class MessagesStepDefinitions
         _sendMessageResponse.Error!.Code.Should().Be(errorCode);
     }
 
-    [Then(@"the error contains a list of Identities to be deleted that includes i2")]
-    public void ThenTheErrorContainsAListOfIdentitiesToBeDeletedThatIncludesIdentityI2()
+    [Then(@"the error contains a list of Identities to be deleted that includes ([a-zA-Z0-9]+)")]
+    public void ThenTheErrorContainsAListOfIdentitiesToBeDeletedThatIncludesIdentityI2(string includedIdentityName)
     {
+        var includedIdentity = _identities[includedIdentityName];
         var data = _sendMessageResponse!.Error!.Data?.As<PeersToBeDeletedErrorData>();
         data.Should().NotBeNull();
-        data!.PeersToBeDeleted.Contains(_client2.IdentityData!.Address).Should().BeTrue();
-    }
-
-    private static List<string> SplitNames(string identityNames)
-    {
-        return identityNames.Split([", ", " and "], StringSplitOptions.RemoveEmptyEntries).ToList();
-    }
-}
-
-public static class DictionaryExtensions
-{
-    public static TValue[] GetMultiple<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, List<TKey> keys) where TKey : notnull
-    {
-        return dictionary.Where(x => keys.Contains(x.Key)).Select(x => x.Value).ToArray();
+        data!.PeersToBeDeleted.Contains(includedIdentity.IdentityData!.Address).Should().BeTrue();
     }
 }
 
