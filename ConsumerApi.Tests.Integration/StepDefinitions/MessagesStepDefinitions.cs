@@ -10,6 +10,7 @@ using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.ConsumerApi.Tests.Integration.Support;
 using Backbone.Crypto;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Extensions.Options;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.ThrowHelpers;
 
@@ -38,11 +39,15 @@ internal class MessagesStepDefinitions
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
     }
 
-    [Given(@"Identities ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
-    public void GivenIdentitiesIAndI(string identity1Name, string identity2Name)
+    [Given(@"Identities (.+)")]
+    public void GivenIdentities(string identityNames)
     {
-        _identities[identity1Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
-        _identities[identity2Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
+        var splitIdentityNames = SplitNames(identityNames);
+
+        foreach (var identityName in splitIdentityNames)
+        {
+            _identities[identityName] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
+        }
     }
 
     [Given(@"a Relationship ([a-zA-Z0-9]+) between ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
@@ -52,26 +57,37 @@ internal class MessagesStepDefinitions
         _relationships[relationshipName] = relationship;
     }
 
-    [Given(@"([a-zA-Z0-9]+) has sent a Message ([a-zA-Z0-9]+) to ([a-zA-Z0-9]+)")]
-    public async Task GivenIHasSentMessageToI(string senderName, string messageName, string recipientName)
+    [Given(@"([a-zA-Z0-9]+) has sent a Message ([a-zA-Z0-9]+) to (.+)")]
+    public async Task GivenIHasSentMessageToI(string senderName, string messageName, string recipientNames)
     {
+        var splitRecipientNames = SplitNames(recipientNames);
+
         var sender = _identities[senderName];
-        var recipient = _identities[recipientName];
-        var message = await Utils.SendMessage(sender, recipient);
-        _messages[messageName] = message;
+        var recipients = _identities.GetMultiple(splitRecipientNames);
+
+        _messages[messageName] = await Utils.SendMessage(sender, recipients);
+    }
+
+    [Given(@"([a-zA-Z0-9]+) has terminated ([a-zA-Z0-9]+)")]
+    public async Task GivenRIsTerminated(string terminatorName, string relationshipName)
+    {
+        var relationship = _relationships[relationshipName];
+        var terminator = _identities[terminatorName];
+
+        var terminateRelationshipResponse = await terminator.Relationships.TerminateRelationship(relationship.Id);
+        terminateRelationshipResponse.Should().BeASuccess();
     }
 
     [Given(@"([a-zA-Z0-9]+) has decomposed ([a-zA-Z0-9]+)")]
-    public async Task GivenIHasDecomposedItsRelationshipToI(string decomposerName, string peerName)
+    public async Task GivenIHasDecomposedItsRelationshipToI(string decomposerName, string relationshipName)
     {
         var decomposer = _identities[decomposerName];
-        var relationship = _relationships[decomposerName];
-
-        var terminateRelationshipResponse = await decomposer.Relationships.TerminateRelationship(relationship.Id);
-        terminateRelationshipResponse.Should().BeASuccess();
+        var relationship = _relationships[relationshipName];
 
         var decomposeRelationshipResponse = await decomposer.Relationships.DecomposeRelationship(relationship.Id);
         decomposeRelationshipResponse.Should().BeASuccess();
+
+        await Task.Delay(500);
     }
 
     [When(@"([a-zA-Z0-9]+) sends a GET request to the /Messages endpoint")]
@@ -92,6 +108,45 @@ internal class MessagesStepDefinitions
 
         _getMessagesResponse.Result.Should().Contain(m => m.Id == message1.Id);
         _getMessagesResponse.Result.Should().Contain(m => m.Id == message2.Id);
+    }
+
+    [Then(@"the response does not contain the Message ([a-zA-Z0-9]+)")]
+    public void ThenTheResponseDoesNotContainTheMessageM(string messageName)
+    {
+        var message = _messages[messageName];
+
+        ThrowIfNull(_getMessagesResponse);
+
+        _getMessagesResponse.Result.Should().NotContain(m => m.Id == message.Id);
+    }
+
+    [Then(@"the response contains the Message ([a-zA-Z0-9]+)")]
+    public void ThenTheResponseContainsTheMessageM(string messageName)
+    {
+        var message = _messages[messageName];
+
+        ThrowIfNull(_getMessagesResponse);
+
+        _getMessagesResponse.Result.Should().Contain(m => m.Id == message.Id);
+    }
+
+    [Then(@"the address of the recipient ([a-zA-Z0-9]+) is anonymized")]
+    public void ThenTheAddressOfIIsAnonymized(string anonymizedIdentityName)
+    {
+        var addressOfIdentityThatShouldBeAnonymized = _identities[anonymizedIdentityName].IdentityData!.Address;
+
+        ThrowIfNull(_getMessagesResponse);
+
+        var sentMessage = _getMessagesResponse.Result!.First();
+
+        var otherRecipients = sentMessage.Recipients.Select(r => r.Address).Where(a => a != addressOfIdentityThatShouldBeAnonymized);
+
+        var recipientAddressesAfterGet = sentMessage.Recipients.Select(r => r.Address).ToList();
+
+        recipientAddressesAfterGet.Should().Contain(otherRecipients);
+
+        recipientAddressesAfterGet.Should().Contain(IdentityAddress.GetAnonymized("localhost").Value);
+        recipientAddressesAfterGet.Should().NotContain(addressOfIdentityThatShouldBeAnonymized);
     }
 
     [Given("Identities i1 and i2 with an established Relationship")]
@@ -157,6 +212,19 @@ internal class MessagesStepDefinitions
         var data = _sendMessageResponse!.Error!.Data?.As<PeersToBeDeletedErrorData>();
         data.Should().NotBeNull();
         data!.PeersToBeDeleted.Contains(_client2.IdentityData!.Address).Should().BeTrue();
+    }
+
+    private static List<string> SplitNames(string identityNames)
+    {
+        return identityNames.Split([", ", " and "], StringSplitOptions.RemoveEmptyEntries).ToList();
+    }
+}
+
+public static class DictionaryExtensions
+{
+    public static TValue[] GetMultiple<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, List<TKey> keys) where TKey : notnull
+    {
+        return dictionary.Where(x => keys.Contains(x.Key)).Select(x => x.Value).ToArray();
     }
 }
 

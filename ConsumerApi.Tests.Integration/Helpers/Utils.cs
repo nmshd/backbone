@@ -45,19 +45,16 @@ public static class Utils
         return getRelationshipResponse.Result!;
     }
 
-    public static async Task<Message> SendMessage(Client sender, Client recipient)
+    public static async Task<Message> SendMessage(Client sender, params Client[] recipients)
     {
         var sendMessageRequest = new SendMessageRequest
         {
             Body = [0],
-            Recipients =
-            [
-                new SendMessageRequestRecipientInformation
-                {
-                    Address = recipient.IdentityData!.Address,
-                    EncryptedKey = TestDataGenerator.CreateRandomBytes(30)
-                }
-            ],
+            Recipients = recipients.Select(r => new SendMessageRequestRecipientInformation
+            {
+                Address = r.IdentityData!.Address,
+                EncryptedKey = TestDataGenerator.CreateRandomBytes(30)
+            }).ToList(),
             Attachments = []
         };
         var sendMessageResponse = await sender.Messages.SendMessage(sendMessageRequest);
