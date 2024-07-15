@@ -1,17 +1,19 @@
 ﻿using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Responses;
+using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
 using Backbone.Identity.Pool.Creator.PoolsFile;
 
 namespace Backbone.Identity.Pool.Creator;
 public class Identity
 {
     public readonly UserCredentials UserCredentials;
-    
+
     /// <summary>
     /// Unique Order Number
     /// </summary>
     public uint Uon;
-    
+
     public List<Challenge>? Challenges;
 
     public List<string> DeviceIds { get; } = [];
@@ -19,11 +21,18 @@ public class Identity
 
     public List<Identity> IdentitiesToSendMessagesTo { get; } = [];
     public List<Identity> IdentitiesToEstablishRelationshipsWith { get; } = [];
+    public Dictionary<string, Identity> EstablishedRelationshipsById { get; internal set; } = [];
+    public HashSet<(string messageId, Identity recipient)> SentMessagesIdRecipientPair { get; internal set; } = [];
     public uint RelationshipsCapacity { get; private set; }
     public uint ReceivedMessagesCapacity { get; set; }
     public uint SentMessagesCapacity { get; set; }
 
     public PoolEntry Pool { get; private set; }
+    public string Nickname { get; }
+    public string PoolType { get; }
+    public uint GraphAlgorithmVisitCount { get; set; } = 0;
+    public PushDatawalletModificationsResponse? PushDatawalletModificationsResponse { get; internal set; }
+
 
     public Identity(UserCredentials userCredentials, string address, string deviceId, PoolEntry pool, uint orderNumber, uint? uniqueOrderNumber = null)
     {
@@ -38,13 +47,18 @@ public class Identity
         Nickname = pool.Alias + orderNumber;
         PoolType = pool.Type;
         Pool = pool;
-        Uon = uniqueOrderNumber ?? 0;
+
+
+        if (uniqueOrderNumber is not null)
+        {
+            Uon = uniqueOrderNumber ?? 0;
+        }
+        else
+        {
+            pool.IdentityUons.TryDequeue(out var nonNullableUniqueOrderNumber);
+            Uon = nonNullableUniqueOrderNumber;
+        }
     }
-
-    public string Nickname { get; }
-    public string PoolType { get; }
-    public uint GraphAlgorithmVisitCount { get; set; } = 0;
-
     public void AddDevice(string deviceId)
     {
         DeviceIds.Add(deviceId);

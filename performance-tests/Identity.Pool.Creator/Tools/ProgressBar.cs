@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Newtonsoft.Json.Linq;
 
 namespace Backbone.Identity.Pool.Creator.Tools;
 public class ProgressBar : IDisposable, IProgress<double>
@@ -32,7 +33,7 @@ public class ProgressBar : IDisposable, IProgress<double>
     {
         if (upperBound < 1)
             throw new ArgumentOutOfRangeException(nameof(upperBound), "must be 1 or greater");
-        _upperBound = upperBound;
+        _upperBound = upperBound == 1 ? 1 : upperBound - 1;
     }
 
     public void Report(double value)
@@ -48,14 +49,14 @@ public class ProgressBar : IDisposable, IProgress<double>
         {
             if (_disposed) return;
 
-            var progressBlockCount = (int)(_currentProgress/ _upperBound * BLOCK_COUNT);
+            var progressBlockCount = (int)(_currentProgress / _upperBound * BLOCK_COUNT);
             var percent = (int)(_currentProgress / _upperBound * 100);
             var text = string.Format("{4}/{5}[{0}{1}] {2,3}% {3}",
                 new string('#', progressBlockCount), new string('-', BLOCK_COUNT - progressBlockCount),
                 percent,
                 ANIMATION[_animationIndex++ % ANIMATION.Length],
                 _currentProgress,
-                _upperBound);
+                _upperBound + 1);
             UpdateText(text);
 
             ResetTimer();
@@ -105,5 +106,8 @@ public class ProgressBar : IDisposable, IProgress<double>
         }
     }
 
-    public void Increment() => Report(_currentProgress + 1);
+    public void Increment()
+    {
+        Interlocked.Exchange(ref _currentProgress, _currentProgress + 1);
+    }
 }

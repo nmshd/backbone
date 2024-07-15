@@ -1,18 +1,18 @@
 ﻿using System.Collections.Concurrent;
-using System.Diagnostics;
+using System.Security.Principal;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.Crypto;
+using Backbone.Identity.Pool.Creator.Application.Printer;
 using Backbone.Identity.Pool.Creator.PoolsFile;
 using Backbone.Identity.Pool.Creator.PoolsGenerator;
 using Backbone.Identity.Pool.Creator.Tools;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
-using Org.BouncyCastle.Bcpg;
-using Org.BouncyCastle.Tls;
 
 namespace Backbone.Identity.Pool.Creator.EntityCreation;
 public class EntityCreator
@@ -21,28 +21,34 @@ public class EntityCreator
 
     private readonly IList<PoolEntry> _pools;
     private readonly SolutionRepresentation _ram;
+    private readonly IPrinter _printer;
+    private Dictionary<uint, Identity> _identitiesDictionary;
     private readonly ClientCredentials _clientCredentials;
 
-    public EntityCreator(string baseAddress, string clientId, string clientSecret, IEnumerable<PoolEntry> pools, SolutionRepresentation ram)
+    public EntityCreator(string baseAddress, string clientId, string clientSecret, IEnumerable<PoolEntry> pools, SolutionRepresentation ram, IPrinter printer)
     {
         _baseAddress = baseAddress;
         _clientCredentials = new ClientCredentials(clientId, clientSecret);
         _pools = pools.ToList();
         _ram = ram;
+        _printer = printer;
+        _identitiesDictionary = [];
     }
 
     public async Task StartCreation()
     {
         await CreateIdentities();
-
-        await CreateChallenges();
-        return;
         LoadRelationshipsAndMessagesConfiguration();
+        _identitiesDictionary = _pools.SelectMany(p => p.Identities).ToDictionary(i => i.Uon);
 
         await CreateRelationships();
+        await CreateChallenges();
         await CreateMessages();
         await CreateRelationshipTemplates();
+        await CreateDatawalletModifications();
 
+
+        _printer.OutputAll(_pools);
     }
 
     private async Task CreateRelationships()
@@ -50,30 +56,36 @@ public class EntityCreator
         Console.Write("Establishing Relationships... ");
         using var progress = new ProgressBar(_ram.GetRelationshipCount());
 
-        var establishedRelationships = new HashSet<string>();
+        var establishedRelationships = new HashSet<(uint a, uint b)>();
+
         foreach (var identity in _pools.SelectMany(p => p.Identities))
         {
             foreach (var relatedIdentity in identity.IdentitiesToEstablishRelationshipsWith)
             {
-                if (establishedRelationships.Contains(GetRelationshipRepresentation(identity, relatedIdentity))) continue;
-
-                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
-                var relatedSdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, relatedIdentity.UserCredentials);
-
-                var templateResponse = await sdk.RelationshipTemplates.CreateTemplate(new() { Content = [], ExpiresAt = DateTime.Now.AddYears(2), MaxNumberOfAllocations = 50 });
-                var createRelationshipResponse = await relatedSdk.Relationships.CreateRelationship(new() { RelationshipTemplateId = templateResponse.Result!.Id, Content = [] });
-                var acceptRelationshipResponse = await sdk.Relationships.AcceptRelationship(createRelationshipResponse.Result!.Id, new());
-                var relationshipRepresentation = GetRelationshipRepresentation(identity, relatedIdentity);
-                establishedRelationships.Add(relationshipRepresentation);
-                progress.Increment();
+                establishedRelationships.Add(GetRelationshipRepresentation(identity, relatedIdentity));
             }
         }
+
+        await Parallel.ForEachAsync(establishedRelationships, new ParallelOptions() { MaxDegreeOfParallelism = establishedRelationships.Count < 32 ? 4 : 16 }, async (pair, _) =>
+        {
+            var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, _identitiesDictionary[pair.a].UserCredentials);
+            var relatedSdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, _identitiesDictionary[pair.b].UserCredentials);
+
+            var templateResponse = await sdk.RelationshipTemplates.CreateTemplate(new() { Content = [], ExpiresAt = DateTime.Now.AddYears(2), MaxNumberOfAllocations = 50 });
+            var createRelationshipResponse = await relatedSdk.Relationships.CreateRelationship(new() { RelationshipTemplateId = templateResponse.Result!.Id, Content = [] });
+            var acceptRelationshipResponse = await sdk.Relationships.AcceptRelationship(createRelationshipResponse.Result!.Id, new());
+            if(acceptRelationshipResponse is not null && acceptRelationshipResponse.Result is not null) 
+                _identitiesDictionary[pair.a].EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, _identitiesDictionary[pair.b]);
+
+            progress.Increment();
+        });
+
         Console.WriteLine("done.");
     }
 
-    private static string GetRelationshipRepresentation(Identity identity, Identity relatedIdentity)
+    private static (uint a, uint b) GetRelationshipRepresentation(Identity identity, Identity relatedIdentity)
     {
-        return identity.Uon > relatedIdentity.Uon ? $"{identity.Uon}-{relatedIdentity.Uon}" : $"{relatedIdentity.Uon}-{identity.Uon}";
+        return identity.Uon > relatedIdentity.Uon ? (identity.Uon, relatedIdentity.Uon) : (relatedIdentity.Uon, identity.Uon);
     }
 
     private void LoadRelationshipsAndMessagesConfiguration()
@@ -99,7 +111,7 @@ public class EntityCreator
 
     private async Task CreateMessages()
     {
-        Console.Write("Sendiong Messages... ");
+        Console.Write("Sending Messages... ");
         using var progress = new ProgressBar(_ram.GetSentMessagesCount());
 
         foreach (var identity in _pools.SelectMany(p => p.Identities))
@@ -108,12 +120,14 @@ public class EntityCreator
             {
                 var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
 
-                await sdk.Messages.SendMessage(new()
+                var messageResponse = await sdk.Messages.SendMessage(new()
                 {
                     Recipients = [new SendMessageRequestRecipientInformation { Address = recipientIdentity.Address, EncryptedKey = ConvertibleString.FromUtf8(new string('A', 152)).BytesRepresentation }],
                     Attachments = [],
                     Body = []
                 });
+                if(messageResponse is not null && messageResponse.Result is not null)
+                    identity.SentMessagesIdRecipientPair.Add((messageResponse.Result.Id, recipientIdentity));
                 progress.Increment();
             }
         }
@@ -130,7 +144,16 @@ public class EntityCreator
         using var progress = new ProgressBar(_pools.Sum(p => p.Amount));
 
         uint uon = 1;
+
         foreach (var pool in _pools)
+        {
+            for (uint i = 0; i < pool.Amount; i++)
+            {
+                pool.IdentityUons.Enqueue(uon++);
+            }
+        }
+
+        await Parallel.ForEachAsync(_pools, async (pool, _) =>
         {
             for (uint i = 0; i < pool.Amount; i++)
             {
@@ -138,7 +161,7 @@ public class EntityCreator
                 if (sdk.DeviceData is null)
                     throw new Exception("The SDK could not be used to create a new Identity.");
 
-                var createdIdentity = new Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1, uon++);
+                var createdIdentity = new Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
 
                 if (pool.NumberOfDevices > 1)
                 {
@@ -154,7 +177,7 @@ public class EntityCreator
                 pool.Identities.Add(createdIdentity);
                 progress.Increment();
             }
-        }
+        });
         Console.WriteLine("done.");
     }
 
@@ -206,7 +229,7 @@ public class EntityCreator
 
         foreach (var (uon, bag) in dictionaryOfBags)
         {
-            relevantIdentities.Single(i => i.Uon == uon).Challenges = bag.ToList();
+            relevantIdentities.Single(i => i.Uon == uon).Challenges = [.. bag];
         }
         Console.WriteLine("done.");
     }
@@ -214,22 +237,38 @@ public class EntityCreator
     private async Task CreateDatawalletModifications()
     {
         Console.Write("Creating DataWalletModifications... ");
-        using var progress = new ProgressBar(_pools.Sum(p => p.NumberOfDatawalletModifications * p.Amount));
-        foreach (var pool in _pools.Where(p => p.NumberOfDatawalletModifications > 0))
+        using var progress = new ProgressBar(_pools.Where(p => p.NumberOfDatawalletModifications > 0).Sum(p => p.Amount));
+
+        await Parallel.ForEachAsync(_pools.Where(p => p.NumberOfDatawalletModifications > 0), async (pool, ct) =>
         {
             foreach (var identity in pool.Identities)
             {
                 var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
-                for (uint i = 0; i < pool.NumberOfDatawalletModifications; i++)
                 {
-                    await sdk.Datawallet.PushDatawalletModifications(new()
+                    var request = new PushDatawalletModificationsRequest()
                     {
                         LocalIndex = 0,
                         Modifications = []
-                    }, 0);
+                    };
+
+                    for (uint i = 0; i < pool.NumberOfDatawalletModifications; i++)
+                    {
+                        request.Modifications.Add(new()
+                        {
+                            Collection = "Requests",
+                            DatawalletVersion = 1,
+                            ObjectIdentifier = identity.Address,
+                            Type = "Create",
+                            PayloadCategory = "MetaData"
+                        });
+                    }
+                    var ret = await sdk.Datawallet.PushDatawalletModifications(request, supportedDatawalletVersion: 0);
+                    identity.PushDatawalletModificationsResponse = ret.Result;
                     progress.Increment();
                 }
             }
-        }
+        });
+
+        Console.WriteLine("done.");
     }
 }

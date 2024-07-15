@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Concurrent;
+using System.Text.Json.Serialization;
 
 namespace Backbone.Identity.Pool.Creator.PoolsFile;
 public record PoolEntry
@@ -18,6 +19,11 @@ public record PoolEntry
     public uint NumberOfDatawalletModifications { get; set; } = 0;
     public uint NumberOfDevices { get; set; } = 0;
     public uint NumberOfChallenges { get; set; } = 0;
+    
+    /// <summary>
+    /// The UONs to be used by this pool
+    /// </summary>
+    public ConcurrentQueue<uint> IdentityUons { get; internal set; } = new();
 
     [JsonIgnore]
     public List<Identity> Identities = [];

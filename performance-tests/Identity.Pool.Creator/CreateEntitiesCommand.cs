@@ -1,4 +1,5 @@
 ﻿using System.CommandLine;
+using Backbone.Identity.Pool.Creator.Application.Printer;
 using Backbone.Identity.Pool.Creator.EntityCreation;
 using Backbone.Identity.Pool.Creator.PoolsFile;
 using Backbone.Identity.Pool.Creator.PoolsGenerator;
@@ -32,7 +33,7 @@ public class CreateEntitiesCommand : Command
         var poolsConfiguration = await Reader.ReadPools(poolsFilePath);
         var ram = await ReadRAMConfigurationFile(configurationFilePath);
 
-        var creator = new EntityCreator(baseAddress, clientId, clientSecret, poolsConfiguration.Pools.ToList(), ram);
+        var creator = new EntityCreator(baseAddress, clientId, clientSecret, poolsConfiguration.Pools.ToList(), ram, new Printer());
         await creator.StartCreation();
     }
 
@@ -47,10 +48,20 @@ public class CreateEntitiesCommand : Command
             var line = await reader.ReadLineAsync();
             if (line is null) break;
             var values = line.Split(';');
-            var from = Convert.ToUInt32(values[0]);
-            var to = Convert.ToUInt32(values[2]);
-            var count = Convert.ToUInt32(values[4]);
-            
+            uint from, to, count;
+            if (values.Length == 3)
+            {
+                from = Convert.ToUInt32(values[0]);
+                to = Convert.ToUInt32(values[1]);
+                count = Convert.ToUInt32(values[2]);
+            }
+            else
+            {
+                from = Convert.ToUInt32(values[0]);
+                to = Convert.ToUInt32(values[2]);
+                count = Convert.ToUInt32(values[4]);
+            }
+
             res.EstablishRelationship(from, to);
             for (uint i = 0; i < count; i++)
             {

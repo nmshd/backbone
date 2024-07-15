@@ -58,10 +58,47 @@ public class Printer : IPrinter
         Directory.CreateDirectory(outputDirName);
 
         OutputIdentities(outputDirName, pools);
-        //OutputRelationshipsAndMessages(outputDirName, pools);
+        OutputRelationships(outputDirName, pools);
+        OutputMessages(outputDirName, pools);
+        OutputChallenges(outputDirName, pools);
     }
 
-    private void OutputIdentities(string outputDirName, IList<PoolEntry> pools)
+    private void OutputChallenges(string outputDirName, IList<PoolEntry> pools)
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine("ChallengeId;CreatedByAddress;CreatedByDevice;IdentityAddress");
+        foreach (var pool in pools)
+        {
+            foreach (var identity in pool.Identities)
+            {
+                if (identity.Challenges is null) continue;
+                foreach (var challenge in identity.Challenges)
+                {
+                    stringBuilder.AppendLine($"""{challenge.Id};{challenge.CreatedBy};{challenge.CreatedByDevice};{identity.Address}""");
+                }
+            }
+        }
+        File.WriteAllTextAsync($@"{outputDirName}\challenges.csv", stringBuilder.ToString());
+    }
+
+    private static void OutputMessages(string outputDirName, IList<PoolEntry> pools)
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine("MessageId;AddressFrom;AddressTo");
+        foreach (var pool in pools)
+        {
+            foreach (var identity in pool.Identities)
+            {
+                foreach (var (messageId, recipient) in identity.SentMessagesIdRecipientPair)
+                {
+                    stringBuilder.AppendLine($"""{messageId};{identity.Address};{recipient.Address}""");
+                }
+            }
+        }
+        File.WriteAllTextAsync($@"{outputDirName}\messages.csv", stringBuilder.ToString());
+    }
+
+    private static void OutputIdentities(string outputDirName, IList<PoolEntry> pools)
     {
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine("Address;DeviceId;Username;Password;Alias");
@@ -76,6 +113,23 @@ public class Printer : IPrinter
             }
         }
         File.WriteAllTextAsync($@"{outputDirName}\identities.csv", stringBuilder.ToString());
+    }
+
+    private static void OutputRelationships(string outputDirName, IList<PoolEntry> pools)
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine("RelationshipId;AddressFrom;AddressTo");
+        foreach (var pool in pools)
+        {
+            foreach (var identity in pool.Identities)
+            {
+                foreach (var relatedIdentity in identity.EstablishedRelationshipsById)
+                {
+                    stringBuilder.AppendLine($"""{relatedIdentity.Key};{identity.Address};{relatedIdentity.Value.Address}""");
+                }
+            }
+        }
+        File.WriteAllTextAsync($@"{outputDirName}\relationships.csv", stringBuilder.ToString());
     }
 
     private static string GetProjectPath()
@@ -95,6 +149,7 @@ public class Printer : IPrinter
 public interface IPrinter
 
 {
+    public void OutputAll(IList<PoolEntry> pools);
     protected internal void PrintRelationships(IList<PoolEntry> pools, bool summaryOnly = false);
     protected internal void PrintMessages(IList<PoolEntry> pools, bool summaryOnly = false);
     void PrintString(string value, string filename);
