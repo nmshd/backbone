@@ -37,14 +37,16 @@ internal class MessagesStepDefinitions
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
     }
 
-    [Given(@"Identities ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
+    #region Given
+
+    [Given(@"Identities (i[a-zA-Z0-9]*) and (i[a-zA-Z0-9]*)")]
     public void Given2Identities(string identity1Name, string identity2Name)
     {
         _identities[identity1Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
         _identities[identity2Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
     }
 
-    [Given(@"Identities ([a-zA-Z0-9]+), ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
+    [Given(@"Identities (i[a-zA-Z0-9]*), (i[a-zA-Z0-9]*) and (i[a-zA-Z0-9]*)")]
     public void Given3Identities(string identity1Name, string identity2Name, string identity3Name)
     {
         _identities[identity1Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
@@ -52,14 +54,14 @@ internal class MessagesStepDefinitions
         _identities[identity3Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
     }
 
-    [Given(@"a Relationship ([a-zA-Z0-9]+) between ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
+    [Given(@"a Relationship (r[a-zA-Z0-9]*) between (i[a-zA-Z0-9]*) and (i[a-zA-Z0-9]*)")]
     public async Task GivenARelationshipRBetweenIAndI(string relationshipName, string identity1Name, string identity2Name)
     {
         var relationship = await Utils.EstablishRelationshipBetween(_identities[identity1Name], _identities[identity2Name]);
         _relationships[relationshipName] = relationship;
     }
 
-    [Given(@"([a-zA-Z0-9]+) has sent a Message ([a-zA-Z0-9]+) to ([a-zA-Z0-9]+)")]
+    [Given(@"(i[a-zA-Z0-9]*) has sent a Message (m[a-zA-Z0-9]*) to (i[a-zA-Z0-9]*)")]
     public async Task GivenIHasSentMessageTo1Recipient(string senderName, string messageName, string recipientName)
     {
         var sender = _identities[senderName];
@@ -68,7 +70,7 @@ internal class MessagesStepDefinitions
         _messages[messageName] = await Utils.SendMessage(sender, recipient);
     }
 
-    [Given(@"([a-zA-Z0-9]+) has sent a Message ([a-zA-Z0-9]+) to ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
+    [Given(@"(i[a-zA-Z0-9]*) has sent a Message (m[a-zA-Z0-9]*) to (i[a-zA-Z0-9]*) and (i[a-zA-Z0-9]*)")]
     public async Task GivenIHasSentMessageTo2Recipients(string senderName, string messageName, string recipient1Name, string recipient2Name)
     {
         var sender = _identities[senderName];
@@ -78,7 +80,7 @@ internal class MessagesStepDefinitions
         _messages[messageName] = await Utils.SendMessage(sender, recipient1, recipient2);
     }
 
-    [Given(@"([a-zA-Z0-9]+) has terminated ([a-zA-Z0-9]+)")]
+    [Given(@"(i[a-zA-Z0-9]*) has terminated (r[a-zA-Z0-9]*)")]
     public async Task GivenRIsTerminated(string terminatorName, string relationshipName)
     {
         var relationship = _relationships[relationshipName];
@@ -88,7 +90,7 @@ internal class MessagesStepDefinitions
         terminateRelationshipResponse.Should().BeASuccess();
     }
 
-    [Given(@"([a-zA-Z0-9]+) has decomposed ([a-zA-Z0-9]+)")]
+    [Given(@"(i[a-zA-Z0-9]*) has decomposed (r[a-zA-Z0-9]*)")]
     public async Task GivenIHasDecomposedItsRelationshipToI(string decomposerName, string relationshipName)
     {
         var decomposer = _identities[decomposerName];
@@ -100,66 +102,7 @@ internal class MessagesStepDefinitions
         await Task.Delay(500);
     }
 
-    [When(@"([a-zA-Z0-9]+) sends a GET request to the /Messages endpoint")]
-    public async Task WhenISendsAGETRequestToTheMessagesEndpoint(string senderName)
-    {
-        var sender = _identities[senderName];
-        var getMessagesResponse = await sender.Messages.ListMessages();
-        _whenResponse = _getMessagesResponse = getMessagesResponse;
-    }
-
-    [Then(@"the response contains the Messages ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
-    public void ThenTheResponseContainsTheMessagesMAndM(string message1Name, string message2Name)
-    {
-        var message1 = _messages[message1Name];
-        var message2 = _messages[message2Name];
-
-        ThrowIfNull(_getMessagesResponse);
-
-        _getMessagesResponse.Result.Should().Contain(m => m.Id == message1.Id);
-        _getMessagesResponse.Result.Should().Contain(m => m.Id == message2.Id);
-    }
-
-    [Then(@"the response does not contain the Message ([a-zA-Z0-9]+)")]
-    public void ThenTheResponseDoesNotContainTheMessageM(string messageName)
-    {
-        var message = _messages[messageName];
-
-        ThrowIfNull(_getMessagesResponse);
-
-        _getMessagesResponse.Result.Should().NotContain(m => m.Id == message.Id);
-    }
-
-    [Then(@"the response contains the Message ([a-zA-Z0-9]+)")]
-    public void ThenTheResponseContainsTheMessageM(string messageName)
-    {
-        var message = _messages[messageName];
-
-        ThrowIfNull(_getMessagesResponse);
-
-        _getMessagesResponse.Result.Should().Contain(m => m.Id == message.Id);
-    }
-
-    [Then(@"the address of the recipient ([a-zA-Z0-9]+) is anonymized")]
-    public void ThenTheAddressOfIIsAnonymized(string anonymizedIdentityName)
-    {
-        var addressOfIdentityThatShouldBeAnonymized = _identities[anonymizedIdentityName].IdentityData!.Address;
-
-        ThrowIfNull(_getMessagesResponse);
-
-        var sentMessage = _getMessagesResponse.Result!.First();
-
-        var otherRecipients = sentMessage.Recipients.Select(r => r.Address).Where(a => a != addressOfIdentityThatShouldBeAnonymized);
-
-        var recipientAddressesAfterGet = sentMessage.Recipients.Select(r => r.Address).ToList();
-
-        recipientAddressesAfterGet.Should().Contain(otherRecipients);
-
-        recipientAddressesAfterGet.Should().Contain(IdentityAddress.GetAnonymized("localhost").Value);
-        recipientAddressesAfterGet.Should().NotContain(addressOfIdentityThatShouldBeAnonymized);
-    }
-
-    [Given("([a-zA-Z0-9]+) is in status \"ToBeDeleted\"")]
+    [Given("(i[a-zA-Z0-9]*) is in status \"ToBeDeleted\"")]
     public async Task GivenIdentityIIsToBeDeleted(string identityName)
     {
         var identity = _identities[identityName];
@@ -167,7 +110,19 @@ internal class MessagesStepDefinitions
         startDeletionProcessResponse.Should().BeASuccess();
     }
 
-    [When("([a-zA-Z0-9]+) sends a POST request to the /Messages endpoint with ([a-zA-Z0-9]+) as recipient")]
+    #endregion
+
+    #region When
+
+    [When(@"(i[a-zA-Z0-9]*) sends a GET request to the /Messages endpoint")]
+    public async Task WhenISendsAGETRequestToTheMessagesEndpoint(string senderName)
+    {
+        var sender = _identities[senderName];
+        var getMessagesResponse = await sender.Messages.ListMessages();
+        _whenResponse = _getMessagesResponse = getMessagesResponse;
+    }
+
+    [When("(i[a-zA-Z0-9]*) sends a POST request to the /Messages endpoint with (i[a-zA-Z0-9]*) as recipient")]
     public async Task WhenAPostRequestIsSentToTheMessagesEndpoint(string senderName, string recipientName)
     {
         var sender = _identities[senderName];
@@ -187,6 +142,61 @@ internal class MessagesStepDefinitions
             ]
         };
         _whenResponse = _sendMessageResponse = await sender.Messages.SendMessage(sendMessageRequest);
+    }
+
+    #endregion
+
+    #region Then
+
+    [Then(@"the response contains the Messages (m[a-zA-Z0-9]*) and (m[a-zA-Z0-9]*)")]
+    public void ThenTheResponseContainsTheMessagesMAndM(string message1Name, string message2Name)
+    {
+        var message1 = _messages[message1Name];
+        var message2 = _messages[message2Name];
+
+        ThrowIfNull(_getMessagesResponse);
+
+        _getMessagesResponse.Result.Should().Contain(m => m.Id == message1.Id);
+        _getMessagesResponse.Result.Should().Contain(m => m.Id == message2.Id);
+    }
+
+    [Then(@"the response does not contain the Message (m[a-zA-Z0-9]*)")]
+    public void ThenTheResponseDoesNotContainTheMessageM(string messageName)
+    {
+        var message = _messages[messageName];
+
+        ThrowIfNull(_getMessagesResponse);
+
+        _getMessagesResponse.Result.Should().NotContain(m => m.Id == message.Id);
+    }
+
+    [Then(@"the response contains the Message (m[a-zA-Z0-9]*)")]
+    public void ThenTheResponseContainsTheMessageM(string messageName)
+    {
+        var message = _messages[messageName];
+
+        ThrowIfNull(_getMessagesResponse);
+
+        _getMessagesResponse.Result.Should().Contain(m => m.Id == message.Id);
+    }
+
+    [Then(@"the address of the recipient (i[a-zA-Z0-9]*) is anonymized")]
+    public void ThenTheAddressOfIIsAnonymized(string anonymizedIdentityName)
+    {
+        var addressOfIdentityThatShouldBeAnonymized = _identities[anonymizedIdentityName].IdentityData!.Address;
+
+        ThrowIfNull(_getMessagesResponse);
+
+        var sentMessage = _getMessagesResponse.Result!.First();
+
+        var otherRecipients = sentMessage.Recipients.Select(r => r.Address).Where(a => a != addressOfIdentityThatShouldBeAnonymized);
+
+        var recipientAddressesAfterGet = sentMessage.Recipients.Select(r => r.Address).ToList();
+
+        recipientAddressesAfterGet.Should().Contain(otherRecipients);
+
+        recipientAddressesAfterGet.Should().Contain(IdentityAddress.GetAnonymized("localhost").Value);
+        recipientAddressesAfterGet.Should().NotContain(addressOfIdentityThatShouldBeAnonymized);
     }
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
@@ -211,7 +221,7 @@ internal class MessagesStepDefinitions
         _sendMessageResponse.Error!.Code.Should().Be(errorCode);
     }
 
-    [Then(@"the error contains a list of Identities to be deleted that includes ([a-zA-Z0-9]+)")]
+    [Then(@"the error contains a list of Identities to be deleted that includes (i[a-zA-Z0-9]*)")]
     public void ThenTheErrorContainsAListOfIdentitiesToBeDeletedThatIncludesIdentityI2(string includedIdentityName)
     {
         var includedIdentity = _identities[includedIdentityName];
@@ -219,6 +229,8 @@ internal class MessagesStepDefinitions
         data.Should().NotBeNull();
         data!.PeersToBeDeleted.Contains(includedIdentity.IdentityData!.Address).Should().BeTrue();
     }
+
+    #endregion
 }
 
 public class PeersToBeDeletedErrorData
