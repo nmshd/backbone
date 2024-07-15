@@ -1,130 +1,123 @@
+import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 
 import '/core/core.dart';
 
 class DeletionProcessTable extends StatefulWidget {
-  final Identity identityDetails;
-  final VoidCallback onQuotasChanged;
+  final String address;
 
-  const DeletionProcessTable(this.identityDetails, this.onQuotasChanged, {super.key});
+  const DeletionProcessTable({required this.address, super.key});
 
   @override
   State<DeletionProcessTable> createState() => _DeletionProcessTableState();
 }
 
 class _DeletionProcessTableState extends State<DeletionProcessTable> {
+  List<DeletionProcess>? _deletionProcesses;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadIdentityDeletionProcesses();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final groupedQuotas = _groupQuotas();
-
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        title: Text(context.l10n.quotas),
-        subtitle: Text(context.l10n.identityQuotaTable_title_description),
+        title: Text(context.l10n.deletionProcessTable_title),
+        subtitle: Text(context.l10n.deletionProcessTable_title_description),
         children: [
           Card(
             child: Column(
               children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: 500,
-                  child: DataTable2(
-                    columns: [
-                      DataColumn2(label: Text(context.l10n.metric)),
-                      DataColumn2(label: Text(context.l10n.source), size: ColumnSize.S),
-                      DataColumn2(
-                        label: Text(
-                          '${context.l10n.usage} (${context.l10n.used}/${context.l10n.max})',
-                        ),
-                        size: ColumnSize.L,
-                      ),
-                      DataColumn2(label: Text(context.l10n.period), size: ColumnSize.S),
-                      const DataColumn2(label: Text(''), size: ColumnSize.S),
-                    ],
-                    empty: Text(context.l10n.identityQuotaTable_noQuotaApplied),
-                    rows: groupedQuotas.entries.expand((entry) {
-                      final metricName = entry.key;
-                      final quotas = entry.value;
+                if (_deletionProcesses == null)
+                  const Center(child: CircularProgressIndicator())
+                else
+                  SizedBox(
+                    width: double.infinity,
+                    height: 500,
+                    child: DataTable2(
+                      empty: Text(context.l10n.deletionProcessTable_noDeletionProcessFound),
+                      columns: [
+                        DataColumn2(label: Text(context.l10n.id)),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_status), size: ColumnSize.S),
+                        DataColumn2(label: Text(context.l10n.createdAt), size: ColumnSize.S),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_approvalReminders)),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_approvedAt)),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_approvedByDevice)),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodReminders)),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodEndsAt)),
+                      ],
+                      rows: _deletionProcesses!.map(
+                        (deletionProcess) {
+                          final isDisabled = _isRowDisabled(deletionProcess.status);
+                          final textColor = isDisabled ? Colors.grey : Colors.black;
 
-                      final hasIndividualQuota = quotas.any((quota) => quota.source == context.l10n.identityQuotaTable_individual);
-
-                      return [
-                        DataRow2(
-                          color: WidgetStateProperty.all(Theme.of(context).colorScheme.surfaceBright),
-                          cells: [
-                            DataCell(Text(metricName)),
-                            const DataCell(Text('')),
-                            const DataCell(Text('')),
-                            const DataCell(Text('')),
-                            const DataCell(Text('')),
-                          ],
-                        ),
-                        ...quotas.map(
-                          (quota) {
-                            final isTierQuota = quota.source == 'Tier';
-                            final shouldDisable = isTierQuota && hasIndividualQuota;
-                            final tooltipMessage = shouldDisable ? context.l10n.identityQuotaTable_tierQuotaEffectMessage : null;
-
-                            return DataRow2(
-                              // selected: _selectedQuotas.contains(quota.id),
-                              // color: shouldDisable ? WidgetStateProperty.all(Theme.of(context).colorScheme.surfaceBright) : null,
-                              // onSelectChanged: shouldDisable || isTierQuota ? null : (_) => _toggleSelection(quota.id),
-                              cells: [
-                                DataCell(Container()),
-                                DataCell(
-                                  Text(
-                                    quota.source,
-                                    style: TextStyle(color: shouldDisable ? Colors.grey : null),
-                                  ),
+                          return DataRow2(
+                            onTap: isDisabled
+                                ? null
+                                : () {
+                                    context.push('/identities/${widget.address}/deletion-process-details/${deletionProcess.id}');
+                                  },
+                            cells: [
+                              DataCell(Text(deletionProcess.id, style: TextStyle(color: textColor))),
+                              DataCell(Text(deletionProcess.status, style: TextStyle(color: textColor))),
+                              DataCell(
+                                Text(
+                                  '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(deletionProcess.createdAt)} ${DateFormat.Hms().format(deletionProcess.createdAt)}',
+                                  style: TextStyle(color: textColor),
                                 ),
-                                DataCell(
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${quota.usage}/${quota.max}',
-                                        style: TextStyle(color: shouldDisable ? Colors.grey : null),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Expanded(
-                                        child: LinearProgressIndicator(
-                                          value: quota.max > 0 ? quota.usage / quota.max : 0,
-                                          backgroundColor: shouldDisable ? Colors.grey : Theme.of(context).colorScheme.inversePrimary,
-                                          valueColor:
-                                              AlwaysStoppedAnimation<Color>(shouldDisable ? Colors.grey : Theme.of(context).colorScheme.primary),
-                                          minHeight: 8,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                              ),
+                              DataCell(
+                                _RemindersCell(
+                                  reminders: [
+                                    deletionProcess.approvalReminder1SentAt,
+                                    deletionProcess.approvalReminder2SentAt,
+                                    deletionProcess.approvalReminder3SentAt,
+                                  ],
+                                  textColor: textColor,
                                 ),
-                                DataCell(
-                                  Text(
-                                    quota.period,
-                                    style: TextStyle(color: shouldDisable ? Colors.grey : null),
-                                  ),
+                              ),
+                              DataCell(
+                                Text(
+                                  deletionProcess.approvedAt != null
+                                      ? '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(deletionProcess.approvedAt!)} ${DateFormat.Hms().format(deletionProcess.approvedAt!)}'
+                                      : '',
+                                  style: TextStyle(color: textColor),
                                 ),
-                                DataCell(
-                                  Tooltip(
-                                    message: tooltipMessage ?? '',
-                                    child: isTierQuota && shouldDisable
-                                        ? Icon(
-                                            Icons.info,
-                                            color: shouldDisable ? Colors.grey : null,
-                                          )
-                                        : null,
-                                  ),
+                              ),
+                              DataCell(Text(deletionProcess.approvedByDevice ?? '', style: TextStyle(color: textColor))),
+                              DataCell(
+                                _RemindersCell(
+                                  reminders: [
+                                    deletionProcess.gracePeriodReminder1SentAt,
+                                    deletionProcess.gracePeriodReminder2SentAt,
+                                    deletionProcess.gracePeriodReminder3SentAt,
+                                  ],
+                                  textColor: textColor,
                                 ),
-                              ],
-                            );
-                          },
-                        ),
-                      ];
-                    }).toList(),
+                              ),
+                              DataCell(
+                                Text(
+                                  deletionProcess.approvedAt != null
+                                      ? '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(deletionProcess.gracePeriodEndsAt!)} ${DateFormat.Hms().format(deletionProcess.gracePeriodEndsAt!)}'
+                                      : '',
+                                  style: TextStyle(color: textColor),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ).toList(),
+                    ),
                   ),
-                ),
               ],
             ),
           ),
@@ -133,19 +126,55 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
     );
   }
 
-  Map<String, List<IdentityQuota>> _groupQuotas() {
-    final groupedQuotas = <String, List<IdentityQuota>>{};
+  bool _isRowDisabled(String deletionProcessStatus) {
+    return deletionProcessStatus == 'Rejected' || deletionProcessStatus == 'Cancelled';
+  }
 
-    if (widget.identityDetails.quotas != null) {
-      for (final quota in widget.identityDetails.quotas!) {
-        if (groupedQuotas.containsKey(quota.metric.displayName)) {
-          groupedQuotas[quota.metric.displayName]!.add(quota);
-        } else {
-          groupedQuotas[quota.metric.displayName] = [quota];
-        }
-      }
+  Future<void> _loadIdentityDeletionProcesses() async {
+    final deletionProcesses = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcesses(address: widget.address);
+    if (mounted) {
+      setState(() {
+        _deletionProcesses = deletionProcesses.data;
+      });
+    }
+  }
+}
+
+class _RemindersCell extends StatelessWidget {
+  final List<DateTime?> reminders;
+  final Color textColor;
+
+  const _RemindersCell({
+    required this.reminders,
+    required this.textColor,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final validReminders = reminders.where((date) => date != null).toList();
+
+    if (validReminders.isEmpty) {
+      return Text(context.l10n.deletionProcessTable_approvalRemindersCell_noData, style: TextStyle(color: textColor));
     }
 
-    return groupedQuotas;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: validReminders.asMap().entries.map((entry) {
+        final index = entry.key + 1;
+        final date = entry.value!;
+        final color = _isDatePassed(date) ? Colors.green : textColor;
+        return Padding(
+          padding: const EdgeInsets.only(bottom: 4),
+          child: Text(
+            '${context.l10n.deletionProcessTable_approvalRemindersCell_reminder} $index: ${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(date)} ${DateFormat.Hms().format(date)}',
+            style: TextStyle(color: color),
+          ),
+        );
+      }).toList(),
+    );
+  }
+
+  bool _isDatePassed(DateTime date) {
+    return date.isBefore(DateTime.now());
   }
 }
