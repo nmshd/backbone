@@ -1,11 +1,10 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 
 namespace Backbone.Modules.Messages.Application.Messages.DTOs;
 
-public class MessageDTO : IMapTo<Message>
+public class MessageDTO
 {
     public MessageDTO(Message message, IdentityAddress activeIdentity, string didDomainName)
     {
