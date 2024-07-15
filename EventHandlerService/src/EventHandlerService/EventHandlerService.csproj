@@ -26,7 +26,7 @@
         <ProjectReference Include="..\..\..\Modules\Tokens\src\Tokens.ConsumerApi\Tokens.ConsumerApi.csproj"/>
     </ItemGroup>
 
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) == Debug">
         <Exec Command="del appsettings.override.json"/>
         <Exec Command="mklink /h appsettings.override.json ..\..\..\appsettings.override.json"/>
     </Target>
