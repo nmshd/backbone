@@ -67,10 +67,10 @@ public class Message : Entity, IIdentifiable<MessageId>
     private void SetDecompositionFlags(IdentityAddress decomposerAddress, RecipientInformation recipient)
     {
         if (decomposerAddress == recipient.Address)
-            recipient.IsRelationshipDecomposedByRecipient = true;
+            recipient.DecomposeRecipient();
 
         if (decomposerAddress == CreatedBy)
-            recipient.IsRelationshipDecomposedBySender = true;
+            recipient.DecomposeSender();
     }
 
     private void AnonymizeParticipants(RecipientInformation recipient, IdentityAddress anonymizedAddress)

@@ -29,8 +29,8 @@ public class RecipientInformation : Entity
     public DateTime? ReceivedAt { get; private set; }
     public DeviceId? ReceivedByDevice { get; private set; }
     public MessageId MessageId { get; }
-    public bool IsRelationshipDecomposedByRecipient { get; internal set; }
-    public bool IsRelationshipDecomposedBySender { get; internal set; }
+    public bool IsRelationshipDecomposedByRecipient { get; private set; }
+    public bool IsRelationshipDecomposedBySender { get; private set; }
     public bool IsRelationshipFullyDecomposed => IsRelationshipDecomposedByRecipient && IsRelationshipDecomposedBySender;
 
     public void FetchedMessage(DeviceId fetchedByDevice)
@@ -44,5 +44,15 @@ public class RecipientInformation : Entity
     internal void UpdateAddress(IdentityAddress newIdentityAddress)
     {
         Address = newIdentityAddress;
+    }
+
+    internal void DecomposeSender()
+    {
+        IsRelationshipDecomposedBySender = true;
+    }
+
+    internal void DecomposeRecipient()
+    {
+        IsRelationshipDecomposedByRecipient = true;
     }
 }
