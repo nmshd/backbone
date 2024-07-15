@@ -44,60 +44,6 @@ public class DecomposeForTests : AbstractTestsBase
         else
             recipient2.Address.Should().NotBe(ANONYMIZED_ADDRESS);
     }
-
-    // [Theory]
-    // [ClassData(typeof(TestDataWhereOnlyR1IsFullyDecomposed))]
-    // public void AnonymizesRecipientAfterFirstRelationshipIsFullyDecomposed(TestInput input, TestOutput output)
-    // {
-    //     // Arrange
-    //     var message = TestData.CreateMessageWithTwoRecipients();
-    //     if (input.Recipient1HasAlreadyDecomposedRelationshipWithSender)
-    //     {
-    //         message.ParticipantDecomposedRelationship(message.Recipients.First().Address, message.CreatedBy, _anonymizedAddress);
-    //     }
-    //
-    //     if (input.Recipient2HasAlreadyDecomposedRelationshipWithSender)
-    //         message.ParticipantDecomposedRelationship(message.Recipients.Second().Address, message.CreatedBy, _anonymizedAddress);
-    //
-    //     if (input.SenderHasAlreadyDecomposedRelationshipWithRecipient1)
-    //         message.ParticipantDecomposedRelationship(message.CreatedBy, message.Recipients.First().Address, _anonymizedAddress);
-    //
-    //     if (input.SenderHasAlreadyDecomposedRelationshipWithRecipient2)
-    //         message.ParticipantDecomposedRelationship(message.CreatedBy, message.Recipients.Second().Address, _anonymizedAddress);
-    //
-    //     var senderAddress = message.CreatedBy;
-    //     var recipient1 = message.Recipients.First();
-    //     var recipient2 = message.Recipients.Second();
-    //
-    //     var decomposer = input.Decomposer switch
-    //     {
-    //         Participant.Sender => senderAddress,
-    //         Participant.Recipient1 => recipient1.Address,
-    //         Participant.Recipient2 => recipient2.Address,
-    //         _ => throw new Exception()
-    //     };
-    //
-    //     IdentityAddress peer;
-    //
-    //     if (decomposer == senderAddress)
-    //     {
-    //         peer = input.RelationshipTo switch
-    //         {
-    //             Participant.Recipient1 => recipient1.Address,
-    //             Participant.Recipient2 => recipient2.Address,
-    //             _ => throw new Exception()
-    //         };
-    //     }
-    //     else
-    //         peer = senderAddress;
-    //
-    //     // Act
-    //     message.ParticipantDecomposedRelationship(decomposer, peer, _anonymizedAddress);
-    //
-    //     // Assert
-    //     recipient1.Address.Should().Be(_anonymizedAddress);
-    //     recipient2.Address.Should().NotBe(_anonymizedAddress);
-    // }
 }
 
 public enum Participant
@@ -107,7 +53,6 @@ public enum Participant
     Recipient2
 }
 
-// ReSharper disable once UnusedAutoPropertyAccessor.Global - The Id property is only used to identify the test case in the test output
 public record TestInput
 {
     public TestInput(int id,
@@ -233,71 +178,3 @@ public class TestDataWithAllCases : TheoryData<TestInput, TestOutput>
         // Add(new TestInput(63, Participant.Recipient2, Participant.Recipient2, true, true, true, true), new TestOutput("#", "#", "#", "#"));
     }
 }
-
-// public class TestDataWhereOnlyR1IsFullyDecomposed : IEnumerable<object[]>
-// {
-//     public IEnumerator<object[]> GetEnumerator()
-//     {
-//         return new TestDataWithAllCases().Where(d =>
-//         {
-//             var input = (TestInput)d[0];
-//             var output = (TestOutput)d[1];
-//
-//             return input.RelationshipTo == Participant.Recipient1 &&
-//                    output.R1_HiddenForRecipient &&
-//                    output.R1_HiddenForSender &&
-//                    (!output.R2_HiddenForRecipient || output.R2_HiddenForSender);
-//             // ReSharper disable once NotDisposedResourceIsReturned
-//         }).GetEnumerator();
-//     }
-//
-//     IEnumerator IEnumerable.GetEnumerator()
-//     {
-//         return GetEnumerator();
-//     }
-// }
-
-// public class TestDataWhereOnlyR2IsFullyDecomposed : IEnumerable<object[]>
-// {
-//     public IEnumerator<object[]> GetEnumerator()
-//     {
-//         return new TestDataWithAllCases().Where(d =>
-//         {
-//             var output = (TestOutput)d[1];
-//
-//             return
-//                 output.R2_HiddenForRecipient &&
-//                 output.R2_HiddenForSender &&
-//                 (!output.R1_HiddenForRecipient || output.R1_HiddenForSender);
-//             // ReSharper disable once NotDisposedResourceIsReturned
-//         }).GetEnumerator();
-//     }
-//
-//     IEnumerator IEnumerable.GetEnumerator()
-//     {
-//         return GetEnumerator();
-//     }
-// }
-//
-// public class TestDataWhereBothAreFullyDecomposed : IEnumerable<object[]>
-// {
-//     public IEnumerator<object[]> GetEnumerator()
-//     {
-//         return new TestDataWithAllCases().Where(d =>
-//         {
-//             var output = (TestOutput)d[1];
-//
-//             return
-//                 output.R1_HiddenForRecipient &&
-//                 output.R1_HiddenForSender &&
-//                 output.R2_HiddenForRecipient &&
-//                 output.R2_HiddenForSender;
-//             // ReSharper disable once NotDisposedResourceIsReturned
-//         }).GetEnumerator();
-//     }
-//
-//     IEnumerator IEnumerable.GetEnumerator()
-//     {
-//         return GetEnumerator();
-//     }
-// }
