@@ -85,7 +85,7 @@ public class Executor
             var appliedMigrations = await context.Database.GetAppliedMigrationsAsync();
             var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
             var currentMigration = await context.GetLastAppliedMigration();
-            var dependencies = LoadMigrationDependencies(type, context.Database.ProviderName?.EndsWith("PostgreSQL") ?? true);
+            var dependencies = LoadMigrationDependencies(type, context.Database.IsSqlServer());
 
             migrations.AddRange(appliedMigrations.Select(id => new MigrationInfo(moduleType, id, true, dependencies[id])));
             migrations.AddRange(pendingMigrations.Select(id => new MigrationInfo(moduleType, id, false, dependencies[id])));
@@ -95,9 +95,9 @@ public class Executor
         return new TreeHandler(migrations);
     }
 
-    private Dictionary<string, IList<MigrationDependency>> LoadMigrationDependencies(Type dbContextType, bool usePostgres)
+    private Dictionary<string, IList<MigrationDependency>> LoadMigrationDependencies(Type dbContextType, bool useSqlServer)
     {
-        var assemblyNameSuffix = usePostgres ? "Postgres" : "SqlServer";
+        var assemblyNameSuffix = useSqlServer ? "SqlServer" : "Postgres";
         var assembly = Assembly.Load(new AssemblyName($"{dbContextType.Assembly.GetName().Name}.Database.{assemblyNameSuffix}"));
         var definedTypes = assembly.DefinedTypes
             .Where(t => t.BaseType == typeof(Migration));
