@@ -4,7 +4,7 @@ namespace Backbone.DatabaseMigrator;
 
 public class TreeHandler
 {
-    private List<MigrationInfo> _rawMigrations;
+    private readonly List<MigrationInfo> _rawMigrations;
 
     public TreeHandler(List<MigrationInfo> rawMigrations)
     {
