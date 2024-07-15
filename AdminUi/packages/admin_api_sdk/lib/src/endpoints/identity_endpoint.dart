@@ -61,11 +61,12 @@ class IdentitiesEndpoint extends Endpoint {
         transformer: (e) => (e as List).map(DeletionProcess.fromJson).toList(),
       );
 
-  Future<ApiResponse<List<DeletionProcess>>> getIdentityDeletionProcessDetails({
+  Future<ApiResponse<DeletionProcess>> getIdentityDeletionProcessDetails({
     required String address,
+    required String deletionProcessId,
   }) =>
       get(
-        '/api/v1/Identities/$address/DeletionProcesses',
-        transformer: (e) => (e as List).map(DeletionProcess.fromJson).toList(),
+        '/api/v1/Identities/$address/DeletionProcesses/$deletionProcessId',
+        transformer: DeletionProcess.fromJson,
       );
 }
