@@ -5,15 +5,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-      <PackageReference Include="MediatR" Version="12.3.0"/>
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0"/>
+      <PackageReference Include="MediatR" Version="12.3.0" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
     <PackageReference Include="TngTech.ArchUnitNET.xUnit" Version="0.10.6" />
     <PackageReference Include="FluentAssertions" Version="6.12.0" />
       <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-      <PackageReference Include="xunit" Version="2.8.1"/>
+      <PackageReference Include="xunit" Version="2.8.1" />
       <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -41,8 +41,6 @@
     <ProjectReference Include="..\Modules\Quotas\test\Quotas.Application.Tests\Quotas.Application.Tests.csproj" />
     <ProjectReference Include="..\Modules\Quotas\test\Quotas.Domain.Tests\Quotas.Domain.Tests.csproj" />
     <ProjectReference Include="..\Modules\Quotas\test\Quotas.Infrastructure.Tests\Quotas.Infrastructure.Tests.csproj" />
-    <ProjectReference Include="..\Modules\Relationships\test\Relationships.Application.Tests\Relationships.Application.Tests.csproj" />
-    <ProjectReference Include="..\Modules\Relationships\test\Relationships.Domain.Tests\Relationships.Domain.Tests.csproj" />
     <ProjectReference Include="..\Modules\Synchronization\test\Synchronization.Application.Tests\Synchronization.Application.Tests.csproj" />
     <ProjectReference Include="..\Modules\Synchronization\test\Synchronization.Domain.Tests\Synchronization.Domain.Tests.csproj" />
     <ProjectReference Include="..\Modules\Tokens\test\Tokens.Application.Tests\Tokens.Application.Tests.csproj" />

@@ -10,7 +10,7 @@ using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Xunit;
-using static Backbone.Modules.Relationships.Domain.Tests.TestHelpers.TestData;
+using static Backbone.Modules.Relationships.Domain.Aggregates.Relationships.TestHelpers.TestData;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Tests.Tests.Repositories;
 
