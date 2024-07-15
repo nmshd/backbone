@@ -7,8 +7,11 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
+import 'deletion_process_table/deletion_process_table.dart';
 import 'identity_quotas_table/identity_quotas_table.dart';
 import 'modals/change_tier.dart';
+
+export 'deletion_process_table/deletion_process_details/deletion_process_details.dart';
 
 class IdentityDetails extends StatefulWidget {
   final String address;
@@ -69,6 +72,8 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             ),
             Gaps.h16,
             IdentityQuotaList(identityDetails, _reloadIdentity),
+            Gaps.h16,
+            DeletionProcessTable(address: widget.address),
           ],
         ),
       ),
@@ -131,7 +136,7 @@ class _IdentityDetailsCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 32),
+                  Gaps.h32,
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     spacing: 8,
