@@ -9,6 +9,8 @@ public class TreeHandler
     public TreeHandler(List<MigrationInfo> rawMigrations)
     {
         _rawMigrations = rawMigrations;
+        Console.WriteLine("Migrations:");
+        foreach (var info in rawMigrations) Console.WriteLine($"{info.Type}: {info.Name}, {info.IsApplied}, {info.Dependencies.Count} dependencies");
     }
 }
 
