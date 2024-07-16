@@ -7,7 +7,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
-import './deletion_process_auditlogs/deletion_process_auditlogs.dart';
+import 'deletion_process_auditlogs_table/deletion_process_auditlogs_table.dart';
 
 class DeletionProcessDetails extends StatefulWidget {
   final String address;
@@ -20,24 +20,13 @@ class DeletionProcessDetails extends StatefulWidget {
 }
 
 class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
-  DeletionProcess? _deletionProcessesDetails;
-
-  late final ScrollController _scrollController;
+  DeletionProcessDetail? _deletionProcessesDetails;
 
   @override
   void initState() {
     super.initState();
 
-    _scrollController = ScrollController();
-
     _reloadDeletionProcess();
-  }
-
-  @override
-  void dispose() {
-    _scrollController.dispose();
-
-    super.dispose();
   }
 
   @override
@@ -45,52 +34,77 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
     if (_deletionProcessesDetails == null) return const Center(child: CircularProgressIndicator());
 
     final deletionProcessDetails = _deletionProcessesDetails!;
-    return Scrollbar(
-      controller: _scrollController,
-      child: SingleChildScrollView(
-        controller: _scrollController,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (Platform.isMacOS || Platform.isWindows) const BackButton(),
-            _DeletionProcessDetailsCard(
-              address: widget.address,
-              deletionProcessDetails: deletionProcessDetails,
-              updateDeletionProcess: _reloadDeletionProcess,
-            ),
-            Gaps.h16,
-            DeletionProcessAuditLogsTable(auditLogs: deletionProcessDetails.auditLogs ?? []),
-          ],
-        ),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (Platform.isMacOS || Platform.isWindows) const BackButton(),
+          _DeletionProcessDetailsCard(
+            address: widget.address,
+            deletionProcessDetails: deletionProcessDetails,
+            updateDeletionProcess: _reloadDeletionProcess,
+          ),
+          Gaps.h16,
+          Expanded(child: DeletionProcessAuditLogsTable(auditLogs: deletionProcessDetails.auditLogs ?? [])),
+          Gaps.h16,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 16),
+                child: FilledButton(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStateProperty.resolveWith((states) {
+                      return Theme.of(context).colorScheme.error;
+                    }),
+                  ),
+                  onPressed: _cancelDeletionProcess,
+                  child: Text(context.l10n.deletionProcessDetails_cancelDeletionProcess_title),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
+  }
+
+  Future<void> _cancelDeletionProcess() async {
+    final confirmed = await showConfirmationDialog(
+      actionText: context.l10n.confirm,
+      context: context,
+      message: context.l10n.deletionProcessDetails_cancelDeletionProcess_message,
+      title: context.l10n.deletionProcessDetails_cancelDeletionProcess_title,
+    );
+
+    if (!confirmed) return;
+
+    final result = await GetIt.I
+        .get<AdminApiClient>()
+        .deletionProcesses
+        .cancelDeletionProcessAsSupport(address: widget.address, deletionProcessId: widget.deletionProcessId);
+    if (result.hasError && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Theme.of(context).colorScheme.error,
+          content: Text(result.error.message),
+          showCloseIcon: true,
+        ),
+      );
+
+      await _reloadDeletionProcess();
+    }
   }
 
   Future<void> _reloadDeletionProcess() async {
     final deletionProcessesDetails = await GetIt.I
         .get<AdminApiClient>()
-        .identities
+        .deletionProcesses
         .getIdentityDeletionProcessDetails(address: widget.address, deletionProcessId: widget.deletionProcessId);
     if (mounted) {
       setState(() {
         _deletionProcessesDetails = deletionProcessesDetails.data;
-
-        // Log the entire _deletionProcessesDetails to inspect its structure
-        print('_deletionProcessesDetails: $_deletionProcessesDetails');
-
-        final auditLogs = _deletionProcessesDetails?.auditLogs;
-        if (auditLogs != null) {
-          for (var auditLog in auditLogs) {
-            print('AuditLog ID: ${auditLog.id}');
-            print('Created At: ${auditLog.createdAt}');
-            print('Old Status: ${auditLog.oldStatus}');
-            print('New Status: ${auditLog.newStatus}');
-            print('Message Key: ${auditLog.messageKey}');
-            print('Additional Data: ${auditLog.additionalData}');
-          }
-        } else {
-          print('AuditLogs are null');
-        }
       });
     }
   }
@@ -98,7 +112,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
 
 class _DeletionProcessDetailsCard extends StatelessWidget {
   final String address;
-  final DeletionProcess deletionProcessDetails;
+  final DeletionProcessDetail deletionProcessDetails;
   final VoidCallback updateDeletionProcess;
 
   const _DeletionProcessDetailsCard({
