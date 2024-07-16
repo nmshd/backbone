@@ -44,7 +44,7 @@
             "numberOfRelationshipTemplates": 0,
             "numberOfRelationships": 5,
             "totalNumberOfMessages": 50,
-            "numberOfDatawalletModifications": 1,
+            "numberOfDatawalletModifications": 1000,
             "numberOfDevices": 3,
             "numberOfChallenges": 20
         },
