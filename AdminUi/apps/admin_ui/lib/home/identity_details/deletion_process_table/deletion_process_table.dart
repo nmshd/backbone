@@ -131,10 +131,11 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
   }
 
   Future<void> _loadIdentityDeletionProcesses() async {
-    final deletionProcesses = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcesses(address: widget.address);
+    final deletionProcesses = await GetIt.I.get<AdminApiClient>().deletionProcesses.getIdentityDeletionProcesses(address: widget.address);
     if (mounted) {
       setState(() {
         _deletionProcesses = deletionProcesses.data;
+        _deletionProcesses!.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       });
     }
   }
