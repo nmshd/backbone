@@ -139,8 +139,8 @@ class _DeletionProcessDetailsCard extends StatelessWidget {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
+                      _DeletionProcessDetails(title: context.l10n.id, value: deletionProcessDetails.id),
                       _DeletionProcessDetails(title: context.l10n.address, value: address),
-                      _DeletionProcessDetails(title: context.l10n.deletionProcessDetails_deletionProcessID, value: deletionProcessDetails.id),
                       _DeletionProcessDetails(
                         title: context.l10n.createdAt,
                         value:
