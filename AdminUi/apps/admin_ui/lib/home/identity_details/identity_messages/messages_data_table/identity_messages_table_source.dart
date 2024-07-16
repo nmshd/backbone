@@ -64,7 +64,7 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
               cells: [
                 if (type == MessageType.outgoing) DataCell(_RecipientsCell(recipients: message.$2.recipients)),
                 if (type == MessageType.incoming) ...[
-                  DataCell(_SenderAddressCell(senderAddress: message.$2.senderAddress)),
+                  DataCell(Text(message.$2.senderAddress)),
                   DataCell(Text(message.$2.senderDevice)),
                 ],
                 DataCell(Text(message.$2.numberOfAttachments.toString())),
@@ -116,16 +116,5 @@ class _RecipientsCell extends StatelessWidget {
           ),
       ],
     );
-  }
-}
-
-class _SenderAddressCell extends StatelessWidget {
-  final String senderAddress;
-
-  const _SenderAddressCell({required this.senderAddress});
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(onTap: () => context.push('/identities/$senderAddress'), child: Text(senderAddress));
   }
 }
