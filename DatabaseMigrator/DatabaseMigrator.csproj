@@ -55,7 +55,7 @@
     </ItemGroup>
 
     <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) == Debug">
-        <Exec Command="if exist appsettings.override.json del appsettings.override.json"/>
-        <Exec Command="mklink /h appsettings.override.json ..\..\..\appsettings.override.json"/>
+        <Exec Command="if exist appsettings.override.json del then appsettings.override.json"/>
+        <Exec Command="mklink /h appsettings.override.json ..\appsettings.override.json"/>
     </Target>
 </Project>
