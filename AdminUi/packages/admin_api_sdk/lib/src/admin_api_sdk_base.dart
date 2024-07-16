@@ -10,6 +10,7 @@ class AdminApiClient {
   late final QuotasEndpoint quotas;
   late final IdentitiesEndpoint identities;
   late final RelationshipsEndpoint relationships;
+  late final DeletionProcessesEndpoint deletionProcesses;
 
   AdminApiClient._(String baseUrl, String apiKey) {
     final dio = Dio(
@@ -26,6 +27,7 @@ class AdminApiClient {
     quotas = QuotasEndpoint(dio);
     identities = IdentitiesEndpoint(dio);
     relationships = RelationshipsEndpoint(dio);
+    deletionProcesses = DeletionProcessesEndpoint(dio);
   }
 
   static Future<AdminApiClient> create({required String baseUrl, required String apiKey}) async {
