@@ -61,6 +61,24 @@ public class Printer : IPrinter
         OutputRelationships(outputDirName, pools);
         OutputMessages(outputDirName, pools);
         OutputChallenges(outputDirName, pools);
+        OutputDatawalletModifications(outputDirName, pools);
+    }
+
+    private void OutputDatawalletModifications(string outputDirName, IList<PoolEntry> pools)
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine("ModificationIndex;ModificationId;IdentityAddress");
+        foreach (var pool in pools)
+        {
+            foreach (var identity in pool.Identities)
+            {
+                foreach (var modification in identity.DatawalletModifications)
+                {
+                    stringBuilder.AppendLine($"{modification.Index};{modification.Id};{identity.Address}");
+                }
+            }
+        }
+        File.WriteAllTextAsync($@"{outputDirName}\dwms.csv", stringBuilder.ToString());
     }
 
     private void OutputChallenges(string outputDirName, IList<PoolEntry> pools)
@@ -74,7 +92,7 @@ public class Printer : IPrinter
                 if (identity.Challenges is null) continue;
                 foreach (var challenge in identity.Challenges)
                 {
-                    stringBuilder.AppendLine($"""{challenge.Id};{challenge.CreatedBy};{challenge.CreatedByDevice};{identity.Address}""");
+                    stringBuilder.AppendLine($"{challenge.Id};{challenge.CreatedBy};{challenge.CreatedByDevice};{identity.Address}");
                 }
             }
         }
@@ -91,7 +109,7 @@ public class Printer : IPrinter
             {
                 foreach (var (messageId, recipient) in identity.SentMessagesIdRecipientPair)
                 {
-                    stringBuilder.AppendLine($"""{messageId};{identity.Address};{recipient.Address}""");
+                    stringBuilder.AppendLine($"{messageId};{identity.Address};{recipient.Address}");
                 }
             }
         }
@@ -125,7 +143,7 @@ public class Printer : IPrinter
             {
                 foreach (var relatedIdentity in identity.EstablishedRelationshipsById)
                 {
-                    stringBuilder.AppendLine($"""{relatedIdentity.Key};{identity.Address};{relatedIdentity.Value.Address}""");
+                    stringBuilder.AppendLine($"{relatedIdentity.Key};{identity.Address};{relatedIdentity.Value.Address}");
                 }
             }
         }

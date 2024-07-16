@@ -6,6 +6,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
 using Backbone.Crypto;
 using Backbone.Identity.Pool.Creator.Application.Printer;
 using Backbone.Identity.Pool.Creator.PoolsFile;
@@ -13,6 +14,7 @@ using Backbone.Identity.Pool.Creator.PoolsGenerator;
 using Backbone.Identity.Pool.Creator.Tools;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Backbone.Identity.Pool.Creator.EntityCreation;
 public class EntityCreator
@@ -74,7 +76,7 @@ public class EntityCreator
             var templateResponse = await sdk.RelationshipTemplates.CreateTemplate(new() { Content = [], ExpiresAt = DateTime.Now.AddYears(2), MaxNumberOfAllocations = 50 });
             var createRelationshipResponse = await relatedSdk.Relationships.CreateRelationship(new() { RelationshipTemplateId = templateResponse.Result!.Id, Content = [] });
             var acceptRelationshipResponse = await sdk.Relationships.AcceptRelationship(createRelationshipResponse.Result!.Id, new());
-            if(acceptRelationshipResponse is not null && acceptRelationshipResponse.Result is not null) 
+            if (acceptRelationshipResponse is not null && acceptRelationshipResponse.Result is not null)
                 _identitiesDictionary[pair.a].EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, _identitiesDictionary[pair.b]);
 
             progress.Increment();
@@ -124,9 +126,9 @@ public class EntityCreator
                 {
                     Recipients = [new SendMessageRequestRecipientInformation { Address = recipientIdentity.Address, EncryptedKey = ConvertibleString.FromUtf8(new string('A', 152)).BytesRepresentation }],
                     Attachments = [],
-                    Body = []
+                    Body = ConvertibleString.FromUtf8("Message body").BytesRepresentation
                 });
-                if(messageResponse is not null && messageResponse.Result is not null)
+                if (messageResponse.Result is not null)
                     identity.SentMessagesIdRecipientPair.Add((messageResponse.Result.Id, recipientIdentity));
                 progress.Increment();
             }
@@ -190,7 +192,7 @@ public class EntityCreator
             foreach (var identity in pool.Identities)
             {
                 var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
-                for (uint i = 0; i < pool.NumberOfRelationshipTemplates - identity.IdentitiesToEstablishRelationshipsWith.Count; i++)
+                for (uint i = 0; i < pool.NumberOfRelationshipTemplates; i++)
                 {
                     await sdk.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest
                     {
@@ -210,7 +212,7 @@ public class EntityCreator
         Console.Write("Creating Challenges... ");
         using var progress = new ProgressBar(_pools.Sum(p => p.NumberOfChallenges * p.Amount));
 
-        var relevantIdentities = _pools.Where(p => p.NumberOfChallenges > 0).SelectMany(p => p.Identities);
+        var relevantIdentities = _pools.Where(p => p.NumberOfChallenges > 0).SelectMany(p => p.Identities).ToList();
 
         var dictionaryOfBags = new ConcurrentDictionary<uint, ConcurrentBag<Challenge>>();
 
@@ -231,6 +233,7 @@ public class EntityCreator
         {
             relevantIdentities.Single(i => i.Uon == uon).Challenges = [.. bag];
         }
+
         Console.WriteLine("done.");
     }
 
@@ -244,31 +247,96 @@ public class EntityCreator
             foreach (var identity in pool.Identities)
             {
                 var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
-                {
-                    var request = new PushDatawalletModificationsRequest()
-                    {
-                        LocalIndex = 0,
-                        Modifications = []
-                    };
+                var startDatawalletVersionUpgradeResponse = await sdk.SyncRuns.StartSyncRun(new StartSyncRunRequest() { Type = SyncRunType.DatawalletVersionUpgrade, Duration = 100 }, 1);
 
-                    for (uint i = 0; i < pool.NumberOfDatawalletModifications; i++)
+                if (startDatawalletVersionUpgradeResponse.Result is null) continue;
+
+                var finalizeDatawalletVersionUpgradeResponse = await sdk.SyncRuns.FinalizeDatawalletVersionUpgrade(startDatawalletVersionUpgradeResponse.Result.SyncRun.Id,
+                    new FinalizeDatawalletVersionUpgradeRequest()
                     {
-                        request.Modifications.Add(new()
-                        {
-                            Collection = "Requests",
-                            DatawalletVersion = 1,
-                            ObjectIdentifier = identity.Address,
-                            Type = "Create",
-                            PayloadCategory = "MetaData"
-                        });
-                    }
-                    var ret = await sdk.Datawallet.PushDatawalletModifications(request, supportedDatawalletVersion: 0);
-                    identity.PushDatawalletModificationsResponse = ret.Result;
-                    progress.Increment();
-                }
+                        DatawalletModifications = PreGenerateDatawalletModifications(identity.Pool.NumberOfDatawalletModifications),
+                        NewDatawalletVersion = 3
+                    });
+
+                if (finalizeDatawalletVersionUpgradeResponse.Result is not null)
+                    identity.DatawalletModifications = finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications;
+
+                progress.Increment();
+
             }
         });
 
         Console.WriteLine("done.");
+    }
+
+
+    /// <summary>
+    /// Given a number of Datawallet Modifications to generate, distributes them semi-randomly with the following types:
+    /// <ol>
+    /// <li>of type create: 3/10</li>
+    /// <li>of type update: 6/10</li>
+    /// <li>of type delete: 1/10</li>
+    /// </ol>
+    /// </summary>
+    /// <see cref="PushDatawalletModificationsRequestItem.Type"/>
+    /// <returns></returns>
+    private static List<PushDatawalletModificationsRequestItem> PreGenerateDatawalletModifications(uint number)
+    {
+        var ret = new List<PushDatawalletModificationsRequestItem>();
+        uint objectIterator = 1;
+        if (number < 10)
+        {
+            // can't be divided properly. Will only do creates.
+            for (uint i = 0; i < number; i++)
+            {
+                ret.Add(new PushDatawalletModificationsRequestItem()
+                {
+                    Collection = "Performance-Tests",
+                    DatawalletVersion = 2,
+                    Type = "Create",
+                    ObjectIdentifier = "OBJ" + objectIterator++.ToString("D12"),
+                    PayloadCategory = "Userdata"
+                });
+            }
+
+            return ret;
+        }
+
+        var idsAndOperationsDictionary = new Dictionary<string, List<string>>();
+        var random = new Random();
+
+        for (uint i = 0; i < number; i++)
+        {
+            if (i < number * 3 / 10)
+            {
+                // create
+                idsAndOperationsDictionary.Add("OBJ" + objectIterator++.ToString("D12"), ["Create"]);
+            }
+            else if (i < number * 9 / 10)
+            {
+                // update
+                random.GetRandomElement(idsAndOperationsDictionary).Add("Update");
+            }
+            else
+            {
+                // delete
+                var selectedKey = idsAndOperationsDictionary.Where(p => !p.Value.Contains("Delete")).Select(p => p.Key).First();
+                idsAndOperationsDictionary[selectedKey].Add("Delete");
+            }
+        }
+
+        foreach (var (id, operations) in idsAndOperationsDictionary)
+        {
+            ret.AddRange(operations.Select(operation => new PushDatawalletModificationsRequestItem
+            {
+                Collection = "Requests",
+                DatawalletVersion = 1,
+                ObjectIdentifier = id,
+                Type = operation,
+                PayloadCategory = "Metadata"
+            }));
+        }
+
+        return ret;
     }
 }

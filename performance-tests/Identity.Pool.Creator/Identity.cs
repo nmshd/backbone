@@ -2,6 +2,7 @@
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types;
 using Backbone.Identity.Pool.Creator.PoolsFile;
 
 namespace Backbone.Identity.Pool.Creator;
@@ -31,7 +32,7 @@ public class Identity
     public string Nickname { get; }
     public string PoolType { get; }
     public uint GraphAlgorithmVisitCount { get; set; } = 0;
-    public PushDatawalletModificationsResponse? PushDatawalletModificationsResponse { get; internal set; }
+    public List<CreatedDatawalletModification> DatawalletModifications { get; internal set; } = [];
 
 
     public Identity(UserCredentials userCredentials, string address, string deviceId, PoolEntry pool, uint orderNumber, uint? uniqueOrderNumber = null)
