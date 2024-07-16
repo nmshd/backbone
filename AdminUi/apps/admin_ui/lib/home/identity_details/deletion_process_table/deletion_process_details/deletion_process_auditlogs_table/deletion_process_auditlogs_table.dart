@@ -18,6 +18,8 @@ class DeletionProcessAuditLogsTable extends StatefulWidget {
 }
 
 class _DeletionProcessAuditLogsTableState extends State<DeletionProcessAuditLogsTable> {
+  final messageTemplates = MessageTemplate();
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -41,7 +43,13 @@ class _DeletionProcessAuditLogsTableState extends State<DeletionProcessAuditLogs
                     '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(auditLog.createdAt)} ${DateFormat.Hms().format(auditLog.createdAt)}',
                   ),
                 ),
-                DataCell(Text(replaceMessageKeyWithCorrespondingText(auditLog.messageKey))),
+                DataCell(
+                  Builder(
+                    builder: (buildContext) => Text(
+                      messageTemplates.getMessageForDeletionProcessAuditLog(buildContext, auditLog.messageKey, auditLog.additionalData),
+                    ),
+                  ),
+                ),
                 DataCell(auditLog.oldStatus == null ? const Text('') : Text(styleStatus(auditLog.oldStatus!))),
                 DataCell(Text(styleStatus(auditLog.newStatus))),
               ],
@@ -50,39 +58,6 @@ class _DeletionProcessAuditLogsTableState extends State<DeletionProcessAuditLogs
         ),
       ),
     );
-  }
-
-  String replaceMessageKeyWithCorrespondingText(String messageKey) {
-    switch (messageKey) {
-      case 'StartedByOwner':
-        return context.l10n.deletionProcessDetails_auditLogs_startedByOwner;
-      case 'StartedBySupport':
-        return context.l10n.deletionProcessDetails_auditLogs_startedBySupport;
-      case 'Approved':
-        return context.l10n.deletionProcessDetails_auditLogs_approved;
-      case 'Rejected':
-        return context.l10n.deletionProcessDetails_auditLogs_rejected;
-      case 'CancelledByOwner':
-        return context.l10n.deletionProcessDetails_auditLogs_cancelledByOwner;
-      case 'CancelledBySupport':
-        return context.l10n.deletionProcessDetails_auditLogs_cancelledBySupport;
-      case 'CancelledAutomatically':
-        return context.l10n.deletionProcessDetails_auditLogs_cancelledAutomatically;
-      case 'ApprovalReminder1Sent':
-        return context.l10n.deletionProcessDetails_auditLogs_approvalReminder1Sent;
-      case 'ApprovalReminder2Sent':
-        return context.l10n.deletionProcessDetails_auditLogs_approvalReminder2Sent;
-      case 'ApprovalReminder3Sent':
-        return context.l10n.deletionProcessDetails_auditLogs_approvalReminder3Sent;
-      case 'GracePeriodReminder1Sent':
-        return context.l10n.deletionProcessDetails_auditLogs_gracePeriodReminder1Sent;
-      case 'GracePeriodReminder2Sent':
-        return context.l10n.deletionProcessDetails_auditLogs_gracePeriodReminder2Sent;
-      case 'GracePeriodReminder3Sent':
-        return context.l10n.deletionProcessDetails_auditLogs_gracePeriodReminder3Sent;
-      default:
-        return context.l10n.deletionProcessDetails_auditLogs_unknownMessageKey;
-    }
   }
 
   String styleStatus(String status) {
