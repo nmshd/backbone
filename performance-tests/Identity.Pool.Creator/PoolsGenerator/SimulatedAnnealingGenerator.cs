@@ -527,6 +527,8 @@ public class SolutionRepresentation : ICloneable
         
         return stringBuilder.ToString();
     }
+
+    internal uint GetIdentityCount() => RaM.Max(r => r.Key.a);
 }
 
 public static class RandomMethodExtensions

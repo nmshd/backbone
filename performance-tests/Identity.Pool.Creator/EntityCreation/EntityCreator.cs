@@ -37,6 +37,8 @@ public class EntityCreator
 
     public async Task StartCreation()
     {
+        CreateCompensationPool();
+
         await CreateIdentities();
         LoadRelationshipsAndMessagesConfiguration();
         _identitiesDictionary = _pools.SelectMany(p => p.Identities).ToDictionary(i => i.Uon);
@@ -49,6 +51,21 @@ public class EntityCreator
 
 
         _printer.OutputAll(_pools);
+    }
+
+    private void CreateCompensationPool()
+    {
+        var diff = _ram.GetIdentityCount() - _pools.Sum(p => p.Amount);
+        if (diff <= 0) return;
+        
+        _pools.Add(new PoolEntry
+        {
+            Alias = "ac",
+            Name = "App Compensation",
+            NumberOfRelationships = 5,
+            Type = "app",
+            Amount = Convert.ToUInt32(diff)
+        });
     }
 
     /// <summary>
