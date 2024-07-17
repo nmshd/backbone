@@ -4,8 +4,7 @@
     "Default": {
       "commandName": "Project",
       "environmentVariables": {
-      },
-      "workingDirectory": "bin/Debug/$(TargetFramework)"
+      }
     }
   }
 }
