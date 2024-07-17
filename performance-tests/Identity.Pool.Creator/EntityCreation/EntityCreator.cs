@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Security.Principal;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
@@ -14,7 +13,6 @@ using Backbone.Identity.Pool.Creator.PoolsGenerator;
 using Backbone.Identity.Pool.Creator.Tools;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
-using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Backbone.Identity.Pool.Creator.EntityCreation;
 public class EntityCreator
@@ -43,41 +41,49 @@ public class EntityCreator
         LoadRelationshipsAndMessagesConfiguration();
         _identitiesDictionary = _pools.SelectMany(p => p.Identities).ToDictionary(i => i.Uon);
 
+        await CreateRelationshipTemplates();
         await CreateRelationships();
         await CreateChallenges();
         await CreateMessages();
-        await CreateRelationshipTemplates();
         await CreateDatawalletModifications();
 
 
         _printer.OutputAll(_pools);
     }
 
+    /// <summary>
+    /// Creates relationships. Despite being considered undirected, they must be created by an identity (a), using another identity's (b) relationship template.
+    /// This means that the creation of relationship templates must precede the creation of relationships.
+    /// Moreover, templates are created exclusively by connectors, meaning that relationships are initiated by app identities.
+    /// </summary>
+    /// <returns></returns>
     private async Task CreateRelationships()
     {
+        // ensure all connectors involved have at least one relationship template
+        var connectorIdentities = _pools.SelectMany(p => p.Identities).SelectMany((i => i.IdentitiesToEstablishRelationshipsWith)).Distinct().Where(i => i.Pool.IsConnector());
+        var nonConnectorIdentities = _pools.SelectMany(p => p.Identities).SelectMany((i => i.IdentitiesToEstablishRelationshipsWith)).Distinct().Where(i => !i.Pool.IsConnector());
+        if (connectorIdentities.Any(c => c.RelationshipTemplates.Count < 1))
+            throw new Exception("One or more relationship target connectors do not have a usable relationship template.");
+
         Console.Write("Establishing Relationships... ");
         using var progress = new ProgressBar(_ram.GetRelationshipCount());
 
-        var establishedRelationships = new HashSet<(uint a, uint b)>();
 
-        foreach (var identity in _pools.SelectMany(p => p.Identities))
+        await Parallel.ForEachAsync(nonConnectorIdentities, new ParallelOptions { MaxDegreeOfParallelism = _pools.ExpectedNumberOfRelationships() < 32 ? 4 : 16 }, async (nonConnectorIdentity, _) =>
         {
-            foreach (var relatedIdentity in identity.IdentitiesToEstablishRelationshipsWith)
+            var random = new Random();
+            foreach (var relatedIdentity in nonConnectorIdentity.IdentitiesToEstablishRelationshipsWith)
             {
-                establishedRelationships.Add(GetRelationshipRepresentation(identity, relatedIdentity));
+                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, nonConnectorIdentity.UserCredentials);
+                var connectorSdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, relatedIdentity.UserCredentials);
+                var randomRelationshipTemplate = random.GetRandomElement(relatedIdentity.RelationshipTemplates);
+
+                var createRelationshipResponse = await sdk.Relationships.CreateRelationship(new() { RelationshipTemplateId = randomRelationshipTemplate.Id, Content = [] });
+                var acceptRelationshipResponse = await connectorSdk.Relationships.AcceptRelationship(createRelationshipResponse.Result!.Id, new());
+
+                if (acceptRelationshipResponse.Result is not null)
+                    nonConnectorIdentity.EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, relatedIdentity);
             }
-        }
-
-        await Parallel.ForEachAsync(establishedRelationships, new ParallelOptions() { MaxDegreeOfParallelism = establishedRelationships.Count < 32 ? 4 : 16 }, async (pair, _) =>
-        {
-            var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, _identitiesDictionary[pair.a].UserCredentials);
-            var relatedSdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, _identitiesDictionary[pair.b].UserCredentials);
-
-            var templateResponse = await sdk.RelationshipTemplates.CreateTemplate(new() { Content = [], ExpiresAt = DateTime.Now.AddYears(2), MaxNumberOfAllocations = 50 });
-            var createRelationshipResponse = await relatedSdk.Relationships.CreateRelationship(new() { RelationshipTemplateId = templateResponse.Result!.Id, Content = [] });
-            var acceptRelationshipResponse = await sdk.Relationships.AcceptRelationship(createRelationshipResponse.Result!.Id, new());
-            if (acceptRelationshipResponse is not null && acceptRelationshipResponse.Result is not null)
-                _identitiesDictionary[pair.a].EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, _identitiesDictionary[pair.b]);
 
             progress.Increment();
         });
@@ -194,12 +200,15 @@ public class EntityCreator
                 var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
                 for (uint i = 0; i < pool.NumberOfRelationshipTemplates; i++)
                 {
-                    await sdk.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest
+                    var relationshipTemplateResponse = await sdk.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest
                     {
                         Content = [],
                         ExpiresAt = DateTime.Now.EndOfYear(),
                         MaxNumberOfAllocations = 10
                     });
+
+                    if (relationshipTemplateResponse.Result is not null)
+                        identity.RelationshipTemplates.Add(relationshipTemplateResponse.Result);
                     progress.Increment();
                 }
             }

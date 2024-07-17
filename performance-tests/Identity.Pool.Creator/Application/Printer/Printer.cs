@@ -67,14 +67,14 @@ public class Printer : IPrinter
     private void OutputDatawalletModifications(string outputDirName, IList<PoolEntry> pools)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("ModificationIndex;ModificationId;IdentityAddress");
+        stringBuilder.AppendLine("IdentityAddress;ModificationIndex;ModificationId");
         foreach (var pool in pools)
         {
             foreach (var identity in pool.Identities)
             {
                 foreach (var modification in identity.DatawalletModifications)
                 {
-                    stringBuilder.AppendLine($"{modification.Index};{modification.Id};{identity.Address}");
+                    stringBuilder.AppendLine($"{identity.Address};{modification.Index};{modification.Id}");
                 }
             }
         }
@@ -84,7 +84,7 @@ public class Printer : IPrinter
     private void OutputChallenges(string outputDirName, IList<PoolEntry> pools)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("ChallengeId;CreatedByAddress;CreatedByDevice;IdentityAddress");
+        stringBuilder.AppendLine("CreatedByAddress;ChallengeId;CreatedByDevice;IdentityAddress");
         foreach (var pool in pools)
         {
             foreach (var identity in pool.Identities)
@@ -92,7 +92,7 @@ public class Printer : IPrinter
                 if (identity.Challenges is null) continue;
                 foreach (var challenge in identity.Challenges)
                 {
-                    stringBuilder.AppendLine($"{challenge.Id};{challenge.CreatedBy};{challenge.CreatedByDevice};{identity.Address}");
+                    stringBuilder.AppendLine($"{challenge.CreatedBy};{challenge.Id};{challenge.CreatedByDevice};{identity.Address}");
                 }
             }
         }
