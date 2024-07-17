@@ -26,10 +26,8 @@
         <ProjectReference Include="..\..\..\Modules\Tokens\src\Tokens.ConsumerApi\Tokens.ConsumerApi.csproj"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Content Include="..\..\..\appsettings.override.json" Condition="$(Configuration) == Debug">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
-
+    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) == Debug">
+        <Exec Command="rm -f appsettings.override.json"/>
+        <Exec Command="ln -f ../../../appsettings.override.json appsettings.override.json"/>
+    </Target>
 </Project>
