@@ -151,7 +151,7 @@ public class EntityCreator
         Console.Write("Creating Identities... ");
         using var progress = new ProgressBar(_pools.Sum(p => p.Amount));
 
-        uint uon = 1;
+        uint uon = 0;
 
         foreach (var pool in _pools)
         {
