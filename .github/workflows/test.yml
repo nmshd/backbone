@@ -101,25 +101,25 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: ConsumerApi/Dockerfile
+          - dockerfile: Executables/ConsumerApi/src/Dockerfile
             image: consumer-api
 
-          - dockerfile: AdminApi/src/AdminApi/Dockerfile
+          - dockerfile: Executables/AdminApi/src/AdminApi/Dockerfile
             image: admin-ui
 
           - dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
             image: admin-cli
 
-          - dockerfile: DatabaseMigrator/Dockerfile
+          - dockerfile: Executables/DatabaseMigrator/src/Dockerfile
             image: database-migrator
 
           - dockerfile: Executables/EventHandlerService/src/EventHandlerService/Dockerfile
             image: event-handler-service
 
-          - dockerfile: Modules/Files/src/Files.Jobs.SanityCheck/Dockerfile
+          - dockerfile: Executables/FilesSanityCheck/src/FilesSanityCheck/Dockerfile
             image: files-sanity-check
 
-          - dockerfile: Jobs/src/Job.IdentityDeletion/Dockerfile
+          - dockerfile: Executables/IdentityDeletionJobs/src/Job.IdentityDeletion/Dockerfile
             image: identity-deletion-jobs
 
           - dockerfile: Executables/SseServer/src/SseServer/Dockerfile
