@@ -2,6 +2,7 @@ using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Challenges.Application.Challenges.DTOs;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Challenges.Domain.Ids;
 using MediatR;
 
 namespace Backbone.Modules.Challenges.Application.Challenges.Queries.GetChallengeById;
@@ -19,7 +20,7 @@ public class Handler : IRequestHandler<GetChallengeByIdQuery, ChallengeDTO>
 
     public async Task<ChallengeDTO> Handle(GetChallengeByIdQuery request, CancellationToken cancellationToken)
     {
-        var challenge = await _challengesRepository.Find(request.Id, cancellationToken);
+        var challenge = await _challengesRepository.Find(ChallengeId.Parse(request.Id), cancellationToken);
 
         if (challenge.IsExpired())
         {
