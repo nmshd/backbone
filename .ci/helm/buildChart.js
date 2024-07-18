@@ -7,4 +7,4 @@ const version = getRequiredEnvVar("VERSION");
 
 await $`Executables/helm dependency update helm`;
 
-await $`Executables/helm package --version ${version} --app-version ${version} helm`;
+await $`helm package --version ${version} --app-version ${version} helm`;
