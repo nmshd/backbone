@@ -2,7 +2,7 @@
 set -e
 set -x
 
-cd AdminUi
+cd Executables/AdminUi
 dart pub global activate melos
 melos bootstrap
 melos analyze
