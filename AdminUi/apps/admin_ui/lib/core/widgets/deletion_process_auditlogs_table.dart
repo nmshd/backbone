@@ -61,7 +61,7 @@ class _DeletionProcessAuditLogsTableState extends State<DeletionProcessAuditLogs
   }
 
   String styleStatus(String status) {
-    if (status == 'WaitingForApproval') return context.l10n.deletionProcessDetails_auditLogs_waitingForApproval;
+    if (status == 'WaitingForApproval') return context.l10n.deletionProcessAuditLogsTable_auditLogs_waitingForApproval;
     return status;
   }
 }
