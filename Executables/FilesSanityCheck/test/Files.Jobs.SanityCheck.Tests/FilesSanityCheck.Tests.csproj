@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <IsPackable>false</IsPackable>
@@ -10,8 +10,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0"/>
-      <PackageReference Include="xunit" Version="2.8.1"/>
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+      <PackageReference Include="xunit" Version="2.8.1" />
       <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
@@ -24,7 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
-    <ProjectReference Include="..\..\src\Files.Jobs.SanityCheck\Files.Jobs.SanityCheck.csproj" />
+    <ProjectReference Include="..\..\src\FilesSanityCheck\FilesSanityCheck.csproj" />
   </ItemGroup>
 
 </Project>
