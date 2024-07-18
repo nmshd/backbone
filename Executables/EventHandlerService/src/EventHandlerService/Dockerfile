@@ -6,7 +6,7 @@ WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
 COPY ["Modules/Directory.Build.props", "Modules/"]
-COPY ["Executables/EventHandlerService/src/EventHandlerService/EventHandlerService.csproj", "EventHandlerService/src/EventHandlerService/"]
+COPY ["Executables/EventHandlerService/src/EventHandlerService/EventHandlerService.csproj", "Executables/EventHandlerService/src/EventHandlerService/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj", "BuildingBlocks/src/BuildingBlocks.Infrastructure/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Application.Abstractions/BuildingBlocks.Application.Abstractions.csproj", "BuildingBlocks/src/BuildingBlocks.Application.Abstractions/"]
 COPY ["BuildingBlocks/src/DevelopmentKit.Identity/DevelopmentKit.Identity.csproj", "BuildingBlocks/src/DevelopmentKit.Identity/"]
