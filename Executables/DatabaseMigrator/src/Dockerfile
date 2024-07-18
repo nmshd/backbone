@@ -6,7 +6,7 @@ WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
 COPY ["Modules/Directory.Build.props", "Modules/"]
-COPY ["Executables/DatabaseMigrator/DatabaseMigrator.csproj", "Executables/DatabaseMigrator/"]
+COPY ["Executables/DatabaseMigrator/src/DatabaseMigrator.csproj", "Executables/DatabaseMigrator/"]
 COPY ["Executables/AdminApi/src/AdminApi.Infrastructure/AdminApi.Infrastructure.csproj", "Executables/AdminApi/src/AdminApi.Infrastructure/"]
 COPY ["Executables/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastructure.Database.Postgres.csproj", "Executables/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/"]
 COPY ["Executables/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/AdminApi.Infrastructure.Database.SqlServer.csproj", "Executables/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/"]
