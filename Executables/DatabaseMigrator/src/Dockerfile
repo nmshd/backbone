@@ -68,8 +68,10 @@ COPY . .
 
 ARG VERSION
 
-WORKDIR "/src/Executables/DatabaseMigrator/src/DatabaseMigrator"
+WORKDIR "/src/Executables/DatabaseMigrator/src"
 RUN dotnet build "DatabaseMigrator.csproj" -c Release --output /app/build --no-restore
+
+C:\Users\htotbagi\Code\backbone\Executables\DatabaseMigrator\src\DatabaseMigrator.csproj
 
 FROM build AS publish
 

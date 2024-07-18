@@ -18,7 +18,7 @@ COPY ["Modules/Files/src/Files.Infrastructure/Files.Infrastructure.csproj", "Mod
 COPY ["BuildingBlocks/src/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj", "BuildingBlocks/src/BuildingBlocks.Infrastructure/"]
 COPY ["Common/src/Common.Infrastructure/Common.Infrastructure.csproj", "Common/src/Common.Infrastructure/"]
 
-RUN dotnet restore "Modules/Files/src/Files.Jobs.SanityCheck/Files.Jobs.SanityCheck.csproj"
+RUN dotnet restore "Executables/FilesSanityCheck/src/FilesSanityCheck/FilesSanityCheck.csproj"
 
 COPY . .
 
