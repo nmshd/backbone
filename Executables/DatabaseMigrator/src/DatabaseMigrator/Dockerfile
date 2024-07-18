@@ -1,12 +1,12 @@
-﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0.5-alpine3.18 AS base
+﻿﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0.5-alpine3.18 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0.302-1 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.303 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
 COPY ["Modules/Directory.Build.props", "Modules/"]
-COPY ["Executables/DatabaseMigrator/src/DatabaseMigrator.csproj", "Executables/DatabaseMigrator/src/DatabaseMigrator/"]
+COPY ["Executables/DatabaseMigrator/src/DatabaseMigrator/DatabaseMigrator.csproj", "Executables/DatabaseMigrator/src/DatabaseMigrator/DatabaseMigrator/"]
 COPY ["Executables/AdminApi/src/AdminApi.Infrastructure/AdminApi.Infrastructure.csproj", "Executables/AdminApi/src/AdminApi.Infrastructure/"]
 COPY ["Executables/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastructure.Database.Postgres.csproj", "Executables/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/"]
 COPY ["Executables/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/AdminApi.Infrastructure.Database.SqlServer.csproj", "Executables/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/"]
@@ -62,13 +62,13 @@ COPY ["Modules/Challenges/src/Challenges.Infrastructure.Database.Postgres/Challe
 COPY ["Executables/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/AdminApi.Infrastructure.Database.SqlServer.csproj", "Executables/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/"]
 COPY ["Executables/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastructure.Database.Postgres.csproj", "Executables/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/"]
 
-RUN dotnet restore "Executables/DatabaseMigrator/src/DatabaseMigrator.csproj"
+RUN dotnet restore "Executables/DatabaseMigrator/src/DatabaseMigrator/DatabaseMigrator.csproj"
 
 COPY . .
 
 ARG VERSION
 
-WORKDIR "src/Executables/DatabaseMigrator/src"
+WORKDIR "/src/Executables/DatabaseMigrator/src/DatabaseMigrator"
 RUN dotnet build "DatabaseMigrator.csproj" -c Release --output /app/build --no-restore
 
 FROM build AS publish
