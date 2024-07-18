@@ -3,7 +3,7 @@ set -e
 set -x
 
 INITIAL_DIR=$(pwd)
-cd AdminApi/src/AdminApi/ClientApp
+cd Executables/AdminApi/src/AdminApi/ClientApp
 npm ci
 npx eslint --ext ts ./src
 npx prettier --check .
