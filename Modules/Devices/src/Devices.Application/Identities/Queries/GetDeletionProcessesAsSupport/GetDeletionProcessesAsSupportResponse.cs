@@ -7,7 +7,7 @@ namespace Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionPro
 public class GetDeletionProcessesAsSupportResponse : CollectionResponseBase<IdentityDeletionProcessOverviewDTO>
 {
     public GetDeletionProcessesAsSupportResponse(IEnumerable<IdentityDeletionProcess> processes)
-        : base(processes.Select(p => new IdentityDeletionProcessOverviewDTO(p)))
+        : base(processes.Select(p => new IdentityDeletionProcessOverviewDTO(p)).OrderByDescending(p => p.CreatedAt))
     {
     }
 }
