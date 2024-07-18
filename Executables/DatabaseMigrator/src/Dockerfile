@@ -68,7 +68,7 @@ COPY . .
 
 ARG VERSION
 
-WORKDIR "/src/Executables/DatabaseMigrator/src"
+WORKDIR "src/Executables/DatabaseMigrator/src"
 RUN dotnet build "DatabaseMigrator.csproj" -c Release --output /app/build --no-restore
 
 FROM build AS publish
