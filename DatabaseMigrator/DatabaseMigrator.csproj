@@ -54,8 +54,8 @@
         <ProjectReference Include="..\Modules\Tokens\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj"/>
     </ItemGroup>
 
-    <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="$(Configuration) == Debug">
-        <Exec Command="rm -f appsettings.override.json"/>
-        <Exec Command="ln -f ../appsettings.override.json appsettings.override.json"/>
+    <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
+        <Delete Files="$(ProjectDir)appsettings.override.json" />
+        <Copy SourceFiles="..\appsettings.override.json" DestinationFolder="$(ProjectDir)" />
     </Target>
 </Project>
