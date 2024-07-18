@@ -35,10 +35,7 @@ public class Handler : IRequestHandler<RejectRelationshipCommand, RejectRelation
 
         await ReadTemplateFromDb(cancellationToken, relationship);
 
-        var existingRelationships = await _relationshipsRepository.FindRelationships(
-            r =>
-                (r.From == _activeIdentity && r.To == _template.CreatedBy) ||
-                (r.From == _template.CreatedBy && r.To == _activeIdentity), cancellationToken);
+        var existingRelationships = await _relationshipsRepository.FindRelationships(Relationship.HasParticipant(_activeIdentity), cancellationToken);
 
         relationship.Reject(_activeIdentity, _activeDevice, request.CreationResponseContent, existingRelationships.ToList());
 
