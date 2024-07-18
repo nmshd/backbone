@@ -65,7 +65,7 @@ RUN npm i -g @angular/cli
 WORKDIR /src
 COPY ["Directory.Build.props", "."]
 COPY ["Modules/Directory.Build.props", "Modules/"]
-COPY ["Executables/AdminApi/src/AdminApi/AdminApi.csproj", "AdminApi/src/AdminApi/"]
+COPY ["Executables/AdminApi/src/AdminApi/AdminApi.csproj", "Executables/AdminApi/src/AdminApi/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.API/BuildingBlocks.API.csproj", "BuildingBlocks/src/BuildingBlocks.API/"]
 COPY ["Modules/Devices/src/Devices.Domain/Devices.Domain.csproj", "Modules/Devices/src/Devices.Domain/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Domain/BuildingBlocks.Domain.csproj", "BuildingBlocks/src/BuildingBlocks.Domain/"]
@@ -85,16 +85,16 @@ COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
 COPY ["Modules/Quotas/src/Quotas.Application/Quotas.Application.csproj", "Modules/Quotas/src/Quotas.Application/"]
 COPY ["Modules/Quotas/src/Quotas.Domain/Quotas.Domain.csproj", "Modules/Quotas/src/Quotas.Domain/"]
 COPY ["Modules/Quotas/src/Quotas.Infrastructure/Quotas.Infrastructure.csproj", "Modules/Quotas/src/Quotas.Infrastructure/"]
-COPY ["Executables/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastructure.Database.Postgres.csproj", "AdminApi/src/AdminApi.Infrastructure.Database.Postgres/"]
-COPY ["Executables/AdminApi/src/AdminApi.Infrastructure/AdminApi.Infrastructure.csproj", "AdminApi/src/AdminApi.Infrastructure/"]
-COPY ["Executables/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/AdminApi.Infrastructure.Database.SqlServer.csproj", "AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/"]
+COPY ["Executables/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastructure.Database.Postgres.csproj", "Executables/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/"]
+COPY ["Executables/AdminApi/src/AdminApi.Infrastructure/AdminApi.Infrastructure.csproj", "Executables/AdminApi/src/AdminApi.Infrastructure/"]
+COPY ["Executables/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/AdminApi.Infrastructure.Database.SqlServer.csproj", "Executables/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/"]
 RUN dotnet restore "Executables/AdminApi/src/AdminApi/AdminApi.csproj"
 
 COPY . .
 
 ARG VERSION
 
-RUN dotnet publish /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "/src/AdminApi/src/AdminApi/AdminApi.csproj"
+RUN dotnet publish /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "/src/Executables/AdminApi/src/AdminApi/AdminApi.csproj"
 RUN dotnet publish --configuration Release --output /app/publish/health "HealthCheck/HealthCheck.csproj"
 
 ### Final ####
