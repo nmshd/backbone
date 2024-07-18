@@ -113,7 +113,7 @@ jobs:
           - dockerfile: DatabaseMigrator/Dockerfile
             image: database-migrator
 
-          - dockerfile: EventHandlerService/src/EventHandlerService/Dockerfile
+          - dockerfile: Executables/EventHandlerService/src/EventHandlerService/Dockerfile
             image: event-handler-service
 
           - dockerfile: Modules/Files/src/Files.Jobs.SanityCheck/Dockerfile
@@ -122,7 +122,7 @@ jobs:
           - dockerfile: Jobs/src/Job.IdentityDeletion/Dockerfile
             image: identity-deletion-jobs
 
-          - dockerfile: SseServer/src/SseServer/Dockerfile
+          - dockerfile: Executables/SseServer/src/SseServer/Dockerfile
             image: sse-server
 
     steps:
