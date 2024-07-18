@@ -36,7 +36,7 @@ class MessageTemplate {
       'GracePeriodReminder1Sent': context.l10n.messageTemplate_gracePeriodReminder1Sent,
       'GracePeriodReminder2Sent': context.l10n.messageTemplate_gracePeriodReminder2Sent,
       'GracePeriodReminder3Sent': context.l10n.messageTemplate_gracePeriodReminder3Sent,
-      'DataDeleted': '${context.l10n.all} {aggregateType} ${context.l10n.messageTemplate_messagesHaveBeenDeleted}',
+      'DataDeleted': '${context.l10n.all} {aggregateType} ${context.l10n.messageTemplate_haveBeenDeleted}',
     };
 
     var messageTemplate = messageTemplates[messageKey];
