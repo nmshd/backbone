@@ -7,7 +7,6 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
-import 'deletion_process_auditlogs_table/deletion_process_auditlogs_table.dart';
 
 class DeletionProcessDetails extends StatefulWidget {
   final String address;
@@ -21,6 +20,7 @@ class DeletionProcessDetails extends StatefulWidget {
 
 class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
   DeletionProcessDetail? _deletionProcessesDetails;
+  List<AuditLog> auditLogs = [];
 
   @override
   void initState() {
@@ -46,7 +46,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
             updateDeletionProcess: _reloadDeletionProcess,
           ),
           Gaps.h16,
-          Expanded(child: DeletionProcessAuditLogsTable(auditLogs: deletionProcessDetails.auditLogs ?? [])),
+          Expanded(child: DeletionProcessAuditLogsTable(auditLogs: auditLogs)),
           Gaps.h16,
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -105,6 +105,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
     if (mounted) {
       setState(() {
         _deletionProcessesDetails = deletionProcessesDetails.data;
+        auditLogs = deletionProcessesDetails.data.auditLog;
       });
     }
   }

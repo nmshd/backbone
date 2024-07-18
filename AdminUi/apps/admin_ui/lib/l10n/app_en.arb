@@ -108,7 +108,7 @@
   "messageTemplate_gracePeriodReminder1Sent": "The first grace period reminder notification has been sent.",
   "messageTemplate_gracePeriodReminder2Sent": "The second grace period reminder notification has been sent.",
   "messageTemplate_gracePeriodReminder3Sent": "The third grace period reminder notification has been sent.",
-  "messageTemplate_messagesHaveBeenDeleted": "have been deleted.",
+  "messageTemplate_haveBeenDeleted": "have been deleted.",
   "identityDetails_card_identityClipboardMessage": "Identity address copied to clipboard.",
   "identityDetails_card_publicKey": "Public Key",
   "identityDetails_card_publicKey_copyToClipboardMessage": "Public key copied to clipboard.",
