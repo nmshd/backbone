@@ -55,9 +55,12 @@ COPY . .
 
 ARG VERSION
 
-RUN dotnet restore "Executables/ConsumerApi/ConsumerApi.csproj"
-RUN dotnet publish --configuration Release --output /app/publish --no-restore "Executables/ConsumerApi/ConsumerApi.csproj"
-RUN dotnet publish --configuration Release --output /app/publish/health "Executables/HealthCheck/HealthCheck.csproj"
+C:\Users\htotbagi\Code\backbone\Executables\ConsumerApi\src\ConsumerApi.csproj
+
+RUN dotnet restore "Executables/ConsumerApi/src/ConsumerApi.csproj"
+RUN dotnet publish --configuration Release --output /app/publish --no-restore "Executables/ConsumerApi/src/ConsumerApi.csproj"
+RUN dotnet publish --configuration Release --output /app/publish/health "Executables/HealthCheck/src/HealthCheck.csproj"
+
 
 ### Final ####
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.6-jammy-chiseled
