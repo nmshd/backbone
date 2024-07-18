@@ -12,9 +12,4 @@
 		<ProjectReference Include="..\Relationships.Domain\Relationships.Domain.csproj" />
 	</ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)' == 'Release'">
-        <Compile Remove="**\*.Tests.cs" />
-        <Compile Remove="TestHelpers\*" />
-    </ItemGroup>
-
 </Project>

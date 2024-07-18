@@ -5,8 +5,4 @@
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)' == 'Release'">
-        <Compile Remove="**\*.Tests.cs" />
-    </ItemGroup>
-
 </Project>

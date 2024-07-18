@@ -13,15 +13,11 @@
         </WarningsAsErrors>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(Configuration)' == 'Release'">
-        <Compile Remove="**\*.Tests.cs" />
-    </ItemGroup>
-
-    <ItemGroup Condition="'$(Configuration)' != 'Release'">
+    <ItemGroup Condition="'$(Configuration)' != 'Release' And !$(MSBuildProjectFile.Contains('Cleanup.csproj')) And !$(MSBuildProjectFile.Contains('SanityCheck.csproj')) And !$(MSBuildProjectFile.Contains('Devices.AdminCli.csproj'))">
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)' != 'Release'">
+    <ItemGroup Condition="'$(Configuration)' != 'Release' And !$(MSBuildProjectFile.Contains('Cleanup.csproj')) And !$(MSBuildProjectFile.Contains('SanityCheck.csproj')) And !$(MSBuildProjectFile.Contains('Devices.AdminCli.csproj'))">
         <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
