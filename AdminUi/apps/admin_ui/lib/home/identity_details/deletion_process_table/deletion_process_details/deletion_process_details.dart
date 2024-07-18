@@ -72,7 +72,8 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
 
   Future<void> _cancelDeletionProcess() async {
     final confirmed = await showConfirmationDialog(
-      actionText: context.l10n.confirm,
+      actionText: context.l10n.cancel,
+      cancelActionText: context.l10n.close,
       context: context,
       message: context.l10n.deletionProcessDetails_cancelDeletionProcess_message,
       title: context.l10n.deletionProcessDetails_cancelDeletionProcess_title,
