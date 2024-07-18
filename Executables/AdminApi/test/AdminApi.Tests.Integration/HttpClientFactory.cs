@@ -1,4 +1,5 @@
 using Backbone.Tooling.Extensions;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace Backbone.AdminApi.Tests.Integration;
 

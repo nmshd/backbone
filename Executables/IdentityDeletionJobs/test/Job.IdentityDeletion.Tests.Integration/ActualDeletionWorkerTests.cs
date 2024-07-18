@@ -13,6 +13,8 @@ using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
+using Microsoft.VisualStudio.TestPlatform.TestHost;
 using Xunit;
 using Relationship = Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship;
 
