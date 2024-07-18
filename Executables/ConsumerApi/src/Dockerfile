@@ -55,8 +55,6 @@ COPY . .
 
 ARG VERSION
 
-C:\Users\htotbagi\Code\backbone\Executables\ConsumerApi\src\ConsumerApi.csproj
-
 RUN dotnet restore "Executables/ConsumerApi/src/ConsumerApi.csproj"
 RUN dotnet publish --configuration Release --output /app/publish --no-restore "Executables/ConsumerApi/src/ConsumerApi.csproj"
 RUN dotnet publish --configuration Release --output /app/publish/health "Executables/HealthCheck/src/HealthCheck.csproj"
