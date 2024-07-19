@@ -1,11 +1,11 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
-using Backbone.Modules.Messages.Domain.Tests.TestHelpers;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
+using static Backbone.Modules.Messages.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
 
@@ -17,31 +17,25 @@ public class ExpressionTests : AbstractTestsBase
     public void WasExchangedBetween_with_true_assertion()
     {
         // Arrange
-        var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipient = new RecipientInformation(recipientAddress, []);
-        var message = new Message(senderAddress, TestDataGenerator.CreateRandomDeviceId(), [], [], [recipient]);
+        var message = CreateMessageWithOneRecipient();
 
         // Act
-        var resultOne = message.EvaluateWasExchangedBetweenExpression(senderAddress, recipientAddress);
-        var resultTwo = message.EvaluateWasExchangedBetweenExpression(recipientAddress, senderAddress);
+        var wasExchangedBetweenSenderAndRecipient = message.EvaluateWasExchangedBetweenExpression(message.CreatedBy, message.Recipients.First().Address);
+        var wasExchangedBetweenRecipientAndSender = message.EvaluateWasExchangedBetweenExpression(message.Recipients.First().Address, message.CreatedBy);
 
         // Assert
-        resultOne.Should().BeTrue();
-        resultTwo.Should().BeTrue();
+        wasExchangedBetweenSenderAndRecipient.Should().BeTrue();
+        wasExchangedBetweenRecipientAndSender.Should().BeTrue();
     }
 
     [Fact]
     public void WasExchangedBetween_with_false_assertion()
     {
         // Arrange
-        var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipient = new RecipientInformation(recipientAddress, []);
-        var message = new Message(senderAddress, TestDataGenerator.CreateRandomDeviceId(), [], [], [recipient]);
+        var message = CreateMessageWithOneRecipient();
 
         // Act
-        var result = message.EvaluateWasExchangedBetweenExpression(senderAddress, TestDataGenerator.CreateRandomIdentityAddress());
+        var result = message.EvaluateWasExchangedBetweenExpression(message.CreatedBy, TestDataGenerator.CreateRandomIdentityAddress());
 
         // Assert
         result.Should().BeFalse();
@@ -51,13 +45,13 @@ public class ExpressionTests : AbstractTestsBase
 
     #region HasParticipant
 
-    private static readonly IdentityAddress AnonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
+    private static readonly IdentityAddress ANONYMIZED_ADDRESS = TestDataGenerator.CreateRandomIdentityAddress();
 
     [Fact]
     public void HasParticipant_is_true_for_sender_when_no_relationship_is_decomposed()
     {
         // Arrange
-        var message = TestData.CreateMessageWithOneRecipient();
+        var message = CreateMessageWithOneRecipient();
 
         // Act
         var result = message.EvaluateHasParticipantExpression(message.CreatedBy);
@@ -70,8 +64,8 @@ public class ExpressionTests : AbstractTestsBase
     public void HasParticipant_is_true_for_sender_when_relationship_to_at_least_one_recipient_is_not_decomposed()
     {
         // Arrange
-        var message = TestData.CreateMessageWithTwoRecipients();
-        message.DecomposeFor(message.CreatedBy, message.Recipients.First().Address, AnonymizedAddress);
+        var message = CreateMessageWithTwoRecipients();
+        message.DecomposeFor(message.CreatedBy, message.Recipients.First().Address, ANONYMIZED_ADDRESS);
 
         // Act
         var result = message.EvaluateHasParticipantExpression(message.CreatedBy);
@@ -84,9 +78,9 @@ public class ExpressionTests : AbstractTestsBase
     public void HasParticipant_is_false_for_sender_when_relationship_to_all_recipients_are_decomposed()
     {
         // Arrange
-        var message = TestData.CreateMessageWithTwoRecipients();
-        message.DecomposeFor(message.CreatedBy, message.Recipients.First().Address, AnonymizedAddress);
-        message.DecomposeFor(message.CreatedBy, message.Recipients.Second().Address, AnonymizedAddress);
+        var message = CreateMessageWithTwoRecipients();
+        message.DecomposeFor(message.CreatedBy, message.Recipients.First().Address, ANONYMIZED_ADDRESS);
+        message.DecomposeFor(message.CreatedBy, message.Recipients.Second().Address, ANONYMIZED_ADDRESS);
 
         // Act
         var result = message.EvaluateHasParticipantExpression(message.CreatedBy);
@@ -99,7 +93,7 @@ public class ExpressionTests : AbstractTestsBase
     public void HasParticipant_is_true_for_recipient_when_relationship_to_sender_is_not_decomposed()
     {
         // Arrange
-        var message = TestData.CreateMessageWithTwoRecipients();
+        var message = CreateMessageWithTwoRecipients();
 
         // Act
         var result = message.EvaluateHasParticipantExpression(message.Recipients.First().Address);
@@ -112,8 +106,8 @@ public class ExpressionTests : AbstractTestsBase
     public void HasParticipant_is_false_for_recipient_when_relationship_to_sender_is_decomposed()
     {
         // Arrange
-        var message = TestData.CreateMessageWithTwoRecipients();
-        message.DecomposeFor(message.Recipients.First().Address, message.CreatedBy, AnonymizedAddress);
+        var message = CreateMessageWithTwoRecipients();
+        message.DecomposeFor(message.Recipients.First().Address, message.CreatedBy, ANONYMIZED_ADDRESS);
 
         // Act
         var result = message.EvaluateHasParticipantExpression(message.Recipients.First().Address);
