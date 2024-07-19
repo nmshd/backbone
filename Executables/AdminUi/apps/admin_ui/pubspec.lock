@@ -4,14 +4,14 @@ packages:
   admin_api_sdk:
     dependency: "direct main"
     description:
-      path: "../../../packages/admin_api_sdk"
+      path: "../../packages/admin_api_sdk"
       relative: true
     source: path
     version: "1.0.0"
   admin_api_types:
     dependency: "direct main"
     description:
-      path: "../../../packages/admin_api_types"
+      path: "../../packages/admin_api_types"
       relative: true
     source: path
     version: "1.0.0"
