@@ -97,8 +97,11 @@ public class Message : Entity, IIdentifiable<MessageId>
 
     public static Expression<Func<Message, bool>> HasParticipant(IdentityAddress identityAddress)
     {
-        return i => i.CreatedBy == identityAddress && i.Recipients.Any(r => !r.IsRelationshipDecomposedBySender) ||
-                    i.Recipients.Any(r => r.Address == identityAddress && !r.IsRelationshipDecomposedByRecipient);
+        return i =>
+            // As soon as the sender has decomposed the relationship to all recipients, the sender should not see the message anymore
+            i.CreatedBy == identityAddress && i.Recipients.Any(r => !r.IsRelationshipDecomposedBySender) ||
+            // As soon as the recipient has decomposed the relationship to the sender, the recipient should not see the message anymore
+            i.Recipients.Any(r => r.Address == identityAddress && !r.IsRelationshipDecomposedByRecipient);
     }
 
     public static Expression<Func<Message, bool>> WasExchangedBetween(IdentityAddress identityAddress1, IdentityAddress identityAddress2)
