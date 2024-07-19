@@ -11,6 +11,7 @@ using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.ConsumerApi.Tests.Integration.Support;
 using Backbone.Crypto;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.UnitTestTools.Data;
 using Microsoft.Extensions.Options;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.ThrowHelpers;
 
@@ -137,7 +138,7 @@ internal class MessagesStepDefinitions
                 new SendMessageRequestRecipientInformation
                 {
                     Address = recipient.IdentityData!.Address,
-                    EncryptedKey = ConvertibleString.FromUtf8("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").BytesRepresentation
+                    EncryptedKey = TestDataGenerator.CreateRandomBytes(30)
                 }
             ]
         };
