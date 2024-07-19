@@ -188,11 +188,11 @@ jobs:
         database: [sqlserver, postgres]
         test-project:
           - display-name: admin-api
-            path: AdminApi/test/AdminApi.Tests.Integration
+            path: Executables/AdminApi/test/AdminApi.Tests.Integration
           - display-name: consumer-api
-            path: ConsumerApi.Tests.Integration
+            path: Executables/ConsumerApi/test/ConsumerApi.Tests.Integration
           - display-name: identity-deletion-job
-            path: Jobs/test/Job.IdentityDeletion.Tests.Integration
+            path: Executables/IdentityDeletionJobs/test/Job.IdentityDeletion.Tests.Integration
     needs: image-test-builds
     steps:
       - name: Checkout
