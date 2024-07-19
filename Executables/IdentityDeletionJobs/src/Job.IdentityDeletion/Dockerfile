@@ -72,7 +72,7 @@ COPY . .
 
 ARG VERSION
 
-WORKDIR "/src/Executables/IdentityDeletionJob/src/IdentityDeletionJob"
+WORKDIR "/src/Executables/IdentityDeletionJobs/src/Job.IdentityDeletion"
 RUN dotnet build "Job.IdentityDeletion.csproj" -c Release --output /app/build --no-restore
 
 FROM build AS publish
