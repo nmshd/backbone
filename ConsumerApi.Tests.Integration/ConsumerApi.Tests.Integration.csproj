@@ -53,4 +53,8 @@
             <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
         </SpecFlowFeatureFiles>
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Features\Files\" />
+    </ItemGroup>
 </Project>
