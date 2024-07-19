@@ -28,11 +28,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
-        <ProjectReference Include="..\..\..\..\BuildingBlocks\test\Tooling.Tests\Tooling.Tests.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Domain\Devices.Domain.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Messages\src\Messages.Infrastructure\Messages.Infrastructure.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Relationships\src\Relationships.Infrastructure\Relationships.Infrastructure.csproj" />
         <ProjectReference Include="..\..\src\Job.IdentityDeletion\Job.IdentityDeletion.csproj" />
     </ItemGroup>
 
