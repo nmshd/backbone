@@ -2,6 +2,7 @@ using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Files.Application.Files.DTOs;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Files.Domain.Entities;
 using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
@@ -19,15 +20,11 @@ public class Handler : IRequestHandler<ListFileMetadataQuery, ListFileMetadataRe
         _mapper = mapper;
     }
 
-
     public async Task<ListFileMetadataResponse> Handle(ListFileMetadataQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _filesRepository.FindFilesByCreator(request.Ids, _userContext.GetAddress(), request.PaginationFilter, cancellationToken);
-
+        var dbPaginationResult = await _filesRepository.FindFilesByCreator(request.Ids.Select(FileId.Parse), _userContext.GetAddress(), request.PaginationFilter, cancellationToken);
         var items = _mapper.Map<FileMetadataDTO[]>(dbPaginationResult.ItemsOnPage);
 
-        var response = new ListFileMetadataResponse(items, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
-
-        return response;
+        return new ListFileMetadataResponse(items, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }
 }

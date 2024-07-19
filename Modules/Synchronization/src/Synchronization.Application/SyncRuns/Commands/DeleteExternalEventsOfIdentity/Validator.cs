@@ -5,5 +5,8 @@ namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.DeleteE
 
 public class Validator : AbstractValidator<DeleteExternalEventsOfIdentityCommand>
 {
-    public Validator() => RuleFor(x => x.IdentityAddress).Must(x => IdentityAddress.IsValid(x));
+    public Validator()
+    {
+        RuleFor(x => x.IdentityAddress).Must(IdentityAddress.IsValid);
+    }
 }

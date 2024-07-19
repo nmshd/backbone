@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Application.Messages.DTOs;
+using Backbone.Modules.Messages.Domain.Ids;
 using MediatR;
 
 namespace Backbone.Modules.Messages.Application.Messages.Queries.GetMessage;
@@ -22,7 +23,7 @@ public class Handler : IRequestHandler<GetMessageQuery, MessageDTO>
 
     public async Task<MessageDTO> Handle(GetMessageQuery request, CancellationToken cancellationToken)
     {
-        var message = await _messagesRepository.Find(request.Id, _userContext.GetAddress(), cancellationToken, track: true);
+        var message = await _messagesRepository.Find(MessageId.Parse(request.Id), _userContext.GetAddress(), cancellationToken, true);
 
         var recipient = message.Recipients.FirstWithIdOrDefault(_userContext.GetAddress());
 

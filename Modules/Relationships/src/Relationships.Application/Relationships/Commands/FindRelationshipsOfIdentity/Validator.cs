@@ -5,5 +5,8 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Find
 
 public class Validator : AbstractValidator<FindRelationshipsOfIdentityQuery>
 {
-    public Validator() => RuleFor(x => x.IdentityAddress).Must(x => IdentityAddress.IsValid(x));
+    public Validator()
+    {
+        RuleFor(x => x.IdentityAddress).Must(IdentityAddress.IsValid);
+    }
 }

@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
@@ -18,7 +19,8 @@ public class Handler : IRequestHandler<ListRelationshipsQuery, ListRelationships
 
     public async Task<ListRelationshipsResponse> Handle(ListRelationshipsQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _relationshipsRepository.FindRelationshipsWithIds(request.Ids, _userContext.GetAddress(), request.PaginationFilter, cancellationToken, track: false);
+        var dbPaginationResult =
+            await _relationshipsRepository.FindRelationshipsWithIds(request.Ids.Select(RelationshipId.Parse), _userContext.GetAddress(), request.PaginationFilter, cancellationToken, track: false);
 
         return new ListRelationshipsResponse(dbPaginationResult.ItemsOnPage.Select(r => new RelationshipDTO(r)), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }

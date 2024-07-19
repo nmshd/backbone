@@ -5,5 +5,8 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Comma
 
 public class Validator : AbstractValidator<AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand>
 {
-    public Validator() => RuleFor(x => x.IdentityAddress).Must(x => IdentityAddress.IsValid(x));
+    public Validator()
+    {
+        RuleFor(x => x.IdentityAddress).Must(IdentityAddress.IsValid);
+    }
 }

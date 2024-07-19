@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using FluentValidation;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
@@ -13,5 +14,7 @@ public class ListRelationshipsValidator : AbstractValidator<ListRelationshipsQue
             .Cascade(CascadeMode.Stop)
             .DetailedNotNull()
             .Must(ids => ids.Count > 0).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code).WithMessage("'Ids' must not be empty.");
+
+        RuleForEach(x => x.Ids).Must(RelationshipId.IsValid);
     }
 }

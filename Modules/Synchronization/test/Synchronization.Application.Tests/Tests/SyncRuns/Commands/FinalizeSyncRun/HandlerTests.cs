@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.AutoMapper;
@@ -256,9 +255,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 
         var mapper = AutoMapperProfile.CreateMapper();
 
-        var eventBus = A.Fake<IEventBus>();
-
-        return new Handler(_actContext, userContext, mapper, eventBus);
+        return new Handler(_actContext, userContext, mapper);
     }
 
     #endregion

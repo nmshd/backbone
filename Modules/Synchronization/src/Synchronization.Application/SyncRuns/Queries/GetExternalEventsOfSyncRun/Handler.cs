@@ -4,6 +4,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
+using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using MediatR;
 
 namespace Backbone.Modules.Synchronization.Application.SyncRuns.Queries.GetExternalEventsOfSyncRun;
@@ -25,7 +26,7 @@ public class Handler : IRequestHandler<GetExternalEventsOfSyncRunQuery, GetExter
 
     public async Task<GetExternalEventsOfSyncRunResponse> Handle(GetExternalEventsOfSyncRunQuery request, CancellationToken cancellationToken)
     {
-        var syncRun = await _dbContext.GetSyncRunAsNoTracking(request.SyncRunId, _activeIdentity, cancellationToken);
+        var syncRun = await _dbContext.GetSyncRunAsNoTracking(SyncRunId.Parse(request.SyncRunId), _activeIdentity, cancellationToken);
 
         if (syncRun.IsFinalized)
             throw new OperationFailedException(ApplicationErrors.SyncRuns.SyncRunAlreadyFinalized());

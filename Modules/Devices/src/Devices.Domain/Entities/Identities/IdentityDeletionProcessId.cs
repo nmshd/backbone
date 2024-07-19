@@ -11,7 +11,7 @@ public record IdentityDeletionProcessId : StronglyTypedId
 
     private const string PREFIX = "IDP";
 
-    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
+    public static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
     private IdentityDeletionProcessId(string value) : base(value) { }
 
@@ -19,6 +19,11 @@ public record IdentityDeletionProcessId : StronglyTypedId
     {
         var randomPart = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);
         return new IdentityDeletionProcessId(PREFIX + randomPart);
+    }
+
+    public static DomainError? Validate(string value)
+    {
+        return UTILS.Validate(value);
     }
 
     public static Result<IdentityDeletionProcessId, DomainError> Create(string value)

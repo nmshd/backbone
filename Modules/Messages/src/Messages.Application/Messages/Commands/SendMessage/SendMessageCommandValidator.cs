@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Tooling.Extensions;
 using FluentValidation;
@@ -37,7 +38,7 @@ public class SendMessageCommandRecipientInformationValidator : AbstractValidator
 {
     public SendMessageCommandRecipientInformationValidator()
     {
-        RuleFor(r => r.Address).DetailedNotNull();
+        RuleFor(r => r.Address).Must(IdentityAddress.IsValid);
 
         RuleFor(r => r.EncryptedKey)
             .DetailedNotNull()

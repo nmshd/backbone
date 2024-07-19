@@ -5,5 +5,8 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Dele
 
 public class Validator : AbstractValidator<DeleteRelationshipsOfIdentityCommand>
 {
-    public Validator() => RuleFor(x => x.IdentityAddress).Must(x => IdentityAddress.IsValid(x));
+    public Validator()
+    {
+        RuleFor(x => x.IdentityAddress).Must(IdentityAddress.IsValid);
+    }
 }

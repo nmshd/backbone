@@ -1,6 +1,5 @@
 using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
@@ -18,23 +17,21 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IEventBus _eventBus;
     private readonly IMapper _mapper;
     private Datawallet? _datawallet;
     private SyncRun _syncRun = null!;
 
-    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper)
     {
         _dbContext = dbContext;
         _mapper = mapper;
-        _eventBus = eventBus;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
 
     public async Task<FinalizeDatawalletVersionUpgradeSyncRunResponse> Handle(FinalizeDatawalletVersionUpgradeSyncRunCommand request, CancellationToken cancellationToken)
     {
-        _syncRun = await _dbContext.GetSyncRun(request.SyncRunId, _activeIdentity, cancellationToken);
+        _syncRun = await _dbContext.GetSyncRun(SyncRunId.Parse(request.SyncRunId), _activeIdentity, cancellationToken);
 
         if (_syncRun.Type != SyncRun.SyncRunType.DatawalletVersionUpgrade)
             throw new ApplicationException(ApplicationErrors.SyncRuns.UnexpectedSyncRunType(SyncRun.SyncRunType.DatawalletVersionUpgrade));
@@ -72,7 +69,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
     public async Task<FinalizeExternalEventSyncSyncRunResponse> Handle(FinalizeExternalEventSyncSyncRunCommand request, CancellationToken cancellationToken)
     {
-        _syncRun = await _dbContext.GetSyncRunWithExternalEvents(request.SyncRunId, _activeIdentity, cancellationToken);
+        _syncRun = await _dbContext.GetSyncRunWithExternalEvents(SyncRunId.Parse(request.SyncRunId), _activeIdentity, cancellationToken);
 
         if (_syncRun.Type != SyncRun.SyncRunType.ExternalEventSync)
             throw new ApplicationException(ApplicationErrors.SyncRuns.UnexpectedSyncRunType(SyncRun.SyncRunType.ExternalEventSync));

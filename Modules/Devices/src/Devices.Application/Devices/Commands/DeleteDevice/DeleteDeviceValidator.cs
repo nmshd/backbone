@@ -1,4 +1,4 @@
-using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using FluentValidation;
 
 namespace Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
@@ -8,6 +8,6 @@ public class DeleteDeviceValidator : AbstractValidator<DeleteDeviceCommand>
 {
     public DeleteDeviceValidator()
     {
-        RuleFor(c => c.DeviceId).DetailedNotEmpty();
+        RuleFor(c => c.DeviceId).Must(DeviceId.IsValid);
     }
 }

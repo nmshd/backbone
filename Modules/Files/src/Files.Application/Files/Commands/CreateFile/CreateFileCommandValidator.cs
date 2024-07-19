@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 using FluentValidation;
@@ -23,7 +24,7 @@ public class CreateFileCommandValidator : AbstractValidator<CreateFileCommand>
             .GreaterThan(SystemTime.UtcNow).WithMessage("'{PropertyName}' must be in the future.").WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
 
         RuleFor(m => m.Owner)
-            .DetailedNotEmpty();
+            .Must(IdentityAddress.IsValid);
 
         RuleFor(m => m.OwnerSignature)
             .NumberOfBytes(1, 512);

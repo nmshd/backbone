@@ -5,5 +5,8 @@ namespace Backbone.Modules.Synchronization.Application.SyncRuns.Commands.DeleteS
 
 public class Validator : AbstractValidator<DeleteSyncRunsOfIdentityCommand>
 {
-    public Validator() => RuleFor(x => x.IdentityAddress).Must(x => IdentityAddress.IsValid(x));
+    public Validator()
+    {
+        RuleFor(x => x.IdentityAddress).Must(IdentityAddress.IsValid);
+    }
 }
