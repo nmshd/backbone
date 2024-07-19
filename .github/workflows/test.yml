@@ -110,7 +110,7 @@ jobs:
           - dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
             image: admin-cli
 
-          - dockerfile: Executables/DatabaseMigrator/src/Dockerfile
+          - dockerfile: Executables/DatabaseMigrator/src/DatabaseMigrator/Dockerfile
             image: database-migrator
 
           - dockerfile: Executables/EventHandlerService/src/EventHandlerService/Dockerfile
