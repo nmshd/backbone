@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
-COPY ["Executables/FilesSanityCheck/src/FilesSanityCheck/FilesSanityCheck.csproj", "Executables/FilesSanityCheck"]
+COPY ["Executables/FilesSanityCheck/src/FilesSanityCheck/FilesSanityCheck.csproj", "Executables/FilesSanityCheck/src/FilesSanityCheck/FilesSanityCheck/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Application.Abstractions/BuildingBlocks.Application.Abstractions.csproj", "BuildingBlocks/src/BuildingBlocks.Application.Abstractions/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Domain/BuildingBlocks.Domain.csproj", "BuildingBlocks/src/BuildingBlocks.Domain/"]
 COPY ["BuildingBlocks/src/DevelopmentKit.Identity/DevelopmentKit.Identity.csproj", "BuildingBlocks/src/DevelopmentKit.Identity/"]
@@ -19,6 +19,8 @@ COPY ["BuildingBlocks/src/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastru
 COPY ["Common/src/Common.Infrastructure/Common.Infrastructure.csproj", "Common/src/Common.Infrastructure/"]
 
 RUN dotnet restore "Executables/FilesSanityCheck/src/FilesSanityCheck/FilesSanityCheck.csproj"
+
+
 
 COPY . .
 
