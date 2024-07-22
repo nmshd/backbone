@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0.303 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
-COPY ["Modules/Devices/src/Devices.AdminCli/Devices.AdminCli.csproj", "Modules/Devices/src/Devices.AdminCli/"]
+COPY ["Executables/AdminCli/src/AdminCli/AdminCli.csproj", "Executables/AdminCli/src/AdminCli/"]
 COPY ["Modules/Devices/src/Devices.Infrastructure/Devices.Infrastructure.csproj", "Modules/Devices/src/Devices.Infrastructure/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Domain/BuildingBlocks.Domain.csproj", "BuildingBlocks/src/BuildingBlocks.Domain/"]
 COPY ["BuildingBlocks/src/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj", "BuildingBlocks/src/BuildingBlocks.Infrastructure/"]
@@ -19,14 +19,14 @@ COPY ["BuildingBlocks/src/BuildingBlocks.Application/BuildingBlocks.Application.
 COPY ["BuildingBlocks/src/Crypto/Crypto.csproj", "BuildingBlocks/src/Crypto/"]
 COPY ["Modules/Devices/src/Devices.Domain/Devices.Domain.csproj", "Modules/Devices/src/Devices.Domain/"]
 
-RUN dotnet restore "Modules/Devices/src/Devices.AdminCli/Devices.AdminCli.csproj"
+RUN dotnet restore "Executables/AdminCli/src/AdminCli/AdminCli.csproj"
 
 COPY . .
 
 ARG VERSION
 
-WORKDIR "/src/Modules/Devices/src/Devices.AdminCli"
-RUN dotnet publish --no-restore -c Release -o /app/publish "Devices.AdminCli.csproj"
+WORKDIR "/src/Executables/AdminCli/src/AdminCli"
+RUN dotnet publish --no-restore -c Release -o /app/publish "AdminCli.csproj"
 
 FROM base AS final
 WORKDIR /app

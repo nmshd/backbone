@@ -107,7 +107,7 @@ jobs:
           - dockerfile: Executables/AdminApi/src/AdminApi/Dockerfile
             image: admin-ui
 
-          - dockerfile: Modules/Devices/src/Devices.AdminCli/Dockerfile
+          - dockerfile: Executables/AdminCli/src/AdminCli/Dockerfile
             image: admin-cli
 
           - dockerfile: Executables/DatabaseMigrator/src/DatabaseMigrator/Dockerfile
