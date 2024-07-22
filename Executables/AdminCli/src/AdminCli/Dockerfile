@@ -30,7 +30,7 @@ RUN dotnet publish --no-restore -c Release -o /app/publish "AdminCli.csproj"
 
 FROM base AS final
 WORKDIR /app
-COPY --from=build /app/publish/Backbone.Modules.Devices.AdminCli ./backbone
+COPY --from=build /app/publish ./backbone
 
 ENV PATH="$PATH:/app"
 
