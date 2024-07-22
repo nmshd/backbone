@@ -37,6 +37,7 @@ class _IdentitiesDataTableState extends State<IdentitiesDataTable> {
       isVerticalScrollBarVisible: true,
       renderEmptyRowsInTheEnd: false,
       availableRowsPerPage: const [5, 10, 25, 50, 100],
+      wrapInCard: false,
       empty: Text(context.l10n.identitiesDataTable_noIdentitiesFound),
       errorBuilder: (error) => Center(
         child: Column(

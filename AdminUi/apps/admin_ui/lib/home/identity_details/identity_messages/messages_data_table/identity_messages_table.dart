@@ -51,6 +51,7 @@ class _IdentityMessagesTableState extends State<IdentityMessagesTable> {
                 isVerticalScrollBarVisible: true,
                 renderEmptyRowsInTheEnd: false,
                 availableRowsPerPage: const [5, 10, 25, 50, 100],
+                wrapInCard: false,
                 empty: Text(widget.emptyTableMessage),
                 errorBuilder: (error) => Center(
                   child: Column(
