@@ -1,4 +1,4 @@
-﻿using Backbone.Modules.Relationships.Domain.Aggregates.Relationships.TestHelpers;
+﻿using Backbone.Modules.Relationships.Domain.TestHelpers;
 using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;

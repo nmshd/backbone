@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using Xunit;
-using static Backbone.Modules.Relationships.Domain.Aggregates.Relationships.TestHelpers.TestData;
+using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 

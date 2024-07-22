@@ -1,7 +1,7 @@
 <Project>
 
     <ItemGroup Condition="'$(Configuration)' == 'Release' And !$(MSBuildProjectFile.Contains('Tests.csproj'))">
-        <Compile Remove="**\*.Tests.cs" />
+        <Compile Remove="**\*Tests.cs" />
         <Compile Remove="TestHelpers\*" />
     </ItemGroup>
     
