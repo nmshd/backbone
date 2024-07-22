@@ -38,7 +38,7 @@ public class MessageDTO
             var recipientInformationDTO = new RecipientInformationDTO(recipient);
             recipients.Add(recipientInformationDTO);
 
-            // as sender who has decomposed the relationship to a recipient should see the recipient as anonymized
+            // a sender who has decomposed the relationship to a recipient should see the recipient as anonymized
             if (message.CreatedBy == activeIdentity && recipient.IsRelationshipDecomposedBySender)
                 recipientInformationDTO.Address = IdentityAddress.GetAnonymized(didDomainName);
         }
