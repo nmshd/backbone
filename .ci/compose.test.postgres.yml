@@ -32,7 +32,7 @@ services:
   database-migrator:
     environment:
       Infrastructure__SqlDatabase__Provider: Postgres
-      Infrastructure__SqlDatabase__ConnectionString: "Server=postgres;Database=enmeshed;User Id=postgres;Password=admin;Port=5432"
+      Infrastructure__SqlDatabase__ConnectionString: "Server=postgres;Database=enmeshed;User Id=postgres;Password=Passw0rd;Port=5432"
 
 configs:
   Config:
