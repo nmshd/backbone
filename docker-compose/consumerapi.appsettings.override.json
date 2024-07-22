@@ -86,6 +86,9 @@
             }
         },
         "Relationships": {
+            "Application": {
+                "DidDomainName": "localhost"
+            },
             "Infrastructure": {
                 "SqlDatabase": {
                     "Provider": "Postgres",

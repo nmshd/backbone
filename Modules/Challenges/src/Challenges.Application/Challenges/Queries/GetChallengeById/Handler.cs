@@ -1,4 +1,3 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Challenges.Application.Challenges.DTOs;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
@@ -9,12 +8,10 @@ namespace Backbone.Modules.Challenges.Application.Challenges.Queries.GetChalleng
 public class Handler : IRequestHandler<GetChallengeByIdQuery, ChallengeDTO>
 {
     private readonly IChallengesRepository _challengesRepository;
-    private readonly IMapper _mapper;
 
-    public Handler(IChallengesRepository challengesRepository, IMapper mapper)
+    public Handler(IChallengesRepository challengesRepository)
     {
         _challengesRepository = challengesRepository;
-        _mapper = mapper;
     }
 
     public async Task<ChallengeDTO> Handle(GetChallengeByIdQuery request, CancellationToken cancellationToken)
@@ -26,7 +23,7 @@ public class Handler : IRequestHandler<GetChallengeByIdQuery, ChallengeDTO>
             throw new NotFoundException();
         }
 
-        var response = _mapper.Map<ChallengeDTO>(challenge);
+        var response = new ChallengeDTO(challenge);
 
         return response;
     }
