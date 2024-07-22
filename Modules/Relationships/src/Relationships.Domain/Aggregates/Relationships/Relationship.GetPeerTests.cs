@@ -1,10 +1,11 @@
-﻿using FluentAssertions;
+﻿using Backbone.UnitTestTools.BaseClasses;
+using FluentAssertions;
 using Xunit;
 using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-public class RelationshipGetPeerTests
+public class RelationshipGetPeerTests : AbstractTestsBase
 {
     [Fact]
     public void Returns_from_if_to_is_passed()
