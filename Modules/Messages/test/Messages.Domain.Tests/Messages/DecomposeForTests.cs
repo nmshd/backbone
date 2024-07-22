@@ -118,15 +118,15 @@ public record TestInput
 // ReSharper disable InconsistentNaming
 public record TestOutput
 {
-    public TestOutput(bool R1_HiddenForSender, bool R1_HiddenForRecipient, bool R2_HiddenForSender, bool R2_HiddenForRecipient, bool SenderIsAnonymized, bool R1IsAnonymized, bool R2IsAnonymized)
+    public TestOutput(bool r1_HiddenForSender, bool r1_HiddenForRecipient, bool r2_HiddenForSender, bool r2_HiddenForRecipient, bool senderIsAnonymized, bool r1IsAnonymized, bool r2IsAnonymized)
     {
-        this.R1_HiddenForSender = R1_HiddenForSender;
-        this.R1_HiddenForRecipient = R1_HiddenForRecipient;
-        this.R2_HiddenForSender = R2_HiddenForSender;
-        this.R2_HiddenForRecipient = R2_HiddenForRecipient;
-        this.SenderIsAnonymized = SenderIsAnonymized;
-        this.R1IsAnonymized = R1IsAnonymized;
-        this.R2IsAnonymized = R2IsAnonymized;
+        R1_HiddenForSender = r1_HiddenForSender;
+        R1_HiddenForRecipient = r1_HiddenForRecipient;
+        R2_HiddenForSender = r2_HiddenForSender;
+        R2_HiddenForRecipient = r2_HiddenForRecipient;
+        SenderIsAnonymized = senderIsAnonymized;
+        R1IsAnonymized = r1IsAnonymized;
+        R2IsAnonymized = r2IsAnonymized;
     }
 
     public TestOutput(string errorCode)
