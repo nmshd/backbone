@@ -1,16 +1,13 @@
-using AutoMapper;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Messages.Domain.Entities;
 
 namespace Backbone.Modules.Messages.Application.Messages.DTOs;
 
-public class AttachmentDTO : IHaveCustomMapping
+public class AttachmentDTO
 {
-    public required string Id { get; set; }
-
-    public void CreateMappings(Profile configuration)
+    public AttachmentDTO(Attachment attachment)
     {
-        configuration.CreateMap<Attachment, AttachmentDTO>()
-            .ForMember(dto => dto.Id, expression => expression.MapFrom(e => e.Id.Value));
+        Id = attachment.Id;
     }
+
+    public string Id { get; set; }
 }
