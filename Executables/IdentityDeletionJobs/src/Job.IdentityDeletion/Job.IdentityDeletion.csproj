@@ -40,6 +40,6 @@
 
     <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
         <Delete Files="$(ProjectDir)appsettings.override.json"/>
-        <Copy SourceFiles="..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true"/>
+        <Copy SourceFiles="..\..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true"/>
     </Target>
 </Project>
