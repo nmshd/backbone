@@ -13,11 +13,10 @@ RUN dotnet publish --configuration Release --output /app --no-restore
 # Run	
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine3.18
 WORKDIR /app
-ENV Logging__Console__FormatterName=
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 RUN apk add icu-libs
 COPY --from=build-env /app .
 
-LABEL org.opencontainers.image.source = "https://github.com/nmshd/backbone"
+LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 
 ENTRYPOINT ["dotnet", "Backbone.Modules.Challenges.Jobs.Cleanup.dll"]
