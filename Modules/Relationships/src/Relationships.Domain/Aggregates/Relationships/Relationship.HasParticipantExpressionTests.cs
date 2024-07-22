@@ -7,7 +7,7 @@ using static Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Test
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-public class HasParticipantExpressionTests : AbstractTestsBase
+public class RelationshipHasParticipantExpressionTests : AbstractTestsBase
 {
     [Fact]
     public void WithParticipant_From()

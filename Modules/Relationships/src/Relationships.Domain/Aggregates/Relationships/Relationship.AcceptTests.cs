@@ -11,7 +11,7 @@ using static Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Test
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-public class AcceptRelationshipTests : AbstractTestsBase
+public class RelationshipAcceptTests : AbstractTestsBase
 {
     [Fact]
     public void Accepting_creation_transitions_relationship_to_status_active()

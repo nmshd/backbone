@@ -10,7 +10,7 @@ using static Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Test
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-public class AcceptRelationshipReactivationTests : AbstractTestsBase
+public class RelationshipAcceptReactivationTests : AbstractTestsBase
 {
     [Fact]
     public void Accepting_reactivation_transitions_relationship_to_status_active()

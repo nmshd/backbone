@@ -12,7 +12,7 @@ using static Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Test
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-public class DecomposeRelationshipTests : AbstractTestsBase
+public class RelationshipDecomposeTests : AbstractTestsBase
 {
     [Fact]
     public void Decomposing_as_firstParticipant_transitions_relationship_to_status_DeletionProposed()

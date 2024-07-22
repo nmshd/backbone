@@ -11,23 +11,23 @@ using static Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Test
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-public class RejectRelationshipTests : AbstractTestsBase
+public class RelationshipRevokeTests : AbstractTestsBase
 {
     [Fact]
-    public void Reject_creation_transitions_relationship_to_status_rejected()
+    public void Revoke_creation_transitions_relationship_to_status_revoked()
     {
         // Arrange
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Reject(IDENTITY_2, DEVICE_2, null);
+        relationship.Revoke(IDENTITY_1, DEVICE_1, null);
 
         // Assert
-        relationship.Status.Should().Be(RelationshipStatus.Rejected);
+        relationship.Status.Should().Be(RelationshipStatus.Revoked);
     }
 
     [Fact]
-    public void Rejecting_creation_creates_an_audit_log_entry()
+    public void Revoking_creation_creates_an_audit_log_entry()
     {
         // Arrange
         SystemTime.Set("2000-01-01");
@@ -35,7 +35,7 @@ public class RejectRelationshipTests : AbstractTestsBase
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Reject(IDENTITY_2, DEVICE_2, null);
+        relationship.Revoke(IDENTITY_1, DEVICE_1, null);
 
         // Assert
         relationship.AuditLog.Should().HaveCount(2);
@@ -43,11 +43,11 @@ public class RejectRelationshipTests : AbstractTestsBase
         var auditLogEntry = relationship.AuditLog.OrderBy(a => a.CreatedAt).Last();
 
         auditLogEntry.Id.Should().NotBeNull();
-        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.RejectionOfCreation);
+        auditLogEntry.Reason.Should().Be(RelationshipAuditLogEntryReason.RevocationOfCreation);
         auditLogEntry.OldStatus.Should().Be(RelationshipStatus.Pending);
-        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.Rejected);
-        auditLogEntry.CreatedBy.Should().Be(IDENTITY_2);
-        auditLogEntry.CreatedByDevice.Should().Be(DEVICE_2);
+        auditLogEntry.NewStatus.Should().Be(RelationshipStatus.Revoked);
+        auditLogEntry.CreatedBy.Should().Be(IDENTITY_1);
+        auditLogEntry.CreatedByDevice.Should().Be(DEVICE_1);
         auditLogEntry.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
     }
 
@@ -58,7 +58,7 @@ public class RejectRelationshipTests : AbstractTestsBase
         var relationship = CreatePendingRelationship();
 
         // Act
-        relationship.Reject(IDENTITY_2, DEVICE_2, null);
+        relationship.Revoke(IDENTITY_1, DEVICE_1, null);
 
         // Assert
         var domainEvent = relationship.Should().HaveASingleDomainEvent<RelationshipStatusChangedDomainEvent>();
@@ -69,13 +69,13 @@ public class RejectRelationshipTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Can_only_reject_creation_when_relationship_is_in_status_pending()
+    public void Can_only_revoke_creation_when_relationship_is_in_status_pending()
     {
         // Arrange
         var relationship = CreateActiveRelationship();
 
         // Act
-        var acting = () => relationship.Reject(IDENTITY_2, DEVICE_2, null);
+        var acting = () => relationship.Revoke(IDENTITY_2, DEVICE_2, null);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
@@ -85,29 +85,29 @@ public class RejectRelationshipTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Cannot_reject_own_relationship_request()
+    public void Cannot_revoke_own_relationship_request()
     {
         // Arrange
         var relationship = CreatePendingRelationship();
 
         // Act
-        var acting = () => relationship.Reject(IDENTITY_1, DEVICE_1, null);
+        var acting = () => relationship.Revoke(IDENTITY_2, DEVICE_2, null);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotRevokeRelationshipRequestNotCreatedByYourself");
     }
 
     [Fact]
-    public void Cannot_reject_foreign_relationship_request()
+    public void Cannot_revoke_foreign_relationship_request()
     {
         // Arrange
         var relationship = CreatePendingRelationship();
         var foreignAddress = IdentityAddress.ParseUnsafe("some-other-identity");
 
         // Act
-        var acting = () => relationship.Reject(foreignAddress, DeviceId.New(), null);
+        var acting = () => relationship.Revoke(foreignAddress, DeviceId.New(), null);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotRevokeRelationshipRequestNotCreatedByYourself");
     }
 }

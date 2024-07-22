@@ -8,10 +8,10 @@ using static Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Test
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-public class DeletionOfParticipantCancelledTests : AbstractTestsBase
+public class RelationshipParticipantIsToBeDeletedTests : AbstractTestsBase
 {
     [Fact]
-    public void Raises_PeerDeletionCancelledDomainEvent()
+    public void Raises_PeerToBeDeletedDomainEvent()
     {
         // Arrange
         var identityToBeDeleted = TestDataGenerator.CreateRandomIdentityAddress();
@@ -19,12 +19,12 @@ public class DeletionOfParticipantCancelledTests : AbstractTestsBase
         var relationship = CreateActiveRelationship(peer, identityToBeDeleted);
 
         // Act
-        relationship.DeletionOfParticipantCancelled(identityToBeDeleted);
+        relationship.ParticipantIsToBeDeleted(identityToBeDeleted);
 
         // Assert
-        var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerDeletionCancelledDomainEvent>();
-        domainEvent.PeerOfIdentityWithDeletionCancelled.Should().Be(peer);
+        var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerToBeDeletedDomainEvent>();
+        domainEvent.PeerOfIdentityToBeDeleted.Should().Be(peer);
         domainEvent.RelationshipId.Should().Be(relationship.Id);
-        domainEvent.IdentityWithDeletionCancelled.Should().Be(identityToBeDeleted);
+        domainEvent.IdentityToBeDeleted.Should().Be(identityToBeDeleted);
     }
 }

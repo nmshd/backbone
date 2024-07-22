@@ -10,7 +10,7 @@ using static Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Test
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-public class CreateRelationshipTests : AbstractTestsBase
+public class RelationshipCreateTests : AbstractTestsBase
 {
     [Fact]
     public void New_Relationship_Has_Correct_Data()

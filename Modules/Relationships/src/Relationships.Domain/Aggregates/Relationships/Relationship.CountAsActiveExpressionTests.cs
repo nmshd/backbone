@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-public class CountAsActiveExpressionTests : AbstractTestsBase
+public class RelationshipCountAsActiveExpressionTests : AbstractTestsBase
 {
     #region CountsAsActive
 

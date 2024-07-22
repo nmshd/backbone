@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
-public class RelationshipTemplateTests : AbstractTestsBase
+public class RelationshipTemplateCreateTests : AbstractTestsBase
 {
     [Fact]
     public void Raises_RelationshipTemplateCreatedDomainEvent_when_creating()

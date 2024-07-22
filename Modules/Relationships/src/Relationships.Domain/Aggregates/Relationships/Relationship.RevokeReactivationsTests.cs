@@ -10,7 +10,7 @@ using static Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Test
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-public class RevokeRelationshipReactivationTests : AbstractTestsBase
+public class RelationshipRevokeReactivationTests : AbstractTestsBase
 {
     [Fact]
     public void Revoking_relationship_reactivation_request_creates_an_audit_log_entry()
