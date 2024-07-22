@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
-namespace Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.DataSource;
+namespace Backbone.FilesSanityCheck.Infrastructure.DataSource;
 
 public class DataSource : IDataSource
 {

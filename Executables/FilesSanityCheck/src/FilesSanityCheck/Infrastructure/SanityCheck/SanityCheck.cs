@@ -1,8 +1,8 @@
+using Backbone.FilesSanityCheck.Infrastructure.DataSource;
+using Backbone.FilesSanityCheck.Infrastructure.Reporter;
 using Backbone.Modules.Files.Domain.Entities;
-using Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.DataSource;
-using Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.Reporter;
 
-namespace Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.SanityCheck;
+namespace Backbone.FilesSanityCheck.Infrastructure.SanityCheck;
 
 public class SanityCheck
 {

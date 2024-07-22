@@ -1,23 +1,23 @@
+using Backbone.FilesSanityCheck.Tests.Infrastructure.DataSource;
+using Backbone.FilesSanityCheck.Tests.Infrastructure.Reporter;
 using Backbone.Modules.Files.Domain.Entities;
-using Backbone.Modules.Files.Jobs.SanityCheck.Tests.Infrastructure.DataSource;
-using Backbone.Modules.Files.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
 using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Files.Jobs.SanityCheck.Tests.Tests;
+namespace Backbone.FilesSanityCheck.Tests.Tests;
 
 public class SanityCheckTests : AbstractTestsBase
 {
     private readonly FakeDataSource _dataSource;
     private readonly TestReporter _reporter;
-    private readonly SanityCheck.Infrastructure.SanityCheck.SanityCheck _sanityCheck;
+    private readonly FilesSanityCheck.Infrastructure.SanityCheck.SanityCheck _sanityCheck;
 
     public SanityCheckTests()
     {
         _dataSource = new FakeDataSource();
         _reporter = new TestReporter();
-        _sanityCheck = new SanityCheck.Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
+        _sanityCheck = new FilesSanityCheck.Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
     }
 
     [Fact]

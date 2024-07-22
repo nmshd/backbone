@@ -1,7 +1,7 @@
-using Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.DataSource;
-using Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.Reporter;
+using Backbone.FilesSanityCheck.Infrastructure.DataSource;
+using Backbone.FilesSanityCheck.Infrastructure.Reporter;
 
-namespace Backbone.Modules.Files.Jobs.SanityCheck;
+namespace Backbone.FilesSanityCheck;
 
 public class Worker : IHostedService
 {

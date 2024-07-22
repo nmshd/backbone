@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Backbone.Modules.Files.Jobs.SanityCheck.Extensions;
+namespace Backbone.FilesSanityCheck.Extensions;
 
 internal static class IConfigurationExtensions
 {

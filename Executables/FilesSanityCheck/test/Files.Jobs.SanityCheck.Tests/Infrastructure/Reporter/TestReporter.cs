@@ -1,7 +1,7 @@
+using Backbone.FilesSanityCheck.Infrastructure.Reporter;
 using Backbone.Modules.Files.Domain.Entities;
-using Backbone.Modules.Files.Jobs.SanityCheck.Infrastructure.Reporter;
 
-namespace Backbone.Modules.Files.Jobs.SanityCheck.Tests.Infrastructure.Reporter;
+namespace Backbone.FilesSanityCheck.Tests.Infrastructure.Reporter;
 
 public class TestReporter : IReporter
 {
