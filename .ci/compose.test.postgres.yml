@@ -6,7 +6,7 @@ services:
     hostname: postgres
     image: postgres
     environment:
-      - POSTGRES_PASSWORD=Passw0rd
+      - POSTGRES_PASSWORD=admin
       - POSTGRES_DB=enmeshed
     ports:
       - 5432:5432
