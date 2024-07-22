@@ -48,11 +48,17 @@ public class RecipientInformation : Entity
 
     internal void DecomposeSender()
     {
+        if (IsRelationshipDecomposedBySender)
+            throw new DomainException(DomainErrors.UnableToDecompose());
+
         IsRelationshipDecomposedBySender = true;
     }
 
     internal void DecomposeRecipient()
     {
+        if (IsRelationshipDecomposedByRecipient)
+            throw new DomainException(DomainErrors.UnableToDecompose());
+
         IsRelationshipDecomposedByRecipient = true;
     }
 }

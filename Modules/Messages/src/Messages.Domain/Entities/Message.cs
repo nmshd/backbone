@@ -58,7 +58,10 @@ public class Message : Entity, IIdentifiable<MessageId>
 
     public void DecomposeFor(IdentityAddress decomposerAddress, IdentityAddress peerAddress, IdentityAddress anonymizedAddress)
     {
-        var recipient = Recipients.First(r => r.Address == decomposerAddress || r.Address == peerAddress);
+        var recipient = Recipients.FirstOrDefault(r => r.Address == decomposerAddress || r.Address == peerAddress);
+
+        if (recipient == null)
+            throw new DomainException(DomainErrors.UnableToDecompose());
 
         SetDecompositionFlags(decomposerAddress, recipient);
         AnonymizeParticipants(recipient, anonymizedAddress);

@@ -1,13 +1,14 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Messages.DTOs;
 using Backbone.Modules.Messages.Application.Tests.TestHelpers;
+using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Messages.Application.Tests.Tests.Messages.DTOs;
 
-public class MessageDTOTests
+public class MessageDTOTests : AbstractTestsBase
 {
     private const string DID_DOMAIN_NAME = "localhost";
     private static readonly IdentityAddress ANONYMIZED_ADDRESS = IdentityAddress.GetAnonymized(DID_DOMAIN_NAME);

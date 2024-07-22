@@ -1,4 +1,6 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using System.Diagnostics.CodeAnalysis;
+using Backbone.BuildingBlocks.Domain;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Tests.TestHelpers;
 using Backbone.UnitTestTools.BaseClasses;
@@ -14,35 +16,44 @@ public class DecomposeForTests : AbstractTestsBase
 
     [Theory]
     [ClassData(typeof(TestDataWithAllCases))]
-    public void SetsMessageIsHiddenForX(TestInput input, TestOutput output)
+    public void FullTest(TestInput input, TestOutput output)
     {
         // Act
-        input.Message.DecomposeFor(input.Decomposer, input.Peer, ANONYMIZED_ADDRESS);
+        if (output.IsSuccess)
+            input.Message.DecomposeFor(input.Decomposer, input.Peer, ANONYMIZED_ADDRESS);
+        else
+        {
+            var acting = () => input.Message.DecomposeFor(input.Decomposer, input.Peer, ANONYMIZED_ADDRESS);
+            acting.Should().Throw<DomainException>().Which.Code.Should().Be(output.ErrorCode);
+        }
 
         // Assert
         var recipient1 = input.Message.Recipients.First();
         var recipient2 = input.Message.Recipients.Second();
 
-        recipient1.IsRelationshipDecomposedByRecipient.Should().Be(output.R1_HiddenForRecipient);
-        recipient1.IsRelationshipDecomposedBySender.Should().Be(output.R1_HiddenForSender);
+        if (output.IsSuccess)
+        {
+            recipient1.IsRelationshipDecomposedByRecipient.Should().Be(output.R1_HiddenForRecipient.Value);
+            recipient1.IsRelationshipDecomposedBySender.Should().Be(output.R1_HiddenForSender.Value);
 
-        recipient2.IsRelationshipDecomposedByRecipient.Should().Be(output.R2_HiddenForRecipient);
-        recipient2.IsRelationshipDecomposedBySender.Should().Be(output.R2_HiddenForSender);
+            recipient2.IsRelationshipDecomposedByRecipient.Should().Be(output.R2_HiddenForRecipient.Value);
+            recipient2.IsRelationshipDecomposedBySender.Should().Be(output.R2_HiddenForSender.Value);
 
-        if (output.SenderIsAnonymized)
-            input.Message.CreatedBy.Should().Be(ANONYMIZED_ADDRESS);
-        else
-            input.Message.CreatedBy.Should().NotBe(ANONYMIZED_ADDRESS);
+            if (output.SenderIsAnonymized.Value)
+                input.Message.CreatedBy.Should().Be(ANONYMIZED_ADDRESS);
+            else
+                input.Message.CreatedBy.Should().NotBe(ANONYMIZED_ADDRESS);
 
-        if (output.R1IsAnonymized)
-            recipient1.Address.Should().Be(ANONYMIZED_ADDRESS);
-        else
-            recipient1.Address.Should().NotBe(ANONYMIZED_ADDRESS);
+            if (output.R1IsAnonymized.Value)
+                recipient1.Address.Should().Be(ANONYMIZED_ADDRESS);
+            else
+                recipient1.Address.Should().NotBe(ANONYMIZED_ADDRESS);
 
-        if (output.R2IsAnonymized)
-            recipient2.Address.Should().Be(ANONYMIZED_ADDRESS);
-        else
-            recipient2.Address.Should().NotBe(ANONYMIZED_ADDRESS);
+            if (output.R2IsAnonymized.Value)
+                recipient2.Address.Should().Be(ANONYMIZED_ADDRESS);
+            else
+                recipient2.Address.Should().NotBe(ANONYMIZED_ADDRESS);
+        }
     }
 }
 
@@ -105,10 +116,48 @@ public record TestInput
 }
 
 // ReSharper disable InconsistentNaming
-public record TestOutput(bool R1_HiddenForSender, bool R1_HiddenForRecipient, bool R2_HiddenForSender, bool R2_HiddenForRecipient, bool SenderIsAnonymized, bool R1IsAnonymized, bool R2IsAnonymized);
+public record TestOutput
+{
+    public TestOutput(bool R1_HiddenForSender, bool R1_HiddenForRecipient, bool R2_HiddenForSender, bool R2_HiddenForRecipient, bool SenderIsAnonymized, bool R1IsAnonymized, bool R2IsAnonymized)
+    {
+        this.R1_HiddenForSender = R1_HiddenForSender;
+        this.R1_HiddenForRecipient = R1_HiddenForRecipient;
+        this.R2_HiddenForSender = R2_HiddenForSender;
+        this.R2_HiddenForRecipient = R2_HiddenForRecipient;
+        this.SenderIsAnonymized = SenderIsAnonymized;
+        this.R1IsAnonymized = R1IsAnonymized;
+        this.R2IsAnonymized = R2IsAnonymized;
+    }
+
+    public TestOutput(string errorCode)
+    {
+        ErrorCode = errorCode;
+    }
+
+
+    public string? ErrorCode { get; set; }
+
+    [MemberNotNullWhen(false, nameof(ErrorCode))]
+    [MemberNotNullWhen(true, nameof(R1_HiddenForSender))]
+    [MemberNotNullWhen(true, nameof(R1_HiddenForRecipient))]
+    [MemberNotNullWhen(true, nameof(R2_HiddenForSender))]
+    [MemberNotNullWhen(true, nameof(R2_HiddenForRecipient))]
+    [MemberNotNullWhen(true, nameof(SenderIsAnonymized))]
+    [MemberNotNullWhen(true, nameof(R1IsAnonymized))]
+    [MemberNotNullWhen(true, nameof(R2IsAnonymized))]
+    public bool IsSuccess => ErrorCode == null;
+
+    public bool? R1_HiddenForSender { get; init; }
+    public bool? R1_HiddenForRecipient { get; init; }
+    public bool? R2_HiddenForSender { get; init; }
+    public bool? R2_HiddenForRecipient { get; init; }
+    public bool? SenderIsAnonymized { get; init; }
+    public bool? R1IsAnonymized { get; init; }
+    public bool? R2IsAnonymized { get; init; }
+}
 // ReSharper restore InconsistentNaming
 
-public class TestDataWithAllCases : TheoryData<TestInput, TestOutput>
+public class TestDataWithAllCases : TheoryData<TestInput, TestOutput?>
 {
     public TestDataWithAllCases()
     {
@@ -144,37 +193,37 @@ public class TestDataWithAllCases : TheoryData<TestInput, TestOutput>
         Add(new TestInput(50, Participant.Sender, Participant.Recipient2, false, true, false, true), new TestOutput(false, true, true, true, false, false, true));
         Add(new TestInput(54, Participant.Sender, Participant.Recipient2, true, true, false, true), new TestOutput(true, true, true, true, true, true, true));
         Add(new TestInput(56, Participant.Sender, Participant.Recipient1, false, true, true, true), new TestOutput(true, true, true, true, true, true, true));
-        // Add(new TestInput(4, Participant.Sender, Participant.Recipient1, true, false, false, false), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(10, Participant.Sender, Participant.Recipient2, false, false, true, false), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(12, Participant.Sender, Participant.Recipient1, true, false, true, false), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(14, Participant.Sender, Participant.Recipient2, true, false, true, false), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(17, Participant.Recipient1, Participant.Recipient1, false, true, false, false), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(20, Participant.Sender, Participant.Recipient1, true, true, false, false), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(21, Participant.Recipient1, Participant.Recipient1, true, true, false, false), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(25, Participant.Recipient1, Participant.Recipient1, false, true, true, false), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(26, Participant.Sender, Participant.Recipient2, false, true, true, false), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(28, Participant.Sender, Participant.Recipient1, true, true, true, false), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(29, Participant.Recipient1, Participant.Recipient1, true, true, true, false), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(30, Participant.Sender, Participant.Recipient2, true, true, true, false), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(35, Participant.Recipient2, Participant.Recipient2, false, false, false, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(36, Participant.Sender, Participant.Recipient1, true, false, false, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(39, Participant.Recipient2, Participant.Recipient2, true, false, false, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(42, Participant.Sender, Participant.Recipient2, false, false, true, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(43, Participant.Recipient2, Participant.Recipient2, false, false, true, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(44, Participant.Sender, Participant.Recipient1, true, false, true, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(46, Participant.Sender, Participant.Recipient2, true, false, true, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(47, Participant.Recipient2, Participant.Recipient2, true, false, true, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(49, Participant.Recipient1, Participant.Recipient1, false, true, false, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(51, Participant.Recipient2, Participant.Recipient2, false, true, false, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(52, Participant.Sender, Participant.Recipient1, true, true, false, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(53, Participant.Recipient1, Participant.Recipient1, true, true, false, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(55, Participant.Recipient2, Participant.Recipient2, true, true, false, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(57, Participant.Recipient1, Participant.Recipient1, false, true, true, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(58, Participant.Sender, Participant.Recipient2, false, true, true, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(59, Participant.Recipient2, Participant.Recipient2, false, true, true, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(60, Participant.Sender, Participant.Recipient1, true, true, true, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(61, Participant.Recipient1, Participant.Recipient1, true, true, true, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(62, Participant.Sender, Participant.Recipient2, true, true, true, true), new TestOutput("#", "#", "#", "#"));
-        // Add(new TestInput(63, Participant.Recipient2, Participant.Recipient2, true, true, true, true), new TestOutput("#", "#", "#", "#"));
+        Add(new TestInput(4, Participant.Sender, Participant.Recipient1, true, false, false, false), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(10, Participant.Sender, Participant.Recipient2, false, false, true, false), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(12, Participant.Sender, Participant.Recipient1, true, false, true, false), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(14, Participant.Sender, Participant.Recipient2, true, false, true, false), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(17, Participant.Recipient1, Participant.Recipient1, false, true, false, false), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(20, Participant.Sender, Participant.Recipient1, true, true, false, false), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(21, Participant.Recipient1, Participant.Recipient1, true, true, false, false), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(25, Participant.Recipient1, Participant.Recipient1, false, true, true, false), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(26, Participant.Sender, Participant.Recipient2, false, true, true, false), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(28, Participant.Sender, Participant.Recipient1, true, true, true, false), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(29, Participant.Recipient1, Participant.Recipient1, true, true, true, false), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(30, Participant.Sender, Participant.Recipient2, true, true, true, false), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(35, Participant.Recipient2, Participant.Recipient2, false, false, false, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(36, Participant.Sender, Participant.Recipient1, true, false, false, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(39, Participant.Recipient2, Participant.Recipient2, true, false, false, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(42, Participant.Sender, Participant.Recipient2, false, false, true, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(43, Participant.Recipient2, Participant.Recipient2, false, false, true, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(44, Participant.Sender, Participant.Recipient1, true, false, true, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(46, Participant.Sender, Participant.Recipient2, true, false, true, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(47, Participant.Recipient2, Participant.Recipient2, true, false, true, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(49, Participant.Recipient1, Participant.Recipient1, false, true, false, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(51, Participant.Recipient2, Participant.Recipient2, false, true, false, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(52, Participant.Sender, Participant.Recipient1, true, true, false, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(53, Participant.Recipient1, Participant.Recipient1, true, true, false, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(55, Participant.Recipient2, Participant.Recipient2, true, true, false, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(57, Participant.Recipient1, Participant.Recipient1, false, true, true, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(58, Participant.Sender, Participant.Recipient2, false, true, true, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(59, Participant.Recipient2, Participant.Recipient2, false, true, true, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(60, Participant.Sender, Participant.Recipient1, true, true, true, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(61, Participant.Recipient1, Participant.Recipient1, true, true, true, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(62, Participant.Sender, Participant.Recipient2, true, true, true, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
+        Add(new TestInput(63, Participant.Recipient2, Participant.Recipient2, true, true, true, true), new TestOutput("error.platform.validation.message.unableToDecompose"));
     }
 }
