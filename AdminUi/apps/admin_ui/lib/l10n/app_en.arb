@@ -112,7 +112,6 @@
   "tierDetails_quotaList_noQuotaForTier": "No quotas added to this tier.",
   "tierDetails_identityList_title": "Identities",
   "tierDetails_identityList_titleDescription": "View Identities associated with this Tier.",
-  "tierDetails_quotaList_titleDescription": "View and assign quotas for this tier.",
   "tiersOverview_title_description": "A list of existing tiers",
   "tiersOverview_noTiersFound": "No tiers found."
 }
