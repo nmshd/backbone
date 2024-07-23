@@ -19,8 +19,6 @@ RUN dart pub global activate melos
 RUN dart pub global run melos:melos bootstrap
 WORKDIR /src/apps/admin_ui
 RUN flutter build web --base-href /new/ --wasm --release --output /build
-# TODO: !!!!!!!!!!!!!!!!!!! remove the following line!!!!!!!!!!!!!!!!!!!!!!!!!!
-RUN cat /build/index.html 
 
 #### Build application ####
 FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build-env
