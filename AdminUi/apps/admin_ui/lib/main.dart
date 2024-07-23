@@ -31,6 +31,7 @@ final _router = GoRouter(
   initialLocation: '/splash',
   navigatorKey: _rootNavigatorKey,
   routes: [
+    GoRoute(path: '/index.html', redirect: (_, __) => '/splash'),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/splash',
