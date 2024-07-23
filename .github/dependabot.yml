@@ -45,21 +45,6 @@ updates:
     labels:
       - "dependencies"
 
-  ##### Admin UI Angular App #####
-  - package-ecosystem: "npm"
-    directory: "/AdminApi/src/AdminApi/ClientApp"
-    schedule:
-      interval: "weekly"
-    groups:
-      update-npm-dependencies:
-        patterns:
-          - "*"
-    reviewers:
-      - "tnotheis"
-      - "daniel-almeida-konkconsulting"
-    labels:
-      - "dependencies"
-
   ##### Admin UI Flutter App#####
   - package-ecosystem: "pub"
     directories:
