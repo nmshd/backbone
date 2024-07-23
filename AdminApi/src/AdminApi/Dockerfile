@@ -18,7 +18,7 @@ WORKDIR /src
 RUN dart pub global activate melos
 RUN dart pub global run melos:melos bootstrap
 WORKDIR /src/apps/admin_ui
-RUN flutter build web --base-href /new/ --output /build
+RUN flutter build web --output /build
 
 #### Build application ####
 FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build-env
@@ -61,16 +61,6 @@ RUN mkdir /rootfs \
 ################################################################################################################
 
 RUN apt update && apt upgrade --yes
-
-# install nodejs
-RUN apt install --yes ca-certificates gnupg && \
-    mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-    apt update && \
-    apt install --yes nodejs
-
-RUN npm i -g @angular/cli
 
 WORKDIR /src
 COPY ["Directory.Build.props", "."]
@@ -121,7 +111,7 @@ WORKDIR /app
 
 COPY --from=build-env /rootfs /
 COPY --from=build-env /app/publish .
-COPY --from=flutter-build-env /build /app/wwwroot/new
+COPY --from=flutter-build-env /build /app/wwwroot
 
 USER $APP_UID
 
