@@ -100,7 +100,7 @@ RUN dotnet publish --configuration Release --output /app/publish/health "/src/Ex
 ### Final ####
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.7-jammy-chiseled
 
-LABEL org.opencontainers.image.source = "https://github.com/nmshd/backbone"
+LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD [ "dotnet", "/app/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]
 EXPOSE 8080
 

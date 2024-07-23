@@ -14,11 +14,6 @@ public static class MessagesQueryableExtensions
         return message;
     }
 
-    public static IQueryable<Message> WithSenderOrRecipient(this IQueryable<Message> query, IdentityAddress identity)
-    {
-        return query.Where(m => m.CreatedBy == identity || m.Recipients.Any(r => r.Address == identity));
-    }
-
     public static IQueryable<Message> WithIdsIn(this IQueryable<Message> query, IEnumerable<MessageId> ids)
     {
         return query.Where(m => ids.Contains(m.Id));
