@@ -141,14 +141,17 @@ class _DeletionProcessDetailsCard extends StatelessWidget {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      _DeletionProcessDetails(title: context.l10n.id, value: deletionProcessDetails.id),
-                      _DeletionProcessDetails(title: context.l10n.address, value: address),
-                      _DeletionProcessDetails(
+                      EntityDetails(title: context.l10n.id, value: deletionProcessDetails.id),
+                      EntityDetails(title: context.l10n.address, value: address),
+                      EntityDetails(
                         title: context.l10n.createdAt,
                         value:
                             '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(deletionProcessDetails.createdAt)} ${DateFormat.Hms().format(deletionProcessDetails.createdAt)}',
                       ),
-                      _DeletionProcessDetails(title: context.l10n.deletionProcessDetails_status, value: deletionProcessDetails.status),
+                      EntityDetails(
+                        title: context.l10n.deletionProcessDetails_status,
+                        value: deletionProcessDetails.status == 'WaitingForApproval' ? 'Waiting for Approval' : deletionProcessDetails.status,
+                      ),
                     ],
                   ),
                 ],

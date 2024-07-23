@@ -54,36 +54,11 @@ class _TierDetailState extends State<TierDetail> {
             Row(
               children: [
                 Expanded(
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '${context.l10n.id}: ',
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                TextSpan(text: tierDetails.id, style: Theme.of(context).textTheme.bodyLarge),
-                              ],
-                            ),
-                          ),
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '${context.l10n.name}: ',
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                TextSpan(text: tierDetails.name, style: Theme.of(context).textTheme.bodyLarge),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: _TierDetailsCard(
+                      tierID: tierDetails.id,
+                      tierName: tierDetails.name,
                     ),
                   ),
                 ),
@@ -102,6 +77,45 @@ class _TierDetailState extends State<TierDetail> {
   Future<void> _reload() async {
     final tierDetails = await GetIt.I.get<AdminApiClient>().tiers.getTier(widget.tierId);
     if (mounted) setState(() => _tierDetails = tierDetails.data);
+  }
+}
+
+class _TierDetailsCard extends StatelessWidget {
+  final String tierID;
+  final String tierName;
+
+  const _TierDetailsCard({
+    required this.tierID,
+    required this.tierName,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(
+          child: Card(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      EntityDetails(title: context.l10n.id, value: tierID),
+                      EntityDetails(title: context.l10n.address, value: tierName),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
