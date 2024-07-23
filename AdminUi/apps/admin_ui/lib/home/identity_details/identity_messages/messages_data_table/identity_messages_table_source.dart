@@ -92,7 +92,7 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
 }
 
 class _RecipientsCell extends StatelessWidget {
-  final List<MessageRecipients> recipients;
+  final List<MessageRecipient> recipients;
 
   const _RecipientsCell({required this.recipients});
 

@@ -9,7 +9,7 @@ class Message {
   final String senderDevice;
   final DateTime sendDate;
   final int numberOfAttachments;
-  final List<MessageRecipients> recipients;
+  final List<MessageRecipient> recipients;
 
   Message({
     required this.messageId,
@@ -25,15 +25,13 @@ class Message {
 }
 
 @JsonSerializable()
-class MessageRecipients {
-  final String messageId;
+class MessageRecipient {
   final String address;
 
-  MessageRecipients({
-    required this.messageId,
+  MessageRecipient({
     required this.address,
   });
 
-  factory MessageRecipients.fromJson(dynamic json) => _$MessageRecipientsFromJson(json as Map<String, dynamic>);
-  Map<String, dynamic> toJson() => _$MessageRecipientsToJson(this);
+  factory MessageRecipient.fromJson(dynamic json) => _$MessageRecipientFromJson(json as Map<String, dynamic>);
+  Map<String, dynamic> toJson() => _$MessageRecipientToJson(this);
 }
