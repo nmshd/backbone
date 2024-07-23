@@ -8,7 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
 import '/core/core.dart';
-import 'modals/show_recipients_dialog.dart';
+import 'modals/all_recipients_dialog.dart';
 
 class IdentityMessagesTableSource extends AsyncDataTableSource {
   Pagination? _pagination;
