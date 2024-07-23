@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
@@ -50,7 +51,7 @@ class _TierDetailState extends State<TierDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (Platform.isMacOS || Platform.isWindows) const BackButton(),
+            if (!kIsWeb && Platform.isMacOS || Platform.isWindows || Platform.isLinux) const BackButton(),
             Row(
               children: [
                 Expanded(

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
@@ -55,7 +56,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (Platform.isMacOS || Platform.isWindows) const BackButton(),
+            if (!kIsWeb && Platform.isMacOS || Platform.isWindows || Platform.isLinux) const BackButton(),
             _IdentityDetailsCard(
               identityDetails: identityDetails,
               selectedTier: _selectedTier,
