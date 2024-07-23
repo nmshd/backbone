@@ -63,20 +63,20 @@ class _DeletionProcessAuditLogsTableState extends State<DeletionProcessAuditLogs
 
   String _getMessageForDeletionProcessAuditLog(String messageKey, Map<String, String> additionalData) {
     final messageTemplates = {
-      'StartedByOwner': context.l10n.messageTemplate_startedByOwner,
-      'StartedBySupport': context.l10n.messageTemplate_startedBySupport,
-      'Approved': context.l10n.messageTemplate_approved,
-      'Rejected': context.l10n.messageTemplate_rejected,
-      'CancelledByOwner': context.l10n.messageTemplate_cancelledByOwner,
-      'CancelledBySupport': context.l10n.messageTemplate_cancelledBySupport,
-      'CancelledAutomatically': context.l10n.messageTemplate_cancelledAutomatically,
-      'ApprovalReminder1Sent': context.l10n.messageTemplate_approvalReminder1Sent,
-      'ApprovalReminder2Sent': context.l10n.messageTemplate_approvalReminder2Sent,
-      'ApprovalReminder3Sent': context.l10n.messageTemplate_approvalReminder3Sent,
-      'GracePeriodReminder1Sent': context.l10n.messageTemplate_gracePeriodReminder1Sent,
-      'GracePeriodReminder2Sent': context.l10n.messageTemplate_gracePeriodReminder2Sent,
-      'GracePeriodReminder3Sent': context.l10n.messageTemplate_gracePeriodReminder3Sent,
-      'DataDeleted': '${context.l10n.all} {aggregateType} ${context.l10n.messageTemplate_haveBeenDeleted}',
+      'StartedByOwner': context.l10n.deletionProcessAuditLogsTable_startedByOwner,
+      'StartedBySupport': context.l10n.deletionProcessAuditLogsTable_startedBySupport,
+      'Approved': context.l10n.deletionProcessAuditLogsTable_approved,
+      'Rejected': context.l10n.deletionProcessAuditLogsTable_rejected,
+      'CancelledByOwner': context.l10n.deletionProcessAuditLogsTable_cancelledByOwner,
+      'CancelledBySupport': context.l10n.deletionProcessAuditLogsTable_cancelledBySupport,
+      'CancelledAutomatically': context.l10n.deletionProcessAuditLogsTable_cancelledAutomatically,
+      'ApprovalReminder1Sent': context.l10n.deletionProcessAuditLogsTable_approvalReminder1Sent,
+      'ApprovalReminder2Sent': context.l10n.deletionProcessAuditLogsTable_approvalReminder2Sent,
+      'ApprovalReminder3Sent': context.l10n.deletionProcessAuditLogsTable_approvalReminder3Sent,
+      'GracePeriodReminder1Sent': context.l10n.deletionProcessAuditLogsTable_gracePeriodReminder1Sent,
+      'GracePeriodReminder2Sent': context.l10n.deletionProcessAuditLogsTable_gracePeriodReminder2Sent,
+      'GracePeriodReminder3Sent': context.l10n.deletionProcessAuditLogsTable_gracePeriodReminder3Sent,
+      'DataDeleted': '${context.l10n.all} {aggregateType} ${context.l10n.deletionProcessAuditLogsTable_haveBeenDeleted}',
     };
 
     var messageTemplate = messageTemplates[messageKey];
