@@ -7,6 +7,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.ConsumerApi.Tests.Integration.Support;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
 using Microsoft.Extensions.Options;
@@ -65,12 +66,12 @@ internal class IdentitiesApiStepDefinitions
     }
 
     [Given("Identities (.+) and (.+) with an established Relationship")]
-    public async Task GivenIdentitiesI1AndI2WithAnEstablishedRelationship(string identityName1, string identityName2)
+    public async Task GivenIdentitiesI1AndI2WithAnEstablishedRelationship(string identity1Name, string identity2Name)
     {
-        await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identityName1);
-        await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identityName2);
+        await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identity1Name);
+        await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identity2Name);
 
-        await EstablishRelationshipBetween(Identity(identityName1), Identity(identityName2));
+        await EstablishRelationshipBetween(Identity(identity1Name), Identity(identity2Name));
     }
 
     [Given("(.+) is in status \"ToBeDeleted\"")]
@@ -78,6 +79,13 @@ internal class IdentitiesApiStepDefinitions
     {
         _responseContext.StartDeletionProcessResponse = await Identity(identityName).Identities.StartDeletionProcess();
         StartDeletionProcessResponse.Should().BeASuccess();
+    }
+
+    [Given(@"Identities (.+)")]
+    public void GivenIdentities(string identityNames)
+    {
+        foreach (var identityName in SplitNames(identityNames))
+            _identitiesContext.Identities[identityName] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
     }
     #endregion
 
@@ -114,8 +122,12 @@ internal class IdentitiesApiStepDefinitions
     {
         _responseContext.WhenResponse = _responseContext.StartDeletionProcessResponse = await Identity(identityName).Identities.StartDeletionProcess();
     }
-
     #endregion
+
+    private static List<string> SplitNames(string identityNames)
+    {
+        return identityNames.Split([", ", " and "], StringSplitOptions.RemoveEmptyEntries).ToList();
+    }
 }
 
 public class IdentitiesContext

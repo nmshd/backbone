@@ -1,19 +1,19 @@
-using AutoMapper;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Challenges.Domain.Entities;
 
 namespace Backbone.Modules.Challenges.Application.Challenges.DTOs;
 
-public class ChallengeDTO : IHaveCustomMapping
+public class ChallengeDTO
 {
-    public required string Id { get; set; }
-    public required DateTime ExpiresAt { get; set; }
+    public ChallengeDTO(Challenge challenge)
+    {
+        Id = challenge.Id.Value;
+        ExpiresAt = challenge.ExpiresAt;
+        CreatedBy = challenge.CreatedBy?.Value;
+        CreatedByDevice = challenge.CreatedByDevice?.Value;
+    }
+
+    public string Id { get; set; }
+    public DateTime ExpiresAt { get; set; }
     public string? CreatedBy { get; set; }
     public string? CreatedByDevice { get; set; }
-
-    public void CreateMappings(Profile configuration)
-    {
-        configuration.CreateMap<Challenge, ChallengeDTO>()
-            .ForMember(dto => dto.Id, expression => expression.MapFrom(m => m.Id.Value));
-    }
 }

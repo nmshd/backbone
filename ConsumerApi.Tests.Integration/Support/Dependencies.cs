@@ -21,10 +21,12 @@ public static class Dependencies
 
         services.ConfigureAndValidate<HttpConfiguration>(options => config.GetSection("Http").Bind(options));
 
-        services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory<Program>()));
+        services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory()));
 
         services.AddScoped<ChallengesContext>();
         services.AddScoped<IdentitiesContext>();
+        services.AddScoped<MessagesContext>();
+        services.AddScoped<RelationshipsContext>();
         services.AddScoped<ResponseContext>();
 
         return services;

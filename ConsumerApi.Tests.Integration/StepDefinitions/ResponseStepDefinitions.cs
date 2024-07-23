@@ -3,6 +3,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Responses;
+using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.ThrowHelpers;
 
@@ -12,11 +13,13 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 internal class ResponseStepDefinitions
 {
     private readonly IdentitiesContext _identitiesContext;
+    private readonly MessagesContext _messagesContext;
     private readonly ResponseContext _responseContext;
 
-    public ResponseStepDefinitions(IdentitiesContext identitiesContext, ResponseContext responseContext)
+    public ResponseStepDefinitions(IdentitiesContext identitiesContext, MessagesContext messagesContext, ResponseContext responseContext)
     {
         _identitiesContext = identitiesContext;
+        _messagesContext = messagesContext;
         _responseContext = responseContext;
     }
 
@@ -91,12 +94,34 @@ internal class ResponseStepDefinitions
         await SendMessageResponse.Should().ComplyWithSchema();
     }
 
-    [Then(@"the response error contains a list of Identities to be deleted that includes (.+)")]
+    [Then(@"the error contains a list of Identities to be deleted that includes (.+)")]
     public void ThenTheErrorContainsAListOfIdentitiesToBeDeletedThatIncludesIdentity(string identityName)
     {
         var errorData = _responseContext.SendMessageResponse!.Error!.Data?.As<PeersToBeDeletedErrorData>();
         errorData.Should().NotBeNull();
         errorData!.PeersToBeDeleted.Contains(_identitiesContext.Identities[identityName].IdentityData!.Address).Should().BeTrue();
+    }
+
+    [Then(@"the response contains the Messages ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
+    public void ThenTheResponseContainsTheMessagesMAndM(string message1Name, string message2Name)
+    {
+        var message1 = _messagesContext.Messages[message1Name];
+        var message2 = _messagesContext.Messages[message2Name];
+
+        ThrowIfNull(_responseContext.GetMessagesResponse);
+
+        _responseContext.GetMessagesResponse.Result.Should().Contain(m => m.Id == message1.Id);
+        _responseContext.GetMessagesResponse.Result.Should().Contain(m => m.Id == message2.Id);
+    }
+
+    [Then(@"the response contains the Message ([a-zA-Z0-9]+)")]
+    public void ThenTheResponseContainsTheMessageM(string messageName)
+    {
+        var message = _messagesContext.Messages[messageName];
+
+        ThrowIfNull(_responseContext.GetMessagesResponse);
+
+        _responseContext.GetMessagesResponse.Result.Should().Contain(m => m.Id == message.Id);
     }
     #endregion
 
@@ -112,7 +137,11 @@ public class ResponseContext
     public ApiResponse<CreateFileResponse>? FileUploadResponse { get; set; } = null!;
     public ApiResponse<CreateIdentityResponse>? CreateIdentityResponse { get; set; } = null!;
     public ApiResponse<StartDeletionProcessResponse>? StartDeletionProcessResponse { get; set; }
+    public ApiResponse<ListMessagesResponse>? GetMessagesResponse { get; set; }
     public ApiResponse<SendMessageResponse>? SendMessageResponse { get; set; } = null!;
+
+    public ApiResponse<Relationship>? TerminateRelationshipResponse { get; set; } = null!;
+    public ApiResponse<RelationshipMetadata>? DecomposeRelationshipResponse { get; set; } = null!;
 
     public IResponse? WhenResponse { get; set; } = null!;
 }
