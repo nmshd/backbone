@@ -17,5 +17,3 @@ class Gaps {
   static const SizedBox w32 = SizedBox(width: 32);
   static const SizedBox w40 = SizedBox(width: 40);
 }
-
-enum MessageType { incoming, outgoing }

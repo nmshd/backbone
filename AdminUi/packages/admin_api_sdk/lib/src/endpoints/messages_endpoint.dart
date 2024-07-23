@@ -1,5 +1,6 @@
 import 'package:admin_api_types/admin_api_types.dart';
 
+import '../enums/enums.dart';
 import '../types/types.dart';
 import 'endpoint.dart';
 
@@ -8,7 +9,7 @@ class MessagesEndpoint extends Endpoint {
 
   Future<ApiResponse<List<Message>>> getMessagesByParticipant({
     required String participant,
-    required String type,
+    required MessageType type,
     required int pageNumber,
     required int pageSize,
   }) =>
@@ -16,7 +17,7 @@ class MessagesEndpoint extends Endpoint {
         '/api/v1/Messages',
         query: {
           'participant': participant,
-          'type': type,
+          'type': type == MessageType.incoming ? 'Incoming' : 'Outgoing',
           'PageNumber': pageNumber,
           'PageSize': pageSize,
         },

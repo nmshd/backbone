@@ -38,7 +38,7 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
     try {
       final response = await GetIt.I.get<AdminApiClient>().messages.getMessagesByParticipant(
             participant: participant,
-            type: type == MessageType.incoming ? 'Incoming' : 'Outgoing',
+            type: type,
             pageNumber: pageNumber,
             pageSize: count,
           );
