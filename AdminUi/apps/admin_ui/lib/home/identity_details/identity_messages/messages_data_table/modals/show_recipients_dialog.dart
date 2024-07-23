@@ -4,20 +4,20 @@ import 'package:go_router/go_router.dart';
 
 import '/core/extensions.dart';
 
-Future<Tier?> showRecipientsDialog({required BuildContext context, required List<MessageRecipient> recipients}) => showDialog<Tier>(
+Future<Tier?> showAllRecipientsDialog({required BuildContext context, required List<MessageRecipient> recipients}) => showDialog<Tier>(
       context: context,
-      builder: (BuildContext context) => _CreateRecipientsDialog(recipients: recipients),
+      builder: (BuildContext context) => _ShowAllRecipientsDialog(recipients: recipients),
     );
 
-class _CreateRecipientsDialog extends StatefulWidget {
+class _ShowAllRecipientsDialog extends StatefulWidget {
   final List<MessageRecipient> recipients;
-  const _CreateRecipientsDialog({required this.recipients});
+  const _ShowAllRecipientsDialog({required this.recipients});
 
   @override
-  State<_CreateRecipientsDialog> createState() => _CreateRecipientsDialogState();
+  State<_ShowAllRecipientsDialog> createState() => _ShowAllRecipientsDialogState();
 }
 
-class _CreateRecipientsDialogState extends State<_CreateRecipientsDialog> {
+class _ShowAllRecipientsDialogState extends State<_ShowAllRecipientsDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
