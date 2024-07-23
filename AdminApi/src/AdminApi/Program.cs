@@ -196,4 +196,11 @@ static void Configure(WebApplication app)
     {
         ResponseWriter = HealthCheckWriter.WriteResponse
     });
+
+    app.Use(async (context, next) =>
+    {
+        context.Response.Headers.Append("Cross-Origin-Embedder-Policy", "credentialless");
+        context.Response.Headers.Append("Cross-Origin-Opener-Policy", "same-origin");
+        await next.Invoke();
+    });
 }
