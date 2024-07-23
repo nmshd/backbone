@@ -92,6 +92,7 @@ class AdminUiApp extends StatelessWidget with WatchItMixin {
     final ThemeMode themeMode = watchValue((ThemeModeModel x) => x.themeMode);
 
     return MaterialApp.router(
+      title: 'Admin UI',
       themeMode: themeMode,
       theme: ThemeData(
         useMaterial3: true,
