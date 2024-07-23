@@ -20,7 +20,7 @@ public static class Dependencies
 
         services.ConfigureAndValidate<HttpConfiguration>(options => config.GetSection("Http").Bind(options));
 
-        services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory<Program>()));
+        services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory()));
 
         return services;
     }

@@ -28,7 +28,7 @@ public class MessagesRepository : IMessagesRepository
     {
         var message = await (track ? _messages : _readOnlyMessages)
             .IncludeAll(_dbContext)
-            .WithSenderOrRecipient(address)
+            .Where(Message.HasParticipant(address))
             .FirstWithId(id, cancellationToken);
 
         return message;
@@ -58,7 +58,7 @@ public class MessagesRepository : IMessagesRepository
         if (ids.Any())
             query = query.WithIdsIn(ids);
 
-        var messages = await query.WithSenderOrRecipient(requiredParticipant)
+        var messages = await query.Where(Message.HasParticipant(requiredParticipant))
             .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
         return messages;
