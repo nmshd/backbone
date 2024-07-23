@@ -56,13 +56,13 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
           .map(
             (message) => DataRow2.byIndex(
               index: pageNumber * count + message.$1,
-              specificRowHeight: message.$2.recipients.length > 3 && _checkIfTheTypeIsOutgoing()
+              specificRowHeight: message.$2.recipients.length > 3 && type == MessageType.outgoing
                   ? 100.0
-                  : message.$2.recipients.length == 3 && _checkIfTheTypeIsOutgoing()
+                  : message.$2.recipients.length == 3 && type == MessageType.outgoing
                       ? 65.0
                       : null,
               cells: [
-                if (_checkIfTheTypeIsOutgoing()) DataCell(_RecipientsCell(recipients: message.$2.recipients)),
+                if (type == MessageType.outgoing) DataCell(_RecipientsCell(recipients: message.$2.recipients)),
                 if (type == MessageType.incoming) ...[
                   DataCell(Text(message.$2.senderAddress)),
                   DataCell(Text(message.$2.senderDevice)),
@@ -88,10 +88,6 @@ class IdentityMessagesTableSource extends AsyncDataTableSource {
   int _totalPages(int count, List<Message>? data) {
     if (data == null || data.isEmpty) return 1;
     return (data.length / count).ceil();
-  }
-
-  bool _checkIfTheTypeIsOutgoing() {
-    return type == MessageType.outgoing;
   }
 }
 
