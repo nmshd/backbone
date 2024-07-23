@@ -25,7 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj"/>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Crypto\Crypto.csproj" />
         <ProjectReference Include="..\..\..\..\ConsumerApi.Sdk\ConsumerApi.Sdk.csproj" />
         <ProjectReference Include="..\..\src\ConsumerApi.csproj" />
@@ -51,6 +51,14 @@
         <SpecFlowFeatureFiles Update="Features\Challenges\{id}\GET.feature">
             <Visible>$(UsingMicrosoftNETSdk)</Visible>
             <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+        </SpecFlowFeatureFiles>
+        <SpecFlowFeatureFiles Update="Features\Messages\GET.feature">
+          <Visible>$(UsingMicrosoftNETSdk)</Visible>
+          <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
+        </SpecFlowFeatureFiles>
+        <SpecFlowFeatureFiles Update="Features\Messages\GET.feature">
+          <Visible>$(UsingMicrosoftNETSdk)</Visible>
+          <CodeBehindFile>%(RelativeDir)%(Filename).feature$(DefaultLanguageSourceExtension)</CodeBehindFile>
         </SpecFlowFeatureFiles>
     </ItemGroup>
 </Project>
