@@ -1,7 +1,7 @@
-using Backbone.Modules.Devices.AdminCli.Commands.Clients;
-using Backbone.Modules.Devices.AdminCli.Commands.Tiers;
+using Backbone.AdminCli.Commands.Clients;
+using Backbone.AdminCli.Commands.Tiers;
 
-namespace Backbone.Modules.Devices.AdminCli.Commands;
+namespace Backbone.AdminCli.Commands;
 
 public class RootCommand : System.CommandLine.RootCommand
 {

@@ -1,10 +1,10 @@
 using System.CommandLine;
 using System.Text.Json;
-using Backbone.Modules.Devices.AdminCli.Commands.BaseClasses;
+using Backbone.AdminCli.Commands.BaseClasses;
 using Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
 using MediatR;
 
-namespace Backbone.Modules.Devices.AdminCli.Commands.Clients;
+namespace Backbone.AdminCli.Commands.Clients;
 
 public class ListClientsCommand : AdminCliDbCommand
 {

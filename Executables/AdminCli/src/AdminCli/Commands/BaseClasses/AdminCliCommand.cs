@@ -1,7 +1,7 @@
 using System.CommandLine;
 using System.Text.Json;
 
-namespace Backbone.Modules.Devices.AdminCli.Commands.BaseClasses;
+namespace Backbone.AdminCli.Commands.BaseClasses;
 
 public abstract class AdminCliCommand : Command
 {

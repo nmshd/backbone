@@ -1,9 +1,9 @@
 using System.CommandLine;
 using System.Text.Json;
-using Backbone.Modules.Devices.AdminCli.Commands.BaseClasses;
+using Backbone.AdminCli.Commands.BaseClasses;
 using MediatR;
 
-namespace Backbone.Modules.Devices.AdminCli.Commands.Clients;
+namespace Backbone.AdminCli.Commands.Clients;
 
 public class CreateClientCommand : AdminCliDbCommand
 {
@@ -53,7 +53,7 @@ public class CreateClientCommand : AdminCliDbCommand
     {
         var mediator = _serviceLocator.GetService<IMediator>(dbProvider, dbConnectionString);
 
-        var response = await mediator.Send(new Application.Clients.Commands.CreateClient.CreateClientCommand(clientId, displayName, clientSecret, defaultTier, maxIdentities), CancellationToken.None);
+        var response = await mediator.Send(new Modules.Devices.Application.Clients.Commands.CreateClient.CreateClientCommand(clientId, displayName, clientSecret, defaultTier, maxIdentities), CancellationToken.None);
 
         Console.WriteLine(JsonSerializer.Serialize(response, JSON_SERIALIZER_OPTIONS));
         Console.WriteLine("Please note the secret since you cannot obtain it later.");

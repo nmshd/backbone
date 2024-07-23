@@ -1,6 +1,6 @@
-using Backbone.Modules.Devices.AdminCli.Commands.BaseClasses;
+using Backbone.AdminCli.Commands.BaseClasses;
 
-namespace Backbone.Modules.Devices.AdminCli.Commands.Tiers;
+namespace Backbone.AdminCli.Commands.Tiers;
 
 public class TierCommand : AdminCliCommand
 {

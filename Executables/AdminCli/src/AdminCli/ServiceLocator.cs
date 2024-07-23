@@ -7,7 +7,7 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.Modules.Devices.AdminCli;
+namespace Backbone.AdminCli;
 
 public class ServiceLocator
 {
