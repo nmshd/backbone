@@ -26,7 +26,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
   void initState() {
     super.initState();
 
-    _reloadDeletionProcess();
+    _loadDeletionProcessDetails();
   }
 
   @override
@@ -39,11 +39,13 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (Platform.isMacOS || Platform.isWindows) const BackButton(),
+          if (Platform.isMacOS || Platform.isWindows)
+            BackButton(
+              onPressed: () => Navigator.of(context).pop(false),
+            ),
           _DeletionProcessDetailsCard(
             address: widget.address,
             deletionProcessDetails: deletionProcessDetails,
-            updateDeletionProcess: _reloadDeletionProcess,
           ),
           Gaps.h16,
           Expanded(child: DeletionProcessAuditLogsTable(auditLogs: auditLogs)),
@@ -56,11 +58,16 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
                 child: FilledButton(
                   style: ButtonStyle(
                     backgroundColor: WidgetStateProperty.resolveWith((states) {
-                      return Theme.of(context).colorScheme.error;
+                      return _checkDeletionProcessStatus(deletionProcessDetails.status) ? Colors.grey : Theme.of(context).colorScheme.error;
                     }),
                   ),
-                  onPressed: _cancelDeletionProcess,
-                  child: Text(context.l10n.deletionProcessDetails_cancelDeletionProcess_title),
+                  onPressed: _checkDeletionProcessStatus(deletionProcessDetails.status) ? null : _cancelDeletionProcess,
+                  child: Text(
+                    context.l10n.deletionProcessDetails_cancelDeletionProcess_title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -85,20 +92,34 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
         .get<AdminApiClient>()
         .deletionProcesses
         .cancelDeletionProcessAsSupport(address: widget.address, deletionProcessId: widget.deletionProcessId);
-    if (result.hasError && mounted) {
+
+    if (result.hasError) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Theme.of(context).colorScheme.error,
+            content: Text(result.error.message),
+            showCloseIcon: true,
+          ),
+        );
+      }
+      return;
+    }
+
+    if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          backgroundColor: Theme.of(context).colorScheme.error,
-          content: Text(result.error.message),
+          backgroundColor: Colors.green,
+          content: Text(context.l10n.deletionProcessDetails_deletionProcessCancelledSuccessfully),
           showCloseIcon: true,
         ),
       );
 
-      await _reloadDeletionProcess();
+      Navigator.of(context).pop(true);
     }
   }
 
-  Future<void> _reloadDeletionProcess() async {
+  Future<void> _loadDeletionProcessDetails() async {
     final deletionProcessesDetails = await GetIt.I
         .get<AdminApiClient>()
         .deletionProcesses
@@ -110,17 +131,19 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
       });
     }
   }
+
+  bool _checkDeletionProcessStatus(String deletionProcessStatus) {
+    return deletionProcessStatus != 'Approved';
+  }
 }
 
 class _DeletionProcessDetailsCard extends StatelessWidget {
   final String address;
   final DeletionProcessDetail deletionProcessDetails;
-  final VoidCallback updateDeletionProcess;
 
   const _DeletionProcessDetailsCard({
     required this.address,
     required this.deletionProcessDetails,
-    required this.updateDeletionProcess,
   });
 
   @override
@@ -134,8 +157,6 @@ class _DeletionProcessDetailsCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(context.l10n.deletionProcessDetails_title, style: Theme.of(context).textTheme.headlineLarge),
-                  Gaps.h32,
                   Wrap(
                     crossAxisAlignment: WrapCrossAlignment.center,
                     spacing: 8,
@@ -160,27 +181,6 @@ class _DeletionProcessDetailsCard extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _DeletionProcessDetails extends StatelessWidget {
-  final String title;
-  final String value;
-
-  const _DeletionProcessDetails({required this.title, required this.value});
-
-  @override
-  Widget build(BuildContext context) {
-    return RawChip(
-      label: Text.rich(
-        TextSpan(
-          children: [
-            TextSpan(text: '$title ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
-            TextSpan(text: value, style: Theme.of(context).textTheme.bodyLarge),
-          ],
-        ),
-      ),
     );
   }
 }

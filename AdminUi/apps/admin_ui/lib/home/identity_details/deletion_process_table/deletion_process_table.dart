@@ -23,7 +23,7 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
   @override
   void initState() {
     super.initState();
-    _loadIdentityDeletionProcesses();
+    _reloadIdentityDeletionProcesses();
   }
 
   @override
@@ -49,29 +49,39 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                         DataColumn2(label: Text(context.l10n.id)),
                         DataColumn2(label: Text(context.l10n.deletionProcessTable_status), size: ColumnSize.S),
                         DataColumn2(label: Text(context.l10n.createdAt), size: ColumnSize.S),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_approvalReminders)),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_approvedAt)),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_approvalReminders), size: ColumnSize.L),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_approvedAt), size: ColumnSize.S),
                         DataColumn2(label: Text(context.l10n.deletionProcessTable_approvedByDevice)),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodReminders)),
-                        DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodEndsAt)),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodReminders), size: ColumnSize.L),
+                        DataColumn2(label: Text(context.l10n.deletionProcessTable_gracePeriodEndsAt), size: ColumnSize.S),
                       ],
                       rows: _deletionProcesses!.map(
                         (deletionProcess) {
                           final isDisabled = _isRowDisabled(deletionProcess.status);
-                          final textColor = isDisabled ? Colors.grey : Colors.black;
+                          final textColor = isDisabled ? Colors.grey : Theme.of(context).colorScheme.onSecondaryContainer;
 
                           return DataRow2(
+                            specificRowHeight: 60,
                             onTap: isDisabled
                                 ? null
-                                : () {
-                                    context.push('/identities/${widget.address}/deletion-process-details/${deletionProcess.id}');
+                                : () async {
+                                    final result =
+                                        await context.push<bool?>('/identities/${widget.address}/deletion-process-details/${deletionProcess.id}');
+                                    if (result! == true) {
+                                      await _reloadIdentityDeletionProcesses();
+                                    }
                                   },
                             cells: [
                               DataCell(Text(deletionProcess.id, style: TextStyle(color: textColor))),
-                              DataCell(Text(deletionProcess.status, style: TextStyle(color: textColor))),
                               DataCell(
                                 Text(
-                                  '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(deletionProcess.createdAt)} ${DateFormat.Hms().format(deletionProcess.createdAt)}',
+                                  deletionProcess.status == 'WaitingForApproval' ? 'Waiting for Approval' : deletionProcess.status,
+                                  style: TextStyle(color: textColor),
+                                ),
+                              ),
+                              DataCell(
+                                Text(
+                                  DateFormat.yMd(Localizations.localeOf(context).languageCode).format(deletionProcess.createdAt),
                                   style: TextStyle(color: textColor),
                                 ),
                               ),
@@ -88,7 +98,7 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                               DataCell(
                                 Text(
                                   deletionProcess.approvedAt != null
-                                      ? '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(deletionProcess.approvedAt!)} ${DateFormat.Hms().format(deletionProcess.approvedAt!)}'
+                                      ? '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(deletionProcess.approvedAt!)} '
                                       : '',
                                   style: TextStyle(color: textColor),
                                 ),
@@ -107,7 +117,7 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                               DataCell(
                                 Text(
                                   deletionProcess.approvedAt != null
-                                      ? '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(deletionProcess.gracePeriodEndsAt!)} ${DateFormat.Hms().format(deletionProcess.gracePeriodEndsAt!)}'
+                                      ? DateFormat.yMd(Localizations.localeOf(context).languageCode).format(deletionProcess.gracePeriodEndsAt!)
                                       : '',
                                   style: TextStyle(color: textColor),
                                 ),
@@ -126,11 +136,7 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
     );
   }
 
-  bool _isRowDisabled(String deletionProcessStatus) {
-    return deletionProcessStatus == 'Rejected' || deletionProcessStatus == 'Cancelled';
-  }
-
-  Future<void> _loadIdentityDeletionProcesses() async {
+  Future<void> _reloadIdentityDeletionProcesses() async {
     final deletionProcesses = await GetIt.I.get<AdminApiClient>().deletionProcesses.getIdentityDeletionProcesses(address: widget.address);
     if (mounted) {
       setState(() {
@@ -138,6 +144,10 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
         _deletionProcesses!.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       });
     }
+  }
+
+  bool _isRowDisabled(String deletionProcessStatus) {
+    return deletionProcessStatus == 'Rejected' || deletionProcessStatus == 'Cancelled';
   }
 }
 
@@ -159,23 +169,17 @@ class _RemindersCell extends StatelessWidget {
     }
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: validReminders.asMap().entries.map((entry) {
         final index = entry.key + 1;
         final date = entry.value!;
-        final color = _isDatePassed(date) ? Colors.green : textColor;
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 4),
-          child: Text(
-            '${context.l10n.deletionProcessTable_approvalRemindersCell_reminder} $index: ${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(date)} ${DateFormat.Hms().format(date)}',
-            style: TextStyle(color: color),
-          ),
+        final color = textColor;
+        return Text(
+          '${context.l10n.deletionProcessTable_approvalRemindersCell_reminder} $index: ${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(date)} ${DateFormat.Hms().format(date)}',
+          style: TextStyle(color: color),
         );
       }).toList(),
     );
-  }
-
-  bool _isDatePassed(DateTime date) {
-    return date.isBefore(DateTime.now());
   }
 }

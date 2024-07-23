@@ -23,12 +23,12 @@ class DeletionProcessesEndpoint extends Endpoint {
         transformer: DeletionProcessDetail.fromJson,
       );
 
-  Future<ApiResponse<DeletionProcessDetail>> cancelDeletionProcessAsSupport({
+  Future<ApiResponse<void>> cancelDeletionProcessAsSupport({
     required String address,
     required String deletionProcessId,
   }) =>
       put(
         '/api/v1/Identities/$address/DeletionProcesses/$deletionProcessId/Cancel',
-        transformer: DeletionProcessDetail.fromJson,
+        transformer: (e) {},
       );
 }
