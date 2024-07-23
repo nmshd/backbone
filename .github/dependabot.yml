@@ -60,6 +60,23 @@ updates:
     labels:
       - "dependencies"
 
+  ##### Admin UI Flutter App#####
+  - package-ecosystem: "pub"
+    directories:
+      - "/AdminUi/apps/admin_ui"
+      - "/AdminUi/packages/admin_api_sdk"
+      - "/AdminUi/packages/admin_api_types"
+    schedule:
+      interval: "weekly"
+    groups:
+      update-pub-dependencies:
+        patterns:
+          - "*"
+    reviewers:
+      - "tnotheis"
+    labels:
+      - "dependencies"
+
   ##### Docker #####
   - package-ecosystem: "docker"
     directories:
