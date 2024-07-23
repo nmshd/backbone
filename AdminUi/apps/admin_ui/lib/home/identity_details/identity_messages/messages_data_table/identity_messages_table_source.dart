@@ -111,7 +111,7 @@ class _RecipientsCell extends StatelessWidget {
         ),
         if (recipients.length > 3)
           FilledButton(
-            onPressed: () => showRecipientsDialog(context: context, recipients: recipients),
+            onPressed: () => showAllRecipientsDialog(context: context, recipients: recipients),
             child: Text(context.l10n.showAll),
           ),
       ],
