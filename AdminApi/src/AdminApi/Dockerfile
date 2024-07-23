@@ -123,7 +123,7 @@ WORKDIR /app
 
 COPY --from=build-env /rootfs /
 COPY --from=build-env /app/publish .
-COPY --from=flutter-build-env /build /wwwroot/new
+COPY --from=flutter-build-env /build /app/wwwroot/new
 
 USER $APP_UID
 
