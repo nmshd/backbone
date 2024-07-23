@@ -1,24 +1,24 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Application.Messages.DTOs;
 using Backbone.Modules.Messages.Domain.Ids;
 using MediatR;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Messages.Application.Messages.Queries.GetMessage;
 
 public class Handler : IRequestHandler<GetMessageQuery, MessageDTO>
 {
     private readonly IMessagesRepository _messagesRepository;
-    private readonly IMapper _mapper;
     private readonly IUserContext _userContext;
+    private readonly ApplicationOptions _options;
 
-    public Handler(IUserContext userContext, IMapper mapper, IMessagesRepository messagesRepository)
+    public Handler(IUserContext userContext, IMessagesRepository messagesRepository, IOptions<ApplicationOptions> options)
     {
         _userContext = userContext;
-        _mapper = mapper;
         _messagesRepository = messagesRepository;
+        _options = options.Value;
     }
 
     public async Task<MessageDTO> Handle(GetMessageQuery request, CancellationToken cancellationToken)
@@ -31,9 +31,7 @@ public class Handler : IRequestHandler<GetMessageQuery, MessageDTO>
 
         await _messagesRepository.Update(message);
 
-        var response = _mapper.Map<MessageDTO>(message);
-
-        response.PrepareForActiveIdentity(_userContext.GetAddress());
+        var response = new MessageDTO(message, _userContext.GetAddress(), _options.DidDomainName);
 
         return response;
     }

@@ -6,6 +6,7 @@ using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using FakeItEasy;
+using Microsoft.Extensions.Options;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.Tests.Tests.Relationships.Commands.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
@@ -22,7 +23,7 @@ public class HandlerTests : AbstractTestsBase
         var relationshipTemplateAllocations = new List<RelationshipTemplateAllocation> { new(RelationshipTemplateId.New(), oldIdentityAddress, DeviceId.New()) };
 
         var request = new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(oldIdentityAddress);
-        var handler = new Handler(mockRepository);
+        var handler = CreateHandler(mockRepository);
 
         A.CallTo(() => mockRepository.FindRelationshipTemplateAllocations(A<Expression<Func<RelationshipTemplateAllocation, bool>>>._, A<CancellationToken>._))
             .Returns(relationshipTemplateAllocations);
@@ -48,7 +49,7 @@ public class HandlerTests : AbstractTestsBase
         var relationshipTemplateAllocations = new List<RelationshipTemplateAllocation> { new(RelationshipTemplateId.New(), oldIdentityAddress, DeviceId.New()) };
 
         var request = new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(anotherIdentityAddress);
-        var handler = new Handler(mockRepository);
+        var handler = CreateHandler(mockRepository);
 
         A.CallTo(() => mockRepository.FindRelationshipTemplateAllocations(A<Expression<Func<RelationshipTemplateAllocation, bool>>>._, A<CancellationToken>._))
             .Returns(relationshipTemplateAllocations);
@@ -61,5 +62,10 @@ public class HandlerTests : AbstractTestsBase
             A<List<RelationshipTemplateAllocation>>.That.Matches(l => l.Contains(relationshipTemplateAllocations.First())),
             A<CancellationToken>._)
         ).MustNotHaveHappened();
+    }
+
+    private static Handler CreateHandler(IRelationshipTemplatesRepository mockRepository)
+    {
+        return new Handler(mockRepository, Options.Create(new ApplicationOptions { DidDomainName = "localhost" }));
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Domain;
-using Backbone.UnitTestTools.FluentAssertions.Assertions;
+using FluentAssertions;
 
 namespace Backbone.UnitTestTools.FluentAssertions.Extensions;
 
