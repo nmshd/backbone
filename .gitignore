@@ -374,8 +374,8 @@ dist
 !Executables/AdminUi/packages/*
 
 # Hardlinks for appsettings.override.json
-AdminApi/src/AdminApi/appsettings.override.json
-ConsumerApi/appsettings.override.json
-DatabaseMigrator/appsettings.override.json
-EventHandlerService/src/EventHandlerService/appsettings.override.json
-Jobs/src/Job.IdentityDeletion/appsettings.override.json
+Executables/AdminApi/src/AdminApi/appsettings.override.json
+Executables/ConsumerApi/src/appsettings.override.json
+Executables/DatabaseMigrator/src/DatabaseMigrator/appsettings.override.json
+Executables/EventHandlerService/src/EventHandlerService/appsettings.override.json
+Executables/IdentityDeletionJobs/src/Job.IdentityDeletion/appsettings.override.json
