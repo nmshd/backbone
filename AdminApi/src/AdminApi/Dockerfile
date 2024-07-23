@@ -10,6 +10,18 @@ RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
 WORKDIR /opt/chisel
 RUN go build ./cmd/chisel
 
+# Build Flutter Admin UI
+FROM ghcr.io/cirruslabs/flutter:3.22.3 AS flutter-build-env
+
+COPY AdminUi /src
+WORKDIR /src
+RUN dart pub global activate melos
+RUN dart pub global run melos:melos bootstrap
+WORKDIR /src/apps/admin_ui
+RUN flutter build web --base-href /new/ --wasm --release --output /build
+# TODO: !!!!!!!!!!!!!!!!!!! remove the following line!!!!!!!!!!!!!!!!!!!!!!!!!!
+RUN cat /build/index.html 
+
 #### Build application ####
 FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build-env
 
@@ -111,6 +123,7 @@ WORKDIR /app
 
 COPY --from=build-env /rootfs /
 COPY --from=build-env /app/publish .
+COPY --from=flutter-build-env /build /wwwroot/new
 
 USER $APP_UID
 
