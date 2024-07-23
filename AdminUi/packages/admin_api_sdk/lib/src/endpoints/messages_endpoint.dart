@@ -17,7 +17,7 @@ class MessagesEndpoint extends Endpoint {
         '/api/v1/Messages',
         query: {
           'participant': participant,
-          'type': type == MessageType.incoming ? 'Incoming' : 'Outgoing',
+          'type': type.name,
           'PageNumber': pageNumber,
           'PageSize': pageSize,
         },
