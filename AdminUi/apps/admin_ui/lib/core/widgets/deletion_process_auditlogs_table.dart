@@ -18,8 +18,6 @@ class DeletionProcessAuditLogsTable extends StatefulWidget {
 }
 
 class _DeletionProcessAuditLogsTableState extends State<DeletionProcessAuditLogsTable> {
-  final messageTemplates = MessageTemplate();
-
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -44,14 +42,12 @@ class _DeletionProcessAuditLogsTableState extends State<DeletionProcessAuditLogs
                   ),
                 ),
                 DataCell(
-                  Builder(
-                    builder: (buildContext) => Text(
-                      messageTemplates.getMessageForDeletionProcessAuditLog(buildContext, auditLog.messageKey, auditLog.additionalData),
-                    ),
+                  Text(
+                    _getMessageForDeletionProcessAuditLog(auditLog.messageKey, auditLog.additionalData),
                   ),
                 ),
-                DataCell(auditLog.oldStatus == null ? const Text('') : Text(styleStatus(auditLog.oldStatus!))),
-                DataCell(Text(styleStatus(auditLog.newStatus))),
+                DataCell(auditLog.oldStatus == null ? const Text('') : Text(_getReformatedStatus(auditLog.oldStatus!))),
+                DataCell(Text(_getReformatedStatus(auditLog.newStatus))),
               ],
             );
           }).toList(),
@@ -60,8 +56,36 @@ class _DeletionProcessAuditLogsTableState extends State<DeletionProcessAuditLogs
     );
   }
 
-  String styleStatus(String status) {
+  String _getReformatedStatus(String status) {
     if (status == 'WaitingForApproval') return context.l10n.deletionProcessAuditLogsTable_auditLogs_waitingForApproval;
     return status;
+  }
+
+  String _getMessageForDeletionProcessAuditLog(String messageKey, Map<String, String> additionalData) {
+    final messageTemplates = {
+      'StartedByOwner': context.l10n.messageTemplate_startedByOwner,
+      'StartedBySupport': context.l10n.messageTemplate_startedBySupport,
+      'Approved': context.l10n.messageTemplate_approved,
+      'Rejected': context.l10n.messageTemplate_rejected,
+      'CancelledByOwner': context.l10n.messageTemplate_cancelledByOwner,
+      'CancelledBySupport': context.l10n.messageTemplate_cancelledBySupport,
+      'CancelledAutomatically': context.l10n.messageTemplate_cancelledAutomatically,
+      'ApprovalReminder1Sent': context.l10n.messageTemplate_approvalReminder1Sent,
+      'ApprovalReminder2Sent': context.l10n.messageTemplate_approvalReminder2Sent,
+      'ApprovalReminder3Sent': context.l10n.messageTemplate_approvalReminder3Sent,
+      'GracePeriodReminder1Sent': context.l10n.messageTemplate_gracePeriodReminder1Sent,
+      'GracePeriodReminder2Sent': context.l10n.messageTemplate_gracePeriodReminder2Sent,
+      'GracePeriodReminder3Sent': context.l10n.messageTemplate_gracePeriodReminder3Sent,
+      'DataDeleted': '${context.l10n.all} {aggregateType} ${context.l10n.messageTemplate_haveBeenDeleted}',
+    };
+
+    var messageTemplate = messageTemplates[messageKey];
+
+    additionalData.forEach((key, value) {
+      final placeholder = '{$key}';
+      messageTemplate = messageTemplate?.replaceAll(placeholder, value);
+    });
+
+    return messageTemplate!;
   }
 }
