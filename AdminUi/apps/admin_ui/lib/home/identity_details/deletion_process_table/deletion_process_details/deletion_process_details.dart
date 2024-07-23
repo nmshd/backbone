@@ -55,17 +55,20 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 16),
-                child: FilledButton(
-                  style: ButtonStyle(
-                    backgroundColor: WidgetStateProperty.resolveWith((states) {
-                      return _checkDeletionProcessStatus(deletionProcessDetails.status) ? Colors.grey : Theme.of(context).colorScheme.error;
-                    }),
-                  ),
-                  onPressed: _checkDeletionProcessStatus(deletionProcessDetails.status) ? null : _cancelDeletionProcess,
-                  child: Text(
-                    context.l10n.deletionProcessDetails_cancelDeletionProcess_title,
-                    style: const TextStyle(
-                      color: Colors.white,
+                child: Tooltip(
+                  message: context.l10n.deletionProcessDetails_cancelDeletionProcess_tooltipMessage,
+                  child: FilledButton(
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStateProperty.resolveWith((states) {
+                        return _checkDeletionProcessStatus(deletionProcessDetails.status) ? Colors.grey : Theme.of(context).colorScheme.error;
+                      }),
+                    ),
+                    onPressed: _checkDeletionProcessStatus(deletionProcessDetails.status) ? null : _cancelDeletionProcess,
+                    child: Text(
+                      context.l10n.deletionProcessDetails_cancelDeletionProcess_title,
+                      style: const TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ),

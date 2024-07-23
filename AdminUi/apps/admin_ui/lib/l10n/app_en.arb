@@ -96,6 +96,7 @@
     "deletionProcessDetails_cancelDeletionProcess_message": "Are you sure you want to cancel deletion process?",
     "deletionProcessDetails_deletionProcessCancelledSuccessfully": "Deletion Process was cancelled successfully.",
     "deletionProcessAuditLogsTable_auditLogs_waitingForApproval": "Waiting for Approval",
+    "deletionProcessDetails_cancelDeletionProcess_tooltipMessage": "Deletion Process must be in status Approved.",
     "messageTemplate_startedByOwner": "The deletion process was started by the owner. It was automatically approved.",
     "messageTemplate_startedBySupport": "The deletion process was started by support. It is now waiting for approval.",
     "messageTemplate_approved": "The deletion process was approved.",
