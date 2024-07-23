@@ -1,119 +1,111 @@
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
-using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
-using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
-using Backbone.ConsumerApi.Tests.Integration.Support;
-using Microsoft.Extensions.Options;
+using static Backbone.ConsumerApi.Tests.Integration.Support.Constants;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
-[Scope(Feature = "POST Challenge")]
-[Scope(Feature = "GET Challenge")]
 internal class ChallengesApiStepDefinitions
 {
-    private string _challengeId;
-    private ApiResponse<Challenge>? _response;
-    private Client _sdk = null!;
-    private bool _isAuthenticated;
-    private readonly HttpClient _httpClient;
-    private readonly ClientCredentials _clientCredentials;
+    private readonly ChallengesContext _challengesContext;
+    private readonly IdentitiesContext _identitiesContext;
+    private readonly ResponseContext _responseContext;
 
-    public ChallengesApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, HttpClientFactory factory)
+    public ChallengesApiStepDefinitions(ChallengesContext challengesContext, IdentitiesContext identitiesContext, ResponseContext responseContext)
     {
-        _challengeId = string.Empty;
-        _httpClient = factory.CreateClient();
-        _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
+        _challengesContext = challengesContext;
+        _identitiesContext = identitiesContext;
+        _responseContext = responseContext;
     }
 
-    [Given("the user is authenticated")]
-    public async Task GivenTheUserIsAuthenticated()
+    private Client AnonymousClient => _identitiesContext.AnonymousClient!;
+    private Client Identity(string identityName) => _identitiesContext.Identities[identityName];
+
+    private string ChallengeId => _challengesContext.ChallengeId!;
+    private ApiResponse<Challenge> ChallengeResponse => _responseContext.ChallengeResponse!;
+
+    #region Given
+    [Given("a Challenge c created by (.+)")]
+    public async Task GivenAChallengeCreatedByIdentity(string identityName)
     {
-        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
-        _isAuthenticated = true;
+        _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ? 
+            await Identity(identityName).Challenges.CreateChallenge() : 
+            await Identity(identityName).Challenges.CreateChallengeUnauthenticated();
+        ChallengeResponse.Should().BeASuccess();
+
+        _challengesContext.ChallengeId = ChallengeResponse.Result!.Id;
+        ChallengeId.Should().NotBeNullOrEmpty();
     }
 
-    [Given("the user is unauthenticated")]
-    public void GivenTheUserIsUnauthenticated()
-    {
-        _sdk = Client.CreateUnauthenticated(_httpClient, _clientCredentials);
-        _isAuthenticated = false;
-    }
-
-    [Given("a Challenge c")]
+    [Given(@"a Challenge c")]
     public async Task GivenAChallengeC()
     {
-        var challengeResponse = !_isAuthenticated ? await _sdk.Challenges.CreateChallengeUnauthenticated() : await _sdk.Challenges.CreateChallenge();
-        challengeResponse.Should().BeASuccess();
-        _challengeId = challengeResponse.Result!.Id;
+        _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ?
+            await AnonymousClient.Challenges.CreateChallenge() :
+            await AnonymousClient.Challenges.CreateChallengeUnauthenticated();
+        ChallengeResponse.Should().BeASuccess();
 
-        _challengeId.Should().NotBeNullOrEmpty();
+        _challengesContext.ChallengeId = ChallengeResponse.Result!.Id;
+        ChallengeId.Should().NotBeNullOrEmpty();
     }
+    #endregion
 
+    #region When
     [When("a POST request is sent to the Challenges endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheChallengesEndpoint()
     {
-        _response = _isAuthenticated ? await _sdk.Challenges.CreateChallenge() : await _sdk.Challenges.CreateChallengeUnauthenticated();
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ? 
+            await AnonymousClient.Challenges.CreateChallenge() : 
+            await AnonymousClient.Challenges.CreateChallengeUnauthenticated();
     }
 
-    [When(@"a GET request is sent to the Challenges/{id} endpoint with ""?(.*?)""?")]
-    public async Task WhenAGETRequestIsSentToTheChallengesIdEndpointWith(string id)
+    [When(@"(.+) sends a POST request to the /Challenges endpoint")]
+    public async Task WhenISendsAPOSTRequestToTheChallengesEndpoint(string identityName)
     {
-        switch (id)
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ?
+            await Identity(identityName).Challenges.CreateChallenge() :
+            await Identity(identityName).Challenges.CreateChallengeUnauthenticated();
+    }
+
+
+    [When(@"(.+) sends a GET request is sent to the Challenges/{id} endpoint with ""?(.*?)""?")]
+    public async Task WhenAGETRequestIsSentToTheChallengesIdEndpointWith(string identityName, string challengeId)
+    {
+        switch (challengeId)
         {
             case "c.Id":
-                id = _challengeId;
+                challengeId = _challengesContext.ChallengeId!;
                 break;
             case "a valid Id":
-                id = "CHLjVPS6h1082AuBVBaR";
+                challengeId = VALID_CHALLENGE_ID;
                 break;
         }
 
-        _response = await _sdk.Challenges.GetChallenge(id);
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await Identity(identityName).Challenges.GetChallenge(challengeId);
     }
+    #endregion
 
-    [Then("the response contains a Challenge")]
-    public async Task ThenTheResponseContainsAChallenge()
-    {
-        _response!.Should().NotBeNull();
-        _response!.Should().BeASuccess();
-        _response!.ContentType.Should().Be("application/json");
-        await _response.Should().ComplyWithSchema();
-        AssertExpirationDateIsInFuture();
-    }
-
+    #region Then
     [Then("the Challenge does not contain information about the creator")]
     public void ThenTheChallengeDoesNotContainInformationAboutTheCreator()
     {
-        _response!.Result!.CreatedBy.Should().BeNull();
-        _response.Result!.CreatedByDevice.Should().BeNull();
+        ChallengeResponse.Result!.CreatedBy.Should().BeNull();
+        ChallengeResponse.Result!.CreatedByDevice.Should().BeNull();
     }
 
     [Then("the Challenge contains information about the creator")]
     public void ThenTheChallengeContainsInformationAboutTheCreator()
     {
-        _response!.Result!.CreatedBy.Should().NotBeNull();
-        _response.Result!.CreatedByDevice.Should().NotBeNull();
+        ChallengeResponse.Result!.CreatedBy.Should().NotBeNull();
+        ChallengeResponse.Result!.CreatedByDevice.Should().NotBeNull();
     }
+    #endregion
+}
 
-    [Then(@"the response status code is (\d+) \(.+\)")]
-    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
-    {
-        var actualStatusCode = (int)_response!.Status;
-        actualStatusCode.Should().Be(expectedStatusCode);
-    }
-
-    [Then(@"the response content contains an error with the error code ""([^""]+)""")]
-    public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
-    {
-        _response!.Error.Should().NotBeNull();
-        _response.Error!.Code.Should().Be(errorCode);
-    }
-
-    private void AssertExpirationDateIsInFuture()
-    {
-        _response!.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
-    }
+public class ChallengesContext
+{
+    public string? ChallengeId { get; set; }
+    public bool IsAuthenticated { get; set; }
 }

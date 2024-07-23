@@ -4,7 +4,7 @@ Feature: POST File
 Identity uploads a File
 
 Scenario: Uploading a File
-	Given Identity i1
-	When i1 sends a POST request to the /Files endpoint
+	Given Identity i
+	When i sends a POST request to the Files endpoint
 	Then the response status code is 201 (Created)
 	And the response contains a CreateFileResponse

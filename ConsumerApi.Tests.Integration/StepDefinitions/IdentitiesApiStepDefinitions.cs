@@ -2,82 +2,100 @@
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
-using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
-using Backbone.ConsumerApi.Tests.Integration.Support;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using static Backbone.ConsumerApi.Tests.Integration.Helpers.Utils;
+using static Backbone.ConsumerApi.Tests.Integration.Support.Constants;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
-[Scope(Feature = "POST Identities/Self/DeletionProcess")]
-[Scope(Feature = "POST Identity")]
 internal class IdentitiesApiStepDefinitions
 {
-    private Client _sdk = null!;
     private readonly ClientCredentials _clientCredentials;
     private readonly HttpClient _httpClient;
-    private ApiResponse<StartDeletionProcessResponse>? _startDeletionProcessResponse;
-    private ApiResponse<CreateIdentityResponse>? _identityResponse;
-    private ApiResponse<Challenge>? _challengeResponse;
 
-    public IdentitiesApiStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
+    private readonly ChallengesContext _challengesContext;
+    private readonly IdentitiesContext _identitiesContext;
+    private readonly ResponseContext _responseContext;
+
+    public IdentitiesApiStepDefinitions(ChallengesContext challengesContext, IdentitiesContext identitiesContext, ResponseContext responseContext, HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
     {
         _httpClient = factory.CreateClient();
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
+
+        _challengesContext = challengesContext;
+        _identitiesContext = identitiesContext;
+        _responseContext = responseContext;
+    }
+
+    private Client AnonymousClient => _identitiesContext.AnonymousClient!;
+    private Client Identity(string identityName) => _identitiesContext.Identities[identityName];
+    private ApiResponse<StartDeletionProcessResponse> StartDeletionProcessResponse => _responseContext.StartDeletionProcessResponse!;
+
+    #region Given
+    [Given(@"Identity (.+)")]
+    public async Task GivenIdentity(string identityName)
+    {
+        _challengesContext.IsAuthenticated = true;
+        await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identityName);
+    }
+
+    [Given("the user is unauthenticated")]
+    public void GivenTheUserIsUnauthenticated()
+    {
+        _challengesContext.IsAuthenticated = false;
+        CreateUnauthenticated(_identitiesContext, _httpClient, _clientCredentials);
     }
 
     [Given("no active deletion process for the identity exists")]
-    public void GivenNoActiveDeletionProcessForTheUserExists()
+    public void GivenNoActiveDeletionProcessForTheUserExists() { }
+
+    [Given("an active deletion process for (.+) exists")]
+    public async Task GivenAnActiveDeletionProcessForTheIdentityExists(string identityName)
     {
+        await Identity(identityName).Identities.StartDeletionProcess();
     }
 
-    [Given("an active deletion process for the identity exists")]
-    public async Task GivenAnActiveDeletionProcessForTheUserExists()
+    [Given("Identities (.+) and (.+) with an established Relationship")]
+    public async Task GivenIdentitiesI1AndI2WithAnEstablishedRelationship(string identityName1, string identityName2)
     {
-        await _sdk.Identities.StartDeletionProcess();
+        await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identityName1);
+        await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identityName2);
+
+        await EstablishRelationshipBetween(Identity(identityName1), Identity(identityName2));
     }
 
-    [Given("an Identity i")]
-    public async Task GivenAnIdentityI()
+    [Given("(.+) is in status \"ToBeDeleted\"")]
+    public async Task GivenIdentityIsToBeDeleted(string identityName)
     {
-        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
+        _responseContext.StartDeletionProcessResponse = await Identity(identityName).Identities.StartDeletionProcess();
+        StartDeletionProcessResponse.Should().BeASuccess();
     }
+    #endregion
 
-    [Given("a Challenge c")]
-    public async Task GivenAChallengeC()
-    {
-        _sdk = Client.CreateUnauthenticated(_httpClient, _clientCredentials);
-        _challengeResponse = await _sdk.Challenges.CreateChallengeUnauthenticated();
-    }
-
-    [When("a POST request is sent to the /Identities/Self/DeletionProcesses endpoint")]
-    public async Task WhenAPOSTRequestIsSentToTheIdentitiesSelfDeletionProcessEndpoint()
-    {
-        _startDeletionProcessResponse = await _sdk.Identities.StartDeletionProcess();
-    }
-
-    [When("a POST request is sent to the /Identities endpoint with a valid signature on c")]
+    #region When
+    [When("a POST request is sent to the Identities endpoint with a valid signature on c")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesEndpoint()
     {
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
         var identityKeyPair = signatureHelper.CreateKeyPair();
 
-        var serializedChallenge = JsonConvert.SerializeObject(_challengeResponse!.Result);
+        var serializedChallenge = JsonConvert.SerializeObject(_responseContext.ChallengeResponse!.Result);
         var challengeSignature = signatureHelper.CreateSignature(identityKeyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
         var signedChallenge = new SignedChallenge(serializedChallenge, challengeSignature);
 
         var createIdentityPayload = new CreateIdentityRequest
         {
-            ClientId = "test",
-            ClientSecret = "test",
+            ClientId = CLIENT_ID,
+            ClientSecret = CLIENT_SECRET,
             IdentityVersion = 1,
             SignedChallenge = signedChallenge,
             IdentityPublicKey = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new CryptoSignaturePublicKey
@@ -85,42 +103,23 @@ internal class IdentitiesApiStepDefinitions
                 alg = CryptoExchangeAlgorithm.ECDH_X25519,
                 pub = identityKeyPair.PublicKey.Base64Representation
             })).BytesRepresentation,
-            DevicePassword = "some-device-password"
+            DevicePassword = DEVICE_PASSWORD
         };
 
-        _identityResponse = await _sdk.Identities.CreateIdentity(createIdentityPayload);
+        _responseContext.WhenResponse = _responseContext.CreateIdentityResponse = await AnonymousClient.Identities.CreateIdentity(createIdentityPayload);
     }
 
-    [Then(@"the response content contains an error with the error code ""([^""]*)""")]
-    public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
+    [When(@"(.+) sends a POST request to the /Identities/Self/DeletionProcesses endpoint")]
+    public async Task WhenIdentitySendsAPOSTRequestToTheIdentitiesSelfDeletionProcessesEndpoint(string identityName)
     {
-        _startDeletionProcessResponse!.Error.Should().NotBeNull();
-        _startDeletionProcessResponse.Error!.Code.Should().Be(errorCode);
+        _responseContext.WhenResponse = _responseContext.StartDeletionProcessResponse = await Identity(identityName).Identities.StartDeletionProcess();
     }
 
-    [Then("the response contains a Deletion Process")]
-    public async Task ThenTheResponseContainsADeletionProcess()
-    {
-        _startDeletionProcessResponse!.Result.Should().NotBeNull();
-        _startDeletionProcessResponse.Should().BeASuccess();
-        await _startDeletionProcessResponse.Should().ComplyWithSchema();
-    }
+    #endregion
+}
 
-    [Then("the response contains a CreateIdentityResponse")]
-    public async Task ThenTheResponseContainsACreateIdentityResponse()
-    {
-        _identityResponse!.Should().NotBeNull();
-        _identityResponse!.Should().BeASuccess();
-        await _identityResponse!.Should().ComplyWithSchema();
-    }
-
-    [Then(@"the response status code is (\d+) \(.+\)")]
-    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
-    {
-        if (_identityResponse != null)
-            ((int)_identityResponse!.Status).Should().Be(expectedStatusCode);
-
-        if (_startDeletionProcessResponse != null)
-            ((int)_startDeletionProcessResponse!.Status).Should().Be(expectedStatusCode);
-    }
+public class IdentitiesContext
+{
+    public Client? AnonymousClient { get; set; }
+    public readonly Dictionary<string, Client> Identities = new();
 }
