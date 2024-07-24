@@ -58,7 +58,6 @@ class _TierDetailState extends State<TierDetail> {
                   runSpacing: 8,
                   children: [
                     EntityDetails(title: context.l10n.tierDetails_tierID, value: tierDetails.id),
-                    Gaps.w8,
                     EntityDetails(title: context.l10n.name, value: tierDetails.name),
                   ],
                 ),
