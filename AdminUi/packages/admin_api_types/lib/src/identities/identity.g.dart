@@ -12,8 +12,8 @@ Identity _$IdentityFromJson(Map<String, dynamic> json) => Identity(
       publicKey: json['publicKey'] as String,
       tierId: json['tierId'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      identityVersion: json['identityVersion'] as int,
-      numberOfDevices: json['numberOfDevices'] as int,
+      identityVersion: (json['identityVersion'] as num).toInt(),
+      numberOfDevices: (json['numberOfDevices'] as num).toInt(),
       devices: (json['devices'] as List<dynamic>?)?.map(Device.fromJson).toList(),
       quotas: (json['quotas'] as List<dynamic>?)?.map(IdentityQuota.fromJson).toList(),
     );
@@ -50,8 +50,8 @@ IdentityQuota _$IdentityQuotaFromJson(Map<String, dynamic> json) => IdentityQuot
       id: json['id'] as String,
       source: json['source'] as String,
       metric: Metric.fromJson(json['metric']),
-      max: json['max'] as int,
-      usage: json['usage'] as int,
+      max: (json['max'] as num).toInt(),
+      usage: (json['usage'] as num).toInt(),
       period: json['period'] as String,
     );
 
@@ -68,11 +68,11 @@ IdentityOverview _$IdentityOverviewFromJson(Map<String, dynamic> json) => Identi
       address: json['address'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       createdWithClient: json['createdWithClient'] as String,
-      identityVersion: json['identityVersion'] as int,
-      numberOfDevices: json['numberOfDevices'] as int,
+      identityVersion: (json['identityVersion'] as num).toInt(),
+      numberOfDevices: (json['numberOfDevices'] as num).toInt(),
       tier: Tier.fromJson(json['tier']),
       lastLoginAt: json['lastLoginAt'] == null ? null : DateTime.parse(json['lastLoginAt'] as String),
-      datawalletVersion: json['datawalletVersion'] as int?,
+      datawalletVersion: (json['datawalletVersion'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$IdentityOverviewToJson(IdentityOverview instance) => <String, dynamic>{

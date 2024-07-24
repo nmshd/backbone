@@ -91,6 +91,17 @@ internal class MessagesStepDefinitions
     [When("([a-zA-Z0-9]+) sends a POST request to the /Messages endpoint with ([a-zA-Z0-9]+) as recipient")]
     public async Task WhenAPostRequestIsSentToTheMessagesEndpoint(string identity1Name, string identity2Name)
     {
+        var sender = _identities[senderName];
+        var getMessagesResponse = await sender.Messages.ListMessages();
+        _whenResponse = _getMessagesResponse = getMessagesResponse;
+    }
+
+    [When("(i[a-zA-Z0-9]*) sends a POST request to the /Messages endpoint with (i[a-zA-Z0-9]*) as recipient")]
+    public async Task WhenAPostRequestIsSentToTheMessagesEndpoint(string senderName, string recipientName)
+    {
+        var sender = _identities[senderName];
+        var recipient = _identities[recipientName];
+
         var sendMessageRequest = new SendMessageRequest
         {
             Attachments = [],
@@ -125,6 +136,8 @@ public static class DictionaryExtensions
     {
         return dictionary.Where(x => keys.Contains(x.Key)).Select(x => x.Value).ToArray();
     }
+
+    #endregion
 }
 
 public class PeersToBeDeletedErrorData
