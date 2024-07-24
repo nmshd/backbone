@@ -58,6 +58,7 @@ class _DateFilterState extends State<DateFilter> {
               child: TextField(
                 onTap: _selectNewDate,
                 readOnly: true,
+                canRequestFocus: false,
                 controller: _controller,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),

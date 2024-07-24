@@ -33,7 +33,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('A list of existing Clients')),
+      appBar: AppBar(title: Text(context.l10n.clientsOverview_title)),
       body: Card(
         child: Padding(
           padding: const EdgeInsets.all(8),
@@ -68,7 +68,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
               Expanded(
                 child: DataTable2(
                   isVerticalScrollBarVisible: true,
-                  empty: const Text('No clients found.'),
+                  empty: Text(context.l10n.clientsOverview_noClientsFound),
                   onSelectAll: (selected) {
                     if (selected == null) return;
 
@@ -80,13 +80,13 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                       }
                     });
                   },
-                  columns: const <DataColumn2>[
-                    DataColumn2(label: Text('Client ID'), size: ColumnSize.L),
-                    DataColumn2(label: Text('Display Name'), size: ColumnSize.L),
-                    DataColumn2(label: Text('Default Tier')),
-                    DataColumn2(label: Text('Number of Identities'), size: ColumnSize.L),
-                    DataColumn2(label: Text('Created At')),
-                    DataColumn2(label: Text(''), size: ColumnSize.L),
+                  columns: <DataColumn2>[
+                    DataColumn2(label: Text(context.l10n.clientID), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.displayName), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.defaultTier)),
+                    DataColumn2(label: Text(context.l10n.numberOfIdentities), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.createdAt)),
+                    const DataColumn2(label: Text(''), size: ColumnSize.L),
                   ],
                   rows: _originalClients
                       .where((e) => _filter.matches(e))
@@ -121,7 +121,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                                 style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),
                                 onPressed: () => showChangeClientSecretDialog(context: context, clientId: client.clientId),
                                 child: Text(
-                                  'Change Client Secret',
+                                  context.l10n.changeClientSecret,
                                   style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
                                   textAlign: TextAlign.center,
                                 ),
@@ -153,8 +153,9 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   Future<void> _removeSelectedClients() async {
     final confirmed = await showConfirmationDialog(
       context: context,
-      title: 'Remove Clients',
-      message: 'Are you sure you want to remove the selected clients?',
+      title: context.l10n.clientsOverview_removeSelectedClients_title,
+      message: context.l10n.clientsOverview_removeSelectedClients_message,
+      actionText: context.l10n.remove,
     );
 
     if (!confirmed) return;
@@ -163,8 +164,8 @@ class _ClientsOverviewState extends State<ClientsOverview> {
       final result = await GetIt.I.get<AdminApiClient>().clients.deleteClient(clientId);
       if (result.hasError && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('An error occurred while deleting the client(s). Please try again.'),
+          SnackBar(
+            content: Text(context.l10n.clientsOverview_removeSelectedClients_error),
             showCloseIcon: true,
           ),
         );
@@ -178,8 +179,8 @@ class _ClientsOverviewState extends State<ClientsOverview> {
 
     if (mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Selected clients have been removed.'),
+        SnackBar(
+          content: Text(context.l10n.clientsOverview_removeSelectedClients_success),
           showCloseIcon: true,
         ),
       );

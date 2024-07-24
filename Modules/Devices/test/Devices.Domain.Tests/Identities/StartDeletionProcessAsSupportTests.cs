@@ -93,7 +93,7 @@ public class StartDeletionProcessAsSupportTests : AbstractTestsBase
 
     private static Identity CreateIdentity()
     {
-        var address = IdentityAddress.Create(Array.Empty<byte>(), "id1");
+        var address = IdentityAddress.Create(Array.Empty<byte>(), "prod.enmeshed.eu");
         return new Identity("", address, Array.Empty<byte>(), TierId.Generate(), 1);
     }
 }

@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Devices.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
     partial class DevicesDbContextModelSnapshot : ModelSnapshot
@@ -18,7 +18,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Devices")
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -54,10 +54,10 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -190,6 +190,7 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(2)
+                        .IsUnicode(false)
                         .HasColumnType("character(2)")
                         .HasDefaultValue("en")
                         .IsFixedLength();
@@ -215,10 +216,10 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("IdentityAddress")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.HasKey("Id");
 
@@ -230,10 +231,10 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", b =>
                 {
                     b.Property<string>("Address")
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("ClientId")
                         .HasMaxLength(200)
@@ -331,10 +332,10 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("IdentityAddress")
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<DateTime?>("RejectedAt")
                         .HasColumnType("timestamp with time zone");
@@ -362,6 +363,9 @@ namespace Devices.Infrastructure.Database.Postgres.Migrations
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
                         .IsFixedLength();
+
+                    b.Property<string>("AdditionalData")
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");

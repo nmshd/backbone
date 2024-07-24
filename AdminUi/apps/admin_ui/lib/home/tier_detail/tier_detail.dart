@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -50,7 +48,7 @@ class _TierDetailState extends State<TierDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (Platform.isMacOS || Platform.isWindows) const BackButton(),
+            if (kIsDesktop) const BackButton(),
             Row(
               children: [
                 Expanded(
@@ -63,7 +61,10 @@ class _TierDetailState extends State<TierDetail> {
                           Text.rich(
                             TextSpan(
                               children: [
-                                TextSpan(text: 'ID: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
+                                TextSpan(
+                                  text: '${context.l10n.tierDetails_tierID}: ',
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                                ),
                                 TextSpan(text: tierDetails.id, style: Theme.of(context).textTheme.bodyLarge),
                               ],
                             ),
@@ -71,7 +72,10 @@ class _TierDetailState extends State<TierDetail> {
                           Text.rich(
                             TextSpan(
                               children: [
-                                TextSpan(text: 'Name: ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
+                                TextSpan(
+                                  text: '${context.l10n.name}: ',
+                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
+                                ),
                                 TextSpan(text: tierDetails.name, style: Theme.of(context).textTheme.bodyLarge),
                               ],
                             ),
@@ -119,10 +123,10 @@ class _QuotaListState extends State<_QuotaList> {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        title: const Text('Quotas'),
+        title: Text(context.l10n.quotas),
         subtitle: isQueuedForDeletionTier
-            ? const Text('View quotas for this tier. This tier is managed by the system and therefore read-only.')
-            : const Text('View and assign quotas for this tier.'),
+            ? Text(context.l10n.tierDetails_quotaList_titleDescription_readOnly)
+            : Text(context.l10n.tierDetails_quotaList_titleDescription),
         children: [
           Card(
             child: Column(
@@ -137,12 +141,12 @@ class _QuotaListState extends State<_QuotaList> {
                   width: double.infinity,
                   height: 500,
                   child: DataTable2(
-                    columns: const [
-                      DataColumn(label: Text('Metric')),
-                      DataColumn(label: Text('Max')),
-                      DataColumn(label: Text('Period')),
+                    columns: [
+                      DataColumn(label: Text(context.l10n.metric)),
+                      DataColumn(label: Text(context.l10n.max)),
+                      DataColumn(label: Text(context.l10n.period)),
                     ],
-                    empty: const Text('No quotas added to this tier.'),
+                    empty: Text(context.l10n.tierDetails_quotaList_noQuotaForTier),
                     rows: widget.tierDetails.quotas
                         .map(
                           (quota) => DataRow2(
@@ -215,8 +219,8 @@ class _IdentitiesListState extends State<_IdentitiesList> {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        title: const Text('Identities'),
-        subtitle: const Text('View Identities associated with this Tier.'),
+        title: Text(context.l10n.tierDetails_identityList_title),
+        subtitle: Text(context.l10n.tierDetails_identityList_titleDescription),
         children: [
           Card(
             child: Column(

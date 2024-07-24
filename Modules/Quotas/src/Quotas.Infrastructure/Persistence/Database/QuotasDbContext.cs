@@ -1,6 +1,8 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.ValueConverters;
+using Backbone.Modules.Quotas.Domain.Aggregates.Challenges;
+using Backbone.Modules.Quotas.Domain.Aggregates.DatawalletModifications;
 using Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Messages;
@@ -40,6 +42,14 @@ public class QuotasDbContext : AbstractDbContextBase
     public DbSet<RelationshipTemplate> RelationshipTemplates { get; set; } = null!;
 
     public DbSet<Token> Tokens { get; set; } = null!;
+
+    public DbSet<IdentityDeletionProcess> IdentityDeletionProcesses { get; set; } = null!;
+
+    public DbSet<Challenge> Challenges { get; set; } = null!;
+
+    public DbSet<DatawalletModification> DatawalletModifications { get; set; } = null!;
+
+    public DbSet<Device> Devices { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

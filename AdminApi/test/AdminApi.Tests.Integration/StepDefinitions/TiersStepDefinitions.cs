@@ -37,12 +37,6 @@ internal class TiersStepDefinitions : BaseStepDefinitions
         _existingTierId = response.Result.Id;
     }
 
-    [Given("the Tier T has one associated identity")]
-    public void GivenTheTierTHasOneAssociatedIdentity()
-    {
-        throw new PendingStepException();
-    }
-
     [Given("the Basic Tier as t")]
     public async Task GivenTheBasicTierAsT()
     {
@@ -85,19 +79,19 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     }
 
     [Then("the response contains a paginated list of Tiers")]
-    public void ThenTheResponseContainsAListOfTiers()
+    public async Task ThenTheResponseContainsAListOfTiers()
     {
         _tiersResponse!.Should().BeASuccess();
         _tiersResponse!.ContentType.Should().StartWith("application/json");
-        _tiersResponse.Should().ComplyWithSchema();
+        await _tiersResponse.Should().ComplyWithSchema();
     }
 
     [Then("the response contains a Tier")]
-    public void ThenTheResponseContainsATier()
+    public async Task ThenTheResponseContainsATier()
     {
         _tierResponse!.Should().BeASuccess();
         _tierResponse!.ContentType.Should().StartWith("application/json");
-        _tierResponse.Should().ComplyWithSchema();
+        await _tierResponse.Should().ComplyWithSchema();
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]

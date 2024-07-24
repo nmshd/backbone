@@ -21,7 +21,8 @@ public class FcmMessageBuilderTests : AbstractTestsBase
             .SetTag(1)
             .SetToken("token1")
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
-            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.New(), new TestPushNotification { SomeProperty = "someValue" }))
+            .AddContent(new NotificationContent(IdentityAddress.Parse("did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d"), DevicePushIdentifier.New(),
+                new TestPushNotification { SomeProperty = "someValue" }))
             .Build();
 
         // Assert
@@ -36,7 +37,7 @@ public class FcmMessageBuilderTests : AbstractTestsBase
         message.Data["content-available"].Should().Be("1");
 
         message.Android.CollapseKey.Should().Be("1");
-        message.Data.Should().Contain("tag", "1");
+        message.Android.Notification.Tag.Should().Be("1");
     }
 
     [Fact]
@@ -47,7 +48,7 @@ public class FcmMessageBuilderTests : AbstractTestsBase
 
         // Act
         var message = new FcmMessageBuilder()
-            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"),
+            .AddContent(new NotificationContent(IdentityAddress.Parse("did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"),
                 new TestPushNotification { SomeProperty = "someValue" }))
             .Build();
         var actualContent = message.Data["content"];
@@ -56,7 +57,7 @@ public class FcmMessageBuilderTests : AbstractTestsBase
         actualContent.Should().BeEquivalentToJson(
             """
             {
-                      'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
+                      'accRef': 'did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d',
                       'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
                       'eventName': 'Test',
                       'sentAt': '2021-01-01T00:00:00.000Z',

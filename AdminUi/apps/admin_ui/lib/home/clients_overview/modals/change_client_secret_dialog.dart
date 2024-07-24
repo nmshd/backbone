@@ -55,7 +55,9 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        title: const Text('Change Client Secret', textAlign: TextAlign.center),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        title: Text(context.l10n.changeClientSecret, textAlign: TextAlign.center),
+        contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
         content: SizedBox(
           width: 500,
           child: Column(
@@ -68,8 +70,8 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                 obscureText: _isClientSecretVisible,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(),
-                  labelText: 'Client Secret',
-                  helperText: 'A Client Secret will be generated if this field is left blank.',
+                  labelText: context.l10n.clientSecret,
+                  helperText: context.l10n.clientSecret_message,
                   suffixIcon: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Row(
@@ -81,9 +83,9 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                         ),
                         Gaps.w4,
                         CopyToClipboardButton(
-                          tooltip: 'Copy to clipboard.',
+                          tooltip: context.l10n.changeClientSecretDialog_copyToClipboard,
                           clipboardText: _newClientSecretController.text,
-                          successMessage: 'Client Secret copied to clipboard.',
+                          successMessage: context.l10n.clientSecret_copiedToClipboard,
                         ),
                       ],
                     ),
@@ -94,7 +96,7 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   child: Text(
-                    'Please save the Client Secret since it will be inaccessible after exiting.',
+                    context.l10n.clientSecret_save_message,
                     style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   ),
                 ),

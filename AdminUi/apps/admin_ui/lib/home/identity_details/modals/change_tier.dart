@@ -52,17 +52,22 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
     return PopScope(
       canPop: !_saving,
       child: AlertDialog(
-        title: const Text('Change Tier', textAlign: TextAlign.center),
-        content: DropdownButtonFormField<String>(
-          value: selectedTier,
-          decoration: const InputDecoration(border: OutlineInputBorder()),
-          onChanged: _saving ? null : (String? newValue) => setState(() => selectedTier = newValue!),
-          items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned).map((TierOverview tier) {
-            return DropdownMenuItem<String>(
-              value: tier.id,
-              child: Text(tier.name),
-            );
-          }).toList(),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        title: Text(context.l10n.changeTier, textAlign: TextAlign.center),
+        contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
+        content: SizedBox(
+          width: 500,
+          child: DropdownButtonFormField<String>(
+            value: selectedTier,
+            decoration: const InputDecoration(border: OutlineInputBorder()),
+            onChanged: _saving ? null : (String? newValue) => setState(() => selectedTier = newValue!),
+            items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned).map((TierOverview tier) {
+              return DropdownMenuItem<String>(
+                value: tier.id,
+                child: Text(tier.name),
+              );
+            }).toList(),
+          ),
         ),
         actions: [
           OutlinedButton(
@@ -87,9 +92,9 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
 
     if (response.hasError) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Failed to update identity. Please try again.'),
-          duration: Duration(seconds: 3),
+        SnackBar(
+          content: Text(context.l10n.changeTierDialog_error),
+          duration: const Duration(seconds: 3),
         ),
       );
 
@@ -99,9 +104,9 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Identity updated successfully.'),
-        duration: Duration(seconds: 3),
+      SnackBar(
+        content: Text(context.l10n.changeTierDialog_success),
+        duration: const Duration(seconds: 3),
       ),
     );
 

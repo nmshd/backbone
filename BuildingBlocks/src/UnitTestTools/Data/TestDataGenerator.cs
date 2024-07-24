@@ -14,7 +14,7 @@ public static class TestDataGenerator
 
     public static IdentityAddress CreateRandomIdentityAddress()
     {
-        return IdentityAddress.Create(CreateRandomBytes(), "id1");
+        return IdentityAddress.Create(CreateRandomBytes(), "prod.enmeshed.eu");
     }
 
     public static DeviceId CreateRandomDeviceId()
@@ -22,12 +22,11 @@ public static class TestDataGenerator
         return DeviceId.New();
     }
 
-    public static byte[] CreateRandomBytes()
+    public static byte[] CreateRandomBytes(int length = 10)
     {
         var random = new Random();
-        var bytes = new byte[10];
+        var bytes = new byte[length];
         random.NextBytes(bytes);
         return bytes;
     }
 }
-

@@ -3,9 +3,10 @@ using Backbone.BuildingBlocks.Domain.Events;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
 
-namespace Backbone.UnitTestTools.FluentAssertions.Assertions;
+// ReSharper disable once CheckNamespace
+namespace FluentAssertions;
 
-public class EntityAssertions : ReferenceTypeAssertions<Entity, EntityAssertions>
+public class EntityAssertions : ObjectAssertions<Entity, EntityAssertions>
 {
     public EntityAssertions(Entity instance) : base(instance)
     {

@@ -1,0 +1,4 @@
+﻿[
+  "Serilog.Enrichers.Demystifier",
+  "SpecFlow.NUnit"
+]

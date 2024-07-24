@@ -16,11 +16,11 @@
         <PackageReference Include="Serilog.Exceptions" Version="8.4.0"/>
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="8.4.0"/>
         <PackageReference Include="Serilog.Formatting.Compact" Version="3.0.0"/>
-        <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.1"/>
+        <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.2"/>
         <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0"/>
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0"/>
         <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0"/>
-        <PackageReference Include="Serilog.Sinks.Http" Version="9.0.0" />
+        <PackageReference Include="Serilog.Sinks.Http" Version="9.0.0"/>
         <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0"/>
         <PackageReference Include="System.Data.SqlClient" Version="4.8.6"/>
     </ItemGroup>
@@ -53,4 +53,9 @@
         <ProjectReference Include="..\Modules\Tokens\src\Tokens.Infrastructure.Database.SqlServer\Tokens.Infrastructure.Database.SqlServer.csproj"/>
         <ProjectReference Include="..\Modules\Tokens\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj"/>
     </ItemGroup>
+
+    <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
+        <Delete Files="$(ProjectDir)appsettings.override.json"/>
+        <Copy SourceFiles="..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true"/>
+    </Target>
 </Project>
