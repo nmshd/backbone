@@ -4,17 +4,17 @@ import 'package:flutter/material.dart';
 
 import '/core/core.dart';
 
-class IdentityQuotaList extends StatefulWidget {
+class IdentityQuotas extends StatefulWidget {
   final Identity identityDetails;
   final VoidCallback onQuotasChanged;
 
-  const IdentityQuotaList(this.identityDetails, this.onQuotasChanged, {super.key});
+  const IdentityQuotas(this.identityDetails, this.onQuotasChanged, {super.key});
 
   @override
-  State<IdentityQuotaList> createState() => IdentityQuotaListState();
+  State<IdentityQuotas> createState() => IdentityQuotasState();
 }
 
-class IdentityQuotaListState extends State<IdentityQuotaList> {
+class IdentityQuotasState extends State<IdentityQuotas> {
   final List<String> _selectedQuotas = [];
 
   bool get isQueuedForDeletionTier => widget.identityDetails.tierId == 'TIR00000000000000001';

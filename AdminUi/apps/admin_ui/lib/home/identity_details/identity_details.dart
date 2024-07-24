@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 import '/core/core.dart';
 import 'identity_messages/identity_messages_overview.dart';
-import 'identity_quotas_table/identity_quotas_table.dart';
+import 'identity_quotas/identity_quotas.dart';
 import 'identity_relationships/identity_relationships.dart';
 import 'modals/change_tier.dart';
 
@@ -68,7 +68,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
               updateTierOfIdentity: _reloadIdentity,
             ),
             Gaps.h16,
-            IdentityQuotaList(identityDetails, _reloadIdentity),
+            IdentityQuotas(identityDetails, _reloadIdentity),
             Gaps.h16,
             IdentityRelationships(address: identityDetails.address),
             Gaps.h16,
