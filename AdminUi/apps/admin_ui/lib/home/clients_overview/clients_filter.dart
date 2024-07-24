@@ -2,7 +2,6 @@ import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:multi_dropdown/multiselect_dropdown.dart';
 
 import '/core/core.dart';
 
@@ -94,23 +93,14 @@ class ClientsFilterRow extends StatefulWidget {
 }
 
 class _ClientsFilterRowState extends State<ClientsFilterRow> {
-  late MultiSelectController<String> _tierController;
-
+  List<MultiSelectFilterOption> _availableTiers = [];
   ClientsFilter filter = ClientsFilter.empty;
 
   @override
   void initState() {
     super.initState();
 
-    _tierController = MultiSelectController();
     _loadTiers();
-  }
-
-  @override
-  void dispose() {
-    _tierController.dispose();
-
-    super.dispose();
   }
 
   @override
@@ -142,12 +132,9 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
             Gaps.w16,
             MultiSelectFilter(
               label: context.l10n.defaultTier,
-              searchLabel: context.l10n.searchTiers,
-              controller: _tierController,
-              onOptionSelected: (List<ValueItem<dynamic>> selectedOptions) {
-                filter = filter.copyWith(
-                  tiers: selectedOptions.isEmpty ? const Optional.absent() : Optional(selectedOptions.map((item) => item.value as String).toList()),
-                );
+              options: _availableTiers,
+              onOptionSelected: (List<String> selectedOptions) {
+                filter = filter.copyWith(tiers: selectedOptions.isEmpty ? const Optional.absent() : Optional(selectedOptions));
 
                 widget.onFilterChanged(filter);
               },
@@ -183,7 +170,7 @@ class _ClientsFilterRowState extends State<ClientsFilterRow> {
   Future<void> _loadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
     final defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient == true).toList();
-    final tierItems = defaultTiers.map((tier) => ValueItem(label: tier.name, value: tier.id)).toList();
-    _tierController.setOptions(tierItems);
+    final tierItems = defaultTiers.map((tier) => (value: tier.id, label: tier.name)).toList();
+    if (mounted) setState(() => _availableTiers = tierItems);
   }
 }

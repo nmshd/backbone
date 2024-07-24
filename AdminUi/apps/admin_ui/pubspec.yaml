@@ -11,6 +11,7 @@ dependencies:
   admin_api_sdk: ^1.0.0
   admin_api_types: ^1.0.0
   data_table_2: ^2.5.15
+  dropdown_button2: ^2.3.9
   flutter:
     sdk: flutter
   flutter_localizations:
@@ -22,7 +23,6 @@ dependencies:
   go_router: ^14.2.1
   intl: any
   logger: ^2.4.0
-  multi_dropdown: ^2.1.4
   shared_preferences: ^2.2.3
   watch_it: ^1.4.2
   window_size:
