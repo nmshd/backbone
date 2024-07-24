@@ -41,6 +41,7 @@ class _IdentityRelationshipTableState extends State<IdentityRelationshipTable> {
                 isVerticalScrollBarVisible: true,
                 renderEmptyRowsInTheEnd: false,
                 availableRowsPerPage: const [5, 10, 25, 50, 100],
+                wrapInCard: false,
                 empty: Text(context.l10n.identityRelationshipTable_emptyRelationshipTable),
                 errorBuilder: (error) => Center(
                   child: Column(
