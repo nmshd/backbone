@@ -38,14 +38,6 @@ class _DeletionProcessAuditLogsState extends State<DeletionProcessAuditLogs> {
               style: const TextStyle(fontSize: 24),
             ),
             Gaps.h16,
-            Text(
-              '${context.l10n.address}:',
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            Gaps.h8,
             Row(
               children: [
                 SizedBox(
@@ -56,6 +48,8 @@ class _DeletionProcessAuditLogsState extends State<DeletionProcessAuditLogs> {
                       controller: textController,
                       decoration: InputDecoration(
                         hintText: context.l10n.deletionProcessAuditLogs_inputHint,
+                        labelText: context.l10n.address,
+                        alignLabelWithHint: true,
                         border: const OutlineInputBorder(),
                       ),
                     ),
