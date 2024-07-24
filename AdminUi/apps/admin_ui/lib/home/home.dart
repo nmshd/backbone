@@ -1,4 +1,5 @@
 export 'clients_overview/clients_overview.dart';
+export 'identities_overview/deletion_process_audit_logs/deletion_process_auditlogs_details/deletion_process_auditlogs_details.dart';
 export 'identities_overview/identities_overview.dart';
 export 'identity_details/identity_details.dart';
 export 'tier_detail/tier_detail.dart';
