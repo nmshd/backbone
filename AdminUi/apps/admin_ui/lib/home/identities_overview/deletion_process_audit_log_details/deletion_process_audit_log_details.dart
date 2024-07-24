@@ -5,24 +5,25 @@ import 'package:get_it/get_it.dart';
 
 import '/core/core.dart';
 
-class DeletionProcessAuditLogsDetails extends StatefulWidget {
+class DeletionProcessAuditLogDetails extends StatefulWidget {
   final String identityAddress;
 
-  const DeletionProcessAuditLogsDetails({
+  const DeletionProcessAuditLogDetails({
     required this.identityAddress,
     super.key,
   });
 
   @override
-  State<DeletionProcessAuditLogsDetails> createState() => _DeletionProcessAuditLogsDetailsState();
+  State<DeletionProcessAuditLogDetails> createState() => _DeletionProcessAuditLogDetailsState();
 }
 
-class _DeletionProcessAuditLogsDetailsState extends State<DeletionProcessAuditLogsDetails> {
+class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLogDetails> {
   List<IdentityDeletionProcessAuditLogEntry>? _identityDeletionProcessAuditLogs;
 
   @override
   void initState() {
     super.initState();
+
     _loadIdentityDeletionProcessAuditLogs();
   }
 
@@ -34,26 +35,14 @@ class _DeletionProcessAuditLogsDetailsState extends State<DeletionProcessAuditLo
 
     final identityDeletionProcessAuditLogs = _identityDeletionProcessAuditLogs!;
     return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (kIsDesktop) const BackButton(),
-        Row(
-          children: [
-            Expanded(
-              child: Card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: EntityDetails(title: context.l10n.identity, value: widget.identityAddress),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
+        if (kIsDesktop) const Align(alignment: Alignment.centerLeft, child: BackButton()),
+        Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Align(alignment: Alignment.centerLeft, child: EntityDetails(title: context.l10n.identity, value: widget.identityAddress)),
+          ),
         ),
         Expanded(child: DeletionProcessAuditLogsTable(auditLogs: identityDeletionProcessAuditLogs)),
       ],
