@@ -379,3 +379,4 @@ Applications/ConsumerApi/src/appsettings.override.json
 Applications/DatabaseMigrator/src/DatabaseMigrator/appsettings.override.json
 Applications/EventHandlerService/src/EventHandlerService/appsettings.override.json
 Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/appsettings.override.json
+Applications/IdentityDeletionJobs/test/Job.IdentityDeletion.Tests.Integration/appsettings.override.json
