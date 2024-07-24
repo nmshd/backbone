@@ -123,6 +123,16 @@ internal class ResponseStepDefinitions
 
         _responseContext.GetMessagesResponse.Result.Should().Contain(m => m.Id == message.Id);
     }
+
+    [Then(@"the response does not contain the Message ([a-zA-Z0-9]+)")]
+    public void ThenTheResponseDoesNotContainTheMessageM(string messageName)
+    {
+        var message = _messagesContext.Messages[messageName];
+
+        ThrowIfNull(_responseContext.GetMessagesResponse);
+
+        _responseContext.GetMessagesResponse.Result.Should().NotContain(m => m.Id == message.Id);
+    }
     #endregion
 
     private void AssertExpirationDateIsInFuture()

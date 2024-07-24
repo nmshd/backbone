@@ -217,7 +217,7 @@ internal class RelationshipsStepDefinitions
         return await client.Relationships.CreateRelationship(createRelationshipRequest);
     }
 
-    // after refactoring
+    // refactoring
 
     private Client Identity(string identityName) => _identitiesContext.Identities[identityName];
 

@@ -21,31 +21,20 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "GET Messages")]
 internal class MessagesStepDefinitions
 {
-    private Client _client1 = null!;
-    private Client _client2 = null!;
-    private ApiResponse<SendMessageResponse>? _sendMessageResponse;
     private readonly ClientCredentials _clientCredentials;
     private readonly HttpClient _httpClient;
-
-    private readonly Dictionary<string, Client> _identities = new();
-    private readonly Dictionary<string, Relationship> _relationships = new();
-    private readonly Dictionary<string, Message> _messages = new();
-    private ApiResponse<ListMessagesResponse>? _getMessagesResponse;
-    private IResponse? _whenResponse;
     
     private readonly IdentitiesContext _identitiesContext;
     private readonly MessagesContext _messagesContext;
-    private readonly RelationshipsContext _relationshipsContext;
     private readonly ResponseContext _responseContext;
 
-    public MessagesStepDefinitions(IdentitiesContext identitiesContext, MessagesContext messagesContext, RelationshipsContext relationshipsContext, ResponseContext responseContext, HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
+    public MessagesStepDefinitions(IdentitiesContext identitiesContext, MessagesContext messagesContext, ResponseContext responseContext, HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
     {
         _httpClient = factory.CreateClient();
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
 
         _identitiesContext = identitiesContext;
         _messagesContext = messagesContext;
-        _relationshipsContext = relationshipsContext;
         _responseContext = responseContext;
     }
 
@@ -63,28 +52,6 @@ internal class MessagesStepDefinitions
         _messagesContext.Messages[messageName] = await Utils.SendMessage(sender, recipients);
     }
 
-    //[Given(@"([a-zA-Z0-9]+) has terminated ([a-zA-Z0-9]+)")]
-    //public async Task GivenRIsTerminated(string terminatorName, string relationshipName)
-    //{
-    //    var relationship = _relationships[relationshipName];
-    //    var terminator = _identities[terminatorName];
-
-    //    var terminateRelationshipResponse = await terminator.Relationships.TerminateRelationship(relationship.Id);
-    //    terminateRelationshipResponse.Should().BeASuccess();
-    //}
-
-    //[Given(@"([a-zA-Z0-9]+) has decomposed ([a-zA-Z0-9]+)")]
-    //public async Task GivenIHasDecomposedItsRelationshipToI(string decomposerName, string relationshipName)
-    //{
-    //    var decomposer = _identities[decomposerName];
-    //    var relationship = _relationships[relationshipName];
-
-    //    var decomposeRelationshipResponse = await decomposer.Relationships.DecomposeRelationship(relationship.Id);
-    //    decomposeRelationshipResponse.Should().BeASuccess();
-
-    //    await Task.Delay(500);
-    //}
-
     [When(@"([a-zA-Z0-9]+) sends a GET request to the /Messages endpoint")]
     public async Task WhenISendsAGETRequestToTheMessagesEndpoint(string senderName)
     {
@@ -92,38 +59,6 @@ internal class MessagesStepDefinitions
         var getMessagesResponse = await sender.Messages.ListMessages();
         _responseContext.WhenResponse = _responseContext.GetMessagesResponse = getMessagesResponse;
     }
-
-    //[Then(@"the response contains the Messages ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
-    //public void ThenTheResponseContainsTheMessagesMAndM(string message1Name, string message2Name)
-    //{
-    //    var message1 = _messages[message1Name];
-    //    var message2 = _messages[message2Name];
-
-    //    ThrowIfNull(_getMessagesResponse);
-
-    //    _getMessagesResponse.Result.Should().Contain(m => m.Id == message1.Id);
-    //    _getMessagesResponse.Result.Should().Contain(m => m.Id == message2.Id);
-    //}
-
-    [Then(@"the response does not contain the Message ([a-zA-Z0-9]+)")]
-    public void ThenTheResponseDoesNotContainTheMessageM(string messageName)
-    {
-        var message = _messages[messageName];
-
-        ThrowIfNull(_getMessagesResponse);
-
-        _getMessagesResponse.Result.Should().NotContain(m => m.Id == message.Id);
-    }
-
-    //[Then(@"the response contains the Message ([a-zA-Z0-9]+)")]
-    //public void ThenTheResponseContainsTheMessageM(string messageName)
-    //{
-    //    var message = _messages[messageName];
-
-    //    ThrowIfNull(_getMessagesResponse);
-
-    //    _getMessagesResponse.Result.Should().Contain(m => m.Id == message.Id);
-    //}
 
     [Then(@"the address of the recipient ([a-zA-Z0-9]+) is anonymized")]
     public void ThenTheAddressOfIIsAnonymized(string anonymizedIdentityName)
@@ -144,14 +79,14 @@ internal class MessagesStepDefinitions
         recipientAddressesAfterGet.Should().NotContain(addressOfIdentityThatShouldBeAnonymized);
     }
 
-    [Given("Identities i1 and i2 with an established Relationship")]
-    public async Task GivenIdentitiesI1AndI2WithAnEstablishedRelationship()
-    {
-        _client1 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
-        _client2 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
+    //[Given("Identities i1 and i2 with an established Relationship")]
+    //public async Task GivenIdentitiesI1AndI2WithAnEstablishedRelationship()
+    //{
+    //    _client1 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
+    //    _client2 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
 
-        await Utils.EstablishRelationshipBetween(_client1, _client2);
-    }
+    //    await Utils.EstablishRelationshipBetween(_client1, _client2);
+    //}
 
     [When("([a-zA-Z0-9]+) sends a POST request to the /Messages endpoint with ([a-zA-Z0-9]+) as recipient")]
     public async Task WhenAPostRequestIsSentToTheMessagesEndpoint(string identity1Name, string identity2Name)
