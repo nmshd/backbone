@@ -31,29 +31,15 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
     public async Task<CreateIdentityResponse> Handle(CreateIdentityCommand command, CancellationToken cancellationToken)
     {
-        var publicKey = PublicKey.FromBytes(command.IdentityPublicKey);
-
-        await _challengeValidator.Validate(command.SignedChallenge, publicKey);
+        var publicKey = await ValidateChallenge(command);
 
         _logger.LogTrace("Challenge successfully validated.");
 
-        var address = IdentityAddress.Create(publicKey.Key, _applicationOptions.DidDomainName);
+        var address = await CreateIdentityAddress(publicKey, cancellationToken);
 
         _logger.LogTrace("Address created. Result: '{address}'", address);
 
-        var addressAlreadyExists = await _identitiesRepository.Exists(address, cancellationToken);
-
-        if (addressAlreadyExists)
-            throw new OperationFailedException(ApplicationErrors.Devices.AddressAlreadyExists());
-
-        var client = await _oAuthClientsRepository.Find(command.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
-
-        var clientIdentityCount = await _identitiesRepository.CountByClientId(command.ClientId, cancellationToken);
-
-        if (clientIdentityCount >= client.MaxIdentities)
-            throw new OperationFailedException(ApplicationErrors.Devices.ClientReachedIdentitiesLimit());
-
-        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion);
+        var newIdentity = await CreateNewIdentity(command, cancellationToken, address);
 
         var communicationLanguageResult = CommunicationLanguage.Create(command.CommunicationLanguage);
         if (communicationLanguageResult.IsFailure)
@@ -76,6 +62,38 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
                 CreatedAt = user.Device.CreatedAt
             }
         };
+    }
+
+    private async Task<Identity> CreateNewIdentity(CreateIdentityCommand command, CancellationToken cancellationToken, IdentityAddress address)
+    {
+        var client = await _oAuthClientsRepository.Find(command.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
+
+        var clientIdentityCount = await _identitiesRepository.CountByClientId(command.ClientId, cancellationToken);
+
+        if (clientIdentityCount >= client.MaxIdentities)
+            throw new OperationFailedException(ApplicationErrors.Devices.ClientReachedIdentitiesLimit());
+
+        var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion);
+        return newIdentity;
+    }
+
+    private async Task<IdentityAddress> CreateIdentityAddress(PublicKey publicKey, CancellationToken cancellationToken)
+    {
+        var address = IdentityAddress.Create(publicKey.Key, _applicationOptions.DidDomainName);
+
+        var addressAlreadyExists = await _identitiesRepository.Exists(address, cancellationToken);
+
+        if (addressAlreadyExists)
+            throw new OperationFailedException(ApplicationErrors.Devices.AddressAlreadyExists());
+        return address;
+    }
+
+    private async Task<PublicKey> ValidateChallenge(CreateIdentityCommand command)
+    {
+        var publicKey = PublicKey.FromBytes(command.IdentityPublicKey);
+
+        await _challengeValidator.Validate(command.SignedChallenge, publicKey);
+        return publicKey;
     }
 }
 
