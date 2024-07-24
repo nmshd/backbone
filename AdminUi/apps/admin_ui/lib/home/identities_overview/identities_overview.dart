@@ -37,34 +37,31 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.identityOverview_title)),
-      body: Padding(
-        padding: const EdgeInsets.only(bottom: 16),
-        child: Column(
-          children: [
-            Expanded(
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      IdentitiesFilter(
-                        onFilterChanged: ({IdentityOverviewFilter? filter}) async {
-                          _dataSource
-                            ..filter = filter
-                            ..refreshDatasource();
-                        },
-                      ),
-                      Expanded(child: IdentitiesDataTable(dataSource: _dataSource)),
-                    ],
-                  ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IdentitiesFilter(
+                      onFilterChanged: ({IdentityOverviewFilter? filter}) async {
+                        _dataSource
+                          ..filter = filter
+                          ..refreshDatasource();
+                      },
+                    ),
+                    Expanded(child: IdentitiesDataTable(dataSource: _dataSource)),
+                  ],
                 ),
               ),
             ),
-            Gaps.h8,
-            const QueryDeletionProcessAuditLogs(),
-          ],
-        ),
+          ),
+          Gaps.h8,
+          const QueryDeletionProcessAuditLogs(),
+        ],
       ),
     );
   }
