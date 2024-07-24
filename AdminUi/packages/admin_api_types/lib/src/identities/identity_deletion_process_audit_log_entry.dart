@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'identity_deletion_process_auditlog_entry.g.dart';
+part 'identity_deletion_process_audit_log_entry.g.dart';
 
 @JsonSerializable()
 class IdentityDeletionProcessAuditLogEntry {

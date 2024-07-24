@@ -1,2 +1,2 @@
 export 'identity.dart';
-export 'identity_deletion_process_auditlog_entry.dart';
+export 'identity_deletion_process_audit_log_entry.dart';

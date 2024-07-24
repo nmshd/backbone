@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'identity_deletion_process_auditlog_entry.dart';
+part of 'identity_deletion_process_audit_log_entry.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
