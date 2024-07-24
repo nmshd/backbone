@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
+import 'identity_messages/identity_messages_overview.dart';
 import 'identity_quotas_table/identity_quotas_table.dart';
 import 'identity_relationship_table/identity_relationship.dart';
 import 'modals/change_tier.dart';
@@ -56,7 +55,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (Platform.isMacOS || Platform.isWindows) const BackButton(),
+            if (kIsDesktop) const BackButton(),
             _IdentityDetailsCard(
               identityDetails: identityDetails,
               selectedTier: _selectedTier,
@@ -72,6 +71,22 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             IdentityQuotaList(identityDetails, _reloadIdentity),
             Gaps.h16,
             IdentityRelationship(address: identityDetails.address),
+            Gaps.h16,
+            IdentityMessagesOverview(
+              participant: widget.address,
+              type: MessageType.incoming,
+              title: context.l10n.identityDetails_receivedMessages_title,
+              subtitle: context.l10n.identityDetails_receivedMessages_subtitle,
+              emptyTableMessage: context.l10n.identityDetails_noReceivedMessagesFound,
+            ),
+            Gaps.h16,
+            IdentityMessagesOverview(
+              participant: widget.address,
+              type: MessageType.outgoing,
+              title: context.l10n.identityDetails_sentMessages_title,
+              subtitle: context.l10n.identityDetails_sentMessages_subtitle,
+              emptyTableMessage: context.l10n.identityDetails_noSentMessagesFound,
+            ),
           ],
         ),
       ),
