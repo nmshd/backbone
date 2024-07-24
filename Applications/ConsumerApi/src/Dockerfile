@@ -59,7 +59,6 @@ RUN dotnet restore "Applications/ConsumerApi/src/ConsumerApi.csproj"
 RUN dotnet publish --configuration Release --output /app/publish --no-restore "Applications/ConsumerApi/src/ConsumerApi.csproj"
 RUN dotnet publish --configuration Release --output /app/publish/health "Applications/HealthCheck/src/HealthCheck.csproj"
 
-
 ### Final ####
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.7-jammy-chiseled
 
