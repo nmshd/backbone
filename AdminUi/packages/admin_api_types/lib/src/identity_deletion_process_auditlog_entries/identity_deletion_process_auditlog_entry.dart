@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'deletion_process.g.dart';
+part 'identity_deletion_process_auditlog_entry.g.dart';
 
 @JsonSerializable()
-class AuditLog {
+class IdentityDeletionProcessAuditLogEntry {
   final String id;
   final DateTime createdAt;
   final String messageKey;
@@ -11,7 +11,7 @@ class AuditLog {
   final String newStatus;
   final Map<String, String> additionalData;
 
-  AuditLog({
+  IdentityDeletionProcessAuditLogEntry({
     required this.id,
     required this.createdAt,
     required this.messageKey,
@@ -20,8 +20,8 @@ class AuditLog {
     this.oldStatus,
   });
 
-  factory AuditLog.fromJson(dynamic json) => _$AuditLogFromJson(json as Map<String, dynamic>);
-  Map<String, dynamic> toJson() => _$AuditLogToJson(this);
+  factory IdentityDeletionProcessAuditLogEntry.fromJson(dynamic json) => _$IdentityDeletionProcessAuditLogEntryFromJson(json as Map<String, dynamic>);
+  Map<String, dynamic> toJson() => _$IdentityDeletionProcessAuditLogEntryToJson(this);
 }
 
 @JsonSerializable()

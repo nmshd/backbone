@@ -1,12 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'deletion_process.dart';
+part of 'identity_deletion_process_auditlog_entry.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-AuditLog _$AuditLogFromJson(Map<String, dynamic> json) => AuditLog(
+IdentityDeletionProcessAuditLogEntry _$IdentityDeletionProcessAuditLogEntryFromJson(Map<String, dynamic> json) =>
+    IdentityDeletionProcessAuditLogEntry(
       id: json['id'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
       messageKey: json['messageKey'] as String,
@@ -15,7 +16,7 @@ AuditLog _$AuditLogFromJson(Map<String, dynamic> json) => AuditLog(
       oldStatus: json['oldStatus'] as String?,
     );
 
-Map<String, dynamic> _$AuditLogToJson(AuditLog instance) => <String, dynamic>{
+Map<String, dynamic> _$IdentityDeletionProcessAuditLogEntryToJson(IdentityDeletionProcessAuditLogEntry instance) => <String, dynamic>{
       'id': instance.id,
       'createdAt': instance.createdAt.toIso8601String(),
       'messageKey': instance.messageKey,
