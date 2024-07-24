@@ -18,19 +18,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Run Checks
-        run: ./.ci/aui/runChecks.sh
-
-  adminui-flutter-checks:
-    runs-on: ubuntu-latest
-    name: Run Admin UI Flutter Checks
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Setup Flutter
         uses: subosito/flutter-action@v2.16.0
       - name: Run checks
-        run: ./.ci/aui/runFlutterChecks.sh
+        run: ./.ci/aui/runChecks.sh
 
   check-formatting:
     runs-on: ubuntu-latest
@@ -40,7 +31,7 @@ jobs:
         uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22.4.1
           cache: "npm"
           cache-dependency-path: "**/package.json"
       - name: Cache npm dependencies
@@ -70,7 +61,7 @@ jobs:
         uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22.4.1
           cache: "npm"
           cache-dependency-path: "**/package.json"
       - name: Cache npm dependencies
@@ -131,7 +122,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22.4.1
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 
@@ -200,7 +191,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22.4.1
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 
@@ -284,7 +275,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: latest
+          node-version: 22.4.1
           cache: "npm"
           cache-dependency-path: "**/package-lock.json"
 

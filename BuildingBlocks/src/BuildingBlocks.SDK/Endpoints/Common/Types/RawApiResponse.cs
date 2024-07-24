@@ -3,7 +3,7 @@ using System.Net;
 
 namespace Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 
-public class RawApiResponse
+public class RawApiResponse : IResponse
 {
     [MemberNotNullWhen(true, nameof(Content))]
     [MemberNotNullWhen(false, nameof(Error))]
