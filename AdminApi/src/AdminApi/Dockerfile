@@ -10,16 +10,6 @@ RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
 WORKDIR /opt/chisel
 RUN go build ./cmd/chisel
 
-# Build Flutter Admin UI
-FROM ghcr.io/cirruslabs/flutter:3.22.3 AS flutter-build-env
-
-COPY AdminUi /src
-WORKDIR /src
-RUN dart pub global activate melos
-RUN dart pub global run melos:melos bootstrap
-WORKDIR /src/apps/admin_ui
-RUN flutter build web --output /build
-
 #### Build application ####
 FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build-env
 
@@ -97,7 +87,17 @@ ARG VERSION
 RUN dotnet publish /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "/src/AdminApi/src/AdminApi/AdminApi.csproj"
 RUN dotnet publish --configuration Release --output /app/publish/health "HealthCheck/HealthCheck.csproj"
 
-### Final ####
+#### Build Flutter Admin UI ####
+FROM ghcr.io/cirruslabs/flutter:3.22.3 AS flutter-build-env
+
+COPY AdminUi /src
+WORKDIR /src
+RUN dart pub global activate melos
+RUN dart pub global run melos:melos bootstrap
+WORKDIR /src/apps/admin_ui
+RUN flutter build web --output /build
+
+#### Final #####
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.7-jammy-chiseled
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
