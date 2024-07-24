@@ -14,14 +14,6 @@ class IdentitiesOverview extends StatefulWidget {
 
 class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   late IdentityDataTableSource _dataSource;
-  late final ScrollController _scrollController;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _scrollController = ScrollController();
-  }
 
   @override
   void didChangeDependencies() {
@@ -45,13 +37,12 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(context.l10n.identityOverview_title)),
-      body: Scrollbar(
-        controller: _scrollController,
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          child: Column(
-            children: [
-              Card(
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 16),
+        child: Column(
+          children: [
+            Expanded(
+              child: Card(
                 child: Padding(
                   padding: const EdgeInsets.all(8),
                   child: Column(
@@ -64,18 +55,15 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
                             ..refreshDatasource();
                         },
                       ),
-                      SizedBox(
-                        height: 700,
-                        child: IdentitiesDataTable(dataSource: _dataSource),
-                      ),
+                      Expanded(child: IdentitiesDataTable(dataSource: _dataSource)),
                     ],
                   ),
                 ),
               ),
-              Gaps.h8,
-              const DeletionProcessAuditLogs(),
-            ],
-          ),
+            ),
+            Gaps.h8,
+            const DeletionProcessAuditLogs(),
+          ],
         ),
       ),
     );
