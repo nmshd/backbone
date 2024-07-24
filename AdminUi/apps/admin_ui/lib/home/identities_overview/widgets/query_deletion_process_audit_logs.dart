@@ -3,14 +3,14 @@ import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
 
-class DeletionProcessAuditLogs extends StatefulWidget {
-  const DeletionProcessAuditLogs({super.key});
+class QueryDeletionProcessAuditLogs extends StatefulWidget {
+  const QueryDeletionProcessAuditLogs({super.key});
 
   @override
-  State<DeletionProcessAuditLogs> createState() => _DeletionProcessAuditLogsState();
+  State<QueryDeletionProcessAuditLogs> createState() => _QueryDeletionProcessAuditLogsState();
 }
 
-class _DeletionProcessAuditLogsState extends State<DeletionProcessAuditLogs> {
+class _QueryDeletionProcessAuditLogsState extends State<QueryDeletionProcessAuditLogs> {
   late TextEditingController textController;
 
   @override

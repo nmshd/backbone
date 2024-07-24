@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
-import 'deletion_process_audit_logs/deletion_process_audit_logs.dart';
+import 'widgets/query_deletion_process_audit_logs.dart';
 
 class IdentitiesOverview extends StatefulWidget {
   const IdentitiesOverview({super.key});
@@ -62,7 +62,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
               ),
             ),
             Gaps.h8,
-            const DeletionProcessAuditLogs(),
+            const QueryDeletionProcessAuditLogs(),
           ],
         ),
       ),
