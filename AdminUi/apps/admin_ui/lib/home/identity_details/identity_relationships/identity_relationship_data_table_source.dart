@@ -19,10 +19,13 @@ class IdentityRelationshipDataTableSource extends AsyncDataTableSource {
 
   @override
   bool get isRowCountApproximate => false;
+
   @override
   int get rowCount => _pagination?.totalRecords ?? 0;
+
   @override
   int get selectedRowCount => 0;
+
   @override
   Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
     final pageNumber = startIndex ~/ count + 1;
