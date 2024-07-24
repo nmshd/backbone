@@ -98,3 +98,39 @@ class IdentityOverview {
   factory IdentityOverview.fromJson(dynamic json) => _$IdentityOverviewFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$IdentityOverviewToJson(this);
 }
+
+@JsonSerializable()
+class IdentityDeletionProcessAuditLogEntry {
+  final String id;
+  final DateTime createdAt;
+  final String messageKey;
+  final String? oldStatus;
+  final String newStatus;
+  final Map<String, String> additionalData;
+
+  IdentityDeletionProcessAuditLogEntry({
+    required this.id,
+    required this.createdAt,
+    required this.messageKey,
+    required this.newStatus,
+    required this.additionalData,
+    this.oldStatus,
+  });
+
+  factory IdentityDeletionProcessAuditLogEntry.fromJson(dynamic json) => _$IdentityDeletionProcessAuditLogEntryFromJson(json as Map<String, dynamic>);
+  Map<String, dynamic> toJson() => _$IdentityDeletionProcessAuditLogEntryToJson(this);
+}
+
+@JsonSerializable()
+class AdditionalData {
+  final String key;
+  final String value;
+
+  AdditionalData({
+    required this.key,
+    required this.value,
+  });
+
+  factory AdditionalData.fromJson(dynamic json) => _$AdditionalDataFromJson(json as Map<String, dynamic>);
+  Map<String, dynamic> toJson() => _$AdditionalDataToJson(this);
+}
