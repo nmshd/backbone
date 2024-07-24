@@ -17,6 +17,6 @@ public static class IServiceCollectionExtensions
                     .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
                 );
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
-        services.AddValidatorsFromAssembly(typeof(CreateTokenCommandValidator).Assembly);
+        services.AddValidatorsFromAssembly(typeof(Validator).Assembly);
     }
 }

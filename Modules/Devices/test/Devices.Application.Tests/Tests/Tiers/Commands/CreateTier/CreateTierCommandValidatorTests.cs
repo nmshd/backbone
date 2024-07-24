@@ -14,7 +14,7 @@ public class CreateTierCommandValidatorTests : AbstractTestsBase
     [InlineData("a-tier-name-with-more-than-30-characters")]
     public void Validation_fails_for_invalid_tier_name(string value)
     {
-        var validator = new CreateTierCommandValidator();
+        var validator = new Validator();
         var validationResult = validator.TestValidate(new CreateTierCommand(value));
 
         validationResult.ShouldHaveValidationErrorFor(x => x.Name);

@@ -11,7 +11,7 @@ public class StartSyncRunCommandValidatorTests : AbstractTestsBase
     [Fact]
     public void Happy_path()
     {
-        var validator = new StartSyncRunCommandValidator();
+        var validator = new Validator();
 
         var command = new StartSyncRunCommand(SyncRunDTO.SyncRunType.DatawalletVersionUpgrade, 1);
         var validationResult = validator.TestValidate(command);
@@ -22,7 +22,7 @@ public class StartSyncRunCommandValidatorTests : AbstractTestsBase
     [Fact]
     public void Fails_when_not_passing_a_SupportedDatawalletVersion()
     {
-        var validator = new StartSyncRunCommandValidator();
+        var validator = new Validator();
 
         var command = new StartSyncRunCommand(SyncRunDTO.SyncRunType.DatawalletVersionUpgrade, 0);
         var validationResult = validator.TestValidate(command);

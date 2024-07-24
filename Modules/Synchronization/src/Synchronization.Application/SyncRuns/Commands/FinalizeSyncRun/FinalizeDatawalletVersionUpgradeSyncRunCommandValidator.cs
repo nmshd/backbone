@@ -10,7 +10,7 @@ public class FinalizeDatawalletVersionUpgradeSyncRunCommandValidator : AbstractV
 {
     public FinalizeDatawalletVersionUpgradeSyncRunCommandValidator()
     {
-        RuleFor(x => x.SyncRunId).Must(SyncRunId.IsValid);
+        RuleFor(x => x.SyncRunId).ValidId<FinalizeDatawalletVersionUpgradeSyncRunCommand, SyncRunId>();
         RuleFor(x => x.NewDatawalletVersion).DetailedNotEmpty();
         RuleForEach(x => x.DatawalletModifications).SetValidator(new PushDatawalletModificationItemValidator());
     }

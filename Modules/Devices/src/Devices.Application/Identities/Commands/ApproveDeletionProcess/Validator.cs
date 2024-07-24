@@ -8,6 +8,6 @@ public class Validator : AbstractValidator<ApproveDeletionProcessCommand>
 {
     public Validator()
     {
-        RuleFor(x => x.DeletionProcessId).Valid(IdentityDeletionProcessId.UTILS.Validate);
+        RuleFor(x => x.DeletionProcessId).ValidId<ApproveDeletionProcessCommand, IdentityDeletionProcessId>();
     }
 }

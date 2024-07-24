@@ -20,7 +20,7 @@ public static class IServiceCollectionExtensions
         );
 
         services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
-        services.AddValidatorsFromAssembly(typeof(CreateRelationshipTemplateCommandValidator).Assembly);
+        services.AddValidatorsFromAssembly(typeof(Validator).Assembly);
 
         services.AddEventHandlers();
     }

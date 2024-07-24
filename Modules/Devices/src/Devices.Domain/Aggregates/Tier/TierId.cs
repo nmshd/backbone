@@ -14,6 +14,11 @@ public record TierId : StronglyTypedId
 
     private TierId(string value) : base(value) { }
 
+    public static bool IsValid(string stringValue)
+    {
+        return UTILS.IsValid(stringValue);
+    }
+
     public static TierId Generate()
     {
         var randomPart = StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);

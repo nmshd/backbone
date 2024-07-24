@@ -18,6 +18,11 @@ public record TierQuotaDefinitionId : StronglyTypedId
 
     }
 
+    public static bool IsValid(string stringValue)
+    {
+        return UTILS.IsValid(stringValue);
+    }
+
     public static TierQuotaDefinitionId Generate()
     {
         var value = PREFIX + StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);

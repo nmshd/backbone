@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Application.FluentValidation;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FluentValidation;
@@ -9,7 +10,7 @@ public class FinalizeExternalEventSyncSyncRunCommandValidator : AbstractValidato
 {
     public FinalizeExternalEventSyncSyncRunCommandValidator()
     {
-        RuleFor(x => x.SyncRunId).Must(SyncRunId.IsValid);
+        RuleFor(x => x.SyncRunId).ValidId<FinalizeExternalEventSyncSyncRunCommand, SyncRunId>();
         RuleForEach(x => x.ExternalEventResults).SetValidator(new EventResultValidator());
         RuleForEach(x => x.DatawalletModifications).SetValidator(new PushDatawalletModificationItemValidator());
     }
@@ -18,7 +19,7 @@ public class FinalizeExternalEventSyncSyncRunCommandValidator : AbstractValidato
     {
         public EventResultValidator()
         {
-            RuleFor(i => i.ExternalEventId).Must(ExternalEventId.IsValid);
+            RuleFor(i => i.ExternalEventId).ValidId<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult, ExternalEventId>();
         }
     }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 using FluentValidation;
 using FluentValidation.Validators;
 
@@ -65,5 +66,13 @@ public static class ValidatorExtensions
         return ruleBuilder
             .SetValidator(new ValueInValidator<T, TProperty>(validOptions))
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
+    }
+
+    public static IRuleBuilderOptions<T, string?> ValidId<T, TId>(this IRuleBuilder<T, string?> ruleBuilder) where TId : StronglyTypedId
+    {
+        return ruleBuilder
+            .Must(x => (bool)typeof(TId).GetMethod("IsValid")!.Invoke(null, [x])!)
+            .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
+            .WithMessage("The ID is not valid. Check length, prefix and the used characters.");
     }
 }

@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Files.Domain.Entities;
+﻿using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.Modules.Files.Domain.Entities;
 using FluentValidation;
 
 namespace Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
@@ -7,6 +8,6 @@ public class Validator : AbstractValidator<GetFileMetadataQuery>
 {
     public Validator()
     {
-        RuleFor(x => x.Id).Must(FileId.IsValid);
+        RuleFor(x => x.Id).ValidId<GetFileMetadataQuery, FileId>();
     }
 }

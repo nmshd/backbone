@@ -11,7 +11,7 @@ public class PushDatawalletModificationsCommandValidatorTests : AbstractTestsBas
     [Fact]
     public void Happy_path()
     {
-        var validator = new PushDatawalletModificationsCommandValidator();
+        var validator = new Validator();
 
         var command = new PushDatawalletModificationsCommand(
             [
@@ -29,7 +29,7 @@ public class PushDatawalletModificationsCommandValidatorTests : AbstractTestsBas
     [Fact]
     public void Fails_when_not_passing_a_SupportedDatawalletVersion()
     {
-        var validator = new PushDatawalletModificationsCommandValidator();
+        var validator = new Validator();
 
         var command = new PushDatawalletModificationsCommand(
             [

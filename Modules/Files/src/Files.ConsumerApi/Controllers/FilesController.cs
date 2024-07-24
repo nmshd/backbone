@@ -38,6 +38,8 @@ public class FilesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadFile([FromForm] CreateFileDTO dto, CancellationToken cancellationToken)
     {
+        //TODO model state is dto valid
+
         var inputStream = new MemoryStream();
 
         await dto.Content.CopyToAsync(inputStream, cancellationToken);

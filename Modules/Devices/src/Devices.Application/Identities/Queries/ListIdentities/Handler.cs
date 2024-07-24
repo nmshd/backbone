@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<ListIdentitiesQuery, ListIdentitiesRespon
 
     public async Task<ListIdentitiesResponse> Handle(ListIdentitiesQuery request, CancellationToken cancellationToken)
     {
-        Expression<Func<Identity, bool>> filter = i => (request.Addresses == null || request.Addresses.Contains(i.Address.Value)) &&
+        Expression<Func<Identity, bool>> filter = i => (request.Addresses == null || request.Addresses.Contains(i.Address)) &&
                                                        (request.Status == null || i.Status == request.Status);
 
         var identities = await _identitiesRepository.Find(filter, cancellationToken);
