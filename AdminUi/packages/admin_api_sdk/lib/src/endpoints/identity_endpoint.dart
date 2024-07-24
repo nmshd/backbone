@@ -53,8 +53,8 @@ class IdentitiesEndpoint extends Endpoint {
     );
   }
 
-  Future<ApiResponse<List<AuditLogs>>> getIdentityAuditLogs({required String address}) => get(
+  Future<ApiResponse<List<AuditLog>>> getIdentityDeletionProcessAuditLogs({required String address}) => get(
         '/api/v1/Identities/$address/DeletionProcesses/AuditLogs',
-        transformer: (e) => (e as List).map(AuditLogs.fromJson).toList(),
+        transformer: (e) => (e as List).map(AuditLog.fromJson).toList(),
       );
 }
