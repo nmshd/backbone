@@ -2,7 +2,6 @@ import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
-import 'package:multi_dropdown/multiselect_dropdown.dart';
 
 import '../../constants.dart';
 import '../../extensions.dart';
@@ -25,15 +24,12 @@ class IdentitiesFilter extends StatefulWidget {
 class _IdentitiesFilterState extends State<IdentitiesFilter> {
   IdentityOverviewFilter _filter = IdentityOverviewFilter();
 
-  late MultiSelectController<String> _tierController;
-  late MultiSelectController<String> _clientController;
+  List<MultiSelectFilterOption> _availableTiers = [];
+  List<MultiSelectFilterOption> _availableClients = [];
 
   @override
   void initState() {
     super.initState();
-
-    _tierController = MultiSelectController();
-    _clientController = MultiSelectController();
 
     if (widget.fixedTierId != null) {
       _filter = _filter.copyWith(tiers: Optional([widget.fixedTierId!]));
@@ -41,14 +37,6 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
 
     _loadTiers();
     _loadClients();
-  }
-
-  @override
-  void dispose() {
-    _tierController.dispose();
-    _clientController.dispose();
-
-    super.dispose();
   }
 
   @override
@@ -71,10 +59,8 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               Gaps.w16,
               MultiSelectFilter(
                 label: context.l10n.tiers,
-                searchLabel: context.l10n.searchTiers,
-                controller: _tierController,
-                onOptionSelected: (List<ValueItem<String>> selectedOptions) {
-                  final selectedTiers = selectedOptions.map((item) => item.value!).toList();
+                options: _availableTiers,
+                onOptionSelected: (List<String> selectedTiers) {
                   _filter = _filter.copyWith(tiers: selectedTiers.isEmpty ? const Optional.absent() : Optional(selectedTiers));
                   widget.onFilterChanged(filter: _filter);
                 },
@@ -83,10 +69,8 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
             Gaps.w16,
             MultiSelectFilter(
               label: context.l10n.clients,
-              searchLabel: context.l10n.identitiesFilter_searchClients,
-              controller: _clientController,
-              onOptionSelected: (List<ValueItem<String>> selectedOptions) {
-                final selectedClients = selectedOptions.map((item) => item.value!).toList();
+              options: _availableClients,
+              onOptionSelected: (List<String> selectedClients) {
                 _filter = _filter.copyWith(clients: selectedClients.isEmpty ? const Optional.absent() : Optional(selectedClients));
                 widget.onFilterChanged(filter: _filter);
               },
@@ -123,8 +107,9 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
               label: context.l10n.datawalletVersion,
               onNumberSelected: (FilterOperator operator, String enteredValue) {
                 final datawalletVersion = FilterOperatorValue(operator, enteredValue);
-                _filter =
-                    _filter.copyWith(datawalletVersion: datawalletVersion.value.isEmpty ? const Optional.absent() : Optional(datawalletVersion));
+                _filter = _filter.copyWith(
+                  datawalletVersion: datawalletVersion.value.isEmpty ? const Optional.absent() : Optional(datawalletVersion),
+                );
                 widget.onFilterChanged(filter: _filter);
               },
             ),
@@ -145,13 +130,15 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
 
   Future<void> _loadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
-    final tierItems = response.data.map((tier) => ValueItem(label: tier.name, value: tier.id)).toList();
-    _tierController.setOptions(tierItems);
+    final tierItems = response.data.map((tier) => (value: tier.id, label: tier.name)).toList();
+
+    if (mounted) setState(() => _availableTiers = tierItems);
   }
 
   Future<void> _loadClients() async {
     final response = await GetIt.I.get<AdminApiClient>().clients.getClients();
-    final clientItems = response.data.map((client) => ValueItem(label: client.displayName, value: client.clientId)).toList();
-    _clientController.setOptions(clientItems);
+    final clientItems = response.data.map((client) => (value: client.clientId, label: client.displayName)).toList();
+
+    if (mounted) setState(() => _availableClients = clientItems);
   }
 }

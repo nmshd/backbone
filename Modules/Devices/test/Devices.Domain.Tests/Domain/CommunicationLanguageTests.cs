@@ -10,6 +10,7 @@ public class CommunicationLanguageTests : AbstractTestsBase
     [Theory]
     [InlineData("de")]
     [InlineData("pt")]
+    [InlineData("it")]
     public void Can_create_communication_language_with_valid_value(string value)
     {
         // Arrange & Act

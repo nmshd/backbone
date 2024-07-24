@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 
 class Gaps {
@@ -17,3 +18,8 @@ class Gaps {
   static const SizedBox w32 = SizedBox(width: 32);
   static const SizedBox w40 = SizedBox(width: 40);
 }
+
+final kIsDesktop = !kIsWeb &&
+    (defaultTargetPlatform == TargetPlatform.linux ||
+        defaultTargetPlatform == TargetPlatform.macOS ||
+        defaultTargetPlatform == TargetPlatform.windows);
