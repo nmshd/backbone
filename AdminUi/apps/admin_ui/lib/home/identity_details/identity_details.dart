@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
+import 'identity_messages/identity_messages_overview.dart';
 import 'identity_quotas_table/identity_quotas_table.dart';
 import 'modals/change_tier.dart';
 
@@ -67,6 +68,22 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             ),
             Gaps.h16,
             IdentityQuotaList(identityDetails, _reloadIdentity),
+            Gaps.h16,
+            IdentityMessagesOverview(
+              participant: widget.address,
+              type: MessageType.incoming,
+              title: context.l10n.identityDetails_receivedMessages_title,
+              subtitle: context.l10n.identityDetails_receivedMessages_subtitle,
+              emptyTableMessage: context.l10n.identityDetails_noReceivedMessagesFound,
+            ),
+            Gaps.h16,
+            IdentityMessagesOverview(
+              participant: widget.address,
+              type: MessageType.outgoing,
+              title: context.l10n.identityDetails_sentMessages_title,
+              subtitle: context.l10n.identityDetails_sentMessages_subtitle,
+              emptyTableMessage: context.l10n.identityDetails_noSentMessagesFound,
+            ),
           ],
         ),
       ),
