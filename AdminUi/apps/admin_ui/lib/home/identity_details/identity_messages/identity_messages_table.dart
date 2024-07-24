@@ -6,8 +6,6 @@ import 'package:flutter/material.dart';
 import '/core/constants.dart';
 import 'identity_messages_data_table_source.dart';
 
-export 'identity_messages_data_table_source.dart';
-
 class IdentityMessagesTable extends StatefulWidget {
   final IdentityMessagesDataTableSource dataSource;
   final MessageType type;
