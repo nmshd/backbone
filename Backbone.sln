@@ -255,7 +255,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Others", "Others", "{8B8EE9
 		appsettings.override.json = appsettings.override.json
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Executables", "Executables", "{44C9D62D-813D-497A-8DDF-C06E515CB22E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Applications", "Applications", "{44C9D62D-813D-497A-8DDF-C06E515CB22E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdminApi", "AdminApi", "{B62C74A0-4F8E-4A76-A26C-26FA0CE3F39F}"
 EndProject
@@ -271,11 +271,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HealthCheck", "HealthCheck"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "helm", "helm", "{AEAECF4E-00BF-4FE0-8F8E-C606B769C326}"
 	ProjectSection(SolutionItems) = preProject
-		Executables\helm\.helmignore = Executables\helm\.helmignore
-		Executables\helm\artifacthub-repo.yml = Executables\helm\artifacthub-repo.yml
-		Executables\helm\Chart.yaml = Executables\helm\Chart.yaml
-		Executables\helm\LICENSE = Executables\helm\LICENSE
-		Executables\helm\values.yaml = Executables\helm\values.yaml
+		Applications\helm\.helmignore = Applications\helm\.helmignore
+		Applications\helm\artifacthub-repo.yml = Applications\helm\artifacthub-repo.yml
+		Applications\helm\Chart.yaml = Applications\helm\Chart.yaml
+		Applications\helm\LICENSE = Applications\helm\LICENSE
+		Applications\helm\values.yaml = Applications\helm\values.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SseServer", "SseServer", "{16FD824D-65D3-4769-9658-B2BB231EC330}"
@@ -288,7 +288,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{64B2D56E-C8D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{248E5883-AFF5-450B-9398-4D0E874A1660}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi", "Executables\ConsumerApi\src\ConsumerApi.csproj", "{BB70B873-52A8-48E1-A772-B0D0C2B9628A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi", "Applications\ConsumerApi\src\ConsumerApi.csproj", "{BB70B873-52A8-48E1-A772-B0D0C2B9628A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1B12C86C-904F-4F69-9DFA-07BB23B5A014}"
 EndProject
@@ -310,31 +310,31 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{DED63960-DC8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C2DFC666-E2F6-4763-840F-1E2D3C40837D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi", "Executables\AdminApi\src\AdminApi\AdminApi.csproj", "{166264CF-B1B7-4722-9F06-6820726939D4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi", "Applications\AdminApi\src\AdminApi\AdminApi.csproj", "{166264CF-B1B7-4722-9F06-6820726939D4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure", "Executables\AdminApi\src\AdminApi.Infrastructure\AdminApi.Infrastructure.csproj", "{5AC75F88-17EC-4037-BEE7-0DB57EDC3552}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure", "Applications\AdminApi\src\AdminApi.Infrastructure\AdminApi.Infrastructure.csproj", "{5AC75F88-17EC-4037-BEE7-0DB57EDC3552}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure.Database.Postgres", "Executables\AdminApi\src\AdminApi.Infrastructure.Database.Postgres\AdminApi.Infrastructure.Database.Postgres.csproj", "{C57013CD-BB85-485C-82B8-6CD0E47EB717}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure.Database.Postgres", "Applications\AdminApi\src\AdminApi.Infrastructure.Database.Postgres\AdminApi.Infrastructure.Database.Postgres.csproj", "{C57013CD-BB85-485C-82B8-6CD0E47EB717}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure.Database.SqlServer", "Executables\AdminApi\src\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj", "{B727B47A-E480-4339-AB6F-D9690338A93F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Infrastructure.Database.SqlServer", "Applications\AdminApi\src\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj", "{B727B47A-E480-4339-AB6F-D9690338A93F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Tests.Integration", "Executables\AdminApi\test\AdminApi.Tests.Integration\AdminApi.Tests.Integration.csproj", "{2804B42A-C94A-42B7-9A5F-7891A7986975}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminApi.Tests.Integration", "Applications\AdminApi\test\AdminApi.Tests.Integration\AdminApi.Tests.Integration.csproj", "{2804B42A-C94A-42B7-9A5F-7891A7986975}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Tests.Integration", "Executables\ConsumerApi\test\ConsumerApi.Tests.Integration\ConsumerApi.Tests.Integration.csproj", "{B8787BE8-F19D-4885-963D-5965CFB7D798}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Tests.Integration", "Applications\ConsumerApi\test\ConsumerApi.Tests.Integration\ConsumerApi.Tests.Integration.csproj", "{B8787BE8-F19D-4885-963D-5965CFB7D798}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHandlerService", "Executables\EventHandlerService\src\EventHandlerService\EventHandlerService.csproj", "{C41D358E-79C3-4CF9-9EE1-49963E9C8F0A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHandlerService", "Applications\EventHandlerService\src\EventHandlerService\EventHandlerService.csproj", "{C41D358E-79C3-4CF9-9EE1-49963E9C8F0A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHandlerService.Tests", "Executables\EventHandlerService\test\EventHandlerService.Tests\EventHandlerService.Tests.csproj", "{B35BDB70-B46B-4757-AB92-A259463DD7A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EventHandlerService.Tests", "Applications\EventHandlerService\test\EventHandlerService.Tests\EventHandlerService.Tests.csproj", "{B35BDB70-B46B-4757-AB92-A259463DD7A6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Job.IdentityDeletion", "Executables\IdentityDeletionJobs\src\Job.IdentityDeletion\Job.IdentityDeletion.csproj", "{4C5AE2A6-5237-40E1-A61F-FEB12752A7C5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Job.IdentityDeletion", "Applications\IdentityDeletionJobs\src\Job.IdentityDeletion\Job.IdentityDeletion.csproj", "{4C5AE2A6-5237-40E1-A61F-FEB12752A7C5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Job.IdentityDeletion.Tests", "Executables\IdentityDeletionJobs\test\Job.IdentityDeletion.Tests\Job.IdentityDeletion.Tests.csproj", "{E394F849-195C-4586-8888-9E1324BE5FCF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Job.IdentityDeletion.Tests", "Applications\IdentityDeletionJobs\test\Job.IdentityDeletion.Tests\Job.IdentityDeletion.Tests.csproj", "{E394F849-195C-4586-8888-9E1324BE5FCF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Job.IdentityDeletion.Tests.Integration", "Executables\IdentityDeletionJobs\test\Job.IdentityDeletion.Tests.Integration\Job.IdentityDeletion.Tests.Integration.csproj", "{1B510C96-DDFD-4376-AB75-44E0B8EFC723}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Job.IdentityDeletion.Tests.Integration", "Applications\IdentityDeletionJobs\test\Job.IdentityDeletion.Tests.Integration\Job.IdentityDeletion.Tests.Integration.csproj", "{1B510C96-DDFD-4376-AB75-44E0B8EFC723}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SseServer", "Executables\SseServer\src\SseServer\SseServer.csproj", "{B36578AF-0AE7-4FEF-98C8-5836998B0597}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SseServer", "Applications\SseServer\src\SseServer\SseServer.csproj", "{B36578AF-0AE7-4FEF-98C8-5836998B0597}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SseServerTests", "Executables\SseServer\test\SseServerTests\SseServerTests.csproj", "{24AF731E-B133-404F-AAE2-19521C15FD2C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SseServerTests", "Applications\SseServer\test\SseServerTests\SseServerTests.csproj", "{24AF731E-B133-404F-AAE2-19521C15FD2C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FilesSanityCheck", "FilesSanityCheck", "{EE57C18D-9B33-439B-A486-33B0A7842BAF}"
 EndProject
@@ -342,26 +342,26 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B64AD62D-06B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{127E4B29-FD43-4BED-87A1-9423414DB87B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesSanityCheck", "Executables\FilesSanityCheck\src\FilesSanityCheck\FilesSanityCheck.csproj", "{B723B7DF-E91A-477A-B09C-08577CE52BB7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesSanityCheck", "Applications\FilesSanityCheck\src\FilesSanityCheck\FilesSanityCheck.csproj", "{B723B7DF-E91A-477A-B09C-08577CE52BB7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesSanityCheck.Tests", "Executables\FilesSanityCheck\test\Files.Jobs.SanityCheck.Tests\FilesSanityCheck.Tests.csproj", "{FEB2983E-E95F-4DBC-AE9B-874C35442A4D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FilesSanityCheck.Tests", "Applications\FilesSanityCheck\test\Files.Jobs.SanityCheck.Tests\FilesSanityCheck.Tests.csproj", "{FEB2983E-E95F-4DBC-AE9B-874C35442A4D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F6BB3689-43FA-4B0B-BEFC-8129E6543F67}"
 	ProjectSection(SolutionItems) = preProject
-		Executables\AdminUi\.gitignore = Executables\AdminUi\.gitignore
-		Executables\AdminUi\analysis_options.yaml = Executables\AdminUi\analysis_options.yaml
-		Executables\AdminUi\config.local.json = Executables\AdminUi\config.local.json
-		Executables\AdminUi\melos.yaml = Executables\AdminUi\melos.yaml
-		Executables\AdminUi\pubspec.lock = Executables\AdminUi\pubspec.lock
-		Executables\AdminUi\pubspec.yaml = Executables\AdminUi\pubspec.yaml
-		Executables\AdminUi\README.md = Executables\AdminUi\README.md
+		Applications\AdminUi\.gitignore = Applications\AdminUi\.gitignore
+		Applications\AdminUi\analysis_options.yaml = Applications\AdminUi\analysis_options.yaml
+		Applications\AdminUi\config.local.json = Applications\AdminUi\config.local.json
+		Applications\AdminUi\melos.yaml = Applications\AdminUi\melos.yaml
+		Applications\AdminUi\pubspec.lock = Applications\AdminUi\pubspec.lock
+		Applications\AdminUi\pubspec.yaml = Applications\AdminUi\pubspec.yaml
+		Applications\AdminUi\README.md = Applications\AdminUi\README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{95EE2E41-D772-4DFF-86F9-A41A840B54D1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCheck", "Executables\HealthCheck\src\HealthCheck.csproj", "{232AAB02-F4F8-4827-8866-00B7FC2CC0E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HealthCheck", "Applications\HealthCheck\src\HealthCheck.csproj", "{232AAB02-F4F8-4827-8866-00B7FC2CC0E2}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrator", "Executables\DatabaseMigrator\src\DatabaseMigrator\DatabaseMigrator.csproj", "{64F7ABF7-4B94-43A4-A567-3E3C2F46ED2B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrator", "Applications\DatabaseMigrator\src\DatabaseMigrator\DatabaseMigrator.csproj", "{64F7ABF7-4B94-43A4-A567-3E3C2F46ED2B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "AdminCli", "AdminCli", "{D4A1B258-27AB-4C2E-97F5-5385DA3A5083}"
 EndProject
@@ -369,7 +369,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A067ED5F-30B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4DE75EB1-5D21-4D73-9408-57B241FB556F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminCli", "Executables\AdminCli\src\AdminCli\AdminCli.csproj", "{600F164D-0423-49DA-B326-67D565E419C8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminCli", "Applications\AdminCli\src\AdminCli\AdminCli.csproj", "{600F164D-0423-49DA-B326-67D565E419C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

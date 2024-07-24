@@ -101,28 +101,28 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: Executables/ConsumerApi/src/Dockerfile
+          - dockerfile: Applications/ConsumerApi/src/Dockerfile
             image: consumer-api
 
-          - dockerfile: Executables/AdminApi/src/AdminApi/Dockerfile
+          - dockerfile: Applications/AdminApi/src/AdminApi/Dockerfile
             image: admin-ui
 
-          - dockerfile: Executables/AdminCli/src/AdminCli/Dockerfile
+          - dockerfile: Applications/AdminCli/src/AdminCli/Dockerfile
             image: admin-cli
 
-          - dockerfile: Executables/DatabaseMigrator/src/DatabaseMigrator/Dockerfile
+          - dockerfile: Applications/DatabaseMigrator/src/DatabaseMigrator/Dockerfile
             image: database-migrator
 
-          - dockerfile: Executables/EventHandlerService/src/EventHandlerService/Dockerfile
+          - dockerfile: Applications/EventHandlerService/src/EventHandlerService/Dockerfile
             image: event-handler-service
 
-          - dockerfile: Executables/FilesSanityCheck/src/FilesSanityCheck/Dockerfile
+          - dockerfile: Applications/FilesSanityCheck/src/FilesSanityCheck/Dockerfile
             image: files-sanity-check
 
-          - dockerfile: Executables/IdentityDeletionJobs/src/Job.IdentityDeletion/Dockerfile
+          - dockerfile: Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Dockerfile
             image: identity-deletion-jobs
 
-          - dockerfile: Executables/SseServer/src/SseServer/Dockerfile
+          - dockerfile: Applications/SseServer/src/SseServer/Dockerfile
             image: sse-server
 
     steps:
@@ -188,11 +188,11 @@ jobs:
         database: [sqlserver, postgres]
         test-project:
           - display-name: admin-api
-            path: Executables/AdminApi/test/AdminApi.Tests.Integration
+            path: Applications/AdminApi/test/AdminApi.Tests.Integration
           - display-name: consumer-api
-            path: Executables/ConsumerApi/test/ConsumerApi.Tests.Integration
+            path: Applications/ConsumerApi/test/ConsumerApi.Tests.Integration
           - display-name: identity-deletion-job
-            path: Executables/IdentityDeletionJobs/test/Job.IdentityDeletion.Tests.Integration
+            path: Applications/IdentityDeletionJobs/test/Job.IdentityDeletion.Tests.Integration
     needs: image-test-builds
     steps:
       - name: Checkout
