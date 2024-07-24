@@ -10,14 +10,14 @@ import 'package:logger/logger.dart';
 import '/core/core.dart';
 import 'modals/all_recipients_dialog.dart';
 
-class IdentityMessagesTableSource extends AsyncDataTableSource {
+class IdentityMessagesDataTableSource extends AsyncDataTableSource {
   Pagination? _pagination;
 
   final Locale locale;
   final String participant;
   final MessageType type;
 
-  IdentityMessagesTableSource({
+  IdentityMessagesDataTableSource({
     required this.participant,
     required this.type,
     required this.locale,
