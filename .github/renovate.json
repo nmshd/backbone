@@ -1,5 +1,12 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": ["config:recommended"],
-    "labels": ["dependencies"]
+    "labels": ["dependencies"],
+    "packageRules": [
+        {
+            "matchDatasources": ["npm"],
+            "packageNames": ["eslint"],
+            "enabled": false
+        }
+    ]
 }
