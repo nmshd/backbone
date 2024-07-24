@@ -1,16 +1,17 @@
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:flutter/material.dart';
 
-import 'messages_data_table/identity_messages_table.dart';
+import 'identity_messages_data_table_source.dart';
+import 'identity_messages_table.dart';
 
-class IdentityMessagesOverview extends StatefulWidget {
+class IdentityMessages extends StatefulWidget {
   final String participant;
   final MessageType type;
   final String title;
   final String subtitle;
   final String emptyTableMessage;
 
-  const IdentityMessagesOverview({
+  const IdentityMessages({
     required this.participant,
     required this.type,
     required this.title,
@@ -20,17 +21,17 @@ class IdentityMessagesOverview extends StatefulWidget {
   });
 
   @override
-  State<IdentityMessagesOverview> createState() => _IdentityMessagesOverviewState();
+  State<IdentityMessages> createState() => _IdentityMessagesState();
 }
 
-class _IdentityMessagesOverviewState extends State<IdentityMessagesOverview> {
-  late IdentityMessagesTableSource _dataSource;
+class _IdentityMessagesState extends State<IdentityMessages> {
+  late IdentityMessagesDataTableSource _dataSource;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _dataSource = IdentityMessagesTableSource(
+    _dataSource = IdentityMessagesDataTableSource(
       participant: widget.participant,
       type: widget.type,
       locale: Localizations.localeOf(context),
