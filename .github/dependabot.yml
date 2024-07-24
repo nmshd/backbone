@@ -9,8 +9,6 @@ updates:
       update-nuget-dependencies:
         patterns:
           - "*"
-    reviewers:
-      - "tnotheis"
     labels:
       - "dependencies"
 
@@ -23,8 +21,6 @@ updates:
       update-github-actions-dependencies:
         patterns:
           - "*"
-    reviewers:
-      - "tnotheis"
     labels:
       - "dependencies"
 
@@ -37,8 +33,6 @@ updates:
       update-npm-dependencies:
         patterns:
           - "*"
-    reviewers:
-      - "tnotheis"
     ignore:
       - dependency-name: "eslint"
         update-types: ["version-update:semver-major"] # Ignore this until https://github.com/typescript-eslint/typescript-eslint/issues/8211 is fixed
@@ -57,8 +51,6 @@ updates:
       update-pub-dependencies:
         patterns:
           - "*"
-    reviewers:
-      - "tnotheis"
     labels:
       - "dependencies"
 
@@ -77,7 +69,5 @@ updates:
       update-docker-dependencies:
         patterns:
           - "*"
-    reviewers:
-      - "tnotheis"
     labels:
       - "dependencies"
