@@ -9,11 +9,9 @@ import '/core/core.dart';
 
 class DeletionProcessAuditLogsDetails extends StatefulWidget {
   final String identityAddress;
-  final Locale locale;
 
   const DeletionProcessAuditLogsDetails({
     required this.identityAddress,
-    required this.locale,
     super.key,
   });
 
