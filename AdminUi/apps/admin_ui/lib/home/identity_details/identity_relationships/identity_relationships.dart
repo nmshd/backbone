@@ -15,13 +15,13 @@ class IdentityRelationships extends StatefulWidget {
 }
 
 class _IdentityRelationshipsState extends State<IdentityRelationships> {
-  late IdentityRelationshipSource _dataSource;
+  late IdentityRelationshipDataTableSource _dataSource;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _dataSource = IdentityRelationshipSource(
+    _dataSource = IdentityRelationshipDataTableSource(
       address: widget.address,
       locale: Localizations.localeOf(context),
     );

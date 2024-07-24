@@ -24,13 +24,13 @@ class IdentityMessages extends StatefulWidget {
 }
 
 class _IdentityMessagesState extends State<IdentityMessages> {
-  late IdentityMessagesTableSource _dataSource;
+  late IdentityMessagesDataTableSource _dataSource;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _dataSource = IdentityMessagesTableSource(
+    _dataSource = IdentityMessagesDataTableSource(
       participant: widget.participant,
       type: widget.type,
       locale: Localizations.localeOf(context),

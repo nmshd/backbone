@@ -6,13 +6,13 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 
-class IdentityRelationshipSource extends AsyncDataTableSource {
+class IdentityRelationshipDataTableSource extends AsyncDataTableSource {
   Pagination? _pagination;
 
   final Locale locale;
   final String address;
 
-  IdentityRelationshipSource({
+  IdentityRelationshipDataTableSource({
     required this.address,
     required this.locale,
   });
