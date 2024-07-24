@@ -2,19 +2,19 @@ import 'package:flutter/material.dart';
 
 import 'identity_relationship_table.dart';
 
-class IdentityRelationship extends StatefulWidget {
+class IdentityRelationships extends StatefulWidget {
   final String address;
 
-  const IdentityRelationship({
+  const IdentityRelationships({
     required this.address,
     super.key,
   });
 
   @override
-  State<IdentityRelationship> createState() => _IdentityRelationshipState();
+  State<IdentityRelationships> createState() => _IdentityRelationshipsState();
 }
 
-class _IdentityRelationshipState extends State<IdentityRelationship> {
+class _IdentityRelationshipsState extends State<IdentityRelationships> {
   late IdentityRelationshipSource _dataSource;
 
   @override
