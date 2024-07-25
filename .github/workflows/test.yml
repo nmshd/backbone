@@ -233,9 +233,9 @@ jobs:
             mv appsettings.override.json appsettings.override.json.bak
             cp .ci/appsettings.override.${{matrix.database}}.local.json appsettings.override.json
 
-            dotnet restore Backbone.sln
+            dotnet restore ${{matrix.test-project.path}}
 
-            dotnet build --no-restore Backbone.sln
+            dotnet build --no-restore ${{matrix.test-project.path}}
           }
           wait
 
