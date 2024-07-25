@@ -55,21 +55,25 @@ final _router = GoRouter(
               parentNavigatorKey: _shellNavigatorKey,
               path: ':address',
               pageBuilder: (context, state) => NoTransitionPage(child: IdentityDetails(address: state.pathParameters['address']!)),
-            ),
-            GoRoute(
-              parentNavigatorKey: _shellNavigatorKey,
-              path: ':address/deletion-process-details/:deletionProcessId',
-              pageBuilder: (context, state) => NoTransitionPage(
-                child:
-                    DeletionProcessDetails(address: state.pathParameters['address']!, deletionProcessId: state.pathParameters['deletionProcessId']!),
-              ),
-            ),
-            GoRoute(
-              parentNavigatorKey: _shellNavigatorKey,
-              path: ':address/deletion-process-audit-logs',
-              pageBuilder: (context, state) => NoTransitionPage(
-                child: DeletionProcessAuditLogDetails(identityAddress: state.pathParameters['address']!),
-              ),
+              routes: [
+                GoRoute(
+                  parentNavigatorKey: _shellNavigatorKey,
+                  path: 'deletion-process-details/:deletionProcessId',
+                  pageBuilder: (context, state) => NoTransitionPage(
+                    child: DeletionProcessDetails(
+                      address: state.pathParameters['address']!,
+                      deletionProcessId: state.pathParameters['deletionProcessId']!,
+                    ),
+                  ),
+                ),
+                GoRoute(
+                  parentNavigatorKey: _shellNavigatorKey,
+                  path: 'deletion-process-audit-logs',
+                  pageBuilder: (context, state) => NoTransitionPage(
+                    child: DeletionProcessAuditLogDetails(identityAddress: state.pathParameters['address']!),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
