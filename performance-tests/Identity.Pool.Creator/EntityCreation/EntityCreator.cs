@@ -17,54 +17,58 @@ using Backbone.Tooling.Extensions;
 namespace Backbone.Identity.Pool.Creator.EntityCreation;
 public class EntityCreator
 {
-    private readonly string _baseAddress;
-
     private readonly IList<PoolEntry> _pools;
     private readonly SolutionRepresentation _ram;
     private readonly IPrinter _printer;
-    private Dictionary<uint, Identity> _identitiesDictionary;
+    private readonly Dictionary<int, HttpClient> _httpClientPool;
     private readonly ClientCredentials _clientCredentials;
 
     public EntityCreator(string baseAddress, string clientId, string clientSecret, IEnumerable<PoolEntry> pools, SolutionRepresentation ram, IPrinter printer)
     {
-        _baseAddress = baseAddress;
         _clientCredentials = new ClientCredentials(clientId, clientSecret);
         _pools = pools.ToList();
         _ram = ram;
         _printer = printer;
-        _identitiesDictionary = [];
+        _httpClientPool = Enumerable.Range(0, Environment.ProcessorCount * 4).ToDictionary(i => i, i => new HttpClient { BaseAddress = new Uri(baseAddress) });
     }
 
     public async Task StartCreation()
     {
+
         CreateCompensationPool();
 
         await CreateIdentities();
         LoadRelationshipsAndMessagesConfiguration();
-        _identitiesDictionary = _pools.SelectMany(p => p.Identities).ToDictionary(i => i.Uon);
+        _printer.OutputAll(_pools, PrintTarget.Identities);
 
         await CreateRelationshipTemplates();
+        _printer.OutputAll(_pools, PrintTarget.RelationshipTemplates);
+
         await CreateRelationships();
+        _printer.OutputAll(_pools, PrintTarget.Relationships);
+
         await CreateChallenges();
+        _printer.OutputAll(_pools, PrintTarget.Challenges);
+
         await CreateMessages();
+        _printer.OutputAll(_pools, PrintTarget.Messages);
+
         await CreateDatawalletModifications();
-
-
-        _printer.OutputAll(_pools);
+        _printer.OutputAll(_pools, PrintTarget.DatawalletModifications);
     }
 
     private void CreateCompensationPool()
     {
         var diff = _ram.GetIdentityCount() - _pools.Sum(p => p.Amount);
         if (diff <= 0) return;
-        
+
         _pools.Add(new PoolEntry
         {
             Alias = "ac",
             Name = "App Compensation",
             NumberOfRelationships = 5,
             Type = "app",
-            Amount = Convert.ToUInt32(diff)
+            Amount = Convert.ToUInt32(diff + 1)
         });
     }
 
@@ -91,8 +95,8 @@ public class EntityCreator
             var random = new Random();
             foreach (var relatedIdentity in nonConnectorIdentity.IdentitiesToEstablishRelationshipsWith)
             {
-                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, nonConnectorIdentity.UserCredentials);
-                var connectorSdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, relatedIdentity.UserCredentials);
+                var sdk = Client.CreateForExistingIdentity(_httpClientPool[Environment.CurrentManagedThreadId], _clientCredentials, nonConnectorIdentity.UserCredentials);
+                var connectorSdk = Client.CreateForExistingIdentity(_httpClientPool[Environment.CurrentManagedThreadId + Environment.ProcessorCount], _clientCredentials, relatedIdentity.UserCredentials);
                 var randomRelationshipTemplate = random.GetRandomElement(relatedIdentity.RelationshipTemplates);
 
                 var createRelationshipResponse = await sdk.Relationships.CreateRelationship(new() { RelationshipTemplateId = randomRelationshipTemplate.Id, Content = [] });
@@ -143,7 +147,7 @@ public class EntityCreator
         {
             foreach (var recipientIdentity in identity.IdentitiesToSendMessagesTo)
             {
-                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
+                var sdk = Client.CreateForExistingIdentity(_httpClientPool[0], _clientCredentials, identity.UserCredentials);
 
                 var messageResponse = await sdk.Messages.SendMessage(new()
                 {
@@ -182,7 +186,7 @@ public class EntityCreator
         {
             for (uint i = 0; i < pool.Amount; i++)
             {
-                var sdk = await Client.CreateForNewIdentity(_baseAddress, _clientCredentials, PasswordHelper.GeneratePassword(18, 24));
+                var sdk = await Client.CreateForNewIdentity(_httpClientPool[Environment.CurrentManagedThreadId], _clientCredentials, PasswordHelper.GeneratePassword(18, 24));
                 if (sdk.DeviceData is null)
                     throw new Exception("The SDK could not be used to create a new Identity.");
 
@@ -214,14 +218,14 @@ public class EntityCreator
         {
             foreach (var identity in pool.Identities)
             {
-                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
+                var sdk = Client.CreateForExistingIdentity(_httpClientPool[Environment.CurrentManagedThreadId], _clientCredentials, identity.UserCredentials);
                 for (uint i = 0; i < pool.NumberOfRelationshipTemplates; i++)
                 {
                     var relationshipTemplateResponse = await sdk.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest
                     {
                         Content = [],
                         ExpiresAt = DateTime.Now.EndOfYear(),
-                        MaxNumberOfAllocations = 10
+                        MaxNumberOfAllocations = 1000
                     });
 
                     if (relationshipTemplateResponse.Result is not null)
@@ -246,7 +250,7 @@ public class EntityCreator
 
         await Parallel.ForEachAsync(relevantIdentities, async (identity, _) =>
         {
-            var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
+            var sdk = Client.CreateForExistingIdentity(_httpClientPool[Environment.CurrentManagedThreadId], _clientCredentials, identity.UserCredentials);
             for (var i = 0; i < identity.Pool.NumberOfChallenges; i++)
             {
                 var challenge = (await sdk.Challenges.CreateChallenge()).Result;
@@ -272,7 +276,7 @@ public class EntityCreator
         {
             foreach (var identity in pool.Identities)
             {
-                var sdk = Client.CreateForExistingIdentity(_baseAddress, _clientCredentials, identity.UserCredentials);
+                var sdk = Client.CreateForExistingIdentity(_httpClientPool[Environment.CurrentManagedThreadId], _clientCredentials, identity.UserCredentials);
                 var startDatawalletVersionUpgradeResponse = await sdk.SyncRuns.StartSyncRun(new StartSyncRunRequest() { Type = SyncRunType.DatawalletVersionUpgrade, Duration = 100 }, 1);
 
                 if (startDatawalletVersionUpgradeResponse.Result is null) continue;
