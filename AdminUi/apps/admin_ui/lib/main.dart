@@ -56,6 +56,13 @@ final _router = GoRouter(
               path: ':address',
               pageBuilder: (context, state) => NoTransitionPage(child: IdentityDetails(address: state.pathParameters['address']!)),
             ),
+            GoRoute(
+              parentNavigatorKey: _shellNavigatorKey,
+              path: ':address/deletion-process-audit-logs',
+              pageBuilder: (context, state) => NoTransitionPage(
+                child: DeletionProcessAuditLogDetails(identityAddress: state.pathParameters['address']!),
+              ),
+            ),
           ],
         ),
         GoRoute(
