@@ -1,14 +1,9 @@
-﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.ConsumerApi.Sdk;
+﻿using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
-using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Responses;
-using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
-using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using Backbone.ConsumerApi.Tests.Integration.Support;
 using Backbone.Crypto;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Microsoft.Extensions.Options;
@@ -23,7 +18,7 @@ internal class MessagesStepDefinitions
 {
     private readonly ClientCredentials _clientCredentials;
     private readonly HttpClient _httpClient;
-    
+
     private readonly IdentitiesContext _identitiesContext;
     private readonly MessagesContext _messagesContext;
     private readonly ResponseContext _responseContext;
@@ -79,29 +74,9 @@ internal class MessagesStepDefinitions
         recipientAddressesAfterGet.Should().NotContain(addressOfIdentityThatShouldBeAnonymized);
     }
 
-    //[Given("Identities i1 and i2 with an established Relationship")]
-    //public async Task GivenIdentitiesI1AndI2WithAnEstablishedRelationship()
-    //{
-    //    _client1 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
-    //    _client2 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
-
-    //    await Utils.EstablishRelationshipBetween(_client1, _client2);
-    //}
-
     [When("([a-zA-Z0-9]+) sends a POST request to the /Messages endpoint with ([a-zA-Z0-9]+) as recipient")]
     public async Task WhenAPostRequestIsSentToTheMessagesEndpoint(string identity1Name, string identity2Name)
     {
-        var sender = _identities[senderName];
-        var getMessagesResponse = await sender.Messages.ListMessages();
-        _whenResponse = _getMessagesResponse = getMessagesResponse;
-    }
-
-    [When("(i[a-zA-Z0-9]*) sends a POST request to the /Messages endpoint with (i[a-zA-Z0-9]*) as recipient")]
-    public async Task WhenAPostRequestIsSentToTheMessagesEndpoint(string senderName, string recipientName)
-    {
-        var sender = _identities[senderName];
-        var recipient = _identities[recipientName];
-
         var sendMessageRequest = new SendMessageRequest
         {
             Attachments = [],
@@ -136,8 +111,6 @@ public static class DictionaryExtensions
     {
         return dictionary.Where(x => keys.Contains(x.Key)).Select(x => x.Value).ToArray();
     }
-
-    #endregion
 }
 
 public class PeersToBeDeletedErrorData

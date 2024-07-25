@@ -17,6 +17,7 @@ public static class Utils
 {
     public static void CreateUnauthenticated(IdentitiesContext identitiesContext, HttpClient httpClient, ClientCredentials clientCredentials)
     {
+        identitiesContext.AnonymousClient = Client.CreateUnauthenticated(httpClient, clientCredentials);
     }
 
     public static async Task CreateAuthenticated(IdentitiesContext identitiesContext, HttpClient httpClient, ClientCredentials clientCredentials, string identityName)
@@ -25,6 +26,8 @@ public static class Utils
     }
 
     public static async Task<Relationship> EstablishRelationshipBetween(Client client1, Client client2)
+    {
+        var createRelationshipTemplateRequest = new CreateRelationshipTemplateRequest
         {
             Content = "AAA".GetBytes()
         };
