@@ -19,8 +19,8 @@ class DeletionProcessDetails extends StatefulWidget {
 }
 
 class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
-  DeletionProcessDetail? _deletionProcessesDetails;
-  List<AuditLog> auditLogs = [];
+  IdentityDeletionProcessDetail? _deletionProcessesDetails;
+  List<IdentityDeletionProcessAuditLogEntry> auditLogs = [];
 
   @override
   void initState() {
@@ -93,7 +93,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
 
     final result = await GetIt.I
         .get<AdminApiClient>()
-        .deletionProcesses
+        .identities
         .cancelDeletionProcessAsSupport(address: widget.address, deletionProcessId: widget.deletionProcessId);
 
     if (result.hasError) {
@@ -125,7 +125,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
   Future<void> _loadDeletionProcessDetails() async {
     final deletionProcessesDetails = await GetIt.I
         .get<AdminApiClient>()
-        .deletionProcesses
+        .identities
         .getIdentityDeletionProcessDetails(address: widget.address, deletionProcessId: widget.deletionProcessId);
     if (mounted) {
       setState(() {
@@ -142,7 +142,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
 
 class _DeletionProcessDetailsCard extends StatelessWidget {
   final String address;
-  final DeletionProcessDetail deletionProcessDetails;
+  final IdentityDeletionProcessDetail deletionProcessDetails;
 
   const _DeletionProcessDetailsCard({
     required this.address,

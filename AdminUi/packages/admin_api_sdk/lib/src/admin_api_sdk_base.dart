@@ -10,7 +10,6 @@ class AdminApiClient {
   late final QuotasEndpoint quotas;
   late final IdentitiesEndpoint identities;
   late final RelationshipsEndpoint relationships;
-  late final DeletionProcessesEndpoint deletionProcesses;
   late final MessagesEndpoint messages;
 
   AdminApiClient._(String baseUrl, String apiKey) {
@@ -28,7 +27,6 @@ class AdminApiClient {
     quotas = QuotasEndpoint(dio);
     identities = IdentitiesEndpoint(dio);
     relationships = RelationshipsEndpoint(dio);
-    deletionProcesses = DeletionProcessesEndpoint(dio);
     messages = MessagesEndpoint(dio);
   }
 

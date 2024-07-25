@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 import '/core/core.dart';
 
 class DeletionProcessAuditLogsTable extends StatefulWidget {
-  final List<AuditLog> auditLogs;
+  final List<IdentityDeletionProcessAuditLogEntry> auditLogs;
 
   const DeletionProcessAuditLogsTable({
     required this.auditLogs,

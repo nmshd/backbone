@@ -18,7 +18,7 @@ class DeletionProcessTable extends StatefulWidget {
 }
 
 class _DeletionProcessTableState extends State<DeletionProcessTable> {
-  List<DeletionProcess>? _deletionProcesses;
+  List<IdentityDeletionProcess>? _deletionProcesses;
 
   @override
   void initState() {
@@ -137,7 +137,7 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
   }
 
   Future<void> _reloadIdentityDeletionProcesses() async {
-    final deletionProcesses = await GetIt.I.get<AdminApiClient>().deletionProcesses.getIdentityDeletionProcesses(address: widget.address);
+    final deletionProcesses = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcesses(address: widget.address);
     if (mounted) {
       setState(() {
         _deletionProcesses = deletionProcesses.data;
