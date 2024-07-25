@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +18,7 @@ class DeletionProcessDetails extends StatefulWidget {
 
 class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
   IdentityDeletionProcessDetail? _deletionProcessesDetails;
-  List<IdentityDeletionProcessAuditLogEntry> auditLogs = [];
+  List<IdentityDeletionProcessAuditLogEntry> _auditLogs = [];
 
   @override
   void initState() {
@@ -39,7 +37,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (Platform.isMacOS || Platform.isWindows)
+          if (kIsDesktop)
             BackButton(
               onPressed: () => Navigator.of(context).pop(false),
             ),
@@ -48,7 +46,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
             deletionProcessDetails: deletionProcessDetails,
           ),
           Gaps.h16,
-          Expanded(child: DeletionProcessAuditLogsTable(auditLogs: auditLogs)),
+          Expanded(child: DeletionProcessAuditLogsTable(auditLogs: _auditLogs)),
           Gaps.h16,
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -130,7 +128,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
     if (mounted) {
       setState(() {
         _deletionProcessesDetails = deletionProcessesDetails.data;
-        auditLogs = deletionProcessesDetails.data.auditLog;
+        _auditLogs = deletionProcessesDetails.data.auditLog;
       });
     }
   }
