@@ -29,8 +29,8 @@ internal class ChallengesApiStepDefinitions
     [Given("a Challenge c created by (.+)")]
     public async Task GivenAChallengeCreatedByI(string identityName)
     {
-        _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ? 
-            await Identity(identityName).Challenges.CreateChallenge() : 
+        _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ?
+            await Identity(identityName).Challenges.CreateChallenge() :
             await Identity(identityName).Challenges.CreateChallengeUnauthenticated();
         ChallengeResponse.Should().BeASuccess();
 
@@ -55,8 +55,8 @@ internal class ChallengesApiStepDefinitions
     [When("a POST request is sent to the /Challenges endpoint")]
     public async Task WhenAPostRequestIsSentToTheChallengesEndpoint()
     {
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ? 
-            await AnonymousClient.Challenges.CreateChallenge() : 
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ?
+            await AnonymousClient.Challenges.CreateChallenge() :
             await AnonymousClient.Challenges.CreateChallengeUnauthenticated();
     }
 
