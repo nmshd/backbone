@@ -12,9 +12,7 @@ Message _$MessageFromJson(Map<String, dynamic> json) => Message(
       senderDevice: json['senderDevice'] as String,
       sendDate: DateTime.parse(json['sendDate'] as String),
       numberOfAttachments: (json['numberOfAttachments'] as num).toInt(),
-      recipients: (json['recipients'] as List<dynamic>)
-          .map(MessageRecipient.fromJson)
-          .toList(),
+      recipients: (json['recipients'] as List<dynamic>).map(MessageRecipient.fromJson).toList(),
     );
 
 Map<String, dynamic> _$MessageToJson(Message instance) => <String, dynamic>{
@@ -26,12 +24,10 @@ Map<String, dynamic> _$MessageToJson(Message instance) => <String, dynamic>{
       'recipients': instance.recipients,
     };
 
-MessageRecipient _$MessageRecipientFromJson(Map<String, dynamic> json) =>
-    MessageRecipient(
+MessageRecipient _$MessageRecipientFromJson(Map<String, dynamic> json) => MessageRecipient(
       address: json['address'] as String,
     );
 
-Map<String, dynamic> _$MessageRecipientToJson(MessageRecipient instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$MessageRecipientToJson(MessageRecipient instance) => <String, dynamic>{
       'address': instance.address,
     };

@@ -6,21 +6,17 @@ part of 'identity_deletion_process_audit_log_entry.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-IdentityDeletionProcessAuditLogEntry
-    _$IdentityDeletionProcessAuditLogEntryFromJson(Map<String, dynamic> json) =>
-        IdentityDeletionProcessAuditLogEntry(
-          id: json['id'] as String,
-          createdAt: DateTime.parse(json['createdAt'] as String),
-          messageKey: json['messageKey'] as String,
-          newStatus: json['newStatus'] as String,
-          additionalData:
-              Map<String, String>.from(json['additionalData'] as Map),
-          oldStatus: json['oldStatus'] as String?,
-        );
+IdentityDeletionProcessAuditLogEntry _$IdentityDeletionProcessAuditLogEntryFromJson(Map<String, dynamic> json) =>
+    IdentityDeletionProcessAuditLogEntry(
+      id: json['id'] as String,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      messageKey: json['messageKey'] as String,
+      newStatus: json['newStatus'] as String,
+      additionalData: Map<String, String>.from(json['additionalData'] as Map),
+      oldStatus: json['oldStatus'] as String?,
+    );
 
-Map<String, dynamic> _$IdentityDeletionProcessAuditLogEntryToJson(
-        IdentityDeletionProcessAuditLogEntry instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$IdentityDeletionProcessAuditLogEntryToJson(IdentityDeletionProcessAuditLogEntry instance) => <String, dynamic>{
       'id': instance.id,
       'createdAt': instance.createdAt.toIso8601String(),
       'messageKey': instance.messageKey,
