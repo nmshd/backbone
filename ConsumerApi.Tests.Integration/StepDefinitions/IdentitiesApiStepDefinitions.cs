@@ -7,7 +7,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
-using Backbone.ConsumerApi.Tests.Integration.Support;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
 using Microsoft.Extensions.Options;
@@ -50,6 +49,13 @@ internal class IdentitiesApiStepDefinitions
         await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identityName);
     }
 
+    [Given(@"Identities ([a-zA-Z0-9, ]+)")]
+    public void GivenIdentities(string identityNames)
+    {
+        foreach (var identityName in SplitNames(identityNames))
+            _identitiesContext.Identities[identityName] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD).Result;
+    }
+
     [Given("the user is unauthenticated")]
     public void GivenTheUserIsUnauthenticated()
     {
@@ -82,18 +88,11 @@ internal class IdentitiesApiStepDefinitions
         _responseContext.StartDeletionProcessResponse = await Identity(identityName).Identities.StartDeletionProcess();
         StartDeletionProcessResponse.Should().BeASuccess();
     }
-
-    [Given(@"Identities ([a-zA-Z0-9, ]+)")]
-    public void GivenIdentities(string identityNames)
-    {
-        foreach (var identityName in SplitNames(identityNames))
-            _identitiesContext.Identities[identityName] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD).Result;
-    }
     #endregion
 
     #region When
-    [When("a POST request is sent to the Identities endpoint with a valid signature on c")]
-    public async Task WhenAPOSTRequestIsSentToTheIdentitiesEndpoint()
+    [When("a POST request is sent to the /Identities endpoint with a valid signature on c")]
+    public async Task WhenAPostRequestIsSentToTheIdentitiesEndpoint()
     {
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
         var identityKeyPair = signatureHelper.CreateKeyPair();
@@ -120,7 +119,7 @@ internal class IdentitiesApiStepDefinitions
     }
 
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Identities/Self/DeletionProcesses endpoint")]
-    public async Task WhenIdentitySendsAPOSTRequestToTheIdentitiesSelfDeletionProcessesEndpoint(string identityName)
+    public async Task WhenISendsAPostRequestToTheIdentitiesSelfDeletionProcessesEndpoint(string identityName)
     {
         _responseContext.WhenResponse = _responseContext.StartDeletionProcessResponse = await Identity(identityName).Identities.StartDeletionProcess();
     }
@@ -130,13 +129,7 @@ internal class IdentitiesApiStepDefinitions
     {
         _responseContext.WhenResponse = _responseContext.CancelDeletionProcessResponse = await Identity(identityName).Identities.CancelDeletionProcess(ActiveDeletionProcessId(identityName));
     }
-
     #endregion
-
-    private static List<string> SplitNames(string identityNames)
-    {
-        return identityNames.Split([", ", " and "], StringSplitOptions.RemoveEmptyEntries).ToList();
-    }
 }
 
 public class IdentitiesContext

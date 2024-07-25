@@ -24,17 +24,10 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Scope(Feature = "POST Device")]
 internal class DevicesStepDefinitions
 {
-    private Client _sdk = null!;
     private readonly ClientCredentials _clientCredentials;
     private readonly HttpClient _httpClient;
 
-    private ApiResponse<EmptyResponse>? _deletionResponse;
-    private ApiResponse<EmptyResponse>? _updateResponse;
-
     private string? _communicationLanguage;
-    private string? _deviceIdD1;
-    private string? _deviceIdD2;
-    private const string NON_EXISTENT_DEVICE_ID = "DVC00000000000000000";
 
     private readonly DevicesContext _devicesContext;
     private readonly IdentitiesContext _identitiesContext;
@@ -54,6 +47,7 @@ internal class DevicesStepDefinitions
     private DeviceData Device(string deviceName) => _devicesContext.Devices[deviceName];
     private Client Identity(string identityName) => _identitiesContext.Identities[identityName];
 
+    #region Given
     [Given("an Identity ([a-zA-Z0-9]+) with a device ([a-zA-Z0-9]+)")]
     public async Task GivenAnIdentityIWithADevice(string identityName, string deviceName)
     {
@@ -61,8 +55,8 @@ internal class DevicesStepDefinitions
         _devicesContext.Devices.Add(deviceName, Identity(identityName).DeviceData!);
     }
 
-    [Given(@"an Identity ([a-zA-Z0-9]+) with devices? ([a-zA-Z0-9, ]+)")]
-    public async Task GivenAnIdentityIWithDevicesDAndD(string identityName, string deviceNames)
+    [Given(@"an Identity ([a-zA-Z0-9]+) with devices ([a-zA-Z0-9, ]+)")]
+    public async Task GivenAnIdentityIWithDevices(string identityName, string deviceNames)
     {
         await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identityName);
 
@@ -76,7 +70,9 @@ internal class DevicesStepDefinitions
         var client = await Identity(identityName).OnboardNewDevice("deviceTwoPassword");
         _devicesContext.Devices.Add(deviceName, client.DeviceData!);
     }
+    #endregion
 
+    #region When
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Devices endpoint")]
     public async Task WhenISendsAPOSTRequestToTheDevicesEndpoint(string identityName)
     {
@@ -89,7 +85,7 @@ internal class DevicesStepDefinitions
         });
     }
 
-    [When(@"([a-zA-Z0-9]+) sends a PUT request to the Devices/Self endpoint with the communication language '(.*)'")]
+    [When(@"([a-zA-Z0-9]+) sends a PUT request to the /Devices/Self endpoint with the communication language '(.*)'")]
     public async Task WhenISendsAPutRequestToTheDevicesSelfEndpointWithTheCommunicationLanguage(string identityName, string communicationLanguage)
     {
         _communicationLanguage = communicationLanguage;
@@ -98,14 +94,14 @@ internal class DevicesStepDefinitions
         _responseContext.WhenResponse = _responseContext.UpdateDeviceResponse = await Identity(identityName).Devices.UpdateActiveDevice(request);
     }
 
-    [When("([a-zA-Z0-9]+) sends a PUT request to the Devices/Self endpoint with a non-existent language code")]
+    [When("([a-zA-Z0-9]+) sends a PUT request to the /Devices/Self endpoint with a non-existent language code")]
     public async Task WhenISendsAPutRequestToTheDeviceSelfEndpointWithAnInvalidPayload(string identityName)
     {
         var request = new UpdateActiveDeviceRequest { CommunicationLanguage = "xz" };
         _responseContext.WhenResponse = _responseContext.UpdateDeviceResponse = await Identity(identityName).Devices.UpdateActiveDevice(request);
     }
 
-    [When(@"([a-zA-Z0-9]+) sends a PUT request to the Devices/Self/Password endpoint with the new password '([^']*)'")]
+    [When(@"([a-zA-Z0-9]+) sends a PUT request to the /Devices/Self/Password endpoint with the new password '([^']*)'")]
     public async Task WhenISendsAPutRequestToTheDevicesSelfPasswordEndpointWithTheNewPassword(string identityName, string newPassword)
     {
         var oldPassword = Identity(identityName).DeviceData!.UserCredentials.Password;
@@ -114,32 +110,26 @@ internal class DevicesStepDefinitions
         _responseContext.WhenResponse = await Identity(identityName).Devices.ChangePassword(request);
     }
 
-    [When("([a-zA-Z0-9]+) sends a DELETE request to the Devices/{id} endpoint with ([a-zA-Z0-9]+).Id")]
+    [When("([a-zA-Z0-9]+) sends a DELETE request to the /Devices/{id} endpoint with ([a-zA-Z0-9]+).Id")]
     public async Task WhenISendsADeleteRequestToTheDeviceIdEndpointWithTheDeviceId(string identityName, string deviceName)
     {
         _responseContext.WhenResponse = _responseContext.DeleteDeviceResponse = await Identity(identityName).Devices.DeleteDevice(Device(deviceName).DeviceId);
     }
 
-    [When("([a-zA-Z0-9]+) sends a DELETE request to the Devices/{id} endpoint with a non existent id")]
+    [When("([a-zA-Z0-9]+) sends a DELETE request to the /Devices/{id} endpoint with a non existent id")]
     public async Task WhenISendsADeleteRequestToTheDeviceIdEndpointWithNonExistentId(string identityName)
     {
         _responseContext.WhenResponse = _responseContext.DeleteDeviceResponse = await Identity(identityName).Devices.DeleteDevice(NON_EXISTENT_DEVICE_ID);
     }
+    #endregion
 
+    #region Then
     [Then("the device on the Backbone of ([a-zA-Z0-9]+) has the new communication language")]
     public async Task ThenTheDeviceOnTheBackboneOfIHasTheNewCommunicationLanguage(string identityName)
     {
         var response = await ListDevices(identityName);
         response.Result!.Count.Should().Be(1);
         response.Result!.First().CommunicationLanguage.Should().Be(_communicationLanguage);
-    }
-
-    protected async Task<ApiResponse<ListDevicesResponse>> ListDevices(string identityName = "i")
-    {
-        var response = await Identity(identityName).Devices.ListDevices();
-        response.Should().BeASuccess();
-
-        return response;
     }
 
     [Then("([a-zA-Z0-9]+) of ([a-zA-Z0-9]+) is deleted")]
@@ -151,10 +141,19 @@ internal class DevicesStepDefinitions
     }
 
     [Then("([a-zA-Z0-9]+) of ([a-zA-Z0-9]+) is not deleted")]
-    public async Task ThenDIsNotDeleted(string deviceName, string identityName)
+    public async Task ThenDOfIsNotDeleted(string deviceName, string identityName)
     {
         var response = await ListDevices(identityName);
         response.Result!.Where(d => d.Id == Device(deviceName).DeviceId).Should().NotBeEmpty();
+    }
+    #endregion
+
+    protected async Task<ApiResponse<ListDevicesResponse>> ListDevices(string identityName = "i")
+    {
+        var response = await Identity(identityName).Devices.ListDevices();
+        response.Should().BeASuccess();
+
+        return response;
     }
 }
 

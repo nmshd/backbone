@@ -22,13 +22,12 @@ internal class ChallengesApiStepDefinitions
 
     private Client AnonymousClient => _identitiesContext.AnonymousClient!;
     private Client Identity(string identityName) => _identitiesContext.Identities[identityName];
-
     private string ChallengeId => _challengesContext.ChallengeId!;
     private ApiResponse<Challenge> ChallengeResponse => _responseContext.ChallengeResponse!;
 
     #region Given
     [Given("a Challenge c created by (.+)")]
-    public async Task GivenAChallengeCreatedByIdentity(string identityName)
+    public async Task GivenAChallengeCreatedByI(string identityName)
     {
         _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ? 
             await Identity(identityName).Challenges.CreateChallenge() : 
@@ -53,8 +52,8 @@ internal class ChallengesApiStepDefinitions
     #endregion
 
     #region When
-    [When("a POST request is sent to the Challenges endpoint")]
-    public async Task WhenAPOSTRequestIsSentToTheChallengesEndpoint()
+    [When("a POST request is sent to the /Challenges endpoint")]
+    public async Task WhenAPostRequestIsSentToTheChallengesEndpoint()
     {
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ? 
             await AnonymousClient.Challenges.CreateChallenge() : 
@@ -62,15 +61,15 @@ internal class ChallengesApiStepDefinitions
     }
 
     [When(@"(.+) sends a POST request to the /Challenges endpoint")]
-    public async Task WhenISendsAPOSTRequestToTheChallengesEndpoint(string identityName)
+    public async Task WhenISendsAPostRequestToTheChallengesEndpoint(string identityName)
     {
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ?
             await Identity(identityName).Challenges.CreateChallenge() :
             await Identity(identityName).Challenges.CreateChallengeUnauthenticated();
     }
 
-    [When(@"(.+) sends a GET request is sent to the Challenges/{id} endpoint with ""?(.*?)""?")]
-    public async Task WhenAGETRequestIsSentToTheChallengesIdEndpointWith(string identityName, string challengeId)
+    [When(@"(.+) sends a GET request is sent to the /Challenges/{id} endpoint with ""?(.*?)""?")]
+    public async Task WhenISendsAGetRequestToTheChallengesIdEndpointWith(string identityName, string challengeId)
     {
         switch (challengeId)
         {
