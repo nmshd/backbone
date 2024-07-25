@@ -96,4 +96,9 @@ public static class Utils
 
         return getMessageResponse.Result!;
     }
+
+    public static List<string> SplitNames(string names)
+    {
+        return names.Split([", ", " and "], StringSplitOptions.RemoveEmptyEntries).ToList();
+    }
 }

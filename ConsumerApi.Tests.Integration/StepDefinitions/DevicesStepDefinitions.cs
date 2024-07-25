@@ -61,6 +61,15 @@ internal class DevicesStepDefinitions
         _devicesContext.Devices.Add(deviceName, Identity(identityName).DeviceData!);
     }
 
+    [Given(@"an Identity ([a-zA-Z0-9]+) with devices? ([a-zA-Z0-9, ]+)")]
+    public async Task GivenAnIdentityIWithDevicesDAndD(string identityName, string deviceNames)
+    {
+        await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identityName);
+
+        foreach (var deviceName in SplitNames(deviceNames))
+            _devicesContext.Devices.Add(deviceName, Identity(identityName).DeviceData!);
+    }
+
     [Given("an un-onboarded device ([a-zA-Z0-9]+) that belongs to ([a-zA-Z0-9]+)")]
     public async Task GivenAnUnOnboardedDeviceDThatBelongsToI(string deviceName, string identityName)
     {

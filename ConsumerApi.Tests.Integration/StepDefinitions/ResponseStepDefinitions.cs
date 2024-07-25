@@ -4,6 +4,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Responses;
+using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.ThrowHelpers;
@@ -31,7 +32,9 @@ internal class ResponseStepDefinitions
     private ApiResponse<CreateFileResponse>? FileUploadResponse => _responseContext.FileUploadResponse;
     private ApiResponse<CreateIdentityResponse>? CreateIdentityResponse => _responseContext.CreateIdentityResponse;
     private ApiResponse<StartDeletionProcessResponse>? StartDeletionProcessResponse => _responseContext.StartDeletionProcessResponse;
+    private ApiResponse<CancelDeletionProcessResponse>? CancelDeletionProcessResponse => _responseContext.CancelDeletionProcessResponse;
     private ApiResponse<SendMessageResponse>? SendMessageResponse => _responseContext.SendMessageResponse;
+    private ApiResponse<UpdateDeviceRegistrationResponse>? UpdateDeviceRegistrationResponse => _responseContext.UpdateDeviceRegistrationResponse;
 
     private IResponse? WhenResponse => _responseContext.WhenResponse;
 
@@ -86,6 +89,14 @@ internal class ResponseStepDefinitions
         StartDeletionProcessResponse!.Result.Should().NotBeNull();
         StartDeletionProcessResponse.Should().BeASuccess();
         await StartDeletionProcessResponse.Should().ComplyWithSchema();
+    }
+
+    [Then(@"the response status is '([^']*)'")]
+    public void ThenTheResponseStatusIs(string deletionProcessStatus)
+    {
+        CancelDeletionProcessResponse!.Result.Should().NotBeNull();
+        CancelDeletionProcessResponse.Should().BeASuccess();
+        CancelDeletionProcessResponse.Result!.Status.Should().Be(deletionProcessStatus);
     }
     #endregion
 
@@ -149,6 +160,14 @@ internal class ResponseStepDefinitions
     }
     #endregion
 
+    #region PnsRegistrations
+    [Then("the response contains the push identifier for the device")]
+    public void ThenTheResponseContainsThePushIdentifierForTheDevice()
+    {
+        UpdateDeviceRegistrationResponse!.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();
+    }
+    #endregion
+
     private void AssertExpirationDateIsInFuture()
     {
         _responseContext.ChallengeResponse!.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
@@ -164,8 +183,10 @@ public class ResponseContext
     public ApiResponse<CreateFileResponse>? FileUploadResponse { get; set; }
     public ApiResponse<CreateIdentityResponse>? CreateIdentityResponse { get; set; }
     public ApiResponse<StartDeletionProcessResponse>? StartDeletionProcessResponse { get; set; }
+    public ApiResponse<CancelDeletionProcessResponse>? CancelDeletionProcessResponse { get; set; }
     public ApiResponse<ListMessagesResponse>? GetMessagesResponse { get; set; }
     public ApiResponse<SendMessageResponse>? SendMessageResponse { get; set; }
+    public ApiResponse<UpdateDeviceRegistrationResponse>? UpdateDeviceRegistrationResponse { get; set; }
 
     public ApiResponse<Relationship>? TerminateRelationshipResponse { get; set; }
     public ApiResponse<RelationshipMetadata>? DecomposeRelationshipResponse { get; set; }

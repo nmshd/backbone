@@ -1,37 +1,24 @@
-﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.ConsumerApi.Sdk;
-using Backbone.ConsumerApi.Sdk.Authentication;
+﻿using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Requests;
-using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Responses;
-using Backbone.ConsumerApi.Tests.Integration.Configuration;
-using Backbone.ConsumerApi.Tests.Integration.Support;
-using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
-[Scope(Feature = "PUT /Devices/Self/PushNotifications")]
 internal class PnsRegistrationStepDefinitions
 {
-    private Client _sdk = null!;
-    private readonly ClientCredentials _clientCredentials;
-    private readonly HttpClient _httpClient;
-    private ApiResponse<UpdateDeviceRegistrationResponse>? _response;
+    private readonly IdentitiesContext _identitiesContext;
+    private readonly ResponseContext _responseContext;
 
-    public PnsRegistrationStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
+    public PnsRegistrationStepDefinitions(IdentitiesContext identitiesContext, ResponseContext responseContext)
     {
-        _httpClient = factory.CreateClient();
-        _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
+        _identitiesContext = identitiesContext;
+        _responseContext = responseContext;
     }
 
-    [Given("the user is authenticated")]
-    public async Task GivenTheUserIsAuthenticated()
-    {
-        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
-    }
+    private Client Identity(string identityName) => _identitiesContext.Identities[identityName];
 
-    [When("a PUT request is sent to the /Devices/Self/PushNotifications endpoint")]
-    public async Task WhenAPutRequestIsSentToTheDevicesSelfPushNotificationsEndpoint()
+    [When("([a-zA-Z0-9]+) sends a PUT request to the /Devices/Self/PushNotifications endpoint")]
+    public async Task WhenAPutRequestIsSentToTheDevicesSelfPushNotificationsEndpoint(string identityName)
     {
         var request = new UpdateDeviceRegistrationRequest
         {
@@ -40,18 +27,18 @@ internal class PnsRegistrationStepDefinitions
             AppId = "someAppId"
         };
 
-        _response = await _sdk.PushNotifications.RegisterForPushNotifications(request);
+        _responseContext.WhenResponse = _responseContext.UpdateDeviceRegistrationResponse = await Identity(identityName).PushNotifications.RegisterForPushNotifications(request);
     }
 
-    [Then(@"the response status code is (\d\d\d) \(.+\)")]
-    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
+    [When(@"([a-zA-Z0-9]+) sends a DELETE request to the /Devices/Self/PushNotifications endpoint")]
+    public async Task WhenADeleteRequestIsSentToTheDevicesSelfPushNotificationsEndpoint(string identityName)
     {
-        ((int)_response!.Status).Should().Be(expectedStatusCode);
+        _responseContext.WhenResponse = await Identity(identityName).PushNotifications.UnregisterFromPushNotifications();
     }
 
-    [Then("the response contains the push identifier for the device")]
-    public void ThenTheResponseContainsThePushIdentifierForTheDevice()
+    [When(@"([a-zA-Z0-9]+) sends a POST request to the /Devices/Self/PushNotifications/SendTestNotification endpoint")]
+    public async Task WhenISendsAPostRequestToTheDevicesSelfPushNotificationsSendTestNotificationEndpoint(string identityName)
     {
-        _response!.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();
+        _responseContext.WhenResponse = await Identity(identityName).PushNotifications.SendTestNotification(new object());
     }
 }

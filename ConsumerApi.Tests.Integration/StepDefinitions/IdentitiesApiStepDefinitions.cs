@@ -39,6 +39,7 @@ internal class IdentitiesApiStepDefinitions
 
     private Client AnonymousClient => _identitiesContext.AnonymousClient!;
     private Client Identity(string identityName) => _identitiesContext.Identities[identityName];
+    private string ActiveDeletionProcessId(string identityName) => _identitiesContext.ActiveDeletionProcesses[identityName];
     private ApiResponse<StartDeletionProcessResponse> StartDeletionProcessResponse => _responseContext.StartDeletionProcessResponse!;
 
     #region Given
@@ -62,7 +63,8 @@ internal class IdentitiesApiStepDefinitions
     [Given("an active deletion process for ([a-zA-Z0-9]+) exists")]
     public async Task GivenAnActiveDeletionProcessForTheIdentityExists(string identityName)
     {
-        await Identity(identityName).Identities.StartDeletionProcess();
+        var deletionProcess = await Identity(identityName).Identities.StartDeletionProcess();
+        _identitiesContext.ActiveDeletionProcesses.Add(identityName, deletionProcess.Result!.Id);
     }
 
     [Given("Identities ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+) with an established Relationship")]
@@ -81,7 +83,7 @@ internal class IdentitiesApiStepDefinitions
         StartDeletionProcessResponse.Should().BeASuccess();
     }
 
-    [Given(@"Identities ([a-zA-Z0-9]+)")]
+    [Given(@"Identities ([a-zA-Z0-9, ]+)")]
     public void GivenIdentities(string identityNames)
     {
         foreach (var identityName in SplitNames(identityNames))
@@ -122,6 +124,13 @@ internal class IdentitiesApiStepDefinitions
     {
         _responseContext.WhenResponse = _responseContext.StartDeletionProcessResponse = await Identity(identityName).Identities.StartDeletionProcess();
     }
+
+    [When(@"([a-zA-Z0-9]+) sends a PUT request to the /Identities/Self/DeletionProcesses/\{id} endpoint")]
+    public async Task WhenISendsAPutRequestToTheIdentitiesSelfDeletionProcessesIdEndpoint(string identityName)
+    {
+        _responseContext.WhenResponse = _responseContext.CancelDeletionProcessResponse = await Identity(identityName).Identities.CancelDeletionProcess(ActiveDeletionProcessId(identityName));
+    }
+
     #endregion
 
     private static List<string> SplitNames(string identityNames)
@@ -134,4 +143,5 @@ public class IdentitiesContext
 {
     public Client? AnonymousClient { get; set; }
     public readonly Dictionary<string, Client> Identities = new();
+    public readonly Dictionary<string, string> ActiveDeletionProcesses = new();
 }

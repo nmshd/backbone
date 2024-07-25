@@ -25,11 +25,11 @@ Scenario: Deleting a non existent Device
 	And d1 of i is not deleted
 
 # baseApi is not capable to handle multiple identities
-#Scenario: Deleting an un-onboarded Device of another Identity
-#	Given an Identity i1 with a device d1
-#	And the current user uses d1
-#	And an Identity i2 with a device d2
-#	And an un-onboarded device d3 belonging to i2
-#	When a DELETE request is sent to the Devices/{id} endpoint with d3.Id
-#	Then the response status code is 400 (Bad Request)
-#	And d3 is not deleted
+Scenario: Deleting an un-onboarded Device of another Identity
+	Given an Identity i1 with a device d1
+	#And the current user uses d1
+	And an Identity i2 with devices d2 and d3
+	#And an un-onboarded device d3 belonging to i2
+	When i1 sends a DELETE request to the Devices/{id} endpoint with d3.Id
+	Then the response status code is 400 (Bad Request)
+	And d3 of i2 is not deleted
