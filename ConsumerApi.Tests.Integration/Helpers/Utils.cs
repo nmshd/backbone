@@ -1,5 +1,7 @@
 ﻿using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
@@ -7,14 +9,28 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
+using Backbone.Crypto;
+using Backbone.Crypto.Implementations;
 using Backbone.Tooling.Extensions;
 using Backbone.UnitTestTools.Data;
+using Newtonsoft.Json;
 using static Backbone.ConsumerApi.Tests.Integration.Support.Constants;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Helpers;
 
 public static class Utils
 {
+    public static SignedChallenge CreateSignedChallenge(Client identity, Challenge challenge)
+    {
+        var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
+        var identityKeyPair = identity.IdentityData!.KeyPair;
+
+        var serializedChallenge = JsonConvert.SerializeObject(challenge);
+        var challengeSignature = signatureHelper.CreateSignature(identityKeyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
+
+        return new SignedChallenge(serializedChallenge, challengeSignature);
+    }
+
     public static void CreateUnauthenticated(IdentitiesContext identitiesContext, HttpClient httpClient, ClientCredentials clientCredentials)
     {
         identitiesContext.AnonymousClient = Client.CreateUnauthenticated(httpClient, clientCredentials);

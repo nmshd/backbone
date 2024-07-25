@@ -69,7 +69,6 @@ internal class ChallengesApiStepDefinitions
             await Identity(identityName).Challenges.CreateChallengeUnauthenticated();
     }
 
-
     [When(@"(.+) sends a GET request is sent to the Challenges/{id} endpoint with ""?(.*?)""?")]
     public async Task WhenAGETRequestIsSentToTheChallengesIdEndpointWith(string identityName, string challengeId)
     {

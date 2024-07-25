@@ -1,18 +1,27 @@
 ﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Support;
+using Backbone.Crypto;
+using Backbone.Crypto.Implementations;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using static Backbone.ConsumerApi.Tests.Integration.Helpers.Utils;
+using static Backbone.ConsumerApi.Tests.Integration.Support.Constants;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "DELETE Device")]
 [Scope(Feature = "UPDATE Device")]
+[Scope(Feature = "POST Device")]
 internal class DevicesStepDefinitions
 {
     private Client _sdk = null!;
@@ -27,120 +36,120 @@ internal class DevicesStepDefinitions
     private string? _deviceIdD2;
     private const string NON_EXISTENT_DEVICE_ID = "DVC00000000000000000";
 
-    public DevicesStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
+    private readonly DevicesContext _devicesContext;
+    private readonly IdentitiesContext _identitiesContext;
+    private readonly ResponseContext _responseContext;
+
+    public DevicesStepDefinitions(DevicesContext devicesContext, IdentitiesContext identitiesContext, ResponseContext responseContext, HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
     {
         _httpClient = factory.CreateClient();
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
+
+        _devicesContext = devicesContext;
+        _identitiesContext = identitiesContext;
+        _responseContext = responseContext;
     }
 
-    [Given("an Identity i with a device d1?")]
-    public async Task GivenAnIdentityIWithADevice()
+    private Challenge Challenge => _responseContext.ChallengeResponse!.Result!;
+    private DeviceData Device(string deviceName) => _devicesContext.Devices[deviceName];
+    private Client Identity(string identityName) => _identitiesContext.Identities[identityName];
+
+    [Given("an Identity ([a-zA-Z0-9]+) with a device ([a-zA-Z0-9]+)")]
+    public async Task GivenAnIdentityIWithADevice(string identityName, string deviceName)
     {
-        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
-        _deviceIdD1 = _sdk.DeviceData!.DeviceId;
+        await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identityName);
+        _devicesContext.Devices.Add(deviceName, Identity(identityName).DeviceData!);
     }
 
-    [Given("an un-onboarded device d2")]
-    public async Task GivenAnUnOnboardedDeviceD2()
+    [Given("an un-onboarded device ([a-zA-Z0-9]+) that belongs to ([a-zA-Z0-9]+)")]
+    public async Task GivenAnUnOnboardedDeviceDThatBelongsToI(string deviceName, string identityName)
     {
-        var client = await _sdk.OnboardNewDevice("deviceTwoPassword");
-        _deviceIdD2 = client.DeviceData!.DeviceId;
+        var client = await Identity(identityName).OnboardNewDevice("deviceTwoPassword");
+        _devicesContext.Devices.Add(deviceName, client.DeviceData!);
     }
 
-    [When("a DELETE request is sent to the Devices/{id} endpoint with d1?.Id")]
-    public async Task WhenADeleteRequestIsSentToTheDeviceIdEndpointWithTheDeviceId()
+    [When(@"([a-zA-Z0-9]+) sends a POST request to the /Devices endpoint")]
+    public async Task WhenISendsAPOSTRequestToTheDevicesEndpoint(string identityName)
     {
-        _deletionResponse = await _sdk.Devices.DeleteDevice(_deviceIdD1!);
+        var signedChallenge = CreateSignedChallenge(Identity(identityName), Challenge);
+
+        _responseContext.WhenResponse = _responseContext.RegisterDeviceResponse = await Identity(identityName).Devices.RegisterDevice(new RegisterDeviceRequest
+        {
+            DevicePassword = DEVICE_PASSWORD,
+            SignedChallenge = signedChallenge
+        });
     }
 
-    [When("a DELETE request is sent to the Devices/{id} endpoint with d2.Id")]
-    public async Task WhenADeleteRequestIsSentToTheDeviceIdEndpointWithD2Id()
-    {
-        _deletionResponse = await _sdk.Devices.DeleteDevice(_deviceIdD2!);
-    }
-
-    [When("a DELETE request is sent to the Devices/{id} endpoint with a non existent id")]
-    public async Task WhenADeleteRequestIsSentToTheDeviceIdEndpointWithNonExistentId()
-    {
-        _deletionResponse = await _sdk.Devices.DeleteDevice(NON_EXISTENT_DEVICE_ID);
-    }
-
-    [When("a PUT request is sent to the Devices/Self endpoint with the communication language '(.*)'")]
-    public async Task WhenAPutRequestIsSentToTheDeviceSelfEndpointWithAValidPayload(string communicationLanguage)
+    [When(@"([a-zA-Z0-9]+) sends a PUT request to the Devices/Self endpoint with the communication language '(.*)'")]
+    public async Task WhenISendsAPutRequestToTheDevicesSelfEndpointWithTheCommunicationLanguage(string identityName, string communicationLanguage)
     {
         _communicationLanguage = communicationLanguage;
         var request = new UpdateActiveDeviceRequest { CommunicationLanguage = _communicationLanguage };
-        _updateResponse = await _sdk.Devices.UpdateActiveDevice(request);
+
+        _responseContext.WhenResponse = _responseContext.UpdateDeviceResponse = await Identity(identityName).Devices.UpdateActiveDevice(request);
     }
 
-    [When("a PUT request is sent to the Devices/Self endpoint with a non-existent language code")]
-    public async Task WhenAPutRequestIsSentToTheDeviceSelfEndpointWithAnInvalidPayload()
+    [When("([a-zA-Z0-9]+) sends a PUT request to the Devices/Self endpoint with a non-existent language code")]
+    public async Task WhenISendsAPutRequestToTheDeviceSelfEndpointWithAnInvalidPayload(string identityName)
     {
         var request = new UpdateActiveDeviceRequest { CommunicationLanguage = "xz" };
-        _updateResponse = await _sdk.Devices.UpdateActiveDevice(request);
+        _responseContext.WhenResponse = _responseContext.UpdateDeviceResponse = await Identity(identityName).Devices.UpdateActiveDevice(request);
     }
 
-    [Then(@"the response status code is (\d\d\d) \(.+\)")]
-    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
+    [When(@"([a-zA-Z0-9]+) sends a PUT request to the Devices/Self/Password endpoint with the new password '([^']*)'")]
+    public async Task WhenISendsAPutRequestToTheDevicesSelfPasswordEndpointWithTheNewPassword(string identityName, string newPassword)
     {
-        if (_deletionResponse != null)
-            ((int)_deletionResponse!.Status).Should().Be(expectedStatusCode);
+        var oldPassword = Identity(identityName).DeviceData!.UserCredentials.Password;
+        var request = new ChangePasswordRequest { OldPassword = oldPassword, NewPassword = newPassword };
 
-        if (_updateResponse != null)
-            ((int)_updateResponse!.Status).Should().Be(expectedStatusCode);
+        _responseContext.WhenResponse = await Identity(identityName).Devices.ChangePassword(request);
     }
 
-    [Then(@"the response content contains an error with the error code ""([^""]*)""")]
-    public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
+    [When("([a-zA-Z0-9]+) sends a DELETE request to the Devices/{id} endpoint with ([a-zA-Z0-9]+).Id")]
+    public async Task WhenISendsADeleteRequestToTheDeviceIdEndpointWithTheDeviceId(string identityName, string deviceName)
     {
-        if (_deletionResponse != null)
-        {
-            _deletionResponse!.Error.Should().NotBeNull();
-            _deletionResponse.Error!.Code.Should().Be(errorCode);
-        }
-
-        if (_updateResponse != null)
-        {
-            _updateResponse!.Error.Should().NotBeNull();
-            _updateResponse.Error!.Code.Should().Be(errorCode);
-        }
+        _responseContext.WhenResponse = _responseContext.DeleteDeviceResponse = await Identity(identityName).Devices.DeleteDevice(Device(deviceName).DeviceId);
     }
 
-    [Then("the device on the Backbone has the new communication language")]
-    public async Task ThenTheDeviceOnTheBackboneHasTheNewCommunicationLanguage()
+    [When("([a-zA-Z0-9]+) sends a DELETE request to the Devices/{id} endpoint with a non existent id")]
+    public async Task WhenISendsADeleteRequestToTheDeviceIdEndpointWithNonExistentId(string identityName)
     {
-        var response = await ListDevices();
+        _responseContext.WhenResponse = _responseContext.DeleteDeviceResponse = await Identity(identityName).Devices.DeleteDevice(NON_EXISTENT_DEVICE_ID);
+    }
+
+    [Then("the device on the Backbone of ([a-zA-Z0-9]+) has the new communication language")]
+    public async Task ThenTheDeviceOnTheBackboneOfIHasTheNewCommunicationLanguage(string identityName)
+    {
+        var response = await ListDevices(identityName);
         response.Result!.Count.Should().Be(1);
         response.Result!.First().CommunicationLanguage.Should().Be(_communicationLanguage);
     }
 
-    [Then("d is not deleted")]
-    public async Task ThenDIsNotDeleted()
+    protected async Task<ApiResponse<ListDevicesResponse>> ListDevices(string identityName = "i")
     {
-        var response = await ListDevices();
-        response.Result!.Where(d => d.Id == _deviceIdD1).Should().NotBeEmpty();
-    }
-
-    [Then("d1 is not deleted")]
-    public async Task ThenD1IsNotDeleted()
-    {
-        var response = await ListDevices();
-        response.Result!.Where(d => d.Id == _deviceIdD1).Should().NotBeEmpty();
-    }
-
-    [Then("d2 is deleted")]
-    public async Task ThenD2IsDeleted()
-    {
-        var response = await ListDevices();
-        response.Result!.Count.Should().Be(1);
-        response.Result!.First().Id.Should().NotBe(_deviceIdD2);
-    }
-
-    protected async Task<ApiResponse<ListDevicesResponse>> ListDevices()
-    {
-        var response = await _sdk.Devices.ListDevices();
+        var response = await Identity(identityName).Devices.ListDevices();
         response.Should().BeASuccess();
 
         return response;
     }
+
+    [Then("([a-zA-Z0-9]+) of ([a-zA-Z0-9]+) is deleted")]
+    public async Task ThenDOfIIsDeleted(string deviceName, string identityName)
+    {
+        var response = await ListDevices(identityName);
+        response.Result!.Count.Should().Be(1);
+        response.Result!.First().Id.Should().NotBe(Device(deviceName).DeviceId);
+    }
+
+    [Then("([a-zA-Z0-9]+) of ([a-zA-Z0-9]+) is not deleted")]
+    public async Task ThenDIsNotDeleted(string deviceName, string identityName)
+    {
+        var response = await ListDevices(identityName);
+        response.Result!.Where(d => d.Id == Device(deviceName).DeviceId).Should().NotBeEmpty();
+    }
+}
+
+public class DevicesContext
+{
+    public readonly Dictionary<string, DeviceData> Devices = new();
 }

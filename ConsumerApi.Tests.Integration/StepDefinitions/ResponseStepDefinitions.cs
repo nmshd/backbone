@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Responses;
@@ -24,6 +25,9 @@ internal class ResponseStepDefinitions
     }
 
     private ApiResponse<Challenge>? ChallengeResponse => _responseContext.ChallengeResponse;
+    private ApiResponse<RegisterDeviceResponse>? RegisterDeviceResponse => _responseContext.RegisterDeviceResponse;
+    private ApiResponse<EmptyResponse>? UpdateDeviceResponse => _responseContext.UpdateDeviceResponse;
+    private ApiResponse<EmptyResponse>? DeleteDeviceResponse => _responseContext.DeleteDeviceResponse;
     private ApiResponse<CreateFileResponse>? FileUploadResponse => _responseContext.FileUploadResponse;
     private ApiResponse<CreateIdentityResponse>? CreateIdentityResponse => _responseContext.CreateIdentityResponse;
     private ApiResponse<StartDeletionProcessResponse>? StartDeletionProcessResponse => _responseContext.StartDeletionProcessResponse;
@@ -54,6 +58,16 @@ internal class ResponseStepDefinitions
         ChallengeResponse!.ContentType.Should().Be("application/json");
         await ChallengeResponse.Should().ComplyWithSchema();
         AssertExpirationDateIsInFuture();
+    }
+    #endregion
+
+    #region Devices
+    [Then(@"the response contains a Device")]
+    public async Task ThenTheResponseContainsADevice()
+    {
+        RegisterDeviceResponse!.Result.Should().NotBeNull();
+        RegisterDeviceResponse.Should().BeASuccess();
+        await RegisterDeviceResponse.Should().ComplyWithSchema();
     }
     #endregion
 
@@ -143,15 +157,18 @@ internal class ResponseStepDefinitions
 
 public class ResponseContext
 {
-    public ApiResponse<Challenge>? ChallengeResponse { get; set; } = null!;
-    public ApiResponse<CreateFileResponse>? FileUploadResponse { get; set; } = null!;
-    public ApiResponse<CreateIdentityResponse>? CreateIdentityResponse { get; set; } = null!;
+    public ApiResponse<Challenge>? ChallengeResponse { get; set; }
+    public ApiResponse<RegisterDeviceResponse>? RegisterDeviceResponse { get; set; }
+    public ApiResponse<EmptyResponse>? UpdateDeviceResponse { get; set; }
+    public ApiResponse<EmptyResponse>? DeleteDeviceResponse { get; set; }
+    public ApiResponse<CreateFileResponse>? FileUploadResponse { get; set; }
+    public ApiResponse<CreateIdentityResponse>? CreateIdentityResponse { get; set; }
     public ApiResponse<StartDeletionProcessResponse>? StartDeletionProcessResponse { get; set; }
     public ApiResponse<ListMessagesResponse>? GetMessagesResponse { get; set; }
-    public ApiResponse<SendMessageResponse>? SendMessageResponse { get; set; } = null!;
+    public ApiResponse<SendMessageResponse>? SendMessageResponse { get; set; }
 
-    public ApiResponse<Relationship>? TerminateRelationshipResponse { get; set; } = null!;
-    public ApiResponse<RelationshipMetadata>? DecomposeRelationshipResponse { get; set; } = null!;
+    public ApiResponse<Relationship>? TerminateRelationshipResponse { get; set; }
+    public ApiResponse<RelationshipMetadata>? DecomposeRelationshipResponse { get; set; }
 
-    public IResponse? WhenResponse { get; set; } = null!;
+    public IResponse? WhenResponse { get; set; }
 }

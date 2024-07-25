@@ -42,7 +42,7 @@ internal class IdentitiesApiStepDefinitions
     private ApiResponse<StartDeletionProcessResponse> StartDeletionProcessResponse => _responseContext.StartDeletionProcessResponse!;
 
     #region Given
-    [Given(@"Identity (.+)")]
+    [Given(@"Identity ([a-zA-Z0-9]+)")]
     public async Task GivenIdentity(string identityName)
     {
         _challengesContext.IsAuthenticated = true;
@@ -59,13 +59,13 @@ internal class IdentitiesApiStepDefinitions
     [Given("no active deletion process for the identity exists")]
     public void GivenNoActiveDeletionProcessForTheUserExists() { }
 
-    [Given("an active deletion process for (.+) exists")]
+    [Given("an active deletion process for ([a-zA-Z0-9]+) exists")]
     public async Task GivenAnActiveDeletionProcessForTheIdentityExists(string identityName)
     {
         await Identity(identityName).Identities.StartDeletionProcess();
     }
 
-    [Given("Identities (.+) and (.+) with an established Relationship")]
+    [Given("Identities ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+) with an established Relationship")]
     public async Task GivenIdentitiesI1AndI2WithAnEstablishedRelationship(string identity1Name, string identity2Name)
     {
         await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identity1Name);
@@ -74,18 +74,18 @@ internal class IdentitiesApiStepDefinitions
         await EstablishRelationshipBetween(Identity(identity1Name), Identity(identity2Name));
     }
 
-    [Given("(.+) is in status \"ToBeDeleted\"")]
+    [Given("([a-zA-Z0-9]+) is in status \"ToBeDeleted\"")]
     public async Task GivenIdentityIsToBeDeleted(string identityName)
     {
         _responseContext.StartDeletionProcessResponse = await Identity(identityName).Identities.StartDeletionProcess();
         StartDeletionProcessResponse.Should().BeASuccess();
     }
 
-    [Given(@"Identities (.+)")]
+    [Given(@"Identities ([a-zA-Z0-9]+)")]
     public void GivenIdentities(string identityNames)
     {
         foreach (var identityName in SplitNames(identityNames))
-            _identitiesContext.Identities[identityName] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
+            _identitiesContext.Identities[identityName] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD).Result;
     }
     #endregion
 
@@ -117,7 +117,7 @@ internal class IdentitiesApiStepDefinitions
         _responseContext.WhenResponse = _responseContext.CreateIdentityResponse = await AnonymousClient.Identities.CreateIdentity(createIdentityPayload);
     }
 
-    [When(@"(.+) sends a POST request to the /Identities/Self/DeletionProcesses endpoint")]
+    [When(@"([a-zA-Z0-9]+) sends a POST request to the /Identities/Self/DeletionProcesses endpoint")]
     public async Task WhenIdentitySendsAPOSTRequestToTheIdentitiesSelfDeletionProcessesEndpoint(string identityName)
     {
         _responseContext.WhenResponse = _responseContext.StartDeletionProcessResponse = await Identity(identityName).Identities.StartDeletionProcess();
