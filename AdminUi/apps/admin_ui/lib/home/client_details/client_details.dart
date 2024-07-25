@@ -18,7 +18,7 @@ class ClientDetails extends StatefulWidget {
 }
 
 class _ClientDetailsState extends State<ClientDetails> {
-  Identity? _identityDetails;
+  Client? _clientDetails;
   List<TierOverview>? _tiers;
   String? _selectedTier;
 
@@ -43,9 +43,9 @@ class _ClientDetailsState extends State<ClientDetails> {
 
   @override
   Widget build(BuildContext context) {
-    if (_identityDetails == null || _tiers == null) return const Center(child: CircularProgressIndicator());
+    if (_clientDetails == null || _tiers == null) return const Center(child: CircularProgressIndicator());
 
-    final identityDetails = _identityDetails!;
+    final clientDetails = _clientDetails!;
     return Scrollbar(
       controller: _scrollController,
       child: SingleChildScrollView(
@@ -55,7 +55,7 @@ class _ClientDetailsState extends State<ClientDetails> {
           children: [
             if (Platform.isMacOS || Platform.isWindows) const BackButton(),
             _ClientDetailsCard(
-              identityDetails: identityDetails,
+              clientDetails: clientDetails,
               selectedTier: _selectedTier,
               onTierChanged: (String? newValue) {
                 setState(() {
@@ -72,11 +72,11 @@ class _ClientDetailsState extends State<ClientDetails> {
   }
 
   Future<void> _reloadIdentity() async {
-    final identityDetails = await GetIt.I.get<AdminApiClient>().identities.getIdentity(widget.address);
+    final clientDetails = await GetIt.I.get<AdminApiClient>().clients.getClient(widget.address);
     if (mounted) {
       setState(() {
-        _identityDetails = identityDetails.data;
-        _selectedTier = _identityDetails!.tierId;
+        _clientDetails = clientDetails.data;
+        _selectedTier = _clientDetails!.defaultTier;
       });
     }
   }
