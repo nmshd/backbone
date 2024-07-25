@@ -9,11 +9,12 @@ ide:
   intellij:
     enabled: false
 
-scripts:
+command:
   format:
-    run: melos exec -- "dart format . --set-exit-if-changed -l 150"
-    description: Run `dart format .` in all packages
+    lineLength: 150
+    setExitIfChanged: true
 
+scripts:
   test:
     # Only run the test command when the package has a test directory
     run: melos exec --dir-exists=test --flutter -- "flutter test" && melos exec --dir-exists=test --no-flutter -- "dart test"

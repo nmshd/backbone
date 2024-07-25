@@ -5,8 +5,8 @@ namespace Backbone.ConsumerApi.Tests.Integration.Extensions;
 
 public static class ApiResponseExtensions
 {
-    public static ApiResponseAssertions<T> Should<T>(this ApiResponse<T> instance)
+    public static ApiResponseAssertions<T> Should<T>(this ApiResponse<T> actualValue)
     {
-        return new ApiResponseAssertions<T>(instance);
+        return new ApiResponseAssertions<T>(actualValue);
     }
 }

@@ -18,5 +18,8 @@ public class RecipientInformationEntityTypeConfiguration : EntityEntityTypeConfi
         builder
             .Property(r => r.EncryptedKey)
             .IsRequired();
+
+        builder.Property(r => r.IsRelationshipDecomposedByRecipient);
+        builder.Property(r => r.IsRelationshipDecomposedBySender);
     }
 }

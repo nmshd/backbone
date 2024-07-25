@@ -13,6 +13,7 @@ class EntityDetails extends StatelessWidget {
     this.onIconPressed,
     this.icon,
     this.tooltipMessage,
+    super.key,
   });
 
   @override

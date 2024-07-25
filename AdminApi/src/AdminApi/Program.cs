@@ -155,6 +155,14 @@ static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, strin
 
 static void Configure(WebApplication app)
 {
+    // the following headers are necessary to run the application in webassembly mode
+    app.Use(async (context, next) =>
+    {
+        context.Response.Headers.Append("Cross-Origin-Embedder-Policy", "credentialless");
+        context.Response.Headers.Append("Cross-Origin-Opener-Policy", "same-origin");
+        await next.Invoke();
+    });
+
     app.UseForwardedHeaders();
 
     var configuration = app.Services.GetRequiredService<IOptions<AdminConfiguration>>().Value;
