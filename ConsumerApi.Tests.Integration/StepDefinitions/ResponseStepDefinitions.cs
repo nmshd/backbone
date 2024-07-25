@@ -6,7 +6,12 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationship;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationship;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.ThrowHelpers;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -35,6 +40,10 @@ internal class ResponseStepDefinitions
     private ApiResponse<CancelDeletionProcessResponse>? CancelDeletionProcessResponse => _responseContext.CancelDeletionProcessResponse;
     private ApiResponse<SendMessageResponse>? SendMessageResponse => _responseContext.SendMessageResponse;
     private ApiResponse<UpdateDeviceRegistrationResponse>? UpdateDeviceRegistrationResponse => _responseContext.UpdateDeviceRegistrationResponse;
+    private ApiResponse<RelationshipMetadata>? CreateRelationshipResponse => _responseContext.CreateRelationshipResponse;
+    private ApiResponse<RelationshipMetadata>? AcceptRelationshipResponse => _responseContext.AcceptRelationshipResponse;
+    private ApiResponse<RelationshipMetadata>? RejectRelationshipResponse => _responseContext.RejectRelationshipResponse;
+    private ApiResponse<RelationshipMetadata>? RevokeRelationshipResponse => _responseContext.RevokeRelationshipResponse;
 
     private IResponse? WhenResponse => _responseContext.WhenResponse;
 
@@ -168,6 +177,37 @@ internal class ResponseStepDefinitions
     }
     #endregion
 
+    #region Relationships
+
+    [Then("the response contains a RelationshipResponse")]
+    public async Task ThenTheResponseContainsARelationship()
+    {
+        if (CreateRelationshipResponse != null)
+        {
+            CreateRelationshipResponse!.Should().BeASuccess();
+            await CreateRelationshipResponse!.Should().ComplyWithSchema();
+        }
+
+        if (AcceptRelationshipResponse != null)
+        {
+            AcceptRelationshipResponse!.Should().BeASuccess();
+            await AcceptRelationshipResponse!.Should().ComplyWithSchema();
+        }
+
+        if (RejectRelationshipResponse != null)
+        {
+            RejectRelationshipResponse!.Should().BeASuccess();
+            await RejectRelationshipResponse!.Should().ComplyWithSchema();
+        }
+
+        if (RevokeRelationshipResponse != null)
+        {
+            RevokeRelationshipResponse!.Should().BeASuccess();
+            await RevokeRelationshipResponse!.Should().ComplyWithSchema();
+        }
+    }
+    #endregion
+
     private void AssertExpirationDateIsInFuture()
     {
         _responseContext.ChallengeResponse!.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
@@ -187,7 +227,11 @@ public class ResponseContext
     public ApiResponse<ListMessagesResponse>? GetMessagesResponse { get; set; }
     public ApiResponse<SendMessageResponse>? SendMessageResponse { get; set; }
     public ApiResponse<UpdateDeviceRegistrationResponse>? UpdateDeviceRegistrationResponse { get; set; }
-
+    public ApiResponse<CreateRelationshipTemplateResponse>? CreateRelationshipTemplateResponse { get; set; }
+    public ApiResponse<RelationshipMetadata>? CreateRelationshipResponse { get; set; }
+    public ApiResponse<RelationshipMetadata>? AcceptRelationshipResponse { get; set; }
+    public ApiResponse<RelationshipMetadata>? RejectRelationshipResponse { get; set; }
+    public ApiResponse<RelationshipMetadata>? RevokeRelationshipResponse { get; set; }
     public ApiResponse<Relationship>? TerminateRelationshipResponse { get; set; }
     public ApiResponse<RelationshipMetadata>? DecomposeRelationshipResponse { get; set; }
 
