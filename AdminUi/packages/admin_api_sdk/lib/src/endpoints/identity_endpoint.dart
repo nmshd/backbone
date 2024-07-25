@@ -52,4 +52,9 @@ class IdentitiesEndpoint extends Endpoint {
       pageSize: pageSize,
     );
   }
+
+  Future<ApiResponse<List<IdentityDeletionProcessAuditLogEntry>>> getIdentityDeletionProcessAuditLogs({required String address}) => get(
+        '/api/v1/Identities/$address/DeletionProcesses/AuditLogs',
+        transformer: (e) => (e as List).map(IdentityDeletionProcessAuditLogEntry.fromJson).toList(),
+      );
 }
