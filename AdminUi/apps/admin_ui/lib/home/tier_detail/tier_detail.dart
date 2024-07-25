@@ -79,45 +79,6 @@ class _TierDetailState extends State<TierDetail> {
   }
 }
 
-class _TierDetailsCard extends StatelessWidget {
-  final String tierID;
-  final String tierName;
-
-  const _TierDetailsCard({
-    required this.tierID,
-    required this.tierName,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      EntityDetails(title: context.l10n.id, value: tierID),
-                      EntityDetails(title: context.l10n.address, value: tierName),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _QuotaList extends StatefulWidget {
   final TierDetails tierDetails;
   final VoidCallback onQuotasChanged;
