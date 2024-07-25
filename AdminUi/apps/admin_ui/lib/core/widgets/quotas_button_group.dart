@@ -67,7 +67,6 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
       message:
           '${context.l10n.quotaButtonGroup_deletionMessage} ${widget.identityAddress != null ? '${context.l10n.quotaButtonGroup_theIdentity} "${widget.identityAddress}"' : '${context.l10n.quotaButtonGroup_theTier} "${widget.tierId}"'}?',
       actionText: context.l10n.remove,
-      cancelActionText: context.l10n.cancel,
     );
 
     if (!confirmed) return;

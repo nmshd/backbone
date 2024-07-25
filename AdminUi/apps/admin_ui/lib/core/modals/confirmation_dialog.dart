@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 
+import '/core/core.dart';
+
 Future<bool> showConfirmationDialog({
   required BuildContext context,
   required String title,
   required String message,
   required String actionText,
-  required String cancelActionText,
+  String? cancelActionText,
 }) async {
   final result = await showDialog<bool>(
     context: context,
-    builder: (BuildContext context) =>
-        _ConfirmationDialog(title: title, message: message, actionText: actionText, cancelActionText: cancelActionText),
+    builder: (BuildContext context) => _ConfirmationDialog(
+      title: title,
+      message: message,
+      actionText: actionText,
+      cancelActionText: cancelActionText,
+    ),
   );
 
   return result ?? false;
@@ -20,9 +26,14 @@ class _ConfirmationDialog extends StatelessWidget {
   final String title;
   final String message;
   final String actionText;
-  final String cancelActionText;
+  final String? cancelActionText;
 
-  const _ConfirmationDialog({required this.title, required this.message, required this.actionText, required this.cancelActionText});
+  const _ConfirmationDialog({
+    required this.title,
+    required this.message,
+    required this.actionText,
+    this.cancelActionText,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +45,7 @@ class _ConfirmationDialog extends StatelessWidget {
       actions: [
         OutlinedButton(
           onPressed: () => Navigator.of(context).pop(false),
-          child: Text(cancelActionText),
+          child: Text(cancelActionText ?? context.l10n.cancel),
         ),
         FilledButton(
           onPressed: () => Navigator.of(context).pop(true),
