@@ -233,9 +233,25 @@ jobs:
             mv appsettings.override.json appsettings.override.json.bak
             cp .ci/appsettings.override.${{matrix.database}}.local.json appsettings.override.json
 
+            ls -a
+
             dotnet restore ${{matrix.test-project.path}}
 
+            ls -a
+
             dotnet build --no-restore ${{matrix.test-project.path}}
+
+            ls -a
+
+            echo "################################"
+
+            ls -a ${{matrix.test-project.path}}
+
+            echo "################################"
+
+            ls -a ${{matrix.test-project.path}}/../../src/Job.IdentityDeletion
+
+
           }
           wait
 
