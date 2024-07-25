@@ -17,7 +17,7 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-        var relationship = TestData.CreateRelationshipWithRequestedReactivation(activeIdentity, TestDataGenerator.CreateRandomIdentityAddress(), reactivationRequestedBy: activeIdentity);
+        var relationship = TestData.CreateRelationshipWithRequestedReactivation(from: activeIdentity, to: TestDataGenerator.CreateRandomIdentityAddress(), reactivationRequestedBy: activeIdentity);
 
         var fakeRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         A.CallTo(() => fakeRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
@@ -45,7 +45,7 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-        var relationship = TestData.CreateRelationshipWithRequestedReactivation(activeIdentity, TestDataGenerator.CreateRandomIdentityAddress(), reactivationRequestedBy: activeIdentity);
+        var relationship = TestData.CreateRelationshipWithRequestedReactivation(from: activeIdentity, to: TestDataGenerator.CreateRandomIdentityAddress(), reactivationRequestedBy: activeIdentity);
 
         var mockRelationshipsRepository = A.Fake<IRelationshipsRepository>();
         A.CallTo(() => mockRelationshipsRepository.FindRelationship(relationship.Id, activeIdentity, A<CancellationToken>._, true)).Returns(relationship);
