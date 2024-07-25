@@ -11,6 +11,7 @@ class AdminApiClient {
   late final IdentitiesEndpoint identities;
   late final RelationshipsEndpoint relationships;
   late final DeletionProcessesEndpoint deletionProcesses;
+  late final MessagesEndpoint messages;
 
   AdminApiClient._(String baseUrl, String apiKey) {
     final dio = Dio(
@@ -28,6 +29,7 @@ class AdminApiClient {
     identities = IdentitiesEndpoint(dio);
     relationships = RelationshipsEndpoint(dio);
     deletionProcesses = DeletionProcessesEndpoint(dio);
+    messages = MessagesEndpoint(dio);
   }
 
   static Future<AdminApiClient> create({required String baseUrl, required String apiKey}) async {
