@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
@@ -7,7 +5,9 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
-import 'identity_quotas_table/identity_quotas_table.dart';
+import 'identity_messages/identity_messages.dart';
+import 'identity_quotas/identity_quotas.dart';
+import 'identity_relationships/identity_relationships.dart';
 import 'modals/change_tier.dart';
 
 class IdentityDetails extends StatefulWidget {
@@ -55,7 +55,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (Platform.isMacOS || Platform.isWindows) const BackButton(),
+            if (kIsDesktop) const BackButton(),
             _IdentityDetailsCard(
               identityDetails: identityDetails,
               selectedTier: _selectedTier,
@@ -68,7 +68,25 @@ class _IdentityDetailsState extends State<IdentityDetails> {
               updateTierOfIdentity: _reloadIdentity,
             ),
             Gaps.h16,
-            IdentityQuotaList(identityDetails, _reloadIdentity),
+            IdentityQuotas(identityDetails, _reloadIdentity),
+            Gaps.h16,
+            IdentityRelationships(address: identityDetails.address),
+            Gaps.h16,
+            IdentityMessages(
+              participant: widget.address,
+              type: MessageType.incoming,
+              title: context.l10n.identityDetails_receivedMessages_title,
+              subtitle: context.l10n.identityDetails_receivedMessages_subtitle,
+              emptyTableMessage: context.l10n.identityDetails_noReceivedMessagesFound,
+            ),
+            Gaps.h16,
+            IdentityMessages(
+              participant: widget.address,
+              type: MessageType.outgoing,
+              title: context.l10n.identityDetails_sentMessages_title,
+              subtitle: context.l10n.identityDetails_sentMessages_subtitle,
+              emptyTableMessage: context.l10n.identityDetails_noSentMessagesFound,
+            ),
           ],
         ),
       ),
@@ -112,110 +130,66 @@ class _IdentityDetailsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final currentTier = availableTiers.firstWhere((tier) => tier.id == identityDetails.tierId);
 
-    return Row(
-      children: [
-        Expanded(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      Text(identityDetails.address, style: Theme.of(context).textTheme.headlineLarge),
-                      Gaps.w16,
-                      CopyToClipboardButton(
-                        clipboardText: identityDetails.address,
-                        successMessage: context.l10n.identityDetails_card_identityClipboardMessage,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 32),
-                  Wrap(
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      _IdentityDetails(
-                        title: context.l10n.clientID,
-                        value: identityDetails.clientId,
-                      ),
-                      _IdentityDetails(
-                        title: context.l10n.identityDetails_card_publicKey,
-                        value: identityDetails.publicKey.ellipsize(20),
-                        onIconPressed: () => context.setClipboardDataWithSuccessNotification(
-                          clipboardText: identityDetails.publicKey,
-                          successMessage: context.l10n.identityDetails_card_publicKey_copyToClipboardMessage,
-                        ),
-                        icon: Icons.copy,
-                        tooltipMessage: context.l10n.identityDetails_card_publicKey_tooltipMessage,
-                      ),
-                      _IdentityDetails(
-                        title: context.l10n.createdAt,
-                        value:
-                            '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(identityDetails.createdAt)} ${DateFormat.Hms().format(identityDetails.createdAt)}',
-                      ),
-                      _IdentityDetails(
-                        title: context.l10n.tier,
-                        value: currentTier.name,
-                        onIconPressed: currentTier.canBeManuallyAssigned
-                            ? () => showChangeTierDialog(
-                                  context: context,
-                                  onTierUpdated: updateTierOfIdentity,
-                                  identityDetails: identityDetails,
-                                  availableTiers: availableTiers,
-                                )
-                            : null,
-                        icon: Icons.edit,
-                        tooltipMessage: context.l10n.changeTier,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _IdentityDetails extends StatelessWidget {
-  final String title;
-  final String value;
-  final VoidCallback? onIconPressed;
-  final IconData? icon;
-  final String? tooltipMessage;
-
-  const _IdentityDetails({
-    required this.title,
-    required this.value,
-    this.onIconPressed,
-    this.icon,
-    this.tooltipMessage,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    assert(
-      onIconPressed == null || (onIconPressed != null && icon != null || tooltipMessage != null),
-      'If edit is provided, icon and tooltipMessage must be provided too.',
-    );
-
-    return RawChip(
-      label: Text.rich(
-        TextSpan(
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            TextSpan(text: '$title ', style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold)),
-            TextSpan(text: value, style: Theme.of(context).textTheme.bodyLarge),
+            Row(
+              children: [
+                Text(identityDetails.address, style: Theme.of(context).textTheme.headlineLarge),
+                Gaps.w16,
+                CopyToClipboardButton(
+                  clipboardText: identityDetails.address,
+                  successMessage: context.l10n.identityDetails_card_identityClipboardMessage,
+                ),
+              ],
+            ),
+            const SizedBox(height: 32),
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                EntityDetails(
+                  title: context.l10n.clientID,
+                  value: identityDetails.clientId,
+                ),
+                EntityDetails(
+                  title: context.l10n.identityDetails_card_publicKey,
+                  value: identityDetails.publicKey.ellipsize(20),
+                  onIconPressed: () => context.setClipboardDataWithSuccessNotification(
+                    clipboardText: identityDetails.publicKey,
+                    successMessage: context.l10n.identityDetails_card_publicKey_copyToClipboardMessage,
+                  ),
+                  icon: Icons.copy,
+                  tooltipMessage: context.l10n.identityDetails_card_publicKey_tooltipMessage,
+                ),
+                EntityDetails(
+                  title: context.l10n.createdAt,
+                  value:
+                      '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(identityDetails.createdAt)} ${DateFormat.Hms().format(identityDetails.createdAt)}',
+                ),
+                EntityDetails(
+                  title: context.l10n.tier,
+                  value: currentTier.name,
+                  onIconPressed: currentTier.canBeManuallyAssigned
+                      ? () => showChangeTierDialog(
+                            context: context,
+                            onTierUpdated: updateTierOfIdentity,
+                            identityDetails: identityDetails,
+                            availableTiers: availableTiers,
+                          )
+                      : null,
+                  icon: Icons.edit,
+                  tooltipMessage: context.l10n.changeTier,
+                ),
+              ],
+            ),
           ],
         ),
       ),
-      onDeleted: onIconPressed,
-      deleteIcon: Icon(icon),
-      deleteButtonTooltipMessage: tooltipMessage,
     );
   }
 }

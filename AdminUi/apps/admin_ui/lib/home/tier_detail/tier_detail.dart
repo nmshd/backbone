@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
@@ -48,46 +46,22 @@ class _TierDetailState extends State<TierDetail> {
       child: SingleChildScrollView(
         controller: _scrollController,
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (Platform.isMacOS || Platform.isWindows) const BackButton(),
-            Row(
-              children: [
-                Expanded(
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '${context.l10n.tierDetails_tierID}: ',
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                TextSpan(text: tierDetails.id, style: Theme.of(context).textTheme.bodyLarge),
-                              ],
-                            ),
-                          ),
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '${context.l10n.name}: ',
-                                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                                TextSpan(text: tierDetails.name, style: Theme.of(context).textTheme.bodyLarge),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
+            if (kIsDesktop) const Align(alignment: Alignment.centerLeft, child: BackButton()),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Wrap(
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    EntityDetails(title: context.l10n.tierDetails_tierID, value: tierDetails.id),
+                    EntityDetails(title: context.l10n.name, value: tierDetails.name),
+                  ],
                 ),
-              ],
+              ),
             ),
             Gaps.h16,
             _QuotaList(tierDetails, _reload),
