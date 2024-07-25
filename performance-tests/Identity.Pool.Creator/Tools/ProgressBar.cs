@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 namespace Backbone.Identity.Pool.Creator.Tools;
 public class ProgressBar : IDisposable, IProgress<double>
 {
-    private const int BLOCK_COUNT = 10;
+    private const int BLOCK_COUNT = 40;
     private readonly TimeSpan _animationInterval = TimeSpan.FromSeconds(1.0 / 8);
     private const string ANIMATION = @"|/-\";
 
