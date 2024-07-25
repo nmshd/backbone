@@ -5,6 +5,8 @@ using Backbone.Tooling;
 namespace Backbone.Identity.Pool.Creator.Application.Printer;
 public class Printer : IPrinter
 {
+    private static string? _outputDirName;
+
     public void PrintRelationships(IList<PoolEntry> pools, bool summaryOnly = false)
     {
         Console.WriteLine($"{pools.ExpectedNumberOfRelationships()} relationships expected.");
@@ -52,16 +54,35 @@ public class Printer : IPrinter
         }
     }
 
-    public void OutputAll(IList<PoolEntry> pools)
+    public void OutputAll(IList<PoolEntry> pools, PrintTarget target = PrintTarget.All)
     {
-        var outputDirName = $@"{GetProjectPath()}\poolCreator.{SystemTime.UtcNow:yyyyMMdd-HHmmss}";
-        Directory.CreateDirectory(outputDirName);
+        _outputDirName ??= $@"{GetProjectPath()}\poolCreator.{SystemTime.UtcNow:yyyyMMdd-HHmmss}";
+        if (!Directory.Exists(_outputDirName))
+            Directory.CreateDirectory(_outputDirName);
 
-        OutputIdentities(outputDirName, pools);
-        OutputRelationships(outputDirName, pools);
-        OutputMessages(outputDirName, pools);
-        OutputChallenges(outputDirName, pools);
-        OutputDatawalletModifications(outputDirName, pools);
+        if ((target & PrintTarget.Identities) != 0) OutputIdentities(_outputDirName, pools);
+        if ((target & PrintTarget.Relationships) != 0) OutputRelationships(_outputDirName, pools);
+        if ((target & PrintTarget.Messages) != 0) OutputMessages(_outputDirName, pools);
+        if ((target & PrintTarget.Challenges) != 0) OutputChallenges(_outputDirName, pools);
+        if ((target & PrintTarget.DatawalletModifications) != 0) OutputDatawalletModifications(_outputDirName, pools);
+        if ((target & PrintTarget.RelationshipTemplates) != 0) OutputRelationshipTemplates(_outputDirName, pools);
+    }
+
+    private void OutputRelationshipTemplates(string outputDirName, IList<PoolEntry> pools)
+    {
+        var stringBuilder = new StringBuilder();
+        stringBuilder.AppendLine("IdentityAddress;RelationshipTemplateId");
+        foreach (var pool in pools)
+        {
+            foreach (var identity in pool.Identities)
+            {
+                foreach (var template in identity.RelationshipTemplates)
+                {
+                    stringBuilder.AppendLine($"{identity.Address};{template.Id}");
+                }
+            }
+        }
+        File.WriteAllTextAsync($@"{outputDirName}\rts.csv", stringBuilder.ToString());
     }
 
     private void OutputDatawalletModifications(string outputDirName, IList<PoolEntry> pools)
@@ -84,7 +105,7 @@ public class Printer : IPrinter
     private void OutputChallenges(string outputDirName, IList<PoolEntry> pools)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("CreatedByAddress;ChallengeId;CreatedByDevice;IdentityAddress");
+        stringBuilder.AppendLine("CreatedByAddress;ChallengeId;CreatedByDevice");
         foreach (var pool in pools)
         {
             foreach (var identity in pool.Identities)
@@ -92,7 +113,7 @@ public class Printer : IPrinter
                 if (identity.Challenges is null) continue;
                 foreach (var challenge in identity.Challenges)
                 {
-                    stringBuilder.AppendLine($"{challenge.CreatedBy};{challenge.Id};{challenge.CreatedByDevice};{identity.Address}");
+                    stringBuilder.AppendLine($"{challenge.CreatedBy};{challenge.Id};{challenge.CreatedByDevice}");
                 }
             }
         }
@@ -167,8 +188,20 @@ public class Printer : IPrinter
 public interface IPrinter
 
 {
-    public void OutputAll(IList<PoolEntry> pools);
+    public void OutputAll(IList<PoolEntry> pools, PrintTarget target = PrintTarget.All);
     protected internal void PrintRelationships(IList<PoolEntry> pools, bool summaryOnly = false);
     protected internal void PrintMessages(IList<PoolEntry> pools, bool summaryOnly = false);
     void PrintString(string value, string filename);
+}
+
+[Flags]
+public enum PrintTarget
+{
+    Identities = 1,
+    Messages = 2,
+    Relationships = 4,
+    RelationshipTemplates = 8,
+    Challenges = 16,
+    DatawalletModifications = 32,
+    All = 255
 }
