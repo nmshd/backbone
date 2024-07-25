@@ -27,13 +27,20 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
-        <ProjectReference Include="..\..\src\Job.IdentityDeletion\Job.IdentityDeletion.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj"/>
+        <ProjectReference Include="..\..\src\Job.IdentityDeletion\Job.IdentityDeletion.csproj"/>
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
         <Delete Files="$(ProjectDir)appsettings.override.json"/>
         <Copy SourceFiles="..\..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true"/>
     </Target>
+
+    <!-- This is required for the job to run. -->
+    <ItemGroup>
+        <Content Include="..\..\..\appsettings.override.json" Condition="$(Configuration) == Debug">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 
 </Project>
