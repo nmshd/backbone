@@ -61,7 +61,7 @@ class IdentitiesEndpoint extends Endpoint {
         transformer: (e) => (e as List).map(IdentityDeletionProcess.fromJson).toList(),
       );
 
-  Future<ApiResponse<IdentityDeletionProcessDetail>> getIdentityDeletionProcessDetails({
+  Future<ApiResponse<IdentityDeletionProcessDetail>> getIdentityDeletionProcess({
     required String address,
     required String deletionProcessId,
   }) =>
@@ -70,7 +70,7 @@ class IdentitiesEndpoint extends Endpoint {
         transformer: IdentityDeletionProcessDetail.fromJson,
       );
 
-  Future<ApiResponse<void>> cancelDeletionProcessAsSupport({
+  Future<ApiResponse<void>> cancelDeletionProcess({
     required String address,
     required String deletionProcessId,
   }) =>

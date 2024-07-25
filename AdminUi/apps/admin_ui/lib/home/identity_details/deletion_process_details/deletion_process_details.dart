@@ -89,10 +89,8 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
 
     if (!confirmed) return;
 
-    final result = await GetIt.I
-        .get<AdminApiClient>()
-        .identities
-        .cancelDeletionProcessAsSupport(address: widget.address, deletionProcessId: widget.deletionProcessId);
+    final result =
+        await GetIt.I.get<AdminApiClient>().identities.cancelDeletionProcess(address: widget.address, deletionProcessId: widget.deletionProcessId);
 
     if (result.hasError) {
       if (mounted) {
@@ -124,7 +122,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
     final deletionProcessesDetails = await GetIt.I
         .get<AdminApiClient>()
         .identities
-        .getIdentityDeletionProcessDetails(address: widget.address, deletionProcessId: widget.deletionProcessId);
+        .getIdentityDeletionProcess(address: widget.address, deletionProcessId: widget.deletionProcessId);
     if (mounted) {
       setState(() {
         _deletionProcessesDetails = deletionProcessesDetails.data;
