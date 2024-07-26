@@ -1,3 +1,3 @@
 using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Backbone.Applications.AdminApi.Tests.Integration")]
+[assembly: InternalsVisibleTo("Backbone.AdminApi.Tests.Integration")]

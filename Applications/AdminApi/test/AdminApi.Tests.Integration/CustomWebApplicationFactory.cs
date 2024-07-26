@@ -5,7 +5,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace Backbone.AdminApi.Tests.Integration;
 
-public class CustomWebApplicationFactory<TStartup> : WebApplicationFactory<TStartup> where TStartup : class
+internal class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override IHost CreateHost(IHostBuilder builder)
     {

@@ -1,7 +1,6 @@
 using Backbone.AdminApi.Tests.Integration.Configuration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 using SolidToken.SpecFlow.DependencyInjection;
 
 namespace Backbone.AdminApi.Tests.Integration.Support;
@@ -23,7 +22,7 @@ public static class Dependencies
             config.GetSection("AdminApi:Http").Bind(options)
         );
 
-        services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory<Program>()));
+        services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory()));
 
         return services;
     }

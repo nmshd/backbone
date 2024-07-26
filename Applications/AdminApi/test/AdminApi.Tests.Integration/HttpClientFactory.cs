@@ -1,13 +1,12 @@
 using Backbone.Tooling.Extensions;
-using Microsoft.VisualStudio.TestPlatform.TestHost;
 
 namespace Backbone.AdminApi.Tests.Integration;
 
 internal class HttpClientFactory
 {
-    private readonly CustomWebApplicationFactory<Program> _factory;
+    private readonly CustomWebApplicationFactory _factory;
 
-    internal HttpClientFactory(CustomWebApplicationFactory<Program> factory)
+    internal HttpClientFactory(CustomWebApplicationFactory factory)
     {
         _factory = factory;
     }
