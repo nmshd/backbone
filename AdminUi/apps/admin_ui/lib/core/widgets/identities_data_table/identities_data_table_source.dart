@@ -103,10 +103,6 @@ class IdentityDataTableSource extends AsyncDataTableSource {
           )
           .toList();
 
-      if (rows.isEmpty) {
-        return AsyncRowsResponse(response.pagination.totalRecords, []);
-      }
-
       return AsyncRowsResponse(response.pagination.totalRecords, rows);
     } catch (e) {
       GetIt.I.get<Logger>().e('Failed to load data: $e');
