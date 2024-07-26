@@ -59,18 +59,28 @@ class IdentityDataTableSource extends AsyncDataTableSource {
           );
       _pagination = response.pagination;
 
-      final rows = response.data.indexed
-          .where((identity) {
-            if (tierId != null) {
-              return identity.$2.tier.id == tierId;
-            }
+      final filteredIdentities = response.data.indexed.where((identity) {
+        if (tierId != null) {
+          return identity.$2.tier.id == tierId;
+        }
 
-            if (clientId != null) {
-              return identity.$2.createdWithClient == clientId;
-            }
+        if (clientId != null) {
+          return identity.$2.createdWithClient == clientId;
+        }
 
-            return true;
-          })
+        return true;
+      }).toList();
+
+      if (filteredIdentities.isEmpty) {
+        _pagination = Pagination(
+          pageNumber: _pagination?.pageNumber ?? 0,
+          pageSize: _pagination?.pageSize ?? count,
+          totalPages: 0,
+          totalRecords: 0,
+        );
+      }
+
+      final rows = filteredIdentities
           .map(
             (identity) => DataRow2.byIndex(
               index: pageNumber * count + identity.$1,
