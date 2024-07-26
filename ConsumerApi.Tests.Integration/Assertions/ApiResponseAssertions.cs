@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Assertions;
 
-public class ApiResponseAssertions<T> : ReferenceTypeAssertions<ApiResponse<T>, ApiResponseAssertions<T>>
+public class ApiResponseAssertions<T> : ObjectAssertions<ApiResponse<T>, ApiResponseAssertions<T>>
 {
     public ApiResponseAssertions(ApiResponse<T> instance) : base(instance)
     {

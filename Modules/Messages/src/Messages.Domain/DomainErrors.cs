@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Domain.Errors;
 
 namespace Backbone.Modules.Messages.Domain;
+
 public static class DomainErrors
 {
     public static DomainError RelationshipToRecipientNotActive(string recipient = "")
@@ -19,5 +20,12 @@ public static class DomainErrors
         return new DomainError(
             "error.platform.validation.message.maxNumberOfUnreceivedMessagesReached",
             $"The message could not be sent because {recipientText} already has the maximum number of unread messages from you.");
+    }
+
+    public static DomainError UnableToDecompose()
+    {
+        return new DomainError(
+            "error.platform.validation.message.unableToDecompose",
+            "This recipient cannot be decomposed. It either has already been decomposed or you are no participant of this message.");
     }
 }

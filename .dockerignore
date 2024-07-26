@@ -26,3 +26,15 @@
 **/appsettings.override.*.json
 LICENSE
 README.md
+
+# flutter
+**/pubspec_overrides.yaml
+**/.dart_tool
+**/build
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.DS_Store
+
+## config.json for connecting to the admin api
+**/config.json
+**/config.local.json

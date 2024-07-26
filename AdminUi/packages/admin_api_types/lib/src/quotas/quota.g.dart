@@ -9,7 +9,7 @@ part of 'quota.dart';
 Quota _$QuotaFromJson(Map<String, dynamic> json) => Quota(
       id: json['id'] as String,
       metric: Metric.fromJson(json['metric']),
-      max: json['max'] as int,
+      max: (json['max'] as num).toInt(),
       period: json['period'] as String,
     );
 

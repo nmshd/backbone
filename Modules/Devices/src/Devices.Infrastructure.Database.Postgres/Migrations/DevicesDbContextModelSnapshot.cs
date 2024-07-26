@@ -364,6 +364,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
+                    b.Property<string>("AdditionalData")
+                        .HasColumnType("text");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 

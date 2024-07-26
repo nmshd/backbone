@@ -52,16 +52,6 @@ RUN mkdir /rootfs \
 
 RUN apt update && apt upgrade --yes
 
-# install nodejs
-RUN apt install --yes ca-certificates gnupg && \
-    mkdir -p /etc/apt/keyrings && \
-    curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
-    echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_18.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
-    apt update && \
-    apt install --yes nodejs
-
-RUN npm i -g @angular/cli
-
 WORKDIR /src
 COPY ["Directory.Build.props", "."]
 COPY ["Modules/Directory.Build.props", "Modules/"]
@@ -97,10 +87,20 @@ ARG VERSION
 RUN dotnet publish /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "/src/AdminApi/src/AdminApi/AdminApi.csproj"
 RUN dotnet publish --configuration Release --output /app/publish/health "HealthCheck/HealthCheck.csproj"
 
-### Final ####
-FROM mcr.microsoft.com/dotnet/aspnet:8.0.6-jammy-chiseled
+#### Build Flutter Admin UI ####
+FROM ghcr.io/cirruslabs/flutter:3.22.3 AS flutter-build-env
 
-LABEL org.opencontainers.image.source = "https://github.com/nmshd/backbone"
+COPY AdminUi /src
+WORKDIR /src
+RUN dart pub global activate melos
+RUN dart pub global run melos:melos bootstrap
+WORKDIR /src/apps/admin_ui
+RUN flutter build web --output /build
+
+#### Final #####
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.7-jammy-chiseled
+
+LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD [ "dotnet", "/app/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]
 EXPOSE 8080
 
@@ -111,6 +111,7 @@ WORKDIR /app
 
 COPY --from=build-env /rootfs /
 COPY --from=build-env /app/publish .
+COPY --from=flutter-build-env /build /app/wwwroot
 
 USER $APP_UID
 
