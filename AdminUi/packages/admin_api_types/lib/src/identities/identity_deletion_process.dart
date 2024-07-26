@@ -3,10 +3,27 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'identity_deletion_process.g.dart';
 
+enum DeletionProcessStatus {
+  @JsonValue('WaitingForApproval')
+  waitingForApproval,
+
+  @JsonValue('Approved')
+  approved,
+
+  @JsonValue('Cancelled')
+  cancelled,
+
+  @JsonValue('Rejected')
+  rejected,
+
+  @JsonValue('Deleting')
+  deleting,
+}
+
 @JsonSerializable()
 class IdentityDeletionProcess {
   final String id;
-  final String status;
+  final DeletionProcessStatus status;
   final DateTime createdAt;
   final DateTime approvalPeriodEndsAt;
   final DateTime? approvalReminder1SentAt;
@@ -42,7 +59,7 @@ class IdentityDeletionProcess {
 @JsonSerializable()
 class IdentityDeletionProcessDetail {
   final String id;
-  final String status;
+  final DeletionProcessStatus status;
   final DateTime createdAt;
   final List<IdentityDeletionProcessAuditLogEntry> auditLog;
 

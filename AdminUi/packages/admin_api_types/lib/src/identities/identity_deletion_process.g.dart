@@ -8,7 +8,7 @@ part of 'identity_deletion_process.dart';
 
 IdentityDeletionProcess _$IdentityDeletionProcessFromJson(Map<String, dynamic> json) => IdentityDeletionProcess(
       id: json['id'] as String,
-      status: json['status'] as String,
+      status: $enumDecode(_$DeletionProcessStatusEnumMap, json['status']),
       createdAt: DateTime.parse(json['createdAt'] as String),
       approvalPeriodEndsAt: DateTime.parse(json['approvalPeriodEndsAt'] as String),
       approvalReminder1SentAt: json['approvalReminder1SentAt'] == null ? null : DateTime.parse(json['approvalReminder1SentAt'] as String),
@@ -24,7 +24,7 @@ IdentityDeletionProcess _$IdentityDeletionProcessFromJson(Map<String, dynamic> j
 
 Map<String, dynamic> _$IdentityDeletionProcessToJson(IdentityDeletionProcess instance) => <String, dynamic>{
       'id': instance.id,
-      'status': instance.status,
+      'status': _$DeletionProcessStatusEnumMap[instance.status]!,
       'createdAt': instance.createdAt.toIso8601String(),
       'approvalPeriodEndsAt': instance.approvalPeriodEndsAt.toIso8601String(),
       'approvalReminder1SentAt': instance.approvalReminder1SentAt?.toIso8601String(),
@@ -38,16 +38,24 @@ Map<String, dynamic> _$IdentityDeletionProcessToJson(IdentityDeletionProcess ins
       'gracePeriodReminder3SentAt': instance.gracePeriodReminder3SentAt?.toIso8601String(),
     };
 
+const _$DeletionProcessStatusEnumMap = {
+  DeletionProcessStatus.waitingForApproval: 'WaitingForApproval',
+  DeletionProcessStatus.approved: 'Approved',
+  DeletionProcessStatus.cancelled: 'Cancelled',
+  DeletionProcessStatus.rejected: 'Rejected',
+  DeletionProcessStatus.deleting: 'Deleting',
+};
+
 IdentityDeletionProcessDetail _$IdentityDeletionProcessDetailFromJson(Map<String, dynamic> json) => IdentityDeletionProcessDetail(
       id: json['id'] as String,
-      status: json['status'] as String,
+      status: $enumDecode(_$DeletionProcessStatusEnumMap, json['status']),
       createdAt: DateTime.parse(json['createdAt'] as String),
       auditLog: (json['auditLog'] as List<dynamic>).map(IdentityDeletionProcessAuditLogEntry.fromJson).toList(),
     );
 
 Map<String, dynamic> _$IdentityDeletionProcessDetailToJson(IdentityDeletionProcessDetail instance) => <String, dynamic>{
       'id': instance.id,
-      'status': instance.status,
+      'status': _$DeletionProcessStatusEnumMap[instance.status]!,
       'createdAt': instance.createdAt.toIso8601String(),
       'auditLog': instance.auditLog,
     };

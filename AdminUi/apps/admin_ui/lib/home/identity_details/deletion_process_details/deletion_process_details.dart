@@ -2,6 +2,7 @@ import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
@@ -18,7 +19,6 @@ class DeletionProcessDetails extends StatefulWidget {
 
 class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
   IdentityDeletionProcessDetail? _deletionProcessesDetails;
-  List<IdentityDeletionProcessAuditLogEntry> _auditLogs = [];
 
   @override
   void initState() {
@@ -37,16 +37,13 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (kIsDesktop)
-            BackButton(
-              onPressed: () => Navigator.of(context).pop(false),
-            ),
+          if (kIsDesktop) BackButton(onPressed: () => context.pop(false)),
           _DeletionProcessDetailsCard(
             address: widget.address,
             deletionProcessDetails: deletionProcessDetails,
           ),
           Gaps.h16,
-          Expanded(child: DeletionProcessAuditLogsTable(auditLogs: _auditLogs)),
+          Expanded(child: DeletionProcessAuditLogsTable(auditLogs: _deletionProcessesDetails!.auditLog)),
           Gaps.h16,
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -56,12 +53,11 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
                 child: Tooltip(
                   message: context.l10n.deletionProcessDetails_cancelDeletionProcess_tooltipMessage,
                   child: FilledButton(
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.resolveWith((states) {
-                        return _checkDeletionProcessStatus(deletionProcessDetails.status) ? Colors.grey : Theme.of(context).colorScheme.error;
-                      }),
+                    style: FilledButton.styleFrom(
+                      backgroundColor:
+                          deletionProcessDetails.status == DeletionProcessStatus.approved ? Colors.grey : Theme.of(context).colorScheme.error,
                     ),
-                    onPressed: _checkDeletionProcessStatus(deletionProcessDetails.status) ? null : _cancelDeletionProcess,
+                    onPressed: deletionProcessDetails.status == DeletionProcessStatus.approved ? null : _cancelDeletionProcess,
                     child: Text(
                       context.l10n.deletionProcessDetails_cancelDeletionProcess_title,
                       style: const TextStyle(
@@ -119,20 +115,16 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
   }
 
   Future<void> _loadDeletionProcessDetails() async {
-    final deletionProcessesDetails = await GetIt.I
-        .get<AdminApiClient>()
-        .identities
-        .getIdentityDeletionProcess(address: widget.address, deletionProcessId: widget.deletionProcessId);
-    if (mounted) {
-      setState(() {
-        _deletionProcessesDetails = deletionProcessesDetails.data;
-        _auditLogs = deletionProcessesDetails.data.auditLog;
-      });
-    }
-  }
+    final deletionProcessesDetails = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcess(
+          address: widget.address,
+          deletionProcessId: widget.deletionProcessId,
+        );
 
-  bool _checkDeletionProcessStatus(String deletionProcessStatus) {
-    return deletionProcessStatus != 'Approved';
+    if (!mounted) return;
+
+    setState(() {
+      _deletionProcessesDetails = deletionProcessesDetails.data;
+    });
   }
 }
 
@@ -170,7 +162,13 @@ class _DeletionProcessDetailsCard extends StatelessWidget {
                       ),
                       EntityDetails(
                         title: context.l10n.deletionProcessDetails_status,
-                        value: deletionProcessDetails.status == 'WaitingForApproval' ? 'Waiting for Approval' : deletionProcessDetails.status,
+                        value: switch (deletionProcessDetails.status) {
+                          DeletionProcessStatus.waitingForApproval => context.l10n.deletionProcessDetails_status_waitingForApproval,
+                          DeletionProcessStatus.approved => context.l10n.deletionProcessDetails_status_approved,
+                          DeletionProcessStatus.cancelled => context.l10n.deletionProcessDetails_status_cancelled,
+                          DeletionProcessStatus.rejected => context.l10n.deletionProcessDetails_status_rejected,
+                          DeletionProcessStatus.deleting => context.l10n.deletionProcessDetails_status_deleting,
+                        },
                       ),
                     ],
                   ),
