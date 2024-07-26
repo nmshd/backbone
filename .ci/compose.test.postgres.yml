@@ -22,7 +22,7 @@ services:
     image: postgres
     environment:
       - PGPASSWORD=Passw0rd
-    command: psql -h postgres -U postgres -d enmeshed -f /app/setup-db/setup-postgres.sql
+    command: psql -h postgres -U postgres -d enmeshed -f /app/scripts/sql/postgres/setup.sql
 
   admin-cli:
     environment:
