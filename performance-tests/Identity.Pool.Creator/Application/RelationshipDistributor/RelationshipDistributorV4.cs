@@ -30,23 +30,22 @@ public class RelationshipDistributorV4 : IRelationshipDistributor
             }
 
             // break on convergence
-            if (successfullyEstablishedRelationshipsCounts.Count > 80)
+            if (successfullyEstablishedRelationshipsCounts.Count <= 80) continue;
+
+            var length = successfullyEstablishedRelationshipsCounts.Count;
+            if (successfullyEstablishedRelationshipsCounts[length - 1] == successfullyEstablishedRelationshipsCounts[length - 2] &&
+                successfullyEstablishedRelationshipsCounts[length - 3] == successfullyEstablishedRelationshipsCounts[length - 2])
             {
-                var length = successfullyEstablishedRelationshipsCounts.Count;
-                if (successfullyEstablishedRelationshipsCounts[length - 1] == successfullyEstablishedRelationshipsCounts[length - 2] &&
-                    successfullyEstablishedRelationshipsCounts[length - 3] == successfullyEstablishedRelationshipsCounts[length - 2])
-                {
-                    return;
-                }
+                return;
             }
         }
     }
 
     private static int DistributeRelationshipsV2InnerLoop(
-        List<Identity> appPoolsIdentities,
-        List<Identity> connectorPoolsIdentities,
+        List<Domain.Identity> appPoolsIdentities,
+        List<Domain.Identity> connectorPoolsIdentities,
         int successfullyEstablishedRelationshipsCount,
-        Identity identity
+        Domain.Identity identity
         )
     {
         var oppositePoolIdentitiesWithCapacityForFurtherRelationships = (identity.PoolType == PoolTypes.CONNECTOR_TYPE
@@ -58,7 +57,7 @@ public class RelationshipDistributorV4 : IRelationshipDistributor
         var index = 0;
         while (identity.RelationshipsCapacity > 0)
         {
-            Identity selectedIdentity;
+            Domain.Identity selectedIdentity;
             do
             {
                 if (index == oppositePoolIdentitiesWithCapacityForFurtherRelationships.Count)

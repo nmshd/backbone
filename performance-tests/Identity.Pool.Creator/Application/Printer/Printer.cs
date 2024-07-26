@@ -68,7 +68,7 @@ public class Printer : IPrinter
         if ((target & PrintTarget.RelationshipTemplates) != 0) OutputRelationshipTemplates(_outputDirName, pools);
     }
 
-    private void OutputRelationshipTemplates(string outputDirName, IList<PoolEntry> pools)
+    private static void OutputRelationshipTemplates(string outputDirName, IList<PoolEntry> pools)
     {
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine("IdentityAddress;RelationshipTemplateId");
@@ -85,7 +85,7 @@ public class Printer : IPrinter
         File.WriteAllTextAsync($@"{outputDirName}\rts.csv", stringBuilder.ToString());
     }
 
-    private void OutputDatawalletModifications(string outputDirName, IList<PoolEntry> pools)
+    private static void OutputDatawalletModifications(string outputDirName, IList<PoolEntry> pools)
     {
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine("IdentityAddress;ModificationIndex;ModificationId");
@@ -102,7 +102,7 @@ public class Printer : IPrinter
         File.WriteAllTextAsync($@"{outputDirName}\dwms.csv", stringBuilder.ToString());
     }
 
-    private void OutputChallenges(string outputDirName, IList<PoolEntry> pools)
+    private static void OutputChallenges(string outputDirName, IList<PoolEntry> pools)
     {
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine("CreatedByAddress;ChallengeId;CreatedByDevice");
@@ -186,7 +186,6 @@ public class Printer : IPrinter
 }
 
 public interface IPrinter
-
 {
     public void OutputAll(IList<PoolEntry> pools, PrintTarget target = PrintTarget.All);
     protected internal void PrintRelationships(IList<PoolEntry> pools, bool summaryOnly = false);

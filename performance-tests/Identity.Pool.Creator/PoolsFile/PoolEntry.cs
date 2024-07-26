@@ -23,10 +23,10 @@ public record PoolEntry
     /// <summary>
     /// The UONs to be used by this pool
     /// </summary>
-    public ConcurrentQueue<uint> IdentityUons { get; internal set; } = new();
+    public ConcurrentQueue<uint> IdentityUniqueOrderNumbers { get; internal set; } = new();
 
     [JsonIgnore]
-    public List<Identity> Identities = [];
+    public List<Domain.Identity> Identities = [];
 
     [JsonIgnore] public uint NumberOfSentMessages;
 
@@ -87,12 +87,12 @@ public static class PoolEntryExtensionMethods
 
     public static void AddUonsIfMissing(this IList<PoolEntry> pools)
     {
-        if (pools.SelectMany(p => p.Identities).Select(i => i.Uon).Distinct().Count() == 1)
+        if (pools.SelectMany(p => p.Identities).Select(i => i.UniqueOrderNumber).Distinct().Count() == 1)
         {
             uint i = 0;
             foreach (var identity in pools.SelectMany(p => p.Identities))
             {
-                identity.Uon = ++i;
+                identity.UniqueOrderNumber = ++i;
             }
         }
     }

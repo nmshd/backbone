@@ -1,14 +1,10 @@
 ﻿using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
-using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Responses;
-using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
-using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates;
-using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types;
 using Backbone.Identity.Pool.Creator.PoolsFile;
 
-namespace Backbone.Identity.Pool.Creator;
+namespace Backbone.Identity.Pool.Creator.Domain;
 public class Identity
 {
     public readonly UserCredentials UserCredentials;

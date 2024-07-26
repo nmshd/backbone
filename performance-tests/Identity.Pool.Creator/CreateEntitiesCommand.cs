@@ -31,13 +31,13 @@ public class CreateEntitiesCommand : Command
     private static async Task EntityCreationProcessor(string baseAddress, string clientId, string clientSecret, string configurationFilePath, string poolsFilePath)
     {
         var poolsConfiguration = await Reader.ReadPools(poolsFilePath);
-        var ram = await ReadRAMConfigurationFile(configurationFilePath);
+        var relationshipsAndMessages = await ReadRelationshipsAndMessagesConfigurationFile(configurationFilePath);
 
-        var creator = new EntityCreator(baseAddress, clientId, clientSecret, poolsConfiguration.Pools.ToList(), ram, new Printer());
+        var creator = new EntityCreator(baseAddress, clientId, clientSecret, poolsConfiguration.Pools.ToList(), relationshipsAndMessages, new Printer());
         await creator.StartCreation();
     }
 
-    private static async Task<SolutionRepresentation> ReadRAMConfigurationFile(string configurationFilePath)
+    private static async Task<SolutionRepresentation> ReadRelationshipsAndMessagesConfigurationFile(string configurationFilePath)
     {
         var res = new SolutionRepresentation();
 
