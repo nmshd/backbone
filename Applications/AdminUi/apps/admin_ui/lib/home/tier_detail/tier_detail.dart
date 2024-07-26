@@ -180,6 +180,7 @@ class _IdentitiesListState extends State<_IdentitiesList> {
       navigateToIdentity: ({required String address}) {
         context.push('/identities/$address');
       },
+      filter: IdentityOverviewFilter(tiers: [widget.tierDetails.id]),
     );
   }
 

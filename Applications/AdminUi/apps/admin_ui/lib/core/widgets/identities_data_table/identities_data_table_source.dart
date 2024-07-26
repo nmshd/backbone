@@ -20,7 +20,8 @@ class IdentityDataTableSource extends AsyncDataTableSource {
   final bool hideTierColumn;
   final void Function({required String address}) navigateToIdentity;
 
-  IdentityDataTableSource({required this.locale, required this.navigateToIdentity, this.hideTierColumn = false});
+  IdentityDataTableSource({required this.locale, required this.navigateToIdentity, this.hideTierColumn = false, IdentityOverviewFilter? filter})
+      : _filter = filter;
 
   void sort({required int sortColumnIndex, required bool sortColumnAscending}) {
     _sortingSettings = (sortColumnIndex: sortColumnIndex, sortAscending: sortColumnAscending);
