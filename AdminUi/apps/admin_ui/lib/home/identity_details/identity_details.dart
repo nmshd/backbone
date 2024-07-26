@@ -5,6 +5,7 @@ import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
+import 'deletion_process_table/deletion_process_table.dart';
 import 'identity_messages/identity_messages.dart';
 import 'identity_quotas/identity_quotas.dart';
 import 'identity_relationships/identity_relationships.dart';
@@ -87,6 +88,8 @@ class _IdentityDetailsState extends State<IdentityDetails> {
               subtitle: context.l10n.identityDetails_sentMessages_subtitle,
               emptyTableMessage: context.l10n.identityDetails_noSentMessagesFound,
             ),
+            Gaps.h16,
+            DeletionProcessTable(address: widget.address),
           ],
         ),
       ),
