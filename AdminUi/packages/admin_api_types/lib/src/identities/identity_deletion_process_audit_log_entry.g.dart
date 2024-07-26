@@ -12,7 +12,10 @@ IdentityDeletionProcessAuditLogEntry _$IdentityDeletionProcessAuditLogEntryFromJ
       createdAt: DateTime.parse(json['createdAt'] as String),
       messageKey: json['messageKey'] as String,
       newStatus: json['newStatus'] as String,
-      additionalData: Map<String, String>.from(json['additionalData'] as Map),
+      additionalData: (json['additionalData'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, e as String),
+          ) ??
+          const {},
       oldStatus: json['oldStatus'] as String?,
     );
 
