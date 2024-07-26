@@ -235,11 +235,6 @@ jobs:
 
             dotnet restore ${{matrix.test-project.path}}
             dotnet build --no-restore ${{matrix.test-project.path}}
-
-            echo "################################"
-
-            cat ${{matrix.test-project.path}}/../../src/Job.IdentityDeletion/appsettings.override.json
-            cat ${{matrix.test-project.path}}/appsettings.override.json
           }
           wait
 
