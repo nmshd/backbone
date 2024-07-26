@@ -3,11 +3,11 @@ using System.Diagnostics;
 using System.Text;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.Identity.Pool.Creator.Application.Printer;
-using Backbone.Identity.Pool.Creator.Domain;
 using Backbone.Identity.Pool.Creator.PoolsFile;
 using Backbone.Identity.Pool.Creator.Tools;
 using Backbone.Tooling;
 using Math = System.Math;
+using GeneratorIdentity = Backbone.Identity.Pool.Creator.Domain.Identity;
 
 namespace Backbone.Identity.Pool.Creator.PoolsGenerator;
 
@@ -22,11 +22,11 @@ public class SimulatedAnnealingPoolsGenerator
     private readonly IPrinter _printer;
 
     private List<PoolEntry> Pools { get; }
-    private List<Domain.Identity> Identities { get; }
+    private List<GeneratorIdentity> Identities { get; }
 
-    private readonly Dictionary<uint, Domain.Identity> _identitiesDictionary;
-    private readonly Dictionary<uint, Domain.Identity> _appIdentitiesDictionary;
-    private readonly Dictionary<uint, Domain.Identity> _connectorIdentitiesDictionary;
+    private readonly Dictionary<uint, GeneratorIdentity> _identitiesDictionary;
+    private readonly Dictionary<uint, GeneratorIdentity> _appIdentitiesDictionary;
+    private readonly Dictionary<uint, GeneratorIdentity> _connectorIdentitiesDictionary;
 
     private const bool P = false;
 
