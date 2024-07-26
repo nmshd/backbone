@@ -71,14 +71,16 @@ class IdentityDataTableSource extends AsyncDataTableSource {
         return true;
       }).toList();
 
-      if (filteredIdentities.isEmpty) {
-        _pagination = Pagination(
-          pageNumber: _pagination?.pageNumber ?? 0,
-          pageSize: _pagination?.pageSize ?? count,
-          totalPages: 0,
-          totalRecords: 0,
-        );
-      }
+      final defaultPageNumber = _pagination?.pageNumber ?? 0;
+      final defaultPageSize = _pagination?.pageSize ?? count;
+      final defaultTotalPages = _pagination?.totalPages ?? 0;
+
+      _pagination = Pagination(
+        pageNumber: defaultPageNumber,
+        pageSize: defaultPageSize,
+        totalPages: filteredIdentities.isEmpty ? 0 : defaultTotalPages,
+        totalRecords: filteredIdentities.isEmpty ? 0 : filteredIdentities.length,
+      );
 
       final rows = filteredIdentities
           .map(
