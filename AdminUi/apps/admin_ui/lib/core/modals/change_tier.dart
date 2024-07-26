@@ -129,7 +129,7 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(context.l10n.changeTierDialog_success),
+        content: Text(widget.identityDetails != null ? context.l10n.changeTierDialog_success_identity : context.l10n.changeTierDialog_success_client),
         duration: const Duration(seconds: 3),
       ),
     );
