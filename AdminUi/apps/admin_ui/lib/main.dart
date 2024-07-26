@@ -9,7 +9,7 @@ import 'core/models/models.dart';
 import 'core/theme/theme.dart';
 import 'home/home.dart';
 import 'screens/screens.dart';
-import 'setup/setup_desktop.dart' if (dart.library.html) 'setup/setup_web.dart';
+import 'setup/setup_desktop.dart' if (dart.library.html) 'setup/setup_web.dart' if (dart.library.js_interop) 'setup/setup_web.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,6 +31,7 @@ final _router = GoRouter(
   initialLocation: '/splash',
   navigatorKey: _rootNavigatorKey,
   routes: [
+    GoRoute(path: '/index.html', redirect: (_, __) => '/splash'),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/splash',
@@ -54,6 +55,25 @@ final _router = GoRouter(
               parentNavigatorKey: _shellNavigatorKey,
               path: ':address',
               pageBuilder: (context, state) => NoTransitionPage(child: IdentityDetails(address: state.pathParameters['address']!)),
+              routes: [
+                GoRoute(
+                  parentNavigatorKey: _shellNavigatorKey,
+                  path: 'deletion-process-details/:deletionProcessId',
+                  pageBuilder: (context, state) => NoTransitionPage(
+                    child: DeletionProcessDetails(
+                      address: state.pathParameters['address']!,
+                      deletionProcessId: state.pathParameters['deletionProcessId']!,
+                    ),
+                  ),
+                ),
+                GoRoute(
+                  parentNavigatorKey: _shellNavigatorKey,
+                  path: 'deletion-process-audit-logs',
+                  pageBuilder: (context, state) => NoTransitionPage(
+                    child: DeletionProcessAuditLogDetails(identityAddress: state.pathParameters['address']!),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -91,6 +111,7 @@ class AdminUiApp extends StatelessWidget with WatchItMixin {
     final ThemeMode themeMode = watchValue((ThemeModeModel x) => x.themeMode);
 
     return MaterialApp.router(
+      title: 'Admin UI',
       themeMode: themeMode,
       theme: ThemeData(
         useMaterial3: true,

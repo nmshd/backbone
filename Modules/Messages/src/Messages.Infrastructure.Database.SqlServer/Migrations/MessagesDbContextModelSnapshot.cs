@@ -98,6 +98,12 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasColumnType("varbinary(max)");
 
+                    b.Property<bool>("IsRelationshipDecomposedByRecipient")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsRelationshipDecomposedBySender")
+                        .HasColumnType("bit");
+
                     b.Property<string>("MessageId")
                         .IsRequired()
                         .HasMaxLength(20)

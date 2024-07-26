@@ -44,38 +44,48 @@ class _CreateTierDialogState extends State<_CreateTierDialog> {
     return PopScope(
       canPop: !_isLoading,
       child: AlertDialog(
-        title: Text(context.l10n.createTierDialog_title),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        title: Text(context.l10n.createTierDialog_title, textAlign: TextAlign.center),
+        contentPadding: const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 32),
         content: _isLoading
             ? const Padding(
                 padding: EdgeInsets.all(16),
                 child: Wrap(alignment: WrapAlignment.center, children: [CircularProgressIndicator()]),
               )
-            : Column(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Text(context.l10n.createTierDialog_formMessage),
-                  Gaps.h16,
-                  TextField(
-                    controller: _tierNameController,
-                    focusNode: _focusNode,
-                    onChanged: (_) {
-                      if (_errorMessage == null) return;
-                      setState(() => _errorMessage = null);
-                    },
-                    onSubmitted: _onSubmitted,
-                    decoration: InputDecoration(
-                      border: const OutlineInputBorder(),
-                      labelText: context.l10n.name,
-                      error: _errorMessage != null
-                          ? Text(
-                              _errorMessage!,
-                              style: Theme.of(context).textTheme.labelSmall!.copyWith(color: Theme.of(context).colorScheme.error),
-                              textAlign: TextAlign.left,
-                            )
-                          : null,
+            : SizedBox(
+                width: 500,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Text('*${context.l10n.required}'),
                     ),
-                  ),
-                ],
+                    Gaps.h32,
+                    TextField(
+                      controller: _tierNameController,
+                      focusNode: _focusNode,
+                      onChanged: (_) {
+                        if (_errorMessage == null) return;
+                        setState(() => _errorMessage = null);
+                      },
+                      onSubmitted: _onSubmitted,
+                      decoration: InputDecoration(
+                        border: const OutlineInputBorder(),
+                        labelText: context.l10n.name,
+                        helperText: context.l10n.createTierDialog_formMessage,
+                        error: _errorMessage != null
+                            ? Text(
+                                _errorMessage!,
+                                style: Theme.of(context).textTheme.labelSmall!.copyWith(color: Theme.of(context).colorScheme.error),
+                                textAlign: TextAlign.left,
+                              )
+                            : null,
+                      ),
+                    ),
+                  ],
+                ),
               ),
         actions: <Widget>[
           OutlinedButton(

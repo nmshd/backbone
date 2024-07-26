@@ -13,7 +13,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.
 
 public class PushNotificationTextProviderTests : AbstractTestsBase
 {
-    private static readonly string[] SUPPORTED_LANGUAGES = ["en", "pt"];
+    private static readonly string[] SUPPORTED_LANGUAGES = ["en", "de", "pt", "it"];
     public static readonly TheoryData<Type> NOTIFICATION_TYPES_DATA = new(GetNotificationTypes());
 
     [Fact]

@@ -1,0 +1,114 @@
+services:
+  consumer-api:
+    container_name: consumer-api-test
+    hostname: consumer-api
+    image: consumer-api:0.0.1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5000:8080"
+    depends_on:
+      database-migrator:
+        condition: service_completed_successfully
+      rabbitmq:
+        condition: service_started
+      azure-storage-emulator:
+        condition: service_started
+    configs:
+      - source: Config
+        target: app/appsettings.override.json
+
+  admin-ui:
+    container_name: admin-ui-test
+    hostname: admin-ui
+    image: admin-ui:0.0.1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "5173:8080"
+    depends_on:
+      database-migrator:
+        condition: service_completed_successfully
+      rabbitmq:
+        condition: service_started
+    configs:
+      - source: Config
+        target: app/appsettings.override.json
+
+  event-handler-service:
+    container_name: event-handler-service-test
+    image: event-handler-service:0.0.1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      database-migrator:
+        condition: service_completed_successfully
+      rabbitmq:
+        condition: service_started
+    configs:
+      - source: Config
+        target: app/appsettings.override.json
+
+  sse-server:
+    container_name: sse-server-test
+    image: sse-server:0.0.1
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    depends_on:
+      database-migrator:
+        condition: service_completed_successfully
+      rabbitmq:
+        condition: service_started
+    configs:
+      - source: Config
+        target: app/appsettings.override.json
+
+  database-migrator:
+    container_name: database-migrator-test
+    image: database-migrator:0.0.1
+    depends_on:
+      seed-database:
+        condition: service_completed_successfully
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    configs:
+      - source: Config
+        target: app/appsettings.override.json
+
+  ### infrastructure ###
+
+  azure-storage-emulator:
+    container_name: azure-storage-emulator-test
+    hostname: azurite
+    image: mcr.microsoft.com/azure-storage/azurite
+    command: azurite -d /data/debug.log -l /data --blobHost "0.0.0.0" --queueHost "0.0.0.0"
+    ports:
+      - "10000:10000"
+
+  rabbitmq:
+    container_name: bkb-rabbitmq-test
+    hostname: rabbitmq
+    image: rabbitmq:3.7-management-alpine
+    ports:
+      - "5672:5672"
+
+  ### seeds ###
+
+  seed-database:
+    volumes:
+      - ../setup-db:/app/setup-db
+    depends_on:
+      database:
+        condition: service_healthy
+
+  admin-cli:
+    container_name: admin-cli-test
+    image: admin-cli:0.0.1
+    depends_on:
+      consumer-api:
+        condition: service_healthy
+    command: backbone client create --clientId test --clientSecret test --defaultTier Basic
+
+networks:
+  default:
+    name: backbone
