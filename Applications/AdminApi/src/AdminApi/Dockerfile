@@ -90,7 +90,7 @@ RUN dotnet publish --configuration Release --output /app/publish/health "/src/Ap
 #### Build Flutter Admin UI ####
 FROM ghcr.io/cirruslabs/flutter:3.22.3 AS flutter-build-env
 
-COPY AdminUi /src
+COPY Applications/AdminUi /src
 WORKDIR /src
 RUN dart pub global activate melos
 RUN dart pub global run melos:melos bootstrap
