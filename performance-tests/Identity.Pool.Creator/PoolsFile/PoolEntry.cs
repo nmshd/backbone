@@ -19,7 +19,7 @@ public record PoolEntry
     public uint NumberOfDatawalletModifications { get; set; } = 0;
     public uint NumberOfDevices { get; set; } = 0;
     public uint NumberOfChallenges { get; set; } = 0;
-    
+
     /// <summary>
     /// The UONs to be used by this pool
     /// </summary>

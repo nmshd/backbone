@@ -41,6 +41,6 @@ public static class CheckSolutionExtensionMethods
         if (expectedNumberOfSentMessages != numberOfSentMessages)
             messages.Add($"Messages: expected {expectedNumberOfSentMessages} but found {numberOfSentMessages} instead (difference of {Math.Abs(numberOfSentMessages - expectedNumberOfSentMessages)}).");
 
-        return (messages.Count == 0 , messages);
+        return (messages.Count == 0, messages);
     }
 }

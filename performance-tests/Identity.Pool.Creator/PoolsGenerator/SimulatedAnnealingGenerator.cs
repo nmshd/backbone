@@ -6,8 +6,8 @@ using Backbone.Identity.Pool.Creator.Application.Printer;
 using Backbone.Identity.Pool.Creator.PoolsFile;
 using Backbone.Identity.Pool.Creator.Tools;
 using Backbone.Tooling;
-using Math = System.Math;
 using GeneratorIdentity = Backbone.Identity.Pool.Creator.Domain.Identity;
+using Math = System.Math;
 
 namespace Backbone.Identity.Pool.Creator.PoolsGenerator;
 

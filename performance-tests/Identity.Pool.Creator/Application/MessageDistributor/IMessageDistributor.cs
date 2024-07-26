@@ -22,7 +22,7 @@ public class MessageDistributorTools
             }
             else if (pool.IsConnector())
             {
-                pool.NumberOfSentMessages= Convert.ToUInt32(decimal.Ceiling(pool.TotalNumberOfMessages * messagesSentByConnectorRatio));
+                pool.NumberOfSentMessages = Convert.ToUInt32(decimal.Ceiling(pool.TotalNumberOfMessages * messagesSentByConnectorRatio));
             }
             else
             {
@@ -30,7 +30,7 @@ public class MessageDistributorTools
             }
             pool.NumberOfReceivedMessages = pool.TotalNumberOfMessages - pool.NumberOfSentMessages;
 
-            if (pool.NumberOfReceivedMessages == 0|| pool.NumberOfSentMessages == 0)
+            if (pool.NumberOfReceivedMessages == 0 || pool.NumberOfSentMessages == 0)
             {
                 throw new Exception(
                     $"The resulting number of sent/received messages for pool {pool.Name} is zero. Please use a higher number and/or adjust the ratio. Otherwise, the number of messages will not match.");

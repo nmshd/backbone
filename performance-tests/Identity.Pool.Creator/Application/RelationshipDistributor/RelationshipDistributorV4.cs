@@ -15,7 +15,7 @@ public class RelationshipDistributorV4 : IRelationshipDistributor
         var connectorPools = pools.Where(p => p.IsConnector() && p.NumberOfRelationships > 0).ToList();
         var appAndConnectorIdentities = pools.Where(p => p.IsApp() || p.IsConnector()).SelectMany(p => p.Identities).OrderByDescending(i => i.RelationshipsCapacity).ToList();
 
-        var appPoolsIdentities = appPools.SelectMany(p => p.Identities).OrderByDescending(i=>i.Pool.Alias).ThenBy(i => i.RelationshipsCapacity).ToList();
+        var appPoolsIdentities = appPools.SelectMany(p => p.Identities).OrderByDescending(i => i.Pool.Alias).ThenBy(i => i.RelationshipsCapacity).ToList();
         var connectorPoolsIdentities = connectorPools.SelectMany(p => p.Identities).OrderByDescending(i => i.Pool.Alias).ThenBy(i => i.RelationshipsCapacity).ToList();
 
         var expectedRelationshipsCount = RelationshipDistributorTools.CheckRelationshipCounts(appPools, connectorPools);

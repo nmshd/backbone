@@ -101,7 +101,7 @@ public class DeterministicPoolsGenerator
         {
             for (uint i = 0; i < pool.Amount; i++)
             {
-                var createdIdentity = new Domain.Identity(new("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)), "ID1" + PasswordHelper.GeneratePassword(16, 16), "DVC" + PasswordHelper.GeneratePassword(8, 8), pool, i+1, uon++);
+                var createdIdentity = new Domain.Identity(new("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)), "ID1" + PasswordHelper.GeneratePassword(16, 16), "DVC" + PasswordHelper.GeneratePassword(8, 8), pool, i + 1, uon++);
 
                 if (pool.NumberOfDevices > 1)
                 {
