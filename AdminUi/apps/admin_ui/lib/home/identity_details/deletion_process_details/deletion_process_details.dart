@@ -44,30 +44,25 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
           ),
           Gaps.h16,
           Expanded(child: DeletionProcessAuditLogsTable(auditLogs: _deletionProcessesDetails!.auditLog)),
-          Gaps.h16,
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 16),
-                child: Tooltip(
-                  message: context.l10n.deletionProcessDetails_cancelDeletionProcess_tooltipMessage,
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                      backgroundColor:
-                          deletionProcessDetails.status == DeletionProcessStatus.approved ? Colors.grey : Theme.of(context).colorScheme.error,
-                    ),
-                    onPressed: deletionProcessDetails.status == DeletionProcessStatus.approved ? null : _cancelDeletionProcess,
-                    child: Text(
-                      context.l10n.deletionProcessDetails_cancelDeletionProcess_title,
-                      style: const TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
+          Gaps.h8,
+          Align(
+            alignment: Alignment.centerRight,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 16),
+              child: Tooltip(
+                message: deletionProcessDetails.status == DeletionProcessStatus.approved
+                    ? ''
+                    : context.l10n.deletionProcessDetails_cancelDeletionProcess_disabledTooltipMessage,
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: Theme.of(context).colorScheme.error,
+                    textStyle: TextStyle(color: Theme.of(context).colorScheme.onError),
                   ),
+                  onPressed: deletionProcessDetails.status != DeletionProcessStatus.approved ? null : _cancelDeletionProcess,
+                  child: Text(context.l10n.deletionProcessDetails_cancelDeletionProcess_title),
                 ),
               ),
-            ],
+            ),
           ),
         ],
       ),

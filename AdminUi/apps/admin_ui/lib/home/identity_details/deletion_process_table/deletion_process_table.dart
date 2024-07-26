@@ -57,20 +57,17 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                       ],
                       rows: _deletionProcesses!.map(
                         (deletionProcess) {
-                          final isDisabled = _isRowDisabled(deletionProcess.status);
-                          final textColor = isDisabled ? Colors.grey : Theme.of(context).colorScheme.onSecondaryContainer;
+                          final textColor = Theme.of(context).colorScheme.onSecondaryContainer;
 
                           return DataRow2(
                             specificRowHeight: 60,
-                            onTap: isDisabled
-                                ? null
-                                : () async {
-                                    final result =
-                                        await context.push<bool?>('/identities/${widget.address}/deletion-process-details/${deletionProcess.id}');
-                                    if (result! == true) {
-                                      await _reloadIdentityDeletionProcesses();
-                                    }
-                                  },
+                            onTap: () async {
+                              final result =
+                                  await context.push<bool?>('/identities/${widget.address}/deletion-process-details/${deletionProcess.id}');
+                              if (result! == true) {
+                                await _reloadIdentityDeletionProcesses();
+                              }
+                            },
                             cells: [
                               DataCell(Text(deletionProcess.id, style: TextStyle(color: textColor))),
                               DataCell(
@@ -150,10 +147,6 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
         _deletionProcesses!.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       });
     }
-  }
-
-  bool _isRowDisabled(DeletionProcessStatus deletionProcessStatus) {
-    return deletionProcessStatus == DeletionProcessStatus.rejected || deletionProcessStatus == DeletionProcessStatus.cancelled;
   }
 }
 
