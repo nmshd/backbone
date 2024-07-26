@@ -75,7 +75,9 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                               DataCell(Text(deletionProcess.id, style: TextStyle(color: textColor))),
                               DataCell(
                                 Text(
-                                  deletionProcess.status.name == 'WaitingForApproval' ? 'Waiting for Approval' : deletionProcess.status.name,
+                                  deletionProcess.status == DeletionProcessStatus.waitingForApproval
+                                      ? 'Waiting for Approval'
+                                      : deletionProcess.status.name,
                                   style: TextStyle(color: textColor),
                                 ),
                               ),
@@ -147,7 +149,7 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
   }
 
   bool _isRowDisabled(DeletionProcessStatus deletionProcessStatus) {
-    return deletionProcessStatus.name == 'Rejected' || deletionProcessStatus.name == 'Cancelled';
+    return deletionProcessStatus == DeletionProcessStatus.rejected || deletionProcessStatus == DeletionProcessStatus.cancelled;
   }
 }
 
