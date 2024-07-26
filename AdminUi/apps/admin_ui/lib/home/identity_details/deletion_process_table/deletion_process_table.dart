@@ -75,9 +75,13 @@ class _DeletionProcessTableState extends State<DeletionProcessTable> {
                               DataCell(Text(deletionProcess.id, style: TextStyle(color: textColor))),
                               DataCell(
                                 Text(
-                                  deletionProcess.status == DeletionProcessStatus.waitingForApproval
-                                      ? 'Waiting for Approval'
-                                      : deletionProcess.status.name,
+                                  switch (deletionProcess.status) {
+                                    DeletionProcessStatus.waitingForApproval => context.l10n.deletionProcessDetails_status_waitingForApproval,
+                                    DeletionProcessStatus.approved => context.l10n.deletionProcessDetails_status_approved,
+                                    DeletionProcessStatus.cancelled => context.l10n.deletionProcessDetails_status_cancelled,
+                                    DeletionProcessStatus.rejected => context.l10n.deletionProcessDetails_status_rejected,
+                                    DeletionProcessStatus.deleting => context.l10n.deletionProcessDetails_status_deleting,
+                                  },
                                   style: TextStyle(color: textColor),
                                 ),
                               ),
