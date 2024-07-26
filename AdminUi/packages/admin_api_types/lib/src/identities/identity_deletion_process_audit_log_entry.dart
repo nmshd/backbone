@@ -16,7 +16,7 @@ class IdentityDeletionProcessAuditLogEntry {
     required this.createdAt,
     required this.messageKey,
     required this.newStatus,
-    required this.additionalData,
+    this.additionalData = const {},
     this.oldStatus,
   });
 
