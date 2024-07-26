@@ -89,6 +89,8 @@
     "deletionProcessTable_noDeletionProcessFound": "No deletion processes found.",
     "deletionProcessTable_approvalRemindersCell_reminder": "Reminder",
     "deletionProcessTable_approvalRemindersCell_noData": "No Data",
+    "deletionProcessTable_gracePeriodRemindersCell_reminder": "Reminder",
+    "deletionProcessTable_gracePeriodRemindersCell_noData": "No Data",
     "deletionProcessDetails_title": "Deletion Process Details",
     "deletionProcessDetails_deletionProcessID": "Deletion Process ID",
     "deletionProcessDetails_status": "Status",
