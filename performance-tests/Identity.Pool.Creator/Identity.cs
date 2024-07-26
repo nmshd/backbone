@@ -13,10 +13,7 @@ public class Identity
 {
     public readonly UserCredentials UserCredentials;
 
-    /// <summary>
-    /// Unique Order Number
-    /// </summary>
-    public uint Uon;
+    public uint UniqueOrderNumber;
 
     public List<Challenge>? Challenges;
 
@@ -56,12 +53,12 @@ public class Identity
 
         if (uniqueOrderNumber is not null)
         {
-            Uon = uniqueOrderNumber ?? 0;
+            UniqueOrderNumber = uniqueOrderNumber ?? 0;
         }
         else
         {
-            pool.IdentityUons.TryDequeue(out var nonNullableUniqueOrderNumber);
-            Uon = nonNullableUniqueOrderNumber;
+            pool.IdentityUniqueOrderNumbers.TryDequeue(out var nonNullableUniqueOrderNumber);
+            UniqueOrderNumber = nonNullableUniqueOrderNumber;
         }
     }
     public void AddDevice(string deviceId)

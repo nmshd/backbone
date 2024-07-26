@@ -41,9 +41,9 @@ public class SimulatedAnnealingPoolsGenerator
 
         _localRandom = new Random();
         Identities = Pools.SelectMany(p => p.Identities).ToList();
-        _identitiesDictionary = Identities.ToDictionary(i => i.Uon);
-        _appIdentitiesDictionary = Identities.Where(i => i.Pool.IsApp()).ToDictionary(i => i.Uon);
-        _connectorIdentitiesDictionary = Identities.Where(i => i.Pool.IsConnector()).ToDictionary(i => i.Uon);
+        _identitiesDictionary = Identities.ToDictionary(i => i.UniqueOrderNumber);
+        _appIdentitiesDictionary = Identities.Where(i => i.Pool.IsApp()).ToDictionary(i => i.UniqueOrderNumber);
+        _connectorIdentitiesDictionary = Identities.Where(i => i.Pool.IsConnector()).ToDictionary(i => i.UniqueOrderNumber);
         _connectorMessageRatio = configuration.Configuration.MessagesSentByConnectorRatio;
     }
 
@@ -133,12 +133,12 @@ public class SimulatedAnnealingPoolsGenerator
             {
                 foreach (var relatedIdentity in identity.IdentitiesToEstablishRelationshipsWith)
                 {
-                    res.EstablishRelationship(identity.Uon, relatedIdentity.Uon);
+                    res.EstablishRelationship(identity.UniqueOrderNumber, relatedIdentity.UniqueOrderNumber);
                 }
 
                 foreach (var relatedIdentity in identity.IdentitiesToSendMessagesTo)
                 {
-                    res.SendMessage(identity.Uon, relatedIdentity.Uon);
+                    res.SendMessage(identity.UniqueOrderNumber, relatedIdentity.UniqueOrderNumber);
                 }
             }
         }
@@ -179,23 +179,23 @@ public class SimulatedAnnealingPoolsGenerator
                 {
                     // app to connector
                     var appIdentity = _localRandom.GetRandomElement(_appIdentitiesDictionary);
-                    var candidates = solution.GetRelationshipsAndMessageSentCountByIdentity(appIdentity.Uon).ToList();
+                    var candidates = solution.GetRelationshipsAndMessageSentCountByIdentity(appIdentity.UniqueOrderNumber).ToList();
                     if (!candidates.Any())
                         return GetNextState(currentSolution, connectorMessageRatio);
                     var orderedCandidates = candidates.OrderByDescending(it => appIdentity.Pool.NumberOfSentMessages - it.messageCount);
                     var selectedCandidate = orderedCandidates.FirstOrDefault().relatedIdentity;
-                    solution.SendMessage(appIdentity.Uon, selectedCandidate);
+                    solution.SendMessage(appIdentity.UniqueOrderNumber, selectedCandidate);
                 }
                 else
                 {
                     // connector to app
                     var connectorIdentity = _localRandom.GetRandomElement(_connectorIdentitiesDictionary);
-                    var candidates = solution.GetRelationshipsAndMessageSentCountByIdentity(connectorIdentity.Uon).ToList();
+                    var candidates = solution.GetRelationshipsAndMessageSentCountByIdentity(connectorIdentity.UniqueOrderNumber).ToList();
                     if (!candidates.Any())
                         return GetNextState(currentSolution, connectorMessageRatio);
                     var orderedCandidates = candidates.OrderByDescending(it => connectorIdentity.Pool.NumberOfSentMessages - it.messageCount);
                     var selectedCandidate = orderedCandidates.FirstOrDefault().relatedIdentity;
-                    solution.SendMessage(connectorIdentity.Uon, selectedCandidate);
+                    solution.SendMessage(connectorIdentity.UniqueOrderNumber, selectedCandidate);
                 }
 
                 if (P) Console.Write("add msg");
@@ -218,12 +218,12 @@ public class SimulatedAnnealingPoolsGenerator
                 do
                 {
                     var i1 = _localRandom.GetRandomElement(_appIdentitiesDictionary);
-                    if (i1.Pool.NumberOfRelationships * TOLERANCE <= solution.GetNumberOfRelatedIdentities(i1.Uon)) continue;
+                    if (i1.Pool.NumberOfRelationships * TOLERANCE <= solution.GetNumberOfRelatedIdentities(i1.UniqueOrderNumber)) continue;
 
                     // if the selected identity has capacity for further relationships
                     var i2 = _localRandom.GetRandomElement(_connectorIdentitiesDictionary);
 
-                    solution.EstablishRelationship(i1.Uon, i2.Uon);
+                    solution.EstablishRelationship(i1.UniqueOrderNumber, i2.UniqueOrderNumber);
                     flag = true;
 
                 } while (!flag && iter++ < 20);
@@ -268,7 +268,7 @@ public class SimulatedAnnealingPoolsGenerator
     private SolutionRepresentation GenerateInitialSolution()
     {
         var solution = new SolutionRepresentation();
-        solution.EstablishRelationship(_localRandom.GetRandomElement(Identities).Uon, _localRandom.GetRandomElement(Identities).Uon);
+        solution.EstablishRelationship(_localRandom.GetRandomElement(Identities).UniqueOrderNumber, _localRandom.GetRandomElement(Identities).UniqueOrderNumber);
         return solution;
     }
 
@@ -309,7 +309,7 @@ public class SolutionRepresentation : ICloneable
     /// This can never happen: a == b
     /// This approach ensures that messages can only be sent in the context of a relationship (a mandatory requisite).
     /// </summary>
-    /// <see cref="Identity.Uon"/>
+    /// <see cref="Identity.UniqueOrderNumber"/>
     private Dictionary<(uint a, uint b), uint> RaM { get; } = new();
 
     public ulong IterationCount { get; set; }

@@ -5,7 +5,7 @@ namespace Backbone.Identity.Pool.Creator.Application.RelationshipDistributor;
 /// <summary>
 /// Assigns relationships based on a special heuristic called PWA (Pool Weight Affinity)
 /// Trying to match pools with similar weights first.
-/// Starts with heavy ones and proceeds to to lighter ones.
+/// Starts with heavy ones and proceeds to lighter ones.
 /// </summary>
 public class RelationshipDistributorV4 : IRelationshipDistributor
 {
