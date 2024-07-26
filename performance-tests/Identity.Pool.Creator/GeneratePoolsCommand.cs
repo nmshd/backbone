@@ -24,14 +24,14 @@ public class GeneratePoolsCommand : Command
         var serviceProvider = ConfigureServices();
 
         var poolsConfiguration = await Reader.ReadPools(poolsFilePath);
-        var generator = new PoolsGenerator.PoolsGenerator(poolsConfiguration,
+        var generator = new PoolsGenerator.DeterministicPoolsGenerator(poolsConfiguration,
             serviceProvider.GetRequiredService<IRelationshipDistributor>(),
             serviceProvider.GetRequiredService<IMessageDistributor>(),
             printer: serviceProvider.GetRequiredService<IPrinter>()
 
         );
 
-        await generator.CreatePools();
+        generator.CreatePools();
 
         var saGenerator = new SimulatedAnnealingPoolsGenerator(poolsConfiguration, printer: serviceProvider.GetRequiredService<IPrinter>());
         await saGenerator.CreatePools();

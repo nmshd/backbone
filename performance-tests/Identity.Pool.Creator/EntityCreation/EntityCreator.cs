@@ -104,9 +104,9 @@ public class EntityCreator
 
                 if (acceptRelationshipResponse.Result is not null)
                     nonConnectorIdentity.EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, relatedIdentity);
-            }
 
-            progress.Increment();
+                progress.Increment();
+            }
         });
 
         Console.WriteLine("done.");

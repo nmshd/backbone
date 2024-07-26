@@ -20,6 +20,9 @@
     <None Update="light-solution\ram.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="poolCreator.20240725-132656\ram.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="pools.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

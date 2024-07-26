@@ -1,17 +1,11 @@
-﻿using System.Text;
-using Backbone.ConsumerApi.Sdk;
-using Backbone.ConsumerApi.Sdk.Authentication;
-using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
-using Backbone.Identity.Pool.Creator.Application.MessageDistributor;
+﻿using Backbone.Identity.Pool.Creator.Application.MessageDistributor;
 using Backbone.Identity.Pool.Creator.Application.Printer;
 using Backbone.Identity.Pool.Creator.Application.RelationshipDistributor;
 using Backbone.Identity.Pool.Creator.PoolsFile;
-using Backbone.Identity.Pool.Creator.Tools;
 using Backbone.Tooling;
-using Backbone.Tooling.Extensions;
 
 namespace Backbone.Identity.Pool.Creator.PoolsGenerator;
-public class PoolsGenerator
+public class DeterministicPoolsGenerator
 {
     private readonly IRelationshipDistributor _relationshipDistributor;
     private readonly IMessageDistributor _messageDistributor;
@@ -20,7 +14,7 @@ public class PoolsGenerator
     private readonly PoolsOffset _poolsOffset;
     private readonly PoolFileRoot _config;
 
-    public PoolsGenerator(
+    public DeterministicPoolsGenerator(
         PoolFileRoot configuration,
         IRelationshipDistributor relationshipDistributor,
         IMessageDistributor messageDistributor,
@@ -36,13 +30,11 @@ public class PoolsGenerator
         _poolsOffset = PoolsOffset.CalculatePoolOffsets(_pools.ToArray());
     }
 
-    public async Task CreatePools()
+    public void CreatePools()
     {
         _pools = PoolsOffset.CreateOffsetPools(_pools, _poolsOffset);
 
         CheckPoolsConfiguration();
-
-        //await CreateIdentities();
         CreateFakeIdentities();
 
         RelationshipDistributorTools.EstablishMessagesOffsetPoolsRelationships(_pools);
@@ -56,11 +48,6 @@ public class PoolsGenerator
 
         _printer.PrintRelationships(_pools, summaryOnly: true);
         _printer.PrintMessages(_pools, summaryOnly: true);
-
-        //await CreateRelationshipTemplates();
-        //await CreateChallenges();
-        //await CreateMessages();
-        //await CreateDatawalletModifications();
 
         _config.Pools = _pools.ToArray();
     }
@@ -91,7 +78,6 @@ public class PoolsGenerator
     /// <summary>
     /// For each pool p, p.NumberOfRelationships must NOT be greater than the sum of identities in all pools of the opposite type
     /// </summary>
-    /// <exception cref="NotImplementedException"></exception>
     private void CheckPoolsConfiguration()
     {
         var expectedAppIdentitiesCount = _pools.Where(p => p.IsApp()).Sum(p => p.Amount);

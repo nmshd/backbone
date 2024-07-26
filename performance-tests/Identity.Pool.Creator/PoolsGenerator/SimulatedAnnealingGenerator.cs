@@ -55,7 +55,7 @@ public class SimulatedAnnealingPoolsGenerator
         _printer.PrintString(Generate().GetAsCSV(_identitiesDictionary), "ram");
     }
 
-    public SolutionRepresentation Generate(double initialTemperature = 20d, ulong maxIterations = 200)
+    public SolutionRepresentation Generate(double initialTemperature = 20d, ulong maxIterations = 20000)
     {
         var progress = new ProgressBar(Convert.ToInt64(maxIterations));
         var currentSolution = GenerateSolutionFromPools(Pools);
@@ -517,14 +517,14 @@ public class SolutionRepresentation : ICloneable
     {
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine("Identity1;Identity1Pool;Identity2;Identity2Pool;MessageCount");
-        
+
         foreach (var ((a, b), c) in RaM)
         {
             var identity1Pool = identitiesDictionary[a].Pool.Alias;
             var identity2Pool = identitiesDictionary[b].Pool.Alias;
             stringBuilder.AppendLine($"{a};{identity1Pool};{b};{identity2Pool};{c}");
         }
-        
+
         return stringBuilder.ToString();
     }
 
