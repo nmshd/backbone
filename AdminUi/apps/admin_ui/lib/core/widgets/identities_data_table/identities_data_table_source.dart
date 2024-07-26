@@ -18,9 +18,19 @@ class IdentityDataTableSource extends AsyncDataTableSource {
 
   final Locale locale;
   final bool hideTierColumn;
+  final bool hideClientColumn;
+  final String? tierId;
+  final String? clientId;
   final void Function({required String address}) navigateToIdentity;
 
-  IdentityDataTableSource({required this.locale, required this.navigateToIdentity, this.hideTierColumn = false});
+  IdentityDataTableSource({
+    required this.locale,
+    required this.navigateToIdentity,
+    this.tierId,
+    this.clientId,
+    this.hideTierColumn = false,
+    this.hideClientColumn = false,
+  });
 
   void sort({required int sortColumnIndex, required bool sortColumnAscending}) {
     _sortingSettings = (sortColumnIndex: sortColumnIndex, sortAscending: sortColumnAscending);
@@ -29,10 +39,13 @@ class IdentityDataTableSource extends AsyncDataTableSource {
 
   @override
   bool get isRowCountApproximate => false;
+
   @override
   int get rowCount => _pagination?.totalRecords ?? 0;
+
   @override
   int get selectedRowCount => 0;
+
   @override
   Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
     final pageNumber = startIndex ~/ count;
@@ -47,6 +60,17 @@ class IdentityDataTableSource extends AsyncDataTableSource {
       _pagination = response.pagination;
 
       final rows = response.data.indexed
+          .where((identity) {
+            if (tierId != null) {
+              return identity.$2.tier.id == tierId;
+            }
+
+            if (clientId != null) {
+              return identity.$2.createdWithClient == clientId;
+            }
+
+            return true;
+          })
           .map(
             (identity) => DataRow2.byIndex(
               index: pageNumber * count + identity.$1,
@@ -54,7 +78,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
               cells: [
                 DataCell(Text(identity.$2.address)),
                 if (!hideTierColumn) DataCell(Text(identity.$2.tier.name)),
-                DataCell(Text(identity.$2.createdWithClient)),
+                if (!hideClientColumn) DataCell(Text(identity.$2.createdWithClient)),
                 DataCell(Text(identity.$2.numberOfDevices.toString())),
                 DataCell(
                   Tooltip(
@@ -78,6 +102,11 @@ class IdentityDataTableSource extends AsyncDataTableSource {
             ),
           )
           .toList();
+
+      if (rows.isEmpty) {
+        return AsyncRowsResponse(response.pagination.totalRecords, []);
+      }
+
       return AsyncRowsResponse(response.pagination.totalRecords, rows);
     } catch (e) {
       GetIt.I.get<Logger>().e('Failed to load data: $e');

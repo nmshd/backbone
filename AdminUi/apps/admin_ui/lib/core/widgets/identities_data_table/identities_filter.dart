@@ -10,10 +10,12 @@ import '../filters/filters.dart';
 class IdentitiesFilter extends StatefulWidget {
   final Future<void> Function({IdentityOverviewFilter? filter}) onFilterChanged;
   final String? fixedTierId;
+  final String? fixedClientId;
 
   const IdentitiesFilter({
     required this.onFilterChanged,
     this.fixedTierId,
+    this.fixedClientId,
     super.key,
   });
 
@@ -66,15 +68,17 @@ class _IdentitiesFilterState extends State<IdentitiesFilter> {
                 },
               ),
             ],
-            Gaps.w16,
-            MultiSelectFilter(
-              label: context.l10n.clients,
-              options: _availableClients,
-              onOptionSelected: (List<String> selectedClients) {
-                _filter = _filter.copyWith(clients: selectedClients.isEmpty ? const Optional.absent() : Optional(selectedClients));
-                widget.onFilterChanged(filter: _filter);
-              },
-            ),
+            if (widget.fixedClientId == null) ...[
+              Gaps.w16,
+              MultiSelectFilter(
+                label: context.l10n.clients,
+                options: _availableClients,
+                onOptionSelected: (List<String> selectedClients) {
+                  _filter = _filter.copyWith(clients: selectedClients.isEmpty ? const Optional.absent() : Optional(selectedClients));
+                  widget.onFilterChanged(filter: _filter);
+                },
+              ),
+            ],
             Gaps.w16,
             NumberFilter(
               label: context.l10n.numberOfDevices,

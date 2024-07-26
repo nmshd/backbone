@@ -7,8 +7,8 @@ class Client {
   final String clientId;
   final String displayName;
   final String defaultTier;
-  final String clientSecret;
   final DateTime createdAt;
+  final String? clientSecret;
   final int? maxIdentities;
   final int? numberOfIdentities;
 

@@ -177,6 +177,7 @@ class _IdentitiesListState extends State<_IdentitiesList> {
     _dataSource = IdentityDataTableSource(
       locale: Localizations.localeOf(context),
       hideTierColumn: true,
+      tierId: widget.tierDetails.id,
       navigateToIdentity: ({required String address}) {
         context.push('/identities/$address');
       },
@@ -209,7 +210,13 @@ class _IdentitiesListState extends State<_IdentitiesList> {
                       ..refreshDatasource();
                   },
                 ),
-                SizedBox(height: 500, child: IdentitiesDataTable(dataSource: _dataSource, hideTierColumn: true)),
+                SizedBox(
+                  height: 500,
+                  child: IdentitiesDataTable(
+                    dataSource: _dataSource,
+                    hideTierColumn: true,
+                  ),
+                ),
               ],
             ),
           ),

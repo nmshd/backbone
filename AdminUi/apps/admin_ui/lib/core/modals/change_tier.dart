@@ -12,11 +12,26 @@ Future<void> showChangeTierDialog({
   Identity? identityDetails,
   Client? clientDetails,
 }) async {
+  assert(identityDetails != null || clientDetails != null, 'Either identity details or client details must be provided');
+  assert(identityDetails == null || clientDetails == null, 'Only one of identity details or client details can be provided');
+
   await showDialog<void>(
     context: context,
     builder: (BuildContext context) => _ShowChangeTierDialog(
       onTierUpdated: onTierUpdated,
       identityDetails: identityDetails,
+      clientDetails: clientDetails,
+      assignTier: ({required String tierId}) {
+        if (clientDetails != null) {
+          return GetIt.I.get<AdminApiClient>().clients.updateClient(
+                clientDetails.clientId,
+                defaultTier: tierId,
+                maxIdentities: clientDetails.maxIdentities,
+              );
+        }
+
+        return GetIt.I.get<AdminApiClient>().identities.updateIdentity(identityDetails!.address, tierId: tierId);
+      },
       availableTiers: availableTiers,
     ),
   );
@@ -24,12 +39,16 @@ Future<void> showChangeTierDialog({
 
 class _ShowChangeTierDialog extends StatefulWidget {
   final VoidCallback onTierUpdated;
-  final Identity? identityDetails;
+  final Future<ApiResponse<dynamic>> Function({required String tierId}) assignTier;
   final List<TierOverview> availableTiers;
+  final Identity? identityDetails;
+  final Client? clientDetails;
 
   const _ShowChangeTierDialog({
     required this.onTierUpdated,
     required this.availableTiers,
+    required this.assignTier,
+    this.clientDetails,
     this.identityDetails,
   });
 
@@ -39,13 +58,14 @@ class _ShowChangeTierDialog extends StatefulWidget {
 
 class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
   bool _saving = false;
-  late String selectedTier;
+  late String? _selectedTier;
 
   @override
   void initState() {
     super.initState();
 
-    if (widget.identityDetails == null) selectedTier = widget.identityDetails!.tierId;
+    if (widget.identityDetails != null) _selectedTier = widget.identityDetails!.tierId;
+    if (widget.clientDetails != null) _selectedTier = widget.clientDetails!.defaultTier;
   }
 
   @override
@@ -59,10 +79,10 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
         content: SizedBox(
           width: 500,
           child: DropdownButtonFormField<String>(
-            value: selectedTier,
+            value: _selectedTier,
             decoration: const InputDecoration(border: OutlineInputBorder()),
-            onChanged: _saving ? null : (String? newValue) => setState(() => selectedTier = newValue!),
-            items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned).map((TierOverview tier) {
+            onChanged: _saving ? null : (String? newValue) => setState(() => _selectedTier = newValue),
+            items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned || tier.canBeUsedAsDefaultForClient).map((TierOverview tier) {
               return DropdownMenuItem<String>(
                 value: tier.id,
                 child: Text(tier.name),
@@ -76,7 +96,8 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
             child: Text(context.l10n.cancel),
           ),
           FilledButton(
-            onPressed: _saving || selectedTier == widget.identityDetails.tierId ? null : _changeTier,
+            onPressed:
+                _saving || _selectedTier == widget.identityDetails?.tierId || _selectedTier == widget.clientDetails?.defaultTier ? null : _changeTier,
             child: Text(context.l10n.save),
           ),
         ],
@@ -87,7 +108,9 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
   Future<void> _changeTier() async {
     setState(() => _saving = true);
 
-    final response = await GetIt.I.get<AdminApiClient>().identities.updateIdentity(widget.identityDetails.address, tierId: selectedTier);
+    assert(_selectedTier != null, 'Invalid State');
+
+    final response = await widget.assignTier(tierId: _selectedTier!);
 
     if (!mounted) return;
 

@@ -3,6 +3,7 @@ import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
@@ -92,6 +93,9 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                       .where((e) => _filter.matches(e))
                       .map(
                         (client) => DataRow2(
+                          onTap: () {
+                            context.go('/clients/${client.clientId}');
+                          },
                           selected: _selectedClients.contains(client.clientId),
                           onSelectChanged: (selected) {
                             if (selected == null) return;

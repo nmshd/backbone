@@ -197,7 +197,7 @@ class _CreateClientDialogState extends State<_CreateClientDialog> {
 
     _clientIdController.text = response.data.clientId;
     _displayNameController.text = response.data.displayName;
-    _clientSecretController.text = response.data.clientSecret;
+    _clientSecretController.text = response.data.clientSecret!;
 
     setState(() => _saveSucceeded = true);
   }
