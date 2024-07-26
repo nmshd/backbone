@@ -9,7 +9,7 @@
         "@babel/preset-typescript": "7.23.3",
         "@js-soft/eslint-config-ts": "^1.6.8",
         "@js-soft/license-check": "^1.0.9",
-        "@types/k6": "~0.48.0",
+        "@types/k6": "~0.52.0",
         "@types/webpack": "5.28.5",
         "babel-loader": "9.1.3",
         "clean-webpack-plugin": "4.0.0",
