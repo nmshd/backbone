@@ -5,17 +5,22 @@ import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
 
-class IdentitiesList extends StatefulWidget {
+enum FilterType {
+  clientFilter,
+  tierFilter,
+}
+
+class IdentitiesTable extends StatefulWidget {
   final Client? clientDetails;
   final TierDetails? tierDetails;
 
-  const IdentitiesList({this.clientDetails, this.tierDetails, super.key});
+  const IdentitiesTable({this.clientDetails, this.tierDetails, super.key});
 
   @override
-  State<IdentitiesList> createState() => _IdentitiesListState();
+  State<IdentitiesTable> createState() => _IdentitiesTableState();
 }
 
-class _IdentitiesListState extends State<IdentitiesList> {
+class _IdentitiesTableState extends State<IdentitiesTable> {
   late IdentityDataTableSource _dataSource;
 
   @override
@@ -25,23 +30,9 @@ class _IdentitiesListState extends State<IdentitiesList> {
     final locale = Localizations.localeOf(context);
 
     if (widget.clientDetails != null) {
-      _dataSource = IdentityDataTableSource(
-        locale: locale,
-        hideClientColumn: true,
-        navigateToIdentity: ({required String address}) {
-          context.push('/identities/$address');
-        },
-        filter: IdentityOverviewFilter(clients: [widget.clientDetails!.clientId]),
-      );
+      _dataSource = _fillDataTableSource(filterType: FilterType.clientFilter, locale: locale, hideViewSpecificColumn: true);
     } else if (widget.tierDetails != null) {
-      _dataSource = IdentityDataTableSource(
-        locale: locale,
-        hideTierColumn: true,
-        navigateToIdentity: ({required String address}) {
-          context.push('/identities/$address');
-        },
-        filter: IdentityOverviewFilter(tiers: [widget.tierDetails!.id]),
-      );
+      _dataSource = _fillDataTableSource(filterType: FilterType.tierFilter, locale: locale, hideViewSpecificColumn: true);
     }
   }
 
@@ -91,6 +82,25 @@ class _IdentitiesListState extends State<IdentitiesList> {
           ),
         ],
       ),
+    );
+  }
+
+  IdentityDataTableSource _fillDataTableSource({required FilterType filterType, required Locale locale, required bool hideViewSpecificColumn}) {
+    final hideClientColumn = filterType == FilterType.clientFilter && hideViewSpecificColumn;
+    final hideTierColumn = filterType == FilterType.tierFilter && hideViewSpecificColumn;
+    final localFilter = switch (filterType) {
+      FilterType.clientFilter => widget.clientDetails != null ? IdentityOverviewFilter(clients: [widget.clientDetails!.clientId]) : null,
+      FilterType.tierFilter => widget.tierDetails != null ? IdentityOverviewFilter(tiers: [widget.tierDetails!.id]) : null,
+    };
+
+    return IdentityDataTableSource(
+      locale: locale,
+      hideClientColumn: hideClientColumn,
+      hideTierColumn: hideTierColumn,
+      filter: localFilter,
+      navigateToIdentity: ({required String address}) {
+        context.push('/identities/$address');
+      },
     );
   }
 }
