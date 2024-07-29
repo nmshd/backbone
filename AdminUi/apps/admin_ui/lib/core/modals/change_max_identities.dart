@@ -90,10 +90,7 @@ class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentities
             onPressed: _saving ? null : () => Navigator.of(context, rootNavigator: true).pop(),
             child: Text(context.l10n.cancel),
           ),
-          FilledButton(
-            onPressed: _saving ? null : _changeMaxIdentities,
-            child: Text(context.l10n.update),
-          ),
+          FilledButton(onPressed: _saving ? null : _changeMaxIdentities, child: Text(context.l10n.update)),
         ],
       ),
     );
