@@ -20,7 +20,7 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var sseConnector = CreateConnector();
 
         // Act
-        var results = await sseConnector.Send([], CreateRandomIdentityAddress(), new TestPushNotification());
+        var results = await sseConnector.Send([], new TestPushNotification());
 
         // Assert
         results.Successes.Should().BeEmpty();
@@ -34,7 +34,7 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var sseConnector = CreateConnector();
 
         // Act
-        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], CreateRandomIdentityAddress(), new TestPushNotification());
+        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], new TestPushNotification());
 
         // Assert
         results.Successes.Should().HaveCount(1);
@@ -52,7 +52,7 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var sseConnector = CreateConnector(mockSseServerClient);
 
         // Act
-        await sseConnector.Send([CreatePnsRegistrationForSse()], recipient, new TestPushNotification());
+        await sseConnector.Send([CreatePnsRegistrationForSse()], new TestPushNotification());
 
         // Assert
         A.CallTo(() => mockSseServerClient.SendEvent(recipient, A<string>._)).MustHaveHappenedOnceExactly();
@@ -69,7 +69,7 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var sseConnector = CreateConnector(mockSseServerClient);
 
         // Act
-        await sseConnector.Send([CreatePnsRegistrationForSse()], recipient, new TestPushNotification());
+        await sseConnector.Send([CreatePnsRegistrationForSse()], new TestPushNotification());
 
         // Assert
         A.CallTo(() => mockSseServerClient.SendEvent(A<string>._, "Test")).MustHaveHappenedOnceExactly();
@@ -86,7 +86,7 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var sseConnector = CreateConnector(fakeSseServerClient);
 
         // Act
-        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], recipient, new TestPushNotification());
+        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], new TestPushNotification());
 
         // Assert
         results.Failures.Should().HaveCount(1);
@@ -105,7 +105,7 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var sseConnector = CreateConnector(fakeSseServerClient);
 
         // Act
-        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], recipient, new TestPushNotification());
+        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], new TestPushNotification());
 
         // Assert
         results.Failures.Should().HaveCount(1);
