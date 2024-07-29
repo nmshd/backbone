@@ -94,7 +94,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                       .map(
                         (client) => DataRow2(
                           onTap: () {
-                            context.go('/clients/${client.clientId}');
+                            context.go('/clients/${client.clientId}', extra: client.numberOfIdentities);
                           },
                           selected: _selectedClients.contains(client.clientId),
                           onSelectChanged: (selected) {
