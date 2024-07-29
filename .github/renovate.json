@@ -4,6 +4,7 @@
     "labels": ["dependencies"],
     "automerge": true,
     "automergeType": "branch",
+    "schedule": ["after 10pm every weekday", "before 5am every weekday", "every weekend"],
     "packageRules": [
         {
             "matchDatasources": ["npm"],
