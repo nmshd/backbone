@@ -97,7 +97,8 @@ final _router = GoRouter(
             GoRoute(
               parentNavigatorKey: _shellNavigatorKey,
               path: ':clientId',
-              pageBuilder: (context, state) => NoTransitionPage(child: ClientDetails(clientId: state.pathParameters['clientId']!)),
+              pageBuilder: (context, state) =>
+                  NoTransitionPage(child: ClientDetails(clientId: state.pathParameters['clientId']!, numberOfIdentities: state.extra! as int)),
             ),
           ],
         ),
