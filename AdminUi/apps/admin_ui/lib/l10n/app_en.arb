@@ -29,6 +29,7 @@
     "id": "ID",
     "identityVersion": "Identity Version",
     "identity": "Identity",
+    "identities": "Identities",
     "lastLoginAt": "Last Login at",
     "light": "Light",
     "max": "Max",
@@ -69,6 +70,7 @@
     "clientsOverview_removeSelectedClients_message": "Are you sure you want to remove the selected clients?",
     "clientsOverview_removeSelectedClients_error": "An error occurred while deleting the client(s). Please try again.",
     "clientsOverview_removeSelectedClients_success": "Selected client(s) have been removed.",
+    "clientDetails_card_defaultTier": "Default Tier",
     "createClientDialog_title": "Create Client",
     "createClientDialog_clientID_message": "A client ID will be generated if this field is left blank.",
     "createClientDialog_displayName_message": "Client ID will be used as a Display Name if no value is provided.",
@@ -149,6 +151,8 @@
     "identityRelationshipTable_relationships": "Relationships",
     "identityRelationshipTable_viewIdentityRelationships": "View relationships of this identity",
     "identityRelationshipTable_errorLoadingData": "An error occurred loading data.",
+    "identityList_tier_titleDescription": "View Identities associated with this Tier.",
+    "identityList_client_titleDescription": "View Identities associated with this Client.",
     "identityMessageTable_recipients": "Recipients",
     "identityMessageTable_senderAddress": "Sender Address",
     "identityMessageTable_senderDevice": "Sender Device",
@@ -174,8 +178,6 @@
     "tierDetails_quotaList_titleDescription": "View and assign quotas for this tier.",
     "tierDetails_quotaList_titleDescription_readOnly": "View quotas for this tier. This tier is managed by the system and therefore read-only.",
     "tierDetails_quotaList_noQuotaForTier": "No quotas added to this tier.",
-    "tierDetails_identityList_title": "Identities",
-    "tierDetails_identityList_titleDescription": "View Identities associated with this Tier.",
     "tiersOverview_title_description": "A list of existing tiers",
     "tiersOverview_noTiersFound": "No tiers found."
 }

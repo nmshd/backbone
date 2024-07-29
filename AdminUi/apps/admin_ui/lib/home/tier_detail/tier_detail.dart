@@ -3,7 +3,6 @@ import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
 
@@ -66,7 +65,7 @@ class _TierDetailState extends State<TierDetail> {
             Gaps.h16,
             _QuotaList(tierDetails, _reload),
             Gaps.h16,
-            _IdentitiesList(tierDetails),
+            IdentitiesList(tierDetails: tierDetails),
           ],
         ),
       ),
@@ -155,74 +154,5 @@ class _QuotaListState extends State<_QuotaList> {
 
       _selectedQuotas.add(id);
     });
-  }
-}
-
-class _IdentitiesList extends StatefulWidget {
-  final TierDetails tierDetails;
-
-  const _IdentitiesList(this.tierDetails);
-
-  @override
-  State<_IdentitiesList> createState() => _IdentitiesListState();
-}
-
-class _IdentitiesListState extends State<_IdentitiesList> {
-  late IdentityDataTableSource _dataSource;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _dataSource = IdentityDataTableSource(
-      locale: Localizations.localeOf(context),
-      hideTierColumn: true,
-      tierId: widget.tierDetails.id,
-      navigateToIdentity: ({required String address}) {
-        context.push('/identities/$address');
-      },
-      filter: IdentityOverviewFilter(tiers: [widget.tierDetails.id]),
-    );
-  }
-
-  @override
-  void dispose() {
-    _dataSource.dispose();
-
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        title: Text(context.l10n.tierDetails_identityList_title),
-        subtitle: Text(context.l10n.tierDetails_identityList_titleDescription),
-        children: [
-          Card(
-            child: Column(
-              children: [
-                IdentitiesFilter(
-                  fixedTierId: widget.tierDetails.id,
-                  onFilterChanged: ({IdentityOverviewFilter? filter}) async {
-                    _dataSource
-                      ..filter = filter
-                      ..refreshDatasource();
-                  },
-                ),
-                SizedBox(
-                  height: 500,
-                  child: IdentitiesDataTable(
-                    dataSource: _dataSource,
-                    hideTierColumn: true,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

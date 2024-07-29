@@ -4,7 +4,6 @@ import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
@@ -120,31 +119,16 @@ class _ClientDetailsCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Text(clientDetails.clientId, style: Theme.of(context).textTheme.headlineLarge),
-                          Gaps.w16,
-                          CopyToClipboardButton(
-                            clipboardText: clientDetails.clientId,
-                            successMessage: context.l10n.identityDetails_card_identityClipboardMessage,
-                          ),
-                        ],
-                      ),
                       Gaps.h32,
                       Wrap(
                         crossAxisAlignment: WrapCrossAlignment.center,
                         spacing: 8,
                         runSpacing: 8,
                         children: [
+                          EntityDetails(title: context.l10n.id, value: clientDetails.clientId),
                           EntityDetails(
-                            title: context.l10n.identityDetails_card_publicKey,
-                            value: clientDetails.displayName.ellipsize(20),
-                            onIconPressed: () => context.setClipboardDataWithSuccessNotification(
-                              clipboardText: clientDetails.displayName,
-                              successMessage: context.l10n.identityDetails_card_publicKey_copyToClipboardMessage,
-                            ),
-                            icon: Icons.copy,
-                            tooltipMessage: context.l10n.identityDetails_card_publicKey_tooltipMessage,
+                            title: context.l10n.maxIdentities,
+                            value: '${clientDetails.maxIdentities == 0 ? 0 : clientDetails.maxIdentities}',
                           ),
                           EntityDetails(
                             title: context.l10n.createdAt,
@@ -152,7 +136,7 @@ class _ClientDetailsCard extends StatelessWidget {
                                 '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(clientDetails.createdAt)} ${DateFormat.Hms().format(clientDetails.createdAt)}',
                           ),
                           EntityDetails(
-                            title: context.l10n.tier,
+                            title: context.l10n.clientDetails_card_defaultTier,
                             value: currentTier.name,
                             onIconPressed: currentTier.canBeManuallyAssigned || currentTier.canBeUsedAsDefaultForClient
                                 ? () => showChangeTierDialog(
@@ -175,73 +159,8 @@ class _ClientDetailsCard extends StatelessWidget {
           ],
         ),
         Gaps.h16,
-        _IdentitiesList(clientDetails),
+        IdentitiesList(clientDetails: clientDetails),
       ],
-    );
-  }
-}
-
-class _IdentitiesList extends StatefulWidget {
-  final Client clientDetails;
-
-  const _IdentitiesList(this.clientDetails);
-
-  @override
-  State<_IdentitiesList> createState() => _IdentitiesListState();
-}
-
-class _IdentitiesListState extends State<_IdentitiesList> {
-  late IdentityDataTableSource _dataSource;
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _dataSource = IdentityDataTableSource(
-      locale: Localizations.localeOf(context),
-      hideClientColumn: true,
-      clientId: widget.clientDetails.clientId,
-      navigateToIdentity: ({required String address}) {
-        context.push('/identities/$address');
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    _dataSource.dispose();
-
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-      child: ExpansionTile(
-        title: Text(context.l10n.tierDetails_identityList_title),
-        subtitle: Text(context.l10n.tierDetails_identityList_titleDescription),
-        children: [
-          Card(
-            child: Column(
-              children: [
-                IdentitiesFilter(
-                  fixedClientId: widget.clientDetails.clientId,
-                  onFilterChanged: ({IdentityOverviewFilter? filter}) async {
-                    _dataSource
-                      ..filter = filter
-                      ..refreshDatasource();
-                  },
-                ),
-                SizedBox(
-                  height: 500,
-                  child: IdentitiesDataTable(dataSource: _dataSource, hideClientColumn: true),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

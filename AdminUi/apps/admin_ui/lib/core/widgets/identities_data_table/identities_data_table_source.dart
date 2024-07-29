@@ -19,15 +19,11 @@ class IdentityDataTableSource extends AsyncDataTableSource {
   final Locale locale;
   final bool hideTierColumn;
   final bool hideClientColumn;
-  final String? tierId;
-  final String? clientId;
   final void Function({required String address}) navigateToIdentity;
 
   IdentityDataTableSource({
     required this.locale,
     required this.navigateToIdentity,
-    this.tierId,
-    this.clientId,
     this.hideTierColumn = false,
     this.hideClientColumn = false,
     IdentityOverviewFilter? filter,
@@ -59,30 +55,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
           );
       _pagination = response.pagination;
 
-      final defaultPageNumber = _pagination?.pageNumber ?? 0;
-      final defaultPageSize = _pagination?.pageSize ?? count;
-      final defaultTotalPages = _pagination?.totalPages ?? 0;
-
-      final filteredIdentities = response.data.indexed.where((identity) {
-        if (tierId != null) {
-          return identity.$2.tier.id == tierId;
-        }
-
-        if (clientId != null) {
-          return identity.$2.createdWithClient == clientId;
-        }
-
-        return true;
-      }).toList();
-
-      _pagination = Pagination(
-        pageNumber: defaultPageNumber,
-        pageSize: defaultPageSize,
-        totalPages: filteredIdentities.isEmpty ? 0 : defaultTotalPages,
-        totalRecords: filteredIdentities.isEmpty ? 0 : filteredIdentities.length,
-      );
-
-      final rows = filteredIdentities
+      final rows = response.data.indexed
           .map(
             (identity) => DataRow2.byIndex(
               index: pageNumber * count + identity.$1,
