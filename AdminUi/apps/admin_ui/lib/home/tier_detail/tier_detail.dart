@@ -57,7 +57,7 @@ class _TierDetailState extends State<TierDetail> {
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    EntityDetails(title: context.l10n.tierDetails_tierID, value: tierDetails.id),
+                    EntityDetails(title: context.l10n.id, value: tierDetails.id),
                     EntityDetails(title: context.l10n.name, value: tierDetails.name),
                   ],
                 ),
@@ -181,6 +181,7 @@ class _IdentitiesListState extends State<_IdentitiesList> {
       navigateToIdentity: ({required String address}) {
         context.push('/identities/$address');
       },
+      filter: IdentityOverviewFilter(tiers: [widget.tierDetails.id]),
     );
   }
 

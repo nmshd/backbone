@@ -30,7 +30,8 @@ class IdentityDataTableSource extends AsyncDataTableSource {
     this.clientId,
     this.hideTierColumn = false,
     this.hideClientColumn = false,
-  });
+  , IdentityOverviewFilter? filter})
+      : _filter = filter;
 
   void sort({required int sortColumnIndex, required bool sortColumnAscending}) {
     _sortingSettings = (sortColumnIndex: sortColumnIndex, sortAscending: sortColumnAscending);
