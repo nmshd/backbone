@@ -5,10 +5,7 @@ import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
 
-enum FilterType {
-  clientFilter,
-  tierFilter,
-}
+enum FilterType { clientFilter, tierFilter }
 
 class IdentitiesTable extends StatefulWidget {
   final Client? clientDetails;
