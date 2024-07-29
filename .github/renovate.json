@@ -2,9 +2,8 @@
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": ["config:recommended"],
     "labels": ["dependencies"],
-    "automerge": true,
-    "automergeType": "branch",
     "schedule": ["after 10pm every weekday", "before 5am every weekday", "every weekend"],
+    "automerge": true,
     "packageRules": [
         {
             "matchDatasources": ["npm"],
@@ -14,43 +13,59 @@
 
         {
             "groupName": "patch-all",
-            "matchUpdateTypes": ["patch", "digest"]
+            "matchUpdateTypes": ["patch", "digest"],
+            "automerge": true,
+            "automergeType": "branch"
         },
 
         {
             "groupName": "minor-updates-nuget",
             "matchDatasources": ["nuget"],
-            "matchUpdateTypes": ["minor"]
+            "matchUpdateTypes": ["minor"],
+            "automerge": true,
+            "automergeType": "branch"
         },
         {
             "groupName": "minor-updates-dart",
             "matchDatasources": ["dart"],
-            "matchUpdateTypes": ["minor"]
+            "matchUpdateTypes": ["minor"],
+            "automerge": true,
+            "automergeType": "branch"
         },
         {
             "groupName": "minor-updates-docker",
             "matchDatasources": ["docker"],
-            "matchUpdateTypes": ["minor"]
+            "matchUpdateTypes": ["minor"],
+            "automerge": true,
+            "automergeType": "branch"
         },
         {
             "groupName": "minor-updates-github-tags-and-runners",
             "matchDatasources": ["github-tags", "github-runners"],
-            "matchUpdateTypes": ["minor"]
+            "matchUpdateTypes": ["minor"],
+            "automerge": true,
+            "automergeType": "branch"
         },
         {
             "groupName": "minor-updates-helm",
             "matchDatasources": ["helm"],
-            "matchUpdateTypes": ["minor"]
+            "matchUpdateTypes": ["minor"],
+            "automerge": true,
+            "automergeType": "branch"
         },
         {
             "groupName": "minor-updates-kubernetes-api",
             "matchDatasources": ["kubernetes-api"],
-            "matchUpdateTypes": ["minor"]
+            "matchUpdateTypes": ["minor"],
+            "automerge": true,
+            "automergeType": "branch"
         },
         {
             "groupName": "minor-updates-terraform-and-provider",
             "matchDatasources": ["terraform-module", "terraform-provider"],
-            "matchUpdateTypes": ["minor"]
+            "matchUpdateTypes": ["minor"],
+            "automerge": true,
+            "automergeType": "branch"
         }
     ]
 }
