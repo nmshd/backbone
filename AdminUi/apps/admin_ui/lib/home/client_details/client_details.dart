@@ -57,11 +57,6 @@ class _ClientDetailsState extends State<ClientDetails> {
               clientDetails: clientDetails,
               selectedTier: _selectedTier,
               numberOfIdentities: widget.numberOfIdentities,
-              onTierChanged: (String? newValue) {
-                setState(() {
-                  _selectedTier = newValue;
-                });
-              },
               availableTiers: _tiers!,
               updateClient: _reloadClient,
             ),
@@ -85,9 +80,7 @@ class _ClientDetailsState extends State<ClientDetails> {
 
   Future<void> _reloadTiers() async {
     final tiers = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
-    if (mounted) {
-      setState(() => _tiers = tiers.data);
-    }
+    if (mounted) setState(() => _tiers = tiers.data);
   }
 }
 
@@ -95,7 +88,6 @@ class _ClientDetailsCard extends StatelessWidget {
   final Client clientDetails;
   final int numberOfIdentities;
   final String? selectedTier;
-  final ValueChanged<String?>? onTierChanged;
   final List<TierOverview> availableTiers;
   final VoidCallback updateClient;
 
@@ -105,7 +97,6 @@ class _ClientDetailsCard extends StatelessWidget {
     required this.numberOfIdentities,
     required this.updateClient,
     this.selectedTier,
-    this.onTierChanged,
   });
 
   @override
@@ -120,48 +111,43 @@ class _ClientDetailsCard extends StatelessWidget {
               child: Card(
                 child: Padding(
                   padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  child: Wrap(
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    spacing: 8,
+                    runSpacing: 8,
                     children: [
-                      Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          EntityDetails(title: context.l10n.id, value: clientDetails.clientId),
-                          EntityDetails(title: context.l10n.displayName, value: clientDetails.displayName),
-                          EntityDetails(
-                            title: context.l10n.maxIdentities,
-                            value: '${clientDetails.maxIdentities ?? context.l10n.noLimit}',
-                            onIconPressed: () => showChangeMaxIdentitiesDialog(
-                              context: context,
-                              clientDetails: clientDetails,
-                              numberOfIdentities: numberOfIdentities,
-                              onMaxIdentitiesUpdated: updateClient,
-                            ),
-                            icon: Icons.edit,
-                            tooltipMessage: context.l10n.clientDetails_maxIdentities_tooltip,
-                          ),
-                          EntityDetails(
-                            title: context.l10n.createdAt,
-                            value:
-                                '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(clientDetails.createdAt)} ${DateFormat.Hms().format(clientDetails.createdAt)}',
-                          ),
-                          EntityDetails(
-                            title: context.l10n.clientDetails_card_defaultTier,
-                            value: currentTier.name,
-                            onIconPressed: currentTier.canBeManuallyAssigned || currentTier.canBeUsedAsDefaultForClient
-                                ? () => showChangeTierDialog(
-                                      context: context,
-                                      onTierUpdated: updateClient,
-                                      clientDetails: clientDetails,
-                                      availableTiers: availableTiers,
-                                    )
-                                : null,
-                            icon: Icons.edit,
-                            tooltipMessage: context.l10n.changeTier,
-                          ),
-                        ],
+                      EntityDetails(title: context.l10n.id, value: clientDetails.clientId),
+                      EntityDetails(title: context.l10n.displayName, value: clientDetails.displayName),
+                      EntityDetails(
+                        title: context.l10n.maxIdentities,
+                        value: '${clientDetails.maxIdentities ?? context.l10n.noLimit}',
+                        onIconPressed: () => showChangeMaxIdentitiesDialog(
+                          context: context,
+                          clientDetails: clientDetails,
+                          numberOfIdentities: numberOfIdentities,
+                          onMaxIdentitiesUpdated: updateClient,
+                        ),
+                        icon: Icons.edit,
+                        tooltipMessage: context.l10n.clientDetails_maxIdentities_tooltip,
+                      ),
+                      EntityDetails(
+                        title: context.l10n.createdAt,
+                        value:
+                            '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(clientDetails.createdAt)} ${DateFormat.Hms().format(clientDetails.createdAt)}',
+                      ),
+                      EntityDetails(
+                        title: context.l10n.clientDetails_card_defaultTier,
+                        value: currentTier.name,
+                        onIconPressed: currentTier.canBeManuallyAssigned || currentTier.canBeUsedAsDefaultForClient
+                            ? () => showChangeTierDialog(
+                                  context: context,
+                                  onTierUpdated: updateClient,
+                                  clientDetails: clientDetails,
+                                  availableTiers: availableTiers,
+                                )
+                            : null,
+                        icon: Icons.edit,
+                        tooltipMessage: context.l10n.changeTier,
                       ),
                     ],
                   ),
