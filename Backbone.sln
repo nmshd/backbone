@@ -267,11 +267,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HealthCheck", "HealthCheck"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "helm", "helm", "{AEAECF4E-00BF-4FE0-8F8E-C606B769C326}"
 	ProjectSection(SolutionItems) = preProject
-		Applications\helm\.helmignore = Applications\helm\.helmignore
-		Applications\helm\artifacthub-repo.yml = Applications\helm\artifacthub-repo.yml
-		Applications\helm\Chart.yaml = Applications\helm\Chart.yaml
-		Applications\helm\LICENSE = Applications\helm\LICENSE
-		Applications\helm\values.yaml = Applications\helm\values.yaml
+		helm\.helmignore = helm\.helmignore
+		helm\artifacthub-repo.yml = helm\artifacthub-repo.yml
+		helm\Chart.yaml = helm\Chart.yaml
+		helm\LICENSE = helm\LICENSE
+		helm\values.yaml = helm\values.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SseServer", "SseServer", "{16FD824D-65D3-4769-9658-B2BB231EC330}"
@@ -941,7 +941,6 @@ Global
 		{A82D9F44-8B80-4803-BA97-7D737DEF6A98} = {44C9D62D-813D-497A-8DDF-C06E515CB22E}
 		{BE3E3C3D-3CD6-417E-AFE6-6B77D41B2AA6} = {44C9D62D-813D-497A-8DDF-C06E515CB22E}
 		{6042C2A5-9520-44D7-A817-F12EB889B6B8} = {44C9D62D-813D-497A-8DDF-C06E515CB22E}
-		{AEAECF4E-00BF-4FE0-8F8E-C606B769C326} = {44C9D62D-813D-497A-8DDF-C06E515CB22E}
 		{16FD824D-65D3-4769-9658-B2BB231EC330} = {44C9D62D-813D-497A-8DDF-C06E515CB22E}
 		{909B814E-6CE1-400D-903A-989FD76AA10D} = {B62C74A0-4F8E-4A76-A26C-26FA0CE3F39F}
 		{EEE8A108-CAC2-44B4-BF3E-7AA931CD7961} = {B62C74A0-4F8E-4A76-A26C-26FA0CE3F39F}
