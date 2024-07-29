@@ -265,15 +265,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EventHandlerService", "Even
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "HealthCheck", "HealthCheck", "{6042C2A5-9520-44D7-A817-F12EB889B6B8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "helm", "helm", "{AEAECF4E-00BF-4FE0-8F8E-C606B769C326}"
-	ProjectSection(SolutionItems) = preProject
-		helm\.helmignore = helm\.helmignore
-		helm\artifacthub-repo.yml = helm\artifacthub-repo.yml
-		helm\Chart.yaml = helm\Chart.yaml
-		helm\LICENSE = helm\LICENSE
-		helm\values.yaml = helm\values.yaml
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SseServer", "SseServer", "{16FD824D-65D3-4769-9658-B2BB231EC330}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{909B814E-6CE1-400D-903A-989FD76AA10D}"
