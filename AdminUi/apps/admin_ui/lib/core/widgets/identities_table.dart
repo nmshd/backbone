@@ -98,9 +98,7 @@ class _IdentitiesTableState extends State<IdentitiesTable> {
       hideClientColumn: hideClientColumn,
       hideTierColumn: hideTierColumn,
       filter: localFilter,
-      navigateToIdentity: ({required String address}) {
-        context.push('/identities/$address');
-      },
+      navigateToIdentity: ({required String address}) => context.push('/identities/$address'),
     );
   }
 }
