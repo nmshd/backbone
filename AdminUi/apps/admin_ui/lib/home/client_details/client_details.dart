@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
@@ -10,8 +8,9 @@ import '/core/core.dart';
 
 class ClientDetails extends StatefulWidget {
   final String clientId;
+  final int numberOfIdentities;
 
-  const ClientDetails({required this.clientId, super.key});
+  const ClientDetails({required this.clientId, required this.numberOfIdentities, super.key});
 
   @override
   State<ClientDetails> createState() => _ClientDetailsState();
@@ -53,18 +52,21 @@ class _ClientDetailsState extends State<ClientDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (Platform.isMacOS || Platform.isWindows) const BackButton(),
+            if (kIsDesktop) const Align(alignment: Alignment.centerLeft, child: BackButton()),
             _ClientDetailsCard(
               clientDetails: clientDetails,
               selectedTier: _selectedTier,
+              numberOfIdentities: widget.numberOfIdentities,
               onTierChanged: (String? newValue) {
                 setState(() {
                   _selectedTier = newValue;
                 });
               },
               availableTiers: _tiers!,
-              updateTierOfIdentity: _reloadClient,
+              updateClient: _reloadClient,
             ),
+            Gaps.h16,
+            IdentitiesTable(clientDetails: clientDetails),
           ],
         ),
       ),
@@ -91,15 +93,17 @@ class _ClientDetailsState extends State<ClientDetails> {
 
 class _ClientDetailsCard extends StatelessWidget {
   final Client clientDetails;
+  final int numberOfIdentities;
   final String? selectedTier;
   final ValueChanged<String?>? onTierChanged;
   final List<TierOverview> availableTiers;
-  final VoidCallback updateTierOfIdentity;
+  final VoidCallback updateClient;
 
   const _ClientDetailsCard({
     required this.clientDetails,
     required this.availableTiers,
-    required this.updateTierOfIdentity,
+    required this.numberOfIdentities,
+    required this.updateClient,
     this.selectedTier,
     this.onTierChanged,
   });
@@ -126,9 +130,18 @@ class _ClientDetailsCard extends StatelessWidget {
                         runSpacing: 8,
                         children: [
                           EntityDetails(title: context.l10n.id, value: clientDetails.clientId),
+                          EntityDetails(title: context.l10n.displayName, value: clientDetails.displayName),
                           EntityDetails(
                             title: context.l10n.maxIdentities,
-                            value: '${clientDetails.maxIdentities == 0 ? 0 : clientDetails.maxIdentities}',
+                            value: '${clientDetails.maxIdentities ?? context.l10n.noLimit}',
+                            onIconPressed: () => showChangeMaxIdentitiesDialog(
+                              context: context,
+                              clientDetails: clientDetails,
+                              numberOfIdentities: numberOfIdentities,
+                              onMaxIdentitiesUpdated: updateClient,
+                            ),
+                            icon: Icons.edit,
+                            tooltipMessage: context.l10n.clientDetails_maxIdentities_tooltip,
                           ),
                           EntityDetails(
                             title: context.l10n.createdAt,
@@ -141,7 +154,7 @@ class _ClientDetailsCard extends StatelessWidget {
                             onIconPressed: currentTier.canBeManuallyAssigned || currentTier.canBeUsedAsDefaultForClient
                                 ? () => showChangeTierDialog(
                                       context: context,
-                                      onTierUpdated: updateTierOfIdentity,
+                                      onTierUpdated: updateClient,
                                       clientDetails: clientDetails,
                                       availableTiers: availableTiers,
                                     )
@@ -158,8 +171,6 @@ class _ClientDetailsCard extends StatelessWidget {
             ),
           ],
         ),
-        Gaps.h16,
-        IdentitiesList(clientDetails: clientDetails),
       ],
     );
   }
