@@ -122,9 +122,10 @@ class _TiersOverviewState extends State<TiersOverview> {
 
   Future<void> _reloadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
+    final tiers = response.data..sort((a, b) => a.name.compareTo(b.name));
 
     setState(() {
-      _tiers = response.data;
+      _tiers = tiers;
     });
   }
 }
