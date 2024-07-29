@@ -4,5 +4,5 @@ export 'deletion_process_audit_logs_table.dart';
 export 'entity_details.dart';
 export 'filters/filters.dart';
 export 'identities_data_table/identities_data_table.dart';
-export 'identities_list.dart';
+export 'identities_table.dart';
 export 'quotas_button_group.dart';
