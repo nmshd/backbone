@@ -73,7 +73,7 @@
     "clientsOverview_removeSelectedClients_error": "An error occurred while deleting the client(s). Please try again.",
     "clientsOverview_removeSelectedClients_success": "Selected client(s) have been removed.",
     "clientDetails_card_defaultTier": "Default Tier",
-    "clientDetails_maxIdentities_tooltip": "",
+    "clientDetails_maxIdentities_tooltip": "Change Max Identities",
     "createClientDialog_title": "Create Client",
     "createClientDialog_clientID_message": "A client ID will be generated if this field is left blank.",
     "createClientDialog_displayName_message": "Client ID will be used as a Display Name if no value is provided.",
