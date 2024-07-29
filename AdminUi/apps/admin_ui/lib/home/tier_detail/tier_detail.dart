@@ -65,7 +65,7 @@ class _TierDetailState extends State<TierDetail> {
             Gaps.h16,
             _QuotaList(tierDetails, _reload),
             Gaps.h16,
-            IdentitiesList(tierDetails: tierDetails),
+            IdentitiesTable(tierDetails: tierDetails),
           ],
         ),
       ),
