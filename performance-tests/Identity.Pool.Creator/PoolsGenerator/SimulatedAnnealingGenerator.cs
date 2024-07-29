@@ -6,6 +6,7 @@ using Backbone.Identity.Pool.Creator.Application.Printer;
 using Backbone.Identity.Pool.Creator.PoolsFile;
 using Backbone.Identity.Pool.Creator.Tools;
 using Backbone.Tooling;
+using GeneratorIdentity = Backbone.Identity.Pool.Creator.Domain.Identity;
 using Math = System.Math;
 
 namespace Backbone.Identity.Pool.Creator.PoolsGenerator;
@@ -21,11 +22,11 @@ public class SimulatedAnnealingPoolsGenerator
     private readonly IPrinter _printer;
 
     private List<PoolEntry> Pools { get; }
-    private List<Identity> Identities { get; }
+    private List<GeneratorIdentity> Identities { get; }
 
-    private readonly Dictionary<uint, Identity> _identitiesDictionary;
-    private readonly Dictionary<uint, Identity> _appIdentitiesDictionary;
-    private readonly Dictionary<uint, Identity> _connectorIdentitiesDictionary;
+    private readonly Dictionary<uint, GeneratorIdentity> _identitiesDictionary;
+    private readonly Dictionary<uint, GeneratorIdentity> _appIdentitiesDictionary;
+    private readonly Dictionary<uint, GeneratorIdentity> _connectorIdentitiesDictionary;
 
     private const bool P = false;
 
@@ -41,16 +42,16 @@ public class SimulatedAnnealingPoolsGenerator
 
         _localRandom = new Random();
         Identities = Pools.SelectMany(p => p.Identities).ToList();
-        _identitiesDictionary = Identities.ToDictionary(i => i.Uon);
-        _appIdentitiesDictionary = Identities.Where(i => i.Pool.IsApp()).ToDictionary(i => i.Uon);
-        _connectorIdentitiesDictionary = Identities.Where(i => i.Pool.IsConnector()).ToDictionary(i => i.Uon);
+        _identitiesDictionary = Identities.ToDictionary(i => i.UniqueOrderNumber);
+        _appIdentitiesDictionary = Identities.Where(i => i.Pool.IsApp()).ToDictionary(i => i.UniqueOrderNumber);
+        _connectorIdentitiesDictionary = Identities.Where(i => i.Pool.IsConnector()).ToDictionary(i => i.UniqueOrderNumber);
         _connectorMessageRatio = configuration.Configuration.MessagesSentByConnectorRatio;
     }
 
     private readonly Random _localRandom;
     private readonly decimal _connectorMessageRatio;
 
-    public async Task CreatePools()
+    public void CreatePools()
     {
         _printer.PrintString(Generate().GetAsCSV(_identitiesDictionary), "ram");
     }
@@ -133,12 +134,12 @@ public class SimulatedAnnealingPoolsGenerator
             {
                 foreach (var relatedIdentity in identity.IdentitiesToEstablishRelationshipsWith)
                 {
-                    res.EstablishRelationship(identity.Uon, relatedIdentity.Uon);
+                    res.EstablishRelationship(identity.UniqueOrderNumber, relatedIdentity.UniqueOrderNumber);
                 }
 
                 foreach (var relatedIdentity in identity.IdentitiesToSendMessagesTo)
                 {
-                    res.SendMessage(identity.Uon, relatedIdentity.Uon);
+                    res.SendMessage(identity.UniqueOrderNumber, relatedIdentity.UniqueOrderNumber);
                 }
             }
         }
@@ -179,23 +180,23 @@ public class SimulatedAnnealingPoolsGenerator
                 {
                     // app to connector
                     var appIdentity = _localRandom.GetRandomElement(_appIdentitiesDictionary);
-                    var candidates = solution.GetRelationshipsAndMessageSentCountByIdentity(appIdentity.Uon).ToList();
+                    var candidates = solution.GetRelationshipsAndMessageSentCountByIdentity(appIdentity.UniqueOrderNumber).ToList();
                     if (!candidates.Any())
                         return GetNextState(currentSolution, connectorMessageRatio);
                     var orderedCandidates = candidates.OrderByDescending(it => appIdentity.Pool.NumberOfSentMessages - it.messageCount);
                     var selectedCandidate = orderedCandidates.FirstOrDefault().relatedIdentity;
-                    solution.SendMessage(appIdentity.Uon, selectedCandidate);
+                    solution.SendMessage(appIdentity.UniqueOrderNumber, selectedCandidate);
                 }
                 else
                 {
                     // connector to app
                     var connectorIdentity = _localRandom.GetRandomElement(_connectorIdentitiesDictionary);
-                    var candidates = solution.GetRelationshipsAndMessageSentCountByIdentity(connectorIdentity.Uon).ToList();
+                    var candidates = solution.GetRelationshipsAndMessageSentCountByIdentity(connectorIdentity.UniqueOrderNumber).ToList();
                     if (!candidates.Any())
                         return GetNextState(currentSolution, connectorMessageRatio);
                     var orderedCandidates = candidates.OrderByDescending(it => connectorIdentity.Pool.NumberOfSentMessages - it.messageCount);
                     var selectedCandidate = orderedCandidates.FirstOrDefault().relatedIdentity;
-                    solution.SendMessage(connectorIdentity.Uon, selectedCandidate);
+                    solution.SendMessage(connectorIdentity.UniqueOrderNumber, selectedCandidate);
                 }
 
                 if (P) Console.Write("add msg");
@@ -218,12 +219,12 @@ public class SimulatedAnnealingPoolsGenerator
                 do
                 {
                     var i1 = _localRandom.GetRandomElement(_appIdentitiesDictionary);
-                    if (i1.Pool.NumberOfRelationships * TOLERANCE <= solution.GetNumberOfRelatedIdentities(i1.Uon)) continue;
+                    if (i1.Pool.NumberOfRelationships * TOLERANCE <= solution.GetNumberOfRelatedIdentities(i1.UniqueOrderNumber)) continue;
 
                     // if the selected identity has capacity for further relationships
                     var i2 = _localRandom.GetRandomElement(_connectorIdentitiesDictionary);
 
-                    solution.EstablishRelationship(i1.Uon, i2.Uon);
+                    solution.EstablishRelationship(i1.UniqueOrderNumber, i2.UniqueOrderNumber);
                     flag = true;
 
                 } while (!flag && iter++ < 20);
@@ -237,7 +238,7 @@ public class SimulatedAnnealingPoolsGenerator
 
     private const double TOLERANCE = 1.05;
 
-    private long CalculateScore(SolutionRepresentation solution, IDictionary<uint, Identity> identities)
+    private long CalculateScore(SolutionRepresentation solution, IDictionary<uint, Domain.Identity> identities)
     {
         var relationshipsTarget = Pools.ExpectedNumberOfRelationships();
         var sentMessagesTarget = Pools.ExpectedNumberOfSentMessages();
@@ -268,7 +269,7 @@ public class SimulatedAnnealingPoolsGenerator
     private SolutionRepresentation GenerateInitialSolution()
     {
         var solution = new SolutionRepresentation();
-        solution.EstablishRelationship(_localRandom.GetRandomElement(Identities).Uon, _localRandom.GetRandomElement(Identities).Uon);
+        solution.EstablishRelationship(_localRandom.GetRandomElement(Identities).UniqueOrderNumber, _localRandom.GetRandomElement(Identities).UniqueOrderNumber);
         return solution;
     }
 
@@ -280,7 +281,7 @@ public class SimulatedAnnealingPoolsGenerator
         {
             for (uint i = 0; i < poolEntry.Amount; i++)
             {
-                poolEntry.Identities.Add(new Identity(
+                poolEntry.Identities.Add(new Domain.Identity(
                         new UserCredentials("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)),
                         "ID1" + PasswordHelper.GeneratePassword(16, 16),
                         "DVC" + PasswordHelper.GeneratePassword(8, 8),
@@ -309,7 +310,7 @@ public class SolutionRepresentation : ICloneable
     /// This can never happen: a == b
     /// This approach ensures that messages can only be sent in the context of a relationship (a mandatory requisite).
     /// </summary>
-    /// <see cref="Identity.Uon"/>
+    /// <see cref="Identity.UniqueOrderNumber"/>
     private Dictionary<(uint a, uint b), uint> RaM { get; } = new();
 
     public ulong IterationCount { get; set; }
@@ -415,7 +416,7 @@ public class SolutionRepresentation : ICloneable
         return RemoveRelationship(a, b);
     }
 
-    public long GetInvalidRelationshipCount(Dictionary<uint, Identity> identities)
+    public long GetInvalidRelationshipCount(Dictionary<uint, Domain.Identity> identities)
     {
         var res = 0;
         foreach (var ((from, to), messageCount) in RaM)
@@ -444,7 +445,7 @@ public class SolutionRepresentation : ICloneable
         return Convert.ToInt64(_messagesCount);
     }
 
-    public void Print(Dictionary<uint, Identity> identities, List<PoolEntry> pools)
+    public void Print(Dictionary<uint, Domain.Identity> identities, List<PoolEntry> pools)
     {
         Console.WriteLine(" ========= SOLUTION OUTPUT =========");
         Console.WriteLine($" =====> EXECUTION TIME: {GetTimeSinceStart()}");
@@ -513,7 +514,7 @@ public class SolutionRepresentation : ICloneable
         return RaM.Where(it => it.Key.a == uon).Select(it => (it.Key.b, it.Value)).ToList();
     }
 
-    public string GetAsCSV(Dictionary<uint, Identity> identitiesDictionary)
+    public string GetAsCSV(Dictionary<uint, Domain.Identity> identitiesDictionary)
     {
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine("Identity1;Identity1Pool;Identity2;Identity2Pool;MessageCount");

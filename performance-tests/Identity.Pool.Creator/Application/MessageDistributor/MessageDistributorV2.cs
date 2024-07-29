@@ -10,12 +10,10 @@ public class MessageDistributorV2 : IMessageDistributor
         var appAndConnectorIdentities = pools.Where(p => p.IsApp() || p.IsConnector()).SelectMany(p => p.Identities).ToList();
 
         uint sentMessages;
-        var loops = 0;
 
         do
         {
             sentMessages = 0;
-            loops++;
             foreach (var identity in appAndConnectorIdentities)
             {
                 using var relatedIdentitiesIterator = identity.IdentitiesToEstablishRelationshipsWith.AsEnumerable().GetEnumerator();

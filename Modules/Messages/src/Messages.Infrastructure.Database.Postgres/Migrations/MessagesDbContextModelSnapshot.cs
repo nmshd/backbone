@@ -98,6 +98,12 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("bytea");
 
+                    b.Property<bool>("IsRelationshipDecomposedByRecipient")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsRelationshipDecomposedBySender")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("MessageId")
                         .IsRequired()
                         .HasMaxLength(20)

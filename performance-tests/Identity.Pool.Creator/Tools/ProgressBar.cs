@@ -13,8 +13,8 @@ public class ProgressBar : IDisposable, IProgress<double>
     private double _currentProgress = 0;
     private string _currentText = string.Empty;
     private bool _disposed = false;
-    private int _animationIndex = 0;
-    private long _upperBound = 1;
+    private int _animationIndex;
+    private readonly long _upperBound;
 
     public ProgressBar()
     {
@@ -66,8 +66,8 @@ public class ProgressBar : IDisposable, IProgress<double>
     private void UpdateText(string text)
     {
         // Get length of common portion
-        int commonPrefixLength = 0;
-        int commonLength = Math.Min(_currentText.Length, text.Length);
+        var commonPrefixLength = 0;
+        var commonLength = Math.Min(_currentText.Length, text.Length);
         while (commonPrefixLength < commonLength && text[commonPrefixLength] == _currentText[commonPrefixLength])
         {
             commonPrefixLength++;
@@ -78,7 +78,7 @@ public class ProgressBar : IDisposable, IProgress<double>
         outputBuilder.Append('\b', _currentText.Length - commonPrefixLength);
 
         // Output new suffix
-        outputBuilder.Append(text.Substring(commonPrefixLength));
+        outputBuilder.Append(text[commonPrefixLength..]);
 
         // If the new text is shorter than the old one: delete overlapping characters
         var overlapCount = _currentText.Length - text.Length;

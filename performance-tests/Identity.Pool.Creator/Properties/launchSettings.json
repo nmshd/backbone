@@ -8,9 +8,9 @@
       "commandName": "Project",
       "commandLineArgs": "GeneratePools --poolsFile pools_light.json"
     },
-    "Pool Generator Light 2": {
+    "Pool Generator Test": {
       "commandName": "Project",
-      "commandLineArgs": "GeneratePools --poolsFile pools_light_2.json"
+      "commandLineArgs": "GeneratePools --poolsFile pools_test.json"
     },
     "Create Entities": {
       "commandName": "Project",

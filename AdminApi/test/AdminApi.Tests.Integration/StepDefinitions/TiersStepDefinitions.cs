@@ -37,12 +37,6 @@ internal class TiersStepDefinitions : BaseStepDefinitions
         _existingTierId = response.Result.Id;
     }
 
-    [Given("the Tier T has one associated identity")]
-    public void GivenTheTierTHasOneAssociatedIdentity()
-    {
-        throw new PendingStepException();
-    }
-
     [Given("the Basic Tier as t")]
     public async Task GivenTheBasicTierAsT()
     {

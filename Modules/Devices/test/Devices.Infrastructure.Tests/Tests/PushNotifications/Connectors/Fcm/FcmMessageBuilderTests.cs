@@ -9,7 +9,7 @@ using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 
-namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.DirectPush;
+namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Fcm;
 
 public class FcmMessageBuilderTests : AbstractTestsBase
 {
@@ -37,7 +37,7 @@ public class FcmMessageBuilderTests : AbstractTestsBase
         message.Data["content-available"].Should().Be("1");
 
         message.Android.CollapseKey.Should().Be("1");
-        message.Data.Should().Contain("tag", "1");
+        message.Android.Notification.Tag.Should().Be("1");
     }
 
     [Fact]

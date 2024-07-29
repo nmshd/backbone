@@ -112,20 +112,15 @@ public class EntityCreator
         Console.WriteLine("done.");
     }
 
-    private static (uint a, uint b) GetRelationshipRepresentation(Identity identity, Identity relatedIdentity)
-    {
-        return identity.Uon > relatedIdentity.Uon ? (identity.Uon, relatedIdentity.Uon) : (relatedIdentity.Uon, identity.Uon);
-    }
-
     private void LoadRelationshipsAndMessagesConfiguration()
     {
-        var dict = _pools.SelectMany(p => p.Identities).ToDictionary(i => i.Uon);
+        var dict = _pools.SelectMany(p => p.Identities).ToDictionary(i => i.UniqueOrderNumber);
 
         foreach (var pool in _pools)
         {
             foreach (var identity in pool.Identities)
             {
-                var res = _ram.GetRelationshipsAndMessageSentCountByIdentity(identity.Uon);
+                var res = _ram.GetRelationshipsAndMessageSentCountByIdentity(identity.UniqueOrderNumber);
                 foreach (var (relatedIdentity, messageCount) in res)
                 {
                     var success = identity.AddIdentityToEstablishRelationshipsWith(dict[relatedIdentity], skipCapacityCheck: true);
@@ -178,7 +173,7 @@ public class EntityCreator
         {
             for (uint i = 0; i < pool.Amount; i++)
             {
-                pool.IdentityUons.Enqueue(uon++);
+                pool.IdentityUniqueOrderNumbers.Enqueue(uon++);
             }
         }
 
@@ -190,7 +185,7 @@ public class EntityCreator
                 if (sdk.DeviceData is null)
                     throw new Exception("The SDK could not be used to create a new Identity.");
 
-                var createdIdentity = new Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
+                var createdIdentity = new Domain.Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
 
                 if (pool.NumberOfDevices > 1)
                 {
@@ -246,7 +241,7 @@ public class EntityCreator
 
         var dictionaryOfBags = new ConcurrentDictionary<uint, ConcurrentBag<Challenge>>();
 
-        foreach (var identity in relevantIdentities) dictionaryOfBags.TryAdd(identity.Uon, []);
+        foreach (var identity in relevantIdentities) dictionaryOfBags.TryAdd(identity.UniqueOrderNumber, []);
 
         await Parallel.ForEachAsync(relevantIdentities, async (identity, _) =>
         {
@@ -254,14 +249,14 @@ public class EntityCreator
             for (var i = 0; i < identity.Pool.NumberOfChallenges; i++)
             {
                 var challenge = (await sdk.Challenges.CreateChallenge()).Result;
-                if (challenge is not null) dictionaryOfBags[identity.Uon].Add(challenge);
+                if (challenge is not null) dictionaryOfBags[identity.UniqueOrderNumber].Add(challenge);
                 progress.Increment();
             }
         });
 
         foreach (var (uon, bag) in dictionaryOfBags)
         {
-            relevantIdentities.Single(i => i.Uon == uon).Challenges = [.. bag];
+            relevantIdentities.Single(i => i.UniqueOrderNumber == uon).Challenges = [.. bag];
         }
 
         Console.WriteLine("done.");
@@ -312,14 +307,14 @@ public class EntityCreator
     /// <returns></returns>
     private static List<PushDatawalletModificationsRequestItem> PreGenerateDatawalletModifications(uint number)
     {
-        var ret = new List<PushDatawalletModificationsRequestItem>();
+        var result = new List<PushDatawalletModificationsRequestItem>();
         uint objectIterator = 1;
         if (number < 10)
         {
             // can't be divided properly. Will only do creates.
             for (uint i = 0; i < number; i++)
             {
-                ret.Add(new PushDatawalletModificationsRequestItem()
+                result.Add(new PushDatawalletModificationsRequestItem()
                 {
                     Collection = "Performance-Tests",
                     DatawalletVersion = 2,
@@ -329,7 +324,7 @@ public class EntityCreator
                 });
             }
 
-            return ret;
+            return result;
         }
 
         var idsAndOperationsDictionary = new Dictionary<string, List<string>>();
@@ -357,7 +352,7 @@ public class EntityCreator
 
         foreach (var (id, operations) in idsAndOperationsDictionary)
         {
-            ret.AddRange(operations.Select(operation => new PushDatawalletModificationsRequestItem
+            result.AddRange(operations.Select(operation => new PushDatawalletModificationsRequestItem
             {
                 Collection = "Requests",
                 DatawalletVersion = 1,
@@ -367,6 +362,6 @@ public class EntityCreator
             }));
         }
 
-        return ret;
+        return result;
     }
 }

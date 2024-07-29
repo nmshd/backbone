@@ -1,7 +1,7 @@
-FROM mcr.microsoft.com/dotnet/runtime:8.0.6 AS base
+FROM mcr.microsoft.com/dotnet/runtime:8.0.7 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0.302-1 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.303 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
@@ -34,4 +34,4 @@ COPY --from=build /app/publish/Backbone.Modules.Devices.AdminCli ./backbone
 
 ENV PATH="$PATH:/app"
 
-LABEL org.opencontainers.image.source = "https://github.com/nmshd/backbone"
+LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"

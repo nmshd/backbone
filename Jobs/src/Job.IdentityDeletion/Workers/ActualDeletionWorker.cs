@@ -12,19 +12,20 @@ namespace Backbone.Job.IdentityDeletion.Workers;
 public class ActualDeletionWorker : IHostedService
 {
     private readonly IHostApplicationLifetime _host;
-    private readonly IEnumerable<IIdentityDeleter> _identityDeleters;
     private readonly IMediator _mediator;
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<ActualDeletionWorker> _logger;
+    private readonly List<IIdentityDeleter> _identityDeleters;
 
-    public ActualDeletionWorker(IHostApplicationLifetime host,
+    public ActualDeletionWorker(
+        IHostApplicationLifetime host,
         IEnumerable<IIdentityDeleter> identityDeleters,
         IMediator mediator,
         IPushNotificationSender pushNotificationSender,
         ILogger<ActualDeletionWorker> logger)
     {
         _host = host;
-        _identityDeleters = identityDeleters;
+        _identityDeleters = identityDeleters.ToList();
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
         _logger = logger;

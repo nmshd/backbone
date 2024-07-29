@@ -159,7 +159,7 @@ internal class RelationshipsStepDefinitions
         }
     }
 
-    [Then("the response contains a Relationship")]
+    [Then("the response contains a RelationshipResponse")]
     public async Task ThenTheResponseContainsARelationship()
     {
         if (_createRelationshipResponse != null)

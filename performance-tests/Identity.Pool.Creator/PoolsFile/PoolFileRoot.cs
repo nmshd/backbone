@@ -3,7 +3,7 @@
 public class PoolFileRoot
 {
     public required PoolEntry[] Pools { get; set; }
-    public required  PoolFileConfiguration Configuration { get; set; }
+    public required PoolFileConfiguration Configuration { get; set; }
 }
 
 public class PoolFileConfiguration

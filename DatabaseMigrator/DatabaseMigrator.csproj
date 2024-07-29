@@ -10,13 +10,13 @@
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0"/>
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0"/>
         <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="8.0.2"/>
-        <PackageReference Include="Serilog" Version="4.0.0"/>
+        <PackageReference Include="Serilog" Version="4.0.1"/>
         <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.2"/>
         <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1"/>
         <PackageReference Include="Serilog.Exceptions" Version="8.4.0"/>
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="8.4.0"/>
         <PackageReference Include="Serilog.Formatting.Compact" Version="3.0.0"/>
-        <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.1"/>
+        <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.2"/>
         <PackageReference Include="Serilog.Extensions.Hosting" Version="8.0.0"/>
         <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0"/>
         <PackageReference Include="Serilog.Sinks.Debug" Version="3.0.0"/>
@@ -54,9 +54,8 @@
         <ProjectReference Include="..\Modules\Tokens\src\Tokens.Infrastructure\Tokens.Infrastructure.csproj"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <Content Include="..\appsettings.override.json" Condition="$(Configuration) == Debug">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </Content>
-    </ItemGroup>
+    <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
+        <Delete Files="$(ProjectDir)appsettings.override.json"/>
+        <Copy SourceFiles="..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true"/>
+    </Target>
 </Project>
