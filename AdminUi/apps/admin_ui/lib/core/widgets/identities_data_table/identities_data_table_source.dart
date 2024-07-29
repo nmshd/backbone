@@ -32,7 +32,6 @@ class IdentityDataTableSource extends AsyncDataTableSource {
     this.hideClientColumn = false,
     IdentityOverviewFilter? filter,
   }) : _filter = filter;
-
   void sort({required int sortColumnIndex, required bool sortColumnAscending}) {
     _sortingSettings = (sortColumnIndex: sortColumnIndex, sortAscending: sortColumnAscending);
     notifyListeners();
@@ -60,6 +59,10 @@ class IdentityDataTableSource extends AsyncDataTableSource {
           );
       _pagination = response.pagination;
 
+      final defaultPageNumber = _pagination?.pageNumber ?? 0;
+      final defaultPageSize = _pagination?.pageSize ?? count;
+      final defaultTotalPages = _pagination?.totalPages ?? 0;
+
       final filteredIdentities = response.data.indexed.where((identity) {
         if (tierId != null) {
           return identity.$2.tier.id == tierId;
@@ -71,10 +74,6 @@ class IdentityDataTableSource extends AsyncDataTableSource {
 
         return true;
       }).toList();
-
-      final defaultPageNumber = _pagination?.pageNumber ?? 0;
-      final defaultPageSize = _pagination?.pageSize ?? count;
-      final defaultTotalPages = _pagination?.totalPages ?? 0;
 
       _pagination = Pagination(
         pageNumber: defaultPageNumber,
