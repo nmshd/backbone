@@ -48,13 +48,13 @@ class _ShowChangeMaxIdentitiesDialog extends StatefulWidget {
 class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentitiesDialog> {
   bool _saving = false;
   int? _maxIdentities = 0;
-  late TextEditingController textController;
+  late TextEditingController _textController;
   String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
-    textController = TextEditingController();
+    _textController = TextEditingController();
   }
 
   @override
@@ -71,7 +71,7 @@ class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentities
             mainAxisSize: MainAxisSize.min,
             children: [
               TextFormField(
-                controller: textController,
+                controller: _textController,
                 decoration: InputDecoration(
                   hintText: context.l10n.maxIdentities_inputHint,
                   labelText: context.l10n.maxIdentities,
