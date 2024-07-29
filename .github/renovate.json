@@ -10,6 +10,10 @@
             "matchDatasources": ["npm"],
             "packageNames": ["eslint"],
             "enabled": false
+        },
+        {
+            "groupName": "patch-all",
+            "matchUpdateTypes": ["patch", "digest"]
         }
     ]
 }
