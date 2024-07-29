@@ -18,21 +18,30 @@ public class Handler : IRequestHandler<SeedQueuedForDeletionTierCommand>
 
     public async Task Handle(SeedQueuedForDeletionTierCommand request, CancellationToken cancellationToken)
     {
-        var queuedForDeletionTier = await _tiersRepository.Find(Tier.QUEUED_FOR_DELETION.Id, CancellationToken.None, true);
+        const int checkInterval = 5000; // Interval in milliseconds (5 seconds)
+        var tierFound = false;
 
-        if (queuedForDeletionTier == null)
+        while (!tierFound)
         {
-            queuedForDeletionTier = new Tier(Tier.QUEUED_FOR_DELETION.Id, Tier.QUEUED_FOR_DELETION.Name);
-            await _tiersRepository.Add(queuedForDeletionTier, CancellationToken.None);
+            var queuedForDeletionTier = await _tiersRepository.Find(Tier.QUEUED_FOR_DELETION.Id, CancellationToken.None, true);
+
+            if (queuedForDeletionTier != null)
+            {
+                tierFound = true;
+
+                var metrics = await _metricsRepository.FindAll(CancellationToken.None);
+                var excludedMetricKeys = new List<MetricKey>
+                {
+                    MetricKey.NumberOfCreatedDatawalletModifications, // Identities to be deleted should still be able to modify the datawallet
+                    MetricKey.NumberOfStartedDeletionProcesses // Identities to be deleted cannot start new deletion processes anyway
+                };
+                queuedForDeletionTier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics.Where(m => !excludedMetricKeys.Contains(m.Key)));
+                await _tiersRepository.Update(queuedForDeletionTier, CancellationToken.None);
+            }
+            else
+            {
+                await Task.Delay(checkInterval, cancellationToken);
+            }
         }
-
-        var metrics = await _metricsRepository.FindAll(CancellationToken.None);
-        var excludedMetricKeys = new List<MetricKey>
-        {
-            MetricKey.NumberOfCreatedDatawalletModifications, // Identities to be deleted should still be able to modify the datawallet
-            MetricKey.NumberOfStartedDeletionProcesses // Identities to be deleted cannot start new deletion processes anyway
-        };
-        queuedForDeletionTier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics.Where(m => !excludedMetricKeys.Contains(m.Key)));
-        await _tiersRepository.Update(queuedForDeletionTier, CancellationToken.None);
     }
 }
