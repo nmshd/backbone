@@ -86,7 +86,7 @@ In order to use a snapshot, you must:
 
 ### List
 
-#### Snapshot 1 (snp1)
+#### Snapshot 1 (snp1.zip, downloadable from file hosting)
 
 RaM Generation: ~8h
 
@@ -99,7 +99,7 @@ Entity Creation: ~10h
 | Relationships         | 20376  |
 | Messages              | 225553 |
 
-#### Snapshot 2 (snp2)
+#### Snapshot 2 (snp2.zip)
 
 RaM Generation: ~20min
 
