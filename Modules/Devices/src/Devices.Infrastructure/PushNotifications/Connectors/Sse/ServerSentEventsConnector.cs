@@ -26,7 +26,7 @@ public class ServerSentEventsConnector : IPnsConnector
             {
                 var eventName = notification.GetEventName();
 
-                _logger.Sending(eventName, registration.IdentityAddress);
+                _logger.Sending(eventName);
 
                 await _sseServerClient.SendEvent(registration.IdentityAddress, eventName);
                 sendResults.AddSuccess(registration.DeviceId);
