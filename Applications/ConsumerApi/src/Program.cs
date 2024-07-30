@@ -91,13 +91,7 @@ static WebApplication CreateApp(string[] args)
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
                 .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
-            .Enrich.WithSensitiveDataMasking(options =>
-            {
-                options.MaskValue = SerilogConstants.MaskedDataPlaceholder;
-                options.MaskingOperators.Add(new IdentityAddressMaskingOperator());
-                options.MaskingOperators.Add(new BackboneIdMaskingOperator("DVC", 17));
-                options.MaskingOperators.Add(new BackboneIdMaskingOperator("USR"));
-            }))
+            .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()))
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
     ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
