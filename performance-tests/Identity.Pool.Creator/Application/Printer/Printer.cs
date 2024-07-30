@@ -56,7 +56,7 @@ public class Printer : IPrinter
 
     public void OutputAll(IList<PoolEntry> pools, PrintTarget target = PrintTarget.All)
     {
-        
+
         CreateOutputDirectoryIfDoesNotExist();
 
         if ((target & PrintTarget.Identities) != 0) OutputIdentities(_outputDirName, pools);
