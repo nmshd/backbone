@@ -14,4 +14,9 @@ public static class IntegerExtensions
     {
         return bytes * 1024 * 1024 * 1024;
     }
+
+    public static TimeSpan Seconds(this int number)
+    {
+        return TimeSpan.FromSeconds(number);
+    }
 }
