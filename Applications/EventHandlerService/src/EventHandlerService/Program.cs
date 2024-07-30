@@ -114,7 +114,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
             .Enrich.WithSensitiveDataMasking(options =>
             {
-                options.MaskValue = "{maskedData}";
+                options.MaskValue = SerilogConstants.MaskedDataPlaceholder;
                 options.MaskingOperators.Add(new IdentityAddressMaskingOperator());
                 options.MaskingOperators.Add(new BackboneIdMaskingOperator("DVC", 17));
                 options.MaskingOperators.Add(new BackboneIdMaskingOperator("USR"));
