@@ -5,9 +5,9 @@ using FluentValidation;
 namespace Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 
 // ReSharper disable once UnusedMember.Global
-public class DeleteDeviceValidator : AbstractValidator<DeleteDeviceCommand>
+public class Validator : AbstractValidator<DeleteDeviceCommand>
 {
-    public DeleteDeviceValidator()
+    public Validator()
     {
         RuleFor(c => c.DeviceId).ValidId<DeleteDeviceCommand, DeviceId>();
     }
