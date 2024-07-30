@@ -5,7 +5,6 @@ using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Application.Users.Commands.SeedTestUsers;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Application.Tiers.Commands.SeedQueuedForDeletionTier;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
