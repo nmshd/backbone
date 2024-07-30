@@ -7,7 +7,7 @@ using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
-namespace Backbone.Modules.Files.Application.Tests.Tests.Identities.Commands.DeleteIdentityCommandTests;
+namespace Backbone.Modules.Files.Application.Tests.Tests.Identities.Commands.DeleteFilesOfIdentity;
 
 public class HandlerTests : AbstractTestsBase
 {
