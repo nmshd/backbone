@@ -95,8 +95,6 @@ services:
   ### seeds ###
 
   seed-database:
-    volumes:
-      - ../setup-db:/app/setup-db
     depends_on:
       database:
         condition: service_healthy

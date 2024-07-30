@@ -371,11 +371,7 @@ dist
 **/SpecFlow/
 
 # flutter
-!AdminUi/packages/*
+!Applications/AdminUi/packages/*
 
 # Hardlinks for appsettings.override.json
-AdminApi/src/AdminApi/appsettings.override.json
-ConsumerApi/appsettings.override.json
-DatabaseMigrator/appsettings.override.json
-EventHandlerService/src/EventHandlerService/appsettings.override.json
-Jobs/src/Job.IdentityDeletion/appsettings.override.json
+Applications/**/appsettings.override.json
