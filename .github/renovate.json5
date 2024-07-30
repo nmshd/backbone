@@ -1,0 +1,73 @@
+{
+    $schema: "https://docs.renovatebot.com/renovate-schema.json",
+    extends: ["config:recommended"],
+    labels: ["dependencies"],
+    schedule: ["after 10pm every weekday", "before 5am every weekday", "every weekend"],
+    packageRules: [
+        {
+            // we don't want to update eslint currently, because there is a breaking change in its config
+            matchDatasources: ["npm"],
+            packageNames: ["eslint"],
+            enabled: false
+        },
+
+        {
+            // the docker images in this list are created and used by our pipelines and can therefore not to be updated by renovate
+            matchDatasources: ["docker"],
+            packageNames: ["admin-ui", "event-handler-service", "sse-server", "database-migrator", "admin-cli"],
+            enabled: false
+        },
+
+        {
+            // these packages are from our Admin UI monorepo and can therefore not be updated by renovate
+            matchDatasources: ["dart"],
+            packageNames: ["admin_api_sdk", "admin_api_types"],
+            enabled: false
+        },
+
+        {
+            // all patch versions of all packages should be part of a single group; we don't even want a PR for this group (hence the automergeType "branch")
+            groupName: "patch-all",
+            matchUpdateTypes: ["patch", "digest"],
+            automerge: true,
+            automergeType: "branch"
+        },
+
+        // ############# Minor updates (one group per datasource) #############
+        {
+            groupName: "minor-updates-nuget",
+            matchDatasources: ["nuget"],
+            matchUpdateTypes: ["minor"]
+        },
+        {
+            groupName: "minor-updates-dart",
+            matchDatasources: ["dart"],
+            matchUpdateTypes: ["minor"]
+        },
+        {
+            groupName: "minor-updates-docker",
+            matchDatasources: ["docker"],
+            matchUpdateTypes: ["minor"]
+        },
+        {
+            groupName: "minor-updates-github-tags-and-runners",
+            matchDatasources: ["github-tags", "github-runners"],
+            matchUpdateTypes: ["minor"]
+        },
+        {
+            groupName: "minor-updates-helm",
+            matchDatasources: ["helm"],
+            matchUpdateTypes: ["minor"]
+        },
+        {
+            groupName: "minor-updates-kubernetes-api",
+            matchDatasources: ["kubernetes-api"],
+            matchUpdateTypes: ["minor"]
+        },
+        {
+            groupName: "minor-updates-terraform-and-provider",
+            matchDatasources: ["terraform-module", "terraform-provider"],
+            matchUpdateTypes: ["minor"]
+        }
+    ]
+}
