@@ -6,6 +6,7 @@ using Backbone.AdminApi.Extensions;
 using Backbone.AdminApi.Infrastructure.Persistence;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Infrastructure.EventBus;
@@ -18,6 +19,7 @@ using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
+using Serilog.Enrichers.Sensitive;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
@@ -73,7 +75,14 @@ static WebApplication CreateApp(string[] args)
             .Enrich.WithProperty("service", "adminui")
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
-                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() })))
+                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
+            .Enrich.WithSensitiveDataMasking(options =>
+            {
+                options.MaskValue = "{maskedData}";
+                options.MaskingOperators.Add(new IdentityAddressMaskingOperator());
+                options.MaskingOperators.Add(new BackboneIdMaskingOperator("DVC", 17));
+                options.MaskingOperators.Add(new BackboneIdMaskingOperator("USR"));
+            }))
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
     ConfigureServices(builder.Services, builder.Configuration, builder.Environment);

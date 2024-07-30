@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.EventHandlerService;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.ConsumerApi;
@@ -14,6 +15,7 @@ using Backbone.Modules.Synchronization.ConsumerApi;
 using Backbone.Modules.Tokens.ConsumerApi;
 using Microsoft.Extensions.Options;
 using Serilog;
+using Serilog.Enrichers.Sensitive;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
@@ -109,7 +111,13 @@ static IHostBuilder CreateHostBuilder(string[] args)
             .Enrich.WithProperty("service", "eventHandlerService")
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
-                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() })
-            )
+                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
+            .Enrich.WithSensitiveDataMasking(options =>
+            {
+                options.MaskValue = "{maskedData}";
+                options.MaskingOperators.Add(new IdentityAddressMaskingOperator());
+                options.MaskingOperators.Add(new BackboneIdMaskingOperator("DVC", 17));
+                options.MaskingOperators.Add(new BackboneIdMaskingOperator("USR"));
+            })
         );
 }

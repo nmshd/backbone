@@ -6,12 +6,13 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoFixture" Version="4.18.1"/>
-        <PackageReference Include="AutoFixture.Xunit2" Version="4.18.1"/>
-        <PackageReference Include="FakeItEasy" Version="8.3.0"/>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0"/>
-        <PackageReference Include="FluentAssertions" Version="6.12.0"/>
-        <PackageReference Include="xunit" Version="2.9.0"/>
+        <PackageReference Include="AutoFixture" Version="4.18.1" />
+        <PackageReference Include="AutoFixture.Xunit2" Version="4.18.1" />
+        <PackageReference Include="FakeItEasy" Version="8.3.0" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+        <PackageReference Include="FluentAssertions" Version="6.12.0" />
+        <PackageReference Include="Serilog.Enrichers.Sensitive" Version="1.7.3" />
+        <PackageReference Include="xunit" Version="2.9.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -27,13 +28,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj"/>
-        <ProjectReference Include="..\..\src\Job.IdentityDeletion\Job.IdentityDeletion.csproj"/>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
+        <ProjectReference Include="..\..\src\Job.IdentityDeletion\Job.IdentityDeletion.csproj" />
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
-        <Delete Files="$(ProjectDir)appsettings.override.json"/>
-        <Copy SourceFiles="..\..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true"/>
+        <Delete Files="$(ProjectDir)appsettings.override.json" />
+        <Copy SourceFiles="..\..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true" />
     </Target>
 
     <!-- This is required for the job to run. -->

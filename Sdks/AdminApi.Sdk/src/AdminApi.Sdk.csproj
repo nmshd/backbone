@@ -1,5 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <ItemGroup>
+    <PackageReference Include="Serilog.Enrichers.Sensitive" Version="1.7.3" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\..\BuildingBlocks\src\BuildingBlocks.SDK\BuildingBlocks.SDK.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Crypto\Crypto.csproj" />
     <ProjectReference Include="..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />

@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
 	<ItemGroup>
+		<PackageReference Include="Serilog.Enrichers.Sensitive" Version="1.7.3" />
 		<PackageReference Include="SimpleBase" Version="4.0.0" />
 	</ItemGroup>
 
