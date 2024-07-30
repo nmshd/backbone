@@ -58,6 +58,5 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
     private async Task SeedQueuedForDeletionTier()
     {
         await _mediator.Send(new CreateQueuedForDeletionTierCommand());
-        await _mediator.Send(new SeedQueuedForDeletionTierCommand());
     }
 }
