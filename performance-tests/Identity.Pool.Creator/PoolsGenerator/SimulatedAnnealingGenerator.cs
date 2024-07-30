@@ -9,6 +9,10 @@ using Backbone.Tooling;
 using GeneratorIdentity = Backbone.Identity.Pool.Creator.Domain.Identity;
 using Math = System.Math;
 
+// ReSharper disable HeuristicUnreachableCode
+#pragma warning disable CS0162 // Unreachable code detected
+                               // -- used for debugging
+
 namespace Backbone.Identity.Pool.Creator.PoolsGenerator;
 
 /// <summary>
@@ -71,9 +75,10 @@ public class SimulatedAnnealingPoolsGenerator
             var solutions = new ConcurrentBag<SolutionRepresentation>();
             var forMax = Convert.ToUInt32(Environment.ProcessorCount) - 2;
 
-            Parallel.For(0, forMax, count =>
+            var solution = currentSolution;
+            Parallel.For(0, forMax, _ =>
             {
-                var nextSolution = currentSolution.Clone() as SolutionRepresentation;
+                var nextSolution = solution.Clone() as SolutionRepresentation;
                 for (uint si = 0; si < 6; si++)
                 {
                     nextSolution = GetNextState(nextSolution!, _connectorMessageRatio, si, 6);
@@ -124,10 +129,11 @@ public class SimulatedAnnealingPoolsGenerator
         return currentSolution;
     }
 
-    private SolutionRepresentation GenerateSolutionFromPools(List<PoolEntry> pools)
+    private static SolutionRepresentation GenerateSolutionFromPools(List<PoolEntry> pools)
     {
         var res = new SolutionRepresentation();
 
+        // ReSharper disable once ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
         foreach (var pool in pools)
         {
             foreach (var identity in pool.Identities)
@@ -162,7 +168,7 @@ public class SimulatedAnnealingPoolsGenerator
             throw new Exception("clone failed");
 
         // -1 means random
-        var progress = i >= 0 && maxI > i ? Convert.ToDouble(i) / maxI : -1;
+        var progress = maxI > i ? Convert.ToDouble(i) / maxI : -1;
 
         if (progress > 0.3 || _localRandom.NextBoolean())
         {
@@ -238,7 +244,7 @@ public class SimulatedAnnealingPoolsGenerator
 
     private const double TOLERANCE = 1.05;
 
-    private long CalculateScore(SolutionRepresentation solution, IDictionary<uint, Domain.Identity> identities)
+    private long CalculateScore(SolutionRepresentation solution, IDictionary<uint, GeneratorIdentity> identities)
     {
         var relationshipsTarget = Pools.ExpectedNumberOfRelationships();
         var sentMessagesTarget = Pools.ExpectedNumberOfSentMessages();
@@ -266,13 +272,6 @@ public class SimulatedAnnealingPoolsGenerator
         - 4 * Math.Abs(sentMessagesTarget - solution.GetSentMessagesCount()) + messagesScore;
     }
 
-    private SolutionRepresentation GenerateInitialSolution()
-    {
-        var solution = new SolutionRepresentation();
-        solution.EstablishRelationship(_localRandom.GetRandomElement(Identities).UniqueOrderNumber, _localRandom.GetRandomElement(Identities).UniqueOrderNumber);
-        return solution;
-    }
-
     private void CreateIdentities()
     {
         uint globalIterator = 0;
@@ -281,7 +280,7 @@ public class SimulatedAnnealingPoolsGenerator
         {
             for (uint i = 0; i < poolEntry.Amount; i++)
             {
-                poolEntry.Identities.Add(new Domain.Identity(
+                poolEntry.Identities.Add(new GeneratorIdentity(
                         new UserCredentials("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)),
                         "ID1" + PasswordHelper.GeneratePassword(16, 16),
                         "DVC" + PasswordHelper.GeneratePassword(8, 8),
@@ -299,8 +298,8 @@ public class SolutionRepresentation : ICloneable
 {
     private readonly Stopwatch _createdAt = Stopwatch.StartNew();
 
-    private ulong _relationshipCount = 0;
-    private ulong _messagesCount = 0;
+    private ulong _relationshipCount;
+    private ulong _messagesCount;
 
     /// <summary>
     /// Relationships & Messages
@@ -310,7 +309,7 @@ public class SolutionRepresentation : ICloneable
     /// This can never happen: a == b
     /// This approach ensures that messages can only be sent in the context of a relationship (a mandatory requisite).
     /// </summary>
-    /// <see cref="Identity.UniqueOrderNumber"/>
+    /// <see cref="GeneratorIdentity.UniqueOrderNumber"/>
     private Dictionary<(uint a, uint b), uint> RaM { get; } = new();
 
     public ulong IterationCount { get; set; }
@@ -416,10 +415,10 @@ public class SolutionRepresentation : ICloneable
         return RemoveRelationship(a, b);
     }
 
-    public long GetInvalidRelationshipCount(Dictionary<uint, Domain.Identity> identities)
+    public long GetInvalidRelationshipCount(Dictionary<uint, GeneratorIdentity> identities)
     {
         var res = 0;
-        foreach (var ((from, to), messageCount) in RaM)
+        foreach (var ((from, to), _) in RaM)
         {
             if (from == to)
             {
@@ -445,7 +444,7 @@ public class SolutionRepresentation : ICloneable
         return Convert.ToInt64(_messagesCount);
     }
 
-    public void Print(Dictionary<uint, Domain.Identity> identities, List<PoolEntry> pools)
+    public void Print(Dictionary<uint, GeneratorIdentity> identities, List<PoolEntry> pools)
     {
         Console.WriteLine(" ========= SOLUTION OUTPUT =========");
         Console.WriteLine($" =====> EXECUTION TIME: {GetTimeSinceStart()}");
@@ -462,24 +461,6 @@ public class SolutionRepresentation : ICloneable
 
         Console.WriteLine($" - Counted {RaM.Count} entries, meaning there are {RaM.Count / 2} relationships.");
         Console.WriteLine($" - Counted {RaM.Sum(x => x.Value)} messages.");
-
-        //var i = 0;
-        //foreach (var ((from, to), _) in RaM.OrderBy(x => x.Key.a).ThenBy(x => x.Key.b))
-        //{
-        //    var identity1 = identities[from];
-        //    var identity2 = identities[to];
-        //    if (identity1.Uon < identity2.Uon)
-        //    {
-        //        Console.WriteLine($"{++i}: {identity1} is related to {identity2}");
-
-        //        //var messageCount = RaM[(identity1.Uon, identity2.Uon)];
-        //        //if (messageCount > 0)
-        //        //    Console.WriteLine($"\t {identity1} sends {messageCount} messages to {identity2}.");
-        //        //messageCount = RaM[(identity2.Uon, identity1.Uon)];
-        //        //if (messageCount > 0)
-        //        //    Console.WriteLine($"\t {identity2} sends {messageCount} messages to {identity1}.");
-        //    }
-        //}
     }
 
     // reflections may be counted twice here
@@ -514,7 +495,7 @@ public class SolutionRepresentation : ICloneable
         return RaM.Where(it => it.Key.a == uon).Select(it => (it.Key.b, it.Value)).ToList();
     }
 
-    public string GetAsCSV(Dictionary<uint, Domain.Identity> identitiesDictionary)
+    public string GetAsCSV(Dictionary<uint, GeneratorIdentity> identitiesDictionary)
     {
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine("Identity1;Identity1Pool;Identity2;Identity2Pool;MessageCount");
