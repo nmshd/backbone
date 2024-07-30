@@ -228,7 +228,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     }
 }
 
-internal static partial class EventBusRabbitMQLogs
+internal static partial class EventBusRabbitMqLogs
 {
     [LoggerMessage(
         EventId = 411326,

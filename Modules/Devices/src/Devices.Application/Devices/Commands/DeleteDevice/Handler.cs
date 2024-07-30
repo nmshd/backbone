@@ -29,7 +29,7 @@ public class Handler : IRequestHandler<DeleteDeviceCommand>
         deviceThatIsBeingDeleted.MarkAsDeleted(_userContext.GetDeviceId(), _userContext.GetAddress());
         await _identitiesRepository.Update(deviceThatIsBeingDeleted, cancellationToken);
 
-        _logger.MarkedDeviceAsDeleted(request.DeviceId);
+        _logger.MarkedDeviceAsDeleted();
     }
 }
 
@@ -39,6 +39,6 @@ internal static partial class DeleteDeviceLogs
         EventId = 776010,
         EventName = "Devices.MarkDeviceAsDeleted.MarkedDeviceAsDeleted",
         Level = LogLevel.Information,
-        Message = "Successfully marked device with id '{deviceId}' as deleted.")]
-    public static partial void MarkedDeviceAsDeleted(this ILogger logger, string deviceId);
+        Message = "Successfully marked the device as deleted.")]
+    public static partial void MarkedDeviceAsDeleted(this ILogger logger);
 }
