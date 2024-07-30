@@ -26,7 +26,8 @@ public class DeterministicPoolsGenerator
         _pools = configuration.Pools.ToList();
         _config = configuration;
 
-        MessageDistributorTools.CalculateSentAndReceivedMessages(_pools, configuration.Configuration);
+        CalculateSentAndReceivedMessages(_pools, configuration.Configuration);
+
         _poolsOffset = PoolsOffset.CalculatePoolOffsets(_pools.ToArray());
     }
 
@@ -37,7 +38,7 @@ public class DeterministicPoolsGenerator
         CheckPoolsConfiguration();
         CreateFakeIdentities();
 
-        RelationshipDistributorTools.EstablishMessagesOffsetPoolsRelationships(_pools);
+        EstablishMessagesOffsetPoolsRelationships(_pools);
 
         _relationshipDistributor.Distribute(_pools);
         _printer.PrintRelationships(_pools, summaryOnly: true);
@@ -112,4 +113,43 @@ public class DeterministicPoolsGenerator
             }
         }
     }
+
+    protected internal static void CalculateSentAndReceivedMessages(IList<PoolEntry> pools, PoolFileConfiguration poolsConfiguration)
+    {
+        var messagesSentByConnectorRatio = poolsConfiguration.MessagesSentByConnectorRatio;
+        var messagesSentByAppRatio = 1 - messagesSentByConnectorRatio;
+
+        foreach (var pool in pools.Where(p => p.TotalNumberOfMessages > 0))
+        {
+            if (pool.IsApp())
+            {
+                pool.NumberOfSentMessages = Convert.ToUInt32(decimal.Ceiling(pool.TotalNumberOfMessages * messagesSentByAppRatio));
+            }
+            else if (pool.IsConnector())
+            {
+                pool.NumberOfSentMessages = Convert.ToUInt32(decimal.Ceiling(pool.TotalNumberOfMessages * messagesSentByConnectorRatio));
+            }
+            else
+            {
+                throw new Exception("Pools that are neither app nor connector cannot send messages.");
+            }
+            pool.NumberOfReceivedMessages = pool.TotalNumberOfMessages - pool.NumberOfSentMessages;
+
+            if (pool.NumberOfReceivedMessages == 0 || pool.NumberOfSentMessages == 0)
+            {
+                throw new Exception(
+                    $"The resulting number of sent/received messages for pool {pool.Name} is zero. Please use a higher number and/or adjust the ratio. Otherwise, the number of messages will not match.");
+            }
+        }
+    }
+
+    protected internal static void EstablishMessagesOffsetPoolsRelationships(IList<PoolEntry> pools)
+    {
+        var messagesOffsetPools = pools.Where(p => p.Alias.StartsWith("a0m") || p.Alias.StartsWith("c0m")).ToList();
+        if (messagesOffsetPools.Count != 2) return;
+
+        var (p1, p2) = (messagesOffsetPools[0], messagesOffsetPools[1]);
+        p1.Identities.Single().AddIdentityToEstablishRelationshipsWith(p2.Identities.Single());
+    }
+
 }

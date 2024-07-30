@@ -5,7 +5,7 @@ using Backbone.Tooling;
 namespace Backbone.Identity.Pool.Creator.Application.Printer;
 public class Printer : IPrinter
 {
-    private static string? _outputDirName;
+    private readonly string _outputDirName = $@"{Path.GetTempPath()}\poolCreator.{SystemTime.UtcNow:yyyyMMdd-HHmmss}";
 
     public void PrintRelationships(IList<PoolEntry> pools, bool summaryOnly = false)
     {
@@ -56,9 +56,8 @@ public class Printer : IPrinter
 
     public void OutputAll(IList<PoolEntry> pools, PrintTarget target = PrintTarget.All)
     {
-        _outputDirName ??= $@"{GetProjectPath()}\poolCreator.{SystemTime.UtcNow:yyyyMMdd-HHmmss}";
-        if (!Directory.Exists(_outputDirName))
-            Directory.CreateDirectory(_outputDirName);
+        
+        CreateOutputDirectoryIfDoesNotExist();
 
         if ((target & PrintTarget.Identities) != 0) OutputIdentities(_outputDirName, pools);
         if ((target & PrintTarget.Relationships) != 0) OutputRelationships(_outputDirName, pools);
@@ -66,6 +65,14 @@ public class Printer : IPrinter
         if ((target & PrintTarget.Challenges) != 0) OutputChallenges(_outputDirName, pools);
         if ((target & PrintTarget.DatawalletModifications) != 0) OutputDatawalletModifications(_outputDirName, pools);
         if ((target & PrintTarget.RelationshipTemplates) != 0) OutputRelationshipTemplates(_outputDirName, pools);
+
+        Console.WriteLine($"Files written to {_outputDirName}");
+    }
+
+    private void CreateOutputDirectoryIfDoesNotExist()
+    {
+        if (!Directory.Exists(_outputDirName))
+            Directory.CreateDirectory(_outputDirName);
     }
 
     private static void OutputRelationshipTemplates(string outputDirName, IList<PoolEntry> pools)
@@ -171,17 +178,11 @@ public class Printer : IPrinter
         File.WriteAllTextAsync($@"{outputDirName}\relationships.csv", stringBuilder.ToString());
     }
 
-    private static string GetProjectPath()
+    public void PrintStringToFile(string value, string filename)
     {
-        var dir = Path.GetFullPath(@"..\..\..");
-        return dir;
-    }
-
-    public void PrintString(string value, string filename)
-    {
-        var outputDirName = $@"{GetProjectPath()}\poolCreator.{SystemTime.UtcNow:yyyyMMdd-HHmmss}";
-        Directory.CreateDirectory(outputDirName);
-        File.WriteAllTextAsync($@"{outputDirName}\{filename}.csv", value);
+        CreateOutputDirectoryIfDoesNotExist();
+        File.WriteAllTextAsync($@"{_outputDirName}\{filename}.csv", value);
+        Console.WriteLine($"File written to {_outputDirName}\\{filename}.csv");
     }
 }
 
@@ -190,7 +191,7 @@ public interface IPrinter
     public void OutputAll(IList<PoolEntry> pools, PrintTarget target = PrintTarget.All);
     protected internal void PrintRelationships(IList<PoolEntry> pools, bool summaryOnly = false);
     protected internal void PrintMessages(IList<PoolEntry> pools, bool summaryOnly = false);
-    void PrintString(string value, string filename);
+    void PrintStringToFile(string value, string filename);
 }
 
 [Flags]

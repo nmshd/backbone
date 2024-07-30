@@ -49,7 +49,7 @@ public class Identity
 
         if (uniqueOrderNumber is not null)
         {
-            UniqueOrderNumber = uniqueOrderNumber ?? 0;
+            UniqueOrderNumber = (uint)uniqueOrderNumber;
         }
         else
         {
@@ -96,7 +96,7 @@ public class Identity
         SentMessagesCapacity--;
     }
 
-    private void ReceiveMessageFrom(Identity identity)
+    private void ReceiveMessageFrom(Identity _)
     {
         ReceivedMessagesCapacity--;
     }

@@ -53,7 +53,7 @@ public class SimulatedAnnealingPoolsGenerator
 
     public void CreatePools()
     {
-        _printer.PrintString(Generate().GetAsCSV(_identitiesDictionary), "ram");
+        _printer.PrintStringToFile(Generate().GetAsCSV(_identitiesDictionary), "ram");
     }
 
     public SolutionRepresentation Generate(double initialTemperature = 20d, ulong maxIterations = 20000)

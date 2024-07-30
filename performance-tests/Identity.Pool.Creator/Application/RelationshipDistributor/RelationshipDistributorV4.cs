@@ -18,7 +18,7 @@ public class RelationshipDistributorV4 : IRelationshipDistributor
         var appPoolsIdentities = appPools.SelectMany(p => p.Identities).OrderByDescending(i => i.Pool.Alias).ThenBy(i => i.RelationshipsCapacity).ToList();
         var connectorPoolsIdentities = connectorPools.SelectMany(p => p.Identities).OrderByDescending(i => i.Pool.Alias).ThenBy(i => i.RelationshipsCapacity).ToList();
 
-        var expectedRelationshipsCount = RelationshipDistributorTools.CheckRelationshipCounts(appPools, connectorPools);
+        var expectedRelationshipsCount = CheckRelationshipCounts(appPools, connectorPools);
         List<int> successfullyEstablishedRelationshipsCounts = [pools.HasMessagesOffsetPool() ? 1 : 0];
 
         while (expectedRelationshipsCount > successfullyEstablishedRelationshipsCounts.Last())
@@ -70,5 +70,16 @@ public class RelationshipDistributorV4 : IRelationshipDistributor
         }
 
         return successfullyEstablishedRelationshipsCount;
+    }
+
+    protected internal static long CheckRelationshipCounts(IList<PoolEntry> appPools, IList<PoolEntry> connectorPools)
+    {
+        var appRelationshipsCount = appPools.Sum(p => p.NumberOfRelationships * p.Amount);
+        var connectorRelationshipsCount = connectorPools.Sum(p => p.NumberOfRelationships * p.Amount);
+
+        if (appRelationshipsCount != connectorRelationshipsCount)
+            throw new Exception(
+                "The number of relationships in the app pools does not match the number of relationships in the connector pools, despite there being offset pools. There is an implementation error.");
+        return appRelationshipsCount;
     }
 }
