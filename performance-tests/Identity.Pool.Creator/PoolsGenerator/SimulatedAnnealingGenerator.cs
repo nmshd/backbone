@@ -11,7 +11,7 @@ using Math = System.Math;
 
 // ReSharper disable HeuristicUnreachableCode
 #pragma warning disable CS0162 // Unreachable code detected
-                               // -- used for debugging
+// -- used for debugging
 
 namespace Backbone.Identity.Pool.Creator.PoolsGenerator;
 
@@ -32,7 +32,7 @@ public class SimulatedAnnealingPoolsGenerator
     private readonly Dictionary<uint, GeneratorIdentity> _appIdentitiesDictionary;
     private readonly Dictionary<uint, GeneratorIdentity> _connectorIdentitiesDictionary;
 
-    private const bool P = false;
+    private const bool PRINT_OUTPUT = false;
 
     public SimulatedAnnealingPoolsGenerator(
         PoolFileRoot configuration,
@@ -70,7 +70,7 @@ public class SimulatedAnnealingPoolsGenerator
 
         for (ulong i = 0; i < maxIterations; i++)
         {
-            if (P) Console.Write($"Temp: {temperature:F3} Score:{currentScore}, solution m: {currentSolution.GetSentMessagesCount():D4}, r:{currentSolution.GetRelationshipCount():D4}. Next action: ");
+            if (PRINT_OUTPUT) Console.Write($"Temp: {temperature:F3} Score:{currentScore}, solution m: {currentSolution.GetSentMessagesCount():D4}, r:{currentSolution.GetRelationshipCount():D4}. Next action: ");
 
             var solutions = new ConcurrentBag<SolutionRepresentation>();
             var forMax = Convert.ToUInt32(Environment.ProcessorCount) - 2;
@@ -82,7 +82,7 @@ public class SimulatedAnnealingPoolsGenerator
                 for (uint si = 0; si < 6; si++)
                 {
                     nextSolution = GetNextState(nextSolution!, _connectorMessageRatio, si, 6);
-                    if (P && si != 6 - 1) Console.Write(", ");
+                    if (PRINT_OUTPUT && si != 6 - 1) Console.Write(", ");
                 }
 
                 if (nextSolution != null) solutions.Add(nextSolution);
@@ -92,7 +92,7 @@ public class SimulatedAnnealingPoolsGenerator
             var nextSolution = scoredSolutions.Solution;
             var nextScore = scoredSolutions.Score;
 
-            if (P) Console.Write($" Next score is {nextScore}");
+            if (PRINT_OUTPUT) Console.Write($" Next score is {nextScore}");
 
             // Positive delta means the next solution is better than the previous
             var delta = nextScore - currentScore;
@@ -101,7 +101,7 @@ public class SimulatedAnnealingPoolsGenerator
             {
                 currentScore = nextScore;
                 currentSolution = nextSolution;
-                if (P) Console.WriteLine(" - accepted due to delta");
+                if (PRINT_OUTPUT) Console.WriteLine(" - accepted due to delta");
             }
             else
             {
@@ -112,11 +112,11 @@ public class SimulatedAnnealingPoolsGenerator
                 {
                     currentScore = nextScore;
                     currentSolution = nextSolution;
-                    if (P) Console.WriteLine(" - accepted due to probability");
+                    if (PRINT_OUTPUT) Console.WriteLine(" - accepted due to probability");
                 }
                 else
                 {
-                    if (P) Console.WriteLine(" - rejected due to probability");
+                    if (PRINT_OUTPUT) Console.WriteLine(" - rejected due to probability");
                 }
             }
 
@@ -177,7 +177,7 @@ public class SimulatedAnnealingPoolsGenerator
             {
                 // will remove a message
                 solution.RemoveRandomMessage();
-                if (P) Console.Write("rmv msg");
+                if (PRINT_OUTPUT) Console.Write("rmv msg");
             }
             else
             {
@@ -205,7 +205,7 @@ public class SimulatedAnnealingPoolsGenerator
                     solution.SendMessage(connectorIdentity.UniqueOrderNumber, selectedCandidate);
                 }
 
-                if (P) Console.Write("add msg");
+                if (PRINT_OUTPUT) Console.Write("add msg");
             }
         }
         else
@@ -215,7 +215,7 @@ public class SimulatedAnnealingPoolsGenerator
             {
                 // will remove a relationship
                 solution.RemoveRandomRelationship();
-                if (P) Console.Write("rmv rel");
+                if (PRINT_OUTPUT) Console.Write("rmv rel");
             }
             else
             {
@@ -235,7 +235,7 @@ public class SimulatedAnnealingPoolsGenerator
 
                 } while (!flag && iter++ < 20);
 
-                if (P) Console.Write("add rel");
+                if (PRINT_OUTPUT) Console.Write("add rel");
             }
         }
 
