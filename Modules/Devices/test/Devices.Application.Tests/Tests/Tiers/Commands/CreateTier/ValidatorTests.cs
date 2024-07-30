@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Commands.CreateTier;
 
-public class CreateTierCommandValidatorTests : AbstractTestsBase
+public class ValidatorTests : AbstractTestsBase
 {
 
     [Theory]

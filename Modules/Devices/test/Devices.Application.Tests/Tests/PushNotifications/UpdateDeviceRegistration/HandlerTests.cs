@@ -9,7 +9,7 @@ using FakeItEasy;
 using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
-namespace Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications;
+namespace Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications.UpdateDeviceRegistration;
 
 public class HandlerTests : AbstractTestsBase
 {
