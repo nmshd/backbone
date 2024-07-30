@@ -1,3 +1,4 @@
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
@@ -28,9 +29,10 @@ public static class TestDataGenerator
         return identity;
     }
 
-    public static PnsRegistration CreatePnsRegistrationForSse()
+    public static PnsRegistration CreatePnsRegistrationForSse(IdentityAddress? identityAddress = null)
     {
-        return new PnsRegistration(CreateRandomIdentityAddress(), CreateRandomDeviceId(), SseHandle.Create(), "", PushEnvironment.Production);
+        identityAddress ??= CreateRandomIdentityAddress();
+        return new PnsRegistration(identityAddress, CreateRandomDeviceId(), SseHandle.Create(), "", PushEnvironment.Production);
     }
 
     public static TierId CreateRandomTierId()
