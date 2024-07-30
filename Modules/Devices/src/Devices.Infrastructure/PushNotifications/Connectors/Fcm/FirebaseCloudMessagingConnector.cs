@@ -1,6 +1,5 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
@@ -27,7 +26,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
         _options = options.Value;
     }
 
-    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, IPushNotification notification)
+    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IPushNotification notification)
     {
         var registrationsArray = registrations as PnsRegistration[] ?? registrations.ToArray();
 

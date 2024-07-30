@@ -20,7 +20,7 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var sseConnector = CreateConnector();
 
         // Act
-        var results = await sseConnector.Send([], CreateRandomIdentityAddress(), new TestPushNotification());
+        var results = await sseConnector.Send([], new TestPushNotification());
 
         // Assert
         results.Successes.Should().BeEmpty();
@@ -34,7 +34,7 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var sseConnector = CreateConnector();
 
         // Act
-        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], CreateRandomIdentityAddress(), new TestPushNotification());
+        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], new TestPushNotification());
 
         // Assert
         results.Successes.Should().HaveCount(1);
@@ -52,41 +52,22 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
         var sseConnector = CreateConnector(mockSseServerClient);
 
         // Act
-        await sseConnector.Send([CreatePnsRegistrationForSse()], recipient, new TestPushNotification());
+        await sseConnector.Send([CreatePnsRegistrationForSse(identityAddress: recipient)], new TestPushNotification());
 
         // Assert
-        A.CallTo(() => mockSseServerClient.SendEvent(recipient, A<string>._)).MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
-    public async Task Sends_the_push_notification_name_to_the_SseServerClient()
-    {
-        // Arrange
-        var recipient = CreateRandomIdentityAddress();
-
-        var mockSseServerClient = A.Fake<ISseServerClient>();
-
-        var sseConnector = CreateConnector(mockSseServerClient);
-
-        // Act
-        await sseConnector.Send([CreatePnsRegistrationForSse()], recipient, new TestPushNotification());
-
-        // Assert
-        A.CallTo(() => mockSseServerClient.SendEvent(A<string>._, "Test")).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockSseServerClient.SendEvent(recipient, "Test")).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
     public async Task Returns_a_failure_with_reason_InvalidHandle_if_SseServerClient_throws_a_SseClientNotRegisteredException()
     {
         // Arrange
-        var recipient = CreateRandomIdentityAddress();
-
         var fakeSseServerClient = new SseServerClientThrowing<SseClientNotRegisteredException>();
 
         var sseConnector = CreateConnector(fakeSseServerClient);
 
         // Act
-        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], recipient, new TestPushNotification());
+        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], new TestPushNotification());
 
         // Assert
         results.Failures.Should().HaveCount(1);
@@ -98,14 +79,12 @@ public class ServerSentEventsConnectorTests : AbstractTestsBase
     public async Task Returns_a_failure_with_reason_Unexpected_if_SseServerClient_throws_an_unexpected_exception()
     {
         // Arrange
-        var recipient = CreateRandomIdentityAddress();
-
         var fakeSseServerClient = new SseServerClientThrowing<Exception>();
 
         var sseConnector = CreateConnector(fakeSseServerClient);
 
         // Act
-        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], recipient, new TestPushNotification());
+        var results = await sseConnector.Send([CreatePnsRegistrationForSse()], new TestPushNotification());
 
         // Assert
         results.Failures.Should().HaveCount(1);
