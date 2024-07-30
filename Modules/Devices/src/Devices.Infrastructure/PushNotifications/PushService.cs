@@ -36,7 +36,7 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
 
             var pnsConnector = _pnsConnectorFactory.CreateFor(platform);
 
-            var sendResults = await pnsConnector.Send(group, recipient, notification);
+            var sendResults = await pnsConnector.Send(group, notification);
             await HandleNotificationResponses(sendResults);
         }
     }

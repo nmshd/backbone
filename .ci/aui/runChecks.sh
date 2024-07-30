@@ -2,7 +2,8 @@
 set -e
 set -x
 
-cd AdminUi
+INITIAL_DIR=$(pwd)
+cd Applications/AdminUi
 dart pub global activate melos
 melos bootstrap
 melos analyze

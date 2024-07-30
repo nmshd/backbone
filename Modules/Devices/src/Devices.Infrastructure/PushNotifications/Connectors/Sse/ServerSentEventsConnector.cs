@@ -1,5 +1,4 @@
 ﻿using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 using Microsoft.Extensions.Logging;
@@ -17,7 +16,7 @@ public class ServerSentEventsConnector : IPnsConnector
         _logger = logger;
     }
 
-    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, IPushNotification notification)
+    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IPushNotification notification)
     {
         var sendResults = new SendResults();
 
@@ -27,9 +26,9 @@ public class ServerSentEventsConnector : IPnsConnector
             {
                 var eventName = notification.GetEventName();
 
-                _logger.Sending(eventName, recipient);
+                _logger.Sending(eventName, registration.IdentityAddress);
 
-                await _sseServerClient.SendEvent(recipient, eventName);
+                await _sseServerClient.SendEvent(registration.IdentityAddress, eventName);
                 sendResults.AddSuccess(registration.DeviceId);
             }
             catch (SseClientNotRegisteredException)
