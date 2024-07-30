@@ -18,11 +18,16 @@ public class Handler : IRequestHandler<SeedQueuedForDeletionTierCommand>
 
     public async Task Handle(SeedQueuedForDeletionTierCommand request, CancellationToken cancellationToken)
     {
-        const int checkInterval = 5000; // Interval in milliseconds (5 seconds)
+        const int checkInterval = 5000;
+        const int maxRetries = 5;
+
+        var retries = 0;
         var tierFound = false;
 
-        while (!tierFound)
+        while (!tierFound && retries < maxRetries)
         {
+            retries++;
+
             var queuedForDeletionTier = await _tiersRepository.Find(Tier.QUEUED_FOR_DELETION.Id, CancellationToken.None, true);
 
             if (queuedForDeletionTier != null)
