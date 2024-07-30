@@ -63,7 +63,7 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
 
         await _pnsRegistrationsRepository.Delete(deviceIdsToDelete, CancellationToken.None);
 
-        _logger.LogTrace("Successfully sent push notifications to '{devicesIds}'.", string.Join(", ", sendResults.Successes));
+        _logger.LogTrace("Successfully sent push notifications to the devices.");
     }
 
     public async Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment,
@@ -107,7 +107,7 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
 
         if (registration == null)
         {
-            _logger.LogInformation("Device '{deviceId}' is not found.", deviceId);
+            _logger.LogInformation("Device not found.");
         }
         else
         {

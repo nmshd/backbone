@@ -31,7 +31,7 @@ public class DummyConnector : IPnsConnector
         foreach (var device in identity.Devices)
         {
             var (title, body) = await _notificationTextProvider.GetNotificationTextForDeviceId(notification.GetType(), device.Id);
-            _logger.LogInformation("Sending push notification to device with id '{deviceId}' of identity with address '{recipient}': {title}, {body}.", recipient, device.Id, title, body);
+            _logger.LogInformation("Sending push notification to the device of the identity: {title}, {body}.", title, body);
         }
 
         return sendResults;

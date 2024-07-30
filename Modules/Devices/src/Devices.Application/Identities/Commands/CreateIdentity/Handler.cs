@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var address = IdentityAddress.Create(publicKey.Key, _applicationOptions.DidDomainName);
 
-        _logger.LogTrace("Address created. Result: '{address}'", address);
+        _logger.LogTrace("Address created.");
 
         var addressAlreadyExists = await _identitiesRepository.Exists(address, cancellationToken);
 
