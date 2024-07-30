@@ -14,22 +14,21 @@ public class Identity
     public List<Challenge>? Challenges;
 
     public List<string> DeviceIds { get; } = [];
-    public string Address { private set; get; }
+    public string Address { get; private set; }
 
     public List<Identity> IdentitiesToSendMessagesTo { get; } = [];
     public List<Identity> IdentitiesToEstablishRelationshipsWith { get; } = [];
-    public Dictionary<string, Identity> EstablishedRelationshipsById { get; internal set; } = [];
-    public HashSet<(string messageId, Identity recipient)> SentMessagesIdRecipientPair { get; internal set; } = [];
+    public Dictionary<string, Identity> EstablishedRelationshipsById { get; private set; } = [];
+    public HashSet<(string messageId, Identity recipient)> SentMessagesIdRecipientPair { get; private set; } = [];
     public uint RelationshipsCapacity { get; private set; }
-    public uint ReceivedMessagesCapacity { get; set; }
-    public uint SentMessagesCapacity { get; set; }
+    public uint ReceivedMessagesCapacity { get; private set; }
+    public uint SentMessagesCapacity { get; private set; }
 
     public PoolEntry Pool { get; private set; }
     public string Nickname { get; }
     public string PoolType { get; }
-    public uint GraphAlgorithmVisitCount { get; set; } = 0;
-    public List<CreatedDatawalletModification> DatawalletModifications { get; internal set; } = [];
-    public List<CreateRelationshipTemplateResponse> RelationshipTemplates { get; internal set; } = [];
+    public List<CreatedDatawalletModification> DatawalletModifications { get; private set; } = [];
+    public List<CreateRelationshipTemplateResponse> RelationshipTemplates { get; private set; } = [];
 
 
     public Identity(UserCredentials userCredentials, string address, string deviceId, PoolEntry pool, uint orderNumber, uint? uniqueOrderNumber = null)
@@ -105,4 +104,9 @@ public class Identity
     public bool HasAvailabilityToSendNewMessages() => SentMessagesCapacity > 0;
 
     public override string ToString() => Nickname;
+
+    public void SetDatawalletModifications(List<CreatedDatawalletModification> resultDatawalletModifications)
+    {
+        DatawalletModifications = resultDatawalletModifications;
+    }
 }

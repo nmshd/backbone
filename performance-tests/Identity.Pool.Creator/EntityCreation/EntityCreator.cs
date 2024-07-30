@@ -284,7 +284,7 @@ public class EntityCreator
                     });
 
                 if (finalizeDatawalletVersionUpgradeResponse.Result is not null)
-                    identity.DatawalletModifications = finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications;
+                    identity.SetDatawalletModifications(finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications);
 
                 progress.Increment();
 

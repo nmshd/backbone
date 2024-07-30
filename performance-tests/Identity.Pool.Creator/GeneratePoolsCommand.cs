@@ -28,11 +28,11 @@ public class GeneratePoolsCommand : Command
         new DeterministicPoolsGenerator(poolsConfiguration,
             serviceProvider.GetRequiredService<IRelationshipDistributor>(),
             serviceProvider.GetRequiredService<IMessageDistributor>(),
-            printer: serviceProvider.GetRequiredService<IPrinter>()
+            serviceProvider.GetRequiredService<IPrinter>()
         ).CreatePools();
 
         new SimulatedAnnealingPoolsGenerator(poolsConfiguration,
-            printer: serviceProvider.GetRequiredService<IPrinter>()
+            serviceProvider.GetRequiredService<IPrinter>()
         ).CreatePools();
     }
 
