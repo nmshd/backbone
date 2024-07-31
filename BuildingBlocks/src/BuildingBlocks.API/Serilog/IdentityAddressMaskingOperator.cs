@@ -6,5 +6,5 @@ public class IdentityAddressMaskingOperator : RegexMaskingOperator
 {
     public IdentityAddressMaskingOperator(string regexString) : base(regexString) { }
     private static string IdentityAddressRegex => IdentityAddress.IdentityAddressValidatorRegex().ToString();
-    public static IdentityAddressMaskingOperator Create() => new(IdentityAddressRegex.Substring(1, IdentityAddressRegex.Length - 2));
+    public static IdentityAddressMaskingOperator Create() => new(IdentityAddressRegex[1..^1]);
 }
