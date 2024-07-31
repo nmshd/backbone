@@ -13,11 +13,12 @@
         </WarningsAsErrors>
     </PropertyGroup>
 
-    <ItemGroup Condition="'$(Configuration)' != 'Release' And $(MSBuildProjectFile.Contains('Relationship'))">
+    <!-- Relationships Module is currently the only one with its respective unit tests next to the production (within the same project, as opposed to on a separate one) -->
+    <ItemGroup Condition="'$(Configuration)' != 'Release' And $(MSBuildProjectFile.Contains('Relationships'))">
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)' != 'Release' And $(MSBuildProjectFile.Contains('Relationship'))">
+    <ItemGroup Condition="'$(Configuration)' != 'Release' And $(MSBuildProjectFile.Contains('Relationships'))">
         <PackageReference Include="xunit.runner.visualstudio" Version="2.8.1">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
