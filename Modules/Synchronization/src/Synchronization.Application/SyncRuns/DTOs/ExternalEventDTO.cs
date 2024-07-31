@@ -6,7 +6,7 @@ namespace Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 
 public class ExternalEventDTO : IHaveCustomMapping
 {
-    public required ExternalEventId Id { get; set; }
+    public required string Id { get; set; }
     public required string Type { get; set; }
     public required long Index { get; set; }
     public required DateTime CreatedAt { get; set; }
@@ -32,6 +32,8 @@ public class ExternalEventDTO : IHaveCustomMapping
 
             _ => throw new ArgumentOutOfRangeException(nameof(externalEventType), externalEventType, null)
         });
-        configuration.CreateMap<ExternalEvent, ExternalEventDTO>();
+
+        configuration.CreateMap<ExternalEvent, ExternalEventDTO>()
+            .ForMember(dto => dto.Id, expression => expression.MapFrom(t => t.Id.Value));
     }
 }

@@ -1,3 +1,4 @@
+using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Synchronization.Domain.Entities;
 
@@ -10,9 +11,15 @@ public class PushDatawalletModificationsResponse
     public required IEnumerable<PushDatawalletModificationsResponseItem> Modifications { get; set; }
 }
 
-public class PushDatawalletModificationsResponseItem : IMapTo<DatawalletModification>
+public class PushDatawalletModificationsResponseItem : IHaveCustomMapping
 {
-    public required DatawalletModificationId Id { get; set; }
+    public required string Id { get; set; }
     public required long Index { get; set; }
     public required DateTime CreatedAt { get; set; }
+
+    public void CreateMappings(Profile configuration)
+    {
+        configuration.CreateMap<DatawalletModification, PushDatawalletModificationsResponseItem>()
+            .ForMember(dto => dto.Id, expression => expression.MapFrom(x => x.Id.Value));
+    }
 }
