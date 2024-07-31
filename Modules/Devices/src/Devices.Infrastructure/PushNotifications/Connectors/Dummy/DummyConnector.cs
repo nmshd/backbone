@@ -1,9 +1,5 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 using Microsoft.Extensions.Logging;
 
@@ -11,33 +7,37 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.D
 
 public class DummyConnector : IPnsConnector
 {
-    private readonly IIdentitiesRepository _identitiesRepository;
-    private readonly IPushNotificationTextProvider _notificationTextProvider;
-    private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
+    private readonly ILogger<DummyConnector> _logger;
 
-    public DummyConnector(IIdentitiesRepository identitiesRepository, IPushNotificationTextProvider notificationTextProvider, ILogger<ApplePushNotificationServiceConnector> logger)
+    public DummyConnector(ILogger<DummyConnector> logger)
     {
-        _identitiesRepository = identitiesRepository;
-        _notificationTextProvider = notificationTextProvider;
         _logger = logger;
     }
 
-    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, IPushNotification notification)
+    public Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IPushNotification notification)
     {
+        _logger.Sending(notification.GetEventName());
+
         var sendResults = new SendResults();
-
-        var identity = await _identitiesRepository.FindByAddress(recipient, CancellationToken.None) ?? throw new Exception("Identity not found.");
-
-        foreach (var device in identity.Devices)
+        foreach (var registration in registrations)
         {
-            var (title, body) = await _notificationTextProvider.GetNotificationTextForDeviceId(notification.GetType(), device.Id);
-            _logger.LogInformation("Sending push notification to device with id '{deviceId}' of identity with address '{recipient}': {title}, {body}.", recipient, device.Id, title, body);
+            sendResults.AddSuccess(registration.DeviceId);
         }
 
-        return sendResults;
+        return Task.FromResult(sendResults);
     }
 
     public void ValidateRegistration(PnsRegistration registration)
     {
     }
+}
+
+internal static partial class DummyConnectorLogs
+{
+    [LoggerMessage(
+        EventId = 860591,
+        EventName = "DummyConnectorLogs.Sending",
+        Level = LogLevel.Debug,
+        Message = "Sending push notification (type '{eventName}').")]
+    public static partial void Sending(this ILogger logger, string eventName);
 }
