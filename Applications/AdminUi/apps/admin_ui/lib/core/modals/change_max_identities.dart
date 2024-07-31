@@ -86,10 +86,7 @@ class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentities
           ),
         ),
         actions: [
-          OutlinedButton(
-            onPressed: _saving ? null : () => Navigator.of(context, rootNavigator: true).pop(),
-            child: Text(context.l10n.cancel),
-          ),
+          OutlinedButton(onPressed: _saving ? null : () => Navigator.of(context, rootNavigator: true).pop(), child: Text(context.l10n.cancel)),
           FilledButton(onPressed: _saving || _maxIdentities == null ? null : _changeMaxIdentities, child: Text(context.l10n.update)),
         ],
       ),
@@ -117,18 +114,17 @@ class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentities
     if (!mounted) return;
 
     if (response.hasError) {
-      setState(() {
-        _saving = false;
-        _errorMessage = context.l10n.maxIdentities_error_message;
-      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.l10n.maxIdentities_error_message), duration: const Duration(seconds: 3)),
+      );
+
+      setState(() => _saving = false);
+
       return;
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.l10n.maxIdentities_success_message),
-        duration: const Duration(seconds: 3),
-      ),
+      SnackBar(content: Text(context.l10n.maxIdentities_success_message), duration: const Duration(seconds: 3)),
     );
 
     widget.onMaxIdentitiesUpdated();
