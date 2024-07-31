@@ -5,5 +5,5 @@ namespace Backbone.BuildingBlocks.API.Serilog;
 public class IdentityAddressMaskingOperator : RegexMaskingOperator
 {
     public IdentityAddressMaskingOperator(string regexString) : base(regexString) { }
-    public static IdentityAddressMaskingOperator Create() => new IdentityAddressMaskingOperator(IdentityAddress.IdentityAddressValidatorRegex().ToString());
+    public static IdentityAddressMaskingOperator Create() => new(IdentityAddress.IdentityAddressValidatorRegex().ToString());
 }
