@@ -7,6 +7,6 @@ public class BackboneIdMaskingOperator : RegexMaskingOperator
 
     private static string RegexPattern(string initials) => $@"{initials}[a-zA-Z0-9]*";
     private static string RegexPattern(string prefix, int maxLength) => $@"{prefix}[a-zA-Z0-9]{{{maxLength - prefix.Length}}}";
-    
+
     private static bool IsStringOfConstantLength(int maxLength) => maxLength != -1;
 }
