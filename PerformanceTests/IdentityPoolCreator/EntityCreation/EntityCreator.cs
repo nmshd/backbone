@@ -7,14 +7,14 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
 using Backbone.Crypto;
-using Backbone.Identity.Pool.Creator.Application.Printer;
-using Backbone.Identity.Pool.Creator.PoolsFile;
-using Backbone.Identity.Pool.Creator.PoolsGenerator;
-using Backbone.Identity.Pool.Creator.Tools;
+using Backbone.IdentityPoolCreator.Application.Printer;
+using Backbone.IdentityPoolCreator.PoolsFile;
+using Backbone.IdentityPoolCreator.PoolsGenerator;
+using Backbone.IdentityPoolCreator.Tools;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 
-namespace Backbone.Identity.Pool.Creator.EntityCreation;
+namespace Backbone.IdentityPoolCreator.EntityCreation;
 public class EntityCreator
 {
     private readonly IList<PoolEntry> _pools;
@@ -29,7 +29,7 @@ public class EntityCreator
         _pools = pools.ToList();
         _ram = ram;
         _printer = printer;
-        _httpClientPool = Enumerable.Range(0, Environment.ProcessorCount * 4).ToDictionary(i => i, i => new HttpClient { BaseAddress = new Uri(baseAddress) });
+        _httpClientPool = Enumerable.Range(0, Environment.ProcessorCount * 4).ToDictionary(i => i, _ => new HttpClient { BaseAddress = new Uri(baseAddress) });
     }
 
     public async Task StartCreation()
@@ -123,7 +123,7 @@ public class EntityCreator
                 var res = _ram.GetRelationshipsAndMessageSentCountByIdentity(identity.UniqueOrderNumber);
                 foreach (var (relatedIdentity, messageCount) in res)
                 {
-                    var success = identity.AddIdentityToEstablishRelationshipsWith(dict[relatedIdentity], skipCapacityCheck: true);
+                    identity.AddIdentityToEstablishRelationshipsWith(dict[relatedIdentity], skipCapacityCheck: true);
                     for (var i = 0; i < messageCount; i++)
                     {
                         identity.SendMessageTo(dict[relatedIdentity], true);
@@ -267,7 +267,7 @@ public class EntityCreator
         Console.Write("Creating DataWalletModifications... ");
         using var progress = new ProgressBar(_pools.Where(p => p.NumberOfDatawalletModifications > 0).Sum(p => p.Amount));
 
-        await Parallel.ForEachAsync(_pools.Where(p => p.NumberOfDatawalletModifications > 0), async (pool, ct) =>
+        await Parallel.ForEachAsync(_pools.Where(p => p.NumberOfDatawalletModifications > 0), async (pool, _) =>
         {
             foreach (var identity in pool.Identities)
             {

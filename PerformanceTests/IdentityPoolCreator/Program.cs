@@ -1,6 +1,4 @@
 ﻿using System.CommandLine;
-using Backbone.Identity.Pool.Creator;
+using Backbone.IdentityPoolCreator;
 
 await new MainCommand().InvokeAsync(args);
-
-
