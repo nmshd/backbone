@@ -4,7 +4,7 @@ using Serilog.Enrichers.Sensitive;
 namespace Backbone.BuildingBlocks.API.Serilog;
 public static class SensitiveDataEnricherExtensions
 {
-    private const string MASKED_DATA_PLACEHOLDER = "{maskedData}";
+    private const string MASKED_DATA_PLACEHOLDER = "**MASKED**";
 
     public static void AddSensitiveDataMasks(this SensitiveDataEnricherOptions options)
     {
