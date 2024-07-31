@@ -82,18 +82,12 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
             decoration: const InputDecoration(border: OutlineInputBorder()),
             onChanged: _saving ? null : (String? newValue) => setState(() => _selectedTier = newValue),
             items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned || tier.canBeUsedAsDefaultForClient).map((TierOverview tier) {
-              return DropdownMenuItem<String>(
-                value: tier.id,
-                child: Text(tier.name),
-              );
+              return DropdownMenuItem<String>(value: tier.id, child: Text(tier.name));
             }).toList(),
           ),
         ),
         actions: [
-          OutlinedButton(
-            onPressed: _saving ? null : () => Navigator.of(context, rootNavigator: true).pop(),
-            child: Text(context.l10n.cancel),
-          ),
+          OutlinedButton(onPressed: _saving ? null : () => Navigator.of(context, rootNavigator: true).pop(), child: Text(context.l10n.cancel)),
           FilledButton(
             onPressed:
                 _saving || _selectedTier == widget.identityDetails?.tierId || _selectedTier == widget.clientDetails?.defaultTier ? null : _changeTier,
@@ -115,10 +109,7 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
 
     if (response.hasError) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.changeTierDialog_error),
-          duration: const Duration(seconds: 3),
-        ),
+        SnackBar(content: Text(context.l10n.changeTierDialog_error), duration: const Duration(seconds: 3)),
       );
 
       setState(() => _saving = false);
