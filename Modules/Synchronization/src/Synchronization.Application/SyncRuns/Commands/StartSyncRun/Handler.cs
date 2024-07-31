@@ -1,4 +1,3 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Extensions;
@@ -21,7 +20,6 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
     private readonly IdentityAddress _activeIdentity;
 
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IMapper _mapper;
 
     private CancellationToken _cancellationToken;
     private Datawallet? _datawallet;
@@ -29,10 +27,9 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
     private StartSyncRunCommand _request = null!;
     private DatawalletVersion? _supportedDatawalletVersion;
 
-    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext)
     {
         _dbContext = dbContext;
-        _mapper = mapper;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
@@ -47,8 +44,8 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
 
         return request.Type switch
         {
-            SyncRunDTO.SyncRunType.DatawalletVersionUpgrade => await StartDatawalletVersionUpgrade(),
-            SyncRunDTO.SyncRunType.ExternalEventSync => await StartExternalEventSync(),
+            SyncRun.SyncRunType.DatawalletVersionUpgrade => await StartDatawalletVersionUpgrade(),
+            SyncRun.SyncRunType.ExternalEventSync => await StartExternalEventSync(),
             _ => throw new Exception("Given sync run type is not supported.")
         };
     }
@@ -125,7 +122,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
     private async Task<SyncRun> CreateNewSyncRun(IEnumerable<ExternalEvent> events)
     {
         var newIndex = DetermineNextSyncRunIndex();
-        var syncRun = new SyncRun(newIndex, _request.Duration ?? DEFAULT_DURATION, _activeIdentity, _activeDevice, events, _mapper.Map<SyncRun.SyncRunType>(_request.Type));
+        var syncRun = new SyncRun(newIndex, _request.Duration ?? DEFAULT_DURATION, _activeIdentity, _activeDevice, events, _request.Type);
 
         await _dbContext.Set<SyncRun>().AddAsync(syncRun, _cancellationToken);
         try
@@ -150,12 +147,10 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
 
     private StartSyncRunResponse CreateResponse(StartSyncRunStatus status, SyncRun? newSyncRun = null)
     {
-        var syncRunDTO = _mapper.Map<SyncRunDTO>(newSyncRun);
-
         var response = new StartSyncRunResponse
         {
             Status = status,
-            SyncRun = syncRunDTO
+            SyncRun = newSyncRun != null ? new SyncRunDTO(newSyncRun) : null
         };
         return response;
     }

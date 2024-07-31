@@ -1,5 +1,3 @@
-using AutoMapper;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Synchronization.Domain.Entities;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
@@ -11,15 +9,16 @@ public class PushDatawalletModificationsResponse
     public required IEnumerable<PushDatawalletModificationsResponseItem> Modifications { get; set; }
 }
 
-public class PushDatawalletModificationsResponseItem : IHaveCustomMapping
+public class PushDatawalletModificationsResponseItem
 {
-    public required string Id { get; set; }
-    public required long Index { get; set; }
-    public required DateTime CreatedAt { get; set; }
-
-    public void CreateMappings(Profile configuration)
+    public PushDatawalletModificationsResponseItem(DatawalletModification datawalletModification)
     {
-        configuration.CreateMap<DatawalletModification, PushDatawalletModificationsResponseItem>()
-            .ForMember(dto => dto.Id, expression => expression.MapFrom(x => x.Id.Value));
+        Id = datawalletModification.Id;
+        Index = datawalletModification.Index;
+        CreatedAt = datawalletModification.CreatedAt;
     }
+
+    public string Id { get; set; }
+    public long Index { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

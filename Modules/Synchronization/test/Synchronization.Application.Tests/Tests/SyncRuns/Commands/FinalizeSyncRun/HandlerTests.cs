@@ -4,6 +4,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
+using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
@@ -156,7 +157,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         {
             new()
             {
-                Type = DatawalletModificationDTO.DatawalletModificationType.Create,
+                Type = DatawalletModificationType.Create,
                 Collection = "someArbitraryCollection",
                 EncryptedPayload = [0],
                 ObjectIdentifier = "someArbitraryObjectIdentifier",

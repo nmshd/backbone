@@ -2,9 +2,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
-using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
@@ -57,7 +55,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        var response = await handler.Handle(new StartSyncRunCommand(SyncRunDTO.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
+        var response = await handler.Handle(new StartSyncRunCommand(SyncRun.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
 
 
         // Assert
@@ -79,9 +77,9 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        var taskWithImmediateSave = handlerWithImmediateSave.Handle(new StartSyncRunCommand(SyncRunDTO.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
+        var taskWithImmediateSave = handlerWithImmediateSave.Handle(new StartSyncRunCommand(SyncRun.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
 
-        var taskWithDelayedSave = handlerWithDelayedSave.Handle(new StartSyncRunCommand(SyncRunDTO.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
+        var taskWithDelayedSave = handlerWithDelayedSave.Handle(new StartSyncRunCommand(SyncRun.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
 
         var handleWithDelayedSave = () => taskWithDelayedSave;
         var handleWithImmediateSave = () => taskWithImmediateSave;
@@ -107,7 +105,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        Func<Task> acting = async () => await handler.Handle(new StartSyncRunCommand(SyncRunDTO.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
+        Func<Task> acting = async () => await handler.Handle(new StartSyncRunCommand(SyncRun.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
 
 
         // Assert
@@ -128,7 +126,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        var response = await handler.Handle(new StartSyncRunCommand(SyncRunDTO.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
+        var response = await handler.Handle(new StartSyncRunCommand(SyncRun.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
 
 
         // Assert
@@ -145,7 +143,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        var response = await handler.Handle(new StartSyncRunCommand(SyncRunDTO.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
+        var response = await handler.Handle(new StartSyncRunCommand(SyncRun.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
 
 
         // Assert
@@ -167,7 +165,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        var response = await handler.Handle(new StartSyncRunCommand(SyncRunDTO.SyncRunType.ExternalEventSync, 1), CancellationToken.None);
+        var response = await handler.Handle(new StartSyncRunCommand(SyncRun.SyncRunType.ExternalEventSync, 1), CancellationToken.None);
 
 
         // Assert
@@ -187,7 +185,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        var response = await handler.Handle(new StartSyncRunCommand(SyncRunDTO.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
+        var response = await handler.Handle(new StartSyncRunCommand(SyncRun.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
 
 
         // Assert
@@ -218,7 +216,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Act
-        var response = await handler.Handle(new StartSyncRunCommand(SyncRunDTO.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
+        var response = await handler.Handle(new StartSyncRunCommand(SyncRun.SyncRunType.ExternalEventSync, DATAWALLET_VERSION), CancellationToken.None);
 
 
         // Assert
@@ -229,7 +227,7 @@ public class HandlerTests : AbstractTestsBase
         canceledSyncRun.FinalizedAt.Should().NotBeNull();
 
         var externalEventOfCanceledSyncRun = _assertionContext.ExternalEvents.First(i => i.Id == externalEvent.Id);
-        externalEventOfCanceledSyncRun.SyncRunId.Should().Be(response.SyncRun.Id);
+        externalEventOfCanceledSyncRun.SyncRunId?.Value.Should().Be(response.SyncRun.Id);
         externalEventOfCanceledSyncRun.SyncErrorCount.Should().Be(1);
     }
 
@@ -263,9 +261,7 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => userContext.GetAddress()).Returns(activeIdentity);
         A.CallTo(() => userContext.GetDeviceId()).Returns(createdByDevice);
 
-        var mapper = AutoMapperProfile.CreateMapper();
-
-        return new Handler(dbContext ?? _actContext, userContext, mapper);
+        return new Handler(dbContext ?? _actContext, userContext);
     }
 
     #endregion

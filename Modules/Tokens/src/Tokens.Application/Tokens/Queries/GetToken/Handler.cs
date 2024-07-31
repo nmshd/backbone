@@ -1,4 +1,3 @@
-using AutoMapper;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using Backbone.Modules.Tokens.Domain.Entities;
@@ -8,18 +7,16 @@ namespace Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;
 
 public class Handler : IRequestHandler<GetTokenQuery, TokenDTO>
 {
-    private readonly IMapper _mapper;
     private readonly ITokensRepository _tokensRepository;
 
-    public Handler(IMapper mapper, ITokensRepository tokensRepository)
+    public Handler(ITokensRepository tokensRepository)
     {
-        _mapper = mapper;
         _tokensRepository = tokensRepository;
     }
 
     public async Task<TokenDTO> Handle(GetTokenQuery request, CancellationToken cancellationToken)
     {
         var token = await _tokensRepository.Find(TokenId.Parse(request.Id));
-        return _mapper.Map<TokenDTO>(token);
+        return new TokenDTO(token);
     }
 }

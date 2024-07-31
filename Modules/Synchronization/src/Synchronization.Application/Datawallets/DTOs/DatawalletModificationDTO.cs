@@ -1,45 +1,31 @@
-using AutoMapper;
-using AutoMapper.Extensions.EnumMapping;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Synchronization.Domain.Entities;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 
-public class DatawalletModificationDTO : IHaveCustomMapping
+public class DatawalletModificationDTO
 {
-    public enum DatawalletModificationType
+    public DatawalletModificationDTO(DatawalletModification datawalletModification)
     {
-        Create,
-        Update,
-        Delete,
-        CacheChanged
+        Id = datawalletModification.Id;
+        DatawalletVersion = datawalletModification.DatawalletVersion;
+        Index = datawalletModification.Index;
+        ObjectIdentifier = datawalletModification.ObjectIdentifier;
+        PayloadCategory = datawalletModification.PayloadCategory;
+        CreatedAt = datawalletModification.CreatedAt;
+        CreatedByDevice = datawalletModification.CreatedByDevice;
+        Collection = datawalletModification.Collection;
+        Type = datawalletModification.Type;
+        EncryptedPayload = datawalletModification.EncryptedPayload;
     }
 
-    public required string Id { get; set; }
-    public required ushort DatawalletVersion { get; set; }
-    public required long Index { get; set; }
-    public required string ObjectIdentifier { get; set; }
+    public string Id { get; set; }
+    public ushort DatawalletVersion { get; set; }
+    public long Index { get; set; }
+    public string ObjectIdentifier { get; set; }
     public string? PayloadCategory { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required string CreatedByDevice { get; set; }
-    public required string Collection { get; set; }
-    public required string Type { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public string CreatedByDevice { get; set; }
+    public string Collection { get; set; }
+    public DatawalletModificationType Type { get; set; }
     public byte[]? EncryptedPayload { get; set; }
-
-
-    public void CreateMappings(Profile configuration)
-    {
-        configuration.CreateMap<DatawalletModification, DatawalletModificationDTO>()
-            .ForMember(dto => dto.Id, expression => expression.MapFrom(m => m.Id.Value))
-            .ForMember(dto => dto.CreatedByDevice, expression => expression.MapFrom(m => m.CreatedByDevice.Value));
-
-        configuration.CreateMap<Datawallet.DatawalletVersion, ushort>().ConvertUsing(version => version.Value);
-
-        configuration.CreateMap<Domain.Entities.DatawalletModificationType, DatawalletModificationType>().ConvertUsingEnumMapping(
-            config => config
-                .MapValue(Domain.Entities.DatawalletModificationType.CacheChanged, DatawalletModificationType.CacheChanged)
-                .MapValue(Domain.Entities.DatawalletModificationType.Create, DatawalletModificationType.Create)
-                .MapValue(Domain.Entities.DatawalletModificationType.Delete, DatawalletModificationType.Delete)
-                .MapValue(Domain.Entities.DatawalletModificationType.Update, DatawalletModificationType.Update));
-    }
 }

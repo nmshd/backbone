@@ -1,4 +1,3 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -14,12 +13,10 @@ public class Handler : IRequestHandler<GetExternalEventsOfSyncRunQuery, GetExter
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IMapper _mapper;
 
-    public Handler(ISynchronizationDbContext dbContext, IMapper mapper, IUserContext userContext)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext)
     {
         _dbContext = dbContext;
-        _mapper = mapper;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
@@ -36,8 +33,6 @@ public class Handler : IRequestHandler<GetExternalEventsOfSyncRunQuery, GetExter
 
         var dbPaginationResult = await _dbContext.GetExternalEventsOfSyncRun(request.PaginationFilter, _activeIdentity, syncRun.Id, cancellationToken);
 
-        var dtos = _mapper.Map<IEnumerable<ExternalEventDTO>>(dbPaginationResult.ItemsOnPage);
-
-        return new GetExternalEventsOfSyncRunResponse(dtos, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
+        return new GetExternalEventsOfSyncRunResponse(dbPaginationResult.ItemsOnPage.Select(e => new ExternalEventDTO(e)), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }
 }

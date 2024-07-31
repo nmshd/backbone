@@ -1,7 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Messages.Application.Messages.DTOs;
 using Backbone.Modules.Messages.Domain.Ids;
 using MediatR;
 using Microsoft.Extensions.Options;

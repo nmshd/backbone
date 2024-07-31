@@ -1,21 +1,29 @@
-using AutoMapper;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 namespace Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 
-public class ExternalEventDTO : IHaveCustomMapping
+public class ExternalEventDTO
 {
-    public required string Id { get; set; }
-    public required string Type { get; set; }
-    public required long Index { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required byte SyncErrorCount { get; set; }
-    public required object Payload { get; set; }
-
-    public void CreateMappings(Profile configuration)
+    public ExternalEventDTO(ExternalEvent externalEvent)
     {
-        configuration.CreateMap<ExternalEventType, string>().ConvertUsing((externalEventType, _) => externalEventType switch
+        Id = externalEvent.Id;
+        Type = MapExternalEventType(externalEvent.Type);
+        Index = externalEvent.Index;
+        CreatedAt = externalEvent.CreatedAt;
+        SyncErrorCount = externalEvent.SyncErrorCount;
+        Payload = externalEvent.Payload;
+    }
+
+    public string Id { get; set; }
+    public string Type { get; set; }
+    public long Index { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public byte SyncErrorCount { get; set; }
+    public object Payload { get; set; }
+
+    private string MapExternalEventType(ExternalEventType externalEventType)
+    {
+        return externalEventType switch
         {
             ExternalEventType.MessageReceived => "MessageReceived",
             ExternalEventType.MessageDelivered => "MessageDelivered",
@@ -31,9 +39,6 @@ public class ExternalEventDTO : IHaveCustomMapping
             ExternalEventType.PeerDeleted => "PeerDeleted",
 
             _ => throw new ArgumentOutOfRangeException(nameof(externalEventType), externalEventType, null)
-        });
-
-        configuration.CreateMap<ExternalEvent, ExternalEventDTO>()
-            .ForMember(dto => dto.Id, expression => expression.MapFrom(t => t.Id.Value));
+        };
     }
 }

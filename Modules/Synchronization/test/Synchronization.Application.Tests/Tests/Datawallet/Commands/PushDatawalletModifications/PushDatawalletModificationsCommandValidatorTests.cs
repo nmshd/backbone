@@ -1,5 +1,6 @@
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
+using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.UnitTestTools.BaseClasses;
 using FluentValidation.TestHelper;
 using Xunit;
@@ -17,7 +18,7 @@ public class PushDatawalletModificationsCommandValidatorTests : AbstractTestsBas
             [
                 new PushDatawalletModificationItem
                 {
-                    Collection = "x", DatawalletVersion = 1, EncryptedPayload = [], ObjectIdentifier = "x", PayloadCategory = "x", Type = DatawalletModificationDTO.DatawalletModificationType.Create
+                    Collection = "x", DatawalletVersion = 1, EncryptedPayload = [], ObjectIdentifier = "x", PayloadCategory = "x", Type = DatawalletModificationType.Create
                 }
             ],
             1);
@@ -35,7 +36,7 @@ public class PushDatawalletModificationsCommandValidatorTests : AbstractTestsBas
             [
                 new PushDatawalletModificationItem
                 {
-                    Collection = "x", DatawalletVersion = 1, EncryptedPayload = [], ObjectIdentifier = "x", PayloadCategory = "x", Type = DatawalletModificationDTO.DatawalletModificationType.Create
+                    Collection = "x", DatawalletVersion = 1, EncryptedPayload = [], ObjectIdentifier = "x", PayloadCategory = "x", Type = DatawalletModificationType.Create
                 }
             ],
             0);

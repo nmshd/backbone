@@ -61,7 +61,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         var response = new FinalizeDatawalletVersionUpgradeSyncRunResponse
         {
             NewDatawalletModificationIndex = _datawallet.LatestModification?.Index,
-            DatawalletModifications = _mapper.Map<CreatedDatawalletModificationDTO[]>(newModifications)
+            DatawalletModifications = newModifications.Select(m => new CreatedDatawalletModificationDTO(m))
         };
 
         return response;
@@ -90,7 +90,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         var response = new FinalizeExternalEventSyncSyncRunResponse
         {
             NewDatawalletModificationIndex = _datawallet.LatestModification?.Index,
-            DatawalletModifications = _mapper.Map<CreatedDatawalletModificationDTO[]>(newModifications)
+            DatawalletModifications = newModifications.Select(x => new CreatedDatawalletModificationDTO(x))
         };
 
         return response;
@@ -120,7 +120,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         foreach (var modificationDto in modifications)
         {
             var newModification = _datawallet.AddModification(
-                _mapper.Map<DatawalletModificationType>(modificationDto.Type),
+                modificationDto.Type,
                 new Datawallet.DatawalletVersion(modificationDto.DatawalletVersion),
                 modificationDto.Collection,
                 modificationDto.ObjectIdentifier,
