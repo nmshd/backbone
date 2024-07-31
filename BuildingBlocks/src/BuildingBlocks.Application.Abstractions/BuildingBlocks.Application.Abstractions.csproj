@@ -12,7 +12,6 @@
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="13.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.7" />
-        <PackageReference Include="Serilog.Enrichers.Sensitive" Version="1.7.3" />
 	</ItemGroup>
 
 	<ItemGroup>

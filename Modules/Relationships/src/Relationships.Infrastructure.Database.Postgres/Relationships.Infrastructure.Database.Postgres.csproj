@@ -1,10 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <PackageReference Include="Serilog.Enrichers.Sensitive" Version="1.7.3" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\Relationships.Infrastructure\Relationships.Infrastructure.csproj" />
   </ItemGroup>
 

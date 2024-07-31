@@ -3,7 +3,6 @@
 	<ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.7" />
 		<PackageReference Include="CSharpFunctionalExtensions" Version="2.42.5" />
-		<PackageReference Include="Serilog.Enrichers.Sensitive" Version="1.7.3" />
 	</ItemGroup>
 
 	<ItemGroup>

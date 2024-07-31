@@ -7,7 +7,6 @@
 	<ItemGroup>
 		<PackageReference Include="BouncyCastle.Cryptography" Version="2.4.0" />
 		<PackageReference Include="NSec.Cryptography" Version="24.4.0" />
-		<PackageReference Include="Serilog.Enrichers.Sensitive" Version="1.7.3" />
 	</ItemGroup>
 
 </Project>

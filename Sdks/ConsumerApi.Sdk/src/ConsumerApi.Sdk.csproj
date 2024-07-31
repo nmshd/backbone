@@ -13,7 +13,6 @@
 
     <ItemGroup>
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-        <PackageReference Include="Serilog.Enrichers.Sensitive" Version="1.7.3" />
     </ItemGroup>
 
 </Project>
