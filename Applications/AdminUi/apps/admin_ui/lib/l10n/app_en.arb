@@ -6,6 +6,7 @@
     "assign": "Assign",
     "all": "All",
     "cancel": "Cancel",
+    "change": "Change",
     "changeClientSecret": "Change Client Secret",
     "changeTier": "Change Tier",
     "clientID": "Client ID",
