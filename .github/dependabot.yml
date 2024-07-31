@@ -42,9 +42,9 @@ updates:
   ##### Admin UI Flutter App#####
   - package-ecosystem: "pub"
     directories:
-      - "/AdminUi/apps/admin_ui"
-      - "/AdminUi/packages/admin_api_sdk"
-      - "/AdminUi/packages/admin_api_types"
+      - "/Applications/AdminUi/apps/admin_ui"
+      - "/Applications/AdminUi/packages/admin_api_sdk"
+      - "/Applications/AdminUi/packages/admin_api_types"
     schedule:
       interval: "weekly"
     groups:

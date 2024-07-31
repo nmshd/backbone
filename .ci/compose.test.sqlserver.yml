@@ -4,7 +4,7 @@ services:
   database:
     container_name: bkb-sql_server-test
     hostname: sqlserver
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    image: mcr.microsoft.com/mssql/server:2022-latest
     environment:
       - MSSQL_SA_PASSWORD=Passw0rd
       - ACCEPT_EULA=Y
@@ -20,8 +20,10 @@ services:
   ### seeds ###
 
   seed-database:
+    volumes:
+      - ../scripts/sql/sqlserver:/app/sql-scripts
     image: mcr.microsoft.com/mssql-tools
-    command: bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S sqlserver -U SA -P Passw0rd -i /app/setup-db/setup-sqlserver.sql "
+    command: bash -c " sleep 20 && /opt/mssql-tools/bin/sqlcmd -S sqlserver -U SA -P Passw0rd -i /app/sql-scripts/setup.sql"
 
   admin-cli:
     environment:

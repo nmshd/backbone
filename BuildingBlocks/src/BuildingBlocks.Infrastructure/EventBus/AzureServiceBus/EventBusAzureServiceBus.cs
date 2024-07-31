@@ -3,7 +3,6 @@ using Autofac;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
 using Microsoft.Extensions.Logging;
