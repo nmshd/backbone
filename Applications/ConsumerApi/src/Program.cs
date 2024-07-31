@@ -82,7 +82,6 @@ static WebApplication CreateApp(string[] args)
 
     builder.Host
         .UseSerilog((context, configuration) => configuration
-            .Filter.ByIncludingOnly(x => x.Level > Serilog.Events.LogEventLevel.Warning)
             .ReadFrom.Configuration(context.Configuration, new ConfigurationReaderOptions { SectionName = "Logging" })
             .Enrich.WithCorrelationId("X-Correlation-Id", addValueIfHeaderAbsence: true)
             .Enrich.WithDemystifiedStackTraces()
