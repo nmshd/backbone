@@ -47,7 +47,7 @@ class _ShowChangeMaxIdentitiesDialog extends StatefulWidget {
 
 class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentitiesDialog> {
   bool _saving = false;
-  int? _maxIdentities = 0;
+  int? _maxIdentities;
   late TextEditingController _textController;
   String? _errorMessage;
 
@@ -90,7 +90,7 @@ class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentities
             onPressed: _saving ? null : () => Navigator.of(context, rootNavigator: true).pop(),
             child: Text(context.l10n.cancel),
           ),
-          FilledButton(onPressed: _saving ? null : _changeMaxIdentities, child: Text(context.l10n.update)),
+          FilledButton(onPressed: _saving || _maxIdentities == null ? null : _changeMaxIdentities, child: Text(context.l10n.update)),
         ],
       ),
     );
