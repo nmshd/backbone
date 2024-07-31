@@ -1,4 +1,5 @@
-﻿using Serilog.Enrichers.Sensitive;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Serilog.Enrichers.Sensitive;
 
 namespace Backbone.BuildingBlocks.API.Serilog;
 public static class SensitiveDataEnricherExtensions
@@ -9,8 +10,8 @@ public static class SensitiveDataEnricherExtensions
     {
         options.MaskValue = MASKED_DATA_PLACEHOLDER;
 
-        options.MaskingOperators.Add(new IdentityAddressMaskingOperator());
-        options.MaskingOperators.Add(new BackboneIdMaskingOperator("DVC", 17));
-        options.MaskingOperators.Add(new BackboneIdMaskingOperator("USR"));
+        options.MaskingOperators.Add(IdentityAddressMaskingOperator.Create());
+        options.MaskingOperators.Add(BackboneIdMaskingOperator.ForId(DeviceId.PREFIX, DeviceId.MAX_LENGTH));
+        options.MaskingOperators.Add(BackboneIdMaskingOperator.ForId(Username.PREFIX, Username.MAX_LENGTH));
     }
 }

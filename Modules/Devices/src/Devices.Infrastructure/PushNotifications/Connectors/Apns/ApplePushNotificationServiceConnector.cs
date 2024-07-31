@@ -69,7 +69,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             .SetNotificationId(notificationId)
             .Build();
 
-        _logger.Sending(notificationContent.EventName, registration.Handle.Value);
+        _logger.Sending(notificationContent.EventName);
 
         var response = await _httpClient.SendAsync(request);
 
@@ -110,6 +110,6 @@ internal static partial class ApplePushNotificationServiceConnectorLogs
         EventId = 770700,
         EventName = "ApplePushNotificationServiceConnector.Sending",
         Level = LogLevel.Debug,
-        Message = "Sending push notification (type '{eventName}') to the identity with handle '{handle}'.")]
-    public static partial void Sending(this ILogger logger, string eventName, string handle);
+        Message = "Sending push notification (type '{eventName}') to the identity.")]
+    public static partial void Sending(this ILogger logger, string eventName);
 }

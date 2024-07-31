@@ -63,7 +63,7 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
 
         await _pnsRegistrationsRepository.Delete(deviceIdsToDelete, CancellationToken.None);
 
-        _logger.LogTrace("Successfully sent push notifications to the devices.");
+        _logger.LogTrace("Successfully sent push notifications.");
     }
 
     public async Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment,

@@ -1,7 +1,9 @@
-﻿using Serilog.Enrichers.Sensitive;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Serilog.Enrichers.Sensitive;
 
 namespace Backbone.BuildingBlocks.API.Serilog;
 public class IdentityAddressMaskingOperator : RegexMaskingOperator
 {
-    public IdentityAddressMaskingOperator() : base(@"did:e:[a-zA-Z0-9]+:dids:[a-zA-Z0-9]{22}") { }
+    public IdentityAddressMaskingOperator(string regexString) : base(regexString) { }
+    public static IdentityAddressMaskingOperator Create() => new IdentityAddressMaskingOperator(IdentityAddress.IdentityAddressValidatorRegex().ToString());
 }

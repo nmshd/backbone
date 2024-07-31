@@ -57,7 +57,7 @@ internal static partial class ServerSentEventsConnectorLogs
         EventId = 433411,
         EventName = "ServerSentEventsConnector.Sending",
         Level = LogLevel.Debug,
-        Message = "Sending push notification (type '{eventName}') to the identity.")]
+        Message = "Sending push notification (type '{eventName}').")]
     public static partial void Sending(this ILogger logger, string eventName);
 
     [LoggerMessage(

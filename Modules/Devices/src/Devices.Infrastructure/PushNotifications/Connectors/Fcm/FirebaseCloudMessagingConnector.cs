@@ -53,7 +53,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
             .SetToken(registration.Handle.Value)
             .Build();
 
-        _logger.Sending(notificationContent.EventName, registration.Handle.Value);
+        _logger.Sending(notificationContent.EventName);
 
         var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(registration.AppId);
         try
@@ -102,6 +102,6 @@ internal static partial class FirebaseCloudMessagingConnectorLogs
         EventId = 227730,
         EventName = "FirebaseCloudMessagingConnector.Sending",
         Level = LogLevel.Debug,
-        Message = "Sending push notification (type '{eventName}') to the device of the identity with handle '{handle}'.")]
-    public static partial void Sending(this ILogger logger, string eventName, string handle);
+        Message = "Sending push notification (type '{eventName}').")]
+    public static partial void Sending(this ILogger logger, string eventName);
 }
