@@ -130,7 +130,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Assert
-        var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId == response.SyncRun.Id);
+        var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId! == response.SyncRun!.Id);
         itemsOfSyncRun.Should().Contain(i => i.Id == itemWithoutErrors.Id);
         itemsOfSyncRun.Should().NotContain(i => i.Id == itemWithMaxErrorCount.Id);
     }
@@ -169,7 +169,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Assert
-        var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId == response.SyncRun.Id);
+        var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId! == response.SyncRun!.Id);
         itemsOfSyncRun.Should().Contain(i => i.Id == itemOfActiveIdentity.Id);
         itemsOfSyncRun.Should().NotContain(i => i.Id == itemOfOtherIdentity.Id);
     }
@@ -189,7 +189,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Assert
-        var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId == response.SyncRun.Id);
+        var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId! == response.SyncRun!.Id);
         itemsOfSyncRun.Should().Contain(i => i.Id == unsyncedItem.Id);
         itemsOfSyncRun.Should().NotContain(i => i.Id == syncedItem.Id);
     }
@@ -227,7 +227,7 @@ public class HandlerTests : AbstractTestsBase
         canceledSyncRun.FinalizedAt.Should().NotBeNull();
 
         var externalEventOfCanceledSyncRun = _assertionContext.ExternalEvents.First(i => i.Id == externalEvent.Id);
-        externalEventOfCanceledSyncRun.SyncRunId?.Value.Should().Be(response.SyncRun.Id);
+        externalEventOfCanceledSyncRun.SyncRunId?.Value.Should().Be(response.SyncRun!.Id);
         externalEventOfCanceledSyncRun.SyncErrorCount.Should().Be(1);
     }
 

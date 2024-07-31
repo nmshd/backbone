@@ -1,17 +1,15 @@
-using AutoMapper;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 
-public class CreateRelationshipTemplateResponse : IHaveCustomMapping
+public class CreateRelationshipTemplateResponse
 {
-    public required string Id { get; set; }
-    public required DateTime CreatedAt { get; set; }
-
-    public void CreateMappings(Profile configuration)
+    public CreateRelationshipTemplateResponse(RelationshipTemplate relationshipTemplate)
     {
-        configuration.CreateMap<RelationshipTemplate, CreateRelationshipTemplateResponse>()
-            .ForMember(dto => dto.Id, expression => expression.MapFrom(m => m.Id.Value));
+        Id = relationshipTemplate.Id;
+        CreatedAt = relationshipTemplate.CreatedAt;
     }
+
+    public string Id { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

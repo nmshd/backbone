@@ -1,4 +1,3 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
@@ -9,13 +8,11 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queri
 
 public class Handler : IRequestHandler<ListRelationshipTemplatesQuery, ListRelationshipTemplatesResponse>
 {
-    private readonly IMapper _mapper;
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
     private readonly IUserContext _userContext;
 
-    public Handler(IUserContext userContext, IMapper mapper, IRelationshipTemplatesRepository relationshipTemplatesRepository)
+    public Handler(IUserContext userContext, IRelationshipTemplatesRepository relationshipTemplatesRepository)
     {
-        _mapper = mapper;
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
         _userContext = userContext;
     }
@@ -25,6 +22,6 @@ public class Handler : IRequestHandler<ListRelationshipTemplatesQuery, ListRelat
         var dbPaginationResult = await _relationshipTemplatesRepository.FindTemplatesWithIds(request.Ids.Select(RelationshipTemplateId.Parse), _userContext.GetAddress(), request.PaginationFilter,
             cancellationToken, track: false);
 
-        return new ListRelationshipTemplatesResponse(_mapper.Map<RelationshipTemplateDTO[]>(dbPaginationResult.ItemsOnPage), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
+        return new ListRelationshipTemplatesResponse(dbPaginationResult.ItemsOnPage.Select(x => new RelationshipTemplateDTO(x)), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
     }
 }
