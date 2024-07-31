@@ -3,7 +3,10 @@
 namespace Backbone.BuildingBlocks.API.Serilog;
 public class BackboneIdMaskingOperator : RegexMaskingOperator
 {
-    public BackboneIdMaskingOperator(string regexString) : base(regexString) { }
-    private static string IdRegexPattern(string prefix, int maxLength) => $@"{prefix}[a-zA-Z0-9]{{{maxLength - prefix.Length}}}";
-    public static BackboneIdMaskingOperator ForId(string prefix, int maxLength) => new(IdRegexPattern(prefix, maxLength));
+    public BackboneIdMaskingOperator(string prefix, int maxLength = -1) : base(IsStringOfConstantLength(maxLength) ? RegexPattern(prefix, maxLength) : RegexPattern(prefix)) { }
+
+    private static string RegexPattern(string initials) => $@"{initials}[a-zA-Z0-9]*";
+    private static string RegexPattern(string prefix, int maxLength) => $@"{prefix}[a-zA-Z0-9]{{{maxLength - prefix.Length}}}";
+    
+    private static bool IsStringOfConstantLength(int maxLength) => maxLength != -1;
 }

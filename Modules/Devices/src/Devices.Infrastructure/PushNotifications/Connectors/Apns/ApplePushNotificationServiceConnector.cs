@@ -110,6 +110,6 @@ internal static partial class ApplePushNotificationServiceConnectorLogs
         EventId = 770700,
         EventName = "ApplePushNotificationServiceConnector.Sending",
         Level = LogLevel.Debug,
-        Message = "Sending push notification (type '{eventName}') to the identity.")]
+        Message = "Sending push notification (type '{eventName}').")]
     public static partial void Sending(this ILogger logger, string eventName);
 }
