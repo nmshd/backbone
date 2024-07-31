@@ -64,8 +64,7 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
   void initState() {
     super.initState();
 
-    if (widget.identityDetails != null) _selectedTier = widget.identityDetails!.tierId;
-    if (widget.clientDetails != null) _selectedTier = widget.clientDetails!.defaultTier;
+    _selectedTier = widget.identityDetails?.tierId ?? widget.clientDetails?.defaultTier;
   }
 
   @override
