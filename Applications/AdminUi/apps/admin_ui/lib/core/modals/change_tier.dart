@@ -58,7 +58,7 @@ class _ShowChangeTierDialog extends StatefulWidget {
 
 class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
   bool _saving = false;
-  late String? _selectedTier;
+  String? _selectedTier;
 
   @override
   void initState() {
@@ -98,7 +98,7 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
           FilledButton(
             onPressed:
                 _saving || _selectedTier == widget.identityDetails?.tierId || _selectedTier == widget.clientDetails?.defaultTier ? null : _changeTier,
-            child: Text(context.l10n.save),
+            child: Text(context.l10n.change),
           ),
         ],
       ),
