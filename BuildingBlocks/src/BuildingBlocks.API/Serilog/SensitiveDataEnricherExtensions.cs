@@ -11,7 +11,7 @@ public static class SensitiveDataEnricherExtensions
         options.MaskValue = MASKED_DATA_PLACEHOLDER;
 
         options.MaskingOperators.Add(new IdentityAddressMaskingOperator());
-        options.MaskingOperators.Add(new BackboneIdMaskingOperator(DeviceId.PREFIX, DeviceId.MAX_LENGTH));
-        options.MaskingOperators.Add(new BackboneIdMaskingOperator(Username.PREFIX, Username.MAX_LENGTH));
+        options.MaskingOperators.Add(new StronglyTypedIdMaskingOperator(DeviceId.PREFIX, DeviceId.MAX_LENGTH));
+        options.MaskingOperators.Add(new StronglyTypedIdMaskingOperator(Username.PREFIX, Username.MAX_LENGTH));
     }
 }
