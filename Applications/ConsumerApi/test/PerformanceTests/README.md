@@ -86,7 +86,7 @@ In order to use a snapshot, you must:
 
 ### List
 
-#### Snapshot 1 (snp1.zip, downloadable from file hosting)
+#### Snapshot Heavy (snapshot.heavy.zip, downloadable from file hosting)
 
 RaM Generation: ~8h
 
@@ -99,15 +99,15 @@ Entity Creation: ~10h
 | Relationships         | 20376  |
 | Messages              | 225553 |
 
-#### Snapshot 2 (snp2.zip)
+#### Snapshot Light (snapshot.light.zip)
 
 RaM Generation: ~20min
 
 Entity Creation: ~1h
 
-| Entity                | Count  |
-| --------------------- | ------ |
-| Identities            | 542    |
-| RelationshipTemplates | 750    |
-| Relationships         | 1747   |
-| Messages              | 16113  |
+| Entity                | Count |
+| --------------------- | ----- |
+| Identities            | 542   |
+| RelationshipTemplates | 750   |
+| Relationships         | 1747  |
+| Messages              | 16113 |
