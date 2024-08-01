@@ -1,7 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Application.Clients.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using MediatR;
 
@@ -9,25 +8,25 @@ namespace Backbone.Modules.Devices.Application.Clients.Queries.GetClient;
 public class Handler : IRequestHandler<GetClientQuery, ClientDTO>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
-    private readonly ITiersRepository _tierRepository;
+    private readonly IIdentitiesRepository _identitiesRepository;
 
-    public Handler(IOAuthClientsRepository oAuthClientsRepository, ITiersRepository tiersRepository)
+    public Handler(IOAuthClientsRepository oAuthClientsRepository, IIdentitiesRepository identitiesRepository)
     {
         _oAuthClientsRepository = oAuthClientsRepository;
-        _tierRepository = tiersRepository;
+        _identitiesRepository = identitiesRepository;
     }
     public async Task<ClientDTO> Handle(GetClientQuery request, CancellationToken cancellationToken)
     {
         var client = await _oAuthClientsRepository.Find(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
-        var defaultTier = await _tierRepository.FindById(client.DefaultTier, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
+        var numberOfIdentities = await _identitiesRepository.CountByClientId(client.ClientId, cancellationToken);
 
         var clientDTO = new ClientDTO
         {
             ClientId = client.ClientId,
             DisplayName = client.DisplayName,
-            DefaultTierId = defaultTier.Id,
-            DefaultTierName = defaultTier.Name,
+            DefaultTier = client.DefaultTier,
             CreatedAt = client.CreatedAt,
+            NumberOfIdentities = numberOfIdentities,
             MaxIdentities = client.MaxIdentities
         };
 
