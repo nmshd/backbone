@@ -10,7 +10,7 @@ environment:
 dependencies:
   admin_api_sdk: ^1.0.0
   admin_api_types: ^1.0.0
-  collection: ^1.18.0
+  collection: any
   data_table_2: ^2.5.15
   dropdown_button2: ^2.3.9
   flutter:
@@ -24,7 +24,7 @@ dependencies:
   go_router: ^14.2.1
   intl: any
   logger: ^2.4.0
-  shared_preferences: ^2.2.3
+  shared_preferences: ^2.3.0
   watch_it: ^1.4.2
   window_size:
     git:
