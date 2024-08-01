@@ -1,4 +1,3 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
 using MediatR;
@@ -8,14 +7,12 @@ namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 
 public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
 {
-    private readonly IMapper _mapper;
     private readonly IFilesRepository _filesRepository;
     private readonly IUserContext _userContext;
 
-    public Handler(IUserContext userContext, IMapper mapper, IFilesRepository filesRepository)
+    public Handler(IUserContext userContext, IFilesRepository filesRepository)
     {
         _userContext = userContext;
-        _mapper = mapper;
         _filesRepository = filesRepository;
     }
 
@@ -38,8 +35,6 @@ public class Handler : IRequestHandler<CreateFileCommand, CreateFileResponse>
             cancellationToken
         );
 
-        var response = _mapper.Map<CreateFileResponse>(file);
-
-        return response;
+        return new CreateFileResponse(file);
     }
 }

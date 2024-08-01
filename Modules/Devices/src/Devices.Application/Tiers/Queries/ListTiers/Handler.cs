@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Application.Tiers.DTOs;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Tiers.Queries.ListTiers;
+
 public class Handler : IRequestHandler<ListTiersQuery, ListTiersResponse>
 {
     private readonly ITiersRepository _tierRepository;

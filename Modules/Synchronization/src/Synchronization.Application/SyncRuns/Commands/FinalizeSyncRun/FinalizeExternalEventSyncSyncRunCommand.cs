@@ -1,5 +1,4 @@
 using System.Text.Json.Serialization;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using MediatR;
 
@@ -31,7 +30,7 @@ public class FinalizeExternalEventSyncSyncRunCommand : IRequest<FinalizeExternal
     public List<ExternalEventResult> ExternalEventResults { get; set; }
     public List<PushDatawalletModificationItem> DatawalletModifications { get; set; }
 
-    public class ExternalEventResult : IMapTo<Domain.Entities.Sync.ExternalEventResult>
+    public class ExternalEventResult
     {
         public ExternalEventResult(string externalEventId) : this(externalEventId, null)
         {

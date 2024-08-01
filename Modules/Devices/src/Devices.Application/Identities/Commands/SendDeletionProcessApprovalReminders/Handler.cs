@@ -16,7 +16,6 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<Handler> _logger;
 
-
     public Handler(IIdentitiesRepository identitiesRepository, IPushNotificationSender pushNotificationSender, ILogger<Handler> logger)
     {
         _identitiesRepository = identitiesRepository;

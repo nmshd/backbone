@@ -1,4 +1,3 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -17,14 +16,12 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IMapper _mapper;
     private Datawallet? _datawallet;
     private SyncRun _syncRun = null!;
 
-    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext)
     {
         _dbContext = dbContext;
-        _mapper = mapper;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
@@ -78,7 +75,13 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
         _datawallet = await _dbContext.GetDatawalletForInsertion(_activeIdentity, cancellationToken) ?? throw new NotFoundException(nameof(Datawallet));
 
-        var eventResults = _mapper.Map<ExternalEventResult[]>(request.ExternalEventResults);
+        var eventResults = request.ExternalEventResults.Select(e =>
+            new ExternalEventResult
+            {
+                ErrorCode = e.ErrorCode ?? string.Empty,
+                ExternalEventId = ExternalEventId.Parse(e.ExternalEventId)
+            }).ToArray();
+
         _syncRun.FinalizeExternalEventSync(eventResults);
         _dbContext.Set<SyncRun>().Update(_syncRun);
 

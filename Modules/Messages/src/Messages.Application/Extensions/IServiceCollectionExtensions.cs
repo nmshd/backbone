@@ -1,7 +1,6 @@
 using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
-using Backbone.Modules.Messages.Application.AutoMapper;
 using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +17,6 @@ public static class IServiceCollectionExtensions
             .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
         );
-        services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
         services.AddValidatorsFromAssembly(typeof(Validator).Assembly);
         services.AddEventHandlers();
     }

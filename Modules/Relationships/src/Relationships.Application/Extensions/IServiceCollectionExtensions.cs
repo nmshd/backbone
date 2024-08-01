@@ -1,7 +1,6 @@
 using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
-using Backbone.Modules.Relationships.Application.AutoMapper;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,7 +18,6 @@ public static class IServiceCollectionExtensions
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
         );
 
-        services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
         services.AddValidatorsFromAssembly(typeof(Validator).Assembly);
 
         services.AddEventHandlers();
