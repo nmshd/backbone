@@ -78,14 +78,14 @@ COPY ["Modules/Quotas/src/Quotas.Infrastructure/Quotas.Infrastructure.csproj", "
 COPY ["Applications/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastructure.Database.Postgres.csproj", "Applications/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/"]
 COPY ["Applications/AdminApi/src/AdminApi.Infrastructure/AdminApi.Infrastructure.csproj", "Applications/AdminApi/src/AdminApi.Infrastructure/"]
 COPY ["Applications/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/AdminApi.Infrastructure.Database.SqlServer.csproj", "Applications/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/"]
-RUN dotnet restore "Applications/AdminApi/src/AdminApi/AdminApi.csproj"
+RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/AdminApi/src/AdminApi/AdminApi.csproj"
 
 COPY . .
 
 ARG VERSION
 
-RUN dotnet publish /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "/src/Applications/AdminApi/src/AdminApi/AdminApi.csproj"
-RUN dotnet publish --configuration Release --output /app/publish/health "/src/Applications/HealthCheck/src/HealthCheck.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:UseAppHost=false --no-restore --configuration Release --output /app/publish "/src/Applications/AdminApi/src/AdminApi/AdminApi.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health "/src/Applications/HealthCheck/src/HealthCheck.csproj"
 
 #### Build Flutter Admin UI ####
 FROM ghcr.io/cirruslabs/flutter:3.22.3 AS flutter-build-env
