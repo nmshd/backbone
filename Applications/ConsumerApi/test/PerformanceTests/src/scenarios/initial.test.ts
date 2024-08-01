@@ -1,11 +1,9 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
-import { check } from "k6";
 import { default as exec } from "k6/execution";
-import { Response } from "k6/http";
 import { ConstantArrivalRateScenario, Options } from "k6/options";
-import { apiVersion, exchangeToken } from "../libs/backbone-client";
+import { exchangeToken } from "../libs/backbone-client";
 import { LoadDREPT } from "../libs/file-utils";
-import { IdentityWithToken, StartSyncRunRequestBody, StartSyncRunResponse, SyncRunType } from "../models";
+import { IdentityWithToken } from "../models";
 
 export const options: Options = {
     scenarios: {
@@ -41,39 +39,6 @@ export function setup(): IdentityWithToken[] {
         const username = testIdentities[i].devices[0].username;
         const password = testIdentities[i].devices[0].password;
         const token = exchangeToken(client, username, password);
-
-        const requestBody: StartSyncRunRequestBody = {
-            duration: 10,
-            type: SyncRunType.DatawalletVersionUpgrade
-        };
-
-        const startSyncRunResponse = client.post(`api/${apiVersion}/SyncRuns`, JSON.stringify(requestBody), {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token.access_token}`
-            }
-        }) as Response;
-
-        check(startSyncRunResponse, {
-            "Start datawallet version upgrade": (r) => r.status === 201
-        });
-
-        const startSyncRunResponseValue = startSyncRunResponse.json("result") as unknown as StartSyncRunResponse | undefined;
-
-        const finalizeDatawalletVersionUpgradeResponse = client.put(
-            `api/${apiVersion}/SyncRuns/${startSyncRunResponseValue?.syncRun?.id}/FinalizeDatawalletVersionUpgrade`,
-            JSON.stringify({ newDatawalletVersion: 2, datawalletModifications: [] }),
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token.access_token}`
-                }
-            }
-        ) as Response;
-
-        check(finalizeDatawalletVersionUpgradeResponse, {
-            "Finalize datawallet version upgrade": (r) => r.status === 200
-        });
 
         testIdentities[i].token = token;
     }
