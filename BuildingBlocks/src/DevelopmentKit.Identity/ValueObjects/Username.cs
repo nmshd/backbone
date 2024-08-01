@@ -11,7 +11,7 @@ public record Username : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
 
-    private const string PREFIX = "USR";
+    public const string PREFIX = "USR";
 
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 

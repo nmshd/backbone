@@ -49,12 +49,12 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
             switch (sendResult.Error!.Reason)
             {
                 case ErrorReason.InvalidHandle:
-                    _logger.DeletingDeviceRegistration(sendResult.DeviceId);
+                    _logger.DeletingDeviceRegistration();
                     deviceIdsToDelete.Add(sendResult.DeviceId);
 
                     break;
                 case ErrorReason.Unexpected:
-                    _logger.ErrorWhileTryingToSendNotification(sendResult.DeviceId, sendResult.Error.Message);
+                    _logger.ErrorWhileTryingToSendNotification(sendResult.Error.Message);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException($"Reason '{sendResult.Error.Reason}' not supported");
@@ -63,7 +63,7 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
 
         await _pnsRegistrationsRepository.Delete(deviceIdsToDelete, CancellationToken.None);
 
-        _logger.LogTrace("Successfully sent push notifications to '{devicesIds}'.", string.Join(", ", sendResults.Successes));
+        _logger.LogTrace("Successfully sent push notifications.");
     }
 
     public async Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment,
@@ -107,12 +107,12 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
 
         if (registration == null)
         {
-            _logger.LogInformation("Device '{deviceId}' is not found.", deviceId);
+            _logger.LogInformation("Device not found.");
         }
         else
         {
             await _pnsRegistrationsRepository.Delete([deviceId], cancellationToken);
-            _logger.UnregisteredDevice(deviceId);
+            _logger.UnregisteredDevice();
         }
     }
 }
@@ -123,20 +123,20 @@ internal static partial class DirectPushServiceLogs
         EventId = 950845,
         EventName = "Devices.DirectPushService.DeletingDeviceRegistration",
         Level = LogLevel.Information,
-        Message = "Deleting device registration for '{deviceId}' since handle is no longer valid.")]
-    public static partial void DeletingDeviceRegistration(this ILogger logger, DeviceId deviceId);
+        Message = "Deleting device registration for the device since handle is no longer valid.")]
+    public static partial void DeletingDeviceRegistration(this ILogger logger);
 
     [LoggerMessage(
         EventId = 624412,
         EventName = "Devices.DirectPushService.ErrorWhileTryingToSendNotification",
         Level = LogLevel.Error,
-        Message = "The following error occurred while trying to send the notification for '{deviceId}': '{error}'.")]
-    public static partial void ErrorWhileTryingToSendNotification(this ILogger logger, DeviceId deviceId, string error);
+        Message = "The following error occurred while trying to send the notification for the device: '{error}'.")]
+    public static partial void ErrorWhileTryingToSendNotification(this ILogger logger, string error);
 
     [LoggerMessage(
         EventId = 628738,
         EventName = "Devices.DirectPushService.UnregisteredDevice",
         Level = LogLevel.Information,
-        Message = "Unregistered device '{deviceId} from push notifications.")]
-    public static partial void UnregisteredDevice(this ILogger logger, DeviceId deviceId);
+        Message = "Unregistered the device from push notifications.")]
+    public static partial void UnregisteredDevice(this ILogger logger);
 }

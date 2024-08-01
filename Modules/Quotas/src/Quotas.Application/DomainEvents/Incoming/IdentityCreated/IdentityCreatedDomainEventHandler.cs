@@ -42,7 +42,7 @@ public class IdentityCreatedDomainEventHandler : IDomainEventHandler<IdentityCre
 
         await _identitiesRepository.Add(identity, CancellationToken.None);
 
-        _logger.IdentityCreated(identity.Address, identity.TierId);
+        _logger.IdentityCreated(identity.TierId);
     }
 }
 
@@ -52,6 +52,6 @@ internal static partial class IdentityCreatedLogs
         EventId = 811934,
         EventName = "Quotas.IdentityCreatedDomainEventHandler.IdentityCreated",
         Level = LogLevel.Information,
-        Message = "Successfully created identity. Identity Address: '{address}', Tier ID: '{tierId}'.")]
-    public static partial void IdentityCreated(this ILogger logger, string address, TierId tierId);
+        Message = "Successfully created the identity. Tier ID: '{tierId}'.")]
+    public static partial void IdentityCreated(this ILogger logger, TierId tierId);
 }
