@@ -1760,6 +1760,11 @@
           "Serilog": "4.0.0"
         }
       },
+      "Serilog.Enrichers.Sensitive": {
+        "type": "Transitive",
+        "resolved": "1.7.3",
+        "contentHash": "U/38ICup0xDMDL8TjprLDCWI16MkQTPEJfWgPROFxtGjsBf+SW1W2fMfEhdiAYLGCTSFWNXmVGdVjU58Gyr0eQ=="
+      },
       "Serilog.Exceptions": {
         "type": "Transitive",
         "resolved": "8.4.0",
@@ -2895,6 +2900,7 @@
           "Microsoft.EntityFrameworkCore": "[8.0.7, )",
           "Microsoft.EntityFrameworkCore.Relational": "[8.0.7, )",
           "Polly": "[8.4.1, )",
+          "Serilog.Enrichers.Sensitive": "[1.7.3, )",
           "System.Data.SqlClient": "[4.8.6, )"
         }
       },
@@ -2996,6 +3002,7 @@
           "Serilog.Enrichers.ClientInfo": "[2.1.0, )",
           "Serilog.Enrichers.Demystifier": "[1.0.2, )",
           "Serilog.Enrichers.Environment": "[3.0.1, )",
+          "Serilog.Enrichers.Sensitive": "[1.7.3, )",
           "Serilog.Exceptions": "[8.4.0, )",
           "Serilog.Exceptions.EntityFrameworkCore": "[8.4.0, )",
           "Serilog.Formatting.Compact": "[3.0.0, )",
@@ -3053,6 +3060,7 @@
           "Backbone.Modules.Synchronization.ConsumerApi": "[1.0.0, )",
           "Backbone.Modules.Tokens.ConsumerApi": "[1.0.0, )",
           "Serilog.Enrichers.Demystifier": "[1.0.2, )",
+          "Serilog.Enrichers.Sensitive": "[1.7.3, )",
           "Serilog.Exceptions": "[8.4.0, )",
           "Serilog.Exceptions.EntityFrameworkCore": "[8.4.0, )"
         }
@@ -3501,6 +3509,7 @@
           "Backbone.UnitTestTools": "[1.0.0, )",
           "FluentAssertions": "[6.12.0, )",
           "Microsoft.NET.Test.Sdk": "[17.10.0, )",
+          "Serilog.Enrichers.Sensitive": "[1.7.3, )",
           "xunit": "[2.9.0, )"
         }
       },

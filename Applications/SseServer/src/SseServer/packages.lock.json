@@ -1427,6 +1427,11 @@
         "resolved": "4.4.0",
         "contentHash": "YhEdSQUsTx+C8m8Bw7ar5/VesXvCFMItyZF7G1AUY+OM0VPZUOeAVpJ4Wl6fydBGUYZxojTDR3I6Bj/+BPkJNA=="
       },
+      "Serilog.Enrichers.Sensitive": {
+        "type": "Transitive",
+        "resolved": "1.7.3",
+        "contentHash": "U/38ICup0xDMDL8TjprLDCWI16MkQTPEJfWgPROFxtGjsBf+SW1W2fMfEhdiAYLGCTSFWNXmVGdVjU58Gyr0eQ=="
+      },
       "Serilog.Extensions.Hosting": {
         "type": "Transitive",
         "resolved": "8.0.0",
@@ -1696,6 +1701,7 @@
           "Microsoft.EntityFrameworkCore": "[8.0.7, )",
           "Microsoft.EntityFrameworkCore.Relational": "[8.0.7, )",
           "Polly": "[8.4.1, )",
+          "Serilog.Enrichers.Sensitive": "[1.7.3, )",
           "System.Data.SqlClient": "[4.8.6, )"
         }
       },

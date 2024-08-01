@@ -53,6 +53,12 @@
           "Polly.Core": "8.4.1"
         }
       },
+      "Serilog.Enrichers.Sensitive": {
+        "type": "Direct",
+        "requested": "[1.7.3, )",
+        "resolved": "1.7.3",
+        "contentHash": "U/38ICup0xDMDL8TjprLDCWI16MkQTPEJfWgPROFxtGjsBf+SW1W2fMfEhdiAYLGCTSFWNXmVGdVjU58Gyr0eQ=="
+      },
       "System.Data.SqlClient": {
         "type": "Direct",
         "requested": "[4.8.6, )",
