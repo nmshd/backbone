@@ -6,12 +6,12 @@ import 'endpoint.dart';
 class ClientsEndpoint extends Endpoint {
   ClientsEndpoint(super.dio);
 
-  Future<ApiResponse<List<Clients>>> getClients() => get(
+  Future<ApiResponse<List<ClientOverview>>> getClients() => get(
         '/api/v1/Clients',
-        transformer: (e) => (e as List).map(Clients.fromJson).toList(),
+        transformer: (e) => (e as List).map(ClientOverview.fromJson).toList(),
       );
 
-  Future<ApiResponse<Client>> createClient({
+  Future<ApiResponse<CreateClientResponse>> createClient({
     required String defaultTier,
     String? clientId,
     String? clientSecret,
@@ -27,18 +27,15 @@ class ClientsEndpoint extends Endpoint {
           'displayName': displayName,
           'maxIdentities': maxIdentities,
         },
-        transformer: Client.fromJson,
+        transformer: CreateClientResponse.fromJson,
       );
 
-  Future<ApiResponse<Client>> getClient(
-    String clientId,
-  ) =>
-      get(
+  Future<ApiResponse<Client>> getClient(String clientId) => get(
         '/api/v1/Clients/$clientId',
         transformer: Client.fromJson,
       );
 
-  Future<ApiResponse<Client>> changeClientSecret(
+  Future<ApiResponse<ChangeClientSecretResponse>> changeClientSecret(
     String clientId, {
     required String? newSecret,
   }) =>
@@ -47,10 +44,10 @@ class ClientsEndpoint extends Endpoint {
         data: {
           'newSecret': newSecret,
         },
-        transformer: Client.fromJson,
+        transformer: ChangeClientSecretResponse.fromJson,
       );
 
-  Future<ApiResponse<Client>> updateClient(
+  Future<ApiResponse<UpdateClientResponse>> updateClient(
     String clientId, {
     required String defaultTier,
     required int? maxIdentities,
@@ -61,7 +58,7 @@ class ClientsEndpoint extends Endpoint {
           'defaultTier': defaultTier,
           'maxIdentities': maxIdentities,
         },
-        transformer: Client.fromJson,
+        transformer: UpdateClientResponse.fromJson,
       );
 
   Future<ApiResponse<void>> deleteClient(

@@ -120,7 +120,6 @@ class _ClientDetailsCard extends StatelessWidget {
                         onIconPressed: () => showChangeMaxIdentitiesDialog(
                           context: context,
                           clientDetails: clientDetails,
-                          numberOfIdentities: clientDetails.numberOfIdentities ?? 0,
                           onMaxIdentitiesUpdated: updateClient,
                         ),
                         icon: Icons.edit,

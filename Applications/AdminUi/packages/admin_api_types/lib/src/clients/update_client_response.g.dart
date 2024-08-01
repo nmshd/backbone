@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'client.dart';
+part of 'update_client_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Client _$ClientFromJson(Map<String, dynamic> json) => Client(
+UpdateClientResponse _$UpdateClientResponseFromJson(Map<String, dynamic> json) => UpdateClientResponse(
       clientId: json['clientId'] as String,
       displayName: json['displayName'] as String,
       defaultTier: json['defaultTier'] as String,
@@ -14,7 +14,7 @@ Client _$ClientFromJson(Map<String, dynamic> json) => Client(
       maxIdentities: (json['maxIdentities'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$ClientToJson(Client instance) => <String, dynamic>{
+Map<String, dynamic> _$UpdateClientResponseToJson(UpdateClientResponse instance) => <String, dynamic>{
       'clientId': instance.clientId,
       'displayName': instance.displayName,
       'defaultTier': instance.defaultTier,

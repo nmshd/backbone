@@ -38,14 +38,14 @@ class ClientsFilter {
     );
   }
 
-  List<Clients> apply(List<Clients> clients) => clients.where(matches).toList();
+  List<ClientOverview> apply(List<ClientOverview> clients) => clients.where(matches).toList();
 
-  bool matches(Clients client) {
+  bool matches(ClientOverview client) {
     if (clientId != null && !client.clientId.contains(clientId!)) return false;
     if (displayName != null && !client.displayName.contains(displayName!)) return false;
     if (tiers != null && !tiers!.contains(client.defaultTier.id)) return false;
     if (createdAt != null && !_applyDateFilter(client.createdAt, createdAt!.$2, createdAt!.$1)) return false;
-    if (numberOfIdentities != null && !_applyNumberFilter(client.numberOfIdentities ?? 0, numberOfIdentities!.$2, numberOfIdentities!.$1)) {
+    if (numberOfIdentities != null && !_applyNumberFilter(client.numberOfIdentities, numberOfIdentities!.$2, numberOfIdentities!.$1)) {
       return false;
     }
 

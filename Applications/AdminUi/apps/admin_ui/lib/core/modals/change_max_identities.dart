@@ -9,7 +9,6 @@ Future<void> showChangeMaxIdentitiesDialog({
   required BuildContext context,
   required VoidCallback onMaxIdentitiesUpdated,
   required Client clientDetails,
-  required int numberOfIdentities,
 }) async {
   await showDialog<void>(
     context: context,
@@ -30,15 +29,11 @@ Future<void> showChangeMaxIdentitiesDialog({
 
 class _ShowChangeMaxIdentitiesDialog extends StatefulWidget {
   final VoidCallback onMaxIdentitiesUpdated;
-  final Future<ApiResponse<dynamic>> Function({required int maxIdentities}) updateMaxIdentities;
   final Client clientDetails;
-  final int numberOfIdentities;
 
   const _ShowChangeMaxIdentitiesDialog({
     required this.onMaxIdentitiesUpdated,
-    required this.updateMaxIdentities,
     required this.clientDetails,
-    required this.numberOfIdentities,
   });
 
   @override
@@ -101,7 +96,9 @@ class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentities
 
     assert(_maxIdentities != null, 'Invalid State');
 
-    if (_maxIdentities != null && _maxIdentities! <= widget.numberOfIdentities) {
+    const numberOfIdentities = 0; // widget.clientDetails.numberOfIdentities;
+
+    if (_maxIdentities != null && _maxIdentities! <= numberOfIdentities) {
       setState(() {
         _saving = false;
         _errorMessage = context.l10n.maxIdentities_error_message_maxIdentitiesLowerThanNumberOfIdentities;

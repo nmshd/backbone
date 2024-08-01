@@ -132,7 +132,7 @@ class _ChangeClientSecretDialogState extends State<_ChangeClientSecretDialog> {
       return;
     }
 
-    _newClientSecretController.text = response.data.clientSecret!;
+    _newClientSecretController.text = response.data.clientSecret;
     setState(() {
       _saveSucceeded = true;
       _saving = false;
