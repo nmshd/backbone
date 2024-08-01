@@ -3,10 +3,13 @@ import papaparse from "papaparse";
 import { DREPT, Identity, Pool } from "./drept";
 import { CSVIdentity } from "./drept/csv-types";
 
-export function LoadDREPT(): DREPT {
+export function LoadDREPT(folderName: string): DREPT {
+    const csvFilesPath = `../snapshots/${folderName}/csvs`;
+
     const identities = new SharedArray("identities", function () {
-        const identitiesFile = open("../snapshots/snp2/csvs/identities.csv");
+        const identitiesFile = open(`${csvFilesPath}/identities.csv`);
         const parsedIdentities = papaparse.parse<CSVIdentity>(identitiesFile, { header: true }).data.filter((identity) => identity.Address !== "");
+        console.log(`found ${parsedIdentities.length} identities`);
         const result: Identity[] = [];
         parsedIdentities.forEach((csvIdentity) => {
             const identity: Identity = {
@@ -21,7 +24,7 @@ export function LoadDREPT(): DREPT {
     });
 
     const pools = new SharedArray("pools", function () {
-        const identitiesFile = open("../snapshots/snp2/csvs/identities.csv");
+        const identitiesFile = open(`${csvFilesPath}/identities.csv`);
         const parsedIdentities = papaparse.parse<CSVIdentity>(identitiesFile, { header: true }).data.filter((identity) => identity.Address !== "");
         const result: Pool[] = [];
         parsedIdentities.forEach((csvIdentity) => {
@@ -30,11 +33,14 @@ export function LoadDREPT(): DREPT {
                 result.push({ name: csvIdentity.Alias, identities: [] });
                 pool = result.find((p) => p.name === csvIdentity.Alias);
             }
-            pool!.identities = identities.filter((i) => i.poolAlias === pool!.name);
+        });
+
+        result.forEach((pool) => {
+            pool.identities = identities.filter((i) => i.poolAlias === pool.name);
         });
 
         return result;
     });
 
-    return { pools: pools } as DREPT;
+    return new DREPT(pools);
 }

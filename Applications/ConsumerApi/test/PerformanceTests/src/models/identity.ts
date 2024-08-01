@@ -23,4 +23,5 @@ export interface CreateIdentityResponse {
 export interface IdentityWithToken extends Identity {
     response: CreateIdentityResponse;
     token: JwtResponse;
+    tokenCreatedAt: Date;
 }

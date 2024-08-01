@@ -1,47 +1,58 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
-import { default as exec } from "k6/execution";
-import { ConstantArrivalRateScenario, Options } from "k6/options";
-import { exchangeToken } from "../libs/backbone-client";
+import { check } from "k6";
+import { SharedArray } from "k6/data";
+import { Options } from "k6/options";
+import { apiVersion, exchangeToken } from "../libs/backbone-client";
 import { LoadDREPT } from "../libs/file-utils";
-import { IdentityWithToken } from "../models";
+import { CreateChallengeResponse } from "../models";
 
 export const options: Options = {
     scenarios: {
         constantRequestRate: {
             executor: "constant-arrival-rate",
-            rate: 10,
-            timeUnit: "1s",
-            duration: "1m",
-            preAllocatedVUs: 10
+            rate: 1,
+            timeUnit: "5m",
+            duration: "60m",
+            preAllocatedVUs: 1
         }
     }
 };
 
-const pools = LoadDREPT().pools.filter((pool) => pool.name.startsWith("a") || pool.name.startsWith("c"));
+const pools = LoadDREPT("snp2").ofTypes("a", "c").pools;
+const testIdentities = new SharedArray("testIdentities", function () {
+    return pools.flatMap((p) => p.identities); // must be an array
+});
 
 const client = new Httpx({
     baseURL: "http://localhost:8081/",
     timeout: 20000 // 20s timeout
 });
 
-export default function (testIdentities: IdentityWithToken[]): void {
-    const currentVuIdInTest = exec.vu.idInTest;
-    const identity = testIdentities[currentVuIdInTest - 1];
+let identityIterator = 0;
 
-    console.debug(`VU ${currentVuIdInTest} is using identity with address ${identity.response.address}`);
-}
+export default function (): void {
+    const currentIdentity = testIdentities[identityIterator++];
 
-export function setup(): IdentityWithToken[] {
-    const scenario = exec.test.options.scenarios?.constantRequestRate as ConstantArrivalRateScenario;
-    const testIdentities = pools.flatMap((p) => p.identities) as IdentityWithToken[];
+    const username = currentIdentity.devices[0].username;
+    const password = currentIdentity.devices[0].password;
+    const token = exchangeToken(client, username, password);
 
-    for (let i = 0; i < scenario.preAllocatedVUs; i++) {
-        const username = testIdentities[i].devices[0].username;
-        const password = testIdentities[i].devices[0].password;
-        const token = exchangeToken(client, username, password);
+    const createChallengeResponse = client.post<"basic">(`api/${apiVersion}/Challenges`, null, {
+        headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token.access_token}`
+        }
+    });
 
-        testIdentities[i].token = token;
-    }
-    console.log(`testIdentities has ${testIdentities.length} identities after setup completed`);
-    return testIdentities;
+    check(createChallengeResponse, {
+        "response code was 201": (r) => r.status === 201
+    });
+
+    const createChallengeResult = createChallengeResponse.json("result") as unknown as CreateChallengeResponse;
+
+    check(createChallengeResult, {
+        "challenge contains correct device": (r) => r.createdByDevice === currentIdentity.devices[0].deviceId,
+        "challenge contains correct address": (r) => r.createdBy === currentIdentity.address,
+        "challenge id is not empty": (r) => r.id !== ""
+    });
 }
