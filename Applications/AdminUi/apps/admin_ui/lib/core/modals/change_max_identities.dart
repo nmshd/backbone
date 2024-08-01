@@ -15,14 +15,6 @@ Future<void> showChangeMaxIdentitiesDialog({
     builder: (BuildContext context) => _ShowChangeMaxIdentitiesDialog(
       onMaxIdentitiesUpdated: onMaxIdentitiesUpdated,
       clientDetails: clientDetails,
-      numberOfIdentities: numberOfIdentities,
-      updateMaxIdentities: ({required int maxIdentities}) {
-        return GetIt.I.get<AdminApiClient>().clients.updateClient(
-              clientDetails.clientId,
-              defaultTier: clientDetails.defaultTier,
-              maxIdentities: maxIdentities,
-            );
-      },
     ),
   );
 }
@@ -96,6 +88,7 @@ class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentities
 
     assert(_maxIdentities != null, 'Invalid State');
 
+    //TODO: enable as soon as it is available in the API
     const numberOfIdentities = 0; // widget.clientDetails.numberOfIdentities;
 
     if (_maxIdentities != null && _maxIdentities! <= numberOfIdentities) {
@@ -106,7 +99,11 @@ class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentities
       return;
     }
 
-    final response = await widget.updateMaxIdentities(maxIdentities: _maxIdentities!);
+    final response = await GetIt.I.get<AdminApiClient>().clients.updateClient(
+          widget.clientDetails.clientId,
+          defaultTier: widget.clientDetails.defaultTier,
+          maxIdentities: _maxIdentities,
+        );
 
     if (!mounted) return;
 
