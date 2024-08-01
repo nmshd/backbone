@@ -85,7 +85,7 @@ public class ActualDeletionWorker : IHostedService
     {
         foreach (var erroringDeletion in erroringDeletionTriggers)
         {
-            _logger.ErrorWhenTriggeringDeletionProcessForIdentity(erroringDeletion.Key, erroringDeletion.Value.Error.Code, erroringDeletion.Value.Error.Message);
+            _logger.ErrorWhenTriggeringDeletionProcessForIdentity(erroringDeletion.Value.Error.Code, erroringDeletion.Value.Error.Message);
         }
     }
 }
@@ -96,6 +96,6 @@ internal static partial class ActualIdentityDeletionWorkerLogs
         EventId = 390931,
         EventName = "ActualIdentityDeletionWorker.ErrorWhenTriggeringDeletionProcessForIdentity",
         Level = LogLevel.Error,
-        Message = "There was an error when trying to trigger the deletion process for the identity with the address {identityAddress}. Error code: '{errorCode}. Error message: {errorMessage}...")]
-    public static partial void ErrorWhenTriggeringDeletionProcessForIdentity(this ILogger logger, IdentityAddress identityAddress, string errorCode, string errorMessage);
+        Message = "There was an error when trying to trigger the deletion process for the identity. Error code: '{errorCode}. Error message: {errorMessage}...")]
+    public static partial void ErrorWhenTriggeringDeletionProcessForIdentity(this ILogger logger, string errorCode, string errorMessage);
 }

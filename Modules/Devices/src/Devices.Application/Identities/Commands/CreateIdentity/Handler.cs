@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var address = IdentityAddress.Create(publicKey.Key, _applicationOptions.DidDomainName);
 
-        _logger.LogTrace("Address created. Result: '{address}'", address);
+        _logger.LogTrace("Address created.");
 
         var addressAlreadyExists = await _identitiesRepository.Exists(address, cancellationToken);
 
@@ -63,7 +63,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         await _identitiesRepository.AddUser(user, command.DevicePassword);
 
-        _logger.CreatedIdentity(newIdentity.Address, user.DeviceId, user.UserName!);
+        _logger.CreatedIdentity();
 
         return new CreateIdentityResponse
         {
@@ -85,6 +85,6 @@ internal static partial class CreatedIdentityLogs
         EventId = 436321,
         EventName = "Devices.CreateIdentity.CreatedIdentity",
         Level = LogLevel.Information,
-        Message = "Identity created. Address: '{address}', Device ID: '{deviceId}', Username: '{userName}'.")]
-    public static partial void CreatedIdentity(this ILogger logger, IdentityAddress address, DeviceId deviceId, string userName);
+        Message = "Identity created.")]
+    public static partial void CreatedIdentity(this ILogger logger);
 }
