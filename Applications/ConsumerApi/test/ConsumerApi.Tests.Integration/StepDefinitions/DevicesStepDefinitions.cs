@@ -2,26 +2,17 @@
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
-using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
-using Backbone.ConsumerApi.Tests.Integration.Support;
-using Backbone.Crypto;
-using Backbone.Crypto.Implementations;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.Utils;
 using static Backbone.ConsumerApi.Tests.Integration.Support.Constants;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
-[Scope(Feature = "DELETE Device")]
-[Scope(Feature = "UPDATE Device")]
-[Scope(Feature = "POST Device")]
 internal class DevicesStepDefinitions
 {
     private readonly ClientCredentials _clientCredentials;
@@ -51,14 +42,14 @@ internal class DevicesStepDefinitions
     [Given("an Identity ([a-zA-Z0-9]+) with a device ([a-zA-Z0-9]+)")]
     public async Task GivenAnIdentityIWithADevice(string identityName, string deviceName)
     {
-        await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identityName);
+        _identitiesContext.Identities.Add(identityName, await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD));
         _devicesContext.Devices.Add(deviceName, Identity(identityName).DeviceData!);
     }
 
     [Given(@"an Identity ([a-zA-Z0-9]+) with devices ([a-zA-Z0-9, ]+)")]
     public async Task GivenAnIdentityIWithDevices(string identityName, string deviceNames)
     {
-        await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identityName);
+        _identitiesContext.Identities.Add(identityName, await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD));
 
         foreach (var deviceName in SplitNames(deviceNames))
             _devicesContext.Devices.Add(deviceName, Identity(identityName).DeviceData!);
@@ -85,7 +76,7 @@ internal class DevicesStepDefinitions
         });
     }
 
-    [When(@"([a-zA-Z0-9]+) sends a PUT request to the /Devices/Self endpoint with the communication language '(.*)'")]
+    [When(@"([a-zA-Z0-9]+) sends a PUT request to the /Devices/Self endpoint with the communication language '(de|en|pt)'")]
     public async Task WhenISendsAPutRequestToTheDevicesSelfEndpointWithTheCommunicationLanguage(string identityName, string communicationLanguage)
     {
         _communicationLanguage = communicationLanguage;
@@ -124,8 +115,8 @@ internal class DevicesStepDefinitions
     #endregion
 
     #region Then
-    [Then("the device on the Backbone of ([a-zA-Z0-9]+) has the new communication language")]
-    public async Task ThenTheDeviceOnTheBackboneOfIHasTheNewCommunicationLanguage(string identityName)
+    [Then(@"the Backbone has persisted '(de|en|pt)' as the new communication language of ([a-zA-Z0-9]+) belonging to ([a-zA-Z0-9]+)\.")]
+    public async Task ThenTheBackboneHasPersistedAsTheNewCommunicationLanguageOfDBelongingToI_(string communicationLanguage, string deviceName, string identityName)
     {
         var response = await ListDevices(identityName);
         response.Result!.Count.Should().Be(1);

@@ -18,7 +18,7 @@ public class CreateFileRequest
     {
         return new MultipartFormDataContent
         {
-            { new StreamContent(Content), "content", "test.txt" },
+            { new StreamContent(Content), "content", "filename" },
             { new StringContent(Owner), "owner" },
             { new StringContent(OwnerSignature), "ownerSignature" },
             { new StringContent(CipherHash), "cipherHash" },

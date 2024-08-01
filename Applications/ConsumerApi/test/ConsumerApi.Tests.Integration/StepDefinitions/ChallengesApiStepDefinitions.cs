@@ -26,12 +26,10 @@ internal class ChallengesApiStepDefinitions
     private ApiResponse<Challenge> ChallengeResponse => _responseContext.ChallengeResponse!;
 
     #region Given
-    [Given("a Challenge c created by (.+)")]
+    [Given("a Challenge c created by ([a-zA-Z0-9]+)")]
     public async Task GivenAChallengeCreatedByI(string identityName)
     {
-        _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ?
-            await Identity(identityName).Challenges.CreateChallenge() :
-            await Identity(identityName).Challenges.CreateChallengeUnauthenticated();
+        _responseContext.ChallengeResponse = await Identity(identityName).Challenges.CreateChallenge();
         ChallengeResponse.Should().BeASuccess();
 
         _challengesContext.ChallengeId = ChallengeResponse.Result!.Id;
@@ -41,9 +39,7 @@ internal class ChallengesApiStepDefinitions
     [Given(@"a Challenge c")]
     public async Task GivenAChallengeC()
     {
-        _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ?
-            await AnonymousClient.Challenges.CreateChallenge() :
-            await AnonymousClient.Challenges.CreateChallengeUnauthenticated();
+        _responseContext.ChallengeResponse = await AnonymousClient.Challenges.CreateChallengeUnauthenticated();
         ChallengeResponse.Should().BeASuccess();
 
         _challengesContext.ChallengeId = ChallengeResponse.Result!.Id;
@@ -55,32 +51,24 @@ internal class ChallengesApiStepDefinitions
     [When("a POST request is sent to the /Challenges endpoint")]
     public async Task WhenAPostRequestIsSentToTheChallengesEndpoint()
     {
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ?
-            await AnonymousClient.Challenges.CreateChallenge() :
-            await AnonymousClient.Challenges.CreateChallengeUnauthenticated();
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await AnonymousClient.Challenges.CreateChallengeUnauthenticated();
     }
 
-    [When(@"(.+) sends a POST request to the /Challenges endpoint")]
+    [When(@"([a-zA-Z0-9]+) sends a POST request to the /Challenges endpoint")]
     public async Task WhenISendsAPostRequestToTheChallengesEndpoint(string identityName)
     {
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = _challengesContext.IsAuthenticated ?
-            await Identity(identityName).Challenges.CreateChallenge() :
-            await Identity(identityName).Challenges.CreateChallengeUnauthenticated();
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await Identity(identityName).Challenges.CreateChallenge();
     }
 
-    [When(@"(.+) sends a GET request is sent to the /Challenges/{id} endpoint with ""?(.*?)""?")]
+    [When(@"([a-zA-Z0-9]+) sends a GET request to the /Challenges/{id} endpoint with a valid id ""?(.*?)""?")]
+    public async Task WhenISendsAGetRequestToTheChallengesIdEndpointWithAValidId(string identityName, string challengeId)
+    {
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await Identity(identityName).Challenges.GetChallenge(_challengesContext.ChallengeId!);
+    }
+
+    [When(@"([a-zA-Z0-9]+) sends a GET request to the /Challenges/{id} endpoint with a placeholder id ""?(.*?)""?")]
     public async Task WhenISendsAGetRequestToTheChallengesIdEndpointWith(string identityName, string challengeId)
     {
-        switch (challengeId)
-        {
-            case "c.Id":
-                challengeId = _challengesContext.ChallengeId!;
-                break;
-            case "a valid Id":
-                challengeId = VALID_CHALLENGE_ID;
-                break;
-        }
-
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = await Identity(identityName).Challenges.GetChallenge(challengeId);
     }
     #endregion

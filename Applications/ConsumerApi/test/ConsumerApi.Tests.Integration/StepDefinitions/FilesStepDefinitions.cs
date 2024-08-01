@@ -25,10 +25,10 @@ internal class FilesStepDefinitions
         {
             Content = new MemoryStream("content"u8.ToArray()),
             Owner = Identity(identityName).IdentityData!.Address,
-            OwnerSignature = VALID_BASE64_STRING,
-            CipherHash = VALID_BASE64_STRING,
+            OwnerSignature = SOME_BASE64_STRING,
+            CipherHash = SOME_BASE64_STRING,
             ExpiresAt = DateTime.UtcNow.AddDays(1),
-            EncryptedProperties = VALID_BASE64_STRING
+            EncryptedProperties = SOME_BASE64_STRING
         };
 
         _responseContext.WhenResponse = _responseContext.FileUploadResponse = await Identity(identityName).Files.UploadFile(createFileRequest);

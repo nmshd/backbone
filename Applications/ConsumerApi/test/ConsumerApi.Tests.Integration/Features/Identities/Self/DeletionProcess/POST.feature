@@ -5,7 +5,7 @@ User starts a deletion process
 
     Scenario: Starting a deletion process
         Given Identity i
- 	    And no active deletion process for the identity exists
+ 	    And no active deletion process for i exists
  	    When i sends a POST request to the /Identities/Self/DeletionProcesses endpoint
  	    Then the response status code is 201 (Created)
  	    And the response contains a Deletion Process

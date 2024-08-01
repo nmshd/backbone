@@ -7,9 +7,9 @@ User updates a Device
 		Given an Identity i with a device d
 		When i sends a PUT request to the /Devices/Self endpoint with the communication language 'de'
 		Then the response status code is 204 (No Content)
-		And the device on the Backbone of i has the new communication language
+		And the Backbone has persisted 'de' as the new communication language of d belonging to i.
 
-	Scenario: Updating own Device with invalid data
+	Scenario: Updating own Device with an invalid language code as communication language
 		Given an Identity i with a device d
 		When i sends a PUT request to the /Devices/Self endpoint with a non-existent language code
 		Then the response status code is 400 (Bad Request)

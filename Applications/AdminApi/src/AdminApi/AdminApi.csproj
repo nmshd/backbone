@@ -43,9 +43,4 @@
         <ProjectReference Include="..\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj"/>
         <ProjectReference Include="..\AdminApi.Infrastructure\AdminApi.Infrastructure.csproj"/>
     </ItemGroup>
-
-    <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
-        <Delete Files="$(ProjectDir)appsettings.override.json"/>
-        <Copy SourceFiles="..\..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true"/>
-    </Target>
 </Project>

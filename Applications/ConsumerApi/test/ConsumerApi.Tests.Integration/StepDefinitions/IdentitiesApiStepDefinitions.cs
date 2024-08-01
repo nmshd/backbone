@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.SDK.Crypto;
+﻿using System.Net.Http;
+using Backbone.BuildingBlocks.SDK.Crypto;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
@@ -46,7 +47,7 @@ internal class IdentitiesApiStepDefinitions
     public async Task GivenIdentity(string identityName)
     {
         _challengesContext.IsAuthenticated = true;
-        await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identityName);
+        _identitiesContext.Identities.Add(identityName, await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD));
     }
 
     [Given(@"Identities ([a-zA-Z0-9, ]+)")]
@@ -60,11 +61,11 @@ internal class IdentitiesApiStepDefinitions
     public void GivenTheUserIsUnauthenticated()
     {
         _challengesContext.IsAuthenticated = false;
-        CreateUnauthenticated(_identitiesContext, _httpClient, _clientCredentials);
+        _identitiesContext.AnonymousClient = Client.CreateUnauthenticated(_httpClient, _clientCredentials);
     }
 
-    [Given("no active deletion process for the identity exists")]
-    public void GivenNoActiveDeletionProcessForTheUserExists() { }
+    [Given("no active deletion process for i exists")]
+    public void GivenNoActiveDeletionProcessForIExists() { }
 
     [Given("an active deletion process for ([a-zA-Z0-9]+) exists")]
     public async Task GivenAnActiveDeletionProcessForTheIdentityExists(string identityName)
@@ -76,8 +77,8 @@ internal class IdentitiesApiStepDefinitions
     [Given("Identities ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+) with an established Relationship")]
     public async Task GivenIdentitiesI1AndI2WithAnEstablishedRelationship(string identity1Name, string identity2Name)
     {
-        await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identity1Name);
-        await CreateAuthenticated(_identitiesContext, _httpClient, _clientCredentials, identity2Name);
+        _identitiesContext.Identities.Add(identity1Name, await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD));
+        _identitiesContext.Identities.Add(identity2Name, await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD));
 
         await EstablishRelationshipBetween(Identity(identity1Name), Identity(identity2Name));
     }
@@ -103,8 +104,8 @@ internal class IdentitiesApiStepDefinitions
 
         var createIdentityPayload = new CreateIdentityRequest
         {
-            ClientId = CLIENT_ID,
-            ClientSecret = CLIENT_SECRET,
+            ClientId = _clientCredentials.ClientId,
+            ClientSecret = _clientCredentials.ClientSecret,
             IdentityVersion = 1,
             SignedChallenge = signedChallenge,
             IdentityPublicKey = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new CryptoSignaturePublicKey

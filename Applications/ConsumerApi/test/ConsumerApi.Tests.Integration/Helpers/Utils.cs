@@ -31,16 +31,6 @@ public static class Utils
         return new SignedChallenge(serializedChallenge, challengeSignature);
     }
 
-    public static void CreateUnauthenticated(IdentitiesContext identitiesContext, HttpClient httpClient, ClientCredentials clientCredentials)
-    {
-        identitiesContext.AnonymousClient = Client.CreateUnauthenticated(httpClient, clientCredentials);
-    }
-
-    public static async Task CreateAuthenticated(IdentitiesContext identitiesContext, HttpClient httpClient, ClientCredentials clientCredentials, string identityName)
-    {
-        identitiesContext.Identities.Add(identityName, await Client.CreateForNewIdentity(httpClient, clientCredentials, DEVICE_PASSWORD));
-    }
-
     public static async Task<Relationship> EstablishRelationshipBetween(Client client1, Client client2)
     {
         var createRelationshipTemplateRequest = new CreateRelationshipTemplateRequest

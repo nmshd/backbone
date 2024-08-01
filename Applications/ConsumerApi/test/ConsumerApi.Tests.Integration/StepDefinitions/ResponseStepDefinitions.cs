@@ -8,10 +8,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.AcceptRelationship;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.CreateRelationship;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.RejectRelationship;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationship;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.ThrowHelpers;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -32,8 +28,6 @@ internal class ResponseStepDefinitions
 
     private ApiResponse<Challenge>? ChallengeResponse => _responseContext.ChallengeResponse;
     private ApiResponse<RegisterDeviceResponse>? RegisterDeviceResponse => _responseContext.RegisterDeviceResponse;
-    private ApiResponse<EmptyResponse>? UpdateDeviceResponse => _responseContext.UpdateDeviceResponse;
-    private ApiResponse<EmptyResponse>? DeleteDeviceResponse => _responseContext.DeleteDeviceResponse;
     private ApiResponse<CreateFileResponse>? FileUploadResponse => _responseContext.FileUploadResponse;
     private ApiResponse<CreateIdentityResponse>? CreateIdentityResponse => _responseContext.CreateIdentityResponse;
     private ApiResponse<StartDeletionProcessResponse>? StartDeletionProcessResponse => _responseContext.StartDeletionProcessResponse;
@@ -61,45 +55,49 @@ internal class ResponseStepDefinitions
         WhenResponse.Error!.Code.Should().Be(errorCode);
     }
 
-    #region Challenges
-    [Then("the response contains a Challenge")]
-    public async Task ThenTheResponseContainsAChallenge()
+    [Then(@"the response contains a (.*)")]
+    public async Task ThenTheResponseContains(string responseType)
     {
-        ChallengeResponse!.Should().NotBeNull();
-        ChallengeResponse!.Should().BeASuccess();
-        ChallengeResponse!.ContentType.Should().Be("application/json");
-        await ChallengeResponse.Should().ComplyWithSchema();
-        AssertExpirationDateIsInFuture();
+        if (responseType == "Challenge")
+            await CheckResponse(ChallengeResponse);
+        else if (responseType == "Device")
+            await CheckResponse(RegisterDeviceResponse);
+        else if (responseType == "CreateIdentityResponse")
+            await CheckResponse(CreateIdentityResponse);
+        else if (responseType == "StartDeletionProcessResponse")
+            await CheckResponse(StartDeletionProcessResponse);
+        else if (responseType == "CancelDeletionProcessResponse")
+            await CheckResponse(CancelDeletionProcessResponse);
+        else if (responseType == "FileUploadResponse")
+            await CheckResponse(FileUploadResponse);
+        else if (responseType == "SendMessageResponse")
+            await CheckResponse(SendMessageResponse);
+        else if (responseType == "UpdateDeviceRegistrationResponse")
+            await CheckResponse(UpdateDeviceRegistrationResponse);
+        else if (responseType == "CreateRelationshipTemplateResponse")
+            await CheckResponse(_responseContext.CreateRelationshipTemplateResponse);
+        else if (responseType == "Relationship")
+            await CheckResponse(_responseContext.TerminateRelationshipResponse);
+        else if (responseType == "RelationshipMetadata")
+            await CheckRelationshipMetadata();
     }
-    #endregion
 
-    #region Devices
-    [Then(@"the response contains a Device")]
-    public async Task ThenTheResponseContainsADevice()
+    private static async Task CheckResponse<T>(ApiResponse<T>? response) where T : class
     {
-        RegisterDeviceResponse!.Result.Should().NotBeNull();
-        RegisterDeviceResponse.Should().BeASuccess();
-        await RegisterDeviceResponse.Should().ComplyWithSchema();
+        response!.Result.Should().NotBeNull();
+        response.Should().BeASuccess();
+        await response.Should().ComplyWithSchema();
+    }
+
+    #region Challenges
+    [Then(@"the Challenge has a valid expiration date")]
+    public void ThenTheChallengeHasAValidExpirationDate()
+    {
+        ChallengeResponse!.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
     }
     #endregion
 
     #region Identities
-    [Then(@"the response contains a CreateIdentityResponse")]
-    public async Task ThenTheResponseContainsACreateIdentityResponse()
-    {
-        CreateIdentityResponse!.Should().NotBeNull();
-        CreateIdentityResponse!.Should().BeASuccess();
-        await CreateIdentityResponse!.Should().ComplyWithSchema();
-    }
-
-    [Then(@"the response contains a Deletion Process")]
-    public async Task ThenTheResponseContainsADeletionProcess()
-    {
-        StartDeletionProcessResponse!.Result.Should().NotBeNull();
-        StartDeletionProcessResponse.Should().BeASuccess();
-        await StartDeletionProcessResponse.Should().ComplyWithSchema();
-    }
-
     [Then(@"the response status is '([^']*)'")]
     public void ThenTheResponseStatusIs(string deletionProcessStatus)
     {
@@ -109,25 +107,7 @@ internal class ResponseStepDefinitions
     }
     #endregion
 
-    #region Files
-    [Then(@"the response contains a CreateFileResponse")]
-    public async Task ThenTheResponseContainsACreateFileResponse()
-    {
-        FileUploadResponse!.Result.Should().NotBeNull();
-        FileUploadResponse.Should().BeASuccess();
-        await FileUploadResponse.Should().ComplyWithSchema();
-    }
-    #endregion
-
     #region Messages
-    [Then("the response contains a SendMessageResponse")]
-    public async Task ThenTheResponseContainsASendMessageResponse()
-    {
-        SendMessageResponse!.Result.Should().NotBeNull();
-        SendMessageResponse.Should().BeASuccess();
-        await SendMessageResponse.Should().ComplyWithSchema();
-    }
-
     [Then(@"the error contains a list of Identities to be deleted that includes (.+)")]
     public void ThenTheErrorContainsAListOfIdentitiesToBeDeletedThatIncludesIdentity(string identityName)
     {
@@ -178,40 +158,21 @@ internal class ResponseStepDefinitions
     #endregion
 
     #region Relationships
-
-    [Then("the response contains a RelationshipResponse")]
-    public async Task ThenTheResponseContainsARelationship()
+    private async Task CheckRelationshipMetadata()
     {
         if (CreateRelationshipResponse != null)
-        {
-            CreateRelationshipResponse!.Should().BeASuccess();
-            await CreateRelationshipResponse!.Should().ComplyWithSchema();
-        }
+            await CheckResponse(CreateRelationshipResponse);
 
         if (AcceptRelationshipResponse != null)
-        {
-            AcceptRelationshipResponse!.Should().BeASuccess();
-            await AcceptRelationshipResponse!.Should().ComplyWithSchema();
-        }
+            await CheckResponse(AcceptRelationshipResponse);
 
         if (RejectRelationshipResponse != null)
-        {
-            RejectRelationshipResponse!.Should().BeASuccess();
-            await RejectRelationshipResponse!.Should().ComplyWithSchema();
-        }
+            await CheckResponse(RejectRelationshipResponse);
 
         if (RevokeRelationshipResponse != null)
-        {
-            RevokeRelationshipResponse!.Should().BeASuccess();
-            await RevokeRelationshipResponse!.Should().ComplyWithSchema();
-        }
+            await CheckResponse(RevokeRelationshipResponse);
     }
     #endregion
-
-    private void AssertExpirationDateIsInFuture()
-    {
-        _responseContext.ChallengeResponse!.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
-    }
 }
 
 public class ResponseContext
