@@ -5,7 +5,7 @@
         "@babel/core": "7.25.2",
         "@babel/plugin-proposal-class-properties": "7.18.6",
         "@babel/plugin-proposal-object-rest-spread": "7.20.7",
-        "@babel/preset-env": "7.25.2",
+        "@babel/preset-env": "7.25.3",
         "@babel/preset-typescript": "7.24.7",
         "@js-soft/eslint-config-ts": "^1.6.8",
         "@js-soft/license-check": "^1.0.9",
