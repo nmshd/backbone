@@ -9,11 +9,13 @@ namespace Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
 public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
+    private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
 
-    public Handler(IOAuthClientsRepository oAuthClientsRepository, ITiersRepository tiersRepository)
+    public Handler(IOAuthClientsRepository oAuthClientsRepository, IIdentitiesRepository identitiesRepository, ITiersRepository tiersRepository)
     {
         _oAuthClientsRepository = oAuthClientsRepository;
+        _identitiesRepository = identitiesRepository;
         _tiersRepository = tiersRepository;
     }
 
@@ -28,6 +30,10 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
         var tierExists = await _tiersRepository.ExistsWithId(tierIdResult.Value, cancellationToken);
         if (!tierExists)
             throw new ApplicationException(ApplicationErrors.Devices.InvalidTierIdOrDoesNotExist());
+
+        var identitiesCount = await _identitiesRepository.CountByClientId(request.ClientId, cancellationToken);
+        if (request.MaxIdentities.HasValue && request.MaxIdentities < identitiesCount)
+            throw new ApplicationException(ApplicationErrors.Devices.MaxIdentitiesLessThanCurrentIdentities(request.MaxIdentities.Value, identitiesCount));
 
         var hasChanges = client.Update(tierIdResult.Value, request.MaxIdentities);
         if (hasChanges)

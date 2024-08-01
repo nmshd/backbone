@@ -65,6 +65,11 @@ public static class ApplicationErrors
         {
             return new ApplicationError("error.platform.validation.device.clientReachedIdentitiesLimit", "The client's Identity limit has been reached. A new Identity cannot be created with this client.");
         }
+
+        public static ApplicationError MaxIdentitiesLessThanCurrentIdentities(int requestedMaxIdentities, int identitiesCount)
+        {
+            return new ApplicationError("error.platform.validation.device.maxIdentitiesLessThanCurrentIdentities", $"The requested maximum number of identities {requestedMaxIdentities} is less than the current number of identities {identitiesCount}.");
+        }
     }
     public static class Identities
     {
