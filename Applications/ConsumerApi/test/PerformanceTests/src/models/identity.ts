@@ -1,4 +1,5 @@
 import { JwtResponse } from ".";
+import { Identity } from "../libs/drept";
 
 export interface CreateIdentityRequest {
     clientId: string;
@@ -19,8 +20,7 @@ export interface CreateIdentityResponse {
     };
 }
 
-export interface IdentityWithToken {
+export interface IdentityWithToken extends Identity {
     response: CreateIdentityResponse;
     token: JwtResponse;
-    password: string;
 }
