@@ -5,6 +5,7 @@ using Azure.Messaging.ServiceBus.Administration;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
+using Microsoft.Azure.Amqp;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
@@ -175,7 +176,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             }
             catch (Exception ex)
             {
-                _logger.ErrorWhileProcessingDomainEvent(domainEvent.DomainEventId, ex);
+                _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
                 return false;
             }
         }
@@ -225,6 +226,6 @@ internal static partial class EventBusAzureServiceBusLogs
         EventId = 146670,
         EventName = "EventBusAzureServiceBus.ErrorWhileProcessingDomainEvent",
         Level = LogLevel.Error,
-        Message = "An error occurred while processing the domain event with id '{domainEventId}'.")]
-    public static partial void ErrorWhileProcessingDomainEvent(this ILogger logger, string domainEventId, Exception ex);
+        Message = "An error occurred while processing the '{domainEventName}'.")]
+    public static partial void ErrorWhileProcessingDomainEvent(this ILogger logger, string domainEventName, Exception ex);
 }

@@ -131,7 +131,7 @@ public partial record IdentityAddress : StronglyTypedId
     }
 
     [GeneratedRegex($@"^(?<addressWithoutChecksum>did:e:(?<didDomainName>(?:[a-z0-9]+\.)*[a-z]{{2,}}):dids:(?<identitySpecificPart>[0-9a-f]{{20}}))(?<checksum>[0-9a-f]{{{CHECKSUM_LENGTH_S}}})$")]
-    private static partial Regex IdentityAddressValidatorRegex();
+    public static partial Regex IdentityAddressValidatorRegex();
 
     #endregion
 }

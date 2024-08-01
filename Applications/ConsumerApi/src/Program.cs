@@ -3,13 +3,13 @@ using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
+using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Common.Infrastructure;
 using Backbone.ConsumerApi;
 using Backbone.ConsumerApi.Configuration;
 using Backbone.ConsumerApi.Extensions;
-using Backbone.ConsumerApi.Mvc.Middleware;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
@@ -34,6 +34,7 @@ using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
+using Serilog.Enrichers.Sensitive;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
@@ -90,7 +91,7 @@ static WebApplication CreateApp(string[] args)
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
                 .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
-        )
+            .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()))
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
     ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
@@ -208,8 +209,6 @@ static void Configure(WebApplication app)
     app.UseCors();
 
     app.UseAuthentication().UseAuthorization();
-
-    app.UseMiddleware<UserDataLoggingMiddleware>();
 
     app.MapControllers();
     app.MapHealthChecks("/health", new HealthCheckOptions
