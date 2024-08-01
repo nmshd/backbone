@@ -108,7 +108,7 @@ internal class ResponseStepDefinitions
     #endregion
 
     #region Messages
-    [Then(@"the error contains a list of Identities to be deleted that includes (.+)")]
+    [Then(@"the error contains a list of Identities to be deleted that includes ([a-zA-Z0-9]+)")]
     public void ThenTheErrorContainsAListOfIdentitiesToBeDeletedThatIncludesIdentity(string identityName)
     {
         var errorData = _responseContext.SendMessageResponse!.Error!.Data?.As<PeersToBeDeletedErrorData>();

@@ -76,7 +76,7 @@ internal class DevicesStepDefinitions
         });
     }
 
-    [When(@"([a-zA-Z0-9]+) sends a PUT request to the /Devices/Self endpoint with the communication language '(de|en|pt)'")]
+    [When(@"([a-zA-Z0-9]+) sends a PUT request to the /Devices/Self endpoint with the communication language '(de|en|it|pt)'")]
     public async Task WhenISendsAPutRequestToTheDevicesSelfEndpointWithTheCommunicationLanguage(string identityName, string communicationLanguage)
     {
         _communicationLanguage = communicationLanguage;

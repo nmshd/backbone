@@ -18,7 +18,7 @@ internal class FilesStepDefinitions
 
     private Client Identity(string identityName) => _identitiesContext.Identities[identityName];
 
-    [When("(.+) sends a POST request to the /Files endpoint")]
+    [When("([a-zA-Z0-9]+) sends a POST request to the /Files endpoint")]
     public async Task WhenAPostRequestIsSentToTheFilesEndpoint(string identityName)
     {
         var createFileRequest = new CreateFileRequest
