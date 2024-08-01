@@ -8,9 +8,8 @@ import '/core/core.dart';
 
 class ClientDetails extends StatefulWidget {
   final String clientId;
-  final int numberOfIdentities;
 
-  const ClientDetails({required this.clientId, required this.numberOfIdentities, super.key});
+  const ClientDetails({required this.clientId, super.key});
 
   @override
   State<ClientDetails> createState() => _ClientDetailsState();
@@ -56,7 +55,6 @@ class _ClientDetailsState extends State<ClientDetails> {
             _ClientDetailsCard(
               clientDetails: clientDetails,
               selectedTier: _selectedTier,
-              numberOfIdentities: widget.numberOfIdentities,
               availableTiers: _tiers!,
               updateClient: _reloadClient,
             ),
@@ -86,7 +84,6 @@ class _ClientDetailsState extends State<ClientDetails> {
 
 class _ClientDetailsCard extends StatelessWidget {
   final Client clientDetails;
-  final int numberOfIdentities;
   final String? selectedTier;
   final List<TierOverview> availableTiers;
   final VoidCallback updateClient;
@@ -94,7 +91,6 @@ class _ClientDetailsCard extends StatelessWidget {
   const _ClientDetailsCard({
     required this.clientDetails,
     required this.availableTiers,
-    required this.numberOfIdentities,
     required this.updateClient,
     this.selectedTier,
   });
@@ -124,7 +120,7 @@ class _ClientDetailsCard extends StatelessWidget {
                         onIconPressed: () => showChangeMaxIdentitiesDialog(
                           context: context,
                           clientDetails: clientDetails,
-                          numberOfIdentities: numberOfIdentities,
+                          numberOfIdentities: clientDetails.numberOfIdentities ?? 0,
                           onMaxIdentitiesUpdated: updateClient,
                         ),
                         icon: Icons.edit,

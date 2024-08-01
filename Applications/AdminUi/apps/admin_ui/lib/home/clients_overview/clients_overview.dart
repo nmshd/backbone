@@ -93,7 +93,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                       .where((e) => _filter.matches(e))
                       .map(
                         (client) => DataRow2(
-                          onTap: () => context.go('/clients/${client.clientId}', extra: client.numberOfIdentities),
+                          onTap: () => context.go('/clients/${client.clientId}'),
                           selected: _selectedClients.contains(client.clientId),
                           onSelectChanged: (selected) {
                             if (selected == null) return;
