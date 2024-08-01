@@ -2,6 +2,7 @@ using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Application.Clients.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using MediatR;
 
@@ -10,16 +11,28 @@ public class Handler : IRequestHandler<GetClientQuery, ClientDTO>
 {
     private readonly IMapper _mapper;
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
+    private readonly ITiersRepository _tierRepository;
 
-    public Handler(IMapper mapper, IOAuthClientsRepository oAuthClientsRepository)
+    public Handler(IMapper mapper, IOAuthClientsRepository oAuthClientsRepository, ITiersRepository tiersRepository)
     {
         _oAuthClientsRepository = oAuthClientsRepository;
+        _tierRepository = tiersRepository;
         _mapper = mapper;
     }
     public async Task<ClientDTO> Handle(GetClientQuery request, CancellationToken cancellationToken)
     {
         var client = await _oAuthClientsRepository.Find(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
-        var clientDTO = _mapper.Map<ClientDTO>(client);
+        var defaultTier = await _tierRepository.FindById(client.DefaultTier, cancellationToken) ?? throw new NotFoundException(nameof(Tier));
+        
+        var clientDTO = new ClientDTO
+        {
+            ClientId = client.ClientId,
+            DisplayName = client.DisplayName,
+            DefaultTierId = defaultTier.Id,
+            DefaultTierName = defaultTier.Name,
+            CreatedAt = client.CreatedAt,
+            MaxIdentities = client.MaxIdentities
+        };
 
         return clientDTO;
     }
