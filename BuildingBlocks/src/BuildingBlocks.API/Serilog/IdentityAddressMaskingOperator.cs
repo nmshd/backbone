@@ -10,6 +10,6 @@ public class IdentityAddressMaskingOperator : RegexMaskingOperator
 
     private static string TrimRegexForMidStringUse()
     {
-        return IdentityAddressRegex[1..^1];
+        return IdentityAddressRegex[1..^1]; // remove '^' and '$' so that it can be used when identity address is part of a longer string
     }
 }
