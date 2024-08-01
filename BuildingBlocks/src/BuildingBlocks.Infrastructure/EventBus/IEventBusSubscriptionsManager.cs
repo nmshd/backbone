@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus;

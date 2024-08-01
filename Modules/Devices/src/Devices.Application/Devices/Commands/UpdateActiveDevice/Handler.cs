@@ -33,7 +33,7 @@ public class Handler : IRequestHandler<UpdateActiveDeviceCommand>
         if (deviceUpdated)
             await _identitiesRepository.Update(currentDevice, cancellationToken);
 
-        _logger.UpdatedActiveDevice(_activeDevice);
+        _logger.UpdatedActiveDevice();
     }
 }
 
@@ -43,6 +43,6 @@ internal static partial class UpdateActiveDeviceLogs
         EventId = 274194,
         EventName = "Devices.UpdateActiveDevice.UpdatedActiveDevice",
         Level = LogLevel.Information,
-        Message = "Successfully updated device with id '{activeDevice}'.")]
-    public static partial void UpdatedActiveDevice(this ILogger logger, DeviceId activeDevice);
+        Message = "Successfully updated the device.")]
+    public static partial void UpdatedActiveDevice(this ILogger logger);
 }
