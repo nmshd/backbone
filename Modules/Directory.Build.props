@@ -12,4 +12,12 @@
             CS8777,CS8819,CS8824,CS8825,CS8847
         </WarningsAsErrors>
     </PropertyGroup>
+
+    <PropertyGroup>
+        <!-- Generate lock file -->
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+
+        <!-- Restore the exact packages as listed in the lock file -->
+        <RestoreLockedMode Condition="'$(ContinuousIntegrationBuild)' == 'true'">true</RestoreLockedMode>
+    </PropertyGroup>
 </Project>
