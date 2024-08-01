@@ -23,7 +23,7 @@ public class ChallengesController : ApiControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ChallengeDTO>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    
+    [AllowAnonymous]
     public async Task<IActionResult> Create(CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new CreateChallengeCommand(), cancellationToken);
