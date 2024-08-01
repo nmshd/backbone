@@ -18,7 +18,8 @@ export const options: Options = {
     }
 };
 
-const pools = LoadDREPT("snp2").ofTypes("a", "c").pools;
+const snapshot = __ENV.snapshot === "" ? "light" : __ENV.snapshot;
+const pools = LoadDREPT(snapshot).ofTypes("a", "c").pools;
 const testIdentities = new SharedArray("testIdentities", function () {
     return pools.flatMap((p) => p.identities); // must be an array
 });
