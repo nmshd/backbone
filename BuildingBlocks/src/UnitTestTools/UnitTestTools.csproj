@@ -1,23 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
-        <PackageReference Include="FakeItEasy" Version="8.3.0"/>
-        <PackageReference Include="FluentAssertions" Version="6.12.0"/>
-        <PackageReference Include="FluentAssertions.Json" Version="6.1.0"/>
+        <PackageReference Include="FakeItEasy" Version="8.3.0" />
+        <PackageReference Include="FluentAssertions" Version="6.12.0" />
+        <PackageReference Include="FluentAssertions.Json" Version="6.1.0" />
         <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
-        <PackageReference Include="FluentValidation" Version="11.9.2"/>
-        <PackageReference Include="MediatR" Version="12.4.0"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7"/>
-        <PackageReference Include="xunit.assert" Version="2.9.0"/>
+        <PackageReference Include="FluentValidation" Version="11.9.2" />
+        <PackageReference Include="MediatR" Version="12.4.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="8.0.7" />
+        <PackageReference Include="xunit.assert" Version="2.9.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj"/>
-        <ProjectReference Include="..\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj"/>
-        <ProjectReference Include="..\Tooling\Tooling.csproj"/>
+        <ProjectReference Include="..\BuildingBlocks.Infrastructure\BuildingBlocks.Infrastructure.csproj" />
+        <ProjectReference Include="..\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
+        <ProjectReference Include="..\Tooling\Tooling.csproj" />
     </ItemGroup>
 
 </Project>

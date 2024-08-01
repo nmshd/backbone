@@ -53,13 +53,15 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
         var sender = _userContext.GetAddress();
         var recipients = new List<RecipientInformation>();
 
+        var i = 0;
+
         foreach (var recipientDto in request.Recipients)
         {
             var relationshipBetweenSenderAndRecipient = await _relationshipsRepository.FindYoungestRelationship(sender, recipientDto.Address, cancellationToken);
 
             if (relationshipBetweenSenderAndRecipient == null)
             {
-                _logger.LogInformation("Sending message aborted. There is no relationship between sender ({sender}) and recipient ({recipient}).", sender, recipientDto.Address);
+                _logger.LogInformation($"Sending message aborted. There is no relationship between the sender and the recipient at index {i}.");
                 throw new OperationFailedException(ApplicationErrors.NoRelationshipToRecipientExists(recipientDto.Address));
             }
 
@@ -72,6 +74,8 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
             var recipient = new RecipientInformation(recipientDto.Address, recipientDto.EncryptedKey);
 
             recipients.Add(recipient);
+
+            i++;
         }
 
         _logger.LogInformation("Successfully validated all recipients.");
