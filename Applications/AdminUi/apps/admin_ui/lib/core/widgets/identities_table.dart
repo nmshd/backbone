@@ -5,13 +5,13 @@ import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
 
-enum FilterType { clientFilter, tierFilter }
-
 class IdentitiesTable extends StatefulWidget {
   final Client? clientDetails;
   final TierDetails? tierDetails;
 
-  const IdentitiesTable({this.clientDetails, this.tierDetails, super.key});
+  const IdentitiesTable({this.clientDetails, this.tierDetails, super.key})
+      : assert(clientDetails != null || tierDetails != null, 'Either client details or tier details must be provided'),
+        assert(clientDetails == null || tierDetails == null, 'Only one of client details or tier details can be provided');
 
   @override
   State<IdentitiesTable> createState() => _IdentitiesTableState();
@@ -27,9 +27,19 @@ class _IdentitiesTableState extends State<IdentitiesTable> {
     final locale = Localizations.localeOf(context);
 
     if (widget.clientDetails != null) {
-      _dataSource = _fillDataTableSource(filterType: FilterType.clientFilter, locale: locale, hideViewSpecificColumn: true);
-    } else if (widget.tierDetails != null) {
-      _dataSource = _fillDataTableSource(filterType: FilterType.tierFilter, locale: locale, hideViewSpecificColumn: true);
+      _dataSource = IdentityDataTableSource(
+        locale: locale,
+        hideClientColumn: true,
+        filter: IdentityOverviewFilter(clients: [widget.clientDetails!.clientId]),
+        navigateToIdentity: ({required String address}) => context.push('/identities/$address'),
+      );
+    } else {
+      _dataSource = IdentityDataTableSource(
+        locale: locale,
+        hideTierColumn: true,
+        filter: IdentityOverviewFilter(tiers: [widget.tierDetails!.id]),
+        navigateToIdentity: ({required String address}) => context.push('/identities/$address'),
+      );
     }
   }
 
@@ -41,18 +51,13 @@ class _IdentitiesTableState extends State<IdentitiesTable> {
 
   @override
   Widget build(BuildContext context) {
-    var description = '';
-    if (widget.clientDetails != null) {
-      description = context.l10n.identityList_client_titleDescription;
-    } else if (widget.tierDetails != null) {
-      description = context.l10n.identityList_tier_titleDescription;
-    }
-
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
         title: Text(context.l10n.identities),
-        subtitle: Text(description),
+        subtitle: Text(
+          widget.clientDetails != null ? context.l10n.identityList_client_titleDescription : context.l10n.identityList_tier_titleDescription,
+        ),
         children: [
           Card(
             child: Column(
@@ -79,23 +84,6 @@ class _IdentitiesTableState extends State<IdentitiesTable> {
           ),
         ],
       ),
-    );
-  }
-
-  IdentityDataTableSource _fillDataTableSource({required FilterType filterType, required Locale locale, required bool hideViewSpecificColumn}) {
-    final hideClientColumn = filterType == FilterType.clientFilter && hideViewSpecificColumn;
-    final hideTierColumn = filterType == FilterType.tierFilter && hideViewSpecificColumn;
-    final localFilter = switch (filterType) {
-      FilterType.clientFilter => widget.clientDetails != null ? IdentityOverviewFilter(clients: [widget.clientDetails!.clientId]) : null,
-      FilterType.tierFilter => widget.tierDetails != null ? IdentityOverviewFilter(tiers: [widget.tierDetails!.id]) : null,
-    };
-
-    return IdentityDataTableSource(
-      locale: locale,
-      hideClientColumn: hideClientColumn,
-      hideTierColumn: hideTierColumn,
-      filter: localFilter,
-      navigateToIdentity: ({required String address}) => context.push('/identities/$address'),
     );
   }
 }
