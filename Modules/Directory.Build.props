@@ -13,6 +13,10 @@
         </WarningsAsErrors>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+        <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+    </PropertyGroup>
+
     <PropertyGroup>
         <!-- Generate lock file -->
         <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
