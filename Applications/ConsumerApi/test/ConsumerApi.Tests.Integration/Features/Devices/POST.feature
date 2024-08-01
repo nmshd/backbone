@@ -3,7 +3,7 @@ Feature: POST Device
 
 User creates a Device
 
-	Scenario: Creating a Device
+	Scenario: Registering a Device
 		Given Identity i
 		And a Challenge c created by i
 		When i sends a POST request to the /Devices endpoint
