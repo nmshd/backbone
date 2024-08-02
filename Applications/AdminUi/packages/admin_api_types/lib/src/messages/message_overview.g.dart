@@ -23,11 +23,3 @@ Map<String, dynamic> _$MessageOverviewToJson(MessageOverview instance) => <Strin
       'numberOfAttachments': instance.numberOfAttachments,
       'recipients': instance.recipients,
     };
-
-MessageRecipient _$MessageRecipientFromJson(Map<String, dynamic> json) => MessageRecipient(
-      address: json['address'] as String,
-    );
-
-Map<String, dynamic> _$MessageRecipientToJson(MessageRecipient instance) => <String, dynamic>{
-      'address': instance.address,
-    };

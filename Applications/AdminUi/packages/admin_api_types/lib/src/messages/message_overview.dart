@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+import 'message_recipient.dart';
+
 part 'message_overview.g.dart';
 
 @JsonSerializable()
@@ -22,16 +24,4 @@ class MessageOverview {
 
   factory MessageOverview.fromJson(dynamic json) => _$MessageOverviewFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$MessageOverviewToJson(this);
-}
-
-@JsonSerializable()
-class MessageRecipient {
-  final String address;
-
-  MessageRecipient({
-    required this.address,
-  });
-
-  factory MessageRecipient.fromJson(dynamic json) => _$MessageRecipientFromJson(json as Map<String, dynamic>);
-  Map<String, dynamic> toJson() => _$MessageRecipientToJson(this);
 }
