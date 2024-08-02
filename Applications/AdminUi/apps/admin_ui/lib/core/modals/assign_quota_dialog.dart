@@ -16,7 +16,7 @@ Future<void> showAddQuotaDialog({
   assert(tierId != null || identityAddress != null, 'Either tierId or address must be provided');
   assert(tierId == null || identityAddress == null, 'Only one of tierId or address can be provided');
 
-  final metrics = await GetIt.I.get<AdminApiClient>().quotas.getMetrics();
+  final metrics = await GetIt.I.get<AdminApiClient>().metrics.getMetrics();
 
   if (!context.mounted) return;
 
@@ -37,7 +37,7 @@ Future<void> showAddQuotaDialog({
 }
 
 class _AssignQuotaDialog extends StatefulWidget {
-  final List<Metric> availableMetrics;
+  final List<MetricResponse> availableMetrics;
   final Future<ApiResponse<dynamic>> Function({required String metricKey, required int max, required String period}) addQuota;
   final VoidCallback onQuotaAdded;
 

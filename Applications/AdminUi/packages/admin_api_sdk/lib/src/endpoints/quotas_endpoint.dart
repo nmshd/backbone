@@ -59,9 +59,4 @@ class QuotasEndpoint extends Endpoint {
         transformer: (e) {},
         allowEmptyResponse: true,
       );
-
-  Future<ApiResponse<List<Metric>>> getMetrics() => get(
-        '/api/v1/Metrics',
-        transformer: (e) => (e as List).map(Metric.fromJson).toList(),
-      );
 }
