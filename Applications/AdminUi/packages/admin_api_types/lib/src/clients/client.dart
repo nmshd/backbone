@@ -8,6 +8,7 @@ class Client {
   final String displayName;
   final String defaultTier;
   final DateTime createdAt;
+  final int numberOfIdentities;
   final int? maxIdentities;
 
   Client({
@@ -15,6 +16,7 @@ class Client {
     required this.displayName,
     required this.defaultTier,
     required this.createdAt,
+    required this.numberOfIdentities,
     this.maxIdentities,
   });
 

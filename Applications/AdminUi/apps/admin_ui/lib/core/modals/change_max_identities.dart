@@ -88,8 +88,7 @@ class _ShowChangeMaxIdentitiesDialogState extends State<_ShowChangeMaxIdentities
 
     assert(_maxIdentities != null, 'Invalid State');
 
-    //TODO: enable as soon as it is available in the API
-    const numberOfIdentities = 0; // widget.clientDetails.numberOfIdentities;
+    final numberOfIdentities = widget.clientDetails.numberOfIdentities;
 
     if (_maxIdentities != null && _maxIdentities! <= numberOfIdentities) {
       setState(() {
