@@ -21,7 +21,7 @@ class IdentityDetails extends StatefulWidget {
 }
 
 class _IdentityDetailsState extends State<IdentityDetails> {
-  Identity? _identityDetails;
+  IdentityResponse? _identityDetails;
   List<TierOverviewResponse>? _tiers;
   String? _selectedTier;
 
@@ -115,7 +115,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 }
 
 class _IdentityDetailsCard extends StatelessWidget {
-  final Identity identityDetails;
+  final IdentityResponse identityDetails;
   final String? selectedTier;
   final ValueChanged<String?>? onTierChanged;
   final List<TierOverviewResponse> availableTiers;

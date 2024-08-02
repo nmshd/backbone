@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '/core/core.dart';
 
 class IdentityQuotas extends StatefulWidget {
-  final Identity identityDetails;
+  final IdentityResponse identityDetails;
   final VoidCallback onQuotasChanged;
 
   const IdentityQuotas(this.identityDetails, this.onQuotasChanged, {super.key});

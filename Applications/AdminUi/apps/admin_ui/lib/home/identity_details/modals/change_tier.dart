@@ -8,7 +8,7 @@ import '/core/core.dart';
 Future<void> showChangeTierDialog({
   required BuildContext context,
   required VoidCallback onTierUpdated,
-  required Identity identityDetails,
+  required IdentityResponse identityDetails,
   required List<TierOverviewResponse> availableTiers,
 }) async {
   await showDialog<void>(
@@ -23,7 +23,7 @@ Future<void> showChangeTierDialog({
 
 class _ShowChangeTierDialog extends StatefulWidget {
   final VoidCallback onTierUpdated;
-  final Identity identityDetails;
+  final IdentityResponse identityDetails;
   final List<TierOverviewResponse> availableTiers;
 
   const _ShowChangeTierDialog({

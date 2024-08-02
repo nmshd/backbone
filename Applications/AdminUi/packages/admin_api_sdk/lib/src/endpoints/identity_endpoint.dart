@@ -7,12 +7,12 @@ import 'endpoint.dart';
 class IdentitiesEndpoint extends Endpoint {
   IdentitiesEndpoint(super._dio);
 
-  Future<ApiResponse<Identity>> getIdentity(
+  Future<ApiResponse<IdentityResponse>> getIdentity(
     String address,
   ) =>
       get(
         '/api/v1/Identities/$address',
-        transformer: Identity.fromJson,
+        transformer: IdentityResponse.fromJson,
       );
 
   Future<ApiResponse<void>> updateIdentity(
