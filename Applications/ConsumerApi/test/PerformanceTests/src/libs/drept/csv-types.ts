@@ -7,3 +7,9 @@ export interface CSVIdentity {
     Password: string;
     Alias: string;
 }
+
+export interface CsvDatawalletModification {
+    IdentityAddress: string;
+    ModificationIndex: string;
+    ModificationId: string;
+}

@@ -4,6 +4,7 @@ export interface Identity {
     address: string;
     devices: Device[];
     poolAlias: string;
+    datawalletModifications?: DatawalletModification[];
 }
 
 export interface Pool {
@@ -15,6 +16,11 @@ interface Device {
     deviceId: string;
     username: string;
     password: string;
+}
+
+interface DatawalletModification {
+    modificationId: string;
+    index: number;
 }
 
 export interface IDREPT {
@@ -40,4 +46,12 @@ export class DREPT implements IDREPT {
      * @returns
      */
     public ofTypes = (...types: string[]): IDREPT => new DREPT(this._pools.filter((pool) => types.some((type) => pool.name.startsWith(type))));
+}
+
+export enum DREPTLoads {
+    Identities,
+    Relationships,
+    Messages,
+    RelationshipTemplates,
+    DatawalletModifications
 }

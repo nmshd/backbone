@@ -13,13 +13,14 @@ export const options: Options = {
             rate: 1,
             timeUnit: "5m",
             duration: "60m",
-            preAllocatedVUs: 1
+            preAllocatedVUs: 20
         }
     }
 };
 
-const snapshot = __ENV.snapshot === "" ? "light" : __ENV.snapshot;
+const snapshot = (__ENV.snapshot as string | undefined) ?? "light";
 const pools = LoadDREPT(snapshot).ofTypes("a", "c").pools;
+
 const testIdentities = new SharedArray("testIdentities", function () {
     return pools.flatMap((p) => p.identities); // must be an array
 });
