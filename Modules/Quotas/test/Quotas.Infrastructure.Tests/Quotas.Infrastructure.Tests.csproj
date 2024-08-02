@@ -24,7 +24,6 @@
     <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
     <ProjectReference Include="..\..\..\Relationships\src\Relationships.Domain\Relationships.Domain.csproj" />
     <ProjectReference Include="..\..\..\Relationships\src\Relationships.Infrastructure\Relationships.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\..\Relationships\test\Relationships.Domain.Tests\Relationships.Domain.Tests.csproj" />
     <ProjectReference Include="..\..\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\Messages\src\Messages.Infrastructure\Messages.Infrastructure.csproj" />
   </ItemGroup>
