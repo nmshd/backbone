@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'message.dart';
+part of 'message_overview.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Message _$MessageFromJson(Map<String, dynamic> json) => Message(
+MessageOverview _$MessageOverviewFromJson(Map<String, dynamic> json) => MessageOverview(
       messageId: json['messageId'] as String,
       senderAddress: json['senderAddress'] as String,
       senderDevice: json['senderDevice'] as String,
@@ -15,7 +15,7 @@ Message _$MessageFromJson(Map<String, dynamic> json) => Message(
       recipients: (json['recipients'] as List<dynamic>).map(MessageRecipient.fromJson).toList(),
     );
 
-Map<String, dynamic> _$MessageToJson(Message instance) => <String, dynamic>{
+Map<String, dynamic> _$MessageOverviewToJson(MessageOverview instance) => <String, dynamic>{
       'messageId': instance.messageId,
       'senderAddress': instance.senderAddress,
       'senderDevice': instance.senderDevice,

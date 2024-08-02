@@ -1,9 +1,9 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'message.g.dart';
+part 'message_overview.g.dart';
 
 @JsonSerializable()
-class Message {
+class MessageOverview {
   final String messageId;
   final String senderAddress;
   final String senderDevice;
@@ -11,7 +11,7 @@ class Message {
   final int numberOfAttachments;
   final List<MessageRecipient> recipients;
 
-  Message({
+  MessageOverview({
     required this.messageId,
     required this.senderAddress,
     required this.senderDevice,
@@ -20,8 +20,8 @@ class Message {
     required this.recipients,
   });
 
-  factory Message.fromJson(dynamic json) => _$MessageFromJson(json as Map<String, dynamic>);
-  Map<String, dynamic> toJson() => _$MessageToJson(this);
+  factory MessageOverview.fromJson(dynamic json) => _$MessageOverviewFromJson(json as Map<String, dynamic>);
+  Map<String, dynamic> toJson() => _$MessageOverviewToJson(this);
 }
 
 @JsonSerializable()
