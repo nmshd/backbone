@@ -1,0 +1,6 @@
+<Project>
+    <PropertyGroup Condition="'$(Configuration)' == 'Release' And !$(MSBuildProjectFile.Contains('Tests.csproj'))">
+        <DefaultItemExcludes>$(DefaultItemExcludes);**/*Tests.cs</DefaultItemExcludes>
+        <DefaultItemExcludes>$(DefaultItemExcludes);**/*TestHelpers\*</DefaultItemExcludes>
+    </PropertyGroup>
+</Project>
