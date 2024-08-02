@@ -52,28 +52,6 @@ class Device {
 }
 
 @JsonSerializable()
-class IdentityQuota {
-  final String id;
-  final String source;
-  final Metric metric;
-  final int max;
-  final int usage;
-  final String period;
-
-  IdentityQuota({
-    required this.id,
-    required this.source,
-    required this.metric,
-    required this.max,
-    required this.usage,
-    required this.period,
-  });
-
-  factory IdentityQuota.fromJson(dynamic json) => _$IdentityQuotaFromJson(json as Map<String, dynamic>);
-  Map<String, dynamic> toJson() => _$IdentityQuotaToJson(this);
-}
-
-@JsonSerializable()
 class IdentityOverview {
   final String address;
   final DateTime createdAt;

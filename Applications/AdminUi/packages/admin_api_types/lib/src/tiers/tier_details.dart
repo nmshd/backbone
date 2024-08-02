@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../quotas/quotas.dart';
+import 'tier_quota_definition.dart';
 
 part 'tier_details.g.dart';
 
@@ -8,7 +8,7 @@ part 'tier_details.g.dart';
 class TierDetails {
   final String id;
   final String name;
-  final List<Quota> quotas;
+  final List<TierQuotaDefinition> quotas;
 
   TierDetails({
     required this.id,

@@ -6,7 +6,7 @@ import 'endpoint.dart';
 class QuotasEndpoint extends Endpoint {
   QuotasEndpoint(super.dio);
 
-  Future<ApiResponse<Quota>> createTierQuota({
+  Future<ApiResponse<TierQuotaDefinition>> createTierQuota({
     required String tierId,
     required String metricKey,
     required int max,
@@ -19,7 +19,7 @@ class QuotasEndpoint extends Endpoint {
           'max': max,
           'period': period,
         },
-        transformer: Quota.fromJson,
+        transformer: TierQuotaDefinition.fromJson,
       );
 
   Future<ApiResponse<void>> deleteTierQuota({
@@ -33,7 +33,7 @@ class QuotasEndpoint extends Endpoint {
         allowEmptyResponse: true,
       );
 
-  Future<ApiResponse<Quota>> createIdentityQuota({
+  Future<ApiResponse<IndividualQuota>> createIdentityQuota({
     required String address,
     required String metricKey,
     required int max,
@@ -46,7 +46,7 @@ class QuotasEndpoint extends Endpoint {
           'max': max,
           'period': period,
         },
-        transformer: Quota.fromJson,
+        transformer: IndividualQuota.fromJson,
       );
 
   Future<ApiResponse<void>> deleteIdentityQuota({
