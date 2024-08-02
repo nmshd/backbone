@@ -1,10 +1,22 @@
+using Backbone.Modules.Devices.Domain.Entities;
+
 namespace Backbone.Modules.Devices.Application.Clients.DTOs;
 public class ClientDTO
 {
-    public required string ClientId { get; set; }
-    public required string DisplayName { get; set; }
-    public required string DefaultTier { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required int NumberOfIdentities { get; set; }
+    public ClientDTO(OAuthClient client, int numberOfIdentities)
+    {
+        ClientId = client.ClientId;
+        DisplayName = client.DisplayName;
+        DefaultTier = client.DefaultTier;
+        CreatedAt = client.CreatedAt;
+        NumberOfIdentities = numberOfIdentities;
+        MaxIdentities = client.MaxIdentities;
+    }
+
+    public string ClientId { get; set; }
+    public string DisplayName { get; set; }
+    public string DefaultTier { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public int NumberOfIdentities { get; set; }
     public int? MaxIdentities { get; set; }
 }

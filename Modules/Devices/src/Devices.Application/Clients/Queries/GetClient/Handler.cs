@@ -20,16 +20,6 @@ public class Handler : IRequestHandler<GetClientQuery, ClientDTO>
         var client = await _oAuthClientsRepository.Find(request.Id, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
         var numberOfIdentities = await _identitiesRepository.CountByClientId(client.ClientId, cancellationToken);
 
-        var clientDTO = new ClientDTO
-        {
-            ClientId = client.ClientId,
-            DisplayName = client.DisplayName,
-            DefaultTier = client.DefaultTier,
-            CreatedAt = client.CreatedAt,
-            NumberOfIdentities = numberOfIdentities,
-            MaxIdentities = client.MaxIdentities
-        };
-
-        return clientDTO;
+        return new ClientDTO(client, numberOfIdentities);
     }
 }
