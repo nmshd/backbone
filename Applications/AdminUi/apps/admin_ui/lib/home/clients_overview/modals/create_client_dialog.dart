@@ -9,7 +9,7 @@ import '/core/core.dart';
 
 Future<void> showCreateClientDialog({
   required BuildContext context,
-  required List<TierOverview> defaultTiers,
+  required List<TierOverviewResponse> defaultTiers,
   required VoidCallback onClientCreated,
 }) async {
   await showDialog<void>(
@@ -19,7 +19,7 @@ Future<void> showCreateClientDialog({
 }
 
 class _CreateClientDialog extends StatefulWidget {
-  final List<TierOverview> defaultTiers;
+  final List<TierOverviewResponse> defaultTiers;
   final VoidCallback onClientCreated;
 
   const _CreateClientDialog({required this.defaultTiers, required this.onClientCreated});

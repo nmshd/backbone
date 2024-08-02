@@ -1,17 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tier.dart';
+part of 'tier_details.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Tier _$TierFromJson(Map<String, dynamic> json) => Tier(
+TierDetails _$TierDetailsFromJson(Map<String, dynamic> json) => TierDetails(
       id: json['id'] as String,
       name: json['name'] as String,
+      quotas: (json['quotas'] as List<dynamic>).map(Quota.fromJson).toList(),
     );
 
-Map<String, dynamic> _$TierToJson(Tier instance) => <String, dynamic>{
+Map<String, dynamic> _$TierDetailsToJson(TierDetails instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
+      'quotas': instance.quotas,
     };

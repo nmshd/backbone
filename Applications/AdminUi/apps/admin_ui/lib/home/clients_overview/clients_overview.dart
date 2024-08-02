@@ -20,7 +20,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
   ClientsFilter _filter = ClientsFilter.empty;
   List<Clients> _originalClients = [];
   final Set<String> _selectedClients = {};
-  List<TierOverview> _defaultTiers = [];
+  List<TierOverviewResponse> _defaultTiers = [];
 
   @override
   void initState() {

@@ -9,7 +9,7 @@ Future<void> showChangeTierDialog({
   required BuildContext context,
   required VoidCallback onTierUpdated,
   required Identity identityDetails,
-  required List<TierOverview> availableTiers,
+  required List<TierOverviewResponse> availableTiers,
 }) async {
   await showDialog<void>(
     context: context,
@@ -24,7 +24,7 @@ Future<void> showChangeTierDialog({
 class _ShowChangeTierDialog extends StatefulWidget {
   final VoidCallback onTierUpdated;
   final Identity identityDetails;
-  final List<TierOverview> availableTiers;
+  final List<TierOverviewResponse> availableTiers;
 
   const _ShowChangeTierDialog({
     required this.onTierUpdated,
@@ -61,7 +61,7 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
             value: selectedTier,
             decoration: const InputDecoration(border: OutlineInputBorder()),
             onChanged: _saving ? null : (String? newValue) => setState(() => selectedTier = newValue!),
-            items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned).map((TierOverview tier) {
+            items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned).map((TierOverviewResponse tier) {
               return DropdownMenuItem<String>(
                 value: tier.id,
                 child: Text(tier.name),
