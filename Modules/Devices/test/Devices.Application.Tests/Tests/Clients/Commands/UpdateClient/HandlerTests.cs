@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Tests.Extensions;
@@ -130,32 +131,6 @@ public class HandlerTests : AbstractTestsBase
                 c.MaxIdentities == 2)
             , CancellationToken.None)
         ).MustHaveHappenedOnceExactly();
-    }
-
-    [Fact]
-    public async Task Change_Max_Identities_With_Value_Less_Than_Number_Of_Identities()
-    {
-        // Arrange
-        var client = new OAuthClient("some-client-id", string.Empty, TierId.Generate(), SystemTime.UtcNow, 1);
-
-        var command = new UpdateClientCommand(client.ClientId, client.DefaultTier, 2);
-
-        var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
-        A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns(client);
-
-        var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.CountByClientId(client.ClientId, A<CancellationToken>._)).Returns(5);
-
-        var tiersRepository = A.Fake<ITiersRepository>();
-        A.CallTo(() => tiersRepository.ExistsWithId(client.DefaultTier, A<CancellationToken>._)).Returns(true);
-
-        var handler = CreateHandler(oAuthClientsRepository, identitiesRepository, tiersRepository);
-
-        // Act
-        var acting = async () => await handler.Handle(command, CancellationToken.None);
-
-        // Assert
-        await acting.Should().ThrowAsync<ApplicationException>().WithErrorCode("error.platform.validation.device.maxIdentitiesLessThanCurrentIdentities");
     }
 
     [Fact]

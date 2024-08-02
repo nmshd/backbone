@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
@@ -32,10 +33,8 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
             throw new ApplicationException(ApplicationErrors.Devices.InvalidTierIdOrDoesNotExist());
 
         var identitiesCount = await _identitiesRepository.CountByClientId(request.ClientId, cancellationToken);
-        if (request.MaxIdentities.HasValue && request.MaxIdentities < identitiesCount)
-            throw new ApplicationException(ApplicationErrors.Devices.MaxIdentitiesLessThanCurrentIdentities(request.MaxIdentities.Value, identitiesCount));
 
-        var hasChanges = client.Update(tierIdResult.Value, request.MaxIdentities);
+        var hasChanges = client.Update(tierIdResult.Value, request.MaxIdentities, identitiesCount);
         if (hasChanges)
             await _oAuthClientsRepository.Update(client, cancellationToken);
 
