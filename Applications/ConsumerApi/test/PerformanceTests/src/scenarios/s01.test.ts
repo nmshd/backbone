@@ -23,7 +23,7 @@ const snapshot = (__ENV.snapshot as string | undefined) ?? "light";
 const pools = LoadDREPT(snapshot, [DREPTLoads.Identities, DREPTLoads.DatawalletModifications]).ofTypes("a", "c").pools;
 
 const testIdentities = new SharedArray("testIdentities", function () {
-    return pools.flatMap((p) => p.identities); // must be an array
+    return pools.flatMap((p) => p.identities);
 });
 
 const client = new Httpx({

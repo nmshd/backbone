@@ -1,10 +1,13 @@
 // DATA REPRESENTATION FOR ENMESHED PERFORMANCE TESTS PROTOCOL
 
 export interface Identity {
+    sentMessages?: Message[];
     address: string;
     devices: Device[];
     poolAlias: string;
     datawalletModifications?: DatawalletModification[];
+    relationshipTemplates?: RelationshipTemplate[];
+    relatedIdentities?: Relationship[];
 }
 
 export interface Pool {
@@ -18,9 +21,23 @@ interface Device {
     password: string;
 }
 
+interface Message {
+    messageId: string;
+    recipient: string;
+}
+
+interface Relationship {
+    relationshipId: string;
+    recipient: string;
+}
+
 interface DatawalletModification {
     modificationId: string;
     index: number;
+}
+
+interface RelationshipTemplate {
+    relationshipTemplateId: string;
 }
 
 export interface IDREPT {
