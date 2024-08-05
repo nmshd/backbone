@@ -5,28 +5,30 @@ import { CsvDatawalletModification as CSVDatawalletModification, CSVIdentity } f
 
 /**
  *
- * @param folderName
- * @param whatoToLoad
+ * @param folderName The name of the folder matching the name of the snapshot to load
+ * @param whatoToLoad An array of {@link DREPTLoads} representing the entities to be loaded
  * @returns a DREPT populated according to @link{whatoToLoad}
  */
-export function LoadDREPT(folderName: string, ...whatoToLoad: DREPTLoads[]): DREPT {
+export function LoadDREPT(folderName: string, whatoToLoad: DREPTLoads[] = [DREPTLoads.Identities]): DREPT {
     const csvFilesPath = `../snapshots/${folderName}/csvs`;
+    let pools: Pool[];
 
-    const pools = new SharedArray("pools", function () {
+    const poolsReturn = new SharedArray("pools", function () {
         if (!whatoToLoad.includes(DREPTLoads.Identities)) {
             console.warn("whatToLoad does not include Identities but they must always be loaded. Loading either way...");
         }
 
-        const result: Pool[] = LoadPoolsWithIdentities();
+        pools = LoadPoolsWithIdentities();
 
         if (whatoToLoad.includes(DREPTLoads.DatawalletModifications)) {
+            console.log("Loading datawallet modifications");
             LoadDataWalletModifications();
         }
 
-        return result;
+        return pools;
     });
 
-    return new DREPT(pools);
+    return new DREPT(poolsReturn);
 
     function LoadDataWalletModifications() {
         const DatawalletModificationsFile = open(`${csvFilesPath}/datawalletModifications.csv`);
@@ -54,23 +56,18 @@ export function LoadDREPT(folderName: string, ...whatoToLoad: DREPTLoads[]): DRE
 
     function LoadPoolsWithIdentities() {
         const identitiesFile = open(`${csvFilesPath}/identities.csv`);
+        const parsedIdentities = papaparse.parse<CSVIdentity>(identitiesFile, { header: true }).data.filter((x) => x.Address !== "");
 
-        const identities = new SharedArray("identities", function () {
-            const parsedIdentities = papaparse.parse<CSVIdentity>(identitiesFile, { header: true }).data.filter((x) => x.Address !== "");
-            const result: Identity[] = [];
-            parsedIdentities.forEach((csvIdentity) => {
-                const identity: Identity = {
-                    address: csvIdentity.Address,
-                    devices: [{ deviceId: csvIdentity.DeviceId, username: csvIdentity.Username, password: csvIdentity.Password }],
-                    poolAlias: csvIdentity.Alias
-                };
-                result.push(identity);
-            });
-
-            return result;
+        const identities: Identity[] = [];
+        parsedIdentities.forEach((csvIdentity) => {
+            const identity: Identity = {
+                address: csvIdentity.Address,
+                devices: [{ deviceId: csvIdentity.DeviceId, username: csvIdentity.Username, password: csvIdentity.Password }],
+                poolAlias: csvIdentity.Alias
+            };
+            identities.push(identity);
         });
 
-        const parsedIdentities = papaparse.parse<CSVIdentity>(identitiesFile, { header: true }).data.filter((identity) => identity.Address !== "");
         const result: Pool[] = [];
 
         parsedIdentities.forEach((csvIdentity) => {
@@ -84,6 +81,7 @@ export function LoadDREPT(folderName: string, ...whatoToLoad: DREPTLoads[]): DRE
         result.forEach((pool) => {
             pool.identities = identities.filter((i) => i.poolAlias === pool.name);
         });
+
         return result;
     }
 }
