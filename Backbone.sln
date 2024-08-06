@@ -247,7 +247,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D54A9259-770
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2429FCAB-2058-4403-94DA-DA26B1655A7D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceSnapshotCreator", "Applications\ConsumerApi\test\PerformanceTests\IdentityPoolCreator\PerformanceSnapshotCreator.csproj", "{B74B8655-8A94-4520-8BAB-212D7123EDB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceSnapshotCreator", "Applications\ConsumerApi\test\ConsumerApi.Tests.Performance\PerformanceSnapshotCreator\PerformanceSnapshotCreator.csproj", "{B74B8655-8A94-4520-8BAB-212D7123EDB4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Domain.Tests", "Modules\Tokens\test\Tokens.Domain.Tests\Tokens.Domain.Tests.csproj", "{EDCB84BE-54C3-4CAD-977E-45EEBEFA1402}"
 EndProject
