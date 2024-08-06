@@ -19,29 +19,31 @@ export function LoadDREPT(folderName: string, whatoToLoad: DREPTLoads[] = [DREPT
             console.warn("whatToLoad does not include Identities but they must always be loaded. Loading either way...");
         }
 
+        console.info("Loading identities");
         pools = LoadPoolsWithIdentities();
         identitiesMap = PopulateIdentitiesMap();
 
         if (whatoToLoad.includes(DREPTLoads.DatawalletModifications)) {
-            console.log("Loading datawallet modifications");
+            console.info("Loading datawallet modifications");
             LoadDataWalletModifications();
         }
 
         if (whatoToLoad.includes(DREPTLoads.RelationshipTemplates)) {
-            console.log("Loading relationship templates");
+            console.info("Loading relationship templates");
             LoadRelationshipTemplates();
         }
 
         if (whatoToLoad.includes(DREPTLoads.Relationships)) {
-            console.log("Loading relationships");
+            console.info("Loading relationships");
             LoadRelationships();
         }
 
         if (whatoToLoad.includes(DREPTLoads.Messages)) {
-            console.log("Loading messages");
+            console.info("Loading messages");
             LoadMessages();
         }
 
+        console.info("Finished Loading");
         return pools;
     });
 

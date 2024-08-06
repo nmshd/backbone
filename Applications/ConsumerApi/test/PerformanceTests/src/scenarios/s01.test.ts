@@ -20,7 +20,7 @@ export const options: Options = {
 };
 
 const snapshot = (__ENV.snapshot as string | undefined) ?? "light";
-const pools = LoadDREPT(snapshot, [DREPTLoads.Identities, DREPTLoads.DatawalletModifications]).ofTypes("a", "c").pools;
+const pools = LoadDREPT(snapshot, [DREPTLoads.Identities, DREPTLoads.DatawalletModifications, DREPTLoads.RelationshipTemplates, DREPTLoads.Relationships, DREPTLoads.Messages]).ofTypes("a", "c").pools;
 
 const testIdentities = new SharedArray("testIdentities", function () {
     return pools.flatMap((p) => p.identities);
