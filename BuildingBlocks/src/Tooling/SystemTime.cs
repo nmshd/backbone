@@ -43,7 +43,7 @@ public static class SystemTime
         var stackTrace = new StackTrace();
         var callerType = stackTrace.GetFrame(2)!.GetMethod()!.DeclaringType;
 
-        if (callerType is { Namespace: not null } && !callerType.Namespace.Contains("Test"))
+        if (callerType is { Namespace: not null } && !callerType.Namespace.Contains("Test") && !callerType.FullName!.Contains("Tests"))
         {
             throw new NotSupportedException("You can't call this method from a Non-Test-class");
         }
