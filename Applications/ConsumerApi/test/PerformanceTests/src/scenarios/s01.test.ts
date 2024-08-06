@@ -14,13 +14,13 @@ export const options: Options = {
             rate: 1,
             timeUnit: "5m",
             duration: "60m",
-            preAllocatedVUs: 20
+            preAllocatedVUs: 1
         }
     }
 };
 
 const snapshot = (__ENV.snapshot as string | undefined) ?? "light";
-const pools = LoadDREPT(snapshot, [DREPTLoads.Identities, DREPTLoads.DatawalletModifications, DREPTLoads.RelationshipTemplates, DREPTLoads.Relationships, DREPTLoads.Messages]).ofTypes("a", "c").pools;
+const pools = LoadDREPT(snapshot, [DREPTLoads.Identities]).ofTypes("a", "c").pools;
 
 const testIdentities = new SharedArray("testIdentities", function () {
     return pools.flatMap((p) => p.identities);
