@@ -88,15 +88,13 @@ services:
   rabbitmq:
     container_name: bkb-rabbitmq-test
     hostname: rabbitmq
-    image: rabbitmq:3.7-management-alpine
+    image: rabbitmq:3.13-management-alpine
     ports:
       - "5672:5672"
 
   ### seeds ###
 
   seed-database:
-    volumes:
-      - ../setup-db:/app/setup-db
     depends_on:
       database:
         condition: service_healthy
