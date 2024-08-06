@@ -26,7 +26,7 @@ public class ServerSentEventsConnector : IPnsConnector
             {
                 var eventName = notification.GetEventName();
 
-                _logger.Sending(eventName, registration.IdentityAddress);
+                _logger.Sending(eventName);
 
                 await _sseServerClient.SendEvent(registration.IdentityAddress, eventName);
                 sendResults.AddSuccess(registration.DeviceId);
@@ -57,8 +57,8 @@ internal static partial class ServerSentEventsConnectorLogs
         EventId = 433411,
         EventName = "ServerSentEventsConnector.Sending",
         Level = LogLevel.Debug,
-        Message = "Sending push notification (type '{eventName}') to '{address}'.")]
-    public static partial void Sending(this ILogger logger, string eventName, string address);
+        Message = "Sending push notification (type '{eventName}').")]
+    public static partial void Sending(this ILogger logger, string eventName);
 
     [LoggerMessage(
         EventId = 707295,
