@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<CreateTokenCommand, CreateTokenResponse>
 
     public async Task<CreateTokenResponse> Handle(CreateTokenCommand request, CancellationToken cancellationToken)
     {
-        var newTokenEntity = new Token(_userContext.GetAddress(), _userContext.GetDeviceId(), request.Content, request.ExpiresAt);
+        var newTokenEntity = new Token(_userContext.GetAddress(), _userContext.GetDeviceId(), request.Content, request.ExpiresAt, request.ForIdentity);
 
         await _tokensRepository.Add(newTokenEntity);
 

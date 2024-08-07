@@ -8,7 +8,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using Backbone.ConsumerApi.Tests.Integration.Support;
 using Backbone.Crypto;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.UnitTestTools.Data;

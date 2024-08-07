@@ -24,10 +24,11 @@ public class TokensRepository : ITokensRepository
         _readonlyTokensDbSet = dbContext.Tokens.AsNoTracking();
     }
 
-    public async Task<Token> Find(TokenId id)
+    public async Task<Token> Find(TokenId id, IdentityAddress? address)
     {
         var getMetadata = _readonlyTokensDbSet
             .Where(Token.IsNotExpired)
+            .Where(Token.CanBeCollectedBy(address))
             .FirstWithId(id);
 
         var token = await getMetadata ?? throw new NotFoundException(nameof(Token));

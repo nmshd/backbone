@@ -18,7 +18,7 @@ public class Token : Entity
         Content = null!;
     }
 
-    public Token(IdentityAddress createdBy, DeviceId createdByDevice, byte[] content, DateTime expiresAt)
+    public Token(IdentityAddress createdBy, DeviceId createdByDevice, byte[] content, DateTime expiresAt, IdentityAddress? forIdentity = null)
     {
         Id = TokenId.New();
 
@@ -29,6 +29,7 @@ public class Token : Entity
         ExpiresAt = expiresAt;
 
         Content = content;
+        ForIdentity = forIdentity;
 
         RaiseDomainEvent(new TokenCreatedDomainEvent(this));
     }
@@ -38,23 +39,22 @@ public class Token : Entity
     public IdentityAddress CreatedBy { get; set; }
     public DeviceId CreatedByDevice { get; set; }
 
+    public IdentityAddress? ForIdentity { get; set; }
+
     public byte[] Content { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
-
-    public void LoadContent(byte[] content)
-    {
-        if (Content != null)
-            throw new Exception("Cannot change the content of a token.");
-
-        Content = content;
-    }
 
     public static Expression<Func<Token, bool>> IsExpired =>
         challenge => challenge.ExpiresAt <= SystemTime.UtcNow;
 
     public static Expression<Func<Token, bool>> IsNotExpired =>
         challenge => challenge.ExpiresAt > SystemTime.UtcNow;
+    
+    public static Expression<Func<Token, bool>> CanBeCollectedBy(IdentityAddress? address)
+    {
+        return token => token.ForIdentity == null || address != null && (token.ForIdentity == address || token.CreatedBy == address);
+    }
 
     public static Expression<Func<Token, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
