@@ -7,7 +7,7 @@ part 'individual_quota.g.dart';
 @JsonSerializable()
 class IndividualQuota {
   final String id;
-  final MetricResponse metric;
+  final Metric metric;
   final int max;
   final String period;
 

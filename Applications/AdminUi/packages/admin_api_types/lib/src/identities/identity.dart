@@ -3,10 +3,10 @@ import 'package:json_annotation/json_annotation.dart';
 import 'identity_device.dart';
 import 'identity_quota.dart';
 
-part 'identity_response.g.dart';
+part 'identity.g.dart';
 
 @JsonSerializable()
-class IdentityResponse {
+class Identity {
   final String address;
   final String clientId;
   final String publicKey;
@@ -17,7 +17,7 @@ class IdentityResponse {
   final List<IdentityDevice>? devices;
   final List<IdentityQuota>? quotas;
 
-  IdentityResponse({
+  Identity({
     required this.address,
     required this.clientId,
     required this.publicKey,
@@ -29,6 +29,6 @@ class IdentityResponse {
     this.quotas,
   });
 
-  factory IdentityResponse.fromJson(dynamic json) => _$IdentityResponseFromJson(json as Map<String, dynamic>);
-  Map<String, dynamic> toJson() => _$IdentityResponseToJson(this);
+  factory Identity.fromJson(dynamic json) => _$IdentityFromJson(json as Map<String, dynamic>);
+  Map<String, dynamic> toJson() => _$IdentityToJson(this);
 }

@@ -1,16 +1,16 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'tier_overview_response.g.dart';
+part 'tier_overview.g.dart';
 
 @JsonSerializable()
-class TierOverviewResponse {
+class TierOverview {
   final String id;
   final String name;
   final int numberOfIdentities;
   final bool canBeUsedAsDefaultForClient;
   final bool canBeManuallyAssigned;
 
-  TierOverviewResponse({
+  TierOverview({
     required this.id,
     required this.name,
     required this.numberOfIdentities,
@@ -18,6 +18,6 @@ class TierOverviewResponse {
     required this.canBeManuallyAssigned,
   });
 
-  factory TierOverviewResponse.fromJson(dynamic json) => _$TierOverviewResponseFromJson(json as Map<String, dynamic>);
-  Map<String, dynamic> toJson() => _$TierOverviewResponseToJson(this);
+  factory TierOverview.fromJson(dynamic json) => _$TierOverviewFromJson(json as Map<String, dynamic>);
+  Map<String, dynamic> toJson() => _$TierOverviewToJson(this);
 }

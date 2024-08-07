@@ -21,8 +21,8 @@ class IdentityDetails extends StatefulWidget {
 }
 
 class _IdentityDetailsState extends State<IdentityDetails> {
-  IdentityResponse? _identityDetails;
-  List<TierOverviewResponse>? _tiers;
+  Identity? _identityDetails;
+  List<TierOverview>? _tiers;
   String? _selectedTier;
 
   late final ScrollController _scrollController;
@@ -115,10 +115,10 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 }
 
 class _IdentityDetailsCard extends StatelessWidget {
-  final IdentityResponse identityDetails;
+  final Identity identityDetails;
   final String? selectedTier;
   final ValueChanged<String?>? onTierChanged;
-  final List<TierOverviewResponse> availableTiers;
+  final List<TierOverview> availableTiers;
   final VoidCallback updateTierOfIdentity;
 
   const _IdentityDetailsCard({

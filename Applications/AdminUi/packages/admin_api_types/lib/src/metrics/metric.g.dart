@@ -1,17 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'metric_response.dart';
+part of 'metric.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-MetricResponse _$MetricResponseFromJson(Map<String, dynamic> json) => MetricResponse(
+Metric _$MetricFromJson(Map<String, dynamic> json) => Metric(
       key: json['key'] as String,
       displayName: json['displayName'] as String,
     );
 
-Map<String, dynamic> _$MetricResponseToJson(MetricResponse instance) => <String, dynamic>{
+Map<String, dynamic> _$MetricToJson(Metric instance) => <String, dynamic>{
       'key': instance.key,
       'displayName': instance.displayName,
     };

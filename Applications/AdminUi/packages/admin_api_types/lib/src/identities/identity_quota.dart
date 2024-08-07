@@ -8,7 +8,7 @@ part 'identity_quota.g.dart';
 class IdentityQuota {
   final String id;
   final String source;
-  final MetricResponse metric;
+  final Metric metric;
   final int max;
   final int usage;
   final String period;

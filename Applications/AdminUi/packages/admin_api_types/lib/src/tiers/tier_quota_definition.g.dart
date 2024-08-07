@@ -8,7 +8,7 @@ part of 'tier_quota_definition.dart';
 
 TierQuotaDefinition _$TierQuotaDefinitionFromJson(Map<String, dynamic> json) => TierQuotaDefinition(
       id: json['id'] as String,
-      metric: MetricResponse.fromJson(json['metric']),
+      metric: Metric.fromJson(json['metric']),
       max: (json['max'] as num).toInt(),
       period: json['period'] as String,
     );

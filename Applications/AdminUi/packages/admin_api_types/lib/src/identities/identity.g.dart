@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'identity_response.dart';
+part of 'identity.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-IdentityResponse _$IdentityResponseFromJson(Map<String, dynamic> json) => IdentityResponse(
+Identity _$IdentityFromJson(Map<String, dynamic> json) => Identity(
       address: json['address'] as String,
       clientId: json['clientId'] as String,
       publicKey: json['publicKey'] as String,
@@ -18,7 +18,7 @@ IdentityResponse _$IdentityResponseFromJson(Map<String, dynamic> json) => Identi
       quotas: (json['quotas'] as List<dynamic>?)?.map(IdentityQuota.fromJson).toList(),
     );
 
-Map<String, dynamic> _$IdentityResponseToJson(IdentityResponse instance) => <String, dynamic>{
+Map<String, dynamic> _$IdentityToJson(Identity instance) => <String, dynamic>{
       'address': instance.address,
       'clientId': instance.clientId,
       'publicKey': instance.publicKey,

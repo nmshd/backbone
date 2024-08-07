@@ -16,7 +16,7 @@ class TiersOverview extends StatefulWidget {
 }
 
 class _TiersOverviewState extends State<TiersOverview> {
-  List<TierOverviewResponse>? _tiers;
+  List<TierOverview>? _tiers;
 
   final double _boxWidth = 700;
 

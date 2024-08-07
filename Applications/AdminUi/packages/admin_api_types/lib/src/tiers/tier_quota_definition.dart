@@ -6,7 +6,7 @@ part 'tier_quota_definition.g.dart';
 @JsonSerializable()
 class TierQuotaDefinition {
   final String id;
-  final MetricResponse metric;
+  final Metric metric;
   final int max;
   final String period;
 

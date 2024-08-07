@@ -37,7 +37,7 @@ Future<void> showAddQuotaDialog({
 }
 
 class _AssignQuotaDialog extends StatefulWidget {
-  final List<MetricResponse> availableMetrics;
+  final List<Metric> availableMetrics;
   final Future<ApiResponse<dynamic>> Function({required String metricKey, required int max, required String period}) addQuota;
   final VoidCallback onQuotaAdded;
 

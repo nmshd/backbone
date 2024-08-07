@@ -8,7 +8,7 @@ part of 'individual_quota.dart';
 
 IndividualQuota _$IndividualQuotaFromJson(Map<String, dynamic> json) => IndividualQuota(
       id: json['id'] as String,
-      metric: MetricResponse.fromJson(json['metric']),
+      metric: Metric.fromJson(json['metric']),
       max: (json['max'] as num).toInt(),
       period: json['period'] as String,
     );
