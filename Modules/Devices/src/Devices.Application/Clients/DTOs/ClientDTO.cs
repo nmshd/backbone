@@ -4,12 +4,13 @@ namespace Backbone.Modules.Devices.Application.Clients.DTOs;
 
 public class ClientDTO
 {
-    public ClientDTO(OAuthClient client)
+    public ClientDTO(OAuthClient client, int numberOfIdentities)
     {
         ClientId = client.ClientId;
         DisplayName = client.DisplayName;
         DefaultTier = client.DefaultTier;
         CreatedAt = client.CreatedAt;
+        NumberOfIdentities = numberOfIdentities;
         MaxIdentities = client.MaxIdentities;
     }
 
@@ -17,5 +18,6 @@ public class ClientDTO
     public string DisplayName { get; set; }
     public string DefaultTier { get; set; }
     public DateTime CreatedAt { get; set; }
+    public int NumberOfIdentities { get; set; }
     public int? MaxIdentities { get; set; }
 }

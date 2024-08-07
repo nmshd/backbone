@@ -1,25 +1,25 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'client.dart';
+part of 'create_client_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Client _$ClientFromJson(Map<String, dynamic> json) => Client(
+CreateClientResponse _$CreateClientResponseFromJson(Map<String, dynamic> json) => CreateClientResponse(
       clientId: json['clientId'] as String,
       displayName: json['displayName'] as String,
+      clientSecret: json['clientSecret'] as String,
       defaultTier: json['defaultTier'] as String,
       createdAt: DateTime.parse(json['createdAt'] as String),
-      numberOfIdentities: (json['numberOfIdentities'] as num).toInt(),
       maxIdentities: (json['maxIdentities'] as num?)?.toInt(),
     );
 
-Map<String, dynamic> _$ClientToJson(Client instance) => <String, dynamic>{
+Map<String, dynamic> _$CreateClientResponseToJson(CreateClientResponse instance) => <String, dynamic>{
       'clientId': instance.clientId,
       'displayName': instance.displayName,
+      'clientSecret': instance.clientSecret,
       'defaultTier': instance.defaultTier,
       'createdAt': instance.createdAt.toIso8601String(),
-      'numberOfIdentities': instance.numberOfIdentities,
       'maxIdentities': instance.maxIdentities,
     };
