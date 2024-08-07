@@ -9,8 +9,6 @@ updates:
       update-nuget-dependencies:
         patterns:
           - "*"
-    reviewers:
-      - "tnotheis"
     labels:
       - "dependencies"
 
@@ -23,8 +21,6 @@ updates:
       update-github-actions-dependencies:
         patterns:
           - "*"
-    reviewers:
-      - "tnotheis"
     labels:
       - "dependencies"
 
@@ -37,26 +33,24 @@ updates:
       update-npm-dependencies:
         patterns:
           - "*"
-    reviewers:
-      - "tnotheis"
     ignore:
       - dependency-name: "eslint"
         update-types: ["version-update:semver-major"] # Ignore this until https://github.com/typescript-eslint/typescript-eslint/issues/8211 is fixed
     labels:
       - "dependencies"
 
-  ##### Admin UI Angular App #####
-  - package-ecosystem: "npm"
-    directory: "/AdminApi/src/AdminApi/ClientApp"
+  ##### Admin UI Flutter App#####
+  - package-ecosystem: "pub"
+    directories:
+      - "/Applications/AdminUi/apps/admin_ui"
+      - "/Applications/AdminUi/packages/admin_api_sdk"
+      - "/Applications/AdminUi/packages/admin_api_types"
     schedule:
       interval: "weekly"
     groups:
-      update-npm-dependencies:
+      update-pub-dependencies:
         patterns:
           - "*"
-    reviewers:
-      - "tnotheis"
-      - "daniel-almeida-konkconsulting"
     labels:
       - "dependencies"
 
@@ -75,7 +69,5 @@ updates:
       update-docker-dependencies:
         patterns:
           - "*"
-    reviewers:
-      - "tnotheis"
     labels:
       - "dependencies"

@@ -371,4 +371,7 @@ dist
 **/SpecFlow/
 
 # flutter
-!AdminUi/packages/*
+!Applications/AdminUi/packages/*
+
+# Hardlinks for appsettings.override.json
+Applications/**/appsettings.override.json

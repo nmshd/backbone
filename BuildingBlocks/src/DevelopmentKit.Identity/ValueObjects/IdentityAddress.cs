@@ -12,6 +12,7 @@ namespace Backbone.DevelopmentKit.Identity.ValueObjects;
 [TypeConverter(typeof(IdentityAddressTypeConverter))]
 public partial record IdentityAddress : StronglyTypedId
 {
+    private const string DELETED_IDENTITY_STRING = "deleted identity";
     public const int MAX_LENGTH = 80;
     private const int CHECKSUM_LENGTH = 2;
     private const string CHECKSUM_LENGTH_S = "2";
@@ -79,6 +80,11 @@ public partial record IdentityAddress : StronglyTypedId
         return new IdentityAddress((mainPhrase + checksum).ToLower());
     }
 
+    public static IdentityAddress GetAnonymized(string didDomainName)
+    {
+        return Create(Encoding.Unicode.GetBytes(DELETED_IDENTITY_STRING), didDomainName);
+    }
+
     private static string CalculateChecksum(string phrase) => Hex(SHA256.HashData(Encoding.ASCII.GetBytes(phrase)))[..CHECKSUM_LENGTH];
 
     private static string Hex(byte[] bytes)
@@ -125,7 +131,7 @@ public partial record IdentityAddress : StronglyTypedId
     }
 
     [GeneratedRegex($@"^(?<addressWithoutChecksum>did:e:(?<didDomainName>(?:[a-z0-9]+\.)*[a-z]{{2,}}):dids:(?<identitySpecificPart>[0-9a-f]{{20}}))(?<checksum>[0-9a-f]{{{CHECKSUM_LENGTH_S}}})$")]
-    private static partial Regex IdentityAddressValidatorRegex();
+    public static partial Regex IdentityAddressValidatorRegex();
 
     #endregion
 }

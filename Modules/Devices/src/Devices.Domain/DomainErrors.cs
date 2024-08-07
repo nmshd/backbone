@@ -68,4 +68,9 @@ public static class DomainErrors
     {
         return new DomainError("error.platform.validation.device.noDeletionProcessIsPastDueApproval", "No deletion process is past due approval.");
     }
+
+    public static DomainError MaxIdentitiesLessThanCurrentIdentities(int requestedMaxIdentities, int identitiesCount)
+    {
+        return new DomainError("error.platform.validation.device.maxIdentitiesLessThanCurrentIdentities", $"The requested maximum number of identities {requestedMaxIdentities} is less than the current number of identities {identitiesCount}.");
+    }
 }

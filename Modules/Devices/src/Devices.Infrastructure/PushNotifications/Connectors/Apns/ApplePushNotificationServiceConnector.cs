@@ -1,6 +1,5 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
@@ -29,7 +28,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         _options = options.Value;
     }
 
-    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, IPushNotification notification)
+    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IPushNotification notification)
     {
         ValidateRegistrations(registrations);
 
@@ -70,7 +69,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
             .SetNotificationId(notificationId)
             .Build();
 
-        _logger.Sending(notificationContent.EventName, registration.IdentityAddress, registration.Handle.Value);
+        _logger.Sending(notificationContent.EventName);
 
         var response = await _httpClient.SendAsync(request);
 
@@ -111,6 +110,6 @@ internal static partial class ApplePushNotificationServiceConnectorLogs
         EventId = 770700,
         EventName = "ApplePushNotificationServiceConnector.Sending",
         Level = LogLevel.Debug,
-        Message = "Sending push notification (type '{eventName}') to '{address}' with handle '{handle}'.")]
-    public static partial void Sending(this ILogger logger, string eventName, string address, string handle);
+        Message = "Sending push notification (type '{eventName}').")]
+    public static partial void Sending(this ILogger logger, string eventName);
 }

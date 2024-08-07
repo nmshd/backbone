@@ -76,9 +76,9 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         var eventName = @event.GetType().Name;
 
-        _logger.LogInformation("Creating RabbitMQ channel to publish event: '{EventId}' ({EventName})", @event.DomainEventId, eventName);
+        _logger.LogInformation("Creating RabbitMQ channel to publish a '{EventName}'.", eventName);
 
-        _logger.LogInformation("Declaring RabbitMQ exchange to publish event: '{EventId}'", @event.DomainEventId);
+        _logger.LogInformation("Declaring RabbitMQ exchange to publish a '{EventName}'.", eventName);
 
         var message = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
         {
@@ -89,7 +89,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         policy.Execute(() =>
         {
-            _logger.LogDebug("Publishing event to RabbitMQ: '{EventId}'", @event.DomainEventId);
+            _logger.LogDebug("Publishing a {EventName} to RabbitMQ.", eventName);
 
             using var channel = _persistentConnection.CreateModel();
             var properties = channel.CreateBasicProperties();
@@ -102,7 +102,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 properties,
                 body);
 
-            _logger.PublishedDomainEvent(@event.DomainEventId);
+            _logger.PublishedDomainEvent();
         });
     }
 
@@ -228,7 +228,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     }
 }
 
-internal static partial class EventBusRabbitMQLogs
+internal static partial class EventBusRabbitMqLogs
 {
     [LoggerMessage(
         EventId = 411326,
@@ -241,8 +241,8 @@ internal static partial class EventBusRabbitMQLogs
         EventId = 585231,
         EventName = "EventBusRabbitMQ.PublishedDomainEvent",
         Level = LogLevel.Debug,
-        Message = "Successfully published event with id '{domainEventId}'.")]
-    public static partial void PublishedDomainEvent(this ILogger logger, string domainEventId);
+        Message = "Successfully published the event.")]
+    public static partial void PublishedDomainEvent(this ILogger logger);
 
     [LoggerMessage(
         EventId = 702822,
