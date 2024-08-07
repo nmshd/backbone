@@ -1,25 +1,23 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'client.g.dart';
+part 'update_client_response.g.dart';
 
 @JsonSerializable()
-class Client {
+class UpdateClientResponse {
   final String clientId;
   final String displayName;
   final String defaultTier;
   final DateTime createdAt;
-  final int numberOfIdentities;
   final int? maxIdentities;
 
-  Client({
+  UpdateClientResponse({
     required this.clientId,
     required this.displayName,
     required this.defaultTier,
     required this.createdAt,
-    required this.numberOfIdentities,
-    this.maxIdentities,
+    required this.maxIdentities,
   });
 
-  factory Client.fromJson(dynamic json) => _$ClientFromJson(json as Map<String, dynamic>);
-  Map<String, dynamic> toJson() => _$ClientToJson(this);
+  factory UpdateClientResponse.fromJson(dynamic json) => _$UpdateClientResponseFromJson(json as Map<String, dynamic>);
+  Map<String, dynamic> toJson() => _$UpdateClientResponseToJson(this);
 }
