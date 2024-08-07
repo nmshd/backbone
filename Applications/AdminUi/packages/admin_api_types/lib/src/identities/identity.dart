@@ -14,8 +14,8 @@ class Identity {
   final DateTime createdAt;
   final int identityVersion;
   final int numberOfDevices;
-  final List<IdentityDevice>? devices;
-  final List<IdentityQuota>? quotas;
+  final List<IdentityDevice> devices;
+  final List<IdentityQuota> quotas;
 
   Identity({
     required this.address,
@@ -25,8 +25,8 @@ class Identity {
     required this.createdAt,
     required this.identityVersion,
     required this.numberOfDevices,
-    this.devices,
-    this.quotas,
+    required this.devices,
+    required this.quotas,
   });
 
   factory Identity.fromJson(dynamic json) => _$IdentityFromJson(json as Map<String, dynamic>);

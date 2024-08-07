@@ -14,8 +14,8 @@ Identity _$IdentityFromJson(Map<String, dynamic> json) => Identity(
       createdAt: DateTime.parse(json['createdAt'] as String),
       identityVersion: (json['identityVersion'] as num).toInt(),
       numberOfDevices: (json['numberOfDevices'] as num).toInt(),
-      devices: (json['devices'] as List<dynamic>?)?.map(IdentityDevice.fromJson).toList(),
-      quotas: (json['quotas'] as List<dynamic>?)?.map(IdentityQuota.fromJson).toList(),
+      devices: (json['devices'] as List<dynamic>).map(IdentityDevice.fromJson).toList(),
+      quotas: (json['quotas'] as List<dynamic>).map(IdentityQuota.fromJson).toList(),
     );
 
 Map<String, dynamic> _$IdentityToJson(Identity instance) => <String, dynamic>{
