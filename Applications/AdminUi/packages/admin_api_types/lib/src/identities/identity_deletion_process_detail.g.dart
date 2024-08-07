@@ -15,7 +15,7 @@ IdentityDeletionProcessDetail _$IdentityDeletionProcessDetailFromJson(Map<String
 
 Map<String, dynamic> _$IdentityDeletionProcessDetailToJson(IdentityDeletionProcessDetail instance) => <String, dynamic>{
       'id': instance.id,
-      'status': _$DeletionProcessStatusEnumMap[instance.status]!,
+      'status': _$DeletionProcessStatusEnumMap[instance.status],
       'createdAt': instance.createdAt.toIso8601String(),
       'auditLog': instance.auditLog,
     };

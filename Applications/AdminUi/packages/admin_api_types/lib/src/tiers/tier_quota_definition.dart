@@ -1,5 +1,6 @@
-import 'package:admin_api_types/admin_api_types.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import '../metrics/metric.dart';
 
 part 'tier_quota_definition.g.dart';
 

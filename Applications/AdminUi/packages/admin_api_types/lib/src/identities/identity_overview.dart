@@ -1,5 +1,6 @@
-import 'package:admin_api_types/admin_api_types.dart';
 import 'package:json_annotation/json_annotation.dart';
+
+import '../tiers/tier.dart';
 
 part 'identity_overview.g.dart';
 

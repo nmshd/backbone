@@ -1,4 +1,3 @@
-import 'package:admin_api_types/src/admin_api_types_base.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 import '../enums/enums.dart';

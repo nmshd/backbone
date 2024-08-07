@@ -24,7 +24,7 @@ IdentityDeletionProcess _$IdentityDeletionProcessFromJson(Map<String, dynamic> j
 
 Map<String, dynamic> _$IdentityDeletionProcessToJson(IdentityDeletionProcess instance) => <String, dynamic>{
       'id': instance.id,
-      'status': _$DeletionProcessStatusEnumMap[instance.status]!,
+      'status': _$DeletionProcessStatusEnumMap[instance.status],
       'createdAt': instance.createdAt.toIso8601String(),
       'approvalPeriodEndsAt': instance.approvalPeriodEndsAt.toIso8601String(),
       'approvalReminder1SentAt': instance.approvalReminder1SentAt?.toIso8601String(),
