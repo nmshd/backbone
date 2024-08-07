@@ -29,7 +29,10 @@ Future<void> showAddQuotaDialog({
           return GetIt.I.get<AdminApiClient>().quotas.createTierQuota(tierId: tierId, metricKey: metricKey, max: max, period: period);
         }
 
-        return GetIt.I.get<AdminApiClient>().quotas.createIdentityQuota(address: identityAddress!, metricKey: metricKey, max: max, period: period);
+        return GetIt.I
+            .get<AdminApiClient>()
+            .identities
+            .createIdentityQuota(address: identityAddress!, metricKey: metricKey, max: max, period: period);
       },
       onQuotaAdded: onQuotaAdded,
     ),
