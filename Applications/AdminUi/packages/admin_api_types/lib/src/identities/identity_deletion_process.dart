@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 
-import '../enums/enums.dart';
+import 'deletion_process_status.dart';
 
 part 'identity_deletion_process.g.dart';
 
