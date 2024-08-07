@@ -10,9 +10,15 @@ export 'identities_filter.dart';
 
 class IdentitiesDataTable extends StatefulWidget {
   final IdentityDataTableSource dataSource;
+  final bool hideClientColumn;
   final bool hideTierColumn;
 
-  const IdentitiesDataTable({required this.dataSource, this.hideTierColumn = false, super.key});
+  const IdentitiesDataTable({
+    required this.dataSource,
+    this.hideTierColumn = false,
+    this.hideClientColumn = false,
+    super.key,
+  });
 
   @override
   State<IdentitiesDataTable> createState() => _IdentitiesDataTableState();
@@ -52,7 +58,7 @@ class _IdentitiesDataTableState extends State<IdentitiesDataTable> {
       columns: <DataColumn2>[
         DataColumn2(label: Text(context.l10n.address), size: ColumnSize.L, onSort: _sort),
         if (!widget.hideTierColumn) DataColumn2(label: Text(context.l10n.tier), size: ColumnSize.S),
-        DataColumn2(label: Text(context.l10n.identitiesDataTable_createdWithClient), onSort: _sort),
+        if (!widget.hideClientColumn) DataColumn2(label: Text(context.l10n.identitiesDataTable_createdWithClient), onSort: _sort),
         DataColumn2(label: Text(context.l10n.numberOfDevices), onSort: _sort),
         DataColumn2(label: Text(context.l10n.createdAt), size: ColumnSize.S, onSort: _sort),
         DataColumn2(label: Text(context.l10n.lastLoginAt), size: ColumnSize.S, onSort: _sort),

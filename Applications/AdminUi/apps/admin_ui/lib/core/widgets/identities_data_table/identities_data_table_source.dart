@@ -18,11 +18,16 @@ class IdentityDataTableSource extends AsyncDataTableSource {
 
   final Locale locale;
   final bool hideTierColumn;
+  final bool hideClientColumn;
   final void Function({required String address}) navigateToIdentity;
 
-  IdentityDataTableSource({required this.locale, required this.navigateToIdentity, this.hideTierColumn = false, IdentityOverviewFilter? filter})
-      : _filter = filter;
-
+  IdentityDataTableSource({
+    required this.locale,
+    required this.navigateToIdentity,
+    this.hideTierColumn = false,
+    this.hideClientColumn = false,
+    IdentityOverviewFilter? filter,
+  }) : _filter = filter;
   void sort({required int sortColumnIndex, required bool sortColumnAscending}) {
     _sortingSettings = (sortColumnIndex: sortColumnIndex, sortAscending: sortColumnAscending);
     notifyListeners();
@@ -30,10 +35,13 @@ class IdentityDataTableSource extends AsyncDataTableSource {
 
   @override
   bool get isRowCountApproximate => false;
+
   @override
   int get rowCount => _pagination?.totalRecords ?? 0;
+
   @override
   int get selectedRowCount => 0;
+
   @override
   Future<AsyncRowsResponse> getRows(int startIndex, int count) async {
     final pageNumber = startIndex ~/ count;
@@ -55,7 +63,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
               cells: [
                 DataCell(Text(identity.$2.address)),
                 if (!hideTierColumn) DataCell(Text(identity.$2.tier.name)),
-                DataCell(Text(identity.$2.createdWithClient)),
+                if (!hideClientColumn) DataCell(Text(identity.$2.createdWithClient)),
                 DataCell(Text(identity.$2.numberOfDevices.toString())),
                 DataCell(
                   Tooltip(
@@ -79,6 +87,7 @@ class IdentityDataTableSource extends AsyncDataTableSource {
             ),
           )
           .toList();
+
       return AsyncRowsResponse(response.pagination.totalRecords, rows);
     } catch (e) {
       GetIt.I.get<Logger>().e('Failed to load data: $e');
