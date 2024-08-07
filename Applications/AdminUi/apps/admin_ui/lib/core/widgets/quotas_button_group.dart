@@ -100,7 +100,7 @@ class _QuotasButtonGroupState extends State<QuotasButtonGroup> {
   Future<ApiResponse<void>> _deleteQuota(String quota) {
     final client = GetIt.I.get<AdminApiClient>();
 
-    if (widget.identityAddress != null) return client.identities.deleteIdentityQuota(address: widget.identityAddress!, individualQuotaId: quota);
+    if (widget.identityAddress != null) return client.identities.deleteIndividualQuota(address: widget.identityAddress!, individualQuotaId: quota);
     return client.quotas.deleteTierQuota(tierId: widget.tierId!, tierQuotaDefinitionId: quota);
   }
 }

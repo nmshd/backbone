@@ -84,7 +84,7 @@ class IdentitiesEndpoint extends Endpoint {
         transformer: (e) => (e as List).map(IdentityDeletionProcessAuditLogEntry.fromJson).toList(),
       );
 
-  Future<ApiResponse<IndividualQuota>> createIdentityQuota({
+  Future<ApiResponse<IndividualQuota>> createIndividualQuota({
     required String address,
     required String metricKey,
     required int max,
@@ -100,7 +100,7 @@ class IdentitiesEndpoint extends Endpoint {
         transformer: IndividualQuota.fromJson,
       );
 
-  Future<ApiResponse<void>> deleteIdentityQuota({
+  Future<ApiResponse<void>> deleteIndividualQuota({
     required String address,
     required String individualQuotaId,
   }) =>

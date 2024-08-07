@@ -32,7 +32,7 @@ Future<void> showAddQuotaDialog({
         return GetIt.I
             .get<AdminApiClient>()
             .identities
-            .createIdentityQuota(address: identityAddress!, metricKey: metricKey, max: max, period: period);
+            .createIndividualQuota(address: identityAddress!, metricKey: metricKey, max: max, period: period);
       },
       onQuotaAdded: onQuotaAdded,
     ),
