@@ -146,13 +146,11 @@ class IdentityQuotasState extends State<IdentityQuotas> {
   Map<String, List<IdentityQuota>> _groupQuotas() {
     final groupedQuotas = <String, List<IdentityQuota>>{};
 
-    if (widget.identityDetails.quotas != null) {
-      for (final quota in widget.identityDetails.quotas!) {
-        if (groupedQuotas.containsKey(quota.metric.displayName)) {
-          groupedQuotas[quota.metric.displayName]!.add(quota);
-        } else {
-          groupedQuotas[quota.metric.displayName] = [quota];
-        }
+    for (final quota in widget.identityDetails.quotas) {
+      if (groupedQuotas.containsKey(quota.metric.displayName)) {
+        groupedQuotas[quota.metric.displayName]!.add(quota);
+      } else {
+        groupedQuotas[quota.metric.displayName] = [quota];
       }
     }
 

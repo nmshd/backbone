@@ -14,8 +14,8 @@ Identity _$IdentityFromJson(Map<String, dynamic> json) => Identity(
       createdAt: DateTime.parse(json['createdAt'] as String),
       identityVersion: (json['identityVersion'] as num).toInt(),
       numberOfDevices: (json['numberOfDevices'] as num).toInt(),
-      devices: (json['devices'] as List<dynamic>?)?.map(Device.fromJson).toList(),
-      quotas: (json['quotas'] as List<dynamic>?)?.map(IdentityQuota.fromJson).toList(),
+      devices: (json['devices'] as List<dynamic>).map(IdentityDevice.fromJson).toList(),
+      quotas: (json['quotas'] as List<dynamic>).map(IdentityQuota.fromJson).toList(),
     );
 
 Map<String, dynamic> _$IdentityToJson(Identity instance) => <String, dynamic>{
@@ -28,60 +28,4 @@ Map<String, dynamic> _$IdentityToJson(Identity instance) => <String, dynamic>{
       'numberOfDevices': instance.numberOfDevices,
       'devices': instance.devices,
       'quotas': instance.quotas,
-    };
-
-Device _$DeviceFromJson(Map<String, dynamic> json) => Device(
-      id: json['id'] as String,
-      username: json['username'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      createdByDevice: json['createdByDevice'] as String,
-      lastLogin: json['lastLogin'] as Map<String, dynamic>?,
-    );
-
-Map<String, dynamic> _$DeviceToJson(Device instance) => <String, dynamic>{
-      'id': instance.id,
-      'username': instance.username,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'createdByDevice': instance.createdByDevice,
-      'lastLogin': instance.lastLogin,
-    };
-
-IdentityQuota _$IdentityQuotaFromJson(Map<String, dynamic> json) => IdentityQuota(
-      id: json['id'] as String,
-      source: json['source'] as String,
-      metric: Metric.fromJson(json['metric']),
-      max: (json['max'] as num).toInt(),
-      usage: (json['usage'] as num).toInt(),
-      period: json['period'] as String,
-    );
-
-Map<String, dynamic> _$IdentityQuotaToJson(IdentityQuota instance) => <String, dynamic>{
-      'id': instance.id,
-      'source': instance.source,
-      'metric': instance.metric,
-      'max': instance.max,
-      'usage': instance.usage,
-      'period': instance.period,
-    };
-
-IdentityOverview _$IdentityOverviewFromJson(Map<String, dynamic> json) => IdentityOverview(
-      address: json['address'] as String,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      createdWithClient: json['createdWithClient'] as String,
-      identityVersion: (json['identityVersion'] as num).toInt(),
-      numberOfDevices: (json['numberOfDevices'] as num).toInt(),
-      tier: Tier.fromJson(json['tier']),
-      lastLoginAt: json['lastLoginAt'] == null ? null : DateTime.parse(json['lastLoginAt'] as String),
-      datawalletVersion: (json['datawalletVersion'] as num?)?.toInt(),
-    );
-
-Map<String, dynamic> _$IdentityOverviewToJson(IdentityOverview instance) => <String, dynamic>{
-      'address': instance.address,
-      'createdAt': instance.createdAt.toIso8601String(),
-      'createdWithClient': instance.createdWithClient,
-      'identityVersion': instance.identityVersion,
-      'numberOfDevices': instance.numberOfDevices,
-      'tier': instance.tier,
-      'lastLoginAt': instance.lastLoginAt?.toIso8601String(),
-      'datawalletVersion': instance.datawalletVersion,
     };
