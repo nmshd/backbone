@@ -7,7 +7,7 @@ import 'endpoint.dart';
 class MessagesEndpoint extends Endpoint {
   MessagesEndpoint(super.dio);
 
-  Future<ApiResponse<List<Message>>> getMessagesByParticipant({
+  Future<ApiResponse<List<MessageOverview>>> getMessagesByParticipant({
     required String participant,
     required MessageType type,
     required int pageNumber,
@@ -21,6 +21,6 @@ class MessagesEndpoint extends Endpoint {
           'PageNumber': pageNumber,
           'PageSize': pageSize,
         },
-        transformer: (e) => (e as List).map(Message.fromJson).toList(),
+        transformer: (e) => (e as List).map(MessageOverview.fromJson).toList(),
       );
 }

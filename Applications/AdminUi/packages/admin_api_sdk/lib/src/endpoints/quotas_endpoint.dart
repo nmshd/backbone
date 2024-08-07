@@ -6,7 +6,7 @@ import 'endpoint.dart';
 class QuotasEndpoint extends Endpoint {
   QuotasEndpoint(super.dio);
 
-  Future<ApiResponse<Quota>> createTierQuota({
+  Future<ApiResponse<TierQuotaDefinition>> createTierQuota({
     required String tierId,
     required String metricKey,
     required int max,
@@ -19,7 +19,7 @@ class QuotasEndpoint extends Endpoint {
           'max': max,
           'period': period,
         },
-        transformer: Quota.fromJson,
+        transformer: TierQuotaDefinition.fromJson,
       );
 
   Future<ApiResponse<void>> deleteTierQuota({
@@ -31,37 +31,5 @@ class QuotasEndpoint extends Endpoint {
         expectedStatus: 204,
         transformer: (e) {},
         allowEmptyResponse: true,
-      );
-
-  Future<ApiResponse<Quota>> createIdentityQuota({
-    required String address,
-    required String metricKey,
-    required int max,
-    required String period,
-  }) =>
-      post(
-        '/api/v1/Identities/$address/Quotas',
-        data: {
-          'metricKey': metricKey,
-          'max': max,
-          'period': period,
-        },
-        transformer: Quota.fromJson,
-      );
-
-  Future<ApiResponse<void>> deleteIdentityQuota({
-    required String address,
-    required String individualQuotaId,
-  }) =>
-      delete(
-        '/api/v1/Identities/$address/Quotas/$individualQuotaId',
-        expectedStatus: 204,
-        transformer: (e) {},
-        allowEmptyResponse: true,
-      );
-
-  Future<ApiResponse<List<Metric>>> getMetrics() => get(
-        '/api/v1/Metrics',
-        transformer: (e) => (e as List).map(Metric.fromJson).toList(),
       );
 }
