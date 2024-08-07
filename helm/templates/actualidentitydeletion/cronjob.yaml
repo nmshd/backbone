@@ -63,7 +63,9 @@ spec:
                       name: rabbitmq-password
                       key: "VALUE" 
                 {{- end }}
-                {{- with .Values.actualidentitydeletion.env }}
+                {{- $globalEnv := .Values.global.env | default (dict) }}
+                {{- $actualidentitydeletionEnv := .Values.actualidentitydeletion.env | default (dict) }}
+                {{- with merge $globalEnv $actualidentitydeletionEnv }} 
                 {{- toYaml . | nindent 16 }}
                 {{- end }}
           {{- with .Values.actualidentitydeletion.nodeSelector }}

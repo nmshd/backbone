@@ -94,7 +94,9 @@ spec:
                   name: rabbitmq-password
                   key: "VALUE" 
             {{- end }}
-            {{- with .Values.adminui.env }}
+            {{- $globalEnv := .Values.global.env | default (dict) }} 
+            {{- $adminuiEnv := .Values.adminui.env | default (dict) }}
+            {{- with merge $globalEnv $adminuiEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
       {{- with .Values.adminui.nodeSelector }}

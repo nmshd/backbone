@@ -43,7 +43,9 @@ spec:
           env:
             - name: Database__Provider
               value: {{ .Values.global.configuration.modules.devices.infrastructure.sqlDatabase.provider }}
-            {{- with .Values.admincli.env }}
+            {{- $globalEnv := .Values.global.env | default (dict) }}
+            {{- $admincliEnv := .Values.admincli.env | default (dict) }}
+            {{- with merge $globalEnv $admincliEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
           tty: true

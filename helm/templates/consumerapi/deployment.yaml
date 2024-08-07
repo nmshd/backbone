@@ -78,7 +78,9 @@ spec:
                   name: rabbitmq-password
                   key: "VALUE" 
             {{- end }}
-            {{- with .Values.consumerapi.env }}
+            {{- $globalEnv := .Values.global.env | default (dict) }}
+            {{- $consumerapiEnv := .Values.consumerapi.env | default (dict) }}
+            {{- with merge $globalEnv $consumerapiEnv}}
             {{- toYaml . | nindent 12 }}
             {{- end }}
           livenessProbe:

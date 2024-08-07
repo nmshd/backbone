@@ -68,7 +68,9 @@ spec:
                   name: rabbitmq-password
                   key: "VALUE" 
             {{- end }}
-            {{- with .Values.eventhandler.env }}
+            {{- $globalEnv := .Values.global.env | default (dict) }}
+            {{- $eventhandlerEnv := .Values.eventhandler.env | default (dict) }}
+            {{- with merge $globalEnv $eventhandlerEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
       {{- with .Values.eventhandler.nodeSelector }}

@@ -66,7 +66,9 @@ spec:
               subPath: appsettings.override.json
               readOnly: true
           env:
-            {{- with .Values.sseserver.env }}
+            {{- $globalEnv := .Values.global.env | default (dict) }}
+            {{- $sseserverEnv := .Values.sseserver.env | default (dict) }}
+            {{- with merge $globalEnv $sseserverEnv }}
             {{- toYaml . | nindent 12 }}
             {{- end }}
           livenessProbe:
