@@ -1,5 +1,4 @@
-﻿using Backbone.ConsumerApi.Sdk;
-using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Requests;
+﻿using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Requests;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -15,10 +14,8 @@ internal class PnsRegistrationStepDefinitions
         _responseContext = responseContext;
     }
 
-    private Client Identity(string identityName) => _identitiesContext.Identities[identityName];
-
     [When("([a-zA-Z0-9]+) sends a PUT request to the /Devices/Self/PushNotifications endpoint")]
-    public async Task WhenAPutRequestIsSentToTheDevicesSelfPushNotificationsEndpoint(string identityName)
+    public async Task WhenISendsAPutRequestToTheDevicesSelfPushNotificationsEndpoint(string identityName)
     {
         var request = new UpdateDeviceRegistrationRequest
         {
@@ -27,18 +24,18 @@ internal class PnsRegistrationStepDefinitions
             AppId = "someAppId"
         };
 
-        _responseContext.WhenResponse = _responseContext.UpdateDeviceRegistrationResponse = await Identity(identityName).PushNotifications.RegisterForPushNotifications(request);
+        _responseContext.WhenResponse = _responseContext.UpdateDeviceRegistrationResponse = await _identitiesContext.ClientPool.FirstForIdentity(identityName)!.PushNotifications.RegisterForPushNotifications(request);
     }
 
     [When(@"([a-zA-Z0-9]+) sends a DELETE request to the /Devices/Self/PushNotifications endpoint")]
-    public async Task WhenADeleteRequestIsSentToTheDevicesSelfPushNotificationsEndpoint(string identityName)
+    public async Task WhenISendsADeleteRequestToTheDevicesSelfPushNotificationsEndpoint(string identityName)
     {
-        _responseContext.WhenResponse = await Identity(identityName).PushNotifications.UnregisterFromPushNotifications();
+        _responseContext.WhenResponse = await _identitiesContext.ClientPool.FirstForIdentity(identityName)!.PushNotifications.UnregisterFromPushNotifications();
     }
 
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Devices/Self/PushNotifications/SendTestNotification endpoint")]
     public async Task WhenISendsAPostRequestToTheDevicesSelfPushNotificationsSendTestNotificationEndpoint(string identityName)
     {
-        _responseContext.WhenResponse = await Identity(identityName).PushNotifications.SendTestNotification(new object());
+        _responseContext.WhenResponse = await _identitiesContext.ClientPool.FirstForIdentity(identityName)!.PushNotifications.SendTestNotification(new object());
     }
 }

@@ -1,7 +1,6 @@
 ﻿using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
-using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.Crypto;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.ThrowHelpers;
@@ -12,6 +11,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Binding]
 internal class MessagesStepDefinitions
 {
+    #region Constructor, Fields, Properties
     private readonly IdentitiesContext _identitiesContext;
     private readonly MessagesContext _messagesContext;
     private readonly ResponseContext _responseContext;
@@ -23,19 +23,17 @@ internal class MessagesStepDefinitions
         _responseContext = responseContext;
     }
 
-    private Client Identity(string identityName) => _identitiesContext.Identities[identityName];
-    private Client[] Identities(List<string> splitIdentityNames) => _identitiesContext.Identities.GetMultiple(splitIdentityNames);
+    private ClientPool ClientPool => _identitiesContext.ClientPool;
+    #endregion
 
     #region Given
     [Given(@"([a-zA-Z0-9]+) has sent a Message ([a-zA-Z0-9]+) to (.+)")]
     public async Task GivenIHasSentMessageToI(string senderName, string messageName, string recipientNames)
     {
-        var splitRecipientNames = SplitNames(recipientNames);
+        var sender = ClientPool.FirstForIdentity(senderName)!;
+        var recipients = ClientPool.GetClientsByIdentities(SplitNames(recipientNames));
 
-        var sender = Identity(senderName);
-        var recipients = Identities(splitRecipientNames);
-
-        _messagesContext.Messages[messageName] = await Utils.SendMessage(sender, recipients);
+        _messagesContext.Messages[messageName] = await SendMessage(sender, recipients);
     }
     #endregion
 
@@ -43,9 +41,8 @@ internal class MessagesStepDefinitions
     [When(@"([a-zA-Z0-9]+) sends a GET request to the /Messages endpoint")]
     public async Task WhenISendsAGetRequestToTheMessagesEndpoint(string senderName)
     {
-        var sender = Identity(senderName);
-        var getMessagesResponse = await sender.Messages.ListMessages();
-        _responseContext.WhenResponse = _responseContext.GetMessagesResponse = getMessagesResponse;
+        var sender = ClientPool.FirstForIdentity(senderName)!;
+        _responseContext.WhenResponse = _responseContext.GetMessagesResponse = await sender.Messages.ListMessages();
     }
 
     [When("([a-zA-Z0-9]+) sends a POST request to the /Messages endpoint with ([a-zA-Z0-9]+) as recipient")]
@@ -59,13 +56,13 @@ internal class MessagesStepDefinitions
             [
                 new SendMessageRequestRecipientInformation
                 {
-                    Address = Identity(identity2Name).IdentityData!.Address,
+                    Address = ClientPool.FirstForIdentity(identity2Name)!.IdentityData!.Address,
                     EncryptedKey = ConvertibleString.FromUtf8("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").BytesRepresentation
                 }
             ]
         };
 
-        _responseContext.WhenResponse = _responseContext.SendMessageResponse = await Identity(identity1Name).Messages.SendMessage(sendMessageRequest);
+        _responseContext.WhenResponse = _responseContext.SendMessageResponse = await ClientPool.FirstForIdentity(identity1Name)!.Messages.SendMessage(sendMessageRequest);
     }
     #endregion
 
@@ -73,18 +70,16 @@ internal class MessagesStepDefinitions
     [Then(@"the address of the recipient ([a-zA-Z0-9]+) is anonymized")]
     public void ThenTheAddressOfIIsAnonymized(string anonymizedIdentityName)
     {
-        var addressOfIdentityThatShouldBeAnonymized = Identity(anonymizedIdentityName).IdentityData!.Address;
+        var addressOfIdentityThatShouldBeAnonymized = ClientPool.FirstForIdentity(anonymizedIdentityName)!.IdentityData!.Address;
 
         ThrowIfNull(_responseContext.GetMessagesResponse);
 
         var sentMessage = _responseContext.GetMessagesResponse.Result!.First();
 
         var otherRecipients = sentMessage.Recipients.Select(r => r.Address).Where(a => a != addressOfIdentityThatShouldBeAnonymized);
-
         var recipientAddressesAfterGet = sentMessage.Recipients.Select(r => r.Address).ToList();
 
         recipientAddressesAfterGet.Should().Contain(otherRecipients);
-
         recipientAddressesAfterGet.Should().Contain(IdentityAddress.GetAnonymized("localhost").Value);
         recipientAddressesAfterGet.Should().NotContain(addressOfIdentityThatShouldBeAnonymized);
     }
@@ -94,14 +89,6 @@ internal class MessagesStepDefinitions
 public class MessagesContext
 {
     public readonly Dictionary<string, Message> Messages = new();
-}
-
-public static class DictionaryExtensions
-{
-    public static TValue[] GetMultiple<TKey, TValue>(this Dictionary<TKey, TValue> dictionary, List<TKey> keys) where TKey : notnull
-    {
-        return dictionary.Where(x => keys.Contains(x.Key)).Select(x => x.Value).ToArray();
-    }
 }
 
 public class PeersToBeDeletedErrorData

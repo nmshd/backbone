@@ -1,5 +1,4 @@
-﻿using Backbone.ConsumerApi.Sdk;
-using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
+﻿using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
 using static Backbone.ConsumerApi.Tests.Integration.Support.Constants;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -16,21 +15,21 @@ internal class FilesStepDefinitions
         _responseContext = responseContext;
     }
 
-    private Client Identity(string identityName) => _identitiesContext.Identities[identityName];
-
     [When("([a-zA-Z0-9]+) sends a POST request to the /Files endpoint")]
     public async Task WhenAPostRequestIsSentToTheFilesEndpoint(string identityName)
     {
+        var identity = _identitiesContext.ClientPool.FirstForIdentity(identityName)!;
+
         var createFileRequest = new CreateFileRequest
         {
             Content = new MemoryStream("content"u8.ToArray()),
-            Owner = Identity(identityName).IdentityData!.Address,
+            Owner = identity.IdentityData!.Address,
             OwnerSignature = SOME_BASE64_STRING,
             CipherHash = SOME_BASE64_STRING,
             ExpiresAt = DateTime.UtcNow.AddDays(1),
             EncryptedProperties = SOME_BASE64_STRING
         };
 
-        _responseContext.WhenResponse = _responseContext.FileUploadResponse = await Identity(identityName).Files.UploadFile(createFileRequest);
+        _responseContext.WhenResponse = _responseContext.FileUploadResponse = await identity.Files.UploadFile(createFileRequest);
     }
 }

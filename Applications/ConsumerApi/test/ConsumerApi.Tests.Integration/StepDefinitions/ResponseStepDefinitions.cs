@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Responses;
@@ -59,23 +58,28 @@ internal class ResponseStepDefinitions
     [Then(@"the response contains a (.*)")]
     public async Task ThenTheResponseContains(string responseType)
     {
-        var property = GetType().GetProperty(responseType + "Response", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        if (property != null)
-        {
-            var response = property.GetValue(this);
-            var method = GetType().GetMethod("CheckResponse", BindingFlags.NonPublic | BindingFlags.Static);
-            var genericMethod = method!.MakeGenericMethod(property.PropertyType.GenericTypeArguments[0]);
-            await (Task)genericMethod.Invoke(null, [response])!;
-        }
+        if (responseType == "Challenge")
+            await CheckResponse(ChallengeResponse);
+        else if (responseType == "Device")
+            await CheckResponse(RegisterDeviceResponse);
+        else if (responseType == "CreateIdentityResponse")
+            await CheckResponse(CreateIdentityResponse);
+        else if (responseType == "StartDeletionProcessResponse")
+            await CheckResponse(StartDeletionProcessResponse);
+        else if (responseType == "CancelDeletionProcessResponse")
+            await CheckResponse(CancelDeletionProcessResponse);
+        else if (responseType == "FileUploadResponse")
+            await CheckResponse(FileUploadResponse);
+        else if (responseType == "SendMessageResponse")
+            await CheckResponse(SendMessageResponse);
+        else if (responseType == "UpdateDeviceRegistrationResponse")
+            await CheckResponse(UpdateDeviceRegistrationResponse);
+        else if (responseType == "CreateRelationshipTemplateResponse")
+            await CheckResponse(_responseContext.CreateRelationshipTemplateResponse);
+        else if (responseType == "Relationship")
+            await CheckResponse(_responseContext.TerminateRelationshipResponse);
         else if (responseType == "RelationshipMetadata")
-        {
             await CheckRelationshipMetadata();
-        }
-        else
-        {
-            throw new ArgumentException($"Unknown response type: {responseType}");
-        }
     }
 
     private static async Task CheckResponse<T>(ApiResponse<T>? response) where T : class
@@ -109,7 +113,7 @@ internal class ResponseStepDefinitions
     {
         var errorData = _responseContext.SendMessageResponse!.Error!.Data?.As<PeersToBeDeletedErrorData>();
         errorData.Should().NotBeNull();
-        errorData!.PeersToBeDeleted.Contains(_identitiesContext.Identities[identityName].IdentityData!.Address).Should().BeTrue();
+        errorData!.PeersToBeDeleted.Contains(_identitiesContext.ClientPool.FirstForIdentity(identityName)!.IdentityData!.Address).Should().BeTrue();
     }
 
     [Then(@"the response contains the Messages ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]

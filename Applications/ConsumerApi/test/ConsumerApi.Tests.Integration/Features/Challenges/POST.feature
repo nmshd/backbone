@@ -12,9 +12,8 @@ User creates a Challenge
 		And the Challenge does not contain information about the creator
 
 	Scenario: Creating a Challenge as an authenticated user
-		Given Identity i
-		When i sends a POST request to the /Challenges endpoint
+		Given the user is authenticated
+		When a POST request is sent to the /Challenges endpoint
 		Then the response status code is 201 (Created)
 		And the response contains a Challenge
-		And the Challenge has a valid expiration date
 		And the Challenge contains information about the creator

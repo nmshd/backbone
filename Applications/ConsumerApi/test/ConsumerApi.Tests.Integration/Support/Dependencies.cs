@@ -24,7 +24,6 @@ public static class Dependencies
         services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory()));
 
         services.AddScoped<ChallengesContext>();
-        services.AddScoped<DevicesContext>();
         services.AddScoped<IdentitiesContext>();
         services.AddScoped<MessagesContext>();
         services.AddScoped<RelationshipsContext>();
