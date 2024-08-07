@@ -13,3 +13,5 @@ Scenario: Deleting an inexistent Tier Quota
 	When a DELETE request is sent to the /Tiers/{t.id}/Quotas/{quotaId} endpoint with an inexistent quota id
 	Then the response status code is 404 (Not Found)
 	And the response content contains an error with the error code "error.platform.recordNotFound"
+
+#Scenario: Deleting a Tier Quota for a non existent Tier
