@@ -10,5 +10,5 @@ public class CreateTokenCommand : IRequest<CreateTokenResponse>, IMapTo<Token>
 {
     public required byte[] Content { get; set; }
     public required DateTime ExpiresAt { get; set; }
-    public required string ForIdentity { get; set; }
+    public required string? ForIdentity { get; set; }
 }
