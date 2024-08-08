@@ -14,4 +14,8 @@ Scenario: Deleting an inexistent Tier Quota
 	Then the response status code is 404 (Not Found)
 	And the response content contains an error with the error code "error.platform.recordNotFound"
 
-#Scenario: Deleting a Tier Quota for a non existent Tier
+Scenario: Deleting a Tier Quota for a non existent Tier
+	Given a Tier t with a Quota q
+	When a DELETE request is sent to the /Tiers/{nonExistentTier}/Quotas/{q.id}
+	Then the response status code is 404 (Not Found)
+	And the response content contains an error with the error code "error.platform.recordNotFound"

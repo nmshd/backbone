@@ -124,7 +124,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     {
         if (_identityResponse != null)
         {
-            _identityResponse!.Result!.Should().NotBeNull();
+            _identityResponse!.Error!.Should().NotBeNull();
             _identityResponse.Error!.Code.Should().Be(errorCode);
         }
 
