@@ -50,7 +50,7 @@ public class Token : Entity
 
     public static Expression<Func<Token, bool>> IsNotExpired =>
         challenge => challenge.ExpiresAt > SystemTime.UtcNow;
-    
+
     public static Expression<Func<Token, bool>> CanBeCollectedBy(IdentityAddress? address)
     {
         return token => token.ForIdentity == null || address != null && (token.ForIdentity == address || token.CreatedBy == address);

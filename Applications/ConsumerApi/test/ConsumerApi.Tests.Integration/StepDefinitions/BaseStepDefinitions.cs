@@ -36,7 +36,7 @@ internal class BaseStepDefinitions
         Identities[identity2Name] = Client.CreateForNewIdentity(HttpClient, ClientCredentials, Constants.DEVICE_PASSWORD).Result;
         Identities[identity3Name] = Client.CreateForNewIdentity(HttpClient, ClientCredentials, Constants.DEVICE_PASSWORD).Result;
     }
-    
+
     #endregion
 
 }

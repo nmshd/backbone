@@ -61,7 +61,7 @@ public class TokensRepository : ITokensRepository
         if (owner != null)
             query = query.Where(t => t.CreatedBy == owner);
 
-        if(createdForOrBy != null)
+        if (createdForOrBy != null)
             query = query.Where(Token.CanBeCollectedBy(createdForOrBy));
 
         var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
