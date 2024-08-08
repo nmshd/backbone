@@ -70,23 +70,26 @@ It should be noted that arg1 takes precedence over arg0. Any keys existing in bo
 their values overridden by the key-value pairs from arg1. This allows resource-specific settings to override global 
 settings.
 */}}
-{{- define "mergeEnvValues" -}}
-{{- $arg := . }}
-{{- $arg0 := default (list) (index $arg 0) }}
-{{- $arg1 := default (list) (index $arg 1) }}
+{{- define "mergeAndRenderEnv2" -}}
+{{- $arg0 := index . 0 }}
+{{- $arg1 := index . 1 }}
+
 {{- $globalEnvMap := include "listToMap" $arg0 | fromYaml }}
 {{- $adminuiEnvMap := include "listToMap" $arg1 | fromYaml }}
-{{- $mergedEnvMap := merge $adminuiEnvMap $globalEnvMap }}
-{{- $mergedEnvList := include "mapToList" $mergedEnvMap }}
+{{- $mergedEnvMap := merge $adminuiEnvMap $globalEnvMap}}
+
 {{- range $item := $mergedEnvMap }}
-- name: {{ $item.name }}
-{{- if $item.value }}
-  value: {{ $item.value }}
-{{- else if $item.valueFrom }}
-  valueFrom:
-    secretKeyRef:
-      name: {{ $item.valueFrom.secretKeyRef.name }}
-      key: {{ $item.valueFrom.secretKeyRef.key }}
+            - name: {{ $item.name }}
+                {{- if $item.value }}
+              value: {{ $item.value }}
+                {{- else if $item.valueFrom }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $item.valueFrom.secretKeyRef.name }}
+                  key: {{ $item.valueFrom.secretKeyRef.key }}
+            {{- end }}
+            {{- end }}
+
 {{- end }}
-{{- end }}
-{{- end -}}
+
+
