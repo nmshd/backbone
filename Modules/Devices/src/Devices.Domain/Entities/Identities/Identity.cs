@@ -81,6 +81,19 @@ public class Identity : Entity
         return Devices.Count < 1;
     }
 
+    public static ApplicationUser CreateIdentity(string clientId, IdentityAddress address, byte[] publicKey, TierId defaultTier, byte identityVersion, string communicationLanguage)
+    {
+        var newIdentity = new Identity(clientId, address, publicKey, defaultTier, identityVersion);
+
+        var communicationLanguageResult = CommunicationLanguage.Create(communicationLanguage);
+        if (communicationLanguageResult.IsFailure)
+            throw new DomainException(communicationLanguageResult.Error);
+
+        var user = new ApplicationUser(newIdentity, communicationLanguageResult.Value);
+
+        return user;
+    }
+
     public void ChangeTier(TierId id)
     {
         if (id == Tier.QUEUED_FOR_DELETION.Id || TierId == Tier.QUEUED_FOR_DELETION.Id)
