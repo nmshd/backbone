@@ -1,6 +1,5 @@
 using Backbone.AdminApi.Infrastructure.DTOs;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
-using Backbone.AdminApi.Sdk;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
@@ -42,7 +41,7 @@ public class ClientsController : ApiControllerBase
     [ProducesError(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetClient([FromRoute] string id, CancellationToken cancellationToken)
     {
-        var client = await _adminApiDbContext.ClientOverviews.FirstOrDefaultAsync(c => c.ClientId == id, cancellationToken: cancellationToken) ?? throw new NotFoundException(nameof(Client));
+        var client = await _adminApiDbContext.ClientOverviews.FirstOrDefaultAsync(c => c.ClientId == id, cancellationToken: cancellationToken) ?? throw new NotFoundException(nameof(ClientOverview));
         return Ok(new ClientDTO(client.ClientId, client.DisplayName, client.DefaultTier.Id, client.CreatedAt, client.NumberOfIdentities, client.MaxIdentities));
     }
 
