@@ -28,3 +28,28 @@ Selector labels
 app.kubernetes.io/name: {{ include "global.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
+
+
+{{/*
+Converts a list of environment variables to a map
+*/}}
+{{- define "listToMap" -}}
+  {{- $list := . -}}
+  {{- $map := dict -}}
+  {{- range $item := $list -}}
+    {{- $map = set $map $item.name $item -}}
+  {{- end -}}
+  {{- toYaml $map -}}
+{{- end -}}
+
+{{/*
+Converts a map of environment variables back to a list
+*/}}
+{{- define "mapToList" -}}
+  {{- $map := . -}}
+  {{- $list := list -}}
+  {{- range $key, $value := $map -}}
+    {{- $list = append $list $value -}}
+  {{- end -}}
+  {{- toYaml $list -}}
+{{- end -}}

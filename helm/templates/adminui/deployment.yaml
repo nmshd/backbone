@@ -94,10 +94,20 @@ spec:
                   name: rabbitmq-password
                   key: "VALUE" 
             {{- end }}
-            {{- $globalEnv := .Values.global.env | default (dict) }} 
-            {{- $adminuiEnv := .Values.adminui.env | default (dict) }}
-            {{- with merge $globalEnv $adminuiEnv }}
-            {{- toYaml . | nindent 12 }}
+            {{- $globalEnvMap := include "listToMap" .Values.global.env | fromYaml }}
+            {{- $adminuiEnvMap := include "listToMap" .Values.adminui.env | fromYaml }}
+            {{- $mergedEnvMap := merge $adminuiEnvMap $globalEnvMap }}
+            {{- $mergedEnvList := include "mapToList" $mergedEnvMap }}
+            {{- range $item := $mergedEnvMap }}
+            - name: {{ $item.name }}
+            {{- if $item.value }}
+              value: {{ $item.value }}
+            {{- else if $item.valueFrom }}
+              valueFrom:
+                secretKeyRef:
+                  name: {{ $item.valueFrom.secretKeyRef.name }}
+                  key: {{ $item.valueFrom.secretKeyRef.key }}
+            {{- end }}
             {{- end }}
       {{- with .Values.adminui.nodeSelector }}
       nodeSelector:
