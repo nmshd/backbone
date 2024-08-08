@@ -94,8 +94,11 @@ spec:
                   name: rabbitmq-password
                   key: "VALUE" 
             {{- end }}
-            {{- $globalEnvMap := include "listToMap" .Values.global.env | fromYaml }}
-            {{- $adminuiEnvMap := include "listToMap" .Values.adminui.env | fromYaml }}
+
+            {{- $arg0 := default (list) (.Values.global.env) }}
+            {{- $arg1 := default (list) (.Values.adminui.env) }}
+            {{- $globalEnvMap := include "listToMap" $arg0 | fromYaml }}
+            {{- $adminuiEnvMap := include "listToMap" $arg1 | fromYaml }}
             {{- $mergedEnvMap := merge $adminuiEnvMap $globalEnvMap }}
             {{- $mergedEnvList := include "mapToList" $mergedEnvMap }}
             {{- range $item := $mergedEnvMap }}

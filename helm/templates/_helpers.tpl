@@ -53,3 +53,40 @@ Converts a map of environment variables back to a list
   {{- end -}}
   {{- toYaml $list -}}
 {{- end -}}
+
+{{/*
+This function merges global and resource-specific environment variables for your Helm chart.
+
+The function takes two arguments:
+    - arg0: a list of the global environment variables defined in the chart's values file (.Values.global.env)
+    - arg1: a list of the resource-specific environment variables (.Values.{resource}.env)
+
+Usage:  {{ include "mergeEnvValues" (list .Values.global.env .Values.{resource}.env) }}
+
+In the example above, replace "{resource}" with the name of the specific resource where you want to apply the merged 
+environment variables.
+
+It should be noted that arg1 takes precedence over arg0. Any keys existing in both lists (arg0 and arg1) will have 
+their values overridden by the key-value pairs from arg1. This allows resource-specific settings to override global 
+settings.
+*/}}
+{{- define "mergeEnvValues" -}}
+{{- $arg := . }}
+{{- $arg0 := default (list) (index $arg 0) }}
+{{- $arg1 := default (list) (index $arg 1) }}
+{{- $globalEnvMap := include "listToMap" $arg0 | fromYaml }}
+{{- $adminuiEnvMap := include "listToMap" $arg1 | fromYaml }}
+{{- $mergedEnvMap := merge $adminuiEnvMap $globalEnvMap }}
+{{- $mergedEnvList := include "mapToList" $mergedEnvMap }}
+{{- range $item := $mergedEnvMap }}
+- name: {{ $item.name }}
+{{- if $item.value }}
+  value: {{ $item.value }}
+{{- else if $item.valueFrom }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ $item.valueFrom.secretKeyRef.name }}
+      key: {{ $item.valueFrom.secretKeyRef.key }}
+{{- end }}
+{{- end }}
+{{- end -}}
