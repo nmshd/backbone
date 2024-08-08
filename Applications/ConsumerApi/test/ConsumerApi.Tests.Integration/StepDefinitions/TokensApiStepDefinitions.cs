@@ -206,6 +206,16 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         _responseTokens.AddRange(_tokensResponse.Result!);
     }
 
+    [When("(i[a-zA-Z0-9]*) sends a GET request to the /Tokens endpoint and passes t.id")]
+    public async Task WhenISendsAGETRequestToTheTokensEndpointAndPassesT_IdAsync(string identity)
+    {
+        var tokenIds = new List<string> { _tokenId };
+        _tokensResponse = await Identities[identity].Tokens.ListTokens(tokenIds);
+
+        _responseTokens.AddRange(_tokensResponse.Result!);
+    }
+
+
     [Then("the response contains both Tokens")]
     public void ThenTheResponseOnlyContainsTheOwnToken()
     {
@@ -267,8 +277,27 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
     [Then("the response contains t")]
     public void ThenTheResponseContainsT()
     {
-        _tokenResponse!.Should().BeASuccess();
-        _tokenResponse!.Result!.Id.Should().Be(_tokenId);
+        if (_tokenResponse is not null)
+        {
+            _tokenResponse.Should().BeASuccess();
+            _tokenResponse.Result!.Id.Should().Be(_tokenId);
+        }
+        if (_tokensResponse is not null)
+        {
+            _tokensResponse.Should().BeASuccess();
+            _tokensResponse.Result!.Select(x => x.Id).Should().Contain(_tokenId);
+        }
     }
+
+    [Then("the response does not contain t")]
+    public void ThenTheResponseDoesNotContainT()
+    {
+        if (_tokensResponse is not null)
+        {
+            _tokensResponse.Should().BeASuccess();
+            _tokensResponse.Result!.Select(x => x.Id).Should().NotContain(_tokenId);
+        }
+    }
+
 
 }
