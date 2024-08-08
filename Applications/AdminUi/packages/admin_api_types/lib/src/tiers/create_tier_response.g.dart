@@ -1,17 +1,17 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'tier.dart';
+part of 'create_tier_response.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Tier _$TierFromJson(Map<String, dynamic> json) => Tier(
+CreateTierResponse _$CreateTierResponseFromJson(Map<String, dynamic> json) => CreateTierResponse(
       id: json['id'] as String,
       name: json['name'] as String,
     );
 
-Map<String, dynamic> _$TierToJson(Tier instance) => <String, dynamic>{
+Map<String, dynamic> _$CreateTierResponseToJson(CreateTierResponse instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
     };
