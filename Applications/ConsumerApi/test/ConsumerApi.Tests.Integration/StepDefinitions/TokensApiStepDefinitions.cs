@@ -111,7 +111,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         }
     }
 
-    [Given("a Token t created by (i[a-zA-Z0-9]*) where `forIdentity` is the address of (i[a-zA-Z0-9]*)")]
+    [Given("a Token t created by (i[a-zA-Z0-9]*) where forIdentity is the address of (i[a-zA-Z0-9]*)")]
     public async Task GivenATokenTCreatedByIWhereForIdentityIsTheAddressOfI(string createdByIdentity, string createdForIdentity)
     {
         var response = await Identities[createdByIdentity].Tokens.CreateToken(new CreateTokenRequest()
