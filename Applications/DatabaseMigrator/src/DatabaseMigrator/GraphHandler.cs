@@ -48,7 +48,7 @@ public class GraphHandler
                 tree[info.Id] = 0;
                 migrations.RemoveAt(i);
             }
-            else if (info.Dependencies.All(id => tree.ContainsKey(id))) // All dependencies are already in the graph
+            else if (info.Dependencies.All(tree.ContainsKey)) // All dependencies are already in the graph
             {
                 var targetLayer = info.Dependencies
                     .Select(id => tree[id])
