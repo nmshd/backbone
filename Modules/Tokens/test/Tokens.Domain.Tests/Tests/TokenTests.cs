@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Tokens.Domain.DomainEvents;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Tokens.Domain.DomainEvents;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
@@ -26,5 +27,65 @@ public class TokenTests : AbstractTestsBase
         var domainEvent = token.Should().HaveASingleDomainEvent<TokenCreatedDomainEvent>();
         domainEvent.TokenId.Should().Be(token.Id);
         domainEvent.CreatedBy.Should().Be(address);
+    }
+
+    [Fact]
+    public void Expression_CanBeCollectedBy_null_forIdentity()
+    {
+        // Arrange
+        var token = new Token("createdByIdentityAddress", DeviceId.Parse("DVC1"), [], DateTime.Now.AddDays(1), null);
+
+        // Act
+        var result = EvaluateCanBeCollectedByExpression(token, "anyIdentityAddress");
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Expression_CanBeCollectedBy_collector_matching_creator()
+    {
+        // Arrange
+        var token = new Token("createdByIdentityAddress", DeviceId.Parse("DVC1"), [], DateTime.Now.AddDays(1), "createdForIdentityAddress");
+
+        // Act
+        var result = EvaluateCanBeCollectedByExpression(token, "createdByIdentityAddress");
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Expression_CanBeCollectedBy_collector_matching_forIdentity()
+    {
+        // Arrange
+        var token = new Token("createdByIdentityAddress", DeviceId.Parse("DVC1"), [], DateTime.Now.AddDays(1), "createdForIdentityAddress");
+
+        // Act
+        var result = EvaluateCanBeCollectedByExpression(token, "createdForIdentityAddress");
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+
+    [Fact]
+    public void Expression_CanBeCollectedBy_collector_is_third_identity()
+    {
+        // Arrange
+        var token = new Token("createdByIdentityAddress", DeviceId.Parse("DVC1"), [], DateTime.Now.AddDays(1), "createdForIdentityAddress");
+
+        // Act
+        var result = EvaluateCanBeCollectedByExpression(token, "anotherIdentityAddress");
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    private static bool EvaluateCanBeCollectedByExpression(Token token, string identityAddress)
+    {
+        var expression = Token.CanBeCollectedBy(identityAddress);
+        var result = expression.Compile()(token);
+        return result;
     }
 }
