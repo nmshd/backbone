@@ -32,7 +32,7 @@ Scenario: Requesting a list of Tokens contains tokens with `forIdentity` which w
 	Then the response status code is 200 (Ok) 
 	And the response contains t
 
-Scenario: Requesting a list of Tokens contains tokens with `forIdentity` which were created for someone else
+Scenario: Requesting a list of Tokens does not contain tokens with `forIdentity` which were created for someone else
 	Given Identities i1, i2 and i3
 	And a Token t created by i1 where `forIdentity` is the address of i2
 	When i3 sends a GET request to the /Tokens endpoint and passes t.id
