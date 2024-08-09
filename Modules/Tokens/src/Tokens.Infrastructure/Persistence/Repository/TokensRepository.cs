@@ -36,7 +36,7 @@ public class TokensRepository : ITokensRepository
         return token;
     }
 
-    public async Task<DbPaginationResult<Token>> FindAllWithIds(IdentityAddress? createdForOrBy, IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    public async Task<DbPaginationResult<Token>> FindAllWithIds(IdentityAddress createdForOrBy, IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         return await Find(null, createdForOrBy, ids, paginationFilter, cancellationToken);
     }

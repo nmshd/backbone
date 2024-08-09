@@ -7,6 +7,7 @@ using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Support;
 using Backbone.Crypto;
+using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 
@@ -31,10 +32,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
 
     private static readonly DateTime TOMORROW = DateTime.Now.AddDays(1);
 
-    private static readonly byte[] CONTENT = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new
-    {
-        key = "some-value"
-    })).BytesRepresentation;
+    private static readonly byte[] CONTENT = JsonConvert.SerializeObject(new { key = "some-value" }).GetBytes();
 
     public TokensApiStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration) : base(factory, httpConfiguration)
     {
@@ -298,6 +296,4 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
             _tokensResponse.Result!.Select(x => x.Id).Should().NotContain(_tokenId);
         }
     }
-
-
 }

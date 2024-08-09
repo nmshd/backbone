@@ -12,7 +12,6 @@ internal class BaseStepDefinitions
     internal readonly HttpClient HttpClient;
     internal readonly ClientCredentials ClientCredentials;
 
-
     public BaseStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
     {
         HttpClient = factory.CreateClient();
@@ -20,7 +19,6 @@ internal class BaseStepDefinitions
     }
 
     #region Given
-
 
     [Given(@"Identities (i[a-zA-Z0-9]*) and (i[a-zA-Z0-9]*)")]
     public void Given2Identities(string identity1Name, string identity2Name)
@@ -38,5 +36,4 @@ internal class BaseStepDefinitions
     }
 
     #endregion
-
 }
