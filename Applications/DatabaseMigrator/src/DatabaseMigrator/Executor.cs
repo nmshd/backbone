@@ -27,6 +27,22 @@ public class Executor
     private readonly Stack<(Type dbContextType, string? migrationBeforeChanges)> _migratedDbContexts = new();
     private readonly RetryPolicy _retryPolicy;
 
+    private readonly Dictionary<Type, ModuleType> _modules = new()
+    {
+        { typeof(ChallengesDbContext), ModuleType.Challenges }, { typeof(DevicesDbContext), ModuleType.Devices },
+        { typeof(FilesDbContext), ModuleType.Files }, { typeof(RelationshipsDbContext), ModuleType.Relationships },
+        { typeof(QuotasDbContext), ModuleType.Quotas }, { typeof(MessagesDbContext), ModuleType.Messages },
+        { typeof(SynchronizationDbContext), ModuleType.Synchronization }, { typeof(TokensDbContext), ModuleType.Tokens },
+        { typeof(AdminApiDbContext), ModuleType.AdminApi }
+    };
+
+    private readonly List<Type> _moduleContextTypes =
+    [
+        typeof(AdminApiDbContext), typeof(ChallengesDbContext), typeof(DevicesDbContext), typeof(FilesDbContext),
+        typeof(MessagesDbContext), typeof(QuotasDbContext), typeof(RelationshipsDbContext), typeof(SynchronizationDbContext),
+        typeof(TokensDbContext)
+    ];
+
     public Executor(IServiceProvider serviceProvider, ILogger<Executor> logger)
     {
         _serviceProvider = serviceProvider;
@@ -42,20 +58,28 @@ public class Executor
 
     public async Task Execute()
     {
-        _logger.StartApplyingMigrations();
+        _logger.StartReadingMigrations();
+
+        IReadOnlyList<MigrationId> migrationList = [];
 
         try
         {
             var tree = await ReadMigrations();
-            /*await MigrateDbContext<ChallengesDbContext>();
-            await MigrateDbContext<DevicesDbContext>();
-            await MigrateDbContext<FilesDbContext>();
-            await MigrateDbContext<RelationshipsDbContext>();
-            await MigrateDbContext<QuotasDbContext>();
-            await MigrateDbContext<MessagesDbContext>();
-            await MigrateDbContext<SynchronizationDbContext>();
-            await MigrateDbContext<TokensDbContext>();
-            await MigrateDbContext<AdminApiDbContext>();*/
+            migrationList = tree.MigrationSequence;
+        }
+        catch (Exception ex)
+        {
+            _logger.ErrorWhileReadingMigrations(ex);
+            Environment.Exit(1);
+        }
+
+        _logger.SuccessfullyReadMigrations();
+
+        _logger.StartApplyingMigrations();
+
+        try
+        {
+            foreach (var info in migrationList) await MigrateDbContext(_moduleContextTypes[(int)info.Type], info.Id);
         }
         catch (Exception ex)
         {
@@ -67,41 +91,31 @@ public class Executor
         _logger.SuccessfullyAppliedMigrations();
     }
 
-    private async Task<TreeHandler> ReadMigrations()
+    private async Task<GraphHandler> ReadMigrations()
     {
-        Dictionary<Type, ModuleType> modules = new()
-        {
-            { typeof(ChallengesDbContext), ModuleType.Challenges }, { typeof(DevicesDbContext), ModuleType.Devices },
-            { typeof(FilesDbContext), ModuleType.Files }, { typeof(RelationshipsDbContext), ModuleType.Relationships },
-            { typeof(QuotasDbContext), ModuleType.Quotas }, { typeof(MessagesDbContext), ModuleType.Messages },
-            { typeof(SynchronizationDbContext), ModuleType.Synchronization }, { typeof(TokensDbContext), ModuleType.Tokens },
-            { typeof(AdminApiDbContext), ModuleType.AdminApi }
-        };
         List<MigrationInfo> migrations = [];
 
-        foreach (var (type, moduleType) in modules)
+        foreach (var (type, moduleType) in _modules)
         {
             var context = _serviceProvider.GetDbContext(type);
             var appliedMigrations = await context.Database.GetAppliedMigrationsAsync();
             var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
-            var currentMigration = await context.GetLastAppliedMigration();
             var dependencies = LoadMigrationDependencies(type, context.Database.IsSqlServer());
 
-            migrations.AddRange(appliedMigrations.Select(id => new MigrationInfo(moduleType, id, true, dependencies[id])));
-            migrations.AddRange(pendingMigrations.Select(id => new MigrationInfo(moduleType, id, false, dependencies[id])));
-            _migratedDbContexts.Push((type, currentMigration));
+            migrations.AddRange(appliedMigrations.Select(id => new MigrationInfo(new MigrationId(moduleType, id), true, dependencies[id])));
+            migrations.AddRange(pendingMigrations.Select(id => new MigrationInfo(new MigrationId(moduleType, id), false, dependencies[id])));
         }
 
-        return new TreeHandler(migrations);
+        return new GraphHandler(migrations);
     }
 
-    private Dictionary<string, IList<MigrationDependency>> LoadMigrationDependencies(Type dbContextType, bool useSqlServer)
+    private Dictionary<string, IList<MigrationId>> LoadMigrationDependencies(Type dbContextType, bool useSqlServer)
     {
         var assemblyNameSuffix = useSqlServer ? "SqlServer" : "Postgres";
         var assembly = Assembly.Load(new AssemblyName($"{dbContextType.Assembly.GetName().Name}.Database.{assemblyNameSuffix}"));
         var definedTypes = assembly.DefinedTypes
             .Where(t => t.BaseType == typeof(Migration));
-        Dictionary<string, IList<MigrationDependency>> ret = [];
+        Dictionary<string, IList<MigrationId>> ret = [];
 
         foreach (var type in definedTypes)
         {
@@ -109,7 +123,7 @@ public class Executor
             if (idAttr == null) continue;
 
             var dependencies = type.GetCustomAttributes<DependsOnAttribute>()
-                .Select(attr => new MigrationDependency(attr.Module, attr.MigrationId))
+                .Select(attr => new MigrationId(attr.Module, attr.MigrationId))
                 .ToList();
 
             ret[idAttr.Id] = dependencies;
@@ -118,18 +132,14 @@ public class Executor
         return ret;
     }
 
-    private async Task MigrateDbContext<TContext>(string? targetMigration = null) where TContext : DbContext
+    private async Task MigrateDbContext(Type contextType, string? targetMigration = null)
     {
-        await using var context = _serviceProvider.GetDbContext<TContext>();
+        await using var context = _serviceProvider.GetDbContext(contextType);
 
         if (targetMigration == null)
-            _logger.MigratingDbContextToLatestMigration(typeof(TContext).Name);
+            _logger.MigratingDbContextToLatestMigration(contextType.Name);
         else
-            _logger.MigratingDbContextToTargetMigration(typeof(TContext).Name, targetMigration);
-
-        var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
-        if (!pendingMigrations.Any())
-            return;
+            _logger.MigratingDbContextToTargetMigration(contextType.Name, targetMigration);
 
         var migrationBeforeChanges = await context.GetLastAppliedMigration();
 
@@ -140,9 +150,9 @@ public class Executor
         catch (Exception ex)
         {
             if (targetMigration == null)
-                _logger.ErrorWhileApplyingMigrationToLatestMigration(ex, typeof(TContext).Name);
+                _logger.ErrorWhileApplyingMigrationToLatestMigration(ex, contextType.Name);
             else
-                _logger.ErrorWhileApplyingMigrationToTargetMigration(ex, typeof(TContext).Name, targetMigration);
+                _logger.ErrorWhileApplyingMigrationToTargetMigration(ex, contextType.Name, targetMigration);
             throw;
         }
         finally
@@ -151,16 +161,16 @@ public class Executor
         }
 
         if (targetMigration == null)
-            _logger.SuccessfullyMigratedDbContextToLatestMigration(typeof(TContext).Name);
+            _logger.SuccessfullyMigratedDbContextToLatestMigration(contextType.Name);
         else
-            _logger.SuccessfullyMigratedDbContextToTargetMigration(typeof(TContext).Name, targetMigration);
+            _logger.SuccessfullyMigratedDbContextToTargetMigration(contextType.Name, targetMigration);
     }
 
     private async Task RollbackAlreadyMigratedDbContexts()
     {
         while (_migratedDbContexts.Count != 0)
         {
-            var (contextType, migrationBeforeChanges) = _migratedDbContexts.Peek();
+            var (contextType, migrationBeforeChanges) = _migratedDbContexts.Pop();
 
             await using var context = _serviceProvider.GetDbContext(contextType);
 
@@ -181,8 +191,6 @@ public class Executor
 
                 _logger.ErrorOnRollback(ex, context.GetType().Name, migrationBeforeChanges, remainingDbContexts);
             }
-
-            _migratedDbContexts.Pop();
         }
     }
 }
@@ -200,11 +208,6 @@ file static class Extensions
         var stateBeforeMigration = await dbContext.Database.GetAppliedMigrationsAsync();
         var migrationBeforeChanges = stateBeforeMigration.LastOrDefault();
         return migrationBeforeChanges;
-    }
-
-    public static DbContext GetDbContext<T>(this IServiceProvider serviceProvider) where T : DbContext
-    {
-        return serviceProvider.GetDbContext(typeof(T));
     }
 
     public static DbContext GetDbContext(this IServiceProvider serviceProvider, Type type)
@@ -297,4 +300,25 @@ internal static partial class ExecutorLogs
         Message =
             "There was an error while rolling back the migration of context '{context}' to migration '{migrationBeforeChanges}'. The following DbContexts couldn't be rolled back: {remainingDbContexts}")]
     public static partial void ErrorOnRollback(this ILogger logger, Exception ex, string context, string migrationBeforeChanges, string remainingDbContexts);
+
+    [LoggerMessage(
+        EventId = 561111,
+        EventName = "DatabaseMigrator.Executor.StartReadingMigrations",
+        Level = LogLevel.Information,
+        Message = "Start reading migrations...")]
+    public static partial void StartReadingMigrations(this ILogger logger);
+
+    [LoggerMessage(
+        EventId = 561112,
+        EventName = "DatabaseMigrator.Executor.SuccessfullyReadMigrations",
+        Level = LogLevel.Information,
+        Message = "All migrations were successfully read")]
+    public static partial void SuccessfullyReadMigrations(this ILogger logger);
+
+    [LoggerMessage(
+        EventId = 561113,
+        EventName = "DatabaseMigrator.Executor.ErrorWhileReadingMigrations",
+        Level = LogLevel.Critical,
+        Message = "An error occurred while reading the migrations. No changes will be made")]
+    public static partial void ErrorWhileReadingMigrations(this ILogger logger, Exception ex);
 }
