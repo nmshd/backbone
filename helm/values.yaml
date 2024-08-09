@@ -561,6 +561,9 @@ global:
   # environment - possible values: "Development"/"Production"
   environment: ""
 
+  # env - global environment variables  (see https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/)
+  env: []
+        
   # provider - possible values: "Azure"/"GoogleCloud"
   provider: ""
 
