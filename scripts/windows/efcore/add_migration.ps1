@@ -11,7 +11,7 @@ $provider = switch ($provider) {
 }
 $repoRoot = git rev-parse --show-toplevel
 $dbContextName = "${moduleName}DbContext"
-$adminApiProject = "$repoRoot\AdminApi\src\AdminApi"
+$adminApiProject = "$repoRoot\Applications\AdminApi\src\AdminApi"
 $consumerApiProject = "$repoRoot\Applications\ConsumerApi\src"
 $startupProject = If ($moduleName -eq "AdminApi") { $adminApiProject } Else { $consumerApiProject }
 
