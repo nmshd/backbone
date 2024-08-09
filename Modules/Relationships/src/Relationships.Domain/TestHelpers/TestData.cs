@@ -71,14 +71,6 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateRelationshipWithProposedDeletion(IdentityAddress? from = null, IdentityAddress? to = null)
-    {
-        var relationship = CreateTerminatedRelationship(from, to);
-        relationship.Decompose(relationship.From, DEVICE_1);
-        relationship.ClearDomainEvents();
-        return relationship;
-    }
-
     public static Relationship CreateRelationshipWithRequestedReactivation(IdentityAddress from, IdentityAddress to, IdentityAddress reactivationRequestedBy)
     {
         var relationship = CreateTerminatedRelationship(from, to);
@@ -87,14 +79,18 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateDecomposedRelationship(IdentityAddress? from = null, IdentityAddress? to = null, IdentityAddress? decomposedBy = null)
+    public static Relationship CreateRelationshipWithProposedDeletion(IdentityAddress? from = null, IdentityAddress? to = null)
     {
-        from ??= IDENTITY_1;
-        to ??= IDENTITY_2;
-        decomposedBy ??= from;
-
         var relationship = CreateTerminatedRelationship(from, to);
-        relationship.Decompose(decomposedBy, DEVICE_1);
+        relationship.Decompose(relationship.From, DEVICE_1);
+        relationship.ClearDomainEvents();
+        return relationship;
+    }
+
+    public static Relationship CreateRelationshipReadyForDeletion(IdentityAddress? from = null, IdentityAddress? to = null)
+    {
+        var relationship = CreateRelationshipWithProposedDeletion(from, to);
+        relationship.Decompose(relationship.To, DEVICE_1);
         relationship.ClearDomainEvents();
         return relationship;
     }
