@@ -69,9 +69,8 @@ spec:
                 {{- $arg0 := default (list) (.Values.global.env) }}
                 {{- $arg1 := default (list) (.Values.cancelstaledeletionprocesses.env) }}
                 {{- $globalEnvMap := include "listToMap" $arg0 | fromYaml }}
-                {{- $adminuiEnvMap := include "listToMap" $arg1 | fromYaml }}
-                {{- $mergedEnvMap := merge $adminuiEnvMap $globalEnvMap }}
-                {{- $mergedEnvList := include "mapToList" $mergedEnvMap }}
+                {{- $resourceEnvMap := include "listToMap" $arg1 | fromYaml }}
+                {{- $mergedEnvMap := merge $resourceEnvMap $globalEnvMap }}
                 {{- range $item := $mergedEnvMap }}
                 - name: {{ $item.name }}
                 {{- if $item.value }}

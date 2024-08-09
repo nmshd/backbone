@@ -43,13 +43,11 @@ spec:
           env:
             - name: Database__Provider
               value: {{ .Values.global.configuration.modules.devices.infrastructure.sqlDatabase.provider }}
-            
             {{- $arg0 := default (list) (.Values.global.env) }}
             {{- $arg1 := default (list) (.Values.admincli.env) }}
             {{- $globalEnvMap := include "listToMap" $arg0 | fromYaml }}
-            {{- $adminuiEnvMap := include "listToMap" $arg1 | fromYaml }}
-            {{- $mergedEnvMap := merge $adminuiEnvMap $globalEnvMap }}
-            {{- $mergedEnvList := include "mapToList" $mergedEnvMap }}
+            {{- $resourceEnvMap := include "listToMap" $arg1 | fromYaml }}
+            {{- $mergedEnvMap := merge $resourceEnvMap $globalEnvMap }}
             {{- range $item := $mergedEnvMap }}
             - name: {{ $item.name }}
             {{- if $item.value }}
@@ -60,7 +58,7 @@ spec:
                   name: {{ $item.valueFrom.secretKeyRef.name }}
                   key: {{ $item.valueFrom.secretKeyRef.key }}
             {{- end }}
-            {{- end }}            
+            {{- end }}          
           tty: true
           command:
             - /bin/bash
