@@ -1,10 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Backbone.AdminApi.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
+    [DependsOn(ModuleType.Devices, "20240701074627_Init")]
+    [DependsOn(ModuleType.Synchronization, "20240701081741_Init")]
+    [DependsOn(ModuleType.Relationships, "20240701075857_Init")]
+    [DependsOn(ModuleType.Messages, "20240701075023_Init")]
     public partial class Init : Migration
     {
         /// <inheritdoc />

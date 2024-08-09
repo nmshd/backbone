@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
+    [DependsOn(ModuleType.Devices, "20240701074627_Init")]
     public partial class AddAdditionalDataToIdentityDeletionProcessAuditLogEntry : Migration
     {
         /// <inheritdoc />
