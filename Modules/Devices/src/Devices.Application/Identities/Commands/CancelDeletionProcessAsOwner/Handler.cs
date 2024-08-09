@@ -1,11 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
@@ -27,7 +25,6 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
     public async Task<CancelDeletionProcessAsOwnerResponse> Handle(CancelDeletionProcessAsOwnerCommand request, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
-        var oldTierId = identity.TierId;
 
         var deviceId = _userContext.GetDeviceId();
         var deletionProcessIdResult = IdentityDeletionProcessId.Create(request.DeletionProcessId);
@@ -40,7 +37,6 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
         var deletionProcess = identity.CancelDeletionProcessAsOwner(deletionProcessId, deviceId);
 
         await _identitiesRepository.Update(identity, cancellationToken);
-        var newTierId = identity.TierId;
 
         await _notificationSender.SendNotification(identity.Address, new DeletionProcessCancelledByOwnerNotification(), cancellationToken);
 

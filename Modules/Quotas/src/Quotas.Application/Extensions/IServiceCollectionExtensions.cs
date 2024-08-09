@@ -1,7 +1,6 @@
 using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
-using Backbone.Modules.Quotas.Application.AutoMapper;
 using Backbone.Modules.Quotas.Application.Metrics;
 using Backbone.Modules.Quotas.Application.Tiers.Commands.CreateQuotaForTier;
 using Backbone.Modules.Quotas.Domain;
@@ -21,7 +20,6 @@ public static class IServiceCollectionExtensions
         );
 
         services.AddScoped<IMetricStatusesService, MetricStatusesService>();
-        services.AddAutoMapper(typeof(AutoMapperProfile));
         services.AddEventHandlers();
         services.AddMetricCalculators();
     }

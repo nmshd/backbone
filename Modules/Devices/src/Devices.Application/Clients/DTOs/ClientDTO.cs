@@ -1,9 +1,10 @@
 using Backbone.Modules.Devices.Domain.Entities;
 
 namespace Backbone.Modules.Devices.Application.Clients.DTOs;
+
 public class ClientDTO
 {
-    public ClientDTO(OAuthClient client, int numberOfIdentities)
+    public ClientDTO(OAuthClient client, int? numberOfIdentities = null)
     {
         ClientId = client.ClientId;
         DisplayName = client.DisplayName;
@@ -17,6 +18,6 @@ public class ClientDTO
     public string DisplayName { get; set; }
     public string DefaultTier { get; set; }
     public DateTime CreatedAt { get; set; }
-    public int NumberOfIdentities { get; set; }
+    public int? NumberOfIdentities { get; set; }
     public int? MaxIdentities { get; set; }
 }

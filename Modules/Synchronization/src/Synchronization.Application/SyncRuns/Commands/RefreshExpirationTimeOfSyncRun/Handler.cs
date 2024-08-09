@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<RefreshExpirationTimeOfSyncRunCommand, Re
 
     public async Task<RefreshExpirationTimeOfSyncRunResponse> Handle(RefreshExpirationTimeOfSyncRunCommand request, CancellationToken cancellationToken)
     {
-        var syncRun = await _dbContext.GetSyncRun(request.SyncRunId, _activeIdentity, cancellationToken);
+        var syncRun = await _dbContext.GetSyncRun(SyncRunId.Parse(request.SyncRunId), _activeIdentity, cancellationToken);
 
         CheckPrerequisites(syncRun);
 

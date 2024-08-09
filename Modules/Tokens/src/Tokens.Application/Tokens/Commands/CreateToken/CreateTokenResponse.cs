@@ -1,10 +1,15 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.Modules.Tokens.Domain.Entities;
 
 namespace Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 
-public class CreateTokenResponse : IMapTo<Token>
+public class CreateTokenResponse
 {
-    public required TokenId Id { get; set; }
-    public required DateTime CreatedAt { get; set; }
+    public CreateTokenResponse(Token token)
+    {
+        Id = token.Id;
+        CreatedAt = token.CreatedAt;
+    }
+
+    public string Id { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

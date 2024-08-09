@@ -1,36 +1,42 @@
-using AutoMapper;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Files.Domain.Entities;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
 
-public class CreateFileResponse : IHaveCustomMapping
+public class CreateFileResponse
 {
-    public required FileId Id { get; set; }
-
-    public required DateTime CreatedAt { get; set; }
-    public required IdentityAddress CreatedBy { get; set; }
-    public required DeviceId CreatedByDevice { get; set; }
-
-    public required DateTime ModifiedAt { get; set; }
-    public required IdentityAddress ModifiedBy { get; set; }
-    public DateTime? DeletedAt { get; set; }
-    public IdentityAddress? DeletedBy { get; set; }
-
-    public required IdentityAddress Owner { get; set; }
-    public required byte[] OwnerSignature { get; set; }
-
-    public required long CipherSize { get; set; }
-    public required byte[] CipherHash { get; set; }
-
-    public required DateTime ExpiresAt { get; set; }
-
-    public void CreateMappings(Profile configuration)
+    public CreateFileResponse(File file)
     {
-        configuration
-            .CreateMap<File, CreateFileResponse>()
-            .ForMember(dto => dto.OwnerSignature, c => c.MapFrom(f => f.OwnerSignature.Length == 0 ? null : f.OwnerSignature));
+        Id = file.Id;
+        CreatedAt = file.CreatedAt;
+        CreatedBy = file.CreatedBy;
+        CreatedByDevice = file.CreatedByDevice;
+        ModifiedAt = file.ModifiedAt;
+        ModifiedBy = file.ModifiedBy;
+        DeletedAt = file.DeletedAt;
+        DeletedBy = file.DeletedBy?.Value;
+        Owner = file.Owner;
+        OwnerSignature = file.OwnerSignature;
+        CipherSize = file.CipherSize;
+        CipherHash = file.CipherHash;
+        ExpiresAt = file.ExpiresAt;
     }
+
+    public string Id { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+    public string CreatedBy { get; set; }
+    public string CreatedByDevice { get; set; }
+
+    public DateTime ModifiedAt { get; set; }
+    public string ModifiedBy { get; set; }
+    public DateTime? DeletedAt { get; set; }
+    public string? DeletedBy { get; set; }
+
+    public string Owner { get; set; }
+    public byte[] OwnerSignature { get; set; }
+
+    public long CipherSize { get; set; }
+    public byte[] CipherHash { get; set; }
+
+    public DateTime ExpiresAt { get; set; }
 }

@@ -5,6 +5,7 @@ using Backbone.Modules.Quotas.Domain.Metrics;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
+
 public class GetIdentityResponse
 {
     public required string Address { get; set; }
@@ -26,7 +27,7 @@ public class GetIdentityResponse
                 ));
         }
 
-        return new GetIdentityResponse()
+        return new GetIdentityResponse
         {
             Address = identityAddress,
             Quotas = quotasList

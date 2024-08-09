@@ -1,13 +1,13 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using MediatR;
+﻿using MediatR;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.DeleteDatawalletsOfIdentity;
+
 public class DeleteDatawalletsOfIdentityCommand : IRequest
 {
-    public DeleteDatawalletsOfIdentityCommand(IdentityAddress identityAddress)
+    public DeleteDatawalletsOfIdentityCommand(string identityAddress)
     {
         IdentityAddress = identityAddress;
     }
 
-    public IdentityAddress IdentityAddress { get; set; }
+    public string IdentityAddress { get; set; }
 }

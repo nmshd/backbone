@@ -1,6 +1,4 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
-using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.DTOs;
 
@@ -17,11 +15,11 @@ public class RelationshipMetadataDTO
         AuditLog = relationship.AuditLog.Select(a => new RelationshipAuditLogEntryDTO(a)).ToList();
     }
 
-    public RelationshipId Id { get; set; }
-    public RelationshipTemplateId RelationshipTemplateId { get; set; }
+    public string Id { get; set; }
+    public string RelationshipTemplateId { get; set; }
 
-    public IdentityAddress From { get; set; }
-    public IdentityAddress To { get; set; }
+    public string From { get; set; }
+    public string To { get; set; }
 
     public DateTime CreatedAt { get; set; }
 

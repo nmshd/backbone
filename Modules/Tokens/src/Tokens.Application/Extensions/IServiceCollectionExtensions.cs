@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.MediatR;
-using Backbone.Modules.Tokens.Application.AutoMapper;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,7 +15,6 @@ public static class IServiceCollectionExtensions
                     .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
                     .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
                 );
-        services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
-        services.AddValidatorsFromAssembly(typeof(CreateTokenCommandValidator).Assembly);
+        services.AddValidatorsFromAssembly(typeof(Validator).Assembly);
     }
 }

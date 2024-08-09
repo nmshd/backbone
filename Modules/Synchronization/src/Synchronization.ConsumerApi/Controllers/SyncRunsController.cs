@@ -41,7 +41,7 @@ public class SyncRunsController : ApiControllerBase
         ushort supportedDatawalletVersion, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new StartSyncRunCommand(
-            requestBody.Type ?? SyncRunDTO.SyncRunType.ExternalEventSync, requestBody.Duration,
+            requestBody.Type ?? SyncRun.SyncRunType.ExternalEventSync, requestBody.Duration,
             supportedDatawalletVersion), cancellationToken);
 
         if (response.Status == StartSyncRunStatus.Created)
@@ -116,7 +116,7 @@ public class SyncRunsController : ApiControllerBase
 
 public class StartSyncRunRequestBody
 {
-    public SyncRunDTO.SyncRunType? Type { get; set; }
+    public SyncRun.SyncRunType? Type { get; set; }
 
     public ushort? Duration { get; set; }
 }

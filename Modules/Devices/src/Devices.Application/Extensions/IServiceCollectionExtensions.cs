@@ -1,9 +1,8 @@
 using System.Reflection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
-using Backbone.Modules.Devices.Application.AutoMapper;
-using Backbone.Modules.Devices.Application.Clients.Commands.DeleteClient;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
+using Backbone.Modules.Devices.Application.Devices.Queries.ListDevices;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,8 +18,7 @@ public static class IServiceCollectionExtensions
             .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
         );
-        services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
-        services.AddValidatorsFromAssembly(typeof(DeleteClientCommandValidator).Assembly);
+        services.AddValidatorsFromAssembly(typeof(Validator).Assembly);
         services.AddScoped<ChallengeValidator>();
 
         AddEventHandlers(services);

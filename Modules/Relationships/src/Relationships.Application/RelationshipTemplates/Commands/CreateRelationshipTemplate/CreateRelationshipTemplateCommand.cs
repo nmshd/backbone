@@ -1,12 +1,10 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
 using Backbone.BuildingBlocks.Application.Attributes;
-using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 
 [ApplyQuotasForMetrics("NumberOfRelationshipTemplates")]
-public class CreateRelationshipTemplateCommand : IMapTo<RelationshipTemplate>, IRequest<CreateRelationshipTemplateResponse>
+public class CreateRelationshipTemplateCommand : IRequest<CreateRelationshipTemplateResponse>
 {
     public DateTime? ExpiresAt { get; set; }
     public int? MaxNumberOfAllocations { get; set; }

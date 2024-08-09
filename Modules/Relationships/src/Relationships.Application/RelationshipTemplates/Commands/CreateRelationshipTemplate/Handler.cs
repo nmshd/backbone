@@ -1,4 +1,3 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
@@ -9,14 +8,12 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Comma
 public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, CreateRelationshipTemplateResponse>
 {
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
-    private readonly IMapper _mapper;
     private readonly IUserContext _userContext;
 
-    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository, IUserContext userContext, IMapper mapper)
+    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository, IUserContext userContext)
     {
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
         _userContext = userContext;
-        _mapper = mapper;
     }
 
     public async Task<CreateRelationshipTemplateResponse> Handle(CreateRelationshipTemplateCommand request, CancellationToken cancellationToken)
@@ -30,6 +27,6 @@ public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, Create
 
         await _relationshipTemplatesRepository.Add(template, cancellationToken);
 
-        return _mapper.Map<CreateRelationshipTemplateResponse>(template);
+        return new CreateRelationshipTemplateResponse(template);
     }
 }

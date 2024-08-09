@@ -1,13 +1,13 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using MediatR;
+﻿using MediatR;
 
 namespace Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteTokensOfIdentity;
+
 public class DeleteTokensOfIdentityCommand : IRequest
 {
-    public DeleteTokensOfIdentityCommand(IdentityAddress identityAddress)
+    public DeleteTokensOfIdentityCommand(string identityAddress)
     {
         IdentityAddress = identityAddress;
     }
 
-    public IdentityAddress IdentityAddress { get; set; }
+    public string IdentityAddress { get; set; }
 }

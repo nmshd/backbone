@@ -1,14 +1,13 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
 
 public class FindRelationshipsOfIdentityQuery : IRequest<FindRelationshipsOfIdentityResponse>
 {
-    public FindRelationshipsOfIdentityQuery(IdentityAddress identityAddress)
+    public FindRelationshipsOfIdentityQuery(string identityAddress)
     {
         IdentityAddress = identityAddress;
     }
 
-    public IdentityAddress IdentityAddress { get; set; }
+    public string IdentityAddress { get; set; }
 }

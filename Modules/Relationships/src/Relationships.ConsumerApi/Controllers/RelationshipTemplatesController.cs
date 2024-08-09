@@ -8,7 +8,6 @@ using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.GetRelationshipTemplate;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
-using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -32,7 +31,7 @@ public class RelationshipTemplatesController : ApiControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipTemplateDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(RelationshipTemplateId id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetById(string id, CancellationToken cancellationToken)
     {
         var template = await _mediator.Send(new GetRelationshipTemplateQuery { Id = id }, cancellationToken);
         return Ok(template);
@@ -42,7 +41,7 @@ public class RelationshipTemplatesController : ApiControllerBase
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipTemplatesResponse>),
         StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] IEnumerable<RelationshipTemplateId> ids, CancellationToken cancellationToken)
+        [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
         var request = new ListRelationshipTemplatesQuery(paginationFilter, ids);
 

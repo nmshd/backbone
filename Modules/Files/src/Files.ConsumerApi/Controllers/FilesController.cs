@@ -11,7 +11,6 @@ using Backbone.Modules.Files.Application.Files.Queries.GetFileContent;
 using Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
 using Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
 using Backbone.Modules.Files.ConsumerApi.DTOs;
-using Backbone.Modules.Files.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -39,6 +38,8 @@ public class FilesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadFile([FromForm] CreateFileDTO dto, CancellationToken cancellationToken)
     {
+        //TODO model state is dto valid
+
         var inputStream = new MemoryStream();
 
         await dto.Content.CopyToAsync(inputStream, cancellationToken);
@@ -61,7 +62,7 @@ public class FilesController : ApiControllerBase
     [Produces(MediaTypeNames.Application.Octet)]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FileContentResult>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DownloadFile(FileId fileId, CancellationToken cancellationToken)
+    public async Task<IActionResult> DownloadFile(string fileId, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetFileContentQuery { Id = fileId }, cancellationToken);
         return File(response.FileContent, MediaTypeNames.Application.Octet);
@@ -71,7 +72,7 @@ public class FilesController : ApiControllerBase
     [HttpGet("{fileId}/metadata")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<FileMetadataDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetFileMetadata(FileId fileId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetFileMetadata(string fileId, CancellationToken cancellationToken)
     {
         var metadata = await _mediator.Send(new GetFileMetadataQuery { Id = fileId }, cancellationToken);
         return Ok(metadata);
@@ -80,7 +81,7 @@ public class FilesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListFileMetadataResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListFileMetadata([FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] IEnumerable<FileId> ids, CancellationToken cancellationToken)
+        [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 

@@ -12,9 +12,9 @@ public class ListRelationshipsValidatorTests : AbstractTestsBase
     [Fact]
     public void Happy_path()
     {
-        var validator = new ListRelationshipsValidator();
+        var validator = new Validator();
 
-        var validationResult = validator.TestValidate(new ListRelationshipsQuery(new PaginationFilter(), new[] { RelationshipId.New() }));
+        var validationResult = validator.TestValidate(new ListRelationshipsQuery(new PaginationFilter(), [RelationshipId.New().Value]));
 
         validationResult.ShouldNotHaveAnyValidationErrors();
     }
@@ -22,7 +22,7 @@ public class ListRelationshipsValidatorTests : AbstractTestsBase
     [Fact]
     public void Fails_when_Ids_is_null()
     {
-        var validator = new ListRelationshipsValidator();
+        var validator = new Validator();
 
         var validationResult = validator.TestValidate(new ListRelationshipsQuery(new PaginationFilter(), null));
 
@@ -35,9 +35,9 @@ public class ListRelationshipsValidatorTests : AbstractTestsBase
     [Fact]
     public void Fails_when_Ids_is_empty()
     {
-        var validator = new ListRelationshipsValidator();
+        var validator = new Validator();
 
-        var validationResult = validator.TestValidate(new ListRelationshipsQuery(new PaginationFilter(), Array.Empty<RelationshipId>()));
+        var validationResult = validator.TestValidate(new ListRelationshipsQuery(new PaginationFilter(), []));
 
         validationResult.ShouldHaveValidationErrorFor(q => q.Ids);
         validationResult.Errors.Should().HaveCount(1);

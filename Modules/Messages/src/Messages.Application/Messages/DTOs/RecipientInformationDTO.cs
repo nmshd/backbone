@@ -1,4 +1,3 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
 
 namespace Backbone.Modules.Messages.Application.Messages.DTOs;
@@ -10,11 +9,11 @@ public class RecipientInformationDTO
         Address = recipientInformation.Address;
         EncryptedKey = recipientInformation.EncryptedKey;
         ReceivedAt = recipientInformation.ReceivedAt;
-        ReceivedByDevice = recipientInformation.ReceivedByDevice;
+        ReceivedByDevice = recipientInformation.ReceivedByDevice?.Value;
     }
 
-    public IdentityAddress Address { get; set; }
+    public string Address { get; set; }
     public byte[] EncryptedKey { get; set; }
     public DateTime? ReceivedAt { get; set; }
-    public DeviceId? ReceivedByDevice { get; set; }
+    public string? ReceivedByDevice { get; set; }
 }

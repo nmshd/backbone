@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.Attributes;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Commands.CreateFile;
@@ -9,7 +8,7 @@ public class CreateFileCommand : IRequest<CreateFileResponse>
 {
     public required byte[] FileContent { get; set; }
 
-    public required IdentityAddress Owner { get; set; }
+    public required string Owner { get; set; }
     public required byte[] OwnerSignature { get; set; }
 
     public required byte[] CipherHash { get; set; }

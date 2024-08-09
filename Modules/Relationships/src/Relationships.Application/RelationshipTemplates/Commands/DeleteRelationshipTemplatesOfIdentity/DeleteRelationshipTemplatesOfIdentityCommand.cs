@@ -1,14 +1,13 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.DeleteRelationshipTemplatesOfIdentity;
 
 public class DeleteRelationshipTemplatesOfIdentityCommand : IRequest
 {
-    public DeleteRelationshipTemplatesOfIdentityCommand(IdentityAddress identityAddress)
+    public DeleteRelationshipTemplatesOfIdentityCommand(string identityAddress)
     {
         IdentityAddress = identityAddress;
     }
 
-    public IdentityAddress IdentityAddress { get; set; }
+    public string IdentityAddress { get; set; }
 }

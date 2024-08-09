@@ -1,6 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.MediatR;
-using Backbone.Modules.Challenges.Application.AutoMapper;
 using Backbone.Modules.Challenges.Application.Challenges.Commands.CreateChallenge;
 using FluentValidation;
 using MediatR;
@@ -19,7 +18,6 @@ public static class ApplicationServiceCollectionExtensions
             .AddOpenBehavior(typeof(RequestValidationBehavior<,>))
             .AddOpenBehavior(typeof(QuotaEnforcerBehavior<,>))
         );
-        services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
         services.AddValidatorsFromAssembly(typeof(CreateChallengeCommandValidator).Assembly);
     }
 }

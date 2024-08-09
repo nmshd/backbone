@@ -46,13 +46,7 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
 
         _logger.CreatedDevice();
 
-        return new RegisterDeviceResponse
-        {
-            Id = user.DeviceId,
-            Username = user.UserName!,
-            CreatedByDevice = user.Device.CreatedByDevice,
-            CreatedAt = user.Device.CreatedAt
-        };
+        return new RegisterDeviceResponse(user);
     }
 }
 

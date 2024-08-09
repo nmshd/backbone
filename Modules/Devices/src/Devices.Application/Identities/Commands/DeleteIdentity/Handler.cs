@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.DeleteIdentity;
+
 public class Handler : IRequestHandler<DeleteIdentityCommand>
 {
     private readonly IIdentitiesRepository _identitiesRepository;

@@ -1,6 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -23,12 +22,7 @@ public class Handler : IRequestHandler<CancelDeletionAsSupportCommand, CancelDel
     {
         var identity = await _identitiesRepository.FindByAddress(request.Address, cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
 
-        var deletionProcessIdResult = IdentityDeletionProcessId.Create(request.DeletionProcessId);
-
-        if (deletionProcessIdResult.IsFailure)
-            throw new DomainException(deletionProcessIdResult.Error);
-
-        var deletionProcessId = deletionProcessIdResult.Value;
+        var deletionProcessId = IdentityDeletionProcessId.Create(request.DeletionProcessId).Value;
 
         var deletionProcess = identity.CancelDeletionProcessAsSupport(deletionProcessId);
 

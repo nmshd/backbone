@@ -21,7 +21,6 @@ using Backbone.Modules.Relationships.Application.Relationships.Queries.GetPeerOf
 using Backbone.Modules.Relationships.Application.Relationships.Queries.GetRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.GetRelationshipTemplate;
-using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -45,7 +44,7 @@ public class RelationshipsController : ApiControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetRelationship(RelationshipId id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetRelationship(string id, CancellationToken cancellationToken)
     {
         var relationship = await _mediator.Send(new GetRelationshipQuery { Id = id }, cancellationToken);
         return Ok(relationship);
@@ -54,7 +53,7 @@ public class RelationshipsController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipsResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListRelationships([FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] IEnumerable<RelationshipId> ids, CancellationToken cancellationToken)
+        [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
         var request = new ListRelationshipsQuery(paginationFilter, ids);
 
