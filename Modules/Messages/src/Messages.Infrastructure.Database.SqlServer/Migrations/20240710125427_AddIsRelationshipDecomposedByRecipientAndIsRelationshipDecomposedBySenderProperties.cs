@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
+    [DependsOn(ModuleType.Messages, "20240703093043_RemoveRelationshipId")]
     public partial class AddIsRelationshipDecomposedByRecipientAndIsRelationshipDecomposedBySenderProperties : Migration
     {
         /// <inheritdoc />

@@ -1,4 +1,5 @@
 ﻿using System;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
+    [DependsOn(ModuleType.Relationships, "20240701075855_Init")]
     public partial class Init : Migration
     {
         /// <inheritdoc />

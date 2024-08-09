@@ -1,10 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Backbone.AdminApi.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
+    [DependsOn(ModuleType.Devices, "20240701074625_Init")]
+    [DependsOn(ModuleType.Synchronization, "20240701081739_Init")]
+    [DependsOn(ModuleType.Relationships, "20240701075855_Init")]
+    [DependsOn(ModuleType.Messages, "20240701075021_Init")]
     public partial class Init : Migration
     {
         /// <inheritdoc />

@@ -1,10 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
+    [DependsOn(ModuleType.Relationships, "20240701075855_Init")]
     public partial class ConfigureRelationshipAuditLogDeleteBehavior : Migration
     {
         /// <inheritdoc />
