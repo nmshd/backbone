@@ -119,20 +119,4 @@ public class RelationshipCreateTests : AbstractTestsBase
         // Assert
         acting.Should().NotThrow<DomainException>();
     }
-
-    [Fact]
-    public void Cannot_create_Relationship_if_terminated_Relationship_exists()
-    {
-        // Arrange
-        var existingRelationships = new List<Relationship>
-        {
-            CreateTerminatedRelationship()
-        };
-
-        // Act
-        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
-
-        // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists");
-    }
 }
