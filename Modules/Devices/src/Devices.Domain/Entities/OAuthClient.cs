@@ -32,6 +32,9 @@ public class OAuthClient : Entity
 
     public bool Update(TierId newDefaultTier, int? newMaxIdentities, int identitiesCount)
     {
+        if (newMaxIdentities < identitiesCount)
+            throw new DomainException(DomainErrors.MaxIdentitiesLessThanCurrentIdentities(newMaxIdentities.Value, identitiesCount));
+
         var hasChanges = false;
 
         if (DefaultTier != newDefaultTier)
@@ -39,9 +42,6 @@ public class OAuthClient : Entity
             hasChanges = true;
             DefaultTier = newDefaultTier;
         }
-
-        if (newMaxIdentities < identitiesCount)
-            throw new DomainException(DomainErrors.MaxIdentitiesLessThanCurrentIdentities(newMaxIdentities.Value, identitiesCount));
 
         if (MaxIdentities != newMaxIdentities)
         {

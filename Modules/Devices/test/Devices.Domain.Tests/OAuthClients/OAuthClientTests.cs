@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -70,7 +71,7 @@ public class OAuthClientTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Client_update_contains_maximum_identities_value_lesser_than_identities_count()
+    public void Client_update_detects_that_new_maximum_identities_value_is_lesser_than_identities_count()
     {
         // Arrange
         var oldTierId = TierId.Generate();
@@ -78,16 +79,13 @@ public class OAuthClientTests : AbstractTestsBase
 
         var client = new OAuthClient(string.Empty, string.Empty, oldTierId, SystemTime.UtcNow, oldMaxIdentities);
 
-        var newTierId = TierId.Generate();
         const int newMaxIdentities = 1;
-
         const int identitiesCount = 2;
 
         // Act
-        var acting = () => client.Update(newTierId, newMaxIdentities, identitiesCount);
+        var acting = () => client.Update(oldTierId, newMaxIdentities, identitiesCount);
 
         // Assert
-        var exception = acting.Should().Throw<DomainException>().Which;
-        exception.Code.Should().Be("error.platform.validation.device.maxIdentitiesLessThanCurrentIdentities");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.device.maxIdentitiesLessThanCurrentIdentities");
     }
 }

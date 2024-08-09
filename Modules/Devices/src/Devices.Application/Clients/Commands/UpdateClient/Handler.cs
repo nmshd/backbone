@@ -37,6 +37,6 @@ public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse
         if (hasChanges)
             await _oAuthClientsRepository.Update(client, cancellationToken);
 
-        return new UpdateClientResponse(client, identitiesCount);
+        return new UpdateClientResponse(client);
     }
 }
