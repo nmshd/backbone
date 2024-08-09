@@ -89,7 +89,7 @@ public class Printer : IPrinter
                 }
             }
         }
-        File.WriteAllTextAsync($@"{outputDirName}\rts.csv", stringBuilder.ToString());
+        File.WriteAllTextAsync($@"{outputDirName}\relationshipTemplates.csv", stringBuilder.ToString());
     }
 
     private static void OutputDatawalletModifications(string outputDirName, IList<PoolEntry> pools)
@@ -106,7 +106,7 @@ public class Printer : IPrinter
                 }
             }
         }
-        File.WriteAllTextAsync($@"{outputDirName}\dwms.csv", stringBuilder.ToString());
+        File.WriteAllTextAsync($@"{outputDirName}\datawalletModifications.csv", stringBuilder.ToString());
     }
 
     private static void OutputChallenges(string outputDirName, IList<PoolEntry> pools)
