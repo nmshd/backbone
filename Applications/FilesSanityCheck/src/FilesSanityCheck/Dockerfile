@@ -18,17 +18,17 @@ COPY ["Modules/Files/src/Files.Infrastructure/Files.Infrastructure.csproj", "Mod
 COPY ["BuildingBlocks/src/BuildingBlocks.Infrastructure/BuildingBlocks.Infrastructure.csproj", "BuildingBlocks/src/BuildingBlocks.Infrastructure/"]
 COPY ["Common/src/Common.Infrastructure/Common.Infrastructure.csproj", "Common/src/Common.Infrastructure/"]
 
-RUN dotnet restore "Applications/FilesSanityCheck/src/FilesSanityCheck/FilesSanityCheck.csproj"
+RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/FilesSanityCheck/src/FilesSanityCheck/FilesSanityCheck.csproj"
 
 COPY . .
 
 ARG VERSION
 
 WORKDIR "/src/Applications/FilesSanityCheck/src/FilesSanityCheck"
-RUN dotnet build "FilesSanityCheck.csproj" --configuration Release --output /app/build --no-restore
+RUN dotnet build /p:ContinuousIntegrationBuild=true "FilesSanityCheck.csproj" --configuration Release --output /app/build --no-restore
 
 FROM build AS publish
-RUN dotnet publish /property:UseAppHost=false --configuration Release --output /app/publish --no-restore "FilesSanityCheck.csproj" 
+RUN dotnet publish /p:ContinuousIntegrationBuild=true /property:UseAppHost=false --configuration Release --output /app/publish --no-restore "FilesSanityCheck.csproj" 
 
 FROM base AS final
 WORKDIR /app

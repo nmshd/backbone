@@ -66,17 +66,17 @@ COPY ["Modules/Devices/src/Devices.ConsumerApi/Devices.ConsumerApi.csproj", "Mod
 COPY ["Modules/Devices/src/Devices.Infrastructure.Database.Postgres/Devices.Infrastructure.Database.Postgres.csproj", "Modules/Devices/src/Devices.Infrastructure.Database.Postgres/"]
 COPY ["Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/Devices.Infrastructure.Database.SqlServer.csproj", "Modules/Devices/src/Devices.Infrastructure.Database.SqlServer/"]
 
-RUN dotnet restore "Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj"
+RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/IdentityDeletionJobs/src/Job.IdentityDeletion/Job.IdentityDeletion.csproj"
 
 COPY . .
 
 ARG VERSION
 
 WORKDIR "/src/Applications/IdentityDeletionJobs/src/Job.IdentityDeletion"
-RUN dotnet build "Job.IdentityDeletion.csproj" -c Release --output /app/build --no-restore
+RUN dotnet build /p:ContinuousIntegrationBuild=true "Job.IdentityDeletion.csproj" -c Release --output /app/build --no-restore
 
 FROM build AS publish
-RUN dotnet publish -c Release --output /app/publish --no-restore "Job.IdentityDeletion.csproj" 
+RUN dotnet publish /p:ContinuousIntegrationBuild=true -c Release --output /app/publish --no-restore "Job.IdentityDeletion.csproj" 
 
 FROM base AS final
 

@@ -67,17 +67,17 @@ COPY ["Modules/Tokens/src/Tokens.Infrastructure.Database.Postgres/Tokens.Infrast
 COPY ["Modules/Tokens/src/Tokens.Infrastructure/Tokens.Infrastructure.csproj", "Modules/Tokens/src/Tokens.Infrastructure/"]
 COPY ["Modules/Tokens/src/Tokens.Infrastructure.Database.SqlServer/Tokens.Infrastructure.Database.SqlServer.csproj", "Modules/Tokens/src/Tokens.Infrastructure.Database.SqlServer/"]
 
-RUN dotnet restore "Applications/EventHandlerService/src/EventHandlerService/EventHandlerService.csproj"
+RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/EventHandlerService/src/EventHandlerService/EventHandlerService.csproj"
 
 COPY . .
 
 ARG VERSION
 
 WORKDIR "/src/Applications/EventHandlerService/src/EventHandlerService"
-RUN dotnet build "EventHandlerService.csproj" -c Release -o /app/build --no-restore
+RUN dotnet build /p:ContinuousIntegrationBuild=true "EventHandlerService.csproj" -c Release -o /app/build --no-restore
 
 FROM build AS publish
-RUN dotnet publish -c Release -o /app/publish --no-restore "EventHandlerService.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true -c Release -o /app/publish --no-restore "EventHandlerService.csproj"
 
 FROM base AS final
 

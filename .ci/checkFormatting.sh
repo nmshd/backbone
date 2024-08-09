@@ -1,3 +1,3 @@
 #!/bin/bash
 
-dotnet format --verify-no-changes
+dotnet format /p:ContinuousIntegrationBuild=true --verify-no-changes

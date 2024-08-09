@@ -5,10 +5,10 @@ WORKDIR /src
 ARG VERSION
 
 COPY . .
-RUN dotnet restore "Challenges.Jobs.Cleanup/Challenges.Jobs.Cleanup.csproj"
+RUN dotnet restore /p:ContinuousIntegrationBuild=true "Challenges.Jobs.Cleanup/Challenges.Jobs.Cleanup.csproj"
 
 WORKDIR "/src/Challenges.Jobs.Cleanup"
-RUN dotnet publish --configuration Release --output /app --no-restore
+RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app --no-restore
 
 # Run	
 FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine3.18

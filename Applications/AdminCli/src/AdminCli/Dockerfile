@@ -19,14 +19,14 @@ COPY ["BuildingBlocks/src/BuildingBlocks.Application/BuildingBlocks.Application.
 COPY ["BuildingBlocks/src/Crypto/Crypto.csproj", "BuildingBlocks/src/Crypto/"]
 COPY ["Modules/Devices/src/Devices.Domain/Devices.Domain.csproj", "Modules/Devices/src/Devices.Domain/"]
 
-RUN dotnet restore "Applications/AdminCli/src/AdminCli/AdminCli.csproj"
+RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/AdminCli/src/AdminCli/AdminCli.csproj"
 
 COPY . .
 
 ARG VERSION
 
 WORKDIR "/src/Applications/AdminCli/src/AdminCli"
-RUN dotnet publish --no-restore -c Release -o /app/publish "AdminCli.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true --no-restore -c Release -o /app/publish "AdminCli.csproj"
 
 FROM base AS final
 WORKDIR /app
