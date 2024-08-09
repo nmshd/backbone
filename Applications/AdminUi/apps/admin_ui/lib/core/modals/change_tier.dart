@@ -8,14 +8,29 @@ import '/core/core.dart';
 Future<void> showChangeTierDialog({
   required BuildContext context,
   required VoidCallback onTierUpdated,
-  required Identity identityDetails,
   required List<TierOverview> availableTiers,
+  Identity? identityDetails,
+  Client? clientDetails,
 }) async {
+  assert(identityDetails != null || clientDetails != null, 'Either identity details or client details must be provided');
+  assert(identityDetails == null || clientDetails == null, 'Only one of identity details or client details can be provided');
+
   await showDialog<void>(
     context: context,
     builder: (BuildContext context) => _ShowChangeTierDialog(
       onTierUpdated: onTierUpdated,
-      identityDetails: identityDetails,
+      currentTier: (clientDetails?.defaultTier ?? identityDetails?.tierId)!,
+      assignTier: ({required String tierId}) {
+        if (clientDetails != null) {
+          return GetIt.I.get<AdminApiClient>().clients.updateClient(
+                clientDetails.clientId,
+                defaultTier: tierId,
+                maxIdentities: clientDetails.maxIdentities,
+              );
+        }
+
+        return GetIt.I.get<AdminApiClient>().identities.updateIdentity(identityDetails!.address, tierId: tierId);
+      },
       availableTiers: availableTiers,
     ),
   );
@@ -23,13 +38,19 @@ Future<void> showChangeTierDialog({
 
 class _ShowChangeTierDialog extends StatefulWidget {
   final VoidCallback onTierUpdated;
-  final Identity identityDetails;
+  final Future<ApiResponse<dynamic>> Function({required String tierId}) assignTier;
   final List<TierOverview> availableTiers;
+  final String currentTier;
+  // final Identity? identityDetails;
+  // final Client? clientDetails;
 
   const _ShowChangeTierDialog({
     required this.onTierUpdated,
-    required this.identityDetails,
     required this.availableTiers,
+    required this.assignTier,
+    required this.currentTier,
+    // this.clientDetails,
+    // this.identityDetails,
   });
 
   @override
@@ -38,13 +59,13 @@ class _ShowChangeTierDialog extends StatefulWidget {
 
 class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
   bool _saving = false;
-  late String selectedTier;
+  late String _selectedTier;
 
   @override
   void initState() {
     super.initState();
 
-    selectedTier = widget.identityDetails.tierId;
+    _selectedTier = widget.currentTier;
   }
 
   @override
@@ -58,25 +79,19 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
         content: SizedBox(
           width: 500,
           child: DropdownButtonFormField<String>(
-            value: selectedTier,
+            value: _selectedTier,
             decoration: const InputDecoration(border: OutlineInputBorder()),
-            onChanged: _saving ? null : (String? newValue) => setState(() => selectedTier = newValue!),
-            items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned).map((TierOverview tier) {
-              return DropdownMenuItem<String>(
-                value: tier.id,
-                child: Text(tier.name),
-              );
+            onChanged: _saving ? null : (String? newValue) => setState(() => _selectedTier = newValue!),
+            items: widget.availableTiers.where((tier) => tier.canBeManuallyAssigned || tier.canBeUsedAsDefaultForClient).map((TierOverview tier) {
+              return DropdownMenuItem<String>(value: tier.id, child: Text(tier.name));
             }).toList(),
           ),
         ),
         actions: [
-          OutlinedButton(
-            onPressed: _saving ? null : () => Navigator.of(context, rootNavigator: true).pop(),
-            child: Text(context.l10n.cancel),
-          ),
+          OutlinedButton(onPressed: _saving ? null : () => Navigator.of(context, rootNavigator: true).pop(), child: Text(context.l10n.cancel)),
           FilledButton(
-            onPressed: _saving || selectedTier == widget.identityDetails.tierId ? null : _changeTier,
-            child: Text(context.l10n.save),
+            onPressed: _saving || _selectedTier == widget.currentTier ? null : _changeTier,
+            child: Text(context.l10n.change),
           ),
         ],
       ),
@@ -86,16 +101,13 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
   Future<void> _changeTier() async {
     setState(() => _saving = true);
 
-    final response = await GetIt.I.get<AdminApiClient>().identities.updateIdentity(widget.identityDetails.address, tierId: selectedTier);
+    final response = await widget.assignTier(tierId: _selectedTier);
 
     if (!mounted) return;
 
     if (response.hasError) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(context.l10n.changeTierDialog_error),
-          duration: const Duration(seconds: 3),
-        ),
+        SnackBar(content: Text(context.l10n.changeTierDialog_error), duration: const Duration(seconds: 3)),
       );
 
       setState(() => _saving = false);
@@ -104,10 +116,7 @@ class _ShowChangeTierDialogState extends State<_ShowChangeTierDialog> {
     }
 
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(context.l10n.changeTierDialog_success),
-        duration: const Duration(seconds: 3),
-      ),
+      SnackBar(content: Text(context.l10n.changeTierDialog_success), duration: const Duration(seconds: 3)),
     );
 
     widget.onTierUpdated();
