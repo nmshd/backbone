@@ -380,6 +380,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Sdk", "Sdks\Con
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrator.Tests", "Applications\DatabaseMigrator\test\DatabaseMigrator.Tests\DatabaseMigrator.Tests.csproj", "{61AE4071-42D5-4D73-BE7C-843276746592}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrator.Tests", "Applications\DatabaseMigrator\test\DatabaseMigrator.Tests\DatabaseMigrator.Tests.csproj", "{56D22BE1-30F8-4449-82DA-089AFC7CC484}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -818,6 +820,10 @@ Global
 		{61AE4071-42D5-4D73-BE7C-843276746592}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{61AE4071-42D5-4D73-BE7C-843276746592}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{61AE4071-42D5-4D73-BE7C-843276746592}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56D22BE1-30F8-4449-82DA-089AFC7CC484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56D22BE1-30F8-4449-82DA-089AFC7CC484}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56D22BE1-30F8-4449-82DA-089AFC7CC484}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56D22BE1-30F8-4449-82DA-089AFC7CC484}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -988,6 +994,7 @@ Global
 		{CA03350A-2013-4D18-B68D-8C0F680DBA39} = {5F0DFDE4-71A4-4917-9FB1-76CD78E492DC}
 		{6720FC03-1C86-47D5-A14E-992C249DB261} = {F8D5319B-F7F4-4663-9029-3A72AA5B4D1D}
 		{D28F10DA-33BD-4F08-B736-1B7AB53026BD} = {CA03350A-2013-4D18-B68D-8C0F680DBA39}
+		{56D22BE1-30F8-4449-82DA-089AFC7CC484} = {344C0E55-3C08-4765-A945-0E307D70FC98}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}
