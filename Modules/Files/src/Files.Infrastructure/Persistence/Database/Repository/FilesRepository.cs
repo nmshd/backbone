@@ -36,7 +36,6 @@ public class FilesRepository : IFilesRepository
         await _files.AddAsync(file, cancellationToken);
         await _blobStorage.SaveAsync();
         await _dbContext.SaveChangesAsync(cancellationToken);
-
     }
 
     public async Task DeleteFilesOfIdentity(Expression<Func<File, bool>> filter, CancellationToken cancellationToken)
