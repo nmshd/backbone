@@ -87,7 +87,7 @@ public class RelationshipCreateTests : AbstractTestsBase
     [InlineData(RelationshipStatus.Active)]
     [InlineData(RelationshipStatus.Terminated)]
     [InlineData(RelationshipStatus.DeletionProposed)]
-    public void New_relationship_cannot_be_created_when_existing_ones_in_status_x_exists(RelationshipStatus relationshipStatus)
+    public void New_relationship_cannot_be_created_when_there_is_an_existing_one_in_status_x(RelationshipStatus relationshipStatus)
     {
         // Arrange
         var existingRelationships = new List<Relationship>
