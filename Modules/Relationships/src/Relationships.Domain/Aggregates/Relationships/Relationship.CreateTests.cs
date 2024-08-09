@@ -98,6 +98,26 @@ public class RelationshipCreateTests : AbstractTestsBase
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists");
     }
 
+    [Theory]
+    [InlineData(RelationshipStatus.Pending)]
+    [InlineData(RelationshipStatus.Active)]
+    [InlineData(RelationshipStatus.Terminated)]
+    [InlineData(RelationshipStatus.DeletionProposed)]
+    public void There_can_only_be_one_active_relationship_between_two_identities2(RelationshipStatus relationshipStatus)
+    {
+        // Arrange
+        var existingRelationships = new List<Relationship>
+        {
+            CreateRelationshipInStatus(relationshipStatus)
+        };
+
+        // Act
+        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
+
+        // Assert
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists");
+    }
+
     [Fact]
     public void Creating_a_new_relationship_is_possible_if_existing_ones_are_rejected_or_revoked()
     {
@@ -129,21 +149,5 @@ public class RelationshipCreateTests : AbstractTestsBase
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists");
-    }
-
-    [Fact]
-    public void A_new_relationship_can_be_created_after_decomposing_the_old_one()
-    {
-        // Arrange
-        var existingRelationships = new List<Relationship>
-        {
-            CreateDecomposedRelationship(IDENTITY_1, IDENTITY_2)
-        };
-
-        // Act
-        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, [], existingRelationships);
-
-        // Assert
-        newRelationship.Status.Should().Be(RelationshipStatus.Pending);
     }
 }
