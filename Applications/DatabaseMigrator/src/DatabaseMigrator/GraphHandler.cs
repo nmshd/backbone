@@ -18,7 +18,7 @@ public class GraphHandler
             throw new ArgumentException("At least one migration must have 0 dependencies (otherwise we have circular dependencies)");
 
         //Construct the graph with worst case performance of O(n^2)
-        List<MigrationInfo> migrations = [..rawMigrations];
+        List<MigrationInfo> migrations = [.. rawMigrations];
         List<MigrationInfo> lastSnapshot = [];
         Dictionary<MigrationId, int> tree = new();
         var highestLayer = 0;
@@ -38,7 +38,7 @@ public class GraphHandler
                     throw new ArgumentException($"These migrations form a circular dependency:\n{migrationsInCircularDependency}");
                 }
 
-                lastSnapshot = [..migrations];
+                lastSnapshot = [.. migrations];
             }
 
             var info = migrations[i];

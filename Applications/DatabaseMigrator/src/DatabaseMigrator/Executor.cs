@@ -38,8 +38,14 @@ public class Executor
 
     private readonly List<Type> _moduleContextTypes =
     [
-        typeof(AdminApiDbContext), typeof(ChallengesDbContext), typeof(DevicesDbContext), typeof(FilesDbContext),
-        typeof(MessagesDbContext), typeof(QuotasDbContext), typeof(RelationshipsDbContext), typeof(SynchronizationDbContext),
+        typeof(AdminApiDbContext),
+        typeof(ChallengesDbContext),
+        typeof(DevicesDbContext),
+        typeof(FilesDbContext),
+        typeof(MessagesDbContext),
+        typeof(QuotasDbContext),
+        typeof(RelationshipsDbContext),
+        typeof(SynchronizationDbContext),
         typeof(TokensDbContext)
     ];
 

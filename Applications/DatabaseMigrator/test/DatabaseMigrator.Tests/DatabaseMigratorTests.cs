@@ -37,9 +37,12 @@ public class DatabaseMigratorTests : AbstractTestsBase
     {
         List<MigrationInfo> migrations =
         [
-            new SimpleMigrationInfo("A", []), new SimpleMigrationInfo("B", []),
-            new SimpleMigrationInfo("C", ["A"]), new SimpleMigrationInfo("D", []),
-            new SimpleMigrationInfo("E", ["A", "C"]), new SimpleMigrationInfo("F", ["C", "E"])
+            new SimpleMigrationInfo("A", []),
+            new SimpleMigrationInfo("B", []),
+            new SimpleMigrationInfo("C", ["A"]),
+            new SimpleMigrationInfo("D", []),
+            new SimpleMigrationInfo("E", ["A", "C"]),
+            new SimpleMigrationInfo("F", ["C", "E"])
         ];
         List<SimpleMigrationId> expectedIds = ["A", "B", "D", "C", "E", "F"];
 
