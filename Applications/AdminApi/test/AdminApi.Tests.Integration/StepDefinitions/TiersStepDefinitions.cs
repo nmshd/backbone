@@ -11,11 +11,13 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "GET Tiers")]
+[Scope(Feature = "GET Tiers/{id}")]
 [Scope(Feature = "POST Tier")]
 [Scope(Feature = "DELETE Tier")]
 internal class TiersStepDefinitions : BaseStepDefinitions
 {
     private ApiResponse<Tier>? _tierResponse;
+    private ApiResponse<TierDetails>? _getTierResponse;
     private ApiResponse<EmptyResponse>? _deleteResponse;
     private ApiResponse<ListTiersResponse>? _tiersResponse;
     private string _existingTierName;
@@ -52,6 +54,18 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     public async Task WhenAGETRequestIsSentToTheTiersEndpoint()
     {
         _tiersResponse = await _client.Tiers.ListTiers();
+    }
+
+    [When("a GET request is sent to the /Tiers/{t.id} endpoint")]
+    public async Task WhenAGETRequestIsSentToTheTiersByIdEndpoint()
+    {
+        _getTierResponse = await _client.Tiers.GetTier(_existingTierId);
+    }
+
+    [When("a GET request is sent to the /Tiers/{nonExistentTierId} endpoint")]
+    public async Task WhenAGETRequestIsSentToTheTiersByIdEndpointWithANonExistentId()
+    {
+        _getTierResponse = await _client.Tiers.GetTier("TIRNonExistentId1231");
     }
 
     [When("a POST request is sent to the /Tiers endpoint")]
@@ -94,6 +108,15 @@ internal class TiersStepDefinitions : BaseStepDefinitions
         await _tierResponse.Should().ComplyWithSchema();
     }
 
+    [Then("the response contains Tier t")]
+    public async Task ThenTheResponseContainsTierT()
+    {
+        _getTierResponse!.Should().BeASuccess();
+        _getTierResponse!.ContentType.Should().StartWith("application/json");
+        await _getTierResponse.Should().ComplyWithSchema();
+        _getTierResponse.Result!.Id.Should().Be(_existingTierId);
+    }
+
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
@@ -105,12 +128,24 @@ internal class TiersStepDefinitions : BaseStepDefinitions
 
         if (_deleteResponse != null)
             ((int)_deleteResponse!.Status).Should().Be(expectedStatusCode);
+
+        if (_getTierResponse != null)
+            ((int)_getTierResponse!.Status).Should().Be(expectedStatusCode);
     }
 
     [Then(@"the response content contains an error with the error code ""([^""]+)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _tierResponse!.Error.Should().NotBeNull();
-        _tierResponse.Error!.Code.Should().Be(errorCode);
+        if (_tierResponse != null)
+        {
+            _tierResponse!.Error.Should().NotBeNull();
+            _tierResponse.Error!.Code.Should().Be(errorCode);
+        }
+
+        if (_getTierResponse != null)
+        {
+            _getTierResponse!.Error.Should().NotBeNull();
+            _getTierResponse.Error!.Code.Should().Be(errorCode);
+        }
     }
 }

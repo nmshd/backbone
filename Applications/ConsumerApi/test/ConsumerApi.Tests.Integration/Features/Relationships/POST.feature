@@ -62,3 +62,11 @@ Scenario: Revoke Relationship to an Identity in status "ToBeDeleted"
 	When a POST request is sent to the /Relationships/{r.Id}/Revoke endpoint by i1
 	Then the response status code is 400 (Bad Request)
 	And the response content contains an error with the error code "error.platform.validation.relationship.peerIsToBeDeleted"
+
+#Scenario: Request Reactivation Of Relationship
+#Scenario: Accept Reactivation Of Relationship
+#Scenario: Reject Reactivation Of Relationship
+#Scenario: Revoke Reactivation Of Relationship
+#Scenario: Create a Relationship with a non-existent Relationship Template Id
+#Scenario: Decompose Relationship
+#Scenario: Terminate Relationship

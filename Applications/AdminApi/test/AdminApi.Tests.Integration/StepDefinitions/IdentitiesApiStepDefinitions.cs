@@ -10,6 +10,7 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 [Binding]
 [Scope(Feature = "GET Identities")]
 [Scope(Feature = "POST Identities/{id}/DeletionProcess")]
+[Scope(Feature = "GET Identities/{identityAddress}")]
 [Scope(Feature = "GET Identities/{identityAddress}/DeletionProcesses/AuditLogs")]
 internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
@@ -123,7 +124,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     {
         if (_identityResponse != null)
         {
-            _identityResponse!.Result!.Should().NotBeNull();
+            _identityResponse!.Error!.Should().NotBeNull();
             _identityResponse.Error!.Code.Should().Be(errorCode);
         }
 

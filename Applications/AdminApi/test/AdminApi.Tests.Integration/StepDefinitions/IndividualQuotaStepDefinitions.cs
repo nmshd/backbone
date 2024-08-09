@@ -58,6 +58,12 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         _deleteResponse = await _client.Identities.DeleteIndividualQuota(_identityAddress, "QUOInexistentIdxxxxx");
     }
 
+    [When("a DELETE request is sent to the /Identities/{nonExistentAddress}/Quotas/{q.id} endpoint")]
+    public async Task WhenADeleteRequestIsSentToTheDeleteIndividualQuotaEndpointWithANonExistentIdentityAddress()
+    {
+        _deleteResponse = await _client.Identities.DeleteIndividualQuota("someNonExistentIdentityAddress", _quotaId);
+    }
+
     [When("a POST request is sent to the /Identity/{i.id}/Quotas endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheCreateIndividualQuotaEndpoint()
     {
@@ -75,6 +81,17 @@ internal class IndividualQuotaStepDefinitions : BaseStepDefinitions
         _createQuotaResponse = await _client.Identities.CreateIndividualQuota("some-inexistent-identity-address", new CreateQuotaForIdentityRequest
         {
             MetricKey = "NumberOfSentMessages",
+            Max = 2,
+            Period = "Week"
+        });
+    }
+
+    [When("a POST request is sent to the /Identity/{i.id}/Quotas endpoint with an invalid metric key")]
+    public async Task WhenAPOSTRequestIsSentToTheCreateIndividualQuotaEndpointWithAnInvalidMetricKey()
+    {
+        _createQuotaResponse = await _client.Identities.CreateIndividualQuota(_identityAddress, new CreateQuotaForIdentityRequest
+        {
+            MetricKey = "someInvalidMetricKey",
             Max = 2,
             Period = "Week"
         });
