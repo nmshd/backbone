@@ -245,13 +245,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceSnapshotCreator"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Domain.Tests", "Modules\Tokens\test\Tokens.Domain.Tests\Tokens.Domain.Tests.csproj", "{EDCB84BE-54C3-4CAD-977E-45EEBEFA1402}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SseServer", "SseServer\src\SseServer\SseServer.csproj", "{434C078E-D738-4C19-AB89-5F56B57EDA7C}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AAE548AB-4843-476A-BF61-002CF6FEE713}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{824495A9-A255-487D-AF26-6F6CA92BC715}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SseServerTests", "SseServer\test\SseServerTests\SseServerTests.csproj", "{94A32246-991D-483D-8241-E1E4DD6DE145}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Application.Tests", "Modules\Challenges\test\Challenges.Application.Tests\Challenges.Application.Tests.csproj", "{EAA10D43-BD28-40D8-BE07-B8F6DE47C156}"
 EndProject
@@ -368,7 +364,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{4DE75EB1-5
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdminCli", "Applications\AdminCli\src\AdminCli\AdminCli.csproj", "{600F164D-0423-49DA-B326-67D565E419C8}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Skds", "Skds", "{E8DC46CB-7ADD-4564-929B-513B9C081A5B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Sdks", "Sdks", "{E8DC46CB-7ADD-4564-929B-513B9C081A5B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ConsumerApi.Sdk", "ConsumerApi.Sdk", "{5F0DFDE4-71A4-4917-9FB1-76CD78E492DC}"
 EndProject
