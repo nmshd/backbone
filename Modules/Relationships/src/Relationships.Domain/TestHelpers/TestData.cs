@@ -25,6 +25,18 @@ public static class TestData
         return relationship;
     }
 
+    public static Relationship CreateRelationshipInStatus(RelationshipStatus status, IdentityAddress? from = null, IdentityAddress? to = null)
+    {
+        return status switch
+        {
+            RelationshipStatus.Pending => CreatePendingRelationship(from, to),
+            RelationshipStatus.Active => CreateActiveRelationship(from, to),
+            RelationshipStatus.Terminated => CreateTerminatedRelationship(from, to),
+            RelationshipStatus.DeletionProposed => CreateRelationshipWithProposedDeletion(from, to),
+            _ => throw new NotSupportedException($"This method currently does not support relationship status {status}.")
+        };
+    }
+
     public static Relationship CreateActiveRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
     {
         to ??= IDENTITY_2;
@@ -54,7 +66,7 @@ public static class TestData
     public static Relationship CreateTerminatedRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
     {
         var relationship = CreateActiveRelationship(from, to);
-        relationship.Terminate(IDENTITY_1, DEVICE_1);
+        relationship.Terminate(relationship.From, DEVICE_1);
         relationship.ClearDomainEvents();
         return relationship;
     }
@@ -67,14 +79,18 @@ public static class TestData
         return relationship;
     }
 
-    public static Relationship CreateDecomposedRelationship(IdentityAddress? from = null, IdentityAddress? to = null, IdentityAddress? decomposedBy = null)
+    public static Relationship CreateRelationshipWithProposedDeletion(IdentityAddress? from = null, IdentityAddress? to = null)
     {
-        from ??= IDENTITY_1;
-        to ??= IDENTITY_2;
-        decomposedBy ??= from;
-
         var relationship = CreateTerminatedRelationship(from, to);
-        relationship.Decompose(decomposedBy, DEVICE_1);
+        relationship.Decompose(relationship.From, DEVICE_1);
+        relationship.ClearDomainEvents();
+        return relationship;
+    }
+
+    public static Relationship CreateRelationshipReadyForDeletion(IdentityAddress? from = null, IdentityAddress? to = null)
+    {
+        var relationship = CreateRelationshipWithProposedDeletion(from, to);
+        relationship.Decompose(relationship.To, DEVICE_1);
         relationship.ClearDomainEvents();
         return relationship;
     }
