@@ -19,11 +19,16 @@ public class VersionController : ControllerBase
     public async Task<IActionResult> GetBackboneMajorVersion(CancellationToken cancellationToken)
     {
         var majorVersion = await _versionService.GetBackboneMajorVersion();
-        return Ok(new VersionResponse { MajorVersion = majorVersion });
+        return Ok(new VersionResponse { Result = new VersionResult { MajorVersion = majorVersion } });
     }
 }
 
 public class VersionResponse
+{
+    public VersionResult Result { get; set; } = null!;
+}
+
+public class VersionResult
 {
     public required string MajorVersion { get; set; }
 }
