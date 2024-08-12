@@ -54,3 +54,21 @@ Converts a map of environment variables back to a list
   {{- toYaml $list -}}
 {{- end -}}
 
+{{- define "generateEnvVars" -}}
+{{- $globalEnv := index . 0 -}}
+{{- $resourceEnv := index . 1 -}}
+{{- $globalEnvMap := include "listToMap" $globalEnv | fromYaml }}
+{{- $resourceEnvMap := include "listToMap" $resourceEnv | fromYaml }}
+{{- $mergedEnvMap := merge $resourceEnvMap $globalEnvMap }}
+{{- range $item := $mergedEnvMap }}
+- name: {{ $item.name }}
+  {{- if $item.value }}
+  value: {{ $item.value }}
+  {{- else if $item.valueFrom }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ $item.valueFrom.secretKeyRef.name }}
+      key: {{ $item.valueFrom.secretKeyRef.key }}
+  {{- end }}
+{{- end }}
+{{- end }}

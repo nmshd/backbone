@@ -63,22 +63,7 @@ spec:
                       name: rabbitmq-password
                       key: "VALUE" 
                 {{- end }}
-                {{- $arg0 := default (list) (.Values.global.env) }}
-                {{- $arg1 := default (list) (.Values.actualidentitydeletion.env) }}
-                {{- $globalEnvMap := include "listToMap" $arg0 | fromYaml }}
-                {{- $resourceEnvMap := include "listToMap" $arg1 | fromYaml }}
-                {{- $mergedEnvMap := merge $resourceEnvMap $globalEnvMap }}
-                {{- range $item := $mergedEnvMap }}
-                - name: {{ $item.name }}
-                {{- if $item.value }}
-                  value: {{ $item.value }}
-                {{- else if $item.valueFrom }}
-                  valueFrom:
-                    secretKeyRef:
-                      name: {{ $item.valueFrom.secretKeyRef.name }}
-                      key: {{ $item.valueFrom.secretKeyRef.key }}
-                {{- end }}
-                {{- end }}
+                {{- include "generateEnvVars" (list .Values.global.env .Values.actualidentitydeletion.env) | nindent 12 }}
           {{- with .Values.actualidentitydeletion.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 8 }}

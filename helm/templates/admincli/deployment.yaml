@@ -43,22 +43,7 @@ spec:
           env:
             - name: Database__Provider
               value: {{ .Values.global.configuration.modules.devices.infrastructure.sqlDatabase.provider }}
-            {{- $arg0 := default (list) (.Values.global.env) }}
-            {{- $arg1 := default (list) (.Values.admincli.env) }}
-            {{- $globalEnvMap := include "listToMap" $arg0 | fromYaml }}
-            {{- $resourceEnvMap := include "listToMap" $arg1 | fromYaml }}
-            {{- $mergedEnvMap := merge $resourceEnvMap $globalEnvMap }}
-            {{- range $item := $mergedEnvMap }}
-            - name: {{ $item.name }}
-            {{- if $item.value }}
-              value: {{ $item.value }}
-            {{- else if $item.valueFrom }}
-              valueFrom:
-                secretKeyRef:
-                  name: {{ $item.valueFrom.secretKeyRef.name }}
-                  key: {{ $item.valueFrom.secretKeyRef.key }}
-            {{- end }}
-            {{- end }}          
+            {{- include "generateEnvVars" (list .Values.global.env .Values.admincli.env) | nindent 12 }}
           tty: true
           command:
             - /bin/bash
