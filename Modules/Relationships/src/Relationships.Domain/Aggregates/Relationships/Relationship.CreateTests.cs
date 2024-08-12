@@ -82,13 +82,17 @@ public class RelationshipCreateTests : AbstractTestsBase
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotSendRelationshipRequestToYourself");
     }
 
-    [Fact]
-    public void There_can_only_be_one_active_relationship_between_two_identities()
+    [Theory]
+    [InlineData(RelationshipStatus.Pending)]
+    [InlineData(RelationshipStatus.Active)]
+    [InlineData(RelationshipStatus.Terminated)]
+    [InlineData(RelationshipStatus.DeletionProposed)]
+    public void New_relationship_cannot_be_created_when_there_is_an_existing_one_in_status_x(RelationshipStatus relationshipStatus)
     {
         // Arrange
         var existingRelationships = new List<Relationship>
         {
-            CreateActiveRelationship()
+            CreateRelationshipInStatus(relationshipStatus)
         };
 
         // Act
@@ -99,13 +103,14 @@ public class RelationshipCreateTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Creating_a_new_relationship_is_possible_if_existing_ones_are_rejected_or_revoked()
+    public void New_relationship_can_be_created_when_existing_ones_are_rejected_revoked_or_ready_for_deletion()
     {
         // Arrange
         var existingRelationships = new List<Relationship>
         {
             CreateRejectedRelationship(),
-            CreateRevokedRelationship()
+            CreateRevokedRelationship(),
+            CreateRelationshipReadyForDeletion()
         };
 
         // Act
@@ -113,37 +118,5 @@ public class RelationshipCreateTests : AbstractTestsBase
 
         // Assert
         acting.Should().NotThrow<DomainException>();
-    }
-
-    [Fact]
-    public void Cannot_create_Relationship_if_terminated_Relationship_exists()
-    {
-        // Arrange
-        var existingRelationships = new List<Relationship>
-        {
-            CreateTerminatedRelationship()
-        };
-
-        // Act
-        var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
-
-        // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists");
-    }
-
-    [Fact]
-    public void A_new_relationship_can_be_created_after_decomposing_the_old_one()
-    {
-        // Arrange
-        var existingRelationships = new List<Relationship>
-        {
-            CreateDecomposedRelationship(IDENTITY_1, IDENTITY_2)
-        };
-
-        // Act
-        var newRelationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, [], existingRelationships);
-
-        // Assert
-        newRelationship.Status.Should().Be(RelationshipStatus.Pending);
     }
 }

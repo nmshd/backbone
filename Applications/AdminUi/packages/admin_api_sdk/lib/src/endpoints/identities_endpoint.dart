@@ -83,4 +83,31 @@ class IdentitiesEndpoint extends Endpoint {
         '/api/v1/Identities/$address/DeletionProcesses/AuditLogs',
         transformer: (e) => (e as List).map(IdentityDeletionProcessAuditLogEntry.fromJson).toList(),
       );
+
+  Future<ApiResponse<IndividualQuota>> createIndividualQuota({
+    required String address,
+    required String metricKey,
+    required int max,
+    required String period,
+  }) =>
+      post(
+        '/api/v1/Identities/$address/Quotas',
+        data: {
+          'metricKey': metricKey,
+          'max': max,
+          'period': period,
+        },
+        transformer: IndividualQuota.fromJson,
+      );
+
+  Future<ApiResponse<void>> deleteIndividualQuota({
+    required String address,
+    required String individualQuotaId,
+  }) =>
+      delete(
+        '/api/v1/Identities/$address/Quotas/$individualQuotaId',
+        expectedStatus: 204,
+        transformer: (e) {},
+        allowEmptyResponse: true,
+      );
 }

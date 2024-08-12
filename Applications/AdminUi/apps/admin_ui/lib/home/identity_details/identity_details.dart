@@ -9,7 +9,6 @@ import 'deletion_process_table/deletion_process_table.dart';
 import 'identity_messages/identity_messages.dart';
 import 'identity_quotas/identity_quotas.dart';
 import 'identity_relationships/identity_relationships.dart';
-import 'modals/change_tier.dart';
 
 class IdentityDetails extends StatefulWidget {
   final String address;
