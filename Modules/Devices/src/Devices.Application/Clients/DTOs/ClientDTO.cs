@@ -13,16 +13,6 @@ public class ClientDTO
         MaxIdentities = client.MaxIdentities;
     }
 
-    public ClientDTO(string clientId, string displayName, string defaultTier, DateTime createdAt, int numberOfIdentities, int? maxIdentities)
-    {
-        ClientId = clientId;
-        DisplayName = displayName;
-        DefaultTier = defaultTier;
-        CreatedAt = createdAt;
-        NumberOfIdentities = numberOfIdentities;
-        MaxIdentities = maxIdentities;
-    }
-
     public string ClientId { get; set; }
     public string DisplayName { get; set; }
     public string DefaultTier { get; set; }

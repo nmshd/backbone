@@ -4,7 +4,10 @@ using System.Text.Json;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
+using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
+using Microsoft.EntityFrameworkCore;
 using OpenIddict.Core;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
@@ -13,11 +16,13 @@ namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
 public class OAuthClientsRepository : IOAuthClientsRepository
 {
     private readonly OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> _applicationManager;
+    private readonly IQueryable<Identity> _readonlyIdentities;
     private readonly Dictionary<string, CustomOpenIddictEntityFrameworkCoreApplication> _trackedApplications;
 
-    public OAuthClientsRepository(OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager)
+    public OAuthClientsRepository(OpenIddictApplicationManager<CustomOpenIddictEntityFrameworkCoreApplication> applicationManager, DevicesDbContext dbContext)
     {
         _applicationManager = applicationManager;
+        _readonlyIdentities = dbContext.Identities.AsNoTracking();
         _trackedApplications = new Dictionary<string, CustomOpenIddictEntityFrameworkCoreApplication>();
     }
 
@@ -31,6 +36,16 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         var oAuthClients = applications.Select(a => a.ToModel());
 
         return oAuthClients;
+    }
+
+    public async Task<Dictionary<OAuthClient, int>> CountIdentities(List<OAuthClient> clients, CancellationToken cancellationToken, bool track = false)
+    {
+        var result = new Dictionary<OAuthClient, int>();
+
+        foreach (var client in clients)
+            result[client] = await _readonlyIdentities.CountAsync(i => i.ClientId == client.ClientId, cancellationToken);
+
+        return result;
     }
 
     public async Task<OAuthClient?> Find(string clientId, CancellationToken cancellationToken, bool track = false)
