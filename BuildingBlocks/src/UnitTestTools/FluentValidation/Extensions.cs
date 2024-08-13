@@ -1,6 +1,8 @@
 using System.Text.RegularExpressions;
+using FluentAssertions;
 using FluentValidation;
 using FluentValidation.Results;
+using FluentValidation.TestHelper;
 using Xunit.Sdk;
 
 namespace Backbone.UnitTestTools.FluentValidation;
@@ -29,5 +31,19 @@ public static class IValidatorExtensions
             throw new XunitException($"Expected error for item with index {indexOfItem}.");
 
         return validationResult.Errors;
+    }
+}
+
+public static class ValidationTestExtensions
+{
+    public static void ShouldHaveValidationErrorForItem<T>(this TestValidationResult<T> testValidationResult, string propertyName, string expectedErrorCode,
+        string expectedErrorMessage)
+    {
+        var validationError = testValidationResult.Errors.FirstOrDefault(r => r.PropertyName == propertyName);
+        if (validationError == null)
+            throw new XunitException($"Expected error for property '{propertyName}'.");
+
+        validationError.ErrorCode.Should().Be(expectedErrorCode);
+        validationError.ErrorMessage.Should().Be(expectedErrorMessage);
     }
 }

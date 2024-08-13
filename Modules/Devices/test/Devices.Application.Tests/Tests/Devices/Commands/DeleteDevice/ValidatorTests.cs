@@ -1,7 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Devices.Commands.DeleteDevice;
 using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
+using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
 using Xunit;
 
@@ -12,23 +12,29 @@ public class ValidatorTests : AbstractTestsBase
     [Fact]
     public void Happy_path()
     {
+        // Arrange
         var validator = new Validator();
 
+        // Act
         var validationResult = validator.TestValidate(new DeleteDeviceCommand { DeviceId = DeviceId.New() });
 
+        // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
     }
 
     [Fact]
     public void Fails_when_device_id_is_invalid()
     {
+        // Arrange
         var validator = new Validator();
 
+        // Act
         var validationResult = validator.TestValidate(new DeleteDeviceCommand { DeviceId = "some-invalid-device-id" });
 
-        validationResult.ShouldHaveValidationErrorFor(x => x.DeviceId);
-        validationResult.Errors.Should().HaveCount(1);
-        validationResult.Errors.First().ErrorCode.Should().Be("error.platform.validation.invalidPropertyValue");
-        validationResult.Errors.First().ErrorMessage.Should().Be("The ID is not valid. Check length, prefix and the used characters.");
+        // Assert
+        validationResult.ShouldHaveValidationErrorForItem(
+            propertyName: nameof(DeleteDeviceCommand.DeviceId),
+            expectedErrorCode: "error.platform.validation.invalidPropertyValue",
+            expectedErrorMessage: "The ID is not valid. Check length, prefix and the used characters.");
     }
 }

@@ -1,7 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
+using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
 using Xunit;
 
@@ -12,23 +12,29 @@ public class ValidatorTests : AbstractTestsBase
     [Fact]
     public void Happy_path()
     {
+        // Arrange
         var validator = new Validator();
 
+        // Act
         var validationResult = validator.TestValidate(new CancelDeletionProcessAsOwnerCommand(IdentityDeletionProcessId.Generate()));
 
+        // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
     }
 
     [Fact]
     public void Fails_when_deletion_process_id_is_invalid()
     {
+        // Arrange
         var validator = new Validator();
 
+        // Act
         var validationResult = validator.TestValidate(new CancelDeletionProcessAsOwnerCommand("invalid-deletion-process-id"));
 
-        validationResult.ShouldHaveValidationErrorFor(x => x.DeletionProcessId);
-        validationResult.Errors.Should().HaveCount(1);
-        validationResult.Errors.First().ErrorCode.Should().Be("error.platform.validation.invalidPropertyValue");
-        validationResult.Errors.First().ErrorMessage.Should().Be("The ID is not valid. Check length, prefix and the used characters.");
+        // Assert
+        validationResult.ShouldHaveValidationErrorForItem(
+            propertyName: nameof(CancelDeletionProcessAsOwnerCommand.DeletionProcessId),
+            expectedErrorCode: "error.platform.validation.invalidPropertyValue",
+            expectedErrorMessage: "The ID is not valid. Check length, prefix and the used characters.");
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Commands.LogDeletionProcess;
 using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
+using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
 using Xunit;
 
@@ -11,23 +11,29 @@ public class ValidatorTests : AbstractTestsBase
     [Fact]
     public void Happy_path()
     {
+        // Arrange
         var validator = new Validator();
 
+        // Act
         var validationResult = validator.TestValidate(new LogDeletionProcessCommand(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress(), "aggregateType"));
 
+        // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
     }
 
     [Fact]
     public void Fails_when_identity_address_is_invalid()
     {
+        // Arrange
         var validator = new Validator();
 
+        // Act
         var validationResult = validator.TestValidate(new LogDeletionProcessCommand("invalid-identity-address", "aggregateType"));
 
-        validationResult.ShouldHaveValidationErrorFor(x => x.IdentityAddress);
-        validationResult.Errors.Should().HaveCount(1);
-        validationResult.Errors.First().ErrorCode.Should().Be("error.platform.validation.invalidPropertyValue");
-        validationResult.Errors.First().ErrorMessage.Should().Be("The ID is not valid. Check length, prefix and the used characters.");
+        // Assert
+        validationResult.ShouldHaveValidationErrorForItem(
+            propertyName: nameof(LogDeletionProcessCommand.IdentityAddress),
+            expectedErrorCode: "error.platform.validation.invalidPropertyValue",
+            expectedErrorMessage: "The ID is not valid. Check length, prefix and the used characters.");
     }
 }
