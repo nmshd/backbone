@@ -66,9 +66,7 @@ spec:
               subPath: appsettings.override.json
               readOnly: true
           env:
-            {{- with .Values.sseserver.env }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
+            {{- include "generateEnvVars" (list .Values.global.env .Values.sseserver.env) | nindent 12 }}
           livenessProbe:
             httpGet:
               path: /health
