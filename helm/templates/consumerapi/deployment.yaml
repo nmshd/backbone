@@ -78,9 +78,7 @@ spec:
                   name: rabbitmq-password
                   key: "VALUE" 
             {{- end }}
-            {{- with .Values.consumerapi.env }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
+            {{- include "generateEnvVars" (list .Values.global.env .Values.consumerapi.env) | nindent 12 }}
           livenessProbe:
             httpGet:
               path: /health
