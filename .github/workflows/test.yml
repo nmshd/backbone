@@ -270,7 +270,6 @@ jobs:
         with:
           repository: nmshd/runtime
           path: runtime
-          ref: release/v5
 
       - uses: actions/setup-node@v4
         with:
