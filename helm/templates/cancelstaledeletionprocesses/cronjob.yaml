@@ -66,7 +66,7 @@ spec:
                       name: rabbitmq-password
                       key: "VALUE" 
                 {{- end }}
-                {{- include "generateEnvVars" (list .Values.global.env .Values.cancelstaledeletionprocesses.env) | nindent 12 }}
+                {{- include "generateEnvVars" (list .Values.global.env .Values.cancelstaledeletionprocesses.env) | nindent 16 }}
           {{- with .Values.cancelstaledeletionprocesses.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 8 }}
