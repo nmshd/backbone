@@ -5,7 +5,7 @@ namespace Backbone.Modules.Devices.Application.Infrastructure.Persistence.Reposi
 public interface IOAuthClientsRepository
 {
     Task<IEnumerable<OAuthClient>> FindAll(CancellationToken cancellationToken, bool track = false);
-    public Task<Dictionary<OAuthClient, int>> CountIdentities(List<OAuthClient> clients, CancellationToken cancellationToken, bool track = false);
+    public Task<Dictionary<string, int>> CountIdentities(List<string> clients, CancellationToken cancellationToken, bool track = false);
     Task<OAuthClient?> Find(string clientId, CancellationToken cancellationToken, bool track = false);
     Task<bool> Exists(string clientId, CancellationToken cancellationToken);
     Task Add(OAuthClient client, string clientSecret, CancellationToken cancellationToken);

@@ -38,14 +38,18 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return oAuthClients;
     }
 
-    public async Task<Dictionary<OAuthClient, int>> CountIdentities(List<OAuthClient> clients, CancellationToken cancellationToken, bool track = false)
+    public async Task<Dictionary<string, int>> CountIdentities(List<string> clientIds, CancellationToken cancellationToken, bool track = false)
     {
-        var result = new Dictionary<OAuthClient, int>();
+        var identityCounts = await _readonlyIdentities
+            .Where(i => i.ClientId != null && clientIds.Contains(i.ClientId))
+            .GroupBy(i => i.ClientId)
+            .Select(g => new { ClientId = g.Key, Count = g.Count() })
+            .ToDictionaryAsync(g => g.ClientId!, g => g.Count, cancellationToken);
 
-        foreach (var client in clients)
-            result[client] = await _readonlyIdentities.CountAsync(i => i.ClientId == client.ClientId, cancellationToken);
+        foreach (var clientId in clientIds.Where(clientId => !identityCounts.ContainsKey(clientId)))
+            identityCounts[clientId] = 0;
 
-        return result;
+        return identityCounts;
     }
 
     public async Task<OAuthClient?> Find(string clientId, CancellationToken cancellationToken, bool track = false)
