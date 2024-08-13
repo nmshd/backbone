@@ -39,7 +39,7 @@ public static class ValidationTestExtensions
     public static void ShouldHaveValidationErrorForItem<T>(this TestValidationResult<T> testValidationResult, string propertyName, string expectedErrorCode,
         string expectedErrorMessage)
     {
-        var validationError = testValidationResult.Errors.FirstOrDefault(r => r.PropertyName == propertyName);
+        var validationError = testValidationResult.Errors.FirstOrDefault(r => r.PropertyName.Contains(propertyName));
         if (validationError == null)
             throw new XunitException($"Expected error for property '{propertyName}'.");
 
