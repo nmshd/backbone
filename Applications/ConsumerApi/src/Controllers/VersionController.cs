@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Backbone.BuildingBlocks.API;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Backbone.ConsumerApi.Controllers;
@@ -15,17 +16,12 @@ public class VersionController : ControllerBase
 
     [HttpGet]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(VersionResponse), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetBackboneMajorVersion(CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<VersionResult>), StatusCodes.Status200OK)]
+    public IActionResult GetBackboneMajorVersion(CancellationToken cancellationToken)
     {
-        var majorVersion = await _versionService.GetBackboneMajorVersion();
-        return Ok(new VersionResponse { Result = new VersionResult { MajorVersion = majorVersion } });
+        return Ok(new HttpResponseEnvelopeResult<VersionResult>(
+            new VersionResult { MajorVersion = _versionService.GetBackboneMajorVersion() }));
     }
-}
-
-public class VersionResponse
-{
-    public VersionResult Result { get; set; } = null!;
 }
 
 public class VersionResult
