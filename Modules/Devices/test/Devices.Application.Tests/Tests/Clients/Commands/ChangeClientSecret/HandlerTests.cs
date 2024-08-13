@@ -22,10 +22,7 @@ public class HandlerTests : AbstractTestsBase
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
         A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns(client);
 
-        var identitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => identitiesRepository.CountByClientId(client.ClientId, A<CancellationToken>._)).Returns(0);
-
-        var handler = CreateHandler(oAuthClientsRepository, identitiesRepository);
+        var handler = CreateHandler(oAuthClientsRepository);
 
         // Act
         await handler.Handle(command, CancellationToken.None);
@@ -37,8 +34,8 @@ public class HandlerTests : AbstractTestsBase
         ).MustHaveHappenedOnceExactly();
     }
 
-    private Handler CreateHandler(IOAuthClientsRepository oAuthClientsRepository, IIdentitiesRepository identitiesRepository)
+    private Handler CreateHandler(IOAuthClientsRepository oAuthClientsRepository)
     {
-        return new Handler(oAuthClientsRepository, identitiesRepository);
+        return new Handler(oAuthClientsRepository);
     }
 }
