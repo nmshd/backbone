@@ -15,7 +15,11 @@ public class Handler : IRequestHandler<ListClientsQuery, ListClientsResponse>
 
     public async Task<ListClientsResponse> Handle(ListClientsQuery request, CancellationToken cancellationToken)
     {
-        var clients = await _oAuthClientsRepository.FindAll(cancellationToken);
-        return new ListClientsResponse(clients.Select(c => new ClientDTO(c)));
+        var clients = (await _oAuthClientsRepository.FindAll(cancellationToken)).ToList();
+
+        var clientIds = clients.Select(c => c.ClientId).ToList();
+        var numberOfIdentitiesByClient = await _oAuthClientsRepository.CountIdentities(clientIds, cancellationToken);
+
+        return new ListClientsResponse(clients.Select(client => new ClientDTO(client, numberOfIdentitiesByClient[client.ClientId])).ToList());
     }
 }

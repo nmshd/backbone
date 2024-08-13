@@ -23,14 +23,14 @@ public class ClientsEndpoint(EndpointClient client) : AdminApiEndpoint(client)
         return await _client.Post<CreateClientResponse>($"api/{API_VERSION}/Clients", request);
     }
 
-    public async Task<ApiResponse<ClientInfo>> ChangeClientSecret(string id, ChangeClientSecretRequest request)
+    public async Task<ApiResponse<ChangeClientSecretResponse>> ChangeClientSecret(string id, ChangeClientSecretRequest request)
     {
-        return await _client.Patch<ClientInfo>($"api/{API_VERSION}/Clients/{id}/ChangeSecret", request);
+        return await _client.Patch<ChangeClientSecretResponse>($"api/{API_VERSION}/Clients/{id}/ChangeSecret", request);
     }
 
-    public async Task<ApiResponse<ClientInfo>> UpdateClient(string id, UpdateClientRequest request)
+    public async Task<ApiResponse<UpdateClientResponse>> UpdateClient(string id, UpdateClientRequest request)
     {
-        return await _client.Put<ClientInfo>($"api/{API_VERSION}/Clients/{id}", request);
+        return await _client.Put<UpdateClientResponse>($"api/{API_VERSION}/Clients/{id}", request);
     }
 
     public async Task<ApiResponse<EmptyResponse>> DeleteClient(string id)
