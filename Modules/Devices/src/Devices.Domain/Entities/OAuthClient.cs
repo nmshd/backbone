@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
 namespace Backbone.Modules.Devices.Domain.Entities;
@@ -29,7 +30,7 @@ public class OAuthClient : Entity
     public DateTime CreatedAt { get; }
     public int? MaxIdentities { get; private set; }
 
-    public bool Update(TierId newDefaultTier, int? newMaxIdentities)
+    public bool Update(TierId newDefaultTier, int? newMaxIdentities, int identitiesCount)
     {
         var hasChanges = false;
 
@@ -38,6 +39,9 @@ public class OAuthClient : Entity
             hasChanges = true;
             DefaultTier = newDefaultTier;
         }
+
+        if (newMaxIdentities < identitiesCount)
+            throw new DomainException(DomainErrors.MaxIdentitiesLessThanCurrentIdentities(newMaxIdentities.Value, identitiesCount));
 
         if (MaxIdentities != newMaxIdentities)
         {

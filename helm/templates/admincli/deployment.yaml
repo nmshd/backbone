@@ -43,9 +43,7 @@ spec:
           env:
             - name: Database__Provider
               value: {{ .Values.global.configuration.modules.devices.infrastructure.sqlDatabase.provider }}
-            {{- with .Values.admincli.env }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
+            {{- include "generateEnvVars" (list .Values.global.env .Values.admincli.env) | nindent 12 }}
           tty: true
           command:
             - /bin/bash
