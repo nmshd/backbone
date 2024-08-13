@@ -51,9 +51,7 @@ spec:
               subPath: appsettings.override.json
               readOnly: true
           env:
-            {{- with .Values.databasemigrator.env }}
-            {{- toYaml . | nindent 12 }}
-            {{- end }}
+            {{- include "generateEnvVars" (list .Values.global.env .Values.databasemigrator.env) | nindent 12 }}
       {{- with .Values.databasemigrator.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
