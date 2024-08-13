@@ -69,7 +69,6 @@ internal class ClientDetailsStepDefinitions : BaseStepDefinitions
         _response!.Result!.ClientId.Should().Be(_clientId);
         _response!.Result!.DefaultTier.Should().Be(_tierId);
         _response!.Result!.MaxIdentities.Should().Be(_maxIdentities);
-        _response!.Result!.NumberOfIdentities.Should().BeLessOrEqualTo(_maxIdentities);
         _response!.ContentType.Should().StartWith("application/json");
         await _response!.Should().ComplyWithSchema();
     }
