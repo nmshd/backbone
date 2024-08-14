@@ -1,5 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Tokens.Domain.DomainEvents;
+﻿using Backbone.Modules.Tokens.Domain.DomainEvents;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Domain.Tests.TestHelpers;
 using Backbone.UnitTestTools.BaseClasses;
@@ -34,7 +33,7 @@ public class TokenTests : AbstractTestsBase
     public void Expression_CanBeCollectedBy_null_forIdentity()
     {
         // Arrange
-        var token = TestData.CreateToken(TestDataGenerator.CreateRandomIdentityAddress(), null);
+        var token = TestData.CreateToken(createdBy: TestDataGenerator.CreateRandomIdentityAddress(), forIdentity: null);
 
         // Act
         var result = EvaluateCanBeCollectedByExpression(token, "anyIdentityAddress");
@@ -47,10 +46,12 @@ public class TokenTests : AbstractTestsBase
     public void Expression_CanBeCollectedBy_collector_matching_creator()
     {
         // Arrange
-        var token = new Token("createdByIdentityAddress", DeviceId.Parse("DVC1"), [], DateTime.Now.AddDays(1), "createdForIdentityAddress");
+        var createdByIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var createdForIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var token = TestData.CreateToken(createdByIdentityAddress, createdForIdentityAddress);
 
         // Act
-        var result = EvaluateCanBeCollectedByExpression(token, "createdByIdentityAddress");
+        var result = EvaluateCanBeCollectedByExpression(token, createdByIdentityAddress);
 
         // Assert
         result.Should().BeTrue();
@@ -60,10 +61,11 @@ public class TokenTests : AbstractTestsBase
     public void Expression_CanBeCollectedBy_collector_matching_forIdentity()
     {
         // Arrange
-        var token = new Token("createdByIdentityAddress", DeviceId.Parse("DVC1"), [], DateTime.Now.AddDays(1), "createdForIdentityAddress");
+        var createdForIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var token = TestData.CreateToken(createdBy: TestDataGenerator.CreateRandomIdentityAddress(), createdForIdentityAddress);
 
         // Act
-        var result = EvaluateCanBeCollectedByExpression(token, "createdForIdentityAddress");
+        var result = EvaluateCanBeCollectedByExpression(token, createdForIdentityAddress);
 
         // Assert
         result.Should().BeTrue();
@@ -74,7 +76,7 @@ public class TokenTests : AbstractTestsBase
     public void Expression_CanBeCollectedBy_collector_is_third_identity()
     {
         // Arrange
-        var token = new Token("createdByIdentityAddress", DeviceId.Parse("DVC1"), [], DateTime.Now.AddDays(1), "createdForIdentityAddress");
+        var token = TestData.CreateToken(createdBy: TestDataGenerator.CreateRandomIdentityAddress(), forIdentity: TestDataGenerator.CreateRandomIdentityAddress());
 
         // Act
         var result = EvaluateCanBeCollectedByExpression(token, "anotherIdentityAddress");
