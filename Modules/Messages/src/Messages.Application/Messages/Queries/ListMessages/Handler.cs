@@ -34,7 +34,7 @@ public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
 
         await _messagesRepository.Update(dbPaginationResult.ItemsOnPage);
 
-        var response = new ListMessagesResponse(dbPaginationResult.ItemsOnPage, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems, _userContext.GetAddress(), _options.DidDomainName);
+        var response = new ListMessagesResponse(dbPaginationResult, request.PaginationFilter, _userContext.GetAddress(), _options.DidDomainName);
 
         return response;
     }

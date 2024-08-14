@@ -91,7 +91,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private DatawalletModification CreateModification(PushDatawalletModificationItem modificationDto, string blobReference)
     {
         return _datawallet!.AddModification(
-            modificationDto.Type,
+            MapDatawalletModificationType(modificationDto.Type),
             new DatawalletVersion(modificationDto.DatawalletVersion),
             modificationDto.Collection,
             modificationDto.ObjectIdentifier,
@@ -100,6 +100,18 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
             _activeDevice,
             blobReference
         );
+    }
+
+    private DatawalletModificationType MapDatawalletModificationType(DatawalletModificationDTO.DatawalletModificationType type)
+    {
+        return type switch
+        {
+            DatawalletModificationDTO.DatawalletModificationType.Create => DatawalletModificationType.Create,
+            DatawalletModificationDTO.DatawalletModificationType.Update => DatawalletModificationType.Update,
+            DatawalletModificationDTO.DatawalletModificationType.Delete => DatawalletModificationType.Delete,
+            DatawalletModificationDTO.DatawalletModificationType.CacheChanged => DatawalletModificationType.CacheChanged,
+            _ => throw new Exception($"Unsupported Datawallet Modification Type: {type}")
+        };
     }
 
     private void EnsureDeviceIsUpToDate()

@@ -1,6 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using MediatR;
 
@@ -22,6 +21,6 @@ public class Handler : IRequestHandler<ListRelationshipTemplatesQuery, ListRelat
         var dbPaginationResult = await _relationshipTemplatesRepository.FindTemplatesWithIds(request.Ids.Select(RelationshipTemplateId.Parse), _userContext.GetAddress(), request.PaginationFilter,
             cancellationToken, track: false);
 
-        return new ListRelationshipTemplatesResponse(dbPaginationResult.ItemsOnPage.Select(x => new RelationshipTemplateDTO(x)), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
+        return new ListRelationshipTemplatesResponse(dbPaginationResult, request.PaginationFilter);
     }
 }

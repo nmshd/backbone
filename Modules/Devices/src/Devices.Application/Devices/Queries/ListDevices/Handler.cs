@@ -1,6 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
@@ -20,6 +19,6 @@ public class Handler : IRequestHandler<ListDevicesQuery, ListDevicesResponse>
     public async Task<ListDevicesResponse> Handle(ListDevicesQuery request, CancellationToken cancellationToken)
     {
         var dbPaginationResult = await _identitiesRepository.FindAllDevicesOfIdentity(_activeIdentity, request.Ids.Select(DeviceId.Parse), request.PaginationFilter, cancellationToken);
-        return new ListDevicesResponse(dbPaginationResult.ItemsOnPage.Select(d => new DeviceDTO(d)), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
+        return new ListDevicesResponse(dbPaginationResult, request.PaginationFilter);
     }
 }

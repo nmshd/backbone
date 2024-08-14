@@ -34,7 +34,6 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
         _activeDevice = userContext.GetDeviceId();
     }
 
-
     public async Task<StartSyncRunResponse> Handle(StartSyncRunCommand request, CancellationToken cancellationToken)
     {
         _request = request;
@@ -44,8 +43,8 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
 
         return request.Type switch
         {
-            SyncRun.SyncRunType.DatawalletVersionUpgrade => await StartDatawalletVersionUpgrade(),
-            SyncRun.SyncRunType.ExternalEventSync => await StartExternalEventSync(),
+            SyncRunDTO.SyncRunType.DatawalletVersionUpgrade => await StartDatawalletVersionUpgrade(),
+            SyncRunDTO.SyncRunType.ExternalEventSync => await StartExternalEventSync(),
             _ => throw new Exception("Given sync run type is not supported.")
         };
     }
@@ -122,7 +121,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
     private async Task<SyncRun> CreateNewSyncRun(IEnumerable<ExternalEvent> events)
     {
         var newIndex = DetermineNextSyncRunIndex();
-        var syncRun = new SyncRun(newIndex, _request.Duration ?? DEFAULT_DURATION, _activeIdentity, _activeDevice, events, _request.Type);
+        var syncRun = new SyncRun(newIndex, _request.Duration ?? DEFAULT_DURATION, _activeIdentity, _activeDevice, events, MapSyncRunType(_request.Type));
 
         await _dbContext.Set<SyncRun>().AddAsync(syncRun, _cancellationToken);
         try
@@ -140,6 +139,16 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
         return syncRun;
     }
 
+    private SyncRun.SyncRunType MapSyncRunType(SyncRunDTO.SyncRunType type)
+    {
+        return type switch
+        {
+            SyncRunDTO.SyncRunType.DatawalletVersionUpgrade => SyncRun.SyncRunType.DatawalletVersionUpgrade,
+            SyncRunDTO.SyncRunType.ExternalEventSync => SyncRun.SyncRunType.ExternalEventSync,
+            _ => throw new Exception($"Unsupported Sync Run Type: {type}")
+        };
+    }
+
     private long DetermineNextSyncRunIndex()
     {
         return _previousSyncRun == null ? 0 : _previousSyncRun.Index + 1;
@@ -147,11 +156,6 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
 
     private StartSyncRunResponse CreateResponse(StartSyncRunStatus status, SyncRun? newSyncRun = null)
     {
-        var response = new StartSyncRunResponse
-        {
-            Status = status,
-            SyncRun = newSyncRun != null ? new SyncRunDTO(newSyncRun) : null
-        };
-        return response;
+        return new StartSyncRunResponse(status, newSyncRun);
     }
 }

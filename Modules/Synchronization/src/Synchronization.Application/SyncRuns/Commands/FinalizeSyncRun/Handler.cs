@@ -123,7 +123,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         foreach (var modificationDto in modifications)
         {
             var newModification = _datawallet.AddModification(
-                modificationDto.Type,
+                MapDatawalletModificationType(modificationDto.Type),
                 new Datawallet.DatawalletVersion(modificationDto.DatawalletVersion),
                 modificationDto.Collection,
                 modificationDto.ObjectIdentifier,
@@ -136,5 +136,17 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         }
 
         return newModifications;
+    }
+
+    private DatawalletModificationType MapDatawalletModificationType(DatawalletModificationDTO.DatawalletModificationType type)
+    {
+        return type switch
+        {
+            DatawalletModificationDTO.DatawalletModificationType.Create => DatawalletModificationType.Create,
+            DatawalletModificationDTO.DatawalletModificationType.Update => DatawalletModificationType.Update,
+            DatawalletModificationDTO.DatawalletModificationType.Delete => DatawalletModificationType.Delete,
+            DatawalletModificationDTO.DatawalletModificationType.CacheChanged => DatawalletModificationType.CacheChanged,
+            _ => throw new Exception($"Unsupported Datawallet Modification Type: {type}")
+        };
     }
 }

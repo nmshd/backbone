@@ -1,12 +1,11 @@
 using Backbone.BuildingBlocks.Application.FluentValidation;
-using Backbone.Modules.Synchronization.Domain.Entities;
 using FluentValidation;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 
 public class PushDatawalletModificationItem
 {
-    public required DatawalletModificationType Type { get; set; }
+    public required DatawalletModificationDTO.DatawalletModificationType Type { get; set; }
     public required string ObjectIdentifier { get; set; }
     public required string Collection { get; set; }
     public string? PayloadCategory { get; set; }

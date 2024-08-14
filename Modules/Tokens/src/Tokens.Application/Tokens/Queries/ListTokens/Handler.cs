@@ -1,7 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using Backbone.Modules.Tokens.Domain.Entities;
 using MediatR;
 
@@ -24,6 +23,6 @@ public class Handler : IRequestHandler<ListTokensQuery, ListTokensResponse>
             ? await _tokensRepository.FindAllWithIds(request.Ids.Select(TokenId.Parse), request.PaginationFilter, cancellationToken)
             : await _tokensRepository.FindAllOfOwner(_activeIdentity, request.PaginationFilter, cancellationToken);
 
-        return new ListTokensResponse(dbPaginationResult.ItemsOnPage.Select(t => new TokenDTO(t)), request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
+        return new ListTokensResponse(dbPaginationResult, request.PaginationFilter);
     }
 }
