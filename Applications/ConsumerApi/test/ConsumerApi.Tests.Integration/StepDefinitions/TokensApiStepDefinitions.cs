@@ -292,7 +292,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         if (_tokensResponse is not null)
         {
             _tokensResponse.Should().BeASuccess();
-            _tokensResponse.Result!.Select(x => x.Id).Should().NotContain(_tokenId);
+            _tokensResponse.Result!.Should().NotContain(t => t.Id == _tokenId);
         }
     }
 }
