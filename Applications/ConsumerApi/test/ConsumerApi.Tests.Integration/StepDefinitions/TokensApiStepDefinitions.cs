@@ -6,7 +6,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Support;
-using Backbone.Crypto;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -28,7 +27,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
     private ApiResponse<Token>? _tokenResponse;
     private ApiResponse<ListTokensResponse>? _tokensResponse;
     private bool _isAuthenticated;
-    private Client? _sdk;
+    private Client? _client;
 
     private static readonly DateTime TOMORROW = DateTime.Now.AddDays(1);
 
@@ -46,14 +45,14 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
     [Given("the user is authenticated")]
     public async Task GivenTheUserIsAuthenticated()
     {
-        _sdk = await Client.CreateForNewIdentity(HttpClient, ClientCredentials, Constants.DEVICE_PASSWORD);
+        _client = await Client.CreateForNewIdentity(HttpClient, ClientCredentials, Constants.DEVICE_PASSWORD);
         _isAuthenticated = true;
     }
 
     [Given("the user is unauthenticated")]
     public void GivenTheUserIsUnauthenticated()
     {
-        _sdk = Client.CreateUnauthenticated(HttpClient, ClientCredentials);
+        _client = Client.CreateUnauthenticated(HttpClient, ClientCredentials);
         _isAuthenticated = false;
     }
 
@@ -66,8 +65,8 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
             ExpiresAt = TOMORROW
         };
 
-        _sdk = await Client.CreateForNewIdentity(HttpClient, ClientCredentials, Constants.DEVICE_PASSWORD);
-        var response = await _sdk.Tokens.CreateToken(createTokenRequest);
+        _client = await Client.CreateForNewIdentity(HttpClient, ClientCredentials, Constants.DEVICE_PASSWORD);
+        var response = await _client.Tokens.CreateToken(createTokenRequest);
         response.Should().BeASuccess();
 
         _tokenId = response.Result!.Id;
@@ -83,7 +82,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
             ExpiresAt = TOMORROW
         };
 
-        var response = await _sdk!.Tokens.CreateToken(createTokenRequest);
+        var response = await _client!.Tokens.CreateToken(createTokenRequest);
         response.Should().BeASuccess();
 
         _peerTokenId = response.Result!.Id;
@@ -101,7 +100,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
                 ExpiresAt = TOMORROW
             };
 
-            var response = await _sdk!.Tokens.CreateToken(createTokenRequest);
+            var response = await _client!.Tokens.CreateToken(createTokenRequest);
 
             response.Should().BeASuccess();
 
@@ -136,7 +135,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
     {
         var tokenIds = _givenOwnTokens.Select(t => t.Id);
 
-        _tokensResponse = await _sdk!.Tokens.ListTokens(tokenIds);
+        _tokensResponse = await _client!.Tokens.ListTokens(tokenIds);
         _tokensResponse.Should().NotBeNull();
 
         var tokens = _tokensResponse.Result!.ToArray();
@@ -156,11 +155,11 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
 
         if (_isAuthenticated)
         {
-            _createTokenResponse = await _sdk!.Tokens.CreateToken(request);
+            _createTokenResponse = await _client!.Tokens.CreateToken(request);
         }
         else
         {
-            _createTokenResponse401 = await _sdk!.Tokens.CreateTokenUnauthenticated(request);
+            _createTokenResponse401 = await _client!.Tokens.CreateTokenUnauthenticated(request);
         }
     }
 
@@ -173,7 +172,7 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
             ExpiresAt = TOMORROW
         };
 
-        _createTokenResponse = await _sdk!.Tokens.CreateToken(request);
+        _createTokenResponse = await _client!.Tokens.CreateToken(request);
     }
 
     [When(@"a GET request is sent to the Tokens/{id} endpoint with ""?(.*?)""?")]
@@ -192,14 +191,14 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
                 break;
         }
 
-        _tokenResponse = await _sdk!.Tokens.GetTokenUnauthenticated(id);
+        _tokenResponse = await _client!.Tokens.GetTokenUnauthenticated(id);
     }
 
     [When(@"a GET request is sent to the Tokens endpoint with a list containing t\.Id, p\.Id")]
     public async Task WhenAGETRequestIsSentToTheTokensEndpointWithAListContainingT_IdP_Id()
     {
         var tokenIds = new List<string> { _tokenId, _peerTokenId };
-        _tokensResponse = await _sdk!.Tokens.ListTokens(tokenIds);
+        _tokensResponse = await _client!.Tokens.ListTokens(tokenIds);
 
         _responseTokens.AddRange(_tokensResponse.Result!);
     }
