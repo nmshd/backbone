@@ -1,5 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Tokens.Domain.Entities;
 using FluentValidation;

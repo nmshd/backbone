@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using FluentValidation;

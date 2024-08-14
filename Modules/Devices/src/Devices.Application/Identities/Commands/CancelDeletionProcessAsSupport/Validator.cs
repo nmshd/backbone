@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.FluentValidation;
+﻿using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FluentValidation;

@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Tooling.Extensions;

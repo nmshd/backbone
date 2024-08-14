@@ -1,4 +1,4 @@
-using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using FluentValidation;

@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.FluentValidation;
+﻿using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using FluentValidation;
 
@@ -11,4 +11,3 @@ public class Validator : AbstractValidator<GetDeletionProcessesAsSupportQuery>
         RuleFor(x => x.IdentityAddress).ValidId<GetDeletionProcessesAsSupportQuery, IdentityAddress>();
     }
 }
-

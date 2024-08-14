@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.FluentValidation;
+﻿using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Files.Domain.Entities;
 using FluentValidation;
 

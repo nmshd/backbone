@@ -1,4 +1,4 @@
-using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Messages.Domain.Ids;
 using FluentValidation;
 

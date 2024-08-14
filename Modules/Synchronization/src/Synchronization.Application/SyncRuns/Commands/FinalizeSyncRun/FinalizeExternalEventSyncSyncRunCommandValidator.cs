@@ -1,4 +1,4 @@
-using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using FluentValidation;
