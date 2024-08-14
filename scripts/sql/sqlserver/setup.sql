@@ -242,9 +242,13 @@ GRANT SELECT, INSERT, UPDATE, DELETE, EXECUTE, REFERENCES, VIEW DEFINITION ON SC
 GRANT SELECT, INSERT, UPDATE, DELETE ON SCHEMA::AdminUi TO relationships /* we temporarily grant this permission because it is required by relationships in order to delete the AdminUi.RelationshipOverviews view*/
 GRANT SELECT, REFERENCES ON SCHEMA::Relationships TO messages
 GRANT SELECT, REFERENCES ON SCHEMA::Challenges TO devices
-GRANT SELECT ON SCHEMA::Messages TO quotas
+GRANT SELECT ON SCHEMA::Challenges TO quotas
+GRANT SELECT ON SCHEMA::Devices TO quotas
 GRANT SELECT ON SCHEMA::Files TO quotas
+GRANT SELECT ON SCHEMA::Messages TO quotas
 GRANT SELECT ON SCHEMA::Relationships TO quotas
+GRANT SELECT ON SCHEMA::Synchronization TO quotas
+GRANT SELECT ON SCHEMA::Tokens TO quotas
 GRANT SELECT ON SCHEMA::Relationships TO adminUi
 GRANT SELECT ON SCHEMA::Files TO adminUi
 GRANT SELECT ON SCHEMA::Messages TO adminUi
