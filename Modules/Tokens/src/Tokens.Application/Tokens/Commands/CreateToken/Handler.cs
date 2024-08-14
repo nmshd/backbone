@@ -1,5 +1,6 @@
 using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Domain.Entities;
 using MediatR;
@@ -21,7 +22,8 @@ public class Handler : IRequestHandler<CreateTokenCommand, CreateTokenResponse>
 
     public async Task<CreateTokenResponse> Handle(CreateTokenCommand request, CancellationToken cancellationToken)
     {
-        var newTokenEntity = new Token(_userContext.GetAddress(), _userContext.GetDeviceId(), request.Content, request.ExpiresAt, request.ForIdentity!);
+        var forIdentity = request.ForIdentity == null ? null : IdentityAddress.Parse(request.ForIdentity);
+        var newTokenEntity = new Token(_userContext.GetAddress(), _userContext.GetDeviceId(), request.Content, request.ExpiresAt, forIdentity);
 
         await _tokensRepository.Add(newTokenEntity);
 
