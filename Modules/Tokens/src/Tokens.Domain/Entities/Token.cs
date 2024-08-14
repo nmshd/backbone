@@ -53,7 +53,7 @@ public class Token : Entity
 
     public static Expression<Func<Token, bool>> CanBeCollectedBy(IdentityAddress? address)
     {
-        return token => token.ForIdentity == null || address != null && (token.ForIdentity == address || token.CreatedBy == address);
+        return token => token.ForIdentity == null || token.ForIdentity == address || token.CreatedBy == address;
     }
 
     public static Expression<Func<Token, bool>> WasCreatedBy(IdentityAddress identityAddress)
