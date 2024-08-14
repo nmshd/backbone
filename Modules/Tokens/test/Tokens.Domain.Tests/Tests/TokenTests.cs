@@ -33,7 +33,7 @@ public class TokenTests : AbstractTestsBase
     public void Expression_CanBeCollectedBy_null_forIdentity()
     {
         // Arrange
-        var token = new Token("createdByIdentityAddress", DeviceId.Parse("DVC1"), [], DateTime.Now.AddDays(1), null);
+        var token = new Token(TestDataGenerator.CreateRandomIdentityAddress(), DeviceId.Parse("DVC1"), [], DateTime.Now.AddDays(1), null);
 
         // Act
         var result = EvaluateCanBeCollectedByExpression(token, "anyIdentityAddress");
