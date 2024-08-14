@@ -1,6 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Domain.DomainEvents;
 using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Domain.Tests.TestHelpers;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
@@ -33,7 +34,7 @@ public class TokenTests : AbstractTestsBase
     public void Expression_CanBeCollectedBy_null_forIdentity()
     {
         // Arrange
-        var token = new Token(TestDataGenerator.CreateRandomIdentityAddress(), DeviceId.Parse("DVC1"), [], DateTime.Now.AddDays(1), null);
+        var token = TestData.CreateToken(TestDataGenerator.CreateRandomIdentityAddress(), null);
 
         // Act
         var result = EvaluateCanBeCollectedByExpression(token, "anyIdentityAddress");
