@@ -32,9 +32,7 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new GetFileMetadataQuery { Id = "some-invalid-file-id" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(
-            propertyName: nameof(GetFileMetadataQuery.Id),
-            expectedErrorCode: "error.platform.validation.invalidPropertyValue",
-            expectedErrorMessage: "The ID is not valid. Check length, prefix and the used characters.");
+        validationResult.ShouldHaveValidationErrorForId(
+            propertyWithInvalidId: nameof(GetFileMetadataQuery.Id));
     }
 }

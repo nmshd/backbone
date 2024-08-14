@@ -33,9 +33,8 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new ListDevicesQuery(new PaginationFilter(), ["some-invalid-device-id"]));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(
-            propertyName: nameof(ListDevicesQuery.Ids),
-            expectedErrorCode: "error.platform.validation.invalidPropertyValue",
-            expectedErrorMessage: "The ID is not valid. Check length, prefix and the used characters.");
+        validationResult.ShouldHaveValidationErrorForIdInCollection(
+            collectionWithInvalidId: nameof(ListDevicesQuery.Ids),
+            indexWithInvalidId: 0);
     }
 }

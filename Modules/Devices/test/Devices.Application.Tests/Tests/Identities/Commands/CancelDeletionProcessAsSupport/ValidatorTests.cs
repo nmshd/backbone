@@ -32,10 +32,8 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new CancelDeletionAsSupportCommand("invalid-identity-address", IdentityDeletionProcessId.Generate()));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(
-            propertyName: nameof(CancelDeletionAsSupportCommand.Address),
-            expectedErrorCode: "error.platform.validation.invalidPropertyValue",
-            expectedErrorMessage: "The ID is not valid. Check length, prefix and the used characters.");
+        validationResult.ShouldHaveValidationErrorForId(
+            propertyWithInvalidId: nameof(CancelDeletionAsSupportCommand.Address));
     }
 
     [Fact]
@@ -48,9 +46,7 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new CancelDeletionAsSupportCommand(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress(), "invalid-deletion-process-id"));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(
-            propertyName: nameof(CancelDeletionAsSupportCommand.DeletionProcessId),
-            expectedErrorCode: "error.platform.validation.invalidPropertyValue",
-            expectedErrorMessage: "The ID is not valid. Check length, prefix and the used characters.");
+        validationResult.ShouldHaveValidationErrorForId(
+            propertyWithInvalidId: nameof(CancelDeletionAsSupportCommand.DeletionProcessId));
     }
 }

@@ -31,9 +31,7 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new GetIdentityQuery("some-invalid-address"));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(
-            propertyName: nameof(GetIdentityQuery.Address),
-            expectedErrorCode: "error.platform.validation.invalidPropertyValue",
-            expectedErrorMessage: "The ID is not valid. Check length, prefix and the used characters.");
+        validationResult.ShouldHaveValidationErrorForId(
+            propertyWithInvalidId: nameof(GetIdentityQuery.Address));
     }
 }

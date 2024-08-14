@@ -32,9 +32,7 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new DeleteTierCommand("invalid-tier_id"));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(
-            propertyName: nameof(DeleteTierCommand.TierId),
-            expectedErrorCode: "error.platform.validation.invalidPropertyValue",
-            expectedErrorMessage: "The ID is not valid. Check length, prefix and the used characters.");
+        validationResult.ShouldHaveValidationErrorForId(
+            propertyWithInvalidId: nameof(DeleteTierCommand.TierId));
     }
 }

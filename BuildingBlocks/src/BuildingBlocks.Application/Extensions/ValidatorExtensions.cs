@@ -21,15 +21,15 @@ public static class ValidatorExtensions
 
     public static IRuleBuilderOptions<T, string?> ValidId<T, TId>(this IRuleBuilder<T, string?> ruleBuilder) where TId : StronglyTypedId
     {
-        var method = IS_VALID_CACHE[typeof(TId)];
-        if (method == null)
+        if (!IS_VALID_CACHE.TryGetValue(typeof(TId), out var method))
         {
-            method = typeof(TId).GetMethod("IsValid", BindingFlags.Public | BindingFlags.Static)!;
+            method = typeof(TId).GetMethod("IsValid", BindingFlags.Public | BindingFlags.Static) ??
+                     throw new Exception($"Type '{typeof(TId)}' does not implement required 'IsValid' method.");
             IS_VALID_CACHE.TryAdd(typeof(TId), method);
         }
 
         return ruleBuilder
-            .Must(x => (bool)method.Invoke(null, [x])!)
+            .Must(x => (bool)method!.Invoke(null, [x])!)
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
             .WithMessage("The ID is not valid. Check length, prefix and the used characters.");
     }

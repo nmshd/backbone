@@ -33,9 +33,8 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new ListFileMetadataQuery(new PaginationFilter(), ["some-invalid-file-id"]));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(
-            propertyName: nameof(ListFileMetadataQuery.Ids),
-            expectedErrorCode: "error.platform.validation.invalidPropertyValue",
-            expectedErrorMessage: "The ID is not valid. Check length, prefix and the used characters.");
+        validationResult.ShouldHaveValidationErrorForIdInCollection(
+            collectionWithInvalidId: nameof(ListFileMetadataQuery.Ids),
+            indexWithInvalidId: 0);
     }
 }
