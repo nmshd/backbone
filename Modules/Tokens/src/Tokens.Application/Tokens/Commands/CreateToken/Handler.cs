@@ -23,10 +23,10 @@ public class Handler : IRequestHandler<CreateTokenCommand, CreateTokenResponse>
     public async Task<CreateTokenResponse> Handle(CreateTokenCommand request, CancellationToken cancellationToken)
     {
         var forIdentity = request.ForIdentity == null ? null : IdentityAddress.Parse(request.ForIdentity);
-        var newTokenEntity = new Token(_userContext.GetAddress(), _userContext.GetDeviceId(), request.Content, request.ExpiresAt, forIdentity);
+        var newToken = new Token(_userContext.GetAddress(), _userContext.GetDeviceId(), request.Content, request.ExpiresAt, forIdentity);
 
-        await _tokensRepository.Add(newTokenEntity);
+        await _tokensRepository.Add(newToken);
 
-        return _mapper.Map<CreateTokenResponse>(newTokenEntity);
+        return _mapper.Map<CreateTokenResponse>(newToken);
     }
 }
