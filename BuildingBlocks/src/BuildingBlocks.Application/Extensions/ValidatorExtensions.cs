@@ -29,7 +29,7 @@ public static class ValidatorExtensions
         }
 
         return ruleBuilder
-            .Must(x => (bool)method!.Invoke(null, [x])!)
+            .Must(x => (bool)method.Invoke(null, [x])!)
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
             .WithMessage("The ID is not valid. Check length, prefix and the used characters.");
     }

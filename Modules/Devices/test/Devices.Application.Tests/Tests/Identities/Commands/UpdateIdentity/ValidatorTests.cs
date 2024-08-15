@@ -32,8 +32,7 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new UpdateIdentityCommand { Address = "some-invalid-address", TierId = TierId.Generate() });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(
-            propertyWithInvalidId: nameof(UpdateIdentityCommand.Address));
+        validationResult.ShouldHaveValidationErrorForId(nameof(UpdateIdentityCommand.Address));
     }
 
     [Fact]
@@ -46,7 +45,6 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new UpdateIdentityCommand { Address = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress(), TierId = "some-invalid-tier-id" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(
-            propertyWithInvalidId: nameof(UpdateIdentityCommand.TierId));
+        validationResult.ShouldHaveValidationErrorForId(nameof(UpdateIdentityCommand.TierId));
     }
 }

@@ -63,8 +63,8 @@ public static class ValidationTestExtensions
 
     private static void AssertValidationError(ITestValidationWith errorsForProperty, string expectedErrorCode, string expectedErrorMessage)
     {
-        var errorCount = errorsForProperty.Count(r => r.ErrorCode == expectedErrorCode
-                                                      && r.ErrorMessage == expectedErrorMessage);
+        var errorCount = errorsForProperty.Count(r => r.ErrorCode == expectedErrorCode && 
+                                                      r.ErrorMessage == expectedErrorMessage);
         errorCount.Should().Be(1);
     }
 }

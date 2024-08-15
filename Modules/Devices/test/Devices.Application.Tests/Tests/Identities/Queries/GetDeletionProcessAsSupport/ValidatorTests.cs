@@ -32,8 +32,7 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new GetDeletionProcessAsSupportQuery("invalid-identity-address", IdentityDeletionProcessId.Generate()));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(
-            propertyWithInvalidId: nameof(GetDeletionProcessAsSupportQuery.IdentityAddress));
+        validationResult.ShouldHaveValidationErrorForId(nameof(GetDeletionProcessAsSupportQuery.IdentityAddress));
     }
 
     [Fact]
@@ -46,7 +45,6 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new GetDeletionProcessAsSupportQuery(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress(), "invalid-deletion-process-id"));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(
-            propertyWithInvalidId: nameof(GetDeletionProcessAsSupportQuery.DeletionProcessId));
+        validationResult.ShouldHaveValidationErrorForId(nameof(GetDeletionProcessAsSupportQuery.DeletionProcessId));
     }
 }

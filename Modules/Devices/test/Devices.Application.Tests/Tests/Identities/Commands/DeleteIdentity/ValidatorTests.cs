@@ -31,7 +31,6 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new DeleteIdentityCommand("invalid-identity-address"));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(
-            propertyWithInvalidId: nameof(DeleteIdentityCommand.IdentityAddress));
+        validationResult.ShouldHaveValidationErrorForId(nameof(DeleteIdentityCommand.IdentityAddress));
     }
 }

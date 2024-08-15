@@ -32,7 +32,6 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new GetFileMetadataQuery { Id = "some-invalid-file-id" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(
-            propertyWithInvalidId: nameof(GetFileMetadataQuery.Id));
+        validationResult.ShouldHaveValidationErrorForId(nameof(GetFileMetadataQuery.Id));
     }
 }

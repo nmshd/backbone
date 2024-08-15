@@ -31,7 +31,6 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new DeletePnsRegistrationsOfIdentityCommand("some-invalid-address"));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(
-            propertyWithInvalidId: nameof(DeletePnsRegistrationsOfIdentityCommand.IdentityAddress));
+        validationResult.ShouldHaveValidationErrorForId(nameof(DeletePnsRegistrationsOfIdentityCommand.IdentityAddress));
     }
 }

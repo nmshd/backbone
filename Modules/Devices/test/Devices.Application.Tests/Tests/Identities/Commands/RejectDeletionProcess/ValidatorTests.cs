@@ -32,7 +32,6 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new RejectDeletionProcessCommand("invalid-deletion-process-id"));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(
-            propertyWithInvalidId: nameof(RejectDeletionProcessCommand.DeletionProcessId));
+        validationResult.ShouldHaveValidationErrorForId(nameof(RejectDeletionProcessCommand.DeletionProcessId));
     }
 }

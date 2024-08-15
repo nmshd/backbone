@@ -33,7 +33,6 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new GetChallengeByIdQuery { Id = "some-invalid-challenge-id" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(
-            propertyWithInvalidId: nameof(GetChallengeByIdQuery.Id));
+        validationResult.ShouldHaveValidationErrorForId(nameof(GetChallengeByIdQuery.Id));
     }
 }

@@ -32,7 +32,6 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new DeleteDeviceCommand { DeviceId = "some-invalid-device-id" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(
-            propertyWithInvalidId: nameof(DeleteDeviceCommand.DeviceId));
+        validationResult.ShouldHaveValidationErrorForId(nameof(DeleteDeviceCommand.DeviceId));
     }
 }

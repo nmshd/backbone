@@ -32,7 +32,6 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new DeleteTierCommand("invalid-tier_id"));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(
-            propertyWithInvalidId: nameof(DeleteTierCommand.TierId));
+        validationResult.ShouldHaveValidationErrorForId(nameof(DeleteTierCommand.TierId));
     }
 }

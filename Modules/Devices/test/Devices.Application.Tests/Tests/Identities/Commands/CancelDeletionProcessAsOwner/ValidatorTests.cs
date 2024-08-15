@@ -32,7 +32,6 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new CancelDeletionProcessAsOwnerCommand("invalid-deletion-process-id"));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(
-            propertyWithInvalidId: nameof(CancelDeletionProcessAsOwnerCommand.DeletionProcessId));
+        validationResult.ShouldHaveValidationErrorForId(nameof(CancelDeletionProcessAsOwnerCommand.DeletionProcessId));
     }
 }

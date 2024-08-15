@@ -31,7 +31,6 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new StartDeletionProcessAsSupportCommand("invalid-identity-address"));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(
-            propertyWithInvalidId: nameof(StartDeletionProcessAsSupportCommand.IdentityAddress));
+        validationResult.ShouldHaveValidationErrorForId(nameof(StartDeletionProcessAsSupportCommand.IdentityAddress));
     }
 }

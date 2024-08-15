@@ -31,7 +31,6 @@ public class ValidatorTests : AbstractTestsBase
         var validationResult = validator.TestValidate(new GetDeletionProcessesAuditLogsQuery("some-invalid-address"));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(
-            propertyWithInvalidId: nameof(GetDeletionProcessesAuditLogsQuery.IdentityAddress));
+        validationResult.ShouldHaveValidationErrorForId(nameof(GetDeletionProcessesAuditLogsQuery.IdentityAddress));
     }
 }
