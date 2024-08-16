@@ -38,15 +38,15 @@ public class TokensRepository : ITokensRepository
 
     public async Task<DbPaginationResult<Token>> FindAllWithIds(IdentityAddress activeIdentity, IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
-        return await Find(null, activeIdentity, ids, paginationFilter, cancellationToken);
+        return await Find(activeIdentity, ids, paginationFilter, cancellationToken);
     }
 
     public async Task<DbPaginationResult<Token>> FindAllOfOwner(IdentityAddress owner, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
-        return await Find(owner, null, [], paginationFilter, cancellationToken);
+        return await Find(owner, [], paginationFilter, cancellationToken);
     }
 
-    private async Task<DbPaginationResult<Token>> Find(IdentityAddress? owner, IdentityAddress? createdForOrBy, IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
+    private async Task<DbPaginationResult<Token>> Find(IdentityAddress? identityAddress, IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         if (paginationFilter == null)
             throw new Exception("A pagination filter has to be provided.");
@@ -58,11 +58,8 @@ public class TokensRepository : ITokensRepository
         if (idsArray.Any())
             query = query.Where(t => idsArray.Contains(t.Id));
 
-        if (owner != null)
-            query = query.Where(t => t.CreatedBy == owner);
-
-        if (createdForOrBy != null)
-            query = query.Where(Token.CanBeCollectedBy(createdForOrBy));
+        if (identityAddress != null)
+            query = query.Where(Token.CanBeCollectedBy(identityAddress));
 
         var dbPaginationResult = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
