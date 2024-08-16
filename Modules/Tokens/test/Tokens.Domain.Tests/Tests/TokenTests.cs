@@ -1,4 +1,5 @@
-﻿using Backbone.Modules.Tokens.Domain.DomainEvents;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Tokens.Domain.DomainEvents;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Domain.Tests.TestHelpers;
 using Backbone.UnitTestTools.BaseClasses;
@@ -29,63 +30,39 @@ public class TokenTests : AbstractTestsBase
         domainEvent.CreatedBy.Should().Be(address);
     }
 
-    [Fact]
-    public void Expression_CanBeCollectedBy_null_forIdentity()
+    [Theory]
+    [InlineData("", "byIdentity", true)]
+    [InlineData("", "anyIdentity", true)]
+    [InlineData("forIdentity", "byIdentity", true)]
+    [InlineData("forIdentity", "forIdentity", true)]
+    [InlineData("forIdentity", "anyIdentity", false)]
+    public void Expression_CanBeCollectedBy_Returns_Correct_Result(string forAddress, string collectorAddress, bool expectedResult)
     {
         // Arrange
-        var token = TestData.CreateToken(createdBy: TestDataGenerator.CreateRandomIdentityAddress(), forIdentity: null);
+        var byIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+        var forIdentity = string.IsNullOrEmpty(forAddress) ? null : TestDataGenerator.CreateRandomIdentityAddress();
+        var collectorIdentity = GetCollectorIdentity(collectorAddress, byIdentity, forIdentity);
+
+        var token = TestData.CreateToken(byIdentity, forIdentity);
 
         // Act
-        var result = EvaluateCanBeCollectedByExpression(token, "anyIdentityAddress");
+        var result = EvaluateCanBeCollectedByExpression(token, collectorIdentity!);
 
         // Assert
-        result.Should().BeTrue();
+        result.Should().Be(expectedResult);
     }
 
-    [Fact]
-    public void Expression_CanBeCollectedBy_collector_matching_creator()
+    private static IdentityAddress? GetCollectorIdentity(string collectorAddress, IdentityAddress byIdentity, IdentityAddress? forIdentity)
     {
-        // Arrange
-        var createdByIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var createdForIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var token = TestData.CreateToken(createdByIdentityAddress, createdForIdentityAddress);
-
-        // Act
-        var result = EvaluateCanBeCollectedByExpression(token, createdByIdentityAddress);
-
-        // Assert
-        result.Should().BeTrue();
+        return collectorAddress switch
+        {
+            "byIdentity" => byIdentity,
+            "forIdentity" => forIdentity,
+            _ => TestDataGenerator.CreateRandomIdentityAddress()
+        };
     }
 
-    [Fact]
-    public void Expression_CanBeCollectedBy_collector_matching_forIdentity()
-    {
-        // Arrange
-        var createdForIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var token = TestData.CreateToken(createdBy: TestDataGenerator.CreateRandomIdentityAddress(), createdForIdentityAddress);
-
-        // Act
-        var result = EvaluateCanBeCollectedByExpression(token, createdForIdentityAddress);
-
-        // Assert
-        result.Should().BeTrue();
-    }
-
-
-    [Fact]
-    public void Expression_CanBeCollectedBy_collector_is_third_identity()
-    {
-        // Arrange
-        var token = TestData.CreateToken(createdBy: TestDataGenerator.CreateRandomIdentityAddress(), forIdentity: TestDataGenerator.CreateRandomIdentityAddress());
-
-        // Act
-        var result = EvaluateCanBeCollectedByExpression(token, "anotherIdentityAddress");
-
-        // Assert
-        result.Should().BeFalse();
-    }
-
-    private static bool EvaluateCanBeCollectedByExpression(Token token, string identityAddress)
+    private static bool EvaluateCanBeCollectedByExpression(Token token, IdentityAddress identityAddress)
     {
         var expression = Token.CanBeCollectedBy(identityAddress);
         var result = expression.Compile()(token);
