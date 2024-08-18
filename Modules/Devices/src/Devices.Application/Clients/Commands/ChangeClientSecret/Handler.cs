@@ -7,12 +7,10 @@ namespace Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecr
 public class Handler : IRequestHandler<ChangeClientSecretCommand, ChangeClientSecretResponse>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
-    private readonly IIdentitiesRepository _identitiesRepository;
 
-    public Handler(IOAuthClientsRepository oAuthClientsRepository, IIdentitiesRepository identitiesRepository)
+    public Handler(IOAuthClientsRepository oAuthClientsRepository)
     {
         _oAuthClientsRepository = oAuthClientsRepository;
-        _identitiesRepository = identitiesRepository;
     }
 
     public async Task<ChangeClientSecretResponse> Handle(ChangeClientSecretCommand request, CancellationToken cancellationToken)
@@ -23,8 +21,6 @@ public class Handler : IRequestHandler<ChangeClientSecretCommand, ChangeClientSe
 
         await _oAuthClientsRepository.ChangeClientSecret(client, clientSecret, cancellationToken);
 
-        var numberOfIdentities = await _identitiesRepository.CountByClientId(request.ClientId, cancellationToken);
-
-        return new ChangeClientSecretResponse(client, clientSecret, numberOfIdentities);
+        return new ChangeClientSecretResponse(client, clientSecret);
     }
 }
