@@ -26,19 +26,6 @@ internal class ResponseStepDefinitions
         _responseContext = responseContext;
     }
 
-    private ApiResponse<Challenge>? ChallengeResponse => _responseContext.ChallengeResponse;
-    private ApiResponse<RegisterDeviceResponse>? RegisterDeviceResponse => _responseContext.RegisterDeviceResponse;
-    private ApiResponse<CreateFileResponse>? FileUploadResponse => _responseContext.FileUploadResponse;
-    private ApiResponse<CreateIdentityResponse>? CreateIdentityResponse => _responseContext.CreateIdentityResponse;
-    private ApiResponse<StartDeletionProcessResponse>? StartDeletionProcessResponse => _responseContext.StartDeletionProcessResponse;
-    private ApiResponse<CancelDeletionProcessResponse>? CancelDeletionProcessResponse => _responseContext.CancelDeletionProcessResponse;
-    private ApiResponse<SendMessageResponse>? SendMessageResponse => _responseContext.SendMessageResponse;
-    private ApiResponse<UpdateDeviceRegistrationResponse>? UpdateDeviceRegistrationResponse => _responseContext.UpdateDeviceRegistrationResponse;
-    private ApiResponse<RelationshipMetadata>? CreateRelationshipResponse => _responseContext.CreateRelationshipResponse;
-    private ApiResponse<RelationshipMetadata>? AcceptRelationshipResponse => _responseContext.AcceptRelationshipResponse;
-    private ApiResponse<RelationshipMetadata>? RejectRelationshipResponse => _responseContext.RejectRelationshipResponse;
-    private ApiResponse<RelationshipMetadata>? RevokeRelationshipResponse => _responseContext.RevokeRelationshipResponse;
-
     private IResponse? WhenResponse => _responseContext.WhenResponse;
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
@@ -58,42 +45,16 @@ internal class ResponseStepDefinitions
     [Then(@"the response contains a (.*)")]
     public async Task ThenTheResponseContains(string responseType)
     {
-        if (responseType == "Challenge")
-            await CheckResponse(ChallengeResponse);
-        else if (responseType == "Device")
-            await CheckResponse(RegisterDeviceResponse);
-        else if (responseType == "CreateIdentityResponse")
-            await CheckResponse(CreateIdentityResponse);
-        else if (responseType == "StartDeletionProcessResponse")
-            await CheckResponse(StartDeletionProcessResponse);
-        else if (responseType == "CancelDeletionProcessResponse")
-            await CheckResponse(CancelDeletionProcessResponse);
-        else if (responseType == "FileUploadResponse")
-            await CheckResponse(FileUploadResponse);
-        else if (responseType == "SendMessageResponse")
-            await CheckResponse(SendMessageResponse);
-        else if (responseType == "UpdateDeviceRegistrationResponse")
-            await CheckResponse(UpdateDeviceRegistrationResponse);
-        else if (responseType == "CreateRelationshipTemplateResponse")
-            await CheckResponse(_responseContext.CreateRelationshipTemplateResponse);
-        else if (responseType == "Relationship")
-            await CheckResponse(_responseContext.TerminateRelationshipResponse);
-        else if (responseType == "RelationshipMetadata")
-            await CheckRelationshipMetadata();
-    }
-
-    private static async Task CheckResponse<T>(ApiResponse<T>? response) where T : class
-    {
-        response!.Result.Should().NotBeNull();
-        response.Should().BeASuccess();
-        await response.Should().ComplyWithSchema();
+        WhenResponse!.Should().NotBeNull();
+        WhenResponse!.Should().BeASuccess();
+        await WhenResponse!.Should().ComplyWithSchema();
     }
 
     #region Challenges
     [Then(@"the Challenge has a valid expiration date")]
     public void ThenTheChallengeHasAValidExpirationDate()
     {
-        ChallengeResponse!.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
+        _responseContext.ChallengeResponse!.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
     }
     #endregion
 
@@ -101,9 +62,9 @@ internal class ResponseStepDefinitions
     [Then(@"the response status is '([^']*)'")]
     public void ThenTheResponseStatusIs(string deletionProcessStatus)
     {
-        CancelDeletionProcessResponse!.Result.Should().NotBeNull();
-        CancelDeletionProcessResponse.Should().BeASuccess();
-        CancelDeletionProcessResponse.Result!.Status.Should().Be(deletionProcessStatus);
+        _responseContext.CancelDeletionProcessResponse!.Result.Should().NotBeNull();
+        _responseContext.CancelDeletionProcessResponse.Should().BeASuccess();
+        _responseContext.CancelDeletionProcessResponse.Result!.Status.Should().Be(deletionProcessStatus);
     }
     #endregion
 
@@ -153,24 +114,7 @@ internal class ResponseStepDefinitions
     [Then("the response contains the push identifier for the device")]
     public void ThenTheResponseContainsThePushIdentifierForTheDevice()
     {
-        UpdateDeviceRegistrationResponse!.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();
-    }
-    #endregion
-
-    #region Relationships
-    private async Task CheckRelationshipMetadata()
-    {
-        if (CreateRelationshipResponse != null)
-            await CheckResponse(CreateRelationshipResponse);
-
-        if (AcceptRelationshipResponse != null)
-            await CheckResponse(AcceptRelationshipResponse);
-
-        if (RejectRelationshipResponse != null)
-            await CheckResponse(RejectRelationshipResponse);
-
-        if (RevokeRelationshipResponse != null)
-            await CheckResponse(RevokeRelationshipResponse);
+        _responseContext.UpdateDeviceRegistrationResponse!.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();
     }
     #endregion
 }
