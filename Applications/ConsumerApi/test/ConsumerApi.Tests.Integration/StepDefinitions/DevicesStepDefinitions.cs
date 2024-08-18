@@ -20,14 +20,16 @@ internal class DevicesStepDefinitions
 
     private string? _communicationLanguage;
 
+    private readonly ChallengesContext _challengesContext;
     private readonly IdentitiesContext _identitiesContext;
     private readonly ResponseContext _responseContext;
 
-    public DevicesStepDefinitions(IdentitiesContext identitiesContext, ResponseContext responseContext, HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
+    public DevicesStepDefinitions(ChallengesContext challengesContext, IdentitiesContext identitiesContext, ResponseContext responseContext, HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
     {
         _httpClient = factory.CreateClient();
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
 
+        _challengesContext = challengesContext;
         _identitiesContext = identitiesContext;
         _responseContext = responseContext;
     }
@@ -61,11 +63,11 @@ internal class DevicesStepDefinitions
     #endregion
 
     #region When
-    [When(@"([a-zA-Z0-9]+) sends a POST request to the /Devices endpoint")]
-    public async Task WhenISendsAPOSTRequestToTheDevicesEndpoint(string identityName)
+    [When(@"([a-zA-Z0-9]+) sends a POST request to the /Devices endpoint with a valid signature on ([a-zA-Z0-9]+)")]
+    public async Task WhenISendsAPostRequestToTheDevicesEndpointWithASignedChallenge(string identityName, string challengeName)
     {
         var identity = ClientPool.FirstForIdentity(identityName)!;
-        var signedChallenge = CreateSignedChallenge(identity, _responseContext.ChallengeResponse!.Result!);
+        var signedChallenge = CreateSignedChallenge(identity, _challengesContext.Challenges[challengeName]);
 
         _responseContext.WhenResponse = _responseContext.RegisterDeviceResponse = await identity.Devices.RegisterDevice(new RegisterDeviceRequest
         {

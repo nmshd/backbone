@@ -14,7 +14,7 @@ using static Backbone.ConsumerApi.Tests.Integration.Support.Constants;
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
-internal class IdentitiesApiStepDefinitions
+internal class IdentitiesStepDefinitions
 {
     #region Constructor, Fields, Properties
     private readonly ClientCredentials _clientCredentials;
@@ -23,7 +23,7 @@ internal class IdentitiesApiStepDefinitions
     private readonly IdentitiesContext _identitiesContext;
     private readonly ResponseContext _responseContext;
 
-    public IdentitiesApiStepDefinitions(IdentitiesContext identitiesContext, ResponseContext responseContext, HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
+    public IdentitiesStepDefinitions(IdentitiesContext identitiesContext, ResponseContext responseContext, HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
     {
         _httpClient = factory.CreateClient();
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
