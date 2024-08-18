@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Tests.Extensions;
@@ -27,10 +28,13 @@ public class HandlerTests : AbstractTestsBase
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
         A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns(client);
 
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.CountByClientId(client.ClientId, A<CancellationToken>._)).Returns(0);
+
         var tiersRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tiersRepository.ExistsWithId(newDefaultTier.Id, A<CancellationToken>._)).Returns(true);
 
-        var handler = CreateHandler(oAuthClientsRepository, tiersRepository);
+        var handler = CreateHandler(oAuthClientsRepository, identitiesRepository, tiersRepository);
 
         // Act
         await handler.Handle(command, CancellationToken.None);
@@ -56,10 +60,13 @@ public class HandlerTests : AbstractTestsBase
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
         A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns(client);
 
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.CountByClientId(client.ClientId, A<CancellationToken>._)).Returns(0);
+
         var tiersRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tiersRepository.ExistsWithId(newDefaultTier.Id, A<CancellationToken>._)).Returns(false);
 
-        var handler = CreateHandler(oAuthClientsRepository, tiersRepository);
+        var handler = CreateHandler(oAuthClientsRepository, identitiesRepository, tiersRepository);
 
         // Act
         var acting = async () => await handler.Handle(command, CancellationToken.None);
@@ -81,10 +88,13 @@ public class HandlerTests : AbstractTestsBase
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
         A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns<OAuthClient?>(null);
 
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.CountByClientId(client.ClientId, A<CancellationToken>._)).Returns(0);
+
         var tiersRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tiersRepository.ExistsWithId(newDefaultTier.Id, A<CancellationToken>._)).Returns(true);
 
-        var handler = CreateHandler(oAuthClientsRepository, tiersRepository);
+        var handler = CreateHandler(oAuthClientsRepository, identitiesRepository, tiersRepository);
 
         // Act
         var acting = async () => await handler.Handle(command, CancellationToken.None);
@@ -104,10 +114,13 @@ public class HandlerTests : AbstractTestsBase
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
         A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns(client);
 
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.CountByClientId(client.ClientId, A<CancellationToken>._)).Returns(0);
+
         var tiersRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tiersRepository.ExistsWithId(client.DefaultTier, A<CancellationToken>._)).Returns(true);
 
-        var handler = CreateHandler(oAuthClientsRepository, tiersRepository);
+        var handler = CreateHandler(oAuthClientsRepository, identitiesRepository, tiersRepository);
 
         // Act
         await handler.Handle(command, CancellationToken.None);
@@ -131,10 +144,13 @@ public class HandlerTests : AbstractTestsBase
         var oAuthClientsRepository = A.Fake<IOAuthClientsRepository>();
         A.CallTo(() => oAuthClientsRepository.Find(client.ClientId, A<CancellationToken>._, A<bool>._)).Returns<OAuthClient?>(null);
 
+        var identitiesRepository = A.Fake<IIdentitiesRepository>();
+        A.CallTo(() => identitiesRepository.CountByClientId(client.ClientId, A<CancellationToken>._)).Returns(0);
+
         var tiersRepository = A.Fake<ITiersRepository>();
         A.CallTo(() => tiersRepository.ExistsWithId(client.DefaultTier, A<CancellationToken>._)).Returns(true);
 
-        var handler = CreateHandler(oAuthClientsRepository, tiersRepository);
+        var handler = CreateHandler(oAuthClientsRepository, identitiesRepository, tiersRepository);
 
         // Act
         var acting = async () => await handler.Handle(command, CancellationToken.None);
@@ -143,8 +159,8 @@ public class HandlerTests : AbstractTestsBase
         await acting.Should().ThrowAsync<NotFoundException>();
     }
 
-    private Handler CreateHandler(IOAuthClientsRepository oAuthClientsRepository, ITiersRepository tiersRepository)
+    private static Handler CreateHandler(IOAuthClientsRepository oAuthClientsRepository, IIdentitiesRepository identitiesRepository, ITiersRepository tiersRepository)
     {
-        return new Handler(oAuthClientsRepository, tiersRepository);
+        return new Handler(oAuthClientsRepository, identitiesRepository, tiersRepository);
     }
 }

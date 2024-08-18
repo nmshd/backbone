@@ -2,7 +2,7 @@
 
 public class VersionService
 {
-    public async Task<string> GetBackboneMajorVersion()
+    public string GetBackboneMajorVersion()
     {
         var assembly = System.Reflection.Assembly.GetExecutingAssembly();
         var version = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location).FileVersion;
@@ -12,6 +12,6 @@ public class VersionService
 
         var majorVersion = version.Split('.', 2)[0];
 
-        return await Task.FromResult(majorVersion);
+        return majorVersion;
     }
 }

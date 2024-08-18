@@ -7,4 +7,5 @@ public class ClientInfo
     public required string DefaultTier { get; set; }
     public required DateTime CreatedAt { get; set; }
     public int? MaxIdentities { get; set; }
+    public required int NumberOfIdentities { get; set; }
 }
