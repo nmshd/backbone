@@ -49,13 +49,6 @@ internal class IdentitiesStepDefinitions
             await CreateClientForIdentityName(identityName);
     }
 
-    [Given("the user is authenticated")]
-    public void GivenTheUserIsAuthenticated()
-    {
-        var client = Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD).Result;
-        ClientPool.Add(client).ForDefaultIdentity();
-    }
-
     [Given("the user is unauthenticated")]
     public void GivenTheUserIsUnauthenticated()
     {

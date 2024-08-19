@@ -70,15 +70,13 @@ internal class ChallengesStepDefinitions
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = await ClientPool.FirstForIdentity(identityName)!.Challenges.GetChallenge(challengeId);
     }
 
-    // =-=-=-=
-
-    [When(@"a GET request is sent to the Challenges/{id} endpoint with ([a-zA-Z0-9]+)\.Id")]
+    [When(@"i sends a GET request to the Challenges/\{id} endpoint with ([a-zA-Z0-9]+)\.Id")]
     public async Task WhenISendsAGetRequestToTheChallengesIdEndpointWithChallengeId(string challengeName)
     {
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = await ClientPool.FirstForDefaultIdentity()!.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
     }
 
-    [When(@"a GET request is sent to the Challenges/\{id} endpoint with \""([a-zA-Z0-9]+)\""")]
+    [When(@"i sends a GET request to the Challenges/\{id} endpoint with \""([a-zA-Z0-9]+)\""")]
     public async Task WhenAGetRequestIsSentToTheChallengesIdEndpointWithString(string challengeId)
     {
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = await ClientPool.FirstForDefaultIdentity()!.Challenges.GetChallenge(challengeId);
