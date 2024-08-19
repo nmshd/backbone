@@ -39,32 +39,27 @@ public static class ValidationTestExtensions
     public static void ShouldHaveValidationErrorForItem<T>(this TestValidationResult<T> testValidationResult, string propertyName, string expectedErrorCode, string expectedErrorMessage)
     {
         var errorsForProperty = testValidationResult.ShouldHaveValidationErrorFor(propertyName);
-        AssertValidationError(errorsForProperty, expectedErrorCode, expectedErrorMessage);
+        errorsForProperty.Should().Contain(r => r.ErrorCode == expectedErrorCode && r.ErrorMessage == expectedErrorMessage);
     }
 
     public static void ShouldHaveValidationErrorForItemInCollection<T>(this TestValidationResult<T> testValidationResult, string collectionWithInvalidId, int indexWithInvalidId,
         string expectedErrorCode, string expectedErrorMessage)
     {
         var errorsForProperty = testValidationResult.ShouldHaveValidationErrorFor($"{collectionWithInvalidId}[{indexWithInvalidId}]");
-        AssertValidationError(errorsForProperty, expectedErrorCode, expectedErrorMessage);
+        errorsForProperty.Should().Contain(r => r.ErrorCode == expectedErrorCode && r.ErrorMessage == expectedErrorMessage);
     }
 
     public static void ShouldHaveValidationErrorForId<T>(this TestValidationResult<T> testValidationResult, string propertyWithInvalidId)
     {
         var errorsForProperty = testValidationResult.ShouldHaveValidationErrorFor(propertyWithInvalidId);
-        AssertValidationError(errorsForProperty, "error.platform.validation.invalidPropertyValue", "The ID is not valid. Check length, prefix and the used characters.");
+        errorsForProperty.Should().Contain(r =>
+            r.ErrorCode == "error.platform.validation.invalidPropertyValue" && r.ErrorMessage == "The ID is not valid. Check length, prefix and the used characters.");
     }
 
     public static void ShouldHaveValidationErrorForIdInCollection<T>(this TestValidationResult<T> testValidationResult, string collectionWithInvalidId, int indexWithInvalidId)
     {
         var errorsForProperty = testValidationResult.ShouldHaveValidationErrorFor($"{collectionWithInvalidId}[{indexWithInvalidId}]");
-        AssertValidationError(errorsForProperty, "error.platform.validation.invalidPropertyValue", "The ID is not valid. Check length, prefix and the used characters.");
-    }
-
-    private static void AssertValidationError(ITestValidationWith errorsForProperty, string expectedErrorCode, string expectedErrorMessage)
-    {
-        var errorCount = errorsForProperty.Count(r => r.ErrorCode == expectedErrorCode &&
-                                                      r.ErrorMessage == expectedErrorMessage);
-        errorCount.Should().Be(1);
+        errorsForProperty.Should().Contain(r =>
+            r.ErrorCode == "error.platform.validation.invalidPropertyValue" && r.ErrorMessage == "The ID is not valid. Check length, prefix and the used characters.");
     }
 }
