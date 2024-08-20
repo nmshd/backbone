@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling.Extensions;
 using FluentValidation;
 
@@ -12,6 +13,7 @@ public class CreateFileDTOValidator : AbstractValidator<CreateFileDTO>
     {
         ClassLevelCascadeMode = CascadeMode.Stop;
 
+        RuleFor(f => f.Owner).ValidId<CreateFileDTO, IdentityAddress>();
         RuleFor(f => f.Content).NotNull();
         RuleFor(f => f.Content.ContentType).In(MIME_TYPE).WithName("Content Type")
             .WithMessage($"The file must have the MIME type {MIME_TYPE}.");

@@ -11,6 +11,7 @@ using Backbone.Modules.Files.Application.Files.Queries.GetFileContent;
 using Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
 using Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
 using Backbone.Modules.Files.ConsumerApi.DTOs;
+using Backbone.Modules.Files.ConsumerApi.DTOs.Validators;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -38,7 +39,9 @@ public class FilesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> UploadFile([FromForm] CreateFileDTO dto, CancellationToken cancellationToken)
     {
-        //TODO model state is dto valid
+        var validationResult = await new CreateFileDTOValidator().ValidateAsync(dto, cancellationToken);
+        if (!validationResult.IsValid)
+            return BadRequest(validationResult.Errors);
 
         var inputStream = new MemoryStream();
 
