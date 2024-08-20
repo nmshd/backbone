@@ -17,7 +17,9 @@ public class StronglyTypedIds
             {
                 var methods = type.GetMethodMembers();
 
-                return methods.Any(c => c.NameContains("IsValid")) ? new ConditionResult(type, true) : new ConditionResult(type, false, "Entity should have 'IsValid' method");
+                return methods.Any(c => c.NameContains("IsValid") && c.Parameters.Any(p => p.Name == nameof(String)))
+                    ? new ConditionResult(type, true)
+                    : new ConditionResult(type, false, "Entity should have 'IsValid' method");
             }, "")
             .Check(Backbone.ARCHITECTURE);
     }
