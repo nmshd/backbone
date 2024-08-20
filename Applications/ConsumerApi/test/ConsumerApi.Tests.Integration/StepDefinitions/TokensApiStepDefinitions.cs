@@ -212,6 +212,15 @@ internal class TokensApiStepDefinitions : BaseStepDefinitions
         _responseTokens.AddRange(_tokensResponse.Result!);
     }
 
+    [When("(i[a-zA-Z0-9]*) sends a GET request to the /Tokens endpoint")]
+    public async Task WhenISendsAGETRequestToTheTokensEndpoint(string identity)
+    {
+        _tokensResponse = await Identities[identity].Tokens.ListTokens();
+
+        _responseTokens.AddRange(_tokensResponse.Result!);
+    }
+
+
 
     [Then("the response contains both Tokens")]
     public void ThenTheResponseOnlyContainsTheOwnToken()
