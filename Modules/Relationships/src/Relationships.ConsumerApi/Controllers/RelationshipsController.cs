@@ -200,7 +200,7 @@ public class RelationshipsController : ApiControllerBase
     [HttpGet("CanCreate")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CanEstablishRelationshipResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CanEstablishRelationship([FromQuery] IdentityAddress peer, CancellationToken cancellationToken)
+    public async Task<IActionResult> CanEstablishRelationship([FromQuery] string peer, CancellationToken cancellationToken)
     {
         if (peer == null!) throw new ValidationException(GenericApplicationErrors.Validation.InvalidPropertyValue(nameof(peer)));
 
