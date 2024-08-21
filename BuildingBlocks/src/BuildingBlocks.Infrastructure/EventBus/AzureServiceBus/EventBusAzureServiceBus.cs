@@ -5,6 +5,7 @@ using Azure.Messaging.ServiceBus.Administration;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Amqp;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -24,10 +25,11 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
     private readonly IServiceBusPersisterConnection _serviceBusPersisterConnection;
     private readonly IEventBusSubscriptionsManager _subscriptionManager;
     private readonly string _subscriptionName;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public EventBusAzureServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection,
         ILogger<EventBusAzureServiceBus> logger, IEventBusSubscriptionsManager subscriptionManager,
-        ILifetimeScope autofac,
+        ILifetimeScope autofac, IHttpContextAccessor httpContextAccessor,
         HandlerRetryBehavior handlerRetryBehavior,
         string subscriptionClientName)
     {
@@ -35,11 +37,11 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subscriptionManager = subscriptionManager;
         _autofac = autofac;
+        _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         _subscriptionName = subscriptionClientName;
         _sender = _serviceBusPersisterConnection.TopicClient.CreateSender(TOPIC_NAME);
         var options = new ServiceBusProcessorOptions { MaxConcurrentCalls = 10, AutoCompleteMessages = false };
-        _processor =
-            _serviceBusPersisterConnection.TopicClient.CreateProcessor(TOPIC_NAME, _subscriptionName, options);
+        _processor = _serviceBusPersisterConnection.TopicClient.CreateProcessor(TOPIC_NAME, _subscriptionName, options);
 
         _handlerRetryBehavior = handlerRetryBehavior;
     }
@@ -59,11 +61,17 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         });
         var body = Encoding.UTF8.GetBytes(jsonMessage);
 
+        var correlationId = _httpContextAccessor.HttpContext?.Request.Headers["X-Correlation-ID"];
+
+        if (string.IsNullOrEmpty(correlationId))
+            correlationId = Guid.NewGuid().ToString();
+
         var message = new ServiceBusMessage
         {
             MessageId = @event.DomainEventId,
             Body = new BinaryData(body),
-            Subject = eventName
+            Subject = eventName,
+            CorrelationId = correlationId
         };
 
         _logger.SendingDomainEvent(message.MessageId);
