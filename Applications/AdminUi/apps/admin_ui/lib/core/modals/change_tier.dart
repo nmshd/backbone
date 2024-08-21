@@ -41,16 +41,12 @@ class _ShowChangeTierDialog extends StatefulWidget {
   final Future<ApiResponse<dynamic>> Function({required String tierId}) assignTier;
   final List<TierOverview> availableTiers;
   final String currentTier;
-  // final Identity? identityDetails;
-  // final Client? clientDetails;
 
   const _ShowChangeTierDialog({
     required this.onTierUpdated,
     required this.availableTiers,
     required this.assignTier,
     required this.currentTier,
-    // this.clientDetails,
-    // this.identityDetails,
   });
 
   @override
