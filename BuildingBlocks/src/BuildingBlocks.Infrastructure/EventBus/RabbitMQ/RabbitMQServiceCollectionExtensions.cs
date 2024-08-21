@@ -1,5 +1,6 @@
 using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
@@ -39,9 +40,10 @@ public static class RabbitMqServiceCollectionExtensions
             var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
             var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
             var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+            var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
 
             return new EventBusRabbitMq(rabbitMqPersistentConnection, logger, iLifetimeScope,
-                eventBusSubscriptionsManager, options.HandlerRetryBehavior, subscriptionClientName, options.ConnectionRetryCount);
+                httpContextAccessor, eventBusSubscriptionsManager, options.HandlerRetryBehavior, subscriptionClientName, options.ConnectionRetryCount);
         });
     }
 }

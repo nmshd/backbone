@@ -13,4 +13,10 @@
 		<ProjectReference Include="..\Messages.Domain\Messages.Domain.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Reference Include="Microsoft.AspNetCore.Http.Abstractions">
+	    <HintPath>..\..\..\..\..\..\Program Files\dotnet\packs\Microsoft.AspNetCore.App.Ref\8.0.8\ref\net8.0\Microsoft.AspNetCore.Http.Abstractions.dll</HintPath>
+	  </Reference>
+	</ItemGroup>
+
 </Project>

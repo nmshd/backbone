@@ -4,12 +4,14 @@ using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Polly;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using RabbitMQ.Client.Exceptions;
+using Serilog.Context;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.RabbitMQ;
 
@@ -29,9 +31,10 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     private IModel _consumerChannel;
     private readonly string? _queueName;
     private EventingBasicConsumer? _consumer;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public EventBusRabbitMq(IRabbitMqPersistentConnection persistentConnection, ILogger<EventBusRabbitMq> logger,
-        ILifetimeScope autofac, IEventBusSubscriptionsManager? subsManager, HandlerRetryBehavior handlerRetryBehavior, string? queueName = null,
+        ILifetimeScope autofac, IHttpContextAccessor httpContextAccessor, IEventBusSubscriptionsManager? subsManager, HandlerRetryBehavior handlerRetryBehavior, string? queueName = null,
         int connectionRetryCount = 5)
     {
         _persistentConnection =
@@ -41,6 +44,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         _queueName = queueName;
         _consumerChannel = CreateConsumerChannel();
         _autofac = autofac;
+        _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         _connectionRetryCount = connectionRetryCount;
         _handlerRetryBehavior = handlerRetryBehavior;
     }
@@ -95,6 +99,11 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             var properties = channel.CreateBasicProperties();
             properties.DeliveryMode = 2; // persistent
             properties.MessageId = @event.DomainEventId;
+
+            var correlationId = _httpContextAccessor.HttpContext?.Request.Headers["X-Correlation-ID"];
+
+            properties.CorrelationId = correlationId;
+            LogContext.PushProperty("CorrelationId", correlationId);
 
             channel.BasicPublish(BROKER_NAME,
                 eventName,
@@ -161,8 +170,12 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         {
             var eventName = eventArgs.RoutingKey;
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
+
             try
             {
+                if (!string.IsNullOrEmpty(eventArgs.BasicProperties.CorrelationId))
+                    LogContext.PushProperty("CorrelationId", eventArgs.BasicProperties.CorrelationId);
+
                 await ProcessEvent(eventName, message);
 
                 channel.BasicAck(eventArgs.DeliveryTag, false);
