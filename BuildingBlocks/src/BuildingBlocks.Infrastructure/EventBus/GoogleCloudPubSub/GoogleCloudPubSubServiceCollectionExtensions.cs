@@ -1,5 +1,6 @@
 using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -23,9 +24,10 @@ public static class GoogleCloudPubSubServiceCollectionExtensions
             var iLifetimeScope = sp.GetRequiredService<ILifetimeScope>();
             var logger = sp.GetRequiredService<ILogger<EventBusGoogleCloudPubSub>>();
             var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
+            var httpContextAccessor = sp.GetRequiredService<IHttpContextAccessor>();
 
             return new EventBusGoogleCloudPubSub(googleCloudPubSubPersisterConnection, logger,
-                eventBusSubscriptionsManager, iLifetimeScope, options.HandlerRetryBehavior);
+                eventBusSubscriptionsManager, iLifetimeScope, httpContextAccessor, options.HandlerRetryBehavior);
         });
     }
 }
