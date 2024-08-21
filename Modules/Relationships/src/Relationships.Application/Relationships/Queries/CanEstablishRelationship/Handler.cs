@@ -24,9 +24,7 @@ public class Handler : IRequestHandler<CanEstablishRelationshipQuery, CanEstabli
 
     public async Task<CanEstablishRelationshipResponse> Handle(CanEstablishRelationshipQuery request, CancellationToken cancellationToken)
     {
-        var identity = _userContext.GetAddress();
-        var peer = request.PeerAddress;
-        var relationships = await _relationshipsRepository.FindRelationships(BetweenParticipants(identity, peer), cancellationToken);
+        var relationships = await _relationshipsRepository.FindRelationships(BetweenParticipants(_userContext.GetAddress(), IdentityAddress.Parse(request.PeerAddress)), cancellationToken);
 
         return relationships.Any(relationship => FORBIDDEN_STATUSES.Contains(relationship.Status)) ? FALSE : TRUE;
     }

@@ -202,8 +202,6 @@ public class RelationshipsController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> CanEstablishRelationship([FromQuery] string peer, CancellationToken cancellationToken)
     {
-        if (peer == null!) throw new ValidationException(GenericApplicationErrors.Validation.InvalidPropertyValue(nameof(peer)));
-
         var response = await _mediator.Send(new CanEstablishRelationshipQuery { PeerAddress = peer }, cancellationToken);
         return Ok(response);
     }
