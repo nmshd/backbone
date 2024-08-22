@@ -41,8 +41,6 @@
         <ProjectReference Include="..\Modules\Quotas\test\Quotas.Application.Tests\Quotas.Application.Tests.csproj" />
         <ProjectReference Include="..\Modules\Quotas\test\Quotas.Domain.Tests\Quotas.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Quotas\test\Quotas.Infrastructure.Tests\Quotas.Infrastructure.Tests.csproj" />
-        <ProjectReference Include="..\Modules\Relationships\test\Relationships.Application.Tests\Relationships.Application.Tests.csproj" />
-        <ProjectReference Include="..\Modules\Relationships\test\Relationships.Domain.Tests\Relationships.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Synchronization\test\Synchronization.Application.Tests\Synchronization.Application.Tests.csproj" />
         <ProjectReference Include="..\Modules\Synchronization\test\Synchronization.Domain.Tests\Synchronization.Domain.Tests.csproj" />
         <ProjectReference Include="..\Modules\Tokens\test\Tokens.Application.Tests\Tokens.Application.Tests.csproj" />

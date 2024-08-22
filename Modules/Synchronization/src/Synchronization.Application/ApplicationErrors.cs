@@ -24,6 +24,11 @@ public static class ApplicationErrors
         {
             return new ApplicationError("error.platform.validation.datawallet.insufficientSupportedDatawalletVersion", "The supported datawallet version sent with the request is lower than the actual version of the datawallet.");
         }
+
+        public static ApplicationError DatawalletForActiveIdentityExists()
+        {
+            return new ApplicationError("error.platform.validation.datawallet.datawalletForActiveIdentityExists", "The datawallet for the active identity already exists.");
+        }
     }
 
     public static class SyncRuns

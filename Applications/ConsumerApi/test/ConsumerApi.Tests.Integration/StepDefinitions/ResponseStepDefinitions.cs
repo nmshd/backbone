@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
@@ -15,6 +16,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Binding]
 internal class ResponseStepDefinitions
 {
+    #region Constructor, Fields, Properties
     private readonly IdentitiesContext _identitiesContext;
     private readonly MessagesContext _messagesContext;
     private readonly ResponseContext _responseContext;
@@ -27,6 +29,7 @@ internal class ResponseStepDefinitions
     }
 
     private IResponse? WhenResponse => _responseContext.WhenResponse;
+    #endregion
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
@@ -139,6 +142,8 @@ public class ResponseContext
     public ApiResponse<RelationshipMetadata>? RevokeRelationshipResponse { get; set; }
     public ApiResponse<Relationship>? TerminateRelationshipResponse { get; set; }
     public ApiResponse<RelationshipMetadata>? DecomposeRelationshipResponse { get; set; }
+    public ApiResponse<CreateDatawalletResponse>? CreateDatawalletResponse { get; set; }
+    public ApiResponse<PushDatawalletModificationsResponse>? PushDatawalletModificationResponse { get; set; }
 
     public IResponse? WhenResponse { get; set; }
 }

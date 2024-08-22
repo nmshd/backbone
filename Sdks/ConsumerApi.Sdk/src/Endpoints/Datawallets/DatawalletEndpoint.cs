@@ -13,6 +13,14 @@ public class DatawalletEndpoint(EndpointClient client) : ConsumerApiEndpoint(cli
         return await _client.Get<Datawallet>("Datawallet");
     }
 
+    public async Task<ApiResponse<CreateDatawalletResponse>> CreateDatawallet(int supportedDatawalletVersion)
+    {
+        return await _client.Request<CreateDatawalletResponse>(HttpMethod.Post, $"api/{API_VERSION}/Datawallet")
+            .Authenticate()
+            .AddExtraHeader("x-Supported-Datawallet-Version", supportedDatawalletVersion.ToString())
+            .Execute();
+    }
+
     public async Task<ApiResponse<GetDatawalletModificationsResponse>> GetDatawalletModifications(int localIndex, int supportedDatawalletVersion, PaginationFilter? pagination = null)
     {
         return await _client.Request<GetDatawalletModificationsResponse>(HttpMethod.Get, $"api/{API_VERSION}/Datawallet/Modifications")

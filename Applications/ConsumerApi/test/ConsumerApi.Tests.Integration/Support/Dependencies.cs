@@ -28,6 +28,7 @@ public static class Dependencies
         services.AddScoped<MessagesContext>();
         services.AddScoped<RelationshipsContext>();
         services.AddScoped<ResponseContext>();
+        services.AddScoped<DatawalletContext>();
 
         return services;
     }

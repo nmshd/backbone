@@ -56,6 +56,14 @@ internal class IdentitiesStepDefinitions
         ClientPool.AddAnonymous(client);
     }
 
+    [Given(@"Identity ([a-zA-Z0-9]+) with a Datawallet")]
+    public async Task GivenIdentityWithADatawallet(string identityName)
+    {
+        await CreateClientForIdentityName(identityName);
+        await ClientPool.FirstForIdentity(identityName)!.Datawallet.CreateDatawallet(1);
+    }
+
+
     [Given("Identities ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+) with an established Relationship")]
     public async Task GivenIdentitiesWithAnEstablishedRelationship(string identity1Name, string identity2Name)
     {
