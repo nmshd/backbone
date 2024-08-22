@@ -9,7 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '/core/core.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+  final String? redirect;
+
+  const SplashScreen({required this.redirect, super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -44,7 +46,11 @@ class _SplashScreenState extends State<SplashScreen> {
     final sp = await SharedPreferences.getInstance();
 
     if (!sp.containsKey('api_key')) {
-      if (mounted) context.go('/login');
+      if (mounted && widget.redirect != null) {
+        context.go('/login?loc=${widget.redirect!}');
+      } else if (mounted) {
+        context.go('/login');
+      }
 
       return;
     }
@@ -55,12 +61,17 @@ class _SplashScreenState extends State<SplashScreen> {
     final isValid = await AdminApiClient.validateApiKey(baseUrl: baseUrl, apiKey: apiKey);
     if (!isValid) {
       await sp.remove('api_key');
-      if (mounted) context.go('/login');
+
+      if (mounted && widget.redirect != null) {
+        context.go('/login?loc=${widget.redirect!}');
+      } else if (mounted) {
+        context.go('/login');
+      }
 
       return;
     }
 
     GetIt.I.registerSingleton(await AdminApiClient.create(baseUrl: baseUrl, apiKey: apiKey));
-    if (mounted) context.go('/identities');
+    if (mounted) context.go(widget.redirect != null ? Uri.decodeComponent(widget.redirect!) : '/identities');
   }
 }
