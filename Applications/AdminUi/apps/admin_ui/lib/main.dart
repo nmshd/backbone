@@ -29,7 +29,7 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final _router = GoRouter(
-  initialLocation: '/splash',
+  initialLocation: '/identities/did:e:pilot.enmeshed.eu:dids:025482f25d134745abdf2b',
   navigatorKey: _rootNavigatorKey,
   redirect: (context, state) {
     if (GetIt.I.isRegistered<AdminApiClient>()) return null;
@@ -37,7 +37,7 @@ final _router = GoRouter(
     final fullPath = state.fullPath;
     if (fullPath == null || fullPath.startsWith('/splash') || fullPath.startsWith('/login')) return null;
 
-    return '/splash?loc=${Uri.encodeComponent(state.fullPath!)}';
+    return '/splash?loc=${Uri.encodeComponent(state.matchedLocation)}';
   },
   routes: [
     GoRoute(path: '/index.html', redirect: (_, __) => '/splash'),
