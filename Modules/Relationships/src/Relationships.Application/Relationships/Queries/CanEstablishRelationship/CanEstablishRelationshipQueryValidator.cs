@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using FluentValidation;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Queries.CanEstablishRelationship;
@@ -9,5 +10,6 @@ public class CanEstablishRelationshipQueryValidator : AbstractValidator<CanEstab
     public CanEstablishRelationshipQueryValidator()
     {
         RuleFor(q => q.PeerAddress).DetailedNotEmpty();
+        RuleFor(q => q.PeerAddress).Must(IdentityAddress.IsValid);
     }
 }
