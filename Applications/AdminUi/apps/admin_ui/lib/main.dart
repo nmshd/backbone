@@ -1,3 +1,4 @@
+import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -30,17 +31,25 @@ final _shellNavigatorKey = GlobalKey<NavigatorState>();
 final _router = GoRouter(
   initialLocation: '/splash',
   navigatorKey: _rootNavigatorKey,
+  redirect: (context, state) {
+    if (GetIt.I.isRegistered<AdminApiClient>()) return null;
+
+    final fullPath = state.fullPath;
+    if (fullPath == null || fullPath.startsWith('/splash') || fullPath.startsWith('/login')) return null;
+
+    return '/splash?loc=${Uri.encodeComponent(state.fullPath!)}';
+  },
   routes: [
     GoRoute(path: '/index.html', redirect: (_, __) => '/splash'),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/splash',
-      builder: (context, state) => const SplashScreen(),
+      builder: (context, state) => SplashScreen(redirect: state.uri.queryParameters['loc']),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/login',
-      builder: (context, state) => const LoginScreen(),
+      builder: (context, state) => LoginScreen(redirect: state.uri.queryParameters['loc']),
     ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
@@ -102,10 +111,7 @@ final _router = GoRouter(
           ],
         ),
       ],
-      builder: (context, state, child) => HomeScreen(
-        location: state.fullPath!,
-        child: child,
-      ),
+      builder: (context, state, child) => HomeScreen(location: state.fullPath!, child: child),
     ),
   ],
 );
