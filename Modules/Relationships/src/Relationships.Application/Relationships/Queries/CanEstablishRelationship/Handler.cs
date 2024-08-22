@@ -1,8 +1,6 @@
-﻿using System.Linq.Expressions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Queries.CanEstablishRelationship;
@@ -11,7 +9,6 @@ public class Handler : IRequestHandler<CanEstablishRelationshipQuery, CanEstabli
 {
     private static readonly CanEstablishRelationshipResponse TRUE = new() { CanCreate = true };
     private static readonly CanEstablishRelationshipResponse FALSE = new() { CanCreate = false };
-    private static readonly IList<RelationshipStatus> FORBIDDEN_STATUSES = [RelationshipStatus.Pending, RelationshipStatus.Active, RelationshipStatus.Terminated, RelationshipStatus.DeletionProposed];
 
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IUserContext _userContext;
@@ -24,13 +21,8 @@ public class Handler : IRequestHandler<CanEstablishRelationshipQuery, CanEstabli
 
     public async Task<CanEstablishRelationshipResponse> Handle(CanEstablishRelationshipQuery request, CancellationToken cancellationToken)
     {
-        var relationships = await _relationshipsRepository.FindRelationships(BetweenParticipants(_userContext.GetAddress(), IdentityAddress.Parse(request.PeerAddress)), cancellationToken);
+        var hasActiveRelationship = await _relationshipsRepository.RelationshipBetweenTwoIdentitiesExists(_userContext.GetAddress(), IdentityAddress.Parse(request.PeerAddress), cancellationToken);
 
-        return relationships.Any(relationship => FORBIDDEN_STATUSES.Contains(relationship.Status)) ? FALSE : TRUE;
-    }
-
-    private static Expression<Func<Relationship, bool>> BetweenParticipants(IdentityAddress a, IdentityAddress b)
-    {
-        return r => (r.From == a && r.To == b) || (r.From == b && r.To == a);
+        return hasActiveRelationship ? FALSE : TRUE;
     }
 }
