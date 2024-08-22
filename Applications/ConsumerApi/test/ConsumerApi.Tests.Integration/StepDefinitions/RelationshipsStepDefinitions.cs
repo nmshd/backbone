@@ -3,6 +3,7 @@ using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
@@ -15,6 +16,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "POST Relationship")]
+[Scope(Feature = "GET Relationship")]
 internal class RelationshipsStepDefinitions
 {
     private Client _client1 = null!;
@@ -26,6 +28,7 @@ internal class RelationshipsStepDefinitions
     private ApiResponse<RelationshipMetadata>? _acceptRelationshipResponse;
     private ApiResponse<RelationshipMetadata>? _rejectRelationshipResponse;
     private ApiResponse<RelationshipMetadata>? _revokeRelationshipResponse;
+    private ApiResponse<CanEstablishRelationshipResponse>? _canEstablishResponse;
     private string _relationshipId = string.Empty;
 
     public RelationshipsStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
@@ -33,6 +36,8 @@ internal class RelationshipsStepDefinitions
         _httpClient = factory.CreateClient();
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
     }
+
+    #region Given
 
     [Given("Identities i1 and i2")]
     public async Task GivenIdentitiesI1AndI2()
@@ -65,6 +70,26 @@ internal class RelationshipsStepDefinitions
         _relationshipId = createRelationshipResponse.Result!.Id;
     }
 
+    [Given("an active Relationship between i1 and i2 created by i1")]
+    public async Task GivenAnActiveRelationshipBetweenI1AndI2()
+    {
+        var relationshipTemplateResponse = await CreateRelationshipTemplate(_client1);
+        var createRelationshipResponse = await CreateRelationship(_client2, relationshipTemplateResponse.Result!.Id);
+        var acceptRelationshipResponse = await AcceptRelationship(_client1, createRelationshipResponse.Result!.Id);
+
+        _relationshipId = acceptRelationshipResponse.Result!.Id;
+    }
+
+    [Given("a rejected Relationship between i1 and i2 created by i1")]
+    public async Task GivenARejectedRelationshipBetweenI1AndI2()
+    {
+        var relationshipTemplateResponse = await CreateRelationshipTemplate(_client1);
+        var createRelationshipResponse = await CreateRelationship(_client2, relationshipTemplateResponse.Result!.Id);
+        var rejectRelationshipResponse = await RejectRelationship(_client1, createRelationshipResponse.Result!.Id);
+
+        _relationshipId = rejectRelationshipResponse.Result!.Id;
+    }
+
     [Given("i2 is in status \"ToBeDeleted\"")]
     public async Task GivenIdentityI2IsToBeDeleted()
     {
@@ -78,6 +103,10 @@ internal class RelationshipsStepDefinitions
         var startDeletionProcessResponse = await _client1.Identities.StartDeletionProcess();
         startDeletionProcessResponse.Should().BeASuccess();
     }
+
+    #endregion
+
+    #region When
 
     [When("a POST request is sent to the /Relationships endpoint by i1 with rt.id")]
     public async Task WhenAPostRequestIsSentToTheRelationshipsEndpointByI1With()
@@ -114,6 +143,16 @@ internal class RelationshipsStepDefinitions
         };
         _revokeRelationshipResponse = await _client1.Relationships.RevokeRelationship(_relationshipId, revokeRelationshipRequest);
     }
+
+    [When("a GET request is sent to the /Relationships/CanCreate\\?peer={i.id} endpoint by i1 for i2")]
+    public async Task WhenAGetRequestIsSentToTheCanCreateEndpointByI1()
+    {
+        _canEstablishResponse = await _client1.Relationships.CanCreateRelationship(_client2.IdentityData?.Address ?? "");
+    }
+
+    #endregion
+
+    #region Then
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
@@ -187,6 +226,23 @@ internal class RelationshipsStepDefinitions
         }
     }
 
+    [Then("a relationship can be established")]
+    public void ThenARelationshipCanBeEstablished() => PerformCanEstablishRelationshipCheck(true);
+
+    [Then("a relationship can not be established")]
+    public void ThenARelationshipCanNotBeEstablished() => PerformCanEstablishRelationshipCheck(false);
+
+    private void PerformCanEstablishRelationshipCheck(bool value)
+    {
+        if (_canEstablishResponse != null)
+        {
+            _canEstablishResponse!.Should().BeASuccess();
+            _canEstablishResponse!.Result!.CanCreate.Should().Be(value);
+        }
+    }
+
+    #endregion
+
     private async Task<ApiResponse<CreateRelationshipTemplateResponse>> CreateRelationshipTemplate(Client client)
     {
         var createRelationshipTemplateRequest = new CreateRelationshipTemplateRequest
@@ -206,5 +262,23 @@ internal class RelationshipsStepDefinitions
         };
 
         return await client.Relationships.CreateRelationship(createRelationshipRequest);
+    }
+
+    private async Task<ApiResponse<RelationshipMetadata>> AcceptRelationship(Client client, string relationshipId)
+    {
+        var acceptRelationshipRequest = new AcceptRelationshipRequest
+        {
+            CreationResponseContent = "AAA".GetBytes()
+        };
+        return await client.Relationships.AcceptRelationship(relationshipId, acceptRelationshipRequest);
+    }
+
+    private async Task<ApiResponse<RelationshipMetadata>> RejectRelationship(Client client, string relationshipId)
+    {
+        var rejectRelationshipRequest = new RejectRelationshipRequest
+        {
+            CreationResponseContent = "AAA".GetBytes()
+        };
+        return await client.Relationships.RejectRelationship(relationshipId, rejectRelationshipRequest);
     }
 }
