@@ -29,31 +29,24 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 final _shellNavigatorKey = GlobalKey<NavigatorState>();
 
 final _router = GoRouter(
-  initialLocation: '/identities/did:e:pilot.enmeshed.eu:dids:025482f25d134745abdf2b',
+  initialLocation: '/splash',
   navigatorKey: _rootNavigatorKey,
-  redirect: (context, state) {
-    if (GetIt.I.isRegistered<AdminApiClient>()) return null;
-
-    final fullPath = state.fullPath;
-    if (fullPath == null || fullPath.startsWith('/splash') || fullPath.startsWith('/login')) return null;
-
-    return '/splash?loc=${Uri.encodeComponent(state.matchedLocation)}';
-  },
   routes: [
     GoRoute(path: '/index.html', redirect: (_, __) => '/splash'),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/splash',
-      builder: (context, state) => SplashScreen(redirect: state.uri.queryParameters['loc']),
+      builder: (context, state) => SplashScreen(redirect: state.uri.queryParameters['redirect']),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/login',
-      builder: (context, state) => LoginScreen(redirect: state.uri.queryParameters['loc']),
+      builder: (context, state) => LoginScreen(redirect: state.uri.queryParameters['redirect']),
     ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       parentNavigatorKey: _rootNavigatorKey,
+      redirect: (context, state) => GetIt.I.isRegistered<AdminApiClient>() ? null : '/splash?redirect=${Uri.encodeComponent(state.matchedLocation)}',
       routes: [
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
