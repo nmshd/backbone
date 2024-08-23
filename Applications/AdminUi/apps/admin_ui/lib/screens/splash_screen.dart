@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
     if (!sp.containsKey('api_key')) {
       if (mounted && widget.redirect != null) {
-        context.go('/login?loc=${widget.redirect!}');
+        context.go('/login?redirect=${widget.redirect!}');
       } else if (mounted) {
         context.go('/login');
       }
@@ -63,7 +63,7 @@ class _SplashScreenState extends State<SplashScreen> {
       await sp.remove('api_key');
 
       if (mounted && widget.redirect != null) {
-        context.go('/login?loc=${widget.redirect!}');
+        context.go('/login?redirect=${widget.redirect!}');
       } else if (mounted) {
         context.go('/login');
       }
