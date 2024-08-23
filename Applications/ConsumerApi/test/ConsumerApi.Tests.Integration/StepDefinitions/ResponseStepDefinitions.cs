@@ -8,6 +8,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
+using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.ThrowHelpers;
 
@@ -144,6 +145,9 @@ public class ResponseContext
     public ApiResponse<RelationshipMetadata>? DecomposeRelationshipResponse { get; set; }
     public ApiResponse<CreateDatawalletResponse>? CreateDatawalletResponse { get; set; }
     public ApiResponse<PushDatawalletModificationsResponse>? PushDatawalletModificationResponse { get; set; }
+    public ApiResponse<StartSyncRunResponse>? StartSyncRunResponse { get; set; }
+    public ApiResponse<FinalizeDatawalletVersionUpgradeResponse>? FinalizeDatawalletVersionUpgradeResponse { get; set; }
+    public ApiResponse<FinalizeExternalEventSyncResponse>? FinalizeExternalEventSyncResponse { get; set; }
 
     public IResponse? WhenResponse { get; set; }
 }
