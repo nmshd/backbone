@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    route();
+    _route();
   }
 
   @override
@@ -41,37 +41,27 @@ class _SplashScreenState extends State<SplashScreen> {
     );
   }
 
-  Future<void> route() async {
+  Future<void> _route() async {
     await GetIt.I.allReady();
     final sp = await SharedPreferences.getInstance();
 
-    if (!sp.containsKey('api_key')) {
-      if (mounted && widget.redirect != null) {
-        context.go('/login?redirect=${widget.redirect!}');
-      } else if (mounted) {
-        context.go('/login');
-      }
-
-      return;
-    }
+    if (!sp.containsKey('api_key')) return _navigate('/login');
 
     final apiKey = sp.getString('api_key')!;
     const baseUrl = kIsWeb ? '' : String.fromEnvironment('base_url');
 
     final isValid = await AdminApiClient.validateApiKey(baseUrl: baseUrl, apiKey: apiKey);
-    if (!isValid) {
-      await sp.remove('api_key');
-
-      if (mounted && widget.redirect != null) {
-        context.go('/login?redirect=${widget.redirect!}');
-      } else if (mounted) {
-        context.go('/login');
-      }
-
-      return;
-    }
+    if (!isValid) return _navigate('/login');
 
     GetIt.I.registerSingleton(await AdminApiClient.create(baseUrl: baseUrl, apiKey: apiKey));
-    if (mounted) context.go(widget.redirect != null ? Uri.decodeComponent(widget.redirect!) : '/identities');
+    return _navigate('/identities');
+  }
+
+  void _navigate(String defaultRoute) {
+    if (!mounted) return;
+
+    if (widget.redirect != null) return context.go(Uri.decodeComponent(widget.redirect!));
+
+    context.go(defaultRoute);
   }
 }
