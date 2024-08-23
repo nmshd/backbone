@@ -7,7 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '/core/core.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final String? redirect;
+
+  const LoginScreen({required this.redirect, super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -106,6 +108,6 @@ class _LoginScreenState extends State<LoginScreen> {
 
     await GetIt.I.unregisterIfRegistered<AdminApiClient>();
     GetIt.I.registerSingleton(await AdminApiClient.create(baseUrl: baseUrl, apiKey: apiKey));
-    if (mounted) context.go('/identities');
+    if (mounted) context.go(widget.redirect != null ? Uri.decodeComponent(widget.redirect!) : '/identities');
   }
 }
