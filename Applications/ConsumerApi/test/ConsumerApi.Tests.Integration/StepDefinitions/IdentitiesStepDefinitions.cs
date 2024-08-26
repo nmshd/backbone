@@ -76,7 +76,7 @@ internal class IdentitiesStepDefinitions
 
     #region When
     [When("a POST request is sent to the /Identities endpoint with a valid signature on c")]
-    public async Task WhenAPostRequestIsSentToTheIdentitiesEndpoint()
+    public async Task WhenAPostRequestIsSentToTheIdentitiesEndpointWithAValidSignatureOnChallenge()
     {
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
         var identityKeyPair = signatureHelper.CreateKeyPair();
@@ -121,13 +121,14 @@ public class ClientPool
     public static readonly string DEFAULT_IDENTITY_NAME = "";
     public static readonly string DEFAULT_DEVICE_NAME = "";
 
-    private Client? _anonymousClient;
     private readonly List<ClientWrapper> _clientWrappers = [];
 
     public void AddAnonymous(Client client)
     {
-        _anonymousClient = client;
+        Anonymous = client;
     }
+
+    public Client? Anonymous { get; private set; }
 
     public ClientAdder Add(Client client)
     {
@@ -139,7 +140,7 @@ public class ClientPool
         if (!IsOnlyOneClientInThePool)
             throw new InvalidOperationException("No identity is considered 'default identity' when there is more than one in the pool. Use the required identity's key to access it instead.");
 
-        return FirstForDefaultIdentity() ?? _anonymousClient;
+        return FirstForDefaultIdentity() ?? Anonymous;
     }
 
     public bool IsDefaultClientAuthenticated()
@@ -147,10 +148,10 @@ public class ClientPool
         if (!IsOnlyOneClientInThePool)
             throw new InvalidOperationException("No identity is considered 'default identity' when there is more than one in the pool. Use the required identity's key to access it instead.");
 
-        return FirstForDefaultIdentity() != null && _anonymousClient == null;
+        return FirstForDefaultIdentity() != null && Anonymous == null;
     }
 
-    private bool IsOnlyOneClientInThePool => _anonymousClient != null && _clientWrappers.Count == 0 || _anonymousClient == null && _clientWrappers.Select(cw => cw.Identity).Distinct().Count() == 1;
+    private bool IsOnlyOneClientInThePool => Anonymous != null && _clientWrappers.Count == 0 || Anonymous == null && _clientWrappers.Select(cw => cw.Identity).Distinct().Count() == 1;
 
     public Client? FirstForDefaultIdentity() => _clientWrappers.FirstOrDefault()?.Client;
     public Client? FirstForIdentity(string identity) => _clientWrappers.FirstOrDefault(c => c.Identity == identity)?.Client;

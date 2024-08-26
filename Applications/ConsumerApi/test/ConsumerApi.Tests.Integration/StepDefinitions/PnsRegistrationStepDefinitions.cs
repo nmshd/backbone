@@ -15,7 +15,7 @@ internal class PnsRegistrationStepDefinitions
     }
 
     [When("([a-zA-Z0-9]+) sends a PUT request to the /Devices/Self/PushNotifications endpoint")]
-    public async Task WhenISendsAPutRequestToTheDevicesSelfPushNotificationsEndpoint(string identityName)
+    public async Task WhenIdentitySendsAPutRequestToTheDevicesSelfPushNotificationsEndpoint(string identityName)
     {
         var request = new UpdateDeviceRegistrationRequest
         {
@@ -28,13 +28,13 @@ internal class PnsRegistrationStepDefinitions
     }
 
     [When(@"([a-zA-Z0-9]+) sends a DELETE request to the /Devices/Self/PushNotifications endpoint")]
-    public async Task WhenISendsADeleteRequestToTheDevicesSelfPushNotificationsEndpoint(string identityName)
+    public async Task WhenIdentitySendsADeleteRequestToTheDevicesSelfPushNotificationsEndpoint(string identityName)
     {
         _responseContext.WhenResponse = await _identitiesContext.ClientPool.FirstForIdentity(identityName)!.PushNotifications.UnregisterFromPushNotifications();
     }
 
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Devices/Self/PushNotifications/SendTestNotification endpoint")]
-    public async Task WhenISendsAPostRequestToTheDevicesSelfPushNotificationsSendTestNotificationEndpoint(string identityName)
+    public async Task WhenIdentitySendsAPostRequestToTheDevicesSelfPushNotificationsSendTestNotificationEndpoint(string identityName)
     {
         _responseContext.WhenResponse = await _identitiesContext.ClientPool.FirstForIdentity(identityName)!.PushNotifications.SendTestNotification(new object());
     }

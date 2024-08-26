@@ -1,5 +1,4 @@
-﻿using Backbone.ConsumerApi.Sdk;
-using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
+﻿using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.Crypto;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -28,7 +27,7 @@ internal class MessagesStepDefinitions
 
     #region Given
     [Given(@"([a-zA-Z0-9]+) has sent a Message ([a-zA-Z0-9]+) to (.+)")]
-    public async Task GivenIHasSentMessageToI(string senderName, string messageName, string recipientNames)
+    public async Task GivenIdentityHasSentMessageToIdentity(string senderName, string messageName, string recipientNames)
     {
         var sender = ClientPool.FirstForIdentity(senderName)!;
         var recipients = ClientPool.GetClientsByIdentities(SplitNames(recipientNames));
@@ -39,14 +38,14 @@ internal class MessagesStepDefinitions
 
     #region When
     [When(@"([a-zA-Z0-9]+) sends a GET request to the /Messages endpoint")]
-    public async Task WhenISendsAGetRequestToTheMessagesEndpoint(string senderName)
+    public async Task WhenIdentitySendsAGetRequestToTheMessagesEndpoint(string senderName)
     {
         var sender = ClientPool.FirstForIdentity(senderName)!;
         _responseContext.WhenResponse = _responseContext.GetMessagesResponse = await sender.Messages.ListMessages();
     }
 
     [When("([a-zA-Z0-9]+) sends a POST request to the /Messages endpoint with ([a-zA-Z0-9]+) as recipient")]
-    public async Task WhenISendsAPostRequestToTheMessagesEndpoint(string identity1Name, string identity2Name)
+    public async Task WhenIdentitySendsAPostRequestToTheMessagesEndpoint(string identity1Name, string identity2Name)
     {
         var sendMessageRequest = new SendMessageRequest
         {
@@ -68,7 +67,7 @@ internal class MessagesStepDefinitions
 
     #region Then
     [Then(@"the address of the recipient ([a-zA-Z0-9]+) is anonymized")]
-    public void ThenTheAddressOfIIsAnonymized(string anonymizedIdentityName)
+    public void ThenTheAddressOfTheRecipientIsAnonymized(string anonymizedIdentityName)
     {
         var addressOfIdentityThatShouldBeAnonymized = ClientPool.FirstForIdentity(anonymizedIdentityName)!.IdentityData!.Address;
 

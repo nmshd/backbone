@@ -7,8 +7,11 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Responses;
+using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.ThrowHelpers;
 
@@ -82,7 +85,7 @@ internal class ResponseStepDefinitions
     }
 
     [Then(@"the response contains the Messages ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
-    public void ThenTheResponseContainsTheMessagesMAndM(string message1Name, string message2Name)
+    public void ThenTheResponseContainsTheMessages(string message1Name, string message2Name)
     {
         var message1 = _messagesContext.Messages[message1Name];
         var message2 = _messagesContext.Messages[message2Name];
@@ -94,7 +97,7 @@ internal class ResponseStepDefinitions
     }
 
     [Then(@"the response contains the Message ([a-zA-Z0-9]+)")]
-    public void ThenTheResponseContainsTheMessageM(string messageName)
+    public void ThenTheResponseContainsTheMessage(string messageName)
     {
         var message = _messagesContext.Messages[messageName];
 
@@ -104,7 +107,7 @@ internal class ResponseStepDefinitions
     }
 
     [Then(@"the response does not contain the Message ([a-zA-Z0-9]+)")]
-    public void ThenTheResponseDoesNotContainTheMessageM(string messageName)
+    public void ThenTheResponseDoesNotContainTheMessage(string messageName)
     {
         var message = _messagesContext.Messages[messageName];
 
@@ -120,6 +123,26 @@ internal class ResponseStepDefinitions
     {
         _responseContext.UpdateDeviceRegistrationResponse!.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();
     }
+    #endregion
+
+    #region Relationships
+    [Then("a relationship can be established")]
+    public void ThenARelationshipCanBeEstablished()
+    {
+        if (_responseContext.CanEstablishRelationshipResponse != null)
+            _responseContext.CanEstablishRelationshipResponse.Result!.CanCreate.Should().BeTrue();
+    }
+
+    [Then("a relationship can not be established")]
+    public void ThenARelationshipCanNotBeEstablished()
+    {
+        if (_responseContext.CanEstablishRelationshipResponse != null)
+            _responseContext.CanEstablishRelationshipResponse.Result!.CanCreate.Should().BeFalse();
+    }
+    #endregion
+
+    #region Tokens
+
     #endregion
 }
 
@@ -143,12 +166,19 @@ public class ResponseContext
     public ApiResponse<RelationshipMetadata>? RevokeRelationshipResponse { get; set; }
     public ApiResponse<Relationship>? TerminateRelationshipResponse { get; set; }
     public ApiResponse<RelationshipMetadata>? DecomposeRelationshipResponse { get; set; }
+    public ApiResponse<CanEstablishRelationshipResponse>? CanEstablishRelationshipResponse { get; set; }
     public ApiResponse<CreateDatawalletResponse>? CreateDatawalletResponse { get; set; }
     public ApiResponse<PushDatawalletModificationsResponse>? PushDatawalletModificationResponse { get; set; }
     public ApiResponse<StartSyncRunResponse>? StartSyncRunResponse { get; set; }
     public ApiResponse<FinalizeDatawalletVersionUpgradeResponse>? FinalizeDatawalletVersionUpgradeResponse { get; set; }
     public ApiResponse<FinalizeExternalEventSyncResponse>? FinalizeExternalEventSyncResponse { get; set; }
     public ApiResponse<RefreshExpirationTimeResponse>? RefreshExpirationTimeResponse { get; set; }
+    public ApiResponse<CreateTokenResponse>? CreateTokenResponse { get; set; }
+    public ApiResponse<EmptyResponse>? CreateTokenAnonymously { get; set; }
+    public ApiResponse<ListTokensResponse>? ListTokensResponse { get; set; }
+    public ApiResponse<Token>? GetTokenResponse { get; set; }
+
+    public List<Token> ResponseTokens = [];
 
     public IResponse? WhenResponse { get; set; }
 }

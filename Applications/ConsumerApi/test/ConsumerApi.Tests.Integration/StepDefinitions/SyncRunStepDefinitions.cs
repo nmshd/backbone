@@ -21,7 +21,7 @@ internal class SyncRunStepDefinitions
     #endregion
 
     [When(@"([a-zA-Z0-9]+) sends a POST request to /SyncRuns endpoint with the SyncRunType ""([a-zA-Z]+)""")]
-    public async Task WhenISendsAPostRequestToSyncRunsEndpointWithTheSyncRunType(string identityName, string syncRunTypeName)
+    public async Task WhenIdentitySendsAPostRequestToSyncRunsEndpointWithTheSyncRunType(string identityName, string syncRunTypeName)
     {
         var identityAddress = ClientPool.FirstForIdentity(identityName)!.IdentityData!.Address;
         var datawallet = _datawalletContext.CreateDatawalletResponses.Values.First(cdwr => cdwr.Owner == identityAddress);

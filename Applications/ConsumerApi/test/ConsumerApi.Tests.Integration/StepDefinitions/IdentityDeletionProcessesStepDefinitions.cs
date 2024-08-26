@@ -20,7 +20,7 @@ internal class IdentityDeletionProcessesStepDefinitions
 
     #region Given
     [Given("no active deletion process for i exists")]
-    public void GivenNoActiveDeletionProcessForIExists() { }
+    public void GivenNoActiveDeletionProcessForIdentityExists() { }
 
     [Given("an active deletion process for ([a-zA-Z0-9]+) exists")]
     public async Task GivenAnActiveDeletionProcessForTheIdentityExists(string identityName)
@@ -39,13 +39,13 @@ internal class IdentityDeletionProcessesStepDefinitions
 
     #region When
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Identities/Self/DeletionProcesses endpoint")]
-    public async Task WhenISendsAPostRequestToTheIdentitiesSelfDeletionProcessesEndpoint(string identityName)
+    public async Task WhenIdentitySendsAPostRequestToTheIdentitiesSelfDeletionProcessesEndpoint(string identityName)
     {
         _responseContext.WhenResponse = _responseContext.StartDeletionProcessResponse = await ClientPool.FirstForIdentity(identityName)!.Identities.StartDeletionProcess();
     }
 
     [When(@"([a-zA-Z0-9]+) sends a PUT request to the /Identities/Self/DeletionProcesses/\{id} endpoint")]
-    public async Task WhenISendsAPutRequestToTheIdentitiesSelfDeletionProcessesIdEndpoint(string identityName)
+    public async Task WhenIdentitySendsAPutRequestToTheIdentitiesSelfDeletionProcessesIdEndpoint(string identityName)
     {
         _responseContext.WhenResponse = _responseContext.CancelDeletionProcessResponse = await ClientPool.FirstForIdentity(identityName)!.Identities.CancelDeletionProcess(_identitiesContext.ActiveDeletionProcesses[identityName]);
     }

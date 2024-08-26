@@ -16,7 +16,7 @@ internal class FilesStepDefinitions
     }
 
     [When("([a-zA-Z0-9]+) sends a POST request to the /Files endpoint")]
-    public async Task WhenAPostRequestIsSentToTheFilesEndpoint(string identityName)
+    public async Task WhenIdentitySendsAPostRequestToTheFilesEndpoint(string identityName)
     {
         var identity = _identitiesContext.ClientPool.FirstForIdentity(identityName)!;
 

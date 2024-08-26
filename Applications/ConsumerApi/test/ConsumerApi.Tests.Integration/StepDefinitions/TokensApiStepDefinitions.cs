@@ -1,37 +1,20 @@
-﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.ConsumerApi.Sdk;
+﻿using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
-using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
-using Backbone.ConsumerApi.Tests.Integration.Support;
 using Backbone.Crypto;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using static Backbone.ConsumerApi.Tests.Integration.Support.Constants;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
-[Scope(Feature = "POST Token")]
-[Scope(Feature = "GET Token")]
-[Scope(Feature = "GET Tokens")]
 internal class TokensApiStepDefinitions
 {
-    private string _tokenId;
-    private string _peerTokenId;
-    private readonly List<CreateTokenResponse> _givenOwnTokens;
-    private readonly List<Token> _responseTokens;
-    private ApiResponse<CreateTokenResponse>? _createTokenResponse;
-    private ApiResponse<EmptyResponse>? _createTokenResponse401;
-    private ApiResponse<Token>? _tokenResponse;
-    private ApiResponse<ListTokensResponse>? _tokensResponse;
-    private readonly HttpClient _httpClient;
-    private readonly ClientCredentials _clientCredentials;
-    private bool _isAuthenticated;
-    private Client _sdk = null!;
-
+    #region Constructor, Fields, Properties
     private static readonly DateTime TOMORROW = DateTime.Now.AddDays(1);
 
     private static readonly byte[] CONTENT = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new
@@ -39,211 +22,167 @@ internal class TokensApiStepDefinitions
         key = "some-value"
     })).BytesRepresentation;
 
-    public TokensApiStepDefinitions(IOptions<HttpConfiguration> httpConfiguration, HttpClientFactory factory)
+    private readonly HttpClient _httpClient;
+    private readonly ClientCredentials _clientCredentials;
+
+    private readonly IdentitiesContext _identitiesContext;
+    private readonly ResponseContext _responseContext;
+    private readonly TokensContext _tokensContext;
+
+    public TokensApiStepDefinitions(IdentitiesContext identitiesContext, ResponseContext responseContext, TokensContext tokensContext, HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
     {
-        _isAuthenticated = false;
-        _tokenId = string.Empty;
-        _peerTokenId = string.Empty;
-        _givenOwnTokens = [];
-        _responseTokens = [];
         _httpClient = factory.CreateClient();
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
+
+        _identitiesContext = identitiesContext;
+        _responseContext = responseContext;
+        _tokensContext = tokensContext;
     }
 
-    [Given("the user is authenticated")]
-    public async Task GivenTheUserIsAuthenticated()
-    {
-        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
-        _isAuthenticated = true;
-    }
+    private ClientPool ClientPool => _identitiesContext.ClientPool;
 
-    [Given("the user is unauthenticated")]
-    public void GivenTheUserIsUnauthenticated()
-    {
-        _sdk = Client.CreateUnauthenticated(_httpClient, _clientCredentials);
-        _isAuthenticated = false;
-    }
+    private CreateTokenRequest CreateTokenRequest => new() { Content = CONTENT, ExpiresAt = TOMORROW };
+    #endregion
 
-    [Given("an own Token t")]
-    public async Task GivenAnOwnTokenT()
-    {
-        var createTokenRequest = new CreateTokenRequest
-        {
-            Content = CONTENT,
-            ExpiresAt = TOMORROW
-        };
-
-        var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
-        var response = await client.Tokens.CreateToken(createTokenRequest);
-        response.Should().BeASuccess();
-
-        _tokenId = response.Result!.Id;
-        _tokenId.Should().NotBeNullOrEmpty();
-    }
-
-    [Given("a peer Token p")]
-    public async Task GivenAPeerTokenP()
-    {
-        var createTokenRequest = new CreateTokenRequest
-        {
-            Content = CONTENT,
-            ExpiresAt = TOMORROW
-        };
-
-        var response = await _sdk.Tokens.CreateToken(createTokenRequest);
-        response.Should().BeASuccess();
-
-        _peerTokenId = response.Result!.Id;
-        _peerTokenId.Should().NotBeNullOrEmpty();
-    }
-
-    [Given("the user created multiple Tokens")]
-    public async Task GivenTheUserCreatedMultipleTokens()
+    #region Given
+    [Given("([a-zA-Z0-9]+) created multiple Tokens")]
+    public async Task GivenTheIdentityCreatedMultipleTokens(string identityName)
     {
         for (var i = 0; i < 2; i++)
         {
-            var createTokenRequest = new CreateTokenRequest
-            {
-                Content = CONTENT,
-                ExpiresAt = TOMORROW
-            };
+            var client = ClientPool.FirstForIdentity(identityName)!;
 
-            var response = await _sdk.Tokens.CreateToken(createTokenRequest);
-
+            var response = await client.Tokens.CreateToken(CreateTokenRequest);
             response.Should().BeASuccess();
 
-            _givenOwnTokens.Add(response.Result!);
+            _tokensContext.AddCreateTokenResponse(client.IdentityData!.Address, $"t{i}", response.Result!);
         }
     }
 
-    [When("a GET request is sent to the Tokens endpoint with a list of ids of own Tokens")]
-    public async Task WhenAGETRequestIsSentToTheTokensEndpointWithAListOfIdsOfOwnTokens()
+    [Given(@"Identity ([a-zA-Z0-9]+) and Token ([a-zA-Z0-9]+)")]
+    public async Task GivenIdentityAndToken(string identityName, string tokenName)
     {
-        var tokenIds = _givenOwnTokens.Select(t => t.Id);
+        var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
+        ClientPool.Add(client).ForIdentity(identityName);
 
-        _tokensResponse = await _sdk.Tokens.ListTokens(tokenIds);
-        _tokensResponse.Should().NotBeNull();
+        var response = await client.Tokens.CreateToken(CreateTokenRequest);
+        response.Should().BeASuccess();
+        response.Result!.Id.Should().NotBeNullOrEmpty();
 
-        var tokens = _tokensResponse.Result!.ToArray();
-        tokens.Should().HaveCount(_givenOwnTokens.Count);
+        _tokensContext.AddCreateTokenResponse(client.IdentityData!.Address, tokenName, response.Result!);
+    }
+    #endregion
 
-        _responseTokens.AddRange(tokens);
+    #region When
+    [When("([a-zA-Z0-9]+) sends a GET request to the Tokens endpoint with a list of ids of own Tokens")]
+    public async Task WhenIdentitySendsAGetRequestToTheTokensEndpointWithAListOfIdsOfOwnTokens(string identityName)
+    {
+        var client = ClientPool.FirstForIdentity(identityName)!;
+        var tokenIds = _tokensContext.CreateTokenResponses.Values.Where(t => t.CreatedBy == client.IdentityData!.Address).Select(t => t.CreateTokenResponse.Id);
+
+        _responseContext.WhenResponse = _responseContext.ListTokensResponse = await client.Tokens.ListTokens(tokenIds);
+        _responseContext.WhenResponse.Should().NotBeNull();
+
+        var tokensOfIdentityCount = _tokensContext.CreateTokenResponses.Values.Count(t => t.CreatedBy == client.IdentityData!.Address);
+        var tokens = _responseContext.ListTokensResponse.Result!.ToArray();
+        tokens.Should().HaveCount(tokensOfIdentityCount);
+
+        _responseContext.ResponseTokens.AddRange(tokens);
+    }
+
+    [When(@"([a-zA-Z0-9]+) sends a GET request to the Tokens endpoint with a list containing ([a-zA-Z0-9]+).Id, ([a-zA-Z0-9]+).Id")]
+    public async Task WhenIdentitySendsAGetRequestToTheTokensEndpointWithAListContainingTokenIds(string identityName, string tokenName, string peerTokenName)
+    {
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].CreateTokenResponse.Id;
+        var peerTokenId = _tokensContext.CreateTokenResponses[peerTokenName].CreateTokenResponse.Id;
+
+        var tokenIds = new List<string> { tokenId, peerTokenId };
+        _responseContext.WhenResponse = _responseContext.ListTokensResponse = await ClientPool.FirstForIdentity(identityName)!.Tokens.ListTokens(tokenIds);
+
+        _responseContext.ResponseTokens.AddRange(_responseContext.ListTokensResponse.Result!);
+    }
+
+
+    [When(@"([a-zA-Z0-9]+) sends a POST request to the Tokens endpoint")]
+    public async Task WhenIdentitySendsAPostRequestToTheTokensEndpoint(string identityName)
+    {
+        _responseContext.WhenResponse = _responseContext.CreateTokenResponse = await ClientPool.FirstForIdentity(identityName)!.Tokens.CreateToken(CreateTokenRequest);
     }
 
     [When("a POST request is sent to the Tokens endpoint")]
-    public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWith()
+    public async Task WhenAPostRequestIsSentToTheTokensEndpointWith()
     {
-        var request = new CreateTokenRequest
-        {
-            Content = CONTENT,
-            ExpiresAt = TOMORROW
-        };
-
-        if (_isAuthenticated)
-        {
-            _createTokenResponse = await _sdk.Tokens.CreateToken(request);
-        }
-        else
-        {
-            _createTokenResponse401 = await _sdk.Tokens.CreateTokenUnauthenticated(request);
-        }
+        _responseContext.WhenResponse = _responseContext.CreateTokenAnonymously = await ClientPool.Default()!.Tokens.CreateTokenUnauthenticated(CreateTokenRequest);
     }
 
-    [When("a POST request is sent to the Tokens endpoint with invalid Content Type")]
-    public async Task WhenAPOSTRequestIsSentToTheTokensEndpointWithNoRequestContent()
+    [When(@"([a-zA-Z0-9]+) sends a GET request to the Tokens/\{id} endpoint with ([a-zA-Z0-9]+).Id")]
+    public async Task WhenIdentitySendsAGetRequestToTheTokensIdEndpointWithTokenId(string identityName, string tokenName)
     {
-        var request = new CreateTokenRequest
-        {
-            Content = CONTENT,
-            ExpiresAt = TOMORROW
-        };
+        var client = ClientPool.FirstForIdentity(identityName)!;
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].CreateTokenResponse.Id;
 
-        _createTokenResponse = await _sdk.Tokens.CreateToken(request);
+        _responseContext.WhenResponse = _responseContext.GetTokenResponse = await client.Tokens.GetToken(tokenId);
     }
 
-    [When(@"a GET request is sent to the Tokens/{id} endpoint with ""?(.*?)""?")]
-    public async Task WhenAGETRequestIsSentToTheTokensIdEndpointWith(string id)
+    [When(@"a GET request is sent to the Tokens/{id} endpoint with ([a-zA-Z0-9]+).Id")]
+    public async Task WhenAGetRequestIsSentToTheTokensIdEndpointWithTokenId(string tokenName)
     {
-        switch (id)
-        {
-            case "t.Id":
-                id = _tokenId;
-                break;
-            case "p.Id":
-                id = _peerTokenId;
-                break;
-            case "a valid Id":
-                id = "TOKjVPS6h1082AuBVBaR";
-                break;
-        }
+        var client = ClientPool.Anonymous!;
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].CreateTokenResponse.Id;
 
-        _tokenResponse = await _sdk.Tokens.GetToken(id);
+        _responseContext.WhenResponse = _responseContext.GetTokenResponse = await client.Tokens.GetToken(tokenId);
     }
 
-    [When(@"a GET request is sent to the Tokens endpoint with a list containing t\.Id, p\.Id")]
-    public async Task WhenAGETRequestIsSentToTheTokensEndpointWithAListContainingT_IdP_Id()
+    [When(@"([a-zA-Z0-9]+) sends a GET request to the Tokens/{id} endpoint with ""([^""]*)""")]
+    public async Task WhenIdentitySendsAGetRequestToTheTokensIdEndpointWithNonExistingTokenId(string identityName, string nonExistingTokenId)
     {
-        var tokenIds = new List<string> { _tokenId, _peerTokenId };
-        _tokensResponse = await _sdk.Tokens.ListTokens(tokenIds);
-
-        _responseTokens.AddRange(_tokensResponse.Result!);
+        var client = ClientPool.FirstForIdentity(identityName)!;
+        _responseContext.WhenResponse = _responseContext.GetTokenResponse = await client.Tokens.GetToken(nonExistingTokenId);
     }
+    #endregion
 
-    [Then("the response contains both Tokens")]
-    public void ThenTheResponseOnlyContainsTheOwnToken()
+    #region Then
+    [Then("the response contains all Tokens created by ([a-zA-Z0-9]+) with the given ids")]
+    public void ThenTheResponseContainsAllTokensCreatedByIdentityWithTheGivenIds(string identityName)
     {
-        _responseTokens.Should().HaveCount(2)
-            .And.Contain(token => token.Id == _tokenId)
-            .And.Contain(token => token.Id == _peerTokenId);
-    }
+        var client = ClientPool.FirstForIdentity(identityName)!;
+        var tokenIds = _tokensContext.CreateTokenResponses.Values.Where(t => t.CreatedBy == client.IdentityData!.Address).Select(t => t.CreateTokenResponse).ToList();
 
-    [Then("the response contains all Tokens with the given ids")]
-    public void ThenTheResponseContainsAllTokensWithTheGivenIds()
-    {
-        _responseTokens.Select(t => t.Id)
+        _responseContext.ResponseTokens.Select(t => t.Id)
             .Should()
-            .HaveCount(_givenOwnTokens.Count)
-            .And.BeEquivalentTo(_givenOwnTokens.Select(t => t.Id), options => options.WithoutStrictOrdering());
+            .HaveCount(tokenIds.Count)
+            .And.BeEquivalentTo(tokenIds.Select(t => t.Id), options => options.WithoutStrictOrdering());
     }
 
-    [Then("the response contains a CreateTokenResponse")]
-    public async Task ThenTheResponseContainsACreateTokenResponse()
+    [Then(@"the response contains ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
+    public void ThenTheResponseContainsBothTokens(string tokenName, string peerTokenName)
     {
-        _createTokenResponse!.Should().NotBeNull();
-        _createTokenResponse!.Should().BeASuccess();
-        _createTokenResponse!.ContentType.Should().Be("application/json");
-        await _createTokenResponse!.Should().ComplyWithSchema();
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].CreateTokenResponse.Id;
+        var peerTokenId = _tokensContext.CreateTokenResponses[peerTokenName].CreateTokenResponse.Id;
+
+        _responseContext.ResponseTokens.Should().HaveCount(2)
+            .And.Contain(token => token.Id == tokenId)
+            .And.Contain(token => token.Id == peerTokenId);
+    }
+    #endregion
+}
+
+public class TokensContext
+{
+    public Dictionary<string, CreateTokenResponseWrapper> CreateTokenResponses = new();
+
+    public void AddCreateTokenResponse(string createdBy, string tokenName, CreateTokenResponse createTokenResponse)
+    {
+        CreateTokenResponses[tokenName] = new CreateTokenResponseWrapper
+        {
+            CreatedBy = createdBy,
+            CreateTokenResponse = createTokenResponse
+        };
     }
 
-    [Then("the response contains a Token")]
-    public async Task ThenTheResponseContainsAToken()
+    public class CreateTokenResponseWrapper
     {
-        _tokenResponse!.Should().NotBeNull();
-        _tokenResponse!.Should().BeASuccess();
-        _tokenResponse!.ContentType.Should().Be("application/json");
-        await _tokenResponse!.Should().ComplyWithSchema();
-    }
-
-    [Then(@"the response status code is (\d+) \(.+\)")]
-    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
-    {
-        if (_tokensResponse != null)
-            ((int)_tokensResponse.Status).Should().Be(expectedStatusCode);
-
-        if (_tokenResponse != null)
-            ((int)_tokenResponse.Status).Should().Be(expectedStatusCode);
-
-        if (_createTokenResponse != null)
-            ((int)_createTokenResponse.Status).Should().Be(expectedStatusCode);
-
-        if (_createTokenResponse401 != null)
-            ((int)_createTokenResponse401.Status).Should().Be(expectedStatusCode);
-    }
-
-    [Then(@"the response content contains an error with the error code ""([^""]+)""")]
-    public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
-    {
-        _tokenResponse!.Error.Should().NotBeNull();
-        _tokenResponse.Error!.Code.Should().Be(errorCode);
+        public required string CreatedBy;
+        public required CreateTokenResponse CreateTokenResponse;
     }
 }
