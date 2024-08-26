@@ -7,9 +7,6 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Queries.CanEs
 
 public class Handler : IRequestHandler<CanEstablishRelationshipQuery, CanEstablishRelationshipResponse>
 {
-    private static readonly CanEstablishRelationshipResponse TRUE = new() { CanCreate = true };
-    private static readonly CanEstablishRelationshipResponse FALSE = new() { CanCreate = false };
-
     private readonly IRelationshipsRepository _relationshipsRepository;
     private readonly IUserContext _userContext;
 
@@ -23,6 +20,6 @@ public class Handler : IRequestHandler<CanEstablishRelationshipQuery, CanEstabli
     {
         var hasActiveRelationship = await _relationshipsRepository.RelationshipBetweenTwoIdentitiesExists(_userContext.GetAddress(), IdentityAddress.Parse(request.PeerAddress), cancellationToken);
 
-        return hasActiveRelationship ? FALSE : TRUE;
+        return new CanEstablishRelationshipResponse { CanCreate = !hasActiveRelationship };
     }
 }
