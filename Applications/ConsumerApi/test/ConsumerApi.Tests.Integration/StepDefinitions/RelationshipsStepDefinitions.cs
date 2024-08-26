@@ -17,7 +17,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "POST Relationship")]
-[Scope(Feature = "GET Relationship")]
+[Scope(Feature = "GET Relationship/CanCreate")]
 internal class RelationshipsStepDefinitions
 {
     private Client _client1 = null!;
