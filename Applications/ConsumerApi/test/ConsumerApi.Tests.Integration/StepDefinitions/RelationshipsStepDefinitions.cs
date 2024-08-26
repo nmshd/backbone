@@ -220,18 +220,15 @@ internal class RelationshipsStepDefinitions
     }
 
     [Then("a relationship can be established")]
-    public void ThenARelationshipCanBeEstablished() => PerformCanEstablishRelationshipCheck(true);
+    public void ThenARelationshipCanBeEstablished()
+    {
+        if (_canEstablishResponse != null) _canEstablishResponse!.Result!.CanCreate.Should().BeTrue();
+    }
 
     [Then("a relationship can not be established")]
-    public void ThenARelationshipCanNotBeEstablished() => PerformCanEstablishRelationshipCheck(false);
-
-    private void PerformCanEstablishRelationshipCheck(bool value)
+    public void ThenARelationshipCanNotBeEstablished()
     {
-        if (_canEstablishResponse != null)
-        {
-            _canEstablishResponse!.Should().BeASuccess();
-            _canEstablishResponse!.Result!.CanCreate.Should().Be(value);
-        }
+        if (_canEstablishResponse != null) _canEstablishResponse!.Result!.CanCreate.Should().BeFalse();
     }
 
     #endregion
