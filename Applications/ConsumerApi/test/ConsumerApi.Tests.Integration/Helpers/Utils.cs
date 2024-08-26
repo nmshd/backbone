@@ -45,6 +45,39 @@ public static class Utils
         return getRelationshipResponse.Result!;
     }
 
+    public static async Task<Relationship> CreateRejectedRelationshipBetween(Client client1, Client client2)
+    {
+        var createRelationshipTemplateRequest = new CreateRelationshipTemplateRequest
+        {
+            Content = "AAA".GetBytes()
+        };
+
+        var relationshipTemplateResponse = await client1.RelationshipTemplates.CreateTemplate(createRelationshipTemplateRequest);
+        relationshipTemplateResponse.Should().BeASuccess();
+
+        var createRelationshipRequest = new CreateRelationshipRequest
+        {
+            RelationshipTemplateId = relationshipTemplateResponse.Result!.Id,
+            Content = "AAA".GetBytes()
+        };
+
+        var createRelationshipResponse = await client2.Relationships.CreateRelationship(createRelationshipRequest);
+        createRelationshipResponse.Should().BeASuccess();
+
+        var acceptRelationshipRequest = new RejectRelationshipRequest
+        {
+            CreationResponseContent = "AAA".GetBytes()
+        };
+
+        var rejectRelationshipResponse = await client1.Relationships.RejectRelationship(createRelationshipResponse.Result!.Id, acceptRelationshipRequest);
+        rejectRelationshipResponse.Should().BeASuccess();
+
+        var getRelationshipResponse = await client1.Relationships.GetRelationship(createRelationshipResponse.Result.Id);
+        getRelationshipResponse.Should().BeASuccess();
+
+        return getRelationshipResponse.Result!;
+    }
+
     public static async Task<Message> SendMessage(Client sender, params Client[] recipients)
     {
         var sendMessageRequest = new SendMessageRequest

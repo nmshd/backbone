@@ -80,11 +80,7 @@ internal class RelationshipsStepDefinitions
     [Given("a rejected Relationship between i1 and i2 created by i1")]
     public async Task GivenARejectedRelationshipBetweenI1AndI2()
     {
-        var relationshipTemplateResponse = await CreateRelationshipTemplate(_client1);
-        var createRelationshipResponse = await CreateRelationship(_client2, relationshipTemplateResponse.Result!.Id);
-        var rejectRelationshipResponse = await RejectRelationship(_client1, createRelationshipResponse.Result!.Id);
-
-        _relationshipId = rejectRelationshipResponse.Result!.Id;
+        _relationshipId = (await Utils.CreateRejectedRelationshipBetween(_client1, _client2)).Id;
     }
 
     [Given("i2 is in status \"ToBeDeleted\"")]
