@@ -48,17 +48,13 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   if (kIsDesktop)
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.refresh),
-                          onPressed: () {
-                            _reloadClients();
-                            _loadTiers();
-                          },
-                          tooltip: context.l10n.reload,
-                        ),
-                      ],
+                    IconButton(
+                      icon: const Icon(Icons.refresh),
+                      onPressed: () {
+                        _reloadClients();
+                        _loadTiers();
+                      },
+                      tooltip: context.l10n.reload,
                     ),
                   IconButton(
                     icon: Icon(
