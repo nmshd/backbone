@@ -9,7 +9,6 @@ public class CanEstablishRelationshipQueryValidator : AbstractValidator<CanEstab
 {
     public CanEstablishRelationshipQueryValidator()
     {
-        RuleFor(q => q.PeerAddress).DetailedNotEmpty();
         RuleFor(q => q.PeerAddress).Must(IdentityAddress.IsValid);
     }
 }
