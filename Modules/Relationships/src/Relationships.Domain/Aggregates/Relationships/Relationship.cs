@@ -371,7 +371,8 @@ public class Relationship : Entity
     public static Expression<Func<Relationship, bool>> CountsAsActive()
     {
         return r => r.Status != RelationshipStatus.Rejected &&
-                    r.Status != RelationshipStatus.Revoked;
+                    r.Status != RelationshipStatus.Revoked &&
+                    r.Status != RelationshipStatus.ReadyForDeletion;
     }
 
     #endregion

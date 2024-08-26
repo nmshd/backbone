@@ -12,7 +12,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.Helpers;
 
 public static class Utils
 {
-    public static async Task<Relationship> EstablishRelationshipBetween(Client client1, Client client2)
+    public static async Task<RelationshipMetadata> CreatePendingRelationshipBetween(Client client1, Client client2)
     {
         var createRelationshipTemplateRequest = new CreateRelationshipTemplateRequest
         {
@@ -31,15 +31,40 @@ public static class Utils
         var createRelationshipResponse = await client2.Relationships.CreateRelationship(createRelationshipRequest);
         createRelationshipResponse.Should().BeASuccess();
 
+        return createRelationshipResponse.Result!;
+    }
+
+    public static async Task<Relationship> EstablishRelationshipBetween(Client client1, Client client2)
+    {
+        var relationshipMetadata = await CreatePendingRelationshipBetween(client1, client2);
+
         var acceptRelationshipRequest = new AcceptRelationshipRequest
         {
             CreationResponseContent = "AAA".GetBytes()
         };
 
-        var acceptRelationshipResponse = await client1.Relationships.AcceptRelationship(createRelationshipResponse.Result!.Id, acceptRelationshipRequest);
+        var acceptRelationshipResponse = await client1.Relationships.AcceptRelationship(relationshipMetadata.Id, acceptRelationshipRequest);
         acceptRelationshipResponse.Should().BeASuccess();
 
-        var getRelationshipResponse = await client1.Relationships.GetRelationship(createRelationshipResponse.Result.Id);
+        var getRelationshipResponse = await client1.Relationships.GetRelationship(relationshipMetadata.Id);
+        getRelationshipResponse.Should().BeASuccess();
+
+        return getRelationshipResponse.Result!;
+    }
+
+    public static async Task<Relationship> CreateRejectedRelationshipBetween(Client client1, Client client2)
+    {
+        var relationshipMetadata = await CreatePendingRelationshipBetween(client1, client2);
+
+        var rejectRelationshipRequest = new RejectRelationshipRequest
+        {
+            CreationResponseContent = "AAA".GetBytes()
+        };
+
+        var rejectRelationshipResponse = await client1.Relationships.RejectRelationship(relationshipMetadata.Id, rejectRelationshipRequest);
+        rejectRelationshipResponse.Should().BeASuccess();
+
+        var getRelationshipResponse = await client1.Relationships.GetRelationship(relationshipMetadata.Id);
         getRelationshipResponse.Should().BeASuccess();
 
         return getRelationshipResponse.Result!;
