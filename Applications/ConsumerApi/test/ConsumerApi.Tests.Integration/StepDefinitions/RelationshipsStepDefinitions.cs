@@ -17,7 +17,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "POST Relationship")]
-[Scope(Feature = "GET Relationship/CanCreate")]
+[Scope(Feature = "GET Relationships/CanCreate")]
 internal class RelationshipsStepDefinitions
 {
     private Client _client1 = null!;
@@ -222,13 +222,15 @@ internal class RelationshipsStepDefinitions
     [Then("a relationship can be established")]
     public void ThenARelationshipCanBeEstablished()
     {
-        if (_canEstablishResponse != null) _canEstablishResponse!.Result!.CanCreate.Should().BeTrue();
+        if (_canEstablishResponse != null)
+            _canEstablishResponse.Result!.CanCreate.Should().BeTrue();
     }
 
     [Then("a relationship can not be established")]
     public void ThenARelationshipCanNotBeEstablished()
     {
-        if (_canEstablishResponse != null) _canEstablishResponse!.Result!.CanCreate.Should().BeFalse();
+        if (_canEstablishResponse != null)
+            _canEstablishResponse.Result!.CanCreate.Should().BeFalse();
     }
 
     #endregion
