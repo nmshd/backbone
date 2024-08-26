@@ -8,6 +8,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.ConsumerApi.Tests.Integration.Support;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Options;
@@ -73,11 +74,7 @@ internal class RelationshipsStepDefinitions
     [Given("an active Relationship between i1 and i2 created by i1")]
     public async Task GivenAnActiveRelationshipBetweenI1AndI2()
     {
-        var relationshipTemplateResponse = await CreateRelationshipTemplate(_client1);
-        var createRelationshipResponse = await CreateRelationship(_client2, relationshipTemplateResponse.Result!.Id);
-        var acceptRelationshipResponse = await AcceptRelationship(_client1, createRelationshipResponse.Result!.Id);
-
-        _relationshipId = acceptRelationshipResponse.Result!.Id;
+        _relationshipId = (await Utils.EstablishRelationshipBetween(_client1, _client2)).Id;
     }
 
     [Given("a rejected Relationship between i1 and i2 created by i1")]
@@ -262,15 +259,6 @@ internal class RelationshipsStepDefinitions
         };
 
         return await client.Relationships.CreateRelationship(createRelationshipRequest);
-    }
-
-    private async Task<ApiResponse<RelationshipMetadata>> AcceptRelationship(Client client, string relationshipId)
-    {
-        var acceptRelationshipRequest = new AcceptRelationshipRequest
-        {
-            CreationResponseContent = "AAA".GetBytes()
-        };
-        return await client.Relationships.AcceptRelationship(relationshipId, acceptRelationshipRequest);
     }
 
     private async Task<ApiResponse<RelationshipMetadata>> RejectRelationship(Client client, string relationshipId)
