@@ -1,0 +1,19 @@
+meta {
+  name: /Relationships/CanCreate
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/Relationships/CanCreate?peer={{PeerId}}
+  body: none
+  auth: inherit
+}
+
+params:query {
+  peer: {{PeerId}}
+}
+
+vars:pre-request {
+  PeerId: did:e:localhost:dids:8234cca0160ff05c785636
+}

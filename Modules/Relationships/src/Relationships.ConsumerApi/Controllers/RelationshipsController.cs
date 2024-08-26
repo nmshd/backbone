@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Relationships.Application;
@@ -17,6 +18,7 @@ using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRe
 using Backbone.Modules.Relationships.Application.Relationships.Commands.RevokeRelationshipReactivation;
 using Backbone.Modules.Relationships.Application.Relationships.Commands.TerminateRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
+using Backbone.Modules.Relationships.Application.Relationships.Queries.CanEstablishRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.GetPeerOfActiveIdentityInRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.GetRelationship;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.ListRelationships;
@@ -192,6 +194,15 @@ public class RelationshipsController : ApiControllerBase
     public async Task<IActionResult> DecomposeRelationship([FromRoute] string id, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new DecomposeRelationshipCommand { RelationshipId = id }, cancellationToken);
+        return Ok(response);
+    }
+
+    [HttpGet("CanCreate")]
+    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CanEstablishRelationshipResponse>), StatusCodes.Status200OK)]
+    [ProducesError(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> CanEstablishRelationship([FromQuery] string peer, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new CanEstablishRelationshipQuery { PeerAddress = peer }, cancellationToken);
         return Ok(response);
     }
 
