@@ -69,6 +69,14 @@ class _TiersOverviewState extends State<TiersOverview> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  if (kIsDesktop)
+                    IconButton(
+                      icon: const Icon(Icons.refresh),
+                      onPressed: () {
+                        _reloadTiers();
+                      },
+                      tooltip: context.l10n.reload,
+                    ),
                   IconButton.filled(
                     icon: const Icon(Icons.add),
                     color: Theme.of(context).colorScheme.onPrimary,
