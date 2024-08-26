@@ -62,6 +62,15 @@
     "week": "Week",
     "year": "Year",
     "yes": "Yes",
+    "copyToClipboard_tooltip": "Copy to clipboard",
+    "copyToClipboard_success": "Successfully copied the '{entityName}' to clipboard.",
+    "@copiedToClipboard_success": {
+        "placeholders": {
+            "entityName": {
+                "type": "String"
+            }
+        }
+    },
     "addQuotaDialog_maxAmount_message": "Only numbers greater or equal to 0 are valid.",
     "changeClientSecretDialog_copyToClipboard": "Copy to Clipboard",
     "changeTierDialog_success": "Tier changed successfully.",
@@ -134,7 +143,6 @@
     "deletionProcessAuditLogsDetails_noDataFound": "No deletion process audit logs found.",
     "identityDetails_card_identityClipboardMessage": "Identity address copied to clipboard.",
     "identityDetails_card_publicKey": "Public Key",
-    "identityDetails_card_publicKey_copyToClipboardMessage": "Public key copied to clipboard.",
     "identityDetails_card_publicKey_tooltipMessage": "Copy public key",
     "identityDetails_receivedMessages_title": "Received Messages",
     "identityDetails_receivedMessages_subtitle": "View messages received by this identity.",
