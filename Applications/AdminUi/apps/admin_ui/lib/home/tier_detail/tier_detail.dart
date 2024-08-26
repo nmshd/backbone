@@ -47,7 +47,19 @@ class _TierDetailState extends State<TierDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (kIsDesktop) const Align(alignment: Alignment.centerLeft, child: BackButton()),
+            if (kIsDesktop)
+              Row(
+                children: [
+                  const BackButton(),
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () async {
+                      _reload();
+                    },
+                    tooltip: context.l10n.reload,
+                  ),
+                ],
+              ),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),

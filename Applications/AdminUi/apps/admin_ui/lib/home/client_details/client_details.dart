@@ -51,7 +51,20 @@ class _ClientDetailsState extends State<ClientDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (kIsDesktop) const Align(alignment: Alignment.centerLeft, child: BackButton()),
+            if (kIsDesktop)
+              Row(
+                children: [
+                  const BackButton(),
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () async {
+                      _reloadClient();
+                      _reloadTiers();
+                    },
+                    tooltip: context.l10n.reload,
+                  ),
+                ],
+              ),
             _ClientDetailsCard(
               clientDetails: clientDetails,
               selectedTier: _selectedTier,

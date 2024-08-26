@@ -37,7 +37,19 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (kIsDesktop) const Align(alignment: Alignment.centerLeft, child: BackButton()),
+        if (kIsDesktop)
+          Row(
+            children: [
+              BackButton(),
+              IconButton(
+                icon: const Icon(Icons.refresh),
+                onPressed: () async {
+                  _loadIdentityDeletionProcessAuditLogs();
+                },
+                tooltip: context.l10n.reload,
+              ),
+            ],
+          ),
         Card(
           child: Padding(
             padding: const EdgeInsets.all(8),
