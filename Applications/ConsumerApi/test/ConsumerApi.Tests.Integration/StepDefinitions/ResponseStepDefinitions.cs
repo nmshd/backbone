@@ -148,6 +148,7 @@ public class ResponseContext
     public ApiResponse<StartSyncRunResponse>? StartSyncRunResponse { get; set; }
     public ApiResponse<FinalizeDatawalletVersionUpgradeResponse>? FinalizeDatawalletVersionUpgradeResponse { get; set; }
     public ApiResponse<FinalizeExternalEventSyncResponse>? FinalizeExternalEventSyncResponse { get; set; }
+    public ApiResponse<RefreshExpirationTimeResponse>? RefreshExpirationTimeResponse { get; set; }
 
     public IResponse? WhenResponse { get; set; }
 }
