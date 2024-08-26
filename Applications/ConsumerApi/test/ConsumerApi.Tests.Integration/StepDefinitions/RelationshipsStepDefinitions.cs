@@ -256,13 +256,4 @@ internal class RelationshipsStepDefinitions
 
         return await client.Relationships.CreateRelationship(createRelationshipRequest);
     }
-
-    private async Task<ApiResponse<RelationshipMetadata>> RejectRelationship(Client client, string relationshipId)
-    {
-        var rejectRelationshipRequest = new RejectRelationshipRequest
-        {
-            CreationResponseContent = "AAA".GetBytes()
-        };
-        return await client.Relationships.RejectRelationship(relationshipId, rejectRelationshipRequest);
-    }
 }
