@@ -140,7 +140,7 @@ internal class RelationshipsStepDefinitions
     [When("a GET request is sent to the /Relationships/CanCreate\\?peer={i.id} endpoint by i1 for i2")]
     public async Task WhenAGetRequestIsSentToTheCanCreateEndpointByI1()
     {
-        _canEstablishResponse = await _client1.Relationships.CanCreateRelationship(_client2.IdentityData?.Address ?? "");
+        _canEstablishResponse = await _client1.Relationships.CanCreateRelationship(_client2.IdentityData!.Address);
     }
 
     #endregion
