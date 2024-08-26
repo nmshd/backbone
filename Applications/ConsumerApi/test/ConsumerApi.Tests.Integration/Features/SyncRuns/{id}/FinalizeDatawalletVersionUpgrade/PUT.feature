@@ -1,7 +1,7 @@
 @Integration
-Feature: PUT SyncRuns
+Feature: PUT SyncRuns/{id}/FinalizeDatawalletVersionUpgrade
 
-User updates a SyncRun
+User finalizes a DatawalletVersionUpgrade
 
 	Scenario: Finalizing a DatawalletVersionUpgrade
 		Given Identity i
@@ -9,9 +9,3 @@ User updates a SyncRun
 		When i sends a PUT request to /SyncRuns endpoint with the SyncRunType "DatawalletVersionUpgrade"
 		Then the response status code is 200 (Ok)
 		And the response contains a FinalizeDatawalletVersionUpgradeResponse
-
-	# The current operation only supports sync runs of type 'DatawalletVersionUpgrade'.
-	# Scenario: Finalizing an ExternalEventSync
-
-	# This test requires a finalized ExternalEventSync
-	# Scenario: Refreshing expiration time
