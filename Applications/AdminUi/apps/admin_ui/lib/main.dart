@@ -1,3 +1,4 @@
+import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -35,16 +36,17 @@ final _router = GoRouter(
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/splash',
-      builder: (context, state) => const SplashScreen(),
+      builder: (context, state) => SplashScreen(redirect: state.uri.queryParameters['redirect']),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/login',
-      builder: (context, state) => const LoginScreen(),
+      builder: (context, state) => LoginScreen(redirect: state.uri.queryParameters['redirect']),
     ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       parentNavigatorKey: _rootNavigatorKey,
+      redirect: (context, state) => GetIt.I.isRegistered<AdminApiClient>() ? null : '/splash?redirect=${Uri.encodeComponent(state.matchedLocation)}',
       routes: [
         GoRoute(
           parentNavigatorKey: _shellNavigatorKey,
@@ -102,10 +104,7 @@ final _router = GoRouter(
           ],
         ),
       ],
-      builder: (context, state, child) => HomeScreen(
-        location: state.fullPath!,
-        child: child,
-      ),
+      builder: (context, state, child) => HomeScreen(location: state.fullPath!, child: child),
     ),
   ],
 );

@@ -112,7 +112,7 @@ class _ClientDetailsCard extends StatelessWidget {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      EntityDetails(title: context.l10n.id, value: clientDetails.clientId),
+                      CopyableEntityDetails(title: context.l10n.id, value: clientDetails.clientId),
                       EntityDetails(title: context.l10n.displayName, value: clientDetails.displayName),
                       EntityDetails(
                         title: context.l10n.maxIdentities,
