@@ -245,10 +245,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceSnapshotCreator"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Domain.Tests", "Modules\Tokens\test\Tokens.Domain.Tests\Tokens.Domain.Tests.csproj", "{EDCB84BE-54C3-4CAD-977E-45EEBEFA1402}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{AAE548AB-4843-476A-BF61-002CF6FEE713}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{824495A9-A255-487D-AF26-6F6CA92BC715}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Challenges.Application.Tests", "Modules\Challenges\test\Challenges.Application.Tests\Challenges.Application.Tests.csproj", "{EAA10D43-BD28-40D8-BE07-B8F6DE47C156}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Others", "Others", "{8B8EE965-0373-46D6-BB30-7C131EE524E4}"
