@@ -169,10 +169,6 @@ public class ResponseContext
     public ApiResponse<CanEstablishRelationshipResponse>? CanEstablishRelationshipResponse { get; set; }
     public ApiResponse<CreateDatawalletResponse>? CreateDatawalletResponse { get; set; }
     public ApiResponse<PushDatawalletModificationsResponse>? PushDatawalletModificationResponse { get; set; }
-    public ApiResponse<StartSyncRunResponse>? StartSyncRunResponse { get; set; }
-    public ApiResponse<FinalizeDatawalletVersionUpgradeResponse>? FinalizeDatawalletVersionUpgradeResponse { get; set; }
-    public ApiResponse<FinalizeExternalEventSyncResponse>? FinalizeExternalEventSyncResponse { get; set; }
-    public ApiResponse<RefreshExpirationTimeResponse>? RefreshExpirationTimeResponse { get; set; }
     public ApiResponse<CreateTokenResponse>? CreateTokenResponse { get; set; }
     public ApiResponse<EmptyResponse>? CreateTokenAnonymously { get; set; }
     public ApiResponse<ListTokensResponse>? ListTokensResponse { get; set; }
