@@ -47,6 +47,7 @@
     "retry": "Retry",
     "required": "required",
     "remove": "Remove",
+    "reload": "Reload",
     "save": "Save",
     "showAll": "Show all",
     "searchTiers": "Search Tiers",
