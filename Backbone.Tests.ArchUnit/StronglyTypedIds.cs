@@ -1,4 +1,5 @@
-﻿using ArchUnitNET.Domain.Extensions;
+﻿using ArchUnitNET.Domain;
+using ArchUnitNET.Domain.Extensions;
 using ArchUnitNET.Fluent.Conditions;
 using ArchUnitNET.xUnit;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
@@ -12,15 +13,36 @@ public class StronglyTypedIds
     public void StronglyTypedIdsShouldHaveIsValidMethod()
     {
         Classes().That().AreAssignableTo(typeof(StronglyTypedId))
-            .And().AreNot(typeof(StronglyTypedId))
-            .Should().FollowCustomCondition((type) =>
+            .And().AreNotAbstract()
+            .Should().FollowCustomCondition(type =>
             {
-                var methods = type.GetMethodMembers();
+                var methods = type.GetMethodMembers().ToArray();
 
-                return methods.Any(c => c.NameContains("IsValid") && c.Parameters.Any(p => p.Name == nameof(String)))
-                    ? new ConditionResult(type, true)
-                    : new ConditionResult(type, false, "Entity should have 'IsValid' method");
-            }, "")
+                var isValidMethodExists = methods.Any(m => m.NameStartsWith("IsValid(") &&
+                                                           m.IsStatic == true &&
+                                                           m.Visibility == Visibility.Public &&
+                                                           m.Parameters.Count() == 1 &&
+                                                           m.Parameters.Single().FullName == typeof(string).FullName &&
+                                                           m.ReturnType.FullName == typeof(bool).FullName);
+
+                const string errorMessage = "should have a method with the following signature: 'public static boolean IsValid(string stringValue)'.";
+
+                return new ConditionResult(type, isValidMethodExists, isValidMethodExists ? string.Empty : errorMessage);
+
+                // if (isValidMethods.Length == 0)
+                //     return new ConditionResult(type, false, "should have an 'IsValid' method.");
+                //
+                // if (isValidMethods.All(m => m.IsStatic != true))
+                //     return new ConditionResult(type, false, "should have an 'IsValid' method must be static.");
+                //
+                // if (isValidMethods.All(m => m.Parameters.Count() != 1))
+                //     return new ConditionResult(type, false, "At least one 'IsValid' method must have exactly one parameter.");
+                //
+                // if (isValidMethods.All(m => m.Parameters.Single().FullName != typeof(string).FullName))
+                //     return new ConditionResult(type, false, "At least one 'IsValid' method must have a parameter of type 'string'.");
+                //
+                // return new ConditionResult(type, true);
+            }, "should have a static IsValid method with a single parameter of type 'string'.")
             .Check(Backbone.ARCHITECTURE);
     }
 }
