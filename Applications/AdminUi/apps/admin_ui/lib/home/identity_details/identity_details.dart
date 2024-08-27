@@ -55,7 +55,20 @@ class _IdentityDetailsState extends State<IdentityDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (kIsDesktop) const BackButton(),
+            if (kIsDesktop)
+              Row(
+                children: [
+                  const BackButton(),
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () async {
+                      await _reloadIdentity();
+                      await _reloadTiers();
+                    },
+                    tooltip: context.l10n.reload,
+                  ),
+                ],
+              ),
             _IdentityDetailsCard(
               identityDetails: identityDetails,
               selectedTier: _selectedTier,
