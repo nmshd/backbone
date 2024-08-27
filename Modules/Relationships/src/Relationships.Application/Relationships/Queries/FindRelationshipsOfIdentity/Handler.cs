@@ -2,7 +2,7 @@ using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repo
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using MediatR;
 
-namespace Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
+namespace Backbone.Modules.Relationships.Application.Relationships.Queries.FindRelationshipsOfIdentity;
 
 public class Handler : IRequestHandler<FindRelationshipsOfIdentityQuery, FindRelationshipsOfIdentityResponse>
 {
