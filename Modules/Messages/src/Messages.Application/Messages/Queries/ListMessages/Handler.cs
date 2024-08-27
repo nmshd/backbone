@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Messages.Application.Extensions;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Messages.Domain.Ids;
 using MediatR;
 using Microsoft.Extensions.Options;
 
@@ -21,7 +22,8 @@ public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
 
     public async Task<ListMessagesResponse> Handle(ListMessagesQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _messagesRepository.FindMessagesWithIds(request.Ids, _userContext.GetAddress(), request.PaginationFilter, cancellationToken, track: true);
+        var dbPaginationResult =
+            await _messagesRepository.FindMessagesWithIds(request.Ids.Select(MessageId.Parse), _userContext.GetAddress(), request.PaginationFilter, cancellationToken, track: true);
 
         foreach (var message in dbPaginationResult.ItemsOnPage)
         {
@@ -32,7 +34,7 @@ public class Handler : IRequestHandler<ListMessagesQuery, ListMessagesResponse>
 
         await _messagesRepository.Update(dbPaginationResult.ItemsOnPage);
 
-        var response = new ListMessagesResponse(dbPaginationResult.ItemsOnPage, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems, _userContext.GetAddress(), _options.DidDomainName);
+        var response = new ListMessagesResponse(dbPaginationResult, request.PaginationFilter, _userContext.GetAddress(), _options.DidDomainName);
 
         return response;
     }

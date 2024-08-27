@@ -1,4 +1,3 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -13,12 +12,10 @@ public class Handler : IRequestHandler<GetModificationsQuery, GetModificationsRe
 {
     private readonly IdentityAddress _activeIdentity;
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IMapper _mapper;
 
-    public Handler(ISynchronizationDbContext dbContext, IMapper mapper, IUserContext userContext)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext)
     {
         _dbContext = dbContext;
-        _mapper = mapper;
         _activeIdentity = userContext.GetAddress();
     }
 
@@ -33,23 +30,7 @@ public class Handler : IRequestHandler<GetModificationsQuery, GetModificationsRe
 
         var dbPaginationResult = await _dbContext.GetDatawalletModifications(_activeIdentity, request.LocalIndex, request.PaginationFilter, cancellationToken);
 
-        var dtos = MapToDtos(dbPaginationResult.ItemsOnPage);
-
-        return new GetModificationsResponse(dtos, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
-    }
-
-    private List<DatawalletModificationDTO> MapToDtos(IEnumerable<DatawalletModification> modifications)
-    {
-        var datawalletModifications = modifications as DatawalletModification[] ?? modifications.ToArray();
-
-        var mappingTasks = datawalletModifications.Select(MapToDto);
-
-        return mappingTasks.ToList();
-    }
-
-    private DatawalletModificationDTO MapToDto(DatawalletModification modification)
-    {
-        var dto = _mapper.Map<DatawalletModificationDTO>(modification);
-        return dto;
+        return new GetModificationsResponse(dbPaginationResult.ItemsOnPage.Select(modification => new DatawalletModificationDTO(modification)), request.PaginationFilter,
+            dbPaginationResult.TotalNumberOfItems);
     }
 }

@@ -18,6 +18,11 @@ public record QuotaId : StronglyTypedId
 
     }
 
+    public static bool IsValid(string stringValue)
+    {
+        return UTILS.IsValid(stringValue);
+    }
+
     public static QuotaId Generate()
     {
         var value = PREFIX + StringUtils.Generate(DEFAULT_VALID_CHARS, DEFAULT_MAX_LENGTH_WITHOUT_PREFIX);

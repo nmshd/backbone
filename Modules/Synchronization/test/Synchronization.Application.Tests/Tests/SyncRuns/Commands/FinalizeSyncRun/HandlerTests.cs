@@ -1,8 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
@@ -254,11 +252,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         A.CallTo(() => userContext.GetAddress()).Returns(activeIdentity);
         A.CallTo(() => userContext.GetDeviceId()).Returns(activeDevice);
 
-        var mapper = AutoMapperProfile.CreateMapper();
-
-        var eventBus = A.Fake<IEventBus>();
-
-        return new Handler(_actContext, userContext, mapper, eventBus);
+        return new Handler(_actContext, userContext);
     }
 
     #endregion

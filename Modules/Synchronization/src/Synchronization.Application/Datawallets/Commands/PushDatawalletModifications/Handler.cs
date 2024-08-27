@@ -1,4 +1,3 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Extensions;
@@ -17,7 +16,6 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IMapper _mapper;
     private CancellationToken _cancellationToken;
     private Datawallet? _datawallet;
     private DatawalletModification[] _modifications = null!;
@@ -26,10 +24,9 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private PushDatawalletModificationsResponse _response = null!;
     private DatawalletVersion _supportedDatawalletVersion = null!;
 
-    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext)
     {
         _dbContext = dbContext;
-        _mapper = mapper;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
@@ -94,7 +91,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     private DatawalletModification CreateModification(PushDatawalletModificationItem modificationDto, string blobReference)
     {
         return _datawallet!.AddModification(
-            _mapper.Map<DatawalletModificationType>(modificationDto.Type),
+            MapDatawalletModificationType(modificationDto.Type),
             new DatawalletVersion(modificationDto.DatawalletVersion),
             modificationDto.Collection,
             modificationDto.ObjectIdentifier,
@@ -105,6 +102,18 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         );
     }
 
+    private DatawalletModificationType MapDatawalletModificationType(DatawalletModificationDTO.DatawalletModificationType type)
+    {
+        return type switch
+        {
+            DatawalletModificationDTO.DatawalletModificationType.Create => DatawalletModificationType.Create,
+            DatawalletModificationDTO.DatawalletModificationType.Update => DatawalletModificationType.Update,
+            DatawalletModificationDTO.DatawalletModificationType.Delete => DatawalletModificationType.Delete,
+            DatawalletModificationDTO.DatawalletModificationType.CacheChanged => DatawalletModificationType.CacheChanged,
+            _ => throw new Exception($"Unsupported Datawallet Modification Type: {type}")
+        };
+    }
+
     private void EnsureDeviceIsUpToDate()
     {
         if (_datawallet!.LatestModification != null && _datawallet.LatestModification.Index != _request.LocalIndex)
@@ -113,7 +122,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
     private void BuildResponse()
     {
-        var responseItems = _mapper.Map<PushDatawalletModificationsResponseItem[]>(_modifications);
+        var responseItems = _modifications.Select(m => new PushDatawalletModificationsResponseItem(m));
         _response = new PushDatawalletModificationsResponse { Modifications = responseItems, NewIndex = responseItems.Max(i => i.Index) };
     }
 

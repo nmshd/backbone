@@ -30,4 +30,9 @@ public record IdentityDeletionProcessAuditLogEntryId : StronglyTypedId
 
         return Result.Success<IdentityDeletionProcessAuditLogEntryId, DomainError>(new IdentityDeletionProcessAuditLogEntryId(value));
     }
+
+    public static bool IsValid(string stringValue)
+    {
+        return UTILS.IsValid(stringValue);
+    }
 }

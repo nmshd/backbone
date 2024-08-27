@@ -1,14 +1,13 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using MediatR;
+﻿using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
 
 public class AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand : IRequest
 {
-    public AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(IdentityAddress identityAddress)
+    public AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(string identityAddress)
     {
         IdentityAddress = identityAddress;
     }
 
-    public IdentityAddress IdentityAddress { get; set; }
+    public string IdentityAddress { get; set; }
 }

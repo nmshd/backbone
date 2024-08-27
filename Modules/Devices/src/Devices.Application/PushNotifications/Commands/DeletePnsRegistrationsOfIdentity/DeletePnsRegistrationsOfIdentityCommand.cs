@@ -1,13 +1,12 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using MediatR;
+﻿using MediatR;
 
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.DeletePnsRegistrationsOfIdentity;
 public class DeletePnsRegistrationsOfIdentityCommand : IRequest
 {
-    public DeletePnsRegistrationsOfIdentityCommand(IdentityAddress identityAddress)
+    public DeletePnsRegistrationsOfIdentityCommand(string identityAddress)
     {
         IdentityAddress = identityAddress;
     }
 
-    public IdentityAddress IdentityAddress { get; set; }
+    public string IdentityAddress { get; set; }
 }

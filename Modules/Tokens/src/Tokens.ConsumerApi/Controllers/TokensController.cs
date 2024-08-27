@@ -8,7 +8,6 @@ using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using Backbone.Modules.Tokens.Application.Tokens.DTOs;
 using Backbone.Modules.Tokens.Application.Tokens.Queries.GetToken;
 using Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
-using Backbone.Modules.Tokens.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -41,7 +40,7 @@ public class TokensController : ApiControllerBase
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<TokenDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
     [AllowAnonymous]
-    public async Task<IActionResult> GetToken([FromRoute] TokenId id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetToken([FromRoute] string id, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetTokenQuery { Id = id }, cancellationToken);
         return Ok(response);
@@ -50,7 +49,7 @@ public class TokensController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<TokenDTO>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListTokens([FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] IEnumerable<TokenId> ids, CancellationToken cancellationToken)
+        [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
