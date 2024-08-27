@@ -1,7 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
@@ -362,6 +361,6 @@ public class HandlerTests : AbstractTestsBase
         var userContext = A.Fake<IUserContext>();
         A.CallTo(() => userContext.GetAddress()).Returns(ACTIVE_IDENTITY);
 
-        return new Handler(_actContext, AutoMapperProfile.CreateMapper(), userContext);
+        return new Handler(_actContext, userContext);
     }
 }

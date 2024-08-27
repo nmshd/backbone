@@ -10,7 +10,6 @@ using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using Backbone.Modules.Messages.Application.Messages.DTOs;
 using Backbone.Modules.Messages.Application.Messages.Queries.GetMessage;
 using Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
-using Backbone.Modules.Messages.Domain.Ids;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -34,7 +33,7 @@ public class MessagesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListMessagesResponse>), StatusCodes.Status200OK)]
     public async Task<IActionResult> ListMessages([FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] IEnumerable<MessageId> ids, CancellationToken cancellationToken)
+        [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
         var command = new ListMessagesQuery(paginationFilter, ids);
 
@@ -51,7 +50,7 @@ public class MessagesController : ApiControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<MessageDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetMessage(MessageId id, [FromQuery] bool? noBody, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetMessage(string id, [FromQuery] bool? noBody, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new GetMessageQuery { Id = id, NoBody = noBody == true }, cancellationToken);
         return Ok(response);
@@ -62,7 +61,7 @@ public class MessagesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SendMessage(SendMessageCommand request, CancellationToken cancellationToken)
     {
-        var recipientAddresses = request.Recipients.Select(r => r.Address);
+        var recipientAddresses = request.Recipients.Select(r => r.Address).ToList();
         var identitiesToBeDeleted = await _mediator.Send(new ListIdentitiesQuery(recipientAddresses, IdentityStatus.ToBeDeleted), cancellationToken);
         if (identitiesToBeDeleted.Any())
             throw new ApplicationException(ApplicationErrors.RecipientsToBeDeleted(identitiesToBeDeleted.Select(i => i.Address)));

@@ -10,7 +10,6 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContex
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OData;
 using Microsoft.OData.ModelBuilder;
@@ -21,12 +20,8 @@ public static class IServiceCollectionExtensions
 {
     public static IServiceCollection AddCustomFluentValidation(this IServiceCollection services)
     {
-        services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
-
         ValidatorOptions.Global.DisplayNameResolver = (_, member, _) =>
             member != null ? char.ToLowerInvariant(member.Name[0]) + member.Name[1..] : null;
-
-        services.AddValidatorsFromAssemblyContaining<Program>();
 
         return services;
     }

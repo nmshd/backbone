@@ -12,7 +12,6 @@ using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 using FluentValidation;
-using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -154,12 +153,8 @@ public static class IServiceCollectionExtensions
 
     public static IServiceCollection AddCustomFluentValidation(this IServiceCollection services)
     {
-        services.AddFluentValidationAutoValidation(config => { config.DisableDataAnnotationsValidation = true; });
-
         ValidatorOptions.Global.DisplayNameResolver = (_, member, _) =>
             member != null ? char.ToLowerInvariant(member.Name[0]) + member.Name[1..] : null;
-
-        services.AddValidatorsFromAssemblyContaining<Program>();
 
         return services;
     }

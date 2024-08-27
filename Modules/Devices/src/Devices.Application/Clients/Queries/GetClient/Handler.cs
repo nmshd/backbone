@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Domain.Entities;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Clients.Queries.GetClient;
+
 public class Handler : IRequestHandler<GetClientQuery, ClientDTO>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;

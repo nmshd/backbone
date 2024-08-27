@@ -21,6 +21,16 @@ public record IdentityDeletionProcessId : StronglyTypedId
         return new IdentityDeletionProcessId(PREFIX + randomPart);
     }
 
+    public static bool IsValid(string stringValue)
+    {
+        return UTILS.IsValid(stringValue);
+    }
+
+    public static DomainError? Validate(string value)
+    {
+        return UTILS.Validate(value);
+    }
+
     public static Result<IdentityDeletionProcessId, DomainError> Create(string value)
     {
         var validationError = UTILS.Validate(value);
