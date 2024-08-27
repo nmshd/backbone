@@ -12,7 +12,7 @@ using static Backbone.ConsumerApi.Tests.Integration.Support.Constants;
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
-internal class TokensApiStepDefinitions
+internal class TokensStepDefinitions
 {
     #region Constructor, Fields, Properties
     private static readonly DateTime TOMORROW = DateTime.Now.AddDays(1);
@@ -29,7 +29,7 @@ internal class TokensApiStepDefinitions
     private readonly ResponseContext _responseContext;
     private readonly TokensContext _tokensContext;
 
-    public TokensApiStepDefinitions(IdentitiesContext identitiesContext, ResponseContext responseContext, TokensContext tokensContext, HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
+    public TokensStepDefinitions(IdentitiesContext identitiesContext, ResponseContext responseContext, TokensContext tokensContext, HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
     {
         _httpClient = factory.CreateClient();
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
