@@ -32,7 +32,7 @@ Scenario: Requesting a list of Tokens contains tokens with forIdentity which wer
 	Then the response status code is 200 (Ok) 
 	And the response contains t
 
-Scenario: Requesting a list of Tokens contains tokens which can be colleted by me
+Scenario: Requesting a list of Tokens contains tokens which can be collected by me
 	Given Identities i1 and i2
 	And a Token t created by i1 where forIdentity is the address of i2 
 	When i1 sends a GET request to the /Tokens endpoint
