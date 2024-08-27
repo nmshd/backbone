@@ -41,7 +41,7 @@ public class FilesController : ApiControllerBase
     {
         var validationResult = await new CreateFileDTOValidator().ValidateAsync(dto, cancellationToken);
         if (!validationResult.IsValid)
-            return BadRequest(validationResult.Errors);
+            throw new ValidationException(new ApplicationError(validationResult.Errors.First().ErrorCode, validationResult.Errors.First().ErrorMessage));
 
         var inputStream = new MemoryStream();
 
