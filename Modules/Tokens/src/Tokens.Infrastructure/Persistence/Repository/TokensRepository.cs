@@ -41,20 +41,12 @@ public class TokensRepository : ITokensRepository
         return await Find(activeIdentity, ids, paginationFilter, cancellationToken);
     }
 
-    public async Task<DbPaginationResult<Token>> FindAllOfOwner(IdentityAddress owner, PaginationFilter paginationFilter, CancellationToken cancellationToken)
-    {
-        return await Find(owner, [], paginationFilter, cancellationToken, true);
-    }
-
-    private async Task<DbPaginationResult<Token>> Find(IdentityAddress? identityAddress, IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool identityIsOwner = false)
+    private async Task<DbPaginationResult<Token>> Find(IdentityAddress? identityAddress, IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken)
     {
         if (paginationFilter == null)
             throw new Exception("A pagination filter has to be provided.");
 
         var query = _readonlyTokensDbSet.Where(Token.IsNotExpired);
-
-        if (identityIsOwner)
-            query = query.Where(t => t.CreatedBy == identityAddress);
 
         var idsArray = ids as TokenId[] ?? ids.ToArray();
 
