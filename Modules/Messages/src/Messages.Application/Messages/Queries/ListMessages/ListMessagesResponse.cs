@@ -1,3 +1,4 @@
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Messages.DTOs;
@@ -7,8 +8,8 @@ namespace Backbone.Modules.Messages.Application.Messages.Queries.ListMessages;
 
 public class ListMessagesResponse : PagedResponse<MessageDTO>
 {
-    public ListMessagesResponse(IEnumerable<Message> itemsOnPage, PaginationFilter previousPaginationFilter, int totalNumberOfItems, IdentityAddress activeIdentity, string didDomainName)
-        : base(itemsOnPage.Select(i => new MessageDTO(i, activeIdentity, didDomainName)), previousPaginationFilter, totalNumberOfItems)
+    public ListMessagesResponse(DbPaginationResult<Message> dbPaginationResult, PaginationFilter previousPaginationFilter, IdentityAddress activeIdentity, string didDomainName)
+        : base(dbPaginationResult.ItemsOnPage.Select(i => new MessageDTO(i, activeIdentity, didDomainName)), previousPaginationFilter, dbPaginationResult.TotalNumberOfItems)
     {
     }
 }
