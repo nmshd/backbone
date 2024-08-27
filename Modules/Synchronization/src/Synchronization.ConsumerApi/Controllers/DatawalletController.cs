@@ -4,7 +4,6 @@ using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Synchronization.Application;
-using Backbone.Modules.Synchronization.Application.Datawallets.Commands.CreateDatawallet;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetDatawallet;
@@ -36,15 +35,6 @@ public class DatawalletController : ApiControllerBase
     {
         var response = await _mediator.Send(new GetDatawalletQuery(), cancellationToken);
         return Ok(response);
-    }
-
-    [HttpPost]
-    [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateDatawalletResponse>), StatusCodes.Status201Created)]
-    [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CreateDatawallet([FromHeader(Name = "X-Supported-Datawallet-Version")] ushort supportedDatawalletVersion, CancellationToken cancellationToken)
-    {
-        var response = await _mediator.Send(new CreateDatawalletCommand(supportedDatawalletVersion), cancellationToken);
-        return Created(response);
     }
 
     [HttpGet("Modifications")]

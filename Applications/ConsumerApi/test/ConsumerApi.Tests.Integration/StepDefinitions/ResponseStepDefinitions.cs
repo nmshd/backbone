@@ -9,7 +9,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
-using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
@@ -21,6 +20,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 internal class ResponseStepDefinitions
 {
     #region Constructor, Fields, Properties
+
     private readonly IdentitiesContext _identitiesContext;
     private readonly MessagesContext _messagesContext;
     private readonly ResponseContext _responseContext;
@@ -33,6 +33,7 @@ internal class ResponseStepDefinitions
     }
 
     private IResponse? WhenResponse => _responseContext.WhenResponse;
+
     #endregion
 
     [Then(@"the response status code is (\d\d\d) \(.+\)")]
@@ -58,14 +59,17 @@ internal class ResponseStepDefinitions
     }
 
     #region Challenges
+
     [Then(@"the Challenge has a valid expiration date")]
     public void ThenTheChallengeHasAValidExpirationDate()
     {
         _responseContext.ChallengeResponse!.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
     }
+
     #endregion
 
     #region Identities
+
     [Then(@"the response status is '([^']*)'")]
     public void ThenTheResponseStatusIs(string deletionProcessStatus)
     {
@@ -73,9 +77,11 @@ internal class ResponseStepDefinitions
         _responseContext.CancelDeletionProcessResponse.Should().BeASuccess();
         _responseContext.CancelDeletionProcessResponse.Result!.Status.Should().Be(deletionProcessStatus);
     }
+
     #endregion
 
     #region Messages
+
     [Then(@"the error contains a list of Identities to be deleted that includes ([a-zA-Z0-9]+)")]
     public void ThenTheErrorContainsAListOfIdentitiesToBeDeletedThatIncludesIdentity(string identityName)
     {
@@ -115,17 +121,21 @@ internal class ResponseStepDefinitions
 
         _responseContext.GetMessagesResponse.Result.Should().NotContain(m => m.Id == message.Id);
     }
+
     #endregion
 
     #region PnsRegistrations
+
     [Then("the response contains the push identifier for the device")]
     public void ThenTheResponseContainsThePushIdentifierForTheDevice()
     {
         _responseContext.UpdateDeviceRegistrationResponse!.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();
     }
+
     #endregion
 
     #region Relationships
+
     [Then("a relationship can be established")]
     public void ThenARelationshipCanBeEstablished()
     {
@@ -139,6 +149,7 @@ internal class ResponseStepDefinitions
         if (_responseContext.CanEstablishRelationshipResponse != null)
             _responseContext.CanEstablishRelationshipResponse.Result!.CanCreate.Should().BeFalse();
     }
+
     #endregion
 
     #region Tokens
@@ -167,7 +178,6 @@ public class ResponseContext
     public ApiResponse<Relationship>? TerminateRelationshipResponse { get; set; }
     public ApiResponse<RelationshipMetadata>? DecomposeRelationshipResponse { get; set; }
     public ApiResponse<CanEstablishRelationshipResponse>? CanEstablishRelationshipResponse { get; set; }
-    public ApiResponse<CreateDatawalletResponse>? CreateDatawalletResponse { get; set; }
     public ApiResponse<PushDatawalletModificationsResponse>? PushDatawalletModificationResponse { get; set; }
     public ApiResponse<CreateTokenResponse>? CreateTokenResponse { get; set; }
     public ApiResponse<EmptyResponse>? CreateTokenAnonymously { get; set; }

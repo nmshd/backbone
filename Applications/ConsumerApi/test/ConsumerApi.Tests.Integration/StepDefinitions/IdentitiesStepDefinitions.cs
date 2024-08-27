@@ -17,6 +17,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 internal class IdentitiesStepDefinitions
 {
     #region Constructor, Fields, Properties
+
     private readonly ClientCredentials _clientCredentials;
     private readonly HttpClient _httpClient;
 
@@ -33,9 +34,11 @@ internal class IdentitiesStepDefinitions
     }
 
     private ClientPool ClientPool => _identitiesContext.ClientPool;
+
     #endregion
 
     #region Given
+
     [Given(@"Identity ([a-zA-Z0-9]+)")]
     public async Task GivenIdentity(string identityName)
     {
@@ -56,25 +59,19 @@ internal class IdentitiesStepDefinitions
         ClientPool.AddAnonymous(client);
     }
 
-    [Given(@"Identity ([a-zA-Z0-9]+) with a Datawallet")]
-    public async Task GivenIdentityWithADatawallet(string identityName)
-    {
-        await CreateClientForIdentityName(identityName);
-        await ClientPool.FirstForIdentity(identityName)!.Datawallet.CreateDatawallet(1);
-    }
-
-
     [Given("Identities ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+) with an established Relationship")]
     public async Task GivenIdentitiesWithAnEstablishedRelationship(string identity1Name, string identity2Name)
     {
         await CreateClientForIdentityName(identity1Name);
         await CreateClientForIdentityName(identity2Name);
 
-        await EstablishRelationshipBetween(ClientPool.FirstForIdentity(identity1Name)!, ClientPool.FirstForIdentity(identity2Name)!);
+        await EstablishRelationshipBetween(ClientPool.FirstForIdentity(identity1Name), ClientPool.FirstForIdentity(identity2Name));
     }
+
     #endregion
 
     #region When
+
     [When("a POST request is sent to the /Identities endpoint with a valid signature on c")]
     public async Task WhenAPostRequestIsSentToTheIdentitiesEndpointWithAValidSignatureOnChallenge()
     {
@@ -101,6 +98,7 @@ internal class IdentitiesStepDefinitions
 
         _responseContext.WhenResponse = _responseContext.CreateIdentityResponse = await ClientPool.Default()!.Identities.CreateIdentity(createIdentityPayload);
     }
+
     #endregion
 
     private async Task CreateClientForIdentityName(string identityName)
@@ -118,8 +116,8 @@ public class IdentitiesContext
 
 public class ClientPool
 {
-    public static readonly string DEFAULT_IDENTITY_NAME = "";
-    public static readonly string DEFAULT_DEVICE_NAME = "";
+    private const string DEFAULT_IDENTITY_NAME = "";
+    private const string DEFAULT_DEVICE_NAME = "";
 
     private readonly List<ClientWrapper> _clientWrappers = [];
 
@@ -154,7 +152,7 @@ public class ClientPool
     private bool IsOnlyOneClientInThePool => Anonymous != null && _clientWrappers.Count == 0 || Anonymous == null && _clientWrappers.Select(cw => cw.Identity).Distinct().Count() == 1;
 
     public Client? FirstForDefaultIdentity() => _clientWrappers.FirstOrDefault()?.Client;
-    public Client? FirstForIdentity(string identity) => _clientWrappers.FirstOrDefault(c => c.Identity == identity)?.Client;
+    public Client FirstForIdentity(string identity) => _clientWrappers.First(c => c.Identity == identity).Client;
     public Client[] GetClientsByIdentities(List<string> identityNames) => _clientWrappers.Where(cw => cw.Identity != null && identityNames.Contains(cw.Identity)).Select(cw => cw.Client).ToArray();
 
     public Client? GetForDefaultDevice() => _clientWrappers.FirstOrDefault()?.Client;
