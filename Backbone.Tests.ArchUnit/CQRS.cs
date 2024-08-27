@@ -4,22 +4,22 @@ using MediatR;
 using static ArchUnitNET.Fluent.ArchRuleDefinition;
 
 namespace Backbone.Backbone.Tests.ArchUnit;
+
 public class Cqrs
 {
     private static readonly IObjectProvider<IType> NON_ABSTRACT_CLASSES_IMPLEMENTING_IREQUEST =
-            Classes()
-                .That().AreAssignableTo(typeof(IRequest<>)).Or().AreAssignableTo(typeof(IRequest)).As("Classes that implement 'IRequest'")
-                .And().AreNotAbstract()
-                .And().HaveName(".+Command$", true);
+        Classes()
+            .That().AreAssignableTo(typeof(IRequest<>)).Or().AreAssignableTo(typeof(IRequest)).As("Classes that implement 'IRequest'")
+            .And().AreNotAbstract();
 
     private static readonly IObjectProvider<IType> COMMANDS =
         Classes().That().Are(NON_ABSTRACT_CLASSES_IMPLEMENTING_IREQUEST)
             .And().AreNot(Backbone.TEST_TYPES)
-            .And().HaveName(".+Command$", true);
+            .And().HaveNameEndingWith("Command");
 
     private static readonly IObjectProvider<IType> QUERIES =
         Classes().That().Are(NON_ABSTRACT_CLASSES_IMPLEMENTING_IREQUEST)
-            .And().HaveName(".+Query$", true);
+            .And().HaveNameEndingWith("Query");
 
     [Fact]
     public void ClassesInheritingFromIRequestShouldHaveNameEndingWithCommandOrQuery()
@@ -44,5 +44,4 @@ public class Cqrs
             .Should().ResideInNamespace(".+\\.Queries\\.", true)
             .Check(Backbone.ARCHITECTURE);
     }
-
 }
