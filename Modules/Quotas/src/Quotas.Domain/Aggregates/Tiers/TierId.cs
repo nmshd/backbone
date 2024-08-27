@@ -1,22 +1,30 @@
 using System.ComponentModel;
 using System.Globalization;
+using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
 
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 [Serializable]
 [TypeConverter(typeof(TierIdTypeConverter))]
-public record TierId
+public record TierId : StronglyTypedId
 {
-    public string Value { get; }
+    public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
+    private const string PREFIX = "TIR";
+
+    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
     public static implicit operator string(TierId id)
     {
         return id.Value;
     }
 
-    private TierId(string value)
+    private TierId(string value) : base(value)
     {
-        Value = value;
+    }
+
+    public static bool IsValid(string stringValue)
+    {
+        return UTILS.IsValid(stringValue);
     }
 
     public static TierId Parse(string stringValue)

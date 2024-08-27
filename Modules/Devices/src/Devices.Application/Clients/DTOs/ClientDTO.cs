@@ -1,6 +1,7 @@
 using Backbone.Modules.Devices.Domain.Entities;
 
 namespace Backbone.Modules.Devices.Application.Clients.DTOs;
+
 public class ClientDTO
 {
     public ClientDTO(OAuthClient client, int numberOfIdentities)

@@ -11,36 +11,40 @@ public class PushDatawalletModificationsCommandValidatorTests : AbstractTestsBas
     [Fact]
     public void Happy_path()
     {
-        var validator = new PushDatawalletModificationsCommandValidator();
+        // Arrange
+        var validator = new Validator();
 
-        var command = new PushDatawalletModificationsCommand(
+        // Act
+        var validationResult = validator.TestValidate(new PushDatawalletModificationsCommand(
             [
                 new PushDatawalletModificationItem
                 {
                     Collection = "x", DatawalletVersion = 1, EncryptedPayload = [], ObjectIdentifier = "x", PayloadCategory = "x", Type = DatawalletModificationDTO.DatawalletModificationType.Create
                 }
             ],
-            1);
-        var validationResult = validator.TestValidate(command);
+            1));
 
+        // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
     }
 
     [Fact]
     public void Fails_when_not_passing_a_SupportedDatawalletVersion()
     {
-        var validator = new PushDatawalletModificationsCommandValidator();
+        // Arrange
+        var validator = new Validator();
 
-        var command = new PushDatawalletModificationsCommand(
+        // Act
+        var validationResult = validator.TestValidate(new PushDatawalletModificationsCommand(
             [
                 new PushDatawalletModificationItem
                 {
                     Collection = "x", DatawalletVersion = 1, EncryptedPayload = [], ObjectIdentifier = "x", PayloadCategory = "x", Type = DatawalletModificationDTO.DatawalletModificationType.Create
                 }
             ],
-            0);
-        var validationResult = validator.TestValidate(command);
+            0));
 
+        // Assert
         validationResult.ShouldHaveValidationErrorFor(x => x.SupportedDatawalletVersion);
     }
 }
