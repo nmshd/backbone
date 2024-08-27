@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
@@ -24,14 +23,12 @@ public class TokensRepository : ITokensRepository
         _readonlyTokensDbSet = dbContext.Tokens.AsNoTracking();
     }
 
-    public async Task<Token> Find(TokenId id, IdentityAddress? activeIdentity)
+    public async Task<Token?> Find(TokenId id, IdentityAddress? activeIdentity)
     {
-        var getMetadata = _readonlyTokensDbSet
+        var token = await _readonlyTokensDbSet
             .Where(Token.IsNotExpired)
             .Where(Token.CanBeCollectedBy(activeIdentity))
-            .FirstWithId(id);
-
-        var token = await getMetadata ?? throw new NotFoundException(nameof(Token));
+            .FirstOrDefaultAsync(t => t.Id == id);
 
         return token;
     }
@@ -69,14 +66,4 @@ public class TokensRepository : ITokensRepository
     }
 
     #endregion
-}
-
-public static class IDbSetExtensions
-{
-    public static async Task<Token> FirstWithId(this IQueryable<Token> query, TokenId id)
-    {
-        var entity = await query.FirstOrDefaultAsync(t => t.Id == id);
-
-        return entity ?? throw new NotFoundException(nameof(Token));
-    }
 }
