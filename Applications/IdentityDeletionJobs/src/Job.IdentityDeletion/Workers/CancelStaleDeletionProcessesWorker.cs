@@ -1,6 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdentityDeletionProcesses;
+using Backbone.Tooling.Extensions;
 using MediatR;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Backbone.Job.IdentityDeletion.Workers;
 
@@ -35,7 +35,7 @@ public class CancelStaleDeletionProcessesWorker : IHostedService
     {
         var identityDeletionProcessIds = await _mediator.Send(new CancelStaleIdentityDeletionProcessesCommand(), cancellationToken);
 
-        if (!identityDeletionProcessIds.IsNullOrEmpty())
+        if (!identityDeletionProcessIds.IsEmpty())
         {
             var concatenatedIds = string.Join(", ", identityDeletionProcessIds);
             _logger.WorkerCompletedWithResults(concatenatedIds);

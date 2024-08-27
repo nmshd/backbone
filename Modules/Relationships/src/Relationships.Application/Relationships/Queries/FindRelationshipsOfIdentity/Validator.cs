@@ -2,7 +2,7 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using FluentValidation;
 
-namespace Backbone.Modules.Relationships.Application.Relationships.Commands.FindRelationshipsOfIdentity;
+namespace Backbone.Modules.Relationships.Application.Relationships.Queries.FindRelationshipsOfIdentity;
 
 public class Validator : AbstractValidator<FindRelationshipsOfIdentityQuery>
 {
