@@ -24,7 +24,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
   void initState() {
     super.initState();
 
-    _loadDeletionProcessDetails();
+    _reloadDeletionProcessDetails();
   }
 
   @override
@@ -43,9 +43,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
                 BackButton(onPressed: () => context.pop(false)),
                 IconButton(
                   icon: const Icon(Icons.refresh),
-                  onPressed: () async {
-                    _loadDeletionProcessDetails();
-                  },
+                  onPressed: _reloadDeletionProcessDetails,
                   tooltip: context.l10n.reload,
                 ),
               ],
@@ -121,7 +119,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
     }
   }
 
-  Future<void> _loadDeletionProcessDetails() async {
+  Future<void> _reloadDeletionProcessDetails() async {
     final deletionProcessesDetails = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcess(
           address: widget.address,
           deletionProcessId: widget.deletionProcessId,

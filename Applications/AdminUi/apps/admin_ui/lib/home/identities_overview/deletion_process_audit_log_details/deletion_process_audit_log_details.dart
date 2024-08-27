@@ -24,7 +24,7 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
   void initState() {
     super.initState();
 
-    _loadIdentityDeletionProcessAuditLogs();
+    _reloadIdentityDeletionProcessAuditLogs();
   }
 
   @override
@@ -43,9 +43,7 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
               BackButton(),
               IconButton(
                 icon: const Icon(Icons.refresh),
-                onPressed: () async {
-                  _loadIdentityDeletionProcessAuditLogs();
-                },
+                onPressed: _reloadIdentityDeletionProcessAuditLogs,
                 tooltip: context.l10n.reload,
               ),
             ],
@@ -61,7 +59,7 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
     );
   }
 
-  Future<void> _loadIdentityDeletionProcessAuditLogs() async {
+  Future<void> _reloadIdentityDeletionProcessAuditLogs() async {
     final response = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcessAuditLogs(address: widget.identityAddress);
     if (mounted) {
       setState(() {

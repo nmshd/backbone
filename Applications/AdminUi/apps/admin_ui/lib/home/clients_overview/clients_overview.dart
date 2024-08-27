@@ -28,7 +28,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     super.initState();
 
     _reloadClients();
-    _loadTiers();
+    _reloadTiers();
   }
 
   @override
@@ -156,7 +156,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     if (mounted) setState(() => _originalClients = response.data);
   }
 
-  Future<void> _loadTiers() async {
+  Future<void> _reloadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
     setState(() => _defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient == true).toList());
   }
