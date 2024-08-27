@@ -92,6 +92,15 @@ public class Client
         return new Client(httpClient, configuration, null, null);
     }
 
+    public static Client CreateForExistingIdentity(Client clientForExistingIdentity)
+    {
+        return CreateForExistingIdentity(
+            clientForExistingIdentity._httpClient,
+            clientForExistingIdentity._configuration.Authentication.ClientCredentials,
+            clientForExistingIdentity.DeviceData!.UserCredentials
+        );
+    }
+
     public static Client CreateForExistingIdentity(string baseUrl, ClientCredentials clientCredentials, UserCredentials userCredentials)
     {
         return CreateForExistingIdentity(new HttpClient { BaseAddress = new Uri(baseUrl) }, clientCredentials, userCredentials);

@@ -7,6 +7,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 internal class ChallengesStepDefinitions
 {
     #region Constructor, Fields, Properties
+
     private readonly ChallengesContext _challengesContext;
     private readonly IdentitiesContext _identitiesContext;
     private readonly ResponseContext _responseContext;
@@ -19,13 +20,16 @@ internal class ChallengesStepDefinitions
     }
 
     private ClientPool ClientPool => _identitiesContext.ClientPool;
+
     #endregion
 
     #region Given
+
     [Given("a Challenge ([a-zA-Z0-9]+) created by ([a-zA-Z0-9]+)")]
     public async Task GivenAChallengeCreatedByIdentity(string challengeName, string identityName)
     {
-        _responseContext.ChallengeResponse = await ClientPool.FirstForIdentity(identityName)!.Challenges.CreateChallenge();
+        var client = ClientPool.FirstForIdentityName(identityName);
+        _responseContext.ChallengeResponse = await client!.Challenges.CreateChallenge();
         _responseContext.ChallengeResponse!.Should().BeASuccess();
 
         _challengesContext.Challenges[challengeName] = _responseContext.ChallengeResponse.Result!;
@@ -35,55 +39,66 @@ internal class ChallengesStepDefinitions
     [Given(@"a Challenge ([a-zA-Z0-9]+)")]
     public async Task GivenAChallenge(string challengeName)
     {
-        _responseContext.ChallengeResponse = await ClientPool.Default()!.Challenges.CreateChallengeUnauthenticated();
+        var client = ClientPool.Default();
+        _responseContext.ChallengeResponse = await client!.Challenges.CreateChallengeUnauthenticated();
         _responseContext.ChallengeResponse!.Should().BeASuccess();
 
         _challengesContext.Challenges[challengeName] = _responseContext.ChallengeResponse.Result!;
         _challengesContext.Challenges[challengeName].Id.Should().NotBeNullOrEmpty();
     }
+
     #endregion
 
     #region When
+
     [When("a POST request is sent to the /Challenges endpoint")]
     public async Task WhenAPostRequestIsSentToTheChallengesEndpoint()
     {
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = ClientPool.IsDefaultClientAuthenticated() ?
-            await ClientPool.Default()!.Challenges.CreateChallenge() :
-            await ClientPool.Default()!.Challenges.CreateChallengeUnauthenticated();
+        var client = ClientPool.Default();
+
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse =
+            ClientPool.IsDefaultClientAuthenticated() ? await client!.Challenges.CreateChallenge() : await client!.Challenges.CreateChallengeUnauthenticated();
     }
 
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Challenges endpoint")]
     public async Task WhenIdentitySendsAPostRequestToTheChallengesEndpoint(string identityName)
     {
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await ClientPool.FirstForIdentity(identityName)!.Challenges.CreateChallenge();
+        var client = ClientPool.FirstForIdentityName(identityName);
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client!.Challenges.CreateChallenge();
     }
 
     [When(@"([a-zA-Z0-9]+) sends a GET request to the /Challenges/{id} endpoint with a valid id ([a-zA-Z0-9]+)\.Id")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithAValidId(string identityName, string challengeName)
     {
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await ClientPool.FirstForIdentity(identityName)!.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
+        var client = ClientPool.FirstForIdentityName(identityName);
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client!.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
     }
 
     [When(@"([a-zA-Z0-9]+) sends a GET request to the /Challenges/{id} endpoint with a placeholder id ""?(.*?)""?")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithAPlaceholderId(string identityName, string challengeId)
     {
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await ClientPool.FirstForIdentity(identityName)!.Challenges.GetChallenge(challengeId);
+        var client = ClientPool.FirstForIdentityName(identityName);
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client!.Challenges.GetChallenge(challengeId);
     }
 
     [When(@"i sends a GET request to the Challenges/\{id} endpoint with ([a-zA-Z0-9]+)\.Id")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithChallengeId(string challengeName)
     {
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await ClientPool.FirstForDefaultIdentity()!.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
+        var client = ClientPool.FirstForDefaultIdentity();
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client!.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
     }
 
     [When(@"i sends a GET request to the Challenges/\{id} endpoint with \""([a-zA-Z0-9]+)\""")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWith(string challengeId)
     {
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await ClientPool.FirstForDefaultIdentity()!.Challenges.GetChallenge(challengeId);
+        var client = ClientPool.FirstForDefaultIdentity();
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client!.Challenges.GetChallenge(challengeId);
     }
+
     #endregion
 
     #region Then
+
     [Then("the Challenge does not contain information about the creator")]
     public void ThenTheChallengeDoesNotContainInformationAboutTheCreator()
     {
@@ -97,6 +112,7 @@ internal class ChallengesStepDefinitions
         _responseContext.ChallengeResponse!.Result!.CreatedBy.Should().NotBeNull();
         _responseContext.ChallengeResponse!.Result!.CreatedByDevice.Should().NotBeNull();
     }
+
     #endregion
 }
 

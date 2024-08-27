@@ -25,7 +25,7 @@ internal class DatawalletStepDefinitions
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Datawallet/Modifications endpoint with a DatawalletModification in the payload")]
     public async Task WhenIdentitySendsAPostRequestToDatawalletModificationsEndpointWithADatawalletModificationInThePayload(string identityName)
     {
-        var client = ClientPool.FirstForIdentity(identityName);
+        var client = ClientPool.FirstForIdentityName(identityName);
 
         var pushDatawalletModificationsRequestItem = new PushDatawalletModificationsRequestItem
         {

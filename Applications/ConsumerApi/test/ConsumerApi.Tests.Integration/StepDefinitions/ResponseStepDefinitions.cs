@@ -87,7 +87,7 @@ internal class ResponseStepDefinitions
     {
         var errorData = _responseContext.SendMessageResponse!.Error!.Data?.As<PeersToBeDeletedErrorData>();
         errorData.Should().NotBeNull();
-        errorData!.PeersToBeDeleted.Contains(_identitiesContext.ClientPool.FirstForIdentity(identityName)!.IdentityData!.Address).Should().BeTrue();
+        errorData!.PeersToBeDeleted.Contains(_identitiesContext.ClientPool.FirstForIdentityName(identityName)!.IdentityData!.Address).Should().BeTrue();
     }
 
     [Then(@"the response contains the Messages ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]

@@ -65,7 +65,7 @@ internal class IdentitiesStepDefinitions
         await CreateClientForIdentityName(identity1Name);
         await CreateClientForIdentityName(identity2Name);
 
-        await EstablishRelationshipBetween(ClientPool.FirstForIdentity(identity1Name), ClientPool.FirstForIdentity(identity2Name));
+        await EstablishRelationshipBetween(ClientPool.FirstForIdentityName(identity1Name), ClientPool.FirstForIdentityName(identity2Name));
     }
 
     #endregion
@@ -96,7 +96,8 @@ internal class IdentitiesStepDefinitions
             DevicePassword = DEVICE_PASSWORD
         };
 
-        _responseContext.WhenResponse = _responseContext.CreateIdentityResponse = await ClientPool.Default()!.Identities.CreateIdentity(createIdentityPayload);
+        var client = ClientPool.Default();
+        _responseContext.WhenResponse = _responseContext.CreateIdentityResponse = await client!.Identities.CreateIdentity(createIdentityPayload);
     }
 
     #endregion
@@ -149,23 +150,24 @@ public class ClientPool
         return FirstForDefaultIdentity() != null && Anonymous == null;
     }
 
-    private bool IsOnlyOneClientInThePool => Anonymous != null && _clientWrappers.Count == 0 || Anonymous == null && _clientWrappers.Select(cw => cw.Identity).Distinct().Count() == 1;
+    private bool IsOnlyOneClientInThePool => Anonymous != null && _clientWrappers.Count == 0 || Anonymous == null && _clientWrappers.Select(cw => cw.IdentityName).Distinct().Count() == 1;
 
     public Client? FirstForDefaultIdentity() => _clientWrappers.FirstOrDefault()?.Client;
-    public Client FirstForIdentity(string identity) => _clientWrappers.First(c => c.Identity == identity).Client;
-    public Client[] GetClientsByIdentities(List<string> identityNames) => _clientWrappers.Where(cw => cw.Identity != null && identityNames.Contains(cw.Identity)).Select(cw => cw.Client).ToArray();
+    public Client FirstForIdentityName(string identityName) => _clientWrappers.First(c => c.IdentityName == identityName).Client;
+    public Client FirstForIdentityAddress(string identityAddress) => _clientWrappers.First(c => c.Client.IdentityData?.Address == identityAddress).Client;
 
-    public Client? GetForDefaultDevice() => _clientWrappers.FirstOrDefault()?.Client;
-    public Client? GetForDevice(string device) => _clientWrappers.FirstOrDefault(c => c.Device == device)?.Client;
+    public Client[] GetClientsByIdentities(List<string> identityNames) =>
+        _clientWrappers.Where(cw => cw.IdentityName != null && identityNames.Contains(cw.IdentityName)).Select(cw => cw.Client).ToArray();
 
-    public string? GetIdentityForClient(Client client) => _clientWrappers.FirstOrDefault(cw => cw.Client == client)?.Identity;
-    public string? GetIdentityForDevice(string deviceName) => _clientWrappers.FirstOrDefault(cw => cw.Device == deviceName)!.Identity;
+    public Client GetForDeviceName(string deviceName) => _clientWrappers.First(c => c.DeviceName == deviceName).Client;
+
+    public string? GetIdentityForDevice(string deviceName) => _clientWrappers.FirstOrDefault(cw => cw.DeviceName == deviceName)!.IdentityName;
 
     private class ClientWrapper
     {
         public required Client Client { get; set; } // todo: tidy this up
-        public string? Identity { get; set; }
-        public string? Device { get; set; }
+        public string? IdentityName { get; set; }
+        public string? DeviceName { get; set; }
     }
 
     public class ClientAdder
@@ -178,24 +180,16 @@ public class ClientPool
             manager._clientWrappers.Add(_clientWrapper);
         }
 
-        public ClientAdder ForDefaultIdentity()
-        {
-            _clientWrapper.Identity = DEFAULT_IDENTITY_NAME;
-            _clientWrapper.Device = DEFAULT_DEVICE_NAME;
-            return this;
-        }
-
         public ClientAdder ForIdentity(string identity)
         {
-            _clientWrapper.Identity = identity;
-            _clientWrapper.Device = DEFAULT_DEVICE_NAME;
+            _clientWrapper.IdentityName = identity;
+            _clientWrapper.DeviceName = DEFAULT_DEVICE_NAME;
             return this;
         }
 
-        public ClientAdder AndDevice(string device)
+        public void AndDevice(string device)
         {
-            _clientWrapper.Device = device;
-            return this;
+            _clientWrapper.DeviceName = device;
         }
     }
 }
