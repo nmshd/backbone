@@ -62,8 +62,8 @@ class _IdentityDetailsState extends State<IdentityDetails> {
                   IconButton(
                     icon: const Icon(Icons.refresh),
                     onPressed: () async {
-                      _reloadIdentity();
-                      _reloadTiers();
+                      await _reloadIdentity();
+                      await _reloadTiers();
                     },
                     tooltip: context.l10n.reload,
                   ),

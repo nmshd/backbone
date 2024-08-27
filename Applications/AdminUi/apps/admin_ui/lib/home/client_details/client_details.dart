@@ -58,8 +58,8 @@ class _ClientDetailsState extends State<ClientDetails> {
                   IconButton(
                     icon: const Icon(Icons.refresh),
                     onPressed: () async {
-                      _reloadClient();
-                      _reloadTiers();
+                      await _reloadClient();
+                      await _reloadTiers();
                     },
                     tooltip: context.l10n.reload,
                   ),

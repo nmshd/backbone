@@ -72,8 +72,8 @@ class _TiersOverviewState extends State<TiersOverview> {
                   if (kIsDesktop)
                     IconButton(
                       icon: const Icon(Icons.refresh),
-                      onPressed: () {
-                        _reloadTiers();
+                      onPressed: () async {
+                        await _reloadTiers();
                       },
                       tooltip: context.l10n.reload,
                     ),

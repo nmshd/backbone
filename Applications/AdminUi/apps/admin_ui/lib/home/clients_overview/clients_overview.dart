@@ -50,9 +50,9 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                   if (kIsDesktop)
                     IconButton(
                       icon: const Icon(Icons.refresh),
-                      onPressed: () {
-                        _reloadClients();
-                        _loadTiers();
+                      onPressed: () async {
+                        await _reloadClients();
+                        await _reloadTiers();
                       },
                       tooltip: context.l10n.reload,
                     ),

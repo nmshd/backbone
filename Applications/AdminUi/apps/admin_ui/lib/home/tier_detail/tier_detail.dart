@@ -54,7 +54,7 @@ class _TierDetailState extends State<TierDetail> {
                   IconButton(
                     icon: const Icon(Icons.refresh),
                     onPressed: () async {
-                      _reload();
+                      await _reload();
                     },
                     tooltip: context.l10n.reload,
                   ),
