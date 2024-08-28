@@ -31,11 +31,11 @@ public class TokenTests : AbstractTestsBase
     }
 
     [Theory]
-    [InlineData("", "byIdentity", true)]
-    [InlineData("", "anyIdentity", true)]
-    [InlineData("forIdentity", "byIdentity", true)]
-    [InlineData("forIdentity", "forIdentity", true)]
-    [InlineData("forIdentity", "anyIdentity", false)]
+    [InlineData("", "byAddress", true)]
+    [InlineData("", "anyAddress", true)]
+    [InlineData("forAddress", "byAddress", true)]
+    [InlineData("forAddress", "forAddress", true)]
+    [InlineData("forAddress", "anyAddress", false)]
     public void Expression_CanBeCollectedBy_Returns_Correct_Result(string forAddress, string collectorAddress, bool expectedResult)
     {
         // Arrange
@@ -56,8 +56,8 @@ public class TokenTests : AbstractTestsBase
     {
         return collectorAddress switch
         {
-            "byIdentity" => byIdentity,
-            "forIdentity" => forIdentity,
+            "byAddress" => byIdentity,
+            "forAddress" => forIdentity,
             _ => TestDataGenerator.CreateRandomIdentityAddress()
         };
     }
