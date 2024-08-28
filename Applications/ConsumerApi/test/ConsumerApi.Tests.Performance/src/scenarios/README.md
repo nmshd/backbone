@@ -13,10 +13,12 @@ In order to run the performance tests, you must load an appropriate snapshot of 
 
 1.  **Load the snapshot:**
 
-    1. Place the relevant `.pg/.sql` file in the following directory: `/docker-compose/dumps/dump-files`.
-    1. In the directory `/docker-compose/dumps/`, run the appropriate command: `load_postgres.bat` or `load_sqlserver_bak.bat`.
-> [!CAUTION]
-> This will delete you current Enmeshed Database.
+        1. Locate the snapshot you'd like to use. It can be in the `../snapshots` folder or in a remote host if it's a big file. Extract it, as well as the zip files within it.
+        1. Place the relevant `.pg/.sql` file in the following directory: `/docker-compose/dumps/dump-files`.
+        1. In the directory `/docker-compose/dumps/`, run the appropriate command: `load_postgres.bat` or `load_sqlserver_bak.bat`.
+
+    > [!CAUTION]
+    > This will delete you current Enmeshed Database.
 
 1.  **Prepare the csvs:**
 
