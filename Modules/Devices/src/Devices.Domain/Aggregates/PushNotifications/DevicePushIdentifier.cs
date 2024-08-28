@@ -10,8 +10,8 @@ namespace Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 public record DevicePushIdentifier : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
-
     private const string PREFIX = "DPI";
+    private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
     private DevicePushIdentifier(string stringValue) : base(stringValue)
     {
@@ -26,6 +26,11 @@ public record DevicePushIdentifier : StronglyTypedId
     public static DevicePushIdentifier Parse(string stringValue)
     {
         return new DevicePushIdentifier(stringValue);
+    }
+
+    public static bool IsValid(string stringValue)
+    {
+        return UTILS.IsValid(stringValue);
     }
 
     public class DevicePushIdentifierTypeConverter : TypeConverter

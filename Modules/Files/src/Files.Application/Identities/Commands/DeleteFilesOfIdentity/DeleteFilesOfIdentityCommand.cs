@@ -1,14 +1,13 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using MediatR;
+﻿using MediatR;
 
 namespace Backbone.Modules.Files.Application.Identities.Commands.DeleteFilesOfIdentity;
 
 public class DeleteFilesOfIdentityCommand : IRequest
 {
-    public DeleteFilesOfIdentityCommand(IdentityAddress identityAddress)
+    public DeleteFilesOfIdentityCommand(string identityAddress)
     {
         IdentityAddress = identityAddress;
     }
 
-    public IdentityAddress IdentityAddress { get; set; }
+    public string IdentityAddress { get; set; }
 }

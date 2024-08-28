@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using Backbone.Modules.Devices.Application.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
@@ -21,8 +20,6 @@ public class Handler : IRequestHandler<ListIdentitiesQuery, ListIdentitiesRespon
                                                        (request.Status == null || i.Status == request.Status);
 
         var identities = await _identitiesRepository.Find(filter, cancellationToken);
-        var identityDtos = identities.Select(i => new IdentitySummaryDTO(i)).ToList();
-
-        return new ListIdentitiesResponse(identityDtos);
+        return new ListIdentitiesResponse(identities);
     }
 }
