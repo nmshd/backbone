@@ -1,5 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 using FluentValidation;
@@ -18,5 +20,7 @@ public class Validator : AbstractValidator<CreateTokenCommand>
 
         RuleFor(t => t.ExpiresAt)
             .GreaterThan(SystemTime.UtcNow).WithMessage("'{PropertyName}' must be in the future.").WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
+
+        RuleFor(t => t.ForIdentity).ValidId<CreateTokenCommand, IdentityAddress>();
     }
 }
