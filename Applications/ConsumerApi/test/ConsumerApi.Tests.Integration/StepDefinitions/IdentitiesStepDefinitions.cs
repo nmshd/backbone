@@ -45,14 +45,18 @@ internal class IdentitiesStepDefinitions
     [Given($"Identity {RegexFor.SINGLE_THING}")]
     public async Task GivenIdentity(string identityName)
     {
-        await CreateClientForIdentityName(identityName);
+        var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
+        _clientPool.Add(client).ForIdentity(identityName);
     }
 
     [Given($"Identities {RegexFor.LIST_OF_THINGS}")]
     public async Task GivenIdentities(string identityNames)
     {
         foreach (var identityName in SplitNames(identityNames))
-            await CreateClientForIdentityName(identityName);
+        {
+            var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
+            _clientPool.Add(client).ForIdentity(identityName);
+        }
     }
 
     [Given("the user is unauthenticated")]
@@ -65,8 +69,10 @@ internal class IdentitiesStepDefinitions
     [Given($"Identities {RegexFor.SINGLE_THING}{RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}{RegexFor.SINGLE_THING} with an established Relationship")]
     public async Task GivenIdentitiesWithAnEstablishedRelationship(string identity1Name, string identity2Name)
     {
-        await CreateClientForIdentityName(identity1Name);
-        await CreateClientForIdentityName(identity2Name);
+        var client1 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
+        _clientPool.Add(client1).ForIdentity(identity1Name);
+        var client2 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
+        _clientPool.Add(client2).ForIdentity(identity2Name);
 
         await EstablishRelationshipBetween(_clientPool.FirstForIdentityName(identity1Name), _clientPool.FirstForIdentityName(identity2Name));
     }
@@ -113,10 +119,4 @@ internal class IdentitiesStepDefinitions
     }
 
     #endregion
-
-    private async Task CreateClientForIdentityName(string identityName)
-    {
-        var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
-        _clientPool.Add(client).ForIdentity(identityName);
-    }
 }
