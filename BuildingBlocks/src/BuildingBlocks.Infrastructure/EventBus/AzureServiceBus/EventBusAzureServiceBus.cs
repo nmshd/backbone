@@ -5,10 +5,12 @@ using Azure.Messaging.ServiceBus.Administration;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
+using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.Amqp;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Serilog.Context;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
@@ -125,7 +127,11 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             {
                 var eventName = $"{args.Message.Subject}{DOMAIN_EVENT_SUFFIX}";
                 var messageData = args.Message.Body.ToString();
+                var correlationId = args.Message.CorrelationId;
 
+                if (!correlationId.IsEmpty())
+                    LogContext.PushProperty("CorrelationId", correlationId);
+                
                 // Complete the message so that it is not received again.
                 if (await ProcessEvent(eventName, messageData))
                     await args.CompleteMessageAsync(args.Message);
