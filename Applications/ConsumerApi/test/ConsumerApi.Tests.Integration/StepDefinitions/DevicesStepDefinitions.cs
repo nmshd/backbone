@@ -46,6 +46,15 @@ internal class DevicesStepDefinitions
         _clientPool.Add(client).ForIdentity(identityName).AndDevice(deviceName);
     }
 
+    [Given($"an Identity {RegexFor.SINGLE_THING} with a device {RegexFor.SINGLE_THING} and an unonboarded device {RegexFor.SINGLE_THING}")]
+    public async Task GivenAnIdentityWithADeviceAndAnUnonboardedDevice(string identityName, string onboardedDeviceName, string unonboardedDeviceName)
+    {
+        var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
+        _clientPool.Add(client).ForIdentity(identityName).AndDevice(onboardedDeviceName);
+        var clientForUnOnboardedDevice = await client.OnboardNewDevice("Passw0rd");
+        _clientPool.Add(clientForUnOnboardedDevice).ForIdentity(identityName).AndDevice(unonboardedDeviceName);
+    }
+
     [Given($"an Identity {RegexFor.SINGLE_THING} with devices {RegexFor.LIST_OF_THINGS}")]
     public async Task GivenAnIdentityWithDevices(string identityName, string deviceNamesString)
     {
@@ -61,14 +70,6 @@ internal class DevicesStepDefinitions
             var additionalDevice = await clientOfFirstDevice.OnboardNewDevice("Passw0rd");
             _clientPool.Add(additionalDevice).ForIdentity(identityName).AndDevice(deviceName);
         }
-    }
-
-    [Given($"an un-onboarded device {RegexFor.SINGLE_THING} that belongs to {RegexFor.SINGLE_THING}")]
-    public async Task GivenAnUnOnboardedDeviceThatBelongsToIdentity(string deviceName, string identityName)
-    {
-        var existingClient = _clientPool.FirstForIdentityName(identityName);
-        var clientForUnOnboardedDevice = await existingClient.OnboardNewDevice("Passw0rd");
-        _clientPool.Add(clientForUnOnboardedDevice).ForIdentity(identityName).AndDevice(deviceName);
     }
 
     #endregion
