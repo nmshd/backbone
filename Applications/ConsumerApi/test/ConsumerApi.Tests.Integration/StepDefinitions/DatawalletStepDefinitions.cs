@@ -22,7 +22,7 @@ internal class DatawalletStepDefinitions
 
     #region When
 
-    [When(@"([a-zA-Z0-9]+) sends a POST request to the /Datawallet/Modifications endpoint with a DatawalletModification in the payload")]
+    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Datawallet/Modifications endpoint with a DatawalletModification in the payload")]
     public async Task WhenIdentitySendsAPostRequestToDatawalletModificationsEndpointWithADatawalletModificationInThePayload(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);

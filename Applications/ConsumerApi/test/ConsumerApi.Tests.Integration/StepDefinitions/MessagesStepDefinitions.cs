@@ -28,7 +28,7 @@ internal class MessagesStepDefinitions
 
     #region Given
 
-    [Given(@"([a-zA-Z0-9]+) has sent a Message ([a-zA-Z0-9]+) to (.+)")]
+    [Given($"{RegexFor.SINGLE_THING} has sent a Message {RegexFor.SINGLE_THING} to {RegexFor.LIST_OF_THINGS}")]
     public async Task GivenIdentityHasSentMessageToIdentity(string senderName, string messageName, string recipientNames)
     {
         var sender = _clientPool.FirstForIdentityName(senderName);
@@ -41,15 +41,15 @@ internal class MessagesStepDefinitions
 
     #region When
 
-    [When(@"([a-zA-Z0-9]+) sends a GET request to the /Messages endpoint")]
+    [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Messages endpoint")]
     public async Task WhenIdentitySendsAGetRequestToTheMessagesEndpoint(string senderName)
     {
         var sender = _clientPool.FirstForIdentityName(senderName);
         _responseContext.WhenResponse = _responseContext.GetMessagesResponse = await sender.Messages.ListMessages();
     }
 
-    [When("([a-zA-Z0-9]+) sends a POST request to the /Messages endpoint with ([a-zA-Z0-9]+) as recipient")]
-    public async Task WhenIdentitySendsAPostRequestToTheMessagesEndpoint(string identity1Name, string identity2Name)
+    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Messages endpoint with {RegexFor.SINGLE_THING} as recipient")]
+    public async Task WhenIdentitySendsAPostRequestToTheMessagesEndpoint(string senderIdentityName, string recipientIdentityName)
     {
         var sendMessageRequest = new SendMessageRequest
         {
@@ -59,13 +59,13 @@ internal class MessagesStepDefinitions
             [
                 new SendMessageRequestRecipientInformation
                 {
-                    Address = _clientPool.FirstForIdentityName(identity2Name).IdentityData!.Address,
+                    Address = _clientPool.FirstForIdentityName(recipientIdentityName).IdentityData!.Address,
                     EncryptedKey = ConvertibleString.FromUtf8("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").BytesRepresentation
                 }
             ]
         };
 
-        var client = _clientPool.FirstForIdentityName(identity1Name);
+        var client = _clientPool.FirstForIdentityName(senderIdentityName);
         _responseContext.WhenResponse = _responseContext.SendMessageResponse = await client.Messages.SendMessage(sendMessageRequest);
     }
 
@@ -73,7 +73,7 @@ internal class MessagesStepDefinitions
 
     #region Then
 
-    [Then(@"the address of the recipient ([a-zA-Z0-9]+) is anonymized")]
+    [Then($"the address of the recipient {RegexFor.SINGLE_THING} is anonymized")]
     public void ThenTheAddressOfTheRecipientIsAnonymized(string anonymizedIdentityName)
     {
         var addressOfIdentityThatShouldBeAnonymized = _clientPool.FirstForIdentityName(anonymizedIdentityName).IdentityData!.Address;

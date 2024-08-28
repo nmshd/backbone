@@ -29,14 +29,14 @@ internal class IdentityDeletionProcessesStepDefinitions
     {
     }
 
-    [Given("an active deletion process for ([a-zA-Z0-9]+) exists")]
+    [Given($"an active deletion process for {RegexFor.SINGLE_THING} exists")]
     public async Task GivenAnActiveDeletionProcessForTheIdentityExists(string identityName)
     {
         var deletionProcess = await _clientPool.FirstForIdentityName(identityName).Identities.StartDeletionProcess();
         _identitiesContext.ActiveDeletionProcesses.Add(identityName, deletionProcess.Result!.Id);
     }
 
-    [Given("([a-zA-Z0-9]+) is in status \"ToBeDeleted\"")]
+    [Given($"{RegexFor.SINGLE_THING} is in status \"ToBeDeleted\"")]
     public async Task GivenIdentityIsToBeDeleted(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
@@ -48,14 +48,14 @@ internal class IdentityDeletionProcessesStepDefinitions
 
     #region When
 
-    [When(@"([a-zA-Z0-9]+) sends a POST request to the /Identities/Self/DeletionProcesses endpoint")]
+    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Identities/Self/DeletionProcesses endpoint")]
     public async Task WhenIdentitySendsAPostRequestToTheIdentitiesSelfDeletionProcessesEndpoint(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = _responseContext.StartDeletionProcessResponse = await client.Identities.StartDeletionProcess();
     }
 
-    [When(@"([a-zA-Z0-9]+) sends a PUT request to the /Identities/Self/DeletionProcesses/\{id} endpoint")]
+    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Identities/Self/DeletionProcesses/{{id}} endpoint")]
     public async Task WhenIdentitySendsAPutRequestToTheIdentitiesSelfDeletionProcessesIdEndpoint(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);

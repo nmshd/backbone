@@ -39,13 +39,13 @@ internal class IdentitiesStepDefinitions
 
     #region Given
 
-    [Given(@"Identity ([a-zA-Z0-9]+)")]
+    [Given($"Identity {RegexFor.SINGLE_THING}")]
     public async Task GivenIdentity(string identityName)
     {
         await CreateClientForIdentityName(identityName);
     }
 
-    [Given(@"Identities ([a-zA-Z0-9, ]+)")]
+    [Given($"Identities {RegexFor.LIST_OF_THINGS}")]
     public async Task GivenIdentities(string identityNames)
     {
         foreach (var identityName in SplitNames(identityNames))
@@ -59,7 +59,7 @@ internal class IdentitiesStepDefinitions
         _clientPool.AddAnonymous(client);
     }
 
-    [Given("Identities ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+) with an established Relationship")]
+    [Given($"Identities {RegexFor.SINGLE_THING}{RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}{RegexFor.SINGLE_THING} with an established Relationship")]
     public async Task GivenIdentitiesWithAnEstablishedRelationship(string identity1Name, string identity2Name)
     {
         await CreateClientForIdentityName(identity1Name);
@@ -72,7 +72,7 @@ internal class IdentitiesStepDefinitions
 
     #region When
 
-    [When("an anonymous user sends a POST request is sent to the /Identities endpoint with a valid signature on c")]
+    [When("an anonymous user sends a POST request to the /Identities endpoint with a valid signature on c")]
     public async Task WhenAPostRequestIsSentToTheIdentitiesEndpointWithAValidSignatureOnChallenge()
     {
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();

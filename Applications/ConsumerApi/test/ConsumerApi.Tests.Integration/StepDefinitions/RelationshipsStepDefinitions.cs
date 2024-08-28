@@ -37,14 +37,14 @@ internal class RelationshipsStepDefinitions
 
     #region Given
 
-    [Given("a Relationship Template rt created by ([a-zA-Z0-9]+)")]
-    public async Task GivenARelationshipTemplateCreatedByIdentity(string identityName)
+    [Given($"a Relationship Template {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
+    public async Task GivenARelationshipTemplateCreatedByIdentity(string templateName, string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        _responseContext.CreateRelationshipTemplateResponse = await client.RelationshipTemplates.CreateTemplate(CreateRelationshipTemplateRequest);
+        _relationshipsContext.CreateRelationshipTemplateResponses[templateName] = (await client.RelationshipTemplates.CreateTemplate(CreateRelationshipTemplateRequest)).Result!;
     }
 
-    [Given("a Relationship ([a-zA-Z0-9]+) in status (Pending|Active|Rejected) between ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+) created by ([a-zA-Z0-9]+)")]
+    [Given($"a Relationship {RegexFor.SINGLE_THING} in status (Pending|Active|Rejected) between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
     public async Task GivenARelationshipInStatusBetweenIdentityAndIdentityCreatedByIdentity(string relationshipName, string relationshipStatus, string participant1, string participant2,
         string identityName)
     {
@@ -60,14 +60,14 @@ internal class RelationshipsStepDefinitions
         };
     }
 
-    [Given(@"a Relationship ([a-zA-Z0-9]+) between ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
+    [Given($"a Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
     public async Task GivenARelationshipBetweenIdentityAndIdentity(string relationshipName, string identity1Name, string identity2Name)
     {
         var relationship = await EstablishRelationshipBetween(_clientPool.FirstForIdentityName(identity1Name), _clientPool.FirstForIdentityName(identity2Name));
         _relationshipsContext.Relationships[relationshipName] = relationship;
     }
 
-    [Given(@"([a-zA-Z0-9]+) has terminated ([a-zA-Z0-9]+)")]
+    [Given($"{RegexFor.SINGLE_THING} has terminated {RegexFor.SINGLE_THING}")]
     public async Task GivenRelationshipIsTerminated(string terminatorName, string relationshipName)
     {
         var relationship = _relationshipsContext.Relationships[relationshipName];
@@ -77,7 +77,7 @@ internal class RelationshipsStepDefinitions
         _responseContext.TerminateRelationshipResponse.Should().BeASuccess();
     }
 
-    [Given(@"([a-zA-Z0-9]+) has decomposed ([a-zA-Z0-9]+)")]
+    [Given($"{RegexFor.SINGLE_THING} has decomposed {RegexFor.SINGLE_THING}")]
     public async Task GivenIdentityHasDecomposedItsRelationshipToIdentity(string decomposerName, string relationshipName)
     {
         var relationship = _relationshipsContext.Relationships[relationshipName];
@@ -93,16 +93,16 @@ internal class RelationshipsStepDefinitions
 
     #region When
 
-    [When(@"([a-zA-Z0-9]+) sends a POST request to the /Relationships endpoint with rt.id")]
-    public async Task WhenIdentitySendsAPostRequestToTheRelationshipsEndpointWithRelationshipTemplatetId(string identityName)
+    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Relationships endpoint with {RegexFor.SINGLE_THING}.Id")]
+    public async Task WhenIdentitySendsAPostRequestToTheRelationshipsEndpointWithRelationshipTemplatetId(string identityName, string templateName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        var relationshipTemplateId = _responseContext.CreateRelationshipTemplateResponse!.Result!.Id;
+        var relationshipTemplateId = _relationshipsContext.CreateRelationshipTemplateResponses[templateName].Id;
 
         _responseContext.WhenResponse = _responseContext.CreateRelationshipResponse = await client.Relationships.CreateRelationship(CreateRelationshipRequest(relationshipTemplateId));
     }
 
-    [When(@"([a-zA-Z0-9]+) sends a POST request to the /Relationships/{([a-zA-Z0-9]+).Id}/(Accept|Reject|Revoke) endpoint")]
+    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/(Accept|Reject|Revoke) endpoint")]
     public async Task WhenIdentitySendsAPostRequestToTheRelationshipsIdEndpoint(string identityName, string relationshipName, string requestType)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
@@ -119,7 +119,7 @@ internal class RelationshipsStepDefinitions
         };
     }
 
-    [When("a GET request is sent to the /Relationships/CanCreate\\?peer={i.id} endpoint by ([a-zA-Z0-9]+) for ([a-zA-Z0-9]+)")]
+    [When($"a GET request is sent to the /Relationships/CanCreate\\?peer={{i.id}} endpoint by {RegexFor.SINGLE_THING} for {RegexFor.SINGLE_THING}")]
     public async Task WhenAGetRequestIsSentToTheCanCreateEndpointByIdentityForIdentity(string identity1Name, string identity2Name)
     {
         var client = _clientPool.FirstForIdentityName(identity1Name);

@@ -17,7 +17,7 @@ internal class FilesStepDefinitions
         _clientPool = clientPool;
     }
 
-    [When("([a-zA-Z0-9]+) sends a POST request to the /Files endpoint")]
+    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Files endpoint")]
     public async Task WhenIdentitySendsAPostRequestToTheFilesEndpoint(string identityName)
     {
         var identity = _clientPool.FirstForIdentityName(identityName);
