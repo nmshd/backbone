@@ -25,18 +25,18 @@ internal class PnsRegistrationStepDefinitions
         };
 
         _responseContext.WhenResponse = _responseContext.UpdateDeviceRegistrationResponse =
-            await _identitiesContext.ClientPool.FirstForIdentityName(identityName)!.PushNotifications.RegisterForPushNotifications(request);
+            await _identitiesContext.ClientPool.FirstForIdentityName(identityName).PushNotifications.RegisterForPushNotifications(request);
     }
 
     [When(@"([a-zA-Z0-9]+) sends a DELETE request to the /Devices/Self/PushNotifications endpoint")]
     public async Task WhenIdentitySendsADeleteRequestToTheDevicesSelfPushNotificationsEndpoint(string identityName)
     {
-        _responseContext.WhenResponse = await _identitiesContext.ClientPool.FirstForIdentityName(identityName)!.PushNotifications.UnregisterFromPushNotifications();
+        _responseContext.WhenResponse = await _identitiesContext.ClientPool.FirstForIdentityName(identityName).PushNotifications.UnregisterFromPushNotifications();
     }
 
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Devices/Self/PushNotifications/SendTestNotification endpoint")]
     public async Task WhenIdentitySendsAPostRequestToTheDevicesSelfPushNotificationsSendTestNotificationEndpoint(string identityName)
     {
-        _responseContext.WhenResponse = await _identitiesContext.ClientPool.FirstForIdentityName(identityName)!.PushNotifications.SendTestNotification(new object());
+        _responseContext.WhenResponse = await _identitiesContext.ClientPool.FirstForIdentityName(identityName).PushNotifications.SendTestNotification(new object());
     }
 }

@@ -29,7 +29,7 @@ internal class ChallengesStepDefinitions
     public async Task GivenAChallengeCreatedByIdentity(string challengeName, string identityName)
     {
         var client = ClientPool.FirstForIdentityName(identityName);
-        _responseContext.ChallengeResponse = await client!.Challenges.CreateChallenge();
+        _responseContext.ChallengeResponse = await client.Challenges.CreateChallenge();
         _responseContext.ChallengeResponse!.Should().BeASuccess();
 
         _challengesContext.Challenges[challengeName] = _responseContext.ChallengeResponse.Result!;
@@ -64,21 +64,21 @@ internal class ChallengesStepDefinitions
     public async Task WhenIdentitySendsAPostRequestToTheChallengesEndpoint(string identityName)
     {
         var client = ClientPool.FirstForIdentityName(identityName);
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client!.Challenges.CreateChallenge();
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.CreateChallenge();
     }
 
     [When(@"([a-zA-Z0-9]+) sends a GET request to the /Challenges/{id} endpoint with a valid id ([a-zA-Z0-9]+)\.Id")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithAValidId(string identityName, string challengeName)
     {
         var client = ClientPool.FirstForIdentityName(identityName);
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client!.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
     }
 
     [When(@"([a-zA-Z0-9]+) sends a GET request to the /Challenges/{id} endpoint with a placeholder id ""?(.*?)""?")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithAPlaceholderId(string identityName, string challengeId)
     {
         var client = ClientPool.FirstForIdentityName(identityName);
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client!.Challenges.GetChallenge(challengeId);
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.GetChallenge(challengeId);
     }
 
     [When(@"i sends a GET request to the Challenges/\{id} endpoint with ([a-zA-Z0-9]+)\.Id")]

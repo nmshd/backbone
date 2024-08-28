@@ -32,7 +32,7 @@ internal class MessagesStepDefinitions
     [Given(@"([a-zA-Z0-9]+) has sent a Message ([a-zA-Z0-9]+) to (.+)")]
     public async Task GivenIdentityHasSentMessageToIdentity(string senderName, string messageName, string recipientNames)
     {
-        var sender = ClientPool.FirstForIdentityName(senderName)!;
+        var sender = ClientPool.FirstForIdentityName(senderName);
         var recipients = ClientPool.GetClientsByIdentities(SplitNames(recipientNames));
 
         _messagesContext.Messages[messageName] = await SendMessage(sender, recipients);
@@ -45,7 +45,7 @@ internal class MessagesStepDefinitions
     [When(@"([a-zA-Z0-9]+) sends a GET request to the /Messages endpoint")]
     public async Task WhenIdentitySendsAGetRequestToTheMessagesEndpoint(string senderName)
     {
-        var sender = ClientPool.FirstForIdentityName(senderName)!;
+        var sender = ClientPool.FirstForIdentityName(senderName);
         _responseContext.WhenResponse = _responseContext.GetMessagesResponse = await sender.Messages.ListMessages();
     }
 
@@ -60,14 +60,14 @@ internal class MessagesStepDefinitions
             [
                 new SendMessageRequestRecipientInformation
                 {
-                    Address = ClientPool.FirstForIdentityName(identity2Name)!.IdentityData!.Address,
+                    Address = ClientPool.FirstForIdentityName(identity2Name).IdentityData!.Address,
                     EncryptedKey = ConvertibleString.FromUtf8("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").BytesRepresentation
                 }
             ]
         };
 
         var client = ClientPool.FirstForIdentityName(identity1Name);
-        _responseContext.WhenResponse = _responseContext.SendMessageResponse = await client!.Messages.SendMessage(sendMessageRequest);
+        _responseContext.WhenResponse = _responseContext.SendMessageResponse = await client.Messages.SendMessage(sendMessageRequest);
     }
 
     #endregion
@@ -77,7 +77,7 @@ internal class MessagesStepDefinitions
     [Then(@"the address of the recipient ([a-zA-Z0-9]+) is anonymized")]
     public void ThenTheAddressOfTheRecipientIsAnonymized(string anonymizedIdentityName)
     {
-        var addressOfIdentityThatShouldBeAnonymized = ClientPool.FirstForIdentityName(anonymizedIdentityName)!.IdentityData!.Address;
+        var addressOfIdentityThatShouldBeAnonymized = ClientPool.FirstForIdentityName(anonymizedIdentityName).IdentityData!.Address;
 
         ThrowIfNull(_responseContext.GetMessagesResponse);
 

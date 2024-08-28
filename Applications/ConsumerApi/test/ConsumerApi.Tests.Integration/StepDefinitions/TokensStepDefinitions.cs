@@ -54,7 +54,7 @@ internal class TokensStepDefinitions
     {
         for (var i = 0; i < 2; i++)
         {
-            var client = ClientPool.FirstForIdentityName(identityName)!;
+            var client = ClientPool.FirstForIdentityName(identityName);
 
             var response = await client.Tokens.CreateToken(CreateTokenRequest);
             response.Should().BeASuccess();
@@ -83,7 +83,7 @@ internal class TokensStepDefinitions
     [When("([a-zA-Z0-9]+) sends a GET request to the Tokens endpoint with a list of ids of own Tokens")]
     public async Task WhenIdentitySendsAGetRequestToTheTokensEndpointWithAListOfIdsOfOwnTokens(string identityName)
     {
-        var client = ClientPool.FirstForIdentityName(identityName)!;
+        var client = ClientPool.FirstForIdentityName(identityName);
         var tokenIds = _tokensContext.CreateTokenResponses.Values.Where(t => t.CreatedBy == client.IdentityData!.Address).Select(t => t.CreateTokenResponse.Id);
 
         _responseContext.WhenResponse = _responseContext.ListTokensResponse = await client.Tokens.ListTokens(tokenIds);
@@ -104,7 +104,7 @@ internal class TokensStepDefinitions
 
         var tokenIds = new List<string> { tokenId, peerTokenId };
         var client = ClientPool.FirstForIdentityName(identityName);
-        _responseContext.WhenResponse = _responseContext.ListTokensResponse = await client!.Tokens.ListTokens(tokenIds);
+        _responseContext.WhenResponse = _responseContext.ListTokensResponse = await client.Tokens.ListTokens(tokenIds);
 
         _responseContext.ResponseTokens.AddRange(_responseContext.ListTokensResponse.Result!);
     }
@@ -114,7 +114,7 @@ internal class TokensStepDefinitions
     public async Task WhenIdentitySendsAPostRequestToTheTokensEndpoint(string identityName)
     {
         var client = ClientPool.FirstForIdentityName(identityName);
-        _responseContext.WhenResponse = _responseContext.CreateTokenResponse = await client!.Tokens.CreateToken(CreateTokenRequest);
+        _responseContext.WhenResponse = _responseContext.CreateTokenResponse = await client.Tokens.CreateToken(CreateTokenRequest);
     }
 
     [When("a POST request is sent to the Tokens endpoint")]
@@ -127,7 +127,7 @@ internal class TokensStepDefinitions
     [When(@"([a-zA-Z0-9]+) sends a GET request to the Tokens/\{id} endpoint with ([a-zA-Z0-9]+).Id")]
     public async Task WhenIdentitySendsAGetRequestToTheTokensIdEndpointWithTokenId(string identityName, string tokenName)
     {
-        var client = ClientPool.FirstForIdentityName(identityName)!;
+        var client = ClientPool.FirstForIdentityName(identityName);
         var tokenId = _tokensContext.CreateTokenResponses[tokenName].CreateTokenResponse.Id;
 
         _responseContext.WhenResponse = _responseContext.GetTokenResponse = await client.Tokens.GetToken(tokenId);
@@ -145,7 +145,7 @@ internal class TokensStepDefinitions
     [When(@"([a-zA-Z0-9]+) sends a GET request to the Tokens/{id} endpoint with ""([^""]*)""")]
     public async Task WhenIdentitySendsAGetRequestToTheTokensIdEndpointWithNonExistingTokenId(string identityName, string nonExistingTokenId)
     {
-        var client = ClientPool.FirstForIdentityName(identityName)!;
+        var client = ClientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = _responseContext.GetTokenResponse = await client.Tokens.GetToken(nonExistingTokenId);
     }
 
@@ -156,7 +156,7 @@ internal class TokensStepDefinitions
     [Then("the response contains all Tokens created by ([a-zA-Z0-9]+) with the given ids")]
     public void ThenTheResponseContainsAllTokensCreatedByIdentityWithTheGivenIds(string identityName)
     {
-        var client = ClientPool.FirstForIdentityName(identityName)!;
+        var client = ClientPool.FirstForIdentityName(identityName);
         var tokenIds = _tokensContext.CreateTokenResponses.Values.Where(t => t.CreatedBy == client.IdentityData!.Address).Select(t => t.CreateTokenResponse).ToList();
 
         _responseContext.ResponseTokens.Select(t => t.Id)

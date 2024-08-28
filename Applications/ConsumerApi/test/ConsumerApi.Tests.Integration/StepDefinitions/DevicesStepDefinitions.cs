@@ -78,7 +78,7 @@ internal class DevicesStepDefinitions
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Devices endpoint with a valid signature on ([a-zA-Z0-9]+)")]
     public async Task WhenIdentitySendsAPostRequestToTheDevicesEndpointWithASignedChallenge(string identityName, string challengeName)
     {
-        var identity = ClientPool.FirstForIdentityName(identityName)!;
+        var identity = ClientPool.FirstForIdentityName(identityName);
         var signedChallenge = CreateSignedChallenge(identity, _challengesContext.Challenges[challengeName]);
 
         _responseContext.WhenResponse = _responseContext.RegisterDeviceResponse = await identity.Devices.RegisterDevice(new RegisterDeviceRequest
@@ -95,7 +95,7 @@ internal class DevicesStepDefinitions
         var request = new UpdateActiveDeviceRequest { CommunicationLanguage = _communicationLanguage };
 
         var client = ClientPool.GetForDeviceName(deviceName);
-        _responseContext.WhenResponse = _responseContext.UpdateDeviceResponse = await client!.Devices.UpdateActiveDevice(request);
+        _responseContext.WhenResponse = _responseContext.UpdateDeviceResponse = await client.Devices.UpdateActiveDevice(request);
     }
 
     [When("([a-zA-Z0-9]+) sends a PUT request to the /Devices/Self endpoint with a non-existent language code")]
@@ -103,7 +103,7 @@ internal class DevicesStepDefinitions
     {
         var request = new UpdateActiveDeviceRequest { CommunicationLanguage = "xz" };
         var client = ClientPool.GetForDeviceName(deviceName);
-        _responseContext.WhenResponse = _responseContext.UpdateDeviceResponse = await client!.Devices.UpdateActiveDevice(request);
+        _responseContext.WhenResponse = _responseContext.UpdateDeviceResponse = await client.Devices.UpdateActiveDevice(request);
     }
 
     [When(@"([a-zA-Z0-9]+) sends a PUT request to the /Devices/Self/Password endpoint with the new password '([^']*)'")]
@@ -111,27 +111,27 @@ internal class DevicesStepDefinitions
     {
         var client = ClientPool.GetForDeviceName(deviceName);
 
-        var oldPassword = client!.DeviceData!.UserCredentials.Password;
+        var oldPassword = client.DeviceData!.UserCredentials.Password;
         var request = new ChangePasswordRequest { OldPassword = oldPassword, NewPassword = newPassword };
 
-        _responseContext.WhenResponse = await client!.Devices.ChangePassword(request);
+        _responseContext.WhenResponse = await client.Devices.ChangePassword(request);
     }
 
     [When("([a-zA-Z0-9]+) sends a DELETE request to the /Devices/{id} endpoint with ([a-zA-Z0-9]+).Id")]
     public async Task WhenDeviceSendsADeleteRequestToTheDeviceIdEndpointWithTheDeviceId(string senderDeviceName, string deviceName)
     {
-        var deviceId = ClientPool.GetForDeviceName(deviceName)!.DeviceData!.DeviceId;
+        var deviceId = ClientPool.GetForDeviceName(deviceName).DeviceData!.DeviceId;
 
         var client = ClientPool.GetForDeviceName(senderDeviceName);
 
-        _responseContext.WhenResponse = _responseContext.DeleteDeviceResponse = await client!.Devices.DeleteDevice(deviceId);
+        _responseContext.WhenResponse = _responseContext.DeleteDeviceResponse = await client.Devices.DeleteDevice(deviceId);
     }
 
     [When("([a-zA-Z0-9]+) sends a DELETE request to the /Devices/{id} endpoint with a non existent id")]
     public async Task WhenDeviceSendsADeleteRequestToTheDeviceIdEndpointWithNonExistentId(string deviceName)
     {
         var client = ClientPool.GetForDeviceName(deviceName);
-        _responseContext.WhenResponse = _responseContext.DeleteDeviceResponse = await client!.Devices.DeleteDevice(NON_EXISTENT_DEVICE_ID);
+        _responseContext.WhenResponse = _responseContext.DeleteDeviceResponse = await client.Devices.DeleteDevice(NON_EXISTENT_DEVICE_ID);
     }
 
     #endregion
@@ -141,7 +141,7 @@ internal class DevicesStepDefinitions
     [Then("([a-zA-Z0-9]+) is deleted")]
     public async Task ThenDeviceIsDeleted(string deviceName)
     {
-        var deviceId = ClientPool.GetForDeviceName(deviceName)!.DeviceData!.DeviceId;
+        var deviceId = ClientPool.GetForDeviceName(deviceName).DeviceData!.DeviceId;
 
         var clientOfDeletedDevice = ClientPool.GetForDeviceName(deviceName);
         var clientOfOtherDevice = ClientPool.FirstForIdentityAddress(clientOfDeletedDevice.IdentityData!.Address);
@@ -155,11 +155,11 @@ internal class DevicesStepDefinitions
     public async Task ThenDeviceIsNotDeleted(string deviceName)
     {
         var identityName = ClientPool.GetIdentityForDevice(deviceName)!;
-        var deviceId = ClientPool.GetForDeviceName(deviceName)!.DeviceData!.DeviceId;
+        var deviceId = ClientPool.GetForDeviceName(deviceName).DeviceData!.DeviceId;
 
         var client = ClientPool.FirstForIdentityName(identityName);
 
-        var response = await client!.Devices.ListDevices();
+        var response = await client.Devices.ListDevices();
         response.Result!.Where(d => d.Id == deviceId).Should().NotBeEmpty();
     }
 
@@ -168,7 +168,7 @@ internal class DevicesStepDefinitions
     {
         var client = ClientPool.GetForDeviceName(deviceName);
 
-        var response = await client!.Devices.ListDevices();
+        var response = await client.Devices.ListDevices();
         response.Result!.Count.Should().Be(1);
         response.Result!.First().CommunicationLanguage.Should().Be(_communicationLanguage);
     }
