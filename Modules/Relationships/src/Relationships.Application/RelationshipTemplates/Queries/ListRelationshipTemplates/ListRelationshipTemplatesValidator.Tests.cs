@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
+using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
 using Xunit;
 
@@ -12,36 +12,45 @@ public class ListRelationshipTemplatesValidatorTests : AbstractTestsBase
     [Fact]
     public void Happy_path()
     {
-        var validator = new ListRelationshipTemplatesValidator();
+        // Arrange
+        var validator = new Validator();
 
+        // Act
         var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), [RelationshipTemplateId.New()]));
 
+        // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
     }
 
     [Fact]
     public void Fails_when_Ids_is_null()
     {
-        var validator = new ListRelationshipTemplatesValidator();
+        // Arrange
+        var validator = new Validator();
 
+        // Act
         var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), null));
 
-        validationResult.ShouldHaveValidationErrorFor(q => q.Ids);
-        validationResult.Errors.Should().HaveCount(1);
-        validationResult.Errors.First().ErrorCode.Should().Be("error.platform.validation.invalidPropertyValue");
-        validationResult.Errors.First().ErrorMessage.Should().Be("'Ids' must not be empty.");
+        // Assert
+        validationResult.ShouldHaveValidationErrorForItem(
+            propertyName: nameof(ListRelationshipTemplatesQuery.Ids),
+            expectedErrorCode: "error.platform.validation.invalidPropertyValue",
+            expectedErrorMessage: "'Ids' must not be empty.");
     }
 
     [Fact]
     public void Fails_when_Ids_is_empty()
     {
-        var validator = new ListRelationshipTemplatesValidator();
+        // Arrange
+        var validator = new Validator();
 
-        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), Array.Empty<RelationshipTemplateId>()));
+        // Act
+        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), []));
 
-        validationResult.ShouldHaveValidationErrorFor(q => q.Ids);
-        validationResult.Errors.Should().HaveCount(1);
-        validationResult.Errors.First().ErrorCode.Should().Be("error.platform.validation.invalidPropertyValue");
-        validationResult.Errors.First().ErrorMessage.Should().Be("'Ids' must not be empty.");
+        // Assert
+        validationResult.ShouldHaveValidationErrorForItem(
+            propertyName: nameof(ListRelationshipTemplatesQuery.Ids),
+            expectedErrorCode: "error.platform.validation.invalidPropertyValue",
+            expectedErrorMessage: "'Ids' must not be empty.");
     }
 }

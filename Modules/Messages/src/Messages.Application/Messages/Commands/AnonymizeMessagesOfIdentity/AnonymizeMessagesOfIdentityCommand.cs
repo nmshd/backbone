@@ -1,14 +1,13 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using MediatR;
+﻿using MediatR;
 
 namespace Backbone.Modules.Messages.Application.Messages.Commands.AnonymizeMessagesOfIdentity;
 
 public class AnonymizeMessagesOfIdentityCommand : IRequest
 {
-    public AnonymizeMessagesOfIdentityCommand(IdentityAddress identityAddress)
+    public AnonymizeMessagesOfIdentityCommand(string identityAddress)
     {
         IdentityAddress = identityAddress;
     }
 
-    public IdentityAddress IdentityAddress { get; set; }
+    public string IdentityAddress { get; set; }
 }
