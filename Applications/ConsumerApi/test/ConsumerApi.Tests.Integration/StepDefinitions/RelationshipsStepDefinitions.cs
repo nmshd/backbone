@@ -44,20 +44,31 @@ internal class RelationshipsStepDefinitions
         _relationshipsContext.CreateRelationshipTemplateResponses[templateName] = (await client.RelationshipTemplates.CreateTemplate(CreateRelationshipTemplateRequest)).Result!;
     }
 
-    [Given($"a Relationship {RegexFor.SINGLE_THING} in status (Pending|Active|Rejected) between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
-    public async Task GivenARelationshipInStatusBetweenIdentityAndIdentityCreatedByIdentity(string relationshipName, string relationshipStatus, string participant1, string participant2,
-        string identityName)
+    [Given($"a pending Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
+    public async Task GivenAPendingRelationshipBetween(string relationshipName, string participant1Name, string participant2Name, string creatorName)
     {
-        var relationshipCreator = _clientPool.FirstForIdentityName(identityName);
-        var relationshipParticipant = _clientPool.FirstForIdentityName(identityName == participant1 ? participant2 : participant1);
+        var creator = _clientPool.FirstForIdentityName(creatorName);
+        var peer = _clientPool.FirstForIdentityName(creatorName == participant1Name ? participant2Name : participant1Name);
 
-        _relationshipsContext.Relationships[relationshipName] = relationshipStatus switch
-        {
-            "Pending" => await CreatePendingRelationshipBetween(relationshipParticipant, relationshipCreator),
-            "Active" => await EstablishRelationshipBetween(relationshipParticipant, relationshipCreator),
-            "Rejected" => await CreateRejectedRelationshipBetween(relationshipParticipant, relationshipCreator),
-            _ => _relationshipsContext.Relationships[relationshipName]
-        };
+        _relationshipsContext.Relationships[relationshipName] = await CreatePendingRelationshipBetween(peer, creator);
+    }
+
+    [Given($"a rejected Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
+    public async Task GivenARejectedRelationshipBetween(string relationshipName, string participant1Address, string participant2Address)
+    {
+        var participant1 = _clientPool.FirstForIdentityName(participant1Address);
+        var participant2 = _clientPool.FirstForIdentityName(participant2Address);
+
+        _relationshipsContext.Relationships[relationshipName] = await CreateRejectedRelationshipBetween(participant2, participant1);
+    }
+
+    [Given($"an active Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
+    public async Task GivenAnActiveRelationshipBetween(string relationshipName, string participant1Address, string participant2Address)
+    {
+        var participant1 = _clientPool.FirstForIdentityName(participant1Address);
+        var participant2 = _clientPool.FirstForIdentityName(participant2Address);
+
+        _relationshipsContext.Relationships[relationshipName] = await EstablishRelationshipBetween(participant2, participant1);
     }
 
     [Given($"a Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
