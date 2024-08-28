@@ -30,4 +30,5 @@ User deletes an un-onboarded Device
         And an un-onboarded device d2 that belongs to i2
         When d1 sends a DELETE request to the /Devices/{id} endpoint with d2.Id
         Then the response status code is 400 (Bad Request)
+        And the response content contains an error with the error code "error.platform.validation.device.deviceCannotBeDeleted"
         And d2 is not deleted
