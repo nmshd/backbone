@@ -48,7 +48,7 @@ internal class TokensStepDefinitions
 
     #region When
 
-    [When($"{RegexFor.SINGLE_THING} sends a GET request to the Tokens endpoint with the ids of {RegexFor.LIST_OF_THINGS}")]
+    [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Tokens endpoint with the ids of {RegexFor.LIST_OF_THINGS}")]
     public async Task WhenIdentitySendsAGetRequestToTheTokensEndpointWithAListOfIdsOfOwnTokens(string identityName, string tokenNames)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
@@ -62,14 +62,14 @@ internal class TokensStepDefinitions
         tokens.Should().HaveCount(tokenIds.Length);
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a POST request to the Tokens endpoint")]
+    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Tokens endpoint")]
     public async Task WhenIdentitySendsAPostRequestToTheTokensEndpoint(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = await client.Tokens.CreateToken(new CreateTokenRequest { Content = CONTENT, ExpiresAt = TOMORROW });
     }
 
-    [When("an anonymous user sends a POST request is sent to the Tokens endpoint")]
+    [When("an anonymous user sends a POST request is sent to the /Tokens endpoint")]
     public async Task WhenAnAnonymousUserSendsAPOSTRequestIsSentToTheTokensEndpoint()
     {
         _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { Content = CONTENT, ExpiresAt = TOMORROW });

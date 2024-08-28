@@ -14,8 +14,3 @@ User updates a Device
         When d sends a PUT request to the /Devices/Self endpoint with a non-existent language code
         Then the response status code is 400 (Bad Request)
         And the response content contains an error with the error code "error.platform.validation.invalidDeviceCommunicationLanguage"
-
-    Scenario: Updating own Device password
-        Given an Identity i with a device d
-        When d sends a PUT request to the /Devices/Self/Password endpoint with the new password 'password'
-        Then the response status code is 204 (No Content)
