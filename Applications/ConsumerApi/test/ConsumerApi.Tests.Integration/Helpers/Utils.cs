@@ -55,32 +55,17 @@ public static class Utils
 
     public static async Task<Relationship> EstablishRelationshipBetween(Client client1, Client client2)
     {
-        var createRelationshipTemplateRequest = new CreateRelationshipTemplateRequest
-        {
-            Content = "AAA".GetBytes()
-        };
-
-        var relationshipTemplateResponse = await client1.RelationshipTemplates.CreateTemplate(createRelationshipTemplateRequest);
-        relationshipTemplateResponse.Should().BeASuccess();
-
-        var createRelationshipRequest = new CreateRelationshipRequest
-        {
-            RelationshipTemplateId = relationshipTemplateResponse.Result!.Id,
-            Content = "AAA".GetBytes()
-        };
-
-        var createRelationshipResponse = await client2.Relationships.CreateRelationship(createRelationshipRequest);
-        createRelationshipResponse.Should().BeASuccess();
+        var pendingRelationship = await CreatePendingRelationshipBetween(client1, client2);
 
         var acceptRelationshipRequest = new AcceptRelationshipRequest
         {
             CreationResponseContent = "AAA".GetBytes()
         };
 
-        var acceptRelationshipResponse = await client1.Relationships.AcceptRelationship(createRelationshipResponse.Result!.Id, acceptRelationshipRequest);
+        var acceptRelationshipResponse = await client1.Relationships.AcceptRelationship(pendingRelationship.Id, acceptRelationshipRequest);
         acceptRelationshipResponse.Should().BeASuccess();
 
-        var getRelationshipResponse = await client1.Relationships.GetRelationship(createRelationshipResponse.Result.Id);
+        var getRelationshipResponse = await client1.Relationships.GetRelationship(pendingRelationship.Id);
         getRelationshipResponse.Should().BeASuccess();
 
         return getRelationshipResponse.Result!;
