@@ -1,4 +1,7 @@
 ﻿using Backbone.ConsumerApi.Sdk;
+using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Helpers;
 
@@ -9,12 +12,18 @@ public class ClientPool
 
     private readonly List<ClientWrapper> _clientWrappers = [];
 
+    internal ClientPool(HttpClientFactory httpClientFactory, IOptions<HttpConfiguration> configuration)
+    {
+        var clientCredentials = new ClientCredentials(configuration.Value.ClientCredentials.ClientId, configuration.Value.ClientCredentials.ClientSecret);
+        Anonymous = Client.CreateUnauthenticated(httpClientFactory.CreateClient(), clientCredentials);
+    }
+
     public void AddAnonymous(Client client)
     {
         Anonymous = client;
     }
 
-    public Client? Anonymous { get; private set; }
+    public Client Anonymous { get; private set; }
 
     public ClientAdder Add(Client client)
     {

@@ -35,11 +35,10 @@ internal class ChallengesStepDefinitions
         _challengesContext.Challenges[challengeName].Id.Should().NotBeNullOrEmpty();
     }
 
-    [Given(@"a Challenge ([a-zA-Z0-9]+)")]
-    public async Task GivenAChallenge(string challengeName)
+    [Given(@"a Challenge ([a-zA-Z0-9]+) created by an anonymous user")]
+    public async Task GivenAChallengeCreatedByAnAnonymousUser(string challengeName)
     {
-        var client = _clientPool.Default();
-        _responseContext.ChallengeResponse = await client!.Challenges.CreateChallengeUnauthenticated();
+        _responseContext.ChallengeResponse = await _clientPool.Anonymous.Challenges.CreateChallengeUnauthenticated();
         _responseContext.ChallengeResponse!.Should().BeASuccess();
 
         _challengesContext.Challenges[challengeName] = _responseContext.ChallengeResponse.Result!;

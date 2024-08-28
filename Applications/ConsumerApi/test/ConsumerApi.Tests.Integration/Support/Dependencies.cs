@@ -3,6 +3,7 @@ using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using SolidToken.SpecFlow.DependencyInjection;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Support;
@@ -24,7 +25,8 @@ public static class Dependencies
 
         services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory()));
 
-        services.AddScoped<ClientPool>();
+        // For some reason the DI container is not able to use the internal constructor of the ClientPool. Hence we have to create it manually
+        services.AddScoped<ClientPool>(sp => new ClientPool(sp.GetRequiredService<HttpClientFactory>(), sp.GetRequiredService<IOptions<HttpConfiguration>>()));
 
         services.AddScoped<ChallengesContext>();
         services.AddScoped<IdentitiesContext>();
