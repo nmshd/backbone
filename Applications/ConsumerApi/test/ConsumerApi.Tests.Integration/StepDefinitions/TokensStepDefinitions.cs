@@ -72,8 +72,8 @@ internal class TokensStepDefinitions
     [When("an anonymous user sends a POST request is sent to the Tokens endpoint")]
     public async Task WhenAnAnonymousUserSendsAPOSTRequestIsSentToTheTokensEndpoint()
     {
-        var client = _clientPool.Default();
-        _responseContext.WhenResponse = _responseContext.CreateTokenAnonymously = await client!.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { Content = CONTENT, ExpiresAt = TOMORROW });
+        _responseContext.WhenResponse = _responseContext.CreateTokenAnonymously =
+            await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { Content = CONTENT, ExpiresAt = TOMORROW });
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a GET request to the Tokens/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]

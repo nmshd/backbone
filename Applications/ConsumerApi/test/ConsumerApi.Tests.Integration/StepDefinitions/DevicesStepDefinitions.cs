@@ -154,7 +154,7 @@ internal class DevicesStepDefinitions
     [Then("([a-zA-Z0-9]+) is not deleted")]
     public async Task ThenDeviceIsNotDeleted(string deviceName)
     {
-        var identityName = _clientPool.GetIdentityForDevice(deviceName)!;
+        var identityName = _clientPool.GetIdentityNameForDevice(deviceName)!;
         var deviceId = _clientPool.GetForDeviceName(deviceName).DeviceData!.DeviceId;
 
         var client = _clientPool.FirstForIdentityName(identityName);

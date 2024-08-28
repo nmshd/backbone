@@ -141,8 +141,4 @@ internal class ResponseStepDefinitions
     }
 
     #endregion
-
-    #region Tokens
-
-    #endregion
 }

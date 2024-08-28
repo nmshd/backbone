@@ -96,8 +96,7 @@ internal class IdentitiesStepDefinitions
             DevicePassword = DEVICE_PASSWORD
         };
 
-        var client = _clientPool.Default();
-        _responseContext.WhenResponse = _responseContext.CreateIdentityResponse = await client!.Identities.CreateIdentity(createIdentityPayload);
+        _responseContext.WhenResponse = _responseContext.CreateIdentityResponse = await _clientPool.Anonymous.Identities.CreateIdentity(createIdentityPayload);
     }
 
     #endregion

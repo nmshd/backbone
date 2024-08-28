@@ -32,7 +32,7 @@ internal class MessagesStepDefinitions
     public async Task GivenIdentityHasSentMessageToIdentity(string senderName, string messageName, string recipientNames)
     {
         var sender = _clientPool.FirstForIdentityName(senderName);
-        var recipients = _clientPool.GetClientsByIdentities(SplitNames(recipientNames));
+        var recipients = _clientPool.GetAllForIdentityNames(SplitNames(recipientNames));
 
         _messagesContext.Messages[messageName] = await SendMessage(sender, recipients);
     }
