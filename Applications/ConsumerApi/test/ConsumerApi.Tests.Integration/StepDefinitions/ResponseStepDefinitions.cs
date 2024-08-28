@@ -51,7 +51,7 @@ internal class ResponseStepDefinitions
         WhenResponse.Error!.Code.Should().Be(errorCode);
     }
 
-    [Then(@"the response contains a (.*)")]
+    [Then(@"the response contains a ([a-zA-Z]+)")]
     public async Task ThenTheResponseContains(string responseType)
     {
         WhenResponse!.Should().NotBeNull();
@@ -61,8 +61,8 @@ internal class ResponseStepDefinitions
 
     #region Challenges
 
-    [Then(@"the Challenge has a valid expiration date")]
-    public void ThenTheChallengeHasAValidExpirationDate()
+    [Then(@"the Challenge has an expiration date in the future")]
+    public void ThenTheChallengeHasAnExpirationDateInTheFuture()
     {
         _responseContext.ChallengeResponse!.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
     }
@@ -184,8 +184,6 @@ public class ResponseContext
     public ApiResponse<EmptyResponse>? CreateTokenAnonymously { get; set; }
     public ApiResponse<ListTokensResponse>? ListTokensResponse { get; set; }
     public ApiResponse<Token>? GetTokenResponse { get; set; }
-
-    public List<Token> ResponseTokens = [];
 
     public IResponse? WhenResponse { get; set; }
 }

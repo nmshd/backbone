@@ -49,13 +49,12 @@ internal class ChallengesStepDefinitions
 
     #region When
 
-    [When("a POST request is sent to the /Challenges endpoint")]
-    public async Task WhenAPostRequestIsSentToTheChallengesEndpoint()
+    [When("an anonymous user sends a POST request is sent to the /Challenges endpoint")]
+    public async Task WhenAnAnonymousUserSendsAPostRequestIsSentToTheChallengesEndpoint()
     {
-        var client = _clientPool.Default();
+        var client = _clientPool.Anonymous;
 
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse =
-            _clientPool.IsDefaultClientAuthenticated() ? await client!.Challenges.CreateChallenge() : await client!.Challenges.CreateChallengeUnauthenticated();
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.CreateChallengeUnauthenticated();
     }
 
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Challenges endpoint")]

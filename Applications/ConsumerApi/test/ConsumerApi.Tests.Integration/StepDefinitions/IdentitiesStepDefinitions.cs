@@ -71,7 +71,7 @@ internal class IdentitiesStepDefinitions
 
     #region When
 
-    [When("a POST request is sent to the /Identities endpoint with a valid signature on c")]
+    [When("an anonymous user sends a POST request is sent to the /Identities endpoint with a valid signature on c")]
     public async Task WhenAPostRequestIsSentToTheIdentitiesEndpointWithAValidSignatureOnChallenge()
     {
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
