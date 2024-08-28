@@ -27,6 +27,7 @@ internal class IdentityDeletionProcessesStepDefinitions
     [Given("no active deletion process for i exists")]
     public void GivenNoActiveDeletionProcessForIdentityExists()
     {
+        // this step is only for readbility; since no deletion process exists, we don't need to do anything
     }
 
     [Given($"an active deletion process {RegexFor.SINGLE_THING} for {RegexFor.SINGLE_THING} exists")]
