@@ -131,7 +131,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
 
                 if (!correlationId.IsEmpty())
                     LogContext.PushProperty("CorrelationId", correlationId);
-                
+
                 // Complete the message so that it is not received again.
                 if (await ProcessEvent(eventName, messageData))
                     await args.CompleteMessageAsync(args.Message);
