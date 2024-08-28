@@ -29,11 +29,17 @@ internal class IdentityDeletionProcessesStepDefinitions
     {
     }
 
+    [Given($"an active deletion process {RegexFor.SINGLE_THING} for {RegexFor.SINGLE_THING} exists")]
+    public async Task GivenAnActiveDeletionProcessDpForTheIdentityExists(string deletionProcessName, string identityName)
+    {
+        var deletionProcess = await _clientPool.FirstForIdentityName(identityName).Identities.StartDeletionProcess();
+        _identitiesContext.StartDeletionProcessResponses[deletionProcessName] = deletionProcess.Result!;
+    }
+
     [Given($"an active deletion process for {RegexFor.SINGLE_THING} exists")]
     public async Task GivenAnActiveDeletionProcessForTheIdentityExists(string identityName)
     {
-        var deletionProcess = await _clientPool.FirstForIdentityName(identityName).Identities.StartDeletionProcess();
-        _identitiesContext.ActiveDeletionProcesses.Add(identityName, deletionProcess.Result!.Id);
+        await _clientPool.FirstForIdentityName(identityName).Identities.StartDeletionProcess();
     }
 
     [Given($"{RegexFor.SINGLE_THING} is in status \"ToBeDeleted\"")]
@@ -55,13 +61,13 @@ internal class IdentityDeletionProcessesStepDefinitions
         _responseContext.WhenResponse = _responseContext.StartDeletionProcessResponse = await client.Identities.StartDeletionProcess();
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Identities/Self/DeletionProcesses/{{id}} endpoint")]
-    public async Task WhenIdentitySendsAPutRequestToTheIdentitiesSelfDeletionProcessesIdEndpoint(string identityName)
+    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Identities/Self/DeletionProcesses/{RegexFor.SINGLE_THING}.Id endpoint")]
+    public async Task WhenIdentitySendsAPutRequestToTheIdentitiesSelfDeletionProcessesIdEndpoint(string identityName, string deletionProcessName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
 
         _responseContext.WhenResponse = _responseContext.CancelDeletionProcessResponse =
-            await client.Identities.CancelDeletionProcess(_identitiesContext.ActiveDeletionProcesses[identityName]);
+            await client.Identities.CancelDeletionProcess(_identitiesContext.StartDeletionProcessResponses[deletionProcessName].Id);
     }
 
     #endregion

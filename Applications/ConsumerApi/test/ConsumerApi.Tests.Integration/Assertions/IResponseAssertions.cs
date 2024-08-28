@@ -5,9 +5,12 @@ using FluentAssertions.Primitives;
 using Newtonsoft.Json;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Assertions;
+
 public class IResponseAssertions : ObjectAssertions<IResponse, IResponseAssertions>
 {
-    public IResponseAssertions(IResponse instance) : base(instance) { }
+    public IResponseAssertions(IResponse instance) : base(instance)
+    {
+    }
 
     public void BeASuccess(string because = "", params object[] becauseArgs)
     {
@@ -16,6 +19,15 @@ public class IResponseAssertions : ObjectAssertions<IResponse, IResponseAssertio
             .Given(() => Subject)
             .ForCondition(result => result.IsSuccess)
             .FailWith($"Expected response to be successful. Failed with error code: '{Subject.Error?.Code}'. Error Message: '{Subject.Error?.Message}'");
+    }
+
+    public void BeAnError(string because = "", params object[] becauseArgs)
+    {
+        Execute.Assertion
+            .BecauseOf(because, becauseArgs)
+            .Given(() => Subject)
+            .ForCondition(result => result.IsError)
+            .FailWith("Expected the response to not be successful, but it was.");
     }
 
     public async Task ComplyWithSchema(string because = "", params object[] becauseArgs)
@@ -48,6 +60,4 @@ public class IResponseAssertions : ObjectAssertions<IResponse, IResponseAssertio
                     .FailWith($"Response content does not comply with the {type.FullName} schema: {string.Join(", ", errors)}");
         }
     }
-
-
 }

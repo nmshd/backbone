@@ -32,6 +32,6 @@ internal class FilesStepDefinitions
             EncryptedProperties = SOME_BASE64_STRING
         };
 
-        _responseContext.WhenResponse = _responseContext.FileUploadResponse = await identity.Files.UploadFile(createFileRequest);
+        _responseContext.WhenResponse = await identity.Files.UploadFile(createFileRequest);
     }
 }

@@ -35,7 +35,7 @@ internal class DatawalletStepDefinitions
             DatawalletVersion = 1
         };
 
-        _responseContext.WhenResponse = _responseContext.PushDatawalletModificationResponse = await client.Datawallet.PushDatawalletModifications(
+        _responseContext.WhenResponse = await client.Datawallet.PushDatawalletModifications(
             new PushDatawalletModificationsRequest
             {
                 LocalIndex = 0,

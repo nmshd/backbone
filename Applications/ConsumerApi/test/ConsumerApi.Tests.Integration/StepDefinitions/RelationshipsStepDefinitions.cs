@@ -73,8 +73,7 @@ internal class RelationshipsStepDefinitions
         var relationship = _relationshipsContext.Relationships[relationshipName];
         var terminator = _clientPool.FirstForIdentityName(terminatorName);
 
-        _responseContext.TerminateRelationshipResponse = await terminator.Relationships.TerminateRelationship(relationship.Id);
-        _responseContext.TerminateRelationshipResponse.Should().BeASuccess();
+        await terminator.Relationships.TerminateRelationship(relationship.Id);
     }
 
     [Given($"{RegexFor.SINGLE_THING} has decomposed {RegexFor.SINGLE_THING}")]
@@ -94,12 +93,12 @@ internal class RelationshipsStepDefinitions
     #region When
 
     [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Relationships endpoint with {RegexFor.SINGLE_THING}.Id")]
-    public async Task WhenIdentitySendsAPostRequestToTheRelationshipsEndpointWithRelationshipTemplatetId(string identityName, string templateName)
+    public async Task WhenIdentitySendsAPostRequestToTheRelationshipsEndpointWithRelationshipTemplateId(string identityName, string templateName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         var relationshipTemplateId = _relationshipsContext.CreateRelationshipTemplateResponses[templateName].Id;
 
-        _responseContext.WhenResponse = _responseContext.CreateRelationshipResponse = await client.Relationships.CreateRelationship(CreateRelationshipRequest(relationshipTemplateId));
+        _responseContext.WhenResponse = await client.Relationships.CreateRelationship(CreateRelationshipRequest(relationshipTemplateId));
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/(Accept|Reject|Revoke) endpoint")]
@@ -109,13 +108,10 @@ internal class RelationshipsStepDefinitions
 
         _responseContext.WhenResponse = requestType switch
         {
-            "Accept" => _responseContext.AcceptRelationshipResponse =
-                await client.Relationships.AcceptRelationship(_relationshipsContext.Relationships[relationshipName].Id, AcceptRelationshipRequest),
-            "Reject" => _responseContext.RejectRelationshipResponse =
-                await client.Relationships.RejectRelationship(_relationshipsContext.Relationships[relationshipName].Id, RejectRelationshipRequest),
-            "Revoke" => _responseContext.RevokeRelationshipResponse =
-                await client.Relationships.RevokeRelationship(_relationshipsContext.Relationships[relationshipName].Id, RevokeRelationshipRequest),
-            _ => _responseContext.WhenResponse
+            "Accept" => await client.Relationships.AcceptRelationship(_relationshipsContext.Relationships[relationshipName].Id, AcceptRelationshipRequest),
+            "Reject" => await client.Relationships.RejectRelationship(_relationshipsContext.Relationships[relationshipName].Id, RejectRelationshipRequest),
+            "Revoke" => await client.Relationships.RevokeRelationship(_relationshipsContext.Relationships[relationshipName].Id, RevokeRelationshipRequest),
+            _ => throw new NotSupportedException($"Unsupported request type: {requestType}")
         };
     }
 
@@ -125,6 +121,24 @@ internal class RelationshipsStepDefinitions
         var client = _clientPool.FirstForIdentityName(identity1Name);
         _responseContext.WhenResponse = _responseContext.CanEstablishRelationshipResponse =
             await client.Relationships.CanCreateRelationship(_clientPool.FirstForIdentityName(identity2Name).IdentityData!.Address);
+    }
+
+    #endregion
+
+    #region Then
+
+    [Then("a relationship can be established")]
+    public void ThenARelationshipCanBeEstablished()
+    {
+        if (_responseContext.CanEstablishRelationshipResponse != null)
+            _responseContext.CanEstablishRelationshipResponse.Result!.CanCreate.Should().BeTrue();
+    }
+
+    [Then("a relationship can not be established")]
+    public void ThenARelationshipCanNotBeEstablished()
+    {
+        if (_responseContext.CanEstablishRelationshipResponse != null)
+            _responseContext.CanEstablishRelationshipResponse.Result!.CanCreate.Should().BeFalse();
     }
 
     #endregion

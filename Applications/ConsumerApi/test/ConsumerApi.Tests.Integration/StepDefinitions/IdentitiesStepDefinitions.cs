@@ -24,14 +24,17 @@ internal class IdentitiesStepDefinitions
     private readonly HttpClient _httpClient;
 
     private readonly ResponseContext _responseContext;
+    private readonly ChallengesContext _challengesContext;
     private readonly ClientPool _clientPool;
 
-    public IdentitiesStepDefinitions(ResponseContext responseContext, ClientPool clientPool, HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
+    public IdentitiesStepDefinitions(ResponseContext responseContext, ChallengesContext challengesContext, ClientPool clientPool, HttpClientFactory factory,
+        IOptions<HttpConfiguration> httpConfiguration)
     {
         _httpClient = factory.CreateClient();
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
 
         _responseContext = responseContext;
+        _challengesContext = challengesContext;
         _clientPool = clientPool;
     }
 
@@ -72,13 +75,13 @@ internal class IdentitiesStepDefinitions
 
     #region When
 
-    [When("an anonymous user sends a POST request to the /Identities endpoint with a valid signature on c")]
-    public async Task WhenAPostRequestIsSentToTheIdentitiesEndpointWithAValidSignatureOnChallenge()
+    [When($"an anonymous user sends a POST request to the /Identities endpoint with a valid signature on {RegexFor.SINGLE_THING}")]
+    public async Task WhenAPostRequestIsSentToTheIdentitiesEndpointWithAValidSignatureOnChallenge(string challengeName)
     {
         var signatureHelper = SignatureHelper.CreateEd25519WithRawKeyFormat();
         var identityKeyPair = signatureHelper.CreateKeyPair();
 
-        var serializedChallenge = JsonConvert.SerializeObject(_responseContext.ChallengeResponse!.Result);
+        var serializedChallenge = JsonConvert.SerializeObject(_challengesContext.Challenges[challengeName]);
         var challengeSignature = signatureHelper.CreateSignature(identityKeyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
         var signedChallenge = new SignedChallenge(serializedChallenge, challengeSignature);
 
@@ -96,7 +99,17 @@ internal class IdentitiesStepDefinitions
             DevicePassword = DEVICE_PASSWORD
         };
 
-        _responseContext.WhenResponse = _responseContext.CreateIdentityResponse = await _clientPool.Anonymous.Identities.CreateIdentity(createIdentityPayload);
+        _responseContext.WhenResponse = await _clientPool.Anonymous.Identities.CreateIdentity(createIdentityPayload);
+    }
+
+    #endregion
+
+    #region Then
+
+    [Then($"the new status of {RegexFor.SINGLE_THING} is '([a-zA-Z]+)'")]
+    public void ThenTheResponseStatusIs(string deletionProcessName, string newDeletionProcessStatus)
+    {
+        _responseContext.CancelDeletionProcessResponse!.Result!.Status.Should().Be(newDeletionProcessStatus);
     }
 
     #endregion

@@ -90,6 +90,46 @@ internal class MessagesStepDefinitions
         recipientAddressesAfterGet.Should().NotContain(addressOfIdentityThatShouldBeAnonymized);
     }
 
+    [Then(@"the error contains a list of Identities to be deleted that includes ([a-zA-Z0-9]+)")]
+    public void ThenTheErrorContainsAListOfIdentitiesToBeDeletedThatIncludesIdentity(string identityName)
+    {
+        var errorData = _responseContext.SendMessageResponse!.Error!.Data?.As<PeersToBeDeletedErrorData>();
+        errorData.Should().NotBeNull();
+        errorData!.PeersToBeDeleted.Contains(_clientPool.FirstForIdentityName(identityName).IdentityData!.Address).Should().BeTrue();
+    }
+
+    [Then(@"the response contains the Messages ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
+    public void ThenTheResponseContainsTheMessages(string message1Name, string message2Name)
+    {
+        var message1 = _messagesContext.Messages[message1Name];
+        var message2 = _messagesContext.Messages[message2Name];
+
+        ThrowIfNull(_responseContext.GetMessagesResponse);
+
+        _responseContext.GetMessagesResponse.Result.Should().Contain(m => m.Id == message1.Id);
+        _responseContext.GetMessagesResponse.Result.Should().Contain(m => m.Id == message2.Id);
+    }
+
+    [Then(@"the response contains the Message ([a-zA-Z0-9]+)")]
+    public void ThenTheResponseContainsTheMessage(string messageName)
+    {
+        var message = _messagesContext.Messages[messageName];
+
+        ThrowIfNull(_responseContext.GetMessagesResponse);
+
+        _responseContext.GetMessagesResponse.Result.Should().Contain(m => m.Id == message.Id);
+    }
+
+    [Then(@"the response does not contain the Message ([a-zA-Z0-9]+)")]
+    public void ThenTheResponseDoesNotContainTheMessage(string messageName)
+    {
+        var message = _messagesContext.Messages[messageName];
+
+        ThrowIfNull(_responseContext.GetMessagesResponse);
+
+        _responseContext.GetMessagesResponse.Result.Should().NotContain(m => m.Id == message.Id);
+    }
+
     #endregion
 }
 

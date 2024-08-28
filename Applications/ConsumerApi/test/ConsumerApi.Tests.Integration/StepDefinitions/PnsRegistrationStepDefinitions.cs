@@ -16,6 +16,8 @@ internal class PnsRegistrationStepDefinitions
         _clientPool = clientPool;
     }
 
+    #region When
+
     [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Devices/Self/PushNotifications endpoint")]
     public async Task WhenIdentitySendsAPutRequestToTheDevicesSelfPushNotificationsEndpoint(string identityName)
     {
@@ -41,4 +43,16 @@ internal class PnsRegistrationStepDefinitions
     {
         _responseContext.WhenResponse = await _clientPool.FirstForIdentityName(identityName).PushNotifications.SendTestNotification(new object());
     }
+
+    #endregion
+
+    #region Then
+
+    [Then("the response contains the push identifier for the device")]
+    public void ThenTheResponseContainsThePushIdentifierForTheDevice()
+    {
+        _responseContext.UpdateDeviceRegistrationResponse!.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();
+    }
+
+    #endregion
 }

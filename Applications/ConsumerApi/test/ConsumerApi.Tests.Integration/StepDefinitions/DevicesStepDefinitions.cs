@@ -81,7 +81,7 @@ internal class DevicesStepDefinitions
         var identity = _clientPool.FirstForIdentityName(identityName);
         var signedChallenge = CreateSignedChallenge(identity, _challengesContext.Challenges[challengeName]);
 
-        _responseContext.WhenResponse = _responseContext.RegisterDeviceResponse = await identity.Devices.RegisterDevice(new RegisterDeviceRequest
+        _responseContext.WhenResponse = await identity.Devices.RegisterDevice(new RegisterDeviceRequest
         {
             DevicePassword = DEVICE_PASSWORD,
             SignedChallenge = signedChallenge
@@ -95,7 +95,7 @@ internal class DevicesStepDefinitions
         var request = new UpdateActiveDeviceRequest { CommunicationLanguage = _communicationLanguage };
 
         var client = _clientPool.GetForDeviceName(deviceName);
-        _responseContext.WhenResponse = _responseContext.UpdateDeviceResponse = await client.Devices.UpdateActiveDevice(request);
+        _responseContext.WhenResponse = await client.Devices.UpdateActiveDevice(request);
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Devices/Self endpoint with a non-existent language code")]
@@ -103,7 +103,7 @@ internal class DevicesStepDefinitions
     {
         var request = new UpdateActiveDeviceRequest { CommunicationLanguage = "xz" };
         var client = _clientPool.GetForDeviceName(deviceName);
-        _responseContext.WhenResponse = _responseContext.UpdateDeviceResponse = await client.Devices.UpdateActiveDevice(request);
+        _responseContext.WhenResponse = await client.Devices.UpdateActiveDevice(request);
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Devices/Self/Password endpoint with the new password '([^']*)'")]
@@ -124,14 +124,14 @@ internal class DevicesStepDefinitions
 
         var client = _clientPool.GetForDeviceName(senderDeviceName);
 
-        _responseContext.WhenResponse = _responseContext.DeleteDeviceResponse = await client.Devices.DeleteDevice(deviceId);
+        _responseContext.WhenResponse = await client.Devices.DeleteDevice(deviceId);
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a DELETE request to the /Devices/{{id}} endpoint with a non existent id")]
     public async Task WhenDeviceSendsADeleteRequestToTheDeviceIdEndpointWithNonExistentId(string deviceName)
     {
         var client = _clientPool.GetForDeviceName(deviceName);
-        _responseContext.WhenResponse = _responseContext.DeleteDeviceResponse = await client.Devices.DeleteDevice(NON_EXISTENT_DEVICE_ID);
+        _responseContext.WhenResponse = await client.Devices.DeleteDevice(NON_EXISTENT_DEVICE_ID);
     }
 
     #endregion

@@ -66,14 +66,13 @@ internal class TokensStepDefinitions
     public async Task WhenIdentitySendsAPostRequestToTheTokensEndpoint(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        _responseContext.WhenResponse = _responseContext.CreateTokenResponse = await client.Tokens.CreateToken(new CreateTokenRequest { Content = CONTENT, ExpiresAt = TOMORROW });
+        _responseContext.WhenResponse = await client.Tokens.CreateToken(new CreateTokenRequest { Content = CONTENT, ExpiresAt = TOMORROW });
     }
 
     [When("an anonymous user sends a POST request is sent to the Tokens endpoint")]
     public async Task WhenAnAnonymousUserSendsAPOSTRequestIsSentToTheTokensEndpoint()
     {
-        _responseContext.WhenResponse = _responseContext.CreateTokenAnonymously =
-            await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { Content = CONTENT, ExpiresAt = TOMORROW });
+        _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { Content = CONTENT, ExpiresAt = TOMORROW });
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a GET request to the Tokens/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]
@@ -82,7 +81,7 @@ internal class TokensStepDefinitions
         var client = _clientPool.FirstForIdentityName(identityName);
         var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
 
-        _responseContext.WhenResponse = _responseContext.GetTokenResponse = await client.Tokens.GetToken(tokenId);
+        _responseContext.WhenResponse = await client.Tokens.GetToken(tokenId);
     }
 
     [When($"an anonymous user sends a GET request to the Tokens/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]
@@ -91,14 +90,14 @@ internal class TokensStepDefinitions
         var client = _clientPool.Anonymous;
         var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
 
-        _responseContext.WhenResponse = _responseContext.GetTokenResponse = await client.Tokens.GetToken(tokenId);
+        _responseContext.WhenResponse = await client.Tokens.GetToken(tokenId);
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a GET request to the Tokens/{{id}} endpoint with \"([^\"]*)\"")]
     public async Task WhenIdentitySendsAGetRequestToTheTokensIdEndpointWithNonExistingTokenId(string identityName, string nonExistingTokenId)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        _responseContext.WhenResponse = _responseContext.GetTokenResponse = await client.Tokens.GetToken(nonExistingTokenId);
+        _responseContext.WhenResponse = await client.Tokens.GetToken(nonExistingTokenId);
     }
 
     #endregion

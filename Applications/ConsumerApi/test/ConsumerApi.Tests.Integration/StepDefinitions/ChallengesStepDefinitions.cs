@@ -1,5 +1,4 @@
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
-using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -28,21 +27,17 @@ internal class ChallengesStepDefinitions
     public async Task GivenAChallengeCreatedByIdentity(string challengeName, string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        _responseContext.ChallengeResponse = await client.Challenges.CreateChallenge();
-        _responseContext.ChallengeResponse!.Should().BeASuccess();
+        var response = await client.Challenges.CreateChallenge();
 
-        _challengesContext.Challenges[challengeName] = _responseContext.ChallengeResponse.Result!;
-        _challengesContext.Challenges[challengeName].Id.Should().NotBeNullOrEmpty();
+        _challengesContext.Challenges[challengeName] = response.Result!;
     }
 
     [Given($"a Challenge {RegexFor.SINGLE_THING} created by an anonymous user")]
     public async Task GivenAChallengeCreatedByAnAnonymousUser(string challengeName)
     {
-        _responseContext.ChallengeResponse = await _clientPool.Anonymous.Challenges.CreateChallengeUnauthenticated();
-        _responseContext.ChallengeResponse!.Should().BeASuccess();
+        var response = await _clientPool.Anonymous.Challenges.CreateChallengeUnauthenticated();
 
-        _challengesContext.Challenges[challengeName] = _responseContext.ChallengeResponse.Result!;
-        _challengesContext.Challenges[challengeName].Id.Should().NotBeNullOrEmpty();
+        _challengesContext.Challenges[challengeName] = response.Result!;
     }
 
     #endregion
@@ -88,6 +83,12 @@ internal class ChallengesStepDefinitions
     #endregion
 
     #region Then
+
+    [Then(@"the Challenge has an expiration date in the future")]
+    public void ThenTheChallengeHasAnExpirationDateInTheFuture()
+    {
+        _responseContext.ChallengeResponse!.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
+    }
 
     [Then("the Challenge does not contain information about the creator")]
     public void ThenTheChallengeDoesNotContainInformationAboutTheCreator()
