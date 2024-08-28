@@ -1,4 +1,5 @@
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,8 @@ public static class Dependencies
         services.ConfigureAndValidate<HttpConfiguration>(options => config.GetSection("Http").Bind(options));
 
         services.AddSingleton(new HttpClientFactory(new CustomWebApplicationFactory()));
+
+        services.AddScoped<ClientPool>();
 
         services.AddScoped<ChallengesContext>();
         services.AddScoped<IdentitiesContext>();

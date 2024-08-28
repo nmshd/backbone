@@ -1,5 +1,6 @@
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.ConsumerApi.Tests.Integration.Helpers;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -9,17 +10,15 @@ internal class ChallengesStepDefinitions
     #region Constructor, Fields, Properties
 
     private readonly ChallengesContext _challengesContext;
-    private readonly IdentitiesContext _identitiesContext;
     private readonly ResponseContext _responseContext;
+    private readonly ClientPool _clientPool;
 
-    public ChallengesStepDefinitions(ChallengesContext challengesContext, IdentitiesContext identitiesContext, ResponseContext responseContext)
+    public ChallengesStepDefinitions(ChallengesContext challengesContext, ResponseContext responseContext, ClientPool clientPool)
     {
         _challengesContext = challengesContext;
-        _identitiesContext = identitiesContext;
         _responseContext = responseContext;
+        _clientPool = clientPool;
     }
-
-    private ClientPool ClientPool => _identitiesContext.ClientPool;
 
     #endregion
 
@@ -28,7 +27,7 @@ internal class ChallengesStepDefinitions
     [Given("a Challenge ([a-zA-Z0-9]+) created by ([a-zA-Z0-9]+)")]
     public async Task GivenAChallengeCreatedByIdentity(string challengeName, string identityName)
     {
-        var client = ClientPool.FirstForIdentityName(identityName);
+        var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.ChallengeResponse = await client.Challenges.CreateChallenge();
         _responseContext.ChallengeResponse!.Should().BeASuccess();
 
@@ -39,7 +38,7 @@ internal class ChallengesStepDefinitions
     [Given(@"a Challenge ([a-zA-Z0-9]+)")]
     public async Task GivenAChallenge(string challengeName)
     {
-        var client = ClientPool.Default();
+        var client = _clientPool.Default();
         _responseContext.ChallengeResponse = await client!.Challenges.CreateChallengeUnauthenticated();
         _responseContext.ChallengeResponse!.Should().BeASuccess();
 
@@ -54,44 +53,44 @@ internal class ChallengesStepDefinitions
     [When("a POST request is sent to the /Challenges endpoint")]
     public async Task WhenAPostRequestIsSentToTheChallengesEndpoint()
     {
-        var client = ClientPool.Default();
+        var client = _clientPool.Default();
 
         _responseContext.WhenResponse = _responseContext.ChallengeResponse =
-            ClientPool.IsDefaultClientAuthenticated() ? await client!.Challenges.CreateChallenge() : await client!.Challenges.CreateChallengeUnauthenticated();
+            _clientPool.IsDefaultClientAuthenticated() ? await client!.Challenges.CreateChallenge() : await client!.Challenges.CreateChallengeUnauthenticated();
     }
 
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Challenges endpoint")]
     public async Task WhenIdentitySendsAPostRequestToTheChallengesEndpoint(string identityName)
     {
-        var client = ClientPool.FirstForIdentityName(identityName);
+        var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.CreateChallenge();
     }
 
     [When(@"([a-zA-Z0-9]+) sends a GET request to the /Challenges/{id} endpoint with a valid id ([a-zA-Z0-9]+)\.Id")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithAValidId(string identityName, string challengeName)
     {
-        var client = ClientPool.FirstForIdentityName(identityName);
+        var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
     }
 
     [When(@"([a-zA-Z0-9]+) sends a GET request to the /Challenges/{id} endpoint with a placeholder id ""?(.*?)""?")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithAPlaceholderId(string identityName, string challengeId)
     {
-        var client = ClientPool.FirstForIdentityName(identityName);
+        var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.GetChallenge(challengeId);
     }
 
     [When(@"i sends a GET request to the Challenges/\{id} endpoint with ([a-zA-Z0-9]+)\.Id")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithChallengeId(string challengeName)
     {
-        var client = ClientPool.FirstForDefaultIdentity();
+        var client = _clientPool.FirstForDefaultIdentity();
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client!.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
     }
 
     [When(@"i sends a GET request to the Challenges/\{id} endpoint with \""([a-zA-Z0-9]+)\""")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWith(string challengeId)
     {
-        var client = ClientPool.FirstForDefaultIdentity();
+        var client = _clientPool.FirstForDefaultIdentity();
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client!.Challenges.GetChallenge(challengeId);
     }
 

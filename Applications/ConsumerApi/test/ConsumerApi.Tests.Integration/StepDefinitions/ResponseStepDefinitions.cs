@@ -12,6 +12,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.ThrowHelpers;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -21,15 +22,15 @@ internal class ResponseStepDefinitions
 {
     #region Constructor, Fields, Properties
 
-    private readonly IdentitiesContext _identitiesContext;
     private readonly MessagesContext _messagesContext;
     private readonly ResponseContext _responseContext;
+    private readonly ClientPool _clientPool;
 
-    public ResponseStepDefinitions(IdentitiesContext identitiesContext, MessagesContext messagesContext, ResponseContext responseContext)
+    public ResponseStepDefinitions(MessagesContext messagesContext, ResponseContext responseContext, ClientPool clientPool)
     {
-        _identitiesContext = identitiesContext;
         _messagesContext = messagesContext;
         _responseContext = responseContext;
+        _clientPool = clientPool;
     }
 
     private IResponse? WhenResponse => _responseContext.WhenResponse;
@@ -87,7 +88,7 @@ internal class ResponseStepDefinitions
     {
         var errorData = _responseContext.SendMessageResponse!.Error!.Data?.As<PeersToBeDeletedErrorData>();
         errorData.Should().NotBeNull();
-        errorData!.PeersToBeDeleted.Contains(_identitiesContext.ClientPool.FirstForIdentityName(identityName).IdentityData!.Address).Should().BeTrue();
+        errorData!.PeersToBeDeleted.Contains(_clientPool.FirstForIdentityName(identityName).IdentityData!.Address).Should().BeTrue();
     }
 
     [Then(@"the response contains the Messages ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]

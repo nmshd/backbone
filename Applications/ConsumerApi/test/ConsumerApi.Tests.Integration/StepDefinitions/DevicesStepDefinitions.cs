@@ -2,6 +2,7 @@
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Microsoft.Extensions.Options;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.Utils;
 using static Backbone.ConsumerApi.Tests.Integration.Support.Constants;
@@ -19,21 +20,19 @@ internal class DevicesStepDefinitions
     private string? _communicationLanguage;
 
     private readonly ChallengesContext _challengesContext;
-    private readonly IdentitiesContext _identitiesContext;
     private readonly ResponseContext _responseContext;
+    private readonly ClientPool _clientPool;
 
-    public DevicesStepDefinitions(ChallengesContext challengesContext, IdentitiesContext identitiesContext, ResponseContext responseContext, HttpClientFactory factory,
-        IOptions<HttpConfiguration> httpConfiguration)
+    public DevicesStepDefinitions(ChallengesContext challengesContext, ResponseContext responseContext, HttpClientFactory factory,
+        IOptions<HttpConfiguration> httpConfiguration, ClientPool clientPool)
     {
         _httpClient = factory.CreateClient();
         _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
 
         _challengesContext = challengesContext;
-        _identitiesContext = identitiesContext;
         _responseContext = responseContext;
+        _clientPool = clientPool;
     }
-
-    private ClientPool ClientPool => _identitiesContext.ClientPool;
 
     #endregion
 
@@ -43,7 +42,7 @@ internal class DevicesStepDefinitions
     public async Task GivenAnIdentityWithADevice(string identityName, string deviceName)
     {
         var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
-        ClientPool.Add(client).ForIdentity(identityName).AndDevice(deviceName);
+        _clientPool.Add(client).ForIdentity(identityName).AndDevice(deviceName);
     }
 
     [Given(@"an Identity ([a-zA-Z0-9]+) with devices ([a-zA-Z0-9, ]+)")]
@@ -54,21 +53,21 @@ internal class DevicesStepDefinitions
         var deviceNames = SplitNames(deviceNamesString);
         var firstDeviceName = deviceNames.First();
 
-        ClientPool.Add(clientOfFirstDevice).ForIdentity(identityName).AndDevice(firstDeviceName);
+        _clientPool.Add(clientOfFirstDevice).ForIdentity(identityName).AndDevice(firstDeviceName);
 
         foreach (var deviceName in deviceNames.Skip(1))
         {
             var additionalDevice = await clientOfFirstDevice.OnboardNewDevice("Passw0rd");
-            ClientPool.Add(additionalDevice).ForIdentity(identityName).AndDevice(deviceName);
+            _clientPool.Add(additionalDevice).ForIdentity(identityName).AndDevice(deviceName);
         }
     }
 
     [Given("an un-onboarded device ([a-zA-Z0-9]+) that belongs to ([a-zA-Z0-9]+)")]
     public async Task GivenAnUnOnboardedDeviceThatBelongsToIdentity(string deviceName, string identityName)
     {
-        var existingClient = ClientPool.FirstForIdentityName(identityName);
+        var existingClient = _clientPool.FirstForIdentityName(identityName);
         var clientForUnOnboardedDevice = await existingClient.OnboardNewDevice("Passw0rd");
-        ClientPool.Add(clientForUnOnboardedDevice).ForIdentity(identityName).AndDevice(deviceName);
+        _clientPool.Add(clientForUnOnboardedDevice).ForIdentity(identityName).AndDevice(deviceName);
     }
 
     #endregion
@@ -78,7 +77,7 @@ internal class DevicesStepDefinitions
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Devices endpoint with a valid signature on ([a-zA-Z0-9]+)")]
     public async Task WhenIdentitySendsAPostRequestToTheDevicesEndpointWithASignedChallenge(string identityName, string challengeName)
     {
-        var identity = ClientPool.FirstForIdentityName(identityName);
+        var identity = _clientPool.FirstForIdentityName(identityName);
         var signedChallenge = CreateSignedChallenge(identity, _challengesContext.Challenges[challengeName]);
 
         _responseContext.WhenResponse = _responseContext.RegisterDeviceResponse = await identity.Devices.RegisterDevice(new RegisterDeviceRequest
@@ -94,7 +93,7 @@ internal class DevicesStepDefinitions
         _communicationLanguage = communicationLanguage;
         var request = new UpdateActiveDeviceRequest { CommunicationLanguage = _communicationLanguage };
 
-        var client = ClientPool.GetForDeviceName(deviceName);
+        var client = _clientPool.GetForDeviceName(deviceName);
         _responseContext.WhenResponse = _responseContext.UpdateDeviceResponse = await client.Devices.UpdateActiveDevice(request);
     }
 
@@ -102,14 +101,14 @@ internal class DevicesStepDefinitions
     public async Task WhenDeviceSendsAPutRequestToTheDeviceSelfEndpointWithAnInvalidPayload(string deviceName)
     {
         var request = new UpdateActiveDeviceRequest { CommunicationLanguage = "xz" };
-        var client = ClientPool.GetForDeviceName(deviceName);
+        var client = _clientPool.GetForDeviceName(deviceName);
         _responseContext.WhenResponse = _responseContext.UpdateDeviceResponse = await client.Devices.UpdateActiveDevice(request);
     }
 
     [When(@"([a-zA-Z0-9]+) sends a PUT request to the /Devices/Self/Password endpoint with the new password '([^']*)'")]
     public async Task WhenDeviceSendsAPutRequestToTheDevicesSelfPasswordEndpointWithTheNewPassword(string deviceName, string newPassword)
     {
-        var client = ClientPool.GetForDeviceName(deviceName);
+        var client = _clientPool.GetForDeviceName(deviceName);
 
         var oldPassword = client.DeviceData!.UserCredentials.Password;
         var request = new ChangePasswordRequest { OldPassword = oldPassword, NewPassword = newPassword };
@@ -120,9 +119,9 @@ internal class DevicesStepDefinitions
     [When("([a-zA-Z0-9]+) sends a DELETE request to the /Devices/{id} endpoint with ([a-zA-Z0-9]+).Id")]
     public async Task WhenDeviceSendsADeleteRequestToTheDeviceIdEndpointWithTheDeviceId(string senderDeviceName, string deviceName)
     {
-        var deviceId = ClientPool.GetForDeviceName(deviceName).DeviceData!.DeviceId;
+        var deviceId = _clientPool.GetForDeviceName(deviceName).DeviceData!.DeviceId;
 
-        var client = ClientPool.GetForDeviceName(senderDeviceName);
+        var client = _clientPool.GetForDeviceName(senderDeviceName);
 
         _responseContext.WhenResponse = _responseContext.DeleteDeviceResponse = await client.Devices.DeleteDevice(deviceId);
     }
@@ -130,7 +129,7 @@ internal class DevicesStepDefinitions
     [When("([a-zA-Z0-9]+) sends a DELETE request to the /Devices/{id} endpoint with a non existent id")]
     public async Task WhenDeviceSendsADeleteRequestToTheDeviceIdEndpointWithNonExistentId(string deviceName)
     {
-        var client = ClientPool.GetForDeviceName(deviceName);
+        var client = _clientPool.GetForDeviceName(deviceName);
         _responseContext.WhenResponse = _responseContext.DeleteDeviceResponse = await client.Devices.DeleteDevice(NON_EXISTENT_DEVICE_ID);
     }
 
@@ -141,10 +140,10 @@ internal class DevicesStepDefinitions
     [Then("([a-zA-Z0-9]+) is deleted")]
     public async Task ThenDeviceIsDeleted(string deviceName)
     {
-        var deviceId = ClientPool.GetForDeviceName(deviceName).DeviceData!.DeviceId;
+        var deviceId = _clientPool.GetForDeviceName(deviceName).DeviceData!.DeviceId;
 
-        var clientOfDeletedDevice = ClientPool.GetForDeviceName(deviceName);
-        var clientOfOtherDevice = ClientPool.FirstForIdentityAddress(clientOfDeletedDevice.IdentityData!.Address);
+        var clientOfDeletedDevice = _clientPool.GetForDeviceName(deviceName);
+        var clientOfOtherDevice = _clientPool.FirstForIdentityAddress(clientOfDeletedDevice.IdentityData!.Address);
 
         var response = await clientOfOtherDevice.Devices.ListDevices();
         response.Result!.Count.Should().Be(1);
@@ -154,10 +153,10 @@ internal class DevicesStepDefinitions
     [Then("([a-zA-Z0-9]+) is not deleted")]
     public async Task ThenDeviceIsNotDeleted(string deviceName)
     {
-        var identityName = ClientPool.GetIdentityForDevice(deviceName)!;
-        var deviceId = ClientPool.GetForDeviceName(deviceName).DeviceData!.DeviceId;
+        var identityName = _clientPool.GetIdentityForDevice(deviceName)!;
+        var deviceId = _clientPool.GetForDeviceName(deviceName).DeviceData!.DeviceId;
 
-        var client = ClientPool.FirstForIdentityName(identityName);
+        var client = _clientPool.FirstForIdentityName(identityName);
 
         var response = await client.Devices.ListDevices();
         response.Result!.Where(d => d.Id == deviceId).Should().NotBeEmpty();
@@ -166,7 +165,7 @@ internal class DevicesStepDefinitions
     [Then(@"the Backbone has persisted '(de|en|pt)' as the new communication language of ([a-zA-Z0-9]+)\.")]
     public async Task ThenTheBackboneHasPersistedAsTheNewCommunicationLanguageOfDevice(string communicationLanguage, string deviceName)
     {
-        var client = ClientPool.GetForDeviceName(deviceName);
+        var client = _clientPool.GetForDeviceName(deviceName);
 
         var response = await client.Devices.ListDevices();
         response.Result!.Count.Should().Be(1);

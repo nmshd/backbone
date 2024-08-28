@@ -1,4 +1,5 @@
 ﻿using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Requests;
+using Backbone.ConsumerApi.Tests.Integration.Helpers;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -7,16 +8,14 @@ internal class DatawalletStepDefinitions
 {
     #region Constructor, Fields, Properties
 
-    private readonly IdentitiesContext _identitiesContext;
     private readonly ResponseContext _responseContext;
+    private readonly ClientPool _clientPool;
 
-    public DatawalletStepDefinitions(IdentitiesContext identitiesContext, ResponseContext responseContext)
+    public DatawalletStepDefinitions(ResponseContext responseContext, ClientPool clientPool)
     {
-        _identitiesContext = identitiesContext;
         _responseContext = responseContext;
+        _clientPool = clientPool;
     }
-
-    private ClientPool ClientPool => _identitiesContext.ClientPool;
 
     #endregion
 
@@ -25,7 +24,7 @@ internal class DatawalletStepDefinitions
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Datawallet/Modifications endpoint with a DatawalletModification in the payload")]
     public async Task WhenIdentitySendsAPostRequestToDatawalletModificationsEndpointWithADatawalletModificationInThePayload(string identityName)
     {
-        var client = ClientPool.FirstForIdentityName(identityName);
+        var client = _clientPool.FirstForIdentityName(identityName);
 
         var pushDatawalletModificationsRequestItem = new PushDatawalletModificationsRequestItem
         {

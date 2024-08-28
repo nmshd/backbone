@@ -1,4 +1,5 @@
 ﻿using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
+using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using static Backbone.ConsumerApi.Tests.Integration.Support.Constants;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -6,19 +7,19 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 [Binding]
 internal class FilesStepDefinitions
 {
-    private readonly IdentitiesContext _identitiesContext;
     private readonly ResponseContext _responseContext;
+    private readonly ClientPool _clientPool;
 
-    public FilesStepDefinitions(IdentitiesContext identitiesContext, ResponseContext responseContext)
+    public FilesStepDefinitions(ResponseContext responseContext, ClientPool clientPool)
     {
-        _identitiesContext = identitiesContext;
         _responseContext = responseContext;
+        _clientPool = clientPool;
     }
 
     [When("([a-zA-Z0-9]+) sends a POST request to the /Files endpoint")]
     public async Task WhenIdentitySendsAPostRequestToTheFilesEndpoint(string identityName)
     {
-        var identity = _identitiesContext.ClientPool.FirstForIdentityName(identityName);
+        var identity = _clientPool.FirstForIdentityName(identityName);
 
         var createFileRequest = new CreateFileRequest
         {

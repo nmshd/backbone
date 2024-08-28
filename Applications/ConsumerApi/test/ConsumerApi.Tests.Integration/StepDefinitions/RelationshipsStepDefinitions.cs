@@ -2,6 +2,7 @@
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
+using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.Tooling.Extensions;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.Utils;
 using AcceptRelationshipRequest = Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests.AcceptRelationshipRequest;
@@ -15,18 +16,16 @@ internal class RelationshipsStepDefinitions
 {
     #region Constructor, Fields, Properties
 
-    private readonly IdentitiesContext _identitiesContext;
     private readonly RelationshipsContext _relationshipsContext;
     private readonly ResponseContext _responseContext;
+    private readonly ClientPool _clientPool;
 
-    public RelationshipsStepDefinitions(IdentitiesContext identitiesContext, RelationshipsContext relationshipsContext, ResponseContext responseContext)
+    public RelationshipsStepDefinitions(RelationshipsContext relationshipsContext, ResponseContext responseContext, ClientPool clientPool)
     {
-        _identitiesContext = identitiesContext;
         _relationshipsContext = relationshipsContext;
         _responseContext = responseContext;
+        _clientPool = clientPool;
     }
-
-    private ClientPool ClientPool => _identitiesContext.ClientPool;
 
     private static CreateRelationshipTemplateRequest CreateRelationshipTemplateRequest => new() { Content = "AAA".GetBytes() };
     private static CreateRelationshipRequest CreateRelationshipRequest(string relationshipTemplateId) => new() { RelationshipTemplateId = relationshipTemplateId, Content = "AAA".GetBytes() };
@@ -41,7 +40,7 @@ internal class RelationshipsStepDefinitions
     [Given("a Relationship Template rt created by ([a-zA-Z0-9]+)")]
     public async Task GivenARelationshipTemplateCreatedByIdentity(string identityName)
     {
-        var client = ClientPool.FirstForIdentityName(identityName);
+        var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.CreateRelationshipTemplateResponse = await client.RelationshipTemplates.CreateTemplate(CreateRelationshipTemplateRequest);
     }
 
@@ -49,8 +48,8 @@ internal class RelationshipsStepDefinitions
     public async Task GivenARelationshipInStatusBetweenIdentityAndIdentityCreatedByIdentity(string relationshipName, string relationshipStatus, string participant1, string participant2,
         string identityName)
     {
-        var relationshipCreator = ClientPool.FirstForIdentityName(identityName);
-        var relationshipParticipant = ClientPool.FirstForIdentityName(identityName == participant1 ? participant2 : participant1);
+        var relationshipCreator = _clientPool.FirstForIdentityName(identityName);
+        var relationshipParticipant = _clientPool.FirstForIdentityName(identityName == participant1 ? participant2 : participant1);
 
         _relationshipsContext.Relationships[relationshipName] = relationshipStatus switch
         {
@@ -64,7 +63,7 @@ internal class RelationshipsStepDefinitions
     [Given(@"a Relationship ([a-zA-Z0-9]+) between ([a-zA-Z0-9]+) and ([a-zA-Z0-9]+)")]
     public async Task GivenARelationshipBetweenIdentityAndIdentity(string relationshipName, string identity1Name, string identity2Name)
     {
-        var relationship = await EstablishRelationshipBetween(ClientPool.FirstForIdentityName(identity1Name), ClientPool.FirstForIdentityName(identity2Name));
+        var relationship = await EstablishRelationshipBetween(_clientPool.FirstForIdentityName(identity1Name), _clientPool.FirstForIdentityName(identity2Name));
         _relationshipsContext.Relationships[relationshipName] = relationship;
     }
 
@@ -72,7 +71,7 @@ internal class RelationshipsStepDefinitions
     public async Task GivenRelationshipIsTerminated(string terminatorName, string relationshipName)
     {
         var relationship = _relationshipsContext.Relationships[relationshipName];
-        var terminator = ClientPool.FirstForIdentityName(terminatorName);
+        var terminator = _clientPool.FirstForIdentityName(terminatorName);
 
         _responseContext.TerminateRelationshipResponse = await terminator.Relationships.TerminateRelationship(relationship.Id);
         _responseContext.TerminateRelationshipResponse.Should().BeASuccess();
@@ -82,7 +81,7 @@ internal class RelationshipsStepDefinitions
     public async Task GivenIdentityHasDecomposedItsRelationshipToIdentity(string decomposerName, string relationshipName)
     {
         var relationship = _relationshipsContext.Relationships[relationshipName];
-        var decomposer = ClientPool.FirstForIdentityName(decomposerName);
+        var decomposer = _clientPool.FirstForIdentityName(decomposerName);
 
         _responseContext.DecomposeRelationshipResponse = await decomposer.Relationships.DecomposeRelationship(relationship.Id);
         _responseContext.DecomposeRelationshipResponse.Should().BeASuccess();
@@ -97,7 +96,7 @@ internal class RelationshipsStepDefinitions
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Relationships endpoint with rt.id")]
     public async Task WhenIdentitySendsAPostRequestToTheRelationshipsEndpointWithRelationshipTemplatetId(string identityName)
     {
-        var client = ClientPool.FirstForIdentityName(identityName);
+        var client = _clientPool.FirstForIdentityName(identityName);
         var relationshipTemplateId = _responseContext.CreateRelationshipTemplateResponse!.Result!.Id;
 
         _responseContext.WhenResponse = _responseContext.CreateRelationshipResponse = await client.Relationships.CreateRelationship(CreateRelationshipRequest(relationshipTemplateId));
@@ -106,7 +105,7 @@ internal class RelationshipsStepDefinitions
     [When(@"([a-zA-Z0-9]+) sends a POST request to the /Relationships/{([a-zA-Z0-9]+).Id}/(Accept|Reject|Revoke) endpoint")]
     public async Task WhenIdentitySendsAPostRequestToTheRelationshipsIdEndpoint(string identityName, string relationshipName, string requestType)
     {
-        var client = ClientPool.FirstForIdentityName(identityName);
+        var client = _clientPool.FirstForIdentityName(identityName);
 
         _responseContext.WhenResponse = requestType switch
         {
@@ -123,9 +122,9 @@ internal class RelationshipsStepDefinitions
     [When("a GET request is sent to the /Relationships/CanCreate\\?peer={i.id} endpoint by ([a-zA-Z0-9]+) for ([a-zA-Z0-9]+)")]
     public async Task WhenAGetRequestIsSentToTheCanCreateEndpointByIdentityForIdentity(string identity1Name, string identity2Name)
     {
-        var client = ClientPool.FirstForIdentityName(identity1Name);
+        var client = _clientPool.FirstForIdentityName(identity1Name);
         _responseContext.WhenResponse = _responseContext.CanEstablishRelationshipResponse =
-            await client.Relationships.CanCreateRelationship(ClientPool.FirstForIdentityName(identity2Name).IdentityData!.Address);
+            await client.Relationships.CanCreateRelationship(_clientPool.FirstForIdentityName(identity2Name).IdentityData!.Address);
     }
 
     #endregion
