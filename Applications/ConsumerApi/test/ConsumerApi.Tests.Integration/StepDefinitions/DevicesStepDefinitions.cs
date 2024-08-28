@@ -132,7 +132,7 @@ internal class DevicesStepDefinitions
     public async Task WhenDeviceSendsADeleteRequestToTheDeviceIdEndpointWithNonExistentId(string deviceName)
     {
         var client = _clientPool.GetForDeviceName(deviceName);
-        _responseContext.WhenResponse = await client.Devices.DeleteDevice(NON_EXISTENT_DEVICE_ID);
+        _responseContext.WhenResponse = await client.Devices.DeleteDevice("DVC00000000000000000");
     }
 
     #endregion

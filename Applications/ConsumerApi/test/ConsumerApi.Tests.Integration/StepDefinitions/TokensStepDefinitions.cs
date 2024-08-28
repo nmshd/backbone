@@ -2,7 +2,6 @@
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using Backbone.Tooling.Extensions;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -12,8 +11,6 @@ internal class TokensStepDefinitions
     #region Constructor, Fields, Properties
 
     private static readonly DateTime TOMORROW = DateTime.Now.AddDays(1);
-
-    private static readonly byte[] CONTENT = "AAA".GetBytes();
 
     private readonly ResponseContext _responseContext;
     private readonly TokensContext _tokensContext;
@@ -37,7 +34,7 @@ internal class TokensStepDefinitions
         {
             var client = _clientPool.FirstForIdentityName(identityName);
 
-            var response = await client.Tokens.CreateToken(new CreateTokenRequest { Content = CONTENT, ExpiresAt = TOMORROW });
+            var response = await client.Tokens.CreateToken(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
             response.Should().BeASuccess();
 
             _tokensContext.CreateTokenResponses[tokenName] = response.Result!;
@@ -66,13 +63,13 @@ internal class TokensStepDefinitions
     public async Task WhenIdentitySendsAPostRequestToTheTokensEndpoint(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        _responseContext.WhenResponse = await client.Tokens.CreateToken(new CreateTokenRequest { Content = CONTENT, ExpiresAt = TOMORROW });
+        _responseContext.WhenResponse = await client.Tokens.CreateToken(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
     }
 
     [When("an anonymous user sends a POST request is sent to the /Tokens endpoint")]
     public async Task WhenAnAnonymousUserSendsAPOSTRequestIsSentToTheTokensEndpoint()
     {
-        _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { Content = CONTENT, ExpiresAt = TOMORROW });
+        _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a GET request to the Tokens/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]

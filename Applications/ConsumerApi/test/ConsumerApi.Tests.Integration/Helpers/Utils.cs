@@ -9,7 +9,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
-using Backbone.Tooling.Extensions;
 using Backbone.UnitTestTools.Data;
 using Newtonsoft.Json;
 
@@ -32,7 +31,7 @@ public static class Utils
     {
         var createRelationshipTemplateRequest = new CreateRelationshipTemplateRequest
         {
-            Content = "AAA".GetBytes()
+            Content = TestData.SOME_BYTES
         };
 
         var relationshipTemplateResponse = await client1.RelationshipTemplates.CreateTemplate(createRelationshipTemplateRequest);
@@ -41,7 +40,7 @@ public static class Utils
         var createRelationshipRequest = new CreateRelationshipRequest
         {
             RelationshipTemplateId = relationshipTemplateResponse.Result!.Id,
-            Content = "AAA".GetBytes()
+            Content = TestData.SOME_BYTES
         };
 
         var createRelationshipResponse = await client2.Relationships.CreateRelationship(createRelationshipRequest);
@@ -59,7 +58,7 @@ public static class Utils
 
         var acceptRelationshipRequest = new AcceptRelationshipRequest
         {
-            CreationResponseContent = "AAA".GetBytes()
+            CreationResponseContent = TestData.SOME_BYTES
         };
 
         var acceptRelationshipResponse = await client1.Relationships.AcceptRelationship(pendingRelationship.Id, acceptRelationshipRequest);
@@ -77,7 +76,7 @@ public static class Utils
 
         var rejectRelationshipRequest = new RejectRelationshipRequest
         {
-            CreationResponseContent = "AAA".GetBytes()
+            CreationResponseContent = TestData.SOME_BYTES
         };
 
         var rejectRelationshipResponse = await client1.Relationships.RejectRelationship(relationshipMetadata.Id, rejectRelationshipRequest);

@@ -3,7 +3,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using Backbone.Tooling.Extensions;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.Utils;
 using AcceptRelationshipRequest = Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests.AcceptRelationshipRequest;
 using RejectRelationshipRequest = Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests.RejectRelationshipRequest;
@@ -27,12 +26,6 @@ internal class RelationshipsStepDefinitions
         _clientPool = clientPool;
     }
 
-    private static CreateRelationshipTemplateRequest CreateRelationshipTemplateRequest => new() { Content = "AAA".GetBytes() };
-    private static CreateRelationshipRequest CreateRelationshipRequest(string relationshipTemplateId) => new() { RelationshipTemplateId = relationshipTemplateId, Content = "AAA".GetBytes() };
-    private static AcceptRelationshipRequest AcceptRelationshipRequest => new() { CreationResponseContent = "AAA".GetBytes() };
-    private static RejectRelationshipRequest RejectRelationshipRequest => new() { CreationResponseContent = "AAA".GetBytes() };
-    private static RevokeRelationshipRequest RevokeRelationshipRequest => new() { CreationResponseContent = "AAA".GetBytes() };
-
     #endregion
 
     #region Given
@@ -41,7 +34,8 @@ internal class RelationshipsStepDefinitions
     public async Task GivenARelationshipTemplateCreatedByIdentity(string templateName, string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        _relationshipsContext.CreateRelationshipTemplateResponses[templateName] = (await client.RelationshipTemplates.CreateTemplate(CreateRelationshipTemplateRequest)).Result!;
+        _relationshipsContext.CreateRelationshipTemplateResponses[templateName] =
+            (await client.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES })).Result!;
     }
 
     [Given($"a pending Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
@@ -109,7 +103,8 @@ internal class RelationshipsStepDefinitions
         var client = _clientPool.FirstForIdentityName(identityName);
         var relationshipTemplateId = _relationshipsContext.CreateRelationshipTemplateResponses[templateName].Id;
 
-        _responseContext.WhenResponse = await client.Relationships.CreateRelationship(CreateRelationshipRequest(relationshipTemplateId));
+        _responseContext.WhenResponse =
+            await client.Relationships.CreateRelationship(new CreateRelationshipRequest { RelationshipTemplateId = relationshipTemplateId, Content = TestData.SOME_BYTES });
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/(Accept|Reject|Revoke) endpoint")]
@@ -119,9 +114,12 @@ internal class RelationshipsStepDefinitions
 
         _responseContext.WhenResponse = requestType switch
         {
-            "Accept" => await client.Relationships.AcceptRelationship(_relationshipsContext.Relationships[relationshipName].Id, AcceptRelationshipRequest),
-            "Reject" => await client.Relationships.RejectRelationship(_relationshipsContext.Relationships[relationshipName].Id, RejectRelationshipRequest),
-            "Revoke" => await client.Relationships.RevokeRelationship(_relationshipsContext.Relationships[relationshipName].Id, RevokeRelationshipRequest),
+            "Accept" => await client.Relationships.AcceptRelationship(_relationshipsContext.Relationships[relationshipName].Id,
+                new AcceptRelationshipRequest { CreationResponseContent = TestData.SOME_BYTES }),
+            "Reject" => await client.Relationships.RejectRelationship(_relationshipsContext.Relationships[relationshipName].Id,
+                new RejectRelationshipRequest { CreationResponseContent = TestData.SOME_BYTES }),
+            "Revoke" => await client.Relationships.RevokeRelationship(_relationshipsContext.Relationships[relationshipName].Id,
+                new RevokeRelationshipRequest { CreationResponseContent = TestData.SOME_BYTES }),
             _ => throw new NotSupportedException($"Unsupported request type: {requestType}")
         };
     }

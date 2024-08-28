@@ -1,7 +1,6 @@
 ﻿using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using static Backbone.ConsumerApi.Tests.Integration.Support.Constants;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -26,10 +25,10 @@ internal class FilesStepDefinitions
         {
             Content = new MemoryStream("content"u8.ToArray()),
             Owner = identity.IdentityData!.Address,
-            OwnerSignature = SOME_BASE64_STRING,
-            CipherHash = SOME_BASE64_STRING,
+            OwnerSignature = TestData.SOME_BASE64_STRING,
+            CipherHash = TestData.SOME_BASE64_STRING,
             ExpiresAt = DateTime.UtcNow.AddDays(1),
-            EncryptedProperties = SOME_BASE64_STRING
+            EncryptedProperties = TestData.SOME_BASE64_STRING
         };
 
         _responseContext.WhenResponse = await identity.Files.UploadFile(createFileRequest);
