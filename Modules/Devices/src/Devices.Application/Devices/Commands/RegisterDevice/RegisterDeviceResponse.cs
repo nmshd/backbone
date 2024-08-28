@@ -1,11 +1,19 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 
 public class RegisterDeviceResponse
 {
-    public required DeviceId Id { get; set; }
-    public required string Username { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required DeviceId CreatedByDevice { get; set; }
+    public RegisterDeviceResponse(ApplicationUser user)
+    {
+        Id = user.DeviceId;
+        Username = user.UserName!;
+        CreatedByDevice = user.Device.CreatedByDevice;
+        CreatedAt = user.Device.CreatedAt;
+    }
+
+    public string Id { get; set; }
+    public string Username { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public string CreatedByDevice { get; set; }
 }

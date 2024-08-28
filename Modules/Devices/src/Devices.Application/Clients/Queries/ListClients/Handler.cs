@@ -1,5 +1,3 @@
-using AutoMapper;
-using Backbone.Modules.Devices.Application.Clients.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
@@ -8,18 +6,19 @@ namespace Backbone.Modules.Devices.Application.Clients.Queries.ListClients;
 public class Handler : IRequestHandler<ListClientsQuery, ListClientsResponse>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;
-    private readonly IMapper _mapper;
 
-    public Handler(IOAuthClientsRepository oAuthClientsRepository, IMapper mapper)
+    public Handler(IOAuthClientsRepository oAuthClientsRepository)
     {
         _oAuthClientsRepository = oAuthClientsRepository;
-        _mapper = mapper;
     }
+
     public async Task<ListClientsResponse> Handle(ListClientsQuery request, CancellationToken cancellationToken)
     {
-        var clients = await _oAuthClientsRepository.FindAll(cancellationToken);
-        var clientDtos = _mapper.Map<IEnumerable<ClientDTO>>(clients);
+        var clients = (await _oAuthClientsRepository.FindAll(cancellationToken)).ToList();
 
-        return new ListClientsResponse(clientDtos);
+        var clientIds = clients.Select(c => c.ClientId).ToList();
+        var numberOfIdentitiesByClient = await _oAuthClientsRepository.CountIdentities(clientIds, cancellationToken);
+
+        return new ListClientsResponse(clients, numberOfIdentitiesByClient);
     }
 }

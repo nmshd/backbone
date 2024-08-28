@@ -55,7 +55,20 @@ class _IdentityDetailsState extends State<IdentityDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (kIsDesktop) const BackButton(),
+            if (kIsDesktop)
+              Row(
+                children: [
+                  const BackButton(),
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () async {
+                      await _reloadIdentity();
+                      await _reloadTiers();
+                    },
+                    tooltip: context.l10n.reload,
+                  ),
+                ],
+              ),
             _IdentityDetailsCard(
               identityDetails: identityDetails,
               selectedTier: _selectedTier,
@@ -154,20 +167,8 @@ class _IdentityDetailsCard extends StatelessWidget {
               spacing: 8,
               runSpacing: 8,
               children: [
-                EntityDetails(
-                  title: context.l10n.clientID,
-                  value: identityDetails.clientId,
-                ),
-                EntityDetails(
-                  title: context.l10n.identityDetails_card_publicKey,
-                  value: identityDetails.publicKey.ellipsize(20),
-                  onIconPressed: () => context.setClipboardDataWithSuccessNotification(
-                    clipboardText: identityDetails.publicKey,
-                    successMessage: context.l10n.identityDetails_card_publicKey_copyToClipboardMessage,
-                  ),
-                  icon: Icons.copy,
-                  tooltipMessage: context.l10n.identityDetails_card_publicKey_tooltipMessage,
-                ),
+                CopyableEntityDetails(title: context.l10n.clientID, value: identityDetails.clientId),
+                CopyableEntityDetails(title: context.l10n.identityDetails_card_publicKey, value: identityDetails.publicKey, ellipsize: 20),
                 EntityDetails(
                   title: context.l10n.createdAt,
                   value:

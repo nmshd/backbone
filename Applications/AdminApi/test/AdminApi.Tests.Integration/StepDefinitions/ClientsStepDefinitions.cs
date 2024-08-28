@@ -1,5 +1,4 @@
-﻿using Backbone.AdminApi.Sdk.Endpoints.Clients.Types;
-using Backbone.AdminApi.Sdk.Endpoints.Clients.Types.Requests;
+﻿using Backbone.AdminApi.Sdk.Endpoints.Clients.Types.Requests;
 using Backbone.AdminApi.Sdk.Endpoints.Clients.Types.Responses;
 using Backbone.AdminApi.Sdk.Endpoints.Tiers.Types.Requests;
 using Backbone.AdminApi.Tests.Integration.Configuration;
@@ -24,8 +23,8 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
     private int? _maxIdentities;
     private int? _updatedMaxIdentities;
     private ApiResponse<ListClientsResponse>? _getClientsResponse;
-    private ApiResponse<ClientInfo>? _changeClientSecretResponse;
-    private ApiResponse<ClientInfo>? _updateClientResponse;
+    private ApiResponse<ChangeClientSecretResponse>? _changeClientSecretResponse;
+    private ApiResponse<UpdateClientResponse>? _updateClientResponse;
     private ApiResponse<EmptyResponse>? _deleteResponse;
 
     public ClientsStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)

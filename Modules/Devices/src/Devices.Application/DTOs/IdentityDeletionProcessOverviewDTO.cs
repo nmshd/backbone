@@ -1,4 +1,3 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Application.DTOs;
@@ -17,7 +16,7 @@ public class IdentityDeletionProcessOverviewDTO
         ApprovalReminder3SentAt = process.ApprovalReminder3SentAt;
 
         ApprovedAt = process.ApprovedAt;
-        ApprovedByDevice = process.ApprovedByDevice;
+        ApprovedByDevice = process.ApprovedByDevice?.Value;
 
         GracePeriodEndsAt = process.GracePeriodEndsAt;
 
@@ -36,7 +35,7 @@ public class IdentityDeletionProcessOverviewDTO
     public DateTime? ApprovalReminder3SentAt { get; set; }
 
     public DateTime? ApprovedAt { get; set; }
-    public DeviceId? ApprovedByDevice { get; set; }
+    public string? ApprovedByDevice { get; set; }
 
     public DateTime? GracePeriodEndsAt { get; set; }
 

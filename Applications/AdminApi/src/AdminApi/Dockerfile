@@ -4,7 +4,7 @@
 # (see https://github.com/dotnet/dotnet-docker/discussions/4527).
 # They are copied from https://github.com/ubuntu-rocks/dotnet/issues/21
 ################################################################################################################
-FROM golang:1.22 AS chisel
+FROM golang:1.23 AS chisel
 
 RUN git clone --depth 1 -b main https://github.com/canonical/chisel /opt/chisel
 WORKDIR /opt/chisel
@@ -88,7 +88,7 @@ RUN dotnet publish /p:UseAppHost=false --no-restore --configuration Release --ou
 RUN dotnet publish --configuration Release --output /app/publish/health "/src/Applications/HealthCheck/src/HealthCheck.csproj"
 
 #### Build Flutter Admin UI ####
-FROM ghcr.io/cirruslabs/flutter:3.24.0 AS flutter-build-env
+FROM ghcr.io/cirruslabs/flutter:3.24.1 AS flutter-build-env
 
 COPY Applications/AdminUi /src
 WORKDIR /src
@@ -98,7 +98,7 @@ WORKDIR /src/apps/admin_ui
 RUN flutter build web --output /build
 
 #### Final #####
-FROM mcr.microsoft.com/dotnet/aspnet:8.0.7-jammy-chiseled
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.8-jammy-chiseled
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD [ "dotnet", "/app/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]
