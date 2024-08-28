@@ -92,15 +92,6 @@ public class Client
         return new Client(httpClient, configuration, null, null);
     }
 
-    public static Client CreateForExistingIdentity(Client clientForExistingIdentity)
-    {
-        return CreateForExistingIdentity(
-            clientForExistingIdentity._httpClient,
-            clientForExistingIdentity._configuration.Authentication.ClientCredentials,
-            clientForExistingIdentity.DeviceData!.UserCredentials
-        );
-    }
-
     public static Client CreateForExistingIdentity(string baseUrl, ClientCredentials clientCredentials, UserCredentials userCredentials)
     {
         return CreateForExistingIdentity(new HttpClient { BaseAddress = new Uri(baseUrl) }, clientCredentials, userCredentials);
@@ -148,6 +139,7 @@ public class Client
 
         var client = new Client(httpClient, configuration, deviceData, identityData);
 
+        // Run a datawallet version upgrade sync run to create a datawallet for the identity
         var syncRun = await client.SyncRuns.StartSyncRun(new StartSyncRunRequest { Type = SyncRunType.DatawalletVersionUpgrade, Duration = 30 }, 1);
         await client.SyncRuns.FinalizeDatawalletVersionUpgrade(syncRun.Result!.SyncRun.Id, new FinalizeDatawalletVersionUpgradeRequest { DatawalletModifications = [], NewDatawalletVersion = 1 });
 
