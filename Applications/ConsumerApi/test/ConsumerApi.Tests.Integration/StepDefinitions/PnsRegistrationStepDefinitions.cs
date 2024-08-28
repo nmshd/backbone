@@ -1,4 +1,5 @@
 ﻿using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Requests;
+using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;

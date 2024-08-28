@@ -1,6 +1,6 @@
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;

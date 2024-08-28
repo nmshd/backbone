@@ -1,5 +1,5 @@
 ﻿using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
-using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
+using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.Tooling.Extensions;
@@ -118,9 +118,4 @@ internal class TokensStepDefinitions
     }
 
     #endregion
-}
-
-public class TokensContext
-{
-    public Dictionary<string, CreateTokenResponse> CreateTokenResponses { get; } = new();
 }

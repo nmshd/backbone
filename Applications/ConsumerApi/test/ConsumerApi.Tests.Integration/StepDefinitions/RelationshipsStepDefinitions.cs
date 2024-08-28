@@ -1,6 +1,6 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
-using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
+﻿using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
+using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.Tooling.Extensions;
@@ -128,9 +128,4 @@ internal class RelationshipsStepDefinitions
     }
 
     #endregion
-}
-
-public class RelationshipsContext
-{
-    public readonly Dictionary<string, Relationship> Relationships = new();
 }

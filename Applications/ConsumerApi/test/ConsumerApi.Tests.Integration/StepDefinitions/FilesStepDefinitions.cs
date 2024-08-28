@@ -1,4 +1,5 @@
 ﻿using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
+using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using static Backbone.ConsumerApi.Tests.Integration.Support.Constants;
 

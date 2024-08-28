@@ -4,6 +4,7 @@ using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
@@ -106,9 +107,4 @@ internal class IdentitiesStepDefinitions
         var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
         _clientPool.Add(client).ForIdentity(identityName);
     }
-}
-
-public class IdentitiesContext
-{
-    public readonly Dictionary<string, string> ActiveDeletionProcesses = new();
 }

@@ -1,5 +1,5 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
-using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
+﻿using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
+using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Backbone.Crypto;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
@@ -91,11 +91,6 @@ internal class MessagesStepDefinitions
     }
 
     #endregion
-}
-
-public class MessagesContext
-{
-    public readonly Dictionary<string, Message> Messages = new();
 }
 
 public class PeersToBeDeletedErrorData

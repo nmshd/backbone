@@ -1,4 +1,5 @@
 ﻿using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Requests;
+using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -43,8 +44,4 @@ internal class DatawalletStepDefinitions
     }
 
     #endregion
-}
-
-public class DatawalletContext
-{
 }

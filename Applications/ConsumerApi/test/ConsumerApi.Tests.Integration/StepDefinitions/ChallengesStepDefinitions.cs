@@ -1,4 +1,4 @@
-using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
+using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 
@@ -111,9 +111,4 @@ internal class ChallengesStepDefinitions
     }
 
     #endregion
-}
-
-public class ChallengesContext
-{
-    public readonly Dictionary<string, Challenge> Challenges = new();
 }

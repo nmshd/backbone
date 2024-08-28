@@ -2,6 +2,7 @@
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using Microsoft.Extensions.Options;
 using static Backbone.ConsumerApi.Tests.Integration.Helpers.Utils;
