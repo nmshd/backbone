@@ -24,7 +24,7 @@ internal class ChallengesStepDefinitions
 
     #region Given
 
-    [Given("a Challenge ([a-zA-Z0-9]+) created by ([a-zA-Z0-9]+)")]
+    [Given($"a Challenge {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
     public async Task GivenAChallengeCreatedByIdentity(string challengeName, string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
@@ -35,7 +35,7 @@ internal class ChallengesStepDefinitions
         _challengesContext.Challenges[challengeName].Id.Should().NotBeNullOrEmpty();
     }
 
-    [Given(@"a Challenge ([a-zA-Z0-9]+) created by an anonymous user")]
+    [Given($"a Challenge {RegexFor.SINGLE_THING} created by an anonymous user")]
     public async Task GivenAChallengeCreatedByAnAnonymousUser(string challengeName)
     {
         _responseContext.ChallengeResponse = await _clientPool.Anonymous.Challenges.CreateChallengeUnauthenticated();
@@ -57,39 +57,32 @@ internal class ChallengesStepDefinitions
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.CreateChallengeUnauthenticated();
     }
 
-    [When(@"([a-zA-Z0-9]+) sends a POST request to the /Challenges endpoint")]
+    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Challenges endpoint")]
     public async Task WhenIdentitySendsAPostRequestToTheChallengesEndpoint(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.CreateChallenge();
     }
 
-    [When(@"([a-zA-Z0-9]+) sends a GET request to the /Challenges/{id} endpoint with a valid id ([a-zA-Z0-9]+)\.Id")]
+    [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Challenges/{{id}} endpoint with a valid id {RegexFor.SINGLE_THING}.Id")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithAValidId(string identityName, string challengeName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
     }
 
-    [When(@"([a-zA-Z0-9]+) sends a GET request to the /Challenges/{id} endpoint with a placeholder id ""?(.*?)""?")]
-    public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithAPlaceholderId(string identityName, string challengeId)
+    [When($"{RegexFor.SINGLE_THING} sends a GET request to the Challenges/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]
+    public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithChallengeId(string identityName, string challengeName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
+    }
+
+    [When($"{RegexFor.SINGLE_THING} sends a GET request to the Challenges/{{id}} endpoint with \"{RegexFor.SINGLE_THING}\"")]
+    public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWith(string identityName, string challengeId)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.GetChallenge(challengeId);
-    }
-
-    [When(@"i sends a GET request to the Challenges/\{id} endpoint with ([a-zA-Z0-9]+)\.Id")]
-    public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithChallengeId(string challengeName)
-    {
-        var client = _clientPool.FirstForDefaultIdentity();
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client!.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
-    }
-
-    [When(@"i sends a GET request to the Challenges/\{id} endpoint with \""([a-zA-Z0-9]+)\""")]
-    public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWith(string challengeId)
-    {
-        var client = _clientPool.FirstForDefaultIdentity();
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client!.Challenges.GetChallenge(challengeId);
     }
 
     #endregion
