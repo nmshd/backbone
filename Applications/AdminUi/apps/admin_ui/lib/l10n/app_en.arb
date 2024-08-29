@@ -142,6 +142,8 @@
     "deletionProcessAuditLogsDetails_title": "Deletion Process Audit Logs",
     "deletionProcessAuditLogsDetails_title_description": "Identity",
     "deletionProcessAuditLogsDetails_noDataFound": "No deletion process audit logs found.",
+    "errorScreen_goToHome": "Go to Home",
+    "errorScreen_404NotFound": "404 Not Found",
     "identityDetails_card_identityClipboardMessage": "Identity address copied to clipboard.",
     "identityDetails_card_publicKey": "Public Key",
     "identityDetails_card_publicKey_tooltipMessage": "Copy public key",
