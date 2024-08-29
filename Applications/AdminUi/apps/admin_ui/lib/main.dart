@@ -43,6 +43,11 @@ final _router = GoRouter(
       path: '/login',
       builder: (context, state) => LoginScreen(redirect: state.uri.queryParameters['redirect']),
     ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/error',
+      builder: (context, state) => ErrorScreen(errorMessage: state.extra as String),
+    ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       parentNavigatorKey: _rootNavigatorKey,
@@ -87,7 +92,7 @@ final _router = GoRouter(
             GoRoute(
               parentNavigatorKey: _shellNavigatorKey,
               path: ':id',
-              pageBuilder: (context, state) => NoTransitionPage(child: TierDetail(tierId: state.pathParameters['id']!)),
+              pageBuilder: (context, state) => NoTransitionPage(child: TierDetail(tierId: 'abc')),
             ),
           ],
         ),
