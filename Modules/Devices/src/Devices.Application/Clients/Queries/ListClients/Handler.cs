@@ -1,4 +1,3 @@
-using Backbone.Modules.Devices.Application.Clients.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using MediatR;
 
@@ -12,6 +11,7 @@ public class Handler : IRequestHandler<ListClientsQuery, ListClientsResponse>
     {
         _oAuthClientsRepository = oAuthClientsRepository;
     }
+
     public async Task<ListClientsResponse> Handle(ListClientsQuery request, CancellationToken cancellationToken)
     {
         var clients = (await _oAuthClientsRepository.FindAll(cancellationToken)).ToList();
@@ -19,6 +19,6 @@ public class Handler : IRequestHandler<ListClientsQuery, ListClientsResponse>
         var clientIds = clients.Select(c => c.ClientId).ToList();
         var numberOfIdentitiesByClient = await _oAuthClientsRepository.CountIdentities(clientIds, cancellationToken);
 
-        return new ListClientsResponse(clients.Select(client => new ClientDTO(client, numberOfIdentitiesByClient[client.ClientId])).ToList());
+        return new ListClientsResponse(clients, numberOfIdentitiesByClient);
     }
 }

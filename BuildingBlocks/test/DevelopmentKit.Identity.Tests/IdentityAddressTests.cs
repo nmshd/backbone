@@ -71,6 +71,14 @@ public class IdentityAddressTests : AbstractTestsBase
     }
 
     [Fact]
+    public void DashesAreAllowedCharactersInDomainNames()
+    {
+        var isValid = IdentityAddress.IsValid("did:e:bkb-nmshd-preprod.nbpdev.de:dids:a75bf465d17e972367a986");
+
+        isValid.Should().BeTrue();
+    }
+
+    [Fact]
     public void AddressesWithInvalidChecksumAreDeclined()
     {
         var testData = TestData.WithInvalidChecksum();
