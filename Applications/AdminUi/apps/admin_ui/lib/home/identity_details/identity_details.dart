@@ -2,6 +2,7 @@ import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
@@ -109,12 +110,21 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   }
 
   Future<void> _reloadIdentity() async {
-    final identityDetails = await GetIt.I.get<AdminApiClient>().identities.getIdentity(widget.address);
-    if (mounted) {
-      setState(() {
-        _identityDetails = identityDetails.data;
-        _selectedTier = _identityDetails!.tierId;
-      });
+    try {
+      final identityDetails = await GetIt.I.get<AdminApiClient>().identities.getIdentity(widget.address);
+
+      if (mounted) {
+        setState(() {
+          _identityDetails = identityDetails.data;
+          _selectedTier = _identityDetails!.tierId;
+        });
+      }
+    } catch (e) {
+      final errorMessage = e.toString().split(':')[2].trim();
+
+      if (mounted) {
+        context.go('/error', extra: errorMessage);
+      }
     }
   }
 

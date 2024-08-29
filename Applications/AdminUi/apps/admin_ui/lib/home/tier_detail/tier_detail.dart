@@ -3,6 +3,7 @@ import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 
 import '/core/core.dart';
 
@@ -83,8 +84,19 @@ class _TierDetailState extends State<TierDetail> {
   }
 
   Future<void> _reload() async {
-    final tierDetails = await GetIt.I.get<AdminApiClient>().tiers.getTier(widget.tierId);
-    if (mounted) setState(() => _tierDetails = tierDetails.data);
+    try {
+      final tierDetails = await GetIt.I.get<AdminApiClient>().tiers.getTier(widget.tierId);
+
+      if (mounted) {
+        setState(() => _tierDetails = tierDetails.data);
+      }
+    } catch (e) {
+      final errorMessage = e.toString().split(':')[2].trim();
+
+      if (mounted) {
+        context.go('/error', extra: errorMessage);
+      }
+    }
   }
 }
 
