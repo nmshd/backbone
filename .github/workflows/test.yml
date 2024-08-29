@@ -292,7 +292,11 @@ jobs:
 
       - name: Install runtime dependencies
         working-directory: ./runtime
-        run: npm install
+        run: npm ci
+
+      - name: Build
+        run: npm run build:node
+        working-directory: ./runtime
 
       - name: Run transport Tests
         working-directory: ./runtime/packages/transport
