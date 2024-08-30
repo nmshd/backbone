@@ -11,35 +11,96 @@ using static Backbone.ConsumerApi.Tests.Integration.Helpers.Utils;
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
+[Scope(Feature = "POST Message")]
+[Scope(Feature = "GET Messages")]
 internal class MessagesStepDefinitions
 {
-    #region Constructor, Fields, Properties
+    private readonly ClientCredentials _clientCredentials;
+    private readonly HttpClient _httpClient;
 
-    private readonly MessagesContext _messagesContext;
-    private readonly ResponseContext _responseContext;
-    private readonly ClientPool _clientPool;
-
+    private readonly Dictionary<string, Client> _identities = new();
+    private readonly Dictionary<string, Relationship> _relationships = new();
+    private readonly Dictionary<string, Message> _messages = new();
     private ApiResponse<ListMessagesResponse>? _getMessagesResponse;
     private ApiResponse<SendMessageResponse>? _sendMessageResponse;
 
-    public MessagesStepDefinitions(MessagesContext messagesContext, ResponseContext responseContext, ClientPool clientPool)
+    public MessagesStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
     {
-        _messagesContext = messagesContext;
-        _responseContext = responseContext;
-        _clientPool = clientPool;
+        _httpClient = factory.CreateClient();
+        _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
     }
-
-    #endregion
 
     #region Given
 
-    [Given($"{RegexFor.SINGLE_THING} has sent a Message {RegexFor.SINGLE_THING} to {RegexFor.LIST_OF_THINGS}")]
-    public async Task GivenIdentityHasSentMessageToIdentity(string senderName, string messageName, string recipientNames)
+    [Given(@"Identities (i[a-zA-Z0-9]*) and (i[a-zA-Z0-9]*)")]
+    public void Given2Identities(string identity1Name, string identity2Name)
     {
-        var sender = _clientPool.FirstForIdentityName(senderName);
-        var recipients = _clientPool.GetAllForIdentityNames(SplitNames(recipientNames));
+        _identities[identity1Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
+        _identities[identity2Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
+    }
 
-        _messagesContext.Messages[messageName] = await SendMessage(sender, recipients);
+    [Given(@"Identities (i[a-zA-Z0-9]*), (i[a-zA-Z0-9]*) and (i[a-zA-Z0-9]*)")]
+    public void Given3Identities(string identity1Name, string identity2Name, string identity3Name)
+    {
+        _identities[identity1Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
+        _identities[identity2Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
+        _identities[identity3Name] = Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD).Result;
+    }
+
+    [Given(@"a Relationship (r[a-zA-Z0-9]*) between (i[a-zA-Z0-9]*) and (i[a-zA-Z0-9]*)")]
+    public async Task GivenARelationshipRBetweenIAndI(string relationshipName, string identity1Name, string identity2Name)
+    {
+        var relationship = await Utils.EstablishRelationshipBetween(_identities[identity1Name], _identities[identity2Name]);
+        _relationships[relationshipName] = relationship;
+    }
+
+    [Given(@"(i[a-zA-Z0-9]*) has sent a Message (m[a-zA-Z0-9]*) to (i[a-zA-Z0-9]*)")]
+    public async Task GivenIHasSentMessageTo1Recipient(string senderName, string messageName, string recipientName)
+    {
+        var sender = _identities[senderName];
+        var recipient = _identities[recipientName];
+
+        _messages[messageName] = await Utils.SendMessage(sender, recipient);
+    }
+
+    [Given(@"(i[a-zA-Z0-9]*) has sent a Message (m[a-zA-Z0-9]*) to (i[a-zA-Z0-9]*) and (i[a-zA-Z0-9]*)")]
+    public async Task GivenIHasSentMessageTo2Recipients(string senderName, string messageName, string recipient1Name, string recipient2Name)
+    {
+        var sender = _identities[senderName];
+        var recipient1 = _identities[recipient1Name];
+        var recipient2 = _identities[recipient2Name];
+
+        _messages[messageName] = await Utils.SendMessage(sender, recipient1, recipient2);
+    }
+
+    [Given(@"(i[a-zA-Z0-9]*) has terminated (r[a-zA-Z0-9]*)")]
+    public async Task GivenRIsTerminated(string terminatorName, string relationshipName)
+    {
+        var relationship = _relationships[relationshipName];
+        var terminator = _identities[terminatorName];
+
+        var terminateRelationshipResponse = await terminator.Relationships.TerminateRelationship(relationship.Id);
+        terminateRelationshipResponse.Should().BeASuccess();
+    }
+
+    [Given(@"(i[a-zA-Z0-9]*) has decomposed (r[a-zA-Z0-9]*)")]
+    public async Task GivenIHasDecomposedItsRelationshipToI(string decomposerName, string relationshipName)
+    {
+        var decomposer = _identities[decomposerName];
+        var relationship = _relationships[relationshipName];
+
+        var decomposeRelationshipResponse = await decomposer.Relationships.DecomposeRelationship(relationship.Id);
+        decomposeRelationshipResponse.Should().BeASuccess();
+
+        await Task.Delay(500);
+    }
+
+    [Given("(i[a-zA-Z0-9]*) is in status \"ToBeDeleted\"")]
+    public async Task GivenIdentityIIsToBeDeleted(string identityName)
+    {
+        var identity = _identities[identityName];
+        var startDeletionProcessResponse = await identity.Identities.StartDeletionProcess();
+        startDeletionProcessResponse.Should().BeASuccess();
     }
 
     #endregion
@@ -49,14 +110,16 @@ internal class MessagesStepDefinitions
     [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Messages endpoint")]
     public async Task WhenIdentitySendsAGetRequestToTheMessagesEndpoint(string senderName)
     {
-        var sender = _clientPool.FirstForIdentityName(senderName);
-        _responseContext.WhenResponse = _getMessagesResponse = await sender.Messages.ListMessages();
+        var sender = _identities[senderName];
+        var getMessagesResponse = await sender.Messages.ListMessages();
+        _whenResponse = _getMessagesResponse = getMessagesResponse;
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Messages endpoint with {RegexFor.SINGLE_THING} as recipient")]
     public async Task WhenIdentitySendsAPostRequestToTheMessagesEndpoint(string senderIdentityName, string recipientIdentityName)
     {
-        var recipientAddress = _clientPool.FirstForIdentityName(recipientIdentityName).IdentityData!.Address;
+        var sender = _identities[senderName];
+        var recipient = _identities[recipientName];
 
         var sendMessageRequest = new SendMessageRequest
         {
@@ -83,7 +146,7 @@ internal class MessagesStepDefinitions
     [Then($"the address of the recipient {RegexFor.SINGLE_THING} is anonymized")]
     public void ThenTheAddressOfTheRecipientIsAnonymized(string anonymizedIdentityName)
     {
-        var addressOfIdentityThatShouldBeAnonymized = _clientPool.FirstForIdentityName(anonymizedIdentityName).IdentityData!.Address;
+        var addressOfIdentityThatShouldBeAnonymized = _identities[anonymizedIdentityName].IdentityData!.Address;
 
         ThrowIfNull(_getMessagesResponse);
 
@@ -130,11 +193,10 @@ internal class MessagesStepDefinitions
     [Then(@"the response does not contain the Message ([a-zA-Z0-9]+)")]
     public void ThenTheResponseDoesNotContainTheMessage(string messageName)
     {
-        var message = _messagesContext.Messages[messageName];
-
-        ThrowIfNull(_getMessagesResponse);
-
-        _getMessagesResponse.Result.Should().NotContain(m => m.Id == message.Id);
+        var includedIdentity = _identities[includedIdentityName];
+        var data = _sendMessageResponse!.Error!.Data?.As<PeersToBeDeletedErrorData>();
+        data.Should().NotBeNull();
+        data!.PeersToBeDeleted.Contains(includedIdentity.IdentityData!.Address).Should().BeTrue();
     }
 
     #endregion
