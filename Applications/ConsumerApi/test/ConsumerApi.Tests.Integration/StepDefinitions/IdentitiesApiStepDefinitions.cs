@@ -66,7 +66,7 @@ internal class IdentitiesApiStepDefinitions
         _startDeletionProcessResponse = await _sdk.Identities.StartDeletionProcess();
     }
 
-    [When("a PUT request is sent to the /Identities/Self/DeletionProcesses/{d.id}/Approve endpoint with a non-existent deletionProcessId")]
+    [When("a PUT request is sent to the /Identities/Self/DeletionProcesses/{id}/Approve endpoint with a non-existent deletionProcessId")]
     public async Task WhenAPutRequestIsSentToTheIdentitiesSelfDeletionProcessesIdApproveEndpointWithANonExistentDeletionProcessId()
     {
         _approveDeletionProcessResponse = await _sdk.Identities.ApproveDeletionProcess("IDPSomeNonExistentId");
