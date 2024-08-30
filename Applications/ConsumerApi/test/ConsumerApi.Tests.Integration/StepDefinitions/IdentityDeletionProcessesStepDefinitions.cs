@@ -1,5 +1,4 @@
 ﻿using Backbone.ConsumerApi.Tests.Integration.Contexts;
-using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -47,8 +46,7 @@ internal class IdentityDeletionProcessesStepDefinitions
     public async Task GivenIdentityIsToBeDeleted(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        _responseContext.StartDeletionProcessResponse = await client.Identities.StartDeletionProcess();
-        _responseContext.StartDeletionProcessResponse.Should().BeASuccess();
+        await client.Identities.StartDeletionProcess();
     }
 
     #endregion
@@ -69,6 +67,17 @@ internal class IdentityDeletionProcessesStepDefinitions
 
         _responseContext.WhenResponse = _responseContext.CancelDeletionProcessResponse =
             await client.Identities.CancelDeletionProcess(_identitiesContext.StartDeletionProcessResponses[deletionProcessName].Id);
+    }
+
+    #endregion
+
+
+    #region Then
+
+    [Then($"the new status of {RegexFor.SINGLE_THING} is '([a-zA-Z]+)'")]
+    public void ThenTheNewStatusOfTheDeletionProcessIs(string deletionProcessName, string newDeletionProcessStatus)
+    {
+        _responseContext.CancelDeletionProcessResponse!.Result!.Status.Should().Be(newDeletionProcessStatus);
     }
 
     #endregion

@@ -5,7 +5,7 @@ Identity gets all its Messages
 
     Scenario: Getting all Messages
         Given Identities i1 and i2
-        And a Relationship r12 between i1 and i2
+        And an active Relationship r12 between i1 and i2
         And i1 has sent a Message m1 to i2
         And i2 has sent a Message m2 to i1
         When i1 sends a GET request to the /Messages endpoint
@@ -14,8 +14,8 @@ Identity gets all its Messages
 
     Scenario: Getting all Messages as sender after it has decomposed the Relationship
         Given Identities i1, i2 and i3
-        And a Relationship r12 between i1 and i2
-        And a Relationship r13 between i1 and i3
+        And an active Relationship r12 between i1 and i2
+        And an active Relationship r13 between i1 and i3
         And i1 has sent a Message m to i2 and i3
         And i1 has terminated r12
         And i1 has decomposed r12
@@ -26,8 +26,8 @@ Identity gets all its Messages
 
     Scenario: Getting all Messages as sender after a recipient has decomposed the Relationship
         Given Identities i1, i2 and i3
-        And a Relationship r12 between i1 and i2
-        And a Relationship r13 between i1 and i3
+        And an active Relationship r12 between i1 and i2
+        And an active Relationship r13 between i1 and i3
         And i1 has sent a Message m to i2 and i3
         And i2 has terminated r12
         And i2 has decomposed r12
@@ -37,8 +37,8 @@ Identity gets all its Messages
 
     Scenario: Getting all Messages as sender after Relationship with one recipient is fully decomposed
         Given Identities i1, i2 and i3
-        And a Relationship r12 between i1 and i2
-        And a Relationship r13 between i1 and i3
+        And an active Relationship r12 between i1 and i2
+        And an active Relationship r13 between i1 and i3
         And i1 has sent a Message m to i2 and i3
         And i1 has terminated r12
         And i1 has decomposed r12
@@ -50,8 +50,8 @@ Identity gets all its Messages
 
     Scenario: Getting all Messages as sender after it has decomposed Relationships with all recipients
         Given Identities i1, i2 and i3
-        And a Relationship r12 between i1 and i2
-        And a Relationship r13 between i1 and i3
+        And an active Relationship r12 between i1 and i2
+        And an active Relationship r13 between i1 and i3
         And i1 has sent a Message m to i2 and i3
         And i1 has terminated r12
         And i1 has decomposed r12
@@ -63,8 +63,8 @@ Identity gets all its Messages
 
     Scenario: Getting all Messages as recipient after it has decomposed its Relationship with the sender
         Given Identities i1, i2 and i3
-        And a Relationship r12 between i1 and i2
-        And a Relationship r13 between i1 and i3
+        And an active Relationship r12 between i1 and i2
+        And an active Relationship r13 between i1 and i3
         And i1 has sent a Message m to i2 and i3
         And i2 has terminated r12
         And i2 has decomposed r12
@@ -74,8 +74,8 @@ Identity gets all its Messages
 
     Scenario: Getting all Messages as recipient after other recipient's Relationship with the sender is fully decomposed
         Given Identities i1, i2 and i3
-        And a Relationship r12 between i1 and i2
-        And a Relationship r13 between i1 and i3
+        And an active Relationship r12 between i1 and i2
+        And an active Relationship r13 between i1 and i3
         And i1 has sent a Message m to i2 and i3
         And i1 has terminated r12
         And i1 has decomposed r12
@@ -86,8 +86,8 @@ Identity gets all its Messages
 
     Scenario: Getting all Messages as sender after all Relationships are fully decomposed
         Given Identities i1, i2 and i3
-        And a Relationship r12 between i1 and i2
-        And a Relationship r13 between i1 and i3
+        And an active Relationship r12 between i1 and i2
+        And an active Relationship r13 between i1 and i3
         And i1 has sent a Message m to i2 and i3
         And i1 has terminated r12
         And i1 has decomposed r12

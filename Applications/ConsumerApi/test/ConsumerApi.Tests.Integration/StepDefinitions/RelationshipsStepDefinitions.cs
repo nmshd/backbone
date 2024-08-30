@@ -65,13 +65,6 @@ internal class RelationshipsStepDefinitions
         _relationshipsContext.Relationships[relationshipName] = await EstablishRelationshipBetween(participant2, participant1);
     }
 
-    [Given($"a Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
-    public async Task GivenARelationshipBetweenIdentityAndIdentity(string relationshipName, string identity1Name, string identity2Name)
-    {
-        var relationship = await EstablishRelationshipBetween(_clientPool.FirstForIdentityName(identity1Name), _clientPool.FirstForIdentityName(identity2Name));
-        _relationshipsContext.Relationships[relationshipName] = relationship;
-    }
-
     [Given($"{RegexFor.SINGLE_THING} has terminated {RegexFor.SINGLE_THING}")]
     public async Task GivenRelationshipIsTerminated(string terminatorName, string relationshipName)
     {
@@ -123,6 +116,8 @@ internal class RelationshipsStepDefinitions
             _ => throw new NotSupportedException($"Unsupported request type: {requestType}")
         };
     }
+
+    // TODO: remove i.id from the step definition
 
     [When($"a GET request is sent to the /Relationships/CanCreate\\?peer={{i.id}} endpoint by {RegexFor.SINGLE_THING} for {RegexFor.SINGLE_THING}")]
     public async Task WhenAGetRequestIsSentToTheCanCreateEndpointByIdentityForIdentity(string identity1Name, string identity2Name)

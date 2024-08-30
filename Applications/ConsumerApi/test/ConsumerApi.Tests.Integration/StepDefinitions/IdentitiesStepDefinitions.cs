@@ -59,17 +59,6 @@ internal class IdentitiesStepDefinitions
         }
     }
 
-    [Given($"Identities {RegexFor.SINGLE_THING}{RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}{RegexFor.SINGLE_THING} with an established Relationship")]
-    public async Task GivenIdentitiesWithAnEstablishedRelationship(string identity1Name, string identity2Name)
-    {
-        var client1 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
-        _clientPool.Add(client1).ForIdentity(identity1Name);
-        var client2 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
-        _clientPool.Add(client2).ForIdentity(identity2Name);
-
-        await EstablishRelationshipBetween(_clientPool.FirstForIdentityName(identity1Name), _clientPool.FirstForIdentityName(identity2Name));
-    }
-
     #endregion
 
     #region When
