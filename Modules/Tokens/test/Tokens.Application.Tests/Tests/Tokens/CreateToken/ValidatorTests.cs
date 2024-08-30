@@ -9,29 +9,17 @@ using Xunit;
 namespace Backbone.Modules.Tokens.Application.Tests.Tests.Tokens.CreateToken;
 public class ValidatorTests : AbstractTestsBase
 {
-    [Fact]
-    public void Happy_Path_with_ForIdentity()
+    [Theory]
+    [InlineData("did:e:prod.enmeshed.eu:dids:70cf4f3e6edf6bca33d35f")]
+    [InlineData(null)]
+    public void Happy_Path(string identityAddress)
     {
         // Arrange
         var validator = new Validator();
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand() { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = TestDataGenerator.CreateRandomIdentityAddress() });
-
-        // Assert
-        validationResult.ShouldNotHaveAnyValidationErrors();
-    }
-
-    [Fact]
-    public void Happy_Path_without_ForIdentity()
-    {
-        // Arrange
-        var validator = new Validator();
-
-        // Act
-        var validationResult = validator.TestValidate(
-            new CreateTokenCommand() { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1) });
+            new CreateTokenCommand() { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = identityAddress});
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
