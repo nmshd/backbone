@@ -1,4 +1,6 @@
-﻿using Backbone.ConsumerApi.Tests.Integration.Contexts;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
+using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
@@ -11,6 +13,8 @@ internal class IdentityDeletionProcessesStepDefinitions
     private readonly IdentitiesContext _identitiesContext;
     private readonly ResponseContext _responseContext;
     private readonly ClientPool _clientPool;
+
+    private ApiResponse<CancelDeletionProcessResponse>? _cancelDeletionProcessResponse;
 
     public IdentityDeletionProcessesStepDefinitions(IdentitiesContext identitiesContext, ResponseContext responseContext, ClientPool clientPool)
     {
@@ -57,7 +61,7 @@ internal class IdentityDeletionProcessesStepDefinitions
     public async Task WhenIdentitySendsAPostRequestToTheIdentitiesSelfDeletionProcessesEndpoint(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        _responseContext.WhenResponse = _responseContext.StartDeletionProcessResponse = await client.Identities.StartDeletionProcess();
+        _responseContext.WhenResponse = await client.Identities.StartDeletionProcess();
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Identities/Self/DeletionProcesses/{RegexFor.SINGLE_THING}.Id endpoint")]
@@ -65,7 +69,7 @@ internal class IdentityDeletionProcessesStepDefinitions
     {
         var client = _clientPool.FirstForIdentityName(identityName);
 
-        _responseContext.WhenResponse = _responseContext.CancelDeletionProcessResponse =
+        _responseContext.WhenResponse = _cancelDeletionProcessResponse =
             await client.Identities.CancelDeletionProcess(_identitiesContext.StartDeletionProcessResponses[deletionProcessName].Id);
     }
 
@@ -77,7 +81,7 @@ internal class IdentityDeletionProcessesStepDefinitions
     [Then($"the new status of {RegexFor.SINGLE_THING} is '([a-zA-Z]+)'")]
     public void ThenTheNewStatusOfTheDeletionProcessIs(string deletionProcessName, string newDeletionProcessStatus)
     {
-        _responseContext.CancelDeletionProcessResponse!.Result!.Status.Should().Be(newDeletionProcessStatus);
+        _cancelDeletionProcessResponse!.Result!.Status.Should().Be(newDeletionProcessStatus);
     }
 
     #endregion

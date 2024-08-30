@@ -1,4 +1,6 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Tokens.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
@@ -15,6 +17,8 @@ internal class TokensStepDefinitions
     private readonly ResponseContext _responseContext;
     private readonly TokensContext _tokensContext;
     private readonly ClientPool _clientPool;
+
+    private ApiResponse<ListTokensResponse>? _listTokensResponse;
 
     public TokensStepDefinitions(ResponseContext responseContext, TokensContext tokensContext, ClientPool clientPool)
     {
@@ -52,10 +56,10 @@ internal class TokensStepDefinitions
 
         var tokenIds = Utils.SplitNames(tokenNames).Select(tokenName => _tokensContext.CreateTokenResponses[tokenName].Id).ToArray();
 
-        _responseContext.WhenResponse = _responseContext.ListTokensResponse = await client.Tokens.ListTokens(tokenIds);
+        _responseContext.WhenResponse = _listTokensResponse = await client.Tokens.ListTokens(tokenIds);
         _responseContext.WhenResponse.Should().NotBeNull();
 
-        var tokens = _responseContext.ListTokensResponse.Result!.ToArray();
+        var tokens = _listTokensResponse.Result!.ToArray();
         tokens.Should().HaveCount(tokenIds.Length);
     }
 
@@ -105,7 +109,7 @@ internal class TokensStepDefinitions
         var token1Id = _tokensContext.CreateTokenResponses[token1Name].Id;
         var token2Id = _tokensContext.CreateTokenResponses[token2Name].Id;
 
-        _responseContext.ListTokensResponse!.Result.Should()
+        _listTokensResponse!.Result.Should()
             .HaveCount(2).And
             .Contain(token => token.Id == token1Id).And
             .Contain(token => token.Id == token2Id);

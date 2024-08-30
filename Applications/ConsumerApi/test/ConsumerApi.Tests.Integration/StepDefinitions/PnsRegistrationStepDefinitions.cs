@@ -1,4 +1,6 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Requests;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 
@@ -9,6 +11,8 @@ internal class PnsRegistrationStepDefinitions
 {
     private readonly ResponseContext _responseContext;
     private readonly ClientPool _clientPool;
+
+    private ApiResponse<UpdateDeviceRegistrationResponse>? _updateDeviceRegistrationResponse;
 
     public PnsRegistrationStepDefinitions(ResponseContext responseContext, ClientPool clientPool)
     {
@@ -28,7 +32,7 @@ internal class PnsRegistrationStepDefinitions
             AppId = "someAppId"
         };
 
-        _responseContext.WhenResponse = _responseContext.UpdateDeviceRegistrationResponse =
+        _responseContext.WhenResponse = _updateDeviceRegistrationResponse =
             await _clientPool.FirstForIdentityName(identityName).PushNotifications.RegisterForPushNotifications(request);
     }
 
@@ -51,7 +55,7 @@ internal class PnsRegistrationStepDefinitions
     [Then("the response contains the push identifier for the device")]
     public void ThenTheResponseContainsThePushIdentifierForTheDevice()
     {
-        _responseContext.UpdateDeviceRegistrationResponse!.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();
+        _updateDeviceRegistrationResponse!.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();
     }
 
     #endregion

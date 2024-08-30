@@ -1,4 +1,6 @@
-﻿using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
@@ -18,6 +20,8 @@ internal class RelationshipsStepDefinitions
     private readonly RelationshipsContext _relationshipsContext;
     private readonly ResponseContext _responseContext;
     private readonly ClientPool _clientPool;
+
+    private ApiResponse<CanEstablishRelationshipResponse>? _canEstablishRelationshipResponse;
 
     public RelationshipsStepDefinitions(RelationshipsContext relationshipsContext, ResponseContext responseContext, ClientPool clientPool)
     {
@@ -80,8 +84,8 @@ internal class RelationshipsStepDefinitions
         var relationship = _relationshipsContext.Relationships[relationshipName];
         var decomposer = _clientPool.FirstForIdentityName(decomposerName);
 
-        _responseContext.DecomposeRelationshipResponse = await decomposer.Relationships.DecomposeRelationship(relationship.Id);
-        _responseContext.DecomposeRelationshipResponse.Should().BeASuccess();
+        var response = await decomposer.Relationships.DecomposeRelationship(relationship.Id);
+        response.Should().BeASuccess();
 
         await Task.Delay(500);
     }
@@ -123,7 +127,7 @@ internal class RelationshipsStepDefinitions
     public async Task WhenAGetRequestIsSentToTheCanCreateEndpointByIdentityForIdentity(string identity1Name, string identity2Name)
     {
         var client = _clientPool.FirstForIdentityName(identity1Name);
-        _responseContext.WhenResponse = _responseContext.CanEstablishRelationshipResponse =
+        _responseContext.WhenResponse = _canEstablishRelationshipResponse =
             await client.Relationships.CanCreateRelationship(_clientPool.FirstForIdentityName(identity2Name).IdentityData!.Address);
     }
 
@@ -134,15 +138,15 @@ internal class RelationshipsStepDefinitions
     [Then("a relationship can be established")]
     public void ThenARelationshipCanBeEstablished()
     {
-        if (_responseContext.CanEstablishRelationshipResponse != null)
-            _responseContext.CanEstablishRelationshipResponse.Result!.CanCreate.Should().BeTrue();
+        if (_canEstablishRelationshipResponse != null)
+            _canEstablishRelationshipResponse.Result!.CanCreate.Should().BeTrue();
     }
 
     [Then("a relationship can not be established")]
     public void ThenARelationshipCanNotBeEstablished()
     {
-        if (_responseContext.CanEstablishRelationshipResponse != null)
-            _responseContext.CanEstablishRelationshipResponse.Result!.CanCreate.Should().BeFalse();
+        if (_canEstablishRelationshipResponse != null)
+            _canEstablishRelationshipResponse.Result!.CanCreate.Should().BeFalse();
     }
 
     #endregion

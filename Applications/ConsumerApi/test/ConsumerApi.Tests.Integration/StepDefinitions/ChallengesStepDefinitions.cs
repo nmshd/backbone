@@ -1,3 +1,5 @@
+using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 
@@ -11,6 +13,8 @@ internal class ChallengesStepDefinitions
     private readonly ChallengesContext _challengesContext;
     private readonly ResponseContext _responseContext;
     private readonly ClientPool _clientPool;
+
+    private ApiResponse<Challenge>? _challengeResponse;
 
     public ChallengesStepDefinitions(ChallengesContext challengesContext, ResponseContext responseContext, ClientPool clientPool)
     {
@@ -49,35 +53,35 @@ internal class ChallengesStepDefinitions
     {
         var client = _clientPool.Anonymous;
 
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.CreateChallengeUnauthenticated();
+        _responseContext.WhenResponse = _challengeResponse = await client.Challenges.CreateChallengeUnauthenticated();
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Challenges endpoint")]
     public async Task WhenIdentitySendsAPostRequestToTheChallengesEndpoint(string identityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.CreateChallenge();
+        _responseContext.WhenResponse = _challengeResponse = await client.Challenges.CreateChallenge();
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Challenges/{{id}} endpoint with a valid id {RegexFor.SINGLE_THING}.Id")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithAValidId(string identityName, string challengeName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
+        _responseContext.WhenResponse = _challengeResponse = await client.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a GET request to the Challenges/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithChallengeId(string identityName, string challengeName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
+        _responseContext.WhenResponse = _challengeResponse = await client.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a GET request to the Challenges/{{id}} endpoint with \"{RegexFor.SINGLE_THING}\"")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWith(string identityName, string challengeId)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        _responseContext.WhenResponse = _responseContext.ChallengeResponse = await client.Challenges.GetChallenge(challengeId);
+        _responseContext.WhenResponse = _challengeResponse = await client.Challenges.GetChallenge(challengeId);
     }
 
     #endregion
@@ -87,21 +91,21 @@ internal class ChallengesStepDefinitions
     [Then(@"the Challenge has an expiration date in the future")]
     public void ThenTheChallengeHasAnExpirationDateInTheFuture()
     {
-        _responseContext.ChallengeResponse!.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
+        _challengeResponse!.Result!.ExpiresAt.Should().BeAfter(DateTime.UtcNow);
     }
 
     [Then("the Challenge does not contain information about the creator")]
     public void ThenTheChallengeDoesNotContainInformationAboutTheCreator()
     {
-        _responseContext.ChallengeResponse!.Result!.CreatedBy.Should().BeNull();
-        _responseContext.ChallengeResponse!.Result!.CreatedByDevice.Should().BeNull();
+        _challengeResponse!.Result!.CreatedBy.Should().BeNull();
+        _challengeResponse!.Result!.CreatedByDevice.Should().BeNull();
     }
 
     [Then("the Challenge contains information about the creator")]
     public void ThenTheChallengeContainsInformationAboutTheCreator()
     {
-        _responseContext.ChallengeResponse!.Result!.CreatedBy.Should().NotBeNull();
-        _responseContext.ChallengeResponse!.Result!.CreatedByDevice.Should().NotBeNull();
+        _challengeResponse!.Result!.CreatedBy.Should().NotBeNull();
+        _challengeResponse!.Result!.CreatedByDevice.Should().NotBeNull();
     }
 
     #endregion
