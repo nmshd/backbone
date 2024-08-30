@@ -1,5 +1,5 @@
 @Integration
-Feature: GET Token
+Feature: GET /Tokens/{id}
 
 User requests a Token
 

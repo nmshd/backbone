@@ -1,7 +1,7 @@
 ﻿@Integration
-Feature: UPDATE Device
+Feature: PUT /Devices/Self
 
-User updates a Device
+User updates its Device
 
     Scenario: Updating own Device with valid data
         Given an Identity i with a Device d

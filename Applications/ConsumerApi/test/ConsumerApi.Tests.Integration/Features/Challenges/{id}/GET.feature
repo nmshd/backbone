@@ -1,5 +1,5 @@
 @Integration
-Feature: GET Challenge
+Feature: GET /Challenges/{id}
 
 User requests a Challenge
 

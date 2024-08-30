@@ -1,5 +1,5 @@
 ﻿@Integration
-Feature: POST Message
+Feature: POST /Messages
 
 Identity sends a Message
 

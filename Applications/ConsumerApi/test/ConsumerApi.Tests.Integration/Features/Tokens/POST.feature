@@ -1,5 +1,5 @@
 @Integration
-Feature: POST Token
+Feature: POST /Tokens
 
 User creates a Token
 

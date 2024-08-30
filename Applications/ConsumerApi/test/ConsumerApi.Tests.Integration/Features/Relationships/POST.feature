@@ -1,5 +1,5 @@
 ﻿@Integration
-Feature: POST Relationships
+Feature: POST /Relationships
 
 User creates a Relationship
 

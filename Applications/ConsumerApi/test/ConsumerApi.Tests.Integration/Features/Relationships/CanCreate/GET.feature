@@ -1,5 +1,5 @@
 ﻿@Integration
-Feature: GET Relationships/CanCreate
+Feature: GET /Relationships/CanCreate
 
     Scenario: Two identities without a Relationship can create one
         Given Identities i1 and i2

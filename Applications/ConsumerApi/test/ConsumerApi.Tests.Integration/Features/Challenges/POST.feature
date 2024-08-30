@@ -1,5 +1,5 @@
 @Integration
-Feature: POST Challenge
+Feature: POST /Challenges
 
 User creates a Challenge
 

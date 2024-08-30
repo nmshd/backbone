@@ -1,5 +1,5 @@
 ﻿@Integration
-Feature: GET Messages
+Feature: GET /Messages
 
 Identity gets all its Messages
 

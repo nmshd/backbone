@@ -1,5 +1,5 @@
 @Integration
-Feature: POST Identities
+Feature: POST /Identities
 
 User creates an Identity
 

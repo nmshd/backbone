@@ -1,5 +1,5 @@
 @Integration
-Feature: POST /Devices/Self/PushNotification
+Feature: POST /Devices/Self/PushNotification/SendTestNotification
 
 User sends a test push notification
 

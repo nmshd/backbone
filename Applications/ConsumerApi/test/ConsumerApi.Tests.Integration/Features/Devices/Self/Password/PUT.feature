@@ -1,7 +1,7 @@
 ﻿@Integration
-Feature: Change Device Password
+Feature: PUT /Devices/Self/Password
 
-User updates a Device
+User changes its password
 
     Scenario: Changing own Device password
         Given an Identity i with a Device d

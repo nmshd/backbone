@@ -1,5 +1,5 @@
 @Integration
-Feature: POST Datawallet/Modifications
+Feature: POST /Datawallet/Modifications
 
 User pushes a Datawallet Modification
 

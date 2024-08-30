@@ -1,5 +1,5 @@
 @Integration
-Feature: GET Tokens
+Feature: GET /Tokens
 
 User requests multiple Tokens
 

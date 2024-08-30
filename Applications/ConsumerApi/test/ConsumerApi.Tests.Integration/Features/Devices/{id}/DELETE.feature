@@ -1,7 +1,7 @@
 @Integration
-Feature: DELETE Device
+Feature: DELETE /Devices/{id}
 
-User deletes an un-onboarded Device
+User deletes a Device
 
     Scenario: Deleting an un-onboarded Device
         Given an Identity i with a Device d1 and an unonboarded Device d2

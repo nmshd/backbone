@@ -1,5 +1,5 @@
 ﻿@Integration
-Feature: POST Relationships/{id}/Accept
+Feature: POST /Relationships/{id}/Accept
 
 User accepts a Relationship
 

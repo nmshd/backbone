@@ -1,5 +1,5 @@
 ﻿@Integration
-Feature: POST Relationships/{id}/Revoke
+Feature: POST /Relationships/{id}/Revoke
 
 User revokes a Relationship
 

@@ -1,5 +1,5 @@
 @Integration
-Feature: POST Device
+Feature: POST /Devices
 
 User creates a Device
 

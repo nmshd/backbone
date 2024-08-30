@@ -1,5 +1,5 @@
 ﻿@Integration
-Feature: POST Relationships/{id}/Reject
+Feature: POST /Relationships/{id}/Reject
 
 User rejects a Relationship
 
