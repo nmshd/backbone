@@ -13,7 +13,6 @@ public class RelationshipTemplateDTO
         ExpiresAt = relationshipTemplate.ExpiresAt;
         Content = relationshipTemplate.Content;
         CreatedAt = relationshipTemplate.CreatedAt;
-        DeletedAt = relationshipTemplate.DeletedAt;
     }
 
     public string Id { get; set; }
@@ -23,5 +22,4 @@ public class RelationshipTemplateDTO
     public DateTime? ExpiresAt { get; set; }
     public byte[]? Content { get; set; }
     public DateTime CreatedAt { get; set; }
-    public DateTime? DeletedAt { get; set; }
 }
