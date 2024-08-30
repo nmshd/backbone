@@ -31,14 +31,14 @@ class _IdentitiesTableState extends State<IdentitiesTable> {
         locale: locale,
         hideClientColumn: true,
         filter: IdentityOverviewFilter(clients: [widget.clientDetails!.clientId]),
-        navigateToIdentity: ({required String address}) => kIsDesktop ? context.push('/identities/$address') : context.go('/identities/$address'),
+        navigateToIdentity: ({required String address}) => context.push('/identities/$address'),
       );
     } else {
       _dataSource = IdentityDataTableSource(
         locale: locale,
         hideTierColumn: true,
         filter: IdentityOverviewFilter(tiers: [widget.tierDetails!.id]),
-        navigateToIdentity: ({required String address}) => kIsDesktop ? context.push('/identities/$address') : context.go('/identities/$address'),
+        navigateToIdentity: ({required String address}) => context.push('/identities/$address'),
       );
     }
   }
