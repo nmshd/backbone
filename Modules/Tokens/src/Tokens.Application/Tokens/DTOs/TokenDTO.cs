@@ -19,6 +19,8 @@ public class TokenDTO
     public string CreatedBy { get; set; }
     public string CreatedByDevice { get; set; }
 
+    public string? ForIdentity { get; set; }
+
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
 

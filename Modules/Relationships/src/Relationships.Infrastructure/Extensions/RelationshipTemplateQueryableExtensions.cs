@@ -26,9 +26,4 @@ public static class RelationshipTemplateQueryableExtensions
     {
         return query.Where(t => ids.Contains(t.Id));
     }
-
-    public static IQueryable<RelationshipTemplate> NotDeleted(this IQueryable<RelationshipTemplate> query)
-    {
-        return query.Where(t => !t.DeletedAt.HasValue);
-    }
 }

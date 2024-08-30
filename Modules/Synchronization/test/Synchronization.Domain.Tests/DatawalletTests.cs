@@ -108,6 +108,6 @@ public class DatawalletTests : AbstractTestsBase
     private static DatawalletModification AddModificationToDatawallet(Datawallet datawallet)
     {
         return datawallet.AddModification(DatawalletModificationType.Create, new Datawallet.DatawalletVersion(1), "aCollection", "anId", "aPayloadCategory", TestDataGenerator.CreateRandomBytes(),
-            TestDataGenerator.CreateRandomDeviceId(), "aBlobName");
+            TestDataGenerator.CreateRandomDeviceId());
     }
 }
