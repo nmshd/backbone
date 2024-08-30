@@ -76,7 +76,7 @@ internal class TokensStepDefinitions
         _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.CreateTokenUnauthenticated(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW });
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a GET request to the Tokens/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]
+    [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Tokens/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]
     public async Task WhenIdentitySendsAGetRequestToTheTokensIdEndpointWithTokenId(string identityName, string tokenName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
@@ -85,14 +85,14 @@ internal class TokensStepDefinitions
         _responseContext.WhenResponse = await client.Tokens.GetToken(tokenId);
     }
 
-    [When($"an anonymous user sends a GET request to the Tokens/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]
+    [When($"an anonymous user sends a GET request to the /Tokens/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]
     public async Task WhenAnAnonymousUserSendsAGetRequestToTheTokensIdEndpointWithTokenId(string tokenName)
     {
         var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
         _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.GetToken(tokenId);
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a GET request to the Tokens/{{id}} endpoint with \"([^\"]*)\"")]
+    [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Tokens/{{id}} endpoint with \"([^\"]*)\"")]
     public async Task WhenIdentitySendsAGetRequestToTheTokensIdEndpointWithNonExistingTokenId(string identityName, string nonExistingTokenId)
     {
         var client = _clientPool.FirstForIdentityName(identityName);

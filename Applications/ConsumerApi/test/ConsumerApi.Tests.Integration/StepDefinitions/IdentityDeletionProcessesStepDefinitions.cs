@@ -27,7 +27,7 @@ internal class IdentityDeletionProcessesStepDefinitions
 
     #region Given
 
-    [Given("no active deletion process for i exists")]
+    [Given("no active Identity Deletion Process for i exists")]
     public void GivenNoActiveDeletionProcessForIdentityExists()
     {
         // this step is only for readbility; since no deletion process exists, we don't need to do anything

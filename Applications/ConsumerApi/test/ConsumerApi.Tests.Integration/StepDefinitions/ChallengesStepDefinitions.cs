@@ -70,14 +70,14 @@ internal class ChallengesStepDefinitions
         _responseContext.WhenResponse = _challengeResponse = await client.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a GET request to the Challenges/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]
+    [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Challenges/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWithChallengeId(string identityName, string challengeName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         _responseContext.WhenResponse = _challengeResponse = await client.Challenges.GetChallenge(_challengesContext.Challenges[challengeName].Id);
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a GET request to the Challenges/{{id}} endpoint with \"{RegexFor.SINGLE_THING}\"")]
+    [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Challenges/{{id}} endpoint with \"{RegexFor.SINGLE_THING}\"")]
     public async Task WhenIdentitySendsAGetRequestToTheChallengesIdEndpointWith(string identityName, string challengeId)
     {
         var client = _clientPool.FirstForIdentityName(identityName);

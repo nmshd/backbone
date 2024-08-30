@@ -52,7 +52,7 @@ internal class PnsRegistrationStepDefinitions
 
     #region Then
 
-    [Then("the response contains the push identifier for the device")]
+    [Then("the response contains the push identifier for the Device")]
     public void ThenTheResponseContainsThePushIdentifierForTheDevice()
     {
         _updateDeviceRegistrationResponse!.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();

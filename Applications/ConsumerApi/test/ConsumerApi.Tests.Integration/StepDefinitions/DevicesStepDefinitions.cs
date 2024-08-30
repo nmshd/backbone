@@ -39,14 +39,14 @@ internal class DevicesStepDefinitions
 
     #region Given
 
-    [Given($"an Identity {RegexFor.SINGLE_THING} with a device {RegexFor.SINGLE_THING}")]
+    [Given($"an Identity {RegexFor.SINGLE_THING} with a Device {RegexFor.SINGLE_THING}")]
     public async Task GivenAnIdentityWithADevice(string identityName, string deviceName)
     {
         var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
         _clientPool.Add(client).ForIdentity(identityName).AndDevice(deviceName);
     }
 
-    [Given($"an Identity {RegexFor.SINGLE_THING} with a device {RegexFor.SINGLE_THING} and an unonboarded device {RegexFor.SINGLE_THING}")]
+    [Given($"an Identity {RegexFor.SINGLE_THING} with a Device {RegexFor.SINGLE_THING} and an unonboarded Device {RegexFor.SINGLE_THING}")]
     public async Task GivenAnIdentityWithADeviceAndAnUnonboardedDevice(string identityName, string onboardedDeviceName, string unonboardedDeviceName)
     {
         var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
@@ -55,7 +55,7 @@ internal class DevicesStepDefinitions
         _clientPool.Add(clientForUnOnboardedDevice).ForIdentity(identityName).AndDevice(unonboardedDeviceName);
     }
 
-    [Given($"an Identity {RegexFor.SINGLE_THING} with devices {RegexFor.LIST_OF_THINGS}")]
+    [Given($"an Identity {RegexFor.SINGLE_THING} with Devices {RegexFor.LIST_OF_THINGS}")]
     public async Task GivenAnIdentityWithDevices(string identityName, string deviceNamesString)
     {
         var clientOfFirstDevice = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);

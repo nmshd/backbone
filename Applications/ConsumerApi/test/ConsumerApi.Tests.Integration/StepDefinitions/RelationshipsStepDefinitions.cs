@@ -5,10 +5,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using static Backbone.ConsumerApi.Tests.Integration.Helpers.Utils;
-using AcceptRelationshipRequest = Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests.AcceptRelationshipRequest;
-using RejectRelationshipRequest = Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests.RejectRelationshipRequest;
-using RevokeRelationshipRequest = Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests.RevokeRelationshipRequest;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -48,7 +44,7 @@ internal class RelationshipsStepDefinitions
         var creator = _clientPool.FirstForIdentityName(creatorName);
         var peer = _clientPool.FirstForIdentityName(creatorName == participant1Name ? participant2Name : participant1Name);
 
-        _relationshipsContext.Relationships[relationshipName] = await CreatePendingRelationshipBetween(peer, creator);
+        _relationshipsContext.Relationships[relationshipName] = await Utils.CreatePendingRelationshipBetween(peer, creator);
     }
 
     [Given($"a rejected Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
@@ -57,7 +53,7 @@ internal class RelationshipsStepDefinitions
         var participant1 = _clientPool.FirstForIdentityName(participant1Address);
         var participant2 = _clientPool.FirstForIdentityName(participant2Address);
 
-        _relationshipsContext.Relationships[relationshipName] = await CreateRejectedRelationshipBetween(participant2, participant1);
+        _relationshipsContext.Relationships[relationshipName] = await Utils.CreateRejectedRelationshipBetween(participant2, participant1);
     }
 
     [Given($"an active Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
@@ -66,7 +62,7 @@ internal class RelationshipsStepDefinitions
         var participant1 = _clientPool.FirstForIdentityName(participant1Address);
         var participant2 = _clientPool.FirstForIdentityName(participant2Address);
 
-        _relationshipsContext.Relationships[relationshipName] = await EstablishRelationshipBetween(participant2, participant1);
+        _relationshipsContext.Relationships[relationshipName] = await Utils.EstablishRelationshipBetween(participant2, participant1);
     }
 
     [Given($"{RegexFor.SINGLE_THING} has terminated {RegexFor.SINGLE_THING}")]
@@ -121,28 +117,26 @@ internal class RelationshipsStepDefinitions
         };
     }
 
-    // TODO: remove i.id from the step definition
-
-    [When($"a GET request is sent to the /Relationships/CanCreate\\?peer={{i.id}} endpoint by {RegexFor.SINGLE_THING} for {RegexFor.SINGLE_THING}")]
-    public async Task WhenAGetRequestIsSentToTheCanCreateEndpointByIdentityForIdentity(string identity1Name, string identity2Name)
+    [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Relationships/CanCreate\\?peer={{id}} endpoint with id={RegexFor.SINGLE_THING}.id")]
+    public async Task WhenAGetRequestIsSentToTheCanCreateEndpointByIdentityForIdentity(string activeIdentityName, string peerName)
     {
-        var client = _clientPool.FirstForIdentityName(identity1Name);
+        var client = _clientPool.FirstForIdentityName(activeIdentityName);
         _responseContext.WhenResponse = _canEstablishRelationshipResponse =
-            await client.Relationships.CanCreateRelationship(_clientPool.FirstForIdentityName(identity2Name).IdentityData!.Address);
+            await client.Relationships.CanCreateRelationship(_clientPool.FirstForIdentityName(peerName).IdentityData!.Address);
     }
 
     #endregion
 
     #region Then
 
-    [Then("a relationship can be established")]
+    [Then("a Relationship can be established")]
     public void ThenARelationshipCanBeEstablished()
     {
         if (_canEstablishRelationshipResponse != null)
             _canEstablishRelationshipResponse.Result!.CanCreate.Should().BeTrue();
     }
 
-    [Then("a relationship can not be established")]
+    [Then("a Relationship can not be established")]
     public void ThenARelationshipCanNotBeEstablished()
     {
         if (_canEstablishRelationshipResponse != null)
