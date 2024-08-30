@@ -36,9 +36,9 @@ public class ClientPool
 
     private class ClientWrapper
     {
-        public required Client Client { get; set; } // todo: tidy this up
-        public string? IdentityName { get; set; }
-        public string? DeviceName { get; set; }
+        internal required Client Client { get; init; }
+        internal string? IdentityName { get; set; }
+        internal string? DeviceName { get; set; }
     }
 
     public class ClientAdder
