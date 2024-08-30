@@ -22,8 +22,6 @@ public class Validator : AbstractValidator<CreateTokenCommand>
             .GreaterThan(SystemTime.UtcNow).WithMessage("'{PropertyName}' must be in the future.").WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
 
         RuleFor(t => t.ForIdentity)
-            .NotEmpty()
-            .When(t => t.ForIdentity != null)
             .ValidId<CreateTokenCommand, IdentityAddress>()
             .When(t => t.ForIdentity != null);
     }
