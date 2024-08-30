@@ -16,7 +16,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand() {Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = TestDataGenerator.CreateRandomIdentityAddress()});
+            new CreateTokenCommand() { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = TestDataGenerator.CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
