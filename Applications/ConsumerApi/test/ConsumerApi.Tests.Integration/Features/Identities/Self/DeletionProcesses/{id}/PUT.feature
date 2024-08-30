@@ -1,5 +1,5 @@
 @Integration
-Feature: PUT Identities/Self/DeletionProcess
+Feature: PUT Identities/Self/DeletionProcesses
 
 User cancels a deletion process
 

@@ -17,7 +17,7 @@ User requests a Token
         Then the response status code is 200 (OK)
         And the response contains a Token
 
-    Scenario: Requesting a peer Token as an authenticated user
+    Scenario: Requesting a Token of another identity as an authenticated user
         Given Identities i1 and i2
         And Token t belonging to i2
         When i1 sends a GET request to the Tokens/{id} endpoint with t.Id
