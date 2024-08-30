@@ -20,6 +20,8 @@ void main() async {
 
   await setup();
 
+  GoRouter.optionURLReflectsImperativeAPIs = true;
+
   dataTableShowLogs = false;
 
   runApp(const AdminUiApp());

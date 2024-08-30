@@ -41,7 +41,7 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
         if (kIsDesktop)
           Row(
             children: [
-              BackButton(),
+              const BackButton(),
               IconButton(
                 icon: const Icon(Icons.refresh),
                 onPressed: _reloadIdentityDeletionProcessAuditLogs,
