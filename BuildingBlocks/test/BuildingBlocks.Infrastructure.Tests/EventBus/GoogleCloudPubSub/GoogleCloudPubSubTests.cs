@@ -12,7 +12,6 @@ using Google.Api.Gax;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.PubSub.V1;
 using Grpc.Core;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 using Xunit.Abstractions;
@@ -162,10 +161,6 @@ public class EventBusFactory : IDisposable
         builder.RegisterType<TestEvent1DomainEventHandler1>();
         builder.RegisterType<TestEvent1DomainEventHandler2>();
 
-        // Add IHttpContextAccessor registration
-        var httpContextAccessor = new HttpContextAccessor();
-        builder.RegisterInstance<IHttpContextAccessor>(httpContextAccessor);
-
         var autofacServiceProvider = new AutofacServiceProvider(builder.Build());
         var lifeTimeScope = autofacServiceProvider.GetRequiredService<ILifetimeScope>();
         var eventBusSubscriptionsManager = new InMemoryEventBusSubscriptionsManager();
@@ -176,8 +171,7 @@ public class EventBusFactory : IDisposable
             _logger,
             eventBusSubscriptionsManager,
             lifeTimeScope,
-            httpContextAccessor, // Pass IHttpContextAccessor here
-            new HandlerRetryBehavior() { NumberOfRetries = 5, MinimumBackoff = 2, MaximumBackoff = 120 });
+            new HandlerRetryBehavior { NumberOfRetries = 5, MinimumBackoff = 2, MaximumBackoff = 120 });
 
         var instance = new Instance(autofacServiceProvider, eventBusClient, persisterConnection);
         _instances.Add(instance);

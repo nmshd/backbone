@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Serilog.Context;
+﻿using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
+using Microsoft.AspNetCore.Http;
 
 namespace Backbone.BuildingBlocks.API.Mvc.Middleware;
 
@@ -19,12 +19,11 @@ public class CorrelationIdMiddleware
         if (string.IsNullOrEmpty(correlationId))
         {
             correlationId = Guid.NewGuid().ToString();
-            context.Request.Headers["X-Correlation-ID"] = correlationId;
         }
 
         context.Response.Headers["X-Correlation-ID"] = correlationId;
 
-        using (LogContext.PushProperty("CorrelationId", correlationId))
+        using (CustomLogContext.SetCorrelationId(correlationId))
         {
             await _next(context);
         }

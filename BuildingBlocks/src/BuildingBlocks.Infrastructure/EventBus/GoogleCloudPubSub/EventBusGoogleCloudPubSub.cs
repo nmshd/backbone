@@ -2,13 +2,13 @@ using System.Text.RegularExpressions;
 using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
+using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
+using Backbone.Tooling.Extensions;
 using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using Serilog.Context;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
@@ -29,18 +29,15 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     private readonly IGoogleCloudPubSubPersisterConnection _connection;
     private readonly IEventBusSubscriptionsManager _subscriptionManager;
     private readonly HandlerRetryBehavior _handlerRetryBehavior;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public EventBusGoogleCloudPubSub(IGoogleCloudPubSubPersisterConnection connection,
         ILogger<EventBusGoogleCloudPubSub> logger, IEventBusSubscriptionsManager subscriptionManager,
-        ILifetimeScope autofac, IHttpContextAccessor httpContextAccessor,
-        HandlerRetryBehavior handlerRetryBehavior)
+        ILifetimeScope autofac, HandlerRetryBehavior handlerRetryBehavior)
     {
         _connection = connection;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subscriptionManager = subscriptionManager;
         _autofac = autofac;
-        _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         _handlerRetryBehavior = handlerRetryBehavior;
     }
 
@@ -59,18 +56,13 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
             ContractResolver = new ContractResolverWithPrivates()
         });
 
-        var correlationId = _httpContextAccessor.HttpContext?.Request.Headers["X-Correlation-ID"];
-
-        if (string.IsNullOrEmpty(correlationId))
-            correlationId = Guid.NewGuid().ToString();
-
         var message = new PubsubMessage
         {
             Data = ByteString.CopyFromUtf8(jsonMessage),
             Attributes =
             {
                 { PubSubMessageAttributes.EVENT_NAME, eventName },
-                {PubSubMessageAttributes.CORRELATION_ID, correlationId}
+                { PubSubMessageAttributes.CORRELATION_ID, CustomLogContext.GetCorrelationId() }
             }
         };
 
@@ -103,16 +95,19 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
     private async Task<SubscriberClient.Reply> OnIncomingEvent(PubsubMessage @event, CancellationToken _)
     {
-        var eventNameFromAttributes =
-            $"{@event.Attributes[PubSubMessageAttributes.EVENT_NAME]}{DOMAIN_EVENT_SUFFIX}";
+        var eventNameFromAttributes = $"{@event.Attributes[PubSubMessageAttributes.EVENT_NAME]}{DOMAIN_EVENT_SUFFIX}";
         var eventData = @event.Data.ToStringUtf8();
 
         try
         {
-            if (@event.Attributes.TryGetValue(PubSubMessageAttributes.CORRELATION_ID, out var correlationId))
-                LogContext.PushProperty("CorrelationId", correlationId);
+            @event.Attributes.TryGetValue(PubSubMessageAttributes.CORRELATION_ID, out var correlationId);
 
-            await ProcessEvent(eventNameFromAttributes, eventData);
+            correlationId = correlationId.IsNullOrEmpty() ? CustomLogContext.GenerateCorrelationId() : correlationId;
+
+            using (CustomLogContext.SetCorrelationId(correlationId))
+            {
+                await ProcessEvent(eventNameFromAttributes, eventData);
+            }
         }
         catch (Exception ex)
         {

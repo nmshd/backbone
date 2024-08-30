@@ -4,13 +4,11 @@ using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
+using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
-using Backbone.Tooling.Extensions;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Azure.Amqp;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using Serilog.Context;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
@@ -27,24 +25,20 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
     private readonly IServiceBusPersisterConnection _serviceBusPersisterConnection;
     private readonly IEventBusSubscriptionsManager _subscriptionManager;
     private readonly string _subscriptionName;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
     public EventBusAzureServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection,
         ILogger<EventBusAzureServiceBus> logger, IEventBusSubscriptionsManager subscriptionManager,
-        ILifetimeScope autofac, IHttpContextAccessor httpContextAccessor,
-        HandlerRetryBehavior handlerRetryBehavior,
+        ILifetimeScope autofac, HandlerRetryBehavior handlerRetryBehavior,
         string subscriptionClientName)
     {
         _serviceBusPersisterConnection = serviceBusPersisterConnection;
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         _subscriptionManager = subscriptionManager;
         _autofac = autofac;
-        _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         _subscriptionName = subscriptionClientName;
         _sender = _serviceBusPersisterConnection.TopicClient.CreateSender(TOPIC_NAME);
         var options = new ServiceBusProcessorOptions { MaxConcurrentCalls = 10, AutoCompleteMessages = false };
         _processor = _serviceBusPersisterConnection.TopicClient.CreateProcessor(TOPIC_NAME, _subscriptionName, options);
-
         _handlerRetryBehavior = handlerRetryBehavior;
     }
 
@@ -63,17 +57,12 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         });
         var body = Encoding.UTF8.GetBytes(jsonMessage);
 
-        var correlationId = _httpContextAccessor.HttpContext?.Request.Headers["X-Correlation-ID"];
-
-        if (string.IsNullOrEmpty(correlationId))
-            correlationId = Guid.NewGuid().ToString();
-
         var message = new ServiceBusMessage
         {
             MessageId = @event.DomainEventId,
             Body = new BinaryData(body),
             Subject = eventName,
-            CorrelationId = correlationId
+            CorrelationId = CustomLogContext.GetCorrelationId()
         };
 
         _logger.SendingDomainEvent(message.MessageId);
@@ -129,14 +118,16 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
                 var messageData = args.Message.Body.ToString();
                 var correlationId = args.Message.CorrelationId;
 
-                if (!correlationId.IsEmpty())
-                    LogContext.PushProperty("CorrelationId", correlationId);
+                correlationId = correlationId.IsNullOrEmpty() ? CustomLogContext.GenerateCorrelationId() : correlationId;
 
-                // Complete the message so that it is not received again.
-                if (await ProcessEvent(eventName, messageData))
-                    await args.CompleteMessageAsync(args.Message);
-                else
-                    _logger.EventWasNotProcessed(args.Message.MessageId);
+                using (CustomLogContext.SetCorrelationId(correlationId))
+                {
+                    // Complete the message so that it is not received again.
+                    if (await ProcessEvent(eventName, messageData))
+                        await args.CompleteMessageAsync(args.Message);
+                    else
+                        _logger.EventWasNotProcessed(args.Message.MessageId);
+                }
             };
 
         _processor.ProcessErrorAsync += ErrorHandler;
