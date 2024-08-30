@@ -7,8 +7,8 @@ Param(
 $environment="dbmigrations-" + $provider.ToLower()
 $repoRoot = git rev-parse --show-toplevel
 $dbContextName = "${moduleName}DbContext"
-$adminApiProject = "$repoRoot\AdminApi\src\AdminApi"
-$consumerApiProject = "$repoRoot\ConsumerApi"
+$adminApiProject = "$repoRoot\Applications\AdminApi\src\AdminApi"
+$consumerApiProject = "$repoRoot\Applications\ConsumerApi\src"
 
 function UpdateLocalDatabase {    
     param (
