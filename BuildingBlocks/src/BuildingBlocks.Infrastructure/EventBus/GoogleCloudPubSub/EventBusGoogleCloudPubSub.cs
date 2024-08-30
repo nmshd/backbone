@@ -2,7 +2,9 @@ using System.Text.RegularExpressions;
 using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
+using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
+using Backbone.Tooling.Extensions;
 using Google.Cloud.PubSub.V1;
 using Google.Protobuf;
 using Microsoft.Extensions.Logging;
@@ -15,6 +17,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
     private static class PubSubMessageAttributes
     {
         public const string EVENT_NAME = "Subject";
+        public const string CORRELATION_ID = "CorrelationId";
     }
 
     private const string DOMAIN_EVENT_SUFFIX = "DomainEvent";
@@ -58,7 +61,8 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
             Data = ByteString.CopyFromUtf8(jsonMessage),
             Attributes =
             {
-                { PubSubMessageAttributes.EVENT_NAME, eventName }
+                { PubSubMessageAttributes.EVENT_NAME, eventName },
+                { PubSubMessageAttributes.CORRELATION_ID, CustomLogContext.GetCorrelationId() }
             }
         };
 
@@ -91,13 +95,19 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
     private async Task<SubscriberClient.Reply> OnIncomingEvent(PubsubMessage @event, CancellationToken _)
     {
-        var eventNameFromAttributes =
-            $"{@event.Attributes[PubSubMessageAttributes.EVENT_NAME]}{DOMAIN_EVENT_SUFFIX}";
+        var eventNameFromAttributes = $"{@event.Attributes[PubSubMessageAttributes.EVENT_NAME]}{DOMAIN_EVENT_SUFFIX}";
         var eventData = @event.Data.ToStringUtf8();
 
         try
         {
-            await ProcessEvent(eventNameFromAttributes, eventData);
+            @event.Attributes.TryGetValue(PubSubMessageAttributes.CORRELATION_ID, out var correlationId);
+
+            correlationId = correlationId.IsNullOrEmpty() ? CustomLogContext.GenerateCorrelationId() : correlationId;
+
+            using (CustomLogContext.SetCorrelationId(correlationId))
+            {
+                await ProcessEvent(eventNameFromAttributes, eventData);
+            }
         }
         catch (Exception ex)
         {
