@@ -77,7 +77,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
     {
         var blobName = Guid.NewGuid().ToString("N");
 
-        var newModifications = _request.Modifications.Select(m => CreateModification(m, blobName));
+        var newModifications = _request.Modifications.Select(CreateModification);
 
         _dbContext.Set<Datawallet>().Update(_datawallet!);
 
@@ -88,7 +88,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         _modifications = modificationsArray;
     }
 
-    private DatawalletModification CreateModification(PushDatawalletModificationItem modificationDto, string blobReference)
+    private DatawalletModification CreateModification(PushDatawalletModificationItem modificationDto)
     {
         return _datawallet!.AddModification(
             MapDatawalletModificationType(modificationDto.Type),
@@ -97,8 +97,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
             modificationDto.ObjectIdentifier,
             modificationDto.PayloadCategory,
             modificationDto.EncryptedPayload,
-            _activeDevice,
-            blobReference
+            _activeDevice
         );
     }
 
