@@ -51,6 +51,8 @@ internal class MessagesStepDefinitions
     [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Messages endpoint with {RegexFor.SINGLE_THING} as recipient")]
     public async Task WhenIdentitySendsAPostRequestToTheMessagesEndpoint(string senderIdentityName, string recipientIdentityName)
     {
+        var recipientAddress = _clientPool.FirstForIdentityName(recipientIdentityName).IdentityData!.Address;
+
         var sendMessageRequest = new SendMessageRequest
         {
             Attachments = [],
@@ -59,7 +61,7 @@ internal class MessagesStepDefinitions
             [
                 new SendMessageRequestRecipientInformation
                 {
-                    Address = _clientPool.FirstForIdentityName(recipientIdentityName).IdentityData!.Address,
+                    Address = recipientAddress,
                     EncryptedKey = ConvertibleString.FromUtf8("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA").BytesRepresentation
                 }
             ]

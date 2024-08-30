@@ -84,10 +84,8 @@ internal class TokensStepDefinitions
     [When($"an anonymous user sends a GET request to the Tokens/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]
     public async Task WhenAnAnonymousUserSendsAGetRequestToTheTokensIdEndpointWithTokenId(string tokenName)
     {
-        var client = _clientPool.Anonymous;
         var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
-
-        _responseContext.WhenResponse = await client.Tokens.GetToken(tokenId);
+        _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.GetToken(tokenId);
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a GET request to the Tokens/{{id}} endpoint with \"([^\"]*)\"")]

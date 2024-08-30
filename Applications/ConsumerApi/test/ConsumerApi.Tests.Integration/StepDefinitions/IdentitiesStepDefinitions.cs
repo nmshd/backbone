@@ -59,13 +59,6 @@ internal class IdentitiesStepDefinitions
         }
     }
 
-    [Given("the user is unauthenticated")]
-    public void GivenTheUserIsUnauthenticated()
-    {
-        var client = Client.CreateUnauthenticated(_httpClient, _clientCredentials);
-        _clientPool.AddAnonymous(client);
-    }
-
     [Given($"Identities {RegexFor.SINGLE_THING}{RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}{RegexFor.SINGLE_THING} with an established Relationship")]
     public async Task GivenIdentitiesWithAnEstablishedRelationship(string identity1Name, string identity2Name)
     {
@@ -106,16 +99,6 @@ internal class IdentitiesStepDefinitions
         };
 
         _responseContext.WhenResponse = await _clientPool.Anonymous.Identities.CreateIdentity(createIdentityPayload);
-    }
-
-    #endregion
-
-    #region Then
-
-    [Then($"the new status of {RegexFor.SINGLE_THING} is '([a-zA-Z]+)'")]
-    public void ThenTheResponseStatusIs(string deletionProcessName, string newDeletionProcessStatus)
-    {
-        _responseContext.CancelDeletionProcessResponse!.Result!.Status.Should().Be(newDeletionProcessStatus);
     }
 
     #endregion

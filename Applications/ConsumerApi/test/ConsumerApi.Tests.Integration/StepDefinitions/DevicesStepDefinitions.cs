@@ -142,10 +142,10 @@ internal class DevicesStepDefinitions
     [Then($"{RegexFor.SINGLE_THING} is deleted")]
     public async Task ThenDeviceIsDeleted(string deviceName)
     {
-        var deviceId = _clientPool.GetForDeviceName(deviceName).DeviceData!.DeviceId;
-
         var clientOfDeletedDevice = _clientPool.GetForDeviceName(deviceName);
         var clientOfOtherDevice = _clientPool.FirstForIdentityAddress(clientOfDeletedDevice.IdentityData!.Address);
+
+        var deviceId = clientOfDeletedDevice.DeviceData!.DeviceId;
 
         var response = await clientOfOtherDevice.Devices.ListDevices();
         response.Result!.Count.Should().Be(1);
