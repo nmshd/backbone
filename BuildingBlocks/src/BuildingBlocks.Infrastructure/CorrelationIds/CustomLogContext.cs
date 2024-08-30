@@ -1,4 +1,3 @@
-using Backbone.Tooling.Extensions;
 using Serilog.Context;
 
 namespace Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
@@ -15,10 +14,7 @@ public static class CustomLogContext
 
     public static string GetCorrelationId()
     {
-        if (CORRELATION_ID.Value.IsNullOrEmpty())
-            CORRELATION_ID.Value = GenerateCorrelationId();
-
-        return CORRELATION_ID.Value;
+        return CORRELATION_ID.Value ?? "";
     }
 
     public static string GenerateCorrelationId()
