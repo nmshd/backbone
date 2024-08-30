@@ -17,11 +17,6 @@ public class ClientPool
         Anonymous = Client.CreateUnauthenticated(httpClientFactory.CreateClient(), clientCredentials);
     }
 
-    public void AddAnonymous(Client client)
-    {
-        Anonymous = client;
-    }
-
     public Client Anonymous { get; private set; }
 
     public ClientAdder Add(Client client)
