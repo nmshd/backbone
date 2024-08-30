@@ -40,8 +40,8 @@ public static class RabbitMqServiceCollectionExtensions
             var logger = sp.GetRequiredService<ILogger<EventBusRabbitMq>>();
             var eventBusSubscriptionsManager = sp.GetRequiredService<IEventBusSubscriptionsManager>();
 
-            return new EventBusRabbitMq(rabbitMqPersistentConnection, logger, iLifetimeScope,
-                eventBusSubscriptionsManager, options.HandlerRetryBehavior, subscriptionClientName, options.ConnectionRetryCount);
+            return new EventBusRabbitMq(rabbitMqPersistentConnection, logger, iLifetimeScope, eventBusSubscriptionsManager,
+                options.HandlerRetryBehavior, subscriptionClientName, options.ConnectionRetryCount);
         });
     }
 }

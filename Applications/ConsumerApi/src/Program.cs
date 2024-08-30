@@ -189,7 +189,8 @@ static void Configure(WebApplication app)
 
     app.UseMiddleware<RequestResponseTimeMiddleware>()
         .UseMiddleware<ResponseDurationMiddleware>()
-        .UseMiddleware<TraceIdMiddleware>();
+        .UseMiddleware<TraceIdMiddleware>()
+        .UseMiddleware<CorrelationIdMiddleware>();
 
     app.UseSecurityHeaders(policies =>
         policies
