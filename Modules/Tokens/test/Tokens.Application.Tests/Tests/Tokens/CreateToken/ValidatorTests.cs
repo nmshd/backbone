@@ -12,14 +12,14 @@ public class ValidatorTests : AbstractTestsBase
     [Theory]
     [InlineData("did:e:prod.enmeshed.eu:dids:70cf4f3e6edf6bca33d35f")]
     [InlineData(null)]
-    public void Happy_Path(string identityAddress)
+    public void Happy_Path(string forIdentity)
     {
         // Arrange
         var validator = new Validator();
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand() { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = identityAddress});
+            new CreateTokenCommand() { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = forIdentity});
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
