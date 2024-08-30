@@ -23,6 +23,6 @@ public static class CustomLogContext
 
     public static string GenerateCorrelationId()
     {
-        return Guid.NewGuid().ToString();
+        return Guid.NewGuid().ToString("N");
     }
 }

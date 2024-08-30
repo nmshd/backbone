@@ -18,7 +18,7 @@ public class CorrelationIdMiddleware
 
         if (string.IsNullOrEmpty(correlationId))
         {
-            correlationId = Guid.NewGuid().ToString();
+            correlationId = CustomLogContext.GenerateCorrelationId();
         }
 
         context.Response.Headers["X-Correlation-ID"] = correlationId;
