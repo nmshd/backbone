@@ -1,4 +1,5 @@
 ﻿using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
+using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.FluentValidation;
@@ -9,7 +10,7 @@ namespace Backbone.Modules.Tokens.Application.Tests.Tests.Tokens.CreateToken;
 public class ValidatorTests : AbstractTestsBase
 {
     [Fact]
-    public void Happy_Path()
+    public void Happy_Path_with_ForIdentity()
     {
         // Arrange
         var validator = new Validator();
@@ -17,6 +18,20 @@ public class ValidatorTests : AbstractTestsBase
         // Act
         var validationResult = validator.TestValidate(
             new CreateTokenCommand() { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = TestDataGenerator.CreateRandomIdentityAddress() });
+
+        // Assert
+        validationResult.ShouldNotHaveAnyValidationErrors();
+    }
+
+    [Fact]
+    public void Happy_Path_without_ForIdentity()
+    {
+        // Arrange
+        var validator = new Validator();
+
+        // Act
+        var validationResult = validator.TestValidate(
+            new CreateTokenCommand() { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1) });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -48,7 +63,7 @@ public class ValidatorTests : AbstractTestsBase
             new CreateTokenCommand() { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(-1), ForIdentity = TestDataGenerator.CreateRandomIdentityAddress() });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem("ExpiresAt", "error.platform.validation.invalidPropertyValue", "'Expires At' must be in the future.");
+        validationResult.ShouldHaveValidationErrorForItem(nameof(Token.ExpiresAt), "error.platform.validation.invalidPropertyValue", "'Expires At' must be in the future.");
     }
 
     [Fact]
@@ -62,6 +77,6 @@ public class ValidatorTests : AbstractTestsBase
             new CreateTokenCommand() { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = "some-address" });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForId(nameof(CreateTokenCommand.ForIdentity));
+        validationResult.ShouldHaveValidationErrorForId(nameof(Token.ForIdentity));
     }
 }
