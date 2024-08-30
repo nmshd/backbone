@@ -1,6 +1,5 @@
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Synchronization.Domain.Entities;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.Configurations;
@@ -24,7 +23,6 @@ public class DatawalletModificationEntityTypeConfiguration : EntityEntityTypeCon
         builder.Property(x => x.ObjectIdentifier).HasMaxLength(100);
         builder.Property(x => x.PayloadCategory).HasMaxLength(50);
         builder.Property(x => x.Type);
-        builder.Property(x => x.BlobReference).HasMaxLength(32).IsUnicode(false).IsFixedLength(true);
         builder.Property(x => x.EncryptedPayload);
     }
 }
