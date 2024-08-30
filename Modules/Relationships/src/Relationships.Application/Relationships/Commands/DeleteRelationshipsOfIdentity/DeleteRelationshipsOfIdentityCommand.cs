@@ -1,14 +1,13 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Commands.DeleteRelationshipsOfIdentity;
 
 public class DeleteRelationshipsOfIdentityCommand : IRequest
 {
-    public DeleteRelationshipsOfIdentityCommand(IdentityAddress identityAddress)
+    public DeleteRelationshipsOfIdentityCommand(string identityAddress)
     {
         IdentityAddress = identityAddress;
     }
 
-    public IdentityAddress IdentityAddress { get; set; }
+    public string IdentityAddress { get; set; }
 }

@@ -12,7 +12,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.0" />
       <PackageReference Include="xunit" Version="2.9.0" />
       <PackageReference Include="xunit.runner.visualstudio" Version="2.8.2">
       <PrivateAssets>all</PrivateAssets>
@@ -24,7 +24,6 @@
     <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
     <ProjectReference Include="..\..\..\Relationships\src\Relationships.Domain\Relationships.Domain.csproj" />
     <ProjectReference Include="..\..\..\Relationships\src\Relationships.Infrastructure\Relationships.Infrastructure.csproj" />
-    <ProjectReference Include="..\..\..\Relationships\test\Relationships.Domain.Tests\Relationships.Domain.Tests.csproj" />
     <ProjectReference Include="..\..\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
     <ProjectReference Include="..\..\..\Messages\src\Messages.Infrastructure\Messages.Infrastructure.csproj" />
   </ItemGroup>

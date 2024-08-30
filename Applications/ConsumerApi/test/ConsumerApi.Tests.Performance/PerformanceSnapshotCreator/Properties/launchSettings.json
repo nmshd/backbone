@@ -1,0 +1,24 @@
+{
+  "profiles": {
+    "Pool Generator": {
+      "commandName": "Project",
+      "commandLineArgs": "GeneratePools --poolsFile pools.json"
+    },
+    "Pool Generator Light": {
+      "commandName": "Project",
+      "commandLineArgs": "GeneratePools --poolsFile pools_light.json"
+    },
+    "Pool Generator Test": {
+      "commandName": "Project",
+      "commandLineArgs": "GeneratePools --poolsFile pools_test.json"
+    },
+    "Create Entities": {
+      "commandName": "Project",
+      "commandLineArgs": "CreateEntities --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools.json --ram selected-solution\\ram.csv"
+    },
+    "Create Entities Light": {
+      "commandName": "Project",
+      "commandLineArgs": "CreateEntities --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools_light.json --ram light-solution\\ram.csv"
+    }
+  }
+}

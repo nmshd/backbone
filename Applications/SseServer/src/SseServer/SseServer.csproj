@@ -2,13 +2,13 @@
 
     <ItemGroup>
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2"/>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.7"/>
-        <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.22.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8"/>
+        <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.23.0"/>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="9.0.0"/>
         <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="8.0.2"/>
         <PackageReference Include="Serilog" Version="4.0.1"/>
         <PackageReference Include="Serilog.AspNetCore" Version="8.0.2"/>
-        <PackageReference Include="Serilog.Enrichers.ClientInfo" Version="2.1.0"/>
+        <PackageReference Include="Serilog.Enrichers.ClientInfo" Version="2.1.1"/>
         <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.2"/>
         <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1"/>
         <PackageReference Include="Serilog.Exceptions" Version="8.4.0"/>

@@ -66,9 +66,7 @@ spec:
                       name: rabbitmq-password
                       key: "VALUE" 
                 {{- end }}
-                {{- with .Values.sendidentitydeletionreminders.env }}
-                {{- toYaml . | nindent 16 }}
-                {{- end }}
+                {{- include "generateEnvVars" (list .Values.global.env .Values.sendidentitydeletionreminders.env) | nindent 16 }}
           {{- with .Values.sendidentitydeletionreminders.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 8 }}

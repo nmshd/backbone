@@ -1,30 +1,25 @@
-using AutoMapper;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Application.Devices.DTOs;
 
-public class DeviceDTO : IHaveCustomMapping
+public class DeviceDTO
 {
-    public required DeviceId Id { get; set; }
-    public required string Username { get; set; }
-    public required DateTime CreatedAt { get; set; }
-    public required DeviceId CreatedByDevice { get; set; }
-    public required LastLoginInformation LastLogin { get; set; }
-    public required string CommunicationLanguage { get; set; }
-
-    public void CreateMappings(Profile configuration)
+    public DeviceDTO(Device device)
     {
-        configuration
-            .CreateMap<Device, DeviceDTO>()
-            .ForMember(dto => dto.LastLogin,
-                expression => expression.MapFrom(device => new LastLoginInformation { Time = device.User.LastLoginAt }))
-            .ForMember(dto => dto.Username,
-                expression => expression.MapFrom(device => device.User.UserName))
-            .ForMember(dto => dto.CommunicationLanguage,
-                expression => expression.MapFrom(device => device.CommunicationLanguage.Value));
+        Id = device.Id;
+        Username = device.User.UserName!;
+        CreatedAt = device.CreatedAt;
+        CreatedByDevice = device.CreatedByDevice;
+        LastLogin = new LastLoginInformation { Time = device.User.LastLoginAt };
+        CommunicationLanguage = device.CommunicationLanguage;
     }
+
+    public string Id { get; set; }
+    public string Username { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public string CreatedByDevice { get; set; }
+    public LastLoginInformation LastLogin { get; set; }
+    public string CommunicationLanguage { get; set; }
 }
 
 public class LastLoginInformation

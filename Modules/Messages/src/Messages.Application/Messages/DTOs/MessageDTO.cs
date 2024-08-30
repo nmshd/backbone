@@ -1,6 +1,5 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
-using Backbone.Modules.Messages.Domain.Ids;
 
 namespace Backbone.Modules.Messages.Application.Messages.DTOs;
 
@@ -17,10 +16,10 @@ public class MessageDTO
         Recipients = MapRecipients(message, activeIdentity, didDomainName);
     }
 
-    public MessageId Id { get; set; }
+    public string Id { get; set; }
     public DateTime CreatedAt { get; set; }
-    public IdentityAddress CreatedBy { get; set; }
-    public DeviceId CreatedByDevice { get; set; }
+    public string CreatedBy { get; set; }
+    public string CreatedByDevice { get; set; }
     public byte[] Body { get; set; }
     public List<AttachmentDTO> Attachments { get; set; }
     public List<RecipientInformationDTO> Recipients { get; set; }

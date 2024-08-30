@@ -39,7 +39,7 @@ public class Datawallet : Entity
     }
 
     public DatawalletModification AddModification(DatawalletModificationType type, DatawalletVersion datawalletVersionOfModification, string collection, string objectIdentifier,
-        string? payloadCategory, byte[]? encryptedPayload, DeviceId createdByDevice, string blobReference)
+        string? payloadCategory, byte[]? encryptedPayload, DeviceId createdByDevice)
     {
         if (datawalletVersionOfModification > Version)
             throw new DomainException(DomainErrors.Datawallet.DatawalletVersionOfModificationTooHigh(Version, datawalletVersionOfModification));
@@ -47,7 +47,7 @@ public class Datawallet : Entity
         var indexOfNewModification = Modifications.Count > 0 ? Modifications.Max(m => m.Index) + 1 : 0;
 
         var newModification = new DatawalletModification(this, datawalletVersionOfModification, indexOfNewModification, type, collection, objectIdentifier, payloadCategory, encryptedPayload,
-            createdByDevice, blobReference);
+            createdByDevice);
         Modifications.Add(newModification);
 
         if (DomainEvents.All(d => d.GetType() != typeof(DatawalletModifiedDomainEvent)))

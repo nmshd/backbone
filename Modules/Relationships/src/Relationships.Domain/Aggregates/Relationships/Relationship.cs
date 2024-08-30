@@ -78,7 +78,7 @@ public class Relationship : Entity
 
     private static void EnsureNoOtherRelationshipToPeerExists(IdentityAddress target, IEnumerable<Relationship> existingRelationshipsToPeer)
     {
-        if (existingRelationshipsToPeer.Any(r => r.Status is RelationshipStatus.Active or RelationshipStatus.Pending or RelationshipStatus.Terminated))
+        if (existingRelationshipsToPeer.Any(r => r.Status is RelationshipStatus.Active or RelationshipStatus.Pending or RelationshipStatus.Terminated or RelationshipStatus.DeletionProposed))
             throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
     }
 
@@ -371,7 +371,8 @@ public class Relationship : Entity
     public static Expression<Func<Relationship, bool>> CountsAsActive()
     {
         return r => r.Status != RelationshipStatus.Rejected &&
-                    r.Status != RelationshipStatus.Revoked;
+                    r.Status != RelationshipStatus.Revoked &&
+                    r.Status != RelationshipStatus.ReadyForDeletion;
     }
 
     #endregion

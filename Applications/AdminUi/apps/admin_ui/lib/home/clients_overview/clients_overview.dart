@@ -3,6 +3,7 @@ import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
@@ -18,7 +19,7 @@ class ClientsOverview extends StatefulWidget {
 
 class _ClientsOverviewState extends State<ClientsOverview> {
   ClientsFilter _filter = ClientsFilter.empty;
-  List<Clients> _originalClients = [];
+  List<ClientOverview> _originalClients = [];
   final Set<String> _selectedClients = {};
   List<TierOverview> _defaultTiers = [];
 
@@ -27,7 +28,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     super.initState();
 
     _reloadClients();
-    _loadTiers();
+    _reloadTiers();
   }
 
   @override
@@ -46,6 +47,15 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  if (kIsDesktop)
+                    IconButton(
+                      icon: const Icon(Icons.refresh),
+                      onPressed: () async {
+                        await _reloadClients();
+                        await _reloadTiers();
+                      },
+                      tooltip: context.l10n.reload,
+                    ),
                   IconButton(
                     icon: Icon(
                       Icons.delete,
@@ -92,6 +102,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                       .where((e) => _filter.matches(e))
                       .map(
                         (client) => DataRow2(
+                          onTap: () => context.go('/clients/${client.clientId}'),
                           selected: _selectedClients.contains(client.clientId),
                           onSelectChanged: (selected) {
                             if (selected == null) return;
@@ -145,7 +156,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     if (mounted) setState(() => _originalClients = response.data);
   }
 
-  Future<void> _loadTiers() async {
+  Future<void> _reloadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
     setState(() => _defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient == true).toList());
   }

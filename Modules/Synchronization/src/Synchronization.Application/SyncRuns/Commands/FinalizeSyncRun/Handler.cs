@@ -1,6 +1,4 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
@@ -18,23 +16,19 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IEventBus _eventBus;
-    private readonly IMapper _mapper;
     private Datawallet? _datawallet;
     private SyncRun _syncRun = null!;
 
-    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper, IEventBus eventBus)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext)
     {
         _dbContext = dbContext;
-        _mapper = mapper;
-        _eventBus = eventBus;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
 
     public async Task<FinalizeDatawalletVersionUpgradeSyncRunResponse> Handle(FinalizeDatawalletVersionUpgradeSyncRunCommand request, CancellationToken cancellationToken)
     {
-        _syncRun = await _dbContext.GetSyncRun(request.SyncRunId, _activeIdentity, cancellationToken);
+        _syncRun = await _dbContext.GetSyncRun(SyncRunId.Parse(request.SyncRunId), _activeIdentity, cancellationToken);
 
         if (_syncRun.Type != SyncRun.SyncRunType.DatawalletVersionUpgrade)
             throw new ApplicationException(ApplicationErrors.SyncRuns.UnexpectedSyncRunType(SyncRun.SyncRunType.DatawalletVersionUpgrade));
@@ -64,7 +58,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         var response = new FinalizeDatawalletVersionUpgradeSyncRunResponse
         {
             NewDatawalletModificationIndex = _datawallet.LatestModification?.Index,
-            DatawalletModifications = _mapper.Map<CreatedDatawalletModificationDTO[]>(newModifications)
+            DatawalletModifications = newModifications.Select(m => new CreatedDatawalletModificationDTO(m))
         };
 
         return response;
@@ -72,7 +66,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
     public async Task<FinalizeExternalEventSyncSyncRunResponse> Handle(FinalizeExternalEventSyncSyncRunCommand request, CancellationToken cancellationToken)
     {
-        _syncRun = await _dbContext.GetSyncRunWithExternalEvents(request.SyncRunId, _activeIdentity, cancellationToken);
+        _syncRun = await _dbContext.GetSyncRunWithExternalEvents(SyncRunId.Parse(request.SyncRunId), _activeIdentity, cancellationToken);
 
         if (_syncRun.Type != SyncRun.SyncRunType.ExternalEventSync)
             throw new ApplicationException(ApplicationErrors.SyncRuns.UnexpectedSyncRunType(SyncRun.SyncRunType.ExternalEventSync));
@@ -81,7 +75,13 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
 
         _datawallet = await _dbContext.GetDatawalletForInsertion(_activeIdentity, cancellationToken) ?? throw new NotFoundException(nameof(Datawallet));
 
-        var eventResults = _mapper.Map<ExternalEventResult[]>(request.ExternalEventResults);
+        var eventResults = request.ExternalEventResults.Select(e =>
+            new ExternalEventResult
+            {
+                ErrorCode = e.ErrorCode ?? string.Empty,
+                ExternalEventId = ExternalEventId.Parse(e.ExternalEventId)
+            }).ToArray();
+
         _syncRun.FinalizeExternalEventSync(eventResults);
         _dbContext.Set<SyncRun>().Update(_syncRun);
 
@@ -93,7 +93,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         var response = new FinalizeExternalEventSyncSyncRunResponse
         {
             NewDatawalletModificationIndex = _datawallet.LatestModification?.Index,
-            DatawalletModifications = _mapper.Map<CreatedDatawalletModificationDTO[]>(newModifications)
+            DatawalletModifications = newModifications.Select(x => new CreatedDatawalletModificationDTO(x))
         };
 
         return response;
@@ -116,25 +116,34 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         if (modifications.Count == 0)
             return [];
 
-        var blobName = Guid.NewGuid().ToString("N");
-
         var newModifications = new List<DatawalletModification>();
 
         foreach (var modificationDto in modifications)
         {
             var newModification = _datawallet.AddModification(
-                _mapper.Map<DatawalletModificationType>(modificationDto.Type),
+                MapDatawalletModificationType(modificationDto.Type),
                 new Datawallet.DatawalletVersion(modificationDto.DatawalletVersion),
                 modificationDto.Collection,
                 modificationDto.ObjectIdentifier,
                 modificationDto.PayloadCategory,
                 modificationDto.EncryptedPayload,
-                _activeDevice,
-                blobName);
+                _activeDevice);
 
             newModifications.Add(newModification);
         }
 
         return newModifications;
+    }
+
+    private DatawalletModificationType MapDatawalletModificationType(DatawalletModificationDTO.DatawalletModificationType type)
+    {
+        return type switch
+        {
+            DatawalletModificationDTO.DatawalletModificationType.Create => DatawalletModificationType.Create,
+            DatawalletModificationDTO.DatawalletModificationType.Update => DatawalletModificationType.Update,
+            DatawalletModificationDTO.DatawalletModificationType.Delete => DatawalletModificationType.Delete,
+            DatawalletModificationDTO.DatawalletModificationType.CacheChanged => DatawalletModificationType.CacheChanged,
+            _ => throw new Exception($"Unsupported Datawallet Modification Type: {type}")
+        };
     }
 }
