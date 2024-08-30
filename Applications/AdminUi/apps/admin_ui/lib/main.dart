@@ -19,7 +19,7 @@ void main() async {
   GetIt.I.registerSingleton(await ThemeModeModel.create());
 
   await setup();
-  
+
   GoRouter.optionURLReflectsImperativeAPIs = true;
 
   dataTableShowLogs = false;
