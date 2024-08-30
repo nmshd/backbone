@@ -7,7 +7,8 @@ public static class DatawalletExtensions
 {
     public static DatawalletModification AddModification(this Datawallet datawallet, AddModificationParameters parameters)
     {
-        return datawallet.AddModification(parameters.Type, parameters.DatawalletVersion, parameters.Collection, parameters.ObjectIdentifier, parameters.PayloadCategory, parameters.EncryptedPayload, parameters.CreatedByDevice, "");
+        return datawallet.AddModification(parameters.Type, parameters.DatawalletVersion, parameters.Collection, parameters.ObjectIdentifier, parameters.PayloadCategory, parameters.EncryptedPayload,
+            parameters.CreatedByDevice);
     }
 
     public class AddModificationParameters
