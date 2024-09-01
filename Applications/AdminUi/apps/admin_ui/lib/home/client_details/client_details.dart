@@ -51,7 +51,20 @@ class _ClientDetailsState extends State<ClientDetails> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            if (kIsDesktop) const Align(alignment: Alignment.centerLeft, child: BackButton()),
+            if (kIsDesktop)
+              Row(
+                children: [
+                  const BackButton(),
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: () async {
+                      await _reloadClient();
+                      await _reloadTiers();
+                    },
+                    tooltip: context.l10n.reload,
+                  ),
+                ],
+              ),
             _ClientDetailsCard(
               clientDetails: clientDetails,
               selectedTier: _selectedTier,
@@ -112,7 +125,7 @@ class _ClientDetailsCard extends StatelessWidget {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-                      EntityDetails(title: context.l10n.id, value: clientDetails.clientId),
+                      CopyableEntityDetails(title: context.l10n.id, value: clientDetails.clientId),
                       EntityDetails(title: context.l10n.displayName, value: clientDetails.displayName),
                       EntityDetails(
                         title: context.l10n.maxIdentities,

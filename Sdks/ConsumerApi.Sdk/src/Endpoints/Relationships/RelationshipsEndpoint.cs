@@ -77,4 +77,13 @@ public class RelationshipsEndpoint(EndpointClient client) : ConsumerApiEndpoint(
     {
         return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Decompose");
     }
+
+    public async Task<ApiResponse<CanEstablishRelationshipResponse>> CanCreateRelationship(string peerIdentityAddress)
+    {
+        return await _client
+            .Request<CanEstablishRelationshipResponse>(HttpMethod.Get, $"api/{API_VERSION}/Relationships/CanCreate")
+            .Authenticate()
+            .AddQueryParameter("peer", peerIdentityAddress)
+            .Execute();
+    }
 }
