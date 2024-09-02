@@ -320,7 +320,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("DeletionStartedAt")
+                    b.Property<DateTime?>("DeletionStartedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("GracePeriodEndsAt")
