@@ -34,11 +34,12 @@ In order to run the performance tests, you must load an appropriate snapshot of 
     1. Compile the typescript test files into javascript files which k6 can understand: `npx webpack`
     1. You must tweak the way the test is run to ensure it conforms with your preferences. The following CLI parameters are available:
 
-        | Key               | Possible Values         | Notes                          |
-        | ----------------- | ----------------------- | ------------------------------ |
-        | `--duration`      | `60m`, `4h`, etc.       | defaults to `1h` in most cases |
-        | `--address`       | `load-test.enmeshed.eu` | defaults to `localhost:8081`   |
-        | `--env snapshot=` | `heavy`                 | defaults to `light`            |
+        | Key               | Possible Values                          | Notes                          |
+        | ----------------- | ---------------------------------------- | ------------------------------ |
+        | `--duration`      | `60m`, `4h`, etc.                        | defaults to `1h` in most cases |
+        | `--address`       | `load-test.enmeshed.eu`                  | defaults to `localhost:8081`   |
+        | `--env snapshot=` | `heavy`                                  | defaults to `light`            |
+        | `--out`           | `json=results.json` or `csv=results.csv` | defaults to console output     |
 
     1. Run the desired command as follows:
        `k6.exe run <params> .\dist\<sxx>.test.js`
