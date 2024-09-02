@@ -16,9 +16,7 @@ class TiersOverview extends StatefulWidget {
 }
 
 class _TiersOverviewState extends State<TiersOverview> {
-  List<TierOverview>? _tiers;
-
-  final double _boxWidth = 700;
+  List<TierOverview> _tiers = [];
 
   @override
   void initState() {
@@ -29,44 +27,15 @@ class _TiersOverviewState extends State<TiersOverview> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20),
-      child: Column(
-        children: [
-          Container(
-            height: 100,
-            width: _boxWidth,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              boxShadow: const [
-                BoxShadow(
-                  color: Colors.black26,
-                  blurRadius: 4,
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 15, top: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    context.l10n.tiers,
-                    style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontSize: 30),
-                  ),
-                  Text(
-                    context.l10n.tiersOverview_title_description,
-                    style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontSize: 13),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: SizedBox(
-              width: _boxWidth,
-              child: Row(
+    return Scaffold(
+      appBar: AppBar(title: Text(context.l10n.tiersOverview_title)),
+      body: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   if (kIsDesktop)
@@ -75,6 +44,7 @@ class _TiersOverviewState extends State<TiersOverview> {
                       onPressed: _reloadTiers,
                       tooltip: context.l10n.reload,
                     ),
+                  Gaps.w8,
                   IconButton.filled(
                     icon: const Icon(Icons.add),
                     color: Theme.of(context).colorScheme.onPrimary,
@@ -82,39 +52,33 @@ class _TiersOverviewState extends State<TiersOverview> {
                   ),
                 ],
               ),
-            ),
-          ),
-          if (_tiers == null)
-            const Center(child: CircularProgressIndicator())
-          else
-            Expanded(
-              child: Card(
-                child: SizedBox(
-                  width: _boxWidth,
-                  child: DataTable2(
-                    isVerticalScrollBarVisible: true,
-                    showCheckboxColumn: false,
-                    empty: Text(context.l10n.tiersOverview_noTiersFound),
-                    columns: [
-                      DataColumn2(label: Text(context.l10n.name), size: ColumnSize.L),
-                      DataColumn2(label: Text(context.l10n.numberOfIdentities), size: ColumnSize.L),
-                    ],
-                    rows: _tiers!
-                        .map(
-                          (tier) => DataRow2(
-                            onTap: () => context.go('/tiers/${tier.id}'),
-                            cells: [
-                              DataCell(Text(tier.name)),
-                              DataCell(Text('${tier.numberOfIdentities}')),
-                            ],
-                          ),
-                        )
-                        .toList(),
-                  ),
+              Expanded(
+                child: DataTable2(
+                  isVerticalScrollBarVisible: true,
+                  showCheckboxColumn: false,
+                  empty: Text(context.l10n.tiersOverview_noTiersFound),
+                  columns: [
+                    DataColumn2(label: Text(context.l10n.id), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.name), size: ColumnSize.L),
+                    DataColumn2(label: Text(context.l10n.numberOfIdentities), size: ColumnSize.L),
+                  ],
+                  rows: _tiers
+                      .map(
+                        (tier) => DataRow2(
+                          onTap: () => context.go('/tiers/${tier.id}'),
+                          cells: [
+                            DataCell(Text(tier.id)),
+                            DataCell(Text(tier.name)),
+                            DataCell(Text('${tier.numberOfIdentities}')),
+                          ],
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
-            ),
-        ],
+            ],
+          ),
+        ),
       ),
     );
   }

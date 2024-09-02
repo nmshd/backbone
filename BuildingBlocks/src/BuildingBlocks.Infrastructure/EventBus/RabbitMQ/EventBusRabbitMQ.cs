@@ -3,7 +3,9 @@ using System.Text;
 using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
+using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
+using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Polly;
@@ -96,6 +98,8 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             properties.DeliveryMode = 2; // persistent
             properties.MessageId = @event.DomainEventId;
 
+            properties.CorrelationId = CustomLogContext.GetCorrelationId();
+
             channel.BasicPublish(BROKER_NAME,
                 eventName,
                 true,
@@ -161,11 +165,18 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         {
             var eventName = eventArgs.RoutingKey;
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
+
             try
             {
-                await ProcessEvent(eventName, message);
+                var correlationId = eventArgs.BasicProperties.CorrelationId;
+                correlationId = correlationId.IsNullOrEmpty() ? Guid.NewGuid().ToString() : correlationId;
 
-                channel.BasicAck(eventArgs.DeliveryTag, false);
+                using (CustomLogContext.SetCorrelationId(correlationId))
+                {
+                    await ProcessEvent(eventName, message);
+
+                    channel.BasicAck(eventArgs.DeliveryTag, false);
+                }
             }
             catch (Exception ex)
             {

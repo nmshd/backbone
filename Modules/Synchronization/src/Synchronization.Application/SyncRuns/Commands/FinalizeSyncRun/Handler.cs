@@ -116,8 +116,6 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         if (modifications.Count == 0)
             return [];
 
-        var blobName = Guid.NewGuid().ToString("N");
-
         var newModifications = new List<DatawalletModification>();
 
         foreach (var modificationDto in modifications)
@@ -129,8 +127,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
                 modificationDto.ObjectIdentifier,
                 modificationDto.PayloadCategory,
                 modificationDto.EncryptedPayload,
-                _activeDevice,
-                blobName);
+                _activeDevice);
 
             newModifications.Add(newModification);
         }

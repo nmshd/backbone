@@ -18,7 +18,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Synchronization")
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -56,13 +56,6 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
-                        .IsFixedLength();
-
-                    b.Property<string>("BlobReference")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .IsUnicode(false)
-                        .HasColumnType("char(32)")
                         .IsFixedLength();
 
                     b.Property<string>("Collection")

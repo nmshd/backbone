@@ -9,9 +9,9 @@ class Relationship {
   final String templateId;
   final String status;
   final DateTime creationDate;
-  final DateTime answeredAt;
+  final DateTime? answeredAt;
   final String createdByDevice;
-  final String answeredByDevice;
+  final String? answeredByDevice;
 
   Relationship({
     required this.peer,
