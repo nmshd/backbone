@@ -128,8 +128,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                               ),
                             ),
                             DataCell(
-                              ElevatedButton(
-                                style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),
+                              FilledButton(
                                 onPressed: () => showChangeClientSecretDialog(context: context, clientId: client.clientId),
                                 child: Text(
                                   context.l10n.changeClientSecret,
