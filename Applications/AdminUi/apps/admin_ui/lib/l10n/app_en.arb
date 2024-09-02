@@ -133,7 +133,7 @@
     "deletionProcessAuditLogs_inputHint": "Enter an identity address",
     "deletionProcessAuditLogsDetails_noDataFound": "No deletion process audit logs found.",
     "errorScreen_goToHome": "Go to Home",
-    "errorScreen_404NotFound": "404 Not Found",
+    "errorScreen_notFound": "Not Found",
     "identityDetails_card_identityClipboardMessage": "Identity address copied to clipboard.",
     "identityDetails_card_publicKey": "Public Key",
     "identityDetails_receivedMessages_title": "Received Messages",
