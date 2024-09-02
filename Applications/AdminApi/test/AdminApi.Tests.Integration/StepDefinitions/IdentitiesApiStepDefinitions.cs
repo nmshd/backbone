@@ -3,6 +3,7 @@ using Backbone.AdminApi.Sdk.Services;
 using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.UnitTestTools.Data;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
@@ -10,6 +11,7 @@ namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
 [Binding]
 [Scope(Feature = "GET Identities")]
 [Scope(Feature = "POST Identities/{id}/DeletionProcess")]
+[Scope(Feature = "GET Identities/{identityAddress}")]
 [Scope(Feature = "GET Identities/{identityAddress}/DeletionProcesses/AuditLogs")]
 internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
 {
@@ -67,7 +69,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     [When("a GET request is sent to the /Identities/{address} endpoint with an inexistent address")]
     public async Task WhenAGETRequestIsSentToTheIdentitiesAddressEndpointForAnInexistentIdentity()
     {
-        _identityResponse = await _client.Identities.GetIdentity("inexistentIdentityAddress");
+        _identityResponse = await _client.Identities.GetIdentity(TestDataGenerator.CreateRandomIdentityAddress());
     }
 
     [Then("the response contains a list of Identities")]
@@ -123,7 +125,7 @@ internal class IdentitiesApiStepDefinitions : BaseStepDefinitions
     {
         if (_identityResponse != null)
         {
-            _identityResponse!.Result!.Should().NotBeNull();
+            _identityResponse!.Error!.Should().NotBeNull();
             _identityResponse.Error!.Code.Should().Be(errorCode);
         }
 
