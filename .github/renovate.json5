@@ -17,6 +17,10 @@
             packageNames: ["consumer-api", "admin-ui", "event-handler-service", "sse-server", "database-migrator", "admin-cli"],
             enabled: false
         },
+        {
+            // the dart packages in this list is fetched directly from git and therefore doesn't have a version
+            matchDatasources: ["dart"],
+            packageNames: ["window_size"],
             enabled: false
         },
 
