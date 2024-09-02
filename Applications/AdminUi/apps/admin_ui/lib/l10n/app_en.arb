@@ -195,6 +195,6 @@
     "tierDetails_quotaList_titleDescription": "View and assign quotas for this tier.",
     "tierDetails_quotaList_titleDescription_readOnly": "View quotas for this tier. This tier is managed by the system and therefore read-only.",
     "tierDetails_quotaList_noQuotaForTier": "No quotas added to this tier.",
-    "tiersOverview_title_description": "A list of existing tiers",
+    "tiersOverview_title": "A list of existing tiers",
     "tiersOverview_noTiersFound": "No tiers found."
 }
