@@ -13,8 +13,8 @@ public class RelationshipEntityTypeConfiguration : EntityEntityTypeConfiguration
 
         base.Configure(builder);
 
-        builder.HasIndex(x => x.From);
-        builder.HasIndex(x => x.To);
+        builder.HasIndex(x => x.From).HasMethod("hash");
+        builder.HasIndex(x => x.To).HasMethod("hash");
 
         builder.HasKey(x => x.Id);
 
