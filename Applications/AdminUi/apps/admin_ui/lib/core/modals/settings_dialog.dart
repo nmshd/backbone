@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:watch_it/watch_it.dart';
 
 import '../constants.dart';
@@ -39,7 +38,7 @@ class _SettingsDialog extends StatelessWidget with WatchItMixin {
           ),
         ],
       ),
-      actions: [FilledButton(onPressed: () => context.pop(), child: Text(context.l10n.close))],
+      actions: [FilledButton(onPressed: () => Navigator.of(context, rootNavigator: true).pop(), child: Text(context.l10n.close))],
     );
   }
 }
