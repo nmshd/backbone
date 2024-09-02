@@ -13,7 +13,6 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IUserContext _userContext;
     private readonly IPushNotificationSender _notificationSender;
-    private static readonly SemaphoreSlim SEMAPHORE = new(1);
 
     public Handler(IIdentitiesRepository identitiesRepository, IUserContext userContext, IPushNotificationSender notificationSender)
     {
@@ -24,22 +23,14 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
 
     public async Task<StartDeletionProcessAsOwnerResponse> Handle(StartDeletionProcessAsOwnerCommand request, CancellationToken cancellationToken)
     {
-        await SEMAPHORE.WaitAsync(cancellationToken);
-        try
-        {
-            var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
+        var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, true) ?? throw new NotFoundException(nameof(Identity));
 
-            var deletionProcess = identity.StartDeletionProcessAsOwner(_userContext.GetDeviceId());
+        var deletionProcess = identity.StartDeletionProcessAsOwner(_userContext.GetDeviceId());
 
-            await _identitiesRepository.Update(identity, cancellationToken);
+        await _identitiesRepository.Update(identity, cancellationToken);
 
-            await _notificationSender.SendNotification(identity.Address, new DeletionProcessStartedPushNotification(), cancellationToken);
+        await _notificationSender.SendNotification(identity.Address, new DeletionProcessStartedPushNotification(), cancellationToken);
 
-            return new StartDeletionProcessAsOwnerResponse(deletionProcess);
-        }
-        finally
-        {
-            SEMAPHORE.Release();
-        }
+        return new StartDeletionProcessAsOwnerResponse(deletionProcess);
     }
 }
