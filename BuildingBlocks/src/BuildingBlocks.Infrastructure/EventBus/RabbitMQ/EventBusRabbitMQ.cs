@@ -5,6 +5,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
+using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Polly;
@@ -168,7 +169,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
             try
             {
                 var correlationId = eventArgs.BasicProperties.CorrelationId;
-                correlationId = string.IsNullOrEmpty(correlationId) ? Guid.NewGuid().ToString() : correlationId;
+                correlationId = correlationId.IsNullOrEmpty() ? Guid.NewGuid().ToString() : correlationId;
 
                 using (CustomLogContext.SetCorrelationId(correlationId))
                 {
