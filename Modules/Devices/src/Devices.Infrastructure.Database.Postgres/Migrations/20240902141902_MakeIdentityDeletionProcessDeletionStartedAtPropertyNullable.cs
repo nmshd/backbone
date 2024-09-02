@@ -19,6 +19,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 nullable: true,
                 oldClrType: typeof(DateTime),
                 oldType: "timestamp with time zone");
+
+            migrationBuilder.Sql("""
+                                    UPDATE "Devices"."IdentityDeletionProcesses"
+                                    SET "DeletionStartedAt" = NULL
+                                    WHERE "DeletionStartedAt" = '-infinity'::timestamp with time zone;
+                                 """);
         }
 
         /// <inheritdoc />

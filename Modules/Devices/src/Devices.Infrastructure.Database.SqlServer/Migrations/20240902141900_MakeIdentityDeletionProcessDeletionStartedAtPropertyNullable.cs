@@ -19,6 +19,12 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 nullable: true,
                 oldClrType: typeof(DateTime),
                 oldType: "datetime2");
+
+            migrationBuilder.Sql("""
+                                     UPDATE [Devices].[IdentityDeletionProcesses]
+                                     SET [DeletionStartedAt] = NULL
+                                     WHERE [DeletionStartedAt] = '0001-01-01 00:00:00.0000000';
+                                 """);
         }
 
         /// <inheritdoc />
