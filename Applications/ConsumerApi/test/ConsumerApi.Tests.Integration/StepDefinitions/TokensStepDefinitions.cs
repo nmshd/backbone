@@ -89,7 +89,7 @@ internal class TokensStepDefinitions
     public async Task WhenAnAnonymousUserSendsAGetRequestToTheTokensIdEndpointWithTokenId(string tokenName)
     {
         var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
-        _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.GetToken(tokenId);
+        _responseContext.WhenResponse = await _clientPool.Anonymous.Tokens.GetTokenUnauthenticated(tokenId);
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Tokens/{{id}} endpoint with \"([^\"]*)\"")]
