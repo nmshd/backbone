@@ -82,4 +82,11 @@ public class MessagesRepository : IMessagesRepository
             .Where(expression)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IEnumerable<Message>> FindOrphanedMessages(CancellationToken cancellationToken)
+    {
+        return await _messages
+            .Where(m => Message.IsAnonymized(m.CreatedBy) && m.Recipients.All(r => Message.IsAnonymized(r.Address)))
+            .ToListAsync(cancellationToken);
+    }
 }

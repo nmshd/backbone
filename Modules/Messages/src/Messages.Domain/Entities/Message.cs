@@ -93,6 +93,11 @@ public class Message : Entity, IIdentifiable<MessageId>
         CreatedBy = anonymizedIdentityAddress;
     }
 
+    public static bool IsAnonymized(IdentityAddress address)
+    {
+        return address.ToString().StartsWith("ANONYMIZED_");
+    }
+
     #region Expressions
 
     public static Expression<Func<Message, bool>> HasParticipant(IdentityAddress identityAddress)
