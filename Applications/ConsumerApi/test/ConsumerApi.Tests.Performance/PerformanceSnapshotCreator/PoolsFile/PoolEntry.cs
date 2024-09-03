@@ -1,7 +1,9 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.Json.Serialization;
+using Backbone.PerformanceSnapshotCreator.Domain;
 
 namespace Backbone.PerformanceSnapshotCreator.PoolsFile;
+
 public record PoolEntry
 {
     public required string Type { get; set; }
@@ -25,8 +27,7 @@ public record PoolEntry
     /// </summary>
     public ConcurrentQueue<uint> IdentityUniqueOrderNumbers { get; internal set; } = new();
 
-    [JsonIgnore]
-    public List<Domain.Identity> Identities = [];
+    [JsonIgnore] public readonly List<Identity> Identities = [];
 
     [JsonIgnore] public uint NumberOfSentMessages;
 

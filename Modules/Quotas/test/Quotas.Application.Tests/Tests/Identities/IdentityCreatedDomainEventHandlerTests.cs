@@ -57,7 +57,7 @@ public class IdentityCreatedDomainEventHandlerTests : AbstractTestsBase
         A.CallTo(() => mockIdentitiesRepository.Add(A<Identity>.That.Matches(i => i.TierQuotas.Count == 2), CancellationToken.None)).MustHaveHappened();
     }
 
-    private IdentityCreatedDomainEventHandler CreateHandler(IIdentitiesRepository identities, FindTiersStubRepository tiers)
+    private static IdentityCreatedDomainEventHandler CreateHandler(IIdentitiesRepository identities, FindTiersStubRepository tiers)
     {
         var logger = A.Fake<ILogger<IdentityCreatedDomainEventHandler>>();
         var metricCalculatorFactory = A.Fake<MetricCalculatorFactory>();

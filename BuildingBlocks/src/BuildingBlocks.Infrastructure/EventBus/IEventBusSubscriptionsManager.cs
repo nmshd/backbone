@@ -13,9 +13,6 @@ public interface IEventBusSubscriptionsManager
     bool HasSubscriptionsForEvent(string eventName);
     void Clear();
 
-    IEnumerable<InMemoryEventBusSubscriptionsManager.SubscriptionInfo> GetHandlersForEvent<T>()
-        where T : DomainEvent;
-
     IEnumerable<InMemoryEventBusSubscriptionsManager.SubscriptionInfo> GetHandlersForEvent(string eventName);
     string GetEventKey<T>();
 }

@@ -5,16 +5,18 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
 public record MetricKey
 {
-    public static MetricKey NumberOfSentMessages = new("NumberOfSentMessages");
-    public static MetricKey NumberOfRelationships = new("NumberOfRelationships");
-    public static MetricKey NumberOfRelationshipTemplates = new("NumberOfRelationshipTemplates");
-    public static MetricKey NumberOfFiles = new("NumberOfFiles");
-    public static MetricKey NumberOfTokens = new("NumberOfTokens");
-    public static MetricKey UsedFileStorageSpace = new("UsedFileStorageSpace");
-    public static MetricKey NumberOfStartedDeletionProcesses = new("NumberOfStartedDeletionProcesses");
-    public static MetricKey NumberOfCreatedDatawalletModifications = new("NumberOfCreatedDatawalletModifications");
-    public static MetricKey NumberOfCreatedDevices = new("NumberOfCreatedDevices");
-    public static MetricKey NumberOfCreatedChallenges = new("NumberOfCreatedChallenges");
+    // ReSharper disable InconsistentNaming
+    public static readonly MetricKey NumberOfSentMessages = new("NumberOfSentMessages");
+    public static readonly MetricKey NumberOfRelationships = new("NumberOfRelationships");
+    public static readonly MetricKey NumberOfRelationshipTemplates = new("NumberOfRelationshipTemplates");
+    public static readonly MetricKey NumberOfFiles = new("NumberOfFiles");
+    public static readonly MetricKey NumberOfTokens = new("NumberOfTokens");
+    public static readonly MetricKey UsedFileStorageSpace = new("UsedFileStorageSpace");
+    public static readonly MetricKey NumberOfStartedDeletionProcesses = new("NumberOfStartedDeletionProcesses");
+    public static readonly MetricKey NumberOfCreatedDatawalletModifications = new("NumberOfCreatedDatawalletModifications");
+    public static readonly MetricKey NumberOfCreatedDevices = new("NumberOfCreatedDevices");
+    public static readonly MetricKey NumberOfCreatedChallenges = new("NumberOfCreatedChallenges");
+    // ReSharper restore InconsistentNaming
 
     private static readonly MetricKey[] SUPPORTED_METRIC_KEYS =
     [
@@ -29,6 +31,7 @@ public record MetricKey
         NumberOfCreatedDevices,
         NumberOfCreatedChallenges
     ];
+
     private static readonly string[] SUPPORTED_METRIC_KEY_VALUES = SUPPORTED_METRIC_KEYS.Select(m => m.Value).ToArray();
 
     private MetricKey(string value)

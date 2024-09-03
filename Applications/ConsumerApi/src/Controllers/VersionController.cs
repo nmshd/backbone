@@ -17,10 +17,10 @@ public class VersionController : ControllerBase
     [HttpGet]
     [AllowAnonymous]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<VersionResult>), StatusCodes.Status200OK)]
-    public IActionResult GetBackboneMajorVersion(CancellationToken cancellationToken)
+    public IActionResult GetBackboneMajorVersion()
     {
         return Ok(new HttpResponseEnvelopeResult<VersionResult>(
-            new VersionResult { MajorVersion = _versionService.GetBackboneMajorVersion() }));
+            new VersionResult { MajorVersion = VersionService.GetBackboneMajorVersion() }));
     }
 }
 

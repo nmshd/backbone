@@ -224,7 +224,7 @@ public class EventBusFactory : IDisposable
         );
     }
 
-    public void CleanupSubscription(SubscriberServiceApiClient subscriberServiceApiClient, SubscriptionName subscriptionName)
+    public static void CleanupSubscription(SubscriberServiceApiClient subscriberServiceApiClient, SubscriptionName subscriptionName)
     {
         try
         {

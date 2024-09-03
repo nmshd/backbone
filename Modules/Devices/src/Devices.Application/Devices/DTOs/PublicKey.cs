@@ -8,6 +8,8 @@ namespace Backbone.Modules.Devices.Application.Devices.DTOs;
 
 public class PublicKey
 {
+    private static readonly JsonSerializerOptions JSON_SERIALIZER_OPTIONS = new() { Converters = { new DynamicJsonConverter() } };
+
     public PublicKey(SignatureAlgorithm algorithm, byte[] key)
     {
         Algorithm = algorithm;
@@ -36,7 +38,7 @@ public class PublicKey
         var publicKeyObject =
             JsonSerializer.Deserialize<dynamic>(
                 publicKeyJsonString,
-                new JsonSerializerOptions { Converters = { new DynamicJsonConverter() } }) ??
+                JSON_SERIALIZER_OPTIONS) ??
             throw new Exception("Could not deserialize public key.");
         var key = Base64UrlEncoder.DecodeBytes((string)publicKeyObject.pub);
         var algorithm = (SignatureAlgorithm)publicKeyObject.alg;

@@ -10,11 +10,11 @@ public class FakeDataSource : IDataSource
 
     public Task<IEnumerable<string>> GetBlobIdsAsync(CancellationToken cancellationToken)
     {
-        return Task.FromResult(BlobIds as IEnumerable<string>);
+        return Task.FromResult<IEnumerable<string>>(BlobIds);
     }
 
     public Task<IEnumerable<FileId>> GetDatabaseIdsAsync(CancellationToken cancellationToken)
     {
-        return Task.FromResult(DatabaseIds as IEnumerable<FileId>);
+        return Task.FromResult<IEnumerable<FileId>>(DatabaseIds);
     }
 }

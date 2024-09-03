@@ -74,14 +74,12 @@ public static class IServiceCollectionExtensions
 
         services.AddAuthentication(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
 
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme, policy =>
+        services.AddAuthorizationBuilder()
+            .AddPolicy(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme, policy =>
             {
                 policy.AddAuthenticationSchemes(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme);
                 policy.RequireAuthenticatedUser();
             });
-        });
 
         services.AddCors(options =>
         {
@@ -106,7 +104,7 @@ public static class IServiceCollectionExtensions
     }
 
     public static IServiceCollection AddCustomOpenIddict(this IServiceCollection services,
-        BackboneConfiguration.AuthenticationConfiguration configuration, IHostEnvironment environment)
+        BackboneConfiguration.AuthenticationConfiguration configuration)
     {
         services.AddOpenIddict()
             .AddCore(options =>

@@ -29,7 +29,7 @@ public class TierDeletedDomainEventHandlerTests : AbstractTestsBase
         A.CallTo(() => tiersRepository.RemoveById(tier.Id)).MustHaveHappenedOnceExactly();
     }
 
-    private TierDeletedDomainEventHandler CreateHandler(ITiersRepository tiersRepository)
+    private static TierDeletedDomainEventHandler CreateHandler(ITiersRepository tiersRepository)
     {
         return new TierDeletedDomainEventHandler(A.Dummy<ILogger<TierDeletedDomainEventHandler>>(), tiersRepository);
     }

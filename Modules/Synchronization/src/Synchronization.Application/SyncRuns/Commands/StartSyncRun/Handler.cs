@@ -139,7 +139,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
         return syncRun;
     }
 
-    private SyncRun.SyncRunType MapSyncRunType(SyncRunDTO.SyncRunType type)
+    private static SyncRun.SyncRunType MapSyncRunType(SyncRunDTO.SyncRunType type)
     {
         return type switch
         {
@@ -154,7 +154,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
         return _previousSyncRun == null ? 0 : _previousSyncRun.Index + 1;
     }
 
-    private StartSyncRunResponse CreateResponse(StartSyncRunStatus status, SyncRun? newSyncRun = null)
+    private static StartSyncRunResponse CreateResponse(StartSyncRunStatus status, SyncRun? newSyncRun = null)
     {
         return new StartSyncRunResponse(status, newSyncRun);
     }
