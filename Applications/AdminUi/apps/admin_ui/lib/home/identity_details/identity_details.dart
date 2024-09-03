@@ -112,17 +112,15 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   Future<void> _reloadIdentity() async {
     final identityDetails = await GetIt.I.get<AdminApiClient>().identities.getIdentity(widget.address);
 
+    if (!mounted) return;
+
     if (identityDetails.hasError) {
       final errorMessage = identityDetails.error.message;
 
-      if (mounted) {
-        context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/identities'});
-      }
+      context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/identities'});
 
       return;
     }
-
-    if (!mounted) return;
 
     setState(() {
       _identityDetails = identityDetails.data;

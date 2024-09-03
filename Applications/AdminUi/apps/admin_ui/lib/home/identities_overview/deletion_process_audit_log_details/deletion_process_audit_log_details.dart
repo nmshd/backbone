@@ -65,16 +65,15 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
           address: widget.identityAddress,
         );
 
+    if (!mounted) return;
+
     if (response.hasError) {
       final errorMessage = response.error.message;
 
-      if (mounted) {
-        context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/identities'});
-      }
+      context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/identities'});
+
       return;
     }
-
-    if (!mounted) return;
 
     setState(() => _identityDeletionProcessAuditLogs = response.data);
   }

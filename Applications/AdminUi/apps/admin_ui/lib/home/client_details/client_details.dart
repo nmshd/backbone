@@ -83,16 +83,15 @@ class _ClientDetailsState extends State<ClientDetails> {
   Future<void> _reloadClient() async {
     final clientDetails = await GetIt.I.get<AdminApiClient>().clients.getClient(widget.clientId);
 
+    if (!mounted) return;
+
     if (clientDetails.hasError) {
       final errorMessage = clientDetails.error.message;
 
-      if (mounted) {
-        context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/clients'});
-      }
+      context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/clients'});
+
       return;
     }
-
-    if (!mounted) return;
 
     setState(() {
       _clientDetails = clientDetails.data;

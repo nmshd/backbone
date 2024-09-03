@@ -114,16 +114,16 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
           address: widget.address,
           deletionProcessId: widget.deletionProcessId,
         );
+
+    if (!mounted) return;
+
     if (deletionProcessesDetails.hasError) {
       final errorMessage = deletionProcessesDetails.error.message;
 
-      if (mounted) {
-        context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/identities'});
-      }
+      context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/identities'});
+
       return;
     }
-
-    if (!mounted) return;
 
     setState(() => _deletionProcessesDetails = deletionProcessesDetails.data);
   }
