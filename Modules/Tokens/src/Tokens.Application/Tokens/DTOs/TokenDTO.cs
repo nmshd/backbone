@@ -12,6 +12,7 @@ public class TokenDTO
         CreatedAt = token.CreatedAt;
         ExpiresAt = token.ExpiresAt;
         Content = token.Content;
+        ForIdentity = token.ForIdentity?.Value;
     }
 
     public string Id { get; set; }

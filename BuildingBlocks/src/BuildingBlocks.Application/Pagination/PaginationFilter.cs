@@ -10,7 +10,7 @@ public class PaginationFilter
 
     public PaginationFilter(int? pageNumber, int? pageSize)
     {
-        PageNumber = !pageNumber.HasValue || pageNumber.Value < 1 ? DEFAULT_PAGE_NUMBER : pageNumber.Value;
+        PageNumber = pageNumber is null or < 1 ? DEFAULT_PAGE_NUMBER : pageNumber.Value;
         PageSize = pageSize;
     }
 

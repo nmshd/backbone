@@ -58,17 +58,17 @@ public class ActualDeletionWorker : IHostedService
     {
         foreach (var identityAddress in addresses)
         {
-            await ExecuteDeletion(cancellationToken, identityAddress);
+            await ExecuteDeletion(identityAddress, cancellationToken);
         }
     }
 
-    private async Task ExecuteDeletion(CancellationToken cancellationToken, IdentityAddress identityAddress)
+    private async Task ExecuteDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
     {
-        await NotifyIdentityAboutStartingDeletion(cancellationToken, identityAddress);
+        await NotifyIdentityAboutStartingDeletion(identityAddress, cancellationToken);
         await Delete(identityAddress);
     }
 
-    private async Task NotifyIdentityAboutStartingDeletion(CancellationToken cancellationToken, IdentityAddress identityAddress)
+    private async Task NotifyIdentityAboutStartingDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
     {
         await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsPushNotification(), cancellationToken);
     }

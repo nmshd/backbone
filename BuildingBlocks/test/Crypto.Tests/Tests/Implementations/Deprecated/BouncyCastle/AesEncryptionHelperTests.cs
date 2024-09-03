@@ -1,4 +1,3 @@
-using Backbone.Crypto.Abstractions;
 using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
 using Backbone.UnitTestTools.BaseClasses;
 using Xunit;
@@ -7,7 +6,7 @@ namespace Backbone.Crypto.Tests.Tests.Implementations.Deprecated.BouncyCastle;
 
 public class AesEncryptionHelperTests : AbstractTestsBase
 {
-    private readonly ISymmetricEncrypter _symmetricEncrypterUnderTest;
+    private readonly AesSymmetricEncrypter _symmetricEncrypterUnderTest;
 
     #region Setup/Teardown
 

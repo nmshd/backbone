@@ -19,7 +19,7 @@ public class FindTiersStubRepository : ITiersRepository
 
     public Task<Tier?> Find(string id, CancellationToken cancellationToken, bool track = false)
     {
-        return Task.FromResult((Tier?)_tier);
+        return Task.FromResult<Tier?>(_tier);
     }
 
     public Task<TierQuotaDefinition> FindTierQuotaDefinition(string id, CancellationToken cancellationToken, bool track = false)
@@ -28,11 +28,6 @@ public class FindTiersStubRepository : ITiersRepository
     }
 
     public Task RemoveById(TierId tierId)
-    {
-        throw new NotSupportedException();
-    }
-
-    public Task RemoveTierQuotaDefinitionIfOrphaned(TierQuotaDefinitionId tierQuotaDefinitionId)
     {
         throw new NotSupportedException();
     }

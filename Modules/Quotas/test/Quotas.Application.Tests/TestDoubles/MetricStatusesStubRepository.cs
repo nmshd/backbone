@@ -6,15 +6,15 @@ namespace Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 
 internal class MetricStatusesStubRepository : IMetricStatusesRepository
 {
+    private readonly List<MetricStatus> _metricStatuses;
+
     public MetricStatusesStubRepository(List<MetricStatus> metricStatuses)
     {
-        MetricStatuses = metricStatuses;
+        _metricStatuses = metricStatuses;
     }
-
-    public List<MetricStatus> MetricStatuses { get; }
 
     public Task<IEnumerable<MetricStatus>> GetMetricStatuses(IdentityAddress identity, IEnumerable<MetricKey> keys)
     {
-        return Task.FromResult(MetricStatuses.AsEnumerable());
+        return Task.FromResult(_metricStatuses.AsEnumerable());
     }
 }
