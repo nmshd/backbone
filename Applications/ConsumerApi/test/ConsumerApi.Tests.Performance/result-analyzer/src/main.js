@@ -50,12 +50,13 @@ function printMetrics(routeMetrics) {
     console.log("HTTP Request Metrics Grouped by Route and Type:");
     Object.entries(routeMetrics).forEach(([route, typeMetrics]) => {
         const firstMetric = Object.entries(typeMetrics)[0][1];
-        console.log(`\nRoute: ${route}`);
+        console.log(`\n ===\n\nRoute: ${route}`);
         console.log(`Total Requests: ${firstMetric.totalRequests}`);
         console.log("Status Codes:");
         Object.entries(firstMetric.statuses).forEach(([status, count]) => {
             console.log(`  ${status}: ${count}`);
         });
+        console.log("Timings:");
         Object.entries(typeMetrics).forEach(([type, metrics]) => {
             const averageTime = (metrics.totalTime / metrics.totalRequests).toFixed(2);
             console.log(`${type}: \t ${averageTime} ms`);
@@ -75,8 +76,13 @@ function processK6Output(filePath) {
     }
 }
 
-// Specify the path to your K6 JSON output file
-const k6OutputFile = path.join(__dirname, "../../result.csv");
+const args = process.argv.slice(2);
+var filename = "../result.csv";
+if (args[0] === undefined) {
+    console.log(`Loading default file "${filename}". Pass a custom filename if you want to process it instead.`);
+} else {
+    filename = args[0];
+}
 
 // Run the program
-processK6Output(k6OutputFile);
+processK6Output(filename);
