@@ -2,8 +2,8 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
 public class IdentityDeletionConfiguration
 {
-    public static int LengthOfApprovalPeriod { get; } = 7;
-    public static int LengthOfGracePeriod { get; } = 14;
+    public static int LengthOfApprovalPeriod => 7;
+    public static int LengthOfGracePeriod => 14;
 
     public static GracePeriodNotificationConfiguration GracePeriodNotification1 { get; } = new()
     {
@@ -44,9 +44,4 @@ public class GracePeriodNotificationConfiguration
 public class ApprovalReminderNotificationConfiguration
 {
     public int Time { get; init; }
-}
-
-public class DeletionStartsNotification
-{
-    public string Text { get; init; } = "";
 }

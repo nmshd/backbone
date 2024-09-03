@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Application.Identities.Commands.SendDeletionProce
 using MediatR;
 
 namespace Backbone.Job.IdentityDeletion.Workers;
+
 public class SendGracePeriodAndApprovalRemindersWorker : IHostedService
 {
     private readonly IHostApplicationLifetime _host;
@@ -25,17 +26,17 @@ public class SendGracePeriodAndApprovalRemindersWorker : IHostedService
         _host.StopApplication();
     }
 
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
-    }
-
     private async Task StartProcessing(CancellationToken cancellationToken)
     {
         await _mediator.Send(new SendDeletionProcessApprovalRemindersCommand(), cancellationToken);
         await _mediator.Send(new SendDeletionProcessGracePeriodRemindersCommand(), cancellationToken);
 
         _logger.RemindersSent();
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
     }
 }
 

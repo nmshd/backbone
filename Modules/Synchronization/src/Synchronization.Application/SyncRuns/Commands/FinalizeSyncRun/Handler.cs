@@ -135,7 +135,7 @@ public class Handler : IRequestHandler<FinalizeExternalEventSyncSyncRunCommand, 
         return newModifications;
     }
 
-    private DatawalletModificationType MapDatawalletModificationType(DatawalletModificationDTO.DatawalletModificationType type)
+    private static DatawalletModificationType MapDatawalletModificationType(DatawalletModificationDTO.DatawalletModificationType type)
     {
         return type switch
         {

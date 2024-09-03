@@ -19,7 +19,7 @@ public class ServiceLocator
         return serviceProvider.GetRequiredService<T>();
     }
 
-    private IServiceCollection ConfigureServices(string dbProvider, string dbConnectionString)
+    private static IServiceCollection ConfigureServices(string dbProvider, string dbConnectionString)
     {
         var services = new ServiceCollection();
         services

@@ -30,7 +30,7 @@ public class TierTests : AbstractTestsBase
         var tier = new Tier(TierId.Parse("tier-id"), "some tier");
 
         // Act
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        tier.CreateQuota(MetricKey.NUMBER_OF_SENT_MESSAGES, 5, QuotaPeriod.Month);
 
         // Assert
         tier.Quotas.Should().HaveCount(1);
@@ -41,7 +41,7 @@ public class TierTests : AbstractTestsBase
     {
         // Arrange & Act
         var tier = Tier.QUEUED_FOR_DELETION.Clone();
-        var result = tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        var result = tier.CreateQuota(MetricKey.NUMBER_OF_SENT_MESSAGES, 5, QuotaPeriod.Month);
 
         // Assert
         result.IsFailure.Should().BeTrue();
@@ -53,7 +53,7 @@ public class TierTests : AbstractTestsBase
     {
         // Arrange
         var tier = new Tier(TierId.Parse("tier-id"), "some tier");
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        tier.CreateQuota(MetricKey.NUMBER_OF_SENT_MESSAGES, 5, QuotaPeriod.Month);
 
         // Act
         tier.DeleteQuota(tier.Quotas.First().Id);
@@ -68,7 +68,7 @@ public class TierTests : AbstractTestsBase
         // Arrange
         var metrics = new List<Metric>
         {
-            new(MetricKey.NumberOfRelationships, "Number of Relationships")
+            new(MetricKey.NUMBER_OF_RELATIONSHIPS, "Number of Relationships")
         };
         var tier = Tier.QUEUED_FOR_DELETION.Clone();
         var addedQuotas = tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics);
@@ -86,8 +86,8 @@ public class TierTests : AbstractTestsBase
     {
         // Arrange
         var tier = new Tier(TierId.Parse("tier-id"), "some tier");
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Week);
+        tier.CreateQuota(MetricKey.NUMBER_OF_SENT_MESSAGES, 5, QuotaPeriod.Month);
+        tier.CreateQuota(MetricKey.NUMBER_OF_SENT_MESSAGES, 5, QuotaPeriod.Week);
 
         var quotaIdToDelete = tier.Quotas.First().Id;
         var otherQuotaId = tier.Quotas.Second().Id;
@@ -118,7 +118,7 @@ public class TierTests : AbstractTestsBase
     public void Creating_a_quota_with_duplicate_quota_metric_period_throws_domain_exception()
     {
         // Arrange
-        var metricKey = MetricKey.NumberOfSentMessages;
+        var metricKey = MetricKey.NUMBER_OF_SENT_MESSAGES;
         var tier = new Tier(TierId.Parse("tier-id"), "some tier");
         tier.CreateQuota(metricKey, 5, QuotaPeriod.Hour);
 
@@ -136,7 +136,7 @@ public class TierTests : AbstractTestsBase
         // Arrange
         var metrics = new List<Metric>
         {
-            new(MetricKey.NumberOfRelationships, "Number of Relationships")
+            new(MetricKey.NUMBER_OF_RELATIONSHIPS, "Number of Relationships")
         };
         var tier = new Tier(TierId.Parse("tier-id"), "some tier");
 
@@ -155,7 +155,7 @@ public class TierTests : AbstractTestsBase
 
         var metrics = new List<Metric>
         {
-            new(MetricKey.NumberOfSentMessages, "Number of Sent Messages")
+            new(MetricKey.NUMBER_OF_SENT_MESSAGES, "Number of Sent Messages")
         };
 
         // Act
@@ -164,7 +164,7 @@ public class TierTests : AbstractTestsBase
         // Assert
         tier.Quotas.Should().HaveCount(1);
         addedQuotas.Should().HaveCount(1);
-        addedQuotas.First().MetricKey.Should().Be(MetricKey.NumberOfSentMessages);
+        addedQuotas.First().MetricKey.Should().Be(MetricKey.NUMBER_OF_SENT_MESSAGES);
     }
 
     [Fact]
@@ -173,12 +173,12 @@ public class TierTests : AbstractTestsBase
         // Arrange
         var metrics = new List<Metric>
         {
-            new(MetricKey.NumberOfSentMessages, "Number of Sent Messages")
+            new(MetricKey.NUMBER_OF_SENT_MESSAGES, "Number of Sent Messages")
         };
 
         var tier = Tier.QUEUED_FOR_DELETION.Clone();
         tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics);
-        metrics.Add(new Metric(MetricKey.NumberOfRelationships, "Number of Relationships"));
+        metrics.Add(new Metric(MetricKey.NUMBER_OF_RELATIONSHIPS, "Number of Relationships"));
 
         // Act
         var addedQuotas = tier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics).ToList();
@@ -195,7 +195,7 @@ public class TierTests : AbstractTestsBase
         var tierId = TierId.Parse("tier-id");
         var tier = new Tier(tierId, "some-tier-name");
 
-        tier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        tier.CreateQuota(MetricKey.NUMBER_OF_SENT_MESSAGES, 5, QuotaPeriod.Month);
         var tierQuotaDefinitionId = tier.Quotas.First().Id;
         tier.ClearDomainEvents();
 
@@ -213,7 +213,7 @@ public class TierTests : AbstractTestsBase
     {
         // Arrange
         var tierId = TierId.Parse("TIRsomeTierId1111111");
-        var metricKey = MetricKey.NumberOfSentMessages;
+        var metricKey = MetricKey.NUMBER_OF_SENT_MESSAGES;
         var tier = new Tier(tierId, "some-tier-name");
 
         // Act

@@ -61,7 +61,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 
             if (relationshipBetweenSenderAndRecipient == null)
             {
-                _logger.LogInformation($"Sending message aborted. There is no relationship between the sender and the recipient at index {i}.");
+                _logger.LogInformation("Sending message aborted. There is no relationship between the sender and the recipient at index {recipientIndex}.", i);
                 throw new OperationFailedException(ApplicationErrors.NoRelationshipToRecipientExists(recipientDto.Address));
             }
 
