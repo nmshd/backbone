@@ -43,22 +43,25 @@ file static class IdentityExtensions
         return new List<Quota>(individualQuotas).Concat(new List<Quota>(tierQuotas)).ToList();
     }
 
-    public static async Task<IEnumerable<QuotaGroupDTO>> AsQuotaGroupDTOs(this IEnumerable<Quota> quotas, IdentityAddress identityAddress, MetricCalculatorFactory metricCalculatorFactory, CancellationToken cancellationToken)
+    public static async Task<IEnumerable<QuotaGroupDTO>> AsQuotaGroupDTOs(this IEnumerable<Quota> quotas, IdentityAddress identityAddress, MetricCalculatorFactory metricCalculatorFactory,
+        CancellationToken cancellationToken)
     {
-        var singleQuotaDTOs = await Task.WhenAll(quotas.Select(async q =>
-        {
-            var calculator = metricCalculatorFactory.CreateFor(q.MetricKey);
-            var usage = await calculator.CalculateUsage(q.Period.CalculateBegin(SystemTime.UtcNow), q.Period.CalculateEnd(SystemTime.UtcNow), identityAddress, cancellationToken);
+        var singleQuotaDTOs = new List<SingleQuotaDTO>();
 
-            return new SingleQuotaDTO
+        foreach (var quota in quotas)
+        {
+            var calculator = metricCalculatorFactory.CreateFor(quota.MetricKey);
+            var usage = await calculator.CalculateUsage(quota.Period.CalculateBegin(SystemTime.UtcNow), quota.Period.CalculateEnd(SystemTime.UtcNow), identityAddress, cancellationToken);
+
+            singleQuotaDTOs.Add(new SingleQuotaDTO
             {
-                Source = q is IndividualQuota ? QuotaSource.Individual : QuotaSource.Tier,
-                MetricKey = q.MetricKey.Value,
-                Max = q.Max,
+                Source = quota is IndividualQuota ? QuotaSource.Individual : QuotaSource.Tier,
+                MetricKey = quota.MetricKey.Value,
+                Max = quota.Max,
                 Usage = usage,
-                Period = q.Period.ToString()
-            };
-        }));
+                Period = quota.Period.ToString()
+            });
+        }
 
         return singleQuotaDTOs
             .GroupBy(quota => quota.MetricKey)
