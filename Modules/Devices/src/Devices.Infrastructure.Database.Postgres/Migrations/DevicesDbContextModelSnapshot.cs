@@ -18,7 +18,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Devices")
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -273,7 +273,11 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("ClientId");
 
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("ClientId"), "hash");
+
                     b.HasIndex("TierId");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("TierId"), "hash");
 
                     b.ToTable("Identities", "Devices");
                 });
@@ -316,7 +320,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("DeletionStartedAt")
+                    b.Property<DateTime?>("DeletionStartedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("GracePeriodEndsAt")

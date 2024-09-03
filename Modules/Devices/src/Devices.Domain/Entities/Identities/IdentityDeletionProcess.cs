@@ -41,7 +41,6 @@ public class IdentityDeletionProcess : Entity
     public IdentityDeletionProcessId Id { get; }
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
-    public DateTime DeletionStartedAt { get; private set; }
     public DateTime CreatedAt { get; }
     public DateTime ApprovalPeriodEndsAt => CreatedAt.AddDays(IdentityDeletionConfiguration.LengthOfApprovalPeriod);
 
@@ -63,6 +62,8 @@ public class IdentityDeletionProcess : Entity
     public DateTime? GracePeriodReminder1SentAt { get; private set; }
     public DateTime? GracePeriodReminder2SentAt { get; private set; }
     public DateTime? GracePeriodReminder3SentAt { get; private set; }
+
+    public DateTime? DeletionStartedAt { get; private set; }
 
     public bool HasApprovalPeriodExpired => Status == DeletionProcessStatus.WaitingForApproval && SystemTime.UtcNow >= ApprovalPeriodEndsAt;
 

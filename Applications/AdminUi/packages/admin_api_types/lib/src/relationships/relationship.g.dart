@@ -12,9 +12,9 @@ Relationship _$RelationshipFromJson(Map<String, dynamic> json) => Relationship(
       templateId: json['templateId'] as String,
       status: json['status'] as String,
       creationDate: DateTime.parse(json['creationDate'] as String),
-      answeredAt: DateTime.parse(json['answeredAt'] as String),
+      answeredAt: json['answeredAt'] == null ? null : DateTime.parse(json['answeredAt'] as String),
       createdByDevice: json['createdByDevice'] as String,
-      answeredByDevice: json['answeredByDevice'] as String,
+      answeredByDevice: json['answeredByDevice'] as String?,
     );
 
 Map<String, dynamic> _$RelationshipToJson(Relationship instance) => <String, dynamic>{
@@ -23,7 +23,7 @@ Map<String, dynamic> _$RelationshipToJson(Relationship instance) => <String, dyn
       'templateId': instance.templateId,
       'status': instance.status,
       'creationDate': instance.creationDate.toIso8601String(),
-      'answeredAt': instance.answeredAt.toIso8601String(),
+      'answeredAt': instance.answeredAt?.toIso8601String(),
       'createdByDevice': instance.createdByDevice,
       'answeredByDevice': instance.answeredByDevice,
     };
