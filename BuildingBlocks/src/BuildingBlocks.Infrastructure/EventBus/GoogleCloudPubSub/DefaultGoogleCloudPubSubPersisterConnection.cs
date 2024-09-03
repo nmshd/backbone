@@ -2,16 +2,19 @@ using Backbone.Tooling.Extensions;
 using Google.Api.Gax;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.PubSub.V1;
+using Microsoft.Extensions.Logging;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
 public class DefaultGoogleCloudPubSubPersisterConnection : IGoogleCloudPubSubPersisterConnection
 {
+    private readonly ILogger<DefaultGoogleCloudPubSubPersisterConnection> _logger;
     private bool _disposed;
 
-    public DefaultGoogleCloudPubSubPersisterConnection(string projectId, string topicId,
+    public DefaultGoogleCloudPubSubPersisterConnection(ILogger<DefaultGoogleCloudPubSubPersisterConnection> logger, string projectId, string topicId,
         string subscriptionName, string connectionInfo)
     {
+        _logger = logger;
         var topicName = TopicName.FromProjectTopic(projectId, topicId);
         var gcpCredentials = connectionInfo.IsEmpty() ? GoogleCredential.GetApplicationDefault() : GoogleCredential.FromJson(connectionInfo);
 
@@ -39,8 +42,26 @@ public class DefaultGoogleCloudPubSubPersisterConnection : IGoogleCloudPubSubPer
         if (_disposed) return;
 
         _disposed = true;
-        PublisherClient.ShutdownAsync(CancellationToken.None).GetAwaiter().GetResult();
 
-        SubscriberClient.StopAsync(CancellationToken.None).GetAwaiter().GetResult();
+        try
+        {
+            PublisherClient.ShutdownAsync(CancellationToken.None).GetAwaiter().GetResult();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occurred while shutting down the publisher client.");
+        }
+
+        try
+        {
+            SubscriberClient.StopAsync(CancellationToken.None).GetAwaiter().GetResult();
+        }
+        catch (Exception ex)
+        {
+            if (ex.Message != "Can only stop a started instance.")
+                throw;
+
+            _logger.LogError(ex, "An error occurred while stopping the subscriber client.");
+        }
     }
 }
