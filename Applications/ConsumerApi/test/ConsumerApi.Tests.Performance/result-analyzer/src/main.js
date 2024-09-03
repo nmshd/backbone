@@ -20,23 +20,26 @@ function groupMetricsByRoute(metrics) {
     metrics.forEach((metric) => {
         // Extract the route from the URL (assuming the route is the path)
         const route = new URL(metric.name).pathname;
+        const type = metric.metric_name;
 
-        if (!routeMetrics[route]) {
-            routeMetrics[route] = {
+        if (!routeMetrics[route]) routeMetrics[route] = {};
+
+        if (!routeMetrics[route][type]) {
+            routeMetrics[route][type] = {
                 totalRequests: 0,
                 totalTime: 0.0,
                 statuses: {}
             };
         }
 
-        routeMetrics[route].totalRequests += 1;
-        routeMetrics[route].totalTime += parseFloat(metric.metric_value);
+        routeMetrics[route][type].totalRequests += 1;
+        routeMetrics[route][type].totalTime += parseFloat(metric.metric_value);
         const status = metric.status;
 
-        if (!routeMetrics[route].statuses[status]) {
-            routeMetrics[route].statuses[status] = 0;
+        if (!routeMetrics[route][type].statuses[status]) {
+            routeMetrics[route][type].statuses[status] = 0;
         }
-        routeMetrics[route].statuses[status] += 1;
+        routeMetrics[route][type].statuses[status] += 1;
     });
 
     return routeMetrics;
@@ -44,15 +47,18 @@ function groupMetricsByRoute(metrics) {
 
 // Function to print the grouped metrics
 function printMetrics(routeMetrics) {
-    console.log("HTTP Request Metrics Grouped by Route:");
-    Object.entries(routeMetrics).forEach(([route, metrics]) => {
-        const averageTime = (metrics.totalTime / metrics.totalRequests).toFixed(2);
+    console.log("HTTP Request Metrics Grouped by Route and Type:");
+    Object.entries(routeMetrics).forEach(([route, typeMetrics]) => {
+        const firstMetric = Object.entries(typeMetrics)[0][1];
         console.log(`\nRoute: ${route}`);
-        console.log(`Total Requests: ${metrics.totalRequests}`);
-        console.log(`Average Duration: ${averageTime} ms`);
+        console.log(`Total Requests: ${firstMetric.totalRequests}`);
         console.log("Status Codes:");
-        Object.entries(metrics.statuses).forEach(([status, count]) => {
+        Object.entries(firstMetric.statuses).forEach(([status, count]) => {
             console.log(`  ${status}: ${count}`);
+        });
+        Object.entries(typeMetrics).forEach(([type, metrics]) => {
+            const averageTime = (metrics.totalTime / metrics.totalRequests).toFixed(2);
+            console.log(`${type}: \t ${averageTime} ms`);
         });
     });
 }
@@ -61,7 +67,7 @@ function printMetrics(routeMetrics) {
 function processK6Output(filePath) {
     const k6Data = readK6Output(filePath);
     if (k6Data) {
-        const httpMetrics = k6Data.filter((x) => x.metric_name == "http_req_duration");
+        const httpMetrics = k6Data.filter((x) => x.metric_name.indexOf("http_req_") == 0);
         const groupedMetrics = groupMetricsByRoute(httpMetrics);
         printMetrics(groupedMetrics);
     } else {
