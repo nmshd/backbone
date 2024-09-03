@@ -18,6 +18,7 @@ namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
 [Scope(Feature = "POST Identities/Self/DeletionProcess")]
+[Scope(Feature = "PUT Identities/Self/DeletionProcesses/{id}/Approve")]
 [Scope(Feature = "POST Identity")]
 internal class IdentitiesApiStepDefinitions
 {
@@ -25,6 +26,7 @@ internal class IdentitiesApiStepDefinitions
     private readonly ClientCredentials _clientCredentials;
     private readonly HttpClient _httpClient;
     private ApiResponse<StartDeletionProcessResponse>? _startDeletionProcessResponse;
+    private ApiResponse<ApproveDeletionProcessResponse>? _approveDeletionProcessResponse;
     private ApiResponse<CreateIdentityResponse>? _identityResponse;
     private ApiResponse<Challenge>? _challengeResponse;
 
@@ -64,6 +66,12 @@ internal class IdentitiesApiStepDefinitions
         _startDeletionProcessResponse = await _sdk.Identities.StartDeletionProcess();
     }
 
+    [When("a PUT request is sent to the /Identities/Self/DeletionProcesses/{id}/Approve endpoint with a non-existent deletionProcessId")]
+    public async Task WhenAPutRequestIsSentToTheIdentitiesSelfDeletionProcessesIdApproveEndpointWithANonExistentDeletionProcessId()
+    {
+        _approveDeletionProcessResponse = await _sdk.Identities.ApproveDeletionProcess("IDPSomeNonExistentId");
+    }
+
     [When("a POST request is sent to the /Identities endpoint with a valid signature on c")]
     public async Task WhenAPOSTRequestIsSentToTheIdentitiesEndpoint()
     {
@@ -94,8 +102,17 @@ internal class IdentitiesApiStepDefinitions
     [Then(@"the response content contains an error with the error code ""([^""]*)""")]
     public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
     {
-        _startDeletionProcessResponse!.Error.Should().NotBeNull();
-        _startDeletionProcessResponse.Error!.Code.Should().Be(errorCode);
+        if (_startDeletionProcessResponse != null)
+        {
+            _startDeletionProcessResponse!.Error.Should().NotBeNull();
+            _startDeletionProcessResponse.Error!.Code.Should().Be(errorCode);
+        }
+
+        if (_approveDeletionProcessResponse != null)
+        {
+            _approveDeletionProcessResponse!.Error.Should().NotBeNull();
+            _approveDeletionProcessResponse.Error!.Code.Should().Be(errorCode);
+        }
     }
 
     [Then("the response contains a Deletion Process")]
