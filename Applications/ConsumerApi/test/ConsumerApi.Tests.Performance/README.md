@@ -111,3 +111,14 @@ Entity Creation: ~1h
 | RelationshipTemplates | 750   |
 | Relationships         | 1747  |
 | Messages              | 16113 |
+
+# k6 results analysis
+
+When running a k6 load test, you can output the results as a csv file.
+Note that you will need to run `npm i` inside the `result-analyzer` directory before running the aforementioned script for the first time.
+
+The output file can be analyzed using the following script:
+
+`node .\result-analyzer\src\main.js .\result.csv`
+
+Where `result.csv` is the name of the csv file.
