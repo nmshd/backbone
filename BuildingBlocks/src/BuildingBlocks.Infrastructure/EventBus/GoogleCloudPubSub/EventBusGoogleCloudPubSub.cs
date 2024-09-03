@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
-public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
+public partial class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 {
     private static class PubSubMessageAttributes
     {
@@ -90,7 +90,7 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
 
     private static string RemoveDomainEventSuffix(string typeName)
     {
-        return Regex.Replace(typeName, $"^(.+){DOMAIN_EVENT_SUFFIX}$", "$1");
+        return DomainEventNameRegex().Replace(typeName, "$1");
     }
 
     private async Task<SubscriberClient.Reply> OnIncomingEvent(PubsubMessage @event, CancellationToken _)
@@ -155,6 +155,9 @@ public class EventBusGoogleCloudPubSub : IEventBus, IDisposable
             });
         }
     }
+
+    [GeneratedRegex("^(.+)DomainEvent$")]
+    private static partial Regex DomainEventNameRegex();
 }
 
 internal static partial class EventBusGoogleCloudPubSubLogs

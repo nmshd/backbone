@@ -24,7 +24,7 @@ public class MessagesRepository : IMessagesRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false, bool fillBody = true)
+    public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
         var message = await (track ? _messages : _readOnlyMessages)
             .IncludeAll(_dbContext)

@@ -12,16 +12,16 @@ public class MetricsRepository : IMetricsRepository
     {
         _metrics =
         [
-            new Metric(MetricKey.NumberOfSentMessages, "Number of Sent Messages"),
-            new Metric(MetricKey.NumberOfRelationships, "Number of Relationships"),
-            new Metric(MetricKey.NumberOfRelationshipTemplates, "Number of Relationship Templates"),
-            new Metric(MetricKey.NumberOfFiles, "Number of Files"),
-            new Metric(MetricKey.NumberOfTokens, "Number of Tokens"),
-            new Metric(MetricKey.UsedFileStorageSpace, "File Storage Capacity (in Megabytes)"),
-            new Metric(MetricKey.NumberOfStartedDeletionProcesses, "Number of Started Deletion Processes"),
-            new Metric(MetricKey.NumberOfCreatedChallenges, "Number of Created Challenges"),
-            new Metric(MetricKey.NumberOfCreatedDatawalletModifications, "Number of Created Datawallet Modifications"),
-            new Metric(MetricKey.NumberOfCreatedDevices, "Number of Created Devices")
+            new Metric(MetricKey.NUMBER_OF_SENT_MESSAGES, "Number of Sent Messages"),
+            new Metric(MetricKey.NUMBER_OF_RELATIONSHIPS, "Number of Relationships"),
+            new Metric(MetricKey.NUMBER_OF_RELATIONSHIP_TEMPLATES, "Number of Relationship Templates"),
+            new Metric(MetricKey.NUMBER_OF_FILES, "Number of Files"),
+            new Metric(MetricKey.NUMBER_OF_TOKENS, "Number of Tokens"),
+            new Metric(MetricKey.USED_FILE_STORAGE_SPACE, "File Storage Capacity (in Megabytes)"),
+            new Metric(MetricKey.NUMBER_OF_STARTED_DELETION_PROCESSES, "Number of Started Deletion Processes"),
+            new Metric(MetricKey.NUMBER_OF_CREATED_CHALLENGES, "Number of Created Challenges"),
+            new Metric(MetricKey.NUMBER_OF_CREATED_DATAWALLET_MODIFICATIONS, "Number of Created Datawallet Modifications"),
+            new Metric(MetricKey.NUMBER_OF_CREATED_DEVICES, "Number of Created Devices")
         ];
     }
 

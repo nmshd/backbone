@@ -32,11 +32,6 @@ public class FindTierQuotaDefinitionsStubRepository : ITiersRepository
         throw new NotSupportedException();
     }
 
-    public Task RemoveTierQuotaDefinitionIfOrphaned(TierQuotaDefinitionId tierQuotaDefinitionId)
-    {
-        throw new NotSupportedException();
-    }
-
     public Task Update(Tier tier, CancellationToken cancellationToken)
     {
         throw new NotSupportedException();

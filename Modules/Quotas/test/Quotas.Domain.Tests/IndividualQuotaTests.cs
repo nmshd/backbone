@@ -12,7 +12,7 @@ public class IndividualQuotaTests : AbstractTestsBase
     public void Creates_individual_quota_with_valid_properties()
     {
         // Arrange
-        var metricKey = MetricKey.NumberOfSentMessages;
+        var metricKey = MetricKey.NUMBER_OF_SENT_MESSAGES;
         const int max = 10;
         const QuotaPeriod period = QuotaPeriod.Month;
 

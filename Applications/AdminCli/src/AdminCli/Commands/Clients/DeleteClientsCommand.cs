@@ -29,7 +29,7 @@ public class DeleteClientsCommand : AdminCliDbCommand
             try
             {
                 await mediator.Send(new DeleteClientCommand(clientId), CancellationToken.None);
-                Console.WriteLine($"Successfully deleted client '{clientId}'");
+                Console.WriteLine($@"Successfully deleted client '{clientId}'");
             }
             catch (Exception ex)
             {

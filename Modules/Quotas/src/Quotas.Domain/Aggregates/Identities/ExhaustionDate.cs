@@ -4,7 +4,7 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 
 public record ExhaustionDate(DateTime Value) : IComparable<ExhaustionDate>
 {
-    public static ExhaustionDate Unexhausted = new(DateTime.MinValue);
+    public static readonly ExhaustionDate UNEXHAUSTED = new(DateTime.MinValue);
 
     public readonly DateTime Value = Value;
 

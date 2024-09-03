@@ -2,5 +2,5 @@
 
 public class RejectRelationshipRequest
 {
-    public byte[]? CreationResponseContent { get; set; } = Array.Empty<byte>();
+    public byte[]? CreationResponseContent { get; set; } = [];
 }

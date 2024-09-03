@@ -21,12 +21,12 @@ public record PnsHandle
             case PushNotificationPlatform.Fcm:
             {
                 var parseHandleResult = FcmHandle.Parse(value);
-                return parseHandleResult.Map(v => (PnsHandle)v);
+                return parseHandleResult.Map(PnsHandle (v) => v);
             }
             case PushNotificationPlatform.Apns:
             {
                 var parseHandleResult = ApnsHandle.Parse(value);
-                return parseHandleResult.Map(v => (PnsHandle)v);
+                return parseHandleResult.Map(PnsHandle (v) => v);
             }
             case PushNotificationPlatform.Sse:
             {
@@ -36,7 +36,7 @@ public record PnsHandle
             case PushNotificationPlatform.Dummy:
             {
                 var parseHandleResult = DummyHandle.Create();
-                return parseHandleResult.Map(v => (PnsHandle)v);
+                return parseHandleResult.Map(PnsHandle (v) => v);
             }
             default:
                 return Result.Failure<PnsHandle, DomainError>(DomainErrors.InvalidPnsPlatform($"Platform '{platform}' does not exist"));

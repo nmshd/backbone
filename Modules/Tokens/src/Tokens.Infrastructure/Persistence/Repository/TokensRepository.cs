@@ -42,7 +42,7 @@ public class TokensRepository : ITokensRepository
 
         var idsArray = ids as TokenId[] ?? ids.ToArray();
 
-        if (idsArray.Any())
+        if (idsArray.Length != 0)
             query = query.Where(t => idsArray.Contains(t.Id));
 
         query = query.Where(Token.CanBeCollectedBy(activeIdentity));

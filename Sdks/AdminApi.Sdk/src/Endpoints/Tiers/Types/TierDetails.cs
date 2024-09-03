@@ -1,6 +1,4 @@
-﻿using Backbone.AdminApi.Sdk.Endpoints.Identities.Types;
-
-namespace Backbone.AdminApi.Sdk.Endpoints.Tiers.Types;
+﻿namespace Backbone.AdminApi.Sdk.Endpoints.Tiers.Types;
 
 public class TierDetails
 {
