@@ -5,31 +5,29 @@ namespace Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
 public record MetricKey
 {
-    // ReSharper disable InconsistentNaming
-    public static readonly MetricKey NumberOfSentMessages = new("NumberOfSentMessages");
-    public static readonly MetricKey NumberOfRelationships = new("NumberOfRelationships");
-    public static readonly MetricKey NumberOfRelationshipTemplates = new("NumberOfRelationshipTemplates");
-    public static readonly MetricKey NumberOfFiles = new("NumberOfFiles");
-    public static readonly MetricKey NumberOfTokens = new("NumberOfTokens");
-    public static readonly MetricKey UsedFileStorageSpace = new("UsedFileStorageSpace");
-    public static readonly MetricKey NumberOfStartedDeletionProcesses = new("NumberOfStartedDeletionProcesses");
-    public static readonly MetricKey NumberOfCreatedDatawalletModifications = new("NumberOfCreatedDatawalletModifications");
-    public static readonly MetricKey NumberOfCreatedDevices = new("NumberOfCreatedDevices");
-    public static readonly MetricKey NumberOfCreatedChallenges = new("NumberOfCreatedChallenges");
-    // ReSharper restore InconsistentNaming
+    public static readonly MetricKey NUMBER_OF_SENT_MESSAGES = new("NumberOfSentMessages");
+    public static readonly MetricKey NUMBER_OF_RELATIONSHIPS = new("NumberOfRelationships");
+    public static readonly MetricKey NUMBER_OF_RELATIONSHIP_TEMPLATES = new("NumberOfRelationshipTemplates");
+    public static readonly MetricKey NUMBER_OF_FILES = new("NumberOfFiles");
+    public static readonly MetricKey NUMBER_OF_TOKENS = new("NumberOfTokens");
+    public static readonly MetricKey USED_FILE_STORAGE_SPACE = new("UsedFileStorageSpace");
+    public static readonly MetricKey NUMBER_OF_STARTED_DELETION_PROCESSES = new("NumberOfStartedDeletionProcesses");
+    public static readonly MetricKey NUMBER_OF_CREATED_DATAWALLET_MODIFICATIONS = new("NumberOfCreatedDatawalletModifications");
+    public static readonly MetricKey NUMBER_OF_CREATED_DEVICES = new("NumberOfCreatedDevices");
+    public static readonly MetricKey NUMBER_OF_CREATED_CHALLENGES = new("NumberOfCreatedChallenges");
 
     private static readonly MetricKey[] SUPPORTED_METRIC_KEYS =
     [
-        NumberOfSentMessages,
-        NumberOfRelationships,
-        NumberOfFiles,
-        NumberOfTokens,
-        UsedFileStorageSpace,
-        NumberOfRelationshipTemplates,
-        NumberOfStartedDeletionProcesses,
-        NumberOfCreatedDatawalletModifications,
-        NumberOfCreatedDevices,
-        NumberOfCreatedChallenges
+        NUMBER_OF_SENT_MESSAGES,
+        NUMBER_OF_RELATIONSHIPS,
+        NUMBER_OF_FILES,
+        NUMBER_OF_TOKENS,
+        USED_FILE_STORAGE_SPACE,
+        NUMBER_OF_RELATIONSHIP_TEMPLATES,
+        NUMBER_OF_STARTED_DELETION_PROCESSES,
+        NUMBER_OF_CREATED_DATAWALLET_MODIFICATIONS,
+        NUMBER_OF_CREATED_DEVICES,
+        NUMBER_OF_CREATED_CHALLENGES
     ];
 
     private static readonly string[] SUPPORTED_METRIC_KEY_VALUES = SUPPORTED_METRIC_KEYS.Select(m => m.Value).ToArray();

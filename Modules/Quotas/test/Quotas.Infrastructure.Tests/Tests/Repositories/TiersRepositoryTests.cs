@@ -25,8 +25,8 @@ public class TiersRepositoryTests : AbstractTestsBase
         var (arrangeContext, actContext, assertContext) = FakeDbContextFactory.CreateDbContexts<QuotasDbContext>();
 
         var arrangedTier = new Tier(TierId.Parse("TIR00000000000000000"), "Test");
-        var tierQuotaDefinitionToBeDeleted = arrangedTier.CreateQuota(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month).Value;
-        var otherTierQuotaDefinition = arrangedTier.CreateQuota(MetricKey.NumberOfFiles, 5, QuotaPeriod.Month).Value;
+        var tierQuotaDefinitionToBeDeleted = arrangedTier.CreateQuota(MetricKey.NUMBER_OF_SENT_MESSAGES, 5, QuotaPeriod.Month).Value;
+        var otherTierQuotaDefinition = arrangedTier.CreateQuota(MetricKey.NUMBER_OF_FILES, 5, QuotaPeriod.Month).Value;
 
         await arrangeContext.Tiers.AddAsync(arrangedTier);
         await arrangeContext.SaveChangesAsync();

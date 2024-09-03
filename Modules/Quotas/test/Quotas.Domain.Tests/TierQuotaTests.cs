@@ -15,7 +15,7 @@ public class TierQuotaTests : AbstractTestsBase
     {
         // Arrange
         const int max = 5;
-        var metricKey = MetricKey.NumberOfSentMessages;
+        var metricKey = MetricKey.NUMBER_OF_SENT_MESSAGES;
         const QuotaPeriod period = QuotaPeriod.Month;
         var tierQuotaDefinition = new TierQuotaDefinition(metricKey, max, period);
         var applyTo = TestDataGenerator.CreateRandomIdentityAddress();

@@ -42,8 +42,8 @@ public class IdentityCreatedDomainEventHandlerTests : AbstractTestsBase
 
         const int max = 5;
         var tier = new Tier(tierId, "some-tier-name");
-        tier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, max, QuotaPeriod.Month));
-        tier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, max, QuotaPeriod.Week));
+        tier.Quotas.Add(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, max, QuotaPeriod.Month));
+        tier.Quotas.Add(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, max, QuotaPeriod.Week));
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var stubTiersRepository = new FindTiersStubRepository(tier);
