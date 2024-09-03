@@ -71,7 +71,7 @@ class _QueryDeletionProcessAuditLogsState extends State<QueryDeletionProcessAudi
                   ),
                   child: Text(
                     context.l10n.find,
-                    style: TextStyle(color: isButtonEnabled ? Theme.of(context).colorScheme.onPrimary : Colors.black38),
+                    style: TextStyle(color: isButtonEnabled ? Theme.of(context).colorScheme.onPrimary : Colors.white),
                   ),
                 ),
               ],
