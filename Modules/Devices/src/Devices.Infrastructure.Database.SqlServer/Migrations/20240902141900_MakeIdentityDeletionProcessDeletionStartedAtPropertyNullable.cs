@@ -1,4 +1,5 @@
 ﻿using System;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -6,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
+    [DependsOn(ModuleType.Devices, "20240708114346_AddAdditionalDataToIdentityDeletionProcessAuditLogEntry")]
     public partial class MakeIdentityDeletionProcessDeletionStartedAtPropertyNullable : Migration
     {
         /// <inheritdoc />
