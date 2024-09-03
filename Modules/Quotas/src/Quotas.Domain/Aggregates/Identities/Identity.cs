@@ -115,7 +115,7 @@ public class Identity : Entity
     {
         var quotasForMetric = GetAppliedQuotasForMetric(metric);
 
-        var latestExhaustionDate = ExhaustionDate.Unexhausted;
+        var latestExhaustionDate = ExhaustionDate.UNEXHAUSTED;
 
         var utcNow = SystemTime.UtcNow;
 

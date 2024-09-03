@@ -207,7 +207,7 @@ public class IdentityTests : AbstractTestsBase
         // Assert
         identity.MetricStatuses.Should().HaveCount(1);
         identity.MetricStatuses.First().MetricKey.Should().Be(MetricKey.NUMBER_OF_SENT_MESSAGES);
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.Unexhausted);
+        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.UNEXHAUSTED);
     }
 
     [Fact]
@@ -223,7 +223,7 @@ public class IdentityTests : AbstractTestsBase
         // Assert
         identity.MetricStatuses.Should().HaveCount(1);
         identity.MetricStatuses.First().MetricKey.Should().Be(MetricKey.NUMBER_OF_SENT_MESSAGES);
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.Unexhausted);
+        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.UNEXHAUSTED);
     }
 
     [Fact]
@@ -340,7 +340,7 @@ public class IdentityTests : AbstractTestsBase
         await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(0));
 
         // Assert
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.Unexhausted);
+        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.UNEXHAUSTED);
     }
 
     #endregion
@@ -411,8 +411,8 @@ public class IdentityTests : AbstractTestsBase
         await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(2), CancellationToken.None);
 
         // Assert
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.Unexhausted);
-        identity.MetricStatuses.Second().IsExhaustedUntil.Should().NotBe(ExhaustionDate.Unexhausted);
+        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.UNEXHAUSTED);
+        identity.MetricStatuses.Second().IsExhaustedUntil.Should().NotBe(ExhaustionDate.UNEXHAUSTED);
     }
 
     [Fact]
