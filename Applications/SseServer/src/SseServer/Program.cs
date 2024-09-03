@@ -76,7 +76,7 @@ static WebApplication CreateApp(string[] args)
         )
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
-    ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
+    ConfigureServices(builder.Services, builder.Configuration);
 
     var app = builder.Build();
     Configure(app);
@@ -89,7 +89,7 @@ static WebApplication CreateApp(string[] args)
     return app;
 }
 
-static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
+static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
     services.ConfigureAndValidate<Configuration>(configuration.Bind);
 

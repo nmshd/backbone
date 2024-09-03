@@ -20,7 +20,7 @@ public class ListTiersCommand : AdminCliDbCommand
 
         var response = await mediator.Send(new ListTiersQuery(new PaginationFilter()), CancellationToken.None);
 
-        Console.WriteLine("The following tiers are configured:");
+        Console.WriteLine(@"The following tiers are configured:");
 
         foreach (var client in response)
         {

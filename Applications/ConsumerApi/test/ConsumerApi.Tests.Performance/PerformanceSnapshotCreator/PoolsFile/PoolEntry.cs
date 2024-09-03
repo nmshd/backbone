@@ -16,10 +16,10 @@ public record PoolEntry
     public uint Amount { get; set; }
 
     public uint NumberOfRelationshipTemplates { get; set; } = 0;
-    public uint NumberOfRelationships { get; set; } = 0;
-    public uint TotalNumberOfMessages { get; set; } = 0;
+    public uint NumberOfRelationships { get; set; }
+    public uint TotalNumberOfMessages { get; set; }
     public uint NumberOfDatawalletModifications { get; set; } = 0;
-    public uint NumberOfDevices { get; set; } = 0;
+    public uint NumberOfDevices { get; set; }
     public uint NumberOfChallenges { get; set; } = 0;
 
     /// <summary>
