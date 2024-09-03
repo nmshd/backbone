@@ -1,56 +1,57 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 
 namespace Backbone.Modules.Quotas.Domain.Metrics;
+
 public abstract class MetricCalculatorFactory
 {
     public IMetricCalculator CreateFor(MetricKey metricKey)
     {
-        if (metricKey == MetricKey.NumberOfSentMessages)
+        if (metricKey == MetricKey.NUMBER_OF_SENT_MESSAGES)
         {
             return CreateNumberOfSentMessagesMetricCalculator();
         }
 
-        if (metricKey == MetricKey.NumberOfFiles)
+        if (metricKey == MetricKey.NUMBER_OF_FILES)
         {
             return CreateNumberOfFilesMetricCalculator();
         }
 
-        if (metricKey == MetricKey.NumberOfRelationships)
+        if (metricKey == MetricKey.NUMBER_OF_RELATIONSHIPS)
         {
             return CreateNumberOfRelationshipsMetricCalculator();
         }
 
-        if (metricKey == MetricKey.NumberOfRelationshipTemplates)
+        if (metricKey == MetricKey.NUMBER_OF_RELATIONSHIP_TEMPLATES)
         {
             return CreateNumberOfRelationshipTemplatesMetricCalculator();
         }
 
-        if (metricKey == MetricKey.NumberOfTokens)
+        if (metricKey == MetricKey.NUMBER_OF_TOKENS)
         {
             return CreateNumberOfTokensMetricCalculator();
         }
 
-        if (metricKey == MetricKey.UsedFileStorageSpace)
+        if (metricKey == MetricKey.USED_FILE_STORAGE_SPACE)
         {
             return CreateUsedFileStorageSpaceCalculator();
         }
 
-        if (metricKey == MetricKey.NumberOfStartedDeletionProcesses)
+        if (metricKey == MetricKey.NUMBER_OF_STARTED_DELETION_PROCESSES)
         {
             return CreateNumberOfStartedDeletionProcessesCalculator();
         }
 
-        if (metricKey == MetricKey.NumberOfCreatedChallenges)
+        if (metricKey == MetricKey.NUMBER_OF_CREATED_CHALLENGES)
         {
             return CreateNumberOfCreatedChallengesCalculator();
         }
 
-        if (metricKey == MetricKey.NumberOfCreatedDevices)
+        if (metricKey == MetricKey.NUMBER_OF_CREATED_DEVICES)
         {
             return CreateNumberOfCreatedDevicesCalculator();
         }
 
-        if (metricKey == MetricKey.NumberOfCreatedDatawalletModifications)
+        if (metricKey == MetricKey.NUMBER_OF_CREATED_DATAWALLET_MODIFICATIONS)
         {
             return CreateNumberOfCreatedDatawalletModificationsCalculator();
         }

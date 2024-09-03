@@ -137,7 +137,6 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
         {
             _deleteResponse!.Error.Should().NotBeNull();
             _deleteResponse.Error!.Code.Should().Be(errorCode);
-            ;
         }
     }
 }

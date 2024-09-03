@@ -99,7 +99,7 @@ public class Identity : Entity
         }
     }
 
-    internal async Task UpdateAllMetricStatuses(MetricCalculatorFactory factory, CancellationToken cancellationToken)
+    private async Task UpdateAllMetricStatuses(MetricCalculatorFactory factory, CancellationToken cancellationToken)
     {
         var metricKeys = _tierQuotas.Select(q => q.MetricKey).Union(_individualQuotas.Select(q => q.MetricKey)).Distinct();
         await UpdateMetricStatuses(metricKeys, factory, cancellationToken);
@@ -115,7 +115,7 @@ public class Identity : Entity
     {
         var quotasForMetric = GetAppliedQuotasForMetric(metric);
 
-        var latestExhaustionDate = ExhaustionDate.Unexhausted;
+        var latestExhaustionDate = ExhaustionDate.UNEXHAUSTED;
 
         var utcNow = SystemTime.UtcNow;
 
@@ -147,8 +147,8 @@ public class Identity : Entity
     {
         var allQuotasOfMetric = AllQuotas.Where(q => q.MetricKey == metric).ToArray();
 
-        if (!allQuotasOfMetric.Any())
-            return Enumerable.Empty<Quota>();
+        if (allQuotasOfMetric.Length == 0)
+            return [];
 
         var highestWeight = allQuotasOfMetric.Max(q => q.Weight);
         var appliedQuotas = allQuotasOfMetric.Where(q => q.Weight == highestWeight).ToArray();

@@ -7,6 +7,7 @@ using FluentValidation.TestHelper;
 using Xunit;
 
 namespace Backbone.Modules.Tokens.Application.Tests.Tests.Tokens.CreateToken;
+
 public class ValidatorTests : AbstractTestsBase
 {
     [Theory]
@@ -19,7 +20,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand() { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = forIdentity });
+            new CreateTokenCommand { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = forIdentity });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -33,11 +34,12 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand() { Content = [], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = TestDataGenerator.CreateRandomIdentityAddress() });
+            new CreateTokenCommand { Content = [], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = TestDataGenerator.CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(nameof(Token.Content), "error.platform.validation.invalidPropertyValue", "'Content' must not be empty.");
-        validationResult.ShouldHaveValidationErrorForItem(nameof(Token.Content), "error.platform.validation.invalidPropertyValue", "'Content' must be between 1 and 10485760 bytes long. You entered 0 bytes.");
+        validationResult.ShouldHaveValidationErrorForItem(nameof(Token.Content), "error.platform.validation.invalidPropertyValue",
+            "'Content' must be between 1 and 10485760 bytes long. You entered 0 bytes.");
     }
 
     [Fact]
@@ -48,7 +50,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand() { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(-1), ForIdentity = TestDataGenerator.CreateRandomIdentityAddress() });
+            new CreateTokenCommand { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(-1), ForIdentity = TestDataGenerator.CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(nameof(Token.ExpiresAt), "error.platform.validation.invalidPropertyValue", "'Expires At' must be in the future.");
@@ -62,7 +64,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand() { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = "some-address" });
+            new CreateTokenCommand { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = "some-address" });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(Token.ForIdentity));

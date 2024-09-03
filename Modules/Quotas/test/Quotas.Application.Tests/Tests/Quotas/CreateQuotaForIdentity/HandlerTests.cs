@@ -20,14 +20,14 @@ public class HandlerTests : AbstractTestsBase
     public async Task Updates_metric_statuses_after_creating_quota_for_identity()
     {
         // Arrange
-        var metricKey = MetricKey.NumberOfSentMessages;
+        var metricKey = MetricKey.NUMBER_OF_SENT_MESSAGES;
         var tierId = TierId.Parse("TIRsomeTierId1111111");
         var identity = new Identity(CreateRandomIdentityAddress(), tierId);
         var command = new CreateQuotaForIdentityCommand(identity.Address, metricKey.Value, 5, QuotaPeriod.Month);
 
         var identitiesRepository = A.Fake<IIdentitiesRepository>();
         A.CallTo(() => identitiesRepository.Find(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
-        var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NumberOfSentMessages, "Number Of Sent Messages"));
+        var metricsRepository = new FindMetricsStubRepository(new Metric(MetricKey.NUMBER_OF_SENT_MESSAGES, "Number Of Sent Messages"));
         var metricStatusesService = A.Fake<IMetricStatusesService>();
         var handler = CreateHandler(identitiesRepository, metricsRepository, metricStatusesService);
 

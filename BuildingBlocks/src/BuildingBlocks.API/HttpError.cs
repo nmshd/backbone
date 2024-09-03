@@ -158,9 +158,4 @@ public struct HttpErrorId
     {
         return StringValue;
     }
-
-    public string ToString(string format, IFormatProvider formatProvider)
-    {
-        return StringValue;
-    }
 }

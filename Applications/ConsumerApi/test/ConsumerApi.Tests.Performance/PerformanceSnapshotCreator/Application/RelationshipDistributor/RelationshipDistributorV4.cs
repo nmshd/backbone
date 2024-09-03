@@ -1,4 +1,5 @@
-﻿using Backbone.PerformanceSnapshotCreator.PoolsFile;
+﻿using Backbone.PerformanceSnapshotCreator.Domain;
+using Backbone.PerformanceSnapshotCreator.PoolsFile;
 
 namespace Backbone.PerformanceSnapshotCreator.Application.RelationshipDistributor;
 
@@ -42,22 +43,22 @@ public class RelationshipDistributorV4 : IRelationshipDistributor
     }
 
     private static int DistributeRelationshipsV2InnerLoop(
-        List<Domain.Identity> appPoolsIdentities,
-        List<Domain.Identity> connectorPoolsIdentities,
+        List<Identity> appPoolsIdentities,
+        List<Identity> connectorPoolsIdentities,
         int successfullyEstablishedRelationshipsCount,
-        Domain.Identity identity
-        )
+        Identity identity
+    )
     {
         var oppositePoolIdentitiesWithCapacityForFurtherRelationships = (identity.PoolType == PoolTypes.CONNECTOR_TYPE
                 ? appPoolsIdentities
                 : connectorPoolsIdentities
-                ).Where(i => i.HasAvailabilityForNewRelationships()).OrderBy(i => i.IdentitiesToEstablishRelationshipsWith.Count)
+            ).Where(i => i.HasAvailabilityForNewRelationships()).OrderBy(i => i.IdentitiesToEstablishRelationshipsWith.Count)
             .ToList();
 
         var index = 0;
         while (identity.RelationshipsCapacity > 0)
         {
-            Domain.Identity selectedIdentity;
+            Identity selectedIdentity;
             do
             {
                 if (index == oppositePoolIdentitiesWithCapacityForFurtherRelationships.Count)
@@ -72,7 +73,7 @@ public class RelationshipDistributorV4 : IRelationshipDistributor
         return successfullyEstablishedRelationshipsCount;
     }
 
-    protected internal static long CheckRelationshipCounts(IList<PoolEntry> appPools, IList<PoolEntry> connectorPools)
+    private static long CheckRelationshipCounts(IList<PoolEntry> appPools, IList<PoolEntry> connectorPools)
     {
         var appRelationshipsCount = appPools.Sum(p => p.NumberOfRelationships * p.Amount);
         var connectorRelationshipsCount = connectorPools.Sum(p => p.NumberOfRelationships * p.Amount);

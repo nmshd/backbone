@@ -29,7 +29,7 @@ public class RelationshipCreateTests : AbstractTestsBase
         relationship.RelationshipTemplateId.Should().Be(RELATIONSHIP_TEMPLATE_OF_2.Id);
         relationship.RelationshipTemplate.Should().Be(RELATIONSHIP_TEMPLATE_OF_2);
         relationship.CreatedAt.Should().Be(DateTime.Parse("2000-01-01"));
-        relationship.CreationContent.Should().Equal([0, 1, 2]);
+        relationship.CreationContent.Should().Equal(0, 1, 2);
     }
 
     [Fact]

@@ -144,22 +144,25 @@ static IHostBuilder CreateHostBuilder(string[] args)
             .Enrich.WithProperty("service", "databasemigrator")
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
-                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() })
+                .WithDestructurers([new DbUpdateExceptionDestructurer()])
             )
         );
 }
 
-internal class DummyEventBus : IEventBus
+namespace Backbone.DatabaseMigrator
 {
-    public void Publish(DomainEvent @event)
+    internal class DummyEventBus : IEventBus
     {
-    }
+        public void Publish(DomainEvent @event)
+        {
+        }
 
-    public void StartConsuming()
-    {
-    }
+        public void StartConsuming()
+        {
+        }
 
-    public void Subscribe<T, TH>() where T : DomainEvent where TH : IDomainEventHandler<T>
-    {
+        public void Subscribe<T, TH>() where T : DomainEvent where TH : IDomainEventHandler<T>
+        {
+        }
     }
 }

@@ -99,14 +99,12 @@ public static class IServiceCollectionExtensions
                 opts => opts.ApiKey = configuration.Authentication.ApiKey
             );
 
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy("ApiKey", policy =>
+        services.AddAuthorizationBuilder()
+            .AddPolicy("ApiKey", policy =>
             {
                 policy.AddAuthenticationSchemes("ApiKey");
                 policy.RequireAuthenticatedUser();
             });
-        });
 
         services.AddAntiforgery(o =>
         {

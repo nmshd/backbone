@@ -9,6 +9,7 @@ using Xunit;
 using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities.Commands.DeleteIdentityCommandTests;
+
 public class HandlerTests : AbstractTestsBase
 {
     [Fact]
@@ -25,6 +26,6 @@ public class HandlerTests : AbstractTestsBase
 
     private static Handler CreateHandler(IIdentitiesRepository identitiesRepository)
     {
-        return new Handler(identitiesRepository ?? A.Fake<IIdentitiesRepository>());
+        return new Handler(identitiesRepository);
     }
 }

@@ -11,6 +11,8 @@ namespace Backbone.Modules.Devices.Application;
 
 public class ChallengeValidator
 {
+    private static readonly JsonSerializerOptions JSON_SERIALIZER_OPTIONS = new() { PropertyNameCaseInsensitive = true };
+
     private readonly ISignatureHelper _signatureHelper;
     private readonly IChallengesRepository _challengesRepository;
 
@@ -39,7 +41,7 @@ public class ChallengeValidator
 
     private async Task ValidateChallengeExpiry(string serializedChallenge)
     {
-        var deserializedChallenge = JsonSerializer.Deserialize<ChallengeDTO>(serializedChallenge, new JsonSerializerOptions { PropertyNameCaseInsensitive = true }) ?? throw new NotFoundException(nameof(Challenge));
+        var deserializedChallenge = JsonSerializer.Deserialize<ChallengeDTO>(serializedChallenge, JSON_SERIALIZER_OPTIONS) ?? throw new NotFoundException(nameof(Challenge));
         var challenge = await _challengesRepository.FindById(deserializedChallenge.Id, CancellationToken.None) ?? throw new NotFoundException(nameof(Challenge));
         if (challenge.IsExpired())
             throw new OperationFailedException(ApplicationErrors.Devices.ChallengeHasExpired());
