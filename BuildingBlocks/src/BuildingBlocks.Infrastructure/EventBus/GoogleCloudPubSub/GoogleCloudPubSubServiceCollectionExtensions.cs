@@ -14,8 +14,9 @@ public static class GoogleCloudPubSubServiceCollectionExtensions
 
         services.AddSingleton<IEventBusSubscriptionsManager, InMemoryEventBusSubscriptionsManager>();
 
-        services.AddSingleton<IGoogleCloudPubSubPersisterConnection>(
-            new DefaultGoogleCloudPubSubPersisterConnection(options.ProjectId, options.TopicName, options.SubscriptionClientName, options.ConnectionInfo));
+        services.AddSingleton<IGoogleCloudPubSubPersisterConnection>(sp =>
+            new DefaultGoogleCloudPubSubPersisterConnection(sp.GetRequiredService<ILogger<DefaultGoogleCloudPubSubPersisterConnection>>(), options.ProjectId, options.TopicName,
+                options.SubscriptionClientName, options.ConnectionInfo));
 
         services.AddSingleton<IEventBus, EventBusGoogleCloudPubSub>(sp =>
         {
