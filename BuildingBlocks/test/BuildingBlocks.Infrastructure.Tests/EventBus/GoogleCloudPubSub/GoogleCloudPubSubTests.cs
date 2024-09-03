@@ -186,7 +186,7 @@ public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
 
             foreach (var instance in _instances)
             {
-                await instance.AutofacServiceProviders.DisposeAsync();
+                instance.AutofacServiceProviders.Dispose();
                 await instance.EventBusClient.DisposeAsync();
             }
 
