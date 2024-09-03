@@ -5,8 +5,9 @@ import '/core/core.dart';
 
 class ErrorScreen extends StatelessWidget {
   final String errorMessage;
+  final String returnRoute;
 
-  const ErrorScreen({required this.errorMessage, super.key});
+  const ErrorScreen({required this.errorMessage, required this.returnRoute, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +43,7 @@ class ErrorScreen extends StatelessWidget {
             ),
             Gaps.h16,
             FilledButton(
-              onPressed: () => context.go('/identities'),
+              onPressed: () => context.go(returnRoute),
               child: Text(
                 context.l10n.errorScreen_goToHome,
                 style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onPrimary),
