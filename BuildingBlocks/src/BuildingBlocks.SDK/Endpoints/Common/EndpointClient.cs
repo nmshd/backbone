@@ -172,7 +172,7 @@ public class EndpointClient
             _url = url;
             _method = method;
             _authenticated = false;
-            _content = JsonContent.Create((object?)null);
+            _content = JsonContent.Create<object?>(null);
         }
 
         public RequestBuilder<T> Authenticate(bool authenticate = true)

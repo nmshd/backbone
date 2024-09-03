@@ -37,7 +37,7 @@ public class DatawalletModificationDTO
     public DatawalletModificationType Type { get; set; }
     public byte[]? EncryptedPayload { get; set; }
 
-    private DatawalletModificationType MapDatawalletModificationType(Domain.Entities.DatawalletModificationType type)
+    private static DatawalletModificationType MapDatawalletModificationType(Domain.Entities.DatawalletModificationType type)
     {
         return type switch
         {

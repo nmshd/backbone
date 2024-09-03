@@ -60,7 +60,7 @@ public class SimulatedAnnealingPoolsGenerator
         _printer.PrintStringToFile(Generate().GetAsCSV(_identitiesDictionary), "ram");
     }
 
-    public SolutionRepresentation Generate(double initialTemperature = 20d, ulong maxIterations = 20000)
+    private SolutionRepresentation Generate(double initialTemperature = 20d, ulong maxIterations = 20000)
     {
         var progress = new ProgressBar(Convert.ToInt64(maxIterations));
         var currentSolution = GenerateSolutionFromPools(Pools);
@@ -70,7 +70,8 @@ public class SimulatedAnnealingPoolsGenerator
 
         for (ulong i = 0; i < maxIterations; i++)
         {
-            if (PRINT_OUTPUT) Console.Write($"Temp: {temperature:F3} Score:{currentScore}, solution m: {currentSolution.GetSentMessagesCount():D4}, r:{currentSolution.GetRelationshipCount():D4}. Next action: ");
+            if (PRINT_OUTPUT)
+                Console.Write($"Temp: {temperature:F3} Score:{currentScore}, solution m: {currentSolution.GetSentMessagesCount():D4}, r:{currentSolution.GetRelationshipCount():D4}. Next action: ");
 
             var solutions = new ConcurrentBag<SolutionRepresentation>();
             var forMax = Convert.ToUInt32(Environment.ProcessorCount) - 2;
@@ -187,7 +188,7 @@ public class SimulatedAnnealingPoolsGenerator
                     // app to connector
                     var appIdentity = _localRandom.GetRandomElement(_appIdentitiesDictionary);
                     var candidates = solution.GetRelationshipsAndMessageSentCountByIdentity(appIdentity.UniqueOrderNumber).ToList();
-                    if (!candidates.Any())
+                    if (candidates.Count == 0)
                         return GetNextState(currentSolution, connectorMessageRatio);
                     var orderedCandidates = candidates.OrderByDescending(it => appIdentity.Pool.NumberOfSentMessages - it.messageCount);
                     var selectedCandidate = orderedCandidates.FirstOrDefault().relatedIdentity;
@@ -198,7 +199,7 @@ public class SimulatedAnnealingPoolsGenerator
                     // connector to app
                     var connectorIdentity = _localRandom.GetRandomElement(_connectorIdentitiesDictionary);
                     var candidates = solution.GetRelationshipsAndMessageSentCountByIdentity(connectorIdentity.UniqueOrderNumber).ToList();
-                    if (!candidates.Any())
+                    if (candidates.Count == 0)
                         return GetNextState(currentSolution, connectorMessageRatio);
                     var orderedCandidates = candidates.OrderByDescending(it => connectorIdentity.Pool.NumberOfSentMessages - it.messageCount);
                     var selectedCandidate = orderedCandidates.FirstOrDefault().relatedIdentity;
@@ -232,7 +233,6 @@ public class SimulatedAnnealingPoolsGenerator
 
                     solution.EstablishRelationship(i1.UniqueOrderNumber, i2.UniqueOrderNumber);
                     flag = true;
-
                 } while (!flag && iter++ < 20);
 
                 if (PRINT_OUTPUT) Console.Write("add rel");
@@ -254,7 +254,6 @@ public class SimulatedAnnealingPoolsGenerator
 
         foreach (var (identity, (messageSentCount, messageReceivedCount)) in sentAndReceivedMessageCountByIdentityDictionary)
         {
-
             var sentDiff = Convert.ToInt32(messageSentCount) - Convert.ToInt32(identities[identity].Pool.NumberOfSentMessages);
             var receivedDiff = Convert.ToInt32(messageReceivedCount) - Convert.ToInt32(identities[identity].Pool.NumberOfReceivedMessages);
 
@@ -262,14 +261,13 @@ public class SimulatedAnnealingPoolsGenerator
                 messagesScore -= 10 * sentDiff;
             if (identities[identity].Pool.NumberOfReceivedMessages == 0 || receivedDiff > 4)
                 messagesScore -= 10 * receivedDiff;
-
         }
 
         var invalidRelationshipCount = solution.GetInvalidRelationshipCount(_identitiesDictionary);
 
         return
-        -8 * invalidRelationshipCount - 4 * Math.Abs(relationshipsTarget - solution.GetRelationshipCount())
-        - 4 * Math.Abs(sentMessagesTarget - solution.GetSentMessagesCount()) + messagesScore;
+            -8 * invalidRelationshipCount - 4 * Math.Abs(relationshipsTarget - solution.GetRelationshipCount())
+                                          - 4 * Math.Abs(sentMessagesTarget - solution.GetSentMessagesCount()) + messagesScore;
     }
 
     private void CreateIdentities()
@@ -346,7 +344,7 @@ public class SolutionRepresentation : ICloneable
         return true;
     }
 
-    public TimeSpan GetTimeSinceStart() => _createdAt.Elapsed;
+    private TimeSpan GetTimeSinceStart() => _createdAt.Elapsed;
 
     /// <summary></summary>
     /// <param name="identity1"></param>
@@ -354,7 +352,7 @@ public class SolutionRepresentation : ICloneable
     /// <returns>
     /// -1 in case of error. Otherwise, the number of messages deleted along with the relationship.
     /// </returns>
-    public int RemoveRelationship(uint identity1, uint identity2)
+    private int RemoveRelationship(uint identity1, uint identity2)
     {
         if (_relationshipCount <= 0 || !RaM.ContainsKey((identity1, identity2)))
             return -1;
@@ -376,14 +374,12 @@ public class SolutionRepresentation : ICloneable
         return true;
     }
 
-    public bool RemoveMessage(uint identityFrom, uint identityTo)
+    private void RemoveMessage(uint identityFrom, uint identityTo)
     {
-        if (!RaM.ContainsKey((identityFrom, identityTo)))
-            return false;
+        if (!RaM.ContainsKey((identityFrom, identityTo))) return;
 
         RaM[(identityFrom, identityTo)]--;
         _messagesCount--;
-        return true;
     }
 
     public object Clone()
@@ -425,6 +421,7 @@ public class SolutionRepresentation : ICloneable
                 res++;
                 continue;
             }
+
             var i1Pool = identities[from].Pool;
             var i2Pool = identities[to].Pool;
             if (i1Pool.Type == i2Pool.Type || !i1Pool.IsApp() && !i2Pool.IsApp() || !i1Pool.IsConnector() && !i2Pool.IsConnector())
@@ -484,7 +481,6 @@ public class SolutionRepresentation : ICloneable
 
             res[a] = (res[a].sent + c, res[a].received);
             res[b] = (res[b].sent, res[b].received + c);
-
         }
 
         return res;
@@ -536,5 +532,4 @@ public static class RandomMethodExtensions
     {
         return random.GetRandomElement(dictionary.Select(r => r.Key).ToList());
     }
-
 }

@@ -8,7 +8,8 @@ using OpenIddict.EntityFrameworkCore;
 namespace Backbone.Modules.Devices.Infrastructure.OpenIddict;
 
 public class CustomOpenIddictEntityFrameworkCoreApplicationStore :
-    OpenIddictEntityFrameworkCoreApplicationStore<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreToken, DevicesDbContext, string>
+    OpenIddictEntityFrameworkCoreApplicationStore<CustomOpenIddictEntityFrameworkCoreApplication, CustomOpenIddictEntityFrameworkCoreAuthorization, CustomOpenIddictEntityFrameworkCoreToken,
+        DevicesDbContext, string>
 {
     public CustomOpenIddictEntityFrameworkCoreApplicationStore(
         IMemoryCache cache,
@@ -20,22 +21,7 @@ public class CustomOpenIddictEntityFrameworkCoreApplicationStore :
 
     public override async ValueTask DeleteAsync(CustomOpenIddictEntityFrameworkCoreApplication application, CancellationToken cancellationToken)
     {
-        if (application is null)
-        {
-            throw new ArgumentNullException(nameof(application));
-        }
-
-        Task<List<CustomOpenIddictEntityFrameworkCoreAuthorization>> ListAuthorizationsAsync()
-            => Context.Set<CustomOpenIddictEntityFrameworkCoreAuthorization>()
-                .Include(a => a.Tokens)
-                .Where(a => a.Application!.Id == application.Id)
-                .ToListAsync(cancellationToken);
-
-        Task<List<CustomOpenIddictEntityFrameworkCoreToken>> ListTokensAsync()
-            => Context.Set<CustomOpenIddictEntityFrameworkCoreToken>()
-                .Where(t => t.Authorization == null)
-                .Where(t => t.Application!.Id == application.Id)
-                .ToListAsync(cancellationToken);
+        ArgumentNullException.ThrowIfNull(application);
 
         await Context.RunInTransaction(async () =>
         {
@@ -84,8 +70,19 @@ public class CustomOpenIddictEntityFrameworkCoreApplicationStore :
                     "The application was concurrently updated and cannot be persisted in its current state.\r\nReload the application from the database and retry the operation.",
                     exception);
             }
-        }, new List<int>());
+        }, []);
+        return;
+
+        Task<List<CustomOpenIddictEntityFrameworkCoreToken>> ListTokensAsync()
+            => Context.Set<CustomOpenIddictEntityFrameworkCoreToken>()
+                .Where(t => t.Authorization == null)
+                .Where(t => t.Application!.Id == application.Id)
+                .ToListAsync(cancellationToken);
+
+        Task<List<CustomOpenIddictEntityFrameworkCoreAuthorization>> ListAuthorizationsAsync()
+            => Context.Set<CustomOpenIddictEntityFrameworkCoreAuthorization>()
+                .Include(a => a.Tokens)
+                .Where(a => a.Application!.Id == application.Id)
+                .ToListAsync(cancellationToken);
     }
-
 }
-

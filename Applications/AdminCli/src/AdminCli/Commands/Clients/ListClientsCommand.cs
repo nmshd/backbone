@@ -19,7 +19,7 @@ public class ListClientsCommand : AdminCliDbCommand
 
         var response = await mediator.Send(new ListClientsQuery(), CancellationToken.None);
 
-        Console.WriteLine("The following clients are configured:");
+        Console.WriteLine(@"The following clients are configured:");
 
         foreach (var client in response)
         {

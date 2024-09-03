@@ -7,6 +7,9 @@ namespace Backbone.Modules.Devices.Application.Devices.DTOs;
 
 public class Signature
 {
+    private static readonly JsonSerializerOptions JSON_SERIALIZER_OPTIONS = new() { Converters = { new DynamicJsonConverter() } };
+
+
     public Signature(SignatureAlgorithm algorithm, byte[] bytes)
     {
         Algorithm = algorithm;
@@ -35,7 +38,7 @@ public class Signature
         var signatureObject =
             JsonSerializer.Deserialize<dynamic>(
                 signatureJsonString,
-                new JsonSerializerOptions { Converters = { new DynamicJsonConverter() } }) ??
+                JSON_SERIALIZER_OPTIONS) ??
             throw new Exception("Could not deserialize signature.");
         var signature = Base64UrlEncoder.DecodeBytes((string)signatureObject.sig);
         var algorithm = (SignatureAlgorithm)signatureObject.alg;

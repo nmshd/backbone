@@ -1,6 +1,4 @@
 ﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.ConsumerApi.Sdk;
-using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Responses;
@@ -27,7 +25,9 @@ internal class MessagesStepDefinitions : BaseStepDefinitions
     private ApiResponse<SendMessageResponse>? _sendMessageResponse;
     private IResponse? _whenResponse;
 
-    public MessagesStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration) : base(factory, httpConfiguration) { }
+    public MessagesStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration) : base(factory, httpConfiguration)
+    {
+    }
 
     #region Given
 

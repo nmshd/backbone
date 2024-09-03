@@ -91,7 +91,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         {
             PushEnvironment.Development => "https://api.sandbox.push.apple.com:443/3/device",
             PushEnvironment.Production => "https://api.push.apple.com:443/3/device",
-            _ => throw new ArgumentOutOfRangeException()
+            _ => throw new ArgumentOutOfRangeException(nameof(environment))
         };
 
         return $"{baseUrl}/{handle}";

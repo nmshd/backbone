@@ -1,5 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using MediatR;
+﻿using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Queries.CanEstablishRelationship;
 
