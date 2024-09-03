@@ -110,24 +110,22 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
   }
 
   Future<void> _loadDeletionProcessDetails() async {
-    try {
-      final deletionProcessesDetails = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcess(
-            address: widget.address,
-            deletionProcessId: widget.deletionProcessId,
-          );
-
-      if (!mounted) return;
-
-      setState(() {
-        _deletionProcessesDetails = deletionProcessesDetails.data;
-      });
-    } catch (e) {
-      final errorMessage = e.toString().split(':')[2].trim();
+    final deletionProcessesDetails = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcess(
+          address: widget.address,
+          deletionProcessId: widget.deletionProcessId,
+        );
+    if (deletionProcessesDetails.hasError) {
+      final errorMessage = deletionProcessesDetails.error.message;
 
       if (mounted) {
-        context.go('/error', extra: errorMessage);
+        context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/identities'});
       }
+      return;
     }
+
+    if (!mounted) return;
+
+    setState(() => _deletionProcessesDetails = deletionProcessesDetails.data);
   }
 }
 

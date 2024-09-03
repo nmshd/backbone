@@ -81,22 +81,23 @@ class _ClientDetailsState extends State<ClientDetails> {
   }
 
   Future<void> _reloadClient() async {
-    try {
-      final clientDetails = await GetIt.I.get<AdminApiClient>().clients.getClient(widget.clientId);
+    final clientDetails = await GetIt.I.get<AdminApiClient>().clients.getClient(widget.clientId);
+
+    if (clientDetails.hasError) {
+      final errorMessage = clientDetails.error.message;
 
       if (mounted) {
-        setState(() {
-          _clientDetails = clientDetails.data;
-          _selectedTier = _clientDetails!.defaultTier;
-        });
+        context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/clients'});
       }
-    } catch (e) {
-      final errorMessage = e.toString().split(':')[2].trim();
-
-      if (mounted) {
-        context.go('/error', extra: errorMessage);
-      }
+      return;
     }
+
+    if (!mounted) return;
+
+    setState(() {
+      _clientDetails = clientDetails.data;
+      _selectedTier = _clientDetails!.defaultTier;
+    });
   }
 
   Future<void> _reloadTiers() async {

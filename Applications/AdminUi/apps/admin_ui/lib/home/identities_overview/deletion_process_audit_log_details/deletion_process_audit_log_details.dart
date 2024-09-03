@@ -61,20 +61,21 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
   }
 
   Future<void> _reloadIdentityDeletionProcessAuditLogs() async {
-    try {
-      final response = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcessAuditLogs(address: widget.identityAddress);
+    final response = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcessAuditLogs(
+          address: widget.identityAddress,
+        );
+
+    if (response.hasError) {
+      final errorMessage = response.error.message;
 
       if (mounted) {
-        setState(() {
-          _identityDeletionProcessAuditLogs = response.data;
-        });
+        context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/identities'});
       }
-    } catch (e) {
-      final errorMessage = e.toString().split(':')[2].trim();
-
-      if (mounted) {
-        context.go('/error', extra: errorMessage);
-      }
+      return;
     }
+
+    if (!mounted) return;
+
+    setState(() => _identityDeletionProcessAuditLogs = response.data);
   }
 }

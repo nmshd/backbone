@@ -84,19 +84,20 @@ class _TierDetailState extends State<TierDetail> {
   }
 
   Future<void> _reload() async {
-    try {
-      final tierDetails = await GetIt.I.get<AdminApiClient>().tiers.getTier(widget.tierId);
+    final tierDetails = await GetIt.I.get<AdminApiClient>().tiers.getTier(widget.tierId);
+
+    if (tierDetails.hasError) {
+      final errorMessage = tierDetails.error.message;
 
       if (mounted) {
-        setState(() => _tierDetails = tierDetails.data);
+        context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/tiers'});
       }
-    } catch (e) {
-      final errorMessage = e.toString().split(':')[2].trim();
-
-      if (mounted) {
-        context.go('/error', extra: errorMessage);
-      }
+      return;
     }
+
+    if (!mounted) return;
+
+    setState(() => _tierDetails = tierDetails.data);
   }
 }
 

@@ -110,22 +110,24 @@ class _IdentityDetailsState extends State<IdentityDetails> {
   }
 
   Future<void> _reloadIdentity() async {
-    try {
-      final identityDetails = await GetIt.I.get<AdminApiClient>().identities.getIdentity(widget.address);
+    final identityDetails = await GetIt.I.get<AdminApiClient>().identities.getIdentity(widget.address);
+
+    if (identityDetails.hasError) {
+      final errorMessage = identityDetails.error.message;
 
       if (mounted) {
-        setState(() {
-          _identityDetails = identityDetails.data;
-          _selectedTier = _identityDetails!.tierId;
-        });
+        context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/identities'});
       }
-    } catch (e) {
-      final errorMessage = e.toString().split(':')[2].trim();
 
-      if (mounted) {
-        context.go('/error', extra: errorMessage);
-      }
+      return;
     }
+
+    if (!mounted) return;
+
+    setState(() {
+      _identityDetails = identityDetails.data;
+      _selectedTier = _identityDetails!.tierId;
+    });
   }
 
   Future<void> _reloadTiers() async {
