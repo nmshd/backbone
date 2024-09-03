@@ -34,9 +34,11 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
         var sendResults = new SendResults();
 
-        var tasks = registrations.Select(r => SendNotification(r, notification, sendResults));
+        foreach (var registration in registrations)
+        {
+            await SendNotification(registration, notification, sendResults);
+        }
 
-        await Task.WhenAll(tasks);
         return sendResults;
     }
 

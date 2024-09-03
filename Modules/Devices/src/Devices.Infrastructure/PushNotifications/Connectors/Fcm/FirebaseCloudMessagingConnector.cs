@@ -34,9 +34,11 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 
         var sendResults = new SendResults();
 
-        var tasks = registrationsArray.Select(r => SendNotification(r, notification, sendResults));
+        foreach (var registration in registrationsArray)
+        {
+            await SendNotification(registration, notification, sendResults);
+        }
 
-        await Task.WhenAll(tasks);
         return sendResults;
     }
 
