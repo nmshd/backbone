@@ -20,7 +20,7 @@ using Xunit.Abstractions;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub;
 
-public class GoogleCloudPubSubTests : AbstractTestsBase
+public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
 {
     private readonly EventBusFactory _factory;
 
@@ -123,9 +123,9 @@ public class GoogleCloudPubSubTests : AbstractTestsBase
         TestEvent1DomainEventHandler2.ShouldNotHaveAnyTriggeredInstance();
     }
 
-    public override void Dispose()
+    public async ValueTask DisposeAsync()
     {
-        _factory.Dispose();
+        await _factory.DisposeAsync();
 
         TestEvent1DomainEventHandler1.Instances.Clear();
         TestEvent1DomainEventHandler2.Instances.Clear();
@@ -134,7 +134,7 @@ public class GoogleCloudPubSubTests : AbstractTestsBase
         base.Dispose();
     }
 
-    private class EventBusFactory : IDisposable
+    private class EventBusFactory : IAsyncDisposable
     {
         private record Instance(
             AutofacServiceProvider AutofacServiceProviders,
@@ -180,15 +180,14 @@ public class GoogleCloudPubSubTests : AbstractTestsBase
             return eventBusClient;
         }
 
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
             _logger.Dispose();
 
             foreach (var instance in _instances)
             {
-                instance.AutofacServiceProviders.Dispose();
-                instance.EventBusClient.Dispose();
-                instance.PersisterConnection.Dispose();
+                await instance.AutofacServiceProviders.DisposeAsync();
+                await instance.EventBusClient.DisposeAsync();
             }
 
             CleanupTestSubscriptions();

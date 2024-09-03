@@ -37,7 +37,7 @@ public class DefaultGoogleCloudPubSubPersisterConnection : IGoogleCloudPubSubPer
     public PublisherClient PublisherClient { get; }
     public SubscriberClient SubscriberClient { get; }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
         if (_disposed) return;
 
@@ -45,7 +45,7 @@ public class DefaultGoogleCloudPubSubPersisterConnection : IGoogleCloudPubSubPer
 
         try
         {
-            PublisherClient.ShutdownAsync(CancellationToken.None).GetAwaiter().GetResult();
+            await PublisherClient.ShutdownAsync(CancellationToken.None);
         }
         catch (Exception ex)
         {
@@ -54,7 +54,7 @@ public class DefaultGoogleCloudPubSubPersisterConnection : IGoogleCloudPubSubPer
 
         try
         {
-            SubscriberClient.StopAsync(CancellationToken.None).GetAwaiter().GetResult();
+            await SubscriberClient.StopAsync(CancellationToken.None);
         }
         catch (Exception ex)
         {

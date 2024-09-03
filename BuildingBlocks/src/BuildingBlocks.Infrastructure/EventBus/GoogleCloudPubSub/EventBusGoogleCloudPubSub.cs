@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 
-public partial class EventBusGoogleCloudPubSub : IEventBus, IDisposable
+public partial class EventBusGoogleCloudPubSub : IEventBus, IAsyncDisposable
 {
     private static class PubSubMessageAttributes
     {
@@ -41,10 +41,10 @@ public partial class EventBusGoogleCloudPubSub : IEventBus, IDisposable
         _handlerRetryBehavior = handlerRetryBehavior;
     }
 
-    public void Dispose()
+    public async ValueTask DisposeAsync()
     {
         _subscriptionManager.Clear();
-        _connection.Dispose();
+        await _connection.DisposeAsync();
     }
 
     public async void Publish(DomainEvent @event)
