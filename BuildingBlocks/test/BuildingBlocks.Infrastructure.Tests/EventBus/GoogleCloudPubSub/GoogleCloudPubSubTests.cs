@@ -123,7 +123,7 @@ public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
         TestEvent1DomainEventHandler2.ShouldNotHaveAnyTriggeredInstance();
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
         Task.Run(async () => await DisposeAsync()).GetAwaiter().GetResult();
     }
