@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
-public class EventBusAzureServiceBus : IEventBus, IAsyncDisposable
+public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 {
     private const string DOMAIN_EVENT_SUFFIX = "DomainEvent";
     private const string TOPIC_NAME = "default";
@@ -40,6 +40,11 @@ public class EventBusAzureServiceBus : IEventBus, IAsyncDisposable
         var options = new ServiceBusProcessorOptions { MaxConcurrentCalls = 10, AutoCompleteMessages = false };
         _processor = _serviceBusPersisterConnection.TopicClient.CreateProcessor(TOPIC_NAME, _subscriptionName, options);
         _handlerRetryBehavior = handlerRetryBehavior;
+    }
+
+    public void Dispose()
+    {
+        Task.Run(async () => await DisposeAsync()).GetAwaiter().GetResult();
     }
 
     public async ValueTask DisposeAsync()

@@ -37,6 +37,11 @@ public class DefaultGoogleCloudPubSubPersisterConnection : IGoogleCloudPubSubPer
     public PublisherClient PublisherClient { get; }
     public SubscriberClient SubscriberClient { get; }
 
+    public void Dispose()
+    {
+        Task.Run(async () => await DisposeAsync()).GetAwaiter().GetResult();
+    }
+
     public async ValueTask DisposeAsync()
     {
         if (_disposed) return;
