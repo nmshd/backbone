@@ -45,6 +45,18 @@ internal class TokensStepDefinitions
         }
     }
 
+    [Given($"Token {RegexFor.SINGLE_THING} belonging to {RegexFor.SINGLE_THING} where ForIdentity is the address of {RegexFor.SINGLE_THING}")]
+    public async Task GivenTokenTBelongingToIWhereForIdentityIsTheAddressOfI(string tokenName, string identityName, string forIdentityName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var forClient = _clientPool.FirstForIdentityName(forIdentityName);
+
+        var response = await client.Tokens.CreateToken(new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW, ForIdentity = forClient.IdentityData!.Address });
+        response.Should().BeASuccess();
+
+        _tokensContext.CreateTokenResponses[tokenName] = response.Result!;
+    }
+
     #endregion
 
     #region When
@@ -58,9 +70,6 @@ internal class TokensStepDefinitions
 
         _responseContext.WhenResponse = _listTokensResponse = await client.Tokens.ListTokens(tokenIds);
         _responseContext.WhenResponse.Should().NotBeNull();
-
-        var tokens = _listTokensResponse.Result!.ToArray();
-        tokens.Should().HaveCount(tokenIds.Length);
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Tokens endpoint")]
@@ -103,17 +112,23 @@ internal class TokensStepDefinitions
 
     #region Then
 
-    [Then($"the response contains the Tokens {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
-    public void ThenTheResponseContainsTokens(string token1Name, string token2Name)
+    [Then($"the response contains the Tokens? {RegexFor.LIST_OF_THINGS}")]
+    public void ThenTheResponseContainsTokens(string tokenNames)
     {
-        var token1Id = _tokensContext.CreateTokenResponses[token1Name].Id;
-        var token2Id = _tokensContext.CreateTokenResponses[token2Name].Id;
-
-        _listTokensResponse!.Result.Should()
-            .HaveCount(2).And
-            .Contain(token => token.Id == token1Id).And
-            .Contain(token => token.Id == token2Id);
+        foreach (var tokenId in Utils.SplitNames(tokenNames).Select(tokenName => _tokensContext.CreateTokenResponses[tokenName].Id))
+        {
+            _listTokensResponse!.Result.Should().Contain(token => token.Id == tokenId);
+        }
     }
+
+    [Then($"the response does not contain the Token {RegexFor.SINGLE_THING}")]
+    public void ThenTheResponseDoesNotContainTheTokenT(string tokenName)
+    {
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
+
+        _listTokensResponse!.Result.Should().NotContain(token => token.Id == tokenId);
+    }
+
 
     #endregion
 }
