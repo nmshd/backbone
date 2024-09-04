@@ -12,7 +12,7 @@ using Newtonsoft.Json;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
-public class EventBusAzureServiceBus : IEventBus, IDisposable
+public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 {
     private const string DOMAIN_EVENT_SUFFIX = "DomainEvent";
     private const string TOPIC_NAME = "default";
@@ -44,8 +44,13 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
 
     public void Dispose()
     {
+        Task.Run(async () => await DisposeAsync()).GetAwaiter().GetResult();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
         _subscriptionManager.Clear();
-        _processor.CloseAsync().GetAwaiter().GetResult();
+        await _processor.CloseAsync();
     }
 
     public async void Publish(DomainEvent @event)

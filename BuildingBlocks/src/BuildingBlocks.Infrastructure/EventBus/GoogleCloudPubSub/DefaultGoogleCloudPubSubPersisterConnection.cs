@@ -39,13 +39,18 @@ public class DefaultGoogleCloudPubSubPersisterConnection : IGoogleCloudPubSubPer
 
     public void Dispose()
     {
+        Task.Run(async () => await DisposeAsync()).GetAwaiter().GetResult();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
         if (_disposed) return;
 
         _disposed = true;
 
         try
         {
-            PublisherClient.ShutdownAsync(CancellationToken.None).GetAwaiter().GetResult();
+            await PublisherClient.ShutdownAsync(CancellationToken.None);
         }
         catch (Exception ex)
         {
@@ -54,7 +59,7 @@ public class DefaultGoogleCloudPubSubPersisterConnection : IGoogleCloudPubSubPer
 
         try
         {
-            SubscriberClient.StopAsync(CancellationToken.None).GetAwaiter().GetResult();
+            await SubscriberClient.StopAsync(CancellationToken.None);
         }
         catch (Exception ex)
         {
