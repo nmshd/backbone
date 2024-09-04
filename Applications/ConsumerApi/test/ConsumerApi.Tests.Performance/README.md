@@ -130,10 +130,9 @@ In order to run the performance tests, you must load an appropriate snapshot of 
     1. Place the relevant `.pg/.sql` file in the following directory: `/docker-compose/dumps/dump-files`.
     1. In the directory `/docker-compose/dumps/`, run the appropriate command: `load_postgres.bat` or `load_sqlserver_bak.bat`.
 
-    > [!CAUTION]
-    > This will delete you current Enmeshed Database.
-
-1.  **Prepare the csvs:**
+> [!CAUTION]
+> This will delete you current Enmeshed Database.
+4.  **Prepare the csvs:**
 
     1. Extract the compressed csv files into the following directory: `/Application/ConsumerApi/test/PerformanceTests/snapshots/<snapshotName>`. You must create the directory.
 
@@ -149,15 +148,14 @@ In order to run the performance tests, you must load an appropriate snapshot of 
         1. **Linux:** `$ scripts/linux/run-test.sh <scenario-name>`
         1. **Windows:** `# scripts/windows/run-test.ps1 <scenario-name>`
 
-        > [!NOTE]
-        > Both alternatives can be appended with `-- <extra> <parameters>`. Extra parameters are k6 parameters, some of which are explained below.
-
-    1. You must tweak the way the test is run to ensure it conforms with your preferences. The following CLI parameters are available:
-
-        | Key               | Possible Values         | Notes                          |
-        | ----------------- | ----------------------- | ------------------------------ |
-        | `--duration`      | `60m`, `4h`, etc.       | defaults to `1h` in most cases |
-        | `--address`       | `load-test.enmeshed.eu` | defaults to `localhost:8081`   |
-        | `--env snapshot=` | `heavy`                 | defaults to `light`            |
+> [!NOTE]
+> Both alternatives can be appended with `-- <extra> <parameters>`. Extra parameters are k6 parameters, some of which are explained below.
+6. You must tweak the way the test is run to ensure it conforms with your preferences. The following CLI parameters are available:
+    
+    | Key               | Possible Values         | Notes                          |
+    | ----------------- | ----------------------- | ------------------------------ |
+    | `--duration`      | `60m`, `4h`, etc.       | defaults to `1h` in most cases |
+    | `--address`       | `load-test.enmeshed.eu` | defaults to `localhost:8081`   |
+    | `--env snapshot=` | `heavy`                 | defaults to `light`            |
 
     e.g.: `$ scripts/linux/run-test.sh s01 -- --address test.enmeshed.eu:443 --duration 4h`
