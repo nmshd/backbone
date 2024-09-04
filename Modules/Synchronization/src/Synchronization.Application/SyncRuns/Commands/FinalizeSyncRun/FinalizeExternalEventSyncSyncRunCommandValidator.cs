@@ -20,7 +20,7 @@ public class FinalizeExternalEventSyncSyncRunCommandValidator : AbstractValidato
         public EventResultValidator()
         {
             RuleFor(i => i.ExternalEventId).ValidId<FinalizeExternalEventSyncSyncRunCommand.ExternalEventResult, ExternalEventId>();
-            RuleFor(i => i.ErrorCode).MaximumLength(50);
+            RuleFor(i => i.ErrorCode).MaximumLength(100);
         }
     }
 }

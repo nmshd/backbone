@@ -179,8 +179,8 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
 
                     b.Property<string>("ErrorCode")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("ExternalEventId")
                         .IsRequired()
