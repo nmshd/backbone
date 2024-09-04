@@ -120,7 +120,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
     if (deletionProcessesDetails.hasError) {
       final errorMessage = deletionProcessesDetails.error.message;
 
-      context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/identities'});
+      context.pushReplacement('/error', extra: errorMessage);
 
       return;
     }

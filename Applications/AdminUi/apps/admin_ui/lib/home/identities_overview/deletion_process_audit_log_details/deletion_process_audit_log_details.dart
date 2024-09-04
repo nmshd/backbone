@@ -70,7 +70,7 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
     if (response.hasError) {
       final errorMessage = response.error.message;
 
-      context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/identities'});
+      context.pushReplacement('/error', extra: errorMessage);
 
       return;
     }

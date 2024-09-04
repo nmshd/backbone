@@ -88,7 +88,7 @@ class _ClientDetailsState extends State<ClientDetails> {
     if (clientDetails.hasError) {
       final errorMessage = clientDetails.error.message;
 
-      context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/clients'});
+      context.pushReplacement('/error', extra: errorMessage);
 
       return;
     }

@@ -117,7 +117,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
     if (identityDetails.hasError) {
       final errorMessage = identityDetails.error.message;
 
-      context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/identities'});
+      context.pushReplacement('/error', extra: errorMessage);
 
       return;
     }

@@ -91,7 +91,7 @@ class _TierDetailState extends State<TierDetail> {
     if (tierDetails.hasError) {
       final errorMessage = tierDetails.error.message;
 
-      context.goNamed('error', queryParameters: {'errorMessage': errorMessage, 'returnRoute': '/tiers'});
+      context.pushReplacement('/error', extra: errorMessage);
 
       return;
     }

@@ -47,12 +47,8 @@ final _router = GoRouter(
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
-      name: 'error',
       path: '/error',
-      builder: (context, state) => ErrorScreen(
-        errorMessage: state.uri.queryParameters['errorMessage']!,
-        returnRoute: state.uri.queryParameters['returnRoute']!,
-      ),
+      builder: (context, state) => ErrorScreen(errorMessage: state.extra.toString()),
     ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
