@@ -66,6 +66,19 @@ spec:
               subPath: appsettings.override.json
               readOnly: true
           env:
+            {{- if .Values.global.useBuiltInEventbus }}
+            - name: infrastructure__eventBus__vendor
+              value: RabbitMQ
+            - name: infrastructure__eventBus__connectionInfo
+              value: "rabbitmq"
+            - name: infrastructure__eventBus__rabbitMQUsername
+              value: "admin"
+            - name: infrastructure__eventBus__rabbitMQPassword
+              valueFrom:
+                secretKeyRef:
+                  name: rabbitmq-password
+                  key: "VALUE" 
+            {{- end }}
             {{- include "generateEnvVars" (list .Values.global.env .Values.sseserver.env) | nindent 12 }}
           livenessProbe:
             httpGet:
