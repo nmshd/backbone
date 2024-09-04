@@ -18,8 +18,7 @@ function groupMetricsByRoute(metrics) {
     const routeMetrics = {};
 
     metrics.forEach((metric) => {
-        // Extract the route from the URL (assuming the route is the path)
-        const route = new URL(metric.name).pathname;
+        const route = `${metric.method} ${new URL(metric.name).pathname}`;
         const type = metric.metric_name;
 
         if (!routeMetrics[route]) routeMetrics[route] = {};
@@ -47,10 +46,10 @@ function groupMetricsByRoute(metrics) {
 
 // Function to print the grouped metrics
 function printMetrics(routeMetrics) {
-    console.log("HTTP Request Metrics Grouped by Route and Type:");
+    console.log("HTTP Request Metrics Grouped by Route and timing:");
     Object.entries(routeMetrics).forEach(([route, typeMetrics]) => {
         const firstMetric = Object.entries(typeMetrics)[0][1];
-        console.log(`\n ===\n\nRoute: ${route}`);
+        console.log(`\nRoute: ${route}`);
         console.log(`Total Requests: ${firstMetric.totalRequests}`);
         console.log("Status Codes:");
         Object.entries(firstMetric.statuses).forEach(([status, count]) => {
@@ -68,7 +67,7 @@ function printMetrics(routeMetrics) {
 function processK6Output(filePath) {
     const k6Data = readK6Output(filePath);
     if (k6Data) {
-        const httpMetrics = k6Data.filter((x) => x.metric_name.indexOf("http_req_") == 0);
+        const httpMetrics = k6Data.filter((x) => x.metric_name.indexOf("http_req_") == 0 && x.metric_name.indexOf("http_req_tls") != 0);
         const groupedMetrics = groupMetricsByRoute(httpMetrics);
         printMetrics(groupedMetrics);
     } else {
