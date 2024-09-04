@@ -1,49 +1,3 @@
-# How to run
-
-In order to run the performance tests, you must load an appropriate snapshot of the database. These snapshots are bundled with the usernames and passwords of the created identities/devices, meaning you can authenticate as such users and do API calls in their stead.
-
-1.  **Install k6**
-
-    1. You must install k6 if you haven't already. Please download it from the [official website](https://k6.io/open-source/).
-
-1.  **Select a snapshot:**
-
-    1. Select one of the available snapshots. You can find more information on the available snapshots in the [root README](../../README.md) file.
-    1. Extract the snapshot file, and any further zip files there may be inside it.
-
-1.  **Load the snapshot:**
-
-        1. Locate the snapshot you'd like to use. It can be in the `../snapshots` folder or in a remote host if it's a big file. Extract it, as well as the zip files within it.
-        1. Place the relevant `.pg/.sql` file in the following directory: `/docker-compose/dumps/dump-files`.
-        1. In the directory `/docker-compose/dumps/`, run the appropriate command: `load_postgres.bat` or `load_sqlserver_bak.bat`.
-
-    > [!CAUTION]
-    > This will delete you current Enmeshed Database.
-
-1.  **Prepare the csvs:**
-
-    1. Extract the compressed csv files into the following directory: `/Application/ConsumerApi/test/PerformanceTests/snapshots/<snapshotName>`. You must create the directory.
-
-1.  **Start the application**
-
-    1. Using the IDE of your choice, launch the application and ensure it can receive requests.
-
-1.  **Run the test(s)**
-
-    1. cd into the directory `/Application/ConsumerApi/test/PerformanceTests`
-    1. Compile the typescript test files into javascript files which k6 can understand: `npx webpack`
-    1. You must tweak the way the test is run to ensure it conforms with your preferences. The following CLI parameters are available:
-
-        | Key               | Possible Values                          | Notes                          |
-        | ----------------- | ---------------------------------------- | ------------------------------ |
-        | `--duration`      | `60m`, `4h`, etc.                        | defaults to `1h` in most cases |
-        | `--address`       | `load-test.enmeshed.eu`                  | defaults to `localhost:8081`   |
-        | `--env snapshot=` | `heavy`                                  | defaults to `light`            |
-        | `--out`           | `json=results.json` or `csv=results.csv` | defaults to console output     |
-
-    1. Run the desired command as follows:
-       `k6.exe run <params> .\dist\<sxx>.test.js`
-
 # Scenarios
 
 ## 01. Creating Challenges
@@ -197,14 +151,3 @@ In order to run the performance tests, you must load an appropriate snapshot of 
 3. Get all Relationship Templates (CAUTION: remember to paginate the results, if necessary!)
 4. Get all Relationships (CAUTION: remember to paginate the results, if necessary!)
 5. Get all Tokens (CAUTION: remember to paginate the results, if necessary!)
-
-### Problem
-
-**How do we know which objects even exist? Possibilities:**
-
-1. **Using Object Identifiers in Modifications:**
-
-    - When creating the identity (i) and its test data, save the IDs of the created messages, relationship templates, relationships, and tokens in the objectIdentifier of the modifications. After fetching the modifications, read the object IDs from the objectIdentifiers of the modifications.
-
-2. **Saving IDs in an Additional Text File:**
-    - During the creation of the identity's (i) test data, save the IDs in an additional text file. This file can then be referenced to know which objects exist.

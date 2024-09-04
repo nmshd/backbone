@@ -78,9 +78,8 @@ Now that the database has been exported to a file, you can zip it and move it to
 
 In order to use a snapshot, you must:
 
-1.  from the snapshot:
-    1. extract the entity CSV files to the place where the performance tests expect to find them.
-    2. recreate the database. You may need to merge split zip files. This can be done on the Powershell by running `cmd.exe /c copy /b postgres-enmeshed.zip.* postgres-enmeshed.zip`
+1.  from the snapshot, extract the entity CSV files to the place where the performance tests expect to find them.
+1.  recreate the database.
 1.  start the consumer API
 1.  run the performance tests
 
@@ -112,13 +111,53 @@ Entity Creation: ~1h
 | Relationships         | 1747  |
 | Messages              | 16113 |
 
-# k6 results analysis
+# How to run k6 performance tests
 
-When running a k6 load test, you can output the results as a csv file.
-Note that you will need to run `npm i` inside the `result-analyzer` directory before running the aforementioned script for the first time.
+In order to run the performance tests, you must load an appropriate snapshot of the database. These snapshots are bundled with the usernames and passwords of the created identities/devices, meaning you can authenticate as such users and do API calls in their stead.
 
-The output file can be analyzed using the following script:
+1.  **Install k6**
 
-`node .\result-analyzer\src\main.js .\result.csv`
+    1. You must install k6 if you haven't already. Please download it from the [official website](https://k6.io/open-source/).
 
-Where `result.csv` is the name of the csv file.
+1.  **Select a snapshot:**
+
+    1. Select one of the available snapshots. You can find more information on the available snapshots in the [root README](../../README.md) file.
+    1. Extract the snapshot file, and any further zip files there may be inside it.
+
+1.  **Load the snapshot:**
+
+    1. Locate the snapshot you'd like to use. It can be in the `../snapshots` folder or in a remote host if it's a big file. Extract it, as well as the zip files within it.
+    1. Place the relevant `.pg/.sql` file in the following directory: `/docker-compose/dumps/dump-files`.
+    1. In the directory `/docker-compose/dumps/`, run the appropriate command: `load_postgres.bat` or `load_sqlserver_bak.bat`.
+
+    > [!CAUTION]
+    > This will delete you current Enmeshed Database.
+
+1.  **Prepare the csvs:**
+
+    1. Extract the compressed csv files into the following directory: `/Application/ConsumerApi/test/PerformanceTests/snapshots/<snapshotName>`. You must create the directory.
+
+1.  **Start the application**
+
+    1. Using the IDE of your choice, launch the application and ensure it can receive requests.
+
+1.  **Run the test(s)**
+
+    1. cd into the directory `/Application/ConsumerApi/test/ConsumerApi.Tests.Performance`
+    1. Run one of the following commands depending on what system you're using:
+
+        1. **Linux:** `$ scripts/linux/run-test.sh <scenario-name>`
+        1. **Windows:** `# scripts/windows/run-test.ps1 <scenario-name>`
+
+        > [!NOTE]
+        > Both alternatives can be appended with `-- <extra> <parameters>`. Extra parameters are k6 parameters, some of which are explained below.
+
+    1. You must tweak the way the test is run to ensure it conforms with your preferences. The following CLI parameters are available:
+
+        | Key               | Possible Values         | Notes                          |
+        | ----------------- | ----------------------- | ------------------------------ |
+        | `--duration`      | `60m`, `4h`, etc.       | defaults to `1h` in most cases |
+        | `--address`       | `load-test.enmeshed.eu` | defaults to `localhost:8081`   |
+        | `--env snapshot=` | `heavy`                 | defaults to `light`            |
+
+    e.g.: `$ scripts/linux/run-test.sh s01 -- --address test.enmeshed.eu:443 --duration 4h`
