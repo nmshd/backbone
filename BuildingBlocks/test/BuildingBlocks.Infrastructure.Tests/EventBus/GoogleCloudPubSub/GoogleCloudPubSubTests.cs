@@ -5,6 +5,7 @@ using Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestDomainEventHandlers;
 using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestDomainEvents;
 using Backbone.Tooling.Extensions;
+using Backbone.UnitTestTools.BaseClasses;
 using Divergic.Logging.Xunit;
 using FakeItEasy;
 using FluentAssertions;
@@ -19,7 +20,7 @@ using Xunit.Abstractions;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub;
 
-public class GoogleCloudPubSubTests : IDisposable, IAsyncDisposable
+public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
 {
     private readonly EventBusFactory _factory;
 
