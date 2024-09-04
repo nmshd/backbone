@@ -114,7 +114,7 @@ public class PushServiceTests : AbstractTestsBase
             .MustNotHaveHappened();
     }
 
-    private PushService CreateDirectPushService(IPnsRegistrationsRepository pnsRegistrationsRepository)
+    private static PushService CreateDirectPushService(IPnsRegistrationsRepository pnsRegistrationsRepository)
     {
         var dummyPnsConnectorFactory = A.Dummy<PnsConnectorFactory>();
         var dummyLogger = A.Dummy<ILogger<PushService>>();

@@ -6,11 +6,6 @@ public class DummyHasher : IHasher
 {
     private readonly byte[] _bytes;
 
-    public DummyHasher()
-    {
-        _bytes = [1, 2, 3];
-    }
-
     public DummyHasher(byte[] bytes)
     {
         _bytes = bytes;

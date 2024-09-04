@@ -1,10 +1,13 @@
-﻿using Backbone.PerformanceSnapshotCreator.Application.MessageDistributor;
+﻿using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.PerformanceSnapshotCreator.Application.MessageDistributor;
 using Backbone.PerformanceSnapshotCreator.Application.Printer;
 using Backbone.PerformanceSnapshotCreator.Application.RelationshipDistributor;
+using Backbone.PerformanceSnapshotCreator.Domain;
 using Backbone.PerformanceSnapshotCreator.PoolsFile;
 using Backbone.Tooling;
 
 namespace Backbone.PerformanceSnapshotCreator.PoolsGenerator;
+
 public class DeterministicPoolsGenerator
 {
     private readonly IRelationshipDistributor _relationshipDistributor;
@@ -102,19 +105,21 @@ public class DeterministicPoolsGenerator
         {
             for (uint i = 0; i < pool.Amount; i++)
             {
-                var createdIdentity = new Domain.Identity(new("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)), "ID1" + PasswordHelper.GeneratePassword(16, 16), "DVC" + PasswordHelper.GeneratePassword(8, 8), pool, i + 1, uon++);
+                var createdIdentity = new Identity(new UserCredentials("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)),
+                    "ID1" + PasswordHelper.GeneratePassword(16, 16), "DVC" + PasswordHelper.GeneratePassword(8, 8), pool, i + 1, uon++);
 
                 if (pool.NumberOfDevices > 1)
                 {
                     for (uint j = 1; j < pool.NumberOfDevices; j++)
                         createdIdentity.AddDevice("DVC" + PasswordHelper.GeneratePassword(8, 8));
                 }
+
                 pool.Identities.Add(createdIdentity);
             }
         }
     }
 
-    protected internal static void CalculateSentAndReceivedMessages(IList<PoolEntry> pools, PoolFileConfiguration poolsConfiguration)
+    private static void CalculateSentAndReceivedMessages(IList<PoolEntry> pools, PoolFileConfiguration poolsConfiguration)
     {
         var messagesSentByConnectorRatio = poolsConfiguration.MessagesSentByConnectorRatio;
         var messagesSentByAppRatio = 1 - messagesSentByConnectorRatio;
@@ -133,6 +138,7 @@ public class DeterministicPoolsGenerator
             {
                 throw new Exception("Pools that are neither app nor connector cannot send messages.");
             }
+
             pool.NumberOfReceivedMessages = pool.TotalNumberOfMessages - pool.NumberOfSentMessages;
 
             if (pool.NumberOfReceivedMessages == 0 || pool.NumberOfSentMessages == 0)
@@ -143,7 +149,7 @@ public class DeterministicPoolsGenerator
         }
     }
 
-    protected internal static void EstablishMessagesOffsetPoolsRelationships(IList<PoolEntry> pools)
+    private static void EstablishMessagesOffsetPoolsRelationships(IList<PoolEntry> pools)
     {
         var messagesOffsetPools = pools.Where(p => p.Alias.StartsWith("a0m") || p.Alias.StartsWith("c0m")).ToList();
         if (messagesOffsetPools.Count != 2) return;
@@ -151,5 +157,4 @@ public class DeterministicPoolsGenerator
         var (p1, p2) = (messagesOffsetPools[0], messagesOffsetPools[1]);
         p1.Identities.Single().AddIdentityToEstablishRelationshipsWith(p2.Identities.Single());
     }
-
 }

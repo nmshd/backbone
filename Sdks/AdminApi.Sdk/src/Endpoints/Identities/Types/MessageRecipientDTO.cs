@@ -1,4 +1,4 @@
-﻿namespace Backbone.AdminApi.Tests.Integration.Models;
+﻿namespace Backbone.AdminApi.Sdk.Endpoints.Identities.Types;
 
 public class MessageRecipientDTO
 {

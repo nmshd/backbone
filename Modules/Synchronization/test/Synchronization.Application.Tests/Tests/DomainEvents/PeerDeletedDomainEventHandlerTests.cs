@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeleted;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeleted;
@@ -14,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.DomainEvents;
+
 public class PeerDeletedDomainEventHandlerTests : AbstractTestsBase
 {
     [Fact]

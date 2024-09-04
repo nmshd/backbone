@@ -16,43 +16,29 @@ public static class QuotaPeriodExtensions
 {
     public static DateTime CalculateBegin(this QuotaPeriod period, DateTime utcNow)
     {
-        switch (period)
+        return period switch
         {
-            case QuotaPeriod.Hour:
-                return utcNow.StartOfHour();
-            case QuotaPeriod.Day:
-                return utcNow.StartOfDay();
-            case QuotaPeriod.Week:
-                return utcNow.StartOfWeek();
-            case QuotaPeriod.Month:
-                return utcNow.StartOfMonth();
-            case QuotaPeriod.Year:
-                return utcNow.StartOfYear();
-            case QuotaPeriod.Total:
-                return DateTime.MinValue;
-            default:
-                throw new NotSupportedException($"Cannot calculate begin of the passed period '{period}'.");
-        }
+            QuotaPeriod.Hour => utcNow.StartOfHour(),
+            QuotaPeriod.Day => utcNow.StartOfDay(),
+            QuotaPeriod.Week => utcNow.StartOfWeek(),
+            QuotaPeriod.Month => utcNow.StartOfMonth(),
+            QuotaPeriod.Year => utcNow.StartOfYear(),
+            QuotaPeriod.Total => DateTime.MinValue,
+            _ => throw new NotSupportedException($"Cannot calculate begin of the passed period '{period}'.")
+        };
     }
 
     public static DateTime CalculateEnd(this QuotaPeriod period, DateTime utcNow)
     {
-        switch (period)
+        return period switch
         {
-            case QuotaPeriod.Hour:
-                return utcNow.EndOfHour();
-            case QuotaPeriod.Day:
-                return utcNow.EndOfDay();
-            case QuotaPeriod.Week:
-                return utcNow.EndOfWeek();
-            case QuotaPeriod.Month:
-                return utcNow.EndOfMonth();
-            case QuotaPeriod.Year:
-                return utcNow.EndOfYear();
-            case QuotaPeriod.Total:
-                return DateTime.MaxValue;
-            default:
-                throw new NotSupportedException($"Cannot calculate end of the passed period '{period}'.");
-        }
+            QuotaPeriod.Hour => utcNow.EndOfHour(),
+            QuotaPeriod.Day => utcNow.EndOfDay(),
+            QuotaPeriod.Week => utcNow.EndOfWeek(),
+            QuotaPeriod.Month => utcNow.EndOfMonth(),
+            QuotaPeriod.Year => utcNow.EndOfYear(),
+            QuotaPeriod.Total => DateTime.MaxValue,
+            _ => throw new NotSupportedException($"Cannot calculate end of the passed period '{period}'.")
+        };
     }
 }

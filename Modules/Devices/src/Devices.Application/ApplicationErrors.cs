@@ -23,12 +23,8 @@ public static class ApplicationErrors
 
         public static ApplicationError AddressAlreadyExists()
         {
-            return new ApplicationError("error.platform.validation.device.addressAlreadyExists", "The address derived from the given public key already exists. Try again with a different public key.");
-        }
-
-        public static ApplicationError InvalidPublicKeyFormat()
-        {
-            return new ApplicationError("error.platform.validation.device.invalidPublicKeyFormat", "The format of the given public key is not supported.");
+            return new ApplicationError("error.platform.validation.device.addressAlreadyExists",
+                "The address derived from the given public key already exists. Try again with a different public key.");
         }
 
         public static ApplicationError InvalidSignature()
@@ -63,14 +59,8 @@ public static class ApplicationErrors
 
         public static ApplicationError ClientReachedIdentitiesLimit()
         {
-            return new ApplicationError("error.platform.validation.device.clientReachedIdentitiesLimit", "The client's Identity limit has been reached. A new Identity cannot be created with this client.");
-        }
-    }
-    public static class Identities
-    {
-        public static ApplicationError CanOnlyStartDeletionProcessForOwnIdentity()
-        {
-            return new ApplicationError("error.platform.validation.identity.canOnlyStartDeletionProcessForOwnIdentity", "You can only start a deletion process for your own identity.");
+            return new ApplicationError("error.platform.validation.device.clientReachedIdentitiesLimit",
+                "The client's Identity limit has been reached. A new Identity cannot be created with this client.");
         }
     }
 }

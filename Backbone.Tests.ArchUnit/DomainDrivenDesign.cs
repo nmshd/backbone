@@ -13,7 +13,7 @@ public class DomainDrivenDesign
     {
         Types()
             .That().AreAssignableTo(typeof(Entity))
-            .Should().FollowCustomCondition((type) =>
+            .Should().FollowCustomCondition(type =>
             {
                 var constructors = type.GetConstructors();
 

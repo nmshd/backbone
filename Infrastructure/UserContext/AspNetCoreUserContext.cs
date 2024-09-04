@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Security.Claims;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
@@ -68,31 +67,6 @@ public class AspNetCoreUserContext : IUserContext
     {
         var username = GetHttpContext().User.Identities.FirstOrDefault()?.Name;
         return username;
-    }
-
-    public IEnumerable<string> GetRoles()
-    {
-        var rolesClaim = GetHttpContext().User.FindFirstValue(ClaimTypes.Role);
-
-        if (rolesClaim == null) return new List<string>();
-
-        return rolesClaim.Split(' ');
-    }
-
-    public SubscriptionPlan GetSubscriptionPlan()
-    {
-        var subscriptionPlanClaim = GetHttpContext().User.FindFirstValue(SUBSCRIPTION_PLAN_CLAIM);
-
-        if (string.IsNullOrEmpty(subscriptionPlanClaim)) return SubscriptionPlan.Undefined;
-
-        switch (subscriptionPlanClaim)
-        {
-            case "free": return SubscriptionPlan.Free;
-            case "paid": return SubscriptionPlan.Paid;
-            default:
-                throw new InvalidEnumArgumentException(
-                    $"The value '{subscriptionPlanClaim}' is not a supported subscription plan.");
-        }
     }
 
     private HttpContext GetHttpContext()

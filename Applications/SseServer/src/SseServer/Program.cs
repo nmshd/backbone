@@ -72,11 +72,11 @@ static WebApplication CreateApp(string[] args)
             .Enrich.WithProperty("service", "sseserver")
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
-                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
+                .WithDestructurers([new DbUpdateExceptionDestructurer()]))
         )
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
-    ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
+    ConfigureServices(builder.Services, builder.Configuration);
 
     var app = builder.Build();
     Configure(app);
@@ -89,7 +89,7 @@ static WebApplication CreateApp(string[] args)
     return app;
 }
 
-static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IHostEnvironment environment)
+static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
 {
     services.ConfigureAndValidate<Configuration>(configuration.Bind);
 
@@ -103,7 +103,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
 
     services.AddSingleton<IEventQueue, EventQueue>();
 
-    services.AddCustomAspNetCore(parsedConfiguration, environment);
+    services.AddCustomAspNetCore(parsedConfiguration);
 
     services.AddScoped<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 

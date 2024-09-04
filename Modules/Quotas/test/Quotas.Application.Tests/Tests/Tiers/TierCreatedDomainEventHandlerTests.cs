@@ -30,7 +30,7 @@ public class TierCreatedDomainEventHandlerTests : AbstractTestsBase
         mockTierRepository.WasCalledWith.Name.Should().Be(name);
     }
 
-    private TierCreatedDomainEventHandler CreateHandler(AddMockTiersRepository tiers)
+    private static TierCreatedDomainEventHandler CreateHandler(AddMockTiersRepository tiers)
     {
         var logger = A.Fake<ILogger<TierCreatedDomainEventHandler>>();
         return new TierCreatedDomainEventHandler(tiers, logger);

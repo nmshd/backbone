@@ -35,7 +35,7 @@ public class SyncRunDTO
     public string CreatedByDevice { get; set; } = null!;
     public int EventCount { get; set; }
 
-    private SyncRunType MapSyncRunType(SyncRun.SyncRunType type)
+    private static SyncRunType MapSyncRunType(SyncRun.SyncRunType type)
     {
         return type switch
         {
