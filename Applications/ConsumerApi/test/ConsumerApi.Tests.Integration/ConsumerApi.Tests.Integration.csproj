@@ -25,10 +25,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj"/>
-        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Crypto\Crypto.csproj"/>
-        <ProjectReference Include="..\..\..\..\Sdks\ConsumerApi.Sdk\src\ConsumerApi.Sdk.csproj"/>
-        <ProjectReference Include="..\..\src\ConsumerApi.csproj"/>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Crypto\Crypto.csproj" />
+        <ProjectReference Include="..\..\..\..\Sdks\ConsumerApi.Sdk\src\ConsumerApi.Sdk.csproj" />
+        <ProjectReference Include="..\..\src\ConsumerApi.csproj" />
     </ItemGroup>
 
     <ItemGroup>
