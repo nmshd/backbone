@@ -74,6 +74,14 @@ internal class RelationshipsStepDefinitions
         _relationshipsContext.Relationships[relationshipName] = await Utils.CreateTerminatedRelationshipBetween(participant1, participant2);
     }
 
+    [Given($"a terminated Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING} with reactivation request")]
+    public async Task GivenATerminatedRelationshipWithReactivationRequest(string relationshipName, string participant1Address, string participant2Address)
+    {
+        var participant1 = _clientPool.FirstForIdentityName(participant1Address);
+        var participant2 = _clientPool.FirstForIdentityName(participant2Address);
+
+        _relationshipsContext.Relationships[relationshipName] = await Utils.CreateTerminatedRelationshipWithReactivationRequestBetween(participant2, participant1);
+    }
 
     [Given($"{RegexFor.SINGLE_THING} has terminated {RegexFor.SINGLE_THING}")]
     public async Task GivenRelationshipIsTerminated(string terminatorName, string relationshipName)

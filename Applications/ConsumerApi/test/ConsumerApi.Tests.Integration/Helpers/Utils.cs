@@ -101,6 +101,19 @@ public static class Utils
         return getRelationshipResponse.Result!;
     }
 
+    public static async Task<Relationship> CreateTerminatedRelationshipWithReactivationRequestBetween(Client client1, Client client2)
+    {
+        var relationshipMetadata = await CreateTerminatedRelationshipBetween(client1, client2);
+
+        var reactivateRelationshipResponse = await client1.Relationships.RelationshipReactivationRequest(relationshipMetadata.Id);
+        reactivateRelationshipResponse.Should().BeASuccess();
+
+        var getRelationshipResponse = await client1.Relationships.GetRelationship(relationshipMetadata.Id);
+        getRelationshipResponse.Should().BeASuccess();
+
+        return getRelationshipResponse.Result!;
+    }
+
     public static async Task<Message> SendMessage(Client sender, params Client[] recipients)
     {
         var sendMessageRequest = new SendMessageRequest
