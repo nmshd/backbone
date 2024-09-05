@@ -88,6 +88,19 @@ public static class Utils
         return getRelationshipResponse.Result!;
     }
 
+    public static async Task<Relationship> CreateTerminatedRelationshipBetween(Client client1, Client client2)
+    {
+        var relationshipMetadata = await EstablishRelationshipBetween(client1, client2);
+
+        var terminateRelationshipResponse = await client1.Relationships.TerminateRelationship(relationshipMetadata.Id);
+        terminateRelationshipResponse.Should().BeASuccess();
+
+        var getRelationshipResponse = await client1.Relationships.GetRelationship(relationshipMetadata.Id);
+        getRelationshipResponse.Should().BeASuccess();
+
+        return getRelationshipResponse.Result!;
+    }
+
     public static async Task<Message> SendMessage(Client sender, params Client[] recipients)
     {
         var sendMessageRequest = new SendMessageRequest
