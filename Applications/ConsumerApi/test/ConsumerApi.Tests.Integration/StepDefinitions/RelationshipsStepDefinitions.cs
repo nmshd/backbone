@@ -74,7 +74,7 @@ internal class RelationshipsStepDefinitions
         _relationshipsContext.Relationships[relationshipName] = await Utils.CreateTerminatedRelationshipBetween(participant1, participant2);
     }
 
-    [Given($"a terminated Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING} with reactivation request")]
+    [Given($"a terminated Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING} with reactivation request by second participant")]
     public async Task GivenATerminatedRelationshipWithReactivationRequest(string relationshipName, string participant1Address, string participant2Address)
     {
         var participant1 = _clientPool.FirstForIdentityName(participant1Address);
@@ -151,14 +151,27 @@ internal class RelationshipsStepDefinitions
         _responseContext.WhenResponse = await client.Relationships.RelationshipReactivationRequest(_relationshipsContext.Relationships[relationshipName].Id);
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/Reactivate/Accept endpoint")]
-    public async Task WhenIdentitySendsAPutRequestToTheRelationshipsIdReactivateAcceptEndpoint(string identityName, string relationshipName)
+    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/Reactivate/(Accept|Reject|Revoke) endpoint")]
+    public async Task WhenIdentitySendsAPutRequestToTheRelationshipsIdReactivateAcceptEndpoint(string identityName, string relationshipName, string requestType)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
 
-        _responseContext.WhenResponse = await client.Relationships.AcceptReactivationOfRelationship(_relationshipsContext.Relationships[relationshipName].Id);
+        _responseContext.WhenResponse = requestType switch
+        {
+            "Accept" => await client.Relationships.AcceptReactivationOfRelationship(_relationshipsContext.Relationships[relationshipName].Id),
+            "Reject" => await client.Relationships.RejectReactivationOfRelationship(_relationshipsContext.Relationships[relationshipName].Id),
+            "Revoke" => await client.Relationships.RevokeRelationshipReactivation(_relationshipsContext.Relationships[relationshipName].Id),
+            _ => throw new NotSupportedException($"Unsupported request type: {requestType}")
+        };
     }
 
+    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/Decompose endpoint")]
+    public async Task WhenIdentitySendsAPutRequestToTheRelationshipsIdDecomposeEndpoint(string identityName, string relationshipName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        _responseContext.WhenResponse = await client.Relationships.DecomposeRelationship(_relationshipsContext.Relationships[relationshipName].Id);
+    }
 
     [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Relationships/CanCreate\\?peer={{id}} endpoint with id={RegexFor.SINGLE_THING}.id")]
     public async Task WhenAGetRequestIsSentToTheCanCreateEndpointByIdentityForIdentity(string activeIdentityName, string peerName)
