@@ -115,9 +115,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
     if (!mounted) return;
 
     if (identityDetails.hasError) {
-      final errorMessage = identityDetails.error.message;
-
-      context.pushReplacement('/error', extra: errorMessage);
+      context.pushReplacement('/error', extra: identityDetails.error.message);
 
       return;
     }

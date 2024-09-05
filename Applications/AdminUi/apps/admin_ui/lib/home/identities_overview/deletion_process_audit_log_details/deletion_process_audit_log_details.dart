@@ -68,9 +68,7 @@ class _DeletionProcessAuditLogDetailsState extends State<DeletionProcessAuditLog
     if (!mounted) return;
 
     if (response.hasError) {
-      final errorMessage = response.error.message;
-
-      context.pushReplacement('/error', extra: errorMessage);
+      context.pushReplacement('/error', extra: response.error.message);
 
       return;
     }

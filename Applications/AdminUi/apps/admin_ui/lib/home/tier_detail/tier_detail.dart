@@ -89,9 +89,7 @@ class _TierDetailState extends State<TierDetail> {
     if (!mounted) return;
 
     if (tierDetails.hasError) {
-      final errorMessage = tierDetails.error.message;
-
-      context.pushReplacement('/error', extra: errorMessage);
+      context.pushReplacement('/error', extra: tierDetails.error.message);
 
       return;
     }

@@ -86,9 +86,7 @@ class _ClientDetailsState extends State<ClientDetails> {
     if (!mounted) return;
 
     if (clientDetails.hasError) {
-      final errorMessage = clientDetails.error.message;
-
-      context.pushReplacement('/error', extra: errorMessage);
+      context.pushReplacement('/error', extra: clientDetails.error.message);
 
       return;
     }
