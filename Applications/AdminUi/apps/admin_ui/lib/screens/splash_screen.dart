@@ -58,7 +58,8 @@ class _SplashScreenState extends State<SplashScreen> {
   }
 
   void _navigateToLogin() {
-    context.go('/login');
+    final redirectPath = widget.redirect != null ? Uri.encodeComponent(widget.redirect!) : '/';
+    context.go('/login?redirect=$redirectPath');
   }
 
   void _navigate(String defaultRoute) {
