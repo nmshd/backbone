@@ -54,18 +54,10 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!isValid) return _navigateToLogin();
 
     GetIt.I.registerSingleton(await AdminApiClient.create(baseUrl: baseUrl, apiKey: apiKey));
-    return _navigate('/identities');
+    if (mounted) context.go(widget.redirect != null ? Uri.decodeComponent(widget.redirect!) : '/identities');
   }
 
   void _navigateToLogin() {
     context.go(widget.redirect != null ? '/login?redirect=${widget.redirect!}' : '/login');
-  }
-
-  void _navigate(String defaultRoute) {
-    if (!mounted) return;
-
-    if (widget.redirect != null) return context.go(Uri.decodeComponent(widget.redirect!));
-
-    context.go(defaultRoute);
   }
 }
