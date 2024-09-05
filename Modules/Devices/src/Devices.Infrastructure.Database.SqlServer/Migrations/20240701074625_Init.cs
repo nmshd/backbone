@@ -566,7 +566,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                 table: "Tiers",
                 column: "Name",
                 unique: true);
-            
+
             migrationBuilder.AddCheckConstraintForAtMostOneActiveDeletionProcessPerIdentity();
         }
 
@@ -640,7 +640,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
             migrationBuilder.DropTable(
                 name: "Tiers",
                 schema: "Devices");
-            
+
             migrationBuilder.DeleteCheckConstraintForAtMostOneActiveDeletionProcessPerIdentity();
         }
     }

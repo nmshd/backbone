@@ -562,7 +562,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                 table: "Tiers",
                 column: "Name",
                 unique: true);
-            
+
             migrationBuilder.AddCheckConstraintForAtMostOneActiveDeletionProcessPerIdentity();
         }
 
@@ -636,7 +636,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
             migrationBuilder.DropTable(
                 name: "Tiers",
                 schema: "Devices");
-            
+
             migrationBuilder.DeleteCheckConstraintForAtMostOneActiveDeletionProcessPerIdentity();
         }
     }
