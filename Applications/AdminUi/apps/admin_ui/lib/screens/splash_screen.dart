@@ -45,16 +45,20 @@ class _SplashScreenState extends State<SplashScreen> {
     await GetIt.I.allReady();
     final sp = await SharedPreferences.getInstance();
 
-    if (!sp.containsKey('api_key')) return _navigate('/login');
+    if (!sp.containsKey('api_key')) return _navigateToLogin();
 
     final apiKey = sp.getString('api_key')!;
     const baseUrl = kIsWeb ? '' : String.fromEnvironment('base_url');
 
     final isValid = await AdminApiClient.validateApiKey(baseUrl: baseUrl, apiKey: apiKey);
-    if (!isValid) return _navigate('/login');
+    if (!isValid) return _navigateToLogin();
 
     GetIt.I.registerSingleton(await AdminApiClient.create(baseUrl: baseUrl, apiKey: apiKey));
     return _navigate('/identities');
+  }
+
+  void _navigateToLogin() {
+    context.go('/login');
   }
 
   void _navigate(String defaultRoute) {
