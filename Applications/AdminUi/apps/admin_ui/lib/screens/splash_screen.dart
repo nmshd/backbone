@@ -57,7 +57,5 @@ class _SplashScreenState extends State<SplashScreen> {
     if (mounted) context.go(widget.redirect != null ? Uri.decodeComponent(widget.redirect!) : '/identities');
   }
 
-  void _navigateToLogin() {
-    context.go(widget.redirect != null ? '/login?redirect=${widget.redirect!}' : '/login');
-  }
+  void _navigateToLogin() => context.go(widget.redirect != null ? '/login?redirect=${widget.redirect!}' : '/login');
 }
