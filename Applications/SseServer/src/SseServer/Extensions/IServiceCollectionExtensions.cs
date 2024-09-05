@@ -15,7 +15,7 @@ namespace Backbone.SseServer.Extensions;
 public static class IServiceCollectionExtensions
 {
     public static void AddCustomAspNetCore(this IServiceCollection services,
-        Configuration configuration, IHostEnvironment env)
+        Configuration configuration)
     {
         services
             .AddControllers(options => options.Filters.Add(typeof(CustomExceptionFilter)))

@@ -214,15 +214,15 @@ public class RelationshipsController : ApiControllerBase
 
 public class AcceptRelationshipRequest
 {
-    public byte[]? CreationResponseContent { get; set; } = Array.Empty<byte>();
+    public byte[]? CreationResponseContent { get; set; } = [];
 }
 
 public class RejectRelationshipRequest
 {
-    public byte[]? CreationResponseContent { get; set; } = Array.Empty<byte>();
+    public byte[]? CreationResponseContent { get; set; } = [];
 }
 
 public class RevokeRelationshipRequest
 {
-    public byte[]? CreationResponseContent { get; set; } = Array.Empty<byte>();
+    public byte[]? CreationResponseContent { get; set; } = [];
 }

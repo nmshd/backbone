@@ -111,7 +111,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
             .Enrich.WithProperty("service", "eventHandlerService")
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
-                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
+                .WithDestructurers([new DbUpdateExceptionDestructurer()]))
             .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks())
         );
 }

@@ -93,8 +93,7 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
             }
             catch (InfrastructureException exception) when (exception.Code == InfrastructureErrors.UniqueKeyViolation().Code)
             {
-                // This exception can be ignored. It is only thrown in case of a concurrent registration request from multiple devices.
-                _logger.LogInformation(exception.Message);
+                _logger.LogInformation(exception, "This exception can be ignored. It is only thrown in case of a concurrent registration request from multiple devices.");
             }
         }
 

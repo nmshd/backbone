@@ -17,7 +17,7 @@ public class RelationshipTemplateCreatedDomainEventHandler : IDomainEventHandler
     public async Task Handle(RelationshipTemplateCreatedDomainEvent @event)
     {
         var identities = new List<string> { @event.CreatedBy };
-        var metrics = new List<MetricKey> { MetricKey.NumberOfRelationshipTemplates };
+        var metrics = new List<MetricKey> { MetricKey.NUMBER_OF_RELATIONSHIP_TEMPLATES };
 
         await _metricStatusesService.RecalculateMetricStatuses(identities, metrics, CancellationToken.None);
     }

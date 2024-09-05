@@ -76,7 +76,7 @@ static WebApplication CreateApp(string[] args)
             .Enrich.WithProperty("service", "adminui")
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
-                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
+                .WithDestructurers([new DbUpdateExceptionDestructurer()]))
             .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()))
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 

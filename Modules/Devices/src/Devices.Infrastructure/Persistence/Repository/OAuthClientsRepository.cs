@@ -38,7 +38,7 @@ public class OAuthClientsRepository : IOAuthClientsRepository
         return oAuthClients;
     }
 
-    public async Task<Dictionary<string, int>> CountIdentities(List<string> clientIds, CancellationToken cancellationToken, bool track = false)
+    public async Task<Dictionary<string, int>> CountIdentities(List<string> clientIds, CancellationToken cancellationToken)
     {
         var identityCounts = await _readonlyIdentities
             .Where(i => i.ClientId != null && clientIds.Contains(i.ClientId))

@@ -4,10 +4,12 @@ using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
 using Backbone.Crypto;
 using Backbone.PerformanceSnapshotCreator.Application.Printer;
+using Backbone.PerformanceSnapshotCreator.Domain;
 using Backbone.PerformanceSnapshotCreator.PoolsFile;
 using Backbone.PerformanceSnapshotCreator.PoolsGenerator;
 using Backbone.PerformanceSnapshotCreator.Tools;
@@ -15,6 +17,7 @@ using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 
 namespace Backbone.PerformanceSnapshotCreator.EntityCreation;
+
 public class EntityCreator
 {
     private readonly IList<PoolEntry> _pools;
@@ -34,7 +37,6 @@ public class EntityCreator
 
     public async Task StartCreation()
     {
-
         CreateCompensationPool();
 
         await CreateIdentities();
@@ -81,8 +83,8 @@ public class EntityCreator
     private async Task CreateRelationships()
     {
         // ensure all connectors involved have at least one relationship template
-        var connectorIdentities = _pools.SelectMany(p => p.Identities).SelectMany((i => i.IdentitiesToEstablishRelationshipsWith)).Distinct().Where(i => i.Pool.IsConnector());
-        var nonConnectorIdentities = _pools.SelectMany(p => p.Identities).SelectMany((i => i.IdentitiesToEstablishRelationshipsWith)).Distinct().Where(i => !i.Pool.IsConnector());
+        var connectorIdentities = _pools.SelectMany(p => p.Identities).SelectMany(i => i.IdentitiesToEstablishRelationshipsWith).Distinct().Where(i => i.Pool.IsConnector());
+        var nonConnectorIdentities = _pools.SelectMany(p => p.Identities).SelectMany(i => i.IdentitiesToEstablishRelationshipsWith).Distinct().Where(i => !i.Pool.IsConnector());
         if (connectorIdentities.Any(c => c.RelationshipTemplates.Count < 1))
             throw new Exception("One or more relationship target connectors do not have a usable relationship template.");
 
@@ -96,11 +98,12 @@ public class EntityCreator
             foreach (var relatedIdentity in nonConnectorIdentity.IdentitiesToEstablishRelationshipsWith)
             {
                 var sdk = Client.CreateForExistingIdentity(_httpClientPool[Environment.CurrentManagedThreadId], _clientCredentials, nonConnectorIdentity.UserCredentials);
-                var connectorSdk = Client.CreateForExistingIdentity(_httpClientPool[Environment.CurrentManagedThreadId + Environment.ProcessorCount], _clientCredentials, relatedIdentity.UserCredentials);
+                var connectorSdk = Client.CreateForExistingIdentity(_httpClientPool[Environment.CurrentManagedThreadId + Environment.ProcessorCount], _clientCredentials,
+                    relatedIdentity.UserCredentials);
                 var randomRelationshipTemplate = random.GetRandomElement(relatedIdentity.RelationshipTemplates);
 
-                var createRelationshipResponse = await sdk.Relationships.CreateRelationship(new() { RelationshipTemplateId = randomRelationshipTemplate.Id, Content = [] });
-                var acceptRelationshipResponse = await connectorSdk.Relationships.AcceptRelationship(createRelationshipResponse.Result!.Id, new());
+                var createRelationshipResponse = await sdk.Relationships.CreateRelationship(new CreateRelationshipRequest { RelationshipTemplateId = randomRelationshipTemplate.Id, Content = [] });
+                var acceptRelationshipResponse = await connectorSdk.Relationships.AcceptRelationship(createRelationshipResponse.Result!.Id, new AcceptRelationshipRequest());
 
                 if (acceptRelationshipResponse.Result is not null)
                     nonConnectorIdentity.EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, relatedIdentity);
@@ -144,9 +147,12 @@ public class EntityCreator
             {
                 var sdk = Client.CreateForExistingIdentity(_httpClientPool[0], _clientCredentials, identity.UserCredentials);
 
-                var messageResponse = await sdk.Messages.SendMessage(new()
+                var messageResponse = await sdk.Messages.SendMessage(new SendMessageRequest
                 {
-                    Recipients = [new SendMessageRequestRecipientInformation { Address = recipientIdentity.Address, EncryptedKey = ConvertibleString.FromUtf8(new string('A', 152)).BytesRepresentation }],
+                    Recipients =
+                    [
+                        new SendMessageRequestRecipientInformation { Address = recipientIdentity.Address, EncryptedKey = ConvertibleString.FromUtf8(new string('A', 152)).BytesRepresentation }
+                    ],
                     Attachments = [],
                     Body = ConvertibleString.FromUtf8("Message body").BytesRepresentation
                 });
@@ -185,7 +191,7 @@ public class EntityCreator
                 if (sdk.DeviceData is null)
                     throw new Exception("The SDK could not be used to create a new Identity.");
 
-                var createdIdentity = new Domain.Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
+                var createdIdentity = new Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
 
                 if (pool.NumberOfDevices > 1)
                 {
@@ -229,6 +235,7 @@ public class EntityCreator
                 }
             }
         }
+
         Console.WriteLine("done.");
     }
 
@@ -272,12 +279,12 @@ public class EntityCreator
             foreach (var identity in pool.Identities)
             {
                 var sdk = Client.CreateForExistingIdentity(_httpClientPool[Environment.CurrentManagedThreadId], _clientCredentials, identity.UserCredentials);
-                var startDatawalletVersionUpgradeResponse = await sdk.SyncRuns.StartSyncRun(new StartSyncRunRequest() { Type = SyncRunType.DatawalletVersionUpgrade, Duration = 100 }, 1);
+                var startDatawalletVersionUpgradeResponse = await sdk.SyncRuns.StartSyncRun(new StartSyncRunRequest { Type = SyncRunType.DatawalletVersionUpgrade, Duration = 100 }, 1);
 
                 if (startDatawalletVersionUpgradeResponse.Result is null) continue;
 
                 var finalizeDatawalletVersionUpgradeResponse = await sdk.SyncRuns.FinalizeDatawalletVersionUpgrade(startDatawalletVersionUpgradeResponse.Result.SyncRun.Id,
-                    new FinalizeDatawalletVersionUpgradeRequest()
+                    new FinalizeDatawalletVersionUpgradeRequest
                     {
                         DatawalletModifications = PreGenerateDatawalletModifications(identity.Pool.NumberOfDatawalletModifications),
                         NewDatawalletVersion = 3
@@ -287,7 +294,6 @@ public class EntityCreator
                     identity.SetDatawalletModifications(finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications);
 
                 progress.Increment();
-
             }
         });
 
@@ -314,7 +320,7 @@ public class EntityCreator
             // can't be divided properly. Will only do creates.
             for (uint i = 0; i < number; i++)
             {
-                result.Add(new PushDatawalletModificationsRequestItem()
+                result.Add(new PushDatawalletModificationsRequestItem
                 {
                     Collection = "Performance-Tests",
                     DatawalletVersion = 2,

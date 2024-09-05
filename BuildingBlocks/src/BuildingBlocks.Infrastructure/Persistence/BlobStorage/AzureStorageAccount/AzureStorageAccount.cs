@@ -8,10 +8,10 @@ namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureSt
 
 public class AzureStorageAccount : IBlobStorage, IDisposable
 {
-    private readonly IDictionary<BlobClient, byte[]> _changedBlobs;
+    private readonly Dictionary<BlobClient, byte[]> _changedBlobs;
     private readonly ILogger<AzureStorageAccount> _logger;
     private readonly AzureStorageAccountContainerClientFactory _containerClientFactory;
-    private readonly IList<BlobClient> _removedBlobs;
+    private readonly List<BlobClient> _removedBlobs;
 
     public AzureStorageAccount(ILogger<AzureStorageAccount> logger, AzureStorageAccountContainerClientFactory containerClientFactory)
     {

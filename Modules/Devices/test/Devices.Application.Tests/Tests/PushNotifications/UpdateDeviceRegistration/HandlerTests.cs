@@ -30,19 +30,19 @@ public class HandlerTests : AbstractTestsBase
             .Returns(deviceId);
 
         A.CallTo(() => mockPushService.UpdateRegistration(
-                    A<IdentityAddress>._,
-                    A<DeviceId>._,
-                    A<PnsHandle>._,
-                    A<string>._,
-                    A<PushEnvironment>._,
-                    CancellationToken.None
-                ))
+                A<IdentityAddress>._,
+                A<DeviceId>._,
+                A<PnsHandle>._,
+                A<string>._,
+                A<PushEnvironment>._,
+                CancellationToken.None
+            ))
             .Returns(DevicePushIdentifier.New());
 
         var handler = new Handler(mockPushService, mockUserContext);
 
         // Act
-        await handler.Handle(new UpdateDeviceRegistrationCommand()
+        await handler.Handle(new UpdateDeviceRegistrationCommand
         {
             Platform = "fcm",
             Handle = "handle",

@@ -41,16 +41,16 @@ public static class DomainErrors
             $"A relationship to '{targetIdentity}' already exists. If the relationship is terminated, you can reactivate it. Note that a relationship has to be decomposed by both parties before a new one can be created.");
     }
 
-    public static DomainError NoRevocableReactivationRequestExists(string activeIdentity)
+    public static DomainError NoRevocableReactivationRequestExists()
     {
         return new DomainError("error.platform.validation.relationshipRequest.noRevocableReactivationRequestExists",
-            $"There is no pending reactivation request or you are not allowed to revoke it. A reactivation request can only be revoked by the identity that request it.");
+            "There is no pending reactivation request or you are not allowed to revoke it. A reactivation request can only be revoked by the identity that request it.");
     }
 
     public static DomainError CannotRequestReactivationWhenThereIsAnOpenReactivationRequest()
     {
         return new DomainError("error.platform.validation.relationshipRequest.cannotRequestReactivationWhenThereIsAnOpenReactivationRequest",
-            $"You cannot request reactivation when there is an open reactivation request.");
+            "You cannot request reactivation when there is an open reactivation request.");
     }
 
     public static DomainError NoAcceptableRelationshipReactivationRequestExists()
@@ -68,12 +68,12 @@ public static class DomainErrors
     public static DomainError RequestingIdentityDoesNotBelongToRelationship()
     {
         return new DomainError("error.platform.validation.relationshipRequest.requestingIdentityDoesNotBelongToRelationship",
-            $"Requesting identity does not belong to the relationship.");
+            "Requesting identity does not belong to the relationship.");
     }
 
     public static DomainError RelationshipAlreadyDecomposed()
     {
         return new DomainError("error.platform.validation.relationshipRequest.relationshipAlreadyDecomposed",
-            $"You already decomposed this Relationship.");
+            "You already decomposed this Relationship.");
     }
 }
