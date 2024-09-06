@@ -26,6 +26,8 @@ npm i
 
 Set-Location ..
 
+New-Item -Path "k6-outputs" -ItemType Directory -Force
+
 # Check the exit code of the webpack command
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Error: Webpack failed with exit code $LASTEXITCODE." -ForegroundColor Red

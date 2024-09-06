@@ -36,6 +36,8 @@ npm i
 
 cd ..
 
+mkdir -p k6-results
+
 # Run the `npx webpack` command
 npx webpack
 
