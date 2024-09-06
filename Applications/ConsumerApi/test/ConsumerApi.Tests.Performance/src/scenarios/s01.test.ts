@@ -4,7 +4,7 @@ import { check } from "k6";
 import { SharedArray } from "k6/data";
 import { Options } from "k6/options";
 import { apiVersion, exchangeToken } from "../libs/backbone-client";
-import { DataRepresentationForEnmeshedPerformanceTestsLoads } from "../libs/data-representation-for-enmeshed-performance-tests";
+import { DataRepresentationForEnmeshedPerformanceTestsLoads } from "../libs/data-loader/models";
 import { LoadDataRepresentationForEnmeshedPerformanceTests } from "../libs/file-utils";
 import { CreateChallengeResponse } from "../models";
 
@@ -21,6 +21,8 @@ export const options: Options = {
 };
 
 const snapshot = (__ENV.snapshot as string | undefined) ?? "light";
+const clientId = (__ENV.clientId as string | undefined) ?? "client_id";
+const clientSecret = (__ENV.clientSecret as string | undefined) ?? "client_secret";
 const pools = LoadDataRepresentationForEnmeshedPerformanceTests(snapshot, [DataRepresentationForEnmeshedPerformanceTestsLoads.Identities]).ofTypes("a", "c").pools;
 
 const testIdentities = new SharedArray("testIdentities", function () {

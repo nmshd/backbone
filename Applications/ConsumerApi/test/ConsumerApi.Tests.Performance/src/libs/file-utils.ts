@@ -1,13 +1,6 @@
 import { SharedArray } from "k6/data";
 import papaparse from "papaparse";
-import { DataRepresentationForEnmeshedPerformanceTests, DataRepresentationForEnmeshedPerformanceTestsLoads, Identity, Pool } from "./data-representation-for-enmeshed-performance-tests";
-import {
-    CsvDatawalletModification as CSVDatawalletModification,
-    CSVIdentity,
-    CSVMessage,
-    CSVRelationship,
-    CSVRelationshipTemplate
-} from "./data-representation-for-enmeshed-performance-tests/csv-types";
+import { DataRepresentationForEnmeshedPerformanceTests, DataRepresentationForEnmeshedPerformanceTestsLoads, Identity, Pool } from "./data-loader/models";
 
 /**
  *
@@ -164,4 +157,34 @@ export function LoadDataRepresentationForEnmeshedPerformanceTests(
         });
         return result;
     }
+}
+
+interface CSVIdentity {
+    Address: string;
+    DeviceId: string;
+    Username: string;
+    Password: string;
+    Alias: string;
+}
+
+interface CSVDatawalletModification {
+    IdentityAddress: string;
+    ModificationIndex: string;
+    ModificationId: string;
+}
+
+interface CSVRelationshipTemplate {
+    IdentityAddress: string;
+    RelationshipTemplateId: string;
+}
+
+interface CSVRelationship {
+    RelationshipId: string;
+    AddressFrom: string;
+    AddressTo: string;
+}
+interface CSVMessage {
+    MessageId: string;
+    AddressFrom: string;
+    AddressTo: string;
 }
