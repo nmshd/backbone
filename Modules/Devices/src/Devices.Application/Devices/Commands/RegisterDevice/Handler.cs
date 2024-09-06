@@ -46,13 +46,7 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
 
         _logger.CreatedDevice();
 
-        return new RegisterDeviceResponse
-        {
-            Id = user.DeviceId,
-            Username = user.UserName!,
-            CreatedByDevice = user.Device.CreatedByDevice,
-            CreatedAt = user.Device.CreatedAt
-        };
+        return new RegisterDeviceResponse(user);
     }
 }
 
@@ -104,7 +98,7 @@ public class DynamicJsonConverter : JsonConverter<dynamic>
     {
         var list = new List<object?>();
         jsonElement.EnumerateArray().ToList().ForEach(j => list.Add(ReadValue(j)));
-        return (list.Count == 0 ? null : list);
+        return list.Count == 0 ? null : list;
     }
 
     public override void Write(Utf8JsonWriter writer,

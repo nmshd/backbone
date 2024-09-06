@@ -6,6 +6,7 @@ using Backbone.AdminApi.Extensions;
 using Backbone.AdminApi.Infrastructure.Persistence;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.API.Extensions;
+using Backbone.BuildingBlocks.API.Mvc.Middleware;
 using Backbone.BuildingBlocks.API.Serilog;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
@@ -75,7 +76,7 @@ static WebApplication CreateApp(string[] args)
             .Enrich.WithProperty("service", "adminui")
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
-                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
+                .WithDestructurers([new DbUpdateExceptionDestructurer()]))
             .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()))
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
@@ -167,6 +168,11 @@ static void Configure(WebApplication app)
     });
 
     app.UseForwardedHeaders();
+
+    app.UseMiddleware<RequestResponseTimeMiddleware>()
+        .UseMiddleware<ResponseDurationMiddleware>()
+        .UseMiddleware<TraceIdMiddleware>()
+        .UseMiddleware<CorrelationIdMiddleware>();
 
     var configuration = app.Services.GetRequiredService<IOptions<AdminConfiguration>>().Value;
 

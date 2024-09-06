@@ -18,7 +18,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Messages")
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -75,6 +75,8 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedBy");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("CreatedBy"), "hash");
 
                     b.ToTable("Messages", "Messages");
                 });

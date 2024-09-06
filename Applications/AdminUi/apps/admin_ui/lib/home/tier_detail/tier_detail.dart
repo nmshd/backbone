@@ -47,7 +47,17 @@ class _TierDetailState extends State<TierDetail> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            if (kIsDesktop) const Align(alignment: Alignment.centerLeft, child: BackButton()),
+            if (kIsDesktop)
+              Row(
+                children: [
+                  const BackButton(),
+                  IconButton(
+                    icon: const Icon(Icons.refresh),
+                    onPressed: _reload,
+                    tooltip: context.l10n.reload,
+                  ),
+                ],
+              ),
             Card(
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -56,7 +66,7 @@ class _TierDetailState extends State<TierDetail> {
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    EntityDetails(title: context.l10n.id, value: tierDetails.id),
+                    CopyableEntityDetails(title: context.l10n.id, value: tierDetails.id),
                     EntityDetails(title: context.l10n.name, value: tierDetails.name),
                   ],
                 ),

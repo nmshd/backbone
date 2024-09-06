@@ -18,7 +18,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Synchronization")
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -56,13 +56,6 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
-                        .IsFixedLength();
-
-                    b.Property<string>("BlobReference")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .IsUnicode(false)
-                        .HasColumnType("character(32)")
                         .IsFixedLength();
 
                     b.Property<string>("Collection")
@@ -186,8 +179,8 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migr
 
                     b.Property<string>("ErrorCode")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("ExternalEventId")
                         .IsRequired()

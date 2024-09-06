@@ -44,7 +44,6 @@ public class RelationshipTemplate : Entity
     public byte[]? Content { get; private set; }
 
     public DateTime CreatedAt { get; set; }
-    public DateTime? DeletedAt { get; set; }
 
     public IdentityAddress? ForIdentity { get; set; }
 
@@ -62,14 +61,6 @@ public class RelationshipTemplate : Entity
             throw new DomainException(DomainErrors.MaxNumberOfAllocationsExhausted());
 
         Allocations.Add(new RelationshipTemplateAllocation(Id, identity, device));
-    }
-
-    public void LoadContent(byte[] content)
-    {
-        if (Content != null)
-            throw new Exception("Cannot change the content of a relationship template.");
-
-        Content = content;
     }
 
     public static Expression<Func<RelationshipTemplate, bool>> WasCreatedBy(IdentityAddress identityAddress)

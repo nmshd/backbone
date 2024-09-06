@@ -38,10 +38,7 @@ public class Relationship : Entity
 
         CreationContent = creationContent;
 
-        AuditLog = new List<RelationshipAuditLogEntry>
-        {
-            new(RelationshipAuditLogEntryReason.Creation, null, RelationshipStatus.Pending, activeIdentity, activeDevice)
-        };
+        AuditLog = [new(RelationshipAuditLogEntryReason.Creation, null, RelationshipStatus.Pending, activeIdentity, activeDevice)];
 
         RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
@@ -271,7 +268,7 @@ public class Relationship : Entity
     {
         if (AuditLog.OrderBy(a => a.CreatedAt).Last().Reason != RelationshipAuditLogEntryReason.ReactivationRequested ||
             AuditLog.OrderBy(a => a.CreatedAt).Last().CreatedBy != activeIdentity)
-            throw new DomainException(DomainErrors.NoRevocableReactivationRequestExists(activeIdentity));
+            throw new DomainException(DomainErrors.NoRevocableReactivationRequestExists());
     }
 
     public void Decompose(IdentityAddress activeIdentity, DeviceId activeDevice)
@@ -371,7 +368,8 @@ public class Relationship : Entity
     public static Expression<Func<Relationship, bool>> CountsAsActive()
     {
         return r => r.Status != RelationshipStatus.Rejected &&
-                    r.Status != RelationshipStatus.Revoked;
+                    r.Status != RelationshipStatus.Revoked &&
+                    r.Status != RelationshipStatus.ReadyForDeletion;
     }
 
     #endregion

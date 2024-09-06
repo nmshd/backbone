@@ -21,11 +21,6 @@ public partial record IdentityAddress : StronglyTypedId
     {
     }
 
-    public string ToString(string? format, IFormatProvider? formatProvider)
-    {
-        return ToString();
-    }
-
     public static IdentityAddress Parse(string stringValue)
     {
         if (!IsValid(stringValue))
@@ -130,7 +125,7 @@ public partial record IdentityAddress : StronglyTypedId
         return ParseUnsafe(stringValue);
     }
 
-    [GeneratedRegex($@"^(?<addressWithoutChecksum>did:e:(?<didDomainName>(?:[a-z0-9]+\.)*[a-z]{{2,}}):dids:(?<identitySpecificPart>[0-9a-f]{{20}}))(?<checksum>[0-9a-f]{{{CHECKSUM_LENGTH_S}}})$")]
+    [GeneratedRegex($@"^(?<addressWithoutChecksum>did:e:(?<didDomainName>(?:[a-z0-9-]+\.)*[a-z]{{2,}}):dids:(?<identitySpecificPart>[0-9a-f]{{20}}))(?<checksum>[0-9a-f]{{{CHECKSUM_LENGTH_S}}})$")]
     public static partial Regex IdentityAddressValidatorRegex();
 
     #endregion

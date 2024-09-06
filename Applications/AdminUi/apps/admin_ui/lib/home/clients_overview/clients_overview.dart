@@ -28,7 +28,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     super.initState();
 
     _reloadClients();
-    _loadTiers();
+    _reloadTiers();
   }
 
   @override
@@ -47,6 +47,15 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
+                  if (kIsDesktop)
+                    IconButton(
+                      icon: const Icon(Icons.refresh),
+                      onPressed: () async {
+                        await _reloadClients();
+                        await _reloadTiers();
+                      },
+                      tooltip: context.l10n.reload,
+                    ),
                   IconButton(
                     icon: Icon(
                       Icons.delete,
@@ -119,8 +128,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
                               ),
                             ),
                             DataCell(
-                              ElevatedButton(
-                                style: ButtonStyle(backgroundColor: WidgetStateProperty.all<Color>(Theme.of(context).colorScheme.primary)),
+                              FilledButton(
                                 onPressed: () => showChangeClientSecretDialog(context: context, clientId: client.clientId),
                                 child: Text(
                                   context.l10n.changeClientSecret,
@@ -147,7 +155,7 @@ class _ClientsOverviewState extends State<ClientsOverview> {
     if (mounted) setState(() => _originalClients = response.data);
   }
 
-  Future<void> _loadTiers() async {
+  Future<void> _reloadTiers() async {
     final response = await GetIt.I.get<AdminApiClient>().tiers.getTiers();
     setState(() => _defaultTiers = response.data.where((element) => element.canBeUsedAsDefaultForClient == true).toList());
   }

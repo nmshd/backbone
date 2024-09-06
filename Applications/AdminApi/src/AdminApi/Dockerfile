@@ -88,7 +88,7 @@ RUN dotnet publish /p:UseAppHost=false --no-restore --configuration Release --ou
 RUN dotnet publish --configuration Release --output /app/publish/health "/src/Applications/HealthCheck/src/HealthCheck.csproj"
 
 #### Build Flutter Admin UI ####
-FROM ghcr.io/cirruslabs/flutter:3.24.0 AS flutter-build-env
+FROM ghcr.io/cirruslabs/flutter:3.24.2 AS flutter-build-env
 
 COPY Applications/AdminUi /src
 WORKDIR /src

@@ -30,7 +30,7 @@ public class IdentityToBeDeletedDomainEventHandlerTests : AbstractTestsBase
         var fakeRelationshipsRepository = A.Dummy<IRelationshipsRepository>();
 
         A.CallTo(() => fakeRelationshipsRepository.FindRelationships(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._))
-            .Returns(new List<Relationship>() { relationshipToPeer1, relationshipToPeer2 });
+            .Returns(new List<Relationship> { relationshipToPeer1, relationshipToPeer2 });
 
         var handler = CreateHandler(fakeRelationshipsRepository);
 

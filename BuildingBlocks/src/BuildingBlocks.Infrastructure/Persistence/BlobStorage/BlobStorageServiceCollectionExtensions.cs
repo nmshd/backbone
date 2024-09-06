@@ -20,22 +20,27 @@ public static class BlobStorageServiceCollectionExtensions
 
     public static void AddBlobStorage(this IServiceCollection services, BlobStorageOptions options)
     {
-        if (options.CloudProvider == AZURE_CLOUD_PROVIDER)
-            services.AddAzureStorageAccount(azureStorageAccountOptions =>
+        switch (options.CloudProvider)
+        {
+            case AZURE_CLOUD_PROVIDER:
+                services.AddAzureStorageAccount(azureStorageAccountOptions => { azureStorageAccountOptions.ConnectionString = options.ConnectionInfo!; });
+                break;
+            case GOOGLE_CLOUD_PROVIDER:
+                services.AddGoogleCloudStorage(googleCloudStorageOptions =>
+                {
+                    googleCloudStorageOptions.GcpAuthJson = options.ConnectionInfo;
+                    googleCloudStorageOptions.BucketName = options.Container;
+                });
+                break;
+            default:
             {
-                azureStorageAccountOptions.ConnectionString = options.ConnectionInfo!;
-            });
-        else if (options.CloudProvider == GOOGLE_CLOUD_PROVIDER)
-            services.AddGoogleCloudStorage(googleCloudStorageOptions =>
-            {
-                googleCloudStorageOptions.GcpAuthJson = options.ConnectionInfo;
-                googleCloudStorageOptions.BucketName = options.Container;
-            });
-        else if (options.CloudProvider.IsNullOrEmpty())
-            throw new NotSupportedException("No cloud provider was specified.");
-        else
-            throw new NotSupportedException(
-                $"{options.CloudProvider} is not a currently supported cloud provider.");
+                if (options.CloudProvider.IsNullOrEmpty())
+                    throw new NotSupportedException("No cloud provider was specified.");
+
+                throw new NotSupportedException(
+                    $"{options.CloudProvider} is not a currently supported cloud provider.");
+            }
+        }
     }
 }
 
@@ -45,5 +50,5 @@ public class BlobStorageOptions
 
     public string Container { get; set; } = null!;
 
-    public string? ConnectionInfo { get; set; } = null;
+    public string? ConnectionInfo { get; set; }
 }

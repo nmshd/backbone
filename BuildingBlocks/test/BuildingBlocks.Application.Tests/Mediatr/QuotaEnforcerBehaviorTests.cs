@@ -88,7 +88,7 @@ public class QuotaEnforcerBehaviorTests : AbstractTestsBase
     private static QuotaEnforcerBehavior<TestCommand, Unit> CreateQuotaEnforcerBehavior(
         params MetricStatus[] exhaustedMetricStatuses)
     {
-        return new QuotaEnforcerBehavior<TestCommand, Unit>(new QuotaCheckerStub(new(exhaustedMetricStatuses)));
+        return new QuotaEnforcerBehavior<TestCommand, Unit>(new QuotaCheckerStub(new CheckQuotaResult(exhaustedMetricStatuses)));
     }
 }
 

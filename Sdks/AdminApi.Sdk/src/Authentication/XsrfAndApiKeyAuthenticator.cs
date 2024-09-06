@@ -6,8 +6,8 @@ namespace Backbone.AdminApi.Sdk.Authentication;
 public class XsrfAndApiKeyAuthenticator : IAuthenticator
 {
     private readonly string _apiKey;
-    private string? _xsrfToken = null;
-    private string? _xsrfCookie = null;
+    private string? _xsrfToken;
+    private string? _xsrfCookie;
     private readonly HttpClient _client;
 
     public XsrfAndApiKeyAuthenticator(string apiKey, HttpClient client)

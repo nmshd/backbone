@@ -24,12 +24,6 @@ public class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManage
         DoAddSubscription(typeof(TH), typeof(T));
     }
 
-    public IEnumerable<SubscriptionInfo> GetHandlersForEvent<T>() where T : DomainEvent
-    {
-        var key = GetEventKey<T>();
-        return GetHandlersForEvent(key);
-    }
-
     public IEnumerable<SubscriptionInfo> GetHandlersForEvent(string eventName)
     {
         return _handlers[eventName];
@@ -51,7 +45,7 @@ public class InMemoryEventBusSubscriptionsManager : IEventBusSubscriptionsManage
         return GetEventKey(typeof(T));
     }
 
-    public string GetEventKey(Type eventType)
+    public static string GetEventKey(Type eventType)
     {
         return eventType.Name;
     }

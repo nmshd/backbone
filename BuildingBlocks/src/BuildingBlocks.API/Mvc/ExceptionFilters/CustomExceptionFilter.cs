@@ -96,7 +96,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
             });
     }
 
-    private HttpError CreateHttpErrorForInfrastructureException(InfrastructureException infrastructureException)
+    private static HttpError CreateHttpErrorForInfrastructureException(InfrastructureException infrastructureException)
     {
         var httpError = HttpError.ForProduction(
             infrastructureException.Code,
@@ -119,7 +119,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         return httpError;
     }
 
-    private HttpError CreateHttpErrorForDomainException(DomainException domainException)
+    private static HttpError CreateHttpErrorForDomainException(DomainException domainException)
     {
         var httpError = HttpError.ForProduction(
             domainException.Code,
@@ -130,7 +130,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         return httpError;
     }
 
-    private dynamic? GetCustomData(ApplicationException applicationException)
+    private static dynamic? GetCustomData(ApplicationException applicationException)
     {
         if (applicationException is QuotaExhaustedException quotaExhaustedException)
         {
@@ -162,7 +162,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
         };
     }
 
-    private HttpStatusCode GetStatusCodeForDomainException(DomainException exception)
+    private static HttpStatusCode GetStatusCodeForDomainException(DomainException exception)
     {
         if (exception.Code == GenericDomainErrors.NotFound().Code)
             return HttpStatusCode.NotFound;
@@ -208,7 +208,7 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
     private static IEnumerable<string> GetFormattedStackTrace(Exception exception)
     {
         if (exception.StackTrace == null)
-            return Enumerable.Empty<string>();
+            return [];
 
         return
             Regex.Matches(exception.StackTrace, "at .+").Select(m => m.Value.Trim());

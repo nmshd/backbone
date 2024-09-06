@@ -50,7 +50,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
     public async Task Counts_entities_within_timeframe_hour_quotaPeriod()
     {
         // Arrange
-        var messages = new List<Message>()
+        var messages = new List<Message>
         {
             CreateMessage(TODAY, _identityAddress1),
             CreateMessage(YESTERDAY, _identityAddress1),
@@ -73,7 +73,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
     public async Task Counts_entities_within_timeframe_month_quotaPeriod()
     {
         // Arrange
-        var messages = new List<Message>()
+        var messages = new List<Message>
         {
             CreateMessage(TODAY, _identityAddress1),
             CreateMessage(YESTERDAY, _identityAddress1),
@@ -98,7 +98,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
     public async Task Counts_entities_total_quotaPeriod()
     {
         // Arrange
-        var messages = new List<Message>()
+        var messages = new List<Message>
         {
             CreateMessage(TODAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1),
@@ -121,7 +121,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
     public async Task Counts_entities_only_for_requested_identityAddress()
     {
         // Arrange
-        var messages = new List<Message>()
+        var messages = new List<Message>
         {
             CreateMessage(TODAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress2),
@@ -149,7 +149,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
         var message = new Message(
             identityAddress,
             DeviceId.New(),
-            Array.Empty<byte>(),
+            [],
             [],
             []
         );

@@ -62,14 +62,16 @@ class IdentityRelationshipDataTableSource extends AsyncDataTableSource {
                   ),
                 ),
                 DataCell(
-                  Tooltip(
-                    message:
-                        '${DateFormat.yMd(locale.languageCode).format(relationship.$2.answeredAt)} ${DateFormat.Hms().format(relationship.$2.answeredAt)}',
-                    child: Text(DateFormat.yMd(locale.languageCode).format(relationship.$2.answeredAt)),
-                  ),
+                  relationship.$2.answeredAt == null
+                      ? const Text('-')
+                      : Tooltip(
+                          message:
+                              '${DateFormat.yMd(locale.languageCode).format(relationship.$2.answeredAt!)} ${DateFormat.Hms().format(relationship.$2.answeredAt!)}',
+                          child: Text(DateFormat.yMd(locale.languageCode).format(relationship.$2.answeredAt!)),
+                        ),
                 ),
                 DataCell(Text(relationship.$2.createdByDevice)),
-                DataCell(Text(relationship.$2.answeredByDevice)),
+                DataCell(Text(relationship.$2.answeredByDevice ?? '-')),
               ],
             ),
           )

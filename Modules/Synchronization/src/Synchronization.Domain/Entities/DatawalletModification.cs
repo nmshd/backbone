@@ -17,11 +17,10 @@ public class DatawalletModification : Entity
         CreatedBy = null!;
         CreatedByDevice = null!;
         Collection = null!;
-        BlobReference = null!;
     }
 
     public DatawalletModification(Datawallet datawallet, DatawalletVersion datawalletVersion, long index, DatawalletModificationType type, string collection, string objectIdentifier,
-        string? payloadCategory, byte[]? encryptedPayload, DeviceId createdByDevice, string blobReference)
+        string? payloadCategory, byte[]? encryptedPayload, DeviceId createdByDevice)
     {
         Id = DatawalletModificationId.New();
         Datawallet = datawallet;
@@ -37,7 +36,6 @@ public class DatawalletModification : Entity
 
         CreatedAt = SystemTime.UtcNow;
         CreatedByDevice = createdByDevice;
-        BlobReference = blobReference;
     }
 
     public DatawalletModificationId Id { get; }
@@ -52,15 +50,6 @@ public class DatawalletModification : Entity
     public string Collection { get; }
     public DatawalletModificationType Type { get; }
     public byte[]? EncryptedPayload { get; private set; }
-    public string BlobReference { get; }
-
-    public void LoadEncryptedPayload(byte[] encryptedPayload)
-    {
-        if (EncryptedPayload != null)
-            throw new Exception("Cannot change the encrypted payload of a datawallet modification.");
-
-        EncryptedPayload = encryptedPayload;
-    }
 }
 
 public enum DatawalletModificationType

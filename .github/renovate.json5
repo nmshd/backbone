@@ -3,6 +3,7 @@
     extends: ["config:recommended"],
     labels: ["dependencies"],
     schedule: ["after 10pm every weekday", "before 5am every weekday", "every weekend"],
+    ignorePaths: ["**/node_modules/**", "**/bower_components/**", "**/vendor/**", "**/examples/**"], // we have to set this, in order to override the default that comes from `config:recommended`, which ignores any packages in directories like "tests"
     packageRules: [
         {
             // we don't want to update eslint currently, because there is a breaking change in its config
@@ -14,7 +15,13 @@
         {
             // the docker images in this list are created and used by our pipelines and can therefore not to be updated by renovate
             matchDatasources: ["docker"],
-            packageNames: ["admin-ui", "event-handler-service", "sse-server", "database-migrator", "admin-cli"],
+            packageNames: ["consumer-api", "admin-ui", "event-handler-service", "sse-server", "database-migrator", "admin-cli"],
+            enabled: false
+        },
+        {
+            // the dart packages in this list is fetched directly from git and therefore doesn't have a version
+            matchDatasources: ["dart"],
+            packageNames: ["window_size"],
             enabled: false
         },
 

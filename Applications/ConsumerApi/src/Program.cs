@@ -90,7 +90,7 @@ static WebApplication CreateApp(string[] args)
             .Enrich.WithProperty("service", "consumerapi")
             .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                 .WithDefaultDestructurers()
-                .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() }))
+                .WithDestructurers([new DbUpdateExceptionDestructurer()]))
             .Enrich.WithSensitiveDataMasking(options => options.AddSensitiveDataMasks()))
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
@@ -159,7 +159,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomAspNetCore(parsedConfiguration)
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
-        .AddCustomOpenIddict(parsedConfiguration.Authentication, environment);
+        .AddCustomOpenIddict(parsedConfiguration.Authentication);
 
     if (parsedConfiguration.SwaggerUi.Enabled)
         services.AddCustomSwaggerUi(parsedConfiguration.SwaggerUi);
@@ -189,7 +189,8 @@ static void Configure(WebApplication app)
 
     app.UseMiddleware<RequestResponseTimeMiddleware>()
         .UseMiddleware<ResponseDurationMiddleware>()
-        .UseMiddleware<TraceIdMiddleware>();
+        .UseMiddleware<TraceIdMiddleware>()
+        .UseMiddleware<CorrelationIdMiddleware>();
 
     app.UseSecurityHeaders(policies =>
         policies
