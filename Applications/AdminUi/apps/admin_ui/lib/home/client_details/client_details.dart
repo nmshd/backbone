@@ -85,11 +85,7 @@ class _ClientDetailsState extends State<ClientDetails> {
 
     if (!mounted) return;
 
-    if (clientDetails.hasError) {
-      context.pushReplacement('/error', extra: clientDetails.error.message);
-
-      return;
-    }
+    if (clientDetails.hasError) return context.pushReplacement('/error', extra: clientDetails.error.message);
 
     setState(() {
       _clientDetails = clientDetails.data;

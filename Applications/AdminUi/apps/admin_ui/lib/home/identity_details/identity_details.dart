@@ -114,11 +114,7 @@ class _IdentityDetailsState extends State<IdentityDetails> {
 
     if (!mounted) return;
 
-    if (identityDetails.hasError) {
-      context.pushReplacement('/error', extra: identityDetails.error.message);
-
-      return;
-    }
+    if (identityDetails.hasError) return context.pushReplacement('/error', extra: identityDetails.error.message);
 
     setState(() {
       _identityDetails = identityDetails.data;

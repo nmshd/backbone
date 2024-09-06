@@ -117,11 +117,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
 
     if (!mounted) return;
 
-    if (deletionProcessesDetails.hasError) {
-      context.pushReplacement('/error', extra: deletionProcessesDetails.error.message);
-
-      return;
-    }
+    if (deletionProcessesDetails.hasError) return context.pushReplacement('/error', extra: deletionProcessesDetails.error.message);
 
     setState(() => _deletionProcessesDetails = deletionProcessesDetails.data);
   }
