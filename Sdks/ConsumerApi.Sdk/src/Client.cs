@@ -15,6 +15,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Quotas;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns;
+using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
@@ -137,6 +138,10 @@ public class Client
         };
 
         var client = new Client(httpClient, configuration, deviceData, identityData);
+
+        // Run a datawallet version upgrade sync run to create a datawallet for the identity
+        var syncRun = await client.SyncRuns.StartSyncRun(new StartSyncRunRequest { Type = SyncRunType.DatawalletVersionUpgrade, Duration = 30 }, 1);
+        await client.SyncRuns.FinalizeDatawalletVersionUpgrade(syncRun.Result!.SyncRun.Id, new FinalizeDatawalletVersionUpgradeRequest { DatawalletModifications = [], NewDatawalletVersion = 1 });
 
         return client;
     }
