@@ -1,258 +1,203 @@
 ﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.ConsumerApi.Sdk;
-using Backbone.ConsumerApi.Sdk.Authentication;
-using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
-using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
-using Backbone.ConsumerApi.Tests.Integration.Configuration;
+using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using Backbone.ConsumerApi.Tests.Integration.Support;
-using Backbone.Tooling.Extensions;
-using Microsoft.Extensions.Options;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
-[Scope(Feature = "POST Relationship")]
-[Scope(Feature = "GET Relationships/CanCreate")]
 internal class RelationshipsStepDefinitions
 {
-    private Client _client1 = null!;
-    private Client _client2 = null!;
-    private readonly ClientCredentials _clientCredentials;
-    private readonly HttpClient _httpClient;
-    private ApiResponse<CreateRelationshipTemplateResponse>? _relationshipTemplateResponse;
-    private ApiResponse<RelationshipMetadata>? _createRelationshipResponse;
-    private ApiResponse<RelationshipMetadata>? _acceptRelationshipResponse;
-    private ApiResponse<RelationshipMetadata>? _rejectRelationshipResponse;
-    private ApiResponse<RelationshipMetadata>? _revokeRelationshipResponse;
-    private ApiResponse<CanEstablishRelationshipResponse>? _canEstablishResponse;
-    private string _relationshipId = string.Empty;
+    #region Constructor, Fields, Properties
 
-    public RelationshipsStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
+    private readonly RelationshipsContext _relationshipsContext;
+    private readonly ResponseContext _responseContext;
+    private readonly ClientPool _clientPool;
+
+    private ApiResponse<CanEstablishRelationshipResponse>? _canEstablishRelationshipResponse;
+
+    public RelationshipsStepDefinitions(RelationshipsContext relationshipsContext, ResponseContext responseContext, ClientPool clientPool)
     {
-        _httpClient = factory.CreateClient();
-        _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
+        _relationshipsContext = relationshipsContext;
+        _responseContext = responseContext;
+        _clientPool = clientPool;
     }
+
+    #endregion
 
     #region Given
 
-    [Given("Identities i1 and i2")]
-    public async Task GivenIdentitiesI1AndI2()
+    [Given($"a Relationship Template {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
+    public async Task GivenARelationshipTemplateCreatedByIdentity(string templateName, string identityName)
     {
-        _client1 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
-        _client2 = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
+        var client = _clientPool.FirstForIdentityName(identityName);
+        _relationshipsContext.CreateRelationshipTemplateResponses[templateName] =
+            (await client.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES })).Result!;
     }
 
-    [Given("a Relationship Template rt created by i2")]
-    public async Task GivenARelationshipTemplateRtCreatedByI2()
+    [Given($"a pending Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
+    public async Task GivenAPendingRelationshipBetween(string relationshipName, string participant1Name, string participant2Name, string creatorName)
     {
-        _relationshipTemplateResponse = await CreateRelationshipTemplate(_client2);
+        var creator = _clientPool.FirstForIdentityName(creatorName);
+        var peer = _clientPool.FirstForIdentityName(creatorName == participant1Name ? participant2Name : participant1Name);
+
+        _relationshipsContext.Relationships[relationshipName] = await Utils.CreatePendingRelationshipBetween(peer, creator);
     }
 
-    [Given("a pending Relationship between i1 and i2 created by i1")]
-    public async Task GivenAPendingRelationshipBetweenI1AndI2CreatedByI2()
+    [Given($"a rejected Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
+    public async Task GivenARejectedRelationshipBetween(string relationshipName, string participant1Address, string participant2Address)
     {
-        var relationshipTemplateResponse = await CreateRelationshipTemplate(_client2);
-        var createRelationshipResponse = await CreateRelationship(_client1, relationshipTemplateResponse.Result!.Id);
+        var participant1 = _clientPool.FirstForIdentityName(participant1Address);
+        var participant2 = _clientPool.FirstForIdentityName(participant2Address);
 
-        _relationshipId = createRelationshipResponse.Result!.Id;
+        _relationshipsContext.Relationships[relationshipName] = await Utils.CreateRejectedRelationshipBetween(participant2, participant1);
     }
 
-    [Given("a pending Relationship between i1 and i2 created by i2")]
-    public async Task GivenAPendingRelationshipBetweenI1AndI2CreatedByI1()
+    [Given($"an active Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
+    public async Task GivenAnActiveRelationshipBetween(string relationshipName, string participant1Address, string participant2Address)
     {
-        var relationshipTemplateResponse = await CreateRelationshipTemplate(_client1);
-        var createRelationshipResponse = await CreateRelationship(_client2, relationshipTemplateResponse.Result!.Id);
+        var participant1 = _clientPool.FirstForIdentityName(participant1Address);
+        var participant2 = _clientPool.FirstForIdentityName(participant2Address);
 
-        _relationshipId = createRelationshipResponse.Result!.Id;
+        _relationshipsContext.Relationships[relationshipName] = await Utils.EstablishRelationshipBetween(participant2, participant1);
     }
 
-    [Given("an active Relationship between i1 and i2 created by i1")]
-    public async Task GivenAnActiveRelationshipBetweenI1AndI2()
+    [Given($"a terminated Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
+    public async Task GivenATerminatedRelationshipBetween(string relationshipName, string participant1Address, string participant2Address)
     {
-        _relationshipId = (await Utils.EstablishRelationshipBetween(_client1, _client2)).Id;
+        var participant1 = _clientPool.FirstForIdentityName(participant1Address);
+        var participant2 = _clientPool.FirstForIdentityName(participant2Address);
+
+        _relationshipsContext.Relationships[relationshipName] = await Utils.CreateTerminatedRelationshipBetween(participant1, participant2);
     }
 
-    [Given("a rejected Relationship between i1 and i2 created by i1")]
-    public async Task GivenARejectedRelationshipBetweenI1AndI2()
+    [Given($"a terminated Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING} with reactivation requested by i2")]
+    public async Task GivenATerminatedRelationshipWithReactivationRequest(string relationshipName, string participant1Address, string participant2Address)
     {
-        _relationshipId = (await Utils.CreateRejectedRelationshipBetween(_client1, _client2)).Id;
+        var participant1 = _clientPool.FirstForIdentityName(participant1Address);
+        var participant2 = _clientPool.FirstForIdentityName(participant2Address);
+
+        _relationshipsContext.Relationships[relationshipName] = await Utils.CreateTerminatedRelationshipWithReactivationRequestBetween(participant1, participant2);
     }
 
-    [Given("i2 is in status \"ToBeDeleted\"")]
-    public async Task GivenIdentityI2IsToBeDeleted()
+    [Given($"{RegexFor.SINGLE_THING} has terminated {RegexFor.SINGLE_THING}")]
+    public async Task GivenRelationshipIsTerminated(string terminatorName, string relationshipName)
     {
-        var startDeletionProcessResponse = await _client2.Identities.StartDeletionProcess();
-        startDeletionProcessResponse.Should().BeASuccess();
+        var relationship = _relationshipsContext.Relationships[relationshipName];
+        var terminator = _clientPool.FirstForIdentityName(terminatorName);
+
+        await terminator.Relationships.TerminateRelationship(relationship.Id);
     }
 
-    [Given("i1 is in status \"ToBeDeleted\"")]
-    public async Task GivenIdentityI1IsToBeDeleted()
+    [Given($"{RegexFor.SINGLE_THING} has decomposed {RegexFor.SINGLE_THING}")]
+    public async Task GivenIdentityHasDecomposedItsRelationshipToIdentity(string decomposerName, string relationshipName)
     {
-        var startDeletionProcessResponse = await _client1.Identities.StartDeletionProcess();
-        startDeletionProcessResponse.Should().BeASuccess();
+        var relationship = _relationshipsContext.Relationships[relationshipName];
+        var decomposer = _clientPool.FirstForIdentityName(decomposerName);
+
+        var response = await decomposer.Relationships.DecomposeRelationship(relationship.Id);
+        response.Should().BeASuccess();
+
+        await Task.Delay(500);
     }
 
     #endregion
 
     #region When
 
-    [When("a POST request is sent to the /Relationships endpoint by i1 with rt.id")]
-    public async Task WhenAPostRequestIsSentToTheRelationshipsEndpointByI1With()
+    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Relationships endpoint with {RegexFor.SINGLE_THING}.Id")]
+    public async Task WhenIdentitySendsAPostRequestToTheRelationshipsEndpointWithRelationshipTemplateId(string identityName, string templateName)
     {
-        _createRelationshipResponse = await CreateRelationship(_client1, _relationshipTemplateResponse!.Result!.Id);
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var relationshipTemplateId = _relationshipsContext.CreateRelationshipTemplateResponses[templateName].Id;
+
+        _responseContext.WhenResponse =
+            await client.Relationships.CreateRelationship(new CreateRelationshipRequest { RelationshipTemplateId = relationshipTemplateId, Content = TestData.SOME_BYTES });
     }
 
-    [When("a POST request is sent to the /Relationships/{r.Id}/Accept endpoint by i1")]
-    public async Task WhenAPostRequestIsSentToTheAcceptRelationshipEndpointByI1()
+    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/(Accept|Reject|Revoke) endpoint")]
+    public async Task WhenIdentitySendsAPostRequestToTheRelationshipsIdEndpoint(string identityName, string relationshipName, string requestType)
     {
-        var acceptRelationshipRequest = new AcceptRelationshipRequest
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        _responseContext.WhenResponse = requestType switch
         {
-            CreationResponseContent = "AAA".GetBytes()
+            "Accept" => await client.Relationships.AcceptRelationship(_relationshipsContext.Relationships[relationshipName].Id,
+                new AcceptRelationshipRequest { CreationResponseContent = TestData.SOME_BYTES }),
+            "Reject" => await client.Relationships.RejectRelationship(_relationshipsContext.Relationships[relationshipName].Id,
+                new RejectRelationshipRequest { CreationResponseContent = TestData.SOME_BYTES }),
+            "Revoke" => await client.Relationships.RevokeRelationship(_relationshipsContext.Relationships[relationshipName].Id,
+                new RevokeRelationshipRequest { CreationResponseContent = TestData.SOME_BYTES }),
+            _ => throw new NotSupportedException($"Unsupported request type: {requestType}")
         };
-        _acceptRelationshipResponse = await _client1.Relationships.AcceptRelationship(_relationshipId, acceptRelationshipRequest);
     }
 
-    [When("a POST request is sent to the /Relationships/{r.Id}/Reject endpoint by i1")]
-    public async Task WhenAPostRequestIsSentToTheRejectRelationshipEndpointByI1()
+    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/Terminate endpoint")]
+    public async Task WhenIdentitySendsAPutRequestToTheRelationshipsIdEndpoint(string identityName, string relationshipName)
     {
-        var rejectRelationshipRequest = new RejectRelationshipRequest
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        _responseContext.WhenResponse = await client.Relationships.TerminateRelationship(_relationshipsContext.Relationships[relationshipName].Id);
+    }
+
+    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/Reactivate endpoint")]
+    public async Task WhenIdentitySendsAPutRequestToTheRelationshipsIdReactivateEndpoint(string identityName, string relationshipName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        _responseContext.WhenResponse = await client.Relationships.RelationshipReactivationRequest(_relationshipsContext.Relationships[relationshipName].Id);
+    }
+
+    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/Reactivate/(Accept|Reject|Revoke) endpoint")]
+    public async Task WhenIdentitySendsAPutRequestToTheRelationshipsIdReactivateAcceptEndpoint(string identityName, string relationshipName, string requestType)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        _responseContext.WhenResponse = requestType switch
         {
-            CreationResponseContent = "AAA".GetBytes()
+            "Accept" => await client.Relationships.AcceptReactivationOfRelationship(_relationshipsContext.Relationships[relationshipName].Id),
+            "Reject" => await client.Relationships.RejectReactivationOfRelationship(_relationshipsContext.Relationships[relationshipName].Id),
+            "Revoke" => await client.Relationships.RevokeRelationshipReactivation(_relationshipsContext.Relationships[relationshipName].Id),
+            _ => throw new NotSupportedException($"Unsupported request type: {requestType}")
         };
-        _rejectRelationshipResponse = await _client1.Relationships.RejectRelationship(_relationshipId, rejectRelationshipRequest);
     }
 
-    [When("a POST request is sent to the /Relationships/{r.Id}/Revoke endpoint by i1")]
-    public async Task WhenAPostRequestIsSentToTheRevokeRelationshipEndpointByI2()
+    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/Decompose endpoint")]
+    public async Task WhenIdentitySendsAPutRequestToTheRelationshipsIdDecomposeEndpoint(string identityName, string relationshipName)
     {
-        var revokeRelationshipRequest = new RevokeRelationshipRequest
-        {
-            CreationResponseContent = "AAA".GetBytes()
-        };
-        _revokeRelationshipResponse = await _client1.Relationships.RevokeRelationship(_relationshipId, revokeRelationshipRequest);
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        _responseContext.WhenResponse = await client.Relationships.DecomposeRelationship(_relationshipsContext.Relationships[relationshipName].Id);
     }
 
-    [When("a GET request is sent to the /Relationships/CanCreate\\?peer={i.id} endpoint by i1 for i2")]
-    public async Task WhenAGetRequestIsSentToTheCanCreateEndpointByI1()
+    [When($"{RegexFor.SINGLE_THING} sends a GET request to the /Relationships/CanCreate\\?peer={{id}} endpoint with id={RegexFor.SINGLE_THING}.id")]
+    public async Task WhenAGetRequestIsSentToTheCanCreateEndpointByIdentityForIdentity(string activeIdentityName, string peerName)
     {
-        _canEstablishResponse = await _client1.Relationships.CanCreateRelationship(_client2.IdentityData!.Address);
+        var client = _clientPool.FirstForIdentityName(activeIdentityName);
+        _responseContext.WhenResponse = _canEstablishRelationshipResponse =
+            await client.Relationships.CanCreateRelationship(_clientPool.FirstForIdentityName(peerName).IdentityData!.Address);
     }
 
     #endregion
 
     #region Then
 
-    [Then(@"the response status code is (\d\d\d) \(.+\)")]
-    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
-    {
-        if (_createRelationshipResponse != null)
-            ((int)_createRelationshipResponse!.Status).Should().Be(expectedStatusCode);
-
-        if (_acceptRelationshipResponse != null)
-            ((int)_acceptRelationshipResponse!.Status).Should().Be(expectedStatusCode);
-
-        if (_rejectRelationshipResponse != null)
-            ((int)_rejectRelationshipResponse!.Status).Should().Be(expectedStatusCode);
-
-        if (_revokeRelationshipResponse != null)
-            ((int)_revokeRelationshipResponse!.Status).Should().Be(expectedStatusCode);
-    }
-
-    [Then(@"the response content contains an error with the error code ""([^""]*)""")]
-    public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
-    {
-        if (_createRelationshipResponse != null)
-        {
-            _createRelationshipResponse!.Error.Should().NotBeNull();
-            _createRelationshipResponse.Error!.Code.Should().Be(errorCode);
-        }
-
-        if (_acceptRelationshipResponse != null)
-        {
-            _acceptRelationshipResponse!.Error.Should().NotBeNull();
-            _acceptRelationshipResponse.Error!.Code.Should().Be(errorCode);
-        }
-
-        if (_rejectRelationshipResponse != null)
-        {
-            _rejectRelationshipResponse!.Error.Should().NotBeNull();
-            _rejectRelationshipResponse.Error!.Code.Should().Be(errorCode);
-        }
-
-        if (_revokeRelationshipResponse != null)
-        {
-            _revokeRelationshipResponse!.Error.Should().NotBeNull();
-            _revokeRelationshipResponse.Error!.Code.Should().Be(errorCode);
-        }
-    }
-
-    [Then("the response contains a RelationshipResponse")]
-    public async Task ThenTheResponseContainsARelationship()
-    {
-        if (_createRelationshipResponse != null)
-        {
-            _createRelationshipResponse!.Should().BeASuccess();
-            await _createRelationshipResponse!.Should().ComplyWithSchema();
-        }
-
-        if (_acceptRelationshipResponse != null)
-        {
-            _acceptRelationshipResponse!.Should().BeASuccess();
-            await _acceptRelationshipResponse!.Should().ComplyWithSchema();
-        }
-
-        if (_rejectRelationshipResponse != null)
-        {
-            _rejectRelationshipResponse!.Should().BeASuccess();
-            await _rejectRelationshipResponse!.Should().ComplyWithSchema();
-        }
-
-        if (_revokeRelationshipResponse != null)
-        {
-            _revokeRelationshipResponse!.Should().BeASuccess();
-            await _revokeRelationshipResponse!.Should().ComplyWithSchema();
-        }
-    }
-
-    [Then("a relationship can be established")]
+    [Then("a Relationship can be established")]
     public void ThenARelationshipCanBeEstablished()
     {
-        if (_canEstablishResponse != null)
-            _canEstablishResponse.Result!.CanCreate.Should().BeTrue();
+        if (_canEstablishRelationshipResponse != null)
+            _canEstablishRelationshipResponse.Result!.CanCreate.Should().BeTrue();
     }
 
-    [Then("a relationship can not be established")]
+    [Then("a Relationship can not be established")]
     public void ThenARelationshipCanNotBeEstablished()
     {
-        if (_canEstablishResponse != null)
-            _canEstablishResponse.Result!.CanCreate.Should().BeFalse();
+        if (_canEstablishRelationshipResponse != null)
+            _canEstablishRelationshipResponse.Result!.CanCreate.Should().BeFalse();
     }
 
     #endregion
-
-    private async Task<ApiResponse<CreateRelationshipTemplateResponse>> CreateRelationshipTemplate(Client client)
-    {
-        var createRelationshipTemplateRequest = new CreateRelationshipTemplateRequest
-        {
-            Content = "AAA".GetBytes()
-        };
-
-        return await client.RelationshipTemplates.CreateTemplate(createRelationshipTemplateRequest);
-    }
-
-    private async Task<ApiResponse<RelationshipMetadata>> CreateRelationship(Client client, string relationshipTemplateId)
-    {
-        var createRelationshipRequest = new CreateRelationshipRequest
-        {
-            RelationshipTemplateId = relationshipTemplateId,
-            Content = "AAA".GetBytes()
-        };
-
-        return await client.Relationships.CreateRelationship(createRelationshipRequest);
-    }
 }
