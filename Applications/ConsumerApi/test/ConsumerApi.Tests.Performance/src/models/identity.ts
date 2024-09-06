@@ -1,5 +1,5 @@
 import { JwtResponse } from ".";
-import { Identity } from "../libs/data-representation-for-enmeshed-performance-tests";
+import { Identity } from "../libs/drept";
 
 export interface CreateIdentityRequest {
     clientId: string;

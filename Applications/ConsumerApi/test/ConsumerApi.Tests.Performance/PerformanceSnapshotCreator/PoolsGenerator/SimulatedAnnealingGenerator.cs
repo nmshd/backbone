@@ -308,15 +308,15 @@ public class SolutionRepresentation : ICloneable
     /// This approach ensures that messages can only be sent in the context of a relationship (a mandatory requisite).
     /// </summary>
     /// <see cref="GeneratorIdentity.UniqueOrderNumber"/>
-    private Dictionary<(uint a, uint b), uint> RelationshipsAndMessages { get; } = new();
+    private Dictionary<(uint a, uint b), uint> RaM { get; } = new();
 
     public ulong IterationCount { get; set; }
 
     private readonly Random _localRandom = new();
 
-    public SolutionRepresentation(Dictionary<(uint a, uint b), uint>? relationshipsAndMessages = null, Stopwatch? createdAt = null, (ulong relationshipCount, ulong messagesCount)? counters = null)
+    public SolutionRepresentation(Dictionary<(uint a, uint b), uint>? ram = null, Stopwatch? createdAt = null, (ulong relationshipCount, ulong messagesCount)? counters = null)
     {
-        if (relationshipsAndMessages is not null) RelationshipsAndMessages = relationshipsAndMessages.ToDictionary(entry => entry.Key, entry => entry.Value);
+        if (ram is not null) RaM = ram.ToDictionary(entry => entry.Key, entry => entry.Value);
         if (counters.HasValue)
         {
             _relationshipCount = counters.Value.relationshipCount;
@@ -328,7 +328,7 @@ public class SolutionRepresentation : ICloneable
 
     public bool EstablishRelationship(uint identity1, uint identity2)
     {
-        if (RelationshipsAndMessages.ContainsKey((identity1, identity2)))
+        if (RaM.ContainsKey((identity1, identity2)))
         {
             // relationship already exists
             return false;
@@ -337,8 +337,8 @@ public class SolutionRepresentation : ICloneable
         if (identity1 == identity2)
             return false;
 
-        RelationshipsAndMessages[(identity1, identity2)] = 0;
-        RelationshipsAndMessages[(identity2, identity1)] = 0;
+        RaM[(identity1, identity2)] = 0;
+        RaM[(identity2, identity1)] = 0;
 
         _relationshipCount++;
         return true;
@@ -354,13 +354,13 @@ public class SolutionRepresentation : ICloneable
     /// </returns>
     private int RemoveRelationship(uint identity1, uint identity2)
     {
-        if (_relationshipCount <= 0 || !RelationshipsAndMessages.ContainsKey((identity1, identity2)))
+        if (_relationshipCount <= 0 || !RaM.ContainsKey((identity1, identity2)))
             return -1;
 
-        var messageCount = RelationshipsAndMessages[(identity1, identity2)] + RelationshipsAndMessages[(identity2, identity1)];
+        var messageCount = RaM[(identity1, identity2)] + RaM[(identity2, identity1)];
 
-        RelationshipsAndMessages.Remove((identity1, identity2));
-        RelationshipsAndMessages.Remove((identity2, identity1));
+        RaM.Remove((identity1, identity2));
+        RaM.Remove((identity2, identity1));
         _messagesCount -= messageCount;
         _relationshipCount--;
         return Convert.ToInt32(messageCount);
@@ -369,22 +369,22 @@ public class SolutionRepresentation : ICloneable
     public bool SendMessage(uint identityFrom, uint identityTo)
     {
         EstablishRelationship(identityFrom, identityTo);
-        RelationshipsAndMessages[(identityFrom, identityTo)]++;
+        RaM[(identityFrom, identityTo)]++;
         _messagesCount++;
         return true;
     }
 
     private void RemoveMessage(uint identityFrom, uint identityTo)
     {
-        if (!RelationshipsAndMessages.ContainsKey((identityFrom, identityTo))) return;
+        if (!RaM.ContainsKey((identityFrom, identityTo))) return;
 
-        RelationshipsAndMessages[(identityFrom, identityTo)]--;
+        RaM[(identityFrom, identityTo)]--;
         _messagesCount--;
     }
 
     public object Clone()
     {
-        var ret = new SolutionRepresentation(RelationshipsAndMessages, counters: (relationshipCount: _relationshipCount, messagesCount: _messagesCount), createdAt: _createdAt);
+        var ret = new SolutionRepresentation(RaM, counters: (relationshipCount: _relationshipCount, messagesCount: _messagesCount), createdAt: _createdAt);
         return ret;
     }
 
@@ -392,7 +392,8 @@ public class SolutionRepresentation : ICloneable
     {
         if (_messagesCount <= 0) return;
 
-        var (a, b) = _localRandom.GetRandomKey(RelationshipsAndMessages.Where(m => m.Value > 0).ToDictionary());
+        var raMWithMessages = RaM.Where(m => m.Value > 0).ToDictionary();
+        var (a, b) = _localRandom.GetRandomKey(raMWithMessages);
         RemoveMessage(a, b);
     }
 
@@ -406,14 +407,14 @@ public class SolutionRepresentation : ICloneable
     {
         if (_relationshipCount <= 0) return -1;
 
-        var (a, b) = _localRandom.GetRandomKey(RelationshipsAndMessages);
+        var (a, b) = _localRandom.GetRandomKey(RaM);
         return RemoveRelationship(a, b);
     }
 
     public long GetInvalidRelationshipCount(Dictionary<uint, GeneratorIdentity> identities)
     {
         var res = 0;
-        foreach (var ((from, to), _) in RelationshipsAndMessages)
+        foreach (var ((from, to), _) in RaM)
         {
             if (from == to)
             {
@@ -449,20 +450,20 @@ public class SolutionRepresentation : ICloneable
         Console.WriteLine($" ==> Expected sent messages: {pools.ExpectedNumberOfSentMessages()}");
         Console.WriteLine(" =====> ESTABLISHED RELATIONSHIPS");
 
-        if (RelationshipsAndMessages.Count / 2 != GetRelationshipCount())
+        if (RaM.Count / 2 != GetRelationshipCount())
             Console.WriteLine("==[ERROR]=> Relationship Count mismatch.");
 
-        if (RelationshipsAndMessages.Sum(x => x.Value) != GetSentMessagesCount())
+        if (RaM.Sum(x => x.Value) != GetSentMessagesCount())
             Console.WriteLine("==[ERROR]=> Message Count mismatch.");
 
-        Console.WriteLine($" - Counted {RelationshipsAndMessages.Count} entries, meaning there are {RelationshipsAndMessages.Count / 2} relationships.");
-        Console.WriteLine($" - Counted {RelationshipsAndMessages.Sum(x => x.Value)} messages.");
+        Console.WriteLine($" - Counted {RaM.Count} entries, meaning there are {RaM.Count / 2} relationships.");
+        Console.WriteLine($" - Counted {RaM.Sum(x => x.Value)} messages.");
     }
 
     // reflections may be counted twice here
     public uint GetNumberOfRelatedIdentities(uint identity)
     {
-        return (uint)RelationshipsAndMessages.Count(r =>
+        return (uint)RaM.Count(r =>
         {
             var ((a, b), _) = r;
             return a == identity || b == identity;
@@ -473,7 +474,7 @@ public class SolutionRepresentation : ICloneable
     {
         var res = new Dictionary<uint, (uint sent, uint received)>();
 
-        foreach (var ((a, b), c) in RelationshipsAndMessages)
+        foreach (var ((a, b), c) in RaM)
         {
             res.TryAdd(a, (0, 0));
             res.TryAdd(b, (0, 0));
@@ -487,7 +488,7 @@ public class SolutionRepresentation : ICloneable
 
     public IEnumerable<(uint relatedIdentity, uint messageCount)> GetRelationshipsAndMessageSentCountByIdentity(uint uon)
     {
-        return RelationshipsAndMessages.Where(it => it.Key.a == uon).Select(it => (it.Key.b, it.Value)).ToList();
+        return RaM.Where(it => it.Key.a == uon).Select(it => (it.Key.b, it.Value)).ToList();
     }
 
     public string GetAsCSV(Dictionary<uint, GeneratorIdentity> identitiesDictionary)
@@ -495,7 +496,7 @@ public class SolutionRepresentation : ICloneable
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine("Identity1;Identity1Pool;Identity2;Identity2Pool;MessageCount");
 
-        foreach (var ((a, b), c) in RelationshipsAndMessages)
+        foreach (var ((a, b), c) in RaM)
         {
             var identity1Pool = identitiesDictionary[a].Pool.Alias;
             var identity2Pool = identitiesDictionary[b].Pool.Alias;
@@ -505,7 +506,7 @@ public class SolutionRepresentation : ICloneable
         return stringBuilder.ToString();
     }
 
-    internal uint GetIdentityCount() => RelationshipsAndMessages.Max(r => r.Key.a);
+    internal uint GetIdentityCount() => RaM.Max(r => r.Key.a);
 }
 
 public static class RandomMethodExtensions

@@ -4,8 +4,8 @@ import { check } from "k6";
 import { SharedArray } from "k6/data";
 import { Options } from "k6/options";
 import { apiVersion, exchangeToken } from "../libs/backbone-client";
-import { DataRepresentationForEnmeshedPerformanceTestsLoads } from "../libs/data-representation-for-enmeshed-performance-tests";
-import { LoadDataRepresentationForEnmeshedPerformanceTests } from "../libs/file-utils";
+import { DREPTLoads } from "../libs/drept";
+import { LoadDREPT } from "../libs/file-utils";
 import { CreateChallengeResponse } from "../models";
 
 export const options: Options = {
@@ -21,7 +21,7 @@ export const options: Options = {
 };
 
 const snapshot = (__ENV.snapshot as string | undefined) ?? "light";
-const pools = LoadDataRepresentationForEnmeshedPerformanceTests(snapshot, [DataRepresentationForEnmeshedPerformanceTestsLoads.Identities]).ofTypes("a", "c").pools;
+const pools = LoadDREPT(snapshot, [DREPTLoads.Identities]).ofTypes("a", "c").pools;
 
 const testIdentities = new SharedArray("testIdentities", function () {
     return pools.flatMap((p) => p.identities);
