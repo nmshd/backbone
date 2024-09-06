@@ -20,7 +20,7 @@ using Xunit.Abstractions;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub;
 
-public class GoogleCloudPubSubTests : AbstractTestsBase
+public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
 {
     private readonly EventBusFactory _factory;
 
@@ -125,21 +125,23 @@ public class GoogleCloudPubSubTests : AbstractTestsBase
 
     public override void Dispose()
     {
-        _factory.Dispose();
+        Task.Run(async () => await DisposeAsync()).GetAwaiter().GetResult();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _factory.DisposeAsync();
 
         TestEvent1DomainEventHandler1.Instances.Clear();
         TestEvent1DomainEventHandler2.Instances.Clear();
         TestEvent2DomainEventHandler.Instances.Clear();
-
-        base.Dispose();
     }
 
-    private class EventBusFactory : IDisposable
+    private class EventBusFactory : IDisposable, IAsyncDisposable
     {
         private record Instance(
             AutofacServiceProvider AutofacServiceProviders,
-            EventBusGoogleCloudPubSub EventBusClient,
-            DefaultGoogleCloudPubSubPersisterConnection PersisterConnection);
+            EventBusGoogleCloudPubSub EventBusClient);
 
         private const string PROJECT_ID = "nbp-nmshd-bkb";
         private const string TOPIC_NAME = "test-topic";
@@ -147,7 +149,7 @@ public class GoogleCloudPubSubTests : AbstractTestsBase
 
         private readonly ICacheLogger<EventBusGoogleCloudPubSub> _logger;
 
-        public const string CONNECTION_INFO = "";
+        private const string CONNECTION_INFO = "";
 
         private readonly List<Instance> _instances = [];
 
@@ -174,7 +176,7 @@ public class GoogleCloudPubSubTests : AbstractTestsBase
                 lifeTimeScope,
                 new HandlerRetryBehavior { NumberOfRetries = 5, MinimumBackoff = 2, MaximumBackoff = 120 });
 
-            var instance = new Instance(autofacServiceProvider, eventBusClient, persisterConnection);
+            var instance = new Instance(autofacServiceProvider, eventBusClient);
             _instances.Add(instance);
 
             return eventBusClient;
@@ -182,13 +184,17 @@ public class GoogleCloudPubSubTests : AbstractTestsBase
 
         public void Dispose()
         {
+            Task.Run(async () => await DisposeAsync()).GetAwaiter().GetResult();
+        }
+
+        public async ValueTask DisposeAsync()
+        {
             _logger.Dispose();
 
             foreach (var instance in _instances)
             {
                 instance.AutofacServiceProviders.Dispose();
-                instance.EventBusClient.Dispose();
-                instance.PersisterConnection.Dispose();
+                await instance.EventBusClient.DisposeAsync();
             }
 
             CleanupTestSubscriptions();
