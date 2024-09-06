@@ -39,15 +39,15 @@ cd ..
 # Run the `npx webpack` command
 npx webpack
 
-# Check if the test file exists
-if [ ! -f "$testFile" ]; then
-  echo "Error: Test file '$testFile' does not exist."
-  exit 1
-fi
-
 # Check the exit status of the webpack command
 if [ $? -ne 0 ]; then
   echo "Error: Webpack failed."
+  exit 1
+fi
+
+# Check if the test file exists
+if [ ! -f "$testFile" ]; then
+  echo "Error: Test file '$testFile' does not exist."
   exit 1
 fi
 
