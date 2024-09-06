@@ -83,10 +83,9 @@ public class MessagesRepository : IMessagesRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<Message>> FindOrphanedMessages(CancellationToken cancellationToken)
+    public async Task Delete(Message message)
     {
-        return await _messages
-            .Where(m => Message.IsAnonymized(m.CreatedBy) && m.Recipients.All(r => Message.IsAnonymized(r.Address)))
-            .ToListAsync(cancellationToken);
+        _messages.Remove(message);
+        await _dbContext.SaveChangesAsync();
     }
 }
