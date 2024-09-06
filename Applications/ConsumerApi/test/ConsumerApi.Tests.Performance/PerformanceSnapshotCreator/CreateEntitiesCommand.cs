@@ -19,7 +19,7 @@ public class CreateEntitiesCommand : Command
         var clientSecret = new Option<string>(name: "--clientSecret", description: "The corresponding client secret.");
         AddOption(clientSecret);
 
-        var configurationFilePath = new Option<string>(name: "--ram", description: "The csv file with the relationships and messages configuration.");
+        var configurationFilePath = new Option<string>(name: "--relationshipsAndMessages", description: "The csv file with the relationships and messages configuration.");
         AddOption(configurationFilePath);
 
         var poolsFilePath = new Option<string>(name: "--poolsFile", description: "The json file with the pools' configuration.");

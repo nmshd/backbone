@@ -1,5 +1,3 @@
-// DATA REPRESENTATION FOR ENMESHED PERFORMANCE TESTS PROTOCOL
-
 export interface Identity {
     sentMessages?: Message[];
     address: string;
@@ -40,13 +38,13 @@ interface RelationshipTemplate {
     relationshipTemplateId: string;
 }
 
-export interface IDREPT {
+export interface IDataRepresentationForEnmeshedPerformanceTests {
     pools: Pool[];
 
-    ofTypes(...types: string[]): IDREPT;
+    ofTypes(...types: string[]): IDataRepresentationForEnmeshedPerformanceTests;
 }
 
-export class DREPT implements IDREPT {
+export class DataRepresentationForEnmeshedPerformanceTests implements IDataRepresentationForEnmeshedPerformanceTests {
     private readonly _pools: Pool[] = [];
 
     public constructor(pools: Pool[]) {
@@ -62,10 +60,11 @@ export class DREPT implements IDREPT {
      * @param types the names of the pools to be loaded, or simply theIR initial letter(s), e.g.: `.ofTypes("a", "c")` -- loads pools of type a1, a2, a.., c1, c2, c..
      * @returns
      */
-    public ofTypes = (...types: string[]): IDREPT => new DREPT(this._pools.filter((pool) => types.some((type) => pool.name.startsWith(type))));
+    public ofTypes = (...types: string[]): IDataRepresentationForEnmeshedPerformanceTests =>
+        new DataRepresentationForEnmeshedPerformanceTests(this._pools.filter((pool) => types.some((type) => pool.name.startsWith(type))));
 }
 
-export enum DREPTLoads {
+export enum DataRepresentationForEnmeshedPerformanceTestsLoads {
     Identities,
     Relationships,
     Messages,

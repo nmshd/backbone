@@ -6,7 +6,7 @@
 
 The generation of a snapshot is a convoluted process which can be described in the following steps:
 
-#### 1. Creation of a RaM distribution
+#### 1. Creation of a _Relationships & Messages_ distribution
 
 Using the `Identity.Pool.Creator` project, run the command with the arguemnts:
 
@@ -16,13 +16,13 @@ Where `<pools.json>` is a pools configuration file. You can find examples of thi
 
 This will use a mix of a manual algorithm with simulated annealing to create a solution. The time it takes to run the algorith depends mostly on the number of SA iterations. That number can be changed in code.
 
-The execution creates a `ram.csv` file which must be passed to the next step.
+The execution creates a `relationshipsAndMessages.csv` file which must be passed to the next step.
 
 #### 2. Creation of entities
 
 Using the `Identity.Pool.Creator` project, run the command with the arguemnts:
 
-`CreateEntities --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools.json --ram selected-solution\\ram.csv`
+`CreateEntities --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools.json --relationshipsAndMessages selected-solution\\relationshipsAndMessages.csv`
 
 where:
 
@@ -30,7 +30,7 @@ where:
 -   `--clientId` is the client Id to use when addressing the API.
 -   `--clientSecret` is the client Secret to use when addressing the API.
 -   `--poolsFile` is the same file used in the step above.
--   `--ram` the Relationships & Messages configuration created in the step above (csv file).
+-   `--relationshipsAndMessages` the Relationships & Messages configuration created in the step above (csv file).
 
 This command will create the following entities:
 
@@ -87,7 +87,7 @@ In order to use a snapshot, you must:
 
 #### Snapshot Heavy (snapshot.heavy.zip, downloadable from file hosting)
 
-RaM Generation: ~8h
+_Relationships & Messages_ Generation: ~8h
 
 Entity Creation: ~10h
 
@@ -100,7 +100,7 @@ Entity Creation: ~10h
 
 #### Snapshot Light (snapshot.light.zip)
 
-RaM Generation: ~20min
+_Relationships & Messages_ Generation: ~20min
 
 Entity Creation: ~1h
 
@@ -131,8 +131,7 @@ In order to run the performance tests, you must load an appropriate snapshot of 
     1. In the directory `/docker-compose/dumps/`, run the appropriate command: `load_postgres.bat` or `load_sqlserver_bak.bat`.
 
 > [!CAUTION]
-> This will delete you current Enmeshed Database.
-4.  **Prepare the csvs:**
+> This will delete you current Enmeshed Database. 4. **Prepare the csvs:**
 
     1. Extract the compressed csv files into the following directory: `/Application/ConsumerApi/test/PerformanceTests/snapshots/<snapshotName>`. You must create the directory.
 
@@ -149,9 +148,8 @@ In order to run the performance tests, you must load an appropriate snapshot of 
         1. **Windows:** `# scripts/windows/run-test.ps1 <scenario-name>`
 
 > [!NOTE]
-> Both alternatives can be appended with `-- <extra> <parameters>`. Extra parameters are k6 parameters, some of which are explained below.
-6. You must tweak the way the test is run to ensure it conforms with your preferences. The following CLI parameters are available:
-    
+> Both alternatives can be appended with `-- <extra> <parameters>`. Extra parameters are k6 parameters, some of which are explained below. 6. You must tweak the way the test is run to ensure it conforms with your preferences. The following CLI parameters are available:
+
     | Key               | Possible Values         | Notes                          |
     | ----------------- | ----------------------- | ------------------------------ |
     | `--duration`      | `60m`, `4h`, etc.       | defaults to `1h` in most cases |

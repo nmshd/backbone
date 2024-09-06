@@ -1,21 +1,30 @@
 import { SharedArray } from "k6/data";
 import papaparse from "papaparse";
-import { DREPT, DREPTLoads, Identity, Pool } from "./drept";
-import { CsvDatawalletModification as CSVDatawalletModification, CSVIdentity, CSVMessage, CSVRelationship, CSVRelationshipTemplate } from "./drept/csv-types";
+import { DataRepresentationForEnmeshedPerformanceTests, DataRepresentationForEnmeshedPerformanceTestsLoads, Identity, Pool } from "./data-representation-for-enmeshed-performance-tests";
+import {
+    CsvDatawalletModification as CSVDatawalletModification,
+    CSVIdentity,
+    CSVMessage,
+    CSVRelationship,
+    CSVRelationshipTemplate
+} from "./data-representation-for-enmeshed-performance-tests/csv-types";
 
 /**
  *
  * @param folderName The name of the folder matching the name of the snapshot to load
- * @param whatoToLoad An array of {@link DREPTLoads} representing the entities to be loaded
- * @returns a DREPT populated according to @link{whatoToLoad}
+ * @param whatoToLoad An array of {@link DataRepresentationForEnmeshedPerformanceTestsLoads} representing the entities to be loaded
+ * @returns a DataRepresentationForEnmeshedPerformanceTests populated according to @link{whatoToLoad}
  */
-export function LoadDREPT(folderName: string, whatoToLoad: DREPTLoads[] = [DREPTLoads.Identities]): DREPT {
+export function LoadDataRepresentationForEnmeshedPerformanceTests(
+    folderName: string,
+    whatoToLoad: DataRepresentationForEnmeshedPerformanceTestsLoads[] = [DataRepresentationForEnmeshedPerformanceTestsLoads.Identities]
+): DataRepresentationForEnmeshedPerformanceTests {
     const csvFilesPath = `../snapshots/${folderName}/csvs`;
     let pools: Pool[];
     let identitiesMap: Map<string, Identity>;
 
     const poolsReturn = new SharedArray("pools", function () {
-        if (!whatoToLoad.includes(DREPTLoads.Identities)) {
+        if (!whatoToLoad.includes(DataRepresentationForEnmeshedPerformanceTestsLoads.Identities)) {
             console.warn("whatToLoad does not include Identities but they must always be loaded. Loading either way...");
         }
 
@@ -23,22 +32,22 @@ export function LoadDREPT(folderName: string, whatoToLoad: DREPTLoads[] = [DREPT
         pools = LoadPoolsWithIdentities();
         identitiesMap = PopulateIdentitiesMap();
 
-        if (whatoToLoad.includes(DREPTLoads.DatawalletModifications)) {
+        if (whatoToLoad.includes(DataRepresentationForEnmeshedPerformanceTestsLoads.DatawalletModifications)) {
             console.info("Loading datawallet modifications");
             LoadDataWalletModifications();
         }
 
-        if (whatoToLoad.includes(DREPTLoads.RelationshipTemplates)) {
+        if (whatoToLoad.includes(DataRepresentationForEnmeshedPerformanceTestsLoads.RelationshipTemplates)) {
             console.info("Loading relationship templates");
             LoadRelationshipTemplates();
         }
 
-        if (whatoToLoad.includes(DREPTLoads.Relationships)) {
+        if (whatoToLoad.includes(DataRepresentationForEnmeshedPerformanceTestsLoads.Relationships)) {
             console.info("Loading relationships");
             LoadRelationships();
         }
 
-        if (whatoToLoad.includes(DREPTLoads.Messages)) {
+        if (whatoToLoad.includes(DataRepresentationForEnmeshedPerformanceTestsLoads.Messages)) {
             console.info("Loading messages");
             LoadMessages();
         }
@@ -47,7 +56,7 @@ export function LoadDREPT(folderName: string, whatoToLoad: DREPTLoads[] = [DREPT
         return pools;
     });
 
-    return new DREPT(poolsReturn);
+    return new DataRepresentationForEnmeshedPerformanceTests(poolsReturn);
 
     function LoadDataWalletModifications() {
         const DatawalletModificationsFile = open(`${csvFilesPath}/datawalletModifications.csv`);
