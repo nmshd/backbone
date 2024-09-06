@@ -10,7 +10,7 @@ namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates
 public class RelationshipTemplateCreateTests : AbstractTestsBase
 {
     [Fact]
-    public void Raises_RelationshipTemplateCreatedDomainEvent_when_creating()
+    public void Raises_RelationshipTemplateCreatedDomainEvent_when_created_without_optional_parameter()
     {
         // Arrange
         var address = TestDataGenerator.CreateRandomIdentityAddress();
@@ -20,6 +20,25 @@ public class RelationshipTemplateCreateTests : AbstractTestsBase
 
         // Act
         var template = new RelationshipTemplate(address, deviceId, null, expiresAt, content);
+
+        // Assert
+        var domainEvent = template.Should().HaveASingleDomainEvent<RelationshipTemplateCreatedDomainEvent>();
+        domainEvent.TemplateId.Should().Be(template.Id);
+        domainEvent.CreatedBy.Should().Be(address);
+    }
+
+    [Fact]
+    public void Raises_RelationshipTemplateCreatedDomainEvent_when_created_with_optional_parameter()
+    {
+        // Arrange
+        var address = TestDataGenerator.CreateRandomIdentityAddress();
+        var forAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var deviceId = TestDataGenerator.CreateRandomDeviceId();
+        var expiresAt = DateTime.UtcNow;
+        byte[] content = [1, 1, 1, 1, 1, 1, 1, 1];
+
+        // Act
+        var template = new RelationshipTemplate(address, deviceId, null, expiresAt, content, forAddress);
 
         // Assert
         var domainEvent = template.Should().HaveASingleDomainEvent<RelationshipTemplateCreatedDomainEvent>();
