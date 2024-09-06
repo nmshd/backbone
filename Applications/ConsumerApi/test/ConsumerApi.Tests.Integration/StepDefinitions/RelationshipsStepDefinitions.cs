@@ -80,7 +80,7 @@ internal class RelationshipsStepDefinitions
         var participant1 = _clientPool.FirstForIdentityName(participant1Address);
         var participant2 = _clientPool.FirstForIdentityName(participant2Address);
 
-        _relationshipsContext.Relationships[relationshipName] = await Utils.CreateTerminatedRelationshipWithReactivationRequestBetween(participant2, participant1);
+        _relationshipsContext.Relationships[relationshipName] = await Utils.CreateTerminatedRelationshipWithReactivationRequestBetween(participant1, participant2);
     }
 
     [Given($"{RegexFor.SINGLE_THING} has terminated {RegexFor.SINGLE_THING}")]
