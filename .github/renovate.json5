@@ -3,6 +3,7 @@
     extends: ["config:recommended"],
     labels: ["dependencies"],
     schedule: ["after 10pm every weekday", "before 5am every weekday", "every weekend"],
+    ignorePaths: ["**/node_modules/**", "**/bower_components/**", "**/vendor/**", "**/examples/**"], // we have to set this, in order to override the default that comes from `config:recommended`, which ignores any packages in directories like "tests"
     packageRules: [
         {
             // we don't want to update eslint currently, because there is a breaking change in its config
