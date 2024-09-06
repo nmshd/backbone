@@ -93,6 +93,14 @@ public class Message : Entity, IIdentifiable<MessageId>
         CreatedBy = anonymizedIdentityAddress;
     }
 
+    public bool IsOrphaned()
+    {
+        var areAllRecipientsAnonymized = Recipients.All(r => IsAnonymized(r.Address));
+        var isSenderAnonymized = IsAnonymized(CreatedBy);
+
+        return isSenderAnonymized && areAllRecipientsAnonymized;
+    }
+
     public static bool IsAnonymized(IdentityAddress address)
     {
         return address.ToString().StartsWith("ANONYMIZED_");
