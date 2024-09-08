@@ -15,7 +15,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateRelationshipTemplateCommand { ExpiresAt = DateTime.UtcNow.AddDays(1), MaxNumberOfAllocations = 1, Content = [1], ForIdentity = TestDataGenerator.CreateRandomIdentityAddress()});
+            new CreateRelationshipTemplateCommand { ExpiresAt = DateTime.UtcNow.AddDays(1), MaxNumberOfAllocations = 1, Content = [1], ForIdentity = TestDataGenerator.CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -29,7 +29,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateRelationshipTemplateCommand { Content = [1]});
+            new CreateRelationshipTemplateCommand { Content = [1] });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
