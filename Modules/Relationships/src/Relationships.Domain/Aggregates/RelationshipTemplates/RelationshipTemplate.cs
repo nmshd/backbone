@@ -68,7 +68,7 @@ public class RelationshipTemplate : Entity
         return r => r.CreatedBy == identityAddress.ToString();
     }
 
-    public static Expression<Func<RelationshipTemplate, bool>> CanBeCollectedBy(IdentityAddress? address)
+    public static Expression<Func<RelationshipTemplate, bool>> CanBeCollectedBy(IdentityAddress address)
     {
         return relationshipTemplate => relationshipTemplate.ForIdentity == null || relationshipTemplate.ForIdentity == address || relationshipTemplate.CreatedBy == address;
     }

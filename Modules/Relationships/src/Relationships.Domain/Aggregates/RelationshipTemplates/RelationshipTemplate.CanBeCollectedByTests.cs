@@ -19,11 +19,11 @@ public class RelationshipTemplateCanBeCollectedBy : AbstractTestsBase
     [InlineData(I1, I2, I3, false)] // third party can't collect if forIdentity
     [InlineData(I1, I1, I1, true)] // creator can collect if it is also forIdentity
     [InlineData(I1, I1, I3, false)] // third party can't collect if creator is also forIdentity
-    public void Expression_CanBeCollectedBy_Returns_Correct_Result(string creator, string? forIdentity, string? collector, bool expectedResult)
+    public void Expression_CanBeCollectedBy_Returns_Correct_Result(string creator, string? forIdentity, string collector, bool expectedResult)
     {
         var creatorAddress = IdentityAddress.ParseUnsafe(creator);
         var forIdentityAddress = forIdentity == null ? null : IdentityAddress.ParseUnsafe(forIdentity);
-        var collectorAddress = collector == null ? null : IdentityAddress.ParseUnsafe(collector);
+        var collectorAddress = IdentityAddress.ParseUnsafe(collector);
 
         // Arrange
         var token = TestData.CreateRelationshipTemplate(creatorAddress, forIdentityAddress);
@@ -35,7 +35,7 @@ public class RelationshipTemplateCanBeCollectedBy : AbstractTestsBase
         result.Should().Be(expectedResult);
     }
 
-    private static bool EvaluateCanBeCollectedByExpression(RelationshipTemplate relationshipTemplate, IdentityAddress? identityAddress)
+    private static bool EvaluateCanBeCollectedByExpression(RelationshipTemplate relationshipTemplate, IdentityAddress identityAddress)
     {
         var expression = RelationshipTemplate.CanBeCollectedBy(identityAddress);
         var result = expression.Compile()(relationshipTemplate);
