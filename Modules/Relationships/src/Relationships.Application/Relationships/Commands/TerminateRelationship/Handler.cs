@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
@@ -11,14 +10,12 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Term
 public class Handler : IRequestHandler<TerminateRelationshipCommand, RelationshipDTO>
 {
     private readonly IRelationshipsRepository _relationshipsRepository;
-    private readonly IEventBus _eventBus;
     private readonly IdentityAddress _activeIdentity;
     private readonly DeviceId _activeDevice;
 
-    public Handler(IRelationshipsRepository relationshipsRepository, IUserContext userContext, IEventBus eventBus)
+    public Handler(IRelationshipsRepository relationshipsRepository, IUserContext userContext)
     {
         _relationshipsRepository = relationshipsRepository;
-        _eventBus = eventBus;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }

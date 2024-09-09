@@ -1,4 +1,3 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
@@ -21,7 +20,6 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests : AbstractTes
         var identityDeletionProcessStartedDomainEvent = new IdentityDeletionProcessStartedDomainEvent(identityAddress, "some-deletion-process-id", null);
 
         var fakeDbContext = A.Fake<ISynchronizationDbContext>();
-        var mockEventBus = A.Fake<IEventBus>();
 
         var externalEvent = new ExternalEvent(ExternalEventType.IdentityDeletionProcessStarted, IdentityAddress.Parse(identityAddress), 1,
             new { identityDeletionProcessStartedDomainEvent.DeletionProcessId });

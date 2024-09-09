@@ -21,7 +21,7 @@ public class TierQuotaDefinitionCreatedDomainEventHandlerTests : AbstractTestsBa
         // Arrange
         var tierId = TierId.Parse("TIRFxoL0U24aUqZDSAWc");
 
-        var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 5, QuotaPeriod.Month);
         var tierQuotaDefinitionsRepository = new FindTierQuotaDefinitionsStubRepository(tierQuotaDefinition);
 
         var firstIdentity = new Identity("some-identity-address-one", tierId);
@@ -47,7 +47,7 @@ public class TierQuotaDefinitionCreatedDomainEventHandlerTests : AbstractTestsBa
         // Arrange
         var tierId = TierId.Parse("TIRFxoL0U24aUqZDSAWc");
 
-        var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 5, QuotaPeriod.Month);
+        var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 5, QuotaPeriod.Month);
         var tierQuotaDefinitionsRepository = new FindTierQuotaDefinitionsStubRepository(tierQuotaDefinition);
 
         var firstIdentity = new Identity("some-identity-address-one", tierId);

@@ -78,7 +78,7 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
             .MustNotHaveHappened();
     }
 
-    private RelationshipStatusChangedDomainEventHandler CreateHandler(ISynchronizationDbContext dbContext)
+    private static RelationshipStatusChangedDomainEventHandler CreateHandler(ISynchronizationDbContext dbContext)
     {
         return new RelationshipStatusChangedDomainEventHandler(dbContext, A.Fake<ILogger<RelationshipStatusChangedDomainEventHandler>>());
     }

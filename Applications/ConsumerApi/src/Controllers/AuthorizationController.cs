@@ -1,6 +1,6 @@
 using System.Security.Claims;
+using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.ConsumerApi.Mvc;
 using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling.Extensions;
@@ -39,7 +39,7 @@ public class AuthorizationController : ApiControllerBase
     public async Task<IActionResult> Exchange()
     {
         var request = HttpContext.GetOpenIddictServerRequest() ?? throw new OperationFailedException(
-                ApplicationErrors.Authentication.InvalidOAuthRequest("no request was found"));
+            ApplicationErrors.Authentication.InvalidOAuthRequest("no request was found"));
         if (!request.IsPasswordGrantType())
             throw new OperationFailedException(
                 ApplicationErrors.Authentication.InvalidOAuthRequest("the specified grant type is not implemented"));
@@ -63,13 +63,13 @@ public class AuthorizationController : ApiControllerBase
             return InvalidUserCredentials();
 
         var identity = new ClaimsIdentity(
-            claims: new Claim[]
-            {
+            claims:
+            [
                 new(Claims.Subject, user.Id),
                 new(Claims.Name, user.UserName!.Trim()),
                 new("address", user.Device.Identity.Address),
                 new("device_id", user.Device.Id)
-            },
+            ],
             authenticationType: TokenValidationParameters.DefaultAuthenticationType);
 
         identity.SetScopes(new[]
@@ -83,7 +83,7 @@ public class AuthorizationController : ApiControllerBase
         return SignIn(new ClaimsPrincipal(identity), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 
-    private IActionResult InvalidUserCredentials()
+    private ForbidResult InvalidUserCredentials()
     {
         var properties = new AuthenticationProperties(new Dictionary<string, string?>
         {
@@ -95,7 +95,7 @@ public class AuthorizationController : ApiControllerBase
         return Forbid(properties, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
 
-    private IActionResult UserLockedOut()
+    private ForbidResult UserLockedOut()
     {
         var properties = new AuthenticationProperties(new Dictionary<string, string?>
         {

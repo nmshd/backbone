@@ -14,7 +14,7 @@ public class GoogleCloudStorageTests : AbstractTestsBase, IAsyncLifetime
 {
     public const string BUCKET_NAME = "test-bucket-nmshd";
     private readonly StorageClient _storageClient;
-    private readonly IBlobStorage _blobStorageUnderTest;
+    private readonly GoogleCloudStorage _blobStorageUnderTest;
 
     public GoogleCloudStorageTests(ITestOutputHelper output)
     {

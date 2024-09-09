@@ -89,7 +89,7 @@ public class Program
 #pragma warning restore ASP0000
 
                 var worker = Assembly.GetExecutingAssembly().DefinedTypes.FirstOrDefault(t => t.Name == parsedConfiguration.Worker) ??
-                             throw new ArgumentException($"The specified worker could not be recognized, or no worker was set.");
+                             throw new ArgumentException("The specified worker could not be recognized, or no worker was set.");
                 services.AddTransient(typeof(IHostedService), worker);
 
                 services
@@ -125,7 +125,7 @@ public class Program
                 .Enrich.WithProperty("service", "jobs.identitydeletion")
                 .Enrich.WithExceptionDetails(new DestructuringOptionsBuilder()
                     .WithDefaultDestructurers()
-                    .WithDestructurers(new[] { new DbUpdateExceptionDestructurer() })
+                    .WithDestructurers([new DbUpdateExceptionDestructurer()])
                 )
             );
     }
