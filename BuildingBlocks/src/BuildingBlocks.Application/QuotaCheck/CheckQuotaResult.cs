@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.Domain;
 
 namespace Backbone.BuildingBlocks.Application.QuotaCheck;
+
 public class CheckQuotaResult
 {
     public CheckQuotaResult(IEnumerable<MetricStatus> exhaustedStatuses)
@@ -12,5 +13,5 @@ public class CheckQuotaResult
     public IEnumerable<MetricStatus> ExhaustedStatuses { get; }
     public bool IsSuccess { get; internal set; }
 
-    public static CheckQuotaResult Success() => new(Enumerable.Empty<MetricStatus>());
+    public static CheckQuotaResult Success() => new([]);
 }

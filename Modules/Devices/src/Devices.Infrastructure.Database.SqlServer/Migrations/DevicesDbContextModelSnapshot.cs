@@ -18,7 +18,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Devices")
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -272,9 +272,11 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Address");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId")
+                        .HasAnnotation("Npgsql:IndexMethod", "hash");
 
-                    b.HasIndex("TierId");
+                    b.HasIndex("TierId")
+                        .HasAnnotation("Npgsql:IndexMethod", "hash");
 
                     b.ToTable("Identities", "Devices");
                 });
@@ -317,7 +319,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("DeletionStartedAt")
+                    b.Property<DateTime?>("DeletionStartedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime?>("GracePeriodEndsAt")

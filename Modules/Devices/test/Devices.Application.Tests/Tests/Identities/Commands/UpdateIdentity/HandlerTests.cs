@@ -1,11 +1,9 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
@@ -31,7 +29,7 @@ public class HandlerTests : AbstractTestsBase
         var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), [1, 1, 1, 1, 1], oldTier.Id, 1);
 
         A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
-        A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier, newTier });
+        A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier> { oldTier, newTier });
 
         var handler = CreateHandler(identitiesRepository, tiersRepository);
         var request = BuildRequest(newTier, identity);
@@ -58,7 +56,7 @@ public class HandlerTests : AbstractTestsBase
 
         var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), [1, 1, 1, 1, 1], oldTier.Id, 1);
 
-        A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier, newTier });
+        A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier> { oldTier, newTier });
         A.CallTo(() => identitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._)).Returns<Identity?>(null);
 
         var handler = CreateHandler(identitiesRepository, tiersRepository);
@@ -86,7 +84,7 @@ public class HandlerTests : AbstractTestsBase
         var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), [1, 1, 1, 1, 1], oldTier.Id, 1);
 
         A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
-        A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier>() { oldTier });
+        A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier> { oldTier });
 
         var handler = CreateHandler(identitiesRepository, tiersRepository);
         var request = BuildRequest(newTier, identity);

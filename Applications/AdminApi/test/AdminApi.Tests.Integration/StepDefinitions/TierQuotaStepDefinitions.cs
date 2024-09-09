@@ -66,6 +66,17 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
         });
     }
 
+    [When("a POST request is sent to the /Tiers/{t.id}/Quotas endpoint with an invalid metric key")]
+    public async Task WhenAPOSTRequestIsSentToTheCreateTierQuotaEndpointWithAnInvalidMetricKey()
+    {
+        _createTierQuotaResponse = await _client.Tiers.AddTierQuota(_tierId, new CreateQuotaForTierRequest
+        {
+            MetricKey = "SomeInvalidMetricKey",
+            Max = 2,
+            Period = "Week"
+        });
+    }
+
     [When("a POST request is sent to the /Tiers/{tierId}/Quotas endpoint with an inexistent tier id")]
     public async Task WhenAPOSTRequestIsSentToTheCreateTierQuotaEndpointForAnInexistentTier()
     {
@@ -87,6 +98,12 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     public async Task WhenADeleteRequestIsSentToTheDeleteTierQuotaEndpointForAnInexistentQuota()
     {
         _deleteResponse = await _client.Tiers.DeleteTierQuota(_tierId, "inexistentQuotaId");
+    }
+
+    [When("a DELETE request is sent to the /Tiers/{nonExistentTier}/Quotas/{q.id}")]
+    public async Task WhenADeleteRequestIsSentToTheDeleteTierQuotaEndpointWithANonExistentTierId()
+    {
+        _deleteResponse = await _client.Tiers.DeleteTierQuota("nonExistentTierId", _tierQuotaDefinitionId);
     }
 
     [Then(@"the response status code is (\d+) \(.+\)")]
@@ -120,7 +137,6 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
         {
             _deleteResponse!.Error.Should().NotBeNull();
             _deleteResponse.Error!.Code.Should().Be(errorCode);
-            ;
         }
     }
 }

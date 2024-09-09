@@ -31,6 +31,6 @@ public abstract class Quota : Entity
         if (newUsage >= Max)
             return new ExhaustionDate(Period.CalculateEnd(utcNow));
 
-        return ExhaustionDate.Unexhausted;
+        return ExhaustionDate.UNEXHAUSTED;
     }
 }

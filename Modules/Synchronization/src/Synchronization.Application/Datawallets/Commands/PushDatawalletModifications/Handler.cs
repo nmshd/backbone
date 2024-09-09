@@ -75,8 +75,6 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
 
     private async Task CreateModifications()
     {
-        var blobName = Guid.NewGuid().ToString("N");
-
         var newModifications = _request.Modifications.Select(CreateModification);
 
         _dbContext.Set<Datawallet>().Update(_datawallet!);
@@ -101,7 +99,7 @@ public class Handler : IRequestHandler<PushDatawalletModificationsCommand, PushD
         );
     }
 
-    private DatawalletModificationType MapDatawalletModificationType(DatawalletModificationDTO.DatawalletModificationType type)
+    private static DatawalletModificationType MapDatawalletModificationType(DatawalletModificationDTO.DatawalletModificationType type)
     {
         return type switch
         {

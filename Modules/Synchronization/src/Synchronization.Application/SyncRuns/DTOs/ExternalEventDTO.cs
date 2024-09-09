@@ -21,7 +21,7 @@ public class ExternalEventDTO
     public byte SyncErrorCount { get; set; }
     public object Payload { get; set; }
 
-    private string MapExternalEventType(ExternalEventType externalEventType)
+    private static string MapExternalEventType(ExternalEventType externalEventType)
     {
         return externalEventType switch
         {

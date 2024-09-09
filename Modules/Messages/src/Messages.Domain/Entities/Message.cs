@@ -7,7 +7,7 @@ using Backbone.Tooling;
 
 namespace Backbone.Modules.Messages.Domain.Entities;
 
-public class Message : Entity, IIdentifiable<MessageId>
+public class Message : Entity
 {
     // ReSharper disable once UnusedMember.Local
     private Message()

@@ -17,7 +17,7 @@ public class FileUploadedDomainEventHandler : IDomainEventHandler<FileUploadedDo
     public async Task Handle(FileUploadedDomainEvent @event)
     {
         var identities = new List<string> { @event.Uploader };
-        var metrics = new List<MetricKey> { MetricKey.NumberOfFiles, MetricKey.UsedFileStorageSpace };
+        var metrics = new List<MetricKey> { MetricKey.NUMBER_OF_FILES, MetricKey.USED_FILE_STORAGE_SPACE };
 
         await _metricStatusesService.RecalculateMetricStatuses(identities, metrics, CancellationToken.None);
     }

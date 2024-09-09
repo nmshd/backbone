@@ -32,12 +32,8 @@ public class FinalizeExternalEventSyncSyncRunCommand : IRequest<FinalizeExternal
 
     public class ExternalEventResult
     {
-        public ExternalEventResult(string externalEventId) : this(externalEventId, null)
-        {
-        }
-
         [JsonConstructor]
-        public ExternalEventResult(string externalEventId, string? errorCode)
+        public ExternalEventResult(string externalEventId, string? errorCode = null)
         {
             ExternalEventId = externalEventId;
             ErrorCode = errorCode;

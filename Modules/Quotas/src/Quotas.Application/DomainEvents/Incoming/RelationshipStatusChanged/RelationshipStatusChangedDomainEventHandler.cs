@@ -17,7 +17,7 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
     public async Task Handle(RelationshipStatusChangedDomainEvent @event)
     {
         var identities = new List<string> { @event.Initiator, @event.Peer };
-        var metrics = new List<MetricKey> { MetricKey.NumberOfRelationships };
+        var metrics = new List<MetricKey> { MetricKey.NUMBER_OF_RELATIONSHIPS };
 
         await _metricStatusesService.RecalculateMetricStatuses(identities, metrics, CancellationToken.None);
     }

@@ -152,9 +152,13 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
                     b.HasIndex("From");
 
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("From"), "hash");
+
                     b.HasIndex("RelationshipTemplateId");
 
                     b.HasIndex("To");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("To"), "hash");
 
                     b.ToTable("Relationships", "Relationships");
                 });

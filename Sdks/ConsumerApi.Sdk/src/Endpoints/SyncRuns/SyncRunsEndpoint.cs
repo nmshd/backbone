@@ -40,6 +40,6 @@ public class SyncRunsEndpoint(EndpointClient client) : ConsumerApiEndpoint(clien
 
     public async Task<ApiResponse<RefreshExpirationTimeResponse>> RefreshExpirationTime(string id)
     {
-        return await _client.Put<RefreshExpirationTimeResponse>($"SyncRuns/{id}/RefreshExpirationTime");
+        return await _client.Put<RefreshExpirationTimeResponse>($"api/{API_VERSION}/SyncRuns/{id}/RefreshExpirationTime");
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System.Text;
 
 namespace Backbone.PerformanceSnapshotCreator.Tools;
+
 public class ProgressBar : IDisposable, IProgress<double>
 {
     private const int BLOCK_COUNT = 40;
@@ -9,9 +10,9 @@ public class ProgressBar : IDisposable, IProgress<double>
 
     private readonly Timer _timer;
 
-    private double _currentProgress = 0;
+    private double _currentProgress;
     private string _currentText = string.Empty;
-    private bool _disposed = false;
+    private bool _disposed;
     private int _animationIndex;
     private readonly long _upperBound;
 

@@ -17,7 +17,7 @@ public class TokenCreatedDomainEventHandler : IDomainEventHandler<TokenCreatedDo
     public async Task Handle(TokenCreatedDomainEvent @event)
     {
         var identities = new List<string> { @event.CreatedBy };
-        var metrics = new List<MetricKey> { MetricKey.NumberOfTokens };
+        var metrics = new List<MetricKey> { MetricKey.NUMBER_OF_TOKENS };
 
         await _metricStatusesService.RecalculateMetricStatuses(identities, metrics, CancellationToken.None);
     }

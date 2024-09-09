@@ -130,7 +130,7 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
         var identity = CreateIdentity();
         var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
         identity.Devices.Add(device);
-        Hasher.SetHasher(new DummyHasher(new byte[] { 1, 2, 3 }));
+        Hasher.SetHasher(new DummyHasher([1, 2, 3]));
 
         identity.StartDeletionProcessAsOwner(device.Id);
 
@@ -139,7 +139,7 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
 
     private static Identity CreateIdentity()
     {
-        var address = IdentityAddress.Create(Array.Empty<byte>(), "prod.enmeshed.eu");
-        return new Identity("", address, Array.Empty<byte>(), TierId.Generate(), 1);
+        var address = IdentityAddress.Create([], "prod.enmeshed.eu");
+        return new Identity("", address, [], TierId.Generate(), 1);
     }
 }
