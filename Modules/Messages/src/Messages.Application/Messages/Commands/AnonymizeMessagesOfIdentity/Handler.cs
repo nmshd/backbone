@@ -27,7 +27,7 @@ public class Handler : IRequestHandler<AnonymizeMessagesOfIdentityCommand>
         {
             message.ReplaceIdentityAddress(request.IdentityAddress, newIdentityAddress);
 
-            if (message.IsOrphaned())
+            if (message.IsOrphaned(_applicationOptions.DidDomainName))
                 await _messagesRepository.Delete(message);
         }
 

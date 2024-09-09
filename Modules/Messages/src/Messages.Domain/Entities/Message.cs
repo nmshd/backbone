@@ -93,17 +93,17 @@ public class Message : Entity, IIdentifiable<MessageId>
         CreatedBy = anonymizedIdentityAddress;
     }
 
-    public bool IsOrphaned()
+    public bool IsOrphaned(string didDomainName)
     {
-        var areAllRecipientsAnonymized = Recipients.All(r => IsAnonymized(r.Address));
-        var isSenderAnonymized = IsAnonymized(CreatedBy);
+        var areAllRecipientsAnonymized = Recipients.All(r => IsAnonymized(r.Address, didDomainName));
+        var isSenderAnonymized = IsAnonymized(CreatedBy, didDomainName);
 
         return isSenderAnonymized && areAllRecipientsAnonymized;
     }
 
-    public static bool IsAnonymized(IdentityAddress address)
+    public static bool IsAnonymized(IdentityAddress address, string didDomainName)
     {
-        return address.ToString().StartsWith("ANONYMIZED_");
+        return address == IdentityAddress.GetAnonymized(didDomainName);
     }
 
     #region Expressions
