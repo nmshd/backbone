@@ -50,7 +50,7 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
                   columns: <DataColumn2>[
                     DataColumn2(label: Text(context.l10n.id)),
                     DataColumn2(label: Text(context.l10n.createdAt)),
-                    DataColumn2(label: Text(context.l10n.announcementsOverview_expiresAt)),
+                    DataColumn2(label: Text(context.l10n.expiresAt)),
                     DataColumn2(label: Text(context.l10n.announcementsOverview_severity)),
                     const DataColumn2(label: Text('')),
                   ],
