@@ -100,6 +100,7 @@
     "createAnnouncementDialog_title": "Create Announcement",
     "createAnnouncementDialog_explanation": "If a language is not maintained, the English text will be used.",
     "createAnnouncementDialog_impact": "Impact",
+    "createAnnouncementDialog_languages": "Languages",
     "createAnnouncement_selectLanguage": "Select Language",
     "createAnnouncement_english": "English",
     "createAnnouncement_german": "German",
