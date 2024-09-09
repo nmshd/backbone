@@ -1,12 +1,9 @@
-// @ts-expect-error: k6 uses links to packages, which typescript cannot lint.
-import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 import { check } from "k6";
 import { SharedArray } from "k6/data";
 import { Options } from "k6/options";
-import { apiVersion, exchangeToken } from "../libs/backbone-client";
+import { AuthenticatedEnmeshedClient } from "../libs/backbone-client";
 import { DataRepresentationForEnmeshedPerformanceTestsLoads } from "../libs/data-loader/models";
 import { LoadDataRepresentationForEnmeshedPerformanceTests } from "../libs/file-utils";
-import { CreateChallengeResponse } from "../models";
 
 export const options: Options = {
     scenarios: {
@@ -21,17 +18,11 @@ export const options: Options = {
 };
 
 const snapshot = (__ENV.snapshot as string | undefined) ?? "light";
-const clientId = (__ENV.clientId as string | undefined) ?? "client_id";
-const clientSecret = (__ENV.clientSecret as string | undefined) ?? "client_secret";
+
 const pools = LoadDataRepresentationForEnmeshedPerformanceTests(snapshot, [DataRepresentationForEnmeshedPerformanceTestsLoads.Identities]).ofTypes("a", "c").pools;
 
 const testIdentities = new SharedArray("testIdentities", function () {
     return pools.flatMap((p) => p.identities);
-});
-
-const client = new Httpx({
-    baseURL: "http://localhost:8081/",
-    timeout: 20000 // 20s timeout
 });
 
 let identityIterator = 0;
@@ -41,21 +32,13 @@ export default function (): void {
 
     const username = currentIdentity.devices[0].username;
     const password = currentIdentity.devices[0].password;
-    const token = exchangeToken(client, username, password);
+    const client = new AuthenticatedEnmeshedClient(username, password);
 
-    const createChallengeResponse = client.post<"basic">(`api/${apiVersion}/Challenges`, null, {
-        headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token.access_token}`
-        }
-    });
+    const createChallengeResult = client.getChallenge();
 
-    check(createChallengeResponse, {
-        "response code was 201": (r) => r.status === 201
-    });
-
-    const createChallengeResult = createChallengeResponse.json("result") as unknown as CreateChallengeResponse;
-
+    console.log(
+        `[${identityIterator}]\tCurrent device id: ${currentIdentity.devices[0].deviceId}. Challenge created with device Id: ${createChallengeResult.createdByDevice}. Match = ${currentIdentity.devices[0].deviceId === createChallengeResult.createdByDevice}.\nClient username: ${client.username}, function username: ${username}. Match = ${client.username === username}.`
+    );
     check(createChallengeResult, {
         "challenge contains correct device": (r) => r.createdByDevice === currentIdentity.devices[0].deviceId,
         "challenge contains correct address": (r) => r.createdBy === currentIdentity.address,

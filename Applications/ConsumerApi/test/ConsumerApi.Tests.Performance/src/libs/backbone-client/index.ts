@@ -1,2 +1,2 @@
+export * from "./authenticated-enmshed-client";
 export * from "./constants";
-export * from "./identity";
