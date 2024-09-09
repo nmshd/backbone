@@ -150,10 +150,12 @@ In order to run the performance tests, you must load an appropriate snapshot of 
 > [!NOTE]
 > Both alternatives can be appended with `-- <extra> <parameters>`. Extra parameters are k6 parameters, some of which are explained below. 6. You must tweak the way the test is run to ensure it conforms with your preferences. The following CLI parameters are available:
 
-    | Key               | Possible Values         | Notes                          |
-    | ----------------- | ----------------------- | ------------------------------ |
-    | `--duration`      | `60m`, `4h`, etc.       | defaults to `1h` in most cases |
-    | `--address`       | `load-test.enmeshed.eu` | defaults to `localhost:8081`   |
-    | `--env snapshot=` | `heavy`                 | defaults to `light`            |
+    | Key                   | Possible Values               | Notes                          |
+    | --------------------- | -----------------------       | ------------------------------ |
+    | `--duration`          | `60m`, `4h`, etc.             | defaults to `1h` in most cases |
+    | `--address`           | `load-test.enmeshed.eu`       | defaults to `localhost:8081`   |
+    | `--env snapshot=`     | `heavy`                       | defaults to `light`            |
+    | `--env clientId=`     | any string                    | defaults to `test`             |
+    | `--env clientSecret=` | any string                    | defaults to `test`             |
 
     e.g.: `$ scripts/linux/run-test.sh s01 -- --address test.enmeshed.eu:443 --duration 4h`
