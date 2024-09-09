@@ -81,12 +81,18 @@ export function LoadDataRepresentationForEnmeshedPerformanceTests(
 
         const identities: Identity[] = [];
         parsedIdentities.forEach((csvIdentity) => {
-            const identity: Identity = {
-                address: csvIdentity.Address,
-                devices: [{ deviceId: csvIdentity.DeviceId, username: csvIdentity.Username, password: csvIdentity.Password }],
-                poolAlias: csvIdentity.Alias
-            };
-            identities.push(identity);
+            const device = { deviceId: csvIdentity.DeviceId, username: csvIdentity.Username, password: csvIdentity.Password };
+            const sameIdentityInPool = identities.find((i) => i.address === csvIdentity.Address);
+
+            if (sameIdentityInPool) {
+                sameIdentityInPool.devices.push(device);
+            } else {
+                identities.push({
+                    address: csvIdentity.Address,
+                    devices: [device],
+                    poolAlias: csvIdentity.Alias
+                });
+            }
         });
 
         const result: Pool[] = [];
