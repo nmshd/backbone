@@ -26,7 +26,7 @@ t=$(date +"%Y%m%d-%H%M%S")
 # Construct the file paths and commands
 testFile="./dist/${s}.test.js"
 outputFile="./k6-outputs/${t}-${s}.csv"
-resultAnalyzerScript="./tools/result-analyzer/src/main.js"
+resultAnalyzerFolder="./tools/result-analyzer"
 
 # ensure the the result analyzer has its dependencies installed
 
@@ -57,4 +57,8 @@ fi
 k6 run "$testFile" -o "csv=$outputFile" $k6Arguments
 
 # Run the result analyzer script
-node "$resultAnalyzerScript" "$outputFile"
+cd $resultAnalyzerFolder
+
+npx tsx "src/main.js" "$outputFile"
+
+cd ../..

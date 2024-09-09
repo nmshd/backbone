@@ -15,14 +15,14 @@ $t = Get-Date -Format "yyyyMMdd-HHmmss"
 # Construct the file paths and commands
 $testFile = ".\dist\$($s).test.js"
 $outputFile = "k6-outputs\$($t)-$($s).csv"
-$resultAnalyzerScript = ".\tools\result-analyzer\src\main.js"
+$resultAnalyzerFolder = ".\tools\result-analyzer"
 
 # Run the `npx webpack` command
 npx webpack
 
 Set-Location tools\result-analyzer
 
-npm i
+npm install
 
 Set-Location ..\..
 
@@ -45,7 +45,11 @@ try {
     k6 run $testFile -v -o "csv=$outputFile" @k6Arguments
 }
 finally {
+    Set-Location $resultAnalyzerFolder
+    
     # Run the result analyzer script
-    node $resultAnalyzerScript $outputFile
+    npx tsx \src\main.js $outputFile
+
+    Set-Location ..\..
 }
 
