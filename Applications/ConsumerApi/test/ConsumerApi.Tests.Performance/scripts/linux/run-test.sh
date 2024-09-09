@@ -26,15 +26,15 @@ t=$(date +"%Y%m%d-%H%M%S")
 # Construct the file paths and commands
 testFile="./dist/${s}.test.js"
 outputFile="./k6-outputs/${t}-${s}.csv"
-resultAnalyzerScript="./result-analyzer/src/main.js"
+resultAnalyzerScript="./tools/result-analyzer/src/main.js"
 
 # ensure the the result analyzer has its dependencies installed
 
-cd result-analyzer
+cd tools/result-analyzer
 
 npm i
 
-cd ..
+cd ../..
 
 mkdir -p k6-results
 

@@ -15,16 +15,16 @@ $t = Get-Date -Format "yyyyMMdd-HHmmss"
 # Construct the file paths and commands
 $testFile = ".\dist\$($s).test.js"
 $outputFile = "k6-outputs\$($t)-$($s).csv"
-$resultAnalyzerScript = ".\result-analyzer\src\main.js"
+$resultAnalyzerScript = ".\tools\result-analyzer\src\main.js"
 
 # Run the `npx webpack` command
 npx webpack
 
-Set-Location result-analyzer
+Set-Location tools\result-analyzer
 
 npm i
 
-Set-Location ..
+Set-Location ..\..
 
 New-Item -Path "k6-outputs" -ItemType Directory -Force
 
