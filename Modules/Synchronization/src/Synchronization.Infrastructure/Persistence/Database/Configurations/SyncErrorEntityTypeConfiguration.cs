@@ -14,6 +14,6 @@ public class SyncErrorEntityTypeConfiguration : EntityEntityTypeConfiguration<Sy
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.ErrorCode).HasMaxLength(50);
+        builder.Property(x => x.ErrorCode).HasMaxLength(100);
     }
 }
