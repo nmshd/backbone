@@ -1,7 +1,7 @@
 import { check } from "k6";
 import { SharedArray } from "k6/data";
 import { Options } from "k6/options";
-import { AuthenticatedEnmeshedClient } from "../libs/backbone-client";
+import { AuthenticatedEnmeshedClient } from "../libs/backbone-client/authenticated-enmshed-client";
 import { DataRepresentationForEnmeshedPerformanceTestsLoads } from "../libs/data-loader/models";
 import { LoadDataRepresentationForEnmeshedPerformanceTests } from "../libs/file-utils";
 

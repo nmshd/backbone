@@ -1,6 +1,6 @@
-import { apiVersion } from ".";
 import { CreateChallengeResponse, JwtResponse } from "../../models";
 import { BaseEnmeshedClient } from "./base-enmshed-client";
+import { apiVersion } from "./constants";
 import { FluentClient } from "./fluent-client";
 
 export class AuthenticatedEnmeshedClient extends BaseEnmeshedClient {

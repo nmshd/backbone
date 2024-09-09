@@ -2,10 +2,10 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 import { b64encode } from "k6/encoding";
 import { Response } from "k6/http";
-import { apiVersion } from ".";
 import { CreateChallengeResponse, CreateIdentityRequest } from "../../models";
 import { ChallengeRequestPayload, CryptoHelper } from "../crypto-helper";
 import { BaseEnmeshedClient } from "./base-enmshed-client";
+import { apiVersion } from "./constants";
 
 export class UnauthenticatedEnmeshedClient extends BaseEnmeshedClient {
     public constructor() {
