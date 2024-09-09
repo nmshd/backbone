@@ -44,10 +44,7 @@ class ErrorScreen extends StatelessWidget {
               style: TextStyle(fontSize: 18, color: Theme.of(context).colorScheme.tertiary, decoration: TextDecoration.none),
             ),
             Gaps.h16,
-            FilledButton(
-              onPressed: () => context.pop(),
-              child: Text(context.l10n.errorScreen_goToHome, style: TextStyle(fontSize: 16, color: Theme.of(context).colorScheme.onPrimary)),
-            ),
+            FilledButton(onPressed: () => context.pop(), child: Text(context.l10n.errorScreen_goToHome, style: const TextStyle(fontSize: 16))),
           ],
         ),
       ),
