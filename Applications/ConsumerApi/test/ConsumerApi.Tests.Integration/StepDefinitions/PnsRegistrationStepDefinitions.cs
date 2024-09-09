@@ -1,37 +1,29 @@
 ﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.ConsumerApi.Sdk;
-using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.PushNotifications.Types.Responses;
-using Backbone.ConsumerApi.Tests.Integration.Configuration;
-using Backbone.ConsumerApi.Tests.Integration.Support;
-using Microsoft.Extensions.Options;
+using Backbone.ConsumerApi.Tests.Integration.Contexts;
+using Backbone.ConsumerApi.Tests.Integration.Helpers;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
 [Binding]
-[Scope(Feature = "PUT /Devices/Self/PushNotifications")]
 internal class PnsRegistrationStepDefinitions
 {
-    private Client _sdk = null!;
-    private readonly ClientCredentials _clientCredentials;
-    private readonly HttpClient _httpClient;
-    private ApiResponse<UpdateDeviceRegistrationResponse>? _response;
+    private readonly ResponseContext _responseContext;
+    private readonly ClientPool _clientPool;
 
-    public PnsRegistrationStepDefinitions(HttpClientFactory factory, IOptions<HttpConfiguration> httpConfiguration)
+    private ApiResponse<UpdateDeviceRegistrationResponse>? _updateDeviceRegistrationResponse;
+
+    public PnsRegistrationStepDefinitions(ResponseContext responseContext, ClientPool clientPool)
     {
-        _httpClient = factory.CreateClient();
-        _clientCredentials = new ClientCredentials(httpConfiguration.Value.ClientCredentials.ClientId, httpConfiguration.Value.ClientCredentials.ClientSecret);
+        _responseContext = responseContext;
+        _clientPool = clientPool;
     }
 
-    [Given("the user is authenticated")]
-    public async Task GivenTheUserIsAuthenticated()
-    {
-        _sdk = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, Constants.DEVICE_PASSWORD);
-    }
+    #region When
 
-    [When("a PUT request is sent to the /Devices/Self/PushNotifications endpoint")]
-    public async Task WhenAPutRequestIsSentToTheDevicesSelfPushNotificationsEndpoint()
+    [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Devices/Self/PushNotifications endpoint")]
+    public async Task WhenIdentitySendsAPutRequestToTheDevicesSelfPushNotificationsEndpoint(string identityName)
     {
         var request = new UpdateDeviceRegistrationRequest
         {
@@ -40,18 +32,31 @@ internal class PnsRegistrationStepDefinitions
             AppId = "someAppId"
         };
 
-        _response = await _sdk.PushNotifications.RegisterForPushNotifications(request);
+        _responseContext.WhenResponse = _updateDeviceRegistrationResponse =
+            await _clientPool.FirstForIdentityName(identityName).PushNotifications.RegisterForPushNotifications(request);
     }
 
-    [Then(@"the response status code is (\d\d\d) \(.+\)")]
-    public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
+    [When($"{RegexFor.SINGLE_THING} sends a DELETE request to the /Devices/Self/PushNotifications endpoint")]
+    public async Task WhenIdentitySendsADeleteRequestToTheDevicesSelfPushNotificationsEndpoint(string identityName)
     {
-        ((int)_response!.Status).Should().Be(expectedStatusCode);
+        _responseContext.WhenResponse = await _clientPool.FirstForIdentityName(identityName).PushNotifications.UnregisterFromPushNotifications();
     }
 
-    [Then("the response contains the push identifier for the device")]
+    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Devices/Self/PushNotifications/SendTestNotification endpoint")]
+    public async Task WhenIdentitySendsAPostRequestToTheDevicesSelfPushNotificationsSendTestNotificationEndpoint(string identityName)
+    {
+        _responseContext.WhenResponse = await _clientPool.FirstForIdentityName(identityName).PushNotifications.SendTestNotification(new object());
+    }
+
+    #endregion
+
+    #region Then
+
+    [Then("the response contains the push identifier for the Device")]
     public void ThenTheResponseContainsThePushIdentifierForTheDevice()
     {
-        _response!.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();
+        _updateDeviceRegistrationResponse!.Result!.DevicePushIdentifier.Should().NotBeNullOrEmpty();
     }
+
+    #endregion
 }

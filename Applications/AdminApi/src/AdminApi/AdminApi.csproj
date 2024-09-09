@@ -32,21 +32,21 @@
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2" />
     </ItemGroup>
     <ItemGroup>
-        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Application\Challenges.Application.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Infrastructure\Challenges.Infrastructure.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Application\Devices.Application.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj" />
-        <ProjectReference Include="..\..\..\..\Infrastructure\Infrastructure.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Application\Quotas.Application.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
-        <ProjectReference Include="..\AdminApi.Infrastructure.Database.Postgres\AdminApi.Infrastructure.Database.Postgres.csproj" />
-        <ProjectReference Include="..\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj" />
-        <ProjectReference Include="..\AdminApi.Infrastructure\AdminApi.Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj"/>
+        <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Application\Challenges.Application.csproj"/>
+        <ProjectReference Include="..\..\..\..\Modules\Challenges\src\Challenges.Infrastructure\Challenges.Infrastructure.csproj"/>
+        <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Application\Devices.Application.csproj"/>
+        <ProjectReference Include="..\..\..\..\Modules\Devices\src\Devices.Infrastructure\Devices.Infrastructure.csproj"/>
+        <ProjectReference Include="..\..\..\..\Infrastructure\Infrastructure.csproj"/>
+        <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Application\Quotas.Application.csproj"/>
+        <ProjectReference Include="..\..\..\..\Modules\Quotas\src\Quotas.Infrastructure\Quotas.Infrastructure.csproj"/>
+        <ProjectReference Include="..\AdminApi.Infrastructure.Database.Postgres\AdminApi.Infrastructure.Database.Postgres.csproj"/>
+        <ProjectReference Include="..\AdminApi.Infrastructure.Database.SqlServer\AdminApi.Infrastructure.Database.SqlServer.csproj"/>
+        <ProjectReference Include="..\AdminApi.Infrastructure\AdminApi.Infrastructure.csproj"/>
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
-        <Delete Files="$(ProjectDir)appsettings.override.json" />
-        <Copy SourceFiles="..\..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true" />
+        <Delete Files="$(ProjectDir)appsettings.override.json"/>
+        <Copy SourceFiles="..\..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true"/>
     </Target>
 </Project>
