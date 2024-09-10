@@ -13,6 +13,7 @@ public class IdentityDeletionProcess : Entity
     private IdentityDeletionProcess()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        IdentityAddress = null!;
         _auditLog = null!;
         Id = null!;
     }
@@ -20,6 +21,7 @@ public class IdentityDeletionProcess : Entity
     private IdentityDeletionProcess(IdentityAddress createdBy, DeletionProcessStatus status)
     {
         Id = IdentityDeletionProcessId.Generate();
+        IdentityAddress = null!;
         CreatedAt = SystemTime.UtcNow;
         Status = status;
 
@@ -31,6 +33,7 @@ public class IdentityDeletionProcess : Entity
     private IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice)
     {
         Id = IdentityDeletionProcessId.Generate();
+        IdentityAddress = null!;
         CreatedAt = SystemTime.UtcNow;
 
         ApproveInternally(createdBy, createdByDevice);
@@ -39,6 +42,9 @@ public class IdentityDeletionProcess : Entity
     }
 
     public IdentityDeletionProcessId Id { get; }
+
+    private IdentityAddress IdentityAddress { get; }
+
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
     public DateTime CreatedAt { get; }
