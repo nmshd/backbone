@@ -6,12 +6,10 @@ namespace Backbone.ConsumerApi.InterBackboneCommunication;
 public class CustomAuthenticationMiddleware
 {
     private readonly RequestDelegate _next;
-    private readonly IAuthenticationService _authenticationService;
 
-    public CustomAuthenticationMiddleware(RequestDelegate next, IAuthenticationService authenticationService)
+    public CustomAuthenticationMiddleware(RequestDelegate next)
     {
         _next = next;
-        _authenticationService = authenticationService;
     }
 
     public async Task InvokeAsync(HttpContext context)
@@ -23,17 +21,6 @@ public class CustomAuthenticationMiddleware
 
         if (string.IsNullOrEmpty(fromBackbone))
         {
-            var authenticateResult = await _authenticationService.AuthenticateAsync(context, OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
-            if (authenticateResult.Succeeded)
-            {
-                context.User = authenticateResult.Principal;
-            }
-            else
-            {
-                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-                return;
-            }
-
             await _next(context);
         }
         else
@@ -42,7 +29,7 @@ public class CustomAuthenticationMiddleware
             // Example: Create a new ClaimsIdentity and set it in HttpContext.User
             var claims = new List<Claim>
         {
-            new Claim("address", "newUser"),
+            new Claim("address", context.Request.Headers["X-Identity-Proxy"].FirstOrDefault()!),
             new Claim(ClaimTypes.Role, "Admin")
         };
             var identity = new ClaimsIdentity(claims, "Custom");

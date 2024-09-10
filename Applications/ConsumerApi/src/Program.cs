@@ -210,10 +210,16 @@ static void Configure(WebApplication app)
 
     app.UseCors();
 
-    //app.UseAuthentication();
-    app.UseMiddleware<CustomAuthenticationMiddleware>();
-
+    app.UseAuthentication();
     app.UseAuthorization();
+
+    app.UseWhen(context => !context.Request.Headers.ContainsKey("X-From-Backbone"), appBuilder =>
+    {
+        appBuilder.UseAuthentication();
+        appBuilder.UseAuthorization();
+    });
+
+    app.UseMiddleware<CustomAuthenticationMiddleware>();
 
     app.MapControllers();
     app.MapHealthChecks("/health", new HealthCheckOptions
