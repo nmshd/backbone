@@ -93,12 +93,13 @@ public class Message : Entity
         CreatedBy = anonymizedIdentityAddress;
     }
 
-    public bool IsOrphaned(string didDomainName)
+    public void IsOrphaned(IdentityAddress identityAddress, string didDomainName)
     {
         var areAllRecipientsAnonymized = Recipients.All(r => IsAnonymized(r.Address, didDomainName));
         var isSenderAnonymized = IsAnonymized(CreatedBy, didDomainName);
 
-        return isSenderAnonymized && areAllRecipientsAnonymized;
+        if (areAllRecipientsAnonymized & isSenderAnonymized)
+            RaiseDomainEvent(new MessageOrphanedDomainEvent(this, identityAddress));
     }
 
     public static bool IsAnonymized(IdentityAddress address, string didDomainName)
