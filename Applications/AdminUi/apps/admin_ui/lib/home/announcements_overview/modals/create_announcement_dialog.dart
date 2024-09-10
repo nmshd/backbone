@@ -89,10 +89,9 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                 _AnnouncementField(label: '${context.l10n.body} (${context.l10n.createAnnouncement_english})*', controller: _englishBodyController),
                 LanguageMultiSelect(
                   selectedLanguages: _selectedLanguages,
-                  onSelectedLanguagesChanged: (selectedOptions) {
-                    setState(() => _selectedLanguages = selectedOptions);
-                  },
+                  onSelectedLanguagesChanged: (selectedLanguages) => setState(() => _selectedLanguages = selectedLanguages),
                 ),
+                Gaps.h16,
                 if (_selectedLanguages.contains(OptionalLanguageType.german.name)) ...[
                   _AnnouncementField(
                     label: '${context.l10n.title} (${context.l10n.createAnnouncement_german})',
@@ -123,7 +122,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
                     controller: _bodyControllers[OptionalLanguageType.italian]!,
                   ),
                 ],
-                Gaps.h16,
+                Gaps.h8,
                 TextFormField(
                   readOnly: true,
                   decoration: InputDecoration(
