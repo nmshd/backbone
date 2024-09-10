@@ -4,8 +4,13 @@ using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
+using Backbone.Modules.Messages.Application;
+using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
+using Backbone.Modules.Messages.Domain.Entities;
 using CSharpFunctionalExtensions;
 using MediatR;
+using Microsoft.Extensions.Options;
 
 namespace Backbone.Job.IdentityDeletion.Workers;
 
@@ -16,19 +21,25 @@ public class ActualDeletionWorker : IHostedService
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<ActualDeletionWorker> _logger;
     private readonly List<IIdentityDeleter> _identityDeleters;
+    private readonly IMessagesRepository _messagesRepository;
+    private readonly ApplicationOptions _applicationOptions;
 
     public ActualDeletionWorker(
         IHostApplicationLifetime host,
         IEnumerable<IIdentityDeleter> identityDeleters,
         IMediator mediator,
         IPushNotificationSender pushNotificationSender,
-        ILogger<ActualDeletionWorker> logger)
+        ILogger<ActualDeletionWorker> logger,
+        IMessagesRepository messageRepository,
+        IOptions<ApplicationOptions> applicationOptions)
     {
         _host = host;
         _identityDeleters = identityDeleters.ToList();
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
         _logger = logger;
+        _messagesRepository = messageRepository;
+        _applicationOptions = applicationOptions.Value;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -59,6 +70,8 @@ public class ActualDeletionWorker : IHostedService
         foreach (var identityAddress in addresses)
         {
             await ExecuteDeletion(identityAddress, cancellationToken);
+
+            await RaiseOrphanedMessageEvent(cancellationToken, identityAddress);
         }
     }
 
@@ -66,6 +79,15 @@ public class ActualDeletionWorker : IHostedService
     {
         await NotifyIdentityAboutStartingDeletion(identityAddress, cancellationToken);
         await Delete(identityAddress);
+    }
+    private async Task RaiseOrphanedMessageEvent(CancellationToken cancellationToken, IdentityAddress identityAddress)
+    {
+        var messages = await _messagesRepository.Find(Message.HasParticipant(identityAddress), cancellationToken);
+
+        foreach (var message in messages)
+        {
+            message.IsOrphaned(identityAddress, _applicationOptions.DidDomainName);
+        }
     }
 
     private async Task NotifyIdentityAboutStartingDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
