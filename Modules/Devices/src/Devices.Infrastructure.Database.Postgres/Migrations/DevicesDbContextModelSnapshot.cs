@@ -336,6 +336,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("IdentityAddress")
+                        .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character varying(80)")
@@ -356,6 +357,10 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityAddress");
+
+                    b.HasIndex(new[] { "IdentityAddress" }, "IX_only_one_active_deletion_process")
+                        .IsUnique()
+                        .HasFilter("\"Status\" = 1");
 
                     b.ToTable("IdentityDeletionProcesses", "Devices");
                 });
@@ -786,7 +791,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", null)
                         .WithMany("DeletionProcesses")
                         .HasForeignKey("IdentityAddress")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcessAuditLogEntry", b =>

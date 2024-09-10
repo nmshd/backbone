@@ -32,6 +32,7 @@ public static class Dependencies
         services.AddScoped<IdentitiesContext>();
         services.AddScoped<MessagesContext>();
         services.AddScoped<RelationshipsContext>();
+        services.AddScoped<RelationshipTemplatesContext>();
         services.AddScoped<ResponseContext>();
         services.AddScoped<TokensContext>();
 
