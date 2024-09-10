@@ -15,6 +15,11 @@ public static class TestData
     public static readonly RelationshipTemplate RELATIONSHIP_TEMPLATE_OF_1 = new(IDENTITY_1, DEVICE_1, 1, null, []);
     public static readonly RelationshipTemplate RELATIONSHIP_TEMPLATE_OF_2 = new(IDENTITY_2, DEVICE_2, 1, null, []);
 
+    public static RelationshipTemplate CreateRelationshipTemplate(IdentityAddress creatorAddress, IdentityAddress? forIdentityAddress)
+    {
+        return new RelationshipTemplate(creatorAddress, DeviceId.New(), 999, null, [], forIdentityAddress);
+    }
+
     public static Relationship CreatePendingRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
     {
         to ??= IDENTITY_2;

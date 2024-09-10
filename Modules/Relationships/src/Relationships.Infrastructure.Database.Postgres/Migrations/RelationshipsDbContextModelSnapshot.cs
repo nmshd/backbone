@@ -54,6 +54,12 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                     b.Property<DateTime?>("ExpiresAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("ForIdentity")
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
+
                     b.Property<int?>("MaxNumberOfAllocations")
                         .HasColumnType("integer");
 

@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using MediatR;
@@ -18,12 +19,14 @@ public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, Create
 
     public async Task<CreateRelationshipTemplateResponse> Handle(CreateRelationshipTemplateCommand request, CancellationToken cancellationToken)
     {
+        var forIdentity = request.ForIdentity == null ? null : IdentityAddress.Parse(request.ForIdentity);
         var template = new RelationshipTemplate(
             _userContext.GetAddress(),
             _userContext.GetDeviceId(),
             request.MaxNumberOfAllocations,
             request.ExpiresAt,
-            request.Content);
+            request.Content,
+            forIdentity);
 
         await _relationshipTemplatesRepository.Add(template, cancellationToken);
 
