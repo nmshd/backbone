@@ -41,6 +41,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         var template = await (track ? _templates : _readOnlyTemplates)
             .Include(r => r.Allocations)
             .NotExpiredFor(identityAddress)
+            .Where(RelationshipTemplate.CanBeCollectedBy(identityAddress))
             .FirstWithIdOrDefault(id, cancellationToken);
 
         return template;
@@ -52,6 +53,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         var query = (track ? _templates : _readOnlyTemplates)
             .AsQueryable()
             .NotExpiredFor(identityAddress)
+            .Where(RelationshipTemplate.CanBeCollectedBy(identityAddress))
             .WithIdIn(ids);
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
