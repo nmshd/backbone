@@ -10,6 +10,7 @@ using Backbone.Common.Infrastructure;
 using Backbone.ConsumerApi;
 using Backbone.ConsumerApi.Configuration;
 using Backbone.ConsumerApi.Extensions;
+using Backbone.ConsumerApi.InterBackboneCommunication;
 using Backbone.Infrastructure.EventBus;
 using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
@@ -209,7 +210,10 @@ static void Configure(WebApplication app)
 
     app.UseCors();
 
-    app.UseAuthentication().UseAuthorization();
+    //app.UseAuthentication();
+    app.UseMiddleware<CustomAuthenticationMiddleware>();
+
+    app.UseAuthorization();
 
     app.MapControllers();
     app.MapHealthChecks("/health", new HealthCheckOptions
