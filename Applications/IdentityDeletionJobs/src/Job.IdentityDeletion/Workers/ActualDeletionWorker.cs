@@ -6,7 +6,6 @@ using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeleti
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Messages.Application;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
 using CSharpFunctionalExtensions;
 using MediatR;
@@ -70,8 +69,7 @@ public class ActualDeletionWorker : IHostedService
         foreach (var identityAddress in addresses)
         {
             await ExecuteDeletion(identityAddress, cancellationToken);
-
-            await RaiseOrphanedMessageEvent(cancellationToken, identityAddress);
+            await CheckForOrphanedMessages(identityAddress, cancellationToken);
         }
     }
 
@@ -80,7 +78,7 @@ public class ActualDeletionWorker : IHostedService
         await NotifyIdentityAboutStartingDeletion(identityAddress, cancellationToken);
         await Delete(identityAddress);
     }
-    private async Task RaiseOrphanedMessageEvent(CancellationToken cancellationToken, IdentityAddress identityAddress)
+    private async Task CheckForOrphanedMessages(IdentityAddress identityAddress, CancellationToken cancellationToken)
     {
         var messages = await _messagesRepository.Find(Message.HasParticipant(identityAddress), cancellationToken);
 
