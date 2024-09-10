@@ -18,7 +18,7 @@ public class RelationshipTemplate : Entity
         CreatedByDevice = null!;
     }
 
-    public RelationshipTemplate(IdentityAddress createdBy, DeviceId createdByDevice, int? maxNumberOfAllocations, DateTime? expiresAt, byte[] content)
+    public RelationshipTemplate(IdentityAddress createdBy, DeviceId createdByDevice, int? maxNumberOfAllocations, DateTime? expiresAt, byte[] content, IdentityAddress? forIdentity = null)
     {
         Id = RelationshipTemplateId.New();
         CreatedAt = SystemTime.UtcNow;
@@ -28,6 +28,7 @@ public class RelationshipTemplate : Entity
         MaxNumberOfAllocations = maxNumberOfAllocations;
         ExpiresAt = expiresAt;
         Content = content;
+        ForIdentity = forIdentity;
 
         RaiseDomainEvent(new RelationshipTemplateCreatedDomainEvent(this));
     }
@@ -43,6 +44,8 @@ public class RelationshipTemplate : Entity
     public byte[]? Content { get; private set; }
 
     public DateTime CreatedAt { get; set; }
+
+    public IdentityAddress? ForIdentity { get; set; }
 
     public List<RelationshipTemplateAllocation> Allocations { get; set; } = [];
 
@@ -63,5 +66,10 @@ public class RelationshipTemplate : Entity
     public static Expression<Func<RelationshipTemplate, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
         return r => r.CreatedBy == identityAddress.ToString();
+    }
+
+    public static Expression<Func<RelationshipTemplate, bool>> CanBeCollectedBy(IdentityAddress address)
+    {
+        return relationshipTemplate => relationshipTemplate.ForIdentity == null || relationshipTemplate.ForIdentity == address || relationshipTemplate.CreatedBy == address;
     }
 }
