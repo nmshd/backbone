@@ -13,6 +13,7 @@ public class RelationshipTemplateDTO
         ExpiresAt = relationshipTemplate.ExpiresAt;
         Content = relationshipTemplate.Content;
         CreatedAt = relationshipTemplate.CreatedAt;
+        ForIdentity = relationshipTemplate.ForIdentity?.Value;
     }
 
     public string Id { get; set; }
@@ -22,4 +23,5 @@ public class RelationshipTemplateDTO
     public DateTime? ExpiresAt { get; set; }
     public byte[]? Content { get; set; }
     public DateTime CreatedAt { get; set; }
+    public string? ForIdentity { get; set; }
 }
