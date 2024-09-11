@@ -1,9 +1,9 @@
 import { check } from "k6";
 import { SharedArray } from "k6/data";
 import { Options } from "k6/options";
-import { AuthenticatedEnmeshedClient } from "../libs/backbone-client/authenticated-enmshed-client";
+import { AuthenticatedClient } from "../libs/backbone-client/authenticated-client";
 import { DataRepresentationForEnmeshedPerformanceTestsLoads } from "../libs/data-loader/models";
-import { LoadDataRepresentationForEnmeshedPerformanceTests } from "../libs/file-utils";
+import { loadDataRepresentation } from "../libs/file-utils";
 
 export const options: Options = {
     scenarios: {
@@ -19,7 +19,7 @@ export const options: Options = {
 
 const snapshot = (__ENV.snapshot as string | undefined) ?? "light";
 
-const pools = LoadDataRepresentationForEnmeshedPerformanceTests(snapshot, [DataRepresentationForEnmeshedPerformanceTestsLoads.Identities]).ofTypes("a", "c").pools;
+const pools = loadDataRepresentation(snapshot, [DataRepresentationForEnmeshedPerformanceTestsLoads.Identities]).ofTypes("a", "c").pools;
 
 const testIdentities = new SharedArray("testIdentities", function () {
     return pools.flatMap((p) => p.identities);
@@ -32,7 +32,7 @@ export default function (): void {
 
     const username = currentIdentity.devices[0].username;
     const password = currentIdentity.devices[0].password;
-    const client = new AuthenticatedEnmeshedClient(username, password);
+    const client = new AuthenticatedClient(username, password);
 
     const createChallengeResult = client.getChallenge();
 

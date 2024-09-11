@@ -20,7 +20,7 @@ export interface CreateIdentityResponse {
     };
 }
 
-export interface IdentityWithToken extends Identity {
+export interface IdentityWithAccessToken extends Identity {
     response: CreateIdentityResponse;
     token: JwtResponse;
     tokenExpiresAt: Date;

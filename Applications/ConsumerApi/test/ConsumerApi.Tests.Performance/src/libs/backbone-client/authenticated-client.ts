@@ -1,9 +1,9 @@
 import { CreateChallengeResponse, JwtResponse } from "../../models";
-import { BaseEnmeshedClient } from "./base-enmshed-client";
+import { BaseClient } from "./base-client";
 import { apiVersion } from "./constants";
 import { FluentClient } from "./fluent-client";
 
-export class AuthenticatedEnmeshedClient extends BaseEnmeshedClient {
+export class AuthenticatedClient extends BaseClient {
     public readonly username: string;
     private readonly password: string;
 
@@ -47,6 +47,6 @@ export class AuthenticatedEnmeshedClient extends BaseEnmeshedClient {
     }
 
     public getChallenge(): CreateChallengeResponse {
-        return this.client.setEndpoint(`api/${apiVersion}/Challenges`).asJson().authenticate(this.getAccessToken()).post<CreateChallengeResponse>(null);
+        return this.client.setEndpoint(`api/${apiVersion}/Challenges`).withJsonBody().authenticate(this.getAccessToken()).post<CreateChallengeResponse>(null);
     }
 }

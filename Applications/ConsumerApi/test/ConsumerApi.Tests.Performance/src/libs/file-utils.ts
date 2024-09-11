@@ -1,23 +1,25 @@
 import { SharedArray } from "k6/data";
 import papaparse from "papaparse";
-import { DataRepresentationForEnmeshedPerformanceTests, DataRepresentationForEnmeshedPerformanceTestsLoads, Identity, Pool } from "./data-loader/models";
+import {
+    DataRepresentationForEnmeshedPerformanceTests as DataRepresentation,
+    DataRepresentationForEnmeshedPerformanceTestsLoads as DataRepresentationLoads,
+    Identity,
+    Pool
+} from "./data-loader/models";
 
 /**
  *
  * @param folderName The name of the folder matching the name of the snapshot to load
- * @param whatoToLoad An array of {@link DataRepresentationForEnmeshedPerformanceTestsLoads} representing the entities to be loaded
+ * @param whatoToLoad An array of {@link DataRepresentationLoads} representing the entities to be loaded
  * @returns a DataRepresentationForEnmeshedPerformanceTests populated according to @link{whatoToLoad}
  */
-export function LoadDataRepresentationForEnmeshedPerformanceTests(
-    folderName: string,
-    whatoToLoad: DataRepresentationForEnmeshedPerformanceTestsLoads[] = [DataRepresentationForEnmeshedPerformanceTestsLoads.Identities]
-): DataRepresentationForEnmeshedPerformanceTests {
+export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepresentationLoads[] = [DataRepresentationLoads.Identities]): DataRepresentation {
     const csvFilesPath = `../snapshots/${folderName}/csvs`;
     let pools: Pool[];
     let identitiesMap: Map<string, Identity>;
 
     const poolsReturn = new SharedArray("pools", function () {
-        if (!whatoToLoad.includes(DataRepresentationForEnmeshedPerformanceTestsLoads.Identities)) {
+        if (!whatoToLoad.includes(DataRepresentationLoads.Identities)) {
             console.warn("whatToLoad does not include Identities but they must always be loaded. Loading either way...");
         }
 
@@ -25,22 +27,22 @@ export function LoadDataRepresentationForEnmeshedPerformanceTests(
         pools = LoadPoolsWithIdentities();
         identitiesMap = PopulateIdentitiesMap();
 
-        if (whatoToLoad.includes(DataRepresentationForEnmeshedPerformanceTestsLoads.DatawalletModifications)) {
+        if (whatoToLoad.includes(DataRepresentationLoads.DatawalletModifications)) {
             console.info("Loading datawallet modifications");
             LoadDataWalletModifications();
         }
 
-        if (whatoToLoad.includes(DataRepresentationForEnmeshedPerformanceTestsLoads.RelationshipTemplates)) {
+        if (whatoToLoad.includes(DataRepresentationLoads.RelationshipTemplates)) {
             console.info("Loading relationship templates");
             LoadRelationshipTemplates();
         }
 
-        if (whatoToLoad.includes(DataRepresentationForEnmeshedPerformanceTestsLoads.Relationships)) {
+        if (whatoToLoad.includes(DataRepresentationLoads.Relationships)) {
             console.info("Loading relationships");
             LoadRelationships();
         }
 
-        if (whatoToLoad.includes(DataRepresentationForEnmeshedPerformanceTestsLoads.Messages)) {
+        if (whatoToLoad.includes(DataRepresentationLoads.Messages)) {
             console.info("Loading messages");
             LoadMessages();
         }
@@ -49,7 +51,7 @@ export function LoadDataRepresentationForEnmeshedPerformanceTests(
         return pools;
     });
 
-    return new DataRepresentationForEnmeshedPerformanceTests(poolsReturn);
+    return new DataRepresentation(poolsReturn);
 
     function LoadDataWalletModifications() {
         const DatawalletModificationsFile = open(`${csvFilesPath}/datawalletModifications.csv`);

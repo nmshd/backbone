@@ -1,4 +1,3 @@
-// @ts-expect-error: k6 uses links to packages, which typescript cannot lint.
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 
 export class FluentClient {
@@ -25,7 +24,7 @@ export class FluentClient {
         return this;
     }
 
-    public asJson(): this {
+    public withJsonBody(): this {
         this.headers = { ...this.headers, "Content-Type": "application/json" };
         return this;
     }

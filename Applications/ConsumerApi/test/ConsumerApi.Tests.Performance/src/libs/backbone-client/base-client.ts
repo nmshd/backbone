@@ -1,9 +1,8 @@
-// @ts-expect-error: k6 uses links to packages, which typescript cannot lint.
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
 import { defaultBaseUrl } from "./constants";
 import { FluentClient } from "./fluent-client";
 
-export class BaseEnmeshedClient {
+export class BaseClient {
     protected readonly clientId: string;
     protected readonly clientSecret: string;
     protected readonly client: FluentClient;
