@@ -93,19 +93,6 @@ public class Message : Entity
         CreatedBy = anonymizedIdentityAddress;
     }
 
-    public bool IsOrphaned(IdentityAddress identityAddress, string didDomainName)
-    {
-        var areAllRecipientsAnonymized = Recipients.All(r => IsAnonymized(r.Address, didDomainName));
-        var isSenderAnonymized = IsAnonymized(CreatedBy, didDomainName);
-
-        return areAllRecipientsAnonymized & isSenderAnonymized;
-    }
-
-    public static bool IsAnonymized(IdentityAddress address, string didDomainName)
-    {
-        return address == IdentityAddress.GetAnonymized(didDomainName);
-    }
-
     #region Expressions
 
     public static Expression<Func<Message, bool>> HasParticipant(IdentityAddress identityAddress)
