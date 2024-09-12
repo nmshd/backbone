@@ -2,7 +2,7 @@ import { check } from "k6";
 import { SharedArray } from "k6/data";
 import { Options } from "k6/options";
 import { AuthenticatedClient } from "../libs/backbone-client/authenticated-client";
-import { DataRepresentationForEnmeshedPerformanceTestsLoads } from "../libs/data-loader/models";
+import { DataRepresentationLoads } from "../libs/data-loader/models";
 import { loadDataRepresentation } from "../libs/file-utils";
 
 export const options: Options = {
@@ -19,7 +19,7 @@ export const options: Options = {
 
 const snapshot = (__ENV.snapshot as string | undefined) ?? "light";
 
-const pools = loadDataRepresentation(snapshot, [DataRepresentationForEnmeshedPerformanceTestsLoads.Identities]).ofTypes("a", "c").pools;
+const pools = loadDataRepresentation(snapshot, [DataRepresentationLoads.Identities]).ofTypes("a", "c").pools;
 
 const testIdentities = new SharedArray("testIdentities", function () {
     return pools.flatMap((p) => p.identities);

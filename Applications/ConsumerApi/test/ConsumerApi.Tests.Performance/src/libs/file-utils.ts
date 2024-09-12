@@ -1,11 +1,6 @@
 import { SharedArray } from "k6/data";
 import papaparse from "papaparse";
-import {
-    DataRepresentationForEnmeshedPerformanceTests as DataRepresentation,
-    DataRepresentationForEnmeshedPerformanceTestsLoads as DataRepresentationLoads,
-    Identity,
-    Pool
-} from "./data-loader/models";
+import { DataRepresentation, DataRepresentationLoads, Identity, Pool } from "./data-loader/models";
 
 /**
  *
@@ -23,37 +18,39 @@ export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepr
             console.warn("whatToLoad does not include Identities but they must always be loaded. Loading either way...");
         }
 
-        console.info("Loading identities");
-        pools = LoadPoolsWithIdentities();
+        console.info(`Started loading ${folderName} snapshot. Loading identities`);
+        const start = +new Date();
+
+        pools = loadPoolsWithIdentities();
         identitiesMap = PopulateIdentitiesMap();
 
         if (whatoToLoad.includes(DataRepresentationLoads.DatawalletModifications)) {
             console.info("Loading datawallet modifications");
-            LoadDataWalletModifications();
+            loadDataWalletModifications();
         }
 
         if (whatoToLoad.includes(DataRepresentationLoads.RelationshipTemplates)) {
             console.info("Loading relationship templates");
-            LoadRelationshipTemplates();
+            loadRelationshipTemplates();
         }
 
         if (whatoToLoad.includes(DataRepresentationLoads.Relationships)) {
             console.info("Loading relationships");
-            LoadRelationships();
+            loadRelationships();
         }
 
         if (whatoToLoad.includes(DataRepresentationLoads.Messages)) {
             console.info("Loading messages");
-            LoadMessages();
+            loadMessages();
         }
 
-        console.info("Finished Loading");
+        console.info(`Finished Loading in ${+new Date() - start}ms`);
         return pools;
     });
 
     return new DataRepresentation(poolsReturn);
 
-    function LoadDataWalletModifications() {
+    function loadDataWalletModifications() {
         const DatawalletModificationsFile = open(`${csvFilesPath}/datawalletModifications.csv`);
         const parsedDatawalletModifications = papaparse.parse<CSVDatawalletModification>(DatawalletModificationsFile, { header: true }).data.filter((x) => x.IdentityAddress !== "");
 
@@ -77,7 +74,7 @@ export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepr
         });
     }
 
-    function LoadPoolsWithIdentities() {
+    function loadPoolsWithIdentities() {
         const identitiesFile = open(`${csvFilesPath}/identities.csv`);
         const parsedIdentities = papaparse.parse<CSVIdentity>(identitiesFile, { header: true }).data.filter((x) => x.Address !== "");
 
@@ -114,7 +111,7 @@ export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepr
         return result;
     }
 
-    function LoadRelationshipTemplates() {
+    function loadRelationshipTemplates() {
         const RelationshipTemplatesFile = open(`${csvFilesPath}/relationshipTemplates.csv`);
         const parsedRelationshipTemplates = papaparse.parse<CSVRelationshipTemplate>(RelationshipTemplatesFile, { header: true }).data.filter((x) => x.IdentityAddress !== "");
 
@@ -128,7 +125,7 @@ export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepr
         });
     }
 
-    function LoadRelationships() {
+    function loadRelationships() {
         const RelationshipsFile = open(`${csvFilesPath}/relationships.csv`);
         const parsedRelationships = papaparse.parse<CSVRelationship>(RelationshipsFile, { header: true }).data.filter((x) => x.AddressFrom !== "");
         parsedRelationships.forEach((relationship) => {
@@ -143,7 +140,7 @@ export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepr
         });
     }
 
-    function LoadMessages() {
+    function loadMessages() {
         const MessagesFile = open(`${csvFilesPath}/messages.csv`);
         const parsedMessages = papaparse.parse<CSVMessage>(MessagesFile, { header: true }).data.filter((x) => x.AddressFrom !== "");
         parsedMessages.forEach((message) => {
