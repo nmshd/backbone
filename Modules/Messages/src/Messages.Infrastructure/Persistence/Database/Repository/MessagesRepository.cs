@@ -83,9 +83,8 @@ public class MessagesRepository : IMessagesRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task Delete(Message message)
+    public async Task Delete(Expression<Func<Message, bool>> filter, CancellationToken cancellationToken)
     {
-        _messages.Remove(message);
-        await _dbContext.SaveChangesAsync();
+        await _messages.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 }
