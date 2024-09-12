@@ -99,8 +99,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         identityDeleters ??= [A.Dummy<IIdentityDeleter>()];
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
         var logger = A.Dummy<ILogger<ActualDeletionWorker>>();
-        var messages = A.Dummy<IMessagesRepository>();
-        var options = A.Dummy<IOptions<ApplicationOptions>>();
-        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, logger, messages, options);
+        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, logger);
     }
 }
