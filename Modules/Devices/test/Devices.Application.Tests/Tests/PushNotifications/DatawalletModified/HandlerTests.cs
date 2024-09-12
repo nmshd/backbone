@@ -9,7 +9,6 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors;
 using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
@@ -41,6 +40,25 @@ public class HandlerTests : AbstractTestsBase
 
         // Assert
         A.CallTo(() => mockConnector.Send(A<IEnumerable<PnsRegistration>>._, A<IPushNotification>._)).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task Creating_a_Datawallet_modification_sends_a_filtered_notification()
+    {
+        // Arrange
+        var device = UnitTestTools.Data.TestDataGenerator.CreateRandomDeviceId();
+        var identity = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress();
+        var mockSender = A.Fake<IPushNotificationSender>();
+        var handler = new DatawalletModifiedDomainEventHandler(mockSender);
+        var domainEvent = new DatawalletModifiedDomainEvent { Identity = identity, ModifiedByDevice = device };
+
+        // Act
+        await handler.Handle(domainEvent);
+
+        // Assert
+        A.CallTo(() => mockSender.SendFilteredNotification(
+            A<IdentityAddress>._, A<IPushNotification>._, A<IEnumerable<string>>._, A<CancellationToken>._)
+        ).MustHaveHappenedOnceExactly();
     }
 
     private static PnsRegistration CreateRandomRegistration(IdentityAddress identity)
