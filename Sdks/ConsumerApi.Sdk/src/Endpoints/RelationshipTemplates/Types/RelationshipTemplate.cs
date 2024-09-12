@@ -10,4 +10,5 @@ public class RelationshipTemplate
     public DateTime? ExpiresAt { get; set; }
     public byte[]? Content { get; set; }
     public required DateTime CreatedAt { get; set; }
+    public string? ForIdentity { get; set; }
 }
