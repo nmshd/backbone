@@ -20,25 +20,19 @@ public class ActualDeletionWorker : IHostedService
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<ActualDeletionWorker> _logger;
     private readonly List<IIdentityDeleter> _identityDeleters;
-    private readonly IMessagesRepository _messagesRepository;
-    private readonly ApplicationOptions _applicationOptions;
 
     public ActualDeletionWorker(
         IHostApplicationLifetime host,
         IEnumerable<IIdentityDeleter> identityDeleters,
         IMediator mediator,
         IPushNotificationSender pushNotificationSender,
-        ILogger<ActualDeletionWorker> logger,
-        IMessagesRepository messageRepository,
-        IOptions<ApplicationOptions> applicationOptions)
+        ILogger<ActualDeletionWorker> logger)
     {
         _host = host;
         _identityDeleters = identityDeleters.ToList();
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
         _logger = logger;
-        _messagesRepository = messageRepository;
-        _applicationOptions = applicationOptions.Value;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -69,7 +63,6 @@ public class ActualDeletionWorker : IHostedService
         foreach (var identityAddress in addresses)
         {
             await ExecuteDeletion(identityAddress, cancellationToken);
-            await CheckForOrphanedMessages(identityAddress, cancellationToken);
         }
     }
 
@@ -77,15 +70,6 @@ public class ActualDeletionWorker : IHostedService
     {
         await NotifyIdentityAboutStartingDeletion(identityAddress, cancellationToken);
         await Delete(identityAddress);
-    }
-    private async Task CheckForOrphanedMessages(IdentityAddress identityAddress, CancellationToken cancellationToken)
-    {
-        var messages = await _messagesRepository.Find(Message.HasParticipant(identityAddress), cancellationToken);
-
-        foreach (var message in messages)
-        {
-            message.IsOrphaned(identityAddress, _applicationOptions.DidDomainName);
-        }
     }
 
     private async Task NotifyIdentityAboutStartingDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
