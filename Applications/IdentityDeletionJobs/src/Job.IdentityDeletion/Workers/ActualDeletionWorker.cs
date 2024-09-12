@@ -4,12 +4,8 @@ using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
-using Backbone.Modules.Messages.Application;
-using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Messages.Domain.Entities;
 using CSharpFunctionalExtensions;
 using MediatR;
-using Microsoft.Extensions.Options;
 
 namespace Backbone.Job.IdentityDeletion.Workers;
 
