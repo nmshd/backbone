@@ -121,12 +121,11 @@ public class ExpressionTests : AbstractTestsBase
     #region IsMessageOrphaned
 
     [Fact]
-    public void IsMessageOrphaned_should_return_true_when_sender_and_all_recipients_are_anonymized()
+    public void IsMessageOrphaned_is_true_when_sender_and_all_recipients_are_anonymized()
     {
         // Arrange
         var message = CreateMessageWithTwoRecipients();
         message.ReplaceIdentityAddress(message.CreatedBy, ANONYMIZED_ADDRESS);
-
         foreach (var recipient in message.Recipients)
         {
             message.ReplaceIdentityAddress(recipient.Address, ANONYMIZED_ADDRESS);
@@ -140,11 +139,10 @@ public class ExpressionTests : AbstractTestsBase
     }
 
     [Fact]
-    public void IsMessageOrphaned_should_return_false_when_sender_is_not_anonymized()
+    public void IsMessageOrphaned_is_false_when_sender_is_not_anonymized()
     {
         // Arrange
         var message = CreateMessageWithTwoRecipients();
-
         foreach (var recipient in message.Recipients)
         {
             message.ReplaceIdentityAddress(recipient.Address, ANONYMIZED_ADDRESS);
@@ -158,7 +156,7 @@ public class ExpressionTests : AbstractTestsBase
     }
 
     [Fact]
-    public void IsMessageOrphaned_should_return_false_when_one_recipient_is_not_anonymized()
+    public void IsMessageOrphaned_is_false_when_one_recipient_is_not_anonymized()
     {
         // Arrange
         var message = CreateMessageWithTwoRecipients();
