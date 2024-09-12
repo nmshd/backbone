@@ -18,6 +18,6 @@ public class Handler : IRequestHandler<DeleteOrphanedMessagesCommand>
 
     public async Task Handle(DeleteOrphanedMessagesCommand request, CancellationToken cancellationToken)
     {
-        await _messagesRepository.Delete(Message.IsOrphanedExpression(_applicationOptions.DidDomainName), cancellationToken);
+        await _messagesRepository.Delete(Message.IsMessageOrphaned(_applicationOptions.DidDomainName), cancellationToken);
     }
 }

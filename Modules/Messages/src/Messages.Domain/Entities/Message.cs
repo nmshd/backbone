@@ -117,6 +117,14 @@ public class Message : Entity
             i.Recipients.Any(r => r.Address == identityAddress && !r.IsRelationshipDecomposedByRecipient);
     }
 
+    public static Expression<Func<Message, bool>> IsMessageOrphaned(string didDomainName)
+    {
+        return i =>
+            i.CreatedBy == IdentityAddress.GetAnonymized(didDomainName) &
+            i.Recipients.All(r => r.Address == IdentityAddress.GetAnonymized(didDomainName));
+    }
+
+
     public static Expression<Func<Message, bool>> WasExchangedBetween(IdentityAddress identityAddress1, IdentityAddress identityAddress2)
     {
         return m =>
