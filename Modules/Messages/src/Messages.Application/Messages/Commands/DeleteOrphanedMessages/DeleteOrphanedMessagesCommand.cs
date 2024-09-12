@@ -4,10 +4,7 @@ namespace Backbone.Modules.Messages.Application.Messages.Commands.DeleteOrphaned
 
 public class DeleteOrphanedMessagesCommand : IRequest
 {
-    public DeleteOrphanedMessagesCommand(string identityAddress)
+    public DeleteOrphanedMessagesCommand()
     {
-        IdentityAddress = identityAddress;
     }
-
-    public string IdentityAddress { get; set; }
 }
