@@ -1,79 +1,14 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
+import { FluentRequest } from "./fluent-request";
 
 export class FluentClient {
-    private readonly client: Httpx;
-    private endpoint!: string;
-    private headers!: Record<string, string | number | string[]>;
+    public readonly httpxClient: Httpx;
 
     public constructor(client: Httpx) {
-        this.client = client;
+        this.httpxClient = client;
     }
 
-    public setEndpoint(endpoint: string): this {
-        this.endpoint = endpoint;
-        return this;
-    }
-
-    public setHeaders(headers: Record<string, string | number | string[]>): this {
-        this.headers = headers;
-        return this;
-    }
-
-    public authenticate(token: string): this {
-        this.headers = { ...this.headers, Authorization: token };
-        return this;
-    }
-
-    public withJsonBody(): this {
-        this.headers = { ...this.headers, "Content-Type": "application/json" };
-        return this;
-    }
-
-    public post<T>(body: any | null, jsonRootKey: string | null = "result"): T {
-        const response = this.client.post(this.endpoint, body, { headers: this.headers });
-
-        this.ThrowIfResponse4or5(response, "POST");
-        return this.getJson<T>(response, jsonRootKey);
-    }
-
-    public put<T>(body: any | null, jsonRootKey: string | null = "result"): T {
-        const response = this.client.post(this.endpoint, body, { headers: this.headers });
-
-        this.ThrowIfResponse4or5(response, "PUT");
-        return this.getJson<T>(response, jsonRootKey);
-    }
-
-    public get<T>(jsonRootKey: string | null = "result"): T {
-        const response = this.client.get(this.endpoint, { headers: this.headers });
-
-        this.ThrowIfResponse4or5(response, "GET");
-        return this.getJson<T>(response, jsonRootKey);
-    }
-
-    public delete<T>(jsonRootKey: string | null = "result"): T {
-        const response = this.client.delete(this.endpoint, { headers: this.headers });
-
-        this.ThrowIfResponse4or5(response, "DELETE");
-        return this.getJson<T>(response, jsonRootKey);
-    }
-
-    public patch<T>(body: any, jsonRootKey: string | null = "result"): T {
-        const response = this.client.patch(this.endpoint, body, { headers: this.headers });
-
-        this.ThrowIfResponse4or5(response, "PATCH");
-        return this.getJson<T>(response, jsonRootKey);
-    }
-
-    private getJson<T>(response: any, jsonRootKey: string | null): T {
-        if (jsonRootKey === null) {
-            return response.json() as T;
-        }
-        return response.json(jsonRootKey) as T;
-    }
-
-    private ThrowIfResponse4or5(response: any, type: string) {
-        if (response.status.toString()[0] === "4" || response.status.toString()[0] === "5") {
-            throw new Error(`Request ${type} ${this.endpoint} failed with status code ${response.status}: ${JSON.stringify(response.json())}`);
-        }
+    public request(): FluentRequest {
+        return new FluentRequest(this);
     }
 }

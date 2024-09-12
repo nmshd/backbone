@@ -1,7 +1,6 @@
 import { CreateChallengeResponse, JwtResponse } from "../../models";
 import { BaseClient } from "./base-client";
 import { apiVersion } from "./constants";
-import { FluentClient } from "./fluent-client";
 
 export class AuthenticatedClient extends BaseClient {
     public readonly username: string;
@@ -10,14 +9,11 @@ export class AuthenticatedClient extends BaseClient {
     private token_expires_at = new Date();
     private access_token = "";
 
-    private readonly tokenExchangeClient!: FluentClient;
-
     public constructor(username: string, password: string) {
         super();
 
         this.username = username;
         this.password = password;
-        this.tokenExchangeClient = new FluentClient(this.httpxClient);
     }
 
     private tokenIsStillValid(): boolean {
@@ -32,7 +28,7 @@ export class AuthenticatedClient extends BaseClient {
             username: this.username,
             password: this.password
         };
-        const response = this.tokenExchangeClient.setEndpoint("connect/token").setHeaders({ "Content-Type": "application/x-www-form-urlencoded" }).post<JwtResponse>(payload, null);
+        const response = this.client.request().setEndpoint("connect/token").setHeaders({ "Content-Type": "application/x-www-form-urlencoded" }).post<JwtResponse>(payload, null);
 
         this.access_token = `${response.token_type} ${response.access_token}`;
         this.token_expires_at = new Date(+new Date() + response.expires_in * 1000);
@@ -47,6 +43,6 @@ export class AuthenticatedClient extends BaseClient {
     }
 
     public getChallenge(): CreateChallengeResponse {
-        return this.client.setEndpoint(`api/${apiVersion}/Challenges`).withJsonBody().authenticate(this.getAccessToken()).post<CreateChallengeResponse>(null);
+        return this.client.request().setEndpoint(`api/${apiVersion}/Challenges`).withJsonBody().authenticate(this.getAccessToken()).post<CreateChallengeResponse>(null);
     }
 }

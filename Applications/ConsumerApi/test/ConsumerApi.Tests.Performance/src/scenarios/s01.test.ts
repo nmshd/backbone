@@ -36,9 +36,6 @@ export default function (): void {
 
     const createChallengeResult = client.getChallenge();
 
-    console.log(
-        `[${identityIterator}]\tCurrent device id: ${currentIdentity.devices[0].deviceId}. Challenge created with device Id: ${createChallengeResult.createdByDevice}. Match = ${currentIdentity.devices[0].deviceId === createChallengeResult.createdByDevice}.\nClient username: ${client.username}, function username: ${username}. Match = ${client.username === username}.`
-    );
     check(createChallengeResult, {
         "challenge contains correct device": (r) => r.createdByDevice === currentIdentity.devices[0].deviceId,
         "challenge contains correct address": (r) => r.createdBy === currentIdentity.address,
