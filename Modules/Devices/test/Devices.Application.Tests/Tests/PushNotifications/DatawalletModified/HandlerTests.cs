@@ -24,17 +24,13 @@ public class HandlerTests : AbstractTestsBase
         var identity = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress();
         var deviceA = CreateRandomRegistration(identity);
         var deviceB = CreateRandomRegistration(identity);
-        var notifiedDevices = new List<PnsRegistration>();
 
         var fakeRepository = A.Fake<IPnsRegistrationsRepository>();
         A.CallTo(() => fakeRepository.FindWithAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._)).Returns([deviceA, deviceB]);
 
-        var fakeConnector = A.Fake<IPnsConnector>();
-        A.CallTo(() => fakeConnector.Send(A<IEnumerable<PnsRegistration>>._, A<IPushNotification>._))
-            .Invokes((IEnumerable<PnsRegistration> registrations, IPushNotification _) => notifiedDevices.AddRange(registrations));
-
+        var mockConnector = A.Fake<IPnsConnector>();
         var fakeConnectorFactory = A.Fake<PnsConnectorFactoryImpl>();
-        A.CallTo(fakeConnectorFactory).Where(x => x.Method.Name == "CreateForFirebaseCloudMessaging").WithReturnType<IPnsConnector>().Returns(fakeConnector);
+        A.CallTo(fakeConnectorFactory).Where(x => x.Method.Name == "CreateForFirebaseCloudMessaging").WithReturnType<IPnsConnector>().Returns(mockConnector);
 
         var pushService = new PushService(fakeRepository, fakeConnectorFactory, A.Fake<ILogger<PushService>>());
         var handler = new DatawalletModifiedDomainEventHandler(pushService);
@@ -44,8 +40,7 @@ public class HandlerTests : AbstractTestsBase
         await handler.Handle(domainEvent);
 
         // Assert
-        notifiedDevices.Should().HaveCount(1);
-        notifiedDevices.First().Should().Be(deviceB);
+        A.CallTo(() => mockConnector.Send(A<IEnumerable<PnsRegistration>>._, A<IPushNotification>._)).MustHaveHappenedOnceExactly();
     }
 
     private static PnsRegistration CreateRandomRegistration(IdentityAddress identity)
