@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
@@ -41,30 +40,26 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var newIdentity = await CreateNewIdentity(command, cancellationToken, address);
 
-        //var communicationLanguageResult = CommunicationLanguage.Create(command.CommunicationLanguage);
-        //if (communicationLanguageResult.IsFailure)
-        //    throw new DomainException(communicationLanguageResult.Error);
-
-        //var user = new ApplicationUser(newIdentity, communicationLanguageResult.Value);
-
-        //await _identitiesRepository.AddUser(user, command.DevicePassword);
-
         _logger.CreatedIdentity();
+
+        var user = newIdentity.AddDevice(newIdentity, command.CommunicationLanguage);
+
+        await _identitiesRepository.AddUser(user, command.DevicePassword);
 
         return new CreateIdentityResponse
         {
             Address = address,
-            CreatedAt = newIdentity.Device.Identity.CreatedAt,// newIdentity.CreatedAt,
+            CreatedAt = user.Device.Identity.CreatedAt,// newIdentity.CreatedAt,
             Device = new CreateIdentityResponseDevice
             {
-                Id = newIdentity.DeviceId,// user.DeviceId,
-                Username = newIdentity.UserName!, // user.UserName!,
-                CreatedAt = newIdentity.Device.CreatedAt// user.Device.CreatedAt
+                Id = user.DeviceId,// user.DeviceId,
+                Username = user.UserName!, // user.UserName!,
+                CreatedAt = user.Device.CreatedAt// user.Device.CreatedAt
             }
         };
     }
 
-    private async Task<ApplicationUser> CreateNewIdentity(CreateIdentityCommand command, CancellationToken cancellationToken, IdentityAddress address)
+    private async Task<Identity> CreateNewIdentity(CreateIdentityCommand command, CancellationToken cancellationToken, IdentityAddress address)
     {
         var client = await _oAuthClientsRepository.Find(command.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
 
@@ -73,13 +68,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         if (clientIdentityCount >= client.MaxIdentities)
             throw new OperationFailedException(ApplicationErrors.Devices.ClientReachedIdentitiesLimit());
 
-        var user = Identity.CreateIdentity(command.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion, command.CommunicationLanguage);
-
-        //var newIdentity = new Identity(command.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion);
-
-        await _identitiesRepository.AddUser(user, command.DevicePassword);
-
-        return user;
+        return new Identity(client.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion);
     }
 
     private async Task<IdentityAddress> CreateIdentityAddress(PublicKey publicKey, CancellationToken cancellationToken)
