@@ -114,7 +114,7 @@ public class Message : Entity
     public static Expression<Func<Message, bool>> IsMessageOrphaned(string didDomainName)
     {
         return i =>
-            i.CreatedBy == IdentityAddress.GetAnonymized(didDomainName) &
+            i.CreatedBy == IdentityAddress.GetAnonymized(didDomainName) &&
             i.Recipients.All(r => r.Address == IdentityAddress.GetAnonymized(didDomainName));
     }
 
