@@ -1,16 +1,22 @@
 export interface Identity {
+    relationships?: Relationship[];
     sentMessages?: Message[];
     address: string;
     devices: Device[];
     poolAlias: string;
     datawalletModifications?: DatawalletModification[];
     relationshipTemplates?: RelationshipTemplate[];
-    relatedIdentities?: Relationship[];
 }
 
 export interface Pool {
     name: string;
     identities: Identity[];
+}
+
+export interface Relationship {
+    relationshipId: string;
+    fromAddress: string;
+    toAddress: string;
 }
 
 interface Device {
@@ -21,11 +27,6 @@ interface Device {
 
 interface Message {
     messageId: string;
-    recipient: string;
-}
-
-interface Relationship {
-    relationshipId: string;
     recipient: string;
 }
 
@@ -40,7 +41,6 @@ interface RelationshipTemplate {
 
 export interface IDataRepresentation {
     pools: Pool[];
-
     ofTypes(...types: string[]): IDataRepresentation;
 }
 

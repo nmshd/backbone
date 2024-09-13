@@ -1,6 +1,6 @@
 import { SharedArray } from "k6/data";
 import papaparse from "papaparse";
-import { DataRepresentation, DataRepresentationLoads, Identity, Pool } from "./data-loader/models";
+import { DataRepresentation, DataRepresentationLoads, IDataRepresentation, Identity, Pool } from "./data-loader/models";
 
 /**
  *
@@ -8,10 +8,10 @@ import { DataRepresentation, DataRepresentationLoads, Identity, Pool } from "./d
  * @param whatoToLoad An array of {@link DataRepresentationLoads} representing the entities to be loaded
  * @returns a DataRepresentationForEnmeshedPerformanceTests populated according to @link{whatoToLoad}
  */
-export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepresentationLoads[] = [DataRepresentationLoads.Identities]): DataRepresentation {
+export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepresentationLoads[] = [DataRepresentationLoads.Identities]): IDataRepresentation {
     const csvFilesPath = `../snapshots/${folderName}/csvs`;
     let pools: Pool[];
-    let identitiesMap: Map<string, Identity>;
+    const identitiesMap: Map<string, Identity> = new Map<string, Identity>();
 
     const poolsReturn = new SharedArray("pools", function () {
         if (!whatoToLoad.includes(DataRepresentationLoads.Identities)) {
@@ -22,7 +22,6 @@ export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepr
         const start = +new Date();
 
         pools = loadPoolsWithIdentities();
-        identitiesMap = PopulateIdentitiesMap();
 
         if (whatoToLoad.includes(DataRepresentationLoads.DatawalletModifications)) {
             console.info("Loading datawallet modifications");
@@ -78,15 +77,14 @@ export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepr
         const identitiesFile = open(`${csvFilesPath}/identities.csv`);
         const parsedIdentities = papaparse.parse<CSVIdentity>(identitiesFile, { header: true }).data.filter((x) => x.Address !== "");
 
-        const identities: Identity[] = [];
         parsedIdentities.forEach((csvIdentity) => {
             const device = { deviceId: csvIdentity.DeviceId, username: csvIdentity.Username, password: csvIdentity.Password };
-            const sameIdentityInPool = identities.find((i) => i.address === csvIdentity.Address);
+            const sameIdentityInPool = identitiesMap.get(csvIdentity.Address);
 
             if (sameIdentityInPool) {
                 sameIdentityInPool.devices.push(device);
             } else {
-                identities.push({
+                identitiesMap.set(csvIdentity.Address, {
                     address: csvIdentity.Address,
                     devices: [device],
                     poolAlias: csvIdentity.Alias
@@ -105,7 +103,9 @@ export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepr
         });
 
         result.forEach((pool) => {
-            pool.identities = identities.filter((i) => i.poolAlias === pool.name);
+            identitiesMap.forEach((i) => {
+                if (i.poolAlias === pool.name) pool.identities.push(i);
+            });
         });
 
         return result;
@@ -115,28 +115,26 @@ export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepr
         const RelationshipTemplatesFile = open(`${csvFilesPath}/relationshipTemplates.csv`);
         const parsedRelationshipTemplates = papaparse.parse<CSVRelationshipTemplate>(RelationshipTemplatesFile, { header: true }).data.filter((x) => x.IdentityAddress !== "");
 
-        pools.forEach((pool) => {
-            pool.identities.forEach((identity) => {
-                identity.relationshipTemplates = [];
-                parsedRelationshipTemplates.forEach((relationshipTemplate) => {
-                    identity.relationshipTemplates!.push({ relationshipTemplateId: relationshipTemplate.RelationshipTemplateId });
-                });
-            });
+        parsedRelationshipTemplates.forEach((relationshipTemplate) => {
+            const identity = identitiesMap.get(relationshipTemplate.IdentityAddress);
+            if (identity !== undefined) {
+                if (identity.relationshipTemplates === undefined) identity.relationshipTemplates = [];
+                identity.relationshipTemplates.push({ relationshipTemplateId: relationshipTemplate.RelationshipTemplateId });
+            }
         });
     }
 
     function loadRelationships() {
         const RelationshipsFile = open(`${csvFilesPath}/relationships.csv`);
-        const parsedRelationships = papaparse.parse<CSVRelationship>(RelationshipsFile, { header: true }).data.filter((x) => x.AddressFrom !== "");
+        const parsedRelationships = papaparse.parse<CSVRelationship>(RelationshipsFile, { header: true }).data.filter((x) => x.RelationshipId !== "");
         parsedRelationships.forEach((relationship) => {
-            const identityFrom = identitiesMap.get(relationship.AddressFrom);
-            const identityTo = identitiesMap.get(relationship.AddressTo);
-            if (identityTo && identityFrom) {
-                identityFrom.relatedIdentities ??= [];
-                identityTo.relatedIdentities ??= [];
-                identityFrom.relatedIdentities.push({ recipient: identityTo.address, relationshipId: relationship.RelationshipId });
-                identityTo.relatedIdentities.push({ recipient: identityFrom.address, relationshipId: relationship.RelationshipId });
-            }
+            const identityFrom = identitiesMap.get(relationship.AddressFrom)!;
+            if (identityFrom.relationships === undefined) identityFrom.relationships = [];
+            identityFrom.relationships.push({ fromAddress: relationship.AddressFrom, toAddress: relationship.AddressTo, relationshipId: relationship.RelationshipId });
+
+            const identityTo = identitiesMap.get(relationship.AddressTo)!;
+            if (identityTo.relationships === undefined) identityTo.relationships = [];
+            identityTo.relationships.push({ fromAddress: relationship.AddressTo, toAddress: relationship.AddressFrom, relationshipId: relationship.RelationshipId });
         });
     }
 
@@ -151,16 +149,6 @@ export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepr
                 identityFrom.sentMessages.push({ messageId: message.AddressFrom, recipient: message.AddressTo });
             }
         });
-    }
-
-    function PopulateIdentitiesMap(): Map<string, Identity> {
-        const result = new Map<string, Identity>();
-        pools.forEach((pool) => {
-            pool.identities.forEach((identity) => {
-                result.set(identity.address, identity);
-            });
-        });
-        return result;
     }
 }
 
