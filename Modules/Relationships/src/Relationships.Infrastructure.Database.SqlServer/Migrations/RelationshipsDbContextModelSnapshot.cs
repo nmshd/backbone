@@ -54,6 +54,12 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                     b.Property<DateTime?>("ExpiresAt")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("ForIdentity")
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(80)")
+                        .IsFixedLength(false);
+
                     b.Property<int?>("MaxNumberOfAllocations")
                         .HasColumnType("int");
 
@@ -150,11 +156,13 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.HasKey("Id");
 
-                    b.HasIndex("From");
+                    b.HasIndex("From")
+                        .HasAnnotation("Npgsql:IndexMethod", "hash");
 
                     b.HasIndex("RelationshipTemplateId");
 
-                    b.HasIndex("To");
+                    b.HasIndex("To")
+                        .HasAnnotation("Npgsql:IndexMethod", "hash");
 
                     b.ToTable("Relationships", "Relationships");
                 });
