@@ -35,7 +35,7 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
 
         _logger.LogTrace("Successfully validated challenge.");
 
-        var user = identity.AddDevice(identity, command.CommunicationLanguage);
+        var user = identity.AddDevice(command.CommunicationLanguage, _userContext.GetDeviceId());
 
         await _identitiesRepository.AddUser(user, command.DevicePassword);
 

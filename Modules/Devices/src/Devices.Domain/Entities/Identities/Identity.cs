@@ -81,13 +81,13 @@ public class Identity : Entity
         return Devices.Count < 1;
     }
 
-    public ApplicationUser AddDevice(Identity identity, string communicationLanguage)
+    public ApplicationUser AddDevice(string communicationLanguage, DeviceId deviceId)
     {
         var communicationLanguageResult = CommunicationLanguage.Create(communicationLanguage);
         if (communicationLanguageResult.IsFailure)
             throw new DomainException(communicationLanguageResult.Error);
 
-        return new ApplicationUser(identity, communicationLanguageResult.Value);
+        return new ApplicationUser(this, communicationLanguageResult.Value, deviceId);
     }
 
     public void ChangeTier(TierId id)

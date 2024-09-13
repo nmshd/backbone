@@ -42,7 +42,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         _logger.CreatedIdentity();
 
-        var user = newIdentity.AddDevice(newIdentity, command.CommunicationLanguage);
+        var user = newIdentity.AddDevice(command.CommunicationLanguage, DeviceId.New());
 
         await _identitiesRepository.AddUser(user, command.DevicePassword);
 
