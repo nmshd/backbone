@@ -28,6 +28,19 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
     {
         var registrations = await _pnsRegistrationsRepository.FindWithAddress(recipient, cancellationToken);
 
+        await SendNotification(registrations, notification, cancellationToken);
+    }
+
+    public async Task SendFilteredNotification(IdentityAddress recipient, IPushNotification notification, IEnumerable<string> excludedDevices, CancellationToken cancellationToken)
+    {
+        var registrations = await _pnsRegistrationsRepository.FindWithAddress(recipient, cancellationToken);
+        registrations = registrations.Where(x => !excludedDevices.Contains(x.DeviceId));
+
+        await SendNotification(registrations, notification, cancellationToken);
+    }
+
+    private async Task SendNotification(IEnumerable<PnsRegistration> registrations, IPushNotification notification, CancellationToken cancellationToken)
+    {
         var groups = registrations.GroupBy(registration => registration.Handle.Platform);
 
         foreach (var group in groups)
