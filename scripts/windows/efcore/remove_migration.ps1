@@ -5,26 +5,21 @@ Param(
 
 $repoRoot = git rev-parse --show-toplevel
 $dbContextName = "${moduleName}DbContext"
-$adminApiProject = "$repoRoot\Applications\AdminApi\src\AdminApi"
-$consumerApiProject = "$repoRoot\Applications\ConsumerApi\src"
+$startupProject = "$repoRoot\Applications\DatabaseMigrator\src\DatabaseMigrator"
 
 function RemoveMigration {    
     param (
         $provider
     )
 
+    New-Item env:"Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
+
     switch($moduleName){
         "AdminApi" {
-            New-Item env:"Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
-
             $migrationProject = "$repoRoot\AdminApi\src\AdminApi.Infrastructure.Database.$provider"
-            $startupProject = $adminApiProject
         }
         Default {
-            New-Item env:"Modules__${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
-
             $migrationProject = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
-            $startupProject = $consumerApiProject
         }
     }
 
