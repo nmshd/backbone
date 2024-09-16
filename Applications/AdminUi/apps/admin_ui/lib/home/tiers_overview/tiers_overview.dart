@@ -44,18 +44,14 @@ class _TiersOverviewState extends State<TiersOverview> {
               child: Padding(
                 padding: const EdgeInsets.all(8),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Gaps.w8,
-                        IconButton.filled(
-                          icon: const Icon(Icons.add),
-                          color: Theme.of(context).colorScheme.onPrimary,
-                          onPressed: () => _showAddTierDialog(context: context),
-                        ),
-                      ],
+                    Gaps.w8,
+                    IconButton.filled(
+                      icon: const Icon(Icons.add),
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      onPressed: () => _showAddTierDialog(context: context),
                     ),
                     Expanded(
                       child: DataTable2(
