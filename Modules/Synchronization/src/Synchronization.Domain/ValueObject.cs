@@ -63,11 +63,13 @@ public abstract class ValueObject : IComparable, IComparable<ValueObject>
 
     private int CompareComponents(object? object1, object? object2)
     {
-        if (object1 is null && object2 is null)
-            return 0;
-
-        if (object1 is null)
-            return -1;
+        switch (object1)
+        {
+            case null when object2 is null:
+                return 0;
+            case null:
+                return -1;
+        }
 
         if (object2 is null)
             return 1;

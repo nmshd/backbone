@@ -7,33 +7,32 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Xunit;
 
-namespace Backbone.Job.IdentityDeletion.Tests.Tests
+namespace Backbone.Job.IdentityDeletion.Tests.Tests;
+
+public class CancelStaleDeletionProcessesWorkerTests : AbstractTestsBase
 {
-    public class CancelStaleDeletionProcessesWorkerTests : AbstractTestsBase
+    [Fact]
+    public async Task Happy_path()
     {
-        [Fact]
-        public async Task Happy_path()
-        {
-            // Arrange
-            var mockMediator = A.Fake<IMediator>();
+        // Arrange
+        var mockMediator = A.Fake<IMediator>();
 
-            var cancelDeletionProcessWorker = CreateWorker(mockMediator);
+        var cancelDeletionProcessWorker = CreateWorker(mockMediator);
 
-            // Act
-            await cancelDeletionProcessWorker.StartAsync(CancellationToken.None);
+        // Act
+        await cancelDeletionProcessWorker.StartAsync(CancellationToken.None);
 
-            // Assert
-            A.CallTo(() => mockMediator.Send(A<CancelStaleIdentityDeletionProcessesCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
-        }
+        // Assert
+        A.CallTo(() => mockMediator.Send(A<CancelStaleIdentityDeletionProcessesCommand>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+    }
 
-        private static CancelStaleDeletionProcessesWorker CreateWorker(IMediator? mediator = null)
-        {
-            mediator ??= A.Fake<IMediator>();
+    private static CancelStaleDeletionProcessesWorker CreateWorker(IMediator? mediator = null)
+    {
+        mediator ??= A.Fake<IMediator>();
 
-            return new CancelStaleDeletionProcessesWorker(
-                A.Dummy<IHostApplicationLifetime>(),
-                mediator,
-                A.Dummy<ILogger<CancelStaleDeletionProcessesWorker>>());
-        }
+        return new CancelStaleDeletionProcessesWorker(
+            A.Dummy<IHostApplicationLifetime>(),
+            mediator,
+            A.Dummy<ILogger<CancelStaleDeletionProcessesWorker>>());
     }
 }

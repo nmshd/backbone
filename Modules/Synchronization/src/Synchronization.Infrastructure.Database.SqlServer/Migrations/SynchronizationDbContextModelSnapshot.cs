@@ -179,8 +179,8 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 
                     b.Property<string>("ErrorCode")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("ExternalEventId")
                         .IsRequired()

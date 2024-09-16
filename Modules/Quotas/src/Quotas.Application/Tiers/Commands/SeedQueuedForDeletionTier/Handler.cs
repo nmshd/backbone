@@ -48,8 +48,8 @@ public class Handler : IRequestHandler<SeedQueuedForDeletionTierCommand>
         var metrics = await _metricsRepository.FindAll(CancellationToken.None);
         var excludedMetricKeys = new List<MetricKey>
         {
-            MetricKey.NumberOfCreatedDatawalletModifications, // Identities to be deleted should still be able to modify the datawallet
-            MetricKey.NumberOfStartedDeletionProcesses // Identities to be deleted cannot start new deletion processes anyway
+            MetricKey.NUMBER_OF_CREATED_DATAWALLET_MODIFICATIONS, // Identities to be deleted should still be able to modify the datawallet
+            MetricKey.NUMBER_OF_STARTED_DELETION_PROCESSES // Identities to be deleted cannot start new deletion processes anyway
         };
         queuedForDeletionTier.AddQuotaForAllMetricsOnQueuedForDeletion(metrics.Where(m => !excludedMetricKeys.Contains(m.Key)));
     }

@@ -44,14 +44,4 @@ public class AnonymousUserContext : IUserContext
     {
         throw new NotSupportedException();
     }
-
-    public IEnumerable<string> GetRoles()
-    {
-        throw new NotSupportedException();
-    }
-
-    public SubscriptionPlan GetSubscriptionPlan()
-    {
-        throw new NotSupportedException();
-    }
 }

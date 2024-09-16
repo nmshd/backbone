@@ -63,7 +63,7 @@ public class EllipticCurveSignatureHelper : ISignatureHelper
         throw new NotImplementedException();
     }
 
-    private ECPrivateKeyParameters CreatePrivateKeyParameters(ConvertibleString privateKey)
+    private static ECPrivateKeyParameters CreatePrivateKeyParameters(ConvertibleString privateKey)
     {
         try
         {
@@ -71,13 +71,13 @@ public class EllipticCurveSignatureHelper : ISignatureHelper
                 (ECPrivateKeyParameters)PrivateKeyFactory.CreateKey(privateKey.BytesRepresentation);
             return privateKeyParameters;
         }
-        catch (Exception ex) when (ex is ArgumentException || ex is IOException)
+        catch (Exception ex) when (ex is ArgumentException or IOException)
         {
             throw new ArgumentException("Private Key is invalid.", nameof(privateKey), ex);
         }
     }
 
-    private ECPublicKeyParameters CreatePublicKeyParameters(ConvertibleString publicKey)
+    private static ECPublicKeyParameters CreatePublicKeyParameters(ConvertibleString publicKey)
     {
         try
         {
@@ -85,7 +85,7 @@ public class EllipticCurveSignatureHelper : ISignatureHelper
                 (ECPublicKeyParameters)PublicKeyFactory.CreateKey(publicKey.BytesRepresentation);
             return publicKeyParameters;
         }
-        catch (Exception ex) when (ex is ArgumentException || ex is IOException)
+        catch (Exception ex) when (ex is ArgumentException or IOException)
         {
             throw new ArgumentException("Public Key is invalid.", nameof(publicKey), ex);
         }

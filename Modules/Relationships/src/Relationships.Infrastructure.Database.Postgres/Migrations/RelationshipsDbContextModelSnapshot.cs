@@ -54,6 +54,12 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                     b.Property<DateTime?>("ExpiresAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("ForIdentity")
+                        .HasMaxLength(80)
+                        .IsUnicode(false)
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
+
                     b.Property<int?>("MaxNumberOfAllocations")
                         .HasColumnType("integer");
 
@@ -152,9 +158,13 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
                     b.HasIndex("From");
 
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("From"), "hash");
+
                     b.HasIndex("RelationshipTemplateId");
 
                     b.HasIndex("To");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("To"), "hash");
 
                     b.ToTable("Relationships", "Relationships");
                 });

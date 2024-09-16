@@ -14,7 +14,7 @@ public class ExternalEventBuilder
 
     private ExternalEventBuilder()
     {
-        _type = ExternalEventType.MessageDelivered;
+        _type = ExternalEventType.MessageReceived;
         _owner = TestDataGenerator.CreateRandomIdentityAddress();
         _payload = new { SomeArbitraryProperty = "SomeArbitraryValue" };
     }

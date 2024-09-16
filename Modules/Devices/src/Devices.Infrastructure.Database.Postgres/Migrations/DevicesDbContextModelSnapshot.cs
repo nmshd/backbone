@@ -18,7 +18,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Devices")
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -273,7 +273,11 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("ClientId");
 
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("ClientId"), "hash");
+
                     b.HasIndex("TierId");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("TierId"), "hash");
 
                     b.ToTable("Identities", "Devices");
                 });
@@ -316,7 +320,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<DateTime>("DeletionStartedAt")
+                    b.Property<DateTime?>("DeletionStartedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime?>("GracePeriodEndsAt")
@@ -332,6 +336,7 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("IdentityAddress")
+                        .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
                         .HasColumnType("character varying(80)")
@@ -352,6 +357,10 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityAddress");
+
+                    b.HasIndex(new[] { "IdentityAddress" }, "IX_only_one_active_deletion_process")
+                        .IsUnique()
+                        .HasFilter("\"Status\" = 1");
 
                     b.ToTable("IdentityDeletionProcesses", "Devices");
                 });
@@ -782,7 +791,8 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                     b.HasOne("Backbone.Modules.Devices.Domain.Entities.Identities.Identity", null)
                         .WithMany("DeletionProcesses")
                         .HasForeignKey("IdentityAddress")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Backbone.Modules.Devices.Domain.Entities.Identities.IdentityDeletionProcessAuditLogEntry", b =>

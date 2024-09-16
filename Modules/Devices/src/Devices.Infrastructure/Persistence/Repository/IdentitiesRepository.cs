@@ -106,7 +106,16 @@ public class IdentitiesRepository : IIdentitiesRepository
     public async Task Update(Identity identity, CancellationToken cancellationToken)
     {
         _identities.Update(identity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException exception)
+        {
+            if (exception.HasReason(DbUpdateExceptionReason.DuplicateIndex) && exception.InnerException!.Message.Contains("IX_only_one_active_deletion_process"))
+                throw new OnlyOneActiveDeletionProcessAllowedException(exception);
+            throw;
+        }
     }
 
     public async Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)

@@ -26,8 +26,7 @@ public static class DbSetExtensions
     /// </remarks>
     private static IEnumerable<string> GetIncludePaths<T>(DbContext context, int maxDepth = int.MaxValue)
     {
-        if (maxDepth < 0)
-            throw new ArgumentOutOfRangeException(nameof(maxDepth));
+        ArgumentOutOfRangeException.ThrowIfNegative(maxDepth);
 
         var entityType = context.Model.FindEntityType(typeof(T)) ?? throw new Exception("Entity type not found in model");
         var includedNavigations = new HashSet<INavigation>();
@@ -51,11 +50,9 @@ public static class DbSetExtensions
             }
             else
             {
-                foreach (var navigation in entityNavigations)
+                foreach (var inverseNavigation in entityNavigations.Select(navigation => navigation.Inverse).OfType<INavigation>())
                 {
-                    var inverseNavigation = navigation.Inverse;
-                    if (inverseNavigation != null)
-                        includedNavigations.Add(inverseNavigation);
+                    includedNavigations.Add(inverseNavigation);
                 }
 
                 stack.Push(entityNavigations.GetEnumerator());

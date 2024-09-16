@@ -98,7 +98,7 @@ public class DynamicJsonConverter : JsonConverter<dynamic>
     {
         var list = new List<object?>();
         jsonElement.EnumerateArray().ToList().ForEach(j => list.Add(ReadValue(j)));
-        return (list.Count == 0 ? null : list);
+        return list.Count == 0 ? null : list;
     }
 
     public override void Write(Utf8JsonWriter writer,

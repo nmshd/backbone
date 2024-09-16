@@ -10,7 +10,7 @@ public class ValueInValidator<T, TProperty> : PropertyValidator<T, TProperty>
 
     public ValueInValidator(IEnumerable validValues)
     {
-        if (validValues == null) throw new ArgumentNullException(nameof(validValues));
+        ArgumentNullException.ThrowIfNull(validValues);
 
         ValidValues = validValues.Cast<object?>().ToList();
 
