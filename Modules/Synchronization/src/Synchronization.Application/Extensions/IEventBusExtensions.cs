@@ -35,7 +35,6 @@ public static class IEventBusExtensions
         eventBus.Subscribe<MessageCreatedDomainEvent, MessageCreatedDomainEventHandler>();
         eventBus.Subscribe<IdentityDeletionProcessStartedDomainEvent, IdentityDeletionProcessStartedDomainEventHandler>();
         eventBus.Subscribe<IdentityDeletionProcessStatusChangedDomainEvent, IdentityDeletionProcessStatusChangedDomainEventHandler>();
-        // eventBus.Subscribe<MessageDeliveredDomainEvent, MessageDeliveredDomainEventHandler>(); // this is temporarily disabled to avoid an external event flood when the same message is sent to many recipients
     }
 
     private static void SubscribeToRelationshipsEvents(IEventBus eventBus)
