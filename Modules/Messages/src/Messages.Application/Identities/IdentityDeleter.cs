@@ -1,7 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Messages.Commands.AnonymizeMessagesOfIdentity;
-using Backbone.Modules.Messages.Application.Messages.Commands.DeleteOrphanedMessages;
 using MediatR;
 
 namespace Backbone.Modules.Messages.Application.Identities;
@@ -20,7 +19,6 @@ public class IdentityDeleter : IIdentityDeleter
     public async Task Delete(IdentityAddress identityAddress)
     {
         await _mediator.Send(new AnonymizeMessagesOfIdentityCommand(identityAddress));
-        await _mediator.Send(new DeleteOrphanedMessagesCommand());
         await _deletionProcessLogger.LogDeletion(identityAddress, "Messages");
     }
 }
