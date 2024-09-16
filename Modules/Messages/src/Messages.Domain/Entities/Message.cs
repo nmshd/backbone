@@ -113,14 +113,14 @@ public class Message : Entity
             (m.CreatedBy == identityAddress2 && m.Recipients.Any(r => r.Address == identityAddress1));
     }
 
-public static Expression<Func<Message, bool>> IsMessageOrphaned(string didDomainName)
-{
-    var anonymizedAddress = IdentityAddress.GetAnonymized(didDomainName);
-    
-    return i =>
-        i.CreatedBy == anonymizedAddress &&
-        i.Recipients.All(r => r.Address == anonymizedAddress);
-}
+    public static Expression<Func<Message, bool>> IsMessageOrphaned(string didDomainName)
+    {
+        var anonymizedAddress = IdentityAddress.GetAnonymized(didDomainName);
+
+        return i =>
+            i.CreatedBy == anonymizedAddress &&
+            i.Recipients.All(r => r.Address == anonymizedAddress);
+    }
 
 
     #endregion
