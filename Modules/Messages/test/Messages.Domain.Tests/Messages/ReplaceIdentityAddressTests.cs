@@ -1,4 +1,5 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
@@ -24,6 +25,8 @@ public class ReplaceIdentityAddressTests : AbstractTestsBase
 
         // Assert
         message.CreatedBy.Should().Be(newIdentityAddress);
+        message.DomainEvents.Should().ContainSingle(e => e.GetType() == typeof(MessageCreatedDomainEvent));
+        message.DomainEvents.Count(e => e.GetType() == typeof(MessageOrphanedDomainEvent)).Should().Be(2);
     }
 
     [Fact]
@@ -40,6 +43,8 @@ public class ReplaceIdentityAddressTests : AbstractTestsBase
 
         // Assert
         message.Recipients.Single().Address.Should().Be(newAddress);
+        message.DomainEvents.Should().ContainSingle(e => e.GetType() == typeof(MessageCreatedDomainEvent));
+        message.DomainEvents.Should().ContainSingle(e => e.GetType() == typeof(MessageOrphanedDomainEvent));
     }
 
     [Fact]
