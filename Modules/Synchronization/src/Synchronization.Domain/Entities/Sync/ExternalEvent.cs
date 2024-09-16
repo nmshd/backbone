@@ -62,6 +62,7 @@ public enum ExternalEventType
 {
     MessageReceived = 0,
     MessageDelivered = 1,
+    MessageOrphaned = 2,
 
     RelationshipStatusChanged = 10,
     RelationshipReactivationRequested = 12,
