@@ -86,11 +86,13 @@ public class Message : Entity
     {
         var recipient = Recipients.FirstOrDefault(r => r.Address == participantAddress);
         recipient?.UpdateAddress(anonymizedIdentityAddress);
+        RaiseDomainEvent(new MessageOrphanedDomainEvent(this));
     }
 
     private void AnonymizeSender(IdentityAddress anonymizedIdentityAddress)
     {
         CreatedBy = anonymizedIdentityAddress;
+        RaiseDomainEvent(new MessageOrphanedDomainEvent(this));
     }
 
     #region Expressions
