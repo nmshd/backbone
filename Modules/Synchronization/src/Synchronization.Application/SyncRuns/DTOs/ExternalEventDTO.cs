@@ -26,7 +26,6 @@ public class ExternalEventDTO
         return externalEventType switch
         {
             ExternalEventType.MessageReceived => "MessageReceived",
-            ExternalEventType.MessageDelivered => "MessageDelivered",
 
             ExternalEventType.RelationshipStatusChanged => "RelationshipStatusChanged",
             ExternalEventType.RelationshipReactivationRequested => "RelationshipReactivationRequested",

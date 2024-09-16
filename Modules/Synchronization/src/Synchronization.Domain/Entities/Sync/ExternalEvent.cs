@@ -61,7 +61,6 @@ public class ExternalEvent : Entity
 public enum ExternalEventType
 {
     MessageReceived = 0,
-    MessageDelivered = 1,
 
     RelationshipStatusChanged = 10,
     RelationshipReactivationRequested = 12,
