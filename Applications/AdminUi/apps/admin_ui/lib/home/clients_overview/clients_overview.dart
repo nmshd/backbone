@@ -33,120 +33,128 @@ class _ClientsOverviewState extends State<ClientsOverview> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.clientsOverview_title)),
-      body: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ClientsFilterRow(onFilterChanged: (filter) => setState(() => _filter = filter)),
-              Gaps.h16,
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  if (kIsDesktop)
-                    IconButton(
-                      icon: const Icon(Icons.refresh),
-                      onPressed: () async {
-                        await _reloadClients();
-                        await _reloadTiers();
-                      },
-                      tooltip: context.l10n.reload,
-                    ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.delete,
-                      color: _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
-                    ),
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStateProperty.resolveWith((states) {
-                        return _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.error : null;
-                      }),
-                    ),
-                    onPressed: _selectedClients.isNotEmpty ? _removeSelectedClients : null,
-                  ),
-                  Gaps.w8,
-                  IconButton.filled(
-                    icon: const Icon(Icons.add),
-                    onPressed: () => showCreateClientDialog(context: context, defaultTiers: _defaultTiers, onClientCreated: _reloadClients),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: DataTable2(
-                  isVerticalScrollBarVisible: true,
-                  empty: Text(context.l10n.clientsOverview_noClientsFound),
-                  onSelectAll: (selected) {
-                    if (selected == null) return;
-
-                    setState(() {
-                      if (selected) {
-                        _selectedClients.addAll(_originalClients.where((e) => _filter.matches(e)).map((client) => client.clientId));
-                      } else {
-                        _selectedClients.clear();
-                      }
-                    });
-                  },
-                  columns: <DataColumn2>[
-                    DataColumn2(label: Text(context.l10n.clientID), size: ColumnSize.L),
-                    DataColumn2(label: Text(context.l10n.displayName), size: ColumnSize.L),
-                    DataColumn2(label: Text(context.l10n.defaultTier)),
-                    DataColumn2(label: Text(context.l10n.numberOfIdentities), size: ColumnSize.L),
-                    DataColumn2(label: Text(context.l10n.createdAt)),
-                    const DataColumn2(label: Text(''), size: ColumnSize.L),
-                  ],
-                  rows: _originalClients
-                      .where((e) => _filter.matches(e))
-                      .map(
-                        (client) => DataRow2(
-                          onTap: () => context.go('/clients/${client.clientId}'),
-                          selected: _selectedClients.contains(client.clientId),
-                          onSelectChanged: (selected) {
-                            if (selected == null) return;
-
-                            setState(() {
-                              if (selected) {
-                                _selectedClients.add(client.clientId);
-                              } else {
-                                _selectedClients.remove(client.clientId);
-                              }
-                            });
-                          },
-                          cells: [
-                            DataCell(Text(client.clientId)),
-                            DataCell(Text(client.displayName)),
-                            DataCell(Text(client.defaultTier.name)),
-                            DataCell(Text('${client.numberOfIdentities}')),
-                            DataCell(
-                              Tooltip(
-                                message:
-                                    '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(client.createdAt)} ${DateFormat.Hms().format(client.createdAt)}',
-                                child: Text(DateFormat.yMd(Localizations.localeOf(context).languageCode).format(client.createdAt)),
-                              ),
-                            ),
-                            DataCell(
-                              FilledButton(
-                                onPressed: () => showChangeClientSecretDialog(context: context, clientId: client.clientId),
-                                child: Text(
-                                  context.l10n.changeClientSecret,
-                                  style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                            ),
-                          ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (kIsDesktop)
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () async {
+              await _reloadClients();
+              await _reloadTiers();
+            },
+            tooltip: context.l10n.reload,
+          ),
+        Expanded(
+          child: Scaffold(
+            appBar: AppBar(title: Text(context.l10n.clientsOverview_title)),
+            body: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ClientsFilterRow(onFilterChanged: (filter) => setState(() => _filter = filter)),
+                    Gaps.h16,
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        IconButton(
+                          icon: Icon(
+                            Icons.delete,
+                            color: _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.onError : null,
+                          ),
+                          style: ButtonStyle(
+                            backgroundColor: WidgetStateProperty.resolveWith((states) {
+                              return _selectedClients.isNotEmpty ? Theme.of(context).colorScheme.error : null;
+                            }),
+                          ),
+                          onPressed: _selectedClients.isNotEmpty ? _removeSelectedClients : null,
                         ),
-                      )
-                      .toList(),
+                        Gaps.w8,
+                        IconButton.filled(
+                          icon: const Icon(Icons.add),
+                          onPressed: () => showCreateClientDialog(context: context, defaultTiers: _defaultTiers, onClientCreated: _reloadClients),
+                        ),
+                      ],
+                    ),
+                    Expanded(
+                      child: DataTable2(
+                        isVerticalScrollBarVisible: true,
+                        empty: Text(context.l10n.clientsOverview_noClientsFound),
+                        onSelectAll: (selected) {
+                          if (selected == null) return;
+
+                          setState(() {
+                            if (selected) {
+                              _selectedClients.addAll(_originalClients.where((e) => _filter.matches(e)).map((client) => client.clientId));
+                            } else {
+                              _selectedClients.clear();
+                            }
+                          });
+                        },
+                        columns: <DataColumn2>[
+                          DataColumn2(label: Text(context.l10n.clientID), size: ColumnSize.L),
+                          DataColumn2(label: Text(context.l10n.displayName), size: ColumnSize.L),
+                          DataColumn2(label: Text(context.l10n.defaultTier)),
+                          DataColumn2(label: Text(context.l10n.numberOfIdentities), size: ColumnSize.L),
+                          DataColumn2(label: Text(context.l10n.createdAt)),
+                          const DataColumn2(label: Text(''), size: ColumnSize.L),
+                        ],
+                        rows: _originalClients
+                            .where((e) => _filter.matches(e))
+                            .map(
+                              (client) => DataRow2(
+                                onTap: () => context.go('/clients/${client.clientId}'),
+                                selected: _selectedClients.contains(client.clientId),
+                                onSelectChanged: (selected) {
+                                  if (selected == null) return;
+
+                                  setState(() {
+                                    if (selected) {
+                                      _selectedClients.add(client.clientId);
+                                    } else {
+                                      _selectedClients.remove(client.clientId);
+                                    }
+                                  });
+                                },
+                                cells: [
+                                  DataCell(Text(client.clientId)),
+                                  DataCell(Text(client.displayName)),
+                                  DataCell(Text(client.defaultTier.name)),
+                                  DataCell(Text('${client.numberOfIdentities}')),
+                                  DataCell(
+                                    Tooltip(
+                                      message:
+                                          '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(client.createdAt)} ${DateFormat.Hms().format(client.createdAt)}',
+                                      child: Text(DateFormat.yMd(Localizations.localeOf(context).languageCode).format(client.createdAt)),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    FilledButton(
+                                      onPressed: () => showChangeClientSecretDialog(context: context, clientId: client.clientId),
+                                      child: Text(
+                                        context.l10n.changeClientSecret,
+                                        style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                            .toList(),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 
