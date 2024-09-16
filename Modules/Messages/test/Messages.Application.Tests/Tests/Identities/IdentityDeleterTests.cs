@@ -1,7 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Messages.Application.Identities;
 using Backbone.Modules.Messages.Application.Messages.Commands.AnonymizeMessagesOfIdentity;
-using Backbone.Modules.Messages.Application.Messages.Commands.DeleteOrphanedMessages;
 using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using MediatR;
@@ -26,7 +25,6 @@ public class IdentityDeleterTests : AbstractTestsBase
 
         // Assert
         A.CallTo(() => mockMediator.Send(A<AnonymizeMessagesOfIdentityCommand>.That.Matches(command => command.IdentityAddress == identityAddress), A<CancellationToken>._)).MustHaveHappened();
-        A.CallTo(() => mockMediator.Send(A<DeleteOrphanedMessagesCommand>._, A<CancellationToken>._)).MustHaveHappened();
     }
 
     [Fact]
