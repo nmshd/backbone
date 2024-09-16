@@ -24,7 +24,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
   void initState() {
     super.initState();
 
-    _loadDeletionProcessDetails();
+    _reloadIdentityDeletionProcessAuditLogs();
   }
 
   @override
@@ -37,7 +37,17 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (kIsDesktop) BackButton(onPressed: () => context.pop(false)),
+          if (kIsDesktop)
+            Row(
+              children: [
+                BackButton(onPressed: () => context.pop(false)),
+                IconButton(
+                  icon: const Icon(Icons.refresh),
+                  onPressed: _reloadIdentityDeletionProcessAuditLogs,
+                  tooltip: context.l10n.reload,
+                ),
+              ],
+            ),
           _DeletionProcessDetailsCard(
             address: widget.address,
             deletionProcessDetails: deletionProcessDetails,
@@ -109,7 +119,7 @@ class _DeletionProcessDetailsState extends State<DeletionProcessDetails> {
     }
   }
 
-  Future<void> _loadDeletionProcessDetails() async {
+  Future<void> _reloadIdentityDeletionProcessAuditLogs() async {
     final deletionProcessesDetails = await GetIt.I.get<AdminApiClient>().identities.getIdentityDeletionProcess(
           address: widget.address,
           deletionProcessId: widget.deletionProcessId,

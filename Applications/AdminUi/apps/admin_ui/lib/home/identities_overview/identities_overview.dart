@@ -35,34 +35,48 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(context.l10n.identityOverview_title)),
-      body: Column(
-        children: [
-          Expanded(
-            child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IdentitiesFilter(
-                      onFilterChanged: ({IdentityOverviewFilter? filter}) async {
-                        _dataSource
-                          ..filter = filter
-                          ..refreshDatasource();
-                      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (kIsDesktop)
+          IconButton(
+            icon: const Icon(Icons.refresh),
+            onPressed: () async => _dataSource.refreshDatasource(),
+            tooltip: context.l10n.reload,
+          ),
+        Expanded(
+          child: Scaffold(
+            appBar: AppBar(title: Text(context.l10n.identityOverview_title)),
+            body: Column(
+              children: [
+                Expanded(
+                  child: Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IdentitiesFilter(
+                            onFilterChanged: ({IdentityOverviewFilter? filter}) async {
+                              _dataSource
+                                ..filter = filter
+                                ..refreshDatasource();
+                            },
+                          ),
+                          Expanded(child: IdentitiesDataTable(dataSource: _dataSource)),
+                        ],
+                      ),
                     ),
-                    Expanded(child: IdentitiesDataTable(dataSource: _dataSource)),
-                  ],
+                  ),
                 ),
-              ),
+                Gaps.h8,
+                const QueryDeletionProcessAuditLogs(),
+              ],
             ),
           ),
-          Gaps.h8,
-          const QueryDeletionProcessAuditLogs(),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
