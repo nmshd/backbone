@@ -6,5 +6,6 @@
         <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
         <Nullable>enable</Nullable>
         <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+        <OptimizeImplicitlyTriggeredBuild>True</OptimizeImplicitlyTriggeredBuild>
     </PropertyGroup>
 </Project>
