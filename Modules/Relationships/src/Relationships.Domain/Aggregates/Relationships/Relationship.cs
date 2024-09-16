@@ -337,11 +337,11 @@ public class Relationship : Entity
             throw new DomainException(DomainErrors.RequestingIdentityDoesNotBelongToRelationship());
     }
 
-    public void ParticipantIsToBeDeleted(string identityToBeDeleted)
+    public void ParticipantIsToBeDeleted(string identityToBeDeleted, DateTime gracePeriodEndsAt)
     {
         var peer = GetPeerOf(identityToBeDeleted);
 
-        RaiseDomainEvent(new PeerToBeDeletedDomainEvent(peer, Id, identityToBeDeleted));
+        RaiseDomainEvent(new PeerToBeDeletedDomainEvent(peer, Id, identityToBeDeleted, gracePeriodEndsAt));
     }
 
     public void DeletionOfParticipantCancelled(string identityWithDeletionCancelled)
