@@ -16,7 +16,7 @@ public class PeerToBeDeletedDomainEventHandlerTests : AbstractTestsBase
     {
         // Arrange
         var peerOfToBeDeletedIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-        var peerToBeDeletedDomainEvent = new PeerToBeDeletedDomainEvent(peerOfToBeDeletedIdentity, "some-relationship-id", "some-deletedIdentity-id");
+        var peerToBeDeletedDomainEvent = new PeerToBeDeletedDomainEvent(peerOfToBeDeletedIdentity, "some-relationship-id", "some-deletedIdentity-id", "2024-08-25 16:13:34.596561+00");
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 

@@ -17,14 +17,16 @@ public class RelationshipParticipantIsToBeDeletedTests : AbstractTestsBase
         var identityToBeDeleted = TestDataGenerator.CreateRandomIdentityAddress();
         var peer = TestDataGenerator.CreateRandomIdentityAddress();
         var relationship = CreateActiveRelationship(peer, identityToBeDeleted);
+        var gracePeriodEndsAt = new DateTime(2023, 9, 13, 14, 35, 50);
 
         // Act
-        relationship.ParticipantIsToBeDeleted(identityToBeDeleted);
+        relationship.ParticipantIsToBeDeleted(identityToBeDeleted, gracePeriodEndsAt);
 
         // Assert
         var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerToBeDeletedDomainEvent>();
         domainEvent.PeerOfIdentityToBeDeleted.Should().Be(peer);
         domainEvent.RelationshipId.Should().Be(relationship.Id);
         domainEvent.IdentityToBeDeleted.Should().Be(identityToBeDeleted);
+        domainEvent.GracePeriodEndsAt.Should().Be(gracePeriodEndsAt);
     }
 }
