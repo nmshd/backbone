@@ -1,3 +1,4 @@
 #!/bin/bash
 
-dotnet format --verify-no-changes
+dotnet restore /p:ContinuousIntegrationBuild=true
+dotnet format --no-restore --verify-no-changes
