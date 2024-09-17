@@ -61,11 +61,6 @@ public class MessagesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> SendMessage(SendMessageCommand request, CancellationToken cancellationToken)
     {
-        var recipientAddresses = request.Recipients.Select(r => r.Address).ToList();
-        var identitiesToBeDeleted = await _mediator.Send(new ListIdentitiesQuery(recipientAddresses, IdentityStatus.ToBeDeleted), cancellationToken);
-        if (identitiesToBeDeleted.Any())
-            throw new ApplicationException(ApplicationErrors.RecipientsToBeDeleted(identitiesToBeDeleted.Select(i => i.Address)));
-
         var response = await _mediator.Send(request, cancellationToken);
         return CreatedAtAction(nameof(GetMessage), new { id = response.Id }, response);
     }
