@@ -36,3 +36,10 @@ Feature: GET /Relationships/CanCreate
         When i1 sends a GET request to the /Relationships/CanCreate?peer={id} endpoint with id=i2.id
         Then the response status code is 200 (OK)
         And a Relationship can be established
+
+    Scenario: Cannot create Relationship if peer is to be deleted
+        Given Identities i1 and i2
+        And i2 is in status "ToBeDeleted"
+        When i1 sends a GET request to the /Relationships/CanCreate?peer={id} endpoint with id=i2.id
+        Then the response status code is 200 (OK)
+        And a Relationship can not be established
