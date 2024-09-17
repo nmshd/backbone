@@ -55,9 +55,9 @@ COPY . .
 
 ARG VERSION
 
-RUN dotnet restore "Applications/ConsumerApi/src/ConsumerApi.csproj"
-RUN dotnet publish --configuration Release --output /app/publish --no-restore "Applications/ConsumerApi/src/ConsumerApi.csproj"
-RUN dotnet publish --configuration Release --output /app/publish/health "Applications/HealthCheck/src/HealthCheck.csproj"
+RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/ConsumerApi/src/ConsumerApi.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish --no-restore "Applications/ConsumerApi/src/ConsumerApi.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health "Applications/HealthCheck/src/HealthCheck.csproj"
 
 ### Final ####
 FROM mcr.microsoft.com/dotnet/aspnet:8.0.8-jammy-chiseled
