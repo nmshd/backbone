@@ -198,9 +198,14 @@ public class RelationshipsController : ApiControllerBase
     [HttpGet("CanCreate")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CanEstablishRelationshipResponse>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> CanEstablishRelationship([FromQuery] string peer, CancellationToken cancellationToken)
+    public async Task<IActionResult> CanEstablishRelationship([FromQuery(Name = "peer")] string peerAddress, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new CanEstablishRelationshipQuery { PeerAddress = peer }, cancellationToken);
+        var peerIdentity = await _mediator.Send(new GetIdentityQuery(peerAddress), cancellationToken);
+
+        var response = peerIdentity.Status is IdentityStatus.ToBeDeleted
+            ? new CanEstablishRelationshipResponse { CanCreate = false }
+            : await _mediator.Send(new CanEstablishRelationshipQuery { PeerAddress = peerAddress }, cancellationToken);
+
         return Ok(response);
     }
 
