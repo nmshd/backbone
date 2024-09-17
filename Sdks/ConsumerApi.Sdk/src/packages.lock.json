@@ -15,8 +15,8 @@
       },
       "FluentAssertions": {
         "type": "Transitive",
-        "resolved": "6.12.0",
-        "contentHash": "ZXhHT2YwP9lajrwSKbLlFqsmCCvFJMoRSK9t7sImfnCyd0OB3MhgxdoMcVqxbq1iyxD6mD2fiackWmBb7ayiXQ==",
+        "resolved": "6.12.1",
+        "contentHash": "hciWwryyLw3eonfqhFpOMTXyM1/auJChYslEBA+iGJyuBs5O3t/kA8YaeH4iRo/2Fe3ElSYL86C0miivtZ0f3g==",
         "dependencies": {
           "System.Configuration.ConfigurationManager": "4.4.0"
         }
@@ -417,7 +417,7 @@
         "type": "Project",
         "dependencies": {
           "Backbone.Tooling": "[1.0.0, )",
-          "FluentAssertions": "[6.12.0, )",
+          "FluentAssertions": "[6.12.1, )",
           "NJsonSchema.NewtonsoftJson": "[11.0.2, )"
         }
       },

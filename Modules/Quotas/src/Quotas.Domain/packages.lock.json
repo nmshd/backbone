@@ -4,9 +4,9 @@
     "net8.0": {
       "CSharpFunctionalExtensions": {
         "type": "Direct",
-        "requested": "[2.42.5, )",
-        "resolved": "2.42.5",
-        "contentHash": "Do9Q7Nyfx2G4HRt96aB6yoP5Z9ic3jqBHLrf35tULzsWlFoBlkQZT62aXCiv7UmVmF56OUR+a3JoSSs140hfHQ=="
+        "requested": "[3.0.0, )",
+        "resolved": "3.0.0",
+        "contentHash": "IQ+3AD+v+d9JlKkN7FgpoFFjVwHJFUtvYDg7xjjmhARC9EM3xb/n2eYfgZ3tZ0ncWe3ZpPpzDbfZ7u5K9Onymw=="
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions": {
         "type": "Transitive",
@@ -23,8 +23,8 @@
       },
       "SimpleBase": {
         "type": "Transitive",
-        "resolved": "4.0.0",
-        "contentHash": "X9VdQGnMwRZ7ve1eGgzoRxV/srWCQfMWRaFzK8KsnA9P2N0LKUcELAdSW8noAY0JPKkDXNDtpH65CeVQwDDf+w==",
+        "resolved": "4.0.1",
+        "contentHash": "5QNJMyyHMMPMnSWlRNOR+p1R7KtS1CFaHeCy+uDLnPdJLeqHmnYMnrpJuT1jVcJxenWPfIfrJ1xU/9r1NE9aHw==",
         "dependencies": {
           "System.Memory": "4.5.5"
         }
@@ -58,7 +58,7 @@
         "type": "Project",
         "dependencies": {
           "Backbone.BuildingBlocks.Domain": "[1.0.0, )",
-          "SimpleBase": "[4.0.0, )"
+          "SimpleBase": "[4.0.1, )"
         }
       },
       "Backbone.Tooling": {
