@@ -24,7 +24,11 @@ public class PeerDeletedDomainEventHandler : IDomainEventHandler<PeerDeletedDoma
     private async Task CreateExternalEvent(PeerDeletedDomainEvent @event)
     {
 #pragma warning disable IDE0037
-        var payload = new { RelationshipId = @event.RelationshipId };
+        var payload = new
+        {
+            RelationshipId = @event.RelationshipId,
+            DeletionDate = DateTime.UtcNow
+        };
 #pragma warning restore IDE0037
         try
         {
