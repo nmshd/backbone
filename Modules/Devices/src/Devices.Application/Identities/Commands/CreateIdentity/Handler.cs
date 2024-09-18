@@ -31,30 +31,28 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
     public async Task<CreateIdentityResponse> Handle(CreateIdentityCommand command, CancellationToken cancellationToken)
     {
         var publicKey = await ValidateChallenge(command);
-
         _logger.LogTrace("Challenge successfully validated.");
 
         var address = await CreateIdentityAddress(publicKey, cancellationToken);
-
         _logger.LogTrace("Address created.");
 
         var newIdentity = await CreateNewIdentity(command, cancellationToken, address);
+        
+        newIdentity.AddDevice(command.CommunicationLanguage, command.DevicePassword);
+
+        await _identitiesRepository.AddUser(newIdentity.User, command.DevicePassword);
 
         _logger.CreatedIdentity();
-
-        var user = newIdentity.AddDevice(command.CommunicationLanguage, DeviceId.New());
-
-        await _identitiesRepository.AddUser(user, command.DevicePassword);
 
         return new CreateIdentityResponse
         {
             Address = address,
-            CreatedAt = user.Device.Identity.CreatedAt,// newIdentity.CreatedAt,
+            CreatedAt = newIdentity.User.Device.Identity.CreatedAt,// newIdentity.CreatedAt,
             Device = new CreateIdentityResponseDevice
             {
-                Id = user.DeviceId,// user.DeviceId,
-                Username = user.UserName!, // user.UserName!,
-                CreatedAt = user.Device.CreatedAt// user.Device.CreatedAt
+                Id = newIdentity.User.DeviceId,// user.DeviceId,
+                Username = newIdentity.User.UserName!, // user.UserName!,
+                CreatedAt = newIdentity.User.Device.CreatedAt// user.Device.CreatedAt
             }
         };
     }
@@ -64,7 +62,6 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         var client = await _oAuthClientsRepository.Find(command.ClientId, cancellationToken) ?? throw new NotFoundException(nameof(OAuthClient));
 
         var clientIdentityCount = await _identitiesRepository.CountByClientId(command.ClientId, cancellationToken);
-
         if (clientIdentityCount >= client.MaxIdentities)
             throw new OperationFailedException(ApplicationErrors.Devices.ClientReachedIdentitiesLimit());
 
@@ -76,16 +73,15 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         var address = IdentityAddress.Create(publicKey.Key, _applicationOptions.DidDomainName);
 
         var addressAlreadyExists = await _identitiesRepository.Exists(address, cancellationToken);
-
         if (addressAlreadyExists)
             throw new OperationFailedException(ApplicationErrors.Devices.AddressAlreadyExists());
+
         return address;
     }
 
     private async Task<PublicKey> ValidateChallenge(CreateIdentityCommand command)
     {
         var publicKey = PublicKey.FromBytes(command.IdentityPublicKey);
-
         await _challengeValidator.Validate(command.SignedChallenge, publicKey);
         return publicKey;
     }
