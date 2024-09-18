@@ -1,6 +1,6 @@
 import { SharedArray } from "k6/data";
 import papaparse from "papaparse";
-import { DataRepresentation, DataRepresentationLoads, IDataRepresentation, Identity, Pool } from "./data-loader/models";
+import { DataRepresentation, DataRepresentationLoads, Identity, Pool } from "./data-loader/models";
 
 /**
  *
@@ -8,7 +8,7 @@ import { DataRepresentation, DataRepresentationLoads, IDataRepresentation, Ident
  * @param whatoToLoad An array of {@link DataRepresentationLoads} representing the entities to be loaded
  * @returns a DataRepresentationForEnmeshedPerformanceTests populated according to @link{whatoToLoad}
  */
-export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepresentationLoads[] = [DataRepresentationLoads.Identities]): IDataRepresentation {
+export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepresentationLoads[] = [DataRepresentationLoads.Identities]): DataRepresentation {
     const csvFilesPath = `../snapshots/${folderName}/csvs`;
     let pools: Pool[];
     const identitiesMap: Map<string, Identity> = new Map<string, Identity>();

@@ -39,12 +39,7 @@ interface RelationshipTemplate {
     relationshipTemplateId: string;
 }
 
-export interface IDataRepresentation {
-    pools: Pool[];
-    ofTypes(...types: string[]): IDataRepresentation;
-}
-
-export class DataRepresentation implements IDataRepresentation {
+export class DataRepresentation {
     private readonly _pools: Pool[] = [];
 
     public constructor(pools: Pool[]) {
@@ -60,7 +55,9 @@ export class DataRepresentation implements IDataRepresentation {
      * @param types the names of the pools to be loaded, or simply theIR initial letter(s), e.g.: `.ofTypes("a", "c")` -- loads pools of type a1, a2, a.., c1, c2, c..
      * @returns
      */
-    public ofTypes = (...types: string[]): IDataRepresentation => new DataRepresentation(this._pools.filter((pool) => types.some((type) => pool.name.startsWith(type))));
+    public ofTypes(...types: string[]): DataRepresentation {
+        return new DataRepresentation(this._pools.filter((pool) => types.some((type) => pool.name.startsWith(type))));
+    }
 }
 
 export enum DataRepresentationLoads {
