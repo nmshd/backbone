@@ -16,14 +16,14 @@ public class IdentityToBeDeletedDomainEventHandler : IDomainEventHandler<Identit
 
     public async Task Handle(IdentityToBeDeletedDomainEvent @event)
     {
-        var relationships = await GetRelationshipsOf(@event.IdentityAddress);
+        var relationships = await GetPendingAndActiveRelationshipsOf(@event.IdentityAddress);
 
         NotifyRelationshipsOfPeerToBeDeleted(@event.IdentityAddress, relationships);
 
         await _relationshipsRepository.Update(relationships);
     }
 
-    private async Task<List<Relationship>> GetRelationshipsOf(string identityAddress)
+    private async Task<List<Relationship>> GetPendingAndActiveRelationshipsOf(string identityAddress)
     {
         var relationships = (await _relationshipsRepository
             .FindRelationships(r => (r.From == identityAddress || r.To == identityAddress) && r.Status == RelationshipStatus.Active,
