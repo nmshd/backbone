@@ -24,6 +24,8 @@ public class Identity : Entity
         PublicKey = null!;
         Devices = null!;
         _deletionProcesses = null!;
+        Password = null!;
+        User = null!;
     }
 
     public Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion)
@@ -37,6 +39,9 @@ public class Identity : Entity
         TierId = tierId;
         Status = IdentityStatus.Active;
         _deletionProcesses = [];
+
+        Password = "";
+        User = new ApplicationUser();
 
         RaiseDomainEvent(new IdentityCreatedDomainEvent(this));
     }
@@ -76,9 +81,23 @@ public class Identity : Entity
 
     public IdentityStatus Status { get; private set; }
 
+    public string Password { get; private set; }
+    public ApplicationUser User { get; private set; }
+
     public bool IsNew()
     {
         return Devices.Count < 1;
+    }
+
+    public void AddDevice(string communicationLanguage, string password)
+    {
+        var communicationLanguageResult = CommunicationLanguage.Create(communicationLanguage);
+        if (communicationLanguageResult.IsFailure)
+            throw new DomainException(communicationLanguageResult.Error);
+
+        User = new ApplicationUser(this, communicationLanguageResult.Value);
+
+        Password = password;
     }
 
     public ApplicationUser AddDevice(string communicationLanguage, DeviceId deviceId)

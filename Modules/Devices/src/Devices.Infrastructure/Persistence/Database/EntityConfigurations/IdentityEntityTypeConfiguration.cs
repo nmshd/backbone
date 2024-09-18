@@ -18,6 +18,9 @@ public class IdentityEntityTypeConfiguration : EntityEntityTypeConfiguration<Ide
         builder.HasIndex(x => x.ClientId).HasMethod("hash");
         builder.HasIndex(x => x.TierId).HasMethod("hash");
 
+        builder.Ignore(x => x.User);
+        builder.Ignore(x => x.Password);
+
         builder.HasMany(x => x.DeletionProcesses).WithOne().OnDelete(DeleteBehavior.Cascade);
     }
 }
