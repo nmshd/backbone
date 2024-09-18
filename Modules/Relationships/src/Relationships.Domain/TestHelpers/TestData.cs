@@ -49,8 +49,7 @@ public static class TestData
     {
         from ??= IDENTITY_1;
         to ??= IDENTITY_2;
-        var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
-        var relationship = new Relationship(template, from, DEVICE_1, [], []);
+        var relationship = CreatePendingRelationship(from, to);
         relationship.Accept(to, DEVICE_2, []);
         relationship.ClearDomainEvents();
         return relationship;
@@ -60,8 +59,7 @@ public static class TestData
     {
         from ??= IDENTITY_1;
         to ??= IDENTITY_2;
-        var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
-        var relationship = new Relationship(template, from, DEVICE_1, [], []);
+        var relationship = CreatePendingRelationship(from, to);
         relationship.Reject(to, DEVICE_2, null);
         relationship.ClearDomainEvents();
         return relationship;
@@ -71,8 +69,7 @@ public static class TestData
     {
         from ??= IDENTITY_1;
         to ??= IDENTITY_2;
-        var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
-        var relationship = new Relationship(template, from, DEVICE_1, [], []);
+        var relationship = CreatePendingRelationship(from, to);
         relationship.Revoke(from, DEVICE_2, null);
         relationship.ClearDomainEvents();
         return relationship;
