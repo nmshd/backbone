@@ -105,6 +105,30 @@ public class RelationshipCountAsActiveExpressionTests : AbstractTestsBase
     }
 
     #endregion
+
+    #region HasStatusInWhichPeerShouldBeNotifiedAboutDeletion
+
+    [Theory]
+    [InlineData(RelationshipStatus.Pending, true)]
+    [InlineData(RelationshipStatus.Rejected, false)]
+    [InlineData(RelationshipStatus.Revoked, false)]
+    [InlineData(RelationshipStatus.Active, true)]
+    [InlineData(RelationshipStatus.Terminated, true)]
+    [InlineData(RelationshipStatus.DeletionProposed, false)]
+    [InlineData(RelationshipStatus.ReadyForDeletion, false)]
+    public void HasStatusInWhichPeerShouldBeNotifiedAboutDeletion_with_status_Pending(RelationshipStatus status, bool expected)
+    {
+        // Arrange
+        var relationship = TestData.CreateRelationshipInStatus(status);
+
+        // Act
+        var result = relationship.EvaluateHasStatusInWhichPeerShouldBeNotifiedAboutDeletion();
+
+        // Assert
+        result.Should().Be(expected);
+    }
+
+    #endregion
 }
 
 file static class RelationshipExtensions
@@ -118,6 +142,12 @@ file static class RelationshipExtensions
     public static bool EvaluateCountsAsActiveExpression(this Relationship relationship)
     {
         var expression = Relationship.CountsAsActive();
+        return expression.Compile()(relationship);
+    }
+
+    public static bool EvaluateHasStatusInWhichPeerShouldBeNotifiedAboutDeletion(this Relationship relationship)
+    {
+        var expression = Relationship.HasStatusInWhichPeerShouldBeNotifiedAboutDeletion();
         return expression.Compile()(relationship);
     }
 }
