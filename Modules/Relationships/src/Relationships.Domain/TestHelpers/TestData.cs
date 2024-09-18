@@ -35,35 +35,45 @@ public static class TestData
         return status switch
         {
             RelationshipStatus.Pending => CreatePendingRelationship(from, to),
+            RelationshipStatus.Rejected => CreateRejectedRelationship(from, to),
+            RelationshipStatus.Revoked => CreateRevokedRelationship(),
             RelationshipStatus.Active => CreateActiveRelationship(from, to),
             RelationshipStatus.Terminated => CreateTerminatedRelationship(from, to),
             RelationshipStatus.DeletionProposed => CreateRelationshipWithProposedDeletion(from, to),
+            RelationshipStatus.ReadyForDeletion => CreateRelationshipReadyForDeletion(from, to),
             _ => throw new NotSupportedException($"This method currently does not support relationship status {status}.")
         };
     }
 
     public static Relationship CreateActiveRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
     {
+        from ??= IDENTITY_1;
         to ??= IDENTITY_2;
         var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
-        var relationship = new Relationship(template, from ?? IDENTITY_1, DEVICE_1, [], []);
+        var relationship = new Relationship(template, from, DEVICE_1, [], []);
         relationship.Accept(to, DEVICE_2, []);
         relationship.ClearDomainEvents();
         return relationship;
     }
 
-    public static Relationship CreateRejectedRelationship()
+    public static Relationship CreateRejectedRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
     {
-        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, [], []);
-        relationship.Reject(IDENTITY_2, DEVICE_2, null);
+        from ??= IDENTITY_1;
+        to ??= IDENTITY_2;
+        var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
+        var relationship = new Relationship(template, from, DEVICE_1, [], []);
+        relationship.Reject(to, DEVICE_2, null);
         relationship.ClearDomainEvents();
         return relationship;
     }
 
-    public static Relationship CreateRevokedRelationship()
+    public static Relationship CreateRevokedRelationship(IdentityAddress? from = null, IdentityAddress? to = null)
     {
-        var relationship = new Relationship(RELATIONSHIP_TEMPLATE_OF_2, IDENTITY_1, DEVICE_1, [], []);
-        relationship.Revoke(IDENTITY_1, DEVICE_1, null);
+        from ??= IDENTITY_1;
+        to ??= IDENTITY_2;
+        var template = new RelationshipTemplate(to, DEVICE_2, 999, null, []);
+        var relationship = new Relationship(template, from, DEVICE_1, [], []);
+        relationship.Revoke(from, DEVICE_2, null);
         relationship.ClearDomainEvents();
         return relationship;
     }
