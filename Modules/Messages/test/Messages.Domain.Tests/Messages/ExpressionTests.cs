@@ -117,60 +117,6 @@ public class ExpressionTests : AbstractTestsBase
     }
 
     #endregion
-
-    #region IsMessageOrphaned
-
-    [Fact]
-    public void IsMessageOrphaned_is_true_when_sender_and_all_recipients_are_anonymized()
-    {
-        // Arrange
-        var message = CreateMessageWithTwoRecipients();
-        message.ReplaceIdentityAddress(message.CreatedBy, ANONYMIZED_ADDRESS);
-        foreach (var recipient in message.Recipients)
-        {
-            message.ReplaceIdentityAddress(recipient.Address, ANONYMIZED_ADDRESS);
-        }
-
-        // Act
-        var result = message.EvaluateIsMessageOrphanedExpression("did:domain");
-
-        // Assert
-        result.Should().BeTrue();
-    }
-
-    [Fact]
-    public void IsMessageOrphaned_is_false_when_sender_is_not_anonymized()
-    {
-        // Arrange
-        var message = CreateMessageWithTwoRecipients();
-        foreach (var recipient in message.Recipients)
-        {
-            message.ReplaceIdentityAddress(recipient.Address, ANONYMIZED_ADDRESS);
-        }
-
-        // Act
-        var result = message.EvaluateIsMessageOrphanedExpression("did:domain");
-
-        // Assert
-        result.Should().BeFalse();
-    }
-
-    [Fact]
-    public void IsMessageOrphaned_is_false_when_one_recipient_is_not_anonymized()
-    {
-        // Arrange
-        var message = CreateMessageWithTwoRecipients();
-        message.ReplaceIdentityAddress(message.CreatedBy, ANONYMIZED_ADDRESS);
-        message.ReplaceIdentityAddress(message.Recipients.First().Address, ANONYMIZED_ADDRESS);
-
-        // Act
-        var result = message.EvaluateIsMessageOrphanedExpression("did:domain");
-
-        // Assert
-        result.Should().BeFalse();
-    }
-
-    #endregion
 }
 
 file static class MessageExtensions
@@ -184,12 +130,6 @@ file static class MessageExtensions
     public static bool EvaluateHasParticipantExpression(this Message message, IdentityAddress address)
     {
         var expression = Message.HasParticipant(address);
-        return expression.Compile()(message);
-    }
-
-    public static bool EvaluateIsMessageOrphanedExpression(this Message message, string didDomainName)
-    {
-        var expression = Message.IsMessageOrphaned(didDomainName);
         return expression.Compile()(message);
     }
 }
