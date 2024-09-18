@@ -1,13 +1,10 @@
-import { JwtResponse } from ".";
-import { Identity } from "../libs/data-loader/models";
-
 export interface CreateIdentityRequest {
     clientId: string;
     clientSecret: string;
-    identityPublicKey: any;
+    identityPublicKey: unknown;
     devicePassword: string;
     identityVersion: number;
-    signedChallenge: any;
+    signedChallenge: unknown;
 }
 
 export interface CreateIdentityResponse {
@@ -18,10 +15,4 @@ export interface CreateIdentityResponse {
         id: string;
         username: string;
     };
-}
-
-export interface IdentityWithAccessToken extends Identity {
-    response: CreateIdentityResponse;
-    token: JwtResponse;
-    tokenExpiresAt: Date;
 }

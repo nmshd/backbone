@@ -2,19 +2,19 @@ declare module "https://jslib.k6.io/httpx/0.1.0/index.js" {
     export class Httpx {
         constructor(options: Options);
 
-        get<RT extends ResponseType | undefined>(url: string | HttpURL, params?: RefinedParams<RT> | null): RefinedResponse<RT>;
+        get<RT>(url: string | HttpURL, params?: RefinedParams<RT> | null): TypedResponse<RT>;
 
-        delete<RT extends ResponseType | undefined>(url: string | HttpURL, params?: RefinedParams<RT> | null): RefinedResponse<RT>;
+        delete<RT>(url: string | HttpURL, params?: RefinedParams<RT> | null): TypedResponse<RT>;
 
-        post<RT extends ResponseType | undefined>(url: string | HttpURL, body?: RequestBody | null, params?: RefinedParams<RT> | null): RefinedResponse<RT>;
+        post<RT>(url: string | HttpURL, body?: RequestBody | null, params?: RefinedParams<RT> | null): TypedResponse<RT>;
 
-        put<RT extends ResponseType | undefined>(url: string | HttpURL, body?: RequestBody | null, params?: RefinedParams<RT> | null): RefinedResponse<RT>;
+        put<RT>(url: string | HttpURL, body?: RequestBody | null, params?: RefinedParams<RT> | null): TypedResponse<RT>;
 
-        patch<RT extends ResponseType | undefined>(url: string | HttpURL, body?: RequestBody | null, params?: RefinedParams<RT> | null): RefinedResponse<RT>;
+        patch<RT>(url: string | HttpURL, body?: RequestBody | null, params?: RefinedParams<RT> | null): TypedResponse<RT>;
     }
 
-    export class RefinedResponse<RT> {
-        json(path?: string): any;
+    export class TypedResponse<RT> extends Response {
+        json(path?: string): RT;
     }
 
     export interface Options {

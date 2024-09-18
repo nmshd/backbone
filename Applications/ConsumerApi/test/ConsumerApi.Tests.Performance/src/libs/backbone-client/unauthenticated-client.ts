@@ -1,8 +1,8 @@
 import { b64encode } from "k6/encoding";
-import { CreateChallengeResponse, CreateIdentityRequest, CreateIdentityResponse } from "../../models";
 import { CryptoHelper } from "../crypto-helper";
 import { BaseClient } from "./base-client";
 import { apiVersion } from "./constants";
+import { CreateChallengeResponse, CreateIdentityRequest, CreateIdentityResponse } from "./models";
 
 export class UnauthenticatedClient extends BaseClient {
     public constructor() {

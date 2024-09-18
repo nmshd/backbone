@@ -6,7 +6,7 @@ export class BaseClient {
     protected readonly clientId: string;
     protected readonly clientSecret: string;
     protected readonly client: FluentClient;
-    protected readonly httpxClient: any;
+    protected readonly httpxClient: Httpx;
 
     protected constructor() {
         this.clientId = (__ENV.clientId as string | undefined) ?? "test";

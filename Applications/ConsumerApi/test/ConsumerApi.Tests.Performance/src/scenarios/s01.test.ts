@@ -28,7 +28,8 @@ const testIdentities = new SharedArray("testIdentities", function () {
 let identityIterator = 0;
 
 export default function (): void {
-    const currentIdentity = testIdentities[identityIterator++];
+    const thisIdentityIterator = identityIterator++;
+    const currentIdentity = testIdentities[thisIdentityIterator];
 
     const username = currentIdentity.devices[0].username;
     const password = currentIdentity.devices[0].password;

@@ -1,6 +1,6 @@
-import { CreateChallengeResponse, JwtResponse } from "../../models";
 import { BaseClient } from "./base-client";
 import { apiVersion } from "./constants";
+import { CreateChallengeResponse, JwtResponse } from "./models";
 
 export class AuthenticatedClient extends BaseClient {
     public readonly username: string;

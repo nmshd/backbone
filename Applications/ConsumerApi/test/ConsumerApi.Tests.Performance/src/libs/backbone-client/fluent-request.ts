@@ -1,3 +1,5 @@
+import { TypedResponse } from "https://jslib.k6.io/httpx/0.1.0/index.js";
+import { RequestBody } from "k6/http";
 import { FluentClient } from "./fluent-client";
 
 export class FluentRequest {
@@ -29,50 +31,50 @@ export class FluentRequest {
         return this;
     }
 
-    public post<T>(body: any | null, jsonRootKey: string | null = "result"): T {
-        const response = this.statelessClient.httpxClient.post(this.endpoint, body, { headers: this.headers });
+    public post<T>(body: RequestBody | null, jsonRootKey: string | null = "result"): T {
+        const response = this.statelessClient.httpxClient.post<T>(this.endpoint, body, { headers: this.headers });
 
         this.ThrowIfResponse4or5(response, "POST");
         return this.getJson<T>(response, jsonRootKey);
     }
 
-    public put<T>(body: any | null, jsonRootKey: string | null = "result"): T {
-        const response = this.statelessClient.httpxClient.put(this.endpoint, body, { headers: this.headers });
+    public put<T>(body: RequestBody, jsonRootKey: string | null = "result"): T {
+        const response = this.statelessClient.httpxClient.put<T>(this.endpoint, body, { headers: this.headers });
 
         this.ThrowIfResponse4or5(response, "PUT");
         return this.getJson<T>(response, jsonRootKey);
     }
 
     public get<T>(jsonRootKey: string | null = "result"): T {
-        const response = this.statelessClient.httpxClient.get(this.endpoint, { headers: this.headers });
+        const response = this.statelessClient.httpxClient.get<T>(this.endpoint, { headers: this.headers });
 
         this.ThrowIfResponse4or5(response, "GET");
         return this.getJson<T>(response, jsonRootKey);
     }
 
     public delete<T>(jsonRootKey: string | null = "result"): T {
-        const response = this.statelessClient.httpxClient.delete(this.endpoint, { headers: this.headers });
+        const response = this.statelessClient.httpxClient.delete<T>(this.endpoint, { headers: this.headers });
 
         this.ThrowIfResponse4or5(response, "DELETE");
         return this.getJson<T>(response, jsonRootKey);
     }
 
-    public patch<T>(body: any, jsonRootKey: string | null = "result"): T {
-        const response = this.statelessClient.httpxClient.patch(this.endpoint, body, { headers: this.headers });
+    public patch<T>(body: RequestBody, jsonRootKey: string | null = "result"): T {
+        const response = this.statelessClient.httpxClient.patch<T>(this.endpoint, body, { headers: this.headers });
 
         this.ThrowIfResponse4or5(response, "PATCH");
         return this.getJson<T>(response, jsonRootKey);
     }
 
-    private getJson<T>(response: any, jsonRootKey: string | null): T {
+    private getJson<RT>(response: TypedResponse<RT>, jsonRootKey: string | null) {
         if (jsonRootKey === null) {
-            return response.json() as T;
+            return response.json();
         }
-        return response.json(jsonRootKey) as T;
+        return response.json(jsonRootKey);
     }
 
-    private ThrowIfResponse4or5(response: any, type: string) {
-        if (response.status.toString()[0] === "4" || response.status.toString()[0] === "5") {
+    private ThrowIfResponse4or5<T>(response: TypedResponse<T>, type: string) {
+        if (response.status > 399) {
             throw new Error(`Request ${type} ${this.endpoint} failed with status code ${response.status}: ${JSON.stringify(response.json())}`);
         }
     }
