@@ -372,5 +372,12 @@ public class Relationship : Entity
                     r.Status != RelationshipStatus.ReadyForDeletion;
     }
 
+    public static Expression<Func<Relationship, bool>> HasStatusInWhichPeerShouldBeNotifiedAboutDeletion()
+    {
+        return r => r.Status == RelationshipStatus.Pending ||
+                    r.Status == RelationshipStatus.Active ||
+                    r.Status == RelationshipStatus.Terminated;
+    }
+
     #endregion
 }
