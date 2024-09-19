@@ -5,7 +5,9 @@ namespace Backbone.Modules.Quotas.Application.Identities.Queries.ListQuotasForId
 
 public class ListQuotasForIdentityResponse : CollectionResponseBase<QuotaGroupDTO>
 {
-    public ListQuotasForIdentityResponse(IEnumerable<QuotaGroupDTO> items) : base(items) { }
+    public ListQuotasForIdentityResponse(IEnumerable<QuotaGroupDTO> items) : base(items)
+    {
+    }
 }
 
 public class SingleQuotaDTO

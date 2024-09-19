@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.DeleteDatawalletsOfIdentity;
+
 public class Handler : IRequestHandler<DeleteDatawalletsOfIdentityCommand>
 {
     private readonly ISynchronizationDbContext _dbContext;

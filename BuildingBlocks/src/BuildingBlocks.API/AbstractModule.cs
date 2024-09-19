@@ -12,5 +12,7 @@ public abstract class AbstractModule
 
     public abstract void ConfigureEventBus(IEventBus eventBus);
 
-    public virtual void PostStartupValidation(IServiceProvider serviceProvider) { }
+    public virtual void PostStartupValidation(IServiceProvider serviceProvider)
+    {
+    }
 }

@@ -4,6 +4,7 @@ using Dapper;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Common.Infrastructure;
+
 public static class IServiceCollectionExtension
 {
     private const string SQLSERVER = "SqlServer";

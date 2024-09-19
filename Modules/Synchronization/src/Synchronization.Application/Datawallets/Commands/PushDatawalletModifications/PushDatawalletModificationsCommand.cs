@@ -6,7 +6,9 @@ namespace Backbone.Modules.Synchronization.Application.Datawallets.Commands.Push
 
 public class PushDatawalletModificationsCommand : IRequest<PushDatawalletModificationsResponse>
 {
-    public PushDatawalletModificationsCommand(PushDatawalletModificationItem[] modifications, ushort supportedDatawalletVersion) : this(modifications, null, supportedDatawalletVersion) { }
+    public PushDatawalletModificationsCommand(PushDatawalletModificationItem[] modifications, ushort supportedDatawalletVersion) : this(modifications, null, supportedDatawalletVersion)
+    {
+    }
 
     [JsonConstructor]
     public PushDatawalletModificationsCommand(PushDatawalletModificationItem[] modifications, long? localIndex, ushort supportedDatawalletVersion)

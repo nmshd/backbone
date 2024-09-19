@@ -1,3 +1,4 @@
+using Backbone.FilesSanityCheck.Infrastructure.SanityCheck;
 using Backbone.FilesSanityCheck.Tests.Infrastructure.DataSource;
 using Backbone.FilesSanityCheck.Tests.Infrastructure.Reporter;
 using Backbone.Modules.Files.Domain.Entities;
@@ -11,13 +12,13 @@ public class SanityCheckTests : AbstractTestsBase
 {
     private readonly FakeDataSource _dataSource;
     private readonly TestReporter _reporter;
-    private readonly FilesSanityCheck.Infrastructure.SanityCheck.SanityCheck _sanityCheck;
+    private readonly SanityCheck _sanityCheck;
 
     public SanityCheckTests()
     {
         _dataSource = new FakeDataSource();
         _reporter = new TestReporter();
-        _sanityCheck = new FilesSanityCheck.Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
+        _sanityCheck = new SanityCheck(_dataSource, _reporter);
     }
 
     [Fact]

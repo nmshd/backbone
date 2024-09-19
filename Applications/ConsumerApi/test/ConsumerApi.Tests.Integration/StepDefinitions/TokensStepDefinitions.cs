@@ -129,6 +129,5 @@ internal class TokensStepDefinitions
         _listTokensResponse!.Result.Should().NotContain(token => token.Id == tokenId);
     }
 
-
     #endregion
 }

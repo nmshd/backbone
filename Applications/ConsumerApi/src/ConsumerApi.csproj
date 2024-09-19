@@ -5,43 +5,43 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2"/>
-        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0"/>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8"/>
-        <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.24.0"/>
-        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0"/>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8"/>
-        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="8.0.2"/>
-        <PackageReference Include="Serilog.Enrichers.Sensitive" Version="1.7.3"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.8"/>
-        <PackageReference Include="Serilog" Version="4.0.1"/>
-        <PackageReference Include="Serilog.AspNetCore" Version="8.0.2"/>
-        <PackageReference Include="Serilog.Enrichers.ClientInfo" Version="2.1.1"/>
-        <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.2"/>
-        <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1"/>
-        <PackageReference Include="Serilog.Exceptions" Version="8.4.0"/>
-        <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="8.4.0"/>
-        <PackageReference Include="Serilog.Formatting.Compact" Version="3.0.0"/>
-        <PackageReference Include="Serilog.Sinks.Http" Version="9.0.0"/>
-        <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0"/>
+        <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2" />
+        <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
+        <PackageReference Include="NetEscapades.AspNetCore.SecurityHeaders" Version="0.24.0" />
+        <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.8" />
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="8.0.2" />
+        <PackageReference Include="Serilog.Enrichers.Sensitive" Version="1.7.3" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.7.3" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="8.0.8" />
+        <PackageReference Include="Serilog" Version="4.0.1" />
+        <PackageReference Include="Serilog.AspNetCore" Version="8.0.2" />
+        <PackageReference Include="Serilog.Enrichers.ClientInfo" Version="2.1.1" />
+        <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.2" />
+        <PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
+        <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
+        <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="8.4.0" />
+        <PackageReference Include="Serilog.Formatting.Compact" Version="3.0.0" />
+        <PackageReference Include="Serilog.Sinks.Http" Version="9.0.0" />
+        <PackageReference Include="Serilog.Sinks.Seq" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj"/>
-        <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.csproj"/>
-        <ProjectReference Include="..\..\..\Modules\Challenges\src\Challenges.ConsumerApi\Challenges.ConsumerApi.csproj"/>
-        <ProjectReference Include="..\..\..\Modules\Devices\src\Devices.ConsumerApi\Devices.ConsumerApi.csproj"/>
-        <ProjectReference Include="..\..\..\Modules\Files\src\Files.ConsumerApi\Files.ConsumerApi.csproj"/>
-        <ProjectReference Include="..\..\..\Modules\Messages\src\Messages.ConsumerApi\Messages.ConsumerApi.csproj"/>
-        <ProjectReference Include="..\..\..\Modules\Quotas\src\Quotas.ConsumerApi\Quotas.ConsumerApi.csproj"/>
-        <ProjectReference Include="..\..\..\Modules\Relationships\src\Relationships.ConsumerApi\Relationships.ConsumerApi.csproj"/>
-        <ProjectReference Include="..\..\..\Modules\Synchronization\src\Synchronization.ConsumerApi\Synchronization.ConsumerApi.csproj"/>
-        <ProjectReference Include="..\..\..\Modules\Tokens\src\Tokens.ConsumerApi\Tokens.ConsumerApi.csproj"/>
+        <ProjectReference Include="..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
+        <ProjectReference Include="..\..\..\Infrastructure\Infrastructure.csproj" />
+        <ProjectReference Include="..\..\..\Modules\Challenges\src\Challenges.ConsumerApi\Challenges.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\Modules\Devices\src\Devices.ConsumerApi\Devices.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\Modules\Files\src\Files.ConsumerApi\Files.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\Modules\Messages\src\Messages.ConsumerApi\Messages.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\Modules\Quotas\src\Quotas.ConsumerApi\Quotas.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\Modules\Relationships\src\Relationships.ConsumerApi\Relationships.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\Modules\Synchronization\src\Synchronization.ConsumerApi\Synchronization.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\Modules\Tokens\src\Tokens.ConsumerApi\Tokens.ConsumerApi.csproj" />
     </ItemGroup>
 
     <Target Name="PreBuild" BeforeTargets="Build" Condition="$(Configuration) == Debug">
-        <Delete Files="$(ProjectDir)appsettings.override.json"/>
-        <Copy SourceFiles="..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true"/>
+        <Delete Files="$(ProjectDir)appsettings.override.json" />
+        <Copy SourceFiles="..\..\..\appsettings.override.json" DestinationFolder="$(ProjectDir)" UseHardlinksIfPossible="true" />
     </Target>
 </Project>

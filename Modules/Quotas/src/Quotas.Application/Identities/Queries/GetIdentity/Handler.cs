@@ -5,6 +5,7 @@ using Backbone.Modules.Quotas.Domain.Metrics;
 using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Identities.Queries.GetIdentity;
+
 public class Handler : IRequestHandler<GetIdentityQuery, GetIdentityResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;

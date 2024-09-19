@@ -2,7 +2,9 @@ namespace Backbone.Modules.Messages.Common;
 
 public class Range<T>
 {
-    public Range() { }
+    public Range()
+    {
+    }
 
     public Range(T from, T to)
     {
@@ -26,7 +28,9 @@ public class Range<T>
 
 public class OptionalDateRange : Range<DateTime?>
 {
-    public OptionalDateRange() { }
+    public OptionalDateRange()
+    {
+    }
 
     public OptionalDateRange(DateTime? from, DateTime? to) : base(from, to)
     {

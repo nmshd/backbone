@@ -3,6 +3,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 namespace Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
+
 public interface IIdentitiesRepository
 {
     Task Add(Identity identity, CancellationToken cancellationToken);

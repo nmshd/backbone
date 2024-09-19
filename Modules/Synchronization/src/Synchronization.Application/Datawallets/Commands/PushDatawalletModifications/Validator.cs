@@ -12,6 +12,7 @@ public class Validator : AbstractValidator<PushDatawalletModificationsCommand>
     {
         RuleFor(r => r.Modifications).DetailedNotEmpty();
         RuleForEach(r => r.Modifications).SetValidator(new PushDatawalletModificationItemValidator());
-        RuleFor(r => r.SupportedDatawalletVersion).Must(v => v > 0).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code).WithMessage("'SupportedDatawalletVersion' must be greater than 0.");
+        RuleFor(r => r.SupportedDatawalletVersion).Must(v => v > 0).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
+            .WithMessage("'SupportedDatawalletVersion' must be greater than 0.");
     }
 }

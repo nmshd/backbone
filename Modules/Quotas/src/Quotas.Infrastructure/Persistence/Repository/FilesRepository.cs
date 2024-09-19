@@ -5,6 +5,7 @@ using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExten
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
+
 public class FilesRepository : IFilesRepository
 {
     private readonly IQueryable<FileMetadata> _readOnlyFiles;

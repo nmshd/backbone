@@ -8,5 +8,6 @@ public class GetIdentityQuery : IRequest<GetIdentityResponse>
     {
         Address = address;
     }
+
     public string Address { get; set; }
 }

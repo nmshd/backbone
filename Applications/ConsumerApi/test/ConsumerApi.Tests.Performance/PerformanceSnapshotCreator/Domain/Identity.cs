@@ -5,6 +5,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types;
 using Backbone.PerformanceSnapshotCreator.PoolsFile;
 
 namespace Backbone.PerformanceSnapshotCreator.Domain;
+
 public class Identity
 {
     public readonly UserCredentials UserCredentials;
@@ -56,6 +57,7 @@ public class Identity
             UniqueOrderNumber = nonNullableUniqueOrderNumber;
         }
     }
+
     public void AddDevice(string deviceId)
     {
         DeviceIds.Add(deviceId);

@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Domain;
 using Backbone.Common.Infrastructure.Persistence.Repository;
 
 namespace Backbone.BuildingBlocks.Application.QuotaCheck;
+
 public class QuotaCheckerImpl : IQuotaChecker
 {
     private readonly IUserContext _userContext;

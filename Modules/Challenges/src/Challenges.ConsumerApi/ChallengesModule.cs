@@ -37,6 +37,5 @@ public class ChallengesModule : AbstractModule
 
     public override void ConfigureEventBus(IEventBus eventBus)
     {
-
     }
 }

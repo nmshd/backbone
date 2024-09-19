@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Application.Identities.Commands.LogDeletionProces
 using MediatR;
 
 namespace Backbone.Job.IdentityDeletion;
+
 public class DeletionProcessLogger : IDeletionProcessLogger
 {
     private readonly IMediator _mediator;

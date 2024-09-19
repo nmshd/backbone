@@ -21,7 +21,8 @@ public static class ApplicationErrors
 
         public static ApplicationError CannotSendRelationshipRequestToYourself()
         {
-            return new ApplicationError("error.platform.validation.relationshipRequest.cannotSendRelationshipRequestToYourself", "The template you provided is your own. You cannot send a relationship request to yourself.");
+            return new ApplicationError("error.platform.validation.relationshipRequest.cannotSendRelationshipRequestToYourself",
+                "The template you provided is your own. You cannot send a relationship request to yourself.");
         }
     }
 }

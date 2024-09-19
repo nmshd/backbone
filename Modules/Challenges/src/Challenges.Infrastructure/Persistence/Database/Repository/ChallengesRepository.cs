@@ -6,6 +6,7 @@ using Backbone.Modules.Challenges.Domain.Ids;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Repository;
+
 public class ChallengesRepository : IChallengesRepository
 {
     private readonly DbSet<Challenge> _challenges;
@@ -16,6 +17,7 @@ public class ChallengesRepository : IChallengesRepository
         _challenges = dbContext.Challenges;
         _dbContext = dbContext;
     }
+
     public async Task<Challenge> Find(ChallengeId id, CancellationToken cancellationToken)
     {
         return await _challenges

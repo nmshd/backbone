@@ -6,6 +6,7 @@ using MediatR;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
+
 public class Handler : IRequestHandler<UpdateClientCommand, UpdateClientResponse>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;

@@ -8,5 +8,6 @@ public class GetDeletionProcessesAsSupportQuery : IRequest<GetDeletionProcessesA
     {
         IdentityAddress = identityAddress;
     }
+
     public string IdentityAddress { get; set; }
 }

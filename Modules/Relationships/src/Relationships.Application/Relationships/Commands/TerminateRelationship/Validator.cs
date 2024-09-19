@@ -11,4 +11,3 @@ public class Validator : AbstractValidator<TerminateRelationshipCommand>
         RuleFor(x => x.RelationshipId).ValidId<TerminateRelationshipCommand, RelationshipId>();
     }
 }
-

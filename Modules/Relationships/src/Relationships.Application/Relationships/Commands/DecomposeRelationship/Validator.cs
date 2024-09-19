@@ -11,4 +11,3 @@ public class Validator : AbstractValidator<DecomposeRelationshipCommand>
         RuleFor(x => x.RelationshipId).ValidId<DecomposeRelationshipCommand, RelationshipId>();
     }
 }
-

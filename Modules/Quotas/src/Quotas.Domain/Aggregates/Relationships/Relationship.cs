@@ -1,4 +1,5 @@
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Relationships;
+
 public class Relationship : ICreatedAt
 {
     public required string Id { get; set; }
@@ -9,6 +10,7 @@ public class Relationship : ICreatedAt
     public required bool FromHasDecomposed { get; set; }
     public required bool ToHasDecomposed { get; set; }
 }
+
 public enum RelationshipStatus
 {
     Pending = 10,

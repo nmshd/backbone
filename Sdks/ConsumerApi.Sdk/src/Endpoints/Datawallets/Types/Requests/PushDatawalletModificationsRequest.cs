@@ -12,6 +12,7 @@ public class PushDatawalletModificationsRequestItem
     /// Is usually one of the following: "Create", "Update", "Delete", "CacheChanged"
     /// </summary>
     public required string Type { get; set; }
+
     public required string ObjectIdentifier { get; set; }
     public required string Collection { get; set; }
 
@@ -19,6 +20,7 @@ public class PushDatawalletModificationsRequestItem
     /// Is usually one of the following: "TechnicalData", "Userdata", "Metadata"
     /// </summary>
     public string? PayloadCategory { get; set; }
+
     public byte[]? EncryptedPayload { get; set; }
     public required ushort DatawalletVersion { get; set; }
 }

@@ -18,7 +18,8 @@ public class CustomSigninManager : SignInManager<ApplicationUser>
         IAuthenticationSchemeProvider schemes,
         IUserConfirmation<ApplicationUser> confirmation) : base(userManager, contextAccessor, claimsFactory,
         optionsAccessor, logger, schemes, confirmation)
-    { }
+    {
+    }
 
     public override async Task<SignInResult> CheckPasswordSignInAsync(ApplicationUser user, string password,
         bool lockoutOnFailure)

@@ -18,7 +18,8 @@ public class Validator : AbstractValidator<CreateRelationshipTemplateCommand>
             .GreaterThan(0).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code).When(c => c.MaxNumberOfAllocations != null);
 
         RuleFor(c => c.ExpiresAt)
-            .GreaterThan(SystemTime.UtcNow).WithMessage("'{PropertyName}' must be in the future.").WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code).When(c => c.ExpiresAt != null);
+            .GreaterThan(SystemTime.UtcNow).WithMessage("'{PropertyName}' must be in the future.").WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
+            .When(c => c.ExpiresAt != null);
 
         RuleFor(c => c.ForIdentity)
             .ValidId<CreateRelationshipTemplateCommand, IdentityAddress>()

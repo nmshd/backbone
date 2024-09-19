@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.Repository;
+
 public class FilesRepository : IFilesRepository
 {
     private readonly DbSet<File> _files;

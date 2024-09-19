@@ -15,7 +15,6 @@ public record QuotaId : StronglyTypedId
 
     private QuotaId(string value) : base(value)
     {
-
     }
 
     public static bool IsValid(string stringValue)

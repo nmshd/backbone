@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.EntityConfigurations;
+
 public class TokenEntityTypeConfiguration : IEntityTypeConfiguration<Token>
 {
     public void Configure(EntityTypeBuilder<Token> builder)

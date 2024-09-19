@@ -4,6 +4,7 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Tiers;
+
 public class TierNameTests : AbstractTestsBase
 {
     [Theory]

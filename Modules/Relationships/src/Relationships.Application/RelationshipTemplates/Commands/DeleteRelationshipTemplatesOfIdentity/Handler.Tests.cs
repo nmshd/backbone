@@ -7,6 +7,7 @@ using FakeItEasy;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.DeleteRelationshipTemplatesOfIdentity;
+
 public class HandlerTests : AbstractTestsBase
 {
     [Fact]

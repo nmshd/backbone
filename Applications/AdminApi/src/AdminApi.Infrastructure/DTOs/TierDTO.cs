@@ -1,4 +1,5 @@
 namespace Backbone.AdminApi.Infrastructure.DTOs;
+
 public class TierDTO
 {
     public string Id { get; set; }

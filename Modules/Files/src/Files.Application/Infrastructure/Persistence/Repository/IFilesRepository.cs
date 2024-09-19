@@ -6,6 +6,7 @@ using Backbone.Modules.Files.Domain.Entities;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+
 public interface IFilesRepository
 {
     Task<File?> Find(FileId id, CancellationToken cancellationToken, bool track = false, bool fillContent = true);

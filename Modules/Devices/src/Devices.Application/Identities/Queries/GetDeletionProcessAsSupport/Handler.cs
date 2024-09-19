@@ -5,6 +5,7 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsSupport;
+
 public class Handler : IRequestHandler<GetDeletionProcessAsSupportQuery, IdentityDeletionProcessDetailsDTO>
 {
     private readonly IIdentitiesRepository _identitiesRepository;

@@ -11,7 +11,7 @@ public class SignedChallenge
         Challenge = challenge;
         Signature = ConvertibleString.FromUtf8(
             JsonConvert.SerializeObject(new CryptoSignatureSignedChallenge { alg = CryptoHashAlgorithm.SHA512, sig = signature.BytesRepresentation }
-        )).Base64Representation;
+            )).Base64Representation;
     }
 
     public string Challenge { get; internal set; }

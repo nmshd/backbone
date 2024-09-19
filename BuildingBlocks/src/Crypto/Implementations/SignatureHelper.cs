@@ -64,7 +64,6 @@ public class SignatureHelper : ISignatureHelper
     {
         try
         {
-
             var key = Key.Import(_signatureAlgorithm, privateKey.BytesRepresentation, _privateKeyFormat);
             return key;
         }

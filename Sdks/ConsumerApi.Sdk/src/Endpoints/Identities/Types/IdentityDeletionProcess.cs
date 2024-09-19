@@ -1,4 +1,5 @@
 ﻿namespace Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types;
+
 public class IdentityDeletionProcess
 {
     public required string Id { get; set; }

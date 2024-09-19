@@ -1,5 +1,6 @@
 using Backbone.FilesSanityCheck.Infrastructure.DataSource;
 using Backbone.FilesSanityCheck.Infrastructure.Reporter;
+using Backbone.FilesSanityCheck.Infrastructure.SanityCheck;
 
 namespace Backbone.FilesSanityCheck;
 
@@ -39,7 +40,7 @@ public class Worker : IHostedService
 
     private async Task RunSanityCheck(CancellationToken cancellationToken)
     {
-        var sanityCheck = new Infrastructure.SanityCheck.SanityCheck(_dataSource, _reporter);
+        var sanityCheck = new SanityCheck(_dataSource, _reporter);
 
         await sanityCheck.Run(cancellationToken);
     }

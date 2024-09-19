@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.DomainEvents;
+
 public class PeerToBeDeletedDomainEventHandlerTests : AbstractTestsBase
 {
     [Fact]

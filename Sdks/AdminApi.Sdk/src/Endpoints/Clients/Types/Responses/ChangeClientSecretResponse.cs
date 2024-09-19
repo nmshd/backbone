@@ -1,4 +1,5 @@
 ﻿namespace Backbone.AdminApi.Sdk.Endpoints.Clients.Types.Responses;
+
 public class ChangeClientSecretResponse
 {
     public required string ClientId { get; set; }

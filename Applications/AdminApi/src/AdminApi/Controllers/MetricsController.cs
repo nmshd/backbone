@@ -11,7 +11,9 @@ namespace Backbone.AdminApi.Controllers;
 [Authorize("ApiKey")]
 public class MetricsController : ApiControllerBase
 {
-    public MetricsController(IMediator mediator) : base(mediator) { }
+    public MetricsController(IMediator mediator) : base(mediator)
+    {
+    }
 
     [HttpGet]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListMetricsResponse>), StatusCodes.Status200OK)]

@@ -1,17 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<DocumentationFile></DocumentationFile>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <DocumentationFile></DocumentationFile>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="FluentValidation" Version="11.10.0" />
-		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="FluentValidation" Version="11.10.0" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
-		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
-		<ProjectReference Include="..\Synchronization.Domain\Synchronization.Domain.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
+        <ProjectReference Include="..\Synchronization.Domain\Synchronization.Domain.csproj" />
+    </ItemGroup>
 </Project>

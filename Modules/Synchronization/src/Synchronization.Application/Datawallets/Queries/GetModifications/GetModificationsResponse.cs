@@ -5,5 +5,7 @@ namespace Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetMo
 
 public class GetModificationsResponse : PagedResponse<DatawalletModificationDTO>
 {
-    public GetModificationsResponse(IEnumerable<DatawalletModificationDTO> items, PaginationFilter previousPaginationFilter, int totalRecords) : base(items, previousPaginationFilter, totalRecords) { }
+    public GetModificationsResponse(IEnumerable<DatawalletModificationDTO> items, PaginationFilter previousPaginationFilter, int totalRecords) : base(items, previousPaginationFilter, totalRecords)
+    {
+    }
 }

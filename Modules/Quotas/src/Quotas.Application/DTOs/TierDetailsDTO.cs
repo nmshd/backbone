@@ -2,6 +2,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 
 namespace Backbone.Modules.Quotas.Application.DTOs;
+
 public class TierDetailsDTO
 {
     public TierDetailsDTO(Tier tier, IEnumerable<Metric> metrics)

@@ -1,4 +1,5 @@
 namespace Backbone.Modules.Quotas.Domain.Aggregates.Messages;
+
 public class Message : ICreatedAt
 {
     public required string Id { get; set; }

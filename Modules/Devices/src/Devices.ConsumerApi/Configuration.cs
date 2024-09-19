@@ -34,6 +34,5 @@ public class Configuration
             [Required]
             public bool EnableHealthCheck { get; set; } = true;
         }
-
     }
 }

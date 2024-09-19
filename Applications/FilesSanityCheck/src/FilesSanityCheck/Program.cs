@@ -53,7 +53,8 @@ public class Program
 
                     options.BlobStorageOptions.ConnectionInfo = configuration.GetBlobStorageConfiguration().ConnectionInfo;
                     options.BlobStorageOptions.CloudProvider = configuration.GetBlobStorageConfiguration().CloudProvider;
-                    options.BlobStorageOptions.Container = configuration.GetBlobStorageConfiguration().ContainerName.IsNullOrEmpty() ? "files" : configuration.GetBlobStorageConfiguration().ContainerName;
+                    options.BlobStorageOptions.Container =
+                        configuration.GetBlobStorageConfiguration().ContainerName.IsNullOrEmpty() ? "files" : configuration.GetBlobStorageConfiguration().ContainerName;
                 });
             });
     }

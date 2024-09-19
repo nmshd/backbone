@@ -5,6 +5,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Tiers.Queries.GetTierById;
+
 public class Handler : IRequestHandler<GetTierByIdQuery, TierDetailsDTO>
 {
     private readonly ITiersRepository _tiersRepository;

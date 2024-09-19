@@ -1,4 +1,3 @@
-
 [*.{appxmanifest,axml,build,config,csproj,dbml,discomap,dtd,jsproj,lsproj,njsproj,nuspec,proj,props,resw,resx,StyleCop,targets,tasks,vbproj,xml,xsd}]
 indent_style = space
 indent_size = 4
@@ -13,8 +12,6 @@ tab_width = 4
 [**]
 ij_html_space_inside_empty_tag = true
 ij_xml_space_inside_empty_tag = true
-
-[*]
 
 # Microsoft .NET properties
 csharp_indent_braces = false
@@ -153,24 +150,24 @@ dotnet_naming_style.lower_camel_case_style_1.capitalization = camel_case
 dotnet_naming_style.t_upper_camel_case_style.capitalization = pascal_case
 dotnet_naming_style.t_upper_camel_case_style.required_prefix = T
 dotnet_naming_style.upper_camel_case_style.capitalization = pascal_case
-dotnet_naming_symbols.constants_symbols.applicable_accessibilities = public,internal,protected,protected_internal,private_protected
+dotnet_naming_symbols.constants_symbols.applicable_accessibilities = public, internal, protected, protected_internal, private_protected
 dotnet_naming_symbols.constants_symbols.applicable_kinds = field
 dotnet_naming_symbols.constants_symbols.required_modifiers = const
 dotnet_naming_symbols.event_symbols.applicable_accessibilities = *
 dotnet_naming_symbols.event_symbols.applicable_kinds = event
-dotnet_naming_symbols.instance_fields_protected_override_symbols.applicable_accessibilities = local,protected
+dotnet_naming_symbols.instance_fields_protected_override_symbols.applicable_accessibilities = local, protected
 dotnet_naming_symbols.instance_fields_protected_override_symbols.applicable_kinds = field
 dotnet_naming_symbols.instance_fields_protected_override_symbols.required_modifiers = static
-dotnet_naming_symbols.instance_fields_protected_override_symbols_1.applicable_accessibilities = local,protected
+dotnet_naming_symbols.instance_fields_protected_override_symbols_1.applicable_accessibilities = local, protected
 dotnet_naming_symbols.instance_fields_protected_override_symbols_1.applicable_kinds = field
 dotnet_naming_symbols.instance_fields_protected_override_symbols_1.required_modifiers = static
-dotnet_naming_symbols.instance_fields_protected__symbols.applicable_accessibilities = local,protected
+dotnet_naming_symbols.instance_fields_protected__symbols.applicable_accessibilities = local, protected
 dotnet_naming_symbols.instance_fields_protected__symbols.applicable_kinds = field
-dotnet_naming_symbols.instance_fields_protected__symbols.resharper_applicable_kinds = field,readonly_field
+dotnet_naming_symbols.instance_fields_protected__symbols.resharper_applicable_kinds = field, readonly_field
 dotnet_naming_symbols.instance_fields_protected__symbols.resharper_required_modifiers = instance
-dotnet_naming_symbols.instance_fields_protected__symbols_1.applicable_accessibilities = local,protected
+dotnet_naming_symbols.instance_fields_protected__symbols_1.applicable_accessibilities = local, protected
 dotnet_naming_symbols.instance_fields_protected__symbols_1.applicable_kinds = field
-dotnet_naming_symbols.instance_fields_protected__symbols_1.resharper_applicable_kinds = field,readonly_field
+dotnet_naming_symbols.instance_fields_protected__symbols_1.resharper_applicable_kinds = field, readonly_field
 dotnet_naming_symbols.instance_fields_protected__symbols_1.resharper_required_modifiers = instance
 dotnet_naming_symbols.interfaces_symbols.applicable_accessibilities = *
 dotnet_naming_symbols.interfaces_symbols.applicable_kinds = interface
@@ -195,16 +192,16 @@ dotnet_naming_symbols.private_static_fields_symbols.applicable_kinds = field
 dotnet_naming_symbols.private_static_fields_symbols.required_modifiers = static
 dotnet_naming_symbols.private_static_readonly_symbols.applicable_accessibilities = private
 dotnet_naming_symbols.private_static_readonly_symbols.applicable_kinds = field
-dotnet_naming_symbols.private_static_readonly_symbols.required_modifiers = static,readonly
+dotnet_naming_symbols.private_static_readonly_symbols.required_modifiers = static, readonly
 dotnet_naming_symbols.property_symbols.applicable_accessibilities = *
 dotnet_naming_symbols.property_symbols.applicable_kinds = property
-dotnet_naming_symbols.public_fields_symbols.applicable_accessibilities = public,internal,protected,protected_internal,private_protected
+dotnet_naming_symbols.public_fields_symbols.applicable_accessibilities = public, internal, protected, protected_internal, private_protected
 dotnet_naming_symbols.public_fields_symbols.applicable_kinds = field
-dotnet_naming_symbols.static_readonly_symbols.applicable_accessibilities = public,internal,protected,protected_internal,private_protected
+dotnet_naming_symbols.static_readonly_symbols.applicable_accessibilities = public, internal, protected, protected_internal, private_protected
 dotnet_naming_symbols.static_readonly_symbols.applicable_kinds = field
-dotnet_naming_symbols.static_readonly_symbols.required_modifiers = static,readonly
+dotnet_naming_symbols.static_readonly_symbols.required_modifiers = static, readonly
 dotnet_naming_symbols.types_and_namespaces_symbols.applicable_accessibilities = *
-dotnet_naming_symbols.types_and_namespaces_symbols.applicable_kinds = namespace,class,struct,enum,delegate
+dotnet_naming_symbols.types_and_namespaces_symbols.applicable_kinds = namespace, class, struct, enum, delegate
 dotnet_naming_symbols.type_parameters_symbols.applicable_accessibilities = *
 dotnet_naming_symbols.type_parameters_symbols.applicable_kinds = type_parameter
 dotnet_separate_import_directive_groups = false
@@ -220,7 +217,6 @@ dotnet_style_qualification_for_method = false:warning
 dotnet_style_qualification_for_property = false:warning
 dotnet_style_require_accessibility_modifiers = for_non_interface_members:warning
 file_header_template = 
-
 dotnet_diagnostic.bc40000.severity = warning
 dotnet_diagnostic.bc400005.severity = warning
 dotnet_diagnostic.bc40008.severity = warning

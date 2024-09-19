@@ -5,7 +5,9 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.V
 
 public class DatawalletVersionEntityFrameworkValueConverter : ValueConverter<Datawallet.DatawalletVersion, ushort>
 {
-    public DatawalletVersionEntityFrameworkValueConverter() : this(null) { }
+    public DatawalletVersionEntityFrameworkValueConverter() : this(null)
+    {
+    }
 
     public DatawalletVersionEntityFrameworkValueConverter(ConverterMappingHints? mappingHints)
         : base(
@@ -13,5 +15,6 @@ public class DatawalletVersionEntityFrameworkValueConverter : ValueConverter<Dat
             value => new Datawallet.DatawalletVersion(value),
             mappingHints
         )
-    { }
+    {
+    }
 }

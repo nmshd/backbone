@@ -3,6 +3,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
 namespace Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
+
 public class RelationshipReactivationCompletedDomainEvent : DomainEvent
 {
     public RelationshipReactivationCompletedDomainEvent(Relationship relationship, IdentityAddress peer)

@@ -13,7 +13,9 @@ public record IdentityDeletionProcessId : StronglyTypedId
 
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
-    private IdentityDeletionProcessId(string value) : base(value) { }
+    private IdentityDeletionProcessId(string value) : base(value)
+    {
+    }
 
     public static IdentityDeletionProcessId Generate()
     {

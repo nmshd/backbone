@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Domain.Entities;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
+
 public class Handler : IRequestHandler<ChangeClientSecretCommand, ChangeClientSecretResponse>
 {
     private readonly IOAuthClientsRepository _oAuthClientsRepository;

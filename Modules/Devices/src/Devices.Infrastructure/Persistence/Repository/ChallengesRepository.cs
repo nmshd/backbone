@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
+
 public class ChallengesRepository : IChallengesRepository
 {
     private readonly DbSet<Challenge> _challenges;

@@ -2,6 +2,7 @@
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Clients.Queries.GetClient;
+
 public class GetClientQuery : IRequest<ClientDTO>
 {
     public GetClientQuery(string id)

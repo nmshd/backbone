@@ -9,4 +9,3 @@ public interface IPushNotificationRegistrationService
     Task<DevicePushIdentifier> UpdateRegistration(IdentityAddress address, DeviceId deviceId, PnsHandle handle, string appId, PushEnvironment environment, CancellationToken cancellationToken);
     Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken);
 }
-
