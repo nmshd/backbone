@@ -37,7 +37,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         _logger.LogTrace("Address created.");
 
         var newIdentity = await CreateNewIdentity(command, cancellationToken, address);
-        
+
         newIdentity.AddDevice(command.CommunicationLanguage, command.DevicePassword);
 
         await _identitiesRepository.AddUser(newIdentity.User, command.DevicePassword);
@@ -47,12 +47,12 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         return new CreateIdentityResponse
         {
             Address = address,
-            CreatedAt = newIdentity.User.Device.Identity.CreatedAt,// newIdentity.CreatedAt,
+            CreatedAt = newIdentity.CreatedAt,
             Device = new CreateIdentityResponseDevice
             {
-                Id = newIdentity.User.DeviceId,// user.DeviceId,
-                Username = newIdentity.User.UserName!, // user.UserName!,
-                CreatedAt = newIdentity.User.Device.CreatedAt// user.Device.CreatedAt
+                Id = newIdentity.User.DeviceId,
+                Username = newIdentity.User.UserName!,
+                CreatedAt = newIdentity.User.Device.CreatedAt
             }
         };
     }

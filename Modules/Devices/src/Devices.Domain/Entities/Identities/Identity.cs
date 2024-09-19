@@ -89,24 +89,15 @@ public class Identity : Entity
         return Devices.Count < 1;
     }
 
-    public void AddDevice(string communicationLanguage, string password)
+    public void AddDevice(string communicationLanguage, string password, DeviceId? deviceId = null)
     {
         var communicationLanguageResult = CommunicationLanguage.Create(communicationLanguage);
         if (communicationLanguageResult.IsFailure)
             throw new DomainException(communicationLanguageResult.Error);
 
-        User = new ApplicationUser(this, communicationLanguageResult.Value);
+        User = new ApplicationUser(this, communicationLanguageResult.Value, deviceId);
 
         Password = password;
-    }
-
-    public ApplicationUser AddDevice(string communicationLanguage, DeviceId deviceId)
-    {
-        var communicationLanguageResult = CommunicationLanguage.Create(communicationLanguage);
-        if (communicationLanguageResult.IsFailure)
-            throw new DomainException(communicationLanguageResult.Error);
-
-        return new ApplicationUser(this, communicationLanguageResult.Value, deviceId);
     }
 
     public void ChangeTier(TierId id)
