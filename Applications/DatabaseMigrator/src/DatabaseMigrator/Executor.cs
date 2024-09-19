@@ -70,8 +70,8 @@ public class Executor
 
         try
         {
-            var tree = await ReadMigrations();
-            migrationList = tree.MigrationSequence;
+            //var tree = await ReadMigrations();
+            migrationList = await ReadMigrations();
         }
         catch (Exception ex)
         {
@@ -82,6 +82,8 @@ public class Executor
         _logger.SuccessfullyReadMigrations();
 
         _logger.StartApplyingMigrations();
+
+        foreach (var info in migrationList) Console.WriteLine($"{info.Type}: {info.Id}");
 
         try
         {
@@ -97,22 +99,24 @@ public class Executor
         _logger.SuccessfullyAppliedMigrations();
     }
 
-    private async Task<GraphHandler> ReadMigrations()
+    private async Task<IReadOnlyList<MigrationId>> ReadMigrations()
     {
-        List<MigrationInfo> migrations = [];
+        List<MigrationId> migrations = [];
 
         foreach (var (type, moduleType) in _modules)
         {
             var context = _serviceProvider.GetDbContext(type);
-            var appliedMigrations = await context.Database.GetAppliedMigrationsAsync();
+            //var appliedMigrations = await context.Database.GetAppliedMigrationsAsync();
             var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
-            var dependencies = LoadMigrationDependencies(type, context.Database.IsSqlServer());
+            //var dependencies = LoadMigrationDependencies(type, context.Database.IsSqlServer());
 
-            migrations.AddRange(appliedMigrations.Select(id => new MigrationInfo(new MigrationId(moduleType, id), true, dependencies[id])));
-            migrations.AddRange(pendingMigrations.Select(id => new MigrationInfo(new MigrationId(moduleType, id), false, dependencies[id])));
+            //migrations.AddRange(appliedMigrations.Select(id => new MigrationInfo(new MigrationId(moduleType, id), true, dependencies[id])));
+            migrations.AddRange(pendingMigrations.Select(id => new MigrationId(moduleType, id)));
         }
 
-        return new GraphHandler(migrations);
+        migrations.Sort((a, b) => string.CompareOrdinal(a.Id, b.Id));
+
+        return migrations;
     }
 
     private Dictionary<string, IList<MigrationId>> LoadMigrationDependencies(Type dbContextType, bool useSqlServer)
