@@ -74,16 +74,7 @@ cd docker-compose
 
 Now that the database has been exported to a file, you can zip it and move it to a newly created folder for the snapshot you just created. You should also put the step 2. csv files there as well (entity csv files). Don't forget to update the **list** below.
 
-### Usage
-
-In order to use a snapshot, you must:
-
-1.  from the snapshot, extract the entity CSV files to the place where the performance tests expect to find them.
-1.  recreate the database.
-1.  start the consumer API
-1.  run the performance tests
-
-### List
+### List of snapshots
 
 #### Snapshot Heavy (snapshot.heavy.zip, downloadable from file hosting)
 
@@ -127,19 +118,21 @@ In order to run the performance tests, you must load an appropriate snapshot of 
 1.  **Load the snapshot:**
 
     1. Locate the snapshot you'd like to use. It can be in the `../snapshots` folder or in a remote host if it's a big file. Extract it, as well as the zip files within it.
-    1. Place the relevant `.pg/.sql` file in the following directory: `/docker-compose/dumps/dump-files`.
+    1. Place the relevant `.pg`/`.sql` file in the following directory: `/docker-compose/dumps/dump-files`.
     1. In the directory `/docker-compose/dumps/`, run the appropriate command: `load_postgres.bat` or `load_sqlserver_bak.bat`.
 
 > [!CAUTION]
-> This will delete you current Enmeshed Database. 4. **Prepare the csvs:**
+> This will delete you current Enmeshed Database.
+
+4. **Prepare the csvs:**
 
     1. Extract the compressed csv files into the following directory: `/Application/ConsumerApi/test/PerformanceTests/snapshots/<snapshotName>`. You must create the directory.
 
-1.  **Start the application**
+1. **Start the application**
 
     1. Using the IDE of your choice, launch the application and ensure it can receive requests.
 
-1.  **Run the test(s)**
+1. **Run the test(s)**
 
     1. cd into the directory `/Application/ConsumerApi/test/ConsumerApi.Tests.Performance`
     1. Run one of the following commands depending on what system you're using:
