@@ -18,7 +18,7 @@ public class IdentityToBeDeletedDomainEventHandler : IDomainEventHandler<Identit
     {
         var relationships = await GetRelationshipsOf(@event.IdentityAddress);
 
-        NotifyRelationshipsOfPeerToBeDeleted(@event.IdentityAddress, relationships, @event.CreationDate);
+        NotifyRelationshipsOfPeerToBeDeleted(@event.IdentityAddress, relationships, @event.GracePeriodEndsAt);
 
         await _relationshipsRepository.Update(relationships);
     }
@@ -32,11 +32,11 @@ public class IdentityToBeDeletedDomainEventHandler : IDomainEventHandler<Identit
         return relationships;
     }
 
-    private static void NotifyRelationshipsOfPeerToBeDeleted(string identityToBeDeleted, IEnumerable<Relationship> relationships, DateTime creationDate)
+    private static void NotifyRelationshipsOfPeerToBeDeleted(string identityToBeDeleted, IEnumerable<Relationship> relationships, DateTime gracePeriodEndsAt)
     {
         foreach (var relationship in relationships)
         {
-            relationship.ParticipantIsToBeDeleted(identityToBeDeleted, creationDate);
+            relationship.ParticipantIsToBeDeleted(identityToBeDeleted, gracePeriodEndsAt);
         }
     }
 }

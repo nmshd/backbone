@@ -20,6 +20,7 @@ public class IdentityToBeDeletedDomainEventHandlerTests : AbstractTestsBase
     {
         //Arrange
         var identityToBeDeleted = TestDataGenerator.CreateRandomIdentityAddress();
+        var randomDateTime = new DateTime(2015, 7, 23, 14, 35, 50);
 
         var peer1 = TestDataGenerator.CreateRandomIdentityAddress();
         var peer2 = TestDataGenerator.CreateRandomIdentityAddress();
@@ -35,7 +36,7 @@ public class IdentityToBeDeletedDomainEventHandlerTests : AbstractTestsBase
         var handler = CreateHandler(fakeRelationshipsRepository);
 
         //Act
-        await handler.Handle(new IdentityToBeDeletedDomainEvent(identityToBeDeleted));
+        await handler.Handle(new IdentityToBeDeletedDomainEvent(identityToBeDeleted, randomDateTime));
 
         //Assert
         var event1 = relationshipToPeer1.Should().HaveASingleDomainEvent<PeerToBeDeletedDomainEvent>();
