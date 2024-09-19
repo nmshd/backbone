@@ -10,6 +10,10 @@ indent_style = space
 indent_size = 4
 tab_width = 4
 
+[**]
+ij_html_space_inside_empty_tag = true
+ij_xml_space_inside_empty_tag = true
+
 [*]
 
 # Microsoft .NET properties
