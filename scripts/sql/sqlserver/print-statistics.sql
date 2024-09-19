@@ -2,18 +2,34 @@
 declare @NumberOfIdentities int;
 declare @NumberOfConnectorIdentities int;
 declare @NumberOfAppIdentities int;
+
+declare @NumberOfDevices int;
+declare @NumberOfAppDevices int;
+declare @NumberOfConnectorDevices int;
+declare @NumberOfAppIdentitiesWithMoreThanOneDevice int;
+declare @NumberOfConnectorIdentitiesWithMoreThanOneDevice int;
+declare @AvgNumberOfDevicesPerAppIdentity float;
+declare @AvgNumberOfDevicesPerConnectorIdentity float;
+
 declare @AvgNumberOfSentMessagesPerApp float;
 declare @AvgNumberOfSentMessagesPerConnector float;
 declare @AvgNumberOfRecievedMessagesPerApp float;
 declare @AvgNumberOfRecievedMessagesPerConnector float;
 declare @NumberOfMessagesWithMoreThanOneRecipient int;
 declare @AvgNumberOfRecipientsPerMessage float;
+
 declare @AvgNumberOfTokensPerApp float;
 declare @AvgNumberOfTokensPerConnector float;
+
 declare @AvgNumberOfRelationshipTemplatesPerApp float;
 declare @AvgNumberOfRelationshipTemplatesPerConnector float;
+
 declare @AvgNumberOfDatawalletModificationsPerApp float;
 declare @AvgNumberOfDatawalletModificationsPerConnector float;
+
+declare @AvgNumberOfFilesPerApp float;
+declare @AvgNumberOfFilesPerConnector float;
+
 declare @AvgSizeOfDatawalletModificationContent float;
 declare @AvgSizeOfMessageContentPerApp float;
 declare @AvgSizeOfMessageContentPerConnector float;
@@ -22,7 +38,7 @@ declare @AvgSizeOfTokenContentPerConnector float;
 declare @AvgSizeOfRelationshipTemplateContentPerApp float;
 declare @AvgSizeOfRelationshipTemplateContentPerConnector float;
 
-/* Number of identities */
+/* Identities */
 select @NumberOfIdentities = count(*)
 from Devices.Identities
 
@@ -31,6 +47,50 @@ from Devices.Identities
 where ClientId = 'bird-wallet'
 
 set @NumberOfConnectorIdentities = @NumberOfIdentities - @NumberOfAppIdentities
+
+/* Devices */
+select @NumberOfDevices = count(*)
+from Devices.Devices
+
+select @NumberOfAppDevices = count(*)
+from Devices.Devices d
+where (select ClientId from Devices.Identities where Address = d.IdentityAddress) = 'bird-wallet'
+
+set @NumberOfConnectorDevices = @NumberOfDevices - @NumberOfAppDevices
+
+select @NumberOfAppIdentitiesWithMoreThanOneDevice = count(*)
+from (
+	select count(IdentityAddress) as cnt
+	from Devices.Devices d
+	where (select ClientId from Devices.Identities where Address = d.IdentityAddress) = 'bird-wallet'
+	group by IdentityAddress
+) d
+where cnt > 1
+
+select @NumberOfConnectorIdentitiesWithMoreThanOneDevice = count(*)
+from (
+	select count(IdentityAddress) as cnt
+	from Devices.Devices d
+	where (select ClientId from Devices.Identities where Address = d.IdentityAddress) <> 'bird-wallet'
+	group by IdentityAddress
+) d
+where cnt > 1
+
+select @AvgNumberOfDevicesPerAppIdentity = avg(cnt)
+from (
+	select convert(decimal, count(IdentityAddress)) as cnt
+	from Devices.Devices d
+	where (select ClientId from Devices.Identities where Address = d.IdentityAddress) = 'bird-wallet'
+	group by IdentityAddress
+) d
+
+select @AvgNumberOfDevicesPerConnectorIdentity = avg(cnt)
+from (
+	select convert(decimal, count(IdentityAddress)) as cnt
+	from Devices.Devices d
+	where (select ClientId from Devices.Identities where Address = d.IdentityAddress) <> 'bird-wallet'
+	group by IdentityAddress
+) d
 
 /* Messages */
 select @AvgNumberOfSentMessagesPerApp = avg(msgCount)
@@ -131,6 +191,23 @@ from (
 	group by CreatedBy
 ) t
 
+/* Files */
+select @AvgNumberOfFilesPerApp = avg(cnt)
+from (
+	select convert(decimal, count(CreatedBy)) as "cnt"
+	from Files.FileMetadata fm
+	where (select ClientId from Devices.Identities where Address = fm.CreatedBy) = 'bird-wallet'
+	group by CreatedBy
+) m
+
+select @AvgNumberOfFilesPerConnector = avg(cnt)
+from (
+	select convert(decimal, count(CreatedBy)) as "cnt"
+	from Files.FileMetadata fm
+	where (select ClientId from Devices.Identities where Address = fm.CreatedBy) <> 'bird-wallet'
+	group by CreatedBy
+) m
+
 /* Sizes */
 select @AvgSizeOfDatawalletModificationContent = avg(length)
 from (
@@ -187,18 +264,34 @@ insert into @result values
 ('Number of Identities', @NumberOfIdentities),
 ('Number of Connector Identities', @NumberOfConnectorIdentities),
 ('Number of App Identities', @NumberOfAppIdentities),
+
+('Number of Devices', @NumberOfDevices),
+('Number of App Devices', @NumberOfAppDevices),
+('Number of Connector Devices', @NumberOfConnectorDevices),
+('Number of App Identities with more than one Device', @NumberOfAppIdentitiesWithMoreThanOneDevice),
+('Number of Connector Identities with more than one Device', @NumberOfConnectorIdentitiesWithMoreThanOneDevice),
+(N'⌀ Number of Devices per App Identity', @AvgNumberOfDevicesPerAppIdentity),
+(N'⌀ Number of Devices per Connector Identity', @AvgNumberOfDevicesPerConnectorIdentity),
+
 (N'⌀ Number of Sent Messages per App Identity', @AvgNumberOfSentMessagesPerApp),
 (N'⌀ Number of Sent Messages per Connector Identity', @AvgNumberOfSentMessagesPerConnector),
 (N'⌀ Number of Recieved Messages per App Identity', @AvgNumberOfRecievedMessagesPerApp),
 (N'⌀ Number of Recieved Messages per Connector Identity', @AvgNumberOfRecievedMessagesPerConnector),
 ('Number of Messages with more than 1 Recipient', @NumberOfMessagesWithMoreThanOneRecipient),
 (N'⌀ Number of Recipients per Message', @AvgNumberOfRecipientsPerMessage),
+
 (N'⌀ Number of Tokens per App Identity', @AvgNumberOfTokensPerApp),
 (N'⌀ Number of Tokens per Connector Identity', @AvgNumberOfTokensPerConnector),
+
 (N'⌀ Number of Relationship Templates per App Identity', @AvgNumberOfRelationshipTemplatesPerApp),
 (N'⌀ Number of Relationship Templates per Connector Identity', @AvgNumberOfRelationshipTemplatesPerConnector),
+
 (N'⌀ Number of Datawallet Modifications per App Identity', @AvgNumberOfDatawalletModificationsPerApp),
 (N'⌀ Number of Datawallet Modifications per Connector Identity', @AvgNumberOfDatawalletModificationsPerConnector),
+
+(N'⌀ Number of Files per App Identity', @AvgNumberOfFilesPerApp),
+(N'⌀ Number of Files per Connector Identity', @AvgNumberOfFilesPerConnector),
+
 (N'⌀ Size of Datawallet Modifications Content', @AvgSizeOfDatawalletModificationContent),
 (N'⌀ Size of an App Message Content', @AvgSizeOfMessageContentPerApp),
 (N'⌀ Size of an Connector Message Content', @AvgSizeOfMessageContentPerConnector),
