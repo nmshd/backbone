@@ -1,20 +1,20 @@
 import { SharedArray } from "k6/data";
 import papaparse from "papaparse";
-import { DataRepresentation, DataRepresentationLoads, Identity, Pool } from "./data-loader/models";
+import { Identity, LoadedPools, Pool, PoolLoadOptions } from "./data-loader/models";
 
 /**
  *
  * @param folderName The name of the folder matching the name of the snapshot to load
- * @param whatoToLoad An array of {@link DataRepresentationLoads} representing the entities to be loaded
- * @returns a DataRepresentationForEnmeshedPerformanceTests populated according to @link{whatoToLoad}
+ * @param whatoToLoad An array of {@link PoolLoadOptions} representing the entities to be loaded
+ * @returns a {@link LoadedPools} populated according to {@link whatoToLoad}
  */
-export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepresentationLoads[] = [DataRepresentationLoads.Identities]): DataRepresentation {
+export function loadPools(folderName: string, whatoToLoad: PoolLoadOptions[] = [PoolLoadOptions.Identities]): LoadedPools {
     const csvFilesPath = `../snapshots/${folderName}/csvs`;
     let pools: Pool[];
     const identitiesMap: Map<string, Identity> = new Map<string, Identity>();
 
     const poolsReturn = new SharedArray("pools", function () {
-        if (!whatoToLoad.includes(DataRepresentationLoads.Identities)) {
+        if (!whatoToLoad.includes(PoolLoadOptions.Identities)) {
             console.warn("whatToLoad does not include Identities but they must always be loaded. Loading either way...");
         }
 
@@ -23,22 +23,22 @@ export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepr
 
         pools = loadPoolsWithIdentities();
 
-        if (whatoToLoad.includes(DataRepresentationLoads.DatawalletModifications)) {
+        if (whatoToLoad.includes(PoolLoadOptions.DatawalletModifications)) {
             console.info("Loading datawallet modifications");
             loadDataWalletModifications();
         }
 
-        if (whatoToLoad.includes(DataRepresentationLoads.RelationshipTemplates)) {
+        if (whatoToLoad.includes(PoolLoadOptions.RelationshipTemplates)) {
             console.info("Loading relationship templates");
             loadRelationshipTemplates();
         }
 
-        if (whatoToLoad.includes(DataRepresentationLoads.Relationships)) {
+        if (whatoToLoad.includes(PoolLoadOptions.Relationships)) {
             console.info("Loading relationships");
             loadRelationships();
         }
 
-        if (whatoToLoad.includes(DataRepresentationLoads.Messages)) {
+        if (whatoToLoad.includes(PoolLoadOptions.Messages)) {
             console.info("Loading messages");
             loadMessages();
         }
@@ -47,7 +47,7 @@ export function loadDataRepresentation(folderName: string, whatoToLoad: DataRepr
         return pools;
     });
 
-    return new DataRepresentation(poolsReturn);
+    return new LoadedPools(poolsReturn);
 
     function loadDataWalletModifications() {
         const DatawalletModificationsFile = open(`${csvFilesPath}/datawalletModifications.csv`);

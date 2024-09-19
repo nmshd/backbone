@@ -2,8 +2,8 @@ import { check } from "k6";
 import { SharedArray } from "k6/data";
 import { Options } from "k6/options";
 import { AuthenticatedClient } from "../libs/backbone-client/authenticated-client";
-import { DataRepresentationLoads } from "../libs/data-loader/models";
-import { loadDataRepresentation } from "../libs/file-utils";
+import { PoolLoadOptions, PoolTypes } from "../libs/data-loader/models";
+import { loadPools } from "../libs/file-utils";
 
 export const options: Options = {
     scenarios: {
@@ -19,7 +19,7 @@ export const options: Options = {
 
 const snapshot = (__ENV.snapshot as string | undefined) ?? "light";
 
-const pools = loadDataRepresentation(snapshot, [DataRepresentationLoads.Identities]).ofTypes("a", "c").pools;
+const pools = loadPools(snapshot, [PoolLoadOptions.Identities]).ofTypes(PoolTypes.App, PoolTypes.Connector).pools;
 
 const testIdentities = new SharedArray("testIdentities", function () {
     return pools.flatMap((p) => p.identities);

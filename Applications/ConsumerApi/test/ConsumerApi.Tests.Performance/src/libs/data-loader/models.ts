@@ -39,7 +39,7 @@ interface RelationshipTemplate {
     relationshipTemplateId: string;
 }
 
-export class DataRepresentation {
+export class LoadedPools {
     private readonly _pools: Pool[] = [];
 
     public constructor(pools: Pool[]) {
@@ -52,18 +52,36 @@ export class DataRepresentation {
 
     /**
      * fluent method to filter the loaded pools
-     * @param types the names of the pools to be loaded, or simply theIR initial letter(s), e.g.: `.ofTypes("a", "c")` -- loads pools of type a1, a2, a.., c1, c2, c..
+     * @param poolTypes the types of pools to be loaded
      * @returns
      */
-    public ofTypes(...types: string[]): DataRepresentation {
-        return new DataRepresentation(this._pools.filter((pool) => types.some((type) => pool.name.startsWith(type))));
+    public ofTypes(...poolTypes: PoolTypes[]): LoadedPools {
+        if (poolTypes.includes(PoolTypes.All)) return new LoadedPools(this._pools);
+
+        return new LoadedPools(this._pools.filter((pool) => poolTypes.some((type) => pool.name.startsWith(type))));
     }
 }
 
-export enum DataRepresentationLoads {
+export enum PoolLoadOptions {
     Identities,
     Relationships,
     Messages,
     RelationshipTemplates,
     DatawalletModifications
+}
+
+export enum PoolTypes {
+    App = "a",
+    AppLight = "a1",
+    AppMedium = "a2",
+    AppHeavy = "a3",
+
+    Connector = "c",
+    ConnectorLight = "c1",
+    ConnectorMedium = "c2",
+    ConnectorHeavy = "c3",
+
+    Never = "e",
+
+    All = "*"
 }
