@@ -1,16 +1,18 @@
 ﻿using Backbone.BuildingBlocks.Domain.Events;
-using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Messages.Domain.Ids;
 
-namespace Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
-
-public class MessageOrphanedDomainEvent : DomainEvent
+namespace Backbone.Modules.Messages.Domain.DomainEvents.Outgoing
 {
-    public MessageOrphanedDomainEvent(Message message) : base($"{message.Id}/MessageOrphaned")
+    public class MessageOrphanedDomainEvent : DomainEvent
     {
-        MessageId = message.Id;
-        CreatedBy = message.CreatedBy;
-    }
+        public MessageOrphanedDomainEvent(MessageId messageId, IdentityAddress createdBy) : base($"{messageId}/MessageOrphaned")
+        {
+            MessageId = messageId;
+            CreatedBy = createdBy;
+        }
 
-    public string MessageId { get; }
-    public string CreatedBy { get; }
+        public string MessageId { get; }
+        public string CreatedBy { get; }
+    }
 }
