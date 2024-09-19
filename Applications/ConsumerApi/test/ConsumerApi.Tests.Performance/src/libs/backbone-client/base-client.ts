@@ -1,19 +1,15 @@
 import { Httpx } from "https://jslib.k6.io/httpx/0.1.0/index.js";
-import { defaultBaseUrl } from "./constants";
 import { FluentClient } from "./fluent-client";
+import { HttpClientConfiguration } from "./http-client-configuration";
 
 export class BaseClient {
-    protected readonly clientId: string;
-    protected readonly clientSecret: string;
     protected readonly client: FluentClient;
     protected readonly httpxClient: Httpx;
 
-    protected constructor() {
-        this.clientId = (__ENV.clientId as string | undefined) ?? "test";
-        this.clientSecret = (__ENV.clientSecret as string | undefined) ?? "test";
+    protected constructor(config: HttpClientConfiguration) {
         this.httpxClient = new Httpx({
-            baseURL: defaultBaseUrl,
-            timeout: 20000 // 20s timeout
+            baseURL: config.baseUrl,
+            timeout: config.timeout // 20s timeout
         });
 
         this.client = new FluentClient(this.httpxClient);

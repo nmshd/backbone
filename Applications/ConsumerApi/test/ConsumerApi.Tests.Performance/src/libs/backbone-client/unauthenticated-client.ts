@@ -1,7 +1,7 @@
 import { b64encode } from "k6/encoding";
 import { CryptoHelper } from "../crypto-helper";
 import { BaseClient } from "./base-client";
-import { apiVersion } from "./constants";
+import { apiVersion } from "./http-client-configuration";
 import { CreateChallengeResponse, CreateIdentityRequest, CreateIdentityResponse } from "./models";
 
 export class UnauthenticatedClient extends BaseClient {

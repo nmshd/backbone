@@ -1,16 +1,19 @@
 import { BaseClient } from "./base-client";
-import { apiVersion } from "./constants";
+import { HttpClientConfiguration } from "./http-client-configuration";
 import { CreateChallengeResponse, JwtResponse } from "./models";
 
 export class AuthenticatedClient extends BaseClient {
-    public readonly username: string;
-    private readonly password: string;
-
     private token_expires_at = new Date();
     private access_token = "";
+    private readonly configuration: HttpClientConfiguration;
+    private readonly password: string;
+    private readonly username: string;
 
-    public constructor(username: string, password: string) {
-        super();
+    public constructor(username: string, password: string, configuration: HttpClientConfiguration | null = null) {
+        configuration = configuration ?? new HttpClientConfiguration();
+
+        super(configuration);
+        this.configuration = configuration;
 
         this.username = username;
         this.password = password;
@@ -22,8 +25,8 @@ export class AuthenticatedClient extends BaseClient {
 
     private exchangeToken() {
         const payload = {
-            client_id: this.clientId,
-            client_secret: this.clientSecret,
+            client_id: this.configuration.clientId,
+            client_secret: this.configuration.clientSecret,
             grant_type: "password",
             username: this.username,
             password: this.password
@@ -43,6 +46,6 @@ export class AuthenticatedClient extends BaseClient {
     }
 
     public getChallenge(): CreateChallengeResponse {
-        return this.client.request().setEndpoint(`api/${apiVersion}/Challenges`).withJsonBody().authenticate(this.getAccessToken()).post<CreateChallengeResponse>(null);
+        return this.client.request().setEndpoint(`api/${this.configuration.apiVersion}/Challenges`).withJsonBody().authenticate(this.getAccessToken()).post<CreateChallengeResponse>(null);
     }
 }
