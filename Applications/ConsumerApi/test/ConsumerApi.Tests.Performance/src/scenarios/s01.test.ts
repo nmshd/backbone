@@ -2,9 +2,9 @@ import { check } from "k6";
 import { SharedArray } from "k6/data";
 import { Options } from "k6/options";
 import { AuthenticatedClient } from "../libs/backbone-client/authenticated-client";
-import { HttpClientConfiguration } from "../libs/backbone-client/http-client-configuration";
 import { PoolLoadOptions, PoolTypes } from "../libs/data-loader/models";
 import { loadPools } from "../libs/file-utils";
+import { Configuration } from "./configuration";
 
 export const options: Options = {
     scenarios: {
@@ -18,9 +18,9 @@ export const options: Options = {
     }
 };
 
-const snapshot = (__ENV.snapshot as string | undefined) ?? "light";
+const configuration = Configuration.load();
 
-const pools = loadPools(snapshot, [PoolLoadOptions.Identities]).ofTypes(PoolTypes.App, PoolTypes.Connector).pools;
+const pools = loadPools(configuration.snapshot, [PoolLoadOptions.Identities]).ofTypes(PoolTypes.App, PoolTypes.Connector).pools;
 
 const testIdentities = new SharedArray("testIdentities", function () {
     return pools.flatMap((p) => p.identities);
@@ -32,12 +32,9 @@ export default function (): void {
     const thisIdentityIterator = identityIterator++;
     const currentIdentity = testIdentities[thisIdentityIterator];
 
-    const config = new HttpClientConfiguration();
-    config.timeout = 1000;
-
     const username = currentIdentity.devices[0].username;
     const password = currentIdentity.devices[0].password;
-    const client = new AuthenticatedClient(username, password, config);
+    const client = new AuthenticatedClient(username, password, configuration.httpClient);
 
     const createChallengeResult = client.getChallenge();
 

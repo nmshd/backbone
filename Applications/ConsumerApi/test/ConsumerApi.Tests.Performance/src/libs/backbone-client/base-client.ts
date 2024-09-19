@@ -5,12 +5,15 @@ import { HttpClientConfiguration } from "./http-client-configuration";
 export class BaseClient {
     protected readonly client: FluentClient;
     protected readonly httpxClient: Httpx;
+    protected readonly configuration: HttpClientConfiguration;
 
     protected constructor(config: HttpClientConfiguration) {
         this.httpxClient = new Httpx({
             baseURL: config.baseUrl,
-            timeout: config.timeout // 20s timeout
+            timeout: config.timeoutInMilliseconds
         });
+
+        this.configuration = config;
 
         this.client = new FluentClient(this.httpxClient);
     }

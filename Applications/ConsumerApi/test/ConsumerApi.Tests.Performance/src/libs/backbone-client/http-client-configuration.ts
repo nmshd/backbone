@@ -1,50 +1,25 @@
 export class HttpClientConfiguration {
-    private _clientId?: string;
-    private _clientSecret?: string;
-    private _apiVersion = "v1";
-    private _baseUrl = "http://localhost:8081/";
-    /**
-     * in milliseconds
-     */
-    private _timeout = 20000;
-
     public get clientId(): string {
-        return this._clientId ?? (__ENV.clientId as string | undefined) ?? "test";
-    }
-
-    public set clientId(value: string) {
-        this._clientId = value;
+        return this.getEnvVar("clientId") ?? "test";
     }
 
     public get clientSecret(): string {
-        return this._clientSecret ?? (__ENV.clientSecret as string | undefined) ?? "test";
-    }
-
-    public set clientSecret(value: string) {
-        this._clientSecret = value;
+        return this.getEnvVar("clientSecret") ?? "test";
     }
 
     public get apiVersion(): string {
-        return this._apiVersion;
-    }
-
-    public set apiVersion(value: string) {
-        this._apiVersion = value;
+        return this.getEnvVar("apiVersion") ?? "v1";
     }
 
     public get baseUrl(): string {
-        return this._baseUrl;
+        return this.getEnvVar("baseUrl") ?? "http://localhost:8081/";
     }
 
-    public set baseUrl(value: string) {
-        this._baseUrl = value;
+    public get timeoutInMilliseconds(): number {
+        return parseInt(this.getEnvVar("timeoutInMilliseconds") ?? "20000");
     }
 
-    public get timeout(): number {
-        return this._timeout;
-    }
-
-    public set timeout(value: number) {
-        this._timeout = value;
+    private getEnvVar(name: string): string | undefined {
+        return __ENV[name] as string | undefined;
     }
 }

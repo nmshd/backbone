@@ -5,15 +5,11 @@ import { CreateChallengeResponse, JwtResponse } from "./models";
 export class AuthenticatedClient extends BaseClient {
     private token_expires_at = new Date();
     private access_token = "";
-    private readonly configuration: HttpClientConfiguration;
     private readonly password: string;
     private readonly username: string;
 
-    public constructor(username: string, password: string, configuration: HttpClientConfiguration | null = null) {
-        configuration = configuration ?? new HttpClientConfiguration();
-
+    public constructor(username: string, password: string, configuration: HttpClientConfiguration) {
         super(configuration);
-        this.configuration = configuration;
 
         this.username = username;
         this.password = password;
