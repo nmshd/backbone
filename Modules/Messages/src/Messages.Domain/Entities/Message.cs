@@ -54,6 +54,9 @@ public class Message : Entity
             AnonymizeSender(newIdentityAddress);
 
         AnonymizeRecipient(oldIdentityAddress, newIdentityAddress);
+
+        if (MessageIsOrphaned(this, newIdentityAddress))
+            RaiseDomainEvent(new MessageOrphanedDomainEvent(this));
     }
 
     public void DecomposeFor(IdentityAddress decomposerAddress, IdentityAddress peerAddress, IdentityAddress anonymizedAddress)
@@ -86,13 +89,18 @@ public class Message : Entity
     {
         var recipient = Recipients.FirstOrDefault(r => r.Address == participantAddress);
         recipient?.UpdateAddress(anonymizedIdentityAddress);
-        RaiseDomainEvent(new MessageOrphanedDomainEvent(this));
+
     }
 
     private void AnonymizeSender(IdentityAddress anonymizedIdentityAddress)
     {
         CreatedBy = anonymizedIdentityAddress;
-        RaiseDomainEvent(new MessageOrphanedDomainEvent(this));
+    }
+
+    public bool MessageIsOrphaned(Message message, IdentityAddress anonymizedIdentityAddress)
+    {
+        return message.CreatedBy == anonymizedIdentityAddress &&
+               message.Recipients.All(r => r.Address == anonymizedIdentityAddress);
     }
 
     #region Expressions
@@ -112,16 +120,6 @@ public class Message : Entity
             (m.CreatedBy == identityAddress1 && m.Recipients.Any(r => r.Address == identityAddress2)) ||
             (m.CreatedBy == identityAddress2 && m.Recipients.Any(r => r.Address == identityAddress1));
     }
-
-    public static Expression<Func<Message, bool>> IsMessageOrphaned(string didDomainName)
-    {
-        var anonymizedAddress = IdentityAddress.GetAnonymized(didDomainName);
-
-        return i =>
-            i.CreatedBy == anonymizedAddress &&
-            i.Recipients.All(r => r.Address == anonymizedAddress);
-    }
-
 
     #endregion
 }

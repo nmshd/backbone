@@ -7,10 +7,10 @@ public class MessageOrphanedDomainEvent : DomainEvent
 {
     public MessageOrphanedDomainEvent(Message message) : base($"{message.Id}/MessageOrphaned")
     {
-        Id = message.Id;
+        MessageId = message.Id;
         CreatedBy = message.CreatedBy;
     }
 
-    public string Id { get; }
+    public string MessageId { get; }
     public string CreatedBy { get; }
 }
