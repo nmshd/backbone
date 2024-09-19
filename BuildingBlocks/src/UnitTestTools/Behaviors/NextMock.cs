@@ -1,7 +1,6 @@
 using MediatR;
 
 namespace Backbone.UnitTestTools.Behaviors;
-
 public class NextMock<TResponse> where TResponse : new()
 {
     public NextMock()

@@ -5,7 +5,6 @@ using FluentValidation.TestHelper;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
-
 public class ValidatorTests : AbstractTestsBase
 {
     [Fact]
@@ -61,8 +60,7 @@ public class ValidatorTests : AbstractTestsBase
             new CreateRelationshipTemplateCommand() { MaxNumberOfAllocations = 0, Content = [1] });
 
         // Assert
-        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateRelationshipTemplateCommand.MaxNumberOfAllocations), "error.platform.validation.invalidPropertyValue",
-            "'Max Number Of Allocations' must be greater than '0'.");
+        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateRelationshipTemplateCommand.MaxNumberOfAllocations), "error.platform.validation.invalidPropertyValue", "'Max Number Of Allocations' must be greater than '0'.");
     }
 
     [Fact]

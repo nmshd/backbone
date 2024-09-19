@@ -8,7 +8,6 @@ using FakeItEasy;
 using Xunit;
 
 namespace Backbone.Modules.Tokens.Application.Tests.Tests.Tokens.DeleteTokenOfIdentity;
-
 public class HandlerTests : AbstractTestsBase
 {
     [Fact]

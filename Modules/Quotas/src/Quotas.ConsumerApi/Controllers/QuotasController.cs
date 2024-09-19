@@ -13,9 +13,7 @@ namespace Backbone.Modules.Quotas.ConsumerApi.Controllers;
 [Authorize("OpenIddict.Validation.AspNetCore")]
 public class QuotasController : ApiControllerBase
 {
-    public QuotasController(IMediator mediator) : base(mediator)
-    {
-    }
+    public QuotasController(IMediator mediator) : base(mediator) { }
 
     [HttpGet]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<ListQuotasForIdentityResponse>), StatusCodes.Status200OK)]

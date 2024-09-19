@@ -5,7 +5,5 @@ namespace Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 
 public class GetIdentityResponse : IdentitySummaryDTO
 {
-    public GetIdentityResponse(Identity identity) : base(identity)
-    {
-    }
+    public GetIdentityResponse(Identity identity) : base(identity) { }
 }

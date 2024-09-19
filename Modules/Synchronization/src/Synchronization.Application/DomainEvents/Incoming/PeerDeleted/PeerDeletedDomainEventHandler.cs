@@ -5,7 +5,6 @@ using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeleted;
-
 public class PeerDeletedDomainEventHandler : IDomainEventHandler<PeerDeletedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;

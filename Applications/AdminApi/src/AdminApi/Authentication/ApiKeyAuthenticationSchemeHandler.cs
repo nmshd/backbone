@@ -15,8 +15,7 @@ public class ApiKeyAuthenticationSchemeHandler : AuthenticationHandler<ApiKeyAut
     private readonly ApiKeyValidator _apiKeyValidator;
     private const string API_KEY_HEADER_NAME = "X-API-KEY";
 
-    public ApiKeyAuthenticationSchemeHandler(IOptionsMonitor<ApiKeyAuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ApiKeyValidator apiKeyValidator) : base(options,
-        logger, encoder)
+    public ApiKeyAuthenticationSchemeHandler(IOptionsMonitor<ApiKeyAuthenticationSchemeOptions> options, ILoggerFactory logger, UrlEncoder encoder, ApiKeyValidator apiKeyValidator) : base(options, logger, encoder)
     {
         _apiKeyValidator = apiKeyValidator;
     }
@@ -29,7 +28,6 @@ public class ApiKeyAuthenticationSchemeHandler : AuthenticationHandler<ApiKeyAut
         {
             return Task.FromResult(AuthenticateResult.Fail($"Invalid {API_KEY_HEADER_NAME}"));
         }
-
         var claims = new[] { new Claim(ClaimTypes.Name, "VALID USER") };
         var identity = new ClaimsIdentity(claims, Scheme.Name);
         var principal = new ClaimsPrincipal(identity);

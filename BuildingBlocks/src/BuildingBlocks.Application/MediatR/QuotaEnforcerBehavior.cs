@@ -7,7 +7,6 @@ using Backbone.BuildingBlocks.Domain;
 using MediatR;
 
 namespace Backbone.BuildingBlocks.Application.MediatR;
-
 public class QuotaEnforcerBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse> where TRequest : notnull
 {
     private readonly IQuotaChecker _quotaChecker;

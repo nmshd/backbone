@@ -23,8 +23,7 @@ public static class MigrationOperations
             .AppendLine("RETURNS integer AS")
             .AppendLine("$BODY$")
             .AppendLine("BEGIN")
-            .AppendLine(
-                @"return (SELECT COUNT(r.""Id"") FROM ""Relationships"".""Relationships"" r WHERE ((r.""From"" = identityA AND r.""To"" = identityB) OR (r.""From"" = identityB AND r.""To"" = identityA)) AND r.""Status"" IN (10, 20, 50));")
+            .AppendLine(@"return (SELECT COUNT(r.""Id"") FROM ""Relationships"".""Relationships"" r WHERE ((r.""From"" = identityA AND r.""To"" = identityB) OR (r.""From"" = identityB AND r.""To"" = identityA)) AND r.""Status"" IN (10, 20, 50));")
             .AppendLine("END")
             .AppendLine("$BODY$")
             .AppendLine("LANGUAGE plpgsql");

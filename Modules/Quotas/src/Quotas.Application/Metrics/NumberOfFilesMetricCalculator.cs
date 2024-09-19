@@ -2,7 +2,6 @@ using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain;
 
 namespace Backbone.Modules.Quotas.Application.Metrics;
-
 public class NumberOfFilesMetricCalculator : IMetricCalculator
 {
     private readonly IFilesRepository _filesRepository;

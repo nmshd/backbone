@@ -3,7 +3,6 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using MediatR;
 
 namespace Backbone.Modules.Quotas.Application.Identities.Commands.DeleteIdentity;
-
 public class Handler : IRequestHandler<DeleteIdentityCommand>
 {
     private readonly IIdentitiesRepository _identitiesRepository;

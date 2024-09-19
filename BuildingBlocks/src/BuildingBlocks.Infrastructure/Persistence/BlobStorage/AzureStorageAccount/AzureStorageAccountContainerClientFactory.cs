@@ -34,6 +34,7 @@ public class AzureStorageAccountContainerClientFactory
 
             return newContainer;
         }
+
     }
 
     private BlobContainerClient CreateContainerClient(string containerName)

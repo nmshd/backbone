@@ -12,9 +12,7 @@ public record TierId : StronglyTypedId
 
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
-    private TierId(string value) : base(value)
-    {
-    }
+    private TierId(string value) : base(value) { }
 
     public static bool IsValid(string stringValue)
     {

@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.EntityConfigurations;
-
 public class RelationshipTemplateEntityTypeConfiguration : IEntityTypeConfiguration<RelationshipTemplate>
 {
     public void Configure(EntityTypeBuilder<RelationshipTemplate> builder)

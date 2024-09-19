@@ -1,7 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationCompleted;
-
 public class RelationshipReactivationCompletedDomainEvent : DomainEvent
 {
     public RelationshipReactivationCompletedDomainEvent(string relationshipId, string peer)

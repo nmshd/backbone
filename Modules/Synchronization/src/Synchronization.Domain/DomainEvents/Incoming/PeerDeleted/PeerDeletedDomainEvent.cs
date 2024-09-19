@@ -1,7 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeleted;
-
 public class PeerDeletedDomainEvent : DomainEvent
 {
     public PeerDeletedDomainEvent(string peerOfDeletedIdentity, string relationshipId, string deletedIdentity)

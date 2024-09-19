@@ -1,5 +1,4 @@
 namespace Backbone.Modules.Quotas.Domain.Aggregates.FileMetadata;
-
 public class FileMetadata : ICreatedAt
 {
     public required string Id { get; set; }

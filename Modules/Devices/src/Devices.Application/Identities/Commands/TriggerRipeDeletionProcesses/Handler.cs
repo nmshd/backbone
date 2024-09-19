@@ -4,7 +4,6 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
-
 public class Handler : IRequestHandler<TriggerRipeDeletionProcessesCommand, TriggerRipeDeletionProcessesResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;

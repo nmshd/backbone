@@ -1,13 +1,11 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
-using Backbone.Modules.Challenges.Application.Identities;
 
 namespace Backbone.Job.IdentityDeletion;
-
 public static class ServicesExtensions
 {
     public static IServiceCollection RegisterIdentityDeleters(this IServiceCollection services)
     {
-        services.AddTransient<IIdentityDeleter, IdentityDeleter>();
+        services.AddTransient<IIdentityDeleter, Modules.Challenges.Application.Identities.IdentityDeleter>();
         services.AddTransient<IIdentityDeleter, Modules.Devices.Application.Identities.IdentityDeleter>();
         services.AddTransient<IIdentityDeleter, Modules.Files.Application.Identities.IdentityDeleter>();
         services.AddTransient<IIdentityDeleter, Modules.Messages.Application.Identities.IdentityDeleter>();

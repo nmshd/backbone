@@ -24,9 +24,7 @@ public class Range<T>
 
 public class OptionalDateRange : Range<DateTime?>
 {
-    public OptionalDateRange() : base(null, null)
-    {
-    }
+    public OptionalDateRange() : base(null, null) { }
 
     public OptionalDateRange(DateTime? from, DateTime? to) : base(from, to)
     {

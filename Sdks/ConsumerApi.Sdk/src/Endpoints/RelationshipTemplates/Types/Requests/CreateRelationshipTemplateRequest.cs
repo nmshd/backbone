@@ -1,5 +1,4 @@
 ﻿namespace Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
-
 public class CreateRelationshipTemplateRequest
 {
     public DateTime? ExpiresAt { get; set; }

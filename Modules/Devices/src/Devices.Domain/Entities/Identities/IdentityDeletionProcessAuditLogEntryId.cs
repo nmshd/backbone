@@ -13,9 +13,7 @@ public record IdentityDeletionProcessAuditLogEntryId : StronglyTypedId
 
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 
-    private IdentityDeletionProcessAuditLogEntryId(string value) : base(value)
-    {
-    }
+    private IdentityDeletionProcessAuditLogEntryId(string value) : base(value) { }
 
     public static IdentityDeletionProcessAuditLogEntryId Generate()
     {

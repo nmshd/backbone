@@ -1,7 +1,6 @@
 using Backbone.Tooling;
 
 namespace Backbone.BuildingBlocks.Domain;
-
 public class MetricStatus
 {
     public bool IsExhausted => IsExhaustedUntil.HasValue && IsExhaustedUntil > SystemTime.UtcNow;

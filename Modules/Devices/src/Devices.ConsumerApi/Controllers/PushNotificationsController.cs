@@ -15,9 +15,7 @@ namespace Backbone.Modules.Devices.ConsumerApi.Controllers;
 [Authorize(OpenIddictValidationAspNetCoreDefaults.AuthenticationScheme)]
 public class PushNotificationsController : ApiControllerBase
 {
-    public PushNotificationsController(IMediator mediator) : base(mediator)
-    {
-    }
+    public PushNotificationsController(IMediator mediator) : base(mediator) { }
 
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]

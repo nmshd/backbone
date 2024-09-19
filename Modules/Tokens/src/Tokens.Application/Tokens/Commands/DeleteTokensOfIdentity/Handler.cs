@@ -3,7 +3,6 @@ using Backbone.Modules.Tokens.Domain.Entities;
 using MediatR;
 
 namespace Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteTokensOfIdentity;
-
 public class Handler : IRequestHandler<DeleteTokensOfIdentityCommand>
 {
     private readonly ITokensRepository _tokensRepository;

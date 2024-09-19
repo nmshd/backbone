@@ -9,7 +9,7 @@ public class PaginationFilter : IQueryParameterStorage
 
     public NameValueCollection ToQueryParameters() => new()
     {
-        { "PageNumber", PageNumber.ToString() },
-        { "PageSize", PageSize.ToString() }
+        {"PageNumber", PageNumber.ToString()},
+        {"PageSize", PageSize.ToString()}
     };
 }

@@ -23,5 +23,6 @@ internal class UserEntityTypeConfiguration : IEntityTypeConfiguration<Applicatio
             .HasMaxLength(Username.MAX_LENGTH)
             .IsFixedLength()
             .IsUnicode(false);
+
     }
 }

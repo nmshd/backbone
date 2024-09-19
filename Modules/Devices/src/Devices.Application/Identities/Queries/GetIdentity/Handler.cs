@@ -4,7 +4,6 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
-
 public class Handler : IRequestHandler<GetIdentityQuery, GetIdentityResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;

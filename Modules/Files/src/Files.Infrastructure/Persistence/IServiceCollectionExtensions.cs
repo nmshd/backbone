@@ -6,7 +6,6 @@ using Backbone.Modules.Files.Infrastructure.Persistence.Database.Repository;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Files.Infrastructure.Persistence;
-
 public static class IServiceCollectionExtensions
 {
     public static void AddPersistence(this IServiceCollection services, Action<PersistenceOptions> setupOptions)

@@ -2,7 +2,6 @@
 using Backbone.Infrastructure.EventBus;
 
 namespace Backbone.Job.IdentityDeletion;
-
 public class IdentityDeletionJobConfiguration
 {
     [Required]

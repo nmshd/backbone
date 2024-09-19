@@ -31,7 +31,6 @@ public class PasswordHelper
                 stringBuilder.Append(bucket.AllowedChars[index]);
             }
         }
-
         return stringBuilder.ToString();
     }
 
@@ -44,7 +43,6 @@ public class PasswordHelper
             var j = random.Next(i, charArray.Length);
             (charArray[i], charArray[j]) = (charArray[j], charArray[i]);
         }
-
         return new string(charArray);
     }
 

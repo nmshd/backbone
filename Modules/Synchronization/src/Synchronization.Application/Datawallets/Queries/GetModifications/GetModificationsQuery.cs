@@ -7,9 +7,7 @@ namespace Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetMo
 public class GetModificationsQuery : IRequest<GetModificationsResponse>
 {
     // used for testing purposes only
-    internal GetModificationsQuery(long? localIndex, ushort supportedDatawalletVersion) : this(new PaginationFilter(1, 250), localIndex, supportedDatawalletVersion)
-    {
-    }
+    internal GetModificationsQuery(long? localIndex, ushort supportedDatawalletVersion) : this(new PaginationFilter(1, 250), localIndex, supportedDatawalletVersion) { }
 
     [JsonConstructor]
     public GetModificationsQuery(PaginationFilter paginationFilter, long? localIndex, ushort supportedDatawalletVersion)

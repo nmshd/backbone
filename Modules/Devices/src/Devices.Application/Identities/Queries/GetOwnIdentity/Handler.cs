@@ -3,7 +3,6 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Queries.GetOwnIdentity;
-
 public class Handler : IRequestHandler<GetOwnIdentityQuery, GetOwnIdentityResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;
@@ -17,8 +16,7 @@ public class Handler : IRequestHandler<GetOwnIdentityQuery, GetOwnIdentityRespon
 
     public async Task<GetOwnIdentityResponse> Handle(GetOwnIdentityQuery request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken) ??
-                       throw new Exception("Failed to retrieve identity. This could be due to an invalid JWT or data loss.");
+        var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken) ?? throw new Exception("Failed to retrieve identity. This could be due to an invalid JWT or data loss.");
 
         return new GetOwnIdentityResponse(identity);
     }

@@ -11,8 +11,7 @@ public class GetIdentityResponse
     public required string Address { get; set; }
     public required IEnumerable<QuotaDTO> Quotas { get; set; }
 
-    public static async Task<GetIdentityResponse> Create(MetricCalculatorFactory metricCalculatorFactory, string identityAddress, IEnumerable<TierQuota> tierQuotas,
-        IEnumerable<IndividualQuota> individualQuotas, IEnumerable<Metric> metrics, CancellationToken cancellationToken)
+    public static async Task<GetIdentityResponse> Create(MetricCalculatorFactory metricCalculatorFactory, string identityAddress, IEnumerable<TierQuota> tierQuotas, IEnumerable<IndividualQuota> individualQuotas, IEnumerable<Metric> metrics, CancellationToken cancellationToken)
     {
         var quotasList = new List<QuotaDTO>();
 
@@ -22,10 +21,10 @@ public class GetIdentityResponse
         {
             var usage = await CalculateUsage(metricCalculatorFactory, quota, identityAddress, cancellationToken);
             quotasList.Add(new QuotaDTO(
-                quota,
-                new MetricDTO(metrics.First(m => m.Key == quota.MetricKey)),
-                usage
-            ));
+                    quota,
+                    new MetricDTO(metrics.First(m => m.Key == quota.MetricKey)),
+                    usage
+                ));
         }
 
         return new GetIdentityResponse

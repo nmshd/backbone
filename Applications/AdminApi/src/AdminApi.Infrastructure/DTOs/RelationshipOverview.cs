@@ -1,5 +1,4 @@
 namespace Backbone.AdminApi.Infrastructure.DTOs;
-
 public class RelationshipOverview
 {
     public required string From { get; set; }

@@ -5,7 +5,6 @@ using Backbone.Modules.Quotas.Infrastructure.Persistence.Database.QueryableExten
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
-
 public class RelationshipsRepository : IRelationshipsRepository
 {
     private readonly IQueryable<Relationship> _relationshipsReadonly;

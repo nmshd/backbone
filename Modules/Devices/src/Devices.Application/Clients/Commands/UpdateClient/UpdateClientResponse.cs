@@ -1,7 +1,6 @@
 using Backbone.Modules.Devices.Domain.Entities;
 
 namespace Backbone.Modules.Devices.Application.Clients.Commands.UpdateClient;
-
 public class UpdateClientResponse
 {
     public UpdateClientResponse(OAuthClient client)

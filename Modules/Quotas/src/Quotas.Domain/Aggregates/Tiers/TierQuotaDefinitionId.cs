@@ -15,6 +15,7 @@ public record TierQuotaDefinitionId : StronglyTypedId
 
     private TierQuotaDefinitionId(string value) : base(value)
     {
+
     }
 
     public static bool IsValid(string stringValue)

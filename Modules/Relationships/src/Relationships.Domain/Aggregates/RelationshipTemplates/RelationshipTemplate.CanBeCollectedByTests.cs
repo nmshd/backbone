@@ -5,7 +5,6 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
-
 public class RelationshipTemplateCanBeCollectedBy : AbstractTestsBase
 {
     private const string I1 = "did:e:prod.enmeshed.eu:dids:70cf4f3e6edf6bca33d35f";

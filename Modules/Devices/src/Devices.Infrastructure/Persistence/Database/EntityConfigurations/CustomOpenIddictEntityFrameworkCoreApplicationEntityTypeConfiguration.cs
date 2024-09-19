@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Devices.Infrastructure.Persistence.Database.EntityConfigurations;
-
 public class CustomOpenIddictEntityFrameworkCoreApplicationEntityTypeConfiguration : IEntityTypeConfiguration<CustomOpenIddictEntityFrameworkCoreApplication>
 {
     public void Configure(EntityTypeBuilder<CustomOpenIddictEntityFrameworkCoreApplication> builder)

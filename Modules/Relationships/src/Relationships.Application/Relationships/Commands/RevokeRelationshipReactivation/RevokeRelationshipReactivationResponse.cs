@@ -5,7 +5,5 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Revo
 
 public class RevokeRelationshipReactivationResponse : RelationshipMetadataDTO
 {
-    public RevokeRelationshipReactivationResponse(Relationship relationship) : base(relationship)
-    {
-    }
+    public RevokeRelationshipReactivationResponse(Relationship relationship) : base(relationship) { }
 }

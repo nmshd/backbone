@@ -1,7 +1,6 @@
 using Backbone.Modules.Devices.Domain.Entities;
 
 namespace Backbone.Modules.Devices.Application.Clients.Commands.ChangeClientSecret;
-
 public class ChangeClientSecretResponse
 {
     public ChangeClientSecretResponse(OAuthClient client, string clientSecret)

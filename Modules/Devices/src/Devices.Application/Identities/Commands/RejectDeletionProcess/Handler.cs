@@ -6,7 +6,6 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.RejectDeletionProcess;
-
 public class Handler : IRequestHandler<RejectDeletionProcessCommand, RejectDeletionProcessResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;

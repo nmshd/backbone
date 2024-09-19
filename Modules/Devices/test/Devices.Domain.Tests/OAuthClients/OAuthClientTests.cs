@@ -8,7 +8,6 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.OAuthClients;
-
 public class OAuthClientTests : AbstractTestsBase
 {
     [Fact]

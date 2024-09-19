@@ -4,7 +4,6 @@ using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
-
 public class QuotaIdTests : AbstractTestsBase
 {
     [Fact]

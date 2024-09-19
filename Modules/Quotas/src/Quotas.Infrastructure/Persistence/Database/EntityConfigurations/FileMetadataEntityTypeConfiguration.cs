@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Persistence.Database.EntityConfigurations;
-
 public class FileMetadataEntityTypeConfiguration : IEntityTypeConfiguration<FileMetadata>
 {
     public void Configure(EntityTypeBuilder<FileMetadata> builder)

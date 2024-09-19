@@ -17,9 +17,7 @@ public static class ExhaustionDateExtensions
 public class ExhaustionDateAssertions :
     ComparableTypeAssertions<ExhaustionDate, ExhaustionDateAssertions>
 {
-    public ExhaustionDateAssertions(ExhaustionDate subject) : base(subject)
-    {
-    }
+    public ExhaustionDateAssertions(ExhaustionDate subject) : base(subject) { }
 
     protected override string Identifier => "ExhaustionDate";
 

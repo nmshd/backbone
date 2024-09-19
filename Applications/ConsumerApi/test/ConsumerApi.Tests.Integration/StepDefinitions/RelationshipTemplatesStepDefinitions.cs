@@ -58,5 +58,6 @@ internal class RelationshipTemplatesStepDefinitions
         _responseContext.WhenResponse = await client.RelationshipTemplates.GetTemplate(relationshipTemplateId);
     }
 
+
     #endregion
 }
