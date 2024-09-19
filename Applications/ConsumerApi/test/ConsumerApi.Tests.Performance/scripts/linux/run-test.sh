@@ -3,7 +3,7 @@
 # Get the scenario, either from the command line argument or by prompting the user
 s="$1"
 if [ -z "$s" ]; then
-  read -p "Enter the string: " s
+  read -p "Which scenario should be executed? " s
 fi
 
 # Capture all arguments after `--`
