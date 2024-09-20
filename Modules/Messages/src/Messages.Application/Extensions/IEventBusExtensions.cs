@@ -17,5 +17,5 @@ public static class IEventBusExtensions
     {
         eventBus.Subscribe<RelationshipStatusChangedDomainEvent, RelationshipStatusChangedDomainEventHandler>();
         eventBus.Subscribe<MessageOrphanedDomainEvent, MessageOrphanedDomainEventHandler>();
-    }    
+    }
 }
