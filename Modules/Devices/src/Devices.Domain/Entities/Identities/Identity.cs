@@ -27,7 +27,7 @@ public class Identity : Entity
         User = null!;
     }
 
-    public Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion)
+    public Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion, string? communicationLanguage = null)
     {
         ClientId = clientId;
         Address = address;
@@ -39,7 +39,13 @@ public class Identity : Entity
         Status = IdentityStatus.Active;
         _deletionProcesses = [];
 
-        User = new ApplicationUser();
+        if (communicationLanguage != null)
+        {
+            var communicationLanguageResult = CommunicationLanguageResult(communicationLanguage);
+            User = new ApplicationUser(this, communicationLanguageResult.Value);
+        }
+        else
+            User = new ApplicationUser();
 
         RaiseDomainEvent(new IdentityCreatedDomainEvent(this));
     }
@@ -88,11 +94,17 @@ public class Identity : Entity
 
     public void AddDevice(string communicationLanguage, DeviceId? deviceId = null)
     {
+        var communicationLanguageResult = CommunicationLanguageResult(communicationLanguage);
+
+        User = new ApplicationUser(this, communicationLanguageResult.Value, deviceId);
+    }
+
+    private static Result<CommunicationLanguage, DomainError> CommunicationLanguageResult(string communicationLanguage)
+    {
         var communicationLanguageResult = CommunicationLanguage.Create(communicationLanguage);
         if (communicationLanguageResult.IsFailure)
             throw new DomainException(communicationLanguageResult.Error);
-
-        User = new ApplicationUser(this, communicationLanguageResult.Value, deviceId);
+        return communicationLanguageResult;
     }
 
     public void ChangeTier(TierId id)

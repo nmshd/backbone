@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
@@ -38,8 +39,6 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var newIdentity = await CreateNewIdentity(command, cancellationToken, address);
 
-        newIdentity.AddDevice(command.CommunicationLanguage);
-
         await _identitiesRepository.Add(newIdentity, command.DevicePassword);
 
         _logger.CreatedIdentity();
@@ -65,7 +64,11 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         if (clientIdentityCount >= client.MaxIdentities)
             throw new OperationFailedException(ApplicationErrors.Devices.ClientReachedIdentitiesLimit());
 
-        return new Identity(client.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion);
+        var communicationLanguageResult = CommunicationLanguage.Create(command.CommunicationLanguage);
+        if (communicationLanguageResult.IsFailure)
+            throw new DomainException(communicationLanguageResult.Error);
+
+        return new Identity(client.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion, communicationLanguageResult.Value);
     }
 
     private async Task<IdentityAddress> CreateIdentityAddress(PublicKey publicKey, CancellationToken cancellationToken)
