@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\Synchronization.Infrastructure\Synchronization.Infrastructure.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Synchronization.Infrastructure\Synchronization.Infrastructure.csproj" />
+    </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\Relationships.Infrastructure\Relationships.Infrastructure.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Relationships.Infrastructure\Relationships.Infrastructure.csproj" />
+    </ItemGroup>
 
 </Project>

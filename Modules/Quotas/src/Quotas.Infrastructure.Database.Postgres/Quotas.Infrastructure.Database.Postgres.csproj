@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <ProjectReference Include="..\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
+    </ItemGroup>
 
 </Project>
