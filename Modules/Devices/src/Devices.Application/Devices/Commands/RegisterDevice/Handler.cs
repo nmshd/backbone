@@ -32,12 +32,11 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
 
         await _challengeValidator.Validate(command.SignedChallenge, PublicKey.FromBytes(identity.PublicKey));
-
         _logger.LogTrace("Successfully validated challenge.");
 
         identity.AddDevice(command.CommunicationLanguage, command.DevicePassword, _userContext.GetDeviceId());
 
-        await _identitiesRepository.AddUser(identity.User, command.DevicePassword);
+        await _identitiesRepository.Add(identity, command.DevicePassword);
 
         _logger.CreatedDevice();
 

@@ -22,7 +22,7 @@ public interface IIdentitiesRepository
 
     #region Users
 
-    Task AddUser(ApplicationUser user, string password);
+    Task Add(Identity identity, string password);
 
     #endregion
 
