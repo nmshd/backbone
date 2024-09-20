@@ -1,11 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<ItemGroup>
-		<PackageReference Include="SimpleBase" Version="4.0.1" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="SimpleBase" Version="4.0.2" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
+    </ItemGroup>
 
 </Project>

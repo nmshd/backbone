@@ -4,7 +4,9 @@ using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
 
 // ReSharper disable once CheckNamespace
+#pragma warning disable IDE0130
 namespace FluentAssertions;
+#pragma warning restore IDE0130
 
 public class EntityAssertions : ObjectAssertions<Entity, EntityAssertions>
 {

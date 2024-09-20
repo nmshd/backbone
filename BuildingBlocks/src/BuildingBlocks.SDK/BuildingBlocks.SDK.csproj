@@ -4,6 +4,6 @@
         <PackageReference Include="NJsonSchema.NewtonsoftJson" Version="11.0.2" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\Tooling\Tooling.csproj" />
+        <ProjectReference Include="..\Tooling\Tooling.csproj" />
     </ItemGroup>
 </Project>
