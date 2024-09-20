@@ -64,6 +64,64 @@ public class ReplaceIdentityAddressTests : AbstractTestsBase
         message.CreatedBy.Should().Be(createdByAddress);
     }
 
+    [Fact]
+    public void MessageOrphanedDomainEvent_not_raised_when_sender_is_not_anonymized()
+    {
+        // Arrange
+        var identityA = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityB = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityC = TestDataGenerator.CreateRandomIdentityAddress();
+        var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+
+        var message = CreateMessage((identityA, new List<IdentityAddress> { identityB, identityC }));
+
+        // Act
+        message.ReplaceIdentityAddress(identityB, newIdentityAddress);
+        message.ReplaceIdentityAddress(identityC, newIdentityAddress);
+
+        // Assert
+        message.DomainEvents.Should().NotContain(e => e.GetType() == typeof(MessageOrphanedDomainEvent));
+    }
+
+    [Fact]
+    public void MessageOrphanedDomainEvent_not_raised_when_one_recipient_is_not_anonymized()
+    {
+        // Arrange
+        var identityA = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityB = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityC = TestDataGenerator.CreateRandomIdentityAddress();
+        var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+
+        var message = CreateMessage((identityA, new List<IdentityAddress> { identityB, identityC }));
+
+        // Act
+        message.ReplaceIdentityAddress(identityA, newIdentityAddress);
+        message.ReplaceIdentityAddress(identityB, newIdentityAddress);
+
+        // Assert
+        message.DomainEvents.Should().NotContain(e => e.GetType() == typeof(MessageOrphanedDomainEvent));
+    }
+
+    [Fact]
+    public void MessageOrphanedDomainEvent_raised_when_sender_and_all_recipients_are_anonymized()
+    {
+        // Arrange
+        var identityA = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityB = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityC = TestDataGenerator.CreateRandomIdentityAddress();
+        var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+
+        var message = CreateMessage((identityA, new List<IdentityAddress> { identityB, identityC }));
+
+        // Act
+        message.ReplaceIdentityAddress(identityA, newIdentityAddress);
+        message.ReplaceIdentityAddress(identityB, newIdentityAddress);
+        message.ReplaceIdentityAddress(identityC, newIdentityAddress);
+
+        // Assert
+        message.DomainEvents.Should().ContainSingle(e => e.GetType() == typeof(MessageOrphanedDomainEvent));
+    }
+
     private static Message CreateMessage((IdentityAddress createdBy, IEnumerable<IdentityAddress> recipients) parameters)
     {
         var recipientInformation = parameters.recipients.Select(recipientIdentityAddress =>
