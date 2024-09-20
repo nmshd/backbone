@@ -45,7 +45,7 @@ public class ExpressionTests : AbstractTestsBase
 
     #region HasParticipant
 
-    private static readonly IdentityAddress ANONYMIZED_ADDRESS = IdentityAddress.GetAnonymized("did:domain");
+    private static readonly IdentityAddress ANONYMIZED_ADDRESS = TestDataGenerator.CreateRandomIdentityAddress();
 
     [Fact]
     public void HasParticipant_is_true_for_sender_when_no_relationship_is_decomposed()

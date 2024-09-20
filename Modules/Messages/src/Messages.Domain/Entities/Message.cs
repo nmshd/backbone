@@ -89,7 +89,6 @@ public class Message : Entity
     {
         var recipient = Recipients.FirstOrDefault(r => r.Address == participantAddress);
         recipient?.UpdateAddress(anonymizedIdentityAddress);
-
     }
 
     private void AnonymizeSender(IdentityAddress anonymizedIdentityAddress)
