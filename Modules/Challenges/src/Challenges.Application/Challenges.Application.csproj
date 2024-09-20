@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<ItemGroup>
-		<PackageReference Include="FluentValidation" Version="11.10.0" />
-		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="FluentValidation" Version="11.10.0" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
-		<ProjectReference Include="..\Challenges.Domain\Challenges.Domain.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
+        <ProjectReference Include="..\Challenges.Domain\Challenges.Domain.csproj" />
+    </ItemGroup>
 </Project>
