@@ -38,7 +38,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var newIdentity = await CreateNewIdentity(command, cancellationToken, address);
 
-        newIdentity.AddDevice(command.CommunicationLanguage, command.DevicePassword);
+        newIdentity.AddDevice(command.CommunicationLanguage);
 
         await _identitiesRepository.Add(newIdentity, command.DevicePassword);
 
