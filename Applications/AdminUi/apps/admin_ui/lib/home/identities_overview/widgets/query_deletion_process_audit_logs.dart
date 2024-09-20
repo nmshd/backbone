@@ -12,11 +12,14 @@ class QueryDeletionProcessAuditLogs extends StatefulWidget {
 
 class _QueryDeletionProcessAuditLogsState extends State<QueryDeletionProcessAuditLogs> {
   late TextEditingController textController;
+  bool isButtonEnabled = false;
 
   @override
   void initState() {
     super.initState();
     textController = TextEditingController();
+
+    textController.addListener(() => setState(() => isButtonEnabled = textController.text.trim().isNotEmpty));
   }
 
   @override
@@ -33,10 +36,7 @@ class _QueryDeletionProcessAuditLogsState extends State<QueryDeletionProcessAudi
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              context.l10n.deletionProcessAuditLogs_title,
-              style: const TextStyle(fontSize: 24),
-            ),
+            Text(context.l10n.deletionProcessAuditLogs_title, style: const TextStyle(fontSize: 24)),
             Gaps.h16,
             Row(
               children: [
@@ -57,21 +57,21 @@ class _QueryDeletionProcessAuditLogsState extends State<QueryDeletionProcessAudi
                 ),
                 Gaps.w8,
                 ElevatedButton(
-                  onPressed: () {
-                    final address = textController.text.trim();
-                    textController.clear();
-                    context.push('/identities/$address/deletion-process-audit-logs');
-                  },
+                  onPressed: isButtonEnabled
+                      ? () {
+                          final address = textController.text.trim();
+                          textController.clear();
+                          context.push('/identities/$address/deletion-process-audit-logs');
+                        }
+                      : null,
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).colorScheme.primary,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
+                    backgroundColor: isButtonEnabled ? Theme.of(context).colorScheme.primary : Colors.grey,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
                   ),
                   child: Text(
                     context.l10n.find,
-                    style: TextStyle(color: Theme.of(context).colorScheme.onPrimary),
+                    style: TextStyle(color: isButtonEnabled ? Theme.of(context).colorScheme.onPrimary : Colors.white),
                   ),
                 ),
               ],
