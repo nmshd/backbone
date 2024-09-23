@@ -3,7 +3,6 @@ using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
-using Backbone.UnitTestTools.Extensions;
 using FluentAssertions;
 using Xunit;
 
@@ -15,16 +14,16 @@ public class AnonymizeParticipantTests : AbstractTestsBase
     public void CreatedBy_gets_updated()
     {
         // Arrange
-        var createdByAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var message = CreateMessage((createdByAddress, new List<IdentityAddress> { createdByAddress }));
+        var message = CreateMessage((senderAddress, new List<IdentityAddress> { TestDataGenerator.CreateRandomIdentityAddress() }));
 
         // Act
-        message.AnonymizeParticipant(createdByAddress, newIdentityAddress);
+        message.AnonymizeParticipant(senderAddress, anonymizedAddress);
 
         // Assert
-        message.CreatedBy.Should().Be(newIdentityAddress);
+        message.CreatedBy.Should().Be(anonymizedAddress);
     }
 
     [Fact]
@@ -32,94 +31,90 @@ public class AnonymizeParticipantTests : AbstractTestsBase
     {
         // Arrange
         var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var newAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
         var message = CreateMessage((TestDataGenerator.CreateRandomIdentityAddress(), new List<IdentityAddress> { recipientAddress }));
 
         // Act
-        message.AnonymizeParticipant(recipientAddress, newAddress);
+        message.AnonymizeParticipant(recipientAddress, anonymizedAddress);
 
         // Assert
-        message.Recipients.Single().Address.Should().Be(newAddress);
+        message.Recipients.Single().Address.Should().Be(anonymizedAddress);
     }
 
     [Fact]
     public void Message_without_identity_to_be_replaced_stays_unaffected()
     {
         // Arrange
+        var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var addressToAnonymize = TestDataGenerator.CreateRandomIdentityAddress();
+        var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
+
+        var message = CreateMessage((senderAddress, new List<IdentityAddress> { recipientAddress }));
+
+        // Act
+        message.AnonymizeParticipant(addressToAnonymize, anonymizedAddress);
+
+        // Assert
+        message.Recipients.First().Address.Should().Be(recipientAddress);
+        message.CreatedBy.Should().Be(senderAddress);
+    }
+
+    [Fact]
+    public void Does_not_raise_a_MessageOrphanedDomainEvent_when_sender_is_not_anonymized()
+    {
+        // Arrange
+        var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
+
+        var message = CreateMessage((senderAddress, new List<IdentityAddress> { recipientAddress }));
+
+        // Act
+        message.AnonymizeParticipant(recipientAddress, anonymizedAddress);
+
+        // Assert
+        message.Should().NotHaveADomainEvent<MessageOrphanedDomainEvent>();
+    }
+
+    [Fact]
+    public void Does_not_raise_a_MessageOrphanedDomainEvent_when_at_least_one_recipient_is_not_anonymized()
+    {
+        // Arrange
+        var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
         var recipient1Address = TestDataGenerator.CreateRandomIdentityAddress();
         var recipient2Address = TestDataGenerator.CreateRandomIdentityAddress();
-        var createdByAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var addressToReplace = TestDataGenerator.CreateRandomIdentityAddress();
-        var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var message = CreateMessage((createdByAddress, new List<IdentityAddress> { recipient1Address, recipient2Address }));
+        var message = CreateMessage((senderAddress, new List<IdentityAddress> { recipient1Address, recipient2Address }));
 
         // Act
-        message.AnonymizeParticipant(addressToReplace, newIdentityAddress);
+        message.AnonymizeParticipant(senderAddress, anonymizedAddress);
+        message.AnonymizeParticipant(recipient1Address, anonymizedAddress);
 
         // Assert
-        message.Recipients.First().Address.Should().Be(recipient1Address);
-        message.Recipients.Second().Address.Should().Be(recipient2Address);
-        message.CreatedBy.Should().Be(createdByAddress);
+        message.Should().NotHaveADomainEvent<MessageOrphanedDomainEvent>();
     }
 
     [Fact]
-    public void MessageOrphanedDomainEvent_not_raised_when_sender_is_not_anonymized()
+    public void Raises_a_MessageOrphanedDomainEvent_when_sender_and_all_recipients_are_anonymized()
     {
         // Arrange
-        var identityA = TestDataGenerator.CreateRandomIdentityAddress();
-        var identityB = TestDataGenerator.CreateRandomIdentityAddress();
-        var identityC = TestDataGenerator.CreateRandomIdentityAddress();
-        var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var recipient1Address = TestDataGenerator.CreateRandomIdentityAddress();
+        var recipient2Address = TestDataGenerator.CreateRandomIdentityAddress();
+        var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
 
-        var message = CreateMessage((identityA, new List<IdentityAddress> { identityB, identityC }));
-
-        // Act
-        message.AnonymizeParticipant(identityB, newIdentityAddress);
-        message.AnonymizeParticipant(identityC, newIdentityAddress);
-
-        // Assert
-        message.DomainEvents.Should().NotContain(e => e.GetType() == typeof(MessageOrphanedDomainEvent));
-    }
-
-    [Fact]
-    public void MessageOrphanedDomainEvent_not_raised_when_one_recipient_is_not_anonymized()
-    {
-        // Arrange
-        var identityA = TestDataGenerator.CreateRandomIdentityAddress();
-        var identityB = TestDataGenerator.CreateRandomIdentityAddress();
-        var identityC = TestDataGenerator.CreateRandomIdentityAddress();
-        var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-
-        var message = CreateMessage((identityA, new List<IdentityAddress> { identityB, identityC }));
+        var message = CreateMessage((senderAddress, new List<IdentityAddress> { recipient1Address, recipient2Address }));
 
         // Act
-        message.AnonymizeParticipant(identityA, newIdentityAddress);
-        message.AnonymizeParticipant(identityB, newIdentityAddress);
+        message.AnonymizeParticipant(senderAddress, anonymizedAddress);
+        message.AnonymizeParticipant(recipient1Address, anonymizedAddress);
+        message.AnonymizeParticipant(recipient2Address, anonymizedAddress);
 
         // Assert
-        message.DomainEvents.Should().NotContain(e => e.GetType() == typeof(MessageOrphanedDomainEvent));
-    }
-
-    [Fact]
-    public void MessageOrphanedDomainEvent_raised_when_sender_and_all_recipients_are_anonymized()
-    {
-        // Arrange
-        var identityA = TestDataGenerator.CreateRandomIdentityAddress();
-        var identityB = TestDataGenerator.CreateRandomIdentityAddress();
-        var identityC = TestDataGenerator.CreateRandomIdentityAddress();
-        var newIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-
-        var message = CreateMessage((identityA, new List<IdentityAddress> { identityB, identityC }));
-
-        // Act
-        message.AnonymizeParticipant(identityA, newIdentityAddress);
-        message.AnonymizeParticipant(identityB, newIdentityAddress);
-        message.AnonymizeParticipant(identityC, newIdentityAddress);
-
-        // Assert
-        message.DomainEvents.Should().ContainSingle(e => e.GetType() == typeof(MessageOrphanedDomainEvent));
+        message.Should().HaveASingleDomainEvent<MessageOrphanedDomainEvent>();
     }
 
     private static Message CreateMessage((IdentityAddress createdBy, IEnumerable<IdentityAddress> recipients) parameters)
@@ -128,12 +123,16 @@ public class AnonymizeParticipantTests : AbstractTestsBase
             new RecipientInformation(recipientIdentityAddress, [])
         ).ToList();
 
-        return new Message(
+        var message = new Message(
             parameters.createdBy,
             TestDataGenerator.CreateRandomDeviceId(),
             [],
             [],
             recipientInformation
         );
+
+        message.ClearDomainEvents();
+
+        return message;
     }
 }
