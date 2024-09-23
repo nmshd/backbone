@@ -1,5 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerToBeDeleted;
+﻿using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerToBeDeleted;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerToBeDeleted;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -9,35 +8,35 @@ using Microsoft.Extensions.Logging;
 using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.DomainEvents;
+
 public class PeerToBeDeletedDomainEventHandlerTests : AbstractTestsBase
 {
     [Fact]
     public async Task Creates_an_external_event()
     {
         // Arrange
-        var peerOfToBeDeletedIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-        var randomDateTime = new DateTime(2015, 7, 23, 14, 35, 50);
-        var peerToBeDeletedDomainEvent = new PeerToBeDeletedDomainEvent(peerOfToBeDeletedIdentity, "some-relationship-id", "some-deletedIdentity-id", randomDateTime);
+        var peerOfIdentityToBeDeleted = TestDataGenerator.CreateRandomIdentityAddress();
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var externalEvent = new ExternalEvent(ExternalEventType.PeerToBeDeleted, IdentityAddress.Parse(peerOfToBeDeletedIdentity), 1,
-            new { peerToBeDeletedDomainEvent.RelationshipId });
+        var gracePeriodEndsAt = new DateTime(2015, 7, 23, 14, 35, 50);
 
-        A.CallTo(() => mockDbContext.CreateExternalEvent(
-            peerOfToBeDeletedIdentity,
-            ExternalEventType.PeerToBeDeleted,
-            A<object>._)
-        ).Returns(externalEvent);
-
-        var handler = new PeerToBeDeletedDomainEventHandler(mockDbContext,
-            A.Fake<ILogger<PeerToBeDeletedDomainEventHandler>>());
+        var handler = CreateHandler(mockDbContext);
 
         // Act
-        await handler.Handle(peerToBeDeletedDomainEvent);
+        await handler.Handle(new PeerToBeDeletedDomainEvent(peerOfIdentityToBeDeleted, "some-relationship-id", "some-deletedIdentity-id", gracePeriodEndsAt));
 
         // Assert
-        A.CallTo(() => mockDbContext.CreateExternalEvent(peerOfToBeDeletedIdentity, ExternalEventType.PeerToBeDeleted, A<object>._))
+        A.CallTo(() => mockDbContext.CreateExternalEvent(
+                peerOfIdentityToBeDeleted,
+                ExternalEventType.PeerToBeDeleted,
+                A<object>._))
             .MustHaveHappenedOnceExactly();
+    }
+
+    private static PeerToBeDeletedDomainEventHandler CreateHandler(ISynchronizationDbContext mockDbContext)
+    {
+        return new PeerToBeDeletedDomainEventHandler(mockDbContext,
+            A.Fake<ILogger<PeerToBeDeletedDomainEventHandler>>());
     }
 }
