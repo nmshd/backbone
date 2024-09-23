@@ -21,7 +21,7 @@ public class ReplaceIdentityAddressTests : AbstractTestsBase
         var message = CreateMessage((createdByAddress, new List<IdentityAddress> { createdByAddress }));
 
         // Act
-        message.ReplaceIdentityAddress(createdByAddress, newIdentityAddress);
+        message.AnonymizeParticipant(createdByAddress, newIdentityAddress);
 
         // Assert
         message.CreatedBy.Should().Be(newIdentityAddress);
@@ -37,7 +37,7 @@ public class ReplaceIdentityAddressTests : AbstractTestsBase
         var message = CreateMessage((TestDataGenerator.CreateRandomIdentityAddress(), new List<IdentityAddress> { recipientAddress }));
 
         // Act
-        message.ReplaceIdentityAddress(recipientAddress, newAddress);
+        message.AnonymizeParticipant(recipientAddress, newAddress);
 
         // Assert
         message.Recipients.Single().Address.Should().Be(newAddress);
@@ -56,7 +56,7 @@ public class ReplaceIdentityAddressTests : AbstractTestsBase
         var message = CreateMessage((createdByAddress, new List<IdentityAddress> { recipient1Address, recipient2Address }));
 
         // Act
-        message.ReplaceIdentityAddress(addressToReplace, newIdentityAddress);
+        message.AnonymizeParticipant(addressToReplace, newIdentityAddress);
 
         // Assert
         message.Recipients.First().Address.Should().Be(recipient1Address);
@@ -76,8 +76,8 @@ public class ReplaceIdentityAddressTests : AbstractTestsBase
         var message = CreateMessage((identityA, new List<IdentityAddress> { identityB, identityC }));
 
         // Act
-        message.ReplaceIdentityAddress(identityB, newIdentityAddress);
-        message.ReplaceIdentityAddress(identityC, newIdentityAddress);
+        message.AnonymizeParticipant(identityB, newIdentityAddress);
+        message.AnonymizeParticipant(identityC, newIdentityAddress);
 
         // Assert
         message.DomainEvents.Should().NotContain(e => e.GetType() == typeof(MessageOrphanedDomainEvent));
@@ -95,8 +95,8 @@ public class ReplaceIdentityAddressTests : AbstractTestsBase
         var message = CreateMessage((identityA, new List<IdentityAddress> { identityB, identityC }));
 
         // Act
-        message.ReplaceIdentityAddress(identityA, newIdentityAddress);
-        message.ReplaceIdentityAddress(identityB, newIdentityAddress);
+        message.AnonymizeParticipant(identityA, newIdentityAddress);
+        message.AnonymizeParticipant(identityB, newIdentityAddress);
 
         // Assert
         message.DomainEvents.Should().NotContain(e => e.GetType() == typeof(MessageOrphanedDomainEvent));
@@ -114,9 +114,9 @@ public class ReplaceIdentityAddressTests : AbstractTestsBase
         var message = CreateMessage((identityA, new List<IdentityAddress> { identityB, identityC }));
 
         // Act
-        message.ReplaceIdentityAddress(identityA, newIdentityAddress);
-        message.ReplaceIdentityAddress(identityB, newIdentityAddress);
-        message.ReplaceIdentityAddress(identityC, newIdentityAddress);
+        message.AnonymizeParticipant(identityA, newIdentityAddress);
+        message.AnonymizeParticipant(identityB, newIdentityAddress);
+        message.AnonymizeParticipant(identityC, newIdentityAddress);
 
         // Assert
         message.DomainEvents.Should().ContainSingle(e => e.GetType() == typeof(MessageOrphanedDomainEvent));
