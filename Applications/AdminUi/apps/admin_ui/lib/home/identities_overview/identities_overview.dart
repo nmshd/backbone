@@ -44,6 +44,7 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
               child: Padding(
                 padding: const EdgeInsets.all(8),
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IdentitiesFilter(
@@ -52,6 +53,11 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
                           ..filter = filter
                           ..refreshDatasource();
                       },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.refresh),
+                      onPressed: () async => _dataSource.refreshDatasource(),
+                      tooltip: context.l10n.reload,
                     ),
                     Expanded(child: IdentitiesDataTable(dataSource: _dataSource)),
                   ],
