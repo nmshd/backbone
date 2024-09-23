@@ -1,3 +1,4 @@
+using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.Http;
 
@@ -17,12 +18,12 @@ public class RequestResponseTimeMiddleware
 
     public Task InvokeAsync(HttpContext context)
     {
-        var requestTime = DateTime.UtcNow.ToUniversalString();
+        var requestTime = SystemTime.UtcNow.ToUniversalString();
 
         context.Response.OnStarting(() =>
         {
             context.Response.Headers[RESPONSE_HEADER_REQUEST_TIME] = requestTime;
-            context.Response.Headers[RESPONSE_HEADER_RESPONSE_TIME] = DateTime.UtcNow.ToUniversalString();
+            context.Response.Headers[RESPONSE_HEADER_RESPONSE_TIME] = SystemTime.UtcNow.ToUniversalString();
             return Task.CompletedTask;
         });
 
