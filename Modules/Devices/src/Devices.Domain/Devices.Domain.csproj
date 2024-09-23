@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<ItemGroup>
+    <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.8" />
-		<PackageReference Include="CSharpFunctionalExtensions" Version="3.0.0" />
-	</ItemGroup>
+        <PackageReference Include="CSharpFunctionalExtensions" Version="3.0.0" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
-		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
-		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Domain\BuildingBlocks.Domain.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\DevelopmentKit.Identity\DevelopmentKit.Identity.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
+    </ItemGroup>
 
 </Project>
