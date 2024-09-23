@@ -36,7 +36,6 @@ public class PeerToBeDeletedDomainEventHandlerTests : AbstractTestsBase
 
     private static PeerToBeDeletedDomainEventHandler CreateHandler(ISynchronizationDbContext mockDbContext)
     {
-        return new PeerToBeDeletedDomainEventHandler(mockDbContext,
-            A.Fake<ILogger<PeerToBeDeletedDomainEventHandler>>());
+        return new PeerToBeDeletedDomainEventHandler(mockDbContext, A.Fake<ILogger<PeerToBeDeletedDomainEventHandler>>());
     }
 }
