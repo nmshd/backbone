@@ -54,12 +54,11 @@ class _IdentitiesOverviewState extends State<IdentitiesOverview> {
                           ..refreshDatasource();
                       },
                     ),
-                    if (kIsDesktop)
-                      IconButton(
-                        icon: const Icon(Icons.refresh),
-                        onPressed: () async => _dataSource.refreshDatasource(),
-                        tooltip: context.l10n.reload,
-                      ),
+                    IconButton(
+                      icon: const Icon(Icons.refresh),
+                      onPressed: () async => _dataSource.refreshDatasource(),
+                      tooltip: context.l10n.reload,
+                    ),
                     Expanded(child: IdentitiesDataTable(dataSource: _dataSource)),
                   ],
                 ),
