@@ -51,8 +51,15 @@ public class Executor
 
     private readonly List<ModuleType> _initMigrationsOrder =
     [
-        ModuleType.Challenges, ModuleType.Devices, ModuleType.Files, ModuleType.Quotas, ModuleType.Relationships,
-        ModuleType.Synchronization, ModuleType.Tokens, ModuleType.Messages, ModuleType.AdminApi
+        ModuleType.Challenges,
+        ModuleType.Devices,
+        ModuleType.Files,
+        ModuleType.Quotas,
+        ModuleType.Relationships,
+        ModuleType.Synchronization,
+        ModuleType.Tokens,
+        ModuleType.Messages,
+        ModuleType.AdminApi
     ];
 
     public Executor(IServiceProvider serviceProvider, ILogger<Executor> logger)
