@@ -6,7 +6,7 @@ environment:
 
 dependencies:
   admin_api_types: ^1.0.0
-  dio: ^5.5.0+1
+  dio: ^5.7.0
   meta: any
 
 dev_dependencies:

@@ -75,14 +75,6 @@ public class IdentityDeletionProcess : Entity
 
     public bool HasGracePeriodExpired => Status == DeletionProcessStatus.Approved && SystemTime.UtcNow >= GracePeriodEndsAt;
 
-    private void ApproveInternally(IdentityAddress address, DeviceId createdByDevice)
-    {
-        ApprovedAt = SystemTime.UtcNow;
-        ApprovedByDevice = createdByDevice;
-        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
-        ChangeStatus(DeletionProcessStatus.Approved, address, address);
-    }
-
     public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
     {
         return new IdentityDeletionProcess(createdBy, DeletionProcessStatus.WaitingForApproval);
@@ -155,6 +147,14 @@ public class IdentityDeletionProcess : Entity
 
         ApproveInternally(address, approvedByDevice);
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
+    }
+
+    private void ApproveInternally(IdentityAddress address, DeviceId createdByDevice)
+    {
+        ApprovedAt = SystemTime.UtcNow;
+        ApprovedByDevice = createdByDevice;
+        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
+        ChangeStatus(DeletionProcessStatus.Approved, address, address);
     }
 
     public void Reject(IdentityAddress address, DeviceId rejectedByDevice)
