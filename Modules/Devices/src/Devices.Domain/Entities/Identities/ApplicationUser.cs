@@ -8,10 +8,6 @@ public class ApplicationUser : IdentityUser
 {
     private readonly Device _device;
     
-    public ApplicationUser() : this(Username.New())
-    {
-    }
-
     internal ApplicationUser(string username) : base(username)
     {
         _device = null!;
@@ -19,11 +15,10 @@ public class ApplicationUser : IdentityUser
         CreatedAt = SystemTime.UtcNow;
     }
 
-    public ApplicationUser(Identity identity, CommunicationLanguage communicationLanguage, DeviceId? createdByDevice = null) : base(Username.New())
+    public ApplicationUser() : base(Username.New())
     {
-        _device = new Device(identity, communicationLanguage, createdByDevice);
-        DeviceId = Device.Id;
-
+        _device = null!;
+        DeviceId = null!; 
         CreatedAt = SystemTime.UtcNow;
     }
 
