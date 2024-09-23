@@ -7,18 +7,18 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 public class ApplicationUser : IdentityUser
 {
     private readonly Device _device;
-    
-    internal ApplicationUser(string username) : base(username)
+
+    public ApplicationUser() : base(Username.New())
     {
         _device = null!;
         DeviceId = null!;
         CreatedAt = SystemTime.UtcNow;
     }
 
-    public ApplicationUser() : base(Username.New())
+    internal ApplicationUser(string username) : base(username)
     {
         _device = null!;
-        DeviceId = null!; 
+        DeviceId = null!;
         CreatedAt = SystemTime.UtcNow;
     }
 
