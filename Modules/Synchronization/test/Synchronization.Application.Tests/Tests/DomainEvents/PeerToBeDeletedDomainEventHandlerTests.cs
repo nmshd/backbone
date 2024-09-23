@@ -19,7 +19,7 @@ public class PeerToBeDeletedDomainEventHandlerTests : AbstractTestsBase
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var gracePeriodEndsAt = new DateTime(2015, 7, 23, 14, 35, 50);
+        var gracePeriodEndsAt = DateTime.Parse("2015-07-23");
 
         var handler = CreateHandler(mockDbContext);
 
