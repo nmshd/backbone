@@ -96,7 +96,7 @@ public class Message : Entity
         CreatedBy = anonymizedIdentityAddress;
     }
 
-    public bool IsOrphaned(Message message, IdentityAddress anonymizedIdentityAddress)
+    private bool IsOrphaned(Message message, IdentityAddress anonymizedIdentityAddress)
     {
         return message.CreatedBy == anonymizedIdentityAddress &&
                message.Recipients.All(r => r.Address == anonymizedIdentityAddress);
