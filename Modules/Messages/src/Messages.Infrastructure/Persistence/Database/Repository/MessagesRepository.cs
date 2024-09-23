@@ -83,9 +83,8 @@ public class MessagesRepository : IMessagesRepository
             .ToListAsync(cancellationToken);
     }
 
-    public async Task Delete(Message message, CancellationToken cancellationToken)
+    public async Task Delete(MessageId messageId, CancellationToken cancellationToken)
     {
-        _messages.Remove(message);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _messages.Where(m => m.Id == messageId).ExecuteDeleteAsync(cancellationToken);
     }
 }

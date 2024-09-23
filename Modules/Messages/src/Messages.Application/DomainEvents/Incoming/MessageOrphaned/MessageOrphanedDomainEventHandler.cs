@@ -16,8 +16,7 @@ public class MessageOrphanedDomainEventHandler : IDomainEventHandler<MessageOrph
 
     public async Task Handle(MessageOrphanedDomainEvent @event)
     {
-        var message = await _messagesRepository.Find(MessageId.Parse(@event.MessageId), @event.CreatedBy, CancellationToken.None);
-
-        await _messagesRepository.Delete(message, CancellationToken.None);
+        var messageId = MessageId.Parse(@event.MessageId);
+        await _messagesRepository.Delete(messageId, CancellationToken.None);
     }
 }
