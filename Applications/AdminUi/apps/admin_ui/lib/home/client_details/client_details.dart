@@ -2,6 +2,7 @@ import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
@@ -81,12 +82,15 @@ class _ClientDetailsState extends State<ClientDetails> {
 
   Future<void> _reloadClient() async {
     final clientDetails = await GetIt.I.get<AdminApiClient>().clients.getClient(widget.clientId);
-    if (mounted) {
-      setState(() {
-        _clientDetails = clientDetails.data;
-        _selectedTier = _clientDetails!.defaultTier;
-      });
-    }
+
+    if (!mounted) return;
+
+    if (clientDetails.hasError) return context.pushReplacement('/error', extra: clientDetails.error.message);
+
+    setState(() {
+      _clientDetails = clientDetails.data;
+      _selectedTier = _clientDetails!.defaultTier;
+    });
   }
 
   Future<void> _reloadTiers() async {
