@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -34,13 +35,17 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
         await _challengeValidator.Validate(command.SignedChallenge, PublicKey.FromBytes(identity.PublicKey));
         _logger.LogTrace("Successfully validated challenge.");
 
-        identity.AddDevice(command.CommunicationLanguage, _userContext.GetDeviceId());
+        var communicationLanguageResult = CommunicationLanguage.Create(command.CommunicationLanguage);
+        if (communicationLanguageResult.IsFailure)
+            throw new DomainException(communicationLanguageResult.Error);
 
-        await _identitiesRepository.Add(identity, command.DevicePassword);
+        var newDevice = identity.AddDevice(communicationLanguageResult.Value, _userContext.GetDeviceId());
+
+        await _identitiesRepository.UpdateWithNewDevice(identity, command.DevicePassword);
 
         _logger.CreatedDevice();
 
-        return new RegisterDeviceResponse(identity.User);
+        return new RegisterDeviceResponse(newDevice.User);
     }
 }
 

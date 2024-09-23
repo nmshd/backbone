@@ -49,9 +49,9 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
             CreatedAt = newIdentity.CreatedAt,
             Device = new CreateIdentityResponseDevice
             {
-                Id = newIdentity.User.DeviceId,
-                Username = newIdentity.User.UserName!,
-                CreatedAt = newIdentity.User.Device.CreatedAt
+                Id = newIdentity.Devices.First().Id,
+                Username = newIdentity.Devices.First().User.UserName!,
+                CreatedAt = newIdentity.Devices.First().CreatedAt
             }
         };
     }
