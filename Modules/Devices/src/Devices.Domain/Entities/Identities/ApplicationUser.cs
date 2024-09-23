@@ -7,18 +7,16 @@ namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 public class ApplicationUser : IdentityUser
 {
     private readonly Device _device;
+    
+    public ApplicationUser() : this(Username.New())
+    {
+    }
 
-    // This constructor is required by AspnetCoreIdentity
-    public ApplicationUser()
+    internal ApplicationUser(string username) : base(username)
     {
         _device = null!;
         DeviceId = null!;
-    }
-
-    public ApplicationUser(Device device) : base(Username.New())
-    {
-        _device = device;
-        DeviceId = null!;
+        CreatedAt = SystemTime.UtcNow;
     }
 
     public ApplicationUser(Identity identity, CommunicationLanguage communicationLanguage, DeviceId? createdByDevice = null) : base(Username.New())

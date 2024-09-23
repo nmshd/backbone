@@ -24,10 +24,9 @@ public class Identity : Entity
         PublicKey = null!;
         Devices = null!;
         _deletionProcesses = null!;
-        User = null!;
     }
 
-    public Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion, string? communicationLanguage = null)
+    private Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion, CommunicationLanguage deviceCommunicationLanguage, string username)
     {
         ClientId = clientId;
         Address = address;
@@ -39,13 +38,24 @@ public class Identity : Entity
         Status = IdentityStatus.Active;
         _deletionProcesses = [];
 
-        if (communicationLanguage != null)
-        {
-            var communicationLanguageResult = CommunicationLanguageResult(communicationLanguage);
-            User = new ApplicationUser(this, communicationLanguageResult.Value);
-        }
-        else
-            User = new ApplicationUser();
+        Devices.Add( Device.CreateTestDevice(this, deviceCommunicationLanguage, username));
+
+        RaiseDomainEvent(new IdentityCreatedDomainEvent(this));
+    }
+
+    public Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion, CommunicationLanguage deviceCommunicationLanguage)
+    {
+        ClientId = clientId;
+        Address = address;
+        PublicKey = publicKey;
+        IdentityVersion = identityVersion;
+        CreatedAt = SystemTime.UtcNow;
+        Devices = [];
+        TierId = tierId;
+        Status = IdentityStatus.Active;
+        _deletionProcesses = [];
+
+        Devices.Add(new Device(this, deviceCommunicationLanguage));
 
         RaiseDomainEvent(new IdentityCreatedDomainEvent(this));
     }
@@ -85,26 +95,21 @@ public class Identity : Entity
 
     public IdentityStatus Status { get; private set; }
 
-    public ApplicationUser User { get; private set; }
-
     public bool IsNew()
     {
         return Devices.Count < 1;
     }
 
-    public void AddDevice(string communicationLanguage, DeviceId? deviceId = null)
+    public static Identity CreateTestIdentity(IdentityAddress address, byte[] publicKey, TierId tierId, string username)
     {
-        var communicationLanguageResult = CommunicationLanguageResult(communicationLanguage);
-
-        User = new ApplicationUser(this, communicationLanguageResult.Value, deviceId);
+        return new Identity("test", address, publicKey, tierId, 1, CommunicationLanguage.DEFAULT_LANGUAGE, username);
     }
 
-    private static Result<CommunicationLanguage, DomainError> CommunicationLanguageResult(string communicationLanguage)
+    public Device AddDevice(CommunicationLanguage communicationLanguage, DeviceId createdByDevice)
     {
-        var communicationLanguageResult = CommunicationLanguage.Create(communicationLanguage);
-        if (communicationLanguageResult.IsFailure)
-            throw new DomainException(communicationLanguageResult.Error);
-        return communicationLanguageResult;
+        var newDevice = new Device(this, communicationLanguage, createdByDevice);
+        Devices.Add(newDevice);
+        return newDevice;
     }
 
     public void ChangeTier(TierId id)
