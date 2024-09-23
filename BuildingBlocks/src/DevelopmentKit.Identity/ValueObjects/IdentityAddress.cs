@@ -87,11 +87,6 @@ public partial record IdentityAddress : StronglyTypedId
         return Convert.ToHexString(bytes).ToLower();
     }
 
-    public override string ToString()
-    {
-        return Value;
-    }
-
     #region Converters
 
     public class IdentityAddressTypeConverter : TypeConverter
