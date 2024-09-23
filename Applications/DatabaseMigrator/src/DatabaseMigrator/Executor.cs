@@ -87,7 +87,11 @@ public class Executor
 
         try
         {
-            foreach (var info in migrationList) await MigrateDbContext(_moduleContextTypes[(int)info.Type], info.Id);
+            foreach (var info in migrationList)
+            {
+                Console.Error.WriteLine($"Applying migration: {info.Type} {info.Id}");
+                await MigrateDbContext(_moduleContextTypes[(int)info.Type], info.Id);
+            }
         }
         catch (Exception ex)
         {
@@ -115,6 +119,13 @@ public class Executor
         }
 
         migrations.Sort((a, b) => string.CompareOrdinal(a.Id, b.Id));
+
+        if (migrations.First().Type == ModuleType.AdminApi)
+        {
+            var first = migrations[0];
+            migrations.RemoveAt(0);
+            migrations.Add(first);
+        }
 
         return migrations;
     }
