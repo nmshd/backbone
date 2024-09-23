@@ -49,6 +49,12 @@ public class Executor
         typeof(TokensDbContext)
     ];
 
+    private readonly List<ModuleType> _initMigrationsOrder =
+    [
+        ModuleType.Challenges, ModuleType.Devices, ModuleType.Files, ModuleType.Quotas, ModuleType.Relationships,
+        ModuleType.Synchronization, ModuleType.Tokens, ModuleType.Messages, ModuleType.AdminApi
+    ];
+
     public Executor(IServiceProvider serviceProvider, ILogger<Executor> logger)
     {
         _serviceProvider = serviceProvider;
@@ -118,14 +124,22 @@ public class Executor
             migrations.AddRange(pendingMigrations.Select(id => new MigrationId(moduleType, id)));
         }
 
-        migrations.Sort((a, b) => string.CompareOrdinal(a.Id, b.Id));
+        var initMigrations = migrations.FindAll(id => id.Id.EndsWith("Init"));
+        migrations.RemoveAll(id => id.Id.EndsWith("Init"));
 
-        if (migrations.First().Type == ModuleType.AdminApi)
+        migrations.Sort((a, b) => string.CompareOrdinal(a.Id, b.Id));
+        migrations.InsertRange(0, initMigrations.OrderBy(id => _initMigrationsOrder.IndexOf(id.Type)));
+
+        //Test
+        //migrations.Remove(migrations.Last());
+        //migrations.Remove(migrations.Last());
+
+        /*if (migrations.First().Type == ModuleType.AdminApi)
         {
             var first = migrations[0];
             migrations.RemoveAt(0);
             migrations.Add(first);
-        }
+        }*/
 
         return migrations;
     }
