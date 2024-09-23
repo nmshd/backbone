@@ -15,5 +15,5 @@ User revokes a Relationship
         And a pending Relationship r between i1 and i2 created by i2
         And i2 is in status "ToBeDeleted"
         When i1 sends a PUT request to the /Relationships/{r.Id}/Revoke endpoint
-        Then the response status code is 400 (Bad Request)
-        And the response content contains an error with the error code "error.platform.validation.relationship.peerIsToBeDeleted"
+        Then the response status code is 200 (OK)
+        And the response contains a RelationshipMetadata
