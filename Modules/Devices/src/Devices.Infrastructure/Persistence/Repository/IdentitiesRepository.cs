@@ -71,9 +71,7 @@ public class IdentitiesRepository : IIdentitiesRepository
 
     public async Task Add(Identity identity, string password)
     {
-        var user = identity.Devices.First().User;
-
-        var createUserResult = await _userManager.CreateAsync(user, password);
+        var createUserResult = await _userManager.CreateAsync(identity.Devices.First().User, password);
         if (!createUserResult.Succeeded)
             throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
     }
