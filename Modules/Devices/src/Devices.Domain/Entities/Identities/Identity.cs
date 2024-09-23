@@ -38,7 +38,7 @@ public class Identity : Entity
         Status = IdentityStatus.Active;
         _deletionProcesses = [];
 
-        Devices.Add( Device.CreateTestDevice(this, deviceCommunicationLanguage, username));
+        Devices.Add(Device.CreateTestDevice(this, deviceCommunicationLanguage, username));
 
         RaiseDomainEvent(new IdentityCreatedDomainEvent(this));
     }

@@ -27,7 +27,7 @@ public class Device : Entity
         CreatedByDevice = null!;
         CommunicationLanguage = communicationLanguage;
 
-        User = new ApplicationUser(username);
+        User = new ApplicationUser(this, username);
 
         Identity = identity;
         IdentityAddress = null!;
@@ -40,7 +40,7 @@ public class Device : Entity
         CreatedByDevice = createdByDevice ?? Id;
         CommunicationLanguage = communicationLanguage;
 
-        User = new ApplicationUser(); // This is just to satisfy the compiler; the property is actually set by EF core
+        User = new ApplicationUser(this); // This is just to satisfy the compiler; the property is actually set by EF core
 
         // The following distinction is unfortunately necessary in order to make EF recognize that the identity already exists
         if (identity.IsNew())

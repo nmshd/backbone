@@ -8,17 +8,24 @@ public class ApplicationUser : IdentityUser
 {
     private readonly Device _device;
 
-    public ApplicationUser() : base(Username.New())
+    public ApplicationUser()
     {
         _device = null!;
         DeviceId = null!;
         CreatedAt = SystemTime.UtcNow;
     }
 
-    internal ApplicationUser(string username) : base(username)
+    internal ApplicationUser(Device device, string username) : base(username)
     {
-        _device = null!;
-        DeviceId = null!;
+        _device = device;
+        DeviceId = device.Id;
+        CreatedAt = SystemTime.UtcNow;
+    }
+
+    public ApplicationUser(Device device) : base(Username.New())
+    {
+        _device = device;
+        DeviceId = device.Id;
         CreatedAt = SystemTime.UtcNow;
     }
 
