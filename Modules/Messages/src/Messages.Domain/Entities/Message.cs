@@ -56,7 +56,7 @@ public class Message : Entity
         AnonymizeRecipient(oldIdentityAddress, newIdentityAddress);
 
         if (MessageIsOrphaned(this, newIdentityAddress))
-            RaiseDomainEvent(new MessageOrphanedDomainEvent(Id, CreatedBy));
+            RaiseDomainEvent(new MessageOrphanedDomainEvent(this));
     }
 
     public void DecomposeFor(IdentityAddress decomposerAddress, IdentityAddress peerAddress, IdentityAddress anonymizedAddress)
