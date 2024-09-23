@@ -18,4 +18,5 @@ public interface IMessagesRepository
     Task Update(Message message);
     Task Update(IEnumerable<Message> messages);
     Task<IEnumerable<Message>> Find(Expression<Func<Message, bool>> expression, CancellationToken cancellationToken);
+    Task Delete(MessageId messageId, CancellationToken cancellationToken);
 }
