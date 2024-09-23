@@ -10,12 +10,17 @@ public static class IEventBusExtensions
 {
     public static void AddMessagesDomainEventSubscriptions(this IEventBus eventBus)
     {
-        SubscribeToSynchronizationEvents(eventBus);
+        SubscribeToMessagesEvents(eventBus);
+        SubscribeToRelationshipsEvents(eventBus);
     }
 
-    private static void SubscribeToSynchronizationEvents(IEventBus eventBus)
+    private static void SubscribeToMessagesEvents(IEventBus eventBus)
+    {
+        eventBus.Subscribe<MessageOrphanedDomainEvent, MessageOrphanedDomainEventHandler>();
+    }
+
+    private static void SubscribeToRelationshipsEvents(IEventBus eventBus)
     {
         eventBus.Subscribe<RelationshipStatusChangedDomainEvent, RelationshipStatusChangedDomainEventHandler>();
-        eventBus.Subscribe<MessageOrphanedDomainEvent, MessageOrphanedDomainEventHandler>();
     }
 }
