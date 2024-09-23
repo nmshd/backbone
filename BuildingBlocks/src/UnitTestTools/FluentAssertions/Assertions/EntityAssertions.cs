@@ -53,4 +53,13 @@ public class EntityAssertions : ObjectAssertions<Entity, EntityAssertions>
             (TEvent2)Subject.DomainEvents.Single(e => e.GetType() == typeof(TEvent2))
         );
     }
+
+    public void NotHaveADomainEvent<TEvent>(string because = "", params object[] becauseArgs) where TEvent : DomainEvent
+    {
+        Execute.Assertion
+            .BecauseOf(because, becauseArgs)
+            .Given(() => Subject.DomainEvents)
+            .ForCondition(events => events.All(e => e is not TEvent))
+            .FailWith($"Expected {{context:entity}} to not have a {typeof(TEvent).Name}, but it has.", Subject.DomainEvents);
+    }
 }
