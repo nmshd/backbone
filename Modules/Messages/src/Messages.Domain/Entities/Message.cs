@@ -48,12 +48,15 @@ public class Message : Entity
 
     private bool CanAnonymizeSender => Recipients.All(r => r.IsRelationshipFullyDecomposed);
 
-    public void ReplaceIdentityAddress(IdentityAddress oldIdentityAddress, IdentityAddress newIdentityAddress)
+    public void AnonymizeParticipant(IdentityAddress participantAddress, IdentityAddress anonymizedAddress)
     {
-        if (CreatedBy == oldIdentityAddress)
-            AnonymizeSender(newIdentityAddress);
+        if (CreatedBy == participantAddress)
+            AnonymizeSender(anonymizedAddress);
 
-        AnonymizeRecipient(oldIdentityAddress, newIdentityAddress);
+        AnonymizeRecipient(participantAddress, anonymizedAddress);
+
+        if (IsOrphaned(this, anonymizedAddress))
+            RaiseDomainEvent(new MessageOrphanedDomainEvent(this));
     }
 
     public void DecomposeFor(IdentityAddress decomposerAddress, IdentityAddress peerAddress, IdentityAddress anonymizedAddress)
@@ -91,6 +94,12 @@ public class Message : Entity
     private void AnonymizeSender(IdentityAddress anonymizedIdentityAddress)
     {
         CreatedBy = anonymizedIdentityAddress;
+    }
+
+    private bool IsOrphaned(Message message, IdentityAddress anonymizedIdentityAddress)
+    {
+        return message.CreatedBy == anonymizedIdentityAddress &&
+               message.Recipients.All(r => r.Address == anonymizedIdentityAddress);
     }
 
     #region Expressions

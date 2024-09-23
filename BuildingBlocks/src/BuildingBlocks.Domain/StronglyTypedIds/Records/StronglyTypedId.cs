@@ -74,6 +74,11 @@ public abstract record StronglyTypedId(string Value)
         '9'
     ];
 
+    public sealed override string ToString()
+    {
+        return Value;
+    }
+
     public static implicit operator string(StronglyTypedId id)
     {
         return id.Value;

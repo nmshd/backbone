@@ -25,7 +25,7 @@ public class Handler : IRequestHandler<AnonymizeMessagesOfIdentityCommand>
 
         foreach (var message in messages)
         {
-            message.ReplaceIdentityAddress(request.IdentityAddress, newIdentityAddress);
+            message.AnonymizeParticipant(request.IdentityAddress, newIdentityAddress);
         }
 
         await _messagesRepository.Update(messages);
