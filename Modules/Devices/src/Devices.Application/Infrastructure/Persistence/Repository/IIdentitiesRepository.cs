@@ -17,12 +17,9 @@ public interface IIdentitiesRepository
     Task<int> CountByClientId(string clientId, CancellationToken cancellationToken);
     Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false);
     Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken);
-
-    #endregion
-
-    #region Users
-
+    
     Task Add(Identity identity, string password);
+    Task UpdateWithNewDevice(Identity identity, string password);
 
     #endregion
 

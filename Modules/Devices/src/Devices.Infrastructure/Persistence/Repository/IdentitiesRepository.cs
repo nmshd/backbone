@@ -71,7 +71,18 @@ public class IdentitiesRepository : IIdentitiesRepository
 
     public async Task Add(Identity identity, string password)
     {
-        var createUserResult = await _userManager.CreateAsync(identity.User, password);
+        var user = identity.Devices.First().User;
+
+        var createUserResult = await _userManager.CreateAsync(user, password);
+        if (!createUserResult.Succeeded)
+            throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
+    }
+
+    public async Task UpdateWithNewDevice(Identity identity, string password)
+    {
+        var newDevice = identity.Devices.MaxBy(d => d.CreatedAt)!;
+
+        var createUserResult = await _userManager.CreateAsync(newDevice.User, password);
         if (!createUserResult.Succeeded)
             throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
     }
