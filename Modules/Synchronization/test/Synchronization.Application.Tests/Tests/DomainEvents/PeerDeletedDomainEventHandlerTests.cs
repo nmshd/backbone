@@ -1,5 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeleted;
+﻿using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeleted;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeleted;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -17,27 +16,25 @@ public class PeerDeletedDomainEventHandlerTests : AbstractTestsBase
     {
         // Arrange
         var peerOfDeletedIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-        var peerDeletedDomainEvent = new PeerDeletedDomainEvent(peerOfDeletedIdentity, "some-relationship-id", "some-deletedIdentity-id");
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var externalEvent = new ExternalEvent(ExternalEventType.PeerDeleted, IdentityAddress.Parse(peerOfDeletedIdentity), 1,
-            new { peerDeletedDomainEvent.RelationshipId });
-
-        A.CallTo(() => mockDbContext.CreateExternalEvent(
-            peerOfDeletedIdentity,
-            ExternalEventType.PeerDeleted,
-            A<object>._)
-        ).Returns(externalEvent);
-
-        var handler = new PeerDeletedDomainEventHandler(mockDbContext,
-            A.Fake<ILogger<PeerDeletedDomainEventHandler>>());
+        var handler = CreateHandler(mockDbContext);
 
         // Act
-        await handler.Handle(peerDeletedDomainEvent);
+        await handler.Handle(new PeerDeletedDomainEvent(peerOfDeletedIdentity, "some-relationship-id", "some-deletedIdentity-id"));
 
         // Assert
-        A.CallTo(() => mockDbContext.CreateExternalEvent(peerOfDeletedIdentity, ExternalEventType.PeerDeleted, A<object>._))
+        A.CallTo(() => mockDbContext.CreateExternalEvent(
+                peerOfDeletedIdentity,
+                ExternalEventType.PeerDeleted,
+                A<object>._))
             .MustHaveHappenedOnceExactly();
+    }
+
+    private static PeerDeletedDomainEventHandler CreateHandler(ISynchronizationDbContext mockDbContext)
+    {
+        return new PeerDeletedDomainEventHandler(mockDbContext,
+            A.Fake<ILogger<PeerDeletedDomainEventHandler>>());
     }
 }
