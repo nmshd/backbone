@@ -26,7 +26,7 @@ public class HandlerTests : AbstractTestsBase
         var oldTier = new Tier(TierName.Create("Old tier").Value);
         var newTier = new Tier(TierName.Create("New Tier").Value);
 
-        var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), [1, 1, 1, 1, 1], oldTier.Id, 1);
+        var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), [1, 1, 1, 1, 1], oldTier.Id, 1, CommunicationLanguage.DEFAULT_LANGUAGE);
 
         A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier> { oldTier, newTier });
@@ -54,7 +54,7 @@ public class HandlerTests : AbstractTestsBase
         var oldTier = new Tier(TierName.Create("Tier name").Value);
         var newTier = new Tier(TierName.Create("Tier name").Value);
 
-        var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), [1, 1, 1, 1, 1], oldTier.Id, 1);
+        var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), [1, 1, 1, 1, 1], oldTier.Id, 1, CommunicationLanguage.DEFAULT_LANGUAGE);
 
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier> { oldTier, newTier });
         A.CallTo(() => identitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._)).Returns<Identity?>(null);
@@ -81,7 +81,7 @@ public class HandlerTests : AbstractTestsBase
         var oldTier = new Tier(TierName.Create("Tier name").Value);
         var newTier = new Tier(TierName.Create("Tier name").Value);
 
-        var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), [1, 1, 1, 1, 1], oldTier.Id, 1);
+        var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), [1, 1, 1, 1, 1], oldTier.Id, 1, CommunicationLanguage.DEFAULT_LANGUAGE);
 
         A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier> { oldTier });
@@ -107,7 +107,7 @@ public class HandlerTests : AbstractTestsBase
 
         var oldAndNewTier = new Tier(TierName.Create("Tier name").Value);
 
-        var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), [1, 1, 1, 1, 1], oldAndNewTier.Id, 1);
+        var identity = new Identity(CreateRandomDeviceId(), CreateRandomIdentityAddress(), [1, 1, 1, 1, 1], oldAndNewTier.Id, 1, CommunicationLanguage.DEFAULT_LANGUAGE);
 
         A.CallTo(() => identitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._)).Returns(identity);
         A.CallTo(() => tiersRepository.FindByIds(A<IEnumerable<TierId>>._, A<CancellationToken>._)).Returns(new List<Tier> { oldAndNewTier });

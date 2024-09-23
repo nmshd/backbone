@@ -192,7 +192,7 @@ public class ActualDeletionWorkerTests
     {
         var dbContext = GetService<DevicesDbContext>();
 
-        var identity = new Identity("test", TestDataGenerator.CreateRandomIdentityAddress(), [], TierId.Generate(), 1);
+        var identity = new Identity("test", TestDataGenerator.CreateRandomIdentityAddress(), [], TierId.Generate(), 1, CommunicationLanguage.DEFAULT_LANGUAGE);
 
         var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
         identity.Devices.Add(device);

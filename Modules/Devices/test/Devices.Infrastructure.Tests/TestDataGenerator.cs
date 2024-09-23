@@ -21,7 +21,8 @@ public static class TestDataGenerator
             CreateRandomIdentityAddress(),
             CreateRandomBytes(),
             CreateRandomTierId(),
-            1
+            1,
+            CommunicationLanguage.DEFAULT_LANGUAGE
         );
 
         identity.Devices.Add(new Device(identity, deviceCommunicationLanguage != null ? CommunicationLanguage.Create(deviceCommunicationLanguage).Value : CommunicationLanguage.DEFAULT_LANGUAGE));
