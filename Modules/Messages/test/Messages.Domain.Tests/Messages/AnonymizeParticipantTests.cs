@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
 
-public class ReplaceIdentityAddressTests : AbstractTestsBase
+public class AnonymizeParticipantTests : AbstractTestsBase
 {
     [Fact]
     public void CreatedBy_gets_updated()
