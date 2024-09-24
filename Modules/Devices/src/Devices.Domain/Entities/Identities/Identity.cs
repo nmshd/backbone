@@ -100,11 +100,6 @@ public class Identity : Entity
         return Devices.Count < 1;
     }
 
-    public static Identity CreateTestIdentity(IdentityAddress address, byte[] publicKey, TierId tierId, string username)
-    {
-        return new Identity("test", address, publicKey, tierId, 1, CommunicationLanguage.DEFAULT_LANGUAGE, username);
-    }
-
     public Device AddDevice(CommunicationLanguage communicationLanguage, DeviceId createdByDevice)
     {
         var newDevice = new Device(this, communicationLanguage, createdByDevice);
@@ -328,6 +323,11 @@ public class Identity : Entity
     private IdentityDeletionProcess GetDeletionProcessWithId(IdentityDeletionProcessId deletionProcessId)
     {
         return DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+    }
+
+    public static Identity CreateTestIdentity(IdentityAddress address, byte[] publicKey, TierId tierId, string username)
+    {
+        return new Identity("test", address, publicKey, tierId, 1, CommunicationLanguage.DEFAULT_LANGUAGE, username);
     }
 }
 

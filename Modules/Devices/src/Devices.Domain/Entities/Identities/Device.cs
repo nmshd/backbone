@@ -24,7 +24,7 @@ public class Device : Entity
     {
         Id = DeviceId.New();
         CreatedAt = SystemTime.UtcNow;
-        CreatedByDevice = null!;
+        CreatedByDevice = Id;
         CommunicationLanguage = communicationLanguage;
 
         User = new ApplicationUser(this, username);
