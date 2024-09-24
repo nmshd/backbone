@@ -1,10 +1,10 @@
 ﻿using System.CommandLine;
-using Backbone.PerformanceSnapshotCreator.Application.Printer;
-using Backbone.PerformanceSnapshotCreator.EntityCreation;
-using Backbone.PerformanceSnapshotCreator.PoolsFile;
-using Backbone.PerformanceSnapshotCreator.PoolsGenerator;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.Printer;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.EntityCreation;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsGenerator;
 
-namespace Backbone.PerformanceSnapshotCreator;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator;
 
 public class CreateEntitiesCommand : Command
 {

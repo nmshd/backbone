@@ -1,7 +1,7 @@
-﻿using Backbone.PerformanceSnapshotCreator.PoolsFile;
-using Backbone.PerformanceSnapshotCreator.Tools;
+﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tools;
 
-namespace Backbone.PerformanceSnapshotCreator.Application.MessageDistributor;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.MessageDistributor;
 
 public class MessageDistributorV2 : IMessageDistributor
 {

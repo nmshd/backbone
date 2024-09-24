@@ -7,16 +7,15 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.Printer;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsGenerator;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tools;
 using Backbone.Crypto;
-using Backbone.PerformanceSnapshotCreator.Application.Printer;
-using Backbone.PerformanceSnapshotCreator.Domain;
-using Backbone.PerformanceSnapshotCreator.PoolsFile;
-using Backbone.PerformanceSnapshotCreator.PoolsGenerator;
-using Backbone.PerformanceSnapshotCreator.Tools;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 
-namespace Backbone.PerformanceSnapshotCreator.EntityCreation;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.EntityCreation;
 
 public class EntityCreator
 {
@@ -191,7 +190,7 @@ public class EntityCreator
                 if (sdk.DeviceData is null)
                     throw new Exception("The SDK could not be used to create a new Identity.");
 
-                var createdIdentity = new Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
+                var createdIdentity = new Domain.Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
 
                 if (pool.NumberOfDevices > 1)
                 {

@@ -1,6 +1,6 @@
-﻿using Backbone.PerformanceSnapshotCreator.PoolsFile;
+﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
 
-namespace Backbone.PerformanceSnapshotCreator.Application.RelationshipDistributor;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.RelationshipDistributor;
 
 public interface IRelationshipDistributor
 {

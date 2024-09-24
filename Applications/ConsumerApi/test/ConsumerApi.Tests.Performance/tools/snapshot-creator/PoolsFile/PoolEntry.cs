@@ -1,8 +1,8 @@
 ﻿using System.Collections.Concurrent;
 using System.Text.Json.Serialization;
-using Backbone.PerformanceSnapshotCreator.Domain;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Domain;
 
-namespace Backbone.PerformanceSnapshotCreator.PoolsFile;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
 
 public record PoolEntry
 {

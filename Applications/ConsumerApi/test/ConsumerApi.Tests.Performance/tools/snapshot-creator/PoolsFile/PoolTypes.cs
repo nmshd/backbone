@@ -1,4 +1,4 @@
-﻿namespace Backbone.PerformanceSnapshotCreator.PoolsFile;
+﻿namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
 public class PoolTypes
 {
     public const string CONNECTOR_TYPE = "connector";

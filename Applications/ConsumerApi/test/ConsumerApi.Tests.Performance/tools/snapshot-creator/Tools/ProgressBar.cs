@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Backbone.PerformanceSnapshotCreator.Tools;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tools;
 
 public class ProgressBar : IDisposable, IProgress<double>
 {

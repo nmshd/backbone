@@ -1,12 +1,11 @@
 ﻿using Backbone.ConsumerApi.Sdk.Authentication;
-using Backbone.PerformanceSnapshotCreator.Application.MessageDistributor;
-using Backbone.PerformanceSnapshotCreator.Application.Printer;
-using Backbone.PerformanceSnapshotCreator.Application.RelationshipDistributor;
-using Backbone.PerformanceSnapshotCreator.Domain;
-using Backbone.PerformanceSnapshotCreator.PoolsFile;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.MessageDistributor;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.Printer;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.RelationshipDistributor;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
 using Backbone.Tooling;
 
-namespace Backbone.PerformanceSnapshotCreator.PoolsGenerator;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsGenerator;
 
 public class DeterministicPoolsGenerator
 {
@@ -105,7 +104,7 @@ public class DeterministicPoolsGenerator
         {
             for (uint i = 0; i < pool.Amount; i++)
             {
-                var createdIdentity = new Identity(new UserCredentials("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)),
+                var createdIdentity = new Domain.Identity(new UserCredentials("USR" + PasswordHelper.GeneratePassword(8, 8), PasswordHelper.GeneratePassword(18, 24)),
                     "ID1" + PasswordHelper.GeneratePassword(16, 16), "DVC" + PasswordHelper.GeneratePassword(8, 8), pool, i + 1, uon++);
 
                 if (pool.NumberOfDevices > 1)

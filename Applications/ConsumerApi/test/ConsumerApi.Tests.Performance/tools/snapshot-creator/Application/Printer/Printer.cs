@@ -1,8 +1,8 @@
 ﻿using System.Text;
-using Backbone.PerformanceSnapshotCreator.PoolsFile;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
 using Backbone.Tooling;
 
-namespace Backbone.PerformanceSnapshotCreator.Application.Printer;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.Printer;
 
 public class Printer : IPrinter
 {

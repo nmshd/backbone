@@ -1,12 +1,12 @@
 ﻿using System.CommandLine;
-using Backbone.PerformanceSnapshotCreator.Application.MessageDistributor;
-using Backbone.PerformanceSnapshotCreator.Application.Printer;
-using Backbone.PerformanceSnapshotCreator.Application.RelationshipDistributor;
-using Backbone.PerformanceSnapshotCreator.PoolsFile;
-using Backbone.PerformanceSnapshotCreator.PoolsGenerator;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.MessageDistributor;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.Printer;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.RelationshipDistributor;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
 using Microsoft.Extensions.DependencyInjection;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsGenerator;
 
-namespace Backbone.PerformanceSnapshotCreator;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator;
 
 public class GeneratePoolsCommand : Command
 {

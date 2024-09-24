@@ -2,9 +2,9 @@
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types;
-using Backbone.PerformanceSnapshotCreator.PoolsFile;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
 
-namespace Backbone.PerformanceSnapshotCreator.Domain;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Domain;
 public class Identity
 {
     public readonly UserCredentials UserCredentials;

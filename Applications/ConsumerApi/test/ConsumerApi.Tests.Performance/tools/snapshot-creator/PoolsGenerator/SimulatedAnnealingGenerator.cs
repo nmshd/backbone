@@ -2,18 +2,18 @@
 using System.Diagnostics;
 using System.Text;
 using Backbone.ConsumerApi.Sdk.Authentication;
-using Backbone.PerformanceSnapshotCreator.Application.Printer;
-using Backbone.PerformanceSnapshotCreator.PoolsFile;
-using Backbone.PerformanceSnapshotCreator.Tools;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.Printer;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tools;
 using Backbone.Tooling;
-using GeneratorIdentity = Backbone.PerformanceSnapshotCreator.Domain.Identity;
+using GeneratorIdentity = Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Domain.Identity;
 using Math = System.Math;
 
 // ReSharper disable HeuristicUnreachableCode
 #pragma warning disable CS0162 // Unreachable code detected
 // -- used for debugging
 
-namespace Backbone.PerformanceSnapshotCreator.PoolsGenerator;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsGenerator;
 
 /// <summary>
 /// We use a different approach here. Instead of creating all identities, then their relationships and lastly their messages,

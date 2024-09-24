@@ -1,6 +1,6 @@
 ﻿using System.CommandLine;
 
-namespace Backbone.PerformanceSnapshotCreator;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator;
 
 public class MainCommand : RootCommand
 {
