@@ -1,5 +1,4 @@
 ﻿using System.Data.SqlClient;
-using System.Reflection;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
@@ -83,7 +82,6 @@ public class Executor
 
         try
         {
-            //var tree = await ReadMigrations();
             migrationList = await ReadMigrations();
         }
         catch (Exception ex)
@@ -96,15 +94,9 @@ public class Executor
 
         _logger.StartApplyingMigrations();
 
-        foreach (var info in migrationList) Console.WriteLine($"{info.Type}: {info.Id}");
-
         try
         {
-            foreach (var info in migrationList)
-            {
-                Console.Error.WriteLine($"Applying migration: {info.Type} {info.Id}");
-                await MigrateDbContext(_moduleContextTypes[(int)info.Type], info.Id);
-            }
+            foreach (var info in migrationList) await MigrateDbContext(_moduleContextTypes[(int)info.Type], info.Id);
         }
         catch (Exception ex)
         {
@@ -123,11 +115,8 @@ public class Executor
         foreach (var (type, moduleType) in _modules)
         {
             var context = _serviceProvider.GetDbContext(type);
-            //var appliedMigrations = await context.Database.GetAppliedMigrationsAsync();
             var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
-            //var dependencies = LoadMigrationDependencies(type, context.Database.IsSqlServer());
 
-            //migrations.AddRange(appliedMigrations.Select(id => new MigrationInfo(new MigrationId(moduleType, id), true, dependencies[id])));
             migrations.AddRange(pendingMigrations.Select(id => new MigrationId(moduleType, id)));
         }
 
@@ -137,41 +126,7 @@ public class Executor
         migrations.Sort((a, b) => string.CompareOrdinal(a.Id, b.Id));
         migrations.InsertRange(0, initMigrations.OrderBy(id => _initMigrationsOrder.IndexOf(id.Type)));
 
-        //Test
-        //migrations.Remove(migrations.Last());
-        //migrations.Remove(migrations.Last());
-
-        /*if (migrations.First().Type == ModuleType.AdminApi)
-        {
-            var first = migrations[0];
-            migrations.RemoveAt(0);
-            migrations.Add(first);
-        }*/
-
         return migrations;
-    }
-
-    private Dictionary<string, IList<MigrationId>> LoadMigrationDependencies(Type dbContextType, bool useSqlServer)
-    {
-        var assemblyNameSuffix = useSqlServer ? "SqlServer" : "Postgres";
-        var assembly = Assembly.Load(new AssemblyName($"{dbContextType.Assembly.GetName().Name}.Database.{assemblyNameSuffix}"));
-        var definedTypes = assembly.DefinedTypes
-            .Where(t => t.BaseType == typeof(Migration));
-        Dictionary<string, IList<MigrationId>> ret = [];
-
-        foreach (var type in definedTypes)
-        {
-            var idAttr = type.GetCustomAttribute<MigrationAttribute>();
-            if (idAttr == null) continue;
-
-            var dependencies = type.GetCustomAttributes<DependsOnAttribute>()
-                .Select(attr => new MigrationId(attr.Module, attr.MigrationId))
-                .ToList();
-
-            ret[idAttr.Id] = dependencies;
-        }
-
-        return ret;
     }
 
     private async Task MigrateDbContext(Type contextType, string? targetMigration = null)
@@ -236,6 +191,8 @@ public class Executor
         }
     }
 }
+
+public record MigrationId(ModuleType Type, string Id);
 
 file static class Extensions
 {
