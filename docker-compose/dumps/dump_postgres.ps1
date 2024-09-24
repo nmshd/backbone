@@ -10,16 +10,33 @@ param (
 $ContainerName = "tmp-postgres-container"
 
 # Run a PostgreSQL container
-docker run --name $ContainerName -e POSTGRES_PASSWORD="admin" -d postgres
+Write-Host "Creating container $ContainerName for pg_dump execution"
+docker container run --name $ContainerName -e POSTGRES_PASSWORD="admin" -d postgres
 
 # Perform the dump
-docker exec --env PGPASSWORD=$Password -it $ContainerName pg_dump -h $Hostname -U $Username $DbName -f /tmp/$DumpFile
+docker container exec --env PGPASSWORD=$Password -it $ContainerName pg_dump -h $Hostname -U $Username $DbName -f /tmp/$DumpFile
 
-# Copy the dump file to the host
-docker cp "${ContainerName}:/tmp/$DumpFile" "./dump-files/$DumpFile"
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "Database export to $DumpFile successful. Proceeding to copy the file..."
+    
+    # Copy the dump file to the host
+    docker container cp "${ContainerName}:/tmp/$DumpFile" "./dump-files/$DumpFile"
+
+    # Check if the file was successfully copied
+    if (Test-Path "./dump-files/$DumpFile") {
+        Write-Host "Database export completed and saved to ./dump-files/$DumpFile"
+    }
+    else {
+        Write-Host "Error: Failed to copy the $DumpFile file to the host."
+    }
+}
+else {
+    Write-Host "Error: Database export to $DumpFile failed."
+}
+
 
 # Stop and remove the container
-docker stop $ContainerName
-docker rm $ContainerName
+docker container stop $ContainerName
+docker container rm $ContainerName
 
-Write-Host "Database dump completed and saved to ./dump-files/$DumpFile"
+Write-Host "Container $ContainerName stopped and removed"
