@@ -9,13 +9,13 @@ public static class ValidatorExtensions
 {
     private static readonly ConcurrentDictionary<Type, MethodInfo> IS_VALID_CACHE = new();
 
-    public static IRuleBuilderOptions<T, string?> ValidCommunicationLanguage<T, TId>(this IRuleBuilder<T, string?> ruleBuilder) where TId : CommunicationLanguage
+    public static IRuleBuilderOptions<T, string?> ValidCommunicationLanguage<T, TLanguage>(this IRuleBuilder<T, string?> ruleBuilder) where TLanguage : CommunicationLanguage
     {
-        if (!IS_VALID_CACHE.TryGetValue(typeof(TId), out var method))
+        if (!IS_VALID_CACHE.TryGetValue(typeof(TLanguage), out var method))
         {
-            method = typeof(TId).GetMethod("IsValid", BindingFlags.Public | BindingFlags.Static) ??
-                     throw new Exception($"Type '{typeof(TId)}' does not implement required 'IsValid' method.");
-            IS_VALID_CACHE.TryAdd(typeof(TId), method);
+            method = typeof(TLanguage).GetMethod("IsValid", BindingFlags.Public | BindingFlags.Static) ??
+                     throw new Exception($"Type '{typeof(TLanguage)}' does not implement required 'IsValid' method.");
+            IS_VALID_CACHE.TryAdd(typeof(TLanguage), method);
         }
 
         return ruleBuilder
