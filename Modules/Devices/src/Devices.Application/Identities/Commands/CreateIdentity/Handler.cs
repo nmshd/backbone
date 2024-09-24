@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
@@ -65,8 +64,6 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
             throw new OperationFailedException(ApplicationErrors.Devices.ClientReachedIdentitiesLimit());
 
         var communicationLanguageResult = CommunicationLanguage.Create(command.CommunicationLanguage);
-        if (communicationLanguageResult.IsFailure)
-            throw new DomainException(communicationLanguageResult.Error);
 
         return new Identity(client.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion, communicationLanguageResult.Value);
     }

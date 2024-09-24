@@ -4,7 +4,6 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -36,8 +35,6 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
         _logger.LogTrace("Successfully validated challenge.");
 
         var communicationLanguageResult = CommunicationLanguage.Create(command.CommunicationLanguage);
-        if (communicationLanguageResult.IsFailure)
-            throw new DomainException(communicationLanguageResult.Error);
 
         var newDevice = identity.AddDevice(communicationLanguageResult.Value, _userContext.GetDeviceId());
 

@@ -1,0 +1,26 @@
+﻿using System.Collections.Concurrent;
+using System.Reflection;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
+using FluentValidation;
+
+namespace Backbone.Modules.Devices.Application.Extensions;
+public static class ValidatorExtensions
+{
+    private static readonly ConcurrentDictionary<Type, MethodInfo> IS_VALID_CACHE = new();
+
+    public static IRuleBuilderOptions<T, string?> ValidCommunicationLanguage<T, TId>(this IRuleBuilder<T, string?> ruleBuilder) where TId : CommunicationLanguage
+    {
+        if (!IS_VALID_CACHE.TryGetValue(typeof(TId), out var method))
+        {
+            method = typeof(TId).GetMethod("IsValid", BindingFlags.Public | BindingFlags.Static) ??
+                     throw new Exception($"Type '{typeof(TId)}' does not implement required 'IsValid' method.");
+            IS_VALID_CACHE.TryAdd(typeof(TId), method);
+        }
+
+        return ruleBuilder
+            .Must(x => (bool)method.Invoke(null, [x])!)
+            .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
+            .WithMessage("The device language is not valid. Check length and the used characters.");
+    }
+}
