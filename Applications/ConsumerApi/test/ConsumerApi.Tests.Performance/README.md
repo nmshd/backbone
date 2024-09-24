@@ -112,7 +112,7 @@ In order to run the performance tests, you must load an appropriate snapshot of 
 
 1.  **Select a snapshot:**
 
-    1. Select one of the available snapshots. You can find more information on the available snapshots in the [root README](../../README.md) file.
+    1. Select one of the available snapshots. You can find more information on the available snapshots in the [scenarios README](src/scenarios/README.md) file.
     1. Extract the snapshot file, and any further zip files there may be inside it.
 
 1.  **Load the snapshot:**
