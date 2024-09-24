@@ -5,7 +5,6 @@ using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
