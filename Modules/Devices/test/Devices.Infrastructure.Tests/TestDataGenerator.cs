@@ -14,18 +14,20 @@ public static class TestDataGenerator
         return CreateIdentityWithOneDevice(language).Devices.First();
     }
 
-    public static Identity CreateIdentityWithOneDevice(string? deviceCommunicationLanguage = null)
+    public static Identity CreateIdentityWithOneDevice(string? language = null)
     {
+        var deviceCommunicationLanguage = language != null ? CommunicationLanguage.Create(language).Value : CommunicationLanguage.DEFAULT_LANGUAGE;
+
         var identity = new Identity(
             CreateRandomDeviceId(),
             CreateRandomIdentityAddress(),
             CreateRandomBytes(),
             CreateRandomTierId(),
             1,
-            CommunicationLanguage.DEFAULT_LANGUAGE
+            deviceCommunicationLanguage
         );
 
-        identity.Devices.Add(new Device(identity, deviceCommunicationLanguage != null ? CommunicationLanguage.Create(deviceCommunicationLanguage).Value : CommunicationLanguage.DEFAULT_LANGUAGE));
+        identity.Devices.Add(new Device(identity, deviceCommunicationLanguage));
 
         return identity;
     }
