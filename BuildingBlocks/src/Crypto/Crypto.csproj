@@ -1,12 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-		<NoWarn>1701;1702</NoWarn>
-	</PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+        <NoWarn>1701;1702</NoWarn>
+    </PropertyGroup>
 
-	<ItemGroup>
-		<PackageReference Include="BouncyCastle.Cryptography" Version="2.4.0" />
-		<PackageReference Include="NSec.Cryptography" Version="24.4.0" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="BouncyCastle.Cryptography" Version="2.4.0" />
+        <PackageReference Include="NSec.Cryptography" Version="24.4.0" />
+    </ItemGroup>
 
 </Project>
