@@ -3,8 +3,8 @@ using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.Message
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.Printer;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.RelationshipDistributor;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
-using Microsoft.Extensions.DependencyInjection;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsGenerator;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator;
 
