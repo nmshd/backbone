@@ -17,6 +17,8 @@ if [ "$1" == "--" ]; then
     shift
 fi
 
+npm install -g webpack-cli tsx webpack
+
 # Remaining arguments are for `k6`
 k6Arguments="$@"
 

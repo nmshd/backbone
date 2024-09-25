@@ -3,7 +3,7 @@ param (
 )
 
 # install required global packages
-npm install -g webpack-cli tsx
+npm install -g webpack-cli tsx webpack
 
 # Check if the scenario is provided; if not, prompt the user
 if (-not $s) {
