@@ -41,5 +41,5 @@ catch {
     Write-Host "An error occurred during extraction: $_"
 }
 
-$loadPostgres = Join-Path $repoRoot "scripts\dumps\load_postgres.ps1"
+$loadPostgres = Join-Path $repoRoot "scripts\dumps\load-postgres.ps1"
 & $loadPostgres -Hostname $Hostname -Username $Username -Password $Password -DbName $DbName -Dumpfile enmeshed.pg
