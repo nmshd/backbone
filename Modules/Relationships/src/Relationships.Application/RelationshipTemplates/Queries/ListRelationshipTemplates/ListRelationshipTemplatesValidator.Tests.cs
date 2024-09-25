@@ -16,14 +16,14 @@ public class ListRelationshipTemplatesValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), [RelationshipTemplateId.New()]));
+        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), new[] { new RelationshipTemplateQuery() { Id = RelationshipTemplateId.New() } }));
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
     }
 
     [Fact]
-    public void Fails_when_Ids_is_null()
+    public void Fails_when_Queries_is_null()
     {
         // Arrange
         var validator = new Validator();
@@ -33,13 +33,13 @@ public class ListRelationshipTemplatesValidatorTests : AbstractTestsBase
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(
-            propertyName: nameof(ListRelationshipTemplatesQuery.Ids),
+            propertyName: nameof(ListRelationshipTemplatesQuery.Queries),
             expectedErrorCode: "error.platform.validation.invalidPropertyValue",
-            expectedErrorMessage: "'Ids' must not be empty.");
+            expectedErrorMessage: "'Queries' must not be empty.");
     }
 
     [Fact]
-    public void Fails_when_Ids_is_empty()
+    public void Fails_when_Queries_is_empty()
     {
         // Arrange
         var validator = new Validator();
@@ -49,8 +49,8 @@ public class ListRelationshipTemplatesValidatorTests : AbstractTestsBase
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(
-            propertyName: nameof(ListRelationshipTemplatesQuery.Ids),
+            propertyName: nameof(ListRelationshipTemplatesQuery.Queries),
             expectedErrorCode: "error.platform.validation.invalidPropertyValue",
-            expectedErrorMessage: "'Ids' must not be empty.");
+            expectedErrorMessage: "'Queries' must not be empty.");
     }
 }

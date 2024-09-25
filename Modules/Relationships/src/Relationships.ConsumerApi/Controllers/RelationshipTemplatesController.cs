@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
@@ -31,19 +32,24 @@ public class RelationshipTemplatesController : ApiControllerBase
     [HttpGet("{id}")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<RelationshipTemplateDTO>), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetById(string id, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetById(string id, [FromQuery] byte[]? password, CancellationToken cancellationToken)
     {
-        var template = await _mediator.Send(new GetRelationshipTemplateQuery { Id = id }, cancellationToken);
+        var template = await _mediator.Send(new GetRelationshipTemplateQuery { Id = id, Password = password }, cancellationToken);
         return Ok(template);
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipTemplatesResponse>),
         StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter,
-        [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter, [FromQuery] string templates, CancellationToken cancellationToken)
     {
-        var request = new ListRelationshipTemplatesQuery(paginationFilter, ids);
+        var relationshipTemplateQueries = JsonSerializer.Deserialize<List<RelationshipTemplateQuery>>(templates);
+
+        foreach (var q in relationshipTemplateQueries)
+            if (q.Password == null)
+                q.Password = Array.Empty<byte>();
+
+        var request = new ListRelationshipTemplatesQuery(paginationFilter, relationshipTemplateQueries);
 
         request.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 

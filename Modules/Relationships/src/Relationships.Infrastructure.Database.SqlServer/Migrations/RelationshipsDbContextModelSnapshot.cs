@@ -63,6 +63,9 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                     b.Property<int?>("MaxNumberOfAllocations")
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("Password")
+                        .HasColumnType("varbinary(max)");
+
                     b.HasKey("Id");
 
                     b.ToTable("RelationshipTemplates", "Relationships");

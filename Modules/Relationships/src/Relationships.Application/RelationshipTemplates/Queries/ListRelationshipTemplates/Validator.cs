@@ -11,11 +11,15 @@ public class Validator : AbstractValidator<ListRelationshipTemplatesQuery>
 {
     public Validator()
     {
-        RuleFor(q => q.Ids)
+        RuleFor(q => q.Queries)
             .Cascade(CascadeMode.Stop)
             .DetailedNotNull()
-            .Must(ids => ids.Count > 0).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code).WithMessage("'Ids' must not be empty.");
+            .Must(queries => queries.Count > 0).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code).WithMessage("'Queries' must not be empty.");
 
-        RuleForEach(x => x.Ids).ValidId<ListRelationshipTemplatesQuery, RelationshipTemplateId>();
+        RuleForEach(x => x.Queries)
+            .ValidRelationshipTemplate<ListRelationshipTemplatesQuery, RelationshipTemplateQuery, RelationshipTemplateId>(
+                query => query.Id,
+                query => query.Password
+            );
     }
 }

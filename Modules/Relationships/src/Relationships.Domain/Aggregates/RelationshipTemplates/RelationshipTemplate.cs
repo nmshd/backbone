@@ -1,4 +1,5 @@
 using System.Linq.Expressions;
+using System.Text;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -18,7 +19,7 @@ public class RelationshipTemplate : Entity
         CreatedByDevice = null!;
     }
 
-    public RelationshipTemplate(IdentityAddress createdBy, DeviceId createdByDevice, int? maxNumberOfAllocations, DateTime? expiresAt, byte[] content, IdentityAddress? forIdentity = null)
+    public RelationshipTemplate(IdentityAddress createdBy, DeviceId createdByDevice, int? maxNumberOfAllocations, DateTime? expiresAt, byte[] content, IdentityAddress? forIdentity = null, byte[]? password = null)
     {
         Id = RelationshipTemplateId.New();
         CreatedAt = SystemTime.UtcNow;
@@ -29,6 +30,7 @@ public class RelationshipTemplate : Entity
         ExpiresAt = expiresAt;
         Content = content;
         ForIdentity = forIdentity;
+        Password = password;
 
         RaiseDomainEvent(new RelationshipTemplateCreatedDomainEvent(this));
     }
@@ -46,6 +48,7 @@ public class RelationshipTemplate : Entity
     public DateTime CreatedAt { get; set; }
 
     public IdentityAddress? ForIdentity { get; set; }
+    public byte[]? Password { get; set; }
 
     public List<RelationshipTemplateAllocation> Allocations { get; set; } = [];
 
@@ -63,6 +66,11 @@ public class RelationshipTemplate : Entity
         Allocations.Add(new RelationshipTemplateAllocation(Id, identity, device));
     }
 
+    public static Expression<Func<RelationshipTemplate, bool>> HasId(RelationshipTemplateId id)
+    {
+        return r => r.Id == id;
+    }
+
     public static Expression<Func<RelationshipTemplate, bool>> WasCreatedBy(IdentityAddress identityAddress)
     {
         return r => r.CreatedBy == identityAddress.ToString();
@@ -72,4 +80,12 @@ public class RelationshipTemplate : Entity
     {
         return relationshipTemplate => relationshipTemplate.ForIdentity == null || relationshipTemplate.ForIdentity == address || relationshipTemplate.CreatedBy == address;
     }
+
+    public static Expression<Func<RelationshipTemplate, bool>> CanBeCollectedWithPassword(IdentityAddress address, byte[]? password)
+    {
+        return relationshipTemplate => relationshipTemplate.Password == null || relationshipTemplate.Password == password || relationshipTemplate.CreatedBy == address;
+    }
+
+    // relationshipTemplate.Password.SequenceEqual(password!)
+    // relationshipTemplate.Password == password
 }

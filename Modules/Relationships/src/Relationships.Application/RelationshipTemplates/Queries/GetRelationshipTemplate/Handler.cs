@@ -20,13 +20,22 @@ public class Handler : IRequestHandler<GetRelationshipTemplateQuery, Relationshi
 
     public async Task<RelationshipTemplateDTO> Handle(GetRelationshipTemplateQuery request, CancellationToken cancellationToken)
     {
-        var template = await _relationshipTemplatesRepository.Find(RelationshipTemplateId.Parse(request.Id), _userContext.GetAddress(), cancellationToken, true) ??
-                       throw new NotFoundException(nameof(RelationshipTemplate));
+        var template = await GetRelationshipTemplate(request.Id, request.Password, cancellationToken);
 
         template.AllocateFor(_userContext.GetAddress(), _userContext.GetDeviceId());
-
         await _relationshipTemplatesRepository.Update(template);
 
         return new RelationshipTemplateDTO(template);
+    }
+
+    private async Task<RelationshipTemplate> GetRelationshipTemplate(string relationshipTemplateId, byte[]? password, CancellationToken cancellationToken)
+    {
+        var relationshipTemplate = await _relationshipTemplatesRepository.Find(RelationshipTemplateId.Parse(relationshipTemplateId), _userContext.GetAddress(), cancellationToken, true) ??
+                                   throw new NotFoundException(nameof(RelationshipTemplate));
+
+        if (!RelationshipTemplate.CanBeCollectedWithPassword(_userContext.GetAddress(), password).Compile()(relationshipTemplate))
+            throw new NotFoundException(nameof(RelationshipTemplate));
+
+        return relationshipTemplate;
     }
 }

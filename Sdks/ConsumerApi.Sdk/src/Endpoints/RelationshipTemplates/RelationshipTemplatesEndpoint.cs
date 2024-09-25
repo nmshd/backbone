@@ -23,9 +23,24 @@ public class RelationshipTemplatesEndpoint(EndpointClient client) : ConsumerApiE
             .Execute();
     }
 
+    public async Task<ApiResponse<ListRelationshipTemplatesResponse>> ListTemplates(string jsonTemplate, PaginationFilter? pagination = null)
+    {
+        return await _client
+            .Request<ListRelationshipTemplatesResponse>(HttpMethod.Get, $"api/{API_VERSION}/RelationshipTemplates")
+            .Authenticate()
+            .WithPagination(pagination)
+            .AddQueryParameter("templates", jsonTemplate)
+            .Execute();
+    }
+
     public async Task<ApiResponse<RelationshipTemplate>> GetTemplate(string id)
     {
         return await _client.Get<RelationshipTemplate>($"api/{API_VERSION}/RelationshipTemplates/{id}");
+    }
+
+    public async Task<ApiResponse<RelationshipTemplate>> GetTemplate(string id, string password)
+    {
+        return await _client.Get<RelationshipTemplate>($"api/{API_VERSION}/RelationshipTemplates/{id}?password={password}");
     }
 
     public async Task<ApiResponse<CreateRelationshipTemplateResponse>> CreateTemplate(CreateRelationshipTemplateRequest request)

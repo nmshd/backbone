@@ -5,12 +5,18 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queri
 
 public class ListRelationshipTemplatesQuery : IRequest<ListRelationshipTemplatesResponse>
 {
-    public ListRelationshipTemplatesQuery(PaginationFilter paginationFilter, IEnumerable<string>? ids)
+    public ListRelationshipTemplatesQuery(PaginationFilter paginationFilter, IEnumerable<RelationshipTemplateQuery>? queries)
     {
         PaginationFilter = paginationFilter;
-        Ids = ids == null ? [] : ids.ToList();
+        Queries = queries == null ? [] : queries.ToList();
     }
 
     public PaginationFilter PaginationFilter { get; set; }
-    public List<string> Ids { get; set; }
+    public List<RelationshipTemplateQuery> Queries { get; set; }
+}
+
+public class RelationshipTemplateQuery
+{
+    public required string Id { get; set; }
+    public byte[]? Password { get; set; }
 }
