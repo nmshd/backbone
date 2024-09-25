@@ -19,7 +19,7 @@ if (-not (Test-Path "$HostDumpDir/$DumpFile")) {
 }
 
 # Run a SQL Server container in detached mode (so we can copy the file into it)
-docker run -d --name $ContainerName ormico/sqlpackage sleep infinity
+docker run -d --name $ContainerName -v $volumeArg ormico/sqlpackage sleep infinity
 
 # Drop the database if it exists
 $DropDatabaseQuery = "IF DB_ID(N'$DbName') IS NOT NULL BEGIN ALTER DATABASE [$DbName] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [$DbName]; END"
@@ -30,7 +30,7 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "Pre-existing database dropped successfully (if it existed)."
     
     # Run the sqlpackage import command inside the container
-    docker exec -v $volumeArg -ti $ContainerName sqlpackage /Action:Import /TargetServerName:$Hostname /TargetDatabaseName:$DbName /SourceFile:$ContainerDumpDir/$DumpFile /TargetUser:$Username /TargetPassword:$Password /TargetTrustServerCertificate:True
+    docker exec -ti $ContainerName sqlpackage /Action:Import /TargetServerName:$Hostname /TargetDatabaseName:$DbName /SourceFile:$ContainerDumpDir/$DumpFile /TargetUser:$Username /TargetPassword:$Password /TargetTrustServerCertificate:True
  
     # Check if the import command was successful
     if ($LASTEXITCODE -eq 0) {
