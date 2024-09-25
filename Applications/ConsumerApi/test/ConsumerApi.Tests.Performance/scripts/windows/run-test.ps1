@@ -2,6 +2,9 @@ param (
     [string]$s
 )
 
+# install required global packages
+npm install -g webpack-cli tsx
+
 # Check if the scenario is provided; if not, prompt the user
 if (-not $s) {
     $s = Read-Host "Enter the scenario name"
@@ -45,11 +48,7 @@ try {
     k6 run $testFile -v -o "csv=$outputFile" @k6Arguments
 }
 finally {
-    Set-Location $resultAnalyzerFolder
-    
     # Run the result analyzer script
-    npx tsx \src\main.js $outputFile
-
-    Set-Location ..\..
+    npx tsx ${resultAnalyzerFolder}\src\main.js $outputFile
 }
 

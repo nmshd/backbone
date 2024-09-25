@@ -9,13 +9,9 @@ param (
 
 $ContainerName = "tmp-postgres-container"
 
-Write-Host ($PSScriptRoot + "\dump-files")
-
-$volumeArg = ($PSScriptRoot + "\dump-files") + ":/tmp/df";
-Write-Host $volumeArg
-
 # Run a PostgreSQL container
 Write-Host "Creating container $ContainerName for loading dump onto the database"
+$volumeArg = ($PSScriptRoot + "\dump-files") + ":/tmp/df";
 docker container run --name $ContainerName -v $volumeArg -e POSTGRES_PASSWORD="admin" -d postgres
 
 Write-Host "Creating the Database $DbName"

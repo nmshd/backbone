@@ -59,15 +59,15 @@ The specific way of doing this depends greatly on the way the database managemen
 ##### When using SQL Server:
 
 ```sh
-cd docker-compose
-.\dump_sqlserver_bak.bat
+cd scripts/dumps
+.\dump-sqlserver.ps1
 ```
 
 ##### When using PostgreSQL:
 
 ```sh
-cd docker-compose
-.\dump_postgres.bat
+cd scripts/dumps
+.\dump-postgres.ps1
 ```
 
 #### 4. Persisting the results
@@ -129,7 +129,7 @@ Test snapshots are currently only available for **Postgres**.
 
 1.  **Run the test(s)**
 
-    1. cd into the directory `/Application/ConsumerApi/test/ConsumerApi.Tests.Performance`
+    1. cd into the directory `Applications/ConsumerApi/test/ConsumerApi.Tests.Performance`
     1. Run one of the following commands depending on what system you're using:
 
         1. **Linux:** `$ scripts/linux/run-test.sh <scenario-name>`

@@ -10,24 +10,22 @@ param (
 $ContainerName = "tmp-postgres-container"
 
 # Run a PostgreSQL container
+$volumeArg = ($PSScriptRoot + "\dump-files") + ":/tmp/df";
 Write-Host "Creating container $ContainerName for pg_dump execution"
-docker container run --name $ContainerName -e POSTGRES_PASSWORD="admin" -d postgres
+docker container run --name $ContainerName -v $volumeArg -e POSTGRES_PASSWORD="admin" -d postgres
 
 # Perform the dump
-docker container exec --env PGPASSWORD=$Password -it $ContainerName pg_dump -h $Hostname -U $Username $DbName -f /tmp/$DumpFile
+docker container exec --env PGPASSWORD=$Password -it $ContainerName pg_dump -h $Hostname -U $Username $DbName -f /tmp/df/$DumpFile
 
 if ($LASTEXITCODE -eq 0) {
-    Write-Host "Database export to $DumpFile successful. Proceeding to copy the file..."
-    
-    # Copy the dump file to the host
-    docker container cp "${ContainerName}:/tmp/$DumpFile" "./dump-files/$DumpFile"
+    Write-Host "Database export to $DumpFile successful."
 
     # Check if the file was successfully copied
     if (Test-Path "./dump-files/$DumpFile") {
-        Write-Host "Database export completed and saved to ./dump-files/$DumpFile"
+        Write-Host "File found at ./dump-files/$DumpFile"
     }
     else {
-        Write-Host "Error: Failed to copy the $DumpFile file to the host."
+        Write-Host "Error: Failed to locate the $DumpFile file on the host."
     }
 }
 else {
