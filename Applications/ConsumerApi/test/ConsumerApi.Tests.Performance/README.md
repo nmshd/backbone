@@ -106,7 +106,7 @@ Entity Creation: ~1h
 
 In order to run the performance tests, you must load an appropriate snapshot of the database. These snapshots are bundled with the usernames and passwords of the created identities/devices, meaning you can authenticate as such users and do API calls in their stead.
 
-Test snapshots are currently only available for **Postgres**.
+Test snapshots are currently only available for **Postgres**. For windows, make sure that you're using PowerShell 7. It can be installed by running `winget install --id Microsoft.PowerShell --source winget`.
 
 1.  **Install k6**
 
@@ -118,6 +118,7 @@ Test snapshots are currently only available for **Postgres**.
 
 1.  **Load the snapshot and the CSVs:**
 
+    1. `cd Applications/ConsumerApi/test/ConsumerApi.Tests.Performance`
     1. Ensure that the Postgres server where the snapshot should be loaded is running.
     1. Run one of the following commands depending on what system you're using. The spanshot name **must not** contain the extension:
         1. **Linux:** `TBD`
@@ -129,11 +130,10 @@ Test snapshots are currently only available for **Postgres**.
 
 1.  **Run the test(s)**
 
-    1. cd into the directory `Applications/ConsumerApi/test/ConsumerApi.Tests.Performance`
     1. Run one of the following commands depending on what system you're using:
 
-        1. **Linux:** `$ scripts/linux/run-test.sh <scenario-name>`
-        1. **Windows:** `# scripts/windows/run-test.ps1 <scenario-name>`
+        1. **Linux:** `$ scripts/linux/run-test.sh <scenario-name>`, e.g. `s01`
+        1. **Windows:** `# scripts/windows/run-test.ps1 <scenario-name>`, e.g. `s01`
 
 > [!NOTE]
 > Both alternatives can be appended with `-- <extra> <parameters>`. Extra parameters are k6 parameters, some of which are explained below. 6. You must tweak the way the test is run to ensure it conforms with your preferences. The following CLI parameters are available:

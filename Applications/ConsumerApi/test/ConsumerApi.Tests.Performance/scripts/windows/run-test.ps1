@@ -2,13 +2,13 @@ param (
     [string]$s
 )
 
-# install required global packages
-npm install -g webpack-cli tsx webpack
-
 # Check if the scenario is provided; if not, prompt the user
 if (-not $s) {
     $s = Read-Host "Enter the scenario name"
 }
+
+# install required global packages
+npm install -g webpack-cli tsx webpack
 
 $k6Arguments = $args
 
@@ -50,5 +50,6 @@ try {
 finally {
     # Run the result analyzer script
     npx tsx ${resultAnalyzerFolder}\src\main.js $outputFile
+    Write-Host "Result file can be found at '$outputFile'."
 }
 

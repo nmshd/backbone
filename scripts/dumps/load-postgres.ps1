@@ -20,8 +20,10 @@ docker container exec --env PGPASSWORD=admin -it $containerName psql -h $Hostnam
 docker container exec --env PGPASSWORD=admin -it $containerName psql -h $Hostname -U $Username postgres -c "ALTER DATABASE $DbName OWNER TO $Username;"
 docker container exec --env PGPASSWORD=admin -it $containerName psql -h $Hostname -U $Username $DbName -f /tmp/df/$DumpFile
 
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "Database dump loaded successfully from $DumpFile."
+}
+
 # Stop and remove the container
 docker container stop $ContainerName
 docker container rm $ContainerName
-
-Write-Host "Database dump load completed."
