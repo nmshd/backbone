@@ -1,26 +1,27 @@
-set -x
-set -e
+#!/bin/bash
 
-Hostname="host.docker.internal"
-Username="postgres"
-Password="admin"
-DbName="enmeshed"
-DumpFile="enmeshed.pg"
+# Parameters with default values (can be overridden by arguments)
+HOSTNAME=${1:-"host.docker.internal"}
+USERNAME=${2:-"postgres"}
+PASSWORD=${3:-"admin"}
+DB_NAME=${4:-"enmeshed"}
+DUMP_FILE=${5:-"enmeshed.pg"}
 
-ContainerName="postgres-dump-loader"
+CONTAINER_NAME="tmp-postgres-container"
 
-docker run --name $ContainerName --rm -e POSTGRES_PASSWORD=$Password -d -v ./dump-files:/dump-files postgres
+# Run a PostgreSQL container
+echo "Creating container $CONTAINER_NAME for loading dump onto the database"
+VOLUME_ARG="$(dirname "${BASH_SOURCE[0]}")/dump-files:/tmp/df"
+docker container run --name "$CONTAINER_NAME" -v "$VOLUME_ARG" -e POSTGRES_PASSWORD="admin" -d postgres
 
-# Drop database if exists
-docker exec --env PGPASSWORD=$Password -it $ContainerName dropdb --if-exists -h $Hostname -U $Username $DbName
+echo "Creating the Database $DB_NAME"
+docker container exec --env PGPASSWORD=admin -i "$CONTAINER_NAME" dropdb --if-exists -h "$HOSTNAME" -U "$USERNAME" "$DB_NAME"
+docker container exec --env PGPASSWORD=admin -i "$CONTAINER_NAME" psql -h "$HOSTNAME" -U "$USERNAME" postgres -c "CREATE DATABASE $DB_NAME WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.utf8'"
+docker container exec --env PGPASSWORD=admin -i "$CONTAINER_NAME" psql -h "$HOSTNAME" -U "$USERNAME" postgres -c "ALTER DATABASE $DB_NAME OWNER TO $USERNAME;"
+docker container exec --env PGPASSWORD=admin -i "$CONTAINER_NAME" psql -h "$HOSTNAME" -U "$USERNAME" "$DB_NAME" -f "/tmp/df/$DUMP_FILE"
 
-# Create database
-docker exec --env PGPASSWORD=$Password -it $ContainerName psql -h $Hostname -U $Username postgres -c "CREATE DATABASE $DbName WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.utf8'"
+# Stop and remove the container
+docker container stop "$CONTAINER_NAME"
+docker container rm "$CONTAINER_NAME"
 
-# Alter database owner
-docker exec --env PGPASSWORD=$Password -it $ContainerName psql -h $Hostname -U $Username postgres -c "ALTER DATABASE $DbName OWNER TO $Username;"
-
-# Load dump file
-docker exec --env PGPASSWORD=$Password -it $ContainerName psql -h $Hostname -U $Username $DbName -f /dump-files/$DumpFile
-
-docker stop $ContainerName
+echo "Database dump load completed."
