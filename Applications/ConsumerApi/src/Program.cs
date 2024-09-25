@@ -212,10 +212,7 @@ static void Configure(WebApplication app)
     app.UseAuthentication().UseAuthorization();
 
     app.MapControllers();
-    app.MapHealthChecks("/health", new HealthCheckOptions
-    {
-        ResponseWriter = HealthCheckWriter.WriteResponse
-    });
+    app.MapHealthChecks("/health");
 
     app.UseResponseCaching();
 }
