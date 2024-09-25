@@ -106,6 +106,8 @@ Entity Creation: ~1h
 
 In order to run the performance tests, you must load an appropriate snapshot of the database. These snapshots are bundled with the usernames and passwords of the created identities/devices, meaning you can authenticate as such users and do API calls in their stead.
 
+Test snapshots are currently only available for **Postgres**.
+
 1.  **Install k6**
 
     1. You must install k6 if you haven't already. Please download it from the [official website](https://k6.io/open-source/).
@@ -113,17 +115,13 @@ In order to run the performance tests, you must load an appropriate snapshot of 
 1.  **Select a snapshot:**
 
     1. Select one of the available snapshots. You can find more information on the available snapshots in the [scenarios README](src/scenarios/README.md) file.
-    1. Extract the snapshot file, and any further zip files there may be inside it.
 
-1.  **Load the snapshot:**
+1.  **Load the snapshot and the CSVs:**
 
-    1. Locate the snapshot you'd like to use. It can be in the `../snapshots` folder or in a remote host if it's a big file. Extract it, as well as the zip files within it.
-    1. Place the relevant `.pg`/`.sql` file in the following directory: `/docker-compose/dumps/dump-files`.
-    1. (CAUTION: the following step will delete your database) In the directory `/docker-compose/dumps/`, run the appropriate command: `load_postgres.bat` or `load_sqlserver_bak.bat`.
-
-1.  **Prepare the csvs:**
-
-    1. Extract the compressed csv files into the following directory: `/Application/ConsumerApi/test/PerformanceTests/snapshots/<snapshotName>`. You must create the directory.
+    1. Ensure that the Postgres server where the snapshot should be loaded is running.
+    1. Run one of the following commands depending on what system you're using. The spanshot name **must not** contain the extension:
+        1. **Linux:** `TBD`
+        1. **Windows:** `# scripts/windows/load-snapshot.ps1 -SnapshotName "snapshot" [-Hostname "custom.hostname"] [-Username "dbuser"] [-Password "dbpass"] [-DbName "dbname"]`
 
 1.  **Start the application**
 
