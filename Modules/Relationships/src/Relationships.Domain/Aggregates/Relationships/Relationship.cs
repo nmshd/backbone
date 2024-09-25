@@ -337,11 +337,11 @@ public class Relationship : Entity
             throw new DomainException(DomainErrors.RequestingIdentityDoesNotBelongToRelationship());
     }
 
-    public void ParticipantIsToBeDeleted(string identityToBeDeleted)
+    public void ParticipantIsToBeDeleted(IdentityAddress identityToBeDeleted, DateTime gracePeriodEndsAt)
     {
         var peer = GetPeerOf(identityToBeDeleted);
 
-        RaiseDomainEvent(new PeerToBeDeletedDomainEvent(peer, Id, identityToBeDeleted));
+        RaiseDomainEvent(new PeerToBeDeletedDomainEvent(peer, Id, identityToBeDeleted, gracePeriodEndsAt));
     }
 
     public void DeletionOfParticipantCancelled(string identityWithDeletionCancelled)
@@ -370,6 +370,13 @@ public class Relationship : Entity
         return r => r.Status != RelationshipStatus.Rejected &&
                     r.Status != RelationshipStatus.Revoked &&
                     r.Status != RelationshipStatus.ReadyForDeletion;
+    }
+
+    public static Expression<Func<Relationship, bool>> HasStatusInWhichPeerShouldBeNotifiedAboutDeletion()
+    {
+        return r => r.Status == RelationshipStatus.Pending ||
+                    r.Status == RelationshipStatus.Active ||
+                    r.Status == RelationshipStatus.Terminated;
     }
 
     #endregion

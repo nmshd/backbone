@@ -1,7 +1,7 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0.6-alpine3.18 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0.401 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.402 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
@@ -62,18 +62,18 @@ COPY ["Modules/Challenges/src/Challenges.Infrastructure.Database.Postgres/Challe
 COPY ["Applications/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/AdminApi.Infrastructure.Database.SqlServer.csproj", "Applications/AdminApi/src/AdminApi.Infrastructure.Database.SqlServer/"]
 COPY ["Applications/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/AdminApi.Infrastructure.Database.Postgres.csproj", "Applications/AdminApi/src/AdminApi.Infrastructure.Database.Postgres/"]
 
-RUN dotnet restore "Applications/DatabaseMigrator/src/DatabaseMigrator/DatabaseMigrator.csproj"
+RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/DatabaseMigrator/src/DatabaseMigrator/DatabaseMigrator.csproj"
 
 COPY . .
 
 ARG VERSION
 
 WORKDIR "/src/Applications/DatabaseMigrator/src/DatabaseMigrator"
-RUN dotnet build "DatabaseMigrator.csproj" -c Release --output /app/build --no-restore
+RUN dotnet build /p:ContinuousIntegrationBuild=true "DatabaseMigrator.csproj" -c Release --output /app/build --no-restore
 
 FROM build AS publish
 
-RUN dotnet publish -c Release --output /app/publish --no-restore "DatabaseMigrator.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true -c Release --output /app/publish --no-restore "DatabaseMigrator.csproj"
 
 FROM base AS final
 

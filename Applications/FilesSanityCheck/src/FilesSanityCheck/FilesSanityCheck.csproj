@@ -12,7 +12,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
-        <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Application\Files.Application.csproj" />        
+        <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Application\Files.Application.csproj" />
         <ProjectReference Include="..\..\..\..\Modules\Files\src\Files.Infrastructure\Files.Infrastructure.csproj" />
     </ItemGroup>
 

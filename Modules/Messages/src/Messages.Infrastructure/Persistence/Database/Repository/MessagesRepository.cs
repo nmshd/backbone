@@ -82,4 +82,9 @@ public class MessagesRepository : IMessagesRepository
             .Where(expression)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task Delete(MessageId messageId, CancellationToken cancellationToken)
+    {
+        await _messages.Where(m => m.Id == messageId).ExecuteDeleteAsync(cancellationToken);
+    }
 }

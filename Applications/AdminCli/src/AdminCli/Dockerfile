@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/runtime:8.0.8 AS base
 WORKDIR /app
 
-FROM mcr.microsoft.com/dotnet/sdk:8.0.401 AS build
+FROM mcr.microsoft.com/dotnet/sdk:8.0.402 AS build
 WORKDIR /src
 
 COPY ["Directory.Build.props", "."]
@@ -19,14 +19,14 @@ COPY ["BuildingBlocks/src/BuildingBlocks.Application/BuildingBlocks.Application.
 COPY ["BuildingBlocks/src/Crypto/Crypto.csproj", "BuildingBlocks/src/Crypto/"]
 COPY ["Modules/Devices/src/Devices.Domain/Devices.Domain.csproj", "Modules/Devices/src/Devices.Domain/"]
 
-RUN dotnet restore "Applications/AdminCli/src/AdminCli/AdminCli.csproj"
+RUN dotnet restore /p:ContinuousIntegrationBuild=true "Applications/AdminCli/src/AdminCli/AdminCli.csproj"
 
 COPY . .
 
 ARG VERSION
 
 WORKDIR "/src/Applications/AdminCli/src/AdminCli"
-RUN dotnet publish --no-restore -c Release -o /app/publish "AdminCli.csproj"
+RUN dotnet publish /p:ContinuousIntegrationBuild=true --no-restore -c Release -o /app/publish "AdminCli.csproj"
 
 FROM base AS final
 WORKDIR /app

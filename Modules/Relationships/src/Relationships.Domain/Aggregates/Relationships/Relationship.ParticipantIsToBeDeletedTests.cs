@@ -1,7 +1,6 @@
 ﻿using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
@@ -17,14 +16,16 @@ public class RelationshipParticipantIsToBeDeletedTests : AbstractTestsBase
         var identityToBeDeleted = TestDataGenerator.CreateRandomIdentityAddress();
         var peer = TestDataGenerator.CreateRandomIdentityAddress();
         var relationship = CreateActiveRelationship(peer, identityToBeDeleted);
+        var gracePeriodEndsAt = DateTime.Parse("2022-01-01");
 
         // Act
-        relationship.ParticipantIsToBeDeleted(identityToBeDeleted);
+        relationship.ParticipantIsToBeDeleted(identityToBeDeleted, gracePeriodEndsAt);
 
         // Assert
         var domainEvent = relationship.Should().HaveASingleDomainEvent<PeerToBeDeletedDomainEvent>();
         domainEvent.PeerOfIdentityToBeDeleted.Should().Be(peer);
         domainEvent.RelationshipId.Should().Be(relationship.Id);
         domainEvent.IdentityToBeDeleted.Should().Be(identityToBeDeleted);
+        domainEvent.GracePeriodEndsAt.Should().Be(gracePeriodEndsAt);
     }
 }

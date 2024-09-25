@@ -2,9 +2,11 @@
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeleted;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Tooling;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeleted;
+
 public class PeerDeletedDomainEventHandler : IDomainEventHandler<PeerDeletedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
@@ -24,7 +26,11 @@ public class PeerDeletedDomainEventHandler : IDomainEventHandler<PeerDeletedDoma
     private async Task CreateExternalEvent(PeerDeletedDomainEvent @event)
     {
 #pragma warning disable IDE0037
-        var payload = new { RelationshipId = @event.RelationshipId };
+        var payload = new
+        {
+            RelationshipId = @event.RelationshipId,
+            DeletionDate = SystemTime.UtcNow
+        };
 #pragma warning restore IDE0037
         try
         {

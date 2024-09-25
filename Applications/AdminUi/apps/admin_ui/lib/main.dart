@@ -45,6 +45,11 @@ final _router = GoRouter(
       path: '/login',
       builder: (context, state) => LoginScreen(redirect: state.uri.queryParameters['redirect']),
     ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/error',
+      builder: (context, state) => ErrorScreen(errorMessage: state.extra.toString()),
+    ),
     ShellRoute(
       navigatorKey: _shellNavigatorKey,
       parentNavigatorKey: _rootNavigatorKey,

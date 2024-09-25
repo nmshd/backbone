@@ -5,6 +5,7 @@ using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerToBeDeleted;
+
 public class PeerToBeDeletedDomainEventHandler : IDomainEventHandler<PeerToBeDeletedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
@@ -24,7 +25,11 @@ public class PeerToBeDeletedDomainEventHandler : IDomainEventHandler<PeerToBeDel
     private async Task CreateExternalEvent(PeerToBeDeletedDomainEvent @event)
     {
 #pragma warning disable IDE0037
-        var payload = new { RelationshipId = @event.RelationshipId };
+        var payload = new
+        {
+            RelationshipId = @event.RelationshipId,
+            DeletionDate = @event.GracePeriodEndsAt
+        };
 #pragma warning restore IDE0037
         try
         {
