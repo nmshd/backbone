@@ -9,7 +9,8 @@ param (
 
 $ContainerName = "tmp-mssql-server"
 $HostDumpDir = "./dump-files"  # Directory on the host where the .bacpac file is located
-$ContainerDumpDir = "/tmp"  # Directory in the container where the .bacpac will be accessible
+$ContainerDumpDir = "/tmp/df"  # Directory in the container where the .bacpac will be accessible
+$volumeArg = ($PSScriptRoot + "\" + $HostDumpDir) + ":/" + $ContainerDumpDir;
 
 # Ensure the dump file exists in the host directory
 if (-not (Test-Path "$HostDumpDir/$DumpFile")) {
@@ -28,11 +29,8 @@ docker exec -ti $ContainerName /opt/mssql-tools/bin/sqlcmd -S $Hostname -U $User
 if ($LASTEXITCODE -eq 0) {
     Write-Host "Pre-existing database dropped successfully (if it existed)."
     
-    # Copy the BACPAC file from the host to the container
-    docker cp "$HostDumpDir/$DumpFile" "${ContainerName}:$ContainerDumpDir/$DumpFile"
-
     # Run the sqlpackage import command inside the container
-    docker exec -ti $ContainerName sqlpackage /Action:Import /TargetServerName:$Hostname /TargetDatabaseName:$DbName /SourceFile:$ContainerDumpDir/$DumpFile /TargetUser:$Username /TargetPassword:$Password /TargetTrustServerCertificate:True
+    docker exec -v $volumeArg -ti $ContainerName sqlpackage /Action:Import /TargetServerName:$Hostname /TargetDatabaseName:$DbName /SourceFile:$ContainerDumpDir/$DumpFile /TargetUser:$Username /TargetPassword:$Password /TargetTrustServerCertificate:True
  
     # Check if the import command was successful
     if ($LASTEXITCODE -eq 0) {

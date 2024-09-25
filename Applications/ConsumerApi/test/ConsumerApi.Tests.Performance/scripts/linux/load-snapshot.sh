@@ -24,7 +24,6 @@ SNAPSHOTS_FOLDER="$ROOT_PATH/snapshots"
 SNAPSHOT_FILE_PATH="$SNAPSHOTS_FOLDER/$SNAPSHOT_NAME.zip"
 REPO_ROOT=$(realpath "$SCRIPT_PATH/../../../../../..")
 
-echo 
 # Check if the file exists
 echo "Snapshot file path: $SNAPSHOT_FILE_PATH"
 if [ ! -f "$SNAPSHOT_FILE_PATH" ]; then

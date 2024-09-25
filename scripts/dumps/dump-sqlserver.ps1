@@ -8,9 +8,12 @@ param (
 )
 
 $ContainerName = "tmp-mssql-server"
+$HostDumpDir = "./dump-files"  # Directory on the host where the .bacpac file is located
+$ContainerDumpDir = "/tmp/df"  # Directory in the container where the .bacpac will be accessible
 
-# Run a SQL Server container (if not already running)
-docker container run -ti --name $ContainerName ormico/sqlpackage sqlpackage /Action:Export /SourceServerName:$Hostname /SourceDatabaseName:$DbName /TargetFile:/tmp/$DumpFile /SourceUser:$Username /SourcePassword:$Password /SourceTrustServerCertificate:True
+$volumeArg = ($PSScriptRoot + "\" + $HostDumpDir) + ":/" + $ContainerDumpDir;
+
+docker container run -v $volumeArg -ti --name $ContainerName ormico/sqlpackage sqlpackage /Action:Export /SourceServerName:$Hostname /SourceDatabaseName:$DbName /TargetFile:/tmp/$DumpFile /SourceUser:$Username /SourcePassword:$Password /SourceTrustServerCertificate:True
 
 # Check if the export command was successful
 if ($LASTEXITCODE -eq 0) {
