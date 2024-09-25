@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<ItemGroup>
-		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
-	</ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.10.0" />
+    </ItemGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
-		<ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
-		<ProjectReference Include="..\Tokens.Domain\Tokens.Domain.csproj" />
-	</ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application.Abstractions\BuildingBlocks.Application.Abstractions.csproj" />
+        <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.Application\BuildingBlocks.Application.csproj" />
+        <ProjectReference Include="..\Tokens.Domain\Tokens.Domain.csproj" />
+    </ItemGroup>
 
 </Project>

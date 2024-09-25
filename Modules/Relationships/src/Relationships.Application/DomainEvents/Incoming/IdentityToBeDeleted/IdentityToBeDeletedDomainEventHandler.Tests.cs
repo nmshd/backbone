@@ -6,7 +6,6 @@ using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FakeItEasy;
 using FluentAssertions;
 using Xunit;
@@ -30,23 +29,27 @@ public class IdentityToBeDeletedDomainEventHandlerTests : AbstractTestsBase
         var fakeRelationshipsRepository = A.Dummy<IRelationshipsRepository>();
 
         A.CallTo(() => fakeRelationshipsRepository.FindRelationships(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._))
-            .Returns(new List<Relationship> { relationshipToPeer1, relationshipToPeer2 });
+            .Returns([relationshipToPeer1, relationshipToPeer2]);
+
+        var gracePeriodEndsAt = DateTime.Parse("2022-01-01");
 
         var handler = CreateHandler(fakeRelationshipsRepository);
 
         //Act
-        await handler.Handle(new IdentityToBeDeletedDomainEvent(identityToBeDeleted));
+        await handler.Handle(new IdentityToBeDeletedDomainEvent(identityToBeDeleted, gracePeriodEndsAt));
 
         //Assert
         var event1 = relationshipToPeer1.Should().HaveASingleDomainEvent<PeerToBeDeletedDomainEvent>();
         event1.PeerOfIdentityToBeDeleted.Should().Be(peer1);
         event1.RelationshipId.Should().Be(relationshipToPeer1.Id);
         event1.IdentityToBeDeleted.Should().Be(identityToBeDeleted);
+        event1.GracePeriodEndsAt.Should().Be(gracePeriodEndsAt);
 
         var event2 = relationshipToPeer2.Should().HaveASingleDomainEvent<PeerToBeDeletedDomainEvent>();
         event2.PeerOfIdentityToBeDeleted.Should().Be(peer2);
         event2.RelationshipId.Should().Be(relationshipToPeer2.Id);
         event2.IdentityToBeDeleted.Should().Be(identityToBeDeleted);
+        event2.GracePeriodEndsAt.Should().Be(gracePeriodEndsAt);
     }
 
     private static IdentityToBeDeletedDomainEventHandler CreateHandler(IRelationshipsRepository relationshipsRepository)
