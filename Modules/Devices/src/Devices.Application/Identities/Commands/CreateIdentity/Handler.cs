@@ -37,9 +37,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         _logger.LogTrace("Address created.");
 
         var newIdentity = await CreateNewIdentity(command, cancellationToken, address);
-
         await _identitiesRepository.Add(newIdentity, command.DevicePassword);
-
         _logger.CreatedIdentity();
 
         return new CreateIdentityResponse

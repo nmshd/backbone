@@ -33,7 +33,7 @@ public record CommunicationLanguage
         return null;
     }
 
-    public static bool IsValid(string value)
+    public static bool IsValid(string value) // todo: Timo: Should we maybe use this instead of Validate method above?
     {
         if (CULTURES.All(c => c.TwoLetterISOLanguageName != value))
             return false;

@@ -21,6 +21,6 @@ public static class ValidatorExtensions
         return ruleBuilder
             .Must(x => (bool)method.Invoke(null, [x])!)
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
-            .WithMessage("The device language is not valid. Check length and the used characters.");
+            .WithMessage("The device language is not valid. Check length and used characters.");
     }
 }
