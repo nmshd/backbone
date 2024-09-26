@@ -275,9 +275,9 @@ public class Relationship : Entity
     {
         EnsureHasParticipant(activeIdentity);
         EnsureRelationshipNotDecomposedBy(activeIdentity);
-        EnsureStatus(RelationshipStatus.Terminated, RelationshipStatus.DeletionProposed);
+        EnsureStatus(RelationshipStatus.Terminated, RelationshipStatus.DeletionProposed, RelationshipStatus.Rejected, RelationshipStatus.Revoked);
 
-        if (Status == RelationshipStatus.Terminated)
+        if (new[] { RelationshipStatus.Terminated, RelationshipStatus.Rejected, RelationshipStatus.Revoked }.Contains(Status))
             DecomposeAsFirstParticipant(activeIdentity, activeDevice);
         else
             DecomposeAsSecondParticipant(activeIdentity, activeDevice);
@@ -287,7 +287,7 @@ public class Relationship : Entity
 
     private void DecomposeAsFirstParticipant(IdentityAddress activeIdentity, DeviceId activeDevice)
     {
-        EnsureStatus(RelationshipStatus.Terminated);
+        EnsureStatus(RelationshipStatus.Terminated, RelationshipStatus.Rejected, RelationshipStatus.Revoked);
 
         Status = RelationshipStatus.DeletionProposed;
 
