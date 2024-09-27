@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using System.Collections;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
@@ -74,11 +75,13 @@ public class RelationshipDecomposeTests : AbstractTestsBase
         );
     }
 
-    [Fact]
-    public void Can_only_decompose_as_firstParticipant_when_relationship_is_in_status_Terminated()
+
+    [Theory]
+    [ClassData(typeof(RelationshipDecomposeAsFirstParticipantAdmissibleStatusesTestData))]
+    public void Can_only_decompose_as_firstParticipant_when_relationship_is_in_proper_status(RelationshipStatus status)
     {
         // Arrange
-        var relationship = CreatePendingRelationship(IDENTITY_1, IDENTITY_2);
+        var relationship = CreateRelationshipInStatus(status, IDENTITY_1, IDENTITY_2);
 
         // Act
         var acting = () => relationship.Decompose(IDENTITY_1, DEVICE_1);
@@ -180,5 +183,23 @@ public class RelationshipDecomposeTests : AbstractTestsBase
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipAlreadyDecomposed");
+    }
+
+    public class RelationshipDecomposeAsFirstParticipantAdmissibleStatusesTestData : IEnumerable<object[]>
+    {
+        public IEnumerator<object[]> GetEnumerator()
+        {
+            var validStatuses = new[] { RelationshipStatus.Revoked, RelationshipStatus.Terminated, RelationshipStatus.DeletionProposed };
+            var admissibleStatuses = Enum.GetValues(typeof(RelationshipStatus)).Cast<RelationshipStatus>().ToList().Except(validStatuses);
+            var admissibleStatusesQueue = new Queue<RelationshipStatus>();
+            foreach (var item in admissibleStatuses)
+            {
+                admissibleStatusesQueue.Enqueue(item);
+            }
+
+            yield return [admissibleStatusesQueue.Dequeue()];
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
     }
 }
