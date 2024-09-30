@@ -11,7 +11,6 @@ using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.SseServer.Controllers;
 using Backbone.SseServer.Extensions;
 using Backbone.Tooling.Extensions;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
@@ -149,10 +148,7 @@ static void Configure(WebApplication app)
 
     app.MapControllers();
 
-    app.MapHealthChecks("/health", new HealthCheckOptions
-    {
-        ResponseWriter = HealthCheckWriter.WriteResponse
-    });
+    app.MapHealthChecks("/health");
 
     app.UseResponseCaching();
 }
