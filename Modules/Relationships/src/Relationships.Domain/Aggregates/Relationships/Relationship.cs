@@ -277,7 +277,7 @@ public class Relationship : Entity
         EnsureRelationshipNotDecomposedBy(activeIdentity);
         EnsureStatus(RelationshipStatus.Rejected, RelationshipStatus.Revoked, RelationshipStatus.Terminated, RelationshipStatus.DeletionProposed);
 
-        if (new[] { RelationshipStatus.Terminated, RelationshipStatus.Rejected, RelationshipStatus.Revoked }.Contains(Status))
+        if (Status is RelationshipStatus.Terminated or RelationshipStatus.Rejected or RelationshipStatus.Revoked)
             DecomposeAsFirstParticipant(activeIdentity, activeDevice);
         else
             DecomposeAsSecondParticipant(activeIdentity, activeDevice);
