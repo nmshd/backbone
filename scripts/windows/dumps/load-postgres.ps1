@@ -9,15 +9,15 @@ param (
 
 $ContainerName = "tmp-postgres-container"
 
-docker container run --rm --name $ContainerName -v $PSScriptRoot\dump-files:/dump -e POSTGRES_PASSWORD="admin" -d postgres
+docker run -d --rm --name $ContainerName -v $PSScriptRoot\dump-files:/dump -e POSTGRES_PASSWORD="admin" postgres
 
-docker container exec --env PGPASSWORD=admin -it $containerName dropdb --if-exists -h $Hostname -U $Username $DbName
-docker container exec --env PGPASSWORD=admin -it $containerName psql -h $Hostname -U $Username postgres -c "CREATE DATABASE $DbName WITH TEMPLATE = template0 ENCODING = 'UTF8' LOCALE_PROVIDER = libc LOCALE = 'en_US.utf8'"
-docker container exec --env PGPASSWORD=admin -it $containerName psql -h $Hostname -U $Username postgres -c "ALTER DATABASE $DbName OWNER TO $Username;"
-docker container exec --env PGPASSWORD=admin -it $containerName psql -h $Hostname -U $Username $DbName -f /dump/$DumpFile
+docker exec --env PGPASSWORD=$Password -it $containerName psql -h $Hostname -U $Username postgres -c "DROP DATABASE IF EXISTS $DbName"
+docker exec --env PGPASSWORD=$Password -it $containerName psql -h $Hostname -U $Username postgres -c "CREATE DATABASE $DbName"
+docker exec --env PGPASSWORD=$Password -it $containerName psql -h $Hostname -U $Username postgres -c "ALTER DATABASE $DbName OWNER TO $Username;"
+docker exec --env PGPASSWORD=$Password -it $containerName psql -h $Hostname -U $Username $DbName -f /dump/$DumpFile
 
 if ($LASTEXITCODE -eq 0) {
-    Write-Host "Database dump loaded successfully from $DumpFile."
+    Write-Host "Database import successful."
 }
 
-docker container stop $ContainerName
+docker stop $ContainerName

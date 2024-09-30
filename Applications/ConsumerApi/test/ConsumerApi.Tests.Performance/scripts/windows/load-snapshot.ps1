@@ -20,8 +20,7 @@ $snapshotZipPath = "$repoRoot\Applications\ConsumerApi\test\ConsumerApi.Tests.Pe
 
 # Check if the file exists
 if (-not (Test-Path $snapshotZipPath)) {
-    Write-Host "Snapshot file '$SnapshotName' not found in the 'snapshots' folder."
-    exit 1
+    throw "Snapshot file '$SnapshotName' not found in the 'snapshots' folder."
 }
 
 
