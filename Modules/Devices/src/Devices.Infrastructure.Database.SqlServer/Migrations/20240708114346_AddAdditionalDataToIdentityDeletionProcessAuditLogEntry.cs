@@ -1,12 +1,10 @@
-﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
-    [DependsOn(ModuleType.Devices, "20240701074625_Init")]
     public partial class AddAdditionalDataToIdentityDeletionProcessAuditLogEntry : Migration
     {
         /// <inheritdoc />

@@ -1,5 +1,4 @@
 ﻿using System;
-using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -8,7 +7,6 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
-    [DependsOn(ModuleType.Relationships, "20240701075857_Init")]
     public partial class Init : Migration
     {
         /// <inheritdoc />

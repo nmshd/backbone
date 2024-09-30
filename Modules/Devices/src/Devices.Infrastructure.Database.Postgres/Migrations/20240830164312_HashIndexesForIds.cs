@@ -1,12 +1,10 @@
-﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
-    [DependsOn(ModuleType.Devices, "20240708114348_AddAdditionalDataToIdentityDeletionProcessAuditLogEntry")]
     public partial class HashIndexesForIds : Migration
     {
         /// <inheritdoc />

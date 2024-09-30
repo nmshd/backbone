@@ -1,5 +1,4 @@
 ﻿using System;
-using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
@@ -7,7 +6,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
 {
     /// <inheritdoc />
-    [DependsOn(ModuleType.Devices, "20240830164312_HashIndexesForIds")]
     public partial class MakeIdentityDeletionProcessDeletionStartedAtPropertyNullable : Migration
     {
         /// <inheritdoc />

@@ -1,6 +1,5 @@
 ﻿using System.Data.SqlClient;
 using Backbone.AdminApi.Infrastructure.Persistence.Database;
-using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
@@ -190,6 +189,19 @@ public class Executor
             }
         }
     }
+}
+
+public enum ModuleType
+{
+    AdminApi,
+    Challenges,
+    Devices,
+    Files,
+    Messages,
+    Quotas,
+    Relationships,
+    Synchronization,
+    Tokens
 }
 
 public record MigrationId(ModuleType Type, string Id);

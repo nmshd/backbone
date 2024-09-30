@@ -1,12 +1,10 @@
-﻿using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.Attributes;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
-    [DependsOn(ModuleType.Messages, "20240701075021_Init")]
     public partial class RemoveRelationshipId : Migration
     {
         /// <inheritdoc />
