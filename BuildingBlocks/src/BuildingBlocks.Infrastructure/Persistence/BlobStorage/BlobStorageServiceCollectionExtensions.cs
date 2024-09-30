@@ -1,6 +1,8 @@
+using Azure.Storage.Blobs;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
 using Backbone.Tooling.Extensions;
+using HealthChecks.Azure.Storage.Blobs;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
@@ -24,6 +26,10 @@ public static class BlobStorageServiceCollectionExtensions
         {
             case AZURE_CLOUD_PROVIDER:
                 services.AddAzureStorageAccount(azureStorageAccountOptions => { azureStorageAccountOptions.ConnectionString = options.ConnectionInfo!; });
+                services.AddHealthChecks().AddAzureBlobStorage(
+                    clientFactory: _ => new BlobServiceClient(options.ConnectionInfo),
+                    optionsFactory: _ => new AzureBlobStorageHealthCheckOptions { ContainerName = options.Container }
+                );
                 break;
             case GOOGLE_CLOUD_PROVIDER:
                 services.AddGoogleCloudStorage(googleCloudStorageOptions =>

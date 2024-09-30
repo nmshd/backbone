@@ -1,6 +1,5 @@
 using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
-using Azure.Storage.Blobs;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.API.Mvc.Middleware;
@@ -30,7 +29,6 @@ using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Modules.Tokens.ConsumerApi;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Tooling.Extensions;
-using HealthChecks.Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
@@ -162,14 +160,6 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomIdentity(environment)
         .AddCustomFluentValidation()
         .AddCustomOpenIddict(parsedConfiguration.Authentication);
-
-    if (parsedConfiguration.Modules.Files.Infrastructure.BlobStorage.CloudProvider == "Azure")
-    {
-        services.AddHealthChecks().AddAzureBlobStorage(
-            clientFactory: _ => new BlobServiceClient(parsedConfiguration.Modules.Files.Infrastructure.BlobStorage.ConnectionInfo),
-            optionsFactory: _ => new AzureBlobStorageHealthCheckOptions { ContainerName = parsedConfiguration.Modules.Files.Infrastructure.BlobStorage.ContainerName }
-        );
-    }
 
     if (parsedConfiguration.SwaggerUi.Enabled)
         services.AddCustomSwaggerUi(parsedConfiguration.SwaggerUi);
