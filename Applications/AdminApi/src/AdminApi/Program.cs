@@ -16,7 +16,6 @@ using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Tooling.Extensions;
-using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Logging;
 using Serilog;
@@ -209,8 +208,5 @@ static void Configure(WebApplication app)
     app.MapControllers();
     app.MapFallbackToFile("{*path:regex(^(?!api/).*$)}", "index.html"); // don't match paths beginning with "api/"
 
-    app.MapHealthChecks("/health", new HealthCheckOptions
-    {
-        ResponseWriter = HealthCheckWriter.WriteResponse
-    });
+    app.MapHealthChecks("/health");
 }
