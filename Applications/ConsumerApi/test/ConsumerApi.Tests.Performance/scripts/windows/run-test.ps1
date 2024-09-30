@@ -49,7 +49,6 @@ try {
 }
 finally {
     # Run the result analyzer script
-    npx tsx ${resultAnalyzerFolder}\src\main.js $outputFile
+    npx tsx $resultAnalyzerFolder\src\main.js $outputFile
     Write-Host "Result file can be found at '$outputFile'."
 }
-
