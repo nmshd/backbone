@@ -37,7 +37,7 @@ public class RelationshipTemplate : Entity
 
     public RelationshipTemplateId Id { get; set; }
 
-    public ICollection<Relationship> Relationships { get; set; } = new List<Relationship>();
+    public ICollection<Relationship> Relationships { get; set; } = [];
 
     public IdentityAddress CreatedBy { get; set; }
     public DeviceId CreatedByDevice { get; set; }
@@ -71,6 +71,14 @@ public class RelationshipTemplate : Entity
         return Allocations.All(x => x.AllocatedBy != identity);
     }
 
+    // TODO @Nikola: Find a better name for this
+    public bool CanBeCollectedWithPassword2(IdentityAddress address, byte[]? password)
+    {
+        return CanBeCollectedWithPassword(address, password).Compile()(this);
+    }
+
+    #region Expressions
+
     public static Expression<Func<RelationshipTemplate, bool>> HasId(RelationshipTemplateId id)
     {
         return r => r.Id == id;
@@ -93,4 +101,6 @@ public class RelationshipTemplate : Entity
 
     // relationshipTemplate.Password.SequenceEqual(password!)
     // relationshipTemplate.Password == password
+
+    #endregion
 }
