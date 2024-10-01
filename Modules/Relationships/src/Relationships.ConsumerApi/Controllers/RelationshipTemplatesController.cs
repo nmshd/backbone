@@ -45,17 +45,12 @@ public class RelationshipTemplatesController : ApiControllerBase
     {
         var relationshipTemplateQueries = JsonSerializer.Deserialize<List<RelationshipTemplateQuery>>(templates);
 
-        foreach (var q in relationshipTemplateQueries)
-            if (q.Password == null)
-                q.Password = Array.Empty<byte>();
-
         var request = new ListRelationshipTemplatesQuery(paginationFilter, relationshipTemplateQueries);
 
         request.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
+            throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
         var template = await _mediator.Send(request, cancellationToken);
         return Paged(template);

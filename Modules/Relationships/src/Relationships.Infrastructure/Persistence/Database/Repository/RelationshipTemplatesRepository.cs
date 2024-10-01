@@ -48,30 +48,32 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return template;
     }
 
-    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds(IEnumerable<RelationshipTemplateQuery> queries, IdentityAddress identityAddress, PaginationFilter paginationFilter,
+    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds(IEnumerable<RelationshipTemplateQuery> queries, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false)
     {
         var queriesList = queries.ToList();
 
-        Expression<Func<RelationshipTemplate, bool>> filterExpression = template => false;
+        Expression<Func<RelationshipTemplate, bool>> whereClause = template => false;
 
         foreach (var inputQuery in queriesList)
-            filterExpression = filterExpression
+        {
+            whereClause = whereClause
                 .Or(RelationshipTemplate.HasId(RelationshipTemplateId.Parse(inputQuery.Id))
-                    .And(RelationshipTemplate.CanBeCollectedWithPassword(identityAddress, inputQuery.Password))
-                    .And(RelationshipTemplate.CanBeCollectedBy(identityAddress)));
+                    .And(RelationshipTemplate.CanBeCollectedWithPassword(activeIdentity, inputQuery.Password))
+                    .And(RelationshipTemplate.CanBeCollectedBy(activeIdentity)));
+        }
 
         var query = (track ? _templates : _readOnlyTemplates)
-            .AsQueryable()
-            .NotExpiredFor(identityAddress)
-            .Where(filterExpression);
+            .NotExpiredFor(activeIdentity)
+            .Where(whereClause);
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
         return templates;
     }
 
-    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds2(IEnumerable<RelationshipTemplateQuery> queries, IdentityAddress identityAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
+    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds2(IEnumerable<RelationshipTemplateQuery> queries, IdentityAddress identityAddress,
+        PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
     {
         var queriesList = queries.ToList();
 
