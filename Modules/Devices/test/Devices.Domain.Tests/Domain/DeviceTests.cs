@@ -138,11 +138,7 @@ public class DeviceTests : AbstractTestsBase
 
     private static Device CreateUnonboardedDevice(Identity identity)
     {
-        var activeDevice = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE)
-        {
-            Identity = identity // because of the way identity is set in the Device ctor // todo Timo: I don't know haw this even worked before?
-        };
-        return activeDevice;
+        return identity.AddDevice(CommunicationLanguage.DEFAULT_LANGUAGE, identity.Devices.First().Id);
     }
 
     private static Device CreateOnboardedDevice(Identity identity)
