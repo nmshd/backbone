@@ -4,7 +4,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using Backbone.Tooling.Extensions;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -35,7 +34,7 @@ internal class RelationshipTemplatesStepDefinitions
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         var forClient = forIdentityName != "-" ? _clientPool.FirstForIdentityName(forIdentityName).IdentityData!.Address : null;
-        var password = passwordString.Trim() != "-" ? passwordString.Trim().GetBytes() : null;
+        var password = passwordString.Trim() != "-" ? Convert.FromBase64String(passwordString.Trim()) : null;
 
         var response = await client.RelationshipTemplates
             .CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, ForIdentity = forClient, Password = password });
@@ -52,7 +51,7 @@ internal class RelationshipTemplatesStepDefinitions
 
             var client = _clientPool.FirstForIdentityName(identityName);
             var forClient = forIdentityName != "-" ? _clientPool.FirstForIdentityName(forIdentityName).IdentityData!.Address : null;
-            var password = passwordString.Trim() != "-" ? passwordString.Trim().GetBytes() : null;
+            var password = passwordString.Trim() != "-" ? Convert.FromBase64String(passwordString.Trim()) : null;
 
             var response = await client.RelationshipTemplates
                 .CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, ForIdentity = forClient, Password = password });
@@ -116,7 +115,7 @@ internal class RelationshipTemplatesStepDefinitions
 
         for (var i = 0; i < table.RowCount; i++)
         {
-            var (rTempName, passwordOnGet) = ExtractRelationshipTemplateQueryValues(table.Rows[0]);
+            var (rTempName, passwordOnGet) = ExtractRelationshipTemplateQueryValues(table.Rows[i]);
             var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[rTempName].Id;
             var q = $"{{\"Id\":\"{relationshipTemplateId}\"{(passwordOnGet == "-" ? "" : $",\"Password\":\"{passwordOnGet}\"")}}}";
 
