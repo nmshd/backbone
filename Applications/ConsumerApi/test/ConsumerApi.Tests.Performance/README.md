@@ -8,7 +8,7 @@ The generation of a snapshot is a convoluted process which can be described in t
 
 #### 1. Creation of a _Relationships & Messages_ distribution
 
-Using the `Identity.Pool.Creator` project, run the command with the arguemnts:
+Using the `ConsumerApi.Tests.Performance.SnapshotCreator` project, run the command with the arguemnts:
 
 `GeneratePools --poolsFile <pools.json>`
 
@@ -59,15 +59,13 @@ The specific way of doing this depends greatly on the way the database managemen
 ##### When using SQL Server:
 
 ```sh
-cd scripts/dumps
-.\dump-sqlserver.ps1
+cd scripts/windows/dumps/dump-sqlserver.ps1
 ```
 
 ##### When using PostgreSQL:
 
 ```sh
-cd scripts/dumps
-.\dump-postgres.ps1
+cd scripts/windows/dumps/dump-postgres.ps1
 ```
 
 #### 4. Persisting the results
@@ -120,30 +118,34 @@ Test snapshots are currently only available for **Postgres**. For windows, make 
 
     1. `cd Applications/ConsumerApi/test/ConsumerApi.Tests.Performance`
     1. Ensure that the Postgres server where the snapshot should be loaded is running.
-    1. Run one of the following commands depending on what system you're using. The spanshot name **must not** contain the extension:
-        1. **Linux:** `TBD`
-        1. **Windows:** `# scripts/windows/load-snapshot.ps1 -SnapshotName "snapshot" [-Hostname "custom.hostname"] [-Username "dbuser"] [-Password "dbpass"] [-DbName "dbname"]`
-
-1.  **Start the application**
-
-    1. Using the IDE of your choice, launch the application and ensure it can receive requests.
+    1. Run the following command (the snapshot name **must not** contain the extension)
+        ```sh
+        # scripts/windows/load-snapshot.ps1 -SnapshotName "snapshot" [-Hostname "custom.hostname"] [-Username "dbuser"] [-Password "dbpass"] [-DbName "dbname"]
+        ```
 
 1.  **Run the test(s)**
 
-    1. Run one of the following commands depending on what system you're using:
+    ```sh
+    # scripts/windows/run-test.ps1 <scenario-name>
+    ```
 
-        1. **Linux:** `$ scripts/linux/run-test.sh <scenario-name>`, e.g. `s01`
-        1. **Windows:** `# scripts/windows/run-test.ps1 <scenario-name>`, e.g. `s01`
+    where \<scenario-name> is for example `s01`.
 
-> [!NOTE]
-> Both alternatives can be appended with `-- <extra> <parameters>`. Extra parameters are k6 parameters, some of which are explained below. 6. You must tweak the way the test is run to ensure it conforms with your preferences. The following CLI parameters are available:
+    > [!NOTE]
+    > The command can be appended with `-- <extra> <parameters>`. Extra parameters are k6 parameters, some of which are explained below.
 
-    | Key                   | Default             | Possible Values                                 |
-    | --------------------- | ------------------- | ----------------------------------------------- |
-    | `--duration`          | depends on the test | `60m`, `4h`, etc.                               |
-    | `--address`           | `localhost:8081`    | any valid URL, e.g. `load-test.enmeshed.eu`     |
-    | `--env snapshot=`     | `light`             | `heavy`                                         |
-    | `--env clientId=`     | `test`              | any string                                      |
-    | `--env clientSecret=` | `test`              | any string                                      |
+1.  You must tweak the way the test is run to ensure it conforms with your preferences. The following CLI parameters are available:
 
-    e.g.: `$ scripts/linux/run-test.sh s01 -- --address test.enmeshed.eu:443 --duration 4h`
+    | Key                   | Default             | Possible Values                             |
+    | --------------------- | ------------------- | ------------------------------------------- |
+    | `--duration`          | depends on the test | `60m`, `4h`, etc.                           |
+    | `--address`           | `localhost:8081`    | any valid URL, e.g. `load-test.enmeshed.eu` |
+    | `--env snapshot=`     | `light`             | `heavy`                                     |
+    | `--env clientId=`     | `test`              | any string                                  |
+    | `--env clientSecret=` | `test`              | any string                                  |
+
+    Example:
+
+    ```sh
+    $ scripts/windows/run-test.sh s01 -- --address test.enmeshed.eu:443 --duration 4h
+    ```
