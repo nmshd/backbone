@@ -74,7 +74,7 @@ public class RelationshipTemplate : Entity
     // TODO @Nikola: Find a better name for this
     public bool CanBeCollectedWithPassword2(IdentityAddress address, byte[]? password)
     {
-        return CanBeCollectedWithPassword(address, password).Compile()(this);
+        return Password == null || password != null && Password.SequenceEqual(password) || CreatedBy == address;
     }
 
     #region Expressions
@@ -98,9 +98,6 @@ public class RelationshipTemplate : Entity
     {
         return relationshipTemplate => relationshipTemplate.Password == null || relationshipTemplate.Password == password || relationshipTemplate.CreatedBy == address;
     }
-
-    // relationshipTemplate.Password.SequenceEqual(password!)
-    // relationshipTemplate.Password == password
 
     #endregion
 }
