@@ -61,26 +61,35 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
 
     private async Task SendReminder3(Identity identity, int daysUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), cancellationToken);
-        identity.DeletionProcessApprovalReminder3Sent();
-        await _identitiesRepository.Update(identity, cancellationToken);
-        _logger.ApprovalReminder3Sent(deletionProcessId);
+        if (identity.Status != IdentityStatus.ToBeDeleted)
+        {
+            await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), cancellationToken);
+            identity.DeletionProcessApprovalReminder3Sent();
+            await _identitiesRepository.Update(identity, cancellationToken);
+            _logger.ApprovalReminder3Sent(deletionProcessId);
+        }
     }
 
     private async Task SendReminder2(Identity identity, int daysUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), cancellationToken);
-        identity.DeletionProcessApprovalReminder2Sent();
-        await _identitiesRepository.Update(identity, cancellationToken);
-        _logger.ApprovalReminder2Sent(deletionProcessId);
+        if (identity.Status != IdentityStatus.ToBeDeleted)
+        {
+            await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), cancellationToken);
+            identity.DeletionProcessApprovalReminder2Sent();
+            await _identitiesRepository.Update(identity, cancellationToken);
+            _logger.ApprovalReminder2Sent(deletionProcessId);
+        }
     }
 
     private async Task SendReminder1(Identity identity, int daysUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), cancellationToken);
-        identity.DeletionProcessApprovalReminder1Sent();
-        await _identitiesRepository.Update(identity, cancellationToken);
-        _logger.ApprovalReminder1Sent(deletionProcessId);
+        if (identity.Status != IdentityStatus.ToBeDeleted)
+        {
+            await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), cancellationToken);
+            identity.DeletionProcessApprovalReminder1Sent();
+            await _identitiesRepository.Update(identity, cancellationToken);
+            _logger.ApprovalReminder1Sent(deletionProcessId);
+        }
     }
 }
 

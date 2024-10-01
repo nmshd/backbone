@@ -46,8 +46,7 @@ public class SyncRunsController : ApiControllerBase
         [FromHeader(Name = "X-Supported-Datawallet-Version")]
         ushort supportedDatawalletVersion, CancellationToken cancellationToken)
     {
-        var address = _userContext.GetAddress();
-        var identity = _identitiesRepository.FindByAddress(address, CancellationToken.None).Result;
+        var identity = _identitiesRepository.FindByAddress(_userContext.GetAddress(), CancellationToken.None).Result;
 
         if (identity!.Status == IdentityStatus.ToBeDeleted)
             throw new ApplicationException(ApplicationErrors.SyncRuns.CannotStartSyncRunWhileIdentityIsToBeDeleted());

@@ -39,7 +39,8 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
             throw new DomainException(DomainErrors.OnlyOneActiveDeletionProcessAllowed());
         }
 
-        await _notificationSender.SendNotification(identity.Address, new DeletionProcessStartedPushNotification(), cancellationToken);
+        if (identity.Status != IdentityStatus.ToBeDeleted)
+            await _notificationSender.SendNotification(identity.Address, new DeletionProcessStartedPushNotification(), cancellationToken);
 
         return new StartDeletionProcessAsOwnerResponse(deletionProcess);
     }
