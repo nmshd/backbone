@@ -73,11 +73,14 @@ public class RelationshipDecomposeTests : AbstractTestsBase
         );
     }
 
-    [Fact]
-    public void Can_only_decompose_as_firstParticipant_when_relationship_is_in_status_Terminated()
+
+    [Theory]
+    [InlineData(RelationshipStatus.Pending)]
+    [InlineData(RelationshipStatus.Active)]
+    public void Can_only_decompose_as_firstParticipant_when_relationship_is_in_proper_status(RelationshipStatus invalidStatus)
     {
         // Arrange
-        var relationship = CreatePendingRelationship(IDENTITY_1, IDENTITY_2);
+        var relationship = CreateRelationshipInStatus(invalidStatus, IDENTITY_1, IDENTITY_2);
 
         // Act
         var acting = () => relationship.Decompose(IDENTITY_1, DEVICE_1);
