@@ -4,7 +4,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using CSharpFunctionalExtensions;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -29,18 +28,6 @@ internal class RelationshipTemplatesStepDefinitions
     #endregion
 
     #region Given
-
-    [Given($"Relationship Template {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING} where ForIdentity is the address of {RegexFor.SINGLE_THING}")]
-    public async Task GivenRelationshipTemplateCreatedByIWhereForIdentityIsTheAddressOfI(string relationshipTemplateName, string identityName, string forIdentityName)
-    {
-        var client = _clientPool.FirstForIdentityName(identityName);
-        var forClient = _clientPool.FirstForIdentityName(forIdentityName);
-
-        var response = await client.RelationshipTemplates
-            .CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, ForIdentity = forClient.IdentityData!.Address });
-
-        _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateName] = response.Result!;
-    }
 
     [Given($@"Relationship Template {RegexFor.SINGLE_THING_OR_DEFAULT} created by {RegexFor.SINGLE_THING_OR_DEFAULT} with password ""([^""]*)"" and forIdentity {RegexFor.SINGLE_THING_OR_DEFAULT}")]
     public async Task GivenRelationshipTemplateCreatedByTokenOwnerWithPasswordAndForIdentity(string relationshipTemplateName, string identityName, string passwordString, string forIdentityName)
@@ -89,16 +76,6 @@ internal class RelationshipTemplatesStepDefinitions
             new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, ForIdentity = forClient.IdentityData!.Address, Password = password });
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a GET request to the /RelationshipTemplates/{{id}} endpoint with {RegexFor.SINGLE_THING}.Id")]
-    public async Task WhenIdentitySendsAGetRequestToTheRelationshipTemplatesIdEndpointWithId(string identityName, string relationshipTemplateName)
-    {
-        var client = _clientPool.FirstForIdentityName(identityName);
-
-        var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateName].Id;
-
-        _responseContext.WhenResponse = await client.RelationshipTemplates.GetTemplate(relationshipTemplateId);
-    }
-
     [When($@"{RegexFor.SINGLE_THING_OR_DEFAULT} sends a GET request to the /RelationshipTemplate/{RegexFor.SINGLE_THING_OR_DEFAULT}.Id endpoint with password ""([^""]*)""")]
     public async Task WhenIdentitySendsAGetRequestToTheRelationshipTemplatesIdEndpointWithPassword(string identityName, string relationshipTemplateName, string password)
     {
@@ -106,25 +83,12 @@ internal class RelationshipTemplatesStepDefinitions
 
         var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateName].Id;
 
-        _responseContext.WhenResponse = password != "-" ?
-            await client.RelationshipTemplates.GetTemplate(relationshipTemplateId, password.Trim()) :
-            await client.RelationshipTemplates.GetTemplate(relationshipTemplateId);
-    }
-
-    [When($@"{RegexFor.SINGLE_THING_OR_DEFAULT} sends a GET request to the /RelationshipTemplate endpoint with {RegexFor.SINGLE_THING_OR_DEFAULT}.Id and password ""([^""]*)""")]
-    public async Task WhenIdentitySendsAGetRequestToTheRelationshipTemplatesEndpointWithRelationshipTemplateIdAndPassword(string identityName, string relationshipTemplateName, string password)
-    {
-        var client = _clientPool.FirstForIdentityName(identityName);
-
-        var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateName].Id;
-        var jsonTemplate = $"[{{\"Id\":\"{relationshipTemplateId}\"{(password == "-" ? "" : $",\"Password\":\"{password}\"")}}}]";
-
-        _responseContext.WhenResponse = _listRelationshipTemplatesResponse = await client.RelationshipTemplates.ListTemplates(jsonTemplate);
+        _responseContext.WhenResponse = password != "-"
+            ? await client.RelationshipTemplates.GetTemplate(relationshipTemplateId, password.Trim())
+            : await client.RelationshipTemplates.GetTemplate(relationshipTemplateId);
     }
 
     #endregion
-
-
 
 
     [Given(@"Relationship Templates with the following properties")]
