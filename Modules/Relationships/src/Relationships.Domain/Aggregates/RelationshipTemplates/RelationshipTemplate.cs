@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using System.Text;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -19,7 +18,8 @@ public class RelationshipTemplate : Entity
         CreatedByDevice = null!;
     }
 
-    public RelationshipTemplate(IdentityAddress createdBy, DeviceId createdByDevice, int? maxNumberOfAllocations, DateTime? expiresAt, byte[] content, IdentityAddress? forIdentity = null, byte[]? password = null)
+    public RelationshipTemplate(IdentityAddress createdBy, DeviceId createdByDevice, int? maxNumberOfAllocations, DateTime? expiresAt, byte[] content, IdentityAddress? forIdentity = null,
+        byte[]? password = null)
     {
         Id = RelationshipTemplateId.New();
         CreatedAt = SystemTime.UtcNow;
@@ -57,13 +57,18 @@ public class RelationshipTemplate : Entity
         if (identity == CreatedBy)
             return;
 
-        if (Allocations.Any(x => x.AllocatedBy == identity))
+        if (IsAllocatedBy(identity))
             return;
 
         if (Allocations.Count == MaxNumberOfAllocations)
             throw new DomainException(DomainErrors.MaxNumberOfAllocationsExhausted());
 
         Allocations.Add(new RelationshipTemplateAllocation(Id, identity, device));
+    }
+
+    public bool IsAllocatedBy(IdentityAddress identity)
+    {
+        return Allocations.All(x => x.AllocatedBy != identity);
     }
 
     public static Expression<Func<RelationshipTemplate, bool>> HasId(RelationshipTemplateId id)

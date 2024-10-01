@@ -25,6 +25,7 @@ public class Relationship : Entity
     {
         EnsureTargetIsNotSelf(relationshipTemplate, activeIdentity);
         EnsureNoOtherRelationshipToPeerExists(relationshipTemplate.CreatedBy, existingRelationships);
+        EnsureTemplateIsAllocatedBy(relationshipTemplate, activeIdentity);
 
         Id = RelationshipId.New();
         RelationshipTemplateId = relationshipTemplate.Id;
@@ -77,6 +78,12 @@ public class Relationship : Entity
     {
         if (existingRelationshipsToPeer.Any(r => r.Status is RelationshipStatus.Active or RelationshipStatus.Pending or RelationshipStatus.Terminated or RelationshipStatus.DeletionProposed))
             throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
+    }
+
+    private void EnsureTemplateIsAllocatedBy(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity)
+    {
+        if (!relationshipTemplate.IsAllocatedBy(activeIdentity))
+            throw new DomainException(DomainErrors.RelationshipTemplateNotAllocated());
     }
 
     public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
