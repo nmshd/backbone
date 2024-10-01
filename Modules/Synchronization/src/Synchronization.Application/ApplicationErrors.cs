@@ -65,5 +65,10 @@ public static class ApplicationErrors
         {
             return new ApplicationError("error.platform.validation.syncRun.unexpectedSyncRunType", $"The current operation only supports sync runs of type '{expectedType}'.");
         }
+
+        public static ApplicationError CannotStartSyncRunWhileIdentityIsToBeDeleted()
+        {
+            return new ApplicationError("error.platform.validation.syncRun.cannotStartSyncRunWhileIdentityIsToBeDeleted", "Cannot start a sync run. Identity is marked for deletion.");
+        }
     }
 }

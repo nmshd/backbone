@@ -2,7 +2,10 @@ using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Synchronization.Application;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
@@ -26,12 +29,15 @@ namespace Backbone.Modules.Synchronization.ConsumerApi.Controllers;
 public class SyncRunsController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;
+    private readonly IUserContext _userContext;
+    private readonly IIdentitiesRepository _identitiesRepository;
 
-    public SyncRunsController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
+    public SyncRunsController(IMediator mediator, IOptions<ApplicationOptions> options, IUserContext userContext, IIdentitiesRepository identitiesRepository) : base(mediator)
     {
         _options = options.Value;
+        _userContext = userContext;
+        _identitiesRepository = identitiesRepository;
     }
-
 
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<StartSyncRunResponse>), StatusCodes.Status200OK)]
@@ -40,6 +46,12 @@ public class SyncRunsController : ApiControllerBase
         [FromHeader(Name = "X-Supported-Datawallet-Version")]
         ushort supportedDatawalletVersion, CancellationToken cancellationToken)
     {
+        var address = _userContext.GetAddress();
+        var identity = _identitiesRepository.FindByAddress(address, CancellationToken.None).Result;
+
+        if (identity!.Status == IdentityStatus.ToBeDeleted)
+            throw new ApplicationException(ApplicationErrors.SyncRuns.CannotStartSyncRunWhileIdentityIsToBeDeleted());
+
         var response = await _mediator.Send(new StartSyncRunCommand(
             requestBody.Type ?? SyncRunDTO.SyncRunType.ExternalEventSync, requestBody.Duration,
             supportedDatawalletVersion), cancellationToken);
