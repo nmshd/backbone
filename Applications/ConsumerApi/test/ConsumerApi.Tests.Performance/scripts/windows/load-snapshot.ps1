@@ -18,11 +18,9 @@ if (-not $SnapshotName) {
 $repoRoot = git rev-parse --show-toplevel
 $snapshotZipPath = "$repoRoot\Applications\ConsumerApi\test\ConsumerApi.Tests.Performance\snapshots\$SnapshotName.zip"
 
-# Check if the file exists
 if (-not (Test-Path $snapshotZipPath)) {
     throw "Snapshot file '$SnapshotName' not found in the 'snapshots' folder."
 }
-
 
 # Extract the zip file
 try {

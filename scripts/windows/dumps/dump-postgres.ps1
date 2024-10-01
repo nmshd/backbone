@@ -3,38 +3,19 @@ param (
     [string]$Hostname = "host.docker.internal",
     [string]$Username = "postgres",
     [string]$Password = "admin",
-    [string]$DbName = "enmeshed",
-    [string]$DumpFile = "enmeshed.pg"
+    [string]$DbName = "enmeshed"
 )
 
-$ContainerName = "tmp-postgres-container"
+$DumpFile = "enmeshed.pg"
 
-# Run a PostgreSQL container
-$volumeArg = ($PSScriptRoot + "\dump-files") + ":/tmp/df";
-Write-Host "Creating container $ContainerName for pg_dump execution"
-docker container run --name $ContainerName -v $volumeArg -e POSTGRES_PASSWORD="admin" -d postgres
+docker run --rm -v "$PSScriptRoot\dump-files:/dump" --env PGPASSWORD="admin" postgres pg_dump -h $Hostname -U $Username $DbName -f /dump/$DumpFile
 
-# Perform the dump
-docker container exec --env PGPASSWORD=$Password -it $ContainerName pg_dump -h $Hostname -U $Username $DbName -f /tmp/df/$DumpFile
-
-if ($LASTEXITCODE -eq 0) {
-    Write-Host "Database export to $DumpFile successful."
-
-    # Check if the file was successfully copied
-    if (Test-Path "./dump-files/$DumpFile") {
-        Write-Host "File found at ./dump-files/$DumpFile"
-    }
-    else {
-        Write-Host "Error: Failed to locate the $DumpFile file on the host."
-    }
-}
-else {
-    Write-Host "Error: Database export to $DumpFile failed."
+if ($LASTEXITCODE -ne 0) {
+    throw "Error: Database export to $DumpFile failed."
 }
 
+if (-not (Test-Path $PSScriptRoot\dump-files\$DumpFile)) {
+    throw "Snapshot file not found in the 'snapshots' folder."
+}
 
-# Stop and remove the container
-docker container stop $ContainerName
-docker container rm $ContainerName
-
-Write-Host "Container $ContainerName stopped and removed"
+Write-Host "Database export to $DumpFile successful."

@@ -9,7 +9,7 @@ param (
 
 $ContainerName = "tmp-mssql-server"
 
-docker run -d --rm --name $ContainerName -v $PSScriptRoot\dump-files:/dump ormico/sqlpackage sleep infinity
+docker run -d --rm --name $ContainerName -v "$PSScriptRoot\dump-files:/dump" ormico/sqlpackage sleep infinity
 
 docker exec -it $ContainerName /opt/mssql-tools/bin/sqlcmd -S $Hostname -U $Username -P $Password -Q "DROP DATABASE IF EXISTS $DbName"
 docker exec -ti $ContainerName sqlpackage /Action:Import /TargetServerName:$Hostname /TargetDatabaseName:$DbName /SourceFile:$ContainerDumpDir/$DumpFile /TargetUser:$Username /TargetPassword:$Password /TargetTrustServerCertificate:True

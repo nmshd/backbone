@@ -9,7 +9,7 @@ param (
 
 $ContainerName = "tmp-postgres-container"
 
-docker run -d --rm --name $ContainerName -v $PSScriptRoot\dump-files:/dump -e POSTGRES_PASSWORD="admin" postgres
+docker run -d --rm --name $ContainerName -v "$PSScriptRoot\dump-files:/dump" -e POSTGRES_PASSWORD="admin" postgres
 
 docker exec --env PGPASSWORD=$Password -it $containerName psql -h $Hostname -U $Username postgres -c "DROP DATABASE IF EXISTS $DbName"
 docker exec --env PGPASSWORD=$Password -it $containerName psql -h $Hostname -U $Username postgres -c "CREATE DATABASE $DbName"
