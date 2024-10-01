@@ -29,7 +29,7 @@ internal class RelationshipTemplatesStepDefinitions
 
     #region Given
 
-    [Given($@"Relationship Template {RegexFor.SINGLE_THING_OR_DEFAULT} created by {RegexFor.SINGLE_THING_OR_DEFAULT} with password ""([^""]*)"" and forIdentity {RegexFor.SINGLE_THING_OR_DEFAULT}")]
+    [Given($@"Relationship Template {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING} with password ""([^""]*)"" and forIdentity {RegexFor.SINGLE_THING_OR_DEFAULT}")]
     public async Task GivenRelationshipTemplateCreatedByTokenOwnerWithPasswordAndForIdentity(string relationshipTemplateName, string identityName, string passwordString, string forIdentityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
@@ -40,6 +40,24 @@ internal class RelationshipTemplatesStepDefinitions
             .CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, ForIdentity = forClient, Password = password });
 
         _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateName] = response.Result!;
+    }
+
+    [Given(@"Relationship Templates with the following properties")]
+    public async Task GivenRelationshipTemplatesWithTheFollowingProperties(Table table)
+    {
+        for (var i = 0; i < table.RowCount; i++)
+        {
+            var (relationshipTemplateName, identityName, forIdentityName, passwordString) = ExtractRelationshipTemplateCreationValues(table.Rows[i]);
+
+            var client = _clientPool.FirstForIdentityName(identityName);
+            var forClient = forIdentityName != "-" ? _clientPool.FirstForIdentityName(forIdentityName).IdentityData!.Address : null;
+            var password = passwordString.Trim() != "-" ? Convert.FromBase64String(passwordString.Trim()) : null;
+
+            var response = await client.RelationshipTemplates
+                .CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, ForIdentity = forClient, Password = password });
+
+            _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateName] = response.Result!;
+        }
     }
 
     #endregion
@@ -76,7 +94,7 @@ internal class RelationshipTemplatesStepDefinitions
             new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, ForIdentity = forClient.IdentityData!.Address, Password = password });
     }
 
-    [When($@"{RegexFor.SINGLE_THING_OR_DEFAULT} sends a GET request to the /RelationshipTemplate/{RegexFor.SINGLE_THING_OR_DEFAULT}.Id endpoint with password ""([^""]*)""")]
+    [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /RelationshipTemplate/{RegexFor.SINGLE_THING}.Id endpoint with password ""([^""]*)""")]
     public async Task WhenIdentitySendsAGetRequestToTheRelationshipTemplatesIdEndpointWithPassword(string identityName, string relationshipTemplateName, string password)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
@@ -88,28 +106,7 @@ internal class RelationshipTemplatesStepDefinitions
             : await client.RelationshipTemplates.GetTemplate(relationshipTemplateId);
     }
 
-    #endregion
-
-
-    [Given(@"Relationship Templates with the following properties")]
-    public async Task GivenRelationshipTemplatesWithTheFollowingProperties(Table table)
-    {
-        for (var i = 0; i < table.RowCount; i++)
-        {
-            var (relationshipTemplateName, identityName, forIdentityName, passwordString) = ExtractRelationshipTemplateCreationValues(table.Rows[i]);
-
-            var client = _clientPool.FirstForIdentityName(identityName);
-            var forClient = forIdentityName != "-" ? _clientPool.FirstForIdentityName(forIdentityName).IdentityData!.Address : null;
-            var password = passwordString.Trim() != "-" ? Convert.FromBase64String(passwordString.Trim()) : null;
-
-            var response = await client.RelationshipTemplates
-                .CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, ForIdentity = forClient, Password = password });
-
-            _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateName] = response.Result!;
-        }
-    }
-
-    [When($@"{RegexFor.SINGLE_THING_OR_DEFAULT} sends a GET request to the /RelationshipTemplate endpoint with the following payloads")]
+    [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /RelationshipTemplate endpoint with the following payloads")]
     public async Task WhenISendsAGETRequestToTheRelationshipTemplateEndpointWithTheFollowingPayloads(string identityName, Table table)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
@@ -133,6 +130,18 @@ internal class RelationshipTemplatesStepDefinitions
         _responseContext.WhenResponse = _listRelationshipTemplatesResponse = await client.RelationshipTemplates.ListTemplates(jsonTemplate);
     }
 
+    #endregion
+
+    #region Then
+
+    [Then(@"the response contains (\d+) Relationship Template\(s\)")]
+    public void ThenTheResponseContainsRelationshipTemplates(int relationshipTemplateCount)
+    {
+        _listRelationshipTemplatesResponse!.Result!.Count.Should().Be(relationshipTemplateCount);
+    }
+
+    #endregion
+
     private static (string name, string rTempOwner, string forIdentity, string password) ExtractRelationshipTemplateCreationValues(TableRow row)
     {
         return (
@@ -149,11 +158,5 @@ internal class RelationshipTemplatesStepDefinitions
             row.TryGetValue("rTempName", out var rTempName) ? rTempName : string.Empty,
             row.TryGetValue("passwordOnGet", out var passwordOnGet) ? passwordOnGet : string.Empty
         );
-    }
-
-    [Then(@"the response contains (\d+) Relationship Template\(s\)")]
-    public void ThenTheResponseContainsRelationshipTemplates(int relationshipTemplateCount)
-    {
-        _listRelationshipTemplatesResponse!.Result!.Count.Should().Be(relationshipTemplateCount);
     }
 }
