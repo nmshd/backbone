@@ -38,10 +38,3 @@ public record CommunicationLanguage
         return name.Value;
     }
 }
-
-public class InvalidCommunicationLanguageException : Exception
-{
-    public InvalidCommunicationLanguageException(string message) : base(message)
-    {
-    }
-}
