@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Backbone.BuildingBlocks.Domain.Errors;
+using CSharpFunctionalExtensions;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
@@ -16,10 +17,11 @@ public record CommunicationLanguage
         Value = value;
     }
 
-    public static CommunicationLanguage Create(string value)
+    public static Result<CommunicationLanguage, DomainError> Create(string value)
     {
-        if (!IsValid(value))
-            throw new InvalidCommunicationLanguageException($"'{value}' is not a valid {nameof(CommunicationLanguage)}.");
+        var validationResult = Validate(value);
+        if (validationResult != null)
+            return Result.Failure<CommunicationLanguage, DomainError>(validationResult);
         return new CommunicationLanguage(value);
     }
 
