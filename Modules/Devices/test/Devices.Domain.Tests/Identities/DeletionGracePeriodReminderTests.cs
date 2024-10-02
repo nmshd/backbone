@@ -140,6 +140,6 @@ public class DeletionGracePeriodReminderTests : AbstractTestsBase
     private static Identity CreateIdentity()
     {
         var address = IdentityAddress.Create([], "prod.enmeshed.eu");
-        return new Identity("", address, [], TierId.Generate(), 1);
+        return new Identity("", address, [], TierId.Generate(), 1, CommunicationLanguage.DEFAULT_LANGUAGE);
     }
 }
