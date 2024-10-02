@@ -8,9 +8,9 @@ The generation of a snapshot is a convoluted process which can be described in t
 
 #### 1. Creation of a _Relationships & Messages_ distribution
 
-Using the `ConsumerApi.Tests.Performance.SnapshotCreator` project, run the command with the arguemnts:
+Run the `ConsumerApi.Tests.Performance.SnapshotCreator` project with the following arguemnts:
 
-`GeneratePools --poolsFile <pools.json>`
+`GeneratePools --poolsFile <path-to-pools-config-json>`
 
 Where `<pools.json>` is a pools configuration file. You can find examples of this file in this repository.
 
@@ -20,9 +20,9 @@ The execution creates a `relationshipsAndMessages.csv` file which must be passed
 
 #### 2. Creation of entities
 
-Using the `Identity.Pool.Creator` project, run the command with the arguemnts:
+Run the `ConsumerApi.Tests.Performance.SnapshotCreator` project with the following arguemnts:
 
-`CreateEntities --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools.json --relationshipsAndMessages selected-solution\\relationshipsAndMessages.csv`
+`CreateEntities --baseAddress <base-address> --clientId <client-id> --clientSecret <client-secret> --poolsFile <path-to-pools-config-json> --relationshipsAndMessages <path-to-relationshipsAndMessages.csv>`
 
 where:
 
@@ -54,23 +54,23 @@ The time it takes to run this command depends mostly on the number of entities t
 
 #### 3. Dumping the database
 
-The specific way of doing this depends greatly on the way the database management system is running. This guide assumes docker is used.
+Depending on which database you are using, you must run the appropriate script to dump the database to a file.
 
-##### When using SQL Server:
+When using SQL Server:
 
 ```sh
-cd scripts/windows/dumps/dump-sqlserver.ps1
+scripts/windows/dumps/dump-sqlserver.ps1
 ```
 
-##### When using PostgreSQL:
+When using PostgreSQL:
 
 ```sh
-cd scripts/windows/dumps/dump-postgres.ps1
+scripts/windows/dumps/dump-postgres.ps1
 ```
 
 #### 4. Persisting the results
 
-Now that the database has been exported to a file, you can zip it and move it to a newly created folder for the snapshot you just created. You should also put the step 2. csv files there as well (entity csv files). Don't forget to update the **list** below.
+Now that the database has been exported to a file, you can zip it and move it to a newly created folder for the snapshot you just created. You should add the csv files generated in step 2 to the zip as well. Don't forget to update the **list** below.
 
 ### List of snapshots
 
