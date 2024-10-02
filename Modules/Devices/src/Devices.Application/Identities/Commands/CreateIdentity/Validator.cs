@@ -14,6 +14,6 @@ public class CreateIdentityCommandValidator : AbstractValidator<CreateIdentityCo
         RuleFor(c => c.IdentityPublicKey).DetailedNotEmpty();
         RuleFor(c => c.DevicePassword).DetailedNotEmpty();
         RuleFor(c => c.SignedChallenge).DetailedNotEmpty().SetValidator(new SignedChallengeDTOValidator());
-        RuleFor(c => c.CommunicationLanguage).DetailedNotEmpty().ValidCommunicationLanguage<CreateIdentityCommand, CommunicationLanguage>();
+        RuleFor(c => c.CommunicationLanguage).Valid(CommunicationLanguage.Validate);
     }
 }
