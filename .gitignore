@@ -359,8 +359,11 @@ out.yaml
 # helm
 **/Chart.lock
 
-#Performance Tests
+# npm
 dist
+
+# Performance Tests
+scripts/windows/dumps/dump-files
 
 # ci
 .ci/package-lock.json
