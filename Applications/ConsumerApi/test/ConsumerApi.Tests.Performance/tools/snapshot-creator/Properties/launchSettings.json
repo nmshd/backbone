@@ -14,7 +14,7 @@
         },
         "Create Entities Light": {
             "commandName": "Project",
-            "commandLineArgs": "CreateEntities --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pools_light.json --relationshipsAndMessages light-solution\\ram.csv"
+            "commandLineArgs": "CreateEntities --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pool-config.test.json --relationshipsAndMessages path\\to\\relationshipsAndMessages.csv"
         }
     }
 }
