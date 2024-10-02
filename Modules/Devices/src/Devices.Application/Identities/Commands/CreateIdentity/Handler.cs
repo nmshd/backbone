@@ -53,7 +53,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
 
         var communicationLanguageResult = CommunicationLanguage.Create(command.CommunicationLanguage);
 
-        return new Identity(client.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion, communicationLanguageResult.Value);
+        return new Identity(client.ClientId, address, command.IdentityPublicKey, client.DefaultTier, command.IdentityVersion, communicationLanguageResult);
     }
 
     private async Task<IdentityAddress> CreateIdentityAddress(PublicKey publicKey, CancellationToken cancellationToken)
