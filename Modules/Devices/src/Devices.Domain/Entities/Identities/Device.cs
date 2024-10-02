@@ -20,6 +20,19 @@ public class Device : Entity
         CommunicationLanguage = null!;
     }
 
+    private Device(Identity identity, CommunicationLanguage communicationLanguage, string username)
+    {
+        Id = DeviceId.New();
+        CreatedAt = SystemTime.UtcNow;
+        CreatedByDevice = Id;
+        CommunicationLanguage = communicationLanguage;
+
+        User = new ApplicationUser(this, username);
+
+        Identity = identity;
+        IdentityAddress = null!;
+    }
+
     public Device(Identity identity, CommunicationLanguage communicationLanguage, DeviceId? createdByDevice = null)
     {
         Id = DeviceId.New();
@@ -27,7 +40,7 @@ public class Device : Entity
         CreatedByDevice = createdByDevice ?? Id;
         CommunicationLanguage = communicationLanguage;
 
-        User = null!; // This is just to satisfy the compiler; the property is actually set by EF core
+        User = new ApplicationUser(this);
 
         // The following distinction is unfortunately necessary in order to make EF recognize that the identity already exists
         if (identity.IsNew())
@@ -68,7 +81,7 @@ public class Device : Entity
         if (IsOnboarded)
             return new DomainError("error.platform.validation.device.deviceCannotBeDeleted", "The device cannot be deleted because it is already onboarded.");
 
-        if (Identity.Address != addressOfActiveIdentity)
+        if (IdentityAddress != addressOfActiveIdentity)
             return new DomainError("error.platform.validation.device.deviceCannotBeDeleted", "You are not allowed to delete this device as it belongs to another identity.");
 
         return null;
@@ -95,5 +108,10 @@ public class Device : Entity
 
         DeletedAt = SystemTime.UtcNow;
         DeletedByDevice = deletedByDevice;
+    }
+
+    public static Device CreateTestDevice(Identity identity, CommunicationLanguage communicationLanguage, string username)
+    {
+        return new Device(identity, communicationLanguage, username);
     }
 }

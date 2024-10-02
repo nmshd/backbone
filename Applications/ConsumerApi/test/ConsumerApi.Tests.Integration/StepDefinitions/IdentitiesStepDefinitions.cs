@@ -84,6 +84,7 @@ internal class IdentitiesStepDefinitions
                 alg = CryptoExchangeAlgorithm.ECDH_X25519,
                 pub = identityKeyPair.PublicKey.Base64Representation
             })).BytesRepresentation,
+            CommunicationLanguage = "en",
             DevicePassword = DEVICE_PASSWORD
         };
 
