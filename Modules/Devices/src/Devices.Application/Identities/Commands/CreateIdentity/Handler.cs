@@ -40,17 +40,7 @@ public class Handler : IRequestHandler<CreateIdentityCommand, CreateIdentityResp
         await _identitiesRepository.Add(newIdentity, command.DevicePassword);
         _logger.CreatedIdentity();
 
-        return new CreateIdentityResponse
-        {
-            Address = address,
-            CreatedAt = newIdentity.CreatedAt,
-            Device = new CreateIdentityResponseDevice
-            {
-                Id = newIdentity.Devices.First().Id,
-                Username = newIdentity.Devices.First().User.UserName!,
-                CreatedAt = newIdentity.Devices.First().CreatedAt
-            }
-        };
+        return new CreateIdentityResponse(newIdentity);
     }
 
     private async Task<Identity> CreateNewIdentity(CreateIdentityCommand command, CancellationToken cancellationToken, IdentityAddress address)

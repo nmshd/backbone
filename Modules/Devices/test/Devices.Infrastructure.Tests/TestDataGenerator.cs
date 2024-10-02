@@ -27,8 +27,6 @@ public static class TestDataGenerator
             deviceCommunicationLanguage
         );
 
-        identity.Devices.Add(new Device(identity, deviceCommunicationLanguage));
-
         return identity;
     }
 

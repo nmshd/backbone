@@ -1,6 +1,5 @@
 using Backbone.BuildingBlocks.Application.FluentValidation;
 using Backbone.Modules.Devices.Application.Devices.DTOs.Validators;
-using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FluentValidation;
 
