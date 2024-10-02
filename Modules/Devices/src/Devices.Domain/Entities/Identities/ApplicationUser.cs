@@ -8,24 +8,24 @@ public class ApplicationUser : IdentityUser
 {
     private readonly Device _device;
 
-    // This constructor is required by AspnetCoreIdentity
     public ApplicationUser()
     {
         _device = null!;
         DeviceId = null!;
+        CreatedAt = SystemTime.UtcNow;
+    }
+
+    internal ApplicationUser(Device device, string username) : base(username)
+    {
+        _device = device;
+        DeviceId = device.Id;
+        CreatedAt = SystemTime.UtcNow;
     }
 
     public ApplicationUser(Device device) : base(Username.New())
     {
         _device = device;
-        DeviceId = null!;
-    }
-
-    public ApplicationUser(Identity identity, CommunicationLanguage communicationLanguage, DeviceId? createdByDevice = null) : base(Username.New())
-    {
-        _device = new Device(identity, communicationLanguage, createdByDevice);
-        DeviceId = Device.Id;
-
+        DeviceId = device.Id;
         CreatedAt = SystemTime.UtcNow;
     }
 

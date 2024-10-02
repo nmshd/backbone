@@ -20,7 +20,8 @@ public static class TestDataGenerator
             CreateRandomIdentityAddress(),
             CreateRandomBytes(),
             CreateRandomTierId(),
-            1);
+            1,
+            CommunicationLanguage.DEFAULT_LANGUAGE);
     }
 
     public static Identity CreateIdentityWithTier(TierId tierId)
@@ -30,7 +31,8 @@ public static class TestDataGenerator
             CreateRandomIdentityAddress(),
             CreateRandomBytes(),
             tierId,
-            1);
+            1,
+            CommunicationLanguage.DEFAULT_LANGUAGE);
     }
 
     public static Identity CreateIdentityWithOneDevice()
@@ -40,7 +42,8 @@ public static class TestDataGenerator
             CreateRandomIdentityAddress(),
             CreateRandomBytes(),
             CreateRandomTierId(),
-            1);
+            1,
+            CommunicationLanguage.DEFAULT_LANGUAGE);
         identity.Devices.Add(new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE));
 
         return identity;

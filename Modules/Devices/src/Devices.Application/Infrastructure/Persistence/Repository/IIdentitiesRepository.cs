@@ -18,11 +18,8 @@ public interface IIdentitiesRepository
     Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false);
     Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken);
 
-    #endregion
-
-    #region Users
-
-    Task AddUser(ApplicationUser user, string password);
+    Task Add(Identity identity, string password);
+    Task UpdateWithNewDevice(Identity identity, string password);
 
     #endregion
 
