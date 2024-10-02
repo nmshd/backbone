@@ -53,7 +53,7 @@
             "name": "ConnectorLight",
             "alias": "c1",
             "amount": 1,
-            "numberOfRelationshipTemplates": 0,
+            "numberOfRelationshipTemplates": 1,
             "numberOfRelationships": 0,
             "totalNumberOfMessages": 0,
             "numberOfDatawalletModifications": 0,
