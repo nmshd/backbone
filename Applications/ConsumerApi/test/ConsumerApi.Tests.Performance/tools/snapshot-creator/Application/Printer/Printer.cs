@@ -6,7 +6,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.Pri
 
 public class Printer : IPrinter
 {
-    private readonly string _outputDirName = $@"{Path.GetTempPath()}\poolCreator.{SystemTime.UtcNow:yyyyMMdd-HHmmss}";
+    private readonly string _outputDirName = $"{Path.GetTempPath()}poolCreator.{SystemTime.UtcNow:yyyyMMdd-HHmmss}";
 
     public void PrintRelationships(IList<PoolEntry> pools, bool summaryOnly = false)
     {
@@ -91,6 +91,7 @@ public class Printer : IPrinter
                 }
             }
         }
+
         File.WriteAllTextAsync($@"{outputDirName}\relationshipTemplates.csv", stringBuilder.ToString());
     }
 
@@ -108,6 +109,7 @@ public class Printer : IPrinter
                 }
             }
         }
+
         File.WriteAllTextAsync($@"{outputDirName}\datawalletModifications.csv", stringBuilder.ToString());
     }
 
