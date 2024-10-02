@@ -1,0 +1,20 @@
+{
+    "profiles": {
+        "Pool Generator Light": {
+            "commandName": "Project",
+            "commandLineArgs": "GeneratePools --poolsFile pool-config.light.json"
+        },
+        "Pool Generator Heavy": {
+            "commandName": "Project",
+            "commandLineArgs": "GeneratePools --poolsFile pool-config.heavy.json"
+        },
+        "Pool Generator Test": {
+            "commandName": "Project",
+            "commandLineArgs": "GeneratePools --poolsFile pool-config.test.json"
+        },
+        "Create Entities Light": {
+            "commandName": "Project",
+            "commandLineArgs": "CreateEntities --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pool-config.test.json --relationshipsAndMessages path\\to\\relationshipsAndMessages.csv"
+        }
+    }
+}
