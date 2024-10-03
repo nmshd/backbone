@@ -38,7 +38,7 @@ public class RelationshipTemplatesController : ApiControllerBase
         return Ok(template);
     }
 
-    [HttpGet]
+    [HttpGet("Alt/Templates")] // todo: remove 'Alt/Templates' extension once the transport tests are updated
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipTemplatesResponse>),
         StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter, [FromQuery] string templates, CancellationToken cancellationToken)
@@ -56,12 +56,12 @@ public class RelationshipTemplatesController : ApiControllerBase
         return Paged(template);
     }
 
-    [HttpGet]
+    [HttpGet] // todo: remove this endpoint once the transport tests are updated
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipTemplatesResponse>),
         StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter, [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAllWithIds([FromQuery] PaginationFilter paginationFilter, [FromQuery] string ids, CancellationToken cancellationToken)
     {
-        var relationshipTemplateQueries = ids.Select(id => new RelationshipTemplateQuery { Id = id }).ToList();
+        var relationshipTemplateQueries = new List<string>(ids.Split(',')).Select(id => new RelationshipTemplateQuery { Id = id }).ToList();
 
         var request = new ListRelationshipTemplatesQuery(paginationFilter, relationshipTemplateQueries);
 
