@@ -71,7 +71,7 @@ public class RelationshipTemplate : Entity
         return Allocations.All(x => x.AllocatedBy != identity);
     }
 
-    // TODO @Nikola: Find a better name for this
+    public bool CanBeCollectedUsingPassword(IdentityAddress address, byte[]? password)
     public bool CanBeCollectedWithPassword2(IdentityAddress address, byte[]? password)
     {
         return Password == null || password != null && Password.SequenceEqual(password) || CreatedBy == address;
