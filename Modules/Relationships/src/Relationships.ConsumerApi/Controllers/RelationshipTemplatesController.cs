@@ -56,6 +56,25 @@ public class RelationshipTemplatesController : ApiControllerBase
         return Paged(template);
     }
 
+    [HttpGet]
+    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipTemplatesResponse>),
+        StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter, [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
+    {
+        var relationshipTemplateQueries = ids.Select(id => new RelationshipTemplateQuery { Id = id }).ToList();
+
+        var request = new ListRelationshipTemplatesQuery(paginationFilter, relationshipTemplateQueries);
+
+        request.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
+
+        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
+            throw new ApplicationException(
+                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
+
+        var template = await _mediator.Send(request, cancellationToken);
+        return Paged(template);
+    }
+
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<CreateRelationshipTemplateResponse>),
         StatusCodes.Status201Created)]
