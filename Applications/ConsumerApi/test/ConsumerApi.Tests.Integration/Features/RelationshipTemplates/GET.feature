@@ -21,7 +21,6 @@ User requests Relationship Templates
           | rt12      | i2         | i3          | -        |
           | rt13      | i2         | i3          | password |
           | rt14      | i2         | i3          | password |
-          | rt15      | i2         | i3          | password |
         When <activeIdentity> sends a GET request to the /RelationshipTemplate endpoint with the following payloads
           | rTempName | passwordOnGet |
           | rt1       | -             |
@@ -38,8 +37,7 @@ User requests Relationship Templates
           | rt12      | -             |
           | rt13      | password      |
           | rt14      | wordpass      |
-          | rt15      | password      |
-        Then the response contains <itemCount> Relationship Template(s)
+		Then the response contains Relationship Template(s) <retreivedTemplates>
 
         Examples:
           | activeIdentity | itemCount |
