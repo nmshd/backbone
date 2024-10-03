@@ -72,7 +72,6 @@ public class RelationshipTemplate : Entity
     }
 
     public bool CanBeCollectedUsingPassword(IdentityAddress address, byte[]? password)
-    public bool CanBeCollectedWithPassword2(IdentityAddress address, byte[]? password)
     {
         return Password == null || password != null && Password.SequenceEqual(password) || CreatedBy == address;
     }
