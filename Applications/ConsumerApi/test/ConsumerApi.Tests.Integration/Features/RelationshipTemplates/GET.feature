@@ -40,8 +40,8 @@ User requests Relationship Templates
 		Then the response contains Relationship Template(s) <retreivedTemplates>
 
         Examples:
-          | activeIdentity | itemCount |
-          | i1             | 8         |
-          | i2             | 1         |
-          | i3             | 1         |
-          | i4             | 1         |
+		| activeIdentity | retreivedTemplates                                              |
+		| i1             | rt1, rt2, rt3, rt4, rt5, rt6, rt7, rt9                          |
+		| i2             | rt1, rt2, rt3, rt4, rt5, rt7, rt8, rt10, rt11, rt12, rt13, rt14 |
+		| i3             | rt1, rt2, rt3, rt4, rt5, rt7, rt10, rt12, rt13                  |
+		| i4             | rt1, rt2, rt3, rt4, rt5, rt7                                    |
