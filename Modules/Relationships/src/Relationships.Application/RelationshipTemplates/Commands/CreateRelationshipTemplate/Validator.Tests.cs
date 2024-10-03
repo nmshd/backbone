@@ -15,7 +15,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateRelationshipTemplateCommand { ExpiresAt = DateTime.UtcNow.AddDays(1), MaxNumberOfAllocations = 1, Content = [1], ForIdentity = TestDataGenerator.CreateRandomIdentityAddress() });
+            new CreateRelationshipTemplateCommand { ExpiresAt = DateTime.UtcNow.AddDays(1), MaxNumberOfAllocations = 1, Content = [1], ForIdentity = TestDataGenerator.CreateRandomIdentityAddress(), Password = [1] });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -75,5 +75,22 @@ public class ValidatorTests : AbstractTestsBase
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(CreateRelationshipTemplateCommand.ForIdentity));
+    }
+
+    [Fact]
+    public void Fails_when_Password_is_too_long()
+    {
+        // Arrange
+        var validator = new Validator();
+
+        var password = new byte[250];
+        new Random().NextBytes(password);
+
+        // Act
+        var validationResult = validator.TestValidate(
+            new CreateRelationshipTemplateCommand() { Content = [1], Password = password });
+
+        // Assert
+        validationResult.ShouldHaveValidationErrorForItem(nameof(CreateRelationshipTemplateCommand.Password), "error.platform.validation.invalidPropertyValue", "Password must not exceed 200 bytes.");
     }
 }
