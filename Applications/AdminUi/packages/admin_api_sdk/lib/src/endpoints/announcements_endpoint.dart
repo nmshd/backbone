@@ -6,9 +6,8 @@ import 'endpoint.dart';
 class AnnouncementsEndpoint extends Endpoint {
   AnnouncementsEndpoint(super.dio);
 
-  Future<ApiResponse<CreateAnnouncement>> createClient() => post(
-        '/api/v1/Clients',
-        data: {},
-        transformer: CreateAnnouncement.fromJson,
+  Future<ApiResponse<List<AnnouncementOverview>>> getAnnouncements() => get(
+        '/api/v1/Announcements',
+        transformer: (e) => (e as List).map(AnnouncementOverview.fromJson).toList(),
       );
 }

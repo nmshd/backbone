@@ -1,8 +1,11 @@
+import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '/core/core.dart';
 import 'modals/create_announcement_dialog.dart';
+import 'modals/show_announcement_details_dialog.dart';
 
 class AnnouncementsOverview extends StatefulWidget {
   const AnnouncementsOverview({super.key});
@@ -12,6 +15,8 @@ class AnnouncementsOverview extends StatefulWidget {
 }
 
 class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
+  List<AnnouncementOverview> _announcements = [];
+
   @override
   void initState() {
     super.initState();
@@ -36,7 +41,7 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
                   if (kIsDesktop)
                     IconButton(
                       icon: const Icon(Icons.refresh),
-                      onPressed: () async {},
+                      onPressed: () async => _reloadAnnouncements(),
                       tooltip: context.l10n.reload,
                     ),
                   IconButton.filled(
@@ -47,14 +52,38 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
               ),
               Expanded(
                 child: DataTable2(
+                  empty: Text(context.l10n.announcementsOverview_noAnnouncementsFound),
                   columns: <DataColumn2>[
-                    DataColumn2(label: Text(context.l10n.id)),
+                    DataColumn2(label: Text(context.l10n.title)),
                     DataColumn2(label: Text(context.l10n.createdAt)),
                     DataColumn2(label: Text(context.l10n.expiresAt)),
                     DataColumn2(label: Text(context.l10n.announcementsOverview_severity)),
-                    const DataColumn2(label: Text('')),
                   ],
-                  rows: const [],
+                  rows: _announcements
+                      .map(
+                        (announcement) => DataRow2(
+                          onTap: () => showAnnouncementDetailsDialog(context: context, announcementTexts: announcement.announcementTexts),
+                          cells: [
+                            DataCell(Text(announcement.englishTitle)),
+                            DataCell(
+                              Tooltip(
+                                message:
+                                    '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.createdAt)} ${DateFormat.Hms().format(announcement.createdAt)}',
+                                child: Text(DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.createdAt)),
+                              ),
+                            ),
+                            DataCell(
+                              Tooltip(
+                                message:
+                                    '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.expiresAt)} ${DateFormat.Hms().format(announcement.expiresAt)}',
+                                child: Text(DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.expiresAt)),
+                              ),
+                            ),
+                            DataCell(Text(announcement.severity)),
+                          ],
+                        ),
+                      )
+                      .toList(),
                 ),
               ),
             ],
@@ -65,6 +94,9 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
   }
 
   Future<void> _reloadAnnouncements() async {
-    setState(() {});
+    //TODO: uncomment when the endpoint is ready
+    // final response = await GetIt.I.get<AdminApiClient>().announcements.getAnnouncements();
+    // if (mounted) setState(() => _announcements = response.data);
+    if (mounted) setState(() => _announcements = []);
   }
 }
