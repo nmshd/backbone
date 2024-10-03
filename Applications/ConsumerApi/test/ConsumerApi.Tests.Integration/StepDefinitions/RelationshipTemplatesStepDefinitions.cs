@@ -102,7 +102,7 @@ internal class RelationshipTemplatesStepDefinitions
         var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateName].Id;
 
         _responseContext.WhenResponse = password != "-"
-            ? await client.RelationshipTemplates.GetTemplate(relationshipTemplateId, password.Trim())
+            ? await client.RelationshipTemplates.GetTemplate(relationshipTemplateId, Convert.FromBase64String(password.Trim()))
             : await client.RelationshipTemplates.GetTemplate(relationshipTemplateId);
     }
 
@@ -111,33 +111,28 @@ internal class RelationshipTemplatesStepDefinitions
     {
         var client = _clientPool.FirstForIdentityName(identityName);
 
-        var jsonTemplate = "[";
-
-        for (var i = 0; i < table.RowCount; i++)
+        var queries = table.Rows.Select(r =>
         {
-            var (rTempName, passwordOnGet) = ExtractRelationshipTemplateQueryValues(table.Rows[i]);
+            var (rTempName, passwordOnGet) = ExtractRelationshipTemplateQueryValues(r);
+
             var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[rTempName].Id;
-            var q = $"{{\"Id\":\"{relationshipTemplateId}\"{(passwordOnGet == "-" ? "" : $",\"Password\":\"{passwordOnGet}\"")}}}";
+            var password = passwordOnGet == "-" ? null : Convert.FromBase64String(passwordOnGet.Trim());
 
-            if (i < table.RowCount - 1)
-                q += ",";
+            return new RelationshipTemplateQuery { Id = relationshipTemplateId, Password = password };
+        }).ToList();
 
-            jsonTemplate += q;
-        }
-
-        jsonTemplate += "]";
-
-        _responseContext.WhenResponse = _listRelationshipTemplatesResponse = await client.RelationshipTemplates.ListTemplates(jsonTemplate);
+        _responseContext.WhenResponse = _listRelationshipTemplatesResponse = await client.RelationshipTemplates.ListTemplates(queries);
     }
 
     #endregion
 
     #region Then
 
-    [Then(@"the response contains (\d+) Relationship Template\(s\)")]
-    public void ThenTheResponseContainsRelationshipTemplates(int relationshipTemplateCount)
+    [Then($@"the response contains Relationship Template\(s\) {RegexFor.LIST_OF_THINGS}")]
+    public void ThenTheResponseContainsRelationshipTemplates(string relationshipTemplateNames)
     {
-        _listRelationshipTemplatesResponse!.Result!.Count.Should().Be(relationshipTemplateCount);
+        var relationshipTemplates = relationshipTemplateNames.Split(',').Select(item => _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[item.Trim()]).ToList();
+        _listRelationshipTemplatesResponse!.Result!.Should().BeEquivalentTo(relationshipTemplates, options => options.WithStrictOrdering());
     }
 
     #endregion
