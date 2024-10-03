@@ -22,7 +22,7 @@ public record CommunicationLanguage
         var validationResult = Validate(value);
         if (validationResult != null)
             return Result.Failure<CommunicationLanguage, DomainError>(validationResult);
-        return Result.Success<CommunicationLanguage, DomainError>(new CommunicationLanguage(value));
+        return new CommunicationLanguage(value);
     }
 
     public static DomainError? Validate(string value)
