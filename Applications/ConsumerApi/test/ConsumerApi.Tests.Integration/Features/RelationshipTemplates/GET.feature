@@ -3,7 +3,7 @@ Feature: GET /RelationshipTemplates
 
 User requests Relationship Templates
 
-    Scenario Outline: GET Multiple
+	Scenario Outline: Requesting a list of Relationship Templates in a variety of scenarios
         Given Identities i1, i2, i3 and i4
         And Relationship Templates with the following properties
           | rTempName | rTempOwner | forIdentity | password |
