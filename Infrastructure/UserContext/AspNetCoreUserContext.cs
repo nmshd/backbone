@@ -28,7 +28,6 @@ public class AspNetCoreUserContext : IUserContext
     public IdentityAddress? GetAddressOrNull()
     {
         var address = GetHttpContext().User.FindFirstValue(ADDRESS_CLAIM);
-
         return address == null ? null : IdentityAddress.Parse(address);
     }
 
@@ -41,7 +40,6 @@ public class AspNetCoreUserContext : IUserContext
     public DeviceId? GetDeviceIdOrNull()
     {
         var deviceId = GetHttpContext().User.FindFirstValue(DEVICE_ID_CLAIM);
-
         return deviceId == null ? null : DeviceId.Parse(deviceId);
     }
 
@@ -54,7 +52,6 @@ public class AspNetCoreUserContext : IUserContext
     public string? GetUserIdOrNull()
     {
         var userId = GetHttpContext().User.FindFirstValue(USER_ID_CLAIM);
-
         return userId;
     }
 

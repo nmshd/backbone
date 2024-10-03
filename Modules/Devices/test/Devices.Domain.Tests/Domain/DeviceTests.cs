@@ -58,7 +58,7 @@ public class DeviceTests : AbstractTestsBase
         var identity = TestDataGenerator.CreateIdentity();
         var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
 
-        device.User = new ApplicationUser(identity, CommunicationLanguage.DEFAULT_LANGUAGE, device.Id);
+        device.User = new ApplicationUser(device);
 
         // Act
         var isOnboarded = device.IsOnboarded;
@@ -74,7 +74,7 @@ public class DeviceTests : AbstractTestsBase
         var identity = TestDataGenerator.CreateIdentity();
         var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
 
-        device.User = new ApplicationUser(identity, CommunicationLanguage.DEFAULT_LANGUAGE, device.Id);
+        device.User = new ApplicationUser(device);
         device.User.LoginOccurred();
 
         // Act
@@ -138,15 +138,12 @@ public class DeviceTests : AbstractTestsBase
 
     private static Device CreateUnonboardedDevice(Identity identity)
     {
-        var activeDevice = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
-        activeDevice.User = new ApplicationUser(identity, CommunicationLanguage.DEFAULT_LANGUAGE, activeDevice.Id);
-        return activeDevice;
+        return identity.AddDevice(CommunicationLanguage.DEFAULT_LANGUAGE, identity.Devices.First().Id);
     }
 
     private static Device CreateOnboardedDevice(Identity identity)
     {
         var activeDevice = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
-        activeDevice.User = new ApplicationUser(identity, CommunicationLanguage.DEFAULT_LANGUAGE, activeDevice.Id);
         activeDevice.User.LoginOccurred();
         return activeDevice;
     }
