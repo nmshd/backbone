@@ -3,33 +3,19 @@ using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
+using Newtonsoft.Json;
 
 namespace Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates;
 
 public class RelationshipTemplatesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
-    public async Task<ApiResponse<ListRelationshipTemplatesResponse>> ListTemplates(PaginationFilter? pagination = null)
-    {
-        return await _client.Get<ListRelationshipTemplatesResponse>($"api/{API_VERSION}/RelationshipTemplates", null, pagination);
-    }
-
-    public async Task<ApiResponse<ListRelationshipTemplatesResponse>> ListTemplates(IEnumerable<string> ids, PaginationFilter? pagination = null)
+    public async Task<ApiResponse<ListRelationshipTemplatesResponse>> ListTemplates(IEnumerable<RelationshipTemplateQuery> queries, PaginationFilter? pagination = null)
     {
         return await _client
             .Request<ListRelationshipTemplatesResponse>(HttpMethod.Get, $"api/{API_VERSION}/RelationshipTemplates")
             .Authenticate()
             .WithPagination(pagination)
-            .AddQueryParameter("ids", ids)
-            .Execute();
-    }
-
-    public async Task<ApiResponse<ListRelationshipTemplatesResponse>> ListTemplates(string jsonTemplate, PaginationFilter? pagination = null)
-    {
-        return await _client
-            .Request<ListRelationshipTemplatesResponse>(HttpMethod.Get, $"api/{API_VERSION}/RelationshipTemplates")
-            .Authenticate()
-            .WithPagination(pagination)
-            .AddQueryParameter("templates", jsonTemplate)
+            .AddQueryParameter("templates", queries.ToJson())
             .Execute();
     }
 
@@ -38,13 +24,21 @@ public class RelationshipTemplatesEndpoint(EndpointClient client) : ConsumerApiE
         return await _client.Get<RelationshipTemplate>($"api/{API_VERSION}/RelationshipTemplates/{id}");
     }
 
-    public async Task<ApiResponse<RelationshipTemplate>> GetTemplate(string id, string password)
+    public async Task<ApiResponse<RelationshipTemplate>> GetTemplate(string id, byte[] password)
     {
-        return await _client.Get<RelationshipTemplate>($"api/{API_VERSION}/RelationshipTemplates/{id}?password={password}");
+        return await _client.Get<RelationshipTemplate>($"api/{API_VERSION}/RelationshipTemplates/{id}?password={Convert.ToBase64String(password)}");
     }
 
     public async Task<ApiResponse<CreateRelationshipTemplateResponse>> CreateTemplate(CreateRelationshipTemplateRequest request)
     {
         return await _client.Post<CreateRelationshipTemplateResponse>($"api/{API_VERSION}/RelationshipTemplates", request);
+    }
+}
+
+public static class RelationshipTemplateQueryExtensions
+{
+    public static string ToJson(this IEnumerable<RelationshipTemplateQuery> queries)
+    {
+        return JsonConvert.SerializeObject(queries, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, Formatting = Formatting.None });
     }
 }
