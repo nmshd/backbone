@@ -72,34 +72,6 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return templates;
     }
 
-    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds2(IEnumerable<RelationshipTemplateQuery> queries, IdentityAddress identityAddress,
-        PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
-    {
-        var queriesList = queries.ToList();
-
-        var query = (track ? _templates : _readOnlyTemplates)
-            .AsQueryable()
-            .NotExpiredFor(identityAddress)
-            .Where(RelationshipTemplate.CanBeCollectedBy(identityAddress))
-            .WithIdIn(queriesList.Select(q => RelationshipTemplateId.Parse(q.Id)));
-
-        var templates = await query.ToListAsync(cancellationToken);
-
-        var filteredTemplates = templates
-            //.CanBeCollectedWithPassword(identityAddress, queriesList)
-            .ToList();
-
-        // move password check to the handler
-
-        var paginatedTemplates = filteredTemplates
-            .OrderBy(d => d.CreatedAt)
-            .Skip((paginationFilter.PageNumber - 1) * (paginationFilter.PageSize ?? filteredTemplates.Count))
-            .Take(paginationFilter.PageSize ?? filteredTemplates.Count)
-            .ToList();
-
-        return new DbPaginationResult<RelationshipTemplate>(paginatedTemplates, filteredTemplates.Count);
-    }
-
     public async Task Update(RelationshipTemplate template)
     {
         _templates.Update(template);
