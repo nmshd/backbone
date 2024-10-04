@@ -9,12 +9,14 @@ class IdentityDevice {
   final DateTime createdAt;
   final String createdByDevice;
   final Map<String, dynamic>? lastLogin;
+  final String communicationLanguage;
 
   IdentityDevice({
     required this.id,
     required this.username,
     required this.createdAt,
     required this.createdByDevice,
+    required this.communicationLanguage,
     this.lastLogin,
   });
 
