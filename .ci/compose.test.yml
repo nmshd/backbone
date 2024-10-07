@@ -13,7 +13,7 @@ services:
       rabbitmq:
         condition: service_started
       azure-storage-emulator:
-        condition: service_healthy
+        condition: service_started
     configs:
       - source: Config
         target: app/appsettings.override.json
