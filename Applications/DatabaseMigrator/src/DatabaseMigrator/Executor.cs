@@ -1,13 +1,4 @@
 ﻿using System.Data.SqlClient;
-using Backbone.AdminApi.Infrastructure.Persistence.Database;
-using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Files.Infrastructure.Persistence.Database;
-using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
-using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
-using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -19,50 +10,17 @@ namespace Backbone.DatabaseMigrator;
 
 public class Executor
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly DbContextProvider _dbContextProvider;
+    private readonly MigrationReader _migrationReader;
     private readonly ILogger<Executor> _logger;
 
     private readonly Stack<(Type dbContextType, string? migrationBeforeChanges)> _migratedDbContexts = new();
     private readonly RetryPolicy _retryPolicy;
 
-    private readonly Dictionary<Type, ModuleType> _modules = new()
+    public Executor(DbContextProvider dbContextProvider, MigrationReader migrationReader, ILogger<Executor> logger)
     {
-        { typeof(ChallengesDbContext), ModuleType.Challenges }, { typeof(DevicesDbContext), ModuleType.Devices },
-        { typeof(FilesDbContext), ModuleType.Files }, { typeof(RelationshipsDbContext), ModuleType.Relationships },
-        { typeof(QuotasDbContext), ModuleType.Quotas }, { typeof(MessagesDbContext), ModuleType.Messages },
-        { typeof(SynchronizationDbContext), ModuleType.Synchronization }, { typeof(TokensDbContext), ModuleType.Tokens },
-        { typeof(AdminApiDbContext), ModuleType.AdminApi }
-    };
-
-    private readonly List<Type> _moduleContextTypes =
-    [
-        typeof(AdminApiDbContext),
-        typeof(ChallengesDbContext),
-        typeof(DevicesDbContext),
-        typeof(FilesDbContext),
-        typeof(MessagesDbContext),
-        typeof(QuotasDbContext),
-        typeof(RelationshipsDbContext),
-        typeof(SynchronizationDbContext),
-        typeof(TokensDbContext)
-    ];
-
-    private readonly List<ModuleType> _initMigrationsOrder =
-    [
-        ModuleType.Challenges,
-        ModuleType.Devices,
-        ModuleType.Files,
-        ModuleType.Quotas,
-        ModuleType.Relationships,
-        ModuleType.Synchronization,
-        ModuleType.Tokens,
-        ModuleType.Messages,
-        ModuleType.AdminApi
-    ];
-
-    public Executor(IServiceProvider serviceProvider, ILogger<Executor> logger)
-    {
-        _serviceProvider = serviceProvider;
+        _dbContextProvider = dbContextProvider;
+        _migrationReader = migrationReader;
         _logger = logger;
 
         _retryPolicy = Policy.Handle<SqlException>().Or<PostgresException>()
@@ -75,13 +33,29 @@ public class Executor
 
     public async Task Execute()
     {
-        _logger.StartReadingMigrations();
-
-        IReadOnlyList<MigrationId> migrationList = [];
+        var migrations = await ReadMigrations();
 
         try
         {
-            migrationList = await ReadMigrations();
+            await ApplyMigrations(migrations);
+        }
+        catch (Exception ex)
+        {
+            _logger.ErrorWhileApplyingMigrations(ex);
+            await RollbackAlreadyMigratedDbContexts();
+            Environment.Exit(1);
+        }
+    }
+
+    private async Task<IEnumerable<Migration>> ReadMigrations()
+    {
+        _logger.StartReadingMigrations();
+
+        IEnumerable<Migration> migrations = [];
+
+        try
+        {
+            migrations = await _migrationReader.ReadMigrations();
         }
         catch (Exception ex)
         {
@@ -91,46 +65,22 @@ public class Executor
 
         _logger.SuccessfullyReadMigrations();
 
+        return migrations;
+    }
+
+    private async Task ApplyMigrations(IEnumerable<Migration> migrations)
+    {
         _logger.StartApplyingMigrations();
 
-        try
-        {
-            foreach (var info in migrationList) await MigrateDbContext(_moduleContextTypes[(int)info.Type], info.Id);
-        }
-        catch (Exception ex)
-        {
-            _logger.ErrorWhileApplyingMigrations(ex);
-            await RollbackAlreadyMigratedDbContexts();
-            Environment.Exit(1);
-        }
+        foreach (var migration in migrations)
+            await MigrateDbContext(migration.DbContextType, migration.Name);
 
         _logger.SuccessfullyAppliedMigrations();
     }
 
-    private async Task<IReadOnlyList<MigrationId>> ReadMigrations()
-    {
-        List<MigrationId> migrations = [];
-
-        foreach (var (type, moduleType) in _modules)
-        {
-            var context = _serviceProvider.GetDbContext(type);
-            var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
-
-            migrations.AddRange(pendingMigrations.Select(id => new MigrationId(moduleType, id)));
-        }
-
-        var initMigrations = migrations.FindAll(id => id.Id.EndsWith("Init"));
-        migrations.RemoveAll(id => id.Id.EndsWith("Init"));
-
-        migrations.Sort((a, b) => string.CompareOrdinal(a.Id, b.Id));
-        migrations.InsertRange(0, initMigrations.OrderBy(id => _initMigrationsOrder.IndexOf(id.Type)));
-
-        return migrations;
-    }
-
     private async Task MigrateDbContext(Type contextType, string? targetMigration = null)
     {
-        await using var context = _serviceProvider.GetDbContext(contextType);
+        await using var context = _dbContextProvider.GetDbContext(contextType);
 
         if (targetMigration == null)
             _logger.MigratingDbContextToLatestMigration(contextType.Name);
@@ -153,6 +103,7 @@ public class Executor
         }
         finally
         {
+            // we have to add the context even in case of an exception, because only some of the migrations might have been applied
             _migratedDbContexts.Push((context.GetType(), migrationBeforeChanges));
         }
 
@@ -168,9 +119,9 @@ public class Executor
         {
             var (contextType, migrationBeforeChanges) = _migratedDbContexts.Pop();
 
-            await using var context = _serviceProvider.GetDbContext(contextType);
+            await using var context = _dbContextProvider.GetDbContext(contextType);
 
-            // if the migrationBeforeChanges is null, this means that it was the first migration; EF Core doesn't allow unapplying the first migration. But it's no problem because 
+            // if the migrationBeforeChanges is null, this means that it was the first migration; EF Core doesn't allow un-applying the first migration. But it's no problem because 
             // if there is only one migration, it means that in case of a rollback of the application version, there will be nothing that needs the tables from the first migration. 
             if (migrationBeforeChanges == null)
                 continue;
@@ -191,21 +142,6 @@ public class Executor
     }
 }
 
-public enum ModuleType
-{
-    AdminApi,
-    Challenges,
-    Devices,
-    Files,
-    Messages,
-    Quotas,
-    Relationships,
-    Synchronization,
-    Tokens
-}
-
-public record MigrationId(ModuleType Type, string Id);
-
 file static class Extensions
 {
     public static async Task MigrateTo(this DbContext dbContext, string? targetMigration = null)
@@ -216,16 +152,8 @@ file static class Extensions
 
     public static async Task<string?> GetLastAppliedMigration(this DbContext dbContext)
     {
-        var stateBeforeMigration = await dbContext.Database.GetAppliedMigrationsAsync();
-        var migrationBeforeChanges = stateBeforeMigration.LastOrDefault();
-        return migrationBeforeChanges;
-    }
-
-    public static DbContext GetDbContext(this IServiceProvider serviceProvider, Type type)
-    {
-        var scope = serviceProvider.CreateScope();
-        var context = (DbContext)scope.ServiceProvider.GetRequiredService(type);
-        return context;
+        var appliedMigrations = await dbContext.Database.GetAppliedMigrationsAsync();
+        return appliedMigrations.LastOrDefault();
     }
 }
 
