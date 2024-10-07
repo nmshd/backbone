@@ -1,13 +1,4 @@
 ﻿using System.Data.SqlClient;
-using Backbone.AdminApi.Infrastructure.Persistence.Database;
-using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
-using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
-using Backbone.Modules.Files.Infrastructure.Persistence.Database;
-using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
-using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
-using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
-using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -19,15 +10,17 @@ namespace Backbone.DatabaseMigrator;
 
 public class Executor
 {
-    private readonly IServiceProvider _serviceProvider;
+    private readonly DbContextProvider _dbContextProvider;
+    private readonly MigrationReader _migrationReader;
     private readonly ILogger<Executor> _logger;
 
     private readonly Stack<(Type dbContextType, string? migrationBeforeChanges)> _migratedDbContexts = new();
     private readonly RetryPolicy _retryPolicy;
 
-    public Executor(IServiceProvider serviceProvider, ILogger<Executor> logger)
+    public Executor(DbContextProvider dbContextProvider, MigrationReader migrationReader, ILogger<Executor> logger)
     {
-        _serviceProvider = serviceProvider;
+        _dbContextProvider = dbContextProvider;
+        _migrationReader = migrationReader;
         _logger = logger;
 
         _retryPolicy = Policy.Handle<SqlException>().Or<PostgresException>()
@@ -40,19 +33,11 @@ public class Executor
 
     public async Task Execute()
     {
-        _logger.StartApplyingMigrations();
+        var migrations = await ReadMigrations();
 
         try
         {
-            await MigrateDbContext<ChallengesDbContext>();
-            await MigrateDbContext<DevicesDbContext>();
-            await MigrateDbContext<FilesDbContext>();
-            await MigrateDbContext<RelationshipsDbContext>();
-            await MigrateDbContext<QuotasDbContext>();
-            await MigrateDbContext<MessagesDbContext>();
-            await MigrateDbContext<SynchronizationDbContext>();
-            await MigrateDbContext<TokensDbContext>();
-            await MigrateDbContext<AdminApiDbContext>();
+            await ApplyMigrations(migrations);
         }
         catch (Exception ex)
         {
@@ -60,22 +45,47 @@ public class Executor
             await RollbackAlreadyMigratedDbContexts();
             Environment.Exit(1);
         }
+    }
+
+    private async Task<IEnumerable<Migration>> ReadMigrations()
+    {
+        _logger.StartReadingMigrations();
+
+        IEnumerable<Migration> migrations = [];
+
+        try
+        {
+            migrations = await _migrationReader.ReadMigrations();
+        }
+        catch (Exception ex)
+        {
+            _logger.ErrorWhileReadingMigrations(ex);
+            Environment.Exit(1);
+        }
+
+        _logger.SuccessfullyReadMigrations();
+
+        return migrations;
+    }
+
+    private async Task ApplyMigrations(IEnumerable<Migration> migrations)
+    {
+        _logger.StartApplyingMigrations();
+
+        foreach (var migration in migrations)
+            await MigrateDbContext(migration.DbContextType, migration.Name);
 
         _logger.SuccessfullyAppliedMigrations();
     }
 
-    private async Task MigrateDbContext<TContext>(string? targetMigration = null) where TContext : DbContext
+    private async Task MigrateDbContext(Type contextType, string? targetMigration = null)
     {
-        await using var context = _serviceProvider.GetDbContext<TContext>();
+        await using var context = _dbContextProvider.GetDbContext(contextType);
 
         if (targetMigration == null)
-            _logger.MigratingDbContextToLatestMigration(typeof(TContext).Name);
+            _logger.MigratingDbContextToLatestMigration(contextType.Name);
         else
-            _logger.MigratingDbContextToTargetMigration(typeof(TContext).Name, targetMigration);
-
-        var pendingMigrations = await context.Database.GetPendingMigrationsAsync();
-        if (!pendingMigrations.Any())
-            return;
+            _logger.MigratingDbContextToTargetMigration(contextType.Name, targetMigration);
 
         var migrationBeforeChanges = await context.GetLastAppliedMigration();
 
@@ -86,31 +96,32 @@ public class Executor
         catch (Exception ex)
         {
             if (targetMigration == null)
-                _logger.ErrorWhileApplyingMigrationToLatestMigration(ex, typeof(TContext).Name);
+                _logger.ErrorWhileApplyingMigrationToLatestMigration(ex, contextType.Name);
             else
-                _logger.ErrorWhileApplyingMigrationToTargetMigration(ex, typeof(TContext).Name, targetMigration);
+                _logger.ErrorWhileApplyingMigrationToTargetMigration(ex, contextType.Name, targetMigration);
             throw;
         }
         finally
         {
+            // we have to add the context even in case of an exception, because only some of the migrations might have been applied
             _migratedDbContexts.Push((context.GetType(), migrationBeforeChanges));
         }
 
         if (targetMigration == null)
-            _logger.SuccessfullyMigratedDbContextToLatestMigration(typeof(TContext).Name);
+            _logger.SuccessfullyMigratedDbContextToLatestMigration(contextType.Name);
         else
-            _logger.SuccessfullyMigratedDbContextToTargetMigration(typeof(TContext).Name, targetMigration);
+            _logger.SuccessfullyMigratedDbContextToTargetMigration(contextType.Name, targetMigration);
     }
 
     private async Task RollbackAlreadyMigratedDbContexts()
     {
         while (_migratedDbContexts.Count != 0)
         {
-            var (contextType, migrationBeforeChanges) = _migratedDbContexts.Peek();
+            var (contextType, migrationBeforeChanges) = _migratedDbContexts.Pop();
 
-            await using var context = _serviceProvider.GetDbContext(contextType);
+            await using var context = _dbContextProvider.GetDbContext(contextType);
 
-            // if the migrationBeforeChanges is null, this means that it was the first migration; EF Core doesn't allow unapplying the first migration. But it's no problem because 
+            // if the migrationBeforeChanges is null, this means that it was the first migration; EF Core doesn't allow un-applying the first migration. But it's no problem because 
             // if there is only one migration, it means that in case of a rollback of the application version, there will be nothing that needs the tables from the first migration. 
             if (migrationBeforeChanges == null)
                 continue;
@@ -127,8 +138,6 @@ public class Executor
 
                 _logger.ErrorOnRollback(ex, context.GetType().Name, migrationBeforeChanges, remainingDbContexts);
             }
-
-            _migratedDbContexts.Pop();
         }
     }
 }
@@ -143,21 +152,8 @@ file static class Extensions
 
     public static async Task<string?> GetLastAppliedMigration(this DbContext dbContext)
     {
-        var stateBeforeMigration = await dbContext.Database.GetAppliedMigrationsAsync();
-        var migrationBeforeChanges = stateBeforeMigration.LastOrDefault();
-        return migrationBeforeChanges;
-    }
-
-    public static DbContext GetDbContext<T>(this IServiceProvider serviceProvider) where T : DbContext
-    {
-        return serviceProvider.GetDbContext(typeof(T));
-    }
-
-    public static DbContext GetDbContext(this IServiceProvider serviceProvider, Type type)
-    {
-        var scope = serviceProvider.CreateScope();
-        var context = (DbContext)scope.ServiceProvider.GetRequiredService(type);
-        return context;
+        var appliedMigrations = await dbContext.Database.GetAppliedMigrationsAsync();
+        return appliedMigrations.LastOrDefault();
     }
 }
 
@@ -243,4 +239,25 @@ internal static partial class ExecutorLogs
         Message =
             "There was an error while rolling back the migration of context '{context}' to migration '{migrationBeforeChanges}'. The following DbContexts couldn't be rolled back: {remainingDbContexts}")]
     public static partial void ErrorOnRollback(this ILogger logger, Exception ex, string context, string migrationBeforeChanges, string remainingDbContexts);
+
+    [LoggerMessage(
+        EventId = 561111,
+        EventName = "DatabaseMigrator.Executor.StartReadingMigrations",
+        Level = LogLevel.Information,
+        Message = "Start reading migrations...")]
+    public static partial void StartReadingMigrations(this ILogger logger);
+
+    [LoggerMessage(
+        EventId = 561112,
+        EventName = "DatabaseMigrator.Executor.SuccessfullyReadMigrations",
+        Level = LogLevel.Information,
+        Message = "All migrations were successfully read")]
+    public static partial void SuccessfullyReadMigrations(this ILogger logger);
+
+    [LoggerMessage(
+        EventId = 561113,
+        EventName = "DatabaseMigrator.Executor.ErrorWhileReadingMigrations",
+        Level = LogLevel.Critical,
+        Message = "An error occurred while reading the migrations. No changes will be made")]
+    public static partial void ErrorWhileReadingMigrations(this ILogger logger, Exception ex);
 }
