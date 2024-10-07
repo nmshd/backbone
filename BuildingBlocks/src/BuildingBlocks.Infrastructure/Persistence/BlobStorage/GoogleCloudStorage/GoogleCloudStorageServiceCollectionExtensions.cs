@@ -30,6 +30,8 @@ public static class GoogleCloudStorageServiceCollectionExtensions
             return storageClient;
         });
 
+        services.AddSingleton(_ => options);
+
         services.AddScoped<IBlobStorage>(sp =>
         {
             var storageClient = sp.GetService<StorageClient>();

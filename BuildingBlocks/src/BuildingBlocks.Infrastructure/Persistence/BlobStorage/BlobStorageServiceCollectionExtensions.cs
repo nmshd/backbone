@@ -37,6 +37,7 @@ public static class BlobStorageServiceCollectionExtensions
                     googleCloudStorageOptions.GcpAuthJson = options.ConnectionInfo;
                     googleCloudStorageOptions.BucketName = options.Container;
                 });
+                services.AddHealthChecks().AddCheck<GoogleCloudStorageHealthCheck>("GoogleCloud");
                 break;
             default:
             {
