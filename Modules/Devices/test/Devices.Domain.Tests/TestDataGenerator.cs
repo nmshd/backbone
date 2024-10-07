@@ -13,7 +13,8 @@ public static class TestDataGenerator
             CreateRandomIdentityAddress(),
             CreateRandomBytes(),
             tierId ?? TierId.Generate(),
-            1);
+            1,
+            CommunicationLanguage.DEFAULT_LANGUAGE);
 
         var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
         identity.Devices.Add(device);
@@ -30,7 +31,8 @@ public static class TestDataGenerator
             CreateRandomIdentityAddress(),
             CreateRandomBytes(),
             tierId ?? TierId.Generate(),
-            1);
+            1,
+            CommunicationLanguage.DEFAULT_LANGUAGE);
 
         identity.ClearDomainEvents();
 
