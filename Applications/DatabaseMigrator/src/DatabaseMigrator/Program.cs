@@ -67,7 +67,7 @@ static IHostBuilder CreateHostBuilder(string[] args)
 
             services.AddSingleton<IEventBus, DummyEventBus>();
 
-            services.AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase);
+            services.AddAllDbContexts(parsedConfiguration.Infrastructure.SqlDatabase);
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration

@@ -53,7 +53,7 @@ public class MigrationReaderTests
         var services = new ServiceCollection();
 
         services.AddSingleton<IEventBus, DummyEventBus>();
-        services.AddDatabase(new SqlDatabaseConfiguration { Provider = "Postgres", ConnectionString = "User ID=postgres;Password=admin;Server=localhost;Port=5444;Database=enmeshed;" });
+        services.AddAllDbContexts(new SqlDatabaseConfiguration { Provider = "Postgres", ConnectionString = "User ID=postgres;Password=admin;Server=localhost;Port=5444;Database=enmeshed;" });
         services.AddSingleton<DbContextProvider>();
         services.AddSingleton<MigrationReader>();
 

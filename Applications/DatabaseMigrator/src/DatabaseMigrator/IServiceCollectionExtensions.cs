@@ -2,7 +2,7 @@
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddDatabase(this IServiceCollection services, SqlDatabaseConfiguration databaseConfiguration)
+    public static void AddAllDbContexts(this IServiceCollection services, SqlDatabaseConfiguration databaseConfiguration)
     {
         Modules.Challenges.Infrastructure.Persistence.IServiceCollectionExtensions.AddDatabase(services, options =>
         {
