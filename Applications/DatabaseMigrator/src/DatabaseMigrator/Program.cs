@@ -66,6 +66,8 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddSingleton<Executor>();
 
             services.AddSingleton<IEventBus, DummyEventBus>();
+            services.AddSingleton<DbContextProvider>();
+            services.AddSingleton<MigrationReader>();
 
             services.AddAllDbContexts(parsedConfiguration.Infrastructure.SqlDatabase);
         })
