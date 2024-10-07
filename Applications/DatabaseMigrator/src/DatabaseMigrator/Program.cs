@@ -1,7 +1,6 @@
 ﻿using System.Reflection;
 using Autofac.Extensions.DependencyInjection;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Domain.Events;
 using Backbone.DatabaseMigrator;
 using Microsoft.Extensions.Options;
 using Serilog;
@@ -9,7 +8,6 @@ using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
 using Serilog.Exceptions.EntityFrameworkCore.Destructurers;
 using Serilog.Settings.Configuration;
-using IServiceCollectionExtensions = Backbone.Modules.Challenges.Infrastructure.Persistence.IServiceCollectionExtensions;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -68,73 +66,10 @@ static IHostBuilder CreateHostBuilder(string[] args)
             services.AddSingleton<Executor>();
 
             services.AddSingleton<IEventBus, DummyEventBus>();
+            services.AddSingleton<DbContextProvider>();
+            services.AddSingleton<MigrationReader>();
 
-            # region Add db contexts
-
-            IServiceCollectionExtensions.AddDatabase(services, options =>
-            {
-                options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-                options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
-                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
-            });
-
-            Backbone.Modules.Devices.Infrastructure.Persistence.IServiceCollectionExtensions.AddDatabase(services, options =>
-            {
-                options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-                options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
-                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
-            });
-
-            Backbone.Modules.Files.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
-            {
-                options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-                options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
-                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
-            });
-
-            Backbone.Modules.Messages.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
-            {
-                options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-                options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
-                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
-            });
-
-            Backbone.Modules.Quotas.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
-            {
-                options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-                options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
-                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
-            });
-
-            Backbone.Modules.Relationships.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
-            {
-                options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-                options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
-                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
-            });
-
-            Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
-            {
-                options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-                options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
-                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
-            });
-
-            Backbone.Modules.Tokens.Infrastructure.Persistence.Database.IServiceCollectionExtensions.AddDatabase(services, options =>
-            {
-                options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-                options.DbConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
-                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
-            });
-
-            Backbone.AdminApi.Infrastructure.Persistence.IServiceCollectionExtensions.AddDatabase(services, options =>
-            {
-                options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-                options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
-                options.CommandTimeout = parsedConfiguration.Infrastructure.SqlDatabase.CommandTimeout;
-            });
-
-            #endregion
+            services.AddAllDbContexts(parsedConfiguration.Infrastructure.SqlDatabase);
         })
         .UseServiceProviderFactory(new AutofacServiceProviderFactory())
         .UseSerilog((context, configuration) => configuration
@@ -147,22 +82,4 @@ static IHostBuilder CreateHostBuilder(string[] args)
                 .WithDestructurers([new DbUpdateExceptionDestructurer()])
             )
         );
-}
-
-namespace Backbone.DatabaseMigrator
-{
-    internal class DummyEventBus : IEventBus
-    {
-        public void Publish(DomainEvent @event)
-        {
-        }
-
-        public void StartConsuming()
-        {
-        }
-
-        public void Subscribe<T, TH>() where T : DomainEvent where TH : IDomainEventHandler<T>
-        {
-        }
-    }
 }

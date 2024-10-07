@@ -69,9 +69,18 @@ public class IdentitiesRepository : IIdentitiesRepository
         return await _readonlyIdentities.CountAsync(i => i.ClientId == clientId, cancellationToken);
     }
 
-    public async Task AddUser(ApplicationUser user, string password)
+    public async Task Add(Identity identity, string password)
     {
-        var createUserResult = await _userManager.CreateAsync(user, password);
+        var createUserResult = await _userManager.CreateAsync(identity.Devices.First().User, password);
+        if (!createUserResult.Succeeded)
+            throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
+    }
+
+    public async Task UpdateWithNewDevice(Identity identity, string password)
+    {
+        var newDevice = identity.Devices.MaxBy(d => d.CreatedAt)!;
+
+        var createUserResult = await _userManager.CreateAsync(newDevice.User, password);
         if (!createUserResult.Succeeded)
             throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
     }
