@@ -68,7 +68,7 @@ public class RelationshipDecomposeTests : AbstractTestsBase
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
-            "error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus",
+            "error.platform.validation.relationship.relationshipIsNotInCorrectStatus",
             nameof(RelationshipStatus.DeletionProposed)
         );
     }
@@ -87,7 +87,7 @@ public class RelationshipDecomposeTests : AbstractTestsBase
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
-            "error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus",
+            "error.platform.validation.relationship.relationshipIsNotInCorrectStatus",
             nameof(RelationshipStatus.Terminated)
         );
     }
@@ -153,7 +153,7 @@ public class RelationshipDecomposeTests : AbstractTestsBase
         var acting = () => relationship.Decompose(externalIdentity, externalDeviceId);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.requestingIdentityDoesNotBelongToRelationship");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.requestingIdentityDoesNotBelongToRelationship");
     }
 
     [Fact]
@@ -167,7 +167,7 @@ public class RelationshipDecomposeTests : AbstractTestsBase
         var acting = () => relationship.Decompose(IDENTITY_1, DEVICE_1);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipAlreadyDecomposed");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.relationshipAlreadyDecomposed");
     }
 
     [Fact]
@@ -181,6 +181,6 @@ public class RelationshipDecomposeTests : AbstractTestsBase
         var acting = () => relationship.Decompose(IDENTITY_2, DEVICE_2);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipAlreadyDecomposed");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.relationshipAlreadyDecomposed");
     }
 }

@@ -4,7 +4,6 @@ using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
@@ -79,7 +78,7 @@ public class RelationshipRevokeTests : AbstractTestsBase
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
-            "error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus",
+            "error.platform.validation.relationship.relationshipIsNotInCorrectStatus",
             nameof(RelationshipStatus.Pending)
         );
     }
@@ -94,7 +93,7 @@ public class RelationshipRevokeTests : AbstractTestsBase
         var acting = () => relationship.Revoke(IDENTITY_2, DEVICE_2, null);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotRevokeRelationshipRequestNotCreatedByYourself");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.cannotRevokeRelationshipNotCreatedByYourself");
     }
 
     [Fact]
@@ -108,6 +107,6 @@ public class RelationshipRevokeTests : AbstractTestsBase
         var acting = () => relationship.Revoke(foreignAddress, DeviceId.New(), null);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotRevokeRelationshipRequestNotCreatedByYourself");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.cannotRevokeRelationshipNotCreatedByYourself");
     }
 }
