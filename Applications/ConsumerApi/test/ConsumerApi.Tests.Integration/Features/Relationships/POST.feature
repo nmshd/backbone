@@ -16,4 +16,4 @@ User creates a Relationship
         And i2 is in status "ToBeDeleted"
         When i1 sends a POST request to the /Relationships endpoint with rt.Id
         Then the response status code is 400 (Bad Request)
-        And the response content contains an error with the error code "error.platform.validation.relationshipRequest.peerIsToBeDeleted"
+        And the response content contains an error with the error code "error.platform.validation.relationship.peerIsToBeDeleted"

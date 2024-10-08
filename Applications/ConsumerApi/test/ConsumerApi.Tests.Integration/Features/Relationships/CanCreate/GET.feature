@@ -14,7 +14,7 @@ Feature: GET /Relationships/CanCreate
         When i1 sends a GET request to the /Relationships/CanCreate?peer={id} endpoint with id=i2.id
         Then the response status code is 200 (OK)
         And a Relationship can not be established
-        And the code is "error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists"
+        And the code is "error.platform.validation.relationship.relationshipToTargetAlreadyExists"
 
     Scenario: Two identities with a rejected Relationship can create one
         Given Identities i1 and i2
@@ -31,7 +31,7 @@ Feature: GET /Relationships/CanCreate
         When i1 sends a GET request to the /Relationships/CanCreate?peer={id} endpoint with id=i2.id
         Then the response status code is 200 (OK)
         And a Relationship can not be established
-        And the code is "error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists"
+        And the code is "error.platform.validation.relationship.relationshipToTargetAlreadyExists"
 
     Scenario: Two identities with two rejected Relationships can create one
         Given Identities i1 and i2
@@ -48,4 +48,4 @@ Feature: GET /Relationships/CanCreate
         When i1 sends a GET request to the /Relationships/CanCreate?peer={id} endpoint with id=i2.id
         Then the response status code is 200 (OK)
         And a Relationship can not be established
-        And the code is "error.platform.validation.relationshipRequest.peerIsToBeDeleted"
+        And the code is "error.platform.validation.relationship.peerIsToBeDeleted"
