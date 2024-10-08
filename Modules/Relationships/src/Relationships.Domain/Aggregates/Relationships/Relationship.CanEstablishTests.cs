@@ -1,10 +1,11 @@
 ﻿using Backbone.Modules.Relationships.Domain.TestHelpers;
+using Backbone.UnitTestTools.BaseClasses;
 using FluentAssertions;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
-public class RelationshipCanEstablishTests
+public class RelationshipCanEstablishTests : AbstractTestsBase
 {
     [Fact]
     public void Returns_null_when_no_relationships_exists()
