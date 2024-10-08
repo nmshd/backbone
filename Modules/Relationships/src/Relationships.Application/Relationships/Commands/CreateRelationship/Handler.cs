@@ -54,9 +54,7 @@ public class Handler : IRequestHandler<CreateRelationshipCommand, CreateRelation
     private async Task CreateAndSaveRelationship()
     {
         var existingRelationships = await _relationshipsRepository.FindRelationships(
-            r =>
-                (r.From == _activeIdentity && r.To == _template.CreatedBy) ||
-                (r.From == _template.CreatedBy && r.To == _activeIdentity),
+            Relationship.IsBetween(_activeIdentity, _template.CreatedBy),
             _cancellationToken
         );
 
