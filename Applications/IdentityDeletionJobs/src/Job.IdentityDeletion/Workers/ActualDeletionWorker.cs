@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using CSharpFunctionalExtensions;
@@ -17,19 +18,22 @@ public class ActualDeletionWorker : IHostedService
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<ActualDeletionWorker> _logger;
     private readonly List<IIdentityDeleter> _identityDeleters;
+    private readonly IIdentitiesRepository _identitiesRepository;
 
     public ActualDeletionWorker(
         IHostApplicationLifetime host,
         IEnumerable<IIdentityDeleter> identityDeleters,
         IMediator mediator,
         IPushNotificationSender pushNotificationSender,
-        ILogger<ActualDeletionWorker> logger)
+        ILogger<ActualDeletionWorker> logger,
+        IIdentitiesRepository identitiesRepository)
     {
         _host = host;
         _identityDeleters = identityDeleters.ToList();
         _mediator = mediator;
         _pushNotificationSender = pushNotificationSender;
         _logger = logger;
+        _identitiesRepository = identitiesRepository;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -71,7 +75,9 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task NotifyIdentityAboutStartingDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
     {
-        if (identityAddress.Status != IdentityStatus.ToBeDeleted)
+        var identity = _identitiesRepository.FindByAddress(identityAddress, CancellationToken.None).Result;
+
+        if (identity!.Status != IdentityStatus.ToBeDeleted)
             await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsPushNotification(), cancellationToken);
     }
 
