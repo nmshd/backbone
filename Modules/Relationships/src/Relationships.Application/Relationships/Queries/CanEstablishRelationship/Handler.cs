@@ -1,6 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.Relationships.Queries.CanEstablishRelationship;
@@ -18,8 +18,13 @@ public class Handler : IRequestHandler<CanEstablishRelationshipQuery, CanEstabli
 
     public async Task<CanEstablishRelationshipResponse> Handle(CanEstablishRelationshipQuery request, CancellationToken cancellationToken)
     {
-        var hasActiveRelationship = await _relationshipsRepository.RelationshipBetweenTwoIdentitiesExists(_userContext.GetAddress(), IdentityAddress.Parse(request.PeerAddress), cancellationToken);
+        var existingRelationships = await _relationshipsRepository.FindRelationships(
+            Relationship.IsBetween(request.PeerAddress, _userContext.GetAddress()),
+            cancellationToken
+        );
 
-        return new CanEstablishRelationshipResponse { CanCreate = !hasActiveRelationship };
+        var error = Relationship.CanEstablish(existingRelationships.ToList());
+
+        return new CanEstablishRelationshipResponse { CanCreate = error == null, Code = error?.Code };
     }
 }

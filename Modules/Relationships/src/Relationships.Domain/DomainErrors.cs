@@ -35,10 +35,10 @@ public static class DomainErrors
             $"The relationship has to be in status '{string.Join(" or ", expectedStatuses)}' to perform this action.");
     }
 
-    public static DomainError RelationshipToTargetAlreadyExists(string targetIdentity)
+    public static DomainError RelationshipToTargetAlreadyExists()
     {
         return new DomainError("error.platform.validation.relationship.relationshipToTargetAlreadyExists",
-            $"A relationship to '{targetIdentity}' already exists. If the relationship is terminated, you can reactivate it. Note that a relationship has to be decomposed by both parties before a new one can be created.");
+            "A relationship to the owner of the template already exists. If the relationship is terminated, you can reactivate it. Note that a relationship has to be decomposed by both parties before a new one can be created.");
     }
 
     public static DomainError NoRevocableReactivationRequestExists()
