@@ -26,6 +26,7 @@ using Backbone.Modules.Relationships.ConsumerApi;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Modules.Synchronization.ConsumerApi;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
+using Backbone.Modules.Tags.ConsumerApi;
 using Backbone.Modules.Tokens.ConsumerApi;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Backbone.Tooling.Extensions;
@@ -147,6 +148,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddModule<QuotasModule>(configuration)
         .AddModule<RelationshipsModule>(configuration)
         .AddModule<SynchronizationModule>(configuration)
+        .AddModule<TagsModule>(configuration)
         .AddModule<TokensModule>(configuration);
 
     var quotasSqlDatabaseConfiguration = parsedConfiguration.Modules.Quotas.Infrastructure.SqlDatabase;
