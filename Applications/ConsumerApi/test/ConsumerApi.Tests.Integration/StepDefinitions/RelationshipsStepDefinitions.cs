@@ -197,13 +197,13 @@ internal class RelationshipsStepDefinitions
         _canEstablishRelationshipResponse!.Result!.CanCreate.Should().BeFalse();
     }
 
-    [Then(@"the code is ""(.+)""")]
+    [Then(@"the relationship creation check code is ""(.+)""")]
     public void ThenTheCodeIs(string code)
     {
         _canEstablishRelationshipResponse!.Result!.Code.Should().Be(code);
     }
 
-    [Then(@"there is no code")]
+    [Then(@"the response doesn not contain a relationship creation check code")]
     public void ThenThereIsNoCode()
     {
         _canEstablishRelationshipResponse!.Result!.Code.Should().BeNull();
