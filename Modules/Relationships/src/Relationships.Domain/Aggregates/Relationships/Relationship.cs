@@ -61,15 +61,15 @@ public class Relationship : Entity
         return null;
     }
 
+    private static bool AnotherRelationshipToPeerExists(IEnumerable<Relationship> existingRelationshipsToPeer)
+    {
+        return existingRelationshipsToPeer.Any(r => r.Status is RelationshipStatus.Active or RelationshipStatus.Pending or RelationshipStatus.Terminated or RelationshipStatus.DeletionProposed);
+    }
+
     private static void EnsureTargetIsNotSelf(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity)
     {
         if (activeIdentity == relationshipTemplate.CreatedBy)
             throw new DomainException(DomainErrors.CannotSendRelationshipRequestToYourself());
-    }
-
-    private static bool AnotherRelationshipToPeerExists(IEnumerable<Relationship> existingRelationshipsToPeer)
-    {
-        return existingRelationshipsToPeer.Any(r => r.Status is RelationshipStatus.Active or RelationshipStatus.Pending or RelationshipStatus.Terminated or RelationshipStatus.DeletionProposed);
     }
 
     public RelationshipId Id { get; }
