@@ -9,7 +9,7 @@ public static class ApplicationErrors
         public static ApplicationError PeerIsToBeDeleted()
         {
             return new ApplicationError("error.platform.validation.relationship.peerIsToBeDeleted",
-                "Cannot establish relationship with the owner of the template because they are in status 'ToBeDeleted'.");
+                "Cannot establish relationship with the owner of the template because the owner is in status 'ToBeDeleted'.");
         }
     }
 }
