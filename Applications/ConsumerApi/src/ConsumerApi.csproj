@@ -37,6 +37,7 @@
         <ProjectReference Include="..\..\..\Modules\Quotas\src\Quotas.ConsumerApi\Quotas.ConsumerApi.csproj" />
         <ProjectReference Include="..\..\..\Modules\Relationships\src\Relationships.ConsumerApi\Relationships.ConsumerApi.csproj" />
         <ProjectReference Include="..\..\..\Modules\Synchronization\src\Synchronization.ConsumerApi\Synchronization.ConsumerApi.csproj" />
+        <ProjectReference Include="..\..\..\Modules\Tags.ConsumerApi\Tags.ConsumerApi.csproj" />
         <ProjectReference Include="..\..\..\Modules\Tokens\src\Tokens.ConsumerApi\Tokens.ConsumerApi.csproj" />
     </ItemGroup>
 
