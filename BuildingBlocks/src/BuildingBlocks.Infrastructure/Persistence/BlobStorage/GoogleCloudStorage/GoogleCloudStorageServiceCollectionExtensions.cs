@@ -3,6 +3,7 @@ using Backbone.Tooling.Extensions;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
@@ -30,8 +31,6 @@ public static class GoogleCloudStorageServiceCollectionExtensions
             return storageClient;
         });
 
-        services.AddSingleton(_ => options);
-
         services.AddScoped<IBlobStorage>(sp =>
         {
             var storageClient = sp.GetService<StorageClient>();
@@ -49,6 +48,9 @@ public static class GoogleCloudStorageServiceCollectionExtensions
 
             return new GoogleCloudStorage(storageClient, logger);
         });
+
+        services.AddHealthChecks()
+            .Add(new HealthCheckRegistration("Google Cloud", sp => new GoogleCloudStorageHealthCheck(sp.GetRequiredService<StorageClient>(), options), HealthStatus.Unhealthy, null));
     }
 }
 
