@@ -4,6 +4,7 @@ using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Job.IdentityDeletion.Workers;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.FindRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.UnitTestTools.BaseClasses;
@@ -96,6 +97,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         identityDeleters ??= [A.Dummy<IIdentityDeleter>()];
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
         var logger = A.Dummy<ILogger<ActualDeletionWorker>>();
-        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, logger);
+        var identitiesRepository = A.Dummy<IIdentitiesRepository>();
+        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, logger, identitiesRepository);
     }
 }
