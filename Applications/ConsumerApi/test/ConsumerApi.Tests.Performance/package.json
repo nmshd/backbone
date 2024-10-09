@@ -7,7 +7,7 @@
         "@babel/plugin-proposal-object-rest-spread": "7.20.7",
         "@babel/preset-env": "7.25.7",
         "@babel/preset-typescript": "7.25.7",
-        "@js-soft/eslint-config-ts": "1.6.9",
+        "@js-soft/eslint-config-ts": "1.6.11",
         "@js-soft/license-check": "1.0.9",
         "@types/k6": "~0.54.0",
         "@types/papaparse": "^5.3.14",
@@ -18,7 +18,7 @@
         "eslint": "^8.57.0",
         "papaparse": "^5.4.1",
         "prettier": "3.3.3",
-        "typescript": "5.6.2",
+        "typescript": "5.6.3",
         "webpack": "5.95.0",
         "webpack-cli": "5.1.4",
         "webpack-glob-entries": "1.0.1"
