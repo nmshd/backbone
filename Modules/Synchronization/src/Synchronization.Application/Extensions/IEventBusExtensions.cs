@@ -22,12 +22,10 @@ namespace Backbone.Modules.Synchronization.Application.Extensions;
 
 public static class IEventBusExtensions
 {
-    public static IEventBus AddSynchronizationDomainEventSubscriptions(this IEventBus eventBus)
+    public static void AddSynchronizationDomainEventSubscriptions(this IEventBus eventBus)
     {
         SubscribeToMessagesEvents(eventBus);
         SubscribeToRelationshipsEvents(eventBus);
-
-        return eventBus;
     }
 
     private static void SubscribeToMessagesEvents(IEventBus eventBus)
