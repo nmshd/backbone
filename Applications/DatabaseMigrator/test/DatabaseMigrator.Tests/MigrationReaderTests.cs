@@ -48,12 +48,12 @@ public class MigrationReaderTests
 
     private static async Task<MigrationReader> CreateMigrationReader()
     {
-        await StartPostgres("postgres", "admin", 5444);
+        var dbConnectionString = await StartPostgres();
 
         var services = new ServiceCollection();
 
         services.AddSingleton<IEventBus, DummyEventBus>();
-        services.AddAllDbContexts(new SqlDatabaseConfiguration { Provider = "Postgres", ConnectionString = "User ID=postgres;Password=admin;Server=localhost;Port=5444;Database=enmeshed;" });
+        services.AddAllDbContexts(new SqlDatabaseConfiguration { Provider = "Postgres", ConnectionString = dbConnectionString });
         services.AddSingleton<DbContextProvider>();
         services.AddSingleton<MigrationReader>();
 
@@ -62,15 +62,15 @@ public class MigrationReaderTests
         return migrationReader;
     }
 
-    private static async Task StartPostgres(string username, string password, int port)
+    private static async Task<string> StartPostgres()
     {
         var postgreSqlContainer = new PostgreSqlBuilder()
             .WithImage("postgres:16")
-            .WithUsername(username)
-            .WithPassword(password)
-            .WithPortBinding(port, 5432)
+            .WithDatabase("enmeshed")
             .Build();
 
         await postgreSqlContainer.StartAsync();
+
+        return postgreSqlContainer.GetConnectionString();
     }
 }

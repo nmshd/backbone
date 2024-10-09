@@ -82,7 +82,7 @@ public class RelationshipsRepository : IRelationshipsRepository
         catch (DbUpdateException ex)
         {
             if (ex.InnerException != null && ex.InnerException.Message.Contains(ConstraintNames.ONLY_ONE_ACTIVE_RELATIONSHIP_BETWEEN_TWO_IDENTITIES))
-                throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(relationship.To));
+                throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists());
 
             throw;
         }

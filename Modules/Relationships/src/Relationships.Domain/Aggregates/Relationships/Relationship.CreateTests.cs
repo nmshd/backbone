@@ -3,7 +3,6 @@ using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
@@ -79,7 +78,7 @@ public class RelationshipCreateTests : AbstractTestsBase
         var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_1, DEVICE_1, null, []);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotSendRelationshipRequestToYourself");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.cannotCreateRelationshipWithYourself");
     }
 
     [Theory]
@@ -99,7 +98,7 @@ public class RelationshipCreateTests : AbstractTestsBase
         var acting = () => new Relationship(RELATIONSHIP_TEMPLATE_OF_1, IDENTITY_2, DEVICE_2, null, existingRelationships);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.relationshipToTargetAlreadyExists");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.relationshipToTargetAlreadyExists");
     }
 
     [Fact]
