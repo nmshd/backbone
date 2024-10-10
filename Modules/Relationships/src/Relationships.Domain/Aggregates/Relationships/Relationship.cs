@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
@@ -42,6 +43,35 @@ public class Relationship : Entity
         AuditLog = [new(RelationshipAuditLogEntryReason.Creation, null, RelationshipStatus.Pending, activeIdentity, activeDevice)];
 
         RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
+    }
+
+    private void EnsureCanEstablish(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity, List<Relationship> existingRelationships)
+    {
+        var error = CanEstablish(existingRelationships);
+
+        if (error != null)
+            throw new DomainException(error);
+
+        EnsureTargetIsNotSelf(relationshipTemplate, activeIdentity);
+    }
+
+    public static DomainError? CanEstablish(IEnumerable<Relationship> existingRelationships)
+    {
+        if (AnotherRelationshipToPeerExists(existingRelationships))
+            return DomainErrors.RelationshipToTargetAlreadyExists();
+
+        return null;
+    }
+
+    private static bool AnotherRelationshipToPeerExists(IEnumerable<Relationship> existingRelationshipsToPeer)
+    {
+        return existingRelationshipsToPeer.Any(r => r.Status is RelationshipStatus.Active or RelationshipStatus.Pending or RelationshipStatus.Terminated or RelationshipStatus.DeletionProposed);
+    }
+
+    private static void EnsureTargetIsNotSelf(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity)
+    {
+        if (activeIdentity == relationshipTemplate.CreatedBy)
+            throw new DomainException(DomainErrors.CannotSendRelationshipRequestToYourself());
     }
 
     public RelationshipId Id { get; }
@@ -368,6 +398,12 @@ public class Relationship : Entity
     }
 
     #region Expressions
+
+    public static Expression<Func<Relationship, bool>> IsBetween(string identity1, string identity2)
+    {
+        return r => r.From == identity1 && r.To == identity2 ||
+                    r.From == identity2 && r.To == identity1;
+    }
 
     public static Expression<Func<Relationship, bool>> HasParticipant(string identity)
     {
