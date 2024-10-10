@@ -48,20 +48,19 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return template;
     }
 
-    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds(IEnumerable<RelationshipTemplateQuery> queries, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
+    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds(IEnumerable<RelationshipTemplateQueryItem> queryItems, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false)
     {
-        var queriesList = queries.ToList();
+        var queryItemsList = queryItems.ToList();
 
         Expression<Func<RelationshipTemplate, bool>> whereClause = template => false;
 
-        foreach (var inputQuery in queriesList)
-        {
+        foreach (var inputQuery in queryItemsList)
             whereClause = whereClause
                 .Or(RelationshipTemplate.HasId(RelationshipTemplateId.Parse(inputQuery.Id))
-                    .And(RelationshipTemplate.CanBeCollectedWithPassword(activeIdentity, inputQuery.Password))
-                    .And(RelationshipTemplate.CanBeCollectedBy(activeIdentity)));
-        }
+                    .And(RelationshipTemplate.CanBeCollectedWithPassword(activeIdentity, inputQuery.Password)));
+
+        whereClause = whereClause.And(RelationshipTemplate.CanBeCollectedBy(activeIdentity));
 
         var query = (track ? _templates : _readOnlyTemplates)
             .NotExpiredFor(activeIdentity)

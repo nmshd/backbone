@@ -4,6 +4,10 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
+using TechTalk.SpecFlow.Assist;
+
+// ReSharper disable ClassNeverInstantiated.Local
+// ReSharper disable UnusedAutoPropertyAccessor.Local
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -42,21 +46,21 @@ internal class RelationshipTemplatesStepDefinitions
         _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateName] = response.Result!;
     }
 
-    [Given(@"Relationship Templates with the following properties")]
+    [Given(@"the following Relationship Templates")]
     public async Task GivenRelationshipTemplatesWithTheFollowingProperties(Table table)
     {
-        for (var i = 0; i < table.RowCount; i++)
-        {
-            var (relationshipTemplateName, identityName, forIdentityName, passwordString) = ExtractRelationshipTemplateCreationValues(table.Rows[i]);
+        var relationshipTemplatePropertiesSet = table.CreateSet<RelationshipTemplateProperties>();
 
-            var client = _clientPool.FirstForIdentityName(identityName);
-            var forClient = forIdentityName != "-" ? _clientPool.FirstForIdentityName(forIdentityName).IdentityData!.Address : null;
-            var password = passwordString.Trim() != "-" ? Convert.FromBase64String(passwordString.Trim()) : null;
+        foreach (var relationshipTemplateProperties in relationshipTemplatePropertiesSet)
+        {
+            var client = _clientPool.FirstForIdentityName(relationshipTemplateProperties.RTempOwner);
+            var forClient = relationshipTemplateProperties .ForIdentity != "-" ? _clientPool.FirstForIdentityName(relationshipTemplateProperties.ForIdentity).IdentityData!.Address : null;
+            var password = relationshipTemplateProperties.Password.Trim() != "-" ? Convert.FromBase64String(relationshipTemplateProperties.Password.Trim()) : null;
 
             var response = await client.RelationshipTemplates
                 .CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, ForIdentity = forClient, Password = password });
 
-            _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateName] = response.Result!;
+            _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateProperties.RTempName] = response.Result!;
         }
     }
 
@@ -111,12 +115,12 @@ internal class RelationshipTemplatesStepDefinitions
     {
         var client = _clientPool.FirstForIdentityName(identityName);
 
-        var queries = table.Rows.Select(r =>
-        {
-            var (rTempName, passwordOnGet) = ExtractRelationshipTemplateQueryValues(r);
+        var getRequestPayloadSet = table.CreateSet<GetRequestPayload>();
 
-            var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[rTempName].Id;
-            var password = passwordOnGet == "-" ? null : Convert.FromBase64String(passwordOnGet.Trim());
+        var queries = getRequestPayloadSet.Select(payload =>
+        {
+            var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[payload.RTempName].Id;
+            var password = payload.PasswordOnGet == "-" ? null : Convert.FromBase64String(payload.PasswordOnGet.Trim());
 
             return new RelationshipTemplateQuery { Id = relationshipTemplateId, Password = password };
         }).ToList();
@@ -136,22 +140,18 @@ internal class RelationshipTemplatesStepDefinitions
     }
 
     #endregion
+}
 
-    private static (string name, string rTempOwner, string forIdentity, string password) ExtractRelationshipTemplateCreationValues(TableRow row)
-    {
-        return (
-            row.TryGetValue("rTempName", out var rTempName) ? rTempName : string.Empty,
-            row.TryGetValue("rTempOwner", out var rTempOwner) ? rTempOwner : string.Empty,
-            row.TryGetValue("forIdentity", out var forIdentity) ? forIdentity : string.Empty,
-            row.TryGetValue("password", out var password) ? password : string.Empty
-        );
-    }
+file class RelationshipTemplateProperties
+{
+    public required string RTempName { get; set; }
+    public required string RTempOwner { get; set; }
+    public required string ForIdentity { get; set; }
+    public required string Password { get; set; }
+}
 
-    private static (string rTempName, string passwordOnGet) ExtractRelationshipTemplateQueryValues(TableRow row)
-    {
-        return (
-            row.TryGetValue("rTempName", out var rTempName) ? rTempName : string.Empty,
-            row.TryGetValue("passwordOnGet", out var passwordOnGet) ? passwordOnGet : string.Empty
-        );
-    }
+file class GetRequestPayload
+{
+    public required string RTempName { get; set; }
+    public required string PasswordOnGet { get; set; }
 }

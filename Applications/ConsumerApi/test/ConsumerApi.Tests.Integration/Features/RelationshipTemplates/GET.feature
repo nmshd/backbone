@@ -5,7 +5,7 @@ User requests Relationship Templates
 
 	Scenario Outline: Requesting a list of Relationship Templates in a variety of scenarios
 		Given Identities i1, i2, i3 and i4
-		And Relationship Templates with the following properties
+		And the following Relationship Templates
 			| rTempName | rTempOwner | forIdentity | password |
 			| rt1       | i1         | -           | -        |
 			| rt2       | i2         | -           | -        |

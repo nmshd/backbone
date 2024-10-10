@@ -38,38 +38,20 @@ public class RelationshipTemplatesController : ApiControllerBase
         return Ok(template);
     }
 
-    [HttpGet("Alt/Templates")] // todo: remove 'Alt/Templates' extension once the transport tests are updated
+    [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipTemplatesResponse>),
         StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter, [FromQuery] string templates, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter, [FromQuery] string? templates, [FromQuery] IEnumerable<string>? ids, CancellationToken cancellationToken)
     {
-        var relationshipTemplateQueries = JsonSerializer.Deserialize<List<RelationshipTemplateQuery>>(templates);
+        var relationshipTemplateQueryItems =
+            templates != null ? JsonSerializer.Deserialize<List<RelationshipTemplateQueryItem>>(templates) : ids!.Select(id => new RelationshipTemplateQueryItem { Id = id }).ToList();
 
-        var request = new ListRelationshipTemplatesQuery(paginationFilter, relationshipTemplateQueries);
+        var request = new ListRelationshipTemplatesQuery(paginationFilter, relationshipTemplateQueryItems);
 
         request.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
         if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
             throw new ApplicationException(GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
-
-        var template = await _mediator.Send(request, cancellationToken);
-        return Paged(template);
-    }
-
-    [HttpGet] // todo: remove this endpoint once the transport tests are updated
-    [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipTemplatesResponse>),
-        StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAllWithIds([FromQuery] PaginationFilter paginationFilter, [FromQuery] string ids, CancellationToken cancellationToken)
-    {
-        var relationshipTemplateQueries = new List<string>(ids.Split(',')).Select(id => new RelationshipTemplateQuery { Id = id }).ToList();
-
-        var request = new ListRelationshipTemplatesQuery(paginationFilter, relationshipTemplateQueries);
-
-        request.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
-
-        if (paginationFilter.PageSize > _options.Pagination.MaxPageSize)
-            throw new ApplicationException(
-                GenericApplicationErrors.Validation.InvalidPageSize(_options.Pagination.MaxPageSize));
 
         var template = await _mediator.Send(request, cancellationToken);
         return Paged(template);

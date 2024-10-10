@@ -64,7 +64,8 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .HasColumnType("integer");
 
                     b.Property<byte[]>("Password")
-                        .HasColumnType("bytea");
+                        .HasColumnType("bytea")
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 

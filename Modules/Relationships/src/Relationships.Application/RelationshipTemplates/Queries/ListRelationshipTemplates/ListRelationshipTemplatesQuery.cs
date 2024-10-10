@@ -5,17 +5,17 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queri
 
 public class ListRelationshipTemplatesQuery : IRequest<ListRelationshipTemplatesResponse>
 {
-    public ListRelationshipTemplatesQuery(PaginationFilter paginationFilter, IEnumerable<RelationshipTemplateQuery>? queries)
+    public ListRelationshipTemplatesQuery(PaginationFilter paginationFilter, IEnumerable<RelationshipTemplateQueryItem>? queries)
     {
         PaginationFilter = paginationFilter;
-        Queries = queries == null ? [] : queries.ToList();
+        QueryItems = queries == null ? [] : queries.ToList();
     }
 
     public PaginationFilter PaginationFilter { get; set; }
-    public List<RelationshipTemplateQuery> Queries { get; set; }
+    public List<RelationshipTemplateQueryItem> QueryItems { get; set; }
 }
 
-public class RelationshipTemplateQuery
+public class RelationshipTemplateQueryItem
 {
     public required string Id { get; set; }
     public byte[]? Password { get; set; }

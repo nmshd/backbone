@@ -12,7 +12,7 @@ public class RelationshipTemplatesEndpoint(EndpointClient client) : ConsumerApiE
     public async Task<ApiResponse<ListRelationshipTemplatesResponse>> ListTemplates(IEnumerable<RelationshipTemplateQuery> queries, PaginationFilter? pagination = null)
     {
         return await _client
-            .Request<ListRelationshipTemplatesResponse>(HttpMethod.Get, $"api/{API_VERSION}/RelationshipTemplates/Alt/Templates") // todo: remove 'Alt/Templates' extension once the transport tests are updated
+            .Request<ListRelationshipTemplatesResponse>(HttpMethod.Get, $"api/{API_VERSION}/RelationshipTemplates") // todo: remove 'Alt/Templates' extension once the transport tests are updated
             .Authenticate()
             .WithPagination(pagination)
             .AddQueryParameter("templates", queries.ToJson())
@@ -35,7 +35,7 @@ public class RelationshipTemplatesEndpoint(EndpointClient client) : ConsumerApiE
     }
 }
 
-public static class RelationshipTemplateQueryExtensions
+file static class RelationshipTemplateQueryExtensions
 {
     public static string ToJson(this IEnumerable<RelationshipTemplateQuery> queries)
     {

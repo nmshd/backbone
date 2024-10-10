@@ -25,7 +25,6 @@ public class Validator : AbstractValidator<CreateRelationshipTemplateCommand>
             .When(c => c.ForIdentity != null);
 
         RuleFor(c => c.Password)
-            .Must(password => password == null || password.Length <= 200).WithMessage("Password must not exceed 200 bytes.")
-            .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
+            .NumberOfBytes(0, 200).WithMessage("Password must not exceed 200 bytes.").WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
     }
 }

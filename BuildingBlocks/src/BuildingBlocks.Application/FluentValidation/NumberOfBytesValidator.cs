@@ -59,7 +59,7 @@ public static class NumberOfBytesValidatorRuleBuilderExtensions
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
     }
 
-    public static IRuleBuilderOptions<T, byte[]?> NumberOfBytes<T>(this IRuleBuilder<T, byte[]> ruleBuilder,
+    public static IRuleBuilderOptions<T, byte[]?> NumberOfBytes<T>(this IRuleBuilder<T, byte[]?> ruleBuilder,
         int numberOfBytes)
     {
         return ruleBuilder
