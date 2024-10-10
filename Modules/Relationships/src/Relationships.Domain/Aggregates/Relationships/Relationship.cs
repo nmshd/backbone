@@ -96,18 +96,6 @@ public class Relationship : Entity
         return From == activeIdentity ? To : From;
     }
 
-    private static void EnsureNoOtherRelationshipToPeerExists(IdentityAddress target, IEnumerable<Relationship> existingRelationshipsToPeer)
-    {
-        if (existingRelationshipsToPeer.Any(r => r.Status is RelationshipStatus.Active or RelationshipStatus.Pending or RelationshipStatus.Terminated or RelationshipStatus.DeletionProposed))
-            throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists());
-    }
-
-    private void EnsureTemplateIsAllocatedBy(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity)
-    {
-        if (!relationshipTemplate.IsAllocatedBy(activeIdentity))
-            throw new DomainException(DomainErrors.RelationshipTemplateNotAllocated());
-    }
-
     public void Accept(IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationResponseContent)
     {
         EnsureStatus(RelationshipStatus.Pending);
