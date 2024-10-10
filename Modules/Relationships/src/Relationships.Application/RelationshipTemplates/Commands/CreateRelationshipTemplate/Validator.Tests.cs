@@ -17,7 +17,12 @@ public class ValidatorTests : AbstractTestsBase
         // Act
         var validationResult = validator.TestValidate(
             new CreateRelationshipTemplateCommand
-                { ExpiresAt = DateTime.UtcNow.AddDays(1), MaxNumberOfAllocations = 1, Content = [1], ForIdentity = TestDataGenerator.CreateRandomIdentityAddress(), Password = [1] });
+            {
+                ExpiresAt = DateTime.UtcNow.AddDays(1),
+                MaxNumberOfAllocations = 1,
+                Content = [1],
+                ForIdentity = TestDataGenerator.CreateRandomIdentityAddress(), Password = [1]
+            });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -31,7 +36,10 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateRelationshipTemplateCommand { Content = [1] });
+            new CreateRelationshipTemplateCommand
+            {
+                Content = [1]
+            });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -45,7 +53,11 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateRelationshipTemplateCommand() { ExpiresAt = DateTime.UtcNow.AddDays(-1), Content = [1] });
+            new CreateRelationshipTemplateCommand
+            {
+                ExpiresAt = DateTime.UtcNow.AddDays(-1),
+                Content = [1]
+            });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(nameof(CreateRelationshipTemplateCommand.ExpiresAt), "error.platform.validation.invalidPropertyValue", "'Expires At' must be in the future.");
@@ -59,7 +71,11 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateRelationshipTemplateCommand() { MaxNumberOfAllocations = 0, Content = [1] });
+            new CreateRelationshipTemplateCommand
+            {
+                MaxNumberOfAllocations = 0,
+                Content = [1]
+            });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(nameof(CreateRelationshipTemplateCommand.MaxNumberOfAllocations), "error.platform.validation.invalidPropertyValue",
@@ -74,7 +90,11 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateRelationshipTemplateCommand() { Content = [1], ForIdentity = "some-address" });
+            new CreateRelationshipTemplateCommand
+            {
+                Content = [1],
+                ForIdentity = "some-address"
+            });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(CreateRelationshipTemplateCommand.ForIdentity));
@@ -91,7 +111,11 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateRelationshipTemplateCommand() { Content = [1], Password = password });
+            new CreateRelationshipTemplateCommand
+            {
+                Content = [1],
+                Password = password
+            });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(nameof(CreateRelationshipTemplateCommand.Password), "error.platform.validation.invalidPropertyValue",
