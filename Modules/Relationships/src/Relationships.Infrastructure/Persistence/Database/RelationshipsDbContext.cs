@@ -43,5 +43,9 @@ public class RelationshipsDbContext : AbstractDbContextBase
         builder.HasDefaultSchema("Relationships");
 
         builder.ApplyConfigurationsFromAssembly(typeof(RelationshipsDbContext).Assembly);
+
+        builder.Entity<RelationshipTemplate>()
+            .Property(e => e.Password)
+            .HasMaxLength(200);
     }
 }
