@@ -1,13 +1,11 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using TechTalk.SpecFlow.Assist;
-
-// ReSharper disable ClassNeverInstantiated.Local
-// ReSharper disable UnusedAutoPropertyAccessor.Local
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -142,6 +140,8 @@ internal class RelationshipTemplatesStepDefinitions
     #endregion
 }
 
+// ReSharper disable once ClassNeverInstantiated.Local
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 file class RelationshipTemplateProperties
 {
     public required string RTempName { get; set; }
@@ -150,6 +150,8 @@ file class RelationshipTemplateProperties
     public required string Password { get; set; }
 }
 
+// ReSharper disable once ClassNeverInstantiated.Local
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 file class GetRequestPayload
 {
     public required string RTempName { get; set; }
