@@ -26,7 +26,8 @@ public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, Create
             request.MaxNumberOfAllocations,
             request.ExpiresAt,
             request.Content,
-            forIdentity);
+            forIdentity,
+            request.Password);
 
         await _relationshipTemplatesRepository.Add(template, cancellationToken);
 

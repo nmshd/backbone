@@ -5,4 +5,5 @@ public class CreateRelationshipTemplateRequest
     public int? MaxNumberOfAllocations { get; set; }
     public required byte[] Content { get; set; }
     public string? ForIdentity { get; set; }
+    public byte[]? Password { get; set; }
 }
