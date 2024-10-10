@@ -9,13 +9,13 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates;
 
 public class RelationshipTemplatesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
-    public async Task<ApiResponse<ListRelationshipTemplatesResponse>> ListTemplates(IEnumerable<RelationshipTemplateQuery> queries, PaginationFilter? pagination = null)
+    public async Task<ApiResponse<ListRelationshipTemplatesResponse>> ListTemplates(IEnumerable<RelationshipTemplateQueryItem> queryItems, PaginationFilter? pagination = null)
     {
         return await _client
             .Request<ListRelationshipTemplatesResponse>(HttpMethod.Get, $"api/{API_VERSION}/RelationshipTemplates") // todo: remove 'Alt/Templates' extension once the transport tests are updated
             .Authenticate()
             .WithPagination(pagination)
-            .AddQueryParameter("templates", queries.ToJson())
+            .AddQueryParameter("templates", queryItems.ToJson())
             .Execute();
     }
 
@@ -37,8 +37,8 @@ public class RelationshipTemplatesEndpoint(EndpointClient client) : ConsumerApiE
 
 file static class RelationshipTemplateQueryExtensions
 {
-    public static string ToJson(this IEnumerable<RelationshipTemplateQuery> queries)
+    public static string ToJson(this IEnumerable<RelationshipTemplateQueryItem> queryItems)
     {
-        return JsonConvert.SerializeObject(queries, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, Formatting = Formatting.None });
+        return JsonConvert.SerializeObject(queryItems, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, Formatting = Formatting.None });
     }
 }

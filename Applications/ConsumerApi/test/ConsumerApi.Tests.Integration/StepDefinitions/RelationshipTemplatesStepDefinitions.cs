@@ -115,15 +115,15 @@ internal class RelationshipTemplatesStepDefinitions
 
         var getRequestPayloadSet = table.CreateSet<GetRequestPayload>();
 
-        var queries = getRequestPayloadSet.Select(payload =>
+        var queryItems = getRequestPayloadSet.Select(payload =>
         {
             var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[payload.TemplateName].Id;
             var password = payload.PasswordOnGet == "-" ? null : Convert.FromBase64String(payload.PasswordOnGet.Trim());
 
-            return new RelationshipTemplateQuery { Id = relationshipTemplateId, Password = password };
+            return new RelationshipTemplateQueryItem { Id = relationshipTemplateId, Password = password };
         }).ToList();
 
-        _responseContext.WhenResponse = _listRelationshipTemplatesResponse = await client.RelationshipTemplates.ListTemplates(queries);
+        _responseContext.WhenResponse = _listRelationshipTemplatesResponse = await client.RelationshipTemplates.ListTemplates(queryItems);
     }
 
     #endregion
