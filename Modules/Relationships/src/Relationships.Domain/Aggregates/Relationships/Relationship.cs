@@ -24,9 +24,7 @@ public class Relationship : Entity
 
     public Relationship(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity, DeviceId activeDevice, byte[]? creationContent, List<Relationship> existingRelationships)
     {
-        EnsureTargetIsNotSelf(relationshipTemplate, activeIdentity);
-        EnsureNoOtherRelationshipToPeerExists(relationshipTemplate.CreatedBy, existingRelationships);
-        EnsureTemplateIsAllocatedBy(relationshipTemplate, activeIdentity);
+        EnsureCanEstablish(relationshipTemplate, activeIdentity, existingRelationships);
 
         Id = RelationshipId.New();
         RelationshipTemplateId = relationshipTemplate.Id;
@@ -68,6 +66,12 @@ public class Relationship : Entity
         return existingRelationshipsToPeer.Any(r => r.Status is RelationshipStatus.Active or RelationshipStatus.Pending or RelationshipStatus.Terminated or RelationshipStatus.DeletionProposed);
     }
 
+    private static void EnsureTargetIsNotSelf(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity)
+    {
+        if (activeIdentity == relationshipTemplate.CreatedBy)
+            throw new DomainException(DomainErrors.CannotSendRelationshipRequestToYourself());
+    }
+
     public RelationshipId Id { get; }
     public RelationshipTemplateId RelationshipTemplateId { get; }
     public RelationshipTemplate RelationshipTemplate { get; }
@@ -90,12 +94,6 @@ public class Relationship : Entity
     public IdentityAddress GetPeerOf(IdentityAddress activeIdentity)
     {
         return From == activeIdentity ? To : From;
-    }
-
-    private static void EnsureTargetIsNotSelf(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity)
-    {
-        if (activeIdentity == relationshipTemplate.CreatedBy)
-            throw new DomainException(DomainErrors.CannotSendRelationshipRequestToYourself());
     }
 
     private static void EnsureNoOtherRelationshipToPeerExists(IdentityAddress target, IEnumerable<Relationship> existingRelationshipsToPeer)
