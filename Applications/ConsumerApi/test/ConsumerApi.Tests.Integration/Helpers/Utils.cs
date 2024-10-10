@@ -105,7 +105,7 @@ public static class Utils
     {
         var relationshipMetadata = await CreateTerminatedRelationshipBetween(client1, client2);
 
-        var reactivateRelationshipResponse = await client2.Relationships.RelationshipReactivationRequest(relationshipMetadata.Id);
+        var reactivateRelationshipResponse = await client2.Relationships.ReactivateRelationship(relationshipMetadata.Id);
         reactivateRelationshipResponse.Should().BeASuccess();
 
         var getRelationshipResponse = await client2.Relationships.GetRelationship(relationshipMetadata.Id);

@@ -148,7 +148,7 @@ internal class RelationshipsStepDefinitions
     {
         var client = _clientPool.FirstForIdentityName(identityName);
 
-        _responseContext.WhenResponse = await client.Relationships.RelationshipReactivationRequest(_relationshipsContext.Relationships[relationshipName].Id);
+        _responseContext.WhenResponse = await client.Relationships.ReactivateRelationship(_relationshipsContext.Relationships[relationshipName].Id);
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/Reactivate/(Accept|Reject|Revoke) endpoint")]
