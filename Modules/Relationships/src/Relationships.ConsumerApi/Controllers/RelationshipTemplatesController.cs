@@ -43,10 +43,28 @@ public class RelationshipTemplatesController : ApiControllerBase
         StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter, [FromQuery] string? templates, [FromQuery] IEnumerable<string>? ids, CancellationToken cancellationToken)
     {
-        var relationshipTemplateQueryItems =
-            templates != null ? JsonSerializer.Deserialize<List<RelationshipTemplateQueryItem>>(templates) : ids!.Select(id => new RelationshipTemplateQueryItem { Id = id }).ToList();
+        //var relationshipTemplateQueryItems =
+        //    templates != null ? JsonSerializer.Deserialize<List<RelationshipTemplateQueryItem>>(templates) : ids!.Select(id => new RelationshipTemplateQueryItem { Id = id }).ToList();
 
-        var request = new ListRelationshipTemplatesQuery(paginationFilter, relationshipTemplateQueryItems);
+        List<RelationshipTemplateQueryItem>? rrelationshipTemplateQueryItems;
+
+        if (templates != null)
+        {
+            try
+            {
+                rrelationshipTemplateQueryItems = JsonSerializer.Deserialize<List<RelationshipTemplateQueryItem>>(templates);
+            }
+            catch (JsonException)
+            {
+                throw new ApplicationException(ApplicationErrors.RelationshipTemplate.InvalidRelationshipTemplateQueryItem());
+            }
+        }
+        else
+        {
+            rrelationshipTemplateQueryItems = ids!.Select(id => new RelationshipTemplateQueryItem { Id = id }).ToList();
+        }
+
+        var request = new ListRelationshipTemplatesQuery(paginationFilter, rrelationshipTemplateQueryItems);
 
         request.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
