@@ -23,10 +23,12 @@ namespace Backbone.Modules.Relationships.ConsumerApi.Controllers;
 public class RelationshipTemplatesController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;
+    private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-    public RelationshipTemplatesController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
+    public RelationshipTemplatesController(IMediator mediator, IOptions<ApplicationOptions> options, IOptions<JsonOptions> jsonOptions) : base(mediator)
     {
         _options = options.Value;
+        _jsonSerializerOptions = jsonOptions.Value.JsonSerializerOptions;
     }
 
     [HttpGet("{id}")]
@@ -41,30 +43,27 @@ public class RelationshipTemplatesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipTemplatesResponse>),
         StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter, [FromQuery] string? templates, [FromQuery] IEnumerable<string>? ids, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter, [FromQuery] string? templates, [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
-        //var relationshipTemplateQueryItems =
-        //    templates != null ? JsonSerializer.Deserialize<List<RelationshipTemplateQueryItem>>(templates) : ids!.Select(id => new RelationshipTemplateQueryItem { Id = id }).ToList();
-
-        List<RelationshipTemplateQueryItem>? rrelationshipTemplateQueryItems;
+        List<RelationshipTemplateQueryItem>? relationshipTemplateQueryItems;
 
         if (templates != null)
         {
             try
             {
-                rrelationshipTemplateQueryItems = JsonSerializer.Deserialize<List<RelationshipTemplateQueryItem>>(templates);
+                relationshipTemplateQueryItems = JsonSerializer.Deserialize<List<RelationshipTemplateQueryItem>>(templates, _jsonSerializerOptions);
             }
-            catch (JsonException)
+            catch (JsonException ex)
             {
-                throw new ApplicationException(ApplicationErrors.RelationshipTemplate.InvalidRelationshipTemplateQueryItem());
+                throw new ApplicationException(GenericApplicationErrors.Validation.InputCannotBeParsed(ex.Message));
             }
         }
         else
         {
-            rrelationshipTemplateQueryItems = ids!.Select(id => new RelationshipTemplateQueryItem { Id = id }).ToList();
+            relationshipTemplateQueryItems = ids.Select(id => new RelationshipTemplateQueryItem { Id = id }).ToList();
         }
 
-        var request = new ListRelationshipTemplatesQuery(paginationFilter, rrelationshipTemplateQueryItems);
+        var request = new ListRelationshipTemplatesQuery(paginationFilter, relationshipTemplateQueryItems);
 
         request.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 

@@ -1,13 +1,11 @@
-﻿using System.Text;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
 using TechTalk.SpecFlow.Assist;
-
-// ReSharper disable ClassNeverInstantiated.Local
-// ReSharper disable UnusedAutoPropertyAccessor.Local
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -53,14 +51,14 @@ internal class RelationshipTemplatesStepDefinitions
 
         foreach (var relationshipTemplateProperties in relationshipTemplatePropertiesSet)
         {
-            var client = _clientPool.FirstForIdentityName(relationshipTemplateProperties.RTempOwner);
+            var client = _clientPool.FirstForIdentityName(relationshipTemplateProperties.TemplateOwner);
             var forClient = relationshipTemplateProperties.ForIdentity != "-" ? _clientPool.FirstForIdentityName(relationshipTemplateProperties.ForIdentity).IdentityData!.Address : null;
             var password = relationshipTemplateProperties.Password.Trim() != "-" ? Convert.FromBase64String(relationshipTemplateProperties.Password.Trim()) : null;
 
             var response = await client.RelationshipTemplates
                 .CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, ForIdentity = forClient, Password = password });
 
-            _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateProperties.RTempName] = response.Result!;
+            _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateProperties.TemplateName] = response.Result!;
         }
     }
 
@@ -117,15 +115,15 @@ internal class RelationshipTemplatesStepDefinitions
 
         var getRequestPayloadSet = table.CreateSet<GetRequestPayload>();
 
-        var queries = getRequestPayloadSet.Select(payload =>
+        var queryItems = getRequestPayloadSet.Select(payload =>
         {
-            var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[payload.RTempName].Id;
+            var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[payload.TemplateName].Id;
             var password = payload.PasswordOnGet == "-" ? null : Convert.FromBase64String(payload.PasswordOnGet.Trim());
 
-            return new RelationshipTemplateQuery { Id = relationshipTemplateId, Password = password };
+            return new RelationshipTemplateQueryItem { Id = relationshipTemplateId, Password = password };
         }).ToList();
 
-        _responseContext.WhenResponse = _listRelationshipTemplatesResponse = await client.RelationshipTemplates.ListTemplates(queries);
+        _responseContext.WhenResponse = _listRelationshipTemplatesResponse = await client.RelationshipTemplates.ListTemplates(queryItems);
     }
 
     #endregion
@@ -142,16 +140,20 @@ internal class RelationshipTemplatesStepDefinitions
     #endregion
 }
 
+// ReSharper disable once ClassNeverInstantiated.Local
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 file class RelationshipTemplateProperties
 {
-    public required string RTempName { get; set; }
-    public required string RTempOwner { get; set; }
+    public required string TemplateName { get; set; }
+    public required string TemplateOwner { get; set; }
     public required string ForIdentity { get; set; }
     public required string Password { get; set; }
 }
 
+// ReSharper disable once ClassNeverInstantiated.Local
+[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 file class GetRequestPayload
 {
-    public required string RTempName { get; set; }
+    public required string TemplateName { get; set; }
     public required string PasswordOnGet { get; set; }
 }

@@ -48,23 +48,25 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return template;
     }
 
-    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds(IEnumerable<RelationshipTemplateQueryItem> queryItems, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
+    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds(IEnumerable<RelationshipTemplateQueryItem> queryItems, IdentityAddress activeIdentity,
+        PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false)
     {
         var queryItemsList = queryItems.ToList();
 
-        Expression<Func<RelationshipTemplate, bool>> whereClause = template => false;
+        Expression<Func<RelationshipTemplate, bool>> idAndPasswordFilter = template => false;
 
         foreach (var inputQuery in queryItemsList)
-            whereClause = whereClause
+        {
+            idAndPasswordFilter = idAndPasswordFilter
                 .Or(RelationshipTemplate.HasId(RelationshipTemplateId.Parse(inputQuery.Id))
                     .And(RelationshipTemplate.CanBeCollectedWithPassword(activeIdentity, inputQuery.Password)));
-
-        whereClause = whereClause.And(RelationshipTemplate.CanBeCollectedBy(activeIdentity));
+        }
 
         var query = (track ? _templates : _readOnlyTemplates)
             .NotExpiredFor(activeIdentity)
-            .Where(whereClause);
+            .Where(RelationshipTemplate.CanBeCollectedBy(activeIdentity))
+            .Where(idAndPasswordFilter);
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
