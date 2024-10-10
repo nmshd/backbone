@@ -54,7 +54,7 @@ internal class RelationshipTemplatesStepDefinitions
         foreach (var relationshipTemplateProperties in relationshipTemplatePropertiesSet)
         {
             var client = _clientPool.FirstForIdentityName(relationshipTemplateProperties.RTempOwner);
-            var forClient = relationshipTemplateProperties .ForIdentity != "-" ? _clientPool.FirstForIdentityName(relationshipTemplateProperties.ForIdentity).IdentityData!.Address : null;
+            var forClient = relationshipTemplateProperties.ForIdentity != "-" ? _clientPool.FirstForIdentityName(relationshipTemplateProperties.ForIdentity).IdentityData!.Address : null;
             var password = relationshipTemplateProperties.Password.Trim() != "-" ? Convert.FromBase64String(relationshipTemplateProperties.Password.Trim()) : null;
 
             var response = await client.RelationshipTemplates
