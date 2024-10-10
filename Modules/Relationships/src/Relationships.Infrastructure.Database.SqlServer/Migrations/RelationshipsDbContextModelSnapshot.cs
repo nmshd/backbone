@@ -64,8 +64,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                         .HasColumnType("int");
 
                     b.Property<byte[]>("Password")
-                        .HasColumnType("varbinary(max)")
-                        .HasMaxLength(200);
+                        .HasColumnType("varbinary(max)");
 
                     b.HasKey("Id");
 
