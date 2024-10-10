@@ -51,14 +51,14 @@ internal class RelationshipTemplatesStepDefinitions
 
         foreach (var relationshipTemplateProperties in relationshipTemplatePropertiesSet)
         {
-            var client = _clientPool.FirstForIdentityName(relationshipTemplateProperties.RTempOwner);
+            var client = _clientPool.FirstForIdentityName(relationshipTemplateProperties.TemplateOwner);
             var forClient = relationshipTemplateProperties.ForIdentity != "-" ? _clientPool.FirstForIdentityName(relationshipTemplateProperties.ForIdentity).IdentityData!.Address : null;
             var password = relationshipTemplateProperties.Password.Trim() != "-" ? Convert.FromBase64String(relationshipTemplateProperties.Password.Trim()) : null;
 
             var response = await client.RelationshipTemplates
                 .CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, ForIdentity = forClient, Password = password });
 
-            _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateProperties.RTempName] = response.Result!;
+            _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateProperties.TemplateName] = response.Result!;
         }
     }
 
@@ -117,7 +117,7 @@ internal class RelationshipTemplatesStepDefinitions
 
         var queries = getRequestPayloadSet.Select(payload =>
         {
-            var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[payload.RTempName].Id;
+            var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[payload.TemplateName].Id;
             var password = payload.PasswordOnGet == "-" ? null : Convert.FromBase64String(payload.PasswordOnGet.Trim());
 
             return new RelationshipTemplateQuery { Id = relationshipTemplateId, Password = password };
@@ -144,8 +144,8 @@ internal class RelationshipTemplatesStepDefinitions
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 file class RelationshipTemplateProperties
 {
-    public required string RTempName { get; set; }
-    public required string RTempOwner { get; set; }
+    public required string TemplateName { get; set; }
+    public required string TemplateOwner { get; set; }
     public required string ForIdentity { get; set; }
     public required string Password { get; set; }
 }
@@ -154,6 +154,6 @@ file class RelationshipTemplateProperties
 [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 file class GetRequestPayload
 {
-    public required string RTempName { get; set; }
+    public required string TemplateName { get; set; }
     public required string PasswordOnGet { get; set; }
 }
