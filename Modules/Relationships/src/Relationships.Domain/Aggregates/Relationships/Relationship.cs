@@ -68,12 +68,6 @@ public class Relationship : Entity
         return existingRelationshipsToPeer.Any(r => r.Status is RelationshipStatus.Active or RelationshipStatus.Pending or RelationshipStatus.Terminated or RelationshipStatus.DeletionProposed);
     }
 
-    private static void EnsureTargetIsNotSelf(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity)
-    {
-        if (activeIdentity == relationshipTemplate.CreatedBy)
-            throw new DomainException(DomainErrors.CannotSendRelationshipRequestToYourself());
-    }
-
     public RelationshipId Id { get; }
     public RelationshipTemplateId RelationshipTemplateId { get; }
     public RelationshipTemplate RelationshipTemplate { get; }
@@ -107,7 +101,7 @@ public class Relationship : Entity
     private static void EnsureNoOtherRelationshipToPeerExists(IdentityAddress target, IEnumerable<Relationship> existingRelationshipsToPeer)
     {
         if (existingRelationshipsToPeer.Any(r => r.Status is RelationshipStatus.Active or RelationshipStatus.Pending or RelationshipStatus.Terminated or RelationshipStatus.DeletionProposed))
-            throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists(target));
+            throw new DomainException(DomainErrors.RelationshipToTargetAlreadyExists());
     }
 
     private void EnsureTemplateIsAllocatedBy(RelationshipTemplate relationshipTemplate, IdentityAddress activeIdentity)
