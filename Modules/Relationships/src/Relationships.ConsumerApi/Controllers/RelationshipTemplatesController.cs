@@ -45,25 +45,22 @@ public class RelationshipTemplatesController : ApiControllerBase
         StatusCodes.Status200OK)]
     public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter, [FromQuery] string? templates, [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
-        var relationshipTemplateQueryItems =
-            templates != null ? JsonSerializer.Deserialize<List<RelationshipTemplateQueryItem>>(templates) : ids!.Select(id => new RelationshipTemplateQueryItem { Id = id }).ToList();
-
         List<RelationshipTemplateQueryItem>? relationshipTemplateQueryItems;
 
         if (templates != null)
         {
             try
             {
-                relationshipTemplateQueryItems = JsonSerializer.Deserialize<List<RelationshipTemplateQueryItem>>(templates, _jsonSerializerOptions)
+                relationshipTemplateQueryItems = JsonSerializer.Deserialize<List<RelationshipTemplateQueryItem>>(templates, _jsonSerializerOptions);
             }
-            catch (JsonException)
+            catch (JsonException ex)
             {
-                throw new ApplicationException(ApplicationErrors.RelationshipTemplate.InvalidRelationshipTemplateQueryItem());
+                throw new ApplicationException(GenericApplicationErrors.Validation.InputCannotBeParsed(ex.Message));
             }
         }
         else
         {
-            relationshipTemplateQueryItems = ids!.Select(id => new RelationshipTemplateQueryItem { Id = id }).ToList();
+            relationshipTemplateQueryItems = ids.Select(id => new RelationshipTemplateQueryItem { Id = id }).ToList();
         }
 
         var request = new ListRelationshipTemplatesQuery(paginationFilter, relationshipTemplateQueryItems);
