@@ -18,11 +18,10 @@ public class ExternalEvent : Entity
         Payload = null!;
     }
 
-    public ExternalEvent(ExternalEventType type, IdentityAddress owner, long index, object payload)
+    protected ExternalEvent(ExternalEventType type, IdentityAddress owner, object payload)
     {
         Id = ExternalEventId.New();
         Type = type;
-        Index = index;
         Owner = owner;
         CreatedAt = SystemTime.UtcNow;
         Payload = payload;
@@ -32,7 +31,7 @@ public class ExternalEvent : Entity
 
     public ExternalEventId Id { get; }
     public ExternalEventType Type { get; }
-    public long Index { get; }
+    public long Index { get; private set; }
 
     public IdentityAddress Owner { get; }
     public DateTime CreatedAt { get; }
@@ -43,6 +42,11 @@ public class ExternalEvent : Entity
     public SyncRun? SyncRun { get; private set; }
     public SyncRunId? SyncRunId { get; private set; }
     public IReadOnlyCollection<SyncError> Errors => _errors;
+
+    public void UpdateIndex(long newIndex)
+    {
+        Index = newIndex;
+    }
 
     public void AssignToSyncRun(SyncRun syncRun)
     {

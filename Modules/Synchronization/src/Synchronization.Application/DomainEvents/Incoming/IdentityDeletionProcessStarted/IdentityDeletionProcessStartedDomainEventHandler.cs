@@ -24,12 +24,13 @@ public class IdentityDeletionProcessStartedDomainEventHandler : IDomainEventHand
         if (domainEvent.Initiator == domainEvent.Address)
             return;
 
-#pragma warning disable IDE0037
-        var payload = new { DeletionProcessId = domainEvent.DeletionProcessId };
-#pragma warning restore IDE0037
         try
         {
-            await _dbContext.CreateExternalEvent(IdentityAddress.Parse(domainEvent.Address), ExternalEventType.IdentityDeletionProcessStarted, payload);
+            var payload = new IdentityDeletionProcessStartedExternalEvent.PayloadT { DeletionProcessId = domainEvent.DeletionProcessId };
+
+            var externalEvent = new IdentityDeletionProcessStartedExternalEvent(IdentityAddress.Parse(domainEvent.Address), payload);
+
+            await _dbContext.CreateExternalEvent(externalEvent);
         }
         catch (Exception ex)
         {

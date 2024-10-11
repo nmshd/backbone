@@ -25,12 +25,13 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandler : IDomainEve
         if (@event.Initiator == @event.Address)
             return;
 
-#pragma warning disable IDE0037
-        var payload = new { DeletionProcessId = @event.DeletionProcessId };
-#pragma warning restore IDE0037
         try
         {
-            await _dbContext.CreateExternalEvent(IdentityAddress.Parse(@event.Address), ExternalEventType.IdentityDeletionProcessStatusChanged, payload);
+            var payload = new IdentityDeletionProcessStatusChangedExternalEvent.PayloadT { DeletionProcessId = @event.DeletionProcessId };
+
+            var externalEvent = new IdentityDeletionProcessStatusChangedExternalEvent(IdentityAddress.Parse(@event.Address), payload);
+
+            await _dbContext.CreateExternalEvent(externalEvent);
         }
         catch (Exception ex)
         {
