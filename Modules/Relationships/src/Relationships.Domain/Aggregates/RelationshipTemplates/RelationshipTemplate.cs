@@ -10,7 +10,7 @@ namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates
 public class RelationshipTemplate : Entity
 {
     public const int MAX_PASSWORD_LENGTH = 200;
-    
+
     // ReSharper disable once UnusedMember.Local
     private RelationshipTemplate()
     {
