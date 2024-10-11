@@ -10,7 +10,7 @@ public class ExternalEvent : Entity
     private readonly List<SyncError> _errors = [];
 
     // ReSharper disable once UnusedMember.Local
-    private ExternalEvent()
+    protected ExternalEvent()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;

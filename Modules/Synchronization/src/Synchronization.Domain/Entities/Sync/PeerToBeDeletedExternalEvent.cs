@@ -4,6 +4,12 @@ namespace Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 public class PeerToBeDeletedExternalEvent : ExternalEvent
 {
+    // ReSharper disable once UnusedMember.Local
+    private PeerToBeDeletedExternalEvent()
+    {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+    }
+
     public PeerToBeDeletedExternalEvent(IdentityAddress owner, PayloadT payload)
         : base(ExternalEventType.PeerToBeDeleted, owner, payload)
     {
