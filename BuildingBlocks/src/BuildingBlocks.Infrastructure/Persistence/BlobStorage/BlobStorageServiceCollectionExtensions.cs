@@ -1,7 +1,9 @@
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
 using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 
@@ -23,11 +25,7 @@ public static class BlobStorageServiceCollectionExtensions
         switch (options.CloudProvider)
         {
             case AZURE_CLOUD_PROVIDER:
-                services.AddAzureStorageAccount(azureStorageAccountOptions =>
-                {
-                    azureStorageAccountOptions.ConnectionString = options.ConnectionInfo!;
-                    azureStorageAccountOptions.BucketName = options.Container;
-                });
+                services.AddAzureStorageAccount(azureStorageAccountOptions => { azureStorageAccountOptions.ConnectionString = options.ConnectionInfo!; });
                 break;
             case GOOGLE_CLOUD_PROVIDER:
                 services.AddGoogleCloudStorage(googleCloudStorageOptions =>
@@ -45,6 +43,14 @@ public static class BlobStorageServiceCollectionExtensions
                     $"{options.CloudProvider} is not a currently supported cloud provider.");
             }
         }
+
+        services.AddHealthChecks().Add(
+            new HealthCheckRegistration(
+                "blob_storage",
+                sp => new BlobStorageHealthCheck(sp.GetRequiredService<IBlobStorage>(), options.Container),
+                HealthStatus.Unhealthy, null
+            )
+        );
     }
 }
 
