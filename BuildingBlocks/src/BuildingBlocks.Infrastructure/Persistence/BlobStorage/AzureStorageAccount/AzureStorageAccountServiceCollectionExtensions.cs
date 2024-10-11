@@ -1,8 +1,6 @@
-using Azure.Storage.Blobs;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using HealthChecks.Azure.Storage.Blobs;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 
@@ -23,10 +21,13 @@ public static class AzureStorageAccountServiceCollectionExtensions
         services.Configure<AzureStorageAccountOptions>(opt => opt.ConnectionString = options.ConnectionString);
         services.AddSingleton<AzureStorageAccountContainerClientFactory>();
         services.AddScoped<IBlobStorage, AzureStorageAccount>();
-        services.AddSingleton(_ => new BlobServiceClient(options.ConnectionString));
 
-        services.AddHealthChecks().AddAzureBlobStorage(
-            optionsFactory: sp => new AzureBlobStorageHealthCheckOptions { ContainerName = sp.GetRequiredService<IOptions<BlobStorageOptions>>().Value.Container }
+        services.AddHealthChecks().Add(
+            new HealthCheckRegistration(
+                "blob_storage",
+                sp => new BlobStorageHealthCheck(sp.GetRequiredService<IBlobStorage>(), options.BucketName),
+                HealthStatus.Unhealthy, null
+            )
         );
     }
 }
@@ -34,4 +35,5 @@ public static class AzureStorageAccountServiceCollectionExtensions
 public class AzureStorageAccountOptions
 {
     public string ConnectionString { get; set; } = string.Empty;
+    public string BucketName { get; set; } = string.Empty;
 }

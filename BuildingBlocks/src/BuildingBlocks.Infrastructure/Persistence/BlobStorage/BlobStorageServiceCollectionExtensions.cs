@@ -23,7 +23,11 @@ public static class BlobStorageServiceCollectionExtensions
         switch (options.CloudProvider)
         {
             case AZURE_CLOUD_PROVIDER:
-                services.AddAzureStorageAccount(azureStorageAccountOptions => { azureStorageAccountOptions.ConnectionString = options.ConnectionInfo!; });
+                services.AddAzureStorageAccount(azureStorageAccountOptions =>
+                {
+                    azureStorageAccountOptions.ConnectionString = options.ConnectionInfo!;
+                    azureStorageAccountOptions.BucketName = options.Container;
+                });
                 break;
             case GOOGLE_CLOUD_PROVIDER:
                 services.AddGoogleCloudStorage(googleCloudStorageOptions =>

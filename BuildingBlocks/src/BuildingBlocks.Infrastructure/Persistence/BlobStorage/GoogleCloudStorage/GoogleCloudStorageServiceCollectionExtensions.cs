@@ -49,8 +49,13 @@ public static class GoogleCloudStorageServiceCollectionExtensions
             return new GoogleCloudStorage(storageClient, logger);
         });
 
-        services.AddHealthChecks()
-            .Add(new HealthCheckRegistration("Google Cloud", sp => new GoogleCloudStorageHealthCheck(sp.GetRequiredService<StorageClient>(), options), HealthStatus.Unhealthy, null));
+        services.AddHealthChecks().Add(
+            new HealthCheckRegistration(
+                "blob_storage",
+                sp => new BlobStorageHealthCheck(sp.GetRequiredService<IBlobStorage>(), options.BucketName),
+                HealthStatus.Unhealthy, null
+            )
+        );
     }
 }
 
