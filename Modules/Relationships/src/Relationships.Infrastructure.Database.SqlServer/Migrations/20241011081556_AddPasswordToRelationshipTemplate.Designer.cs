@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(RelationshipsDbContext))]
-    [Migration("20241010204932_AddPasswordProtectionToRelationshipTemplates")]
-    partial class AddPasswordProtectionToRelationshipTemplates
+    [Migration("20241011081556_AddPasswordToRelationshipTemplate")]
+    partial class AddPasswordToRelationshipTemplate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

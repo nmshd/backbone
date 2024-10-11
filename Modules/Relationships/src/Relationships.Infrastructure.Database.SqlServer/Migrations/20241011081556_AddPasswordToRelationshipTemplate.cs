@@ -5,7 +5,7 @@
 namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migrations
 {
     /// <inheritdoc />
-    public partial class AddPasswordProtectionToRelationshipTemplates : Migration
+    public partial class AddPasswordToRelationshipTemplate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

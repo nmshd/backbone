@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(RelationshipsDbContext))]
-    [Migration("20241010204941_AddPasswordProtectionToRelationshipTemplates")]
-    partial class AddPasswordProtectionToRelationshipTemplates
+    [Migration("20241011081142_AddPasswordToRelationshipTemplate")]
+    partial class AddPasswordToRelationshipTemplate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
