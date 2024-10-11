@@ -24,7 +24,7 @@ public class Validator : AbstractValidator<ListRelationshipTemplatesQuery>
 
                 queryItems
                     .RuleFor(query => query.Password)
-                    .NumberOfBytes(1, 200)
+                    .NumberOfBytes(1, RelationshipTemplate.MAX_PASSWORD_LENGTH)
                     .When(query => query.Password != null);
             });
     }
