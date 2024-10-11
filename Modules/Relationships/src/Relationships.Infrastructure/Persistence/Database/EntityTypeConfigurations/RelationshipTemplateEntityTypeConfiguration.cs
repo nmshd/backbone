@@ -25,5 +25,9 @@ public class RelationshipTemplateEntityTypeConfiguration : EntityEntityTypeConfi
             .WithOne()
             .HasForeignKey(x => x.RelationshipTemplateId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .Property(x => x.Password)
+            .HasMaxLength(RelationshipTemplate.MAX_PASSWORD_LENGTH);
     }
 }
