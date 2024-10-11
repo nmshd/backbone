@@ -203,7 +203,7 @@ public class RelationshipsController : ApiControllerBase
         var peerIdentity = await _mediator.Send(new GetIdentityQuery(peerAddress), cancellationToken);
 
         var response = peerIdentity.Status is IdentityStatus.ToBeDeleted
-            ? new CanEstablishRelationshipResponse { CanCreate = false }
+            ? new CanEstablishRelationshipResponse { CanCreate = false, Code = ApplicationErrors.Relationship.PeerIsToBeDeleted().Code }
             : await _mediator.Send(new CanEstablishRelationshipQuery { PeerAddress = peerAddress }, cancellationToken);
 
         return Ok(response);
@@ -213,7 +213,7 @@ public class RelationshipsController : ApiControllerBase
     {
         var peerIdentity = await _mediator.Send(new GetIdentityQuery(peerIdentityAddress), cancellationToken);
         if (peerIdentity.Status is IdentityStatus.ToBeDeleted)
-            throw new ApplicationException(ApplicationErrors.Relationship.PeerIsToBeDeleted(peerIdentity.Address));
+            throw new ApplicationException(ApplicationErrors.Relationship.PeerIsToBeDeleted());
     }
 }
 

@@ -4,7 +4,6 @@ using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
 using FluentAssertions;
 using Xunit;
 using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
@@ -63,7 +62,7 @@ public class RelationshipAcceptTests : AbstractTestsBase
 
         // Assert
         acting.Should().Throw<DomainException>().WithError(
-            "error.platform.validation.relationshipRequest.relationshipIsNotInCorrectStatus",
+            "error.platform.validation.relationship.relationshipIsNotInCorrectStatus",
             nameof(RelationshipStatus.Pending)
         );
     }
@@ -78,7 +77,7 @@ public class RelationshipAcceptTests : AbstractTestsBase
         var acting = () => relationship.Accept(IDENTITY_1, DEVICE_1, []);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.cannotAcceptOrRejectRelationshipAddressedToSomeoneElse");
     }
 
     [Fact]
@@ -92,7 +91,7 @@ public class RelationshipAcceptTests : AbstractTestsBase
         var acting = () => relationship.Accept(foreignAddress, DeviceId.New(), []);
 
         // Assert
-        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationshipRequest.cannotAcceptOrRejectRelationshipRequestAddressedToSomeoneElse");
+        acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.cannotAcceptOrRejectRelationshipAddressedToSomeoneElse");
     }
 
     [Fact]
