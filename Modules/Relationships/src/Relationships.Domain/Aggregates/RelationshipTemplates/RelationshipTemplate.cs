@@ -9,6 +9,8 @@ namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates
 
 public class RelationshipTemplate : Entity
 {
+    public const int MAX_PASSWORD_LENGTH = 200;
+
     // ReSharper disable once UnusedMember.Local
     private RelationshipTemplate()
     {
@@ -18,7 +20,8 @@ public class RelationshipTemplate : Entity
         CreatedByDevice = null!;
     }
 
-    public RelationshipTemplate(IdentityAddress createdBy, DeviceId createdByDevice, int? maxNumberOfAllocations, DateTime? expiresAt, byte[] content, IdentityAddress? forIdentity = null)
+    public RelationshipTemplate(IdentityAddress createdBy, DeviceId createdByDevice, int? maxNumberOfAllocations, DateTime? expiresAt, byte[] content, IdentityAddress? forIdentity = null,
+        byte[]? password = null)
     {
         Id = RelationshipTemplateId.New();
         CreatedAt = SystemTime.UtcNow;
@@ -29,13 +32,14 @@ public class RelationshipTemplate : Entity
         ExpiresAt = expiresAt;
         Content = content;
         ForIdentity = forIdentity;
+        Password = password;
 
         RaiseDomainEvent(new RelationshipTemplateCreatedDomainEvent(this));
     }
 
     public RelationshipTemplateId Id { get; set; }
 
-    public ICollection<Relationship> Relationships { get; set; } = new List<Relationship>();
+    public ICollection<Relationship> Relationships { get; set; } = [];
 
     public IdentityAddress CreatedBy { get; set; }
     public DeviceId CreatedByDevice { get; set; }
@@ -46,6 +50,7 @@ public class RelationshipTemplate : Entity
     public DateTime CreatedAt { get; set; }
 
     public IdentityAddress? ForIdentity { get; set; }
+    public byte[]? Password { get; set; }
 
     public List<RelationshipTemplateAllocation> Allocations { get; set; } = [];
 
@@ -54,13 +59,30 @@ public class RelationshipTemplate : Entity
         if (identity == CreatedBy)
             return;
 
-        if (Allocations.Any(x => x.AllocatedBy == identity))
+        if (IsAllocatedBy(identity))
             return;
 
         if (Allocations.Count == MaxNumberOfAllocations)
             throw new DomainException(DomainErrors.MaxNumberOfAllocationsExhausted());
 
         Allocations.Add(new RelationshipTemplateAllocation(Id, identity, device));
+    }
+
+    public bool IsAllocatedBy(IdentityAddress identity)
+    {
+        return Allocations.All(x => x.AllocatedBy != identity);
+    }
+
+    public bool CanBeCollectedUsingPassword(IdentityAddress address, byte[]? password)
+    {
+        return Password == null || password != null && Password.SequenceEqual(password) || CreatedBy == address;
+    }
+
+    #region Expressions
+
+    public static Expression<Func<RelationshipTemplate, bool>> HasId(RelationshipTemplateId id)
+    {
+        return r => r.Id == id;
     }
 
     public static Expression<Func<RelationshipTemplate, bool>> WasCreatedBy(IdentityAddress identityAddress)
@@ -72,4 +94,11 @@ public class RelationshipTemplate : Entity
     {
         return relationshipTemplate => relationshipTemplate.ForIdentity == null || relationshipTemplate.ForIdentity == address || relationshipTemplate.CreatedBy == address;
     }
+
+    public static Expression<Func<RelationshipTemplate, bool>> CanBeCollectedWithPassword(IdentityAddress address, byte[]? password)
+    {
+        return relationshipTemplate => relationshipTemplate.Password == null || relationshipTemplate.Password == password || relationshipTemplate.CreatedBy == address;
+    }
+
+    #endregion
 }
