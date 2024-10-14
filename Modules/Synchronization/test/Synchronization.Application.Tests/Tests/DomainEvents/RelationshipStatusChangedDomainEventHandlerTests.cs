@@ -1,5 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipStatusChanged;
+﻿using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipStatusChanged;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipStatusChanged;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -26,23 +25,13 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var externalEvent = new ExternalEvent(ExternalEventType.RelationshipStatusChanged, relationshipTo, 1,
-            new { @event.RelationshipId });
-
-        A.CallTo(() => mockDbContext.CreateExternalEvent(
-            relationshipTo,
-            ExternalEventType.RelationshipStatusChanged,
-            A<object>._)
-        ).Returns(externalEvent);
-
         var handler = CreateHandler(mockDbContext);
 
         // Act
         await handler.Handle(@event);
 
         // Assert
-        A.CallTo(() => mockDbContext.CreateExternalEvent(relationshipTo, ExternalEventType.RelationshipStatusChanged, A<object>._))
-            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockDbContext.CreateExternalEvent(A<RelationshipStatusChangedExternalEvent>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -59,23 +48,13 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var externalEvent = new ExternalEvent(ExternalEventType.RelationshipStatusChanged, relationshipTo, 1,
-            new { @event.RelationshipId });
-
-        A.CallTo(() => mockDbContext.CreateExternalEvent(
-            relationshipTo,
-            ExternalEventType.RelationshipStatusChanged,
-            A<object>._)
-        ).Returns(externalEvent);
-
         var handler = CreateHandler(mockDbContext);
 
         // Act
         await handler.Handle(@event);
 
         // Assert
-        A.CallTo(() => mockDbContext.CreateExternalEvent(A<IdentityAddress>._, A<ExternalEventType>._, A<object>._))
-            .MustNotHaveHappened();
+        A.CallTo(() => mockDbContext.CreateExternalEvent(A<RelationshipStatusChangedExternalEvent>._)).MustNotHaveHappened();
     }
 
     private static RelationshipStatusChangedDomainEventHandler CreateHandler(ISynchronizationDbContext dbContext)
