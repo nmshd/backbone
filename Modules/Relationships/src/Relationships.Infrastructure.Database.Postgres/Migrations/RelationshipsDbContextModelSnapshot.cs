@@ -18,7 +18,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Relationships")
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -62,6 +62,10 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
 
                     b.Property<int?>("MaxNumberOfAllocations")
                         .HasColumnType("integer");
+
+                    b.Property<byte[]>("Password")
+                        .HasMaxLength(200)
+                        .HasColumnType("bytea");
 
                     b.HasKey("Id");
 

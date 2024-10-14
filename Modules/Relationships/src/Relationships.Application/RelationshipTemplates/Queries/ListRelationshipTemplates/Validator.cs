@@ -1,4 +1,3 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
@@ -11,11 +10,22 @@ public class Validator : AbstractValidator<ListRelationshipTemplatesQuery>
 {
     public Validator()
     {
-        RuleFor(q => q.Ids)
+        RuleFor(q => q.QueryItems)
             .Cascade(CascadeMode.Stop)
-            .DetailedNotNull()
-            .Must(ids => ids.Count > 0).WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code).WithMessage("'Ids' must not be empty.");
+            .DetailedNotEmpty();
 
-        RuleForEach(x => x.Ids).ValidId<ListRelationshipTemplatesQuery, RelationshipTemplateId>();
+        RuleForEach(x => x.QueryItems)
+            .Cascade(CascadeMode.Stop)
+            .ChildRules(queryItems =>
+            {
+                queryItems
+                    .RuleFor(query => query.Id)
+                    .ValidId<RelationshipTemplateQueryItem, RelationshipTemplateId>();
+
+                queryItems
+                    .RuleFor(query => query.Password)
+                    .NumberOfBytes(1, RelationshipTemplate.MAX_PASSWORD_LENGTH)
+                    .When(query => query.Password != null);
+            });
     }
 }
