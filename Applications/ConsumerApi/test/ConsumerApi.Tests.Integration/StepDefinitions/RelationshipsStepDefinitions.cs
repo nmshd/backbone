@@ -83,6 +83,16 @@ internal class RelationshipsStepDefinitions
         _relationshipsContext.Relationships[relationshipName] = await Utils.CreateTerminatedRelationshipWithReactivationRequestBetween(participant1, participant2);
     }
 
+    [Given($"{RegexFor.SINGLE_THING} was fully reactivated")]
+    public async Task GivenRWasReactivated(string relationshipName)
+    {
+        var relationship = _relationshipsContext.Relationships[relationshipName];
+
+        var client = _clientPool.FirstForIdentityAddress(relationship.From);
+
+        await client.Relationships.ReactivateRelationship(relationship.Id);
+    }
+
     [Given($"{RegexFor.SINGLE_THING} has terminated {RegexFor.SINGLE_THING}")]
     public async Task GivenRelationshipIsTerminated(string terminatorName, string relationshipName)
     {
