@@ -21,7 +21,15 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandler : IDomainEve
 
     public async Task Handle(IdentityDeletionProcessStatusChangedDomainEvent @event)
     {
-        await CreateIdentityDeletionProcessStatusChangedExternalEvent(@event);
+        try
+        {
+            await CreateIdentityDeletionProcessStatusChangedExternalEvent(@event);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occured while processing a domain event.");
+            throw;
+        }
     }
 
     private async Task CreateIdentityDeletionProcessStatusChangedExternalEvent(IdentityDeletionProcessStatusChangedDomainEvent @event)
@@ -30,18 +38,10 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandler : IDomainEve
         if (@event.Initiator == @event.Address)
             return;
 
-        try
-        {
-            var payload = new IdentityDeletionProcessStatusChangedExternalEvent.EventPayload { DeletionProcessId = @event.DeletionProcessId };
+        var payload = new IdentityDeletionProcessStatusChangedExternalEvent.EventPayload { DeletionProcessId = @event.DeletionProcessId };
 
-            var externalEvent = new IdentityDeletionProcessStatusChangedExternalEvent(IdentityAddress.Parse(@event.Address), payload);
+        var externalEvent = new IdentityDeletionProcessStatusChangedExternalEvent(IdentityAddress.Parse(@event.Address), payload);
 
-            await _dbContext.CreateExternalEvent(externalEvent);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occured while processing a domain event.");
-            throw;
-        }
+        await _dbContext.CreateExternalEvent(externalEvent);
     }
 }

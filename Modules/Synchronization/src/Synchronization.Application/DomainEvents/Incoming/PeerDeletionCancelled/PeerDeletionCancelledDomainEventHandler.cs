@@ -20,23 +20,23 @@ public class PeerDeletionCancelledDomainEventHandler : IDomainEventHandler<PeerD
 
     public async Task Handle(PeerDeletionCancelledDomainEvent domainEvent)
     {
-        await CreatePeerDeletionCancelledExternalEvent(domainEvent);
-    }
-
-    private async Task CreatePeerDeletionCancelledExternalEvent(PeerDeletionCancelledDomainEvent @event)
-    {
         try
         {
-            var payload = new PeerDeletionCancelledExternalEvent.EventPayload { RelationshipId = @event.RelationshipId };
-
-            var externalEvent = new PeerDeletionCancelledExternalEvent(IdentityAddress.Parse(@event.PeerOfIdentityWithDeletionCancelled), payload);
-
-            await _dbContext.CreateExternalEvent(externalEvent);
+            await CreatePeerDeletionCancelledExternalEvent(domainEvent);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occured while processing a domain event.");
             throw;
         }
+    }
+
+    private async Task CreatePeerDeletionCancelledExternalEvent(PeerDeletionCancelledDomainEvent @event)
+    {
+        var payload = new PeerDeletionCancelledExternalEvent.EventPayload { RelationshipId = @event.RelationshipId };
+
+        var externalEvent = new PeerDeletionCancelledExternalEvent(IdentityAddress.Parse(@event.PeerOfIdentityWithDeletionCancelled), payload);
+
+        await _dbContext.CreateExternalEvent(externalEvent);
     }
 }

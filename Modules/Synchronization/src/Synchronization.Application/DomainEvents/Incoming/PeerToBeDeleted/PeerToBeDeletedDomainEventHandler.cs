@@ -20,23 +20,23 @@ public class PeerToBeDeletedDomainEventHandler : IDomainEventHandler<PeerToBeDel
 
     public async Task Handle(PeerToBeDeletedDomainEvent domainEvent)
     {
-        await CreatePeerToBeDeletedExternalEvent(domainEvent);
-    }
-
-    private async Task CreatePeerToBeDeletedExternalEvent(PeerToBeDeletedDomainEvent @event)
-    {
         try
         {
-            var payload = new PeerToBeDeletedExternalEvent.EventPayload { RelationshipId = @event.RelationshipId, DeletionDate = @event.GracePeriodEndsAt };
-
-            var externalEvent = new PeerToBeDeletedExternalEvent(IdentityAddress.Parse(@event.PeerOfIdentityToBeDeleted), payload);
-
-            await _dbContext.CreateExternalEvent(externalEvent);
+            await CreatePeerToBeDeletedExternalEvent(domainEvent);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occured while processing a domain event.");
             throw;
         }
+    }
+
+    private async Task CreatePeerToBeDeletedExternalEvent(PeerToBeDeletedDomainEvent @event)
+    {
+        var payload = new PeerToBeDeletedExternalEvent.EventPayload { RelationshipId = @event.RelationshipId, DeletionDate = @event.GracePeriodEndsAt };
+
+        var externalEvent = new PeerToBeDeletedExternalEvent(IdentityAddress.Parse(@event.PeerOfIdentityToBeDeleted), payload);
+
+        await _dbContext.CreateExternalEvent(externalEvent);
     }
 }

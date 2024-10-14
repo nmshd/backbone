@@ -20,7 +20,15 @@ public class IdentityDeletionProcessStartedDomainEventHandler : IDomainEventHand
 
     public async Task Handle(IdentityDeletionProcessStartedDomainEvent domainEvent)
     {
-        await CreateIdentityDeletionProcessStartedExternalEvent(domainEvent);
+        try
+        {
+            await CreateIdentityDeletionProcessStartedExternalEvent(domainEvent);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occured while processing a domain event.");
+            throw;
+        }
     }
 
     private async Task CreateIdentityDeletionProcessStartedExternalEvent(IdentityDeletionProcessStartedDomainEvent domainEvent)
@@ -29,18 +37,10 @@ public class IdentityDeletionProcessStartedDomainEventHandler : IDomainEventHand
         if (domainEvent.Initiator == domainEvent.Address)
             return;
 
-        try
-        {
-            var payload = new IdentityDeletionProcessStartedExternalEvent.EventPayload { DeletionProcessId = domainEvent.DeletionProcessId };
+        var payload = new IdentityDeletionProcessStartedExternalEvent.EventPayload { DeletionProcessId = domainEvent.DeletionProcessId };
 
-            var externalEvent = new IdentityDeletionProcessStartedExternalEvent(IdentityAddress.Parse(domainEvent.Address), payload);
+        var externalEvent = new IdentityDeletionProcessStartedExternalEvent(IdentityAddress.Parse(domainEvent.Address), payload);
 
-            await _dbContext.CreateExternalEvent(externalEvent);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "An error occured while processing a domain event.");
-            throw;
-        }
+        await _dbContext.CreateExternalEvent(externalEvent);
     }
 }
