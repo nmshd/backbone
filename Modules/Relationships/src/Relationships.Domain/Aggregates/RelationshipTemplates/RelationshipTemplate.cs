@@ -73,7 +73,7 @@ public class RelationshipTemplate : Entity
         return Allocations.Any(x => x.AllocatedBy == identity);
     }
 
-    public bool CanBeCollectedUsingPassword(IdentityAddress address, byte[]? password)
+    public bool CanBeCollectedUsingPassword(IdentityAddress activeIdentity, byte[]? password)
     {
         return Password == null ||
                password != null && Password.SequenceEqual(password) ||
