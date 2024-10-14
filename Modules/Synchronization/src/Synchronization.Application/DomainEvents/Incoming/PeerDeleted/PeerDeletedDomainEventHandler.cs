@@ -19,11 +19,11 @@ public class PeerDeletedDomainEventHandler : IDomainEventHandler<PeerDeletedDoma
         _logger = logger;
     }
 
-    public async Task Handle(PeerDeletedDomainEvent domainEvent)
+    public async Task Handle(PeerDeletedDomainEvent @event)
     {
         try
         {
-            await CreatePeerDeletedExternalEvent(domainEvent);
+            await CreatePeerDeletedExternalEvent(@event);
         }
         catch (Exception ex)
         {

@@ -18,11 +18,11 @@ public class PeerDeletionCancelledDomainEventHandler : IDomainEventHandler<PeerD
         _logger = logger;
     }
 
-    public async Task Handle(PeerDeletionCancelledDomainEvent domainEvent)
+    public async Task Handle(PeerDeletionCancelledDomainEvent @event)
     {
         try
         {
-            await CreatePeerDeletionCancelledExternalEvent(domainEvent);
+            await CreatePeerDeletionCancelledExternalEvent(@event);
         }
         catch (Exception ex)
         {

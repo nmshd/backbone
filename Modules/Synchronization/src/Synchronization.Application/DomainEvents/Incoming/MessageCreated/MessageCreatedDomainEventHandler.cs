@@ -18,11 +18,11 @@ public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreat
         _logger = logger;
     }
 
-    public async Task Handle(MessageCreatedDomainEvent domainEvent)
+    public async Task Handle(MessageCreatedDomainEvent @event)
     {
         try
         {
-            await CreateMessageReceivedExternalEvents(domainEvent);
+            await CreateMessageReceivedExternalEvents(@event);
         }
         catch (Exception ex)
         {
@@ -31,11 +31,11 @@ public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreat
         }
     }
 
-    private async Task CreateMessageReceivedExternalEvents(MessageCreatedDomainEvent domainEvent)
+    private async Task CreateMessageReceivedExternalEvents(MessageCreatedDomainEvent @event)
     {
-        foreach (var recipient in domainEvent.Recipients)
+        foreach (var recipient in @event.Recipients)
         {
-            var payload = new MessageReceivedExternalEvent.EventPayload { Id = domainEvent.Id };
+            var payload = new MessageReceivedExternalEvent.EventPayload { Id = @event.Id };
 
             var externalEvent = new MessageReceivedExternalEvent(IdentityAddress.Parse(recipient), payload);
 

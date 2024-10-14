@@ -18,11 +18,11 @@ public class RelationshipReactivationRequestedDomainEventHandler : IDomainEventH
         _logger = logger;
     }
 
-    public async Task Handle(RelationshipReactivationRequestedDomainEvent integrationEvent)
+    public async Task Handle(RelationshipReactivationRequestedDomainEvent @event)
     {
         try
         {
-            await CreateRelationshipReactivationRequestedExternalEvent(integrationEvent);
+            await CreateRelationshipReactivationRequestedExternalEvent(@event);
         }
         catch (Exception ex)
         {
