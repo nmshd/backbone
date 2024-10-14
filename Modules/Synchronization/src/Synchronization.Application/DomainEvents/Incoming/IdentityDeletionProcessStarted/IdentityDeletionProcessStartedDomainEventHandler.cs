@@ -18,23 +18,29 @@ public class IdentityDeletionProcessStartedDomainEventHandler : IDomainEventHand
         _logger = logger;
     }
 
-    public async Task Handle(IdentityDeletionProcessStartedDomainEvent domainEvent)
+    public async Task Handle(IdentityDeletionProcessStartedDomainEvent @event)
     {
-        // No need to create an external event if the deletion process was started by the identity itself (in that case it's not "external").
-        if (domainEvent.Initiator == domainEvent.Address)
-            return;
-
-#pragma warning disable IDE0037
-        var payload = new { DeletionProcessId = domainEvent.DeletionProcessId };
-#pragma warning restore IDE0037
         try
         {
-            await _dbContext.CreateExternalEvent(IdentityAddress.Parse(domainEvent.Address), ExternalEventType.IdentityDeletionProcessStarted, payload);
+            await CreateIdentityDeletionProcessStartedExternalEvent(@event);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occured while processing a domain event.");
             throw;
         }
+    }
+
+    private async Task CreateIdentityDeletionProcessStartedExternalEvent(IdentityDeletionProcessStartedDomainEvent @event)
+    {
+        // No need to create an external event if the deletion process was started by the identity itself (in that case it's not "external").
+        if (@event.Initiator == @event.Address)
+            return;
+
+        var payload = new IdentityDeletionProcessStartedExternalEvent.EventPayload { DeletionProcessId = @event.DeletionProcessId };
+
+        var externalEvent = new IdentityDeletionProcessStartedExternalEvent(IdentityAddress.Parse(@event.Address), payload);
+
+        await _dbContext.CreateExternalEvent(externalEvent);
     }
 }
