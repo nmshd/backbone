@@ -1,5 +1,4 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationCompleted;
+﻿using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipReactivationCompleted;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationCompleted;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -21,15 +20,6 @@ public class RelationshipReactivationCompletedDomainEventHandlerTests : Abstract
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var externalEvent = new ExternalEvent(ExternalEventType.RelationshipReactivationCompleted, IdentityAddress.Parse(identityAddress), 1,
-            new { relationshipReactivationCompletedIntegrationEvent.RelationshipId });
-
-        A.CallTo(() => mockDbContext.CreateExternalEvent(
-            identityAddress,
-            ExternalEventType.RelationshipReactivationCompleted,
-            A<object>._)
-        ).Returns(externalEvent);
-
         var handler = new RelationshipReactivationCompletedDomainEventHandler(mockDbContext,
             A.Fake<ILogger<RelationshipReactivationCompletedDomainEventHandler>>());
 
@@ -37,7 +27,6 @@ public class RelationshipReactivationCompletedDomainEventHandlerTests : Abstract
         await handler.Handle(relationshipReactivationCompletedIntegrationEvent);
 
         // Assert
-        A.CallTo(() => mockDbContext.CreateExternalEvent(identityAddress, ExternalEventType.RelationshipReactivationCompleted, A<object>._))
-            .MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockDbContext.CreateExternalEvent(A<RelationshipReactivationCompletedExternalEvent>._)).MustHaveHappenedOnceExactly();
     }
 }
