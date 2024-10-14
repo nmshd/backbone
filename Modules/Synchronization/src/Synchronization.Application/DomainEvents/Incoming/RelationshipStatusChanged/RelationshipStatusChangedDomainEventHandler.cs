@@ -21,9 +21,7 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
     {
         // if the relationship is in status "ReadyForDeletion", the peer doesn't know anything about it; therefore we must not create an external event
         if (@event.NewStatus == "ReadyForDeletion")
-        {
             return;
-        }
 
         try
         {
