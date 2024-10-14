@@ -94,24 +94,20 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         return datawallet;
     }
 
-    public async Task<ExternalEvent> CreateExternalEvent(IdentityAddress owner, ExternalEventType type, object payload)
+    public async Task CreateExternalEvent(ExternalEvent externalEvent)
     {
-        ExternalEvent? externalEvent = null;
-
         await RunInTransaction(async () =>
         {
-            if (externalEvent != null)
-                // if the transaction is retried, the old event has to be removed from the DbSet, because a new one with a new index is added
-                Set<ExternalEvent>().Remove(externalEvent);
+            var nextIndex = await GetNextExternalEventIndexForIdentity(externalEvent.Owner);
 
-            var nextIndex = await GetNextExternalEventIndexForIdentity(owner);
-            externalEvent = new ExternalEvent(type, owner, nextIndex, payload);
+            // if the transaction is retried, it usually means that there was a race condition, which means
+            // that we have to recalculate the Index to avoid getting the same race condition again.
+            externalEvent.UpdateIndex(nextIndex);
 
-            await ExternalEvents.AddAsync(externalEvent);
+            await Set<ExternalEvent>().AddAsync(externalEvent);
+
             await SaveChangesAsync(CancellationToken.None);
         }, [DbErrorCodes.SQLSERVER_INDEX_ALREADY_EXISTS, DbErrorCodes.POSTGRES_INDEX_ALREADY_EXISTS]);
-
-        return externalEvent!;
     }
 
     public async Task<SyncRun> GetSyncRun(SyncRunId syncRunId, IdentityAddress createdBy, CancellationToken cancellationToken)

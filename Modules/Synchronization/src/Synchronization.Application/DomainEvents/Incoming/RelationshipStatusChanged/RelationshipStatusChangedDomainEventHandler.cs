@@ -25,12 +25,13 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
             return;
         }
 
-#pragma warning disable IDE0037
-        var payload = new { RelationshipId = @event.RelationshipId };
-#pragma warning restore IDE0037
         try
         {
-            await _dbContext.CreateExternalEvent(@event.Peer, ExternalEventType.RelationshipStatusChanged, payload);
+            var payload = new RelationshipStatusChangedExternalEvent.PayloadT { RelationshipId = @event.RelationshipId };
+
+            var externalEvent = new RelationshipStatusChangedExternalEvent(@event.Peer, payload);
+
+            await _dbContext.CreateExternalEvent(externalEvent);
         }
         catch (Exception ex)
         {

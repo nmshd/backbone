@@ -27,12 +27,13 @@ public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreat
     {
         foreach (var recipient in domainEvent.Recipients)
         {
-#pragma warning disable IDE0037
-            var payload = new { Id = domainEvent.Id };
-#pragma warning restore IDE0037
             try
             {
-                await _dbContext.CreateExternalEvent(IdentityAddress.Parse(recipient), ExternalEventType.MessageReceived, payload);
+                var payload = new MessageReceivedExternalEvent.PayloadT { Id = domainEvent.Id };
+
+                var externalEvent = new MessageReceivedExternalEvent(IdentityAddress.Parse(recipient), payload);
+
+                await _dbContext.CreateExternalEvent(externalEvent);
             }
             catch (Exception ex)
             {

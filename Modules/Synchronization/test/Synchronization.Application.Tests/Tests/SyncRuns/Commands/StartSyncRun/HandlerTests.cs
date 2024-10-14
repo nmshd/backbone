@@ -119,10 +119,10 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var handler = CreateHandler(_activeIdentity);
 
-        var itemWithoutErrors = ExternalEventBuilder.Build().WithOwner(_activeIdentity).Create();
+        var itemWithoutErrors = ExternalEventBuilder.Build().WithOwner(_activeIdentity).WithIndex(0).Create();
         _arrangeContext.SaveEntity(itemWithoutErrors);
 
-        var itemWithMaxErrorCount = ExternalEventBuilder.Build().WithOwner(_activeIdentity).WithMaxErrorCount().Create();
+        var itemWithMaxErrorCount = ExternalEventBuilder.Build().WithOwner(_activeIdentity).WithIndex(1).WithMaxErrorCount().Create();
         _arrangeContext.SaveEntity(itemWithMaxErrorCount);
 
 
@@ -181,8 +181,8 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var handler = CreateHandler(_activeIdentity);
 
-        var unsyncedItem = _arrangeContext.SaveEntity(ExternalEventBuilder.Build().WithOwner(_activeIdentity).Create());
-        var syncedItem = _arrangeContext.SaveEntity(ExternalEventBuilder.Build().WithOwner(_activeIdentity).AlreadySynced().Create());
+        var unsyncedItem = _arrangeContext.SaveEntity(ExternalEventBuilder.Build().WithOwner(_activeIdentity).WithIndex(0).Create());
+        var syncedItem = _arrangeContext.SaveEntity(ExternalEventBuilder.Build().WithOwner(_activeIdentity).WithIndex(1).AlreadySynced().Create());
 
 
         // Act
