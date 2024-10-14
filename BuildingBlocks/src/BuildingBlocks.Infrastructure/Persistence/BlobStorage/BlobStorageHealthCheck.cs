@@ -11,7 +11,7 @@ public class BlobStorageHealthCheck : IHealthCheck
     private const int MAX_NUMBER_OF_TRIES = 5;
 
     private static bool? _isHealthy;
-    private static int _numberOfTries = 0;
+    private static int _numberOfTries;
 
     private readonly IBlobStorage _storage;
     private readonly string _bucketName;
