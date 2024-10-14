@@ -29,7 +29,7 @@ public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreat
         {
             try
             {
-                var payload = new MessageReceivedExternalEvent.PayloadT { Id = domainEvent.Id };
+                var payload = new MessageReceivedExternalEvent.EventPayload { Id = domainEvent.Id };
 
                 var externalEvent = new MessageReceivedExternalEvent(IdentityAddress.Parse(recipient), payload);
 

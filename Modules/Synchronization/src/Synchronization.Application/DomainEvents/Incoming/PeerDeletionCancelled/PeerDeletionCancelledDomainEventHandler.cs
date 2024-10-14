@@ -27,7 +27,7 @@ public class PeerDeletionCancelledDomainEventHandler : IDomainEventHandler<PeerD
     {
         try
         {
-            var payload = new PeerDeletionCancelledExternalEvent.PayloadT { RelationshipId = @event.RelationshipId };
+            var payload = new PeerDeletionCancelledExternalEvent.EventPayload { RelationshipId = @event.RelationshipId };
 
             var externalEvent = new PeerDeletionCancelledExternalEvent(IdentityAddress.Parse(@event.PeerOfIdentityWithDeletionCancelled), payload);
 

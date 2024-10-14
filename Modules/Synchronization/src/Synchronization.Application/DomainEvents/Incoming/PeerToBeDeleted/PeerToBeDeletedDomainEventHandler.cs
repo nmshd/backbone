@@ -27,7 +27,7 @@ public class PeerToBeDeletedDomainEventHandler : IDomainEventHandler<PeerToBeDel
     {
         try
         {
-            var payload = new PeerToBeDeletedExternalEvent.PayloadT { RelationshipId = @event.RelationshipId, DeletionDate = @event.GracePeriodEndsAt };
+            var payload = new PeerToBeDeletedExternalEvent.EventPayload { RelationshipId = @event.RelationshipId, DeletionDate = @event.GracePeriodEndsAt };
 
             var externalEvent = new PeerToBeDeletedExternalEvent(IdentityAddress.Parse(@event.PeerOfIdentityToBeDeleted), payload);
 

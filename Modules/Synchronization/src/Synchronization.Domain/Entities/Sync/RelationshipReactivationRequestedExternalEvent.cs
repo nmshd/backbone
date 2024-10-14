@@ -10,12 +10,12 @@ public class RelationshipReactivationRequestedExternalEvent : ExternalEvent
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
     }
 
-    public RelationshipReactivationRequestedExternalEvent(IdentityAddress owner, PayloadT payload)
+    public RelationshipReactivationRequestedExternalEvent(IdentityAddress owner, EventPayload payload)
         : base(ExternalEventType.RelationshipReactivationRequested, owner, payload)
     {
     }
 
-    public record PayloadT
+    public record EventPayload
     {
         public required string RelationshipId { get; init; }
     }

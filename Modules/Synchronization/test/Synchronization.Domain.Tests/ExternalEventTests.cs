@@ -12,7 +12,7 @@ public class ExternalEventTests : AbstractTestsBase
     public void Raises_a_domain_event_on_initialization()
     {
         var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var externalEvent = new IdentityDeletionProcessStatusChangedExternalEvent(identityAddress, new IdentityDeletionProcessStatusChangedExternalEvent.PayloadT { DeletionProcessId = "" });
+        var externalEvent = new IdentityDeletionProcessStatusChangedExternalEvent(identityAddress, new IdentityDeletionProcessStatusChangedExternalEvent.EventPayload { DeletionProcessId = "" });
 
         var createdDomainEvent = externalEvent.Should().HaveASingleDomainEvent<ExternalEventCreatedDomainEvent>();
         createdDomainEvent.EventId.Should().Be(externalEvent.Id.Value);

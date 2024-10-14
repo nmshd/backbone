@@ -28,7 +28,7 @@ public class PeerDeletedDomainEventHandler : IDomainEventHandler<PeerDeletedDoma
     {
         try
         {
-            var payload = new PeerDeletedExternalEvent.PayloadT { RelationshipId = @event.RelationshipId, DeletionDate = SystemTime.UtcNow };
+            var payload = new PeerDeletedExternalEvent.EventPayload { RelationshipId = @event.RelationshipId, DeletionDate = SystemTime.UtcNow };
 
             var externalEvent = new PeerDeletedExternalEvent(IdentityAddress.Parse(@event.PeerOfDeletedIdentity), payload);
 

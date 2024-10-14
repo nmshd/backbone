@@ -27,7 +27,7 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
 
         try
         {
-            var payload = new RelationshipStatusChangedExternalEvent.PayloadT { RelationshipId = @event.RelationshipId };
+            var payload = new RelationshipStatusChangedExternalEvent.EventPayload { RelationshipId = @event.RelationshipId };
 
             var externalEvent = new RelationshipStatusChangedExternalEvent(@event.Peer, payload);
 

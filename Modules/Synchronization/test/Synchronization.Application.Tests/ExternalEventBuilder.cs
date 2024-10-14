@@ -57,7 +57,7 @@ public class ExternalEventBuilder
 
     public ExternalEvent Create()
     {
-        var externalEvent = new MessageReceivedExternalEvent(_owner, new MessageReceivedExternalEvent.PayloadT { Id = "MSG11111111111111111" })
+        var externalEvent = new MessageReceivedExternalEvent(_owner, new MessageReceivedExternalEvent.EventPayload { Id = "MSG11111111111111111" })
         {
             SyncErrorCount = _errorCount
         };

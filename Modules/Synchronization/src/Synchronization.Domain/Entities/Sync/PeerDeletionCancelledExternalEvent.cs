@@ -10,12 +10,12 @@ public class PeerDeletionCancelledExternalEvent : ExternalEvent
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
     }
 
-    public PeerDeletionCancelledExternalEvent(IdentityAddress owner, PayloadT payload)
+    public PeerDeletionCancelledExternalEvent(IdentityAddress owner, EventPayload payload)
         : base(ExternalEventType.PeerDeletionCancelled, owner, payload)
     {
     }
 
-    public record PayloadT
+    public record EventPayload
     {
         public required string RelationshipId { get; init; }
     }

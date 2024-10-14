@@ -26,7 +26,7 @@ public class IdentityDeletionProcessStartedDomainEventHandler : IDomainEventHand
 
         try
         {
-            var payload = new IdentityDeletionProcessStartedExternalEvent.PayloadT { DeletionProcessId = domainEvent.DeletionProcessId };
+            var payload = new IdentityDeletionProcessStartedExternalEvent.EventPayload { DeletionProcessId = domainEvent.DeletionProcessId };
 
             var externalEvent = new IdentityDeletionProcessStartedExternalEvent(IdentityAddress.Parse(domainEvent.Address), payload);
 

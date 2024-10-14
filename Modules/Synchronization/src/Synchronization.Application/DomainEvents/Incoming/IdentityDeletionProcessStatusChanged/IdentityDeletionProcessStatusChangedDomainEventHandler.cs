@@ -27,7 +27,7 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandler : IDomainEve
 
         try
         {
-            var payload = new IdentityDeletionProcessStatusChangedExternalEvent.PayloadT { DeletionProcessId = @event.DeletionProcessId };
+            var payload = new IdentityDeletionProcessStatusChangedExternalEvent.EventPayload { DeletionProcessId = @event.DeletionProcessId };
 
             var externalEvent = new IdentityDeletionProcessStatusChangedExternalEvent(IdentityAddress.Parse(@event.Address), payload);
 

@@ -26,7 +26,7 @@ public class RelationshipReactivationCompletedDomainEventHandler : IDomainEventH
     {
         try
         {
-            var payload = new RelationshipReactivationCompletedExternalEvent.PayloadT { RelationshipId = @event.RelationshipId };
+            var payload = new RelationshipReactivationCompletedExternalEvent.EventPayload { RelationshipId = @event.RelationshipId };
 
             var externalEvent = new RelationshipReactivationCompletedExternalEvent(@event.Peer, payload);
 
