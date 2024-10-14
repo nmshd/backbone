@@ -21,6 +21,6 @@ public class ExternalEventEntityTypeConfiguration : EntityEntityTypeConfiguratio
 
         builder.Property(x => x.Payload)
             .HasMaxLength(200)
-            .HasConversion<ExternalEventIdPayloadEntityFrameworkValueConverter>();
+            .HasConversion<ExternalEventPayloadEntityFrameworkValueConverter>();
     }
 }

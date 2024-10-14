@@ -1,5 +1,4 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationRequested;
@@ -19,24 +18,25 @@ public class RelationshipReactivationRequestedDomainEventHandler : IDomainEventH
         _logger = logger;
     }
 
-    public async Task Handle(RelationshipReactivationRequestedDomainEvent integrationEvent)
+    public async Task Handle(RelationshipReactivationRequestedDomainEvent @event)
     {
-        await CreateExternalEvents(integrationEvent);
-    }
-
-    private async Task CreateExternalEvents(RelationshipReactivationRequestedDomainEvent @event)
-    {
-#pragma warning disable IDE0037
-        var payload = new { RelationshipId = @event.RelationshipId };
-#pragma warning restore IDE0037
         try
         {
-            await _dbContext.CreateExternalEvent(IdentityAddress.Parse(@event.Peer), ExternalEventType.RelationshipReactivationRequested, payload);
+            await CreateRelationshipReactivationRequestedExternalEvent(@event);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occured while processing a domain event.");
             throw;
         }
+    }
+
+    private async Task CreateRelationshipReactivationRequestedExternalEvent(RelationshipReactivationRequestedDomainEvent @event)
+    {
+        var payload = new RelationshipReactivationRequestedExternalEvent.EventPayload { RelationshipId = @event.RelationshipId };
+
+        var externalEvent = new RelationshipReactivationRequestedExternalEvent(@event.Peer, payload);
+
+        await _dbContext.CreateExternalEvent(externalEvent);
     }
 }
