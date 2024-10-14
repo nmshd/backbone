@@ -134,7 +134,6 @@ internal class TokensStepDefinitions
 
     #endregion
 
-
     #region Then
 
     [Then($@"the response contains Token\(s\) {RegexFor.LIST_OF_THINGS}")]
