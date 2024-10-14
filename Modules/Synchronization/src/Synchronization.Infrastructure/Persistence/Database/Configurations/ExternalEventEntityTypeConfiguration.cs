@@ -1,4 +1,3 @@
-using Autofac.Builder;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
