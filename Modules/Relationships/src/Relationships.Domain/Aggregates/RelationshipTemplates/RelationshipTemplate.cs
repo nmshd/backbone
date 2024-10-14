@@ -70,7 +70,7 @@ public class RelationshipTemplate : Entity
 
     public bool IsAllocatedBy(IdentityAddress identity)
     {
-        return Allocations.All(x => x.AllocatedBy != identity);
+        return Allocations.Any(x => x.AllocatedBy == identity);
     }
 
     public bool CanBeCollectedUsingPassword(IdentityAddress address, byte[]? password)
