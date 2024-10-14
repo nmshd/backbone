@@ -188,15 +188,25 @@ internal class RelationshipsStepDefinitions
     [Then("a Relationship can be established")]
     public void ThenARelationshipCanBeEstablished()
     {
-        if (_canEstablishRelationshipResponse != null)
-            _canEstablishRelationshipResponse.Result!.CanCreate.Should().BeTrue();
+        _canEstablishRelationshipResponse!.Result!.CanCreate.Should().BeTrue();
     }
 
     [Then("a Relationship can not be established")]
     public void ThenARelationshipCanNotBeEstablished()
     {
-        if (_canEstablishRelationshipResponse != null)
-            _canEstablishRelationshipResponse.Result!.CanCreate.Should().BeFalse();
+        _canEstablishRelationshipResponse!.Result!.CanCreate.Should().BeFalse();
+    }
+
+    [Then(@"the relationship creation check code is ""(.+)""")]
+    public void ThenTheCodeIs(string code)
+    {
+        _canEstablishRelationshipResponse!.Result!.Code.Should().Be(code);
+    }
+
+    [Then(@"the response does not contain a relationship creation check code")]
+    public void ThenThereIsNoCode()
+    {
+        _canEstablishRelationshipResponse!.Result!.Code.Should().BeNull();
     }
 
     #endregion

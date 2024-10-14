@@ -3,4 +3,5 @@
 public class CanEstablishRelationshipResponse
 {
     public required bool CanCreate { get; set; }
+    public string? Code { get; set; }
 }

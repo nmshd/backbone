@@ -35,10 +35,10 @@ public static class DomainErrors
             $"The relationship has to be in status '{string.Join(" or ", expectedStatuses)}' to perform this action.");
     }
 
-    public static DomainError RelationshipToTargetAlreadyExists(string targetIdentity)
+    public static DomainError RelationshipToTargetAlreadyExists()
     {
         return new DomainError("error.platform.validation.relationship.relationshipToTargetAlreadyExists",
-            $"A relationship to '{targetIdentity}' already exists. If the relationship is terminated, you can reactivate it. Note that a relationship has to be decomposed by both parties before a new one can be created.");
+            "A relationship to the owner of the template already exists. If the relationship is terminated, you can reactivate it. Note that a relationship has to be decomposed by both parties before a new one can be created.");
     }
 
     public static DomainError NoRevocableReactivationRequestExists()
@@ -75,5 +75,11 @@ public static class DomainErrors
     {
         return new DomainError("error.platform.validation.relationship.relationshipAlreadyDecomposed",
             "You already decomposed this Relationship.");
+    }
+
+    public static DomainError RelationshipTemplateNotAllocated()
+    {
+        return new DomainError("error.platform.validation.relationship.relationshipTemplateNotAllocated",
+            "The relationship template has to be allocated before it can be used to establish a relationship. Send a GET request to the /RelationshipTemplates/{id} endpoint to allocate the template.");
     }
 }
