@@ -21,7 +21,7 @@ User requests Relationship Templates
           | rt12         | i2            | i3          | -        |
           | rt13         | i2            | i3          | password |
           | rt14         | i2            | i3          | password |
-        When <activeIdentity> sends a GET request to the /RelationshipTemplate endpoint with the following payloads
+        When <activeIdentity> sends a GET request to the /RelationshipTemplates endpoint with the following payloads
           | templateName | passwordOnGet |
           | rt1          | -             |
           | rt2          | -             |

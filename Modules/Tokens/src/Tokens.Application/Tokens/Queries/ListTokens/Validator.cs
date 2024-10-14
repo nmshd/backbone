@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Extensions;
+using Backbone.BuildingBlocks.Application.FluentValidation;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Tokens.Domain.Entities;
 using FluentValidation;
@@ -12,7 +13,24 @@ public class Validator : AbstractValidator<ListTokensQuery>
     public Validator()
     {
         RuleFor(t => t.PaginationFilter).SetValidator(new PaginationFilterValidator()).When(t => t != null);
-        RuleForEach(x => x.Ids).ValidId<ListTokensQuery, TokenId>();
+
+        RuleFor(q => q.QueryItems)
+            .Cascade(CascadeMode.Stop)
+            .DetailedNotEmpty();
+
+        RuleForEach(x => x.QueryItems)
+            .Cascade(CascadeMode.Stop)
+            .ChildRules(queryItems =>
+            {
+                queryItems
+                    .RuleFor(query => query.Id)
+                    .ValidId<TokenQueryItem, TokenId>();
+
+                queryItems
+                    .RuleFor(query => query.Password)
+                    .NumberOfBytes(1, Token.MAX_PASSWORD_LENGTH)
+                    .When(query => query.Password != null);
+            });
     }
 }
 

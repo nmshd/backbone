@@ -23,13 +23,13 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
         return await _client.Get<ListTokensResponse>($"api/{API_VERSION}/Tokens", null, pagination);
     }
 
-    public async Task<ApiResponse<ListTokensResponse>> ListTokens(IEnumerable<string> ids, PaginationFilter? pagination = null)
+    public async Task<ApiResponse<ListTokensResponse>> ListTokens(IEnumerable<TokenQueryItem> queryItems, PaginationFilter? pagination = null)
     {
         return await _client
             .Request<ListTokensResponse>(HttpMethod.Get, $"api/{API_VERSION}/Tokens")
             .Authenticate()
             .WithPagination(pagination)
-            .AddQueryParameter("ids", ids)
+            .AddQueryParameter("tokens", queryItems)
             .Execute();
     }
 
@@ -41,5 +41,10 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
     public async Task<ApiResponse<Token>> GetToken(string id)
     {
         return await _client.Get<Token>($"api/{API_VERSION}/Tokens/{id}");
+    }
+
+    public async Task<ApiResponse<Token>> GetToken(string id, byte[] password)
+    {
+        return await _client.Get<Token>($"api/{API_VERSION}/Tokens/{id}?password={Convert.ToBase64String(password)}");
     }
 }

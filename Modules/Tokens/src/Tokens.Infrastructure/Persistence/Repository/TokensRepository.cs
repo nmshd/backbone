@@ -4,7 +4,9 @@ using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
 using Backbone.Modules.Tokens.Domain.Entities;
+using Backbone.Modules.Tokens.Infrastructure.Extensions;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,12 +25,36 @@ public class TokensRepository : ITokensRepository
         _readonlyTokensDbSet = dbContext.Tokens.AsNoTracking();
     }
 
-    public async Task<Token?> Find(TokenId id, IdentityAddress? activeIdentity)
+    public async Task<DbPaginationResult<Token>> FindTokensWithIds(IEnumerable<TokenQueryItem> queryItems, IdentityAddress activeIdentity,
+        PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
+    {
+        var queryItemsList = queryItems.ToList();
+
+        Expression<Func<Token, bool>> idAndPasswordFilter = template => false;
+
+        foreach (var inputQuery in queryItemsList)
+        {
+            idAndPasswordFilter = idAndPasswordFilter
+                .Or(Token.HasId(TokenId.Parse(inputQuery.Id))
+                    .And(Token.CanBeCollectedWithPassword(activeIdentity, inputQuery.Password)));
+        }
+
+        var query = (track ? _tokensDbSet : _readonlyTokensDbSet)
+            .NotExpiredFor(activeIdentity)
+            .Where(Token.CanBeCollectedBy(activeIdentity))
+            .Where(idAndPasswordFilter);
+
+        var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
+
+        return templates;
+    }
+
+    public async Task<Token?> Find(TokenId id, IdentityAddress? activeIdentity, CancellationToken cancellationToken, bool track = false)
     {
         var token = await _readonlyTokensDbSet
             .Where(Token.IsNotExpired)
             .Where(Token.CanBeCollectedBy(activeIdentity))
-            .FirstOrDefaultAsync(t => t.Id == id);
+            .FirstWithIdOrDefault(id, cancellationToken);
 
         return token;
     }

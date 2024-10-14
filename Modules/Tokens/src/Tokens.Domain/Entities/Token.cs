@@ -8,6 +8,8 @@ namespace Backbone.Modules.Tokens.Domain.Entities;
 
 public class Token : Entity
 {
+    public const int MAX_PASSWORD_LENGTH = 200;
+
     // ReSharper disable once UnusedMember.Local
     private Token()
     {
@@ -18,7 +20,7 @@ public class Token : Entity
         Content = null!;
     }
 
-    public Token(IdentityAddress createdBy, DeviceId createdByDevice, byte[] content, DateTime expiresAt, IdentityAddress? forIdentity = null)
+    public Token(IdentityAddress createdBy, DeviceId createdByDevice, byte[] content, DateTime expiresAt, IdentityAddress? forIdentity = null, byte[]? password = null)
     {
         Id = TokenId.New();
 
@@ -30,6 +32,7 @@ public class Token : Entity
 
         Content = content;
         ForIdentity = forIdentity;
+        Password = password;
 
         RaiseDomainEvent(new TokenCreatedDomainEvent(this));
     }
@@ -40,10 +43,18 @@ public class Token : Entity
     public DeviceId CreatedByDevice { get; set; }
 
     public IdentityAddress? ForIdentity { get; set; }
+    public byte[]? Password { get; set; }
 
     public byte[] Content { get; private set; }
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
+
+    public bool CanBeCollectedUsingPassword(IdentityAddress address, byte[]? password)
+    {
+        return Password == null || password != null && Password.SequenceEqual(password) || CreatedBy == address;
+    }
+
+    #region Expressions
 
     public static Expression<Func<Token, bool>> IsExpired =>
         challenge => challenge.ExpiresAt <= SystemTime.UtcNow;
@@ -60,4 +71,16 @@ public class Token : Entity
     {
         return t => t.CreatedBy == identityAddress.ToString();
     }
+
+    public static Expression<Func<Token, bool>> HasId(TokenId id)
+    {
+        return r => r.Id == id;
+    }
+
+    public static Expression<Func<Token, bool>> CanBeCollectedWithPassword(IdentityAddress address, byte[]? password)
+    {
+        return token => token.Password == null || token.Password == password || token.CreatedBy == address;
+    }
+
+    #endregion
 }
