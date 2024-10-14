@@ -19,6 +19,11 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
 
     public async Task Handle(RelationshipStatusChangedDomainEvent @event)
     {
+        await CreateRelationshipStatusChangedExternalEvent(@event);
+    }
+
+    private async Task CreateRelationshipStatusChangedExternalEvent(RelationshipStatusChangedDomainEvent @event)
+    {
         // if the relationship is in status "ReadyForDeletion", the peer doesn't know anything about it; therefore we must not create an external event
         if (@event.NewStatus == "ReadyForDeletion")
             return;

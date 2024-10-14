@@ -21,6 +21,11 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandler : IDomainEve
 
     public async Task Handle(IdentityDeletionProcessStatusChangedDomainEvent @event)
     {
+        await CreateIdentityDeletionProcessStatusChangedExternalEvent(@event);
+    }
+
+    private async Task CreateIdentityDeletionProcessStatusChangedExternalEvent(IdentityDeletionProcessStatusChangedDomainEvent @event)
+    {
         // No need to create an external event if the action that triggered the event was initiated by the owner of the deletion process (in that case it's not "external").
         if (@event.Initiator == @event.Address)
             return;

@@ -20,10 +20,10 @@ public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreat
 
     public async Task Handle(MessageCreatedDomainEvent domainEvent)
     {
-        await CreateExternalEvents(domainEvent);
+        await CreateMessageReceivedExternalEvent(domainEvent);
     }
 
-    private async Task CreateExternalEvents(MessageCreatedDomainEvent domainEvent)
+    private async Task CreateMessageReceivedExternalEvent(MessageCreatedDomainEvent domainEvent)
     {
         foreach (var recipient in domainEvent.Recipients)
         {

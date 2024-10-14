@@ -20,10 +20,10 @@ public class PeerToBeDeletedDomainEventHandler : IDomainEventHandler<PeerToBeDel
 
     public async Task Handle(PeerToBeDeletedDomainEvent domainEvent)
     {
-        await CreateExternalEvent(domainEvent);
+        await CreatePeerToBeDeletedExternalEvent(domainEvent);
     }
 
-    private async Task CreateExternalEvent(PeerToBeDeletedDomainEvent @event)
+    private async Task CreatePeerToBeDeletedExternalEvent(PeerToBeDeletedDomainEvent @event)
     {
         try
         {

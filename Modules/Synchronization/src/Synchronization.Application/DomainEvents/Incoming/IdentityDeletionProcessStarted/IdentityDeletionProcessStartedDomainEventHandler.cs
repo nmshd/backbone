@@ -20,6 +20,11 @@ public class IdentityDeletionProcessStartedDomainEventHandler : IDomainEventHand
 
     public async Task Handle(IdentityDeletionProcessStartedDomainEvent domainEvent)
     {
+        await CreateIdentityDeletionProcessStartedExternalEvent(domainEvent);
+    }
+
+    private async Task CreateIdentityDeletionProcessStartedExternalEvent(IdentityDeletionProcessStartedDomainEvent domainEvent)
+    {
         // No need to create an external event if the deletion process was started by the identity itself (in that case it's not "external").
         if (domainEvent.Initiator == domainEvent.Address)
             return;

@@ -20,10 +20,10 @@ public class RelationshipReactivationRequestedDomainEventHandler : IDomainEventH
 
     public async Task Handle(RelationshipReactivationRequestedDomainEvent integrationEvent)
     {
-        await CreateExternalEvents(integrationEvent);
+        await CreateRelationshipReactivationRequestedExternalEvent(integrationEvent);
     }
 
-    private async Task CreateExternalEvents(RelationshipReactivationRequestedDomainEvent @event)
+    private async Task CreateRelationshipReactivationRequestedExternalEvent(RelationshipReactivationRequestedDomainEvent @event)
     {
         try
         {
