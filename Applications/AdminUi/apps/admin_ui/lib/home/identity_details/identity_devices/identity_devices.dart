@@ -49,7 +49,10 @@ class IdentityDevices extends StatelessWidget {
                             ),
                             DataCell(
                               Text(
-                                device.lastLogin!.isEmpty ? '${device.lastLogin!.entries.first}' : '-',
+                                device.lastLogin != null && device.lastLogin!['time'] is String
+                                    ? DateFormat.yMd(Localizations.localeOf(context).languageCode)
+                                        .format(DateTime.parse(device.lastLogin!['time'] as String))
+                                    : '-',
                                 style: TextStyle(color: textColor),
                               ),
                             ),
