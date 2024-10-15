@@ -10,8 +10,10 @@ namespace Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Reposit
 public interface ITokensRepository
 {
     Task Add(Token token);
-    Task<DbPaginationResult<Token>> FindTokensWithIds(IEnumerable<TokenQueryItem> queryItems, IdentityAddress activeIdentity, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false);
+
+    Task<DbPaginationResult<Token>> FindTokens(IEnumerable<ListTokensQueryItem> queryItems, IdentityAddress activeIdentity, PaginationFilter paginationFilter,
+        CancellationToken cancellationToken, bool track = false);
+
     Task<Token?> Find(TokenId tokenId, IdentityAddress? activeIdentity, CancellationToken cancellationToken, bool track = false);
-    Task<DbPaginationResult<Token>> FindAllWithIds(IdentityAddress activeIdentity, IEnumerable<TokenId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken);
     Task DeleteTokens(Expression<Func<Token, bool>> filter, CancellationToken cancellationToken);
 }

@@ -120,7 +120,7 @@ internal class RelationshipTemplatesStepDefinitions
             var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[payload.TemplateName].Id;
             var password = payload.PasswordOnGet == "-" ? null : Convert.FromBase64String(payload.PasswordOnGet.Trim());
 
-            return new RelationshipTemplateQueryItem { Id = relationshipTemplateId, Password = password };
+            return new ListRelationshipTemplatesQueryItem { Id = relationshipTemplateId, Password = password };
         }).ToList();
 
         _responseContext.WhenResponse = _listRelationshipTemplatesResponse = await client.RelationshipTemplates.ListTemplates(queryItems);

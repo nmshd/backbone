@@ -24,7 +24,7 @@ public class TokensRepository : ITokensRepository
         _readonlyTokensDbSet = dbContext.Tokens.AsNoTracking();
     }
 
-    public async Task<DbPaginationResult<Token>> FindTokensWithIds(IEnumerable<TokenQueryItem> queryItems, IdentityAddress activeIdentity,
+    public async Task<DbPaginationResult<Token>> FindTokens(IEnumerable<ListTokensQueryItem> queryItems, IdentityAddress activeIdentity,
         PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
     {
         var queryItemsList = queryItems.ToList();

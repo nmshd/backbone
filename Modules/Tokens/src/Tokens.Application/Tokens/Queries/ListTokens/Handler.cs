@@ -1,7 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Tokens.Domain.Entities;
 using MediatR;
 
 namespace Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
@@ -19,7 +18,7 @@ public class Handler : IRequestHandler<ListTokensQuery, ListTokensResponse>
 
     public async Task<ListTokensResponse> Handle(ListTokensQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _tokensRepository.FindTokensWithIds(request.QueryItems, _activeIdentity, request.PaginationFilter, cancellationToken, track: false);
+        var dbPaginationResult = await _tokensRepository.FindTokens(request.QueryItems, _activeIdentity, request.PaginationFilter, cancellationToken, track: false);
 
         return new ListTokensResponse(dbPaginationResult, request.PaginationFilter);
     }
