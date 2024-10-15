@@ -63,9 +63,9 @@ public static class ApplicationErrors
                 "The client's Identity limit has been reached. A new Identity cannot be created with this client.");
         }
 
-        public static ApplicationError CannotSendNotificationsWhileIdentityIsToBeDeleted()
+        public static ApplicationError CannotSendNotificationsWhileIdentityIsInStatusToBeDeleted()
         {
-            return new ApplicationError("error.platform.validation.device.cannotSendNotificationsWhileIdentityIsToBeDeleted",
+            return new ApplicationError("error.platform.validation.device.cannotSendNotificationsWhileIdentityIsInStatusToBeDeleted",
                 "Cannot send notifications while identity is marked for deletion.");
         }
     }
