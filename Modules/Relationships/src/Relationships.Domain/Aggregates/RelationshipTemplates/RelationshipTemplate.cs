@@ -70,12 +70,15 @@ public class RelationshipTemplate : Entity
 
     public bool IsAllocatedBy(IdentityAddress identity)
     {
-        return Allocations.All(x => x.AllocatedBy != identity);
+        return Allocations.Any(x => x.AllocatedBy == identity);
     }
 
-    public bool CanBeCollectedUsingPassword(IdentityAddress address, byte[]? password)
+    public bool CanBeCollectedUsingPassword(IdentityAddress activeIdentity, byte[]? password)
     {
-        return Password == null || password != null && Password.SequenceEqual(password) || CreatedBy == address;
+        return Password == null ||
+               password != null && Password.SequenceEqual(password) ||
+               CreatedBy == activeIdentity || // The owner shouldn't need a password to get the template
+               Allocations.Any(a => a.AllocatedBy == activeIdentity); // if the template has already been allocated by the active identity, it doesn't need to pass the password again 
     }
 
     #region Expressions
