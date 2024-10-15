@@ -1,4 +1,3 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.IdentityDeletionProcessStarted;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.IdentityDeletionProcessStarted;
@@ -21,24 +20,13 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests : AbstractTes
 
         var fakeDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var externalEvent = new ExternalEvent(ExternalEventType.IdentityDeletionProcessStarted, IdentityAddress.Parse(identityAddress), 1,
-            new { identityDeletionProcessStartedDomainEvent.DeletionProcessId });
-
-        A.CallTo(() => fakeDbContext.CreateExternalEvent(
-            A<IdentityAddress>.That.Matches(i => i.Value == identityAddress),
-            ExternalEventType.IdentityDeletionProcessStarted,
-            A<object>._)
-        ).Returns(externalEvent);
-
         var handler = new IdentityDeletionProcessStartedDomainEventHandler(fakeDbContext, A.Fake<ILogger<IdentityDeletionProcessStartedDomainEventHandler>>());
 
         // Act
         await handler.Handle(identityDeletionProcessStartedDomainEvent);
 
         // Assert
-        A.CallTo(() => fakeDbContext
-            .CreateExternalEvent(identityAddress, ExternalEventType.IdentityDeletionProcessStarted, A<object>._)
-        ).MustHaveHappenedOnceExactly();
+        A.CallTo(() => fakeDbContext.CreateExternalEvent(A<IdentityDeletionProcessStartedExternalEvent>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -50,22 +38,12 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests : AbstractTes
 
         var fakeDbContext = A.Fake<ISynchronizationDbContext>();
 
-        var externalEvent = new ExternalEvent(ExternalEventType.IdentityDeletionProcessStarted, IdentityAddress.Parse(deletionProcessOwner), 1,
-            new { identityDeletionProcessStartedDomainEvent.DeletionProcessId });
-
-        A.CallTo(() => fakeDbContext.CreateExternalEvent(
-            A<IdentityAddress>.That.Matches(i => i.Value == deletionProcessOwner),
-            ExternalEventType.IdentityDeletionProcessStarted,
-            A<object>._)
-        ).Returns(externalEvent);
-
         var handler = new IdentityDeletionProcessStartedDomainEventHandler(fakeDbContext, A.Fake<ILogger<IdentityDeletionProcessStartedDomainEventHandler>>());
 
         // Act
         await handler.Handle(identityDeletionProcessStartedDomainEvent);
 
         // Assert
-        A.CallTo(() => fakeDbContext.CreateExternalEvent(deletionProcessOwner, ExternalEventType.IdentityDeletionProcessStarted, A<object>._)
-        ).MustNotHaveHappened();
+        A.CallTo(() => fakeDbContext.CreateExternalEvent(A<IdentityDeletionProcessStartedExternalEvent>._)).MustNotHaveHappened();
     }
 }

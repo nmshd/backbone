@@ -113,8 +113,8 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
     public async Task Missing_results_lead_to_SyncErrors()
     {
         // Arrange
-        var item1 = ExternalEventBuilder.Build().WithOwner(_activeIdentity).Create();
-        var item2 = ExternalEventBuilder.Build().WithOwner(_activeIdentity).Create();
+        var item1 = ExternalEventBuilder.Build().WithOwner(_activeIdentity).WithIndex(0).Create();
+        var item2 = ExternalEventBuilder.Build().WithOwner(_activeIdentity).WithIndex(1).Create();
         var items = _arrangeContext.SaveEntities(item1, item2);
 
         var syncRun = SyncRunBuilder
