@@ -26,10 +26,10 @@ public class Handler : IRequestHandler<GetTokenQuery, TokenDTO>
 
     private async Task<Token> GetToken(string tokenId, byte[]? password, CancellationToken cancellationToken)
     {
-        var token = await _tokensRepository.Find(TokenId.Parse(tokenId), _userContext.GetAddress(), cancellationToken, true) ??
+        var token = await _tokensRepository.Find(TokenId.Parse(tokenId), _userContext.GetAddressOrNull(), cancellationToken, true) ??
                     throw new NotFoundException(nameof(Token));
 
-        if (!token.CanBeCollectedUsingPassword(_userContext.GetAddress(), password))
+        if (!token.CanBeCollectedUsingPassword(_userContext.GetAddressOrNull(), password))
             throw new NotFoundException(nameof(Token));
 
         return token;

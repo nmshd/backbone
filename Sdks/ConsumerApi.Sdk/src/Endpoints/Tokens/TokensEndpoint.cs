@@ -38,6 +38,11 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
         return await _client.GetUnauthenticated<Token>($"api/{API_VERSION}/Tokens/{id}");
     }
 
+    public async Task<ApiResponse<Token>> GetTokenUnauthenticated(string id, byte[] password)
+    {
+        return await _client.GetUnauthenticated<Token>($"api/{API_VERSION}/Tokens/{id}?password={Convert.ToBase64String(password)}");
+    }
+
     public async Task<ApiResponse<Token>> GetToken(string id)
     {
         return await _client.Get<Token>($"api/{API_VERSION}/Tokens/{id}");

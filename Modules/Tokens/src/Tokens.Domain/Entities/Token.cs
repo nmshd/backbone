@@ -49,7 +49,7 @@ public class Token : Entity
     public DateTime CreatedAt { get; set; }
     public DateTime ExpiresAt { get; set; }
 
-    public bool CanBeCollectedUsingPassword(IdentityAddress address, byte[]? password)
+    public bool CanBeCollectedUsingPassword(IdentityAddress? address, byte[]? password)
     {
         return Password == null || password != null && Password.SequenceEqual(password) || CreatedBy == address;
     }

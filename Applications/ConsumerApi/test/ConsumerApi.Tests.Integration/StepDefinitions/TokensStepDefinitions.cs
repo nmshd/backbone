@@ -102,16 +102,23 @@ internal class TokensStepDefinitions
             new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW, ForIdentity = forClient.IdentityData!.Address, Password = password });
     }
 
-    [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /Tokens/{RegexFor.SINGLE_THING}.Id endpoint with password ""([^""]*)""")]
+    [When($@"{RegexFor.OPTIONAL_SINGLE_THING} sends a GET request to the /Tokens/{RegexFor.SINGLE_THING}.Id endpoint with password ""([^""]*)""")]
     public async Task WhenIdentitySendsAGetRequestToTheTokensIdEndpointWithPassword(string identityName, string tokenName, string password)
     {
-        var client = _clientPool.FirstForIdentityName(identityName);
+        var isAuthenticated = identityName != "-";
+        var isPasswordProvided = password != "-";
 
+        var client = isAuthenticated ? _clientPool.FirstForIdentityName(identityName) : _clientPool.Anonymous;
         var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
 
-        _responseContext.WhenResponse = password != "-"
-            ? await client.Tokens.GetToken(tokenId, Convert.FromBase64String(password.Trim()))
-            : await client.Tokens.GetToken(tokenId);
+        if (isAuthenticated)
+            _responseContext.WhenResponse = isPasswordProvided
+                ? await client.Tokens.GetToken(tokenId, Convert.FromBase64String(password.Trim()))
+                : await client.Tokens.GetToken(tokenId);
+        else
+            _responseContext.WhenResponse = isPasswordProvided
+                ? await client.Tokens.GetTokenUnauthenticated(tokenId, Convert.FromBase64String(password.Trim()))
+                : await client.Tokens.GetTokenUnauthenticated(tokenId);
     }
 
     [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /Tokens endpoint with the following payloads")]
