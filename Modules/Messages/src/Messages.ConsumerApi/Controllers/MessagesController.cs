@@ -3,8 +3,6 @@ using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Messages.Application;
 using Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 using Backbone.Modules.Messages.Application.Messages.DTOs;
