@@ -1,0 +1,88 @@
+﻿using Backbone.Modules.Tokens.Domain.Tests.TestHelpers;
+using Backbone.UnitTestTools.Data;
+using FluentAssertions;
+using Xunit;
+
+namespace Backbone.Modules.Tokens.Domain.Tests.Tests;
+
+public class TokenCanBeCollectedWithPasswordTests
+{
+    [Fact]
+    public void Can_collect_without_a_password_when_no_password_is_defined()
+    {
+        // Arrange
+        var creator = TestDataGenerator.CreateRandomIdentityAddress();
+        var collector = TestDataGenerator.CreateRandomIdentityAddress();
+
+        var template = TestData.CreateToken(creator, null);
+
+        // Act
+        var result = template.CanBeCollectedUsingPassword(collector, null);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Can_collect_with_a_password_when_no_password_is_defined()
+    {
+        // Arrange
+        var creator = TestDataGenerator.CreateRandomIdentityAddress();
+        var collector = TestDataGenerator.CreateRandomIdentityAddress();
+
+        var template = TestData.CreateToken(creator, null);
+
+        // Act
+        var result = template.CanBeCollectedUsingPassword(collector, [1]);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Can_collect_with_correct_password()
+    {
+        // Arrange
+        var creator = TestDataGenerator.CreateRandomIdentityAddress();
+        var collector = TestDataGenerator.CreateRandomIdentityAddress();
+
+        var template = TestData.CreateToken(creator, null, password: [1]);
+
+        // Act
+        var result = template.CanBeCollectedUsingPassword(collector, [1]);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Cannot_collect_with_incorrect_password()
+    {
+        // Arrange
+        var creator = TestDataGenerator.CreateRandomIdentityAddress();
+        var collector = TestDataGenerator.CreateRandomIdentityAddress();
+
+        var template = TestData.CreateToken(creator, null, password: [1]);
+
+        // Act
+        var result = template.CanBeCollectedUsingPassword(collector, [2]);
+
+        // Assert
+        result.Should().BeFalse();
+    }
+
+    [Fact]
+    public void Can_collect_as_owner_without_a_password()
+    {
+        // Arrange
+        var creator = TestDataGenerator.CreateRandomIdentityAddress();
+
+        var template = TestData.CreateToken(creator, null, password: [1]);
+
+        // Act
+        var result = template.CanBeCollectedUsingPassword(creator, null);
+
+        // Assert
+        result.Should().BeTrue();
+    }
+}
