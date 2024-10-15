@@ -11,6 +11,6 @@ public class Validator : AbstractValidator<GetRelationshipTemplateQuery>
     {
         RuleFor(x => x.Id).ValidId<GetRelationshipTemplateQuery, RelationshipTemplateId>();
 
-        RuleFor(x => x.Password).NumberOfBytes(1, RelationshipTemplate.MAX_PASSWORD_LENGTH).When(x => x.Password != null);
+        RuleFor(x => x.Password).NumberOfBytes(1, RelationshipTemplate.MAX_PASSWORD_LENGTH);
     }
 }
