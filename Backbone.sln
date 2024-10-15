@@ -235,7 +235,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Infrastructure.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Domain.Tests", "Modules\Messages\test\Messages.Domain.Tests\Messages.Domain.Tests.csproj", "{83A86879-670B-4F22-8835-EE1D0AB49AA9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceSnapshotCreator", "Applications\ConsumerApi\test\ConsumerApi.Tests.Performance\tools\snapshot-creator\ConsumerApi.Tests.Performance.SnapshotCreator.csproj", "{B74B8655-8A94-4520-8BAB-212D7123EDB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Tests.Performance.SnapshotCreator", "Applications\ConsumerApi\test\ConsumerApi.Tests.Performance\tools\snapshot-creator\ConsumerApi.Tests.Performance.SnapshotCreator.csproj", "{B74B8655-8A94-4520-8BAB-212D7123EDB4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Domain.Tests", "Modules\Tokens\test\Tokens.Domain.Tests\Tokens.Domain.Tests.csproj", "{EDCB84BE-54C3-4CAD-977E-45EEBEFA1402}"
 EndProject
@@ -368,7 +368,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Sdk", "Sdks\Con
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1BFEE2F6-D514-4458-994A-3DD106405990}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrator.Tests", "Applications\DatabaseMigrator\test\DatabaseMigrator.Tests\DatabaseMigrator.Tests.csproj", "{553F1C8B-E099-4856-9416-67C103D3D194}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrator.Tests", "Applications\DatabaseMigrator\test\DatabaseMigrator.Tests\DatabaseMigrator.Tests.csproj", "{553F1C8B-E099-4856-9416-67C103D3D194}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Tests.Performance.SnapshotCreater.V2", "Applications\ConsumerApi\test\ConsumerApi.Tests.Performance\tools\snapshot-creator-v2\ConsumerApi.Tests.Performance.SnapshotCreater.V2.csproj", "{CD0DDEB3-3E7F-4E47-B084-806DF08750E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsumerApi.Tests.Performance.SnapshotCreater.Tests", "Applications\ConsumerApi\test\ConsumerApi.Tests.Performance.SnapshotCreater.Tests\ConsumerApi.Tests.Performance.SnapshotCreater.Tests.csproj", "{F1D7C872-D13F-4EEC-9D88-E58F4E4BAA68}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -808,6 +812,14 @@ Global
 		{553F1C8B-E099-4856-9416-67C103D3D194}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{553F1C8B-E099-4856-9416-67C103D3D194}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{553F1C8B-E099-4856-9416-67C103D3D194}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD0DDEB3-3E7F-4E47-B084-806DF08750E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD0DDEB3-3E7F-4E47-B084-806DF08750E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD0DDEB3-3E7F-4E47-B084-806DF08750E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD0DDEB3-3E7F-4E47-B084-806DF08750E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1D7C872-D13F-4EEC-9D88-E58F4E4BAA68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1D7C872-D13F-4EEC-9D88-E58F4E4BAA68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1D7C872-D13F-4EEC-9D88-E58F4E4BAA68}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1D7C872-D13F-4EEC-9D88-E58F4E4BAA68}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -977,6 +989,8 @@ Global
 		{D28F10DA-33BD-4F08-B736-1B7AB53026BD} = {CA03350A-2013-4D18-B68D-8C0F680DBA39}
 		{1BFEE2F6-D514-4458-994A-3DD106405990} = {A82D9F44-8B80-4803-BA97-7D737DEF6A98}
 		{553F1C8B-E099-4856-9416-67C103D3D194} = {1BFEE2F6-D514-4458-994A-3DD106405990}
+		{CD0DDEB3-3E7F-4E47-B084-806DF08750E2} = {248E5883-AFF5-450B-9398-4D0E874A1660}
+		{F1D7C872-D13F-4EEC-9D88-E58F4E4BAA68} = {248E5883-AFF5-450B-9398-4D0E874A1660}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}
