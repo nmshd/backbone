@@ -18,7 +18,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Relationships")
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -62,6 +62,10 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
 
                     b.Property<int?>("MaxNumberOfAllocations")
                         .HasColumnType("int");
+
+                    b.Property<byte[]>("Password")
+                        .HasMaxLength(200)
+                        .HasColumnType("varbinary(200)");
 
                     b.HasKey("Id");
 

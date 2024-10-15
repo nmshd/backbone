@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
+using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
@@ -38,7 +39,7 @@ public static class IServiceCollectionExtensions
                         : $"'{nameOfPropertyWithError}': {firstErrorMessage}";
                     context.HttpContext.Response.ContentType = "application/json";
                     var responsePayload = new HttpResponseEnvelopeError(
-                        HttpError.ForProduction("error.platform.inputCannotBeParsed", formattedMessage,
+                        HttpError.ForProduction(GenericApplicationErrors.Validation.InputCannotBeParsed().Code, formattedMessage,
                             "")); // TODO: add docs
                     return new BadRequestObjectResult(responsePayload);
                 };
