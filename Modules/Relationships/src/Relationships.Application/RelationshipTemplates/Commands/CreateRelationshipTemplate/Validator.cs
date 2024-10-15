@@ -26,6 +26,6 @@ public class Validator : AbstractValidator<CreateRelationshipTemplateCommand>
             .ValidId<CreateRelationshipTemplateCommand, IdentityAddress>()
             .When(c => c.ForIdentity != null);
 
-        RuleFor(c => c.Password).NumberOfBytes(0, RelationshipTemplate.MAX_PASSWORD_LENGTH);
+        RuleFor(c => c.Password).NumberOfBytes(1, RelationshipTemplate.MAX_PASSWORD_LENGTH).When(t => t.Password != null);
     }
 }
