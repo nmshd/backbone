@@ -6,7 +6,6 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Application.Tokens.Queries.ListTokens;
 using Backbone.Modules.Tokens.Domain.Entities;
-using Backbone.Modules.Tokens.Infrastructure.Extensions;
 using Backbone.Modules.Tokens.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +24,7 @@ public class TokensRepository : ITokensRepository
         _readonlyTokensDbSet = dbContext.Tokens.AsNoTracking();
     }
 
-    public async Task<DbPaginationResult<Token>> FindTokensWithIds(IEnumerable<TokenQueryItem> queryItems, IdentityAddress activeIdentity,
+    public async Task<DbPaginationResult<Token>> FindTokens(IEnumerable<ListTokensQueryItem> queryItems, IdentityAddress activeIdentity,
         PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
     {
         var queryItemsList = queryItems.ToList();
@@ -40,7 +39,7 @@ public class TokensRepository : ITokensRepository
         }
 
         var query = (track ? _tokensDbSet : _readonlyTokensDbSet)
-            .NotExpiredFor(activeIdentity)
+            .Where(Token.IsNotExpired)
             .Where(Token.CanBeCollectedBy(activeIdentity))
             .Where(idAndPasswordFilter);
 
@@ -54,7 +53,8 @@ public class TokensRepository : ITokensRepository
         var token = await _readonlyTokensDbSet
             .Where(Token.IsNotExpired)
             .Where(Token.CanBeCollectedBy(activeIdentity))
-            .FirstWithIdOrDefault(id, cancellationToken);
+            .Where(Token.HasId(id))
+            .FirstOrDefaultAsync(cancellationToken);
 
         return token;
     }

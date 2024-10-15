@@ -9,7 +9,7 @@ namespace Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates;
 
 public class RelationshipTemplatesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
 {
-    public async Task<ApiResponse<ListRelationshipTemplatesResponse>> ListTemplates(IEnumerable<RelationshipTemplateQueryItem> queryItems, PaginationFilter? pagination = null)
+    public async Task<ApiResponse<ListRelationshipTemplatesResponse>> ListTemplates(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, PaginationFilter? pagination = null)
     {
         return await _client
             .Request<ListRelationshipTemplatesResponse>(HttpMethod.Get, $"api/{API_VERSION}/RelationshipTemplates")
@@ -37,7 +37,7 @@ public class RelationshipTemplatesEndpoint(EndpointClient client) : ConsumerApiE
 
 file static class RelationshipTemplateQueryExtensions
 {
-    public static string ToJson(this IEnumerable<RelationshipTemplateQueryItem> queryItems)
+    public static string ToJson(this IEnumerable<ListRelationshipTemplatesQueryItem> queryItems)
     {
         return JsonConvert.SerializeObject(queryItems, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore, Formatting = Formatting.None });
     }

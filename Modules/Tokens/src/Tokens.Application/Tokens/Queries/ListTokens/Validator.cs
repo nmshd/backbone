@@ -24,7 +24,7 @@ public class Validator : AbstractValidator<ListTokensQuery>
             {
                 queryItems
                     .RuleFor(query => query.Id)
-                    .ValidId<TokenQueryItem, TokenId>();
+                    .ValidId<ListTokensQueryItem, TokenId>();
 
                 queryItems
                     .RuleFor(query => query.Password)

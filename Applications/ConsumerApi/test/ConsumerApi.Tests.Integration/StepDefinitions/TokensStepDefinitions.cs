@@ -133,7 +133,7 @@ internal class TokensStepDefinitions
             var tokenId = _tokensContext.CreateTokenResponses[payload.TokenName].Id;
             var password = payload.PasswordOnGet == "-" ? null : Convert.FromBase64String(payload.PasswordOnGet.Trim());
 
-            return new TokenQueryItem() { Id = tokenId, Password = password };
+            return new ListTokensQueryItem() { Id = tokenId, Password = password };
         }).ToList();
 
         _responseContext.WhenResponse = _listTokensResponse = await client.Tokens.ListTokens(queryItems);
@@ -170,4 +170,3 @@ file class GetRequestPayload
     public required string TokenName { get; set; }
     public required string PasswordOnGet { get; set; }
 }
-

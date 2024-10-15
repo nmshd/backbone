@@ -23,7 +23,7 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
         return await _client.Get<ListTokensResponse>($"api/{API_VERSION}/Tokens", null, pagination);
     }
 
-    public async Task<ApiResponse<ListTokensResponse>> ListTokens(IEnumerable<TokenQueryItem> queryItems, PaginationFilter? pagination = null)
+    public async Task<ApiResponse<ListTokensResponse>> ListTokens(IEnumerable<ListTokensQueryItem> queryItems, PaginationFilter? pagination = null)
     {
         return await _client
             .Request<ListTokensResponse>(HttpMethod.Get, $"api/{API_VERSION}/Tokens")

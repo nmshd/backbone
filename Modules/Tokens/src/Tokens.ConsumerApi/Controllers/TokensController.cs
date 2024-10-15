@@ -54,13 +54,13 @@ public class TokensController : ApiControllerBase
     public async Task<IActionResult> ListTokens([FromQuery] PaginationFilter paginationFilter, [FromQuery] string? tokens,
         [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
-        List<TokenQueryItem>? tokenQueryItems;
+        List<ListTokensQueryItem>? tokenQueryItems;
 
         if (tokens != null)
         {
             try
             {
-                tokenQueryItems = JsonSerializer.Deserialize<List<TokenQueryItem>>(tokens, _jsonSerializerOptions);
+                tokenQueryItems = JsonSerializer.Deserialize<List<ListTokensQueryItem>>(tokens, _jsonSerializerOptions);
             }
             catch (JsonException ex)
             {
@@ -69,7 +69,7 @@ public class TokensController : ApiControllerBase
         }
         else
         {
-            tokenQueryItems = ids.Select(id => new TokenQueryItem { Id = id }).ToList();
+            tokenQueryItems = ids.Select(id => new ListTokensQueryItem { Id = id }).ToList();
         }
 
         var request = new ListTokensQuery(paginationFilter, tokenQueryItems);

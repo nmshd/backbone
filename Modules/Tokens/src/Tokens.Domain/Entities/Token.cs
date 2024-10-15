@@ -51,13 +51,13 @@ public class Token : Entity
 
     public bool CanBeCollectedUsingPassword(IdentityAddress? address, byte[]? password)
     {
-        return Password == null || password != null && Password.SequenceEqual(password) || CreatedBy == address;
+        return
+            Password == null ||
+            password != null && Password.SequenceEqual(password) ||
+            CreatedBy == address; // The owner shouldn't need a password to get the template
     }
 
     #region Expressions
-
-    public static Expression<Func<Token, bool>> IsExpired =>
-        challenge => challenge.ExpiresAt <= SystemTime.UtcNow;
 
     public static Expression<Func<Token, bool>> IsNotExpired =>
         challenge => challenge.ExpiresAt > SystemTime.UtcNow;
@@ -79,7 +79,10 @@ public class Token : Entity
 
     public static Expression<Func<Token, bool>> CanBeCollectedWithPassword(IdentityAddress address, byte[]? password)
     {
-        return token => token.Password == null || token.Password == password || token.CreatedBy == address;
+        return token =>
+            token.Password == null ||
+            token.Password == password ||
+            token.CreatedBy == address; // The owner shouldn't need a password to get the template
     }
 
     #endregion

@@ -26,6 +26,6 @@ public class Validator : AbstractValidator<CreateTokenCommand>
             .ValidId<CreateTokenCommand, IdentityAddress>()
             .When(t => t.ForIdentity != null);
 
-        RuleFor(c => c.Password).NumberOfBytes(0, Token.MAX_PASSWORD_LENGTH);
+        RuleFor(c => c.Password).NumberOfBytes(1, Token.MAX_PASSWORD_LENGTH).When(c => c.Password != null);
     }
 }

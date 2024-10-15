@@ -20,7 +20,7 @@ public class Validator : AbstractValidator<ListRelationshipTemplatesQuery>
             {
                 queryItems
                     .RuleFor(query => query.Id)
-                    .ValidId<RelationshipTemplateQueryItem, RelationshipTemplateId>();
+                    .ValidId<ListRelationshipTemplatesQueryItem, RelationshipTemplateId>();
 
                 queryItems
                     .RuleFor(query => query.Password)
