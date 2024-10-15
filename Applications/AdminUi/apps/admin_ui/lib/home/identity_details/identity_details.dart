@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 
 import '/core/core.dart';
 import 'deletion_process_table/deletion_process_table.dart';
+import 'identity_devices/identity_devices.dart';
 import 'identity_messages/identity_messages.dart';
 import 'identity_quotas/identity_quotas.dart';
 import 'identity_relationships/identity_relationships.dart';
@@ -83,6 +84,8 @@ class _IdentityDetailsState extends State<IdentityDetails> {
             ),
             Gaps.h16,
             IdentityQuotas(identityDetails, _reloadIdentity),
+            Gaps.h16,
+            IdentityDevices(devices: identityDetails.devices),
             Gaps.h16,
             IdentityRelationships(address: identityDetails.address),
             Gaps.h16,
