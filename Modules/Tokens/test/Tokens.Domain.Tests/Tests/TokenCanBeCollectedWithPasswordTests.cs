@@ -85,4 +85,18 @@ public class TokenCanBeCollectedWithPasswordTests
         // Assert
         result.Should().BeTrue();
     }
+
+    [Fact]
+    public void Can_collect_as_anonymous_user_with_correct_password()
+    {
+        // Arrange
+        var creator = TestDataGenerator.CreateRandomIdentityAddress();
+        var template = TestData.CreateToken(creator, null, password: [1]);
+
+        // Act
+        var result = template.CanBeCollectedUsingPassword(null, [1]);
+
+        // Assert
+        result.Should().BeTrue();
+    }
 }
