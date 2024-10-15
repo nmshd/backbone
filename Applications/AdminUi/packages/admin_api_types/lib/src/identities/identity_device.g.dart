@@ -12,7 +12,7 @@ IdentityDevice _$IdentityDeviceFromJson(Map<String, dynamic> json) => IdentityDe
       createdAt: DateTime.parse(json['createdAt'] as String),
       createdByDevice: json['createdByDevice'] as String,
       communicationLanguage: json['communicationLanguage'] as String,
-      lastLogin: json['lastLogin'] as Map<String, dynamic>?,
+      lastLogin: json['lastLogin'] == null ? null : LastLoginInformation.fromJson(json['lastLogin']),
     );
 
 Map<String, dynamic> _$IdentityDeviceToJson(IdentityDevice instance) => <String, dynamic>{
@@ -22,4 +22,12 @@ Map<String, dynamic> _$IdentityDeviceToJson(IdentityDevice instance) => <String,
       'createdByDevice': instance.createdByDevice,
       'lastLogin': instance.lastLogin,
       'communicationLanguage': instance.communicationLanguage,
+    };
+
+LastLoginInformation _$LastLoginInformationFromJson(Map<String, dynamic> json) => LastLoginInformation(
+      time: DateTime.parse(json['time'] as String),
+    );
+
+Map<String, dynamic> _$LastLoginInformationToJson(LastLoginInformation instance) => <String, dynamic>{
+      'time': instance.time.toIso8601String(),
     };

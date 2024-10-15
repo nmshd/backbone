@@ -50,8 +50,7 @@ class IdentityDevices extends StatelessWidget {
                             DataCell(
                               Text(
                                 device.lastLogin != null
-                                    ? DateFormat.yMd(Localizations.localeOf(context).languageCode)
-                                        .format(DateTime.parse(device.lastLogin!['time'] as String))
+                                    ? DateFormat.yMd(Localizations.localeOf(context).languageCode).format(device.lastLogin!.time)
                                     : '-',
                                 style: TextStyle(color: textColor),
                               ),

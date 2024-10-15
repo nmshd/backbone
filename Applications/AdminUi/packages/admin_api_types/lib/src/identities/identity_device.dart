@@ -8,7 +8,7 @@ class IdentityDevice {
   final String username;
   final DateTime createdAt;
   final String createdByDevice;
-  final Map<String, dynamic>? lastLogin;
+  final LastLoginInformation? lastLogin;
   final String communicationLanguage;
 
   IdentityDevice({
@@ -22,4 +22,14 @@ class IdentityDevice {
 
   factory IdentityDevice.fromJson(dynamic json) => _$IdentityDeviceFromJson(json as Map<String, dynamic>);
   Map<String, dynamic> toJson() => _$IdentityDeviceToJson(this);
+}
+
+@JsonSerializable()
+class LastLoginInformation {
+  final DateTime time;
+
+  LastLoginInformation({required this.time});
+
+  factory LastLoginInformation.fromJson(dynamic json) => _$LastLoginInformationFromJson(json as Map<String, dynamic>);
+  Map<String, dynamic> toJson() => _$LastLoginInformationToJson(this);
 }
