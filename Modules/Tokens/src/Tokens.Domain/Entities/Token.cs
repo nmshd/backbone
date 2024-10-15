@@ -59,9 +59,6 @@ public class Token : Entity
 
     #region Expressions
 
-    public static Expression<Func<Token, bool>> IsExpired =>
-        challenge => challenge.ExpiresAt <= SystemTime.UtcNow;
-
     public static Expression<Func<Token, bool>> IsNotExpired =>
         challenge => challenge.ExpiresAt > SystemTime.UtcNow;
 
