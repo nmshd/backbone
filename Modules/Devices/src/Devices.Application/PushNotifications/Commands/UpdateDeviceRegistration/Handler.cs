@@ -33,7 +33,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
         var identity = await _identitiesRepository.FindByAddress(_activeIdentity, CancellationToken.None);
 
         if (identity!.Status == IdentityStatus.ToBeDeleted)
-            throw new ApplicationException(ApplicationErrors.Devices.CannotSendNotificationsWhileIdentityIsInStatusToBeDeleted());
+            throw new ApplicationException(ApplicationErrors.Devices.CannotSendNotificationsWhileIdentityIsToBeDeleted());
 
         var parseHandleResult = PnsHandle.Parse(DeserializePlatform(request.Platform), request.Handle);
 
