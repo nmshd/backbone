@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Backbone.Modules.Tokens.Domain.Tests.Tests;
 
-public class TokenCanBeCollectedWithPasswordTests
+public class TokenCanBeCollectedUsingPasswordTests
 {
     [Fact]
     public void Can_collect_without_a_password_when_no_password_is_defined()

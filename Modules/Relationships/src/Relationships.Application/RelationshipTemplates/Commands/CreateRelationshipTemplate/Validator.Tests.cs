@@ -119,6 +119,6 @@ public class ValidatorTests : AbstractTestsBase
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(nameof(CreateRelationshipTemplateCommand.Password), "error.platform.validation.invalidPropertyValue",
-            "'Password' must be between 0 and 200 bytes long. You entered 250 bytes.");
+            "'Password' must be between 1 and 200 bytes long. You entered 250 bytes.");
     }
 }

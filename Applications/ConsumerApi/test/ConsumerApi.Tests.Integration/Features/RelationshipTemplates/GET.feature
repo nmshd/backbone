@@ -37,7 +37,8 @@ User requests Relationship Templates
           | rt12         | -             |
           | rt13         | password      |
           | rt14         | wordpass      |
-        Then the response contains Relationship Template(s) <retreivedTemplates>
+        Then the response status code is 200 (OK)
+        And the response contains Relationship Template(s) <retreivedTemplates>
 
         Examples:
           | activeIdentity | retreivedTemplates                                              |
