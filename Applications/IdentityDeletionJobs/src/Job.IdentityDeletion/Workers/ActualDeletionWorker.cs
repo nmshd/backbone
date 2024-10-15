@@ -75,7 +75,7 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task NotifyIdentityAboutStartingDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
     {
-        var identity = _identitiesRepository.FindByAddress(identityAddress, CancellationToken.None).Result;
+        var identity = await _identitiesRepository.FindByAddress(identityAddress, CancellationToken.None);
 
         if (identity!.Status != IdentityStatus.ToBeDeleted)
             await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsPushNotification(), cancellationToken);
