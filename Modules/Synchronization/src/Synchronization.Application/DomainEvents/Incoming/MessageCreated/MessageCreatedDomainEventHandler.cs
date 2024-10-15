@@ -18,28 +18,28 @@ public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreat
         _logger = logger;
     }
 
-    public async Task Handle(MessageCreatedDomainEvent domainEvent)
+    public async Task Handle(MessageCreatedDomainEvent @event)
     {
-        await CreateExternalEvents(domainEvent);
+        try
+        {
+            await CreateMessageReceivedExternalEvents(@event);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "An error occured while processing a domain event.");
+            throw;
+        }
     }
 
-    private async Task CreateExternalEvents(MessageCreatedDomainEvent domainEvent)
+    private async Task CreateMessageReceivedExternalEvents(MessageCreatedDomainEvent @event)
     {
-        foreach (var recipient in domainEvent.Recipients)
+        foreach (var recipient in @event.Recipients)
         {
-            try
-            {
-                var payload = new MessageReceivedExternalEvent.PayloadT { Id = domainEvent.Id };
+            var payload = new MessageReceivedExternalEvent.EventPayload { Id = @event.Id };
 
-                var externalEvent = new MessageReceivedExternalEvent(IdentityAddress.Parse(recipient), payload);
+            var externalEvent = new MessageReceivedExternalEvent(IdentityAddress.Parse(recipient), payload);
 
-                await _dbContext.CreateExternalEvent(externalEvent);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occured while processing a domain event.");
-                throw;
-            }
+            await _dbContext.CreateExternalEvent(externalEvent);
         }
     }
 }

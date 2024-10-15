@@ -19,24 +19,27 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
 
     public async Task Handle(RelationshipStatusChangedDomainEvent @event)
     {
-        // if the relationship is in status "ReadyForDeletion", the peer doesn't know anything about it; therefore we must not create an external event
-        if (@event.NewStatus == "ReadyForDeletion")
-        {
-            return;
-        }
-
         try
         {
-            var payload = new RelationshipStatusChangedExternalEvent.PayloadT { RelationshipId = @event.RelationshipId };
-
-            var externalEvent = new RelationshipStatusChangedExternalEvent(@event.Peer, payload);
-
-            await _dbContext.CreateExternalEvent(externalEvent);
+            await CreateRelationshipStatusChangedExternalEvent(@event);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occured while processing a domain event.");
             throw;
         }
+    }
+
+    private async Task CreateRelationshipStatusChangedExternalEvent(RelationshipStatusChangedDomainEvent @event)
+    {
+        // if the relationship is in status "ReadyForDeletion", the peer doesn't know anything about it; therefore we must not create an external event
+        if (@event.NewStatus == "ReadyForDeletion")
+            return;
+
+        var payload = new RelationshipStatusChangedExternalEvent.EventPayload { RelationshipId = @event.RelationshipId };
+
+        var externalEvent = new RelationshipStatusChangedExternalEvent(@event.Peer, payload);
+
+        await _dbContext.CreateExternalEvent(externalEvent);
     }
 }

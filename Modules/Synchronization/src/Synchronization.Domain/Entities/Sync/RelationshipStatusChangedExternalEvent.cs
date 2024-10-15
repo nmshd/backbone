@@ -10,12 +10,12 @@ public class RelationshipStatusChangedExternalEvent : ExternalEvent
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
     }
 
-    public RelationshipStatusChangedExternalEvent(IdentityAddress owner, PayloadT payload)
+    public RelationshipStatusChangedExternalEvent(IdentityAddress owner, EventPayload payload)
         : base(ExternalEventType.RelationshipStatusChanged, owner, payload)
     {
     }
 
-    public record PayloadT
+    public record EventPayload
     {
         public required string RelationshipId { get; init; }
     }

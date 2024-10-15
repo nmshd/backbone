@@ -18,25 +18,25 @@ public class RelationshipReactivationRequestedDomainEventHandler : IDomainEventH
         _logger = logger;
     }
 
-    public async Task Handle(RelationshipReactivationRequestedDomainEvent integrationEvent)
-    {
-        await CreateExternalEvents(integrationEvent);
-    }
-
-    private async Task CreateExternalEvents(RelationshipReactivationRequestedDomainEvent @event)
+    public async Task Handle(RelationshipReactivationRequestedDomainEvent @event)
     {
         try
         {
-            var payload = new RelationshipReactivationRequestedExternalEvent.PayloadT { RelationshipId = @event.RelationshipId };
-
-            var externalEvent = new RelationshipReactivationRequestedExternalEvent(@event.Peer, payload);
-
-            await _dbContext.CreateExternalEvent(externalEvent);
+            await CreateRelationshipReactivationRequestedExternalEvent(@event);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occured while processing a domain event.");
             throw;
         }
+    }
+
+    private async Task CreateRelationshipReactivationRequestedExternalEvent(RelationshipReactivationRequestedDomainEvent @event)
+    {
+        var payload = new RelationshipReactivationRequestedExternalEvent.EventPayload { RelationshipId = @event.RelationshipId };
+
+        var externalEvent = new RelationshipReactivationRequestedExternalEvent(@event.Peer, payload);
+
+        await _dbContext.CreateExternalEvent(externalEvent);
     }
 }

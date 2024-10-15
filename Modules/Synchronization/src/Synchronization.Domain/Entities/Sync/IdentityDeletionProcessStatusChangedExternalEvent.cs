@@ -10,12 +10,12 @@ public class IdentityDeletionProcessStatusChangedExternalEvent : ExternalEvent
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
     }
 
-    public IdentityDeletionProcessStatusChangedExternalEvent(IdentityAddress owner, PayloadT payload)
+    public IdentityDeletionProcessStatusChangedExternalEvent(IdentityAddress owner, EventPayload payload)
         : base(ExternalEventType.IdentityDeletionProcessStatusChanged, owner, payload)
     {
     }
 
-    public record PayloadT
+    public record EventPayload
     {
         public required string DeletionProcessId { get; init; }
     }
