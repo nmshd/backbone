@@ -14,5 +14,6 @@ public class AttributeInfo
 public class TagInfo
 {
     public required string Tag { get; set; }
-    public string? Title { get; set; }
+    public required Dictionary<string, string> DisplayNames { get; set; }
+    public List<TagInfo> Children { get; set; } = [];
 }
