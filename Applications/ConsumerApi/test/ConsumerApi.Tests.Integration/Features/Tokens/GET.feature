@@ -3,37 +3,46 @@ Feature: GET /Tokens
 
 User requests multiple Tokens
 
-    Scenario: Requesting a list of own Tokens
-        Given Identity i
-        And Tokens t1 and t2 belonging to i
-        When i sends a GET request to the /Tokens endpoint with the ids of t1 and t2
+    Scenario Outline: Requesting a list of Tokens in a variety of scenarios
+        Given Identities i1, i2, i3 and i4
+        And the following Tokens
+          | tokenName | tokenOwner | forIdentity | password |
+          | rt1       | i1         | -           | -        |
+          | rt2       | i2         | -           | -        |
+          | rt3       | i1         | -           | -        |
+          | rt4       | i2         | -           | -        |
+          | rt5       | i1         | -           | password |
+          | rt6       | i1         | -           | password |
+          | rt7       | i2         | -           | password |
+          | rt8       | i2         | -           | password |
+          | rt9       | i1         | i1          | -        |
+          | rt10      | i2         | i3          | -        |
+          | rt11      | i2         | i2          | -        |
+          | rt12      | i2         | i3          | -        |
+          | rt13      | i2         | i3          | password |
+          | rt14      | i2         | i3          | password |
+        When <activeIdentity> sends a GET request to the /Tokens endpoint with the following payloads
+          | tokenName | passwordOnGet |
+          | rt1       | -             |
+          | rt2       | -             |
+          | rt3       | password      |
+          | rt4       | password      |
+          | rt5       | password      |
+          | rt6       | -             |
+          | rt7       | password      |
+          | rt8       | -             |
+          | rt9       | -             |
+          | rt10      | -             |
+          | rt11      | -             |
+          | rt12      | -             |
+          | rt13      | password      |
+          | rt14      | wordpass      |
         Then the response status code is 200 (OK)
-        And the response contains the Tokens t1 and t2
+        And the response contains Token(s) <retreivedTokens>
 
-    Scenario: Requesting an own Token and a Token belonging to another identity
-        Given Identities i1 and i2
-        And Token t1 belonging to i1
-        And Token t2 belonging to i2
-        When i1 sends a GET request to the /Tokens endpoint with the ids of t1 and t2
-        Then the response status code is 200 (OK)
-        And the response contains the Tokens t1 and t2
-
-    Scenario: Requesting a list of Tokens contains tokens with ForIdentity which were created by me
-        Given Identities i1 and i2
-        And Token t belonging to i1 where ForIdentity is the address of i2
-        When i1 sends a GET request to the /Tokens endpoint with the ids of t
-        Then the response status code is 200 (Ok)
-        And the response contains the Token t
-
-    Scenario: Requesting a list of Tokens contains tokens with ForIdentity which were created for me
-        Given Identities i1 and i2
-        And Token t belonging to i1 where ForIdentity is the address of i2
-        When i2 sends a GET request to the /Tokens endpoint with the ids of t
-        Then the response status code is 200 (Ok)
-        And the response contains the Token t
-
-    Scenario: Requesting a list of Tokens does not contain tokens with ForIdentity which were created for someone else
-        Given Identities i1, i2 and i3
-        And Token t belonging to i1 where ForIdentity is the address of i2
-        When i3 sends a GET request to the /Tokens endpoint with the ids of t
-        Then the response does not contain the Token t
+        Examples:
+          | activeIdentity | retreivedTokens                                                 |
+          | i1             | rt1, rt2, rt3, rt4, rt5, rt6, rt7, rt9                          |
+          | i2             | rt1, rt2, rt3, rt4, rt5, rt7, rt8, rt10, rt11, rt12, rt13, rt14 |
+          | i3             | rt1, rt2, rt3, rt4, rt5, rt7, rt10, rt12, rt13                  |
+          | i4             | rt1, rt2, rt3, rt4, rt5, rt7                                    |
