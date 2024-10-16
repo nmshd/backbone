@@ -21,6 +21,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                 nullable: false,
                 defaultValue: "");
 
+            // Fill the new RelationshipId column with the existing relationships between sender and recipient
             migrationBuilder.Sql("""
                                  UPDATE ri
                                  SET ri.RelationshipId = COALESCE((
