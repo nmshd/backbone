@@ -95,12 +95,20 @@ public class RelationshipTemplate : Entity
 
     public static Expression<Func<RelationshipTemplate, bool>> CanBeCollectedBy(IdentityAddress address)
     {
-        return relationshipTemplate => relationshipTemplate.ForIdentity == null || relationshipTemplate.ForIdentity == address || relationshipTemplate.CreatedBy == address;
+        return relationshipTemplate =>
+            relationshipTemplate.ForIdentity == null ||
+            relationshipTemplate.ForIdentity == address ||
+            relationshipTemplate.CreatedBy == address;
     }
 
-    public static Expression<Func<RelationshipTemplate, bool>> CanBeCollectedWithPassword(IdentityAddress address, byte[]? password)
+    public static Expression<Func<RelationshipTemplate, bool>> CanBeCollectedWithPassword(IdentityAddress activeIdentity, byte[]? password)
     {
-        return relationshipTemplate => relationshipTemplate.Password == null || relationshipTemplate.Password == password || relationshipTemplate.CreatedBy == address;
+        return relationshipTemplate =>
+            relationshipTemplate.Password == null ||
+            relationshipTemplate.Password == password ||
+            relationshipTemplate.CreatedBy == activeIdentity || // The owner shouldn't need a password to get the template
+            relationshipTemplate.Allocations.Any(a =>
+                a.AllocatedBy == activeIdentity); // if the template has already been allocated by the active identity, it doesn't need to pass the password again;
     }
 
     #endregion

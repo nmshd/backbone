@@ -6,7 +6,7 @@ User requests a Relationship Template
     Scenario Outline: Requesting a Relationship Template in a variety of scenarios
         Given Identities <givenIdentities>
         And Relationship Template rt created by <templateOwner> with password "<password>" and forIdentity <forIdentity>
-        When <activeIdentity> sends a GET request to the /RelationshipTemplate/rt.Id endpoint with password "<passwordOnGet>"
+        When <activeIdentity> sends a GET request to the /RelationshipTemplates/rt.Id endpoint with password "<passwordOnGet>"
         Then the response status code is <responseStatusCode>
 
         Examples:
