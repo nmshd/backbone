@@ -37,7 +37,7 @@ public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreat
         {
             var payload = new MessageReceivedExternalEvent.EventPayload { Id = @event.Id };
 
-            var externalEvent = new MessageReceivedExternalEvent(IdentityAddress.Parse(recipient), payload);
+            var externalEvent = new MessageReceivedExternalEvent(IdentityAddress.Parse(recipient.Address), payload);
 
             await _dbContext.CreateExternalEvent(externalEvent);
         }
