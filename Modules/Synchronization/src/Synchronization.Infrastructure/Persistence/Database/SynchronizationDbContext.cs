@@ -9,6 +9,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Extensions;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Modules.Synchronization.Domain.Entities.Relationships;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.Data.SqlClient;
@@ -38,6 +39,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
     public DbSet<ExternalEvent> ExternalEvents { get; set; } = null!;
     public DbSet<SyncRun> SyncRuns { get; set; } = null!;
     public DbSet<SyncError> SyncErrors { get; set; } = null!;
+    public DbSet<Relationship> Relationships { get; set; } = null!;
 
     public async Task<DbPaginationResult<DatawalletModification>> GetDatawalletModifications(IdentityAddress activeIdentity, long? localIndex, PaginationFilter paginationFilter,
         CancellationToken cancellationToken)
@@ -162,6 +164,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         var unsyncedEvents = await ExternalEvents
             .WithOwner(owner)
             .Unsynced()
+            .NotBlocked()
             .WithErrorCountBelow(maxErrorCount)
             .ToListAsync(cancellationToken);
 
@@ -178,6 +181,17 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         return query;
     }
 
+    public async Task<List<ExternalEvent>> GetBlockedExternalEventsWithTypeAndContext(ExternalEventType type, string context, CancellationToken cancellationToken)
+    {
+        var query = await ExternalEvents
+            .Blocked()
+            .WithType(type)
+            .WithContext(context)
+            .ToListAsync(cancellationToken);
+
+        return query;
+    }
+
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         base.ConfigureConventions(configurationBuilder);
@@ -189,6 +203,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         configurationBuilder.Properties<SyncRunId>().AreUnicode(false).AreFixedLength().HaveMaxLength(SyncRunId.MAX_LENGTH).HaveConversion<SyncRunIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<ExternalEventId>().AreUnicode(false).AreFixedLength().HaveMaxLength(ExternalEventId.MAX_LENGTH).HaveConversion<ExternalEventIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<SyncErrorId>().AreUnicode(false).AreFixedLength().HaveMaxLength(SyncErrorId.MAX_LENGTH).HaveConversion<SyncErrorIdEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<RelationshipId>().AreUnicode(false).AreFixedLength().HaveMaxLength(RelationshipId.MAX_LENGTH).HaveConversion<RelationshipIdEntityFrameworkValueConverter>();
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

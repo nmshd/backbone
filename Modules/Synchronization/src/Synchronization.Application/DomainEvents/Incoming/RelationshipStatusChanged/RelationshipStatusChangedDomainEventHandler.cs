@@ -1,7 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.Modules.Synchronization.Application.Extensions;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipStatusChanged;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.RelationshipStatusChanged;
@@ -22,6 +24,7 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
         try
         {
             await CreateRelationshipStatusChangedExternalEvent(@event);
+            await DeleteExternalEvents(@event);
         }
         catch (Exception ex)
         {
@@ -41,5 +44,19 @@ public class RelationshipStatusChangedDomainEventHandler : IDomainEventHandler<R
         var externalEvent = new RelationshipStatusChangedExternalEvent(@event.Peer, payload);
 
         await _dbContext.CreateExternalEvent(externalEvent);
+    }
+
+    private async Task DeleteExternalEvents(RelationshipStatusChangedDomainEvent @event)
+    {
+        // when a relationship was decomposed, we can delete all external events related to it for
+        // the identity that initiated the decomposition
+        if (@event.NewStatus is "DeletionProposed" or "ReadyForDeletion")
+        {
+            await _dbContext
+                .Set<ExternalEvent>()
+                .Unsynced()
+                .Where(e => e.Owner == @event.Initiator && e.Context == @event.RelationshipId)
+                .ExecuteDeleteAsync();
+        }
     }
 }
