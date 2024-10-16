@@ -88,9 +88,11 @@ internal class RelationshipsStepDefinitions
     {
         var relationship = _relationshipsContext.Relationships[relationshipName];
 
-        var client = _clientPool.FirstForIdentityAddress(relationship.From);
+        var clientFrom = _clientPool.FirstForIdentityAddress(relationship.From);
+        await clientFrom.Relationships.ReactivateRelationship(relationship.Id);
 
-        await client.Relationships.ReactivateRelationship(relationship.Id);
+        var clientTo = _clientPool.FirstForIdentityAddress(relationship.To);
+        await clientTo.Relationships.AcceptReactivationOfRelationship(relationship.Id);
     }
 
     [Given($"{RegexFor.SINGLE_THING} has terminated {RegexFor.SINGLE_THING}")]

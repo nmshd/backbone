@@ -57,14 +57,14 @@ internal class SynchronizationStepDefinitions
 
     #region Then
 
-    [Then($"the response does not contain an external event for {RegexFor.SINGLE_THING}")]
+    [Then($"the response does not contain an external event for the Message {RegexFor.SINGLE_THING}")]
     public void ThenTheResponseDoesNotContainAnExternalEventForM(string messageName)
     {
         _listExternalEventsOfSyncRunResponse!.Result.Should().NotBeEmpty();
         _listExternalEventsOfSyncRunResponse.Result.Should().NotContain(e => e.Type == "MessageReceived");
     }
 
-    [Then($"the response contains an external event for {RegexFor.SINGLE_THING}")]
+    [Then($"the response contains an external event for the Message {RegexFor.SINGLE_THING}")]
     public void ThenTheResponseContainsAnExternalEventForM(string messageName)
     {
         var message = _messagesContext.Messages[messageName];
