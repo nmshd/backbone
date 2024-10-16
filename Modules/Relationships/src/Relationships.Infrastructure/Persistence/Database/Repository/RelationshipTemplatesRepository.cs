@@ -48,7 +48,7 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return template;
     }
 
-    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds(IEnumerable<RelationshipTemplateQueryItem> queryItems, IdentityAddress activeIdentity,
+    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplates(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, IdentityAddress activeIdentity,
         PaginationFilter paginationFilter,
         CancellationToken cancellationToken, bool track = false)
     {

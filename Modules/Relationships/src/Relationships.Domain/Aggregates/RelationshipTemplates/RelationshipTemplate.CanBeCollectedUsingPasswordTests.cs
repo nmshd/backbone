@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
-public class RelationshipTemplateCanBeCollectedWithPasswordTests : AbstractTestsBase
+public class RelationshipTemplateCanBeCollectedUsingPasswordExpressionTests : AbstractTestsBase
 {
     [Fact]
     public void Can_collect_without_a_password_when_no_password_is_defined()
