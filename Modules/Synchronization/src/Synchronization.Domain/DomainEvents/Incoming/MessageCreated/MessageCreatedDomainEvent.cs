@@ -5,6 +5,7 @@ namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.MessageC
 public class MessageCreatedDomainEvent : DomainEvent
 {
     public required string Id { get; set; }
+    public required string CreatedBy { get; set; }
     public required IEnumerable<Recipient> Recipients { get; set; }
 
     public class Recipient

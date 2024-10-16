@@ -1,4 +1,5 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Synchronization.Domain.Entities.Relationships;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 namespace Backbone.Modules.Synchronization.Application.Tests;
@@ -57,7 +58,7 @@ public class ExternalEventBuilder
 
     public ExternalEvent Create()
     {
-        var externalEvent = new MessageReceivedExternalEvent(_owner, new MessageReceivedExternalEvent.EventPayload { Id = "MSG11111111111111111" })
+        var externalEvent = new MessageReceivedExternalEvent(_owner, new MessageReceivedExternalEvent.EventPayload { Id = "MSG11111111111111111" }, RelationshipId.New())
         {
             SyncErrorCount = _errorCount
         };
