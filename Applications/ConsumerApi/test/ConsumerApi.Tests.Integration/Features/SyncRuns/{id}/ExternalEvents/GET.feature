@@ -1,20 +1,6 @@
 @Integration
 Feature: GET /SyncRuns/{id}/ExternalEvents
 
-#[x] 2 neue Spalten für External Events:
-#    [x] Context; it can be used for other external event types as well;
-#           and when querying, we could have a method called MessageReceivedExternalEvent.WasSentInRelationship(relationshipId)
-#           returning an expression that checks for "Context == relationshipsId"
-#    [x] IsDeliveryBlocked
-#[x] wenn IsDeliveryBlocked == true, dann Event nicht zu Sync Run hinzufügen
-#[ ] bei MessageCreatedDomainEvent
-#    [x] 1. IsDeliveryBlocked des neuen Events auf "Relationships[event.RelationshipId].Status == Terminated" setzen
-#    [x] 2. Context auf event.RelationshipId setzen
-#[ ] bei RelationshipStatusChangedDomainEvent
-#    [x] wenn NewStatus == Active, dann alle Events mit RelationshipId auf IsDeliveryBlocked = false setzen
-#    [x] wenn NewStatus == DeletionProposed, dann alle Events mit RelationshipId von Initiator löschen
-#    [x] wenn NewStatus == ReadyForDeletion, dann alle Events mit RelationshipId von Initiator löschen
-
     Scenario: Getting external events does not return events for messages sent while the Relationship is still terminated
         Given Identities i1 and i2
         And a terminated Relationship r between i1 and i2
