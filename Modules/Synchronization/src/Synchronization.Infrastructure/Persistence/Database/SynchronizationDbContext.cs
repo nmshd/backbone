@@ -112,6 +112,15 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         }, [DbErrorCodes.SQLSERVER_INDEX_ALREADY_EXISTS, DbErrorCodes.POSTGRES_INDEX_ALREADY_EXISTS]);
     }
 
+    public async Task DeleteUnsyncedExternalEventsWithOwnerAndContext(IdentityAddress owner, string context)
+    {
+        await Set<ExternalEvent>()
+            .Unsynced()
+            .WithOwner(owner)
+            .WithContext(context)
+            .ExecuteDeleteAsync();
+    }
+
     public async Task<SyncRun> GetSyncRun(SyncRunId syncRunId, IdentityAddress createdBy, CancellationToken cancellationToken)
     {
         return await SyncRuns

@@ -14,6 +14,7 @@ public interface ISynchronizationDbContext : IDbContext
     Task<Datawallet?> GetDatawalletForInsertion(IdentityAddress owner, CancellationToken cancellationToken);
     Task<Datawallet?> GetDatawallet(IdentityAddress owner, CancellationToken cancellationToken);
     Task CreateExternalEvent(ExternalEvent externalEvent);
+    Task DeleteUnsyncedExternalEventsWithOwnerAndContext(IdentityAddress owner, string context);
     Task<SyncRun> GetSyncRun(SyncRunId syncRunId, IdentityAddress createdBy, CancellationToken cancellationToken);
     Task<bool> IsActiveSyncRunAvailable(IdentityAddress createdBy, CancellationToken cancellationToken);
     Task<SyncRun> GetSyncRunAsNoTracking(SyncRunId syncRunId, IdentityAddress createdBy, CancellationToken cancellationToken);
