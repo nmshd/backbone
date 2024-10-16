@@ -3,7 +3,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
-using FluentAssertions.Extensions;
 
 namespace Backbone.ConsumerApi.Tests.Integration.StepDefinitions;
 
@@ -14,14 +13,12 @@ internal class SynchronizationStepDefinitions
     private readonly Dictionary<string, StartSyncRunResponse> _startSyncRunResponses = new();
     private readonly ResponseContext _responseContext;
     private readonly MessagesContext _messagesContext;
-    private readonly RelationshipsContext _relationshipsContext;
     private ApiResponse<ListExternalEventsResponse>? _listExternalEventsOfSyncRunResponse;
 
-    public SynchronizationStepDefinitions(ResponseContext responseContext, MessagesContext messagesContext, RelationshipsContext relationshipsContext, ClientPool clientPool)
+    public SynchronizationStepDefinitions(ResponseContext responseContext, MessagesContext messagesContext, ClientPool clientPool)
     {
         _responseContext = responseContext;
         _messagesContext = messagesContext;
-        _relationshipsContext = relationshipsContext;
         _clientPool = clientPool;
     }
 
@@ -30,8 +27,6 @@ internal class SynchronizationStepDefinitions
     [Given($"a sync run {RegexFor.SINGLE_THING} started by {RegexFor.SINGLE_THING}")]
     public async Task GivenASyncRunStartedBy(string syncRunName, string identityName)
     {
-        await Task.Delay(1.Seconds());
-
         var client = _clientPool.FirstForIdentityName(identityName);
 
         var startSyncRunResponse = await client.SyncRuns.StartSyncRun(new StartSyncRunRequest { Type = SyncRunType.ExternalEventSync }, 1);
@@ -58,7 +53,7 @@ internal class SynchronizationStepDefinitions
     #region Then
 
     [Then($"the response does not contain an external event for the Message {RegexFor.SINGLE_THING}")]
-    public void ThenTheResponseDoesNotContainAnExternalEventForM(string messageName)
+    public void ThenTheResponseDoesNotContainAnExternalEventForM(string _)
     {
         _listExternalEventsOfSyncRunResponse!.Result.Should().NotBeEmpty();
         _listExternalEventsOfSyncRunResponse.Result.Should().NotContain(e => e.Type == "MessageReceived");
@@ -69,9 +64,7 @@ internal class SynchronizationStepDefinitions
     {
         var message = _messagesContext.Messages[messageName];
         _listExternalEventsOfSyncRunResponse!.Result.Should().NotBeEmpty();
-        _listExternalEventsOfSyncRunResponse.Result.Should().ContainSingle(
-            e => e.Type == "MessageReceived"
-        );
+        _listExternalEventsOfSyncRunResponse.Result.Should().ContainSingle(e => e.Type == "MessageReceived");
         var messageReceivedExternalEvent = _listExternalEventsOfSyncRunResponse.Result!.Single(e => e.Type == "MessageReceived");
         messageReceivedExternalEvent.Payload["id"].GetString().Should().Be(message.Id);
     }

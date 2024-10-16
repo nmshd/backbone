@@ -84,7 +84,7 @@ internal class RelationshipsStepDefinitions
     }
 
     [Given($"{RegexFor.SINGLE_THING} was fully reactivated")]
-    public async Task GivenRWasReactivated(string relationshipName)
+    public async Task GivenRWasFullyReactivated(string relationshipName)
     {
         var relationship = _relationshipsContext.Relationships[relationshipName];
 
@@ -112,8 +112,6 @@ internal class RelationshipsStepDefinitions
 
         var response = await decomposer.Relationships.DecomposeRelationship(relationship.Id);
         response.Should().BeASuccess();
-
-        await Task.Delay(500);
     }
 
     #endregion
