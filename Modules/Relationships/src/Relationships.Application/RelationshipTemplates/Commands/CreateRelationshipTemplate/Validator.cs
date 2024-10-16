@@ -2,6 +2,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 using FluentValidation;
@@ -25,6 +26,6 @@ public class Validator : AbstractValidator<CreateRelationshipTemplateCommand>
             .ValidId<CreateRelationshipTemplateCommand, IdentityAddress>()
             .When(c => c.ForIdentity != null);
 
-        RuleFor(c => c.Password).NumberOfBytes(0, 200);
+        RuleFor(c => c.Password).NumberOfBytes(1, RelationshipTemplate.MAX_PASSWORD_LENGTH).When(t => t.Password != null);
     }
 }
