@@ -235,7 +235,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Files.Infrastructure.Tests"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messages.Domain.Tests", "Modules\Messages\test\Messages.Domain.Tests\Messages.Domain.Tests.csproj", "{83A86879-670B-4F22-8835-EE1D0AB49AA9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PerformanceSnapshotCreator", "Applications\ConsumerApi\test\ConsumerApi.Tests.Performance\tools\snapshot-creator\ConsumerApi.Tests.Performance.SnapshotCreator.csproj", "{B74B8655-8A94-4520-8BAB-212D7123EDB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Tests.Performance.SnapshotCreator", "Applications\ConsumerApi\test\ConsumerApi.Tests.Performance\tools\snapshot-creator\ConsumerApi.Tests.Performance.SnapshotCreator.csproj", "{B74B8655-8A94-4520-8BAB-212D7123EDB4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tokens.Domain.Tests", "Modules\Tokens\test\Tokens.Domain.Tests\Tokens.Domain.Tests.csproj", "{EDCB84BE-54C3-4CAD-977E-45EEBEFA1402}"
 EndProject
@@ -368,19 +368,23 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Sdk", "Sdks\Con
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{1BFEE2F6-D514-4458-994A-3DD106405990}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatabaseMigrator.Tests", "Applications\DatabaseMigrator\test\DatabaseMigrator.Tests\DatabaseMigrator.Tests.csproj", "{553F1C8B-E099-4856-9416-67C103D3D194}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DatabaseMigrator.Tests", "Applications\DatabaseMigrator\test\DatabaseMigrator.Tests\DatabaseMigrator.Tests.csproj", "{553F1C8B-E099-4856-9416-67C103D3D194}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Tests.Performance.SnapshotCreator.Tests", "Applications\ConsumerApi\test\ConsumerApi.Tests.Performance.SnapshotCreator.Tests\ConsumerApi.Tests.Performance.SnapshotCreator.Tests.csproj", "{916F57F5-1C68-4DB2-B8D0-CC58ECD327DB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tags", "Tags", "{2E8887F1-55BD-4751-A522-0377C80DC70B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsumerApi.Tests.Performance.SnapshotCreator.V2", "Applications\ConsumerApi\test\ConsumerApi.Tests.Performance\tools\snapshot-creator-v2\ConsumerApi.Tests.Performance.SnapshotCreator.V2.csproj", "{3AE7948E-8595-49D0-B3EE-206A327CACA0}"
+EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{2A9D40E4-AB8F-49B5-878B-A8C7763EE609}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tags.Application", "Modules\Tags\src\Tags.Application\Tags.Application.csproj", "{04A11F4A-6D3E-484E-89EC-041D223CED21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tags.Application", "Modules\Tags\src\Tags.Application\Tags.Application.csproj", "{04A11F4A-6D3E-484E-89EC-041D223CED21}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tags.ConsumerApi", "Modules\Tags\src\Tags.ConsumerApi\Tags.ConsumerApi.csproj", "{2BE30D30-CCFF-453E-AEAC-9CB3EF677058}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tags.ConsumerApi", "Modules\Tags\src\Tags.ConsumerApi\Tags.ConsumerApi.csproj", "{2BE30D30-CCFF-453E-AEAC-9CB3EF677058}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tags.Domain", "Modules\Tags\src\Tags.Domain\Tags.Domain.csproj", "{3A107CCD-A7E9-448B-82DF-0FD87D1ABA9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tags.Domain", "Modules\Tags\src\Tags.Domain\Tags.Domain.csproj", "{3A107CCD-A7E9-448B-82DF-0FD87D1ABA9E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tags.Infrastructure", "Modules\Tags\src\Tags.Infrastructure\Tags.Infrastructure.csproj", "{98C16B16-7ECE-4E23-8D6C-2CA372EC310C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tags.Infrastructure", "Modules\Tags\src\Tags.Infrastructure\Tags.Infrastructure.csproj", "{98C16B16-7ECE-4E23-8D6C-2CA372EC310C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -820,6 +824,14 @@ Global
 		{553F1C8B-E099-4856-9416-67C103D3D194}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{553F1C8B-E099-4856-9416-67C103D3D194}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{553F1C8B-E099-4856-9416-67C103D3D194}.Release|Any CPU.Build.0 = Release|Any CPU
+		{916F57F5-1C68-4DB2-B8D0-CC58ECD327DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{916F57F5-1C68-4DB2-B8D0-CC58ECD327DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{916F57F5-1C68-4DB2-B8D0-CC58ECD327DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{916F57F5-1C68-4DB2-B8D0-CC58ECD327DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3AE7948E-8595-49D0-B3EE-206A327CACA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3AE7948E-8595-49D0-B3EE-206A327CACA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3AE7948E-8595-49D0-B3EE-206A327CACA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3AE7948E-8595-49D0-B3EE-206A327CACA0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{04A11F4A-6D3E-484E-89EC-041D223CED21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{04A11F4A-6D3E-484E-89EC-041D223CED21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{04A11F4A-6D3E-484E-89EC-041D223CED21}.Release|Any CPU.ActiveCfg = Release|Any CPU
