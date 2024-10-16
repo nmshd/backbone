@@ -1,6 +1,8 @@
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2;
+using FluentAssertions;
 using Xunit.Abstractions;
 
-namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreater.Tests;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests;
 
 public class IdentityPoolConfigGeneratorTests
 {
@@ -20,21 +22,22 @@ public class IdentityPoolConfigGeneratorTests
     #region Verify Json Pool Config
 
     [Theory]
-    [InlineData("PerformanceTestData.xlsx", "heavy-loadtest", "pool-config.heavy.json")]
-    [InlineData("PerformanceTestData.xlsx", "light-loadtest", "pool-config.light.json")]
-    [InlineData("PerformanceTestData.xlsx", "test-loadtest", "pool-config.test.json")]
-    public void VerifyJsonPoolConfig_InputPerformanceTestDataExcel_Success(string excelFile, string workSheet, string expectedLoadTestJson)
+    [InlineData("PerformanceTestData.xlsx", "heavy", "pool-config.heavy.json")]
+    [InlineData("PerformanceTestData.xlsx", "light", "pool-config.light.json")]
+    [InlineData("PerformanceTestData.xlsx", "test", "pool-config.test.json")]
+    public void VerifyJsonPoolConfig_InputPerformanceTestDataExcel_ReturnsSuccess(string excelFile, string workSheet, string expectedLoadTestJson)
     {
         // Arrange
         var expectedJson = Path.Combine(_testDataFolder, expectedLoadTestJson);
-
         var inputFile = Path.Combine(_testDataFolder, excelFile);
+       
+        var sut = new IdentityPoolConfigGenerator();
 
-        var currentWorksheet = workSheet;
-        
         // Act
+        var result = sut.VerifyJsonPoolConfig(inputFile, workSheet, expectedJson);
 
         // Assert
+        result.Should().BeTrue();
     }
 
     #endregion

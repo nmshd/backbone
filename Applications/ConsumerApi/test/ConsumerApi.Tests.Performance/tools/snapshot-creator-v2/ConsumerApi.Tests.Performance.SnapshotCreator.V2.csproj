@@ -8,7 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="ConsumerApi.Tests.Performance.SnapshotCreater.Tests"/>
+        <InternalsVisibleTo Include="ConsumerApi.Tests.Performance.SnapshotCreator.Tests"/>
     </ItemGroup>
 
     <ItemGroup>
