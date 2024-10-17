@@ -1,3 +1,3 @@
-﻿global using static Backbone.UnitTestTools.Data.TestDataGenerator;
+﻿global using FluentAssertions;
 global using Xunit;
-global using FluentAssertions;
+global using static Backbone.UnitTestTools.Data.TestDataGenerator;
