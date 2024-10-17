@@ -6,5 +6,5 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 public record ConnectorConfig : BaseConfig
 {
     [JsonPropertyName(nameof(TotalNumberOfAvailableRelationships))]
-    public int TotalNumberOfAvailableRelationships { get; set; }
+    public long TotalNumberOfAvailableRelationships { get; set; }
 }

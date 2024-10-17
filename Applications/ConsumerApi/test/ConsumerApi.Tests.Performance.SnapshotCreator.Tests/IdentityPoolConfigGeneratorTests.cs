@@ -8,17 +8,16 @@ public class IdentityPoolConfigGeneratorTests
 {
     private static readonly string BASE_DIRECTORY_PATH = AppContext.BaseDirectory.EndsWith("\\") ? AppContext.BaseDirectory : $"{AppContext.BaseDirectory}\\";
     private readonly string _testDataFolder = $"{BASE_DIRECTORY_PATH}\\TestData";
-    private readonly IdentityPoolConfigGenerator _sut = new();
 
     #region Helper Methods
 
     private static PerformanceTestConfiguration GetExpectedPoolConfiguration(string loadTestTag)
     {
-        var expectedPoolConfiguration = loadTestTag switch
+        PerformanceTestConfiguration expectedPoolConfiguration = loadTestTag switch
         {
-            "heavy" => new PerformanceTestConfiguration(HeavyLoadIdentityPool, HeavyLoadConfiguration),
-            "light" => new PerformanceTestConfiguration(LightLoadIdentityPool, LightLoadConfiguration),
-            "test" => new PerformanceTestConfiguration(TestLoadIdentityPool, TestLoadConfiguration),
+            "heavy" => new(HeavyLoadIdentityPool, HeavyLoadConfiguration),
+            "light" => new(LightLoadIdentityPool, LightLoadConfiguration),
+            "test" => new(TestLoadIdentityPool, TestLoadConfiguration),
             _ => throw new ArgumentException($"Invalid load test tag: {loadTestTag}", nameof(loadTestTag))
         };
 
@@ -403,17 +402,43 @@ public class IdentityPoolConfigGeneratorTests
         var expectedPoolConfig = GetExpectedPoolConfiguration(loadTestTag);
 
         // Act
-        var actualPoolConfig = await _sut.DeserializeFromJson(poolConfigJsonFile);
+        var actualPoolConfig = await IdentityPoolConfigGenerator.DeserializeFromJson(poolConfigJsonFile);
 
         // Assert
         actualPoolConfig.Should().NotBeNull();
 
-        var areEqual  = actualPoolConfig!.Equals(expectedPoolConfig); //Note: Should().BeEquivalentTo does not invoke overridden Equals method
+        var areEqual  = actualPoolConfig.Equals(expectedPoolConfig); //Note: Should().BeEquivalentTo does not invoke overridden Equals method
         areEqual.Should().BeTrue();
     }
 
     #endregion
 
+    #region Deserialize From Excel Tests
+    
+    [Theory]
+    [InlineData("PerformanceTestData.xlsx", "heavy")]
+    [InlineData("PerformanceTestData.xlsx", "light")]
+    [InlineData("PerformanceTestData.xlsx", "test")]
+    public async Task DeserializeFromExcel_InputExcelFile_ReturnsPoolConfiguration(string excelFileName, string workSheetName)
+    {
+        // Arrange
+        var excelFile = Path.Combine(_testDataFolder, excelFileName);
+        var expectedPoolConfig = GetExpectedPoolConfiguration(loadTestTag: workSheetName);
+
+        // Act
+        var actualPoolConfig = await IdentityPoolConfigGenerator.DeserializeFromExcel(excelFile, workSheetName);
+
+        // Assert
+        actualPoolConfig.Should().NotBeNull();
+
+        var areEqual = actualPoolConfig.Equals(expectedPoolConfig); //Note: Should().BeEquivalentTo does not invoke overridden Equals method
+        areEqual.Should().BeTrue();
+    }
+    
+    #endregion
+    
+    
+    
     #region Verify Json Pool Config
 
     [Theory]
@@ -427,7 +452,7 @@ public class IdentityPoolConfigGeneratorTests
         var inputFile = Path.Combine(_testDataFolder, excelFile);
 
         var sut = new IdentityPoolConfigGenerator();
-
+        
         // Act
         var result = await sut.VerifyJsonPoolConfig(inputFile, workSheet, expectedJson);
 
