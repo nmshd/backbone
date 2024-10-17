@@ -4,6 +4,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc.ExceptionFilters;
+using Backbone.BuildingBlocks.API.Mvc.ModelBinders;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.ConsumerApi.Configuration;
@@ -27,7 +28,14 @@ public static class IServiceCollectionExtensions
     public static IServiceCollection AddCustomAspNetCore(this IServiceCollection services, BackboneConfiguration configuration)
     {
         services
-            .AddControllers(options => options.Filters.Add(typeof(CustomExceptionFilter)))
+            .AddControllers(
+                options =>
+                {
+                    options.Filters.Add(typeof(CustomExceptionFilter));
+
+                    options.ModelBinderProviders.Insert(0, new GenericArrayModelBinderProvider());
+                }
+            )
             .ConfigureApiBehaviorOptions(options =>
             {
                 options.InvalidModelStateResponseFactory = context =>
