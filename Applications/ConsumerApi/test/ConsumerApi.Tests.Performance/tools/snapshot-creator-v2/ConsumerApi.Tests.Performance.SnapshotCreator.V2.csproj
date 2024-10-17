@@ -4,11 +4,12 @@
         <OutputType>Exe</OutputType>
         <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
-        <Nullable>enable</Nullable>
+        <Nullable>annotations</Nullable>
+        <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="ConsumerApi.Tests.Performance.SnapshotCreator.Tests"/>
+        <InternalsVisibleTo Include="Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests" />
     </ItemGroup>
 
     <ItemGroup>
@@ -21,6 +22,10 @@
       <None Update="Config\pool-config.test.json">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="ExcelMapper" Version="5.2.592" />
     </ItemGroup>
 
 </Project>
