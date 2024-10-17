@@ -11,5 +11,7 @@ public class TokenEntityTypeConfiguration : EntityEntityTypeConfiguration<Token>
         base.Configure(builder);
 
         builder.Property(r => r.Content).IsRequired(false);
+
+        builder.Property(x => x.Password).HasMaxLength(Token.MAX_PASSWORD_LENGTH);
     }
 }

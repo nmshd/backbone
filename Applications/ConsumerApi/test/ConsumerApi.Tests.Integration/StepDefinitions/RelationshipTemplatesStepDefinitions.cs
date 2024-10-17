@@ -45,7 +45,7 @@ internal class RelationshipTemplatesStepDefinitions
     }
 
     [Given(@"the following Relationship Templates")]
-    public async Task GivenRelationshipTemplatesWithTheFollowingProperties(Table table)
+    public async Task GivenTheFollowingRelationshipTemplates(Table table)
     {
         var relationshipTemplatePropertiesSet = table.CreateSet<RelationshipTemplateProperties>();
 
@@ -85,7 +85,7 @@ internal class RelationshipTemplatesStepDefinitions
             new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, Password = password });
     }
 
-    [When($@"{RegexFor.SINGLE_THING} sends a POST request to the /RelationshipTemplate endpoint with password ""(.*)"" and forIdentity {RegexFor.SINGLE_THING}")]
+    [When($@"{RegexFor.SINGLE_THING} sends a POST request to the /RelationshipTemplates endpoint with password ""(.*)"" and forIdentity {RegexFor.SINGLE_THING}")]
     public async Task WhenIdentitySendsAPostRequestToTheRelationshipTemplatesEndpointWithPasswordAndForIdentity(string identityName, string passwordString, string forIdentityName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
@@ -96,7 +96,7 @@ internal class RelationshipTemplatesStepDefinitions
             new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES, ForIdentity = forClient.IdentityData!.Address, Password = password });
     }
 
-    [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /RelationshipTemplate/{RegexFor.SINGLE_THING}.Id endpoint with password ""([^""]*)""")]
+    [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /RelationshipTemplates/{RegexFor.SINGLE_THING}.Id endpoint with password ""([^""]*)""")]
     public async Task WhenIdentitySendsAGetRequestToTheRelationshipTemplatesIdEndpointWithPassword(string identityName, string relationshipTemplateName, string password)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
@@ -108,8 +108,8 @@ internal class RelationshipTemplatesStepDefinitions
             : await client.RelationshipTemplates.GetTemplate(relationshipTemplateId);
     }
 
-    [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /RelationshipTemplate endpoint with the following payloads")]
-    public async Task WhenISendsAGETRequestToTheRelationshipTemplateEndpointWithTheFollowingPayloads(string identityName, Table table)
+    [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /RelationshipTemplates endpoint with the following payloads")]
+    public async Task WhenISendsAGETRequestToTheRelationshipTemplatesEndpointWithTheFollowingPayloads(string identityName, Table table)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
 
@@ -120,7 +120,7 @@ internal class RelationshipTemplatesStepDefinitions
             var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[payload.TemplateName].Id;
             var password = payload.PasswordOnGet == "-" ? null : Convert.FromBase64String(payload.PasswordOnGet.Trim());
 
-            return new RelationshipTemplateQueryItem { Id = relationshipTemplateId, Password = password };
+            return new ListRelationshipTemplatesQueryItem { Id = relationshipTemplateId, Password = password };
         }).ToList();
 
         _responseContext.WhenResponse = _listRelationshipTemplatesResponse = await client.RelationshipTemplates.ListTemplates(queryItems);

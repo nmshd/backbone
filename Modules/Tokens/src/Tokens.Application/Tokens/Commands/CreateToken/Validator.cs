@@ -2,6 +2,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Tooling;
 using Backbone.Tooling.Extensions;
 using FluentValidation;
@@ -24,5 +25,7 @@ public class Validator : AbstractValidator<CreateTokenCommand>
         RuleFor(t => t.ForIdentity)
             .ValidId<CreateTokenCommand, IdentityAddress>()
             .When(t => t.ForIdentity != null);
+
+        RuleFor(c => c.Password).NumberOfBytes(1, Token.MAX_PASSWORD_LENGTH).When(c => c.Password != null);
     }
 }
