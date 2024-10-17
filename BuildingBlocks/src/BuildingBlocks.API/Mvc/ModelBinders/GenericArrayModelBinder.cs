@@ -21,7 +21,7 @@ public class GenericArrayModelBinder : IModelBinder
         var templates = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType))!;
         var query = bindingContext.HttpContext.Request.Query;
 
-        for (var i = 0;; i++)
+        for (var i = 0; ; i++)
         {
             var instance = Activator.CreateInstance(elementType);
             var properties = elementType.GetProperties();
