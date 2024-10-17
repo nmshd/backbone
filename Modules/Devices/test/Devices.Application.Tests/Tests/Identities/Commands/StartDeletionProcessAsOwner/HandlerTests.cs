@@ -51,7 +51,7 @@ public class HandlerTests : AbstractTestsBase
                 A<CancellationToken>._))
             .MustHaveHappenedOnceExactly();
 
-        A.CallTo(() => mockPushNotificationSender.SendNotification(activeIdentity.Address, A<DeletionProcessStartedPushNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockPushNotificationSender.SendNotification(activeIdentity.Address, A<DeletionProcessStartedPushNotification>._, A<CancellationToken>._)).MustNotHaveHappened();
     }
 
     [Fact]

@@ -1,5 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
@@ -22,12 +23,16 @@ public class HandlerTests : AbstractTestsBase
 
         var mockUserContext = A.Fake<IUserContext>();
         var mockPushService = A.Fake<IPushNotificationRegistrationService>();
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
         A.CallTo(() => mockUserContext.GetAddressOrNull())
             .Returns(identity.Address);
 
         A.CallTo(() => mockUserContext.GetDeviceIdOrNull())
             .Returns(deviceId);
+
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(A<IdentityAddress>._, A<CancellationToken>._, A<bool>._))
+            .Returns(identity);
 
         A.CallTo(() => mockPushService.UpdateRegistration(
                 A<IdentityAddress>._,
@@ -39,7 +44,7 @@ public class HandlerTests : AbstractTestsBase
             ))
             .Returns(DevicePushIdentifier.New());
 
-        var handler = new Handler(mockPushService, mockUserContext);
+        var handler = new Handler(mockPushService, mockUserContext, mockIdentitiesRepository);
 
         // Act
         await handler.Handle(new UpdateDeviceRegistrationCommand

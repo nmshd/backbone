@@ -1,4 +1,6 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.Aggregates.Tier;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.UnitTestTools.Data;
 
@@ -28,5 +30,21 @@ public static class TestDataGenerator
         var bytes = new byte[length];
         random.NextBytes(bytes);
         return bytes;
+    }
+
+    public static Identity CreateIdentity(IdentityAddress identityAddress)
+    {
+        return new Identity(
+            CreateRandomDeviceId(),
+            identityAddress,
+            CreateRandomBytes(),
+            CreateRandomTierId(),
+            1,
+            CommunicationLanguage.DEFAULT_LANGUAGE);
+    }
+
+    public static TierId CreateRandomTierId()
+    {
+        return TierId.Generate();
     }
 }

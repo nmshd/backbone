@@ -4,6 +4,7 @@ using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Job.IdentityDeletion.Workers;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
+using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.FindRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.UnitTestTools.BaseClasses;
@@ -44,8 +45,19 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
         SetupRipeDeletionProcessesCommand(fakeMediator, identityAddress1, identityAddress2);
 
+        var identity1 = TestDataGenerator.CreateIdentity(identityAddress1);
+        var identity2 = TestDataGenerator.CreateIdentity(identityAddress2);
+
         var mockIdentityDeleter = A.Fake<IIdentityDeleter>();
-        var worker = CreateWorker(fakeMediator, [mockIdentityDeleter]);
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+
+        var worker = CreateWorker(fakeMediator, [mockIdentityDeleter], mockIdentitiesRepository);
+
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identityAddress1, A<CancellationToken>._, A<bool>._))
+            .Returns(identity1);
+
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identityAddress2, A<CancellationToken>._, A<bool>._))
+            .Returns(identity2);
 
         A.CallTo(() => fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._))
             .Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
@@ -69,8 +81,25 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         SetupRipeDeletionProcessesCommand(fakeMediator, identityAddress1, identityAddress2, identityAddress3);
         A.CallTo(() => fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse([]));
 
+        var identity1 = TestDataGenerator.CreateIdentity(identityAddress1);
+        var identity2 = TestDataGenerator.CreateIdentity(identityAddress2);
+        var identity3 = TestDataGenerator.CreateIdentity(identityAddress3);
+
+        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identityAddress1, A<CancellationToken>._, A<bool>._))
+            .Returns(identity1);
+
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identityAddress2, A<CancellationToken>._, A<bool>._))
+            .Returns(identity2);
+
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identityAddress3, A<CancellationToken>._, A<bool>._))
+            .Returns(identity3);
+
+
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
-        var worker = CreateWorker(fakeMediator, [], mockPushNotificationSender);
+
+        var worker = CreateWorker(fakeMediator, [], mockIdentitiesRepository);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -78,7 +107,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         // Assert
         foreach (var identityAddress in new[] { identityAddress1, identityAddress2, identityAddress3 })
         {
-            A.CallTo(() => mockPushNotificationSender.SendNotification(identityAddress, A<IPushNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => mockPushNotificationSender.SendNotification(identityAddress, A<IPushNotification>._, A<CancellationToken>._)).MustNotHaveHappened();
         }
     }
 
@@ -90,12 +119,15 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
     private static ActualDeletionWorker CreateWorker(IMediator mediator,
         List<IIdentityDeleter>? identityDeleters = null,
+        IIdentitiesRepository? identitiesRepository = null,
         IPushNotificationSender? pushNotificationSender = null)
     {
         var hostApplicationLifetime = A.Dummy<IHostApplicationLifetime>();
         identityDeleters ??= [A.Dummy<IIdentityDeleter>()];
         pushNotificationSender ??= A.Dummy<IPushNotificationSender>();
         var logger = A.Dummy<ILogger<ActualDeletionWorker>>();
-        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, logger);
+        identitiesRepository ??= A.Dummy<IIdentitiesRepository>();
+
+        return new ActualDeletionWorker(hostApplicationLifetime, identityDeleters, mediator, pushNotificationSender, logger, identitiesRepository);
     }
 }

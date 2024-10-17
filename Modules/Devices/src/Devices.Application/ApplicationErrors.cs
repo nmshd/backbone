@@ -62,5 +62,11 @@ public static class ApplicationErrors
             return new ApplicationError("error.platform.validation.device.clientReachedIdentitiesLimit",
                 "The client's Identity limit has been reached. A new Identity cannot be created with this client.");
         }
+
+        public static ApplicationError CannotSendNotificationsWhileIdentityIsInStatusToBeDeleted()
+        {
+            return new ApplicationError("error.platform.validation.device.cannotSendNotificationsWhileIdentityIsInStatusToBeDeleted",
+                "Cannot send notifications while identity is marked for deletion.");
+        }
     }
 }
