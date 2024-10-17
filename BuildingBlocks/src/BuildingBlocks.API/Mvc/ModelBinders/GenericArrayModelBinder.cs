@@ -8,7 +8,9 @@ namespace Backbone.BuildingBlocks.API.Mvc.ModelBinders;
 /**
  * <summary>
  * This model binder allows for binding arrays of complex types from query parameters. The query parameters should be formatted as follows:
- * <code>paramName.0.propertyName1=value&amp;paramName.0.propertyName2=value&amp;paramName.1.propertyName1=value&amp;paramName.1.propertyName2=value</code>
+ * <code>
+ *   paramName.0.propertyName1=value&amp;paramName.0.propertyName2=value&amp;paramName.1.propertyName1=value&amp;paramName.1.propertyName2=value
+ * </code>
  * </summary>
  */
 public class GenericArrayModelBinder : IModelBinder
