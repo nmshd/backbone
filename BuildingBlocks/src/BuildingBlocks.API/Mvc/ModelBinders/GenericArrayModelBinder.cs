@@ -18,20 +18,27 @@ public class GenericArrayModelBinder : IModelBinder
             var instance = Activator.CreateInstance(elementType);
             var properties = elementType.GetProperties();
 
-            var found = false;
+            var queryValueFound = false;
             foreach (var property in properties)
             {
                 var key = $"templates.{i}.{property.Name.ToLower()}";
-                if (query.ContainsKey(key))
-                {
-                    var value = property.PropertyType.IsAssignableTo(typeof(byte[])) ? Base64.Decode(query[key].ToString()) : Convert.ChangeType(query[key].ToString(), property.PropertyType);
 
-                    property.SetValue(instance, value);
-                    found = true;
-                }
+                if (!query.TryGetValue(key, out var queryValue))
+                    continue;
+
+                object? value;
+
+                if (property.PropertyType.IsAssignableTo(typeof(byte[])))
+                    value = Base64.Decode(queryValue.ToString());
+                else
+                    value = Convert.ChangeType(queryValue.ToString(), property.PropertyType);
+
+                property.SetValue(instance, value);
+
+                queryValueFound = true;
             }
 
-            if (!found)
+            if (!queryValueFound)
                 break;
 
             templates.Add(instance);
@@ -53,11 +60,6 @@ public class GenericArrayModelBinderProvider : IModelBinderProvider
 {
     public IModelBinder? GetBinder(ModelBinderProviderContext context)
     {
-        if (context.Metadata.IsEnumerableType && context.Metadata.ElementMetadata != null && context.Metadata.ElementMetadata.IsComplexType)
-        {
-            return new BinderTypeModelBinder(typeof(GenericArrayModelBinder));
-        }
-
-        return null;
+        return context.Metadata is { IsEnumerableType: true, ElementMetadata.IsComplexType: true } ? new BinderTypeModelBinder(typeof(GenericArrayModelBinder)) : null;
     }
 }
