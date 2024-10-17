@@ -3,6 +3,9 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.UnitTestTools.BaseClasses;
+using Backbone.UnitTestTools.Data;
+using FluentAssertions;
+using Xunit;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Relationships;
 
@@ -15,7 +18,7 @@ public class RelationshipTests : AbstractTestsBase
         var relationship = CreateRelationship(RelationshipStatus.Pending);
 
         // Act
-        var acting = () => relationship.EnsureSendingMessagesIsAllowed(CreateRandomIdentityAddress(), 0, 5);
+        var acting = () => relationship.EnsureSendingMessagesIsAllowed(0, 5);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.message.relationshipToRecipientNotActive");
@@ -28,7 +31,7 @@ public class RelationshipTests : AbstractTestsBase
         var relationship = CreateRelationship();
 
         // Act
-        var acting = () => relationship.EnsureSendingMessagesIsAllowed(CreateRandomIdentityAddress(), 5, 5);
+        var acting = () => relationship.EnsureSendingMessagesIsAllowed(5, 5);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.message.maxNumberOfUnreceivedMessagesReached");
@@ -41,7 +44,7 @@ public class RelationshipTests : AbstractTestsBase
         var relationship = CreateRelationship(RelationshipStatus.Terminated);
 
         // Act
-        var acting = () => relationship.EnsureSendingMessagesIsAllowed(CreateRandomIdentityAddress(), 0, 5);
+        var acting = () => relationship.EnsureSendingMessagesIsAllowed(0, 5);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.message.relationshipToRecipientNotActive");
@@ -58,8 +61,8 @@ public class RelationshipTests : AbstractTestsBase
         RelationshipStatus? status = null)
     {
         relationshipId ??= "REL00000000000000000";
-        from ??= CreateRandomIdentityAddress();
-        to ??= CreateRandomIdentityAddress();
+        from ??= TestDataGenerator.CreateRandomIdentityAddress();
+        to ??= TestDataGenerator.CreateRandomIdentityAddress();
         createdAt ??= DateTime.UtcNow;
         status ??= RelationshipStatus.Active;
 
