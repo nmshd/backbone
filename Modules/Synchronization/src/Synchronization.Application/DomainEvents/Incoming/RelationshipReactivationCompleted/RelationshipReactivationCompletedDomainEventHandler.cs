@@ -22,6 +22,7 @@ public class RelationshipReactivationCompletedDomainEventHandler : IDomainEventH
         try
         {
             await CreateRelationshipReactivationCompletedExternalEvent(@event);
+            await UnblockMessageReceivedExternalEvents(@event);
         }
         catch (Exception ex)
         {
@@ -37,5 +38,21 @@ public class RelationshipReactivationCompletedDomainEventHandler : IDomainEventH
         var externalEvent = new RelationshipReactivationCompletedExternalEvent(@event.Peer, payload);
 
         await _dbContext.CreateExternalEvent(externalEvent);
+    }
+
+    private async Task UnblockMessageReceivedExternalEvents(RelationshipReactivationCompletedDomainEvent @event)
+    {
+        if (@event.NewRelationshipStatus != "Active")
+            return;
+
+        var externalEvents = await _dbContext.GetBlockedExternalEventsWithTypeAndContext(ExternalEventType.MessageReceived, @event.RelationshipId, CancellationToken.None);
+
+        foreach (var externalEvent in externalEvents)
+        {
+            externalEvent.UnblockDelivery();
+            _dbContext.Set<ExternalEvent>().Update(externalEvent);
+        }
+
+        await _dbContext.SaveChangesAsync(CancellationToken.None);
     }
 }

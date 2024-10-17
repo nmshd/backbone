@@ -20,7 +20,8 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
         {
             RelationshipId = "REL1",
             Peer = relationshipTo,
-            NewStatus = "Pending"
+            NewStatus = "Pending",
+            Initiator = TestDataGenerator.CreateRandomIdentityAddress()
         };
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
@@ -43,7 +44,8 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
         {
             RelationshipId = "REL1",
             Peer = relationshipTo,
-            NewStatus = "ReadyForDeletion"
+            NewStatus = "ReadyForDeletion",
+            Initiator = TestDataGenerator.CreateRandomIdentityAddress()
         };
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();

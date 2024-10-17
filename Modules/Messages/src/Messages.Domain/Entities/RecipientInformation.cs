@@ -12,18 +12,21 @@ public class RecipientInformation : Entity
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Address = null!;
+        RelationshipId = null!;
         EncryptedKey = null!;
         MessageId = null!;
     }
 
-    public RecipientInformation(IdentityAddress address, byte[] encryptedKey)
+    public RecipientInformation(IdentityAddress address, RelationshipId relationshipId, byte[] encryptedKey)
     {
         Address = address;
+        RelationshipId = relationshipId;
         EncryptedKey = encryptedKey;
         MessageId = null!; // we just assign null to satisfy the compiler; it will be set by EF Core
     }
 
     public int Id { get; }
+    public RelationshipId RelationshipId { get; }
     public IdentityAddress Address { get; private set; }
     public byte[] EncryptedKey { get; }
     public DateTime? ReceivedAt { get; private set; }

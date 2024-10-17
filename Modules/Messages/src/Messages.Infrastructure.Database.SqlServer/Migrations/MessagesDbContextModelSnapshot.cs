@@ -18,7 +18,7 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Messages")
-                .HasAnnotation("ProductVersion", "8.0.6")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -74,7 +74,8 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedBy");
+                    b.HasIndex("CreatedBy")
+                        .HasAnnotation("Npgsql:IndexMethod", "hash");
 
                     b.ToTable("Messages", "Messages");
                 });
@@ -115,6 +116,13 @@ namespace Backbone.Modules.Messages.Infrastructure.Database.SqlServer.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("ReceivedByDevice")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<string>("RelationshipId")
+                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
