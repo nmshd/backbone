@@ -45,7 +45,7 @@ public class RelationshipTemplatesController : ApiControllerBase
     {
         // We keep this code for backwards compatibility reasons. In a few months the `templates`
         // parameter will become required, and the fallback to `ids` will be removed.
-        templates ??= ids.Select(id => new ListRelationshipTemplatesQueryItem { Id = id }).ToArray();
+        templates = templates is { Length: > 0 } ? templates : ids.Select(id => new ListRelationshipTemplatesQueryItem { Id = id }).ToArray();
 
         var request = new ListRelationshipTemplatesQuery(paginationFilter, templates);
 
