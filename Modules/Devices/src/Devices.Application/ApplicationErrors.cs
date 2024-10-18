@@ -66,7 +66,7 @@ public static class ApplicationErrors
         public static ApplicationError CannotSendNotificationsWhileIdentityIsToBeDeleted()
         {
             return new ApplicationError("error.platform.validation.device.cannotSendNotificationsWhileIdentityIsToBeDeleted",
-                "Cannot send notifications while identity is marked for deletion.");
+                "No notifications can be sent to an identity that is marked for deletion.");
         }
     }
 }
