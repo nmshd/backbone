@@ -46,7 +46,7 @@ generate-json --source PerformanceTestData.xlsx --worksheet [all | <worksheet-na
 
 ##### 3.1.2.1 Methods and Tests:
 
-- [ ] Generate JSON configs from Excel Calculation (PerformanceTestData.xlsx)
+- [x] Generate JSON configs from Excel Calculation (PerformanceTestData.xlsx)
 - [ ] Generate JSON Command
 
 #### 3.1.3 Generate RelationshipsAndMessagePoolConfigs Excel Command

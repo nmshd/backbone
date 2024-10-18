@@ -458,4 +458,30 @@ public class IdentityPoolConfigGeneratorTests
     }
 
     #endregion
+
+    #region Generate Json Pool Config
+
+    [Theory]
+    [InlineData("PerformanceTestData-plusNewMedium.xlsx", "medium", "pool-config.medium.json")]
+    public async Task GenerateJsonPoolConfig_InputPerformanceTestDataExcel_ReturnsSuccess(string excelFile, string workSheet, string expectedLoadTestJsonFilename)
+    {
+        // Arrange
+        var expectedPoolConfigJsonFilePath = Path.Combine(_testDataFolder, expectedLoadTestJsonFilename);
+        var inputFile = Path.Combine(_testDataFolder, excelFile);
+
+        var sut = new IdentityPoolConfigGenerator();
+
+        // Act
+        var result = await sut.GenerateJsonPoolConfig(inputFile, workSheet);
+
+        // Assert
+
+        result.Status.Should().BeTrue();
+        result.Message.Should().Be(expectedPoolConfigJsonFilePath);
+
+        File.Exists(expectedPoolConfigJsonFilePath).Should().BeTrue();
+        (await sut.VerifyJsonPoolConfig(inputFile, workSheet, expectedPoolConfigJsonFilePath)).Should().BeTrue();
+    }
+
+    #endregion
 }

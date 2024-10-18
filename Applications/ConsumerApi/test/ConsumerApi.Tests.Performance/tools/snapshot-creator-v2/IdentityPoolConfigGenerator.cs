@@ -7,15 +7,6 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2;
 
 public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
 {
-    public async Task<bool> VerifyJsonPoolConfig(string excelFile, string workSheetName, string poolConfigJsonFile)
-    {
-        var poolConfigFromJson = await DeserializeFromJson(poolConfigJsonFile);
-        var poolConfigFromExcel = await DeserializeFromExcel(excelFile, workSheetName);
-        var result = poolConfigFromJson.Equals(poolConfigFromExcel);
-
-        return result;
-    }
-
     internal static async Task<PerformanceTestConfiguration> DeserializeFromJson(string poolConfigJsonFile)
     {
         var poolConfigFromJsonString = await File.ReadAllTextAsync(poolConfigJsonFile);
@@ -89,5 +80,41 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
         }
 
         return performanceTestConfiguration;
+    }
+
+
+    public async Task<bool> VerifyJsonPoolConfig(string excelFile, string workSheetName, string poolConfigJsonFile)
+    {
+        var poolConfigFromJson = await DeserializeFromJson(poolConfigJsonFile);
+        var poolConfigFromExcel = await DeserializeFromExcel(excelFile, workSheetName);
+        var result = poolConfigFromJson.Equals(poolConfigFromExcel);
+
+        return result;
+    }
+
+    public async Task<(bool Status, string Message)> GenerateJsonPoolConfig(string excelFile, string workSheetName)
+    {
+        var filePath = Path.GetDirectoryName(excelFile);
+
+        if (string.IsNullOrWhiteSpace(filePath))
+        {
+            return (false, "Invalid file path");
+        }
+
+        var poolConfigJsonFilePath = Path.Combine(filePath, $"pool-config.{workSheetName}.json");
+
+        try
+        {
+            var poolConfigFromExcel = await DeserializeFromExcel(excelFile, workSheetName);
+            var poolConfigJson = JsonSerializer.Serialize(poolConfigFromExcel, new JsonSerializerOptions { WriteIndented = true });
+
+            await File.WriteAllTextAsync(poolConfigJsonFilePath, poolConfigJson);
+        }
+        catch (Exception e)
+        {
+            return (false, e.Message);
+        }
+
+        return (true, poolConfigJsonFilePath);
     }
 }
