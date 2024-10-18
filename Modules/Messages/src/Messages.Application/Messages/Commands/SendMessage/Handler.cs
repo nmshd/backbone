@@ -72,7 +72,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
                 numberOfUnreceivedMessagesFromActiveIdentity,
                 _options.MaxNumberOfUnreceivedMessagesFromOneSender);
 
-            var recipient = new RecipientInformation(recipientDto.Address, recipientDto.EncryptedKey);
+            var recipient = new RecipientInformation(recipientDto.Address, relationshipBetweenSenderAndRecipient.Id, recipientDto.EncryptedKey);
 
             recipients.Add(recipient);
 

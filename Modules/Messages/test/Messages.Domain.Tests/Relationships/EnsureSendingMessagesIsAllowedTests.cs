@@ -5,10 +5,10 @@ using Backbone.Modules.Messages.Domain.Ids;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Relationships;
 
-public class RelationshipTests : AbstractTestsBase
+public class EnsureSendingMessagesIsAllowedTests : AbstractTestsBase
 {
     [Fact]
-    public void Relationship_must_be_active_to_allow_sending_messages()
+    public void Throws_if_relationship_is_pending()
     {
         // Arrange
         var relationship = CreateRelationship(RelationshipStatus.Pending);
@@ -21,7 +21,7 @@ public class RelationshipTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Max_number_of_unreceived_messages_must_not_be_reached()
+    public void Throws_if_max_number_of_unreceived_messages_is_reached()
     {
         // Arrange
         var relationship = CreateRelationship();
@@ -34,7 +34,7 @@ public class RelationshipTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Relationship_cannot_be_terminated_to_allow_sending_messages()
+    public void Does_not_throw_if_relationship_is_terminated()
     {
         // Arrange
         var relationship = CreateRelationship(RelationshipStatus.Terminated);
@@ -43,7 +43,7 @@ public class RelationshipTests : AbstractTestsBase
         var acting = () => relationship.EnsureSendingMessagesIsAllowed(CreateRandomIdentityAddress(), 0, 5);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.message.relationshipToRecipientNotActive");
+        acting.Should().NotThrow<Exception>();
     }
 
     #region helpers

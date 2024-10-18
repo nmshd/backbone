@@ -1,5 +1,6 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
 
 namespace Backbone.Modules.Messages.Domain.Tests.TestHelpers;
 
@@ -10,7 +11,7 @@ public static class TestData
         senderAddress ??= CreateRandomIdentityAddress();
         recipientAddress ??= CreateRandomIdentityAddress();
 
-        var recipient = new RecipientInformation(recipientAddress, []);
+        var recipient = new RecipientInformation(recipientAddress, RelationshipId.New(), []);
         return new Message(senderAddress, CreateRandomDeviceId(), [], [], [recipient]);
     }
 
@@ -20,6 +21,7 @@ public static class TestData
         recipient1Address ??= CreateRandomIdentityAddress();
         recipient2Address ??= CreateRandomIdentityAddress();
 
-        return new Message(senderAddress, CreateRandomDeviceId(), [], [], [new RecipientInformation(recipient1Address, []), new RecipientInformation(recipient2Address, [])]);
+        return new Message(senderAddress, CreateRandomDeviceId(), [], [],
+            [new RecipientInformation(recipient1Address, RelationshipId.New(), []), new RecipientInformation(recipient2Address, RelationshipId.New(), [])]);
     }
 }

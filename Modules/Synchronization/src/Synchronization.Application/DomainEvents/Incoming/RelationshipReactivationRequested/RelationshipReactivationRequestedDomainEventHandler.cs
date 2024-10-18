@@ -1,5 +1,4 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.MessageCreated;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationRequested;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
@@ -10,9 +9,9 @@ namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.Rel
 public class RelationshipReactivationRequestedDomainEventHandler : IDomainEventHandler<RelationshipReactivationRequestedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly ILogger<MessageCreatedDomainEventHandler> _logger;
+    private readonly ILogger<RelationshipReactivationRequestedDomainEventHandler> _logger;
 
-    public RelationshipReactivationRequestedDomainEventHandler(ISynchronizationDbContext dbContext, ILogger<MessageCreatedDomainEventHandler> logger)
+    public RelationshipReactivationRequestedDomainEventHandler(ISynchronizationDbContext dbContext, ILogger<RelationshipReactivationRequestedDomainEventHandler> logger)
     {
         _dbContext = dbContext;
         _logger = logger;

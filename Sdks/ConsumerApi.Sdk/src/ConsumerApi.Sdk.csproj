@@ -10,9 +10,4 @@
         <ProjectReference Include="..\..\..\BuildingBlocks\src\Crypto\Crypto.csproj" />
         <ProjectReference Include="..\..\..\BuildingBlocks\src\Tooling\Tooling.csproj" />
     </ItemGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    </ItemGroup>
-
 </Project>

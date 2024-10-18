@@ -1,6 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
 
@@ -116,7 +117,7 @@ public class AnonymizeParticipantTests : AbstractTestsBase
     private static Message CreateMessage((IdentityAddress createdBy, IEnumerable<IdentityAddress> recipients) parameters)
     {
         var recipientInformation = parameters.recipients.Select(recipientIdentityAddress =>
-            new RecipientInformation(recipientIdentityAddress, [])
+            new RecipientInformation(recipientIdentityAddress, RelationshipId.New(), [])
         ).ToList();
 
         var message = new Message(

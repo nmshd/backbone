@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
@@ -158,7 +159,7 @@ public class ActualDeletionWorkerTests
     {
         var dbContext = GetService<MessagesDbContext>();
 
-        var recipient = new RecipientInformation(to, []);
+        var recipient = new RecipientInformation(to, RelationshipId.New(), []);
         var message = new Message(from, DeviceId.New(), [], [], [recipient]);
 
         await dbContext.SaveEntity(message);

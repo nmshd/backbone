@@ -37,7 +37,7 @@ public class Relationship : Entity
 
     public void EnsureSendingMessagesIsAllowed(IdentityAddress activeIdentity, int numberOfUnreceivedMessagesFromActiveIdentity, int maxNumberOfUnreceivedMessagesFromOneSender)
     {
-        if (Status != RelationshipStatus.Active)
+        if (Status is not (RelationshipStatus.Active or RelationshipStatus.Terminated))
             throw new DomainException(DomainErrors.RelationshipToRecipientNotActive(GetPeerOf(activeIdentity)));
 
         if (numberOfUnreceivedMessagesFromActiveIdentity >= maxNumberOfUnreceivedMessagesFromOneSender)

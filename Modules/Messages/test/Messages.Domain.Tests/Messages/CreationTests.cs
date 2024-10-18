@@ -1,5 +1,6 @@
 ﻿using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
 
@@ -10,7 +11,8 @@ public class CreationTests : AbstractTestsBase
     {
         // Arrange
         var sender = CreateRandomIdentityAddress();
-        var recipient = new RecipientInformation(CreateRandomIdentityAddress(), []);
+        var relationshipId = RelationshipId.New();
+        var recipient = new RecipientInformation(CreateRandomIdentityAddress(), relationshipId, []);
 
         // Act
         var message = new Message(
@@ -26,6 +28,7 @@ public class CreationTests : AbstractTestsBase
         domainEvent.CreatedBy.Should().Be(sender);
         domainEvent.Id.Should().Be(message.Id);
         domainEvent.Recipients.Should().HaveCount(1);
-        domainEvent.Recipients.First().Should().Be(recipient.Address);
+        domainEvent.Recipients.First().Address.Should().Be(recipient.Address);
+        domainEvent.Recipients.First().RelationshipId.Should().Be(relationshipId);
     }
 }

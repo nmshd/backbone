@@ -83,6 +83,18 @@ internal class RelationshipsStepDefinitions
         _relationshipsContext.Relationships[relationshipName] = await Utils.CreateTerminatedRelationshipWithReactivationRequestBetween(participant1, participant2);
     }
 
+    [Given($"{RegexFor.SINGLE_THING} was fully reactivated")]
+    public async Task GivenRWasFullyReactivated(string relationshipName)
+    {
+        var relationship = _relationshipsContext.Relationships[relationshipName];
+
+        var clientFrom = _clientPool.FirstForIdentityAddress(relationship.From);
+        await clientFrom.Relationships.ReactivateRelationship(relationship.Id);
+
+        var clientTo = _clientPool.FirstForIdentityAddress(relationship.To);
+        await clientTo.Relationships.AcceptReactivationOfRelationship(relationship.Id);
+    }
+
     [Given($"{RegexFor.SINGLE_THING} has terminated {RegexFor.SINGLE_THING}")]
     public async Task GivenRelationshipIsTerminated(string terminatorName, string relationshipName)
     {
@@ -100,8 +112,6 @@ internal class RelationshipsStepDefinitions
 
         var response = await decomposer.Relationships.DecomposeRelationship(relationship.Id);
         response.Should().BeASuccess();
-
-        await Task.Delay(500);
     }
 
     #endregion
@@ -148,7 +158,7 @@ internal class RelationshipsStepDefinitions
     {
         var client = _clientPool.FirstForIdentityName(identityName);
 
-        _responseContext.WhenResponse = await client.Relationships.RelationshipReactivationRequest(_relationshipsContext.Relationships[relationshipName].Id);
+        _responseContext.WhenResponse = await client.Relationships.ReactivateRelationship(_relationshipsContext.Relationships[relationshipName].Id);
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/Reactivate/(Accept|Reject|Revoke) endpoint")]
