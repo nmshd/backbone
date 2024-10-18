@@ -1,10 +1,6 @@
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
-using Xunit;
-using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Domain.Tests.PushNotifications;
 

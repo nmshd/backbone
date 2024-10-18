@@ -1,9 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Queries.ListIdentities;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.ListIdentities;
 
@@ -16,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListIdentitiesQuery([UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress()], IdentityStatus.Active));
+        var validationResult = validator.TestValidate(new ListIdentitiesQuery([CreateRandomIdentityAddress()], IdentityStatus.Active));
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();

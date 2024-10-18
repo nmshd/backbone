@@ -1,9 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsOwner;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelDeletionProcessAsOwner;
 

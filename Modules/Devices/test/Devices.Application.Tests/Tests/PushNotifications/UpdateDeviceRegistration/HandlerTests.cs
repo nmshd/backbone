@@ -4,10 +4,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using Xunit;
-using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications.UpdateDeviceRegistration;
 

@@ -14,6 +14,7 @@ public class RelationshipReactivationCompletedDomainEventHandlerTests : Abstract
     public async Task Creates_an_external_event()
     {
         // Arrange
+        var identityAddress = CreateRandomIdentityAddress();
         var relationshipReactivationCompletedIntegrationEvent = CreateReactivationCompletedDomainEventForRelationship(RelationshipId.New());
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
@@ -60,7 +61,7 @@ public class RelationshipReactivationCompletedDomainEventHandlerTests : Abstract
         {
             NewRelationshipStatus = "Active",
             RelationshipId = idOfReactivatedRelationship,
-            Peer = TestDataGenerator.CreateRandomIdentityAddress()
+            Peer = CreateRandomIdentityAddress()
         };
     }
 

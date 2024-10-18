@@ -1,10 +1,6 @@
 ﻿using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.Data;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
 
@@ -14,14 +10,14 @@ public class CreationTests : AbstractTestsBase
     public void Raises_MessageCreatedDomainEvent_when_created()
     {
         // Arrange
-        var sender = TestDataGenerator.CreateRandomIdentityAddress();
+        var sender = CreateRandomIdentityAddress();
         var relationshipId = RelationshipId.New();
-        var recipient = new RecipientInformation(TestDataGenerator.CreateRandomIdentityAddress(), relationshipId, []);
+        var recipient = new RecipientInformation(CreateRandomIdentityAddress(), relationshipId, []);
 
         // Act
         var message = new Message(
             sender,
-            TestDataGenerator.CreateRandomDeviceId(),
+            CreateRandomDeviceId(),
             [],
             [],
             [recipient]

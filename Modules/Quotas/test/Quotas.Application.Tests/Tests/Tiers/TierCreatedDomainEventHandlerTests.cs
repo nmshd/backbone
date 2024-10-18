@@ -2,11 +2,8 @@ using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.TierCreated;
 using Backbone.Modules.Quotas.Application.Tests.TestDoubles;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.TierCreated;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
-using Xunit;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Tiers;
 

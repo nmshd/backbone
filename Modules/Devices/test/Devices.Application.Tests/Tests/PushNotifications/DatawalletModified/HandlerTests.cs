@@ -1,9 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.DatawalletModificationCreated;
 using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.DatawalletModificationCreated;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.PushNotifications.DatawalletModified;
 
@@ -13,8 +11,8 @@ public class HandlerTests : AbstractTestsBase
     public async Task Creating_a_Datawallet_modification_sends_a_filtered_notification()
     {
         // Arrange
-        var modifiedByDevice = UnitTestTools.Data.TestDataGenerator.CreateRandomDeviceId();
-        var identity = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress();
+        var modifiedByDevice = CreateRandomDeviceId();
+        var identity = CreateRandomIdentityAddress();
         var mockSender = A.Fake<IPushNotificationSender>();
         var handler = new DatawalletModifiedDomainEventHandler(mockSender);
         var domainEvent = new DatawalletModifiedDomainEvent { Identity = identity, ModifiedByDevice = modifiedByDevice };

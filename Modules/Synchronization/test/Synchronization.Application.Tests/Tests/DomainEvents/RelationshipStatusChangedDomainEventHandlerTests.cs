@@ -13,13 +13,13 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
     public async Task Creates_an_external_event()
     {
         // Arrange
-        var relationshipTo = TestDataGenerator.CreateRandomIdentityAddress();
+        var relationshipTo = CreateRandomIdentityAddress();
         var @event = new RelationshipStatusChangedDomainEvent
         {
             RelationshipId = "REL1",
             Peer = relationshipTo,
             NewStatus = "Pending",
-            Initiator = TestDataGenerator.CreateRandomIdentityAddress()
+            Initiator = CreateRandomIdentityAddress()
         };
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
@@ -37,13 +37,13 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
     public async Task Does_not_create_an_external_event_if_new_status_is_ReadyForDeletion()
     {
         // Arrange
-        var relationshipTo = TestDataGenerator.CreateRandomIdentityAddress();
+        var relationshipTo = CreateRandomIdentityAddress();
         var @event = new RelationshipStatusChangedDomainEvent
         {
             RelationshipId = "REL1",
             Peer = relationshipTo,
             NewStatus = "ReadyForDeletion",
-            Initiator = TestDataGenerator.CreateRandomIdentityAddress()
+            Initiator = CreateRandomIdentityAddress()
         };
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
@@ -63,9 +63,9 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
     public async Task Calls_DeleteUnsyncedExternalEventsWithOwnerAndContext_when_new_status_is_DeletionProposed_or_ReadyForDeletion(string newStatus)
     {
         // Arrange
-        var relationshipTo = TestDataGenerator.CreateRandomIdentityAddress();
+        var relationshipTo = CreateRandomIdentityAddress();
         const string relationshipId = "REL11111111111111111";
-        var initiator = TestDataGenerator.CreateRandomIdentityAddress();
+        var initiator = CreateRandomIdentityAddress();
         var @event = new RelationshipStatusChangedDomainEvent
         {
             RelationshipId = relationshipId,

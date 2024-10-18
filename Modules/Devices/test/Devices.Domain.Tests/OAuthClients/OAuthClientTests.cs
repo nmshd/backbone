@@ -2,12 +2,10 @@ using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.OAuthClients;
+
 public class OAuthClientTests : AbstractTestsBase
 {
     [Fact]
