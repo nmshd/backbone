@@ -1,4 +1,4 @@
 #!/bin/bash
 
-dotnet restore /p:ContinuousIntegrationBuild=true
-dotnet format --no-restore --verify-no-changes
+dotnet restore /p:ContinuousIntegrationBuild=true ../BackBone.sln
+dotnet format --no-restore --verify-no-changes ../BackBone.sln

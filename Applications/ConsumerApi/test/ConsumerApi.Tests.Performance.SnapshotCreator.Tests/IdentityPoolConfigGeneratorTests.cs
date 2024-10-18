@@ -6,8 +6,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests;
 
 public class IdentityPoolConfigGeneratorTests
 {
-    private static readonly string BASE_DIRECTORY_PATH = AppContext.BaseDirectory.EndsWith("\\") ? AppContext.BaseDirectory : $"{AppContext.BaseDirectory}\\";
-    private readonly string _testDataFolder = $"{BASE_DIRECTORY_PATH}\\TestData";
+    private readonly string _testDataFolder = Path.Combine(AppContext.BaseDirectory, "TestData");
 
     #region Helper Methods
 
