@@ -5,11 +5,8 @@ using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
-using FluentAssertions;
 using FluentAssertions.Execution;
-using Xunit;
 using static Backbone.Modules.Quotas.Infrastructure.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Tests.Tests.Repositories;

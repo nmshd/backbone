@@ -1,10 +1,7 @@
 ﻿using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using Backbone.Modules.Tokens.Domain.Entities;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 
 namespace Backbone.Modules.Tokens.Application.Tests.Tests.Tokens.CreateToken;
 
@@ -46,7 +43,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand { Content = [], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = TestDataGenerator.CreateRandomIdentityAddress() });
+            new CreateTokenCommand { Content = [], ExpiresAt = DateTime.UtcNow.AddDays(1), ForIdentity = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(nameof(Token.Content), "error.platform.validation.invalidPropertyValue", "'Content' must not be empty.");
@@ -62,7 +59,7 @@ public class ValidatorTests : AbstractTestsBase
 
         // Act
         var validationResult = validator.TestValidate(
-            new CreateTokenCommand { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(-1), ForIdentity = TestDataGenerator.CreateRandomIdentityAddress() });
+            new CreateTokenCommand { Content = [1], ExpiresAt = DateTime.UtcNow.AddDays(-1), ForIdentity = CreateRandomIdentityAddress() });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForItem(nameof(Token.ExpiresAt), "error.platform.validation.invalidPropertyValue", "'Expires At' must be in the future.");

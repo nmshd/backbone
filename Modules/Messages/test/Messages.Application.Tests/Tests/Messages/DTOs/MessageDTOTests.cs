@@ -1,10 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Messages.DTOs;
 using Backbone.Modules.Messages.Application.Tests.TestHelpers;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Messages.Application.Tests.Tests.Messages.DTOs;
 

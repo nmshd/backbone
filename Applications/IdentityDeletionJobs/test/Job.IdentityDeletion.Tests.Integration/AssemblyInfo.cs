@@ -1,3 +1,1 @@
-﻿using Xunit;
-
-[assembly: AssemblyTrait("Category", "Integration")]
+﻿[assembly: AssemblyTrait("Category", "Integration")]

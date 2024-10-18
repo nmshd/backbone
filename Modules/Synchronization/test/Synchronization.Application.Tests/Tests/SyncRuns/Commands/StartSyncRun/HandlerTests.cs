@@ -7,12 +7,9 @@ using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.StartSyncRun;
 
@@ -20,8 +17,8 @@ public class HandlerTests : AbstractTestsBase
 {
     private const int DATAWALLET_VERSION = 1;
     private readonly SynchronizationDbContext _actContext;
-    private readonly DeviceId _activeDevice = TestDataGenerator.CreateRandomDeviceId();
-    private readonly IdentityAddress _activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+    private readonly DeviceId _activeDevice = CreateRandomDeviceId();
+    private readonly IdentityAddress _activeIdentity = CreateRandomIdentityAddress();
     private readonly SynchronizationDbContext _arrangeContext;
     private readonly SynchronizationDbContext _assertionContext;
     private readonly DbContextOptions<SynchronizationDbContext> _dbOptions;
@@ -161,7 +158,7 @@ public class HandlerTests : AbstractTestsBase
         var itemOfActiveIdentity = ExternalEventBuilder.Build().WithOwner(_activeIdentity).Create();
         _arrangeContext.SaveEntity(itemOfActiveIdentity);
 
-        var itemOfOtherIdentity = ExternalEventBuilder.Build().WithOwner(TestDataGenerator.CreateRandomIdentityAddress()).Create();
+        var itemOfOtherIdentity = ExternalEventBuilder.Build().WithOwner(CreateRandomIdentityAddress()).Create();
         _arrangeContext.SaveEntity(itemOfOtherIdentity);
 
 
@@ -251,7 +248,7 @@ public class HandlerTests : AbstractTestsBase
 
     private Handler CreateHandler(IdentityAddress activeIdentity)
     {
-        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
+        var activeDevice = CreateRandomDeviceId();
         var handler = CreateHandler(activeIdentity, activeDevice);
         return handler;
     }
