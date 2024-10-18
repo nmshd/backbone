@@ -42,8 +42,8 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var identityAddress2 = CreateRandomIdentityAddress();
         SetupRipeDeletionProcessesCommand(fakeMediator, identityAddress1, identityAddress2);
 
-        var identity1 = TestDataGenerator.CreateIdentity(identityAddress1);
-        var identity2 = TestDataGenerator.CreateIdentity(identityAddress2);
+        var identity1 = CreateIdentity(identityAddress1);
+        var identity2 = CreateIdentity(identityAddress2);
 
         var mockIdentityDeleter = A.Fake<IIdentityDeleter>();
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
@@ -78,9 +78,9 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         SetupRipeDeletionProcessesCommand(fakeMediator, identityAddress1, identityAddress2, identityAddress3);
         A.CallTo(() => fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse([]));
 
-        var identity1 = TestDataGenerator.CreateIdentity(identityAddress1);
-        var identity2 = TestDataGenerator.CreateIdentity(identityAddress2);
-        var identity3 = TestDataGenerator.CreateIdentity(identityAddress3);
+        var identity1 = CreateIdentity(identityAddress1);
+        var identity2 = CreateIdentity(identityAddress2);
+        var identity3 = CreateIdentity(identityAddress3);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
