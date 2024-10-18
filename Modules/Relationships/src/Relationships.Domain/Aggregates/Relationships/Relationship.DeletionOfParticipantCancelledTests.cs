@@ -1,8 +1,4 @@
 ﻿using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.Data;
-using FluentAssertions;
-using Xunit;
 using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -13,8 +9,8 @@ public class RelationshipDeletionOfParticipantCancelledTests : AbstractTestsBase
     public void Raises_PeerDeletionCancelledDomainEvent()
     {
         // Arrange
-        var identityToBeDeleted = TestDataGenerator.CreateRandomIdentityAddress();
-        var peer = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityToBeDeleted = CreateRandomIdentityAddress();
+        var peer = CreateRandomIdentityAddress();
         var relationship = CreateActiveRelationship(peer, identityToBeDeleted);
 
         // Act

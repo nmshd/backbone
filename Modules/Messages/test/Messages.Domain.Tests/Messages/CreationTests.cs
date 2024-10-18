@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
-using Backbone.UnitTestTools.Data;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
 

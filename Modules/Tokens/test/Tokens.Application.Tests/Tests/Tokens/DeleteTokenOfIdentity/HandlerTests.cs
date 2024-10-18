@@ -2,7 +2,6 @@
 using Backbone.Modules.Tokens.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteTokensOfIdentity;
 using Backbone.Modules.Tokens.Domain.Entities;
-using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 
 namespace Backbone.Modules.Tokens.Application.Tests.Tests.Tokens.DeleteTokenOfIdentity;

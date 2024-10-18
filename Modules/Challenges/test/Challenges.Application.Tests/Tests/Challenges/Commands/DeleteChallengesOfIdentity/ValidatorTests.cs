@@ -1,5 +1,4 @@
 ﻿using Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteChallengesOfIdentity;
-using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
 

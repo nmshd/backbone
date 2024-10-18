@@ -4,11 +4,7 @@ using Backbone.Modules.Relationships.Application.TestHelpers;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.Data;
 using FakeItEasy;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityDeletionCancelled;
 
@@ -18,10 +14,10 @@ public class IdentityDeletionCancelledDomainEventHandlerTests : AbstractTestsBas
     public static async Task Publishes_PeerToBeDeletedDomainEvent()
     {
         //Arrange
-        var identityWithDeletionCancelled = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityWithDeletionCancelled = CreateRandomIdentityAddress();
 
-        var peer1 = TestDataGenerator.CreateRandomIdentityAddress();
-        var peer2 = TestDataGenerator.CreateRandomIdentityAddress();
+        var peer1 = CreateRandomIdentityAddress();
+        var peer2 = CreateRandomIdentityAddress();
 
         var relationshipToPeer1 = TestData.CreateActiveRelationship(peer1, identityWithDeletionCancelled);
         var relationshipToPeer2 = TestData.CreateActiveRelationship(peer2, identityWithDeletionCancelled);

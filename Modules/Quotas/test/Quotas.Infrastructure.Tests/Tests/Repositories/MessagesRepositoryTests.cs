@@ -5,7 +5,6 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FluentAssertions.Execution;
 

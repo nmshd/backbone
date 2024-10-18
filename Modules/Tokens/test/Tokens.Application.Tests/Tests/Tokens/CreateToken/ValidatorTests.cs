@@ -1,6 +1,5 @@
 ﻿using Backbone.Modules.Tokens.Application.Tokens.Commands.CreateToken;
 using Backbone.Modules.Tokens.Domain.Entities;
-using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
 

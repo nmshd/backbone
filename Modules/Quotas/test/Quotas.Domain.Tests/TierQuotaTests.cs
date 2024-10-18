@@ -1,7 +1,6 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.UnitTestTools.Data;
 
 namespace Backbone.Modules.Quotas.Domain.Tests;
 
