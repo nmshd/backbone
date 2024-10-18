@@ -6,9 +6,9 @@ public class TagProvider
 
     private readonly Dictionary<string, IEnumerable<TagInfo>> _tags = [];
 
-    public TagProvider(ApplicationOptions options)
+    public TagProvider(IEnumerable<AttributeInfo> attributes)
     {
-        foreach (var attribute in options.Attributes)
+        foreach (var attribute in attributes)
         {
             _tags[attribute.Name] = attribute.Tags;
         }
