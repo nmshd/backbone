@@ -1,9 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.UpdateIdentity;
 
@@ -16,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new UpdateIdentityCommand { Address = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress(), TierId = TierId.Generate() });
+        var validationResult = validator.TestValidate(new UpdateIdentityCommand { Address = CreateRandomIdentityAddress(), TierId = TierId.Generate() });
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -42,7 +40,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new UpdateIdentityCommand { Address = UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress(), TierId = "some-invalid-tier-id" });
+        var validationResult = validator.TestValidate(new UpdateIdentityCommand { Address = CreateRandomIdentityAddress(), TierId = "some-invalid-tier-id" });
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(UpdateIdentityCommand.TierId));

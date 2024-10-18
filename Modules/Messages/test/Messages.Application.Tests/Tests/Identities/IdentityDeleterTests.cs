@@ -1,11 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Messages.Application.Identities;
 using Backbone.Modules.Messages.Application.Messages.Commands.AnonymizeMessagesOfIdentity;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using MediatR;
-using Xunit;
-using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Messages.Application.Tests.Tests.Identities;
 

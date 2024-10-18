@@ -1,8 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsSupport;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetDeletionProcessesAsSupport;
 
@@ -15,7 +13,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetDeletionProcessesAsSupportQuery(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress()));
+        var validationResult = validator.TestValidate(new GetDeletionProcessesAsSupportQuery(CreateRandomIdentityAddress()));
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();

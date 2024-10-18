@@ -1,7 +1,4 @@
 ﻿using Backbone.Modules.Tokens.Domain.Tests.TestHelpers;
-using Backbone.UnitTestTools.Data;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Tokens.Domain.Tests.Tests;
 
@@ -11,8 +8,8 @@ public class TokenCanBeCollectedUsingPasswordTests
     public void Can_collect_without_a_password_when_no_password_is_defined()
     {
         // Arrange
-        var creator = TestDataGenerator.CreateRandomIdentityAddress();
-        var collector = TestDataGenerator.CreateRandomIdentityAddress();
+        var creator = CreateRandomIdentityAddress();
+        var collector = CreateRandomIdentityAddress();
 
         var template = TestData.CreateToken(creator, null);
 
@@ -27,8 +24,8 @@ public class TokenCanBeCollectedUsingPasswordTests
     public void Can_collect_with_a_password_when_no_password_is_defined()
     {
         // Arrange
-        var creator = TestDataGenerator.CreateRandomIdentityAddress();
-        var collector = TestDataGenerator.CreateRandomIdentityAddress();
+        var creator = CreateRandomIdentityAddress();
+        var collector = CreateRandomIdentityAddress();
 
         var template = TestData.CreateToken(creator, null);
 
@@ -43,8 +40,8 @@ public class TokenCanBeCollectedUsingPasswordTests
     public void Can_collect_with_correct_password()
     {
         // Arrange
-        var creator = TestDataGenerator.CreateRandomIdentityAddress();
-        var collector = TestDataGenerator.CreateRandomIdentityAddress();
+        var creator = CreateRandomIdentityAddress();
+        var collector = CreateRandomIdentityAddress();
 
         var template = TestData.CreateToken(creator, null, password: [1]);
 
@@ -59,8 +56,8 @@ public class TokenCanBeCollectedUsingPasswordTests
     public void Cannot_collect_with_incorrect_password()
     {
         // Arrange
-        var creator = TestDataGenerator.CreateRandomIdentityAddress();
-        var collector = TestDataGenerator.CreateRandomIdentityAddress();
+        var creator = CreateRandomIdentityAddress();
+        var collector = CreateRandomIdentityAddress();
 
         var template = TestData.CreateToken(creator, null, password: [1]);
 
@@ -75,7 +72,7 @@ public class TokenCanBeCollectedUsingPasswordTests
     public void Can_collect_as_owner_without_a_password()
     {
         // Arrange
-        var creator = TestDataGenerator.CreateRandomIdentityAddress();
+        var creator = CreateRandomIdentityAddress();
 
         var template = TestData.CreateToken(creator, null, password: [1]);
 
@@ -90,7 +87,7 @@ public class TokenCanBeCollectedUsingPasswordTests
     public void Can_collect_as_anonymous_user_with_correct_password()
     {
         // Arrange
-        var creator = TestDataGenerator.CreateRandomIdentityAddress();
+        var creator = CreateRandomIdentityAddress();
         var template = TestData.CreateToken(creator, null, password: [1]);
 
         // Act

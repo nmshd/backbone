@@ -6,19 +6,16 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
 
 public class HandlerTests : AbstractTestsBase
 {
-    private readonly DeviceId _activeDevice = TestDataGenerator.CreateRandomDeviceId();
-    private readonly IdentityAddress _activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+    private readonly DeviceId _activeDevice = CreateRandomDeviceId();
+    private readonly IdentityAddress _activeIdentity = CreateRandomIdentityAddress();
     private readonly DbContextOptions<SynchronizationDbContext> _dbOptions;
     private readonly IEventBus _eventBus;
     private readonly Fixture _testDataGenerator;

@@ -1,9 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Commands.CancelDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelDeletionProcessAsSupport;
 
@@ -16,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new CancelDeletionAsSupportCommand(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress(), IdentityDeletionProcessId.Generate()));
+        var validationResult = validator.TestValidate(new CancelDeletionAsSupportCommand(CreateRandomIdentityAddress(), IdentityDeletionProcessId.Generate()));
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -42,7 +40,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new CancelDeletionAsSupportCommand(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress(), "invalid-deletion-process-id"));
+        var validationResult = validator.TestValidate(new CancelDeletionAsSupportCommand(CreateRandomIdentityAddress(), "invalid-deletion-process-id"));
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(CancelDeletionAsSupportCommand.DeletionProcessId));

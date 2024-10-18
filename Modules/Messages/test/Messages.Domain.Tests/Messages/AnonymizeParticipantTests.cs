@@ -1,10 +1,6 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Messages.Domain.Entities;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.Data;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
 
@@ -14,10 +10,10 @@ public class AnonymizeParticipantTests : AbstractTestsBase
     public void CreatedBy_gets_updated()
     {
         // Arrange
-        var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var senderAddress = CreateRandomIdentityAddress();
+        var anonymizedAddress = CreateRandomIdentityAddress();
 
-        var message = CreateMessage((senderAddress, new List<IdentityAddress> { TestDataGenerator.CreateRandomIdentityAddress() }));
+        var message = CreateMessage((senderAddress, new List<IdentityAddress> { CreateRandomIdentityAddress() }));
 
         // Act
         message.AnonymizeParticipant(senderAddress, anonymizedAddress);
@@ -30,10 +26,10 @@ public class AnonymizeParticipantTests : AbstractTestsBase
     public void Recipient_gets_updated()
     {
         // Arrange
-        var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var recipientAddress = CreateRandomIdentityAddress();
+        var anonymizedAddress = CreateRandomIdentityAddress();
 
-        var message = CreateMessage((TestDataGenerator.CreateRandomIdentityAddress(), new List<IdentityAddress> { recipientAddress }));
+        var message = CreateMessage((CreateRandomIdentityAddress(), new List<IdentityAddress> { recipientAddress }));
 
         // Act
         message.AnonymizeParticipant(recipientAddress, anonymizedAddress);
@@ -46,10 +42,10 @@ public class AnonymizeParticipantTests : AbstractTestsBase
     public void Message_without_identity_to_be_replaced_stays_unaffected()
     {
         // Arrange
-        var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var addressToAnonymize = TestDataGenerator.CreateRandomIdentityAddress();
-        var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var recipientAddress = CreateRandomIdentityAddress();
+        var senderAddress = CreateRandomIdentityAddress();
+        var addressToAnonymize = CreateRandomIdentityAddress();
+        var anonymizedAddress = CreateRandomIdentityAddress();
 
         var message = CreateMessage((senderAddress, new List<IdentityAddress> { recipientAddress }));
 
@@ -65,9 +61,9 @@ public class AnonymizeParticipantTests : AbstractTestsBase
     public void Does_not_raise_a_MessageOrphanedDomainEvent_when_sender_is_not_anonymized()
     {
         // Arrange
-        var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipientAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var senderAddress = CreateRandomIdentityAddress();
+        var recipientAddress = CreateRandomIdentityAddress();
+        var anonymizedAddress = CreateRandomIdentityAddress();
 
         var message = CreateMessage((senderAddress, new List<IdentityAddress> { recipientAddress }));
 
@@ -82,10 +78,10 @@ public class AnonymizeParticipantTests : AbstractTestsBase
     public void Does_not_raise_a_MessageOrphanedDomainEvent_when_at_least_one_recipient_is_not_anonymized()
     {
         // Arrange
-        var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipient1Address = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipient2Address = TestDataGenerator.CreateRandomIdentityAddress();
-        var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var senderAddress = CreateRandomIdentityAddress();
+        var recipient1Address = CreateRandomIdentityAddress();
+        var recipient2Address = CreateRandomIdentityAddress();
+        var anonymizedAddress = CreateRandomIdentityAddress();
 
         var message = CreateMessage((senderAddress, new List<IdentityAddress> { recipient1Address, recipient2Address }));
 
@@ -101,10 +97,10 @@ public class AnonymizeParticipantTests : AbstractTestsBase
     public void Raises_a_MessageOrphanedDomainEvent_when_sender_and_all_recipients_are_anonymized()
     {
         // Arrange
-        var senderAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipient1Address = TestDataGenerator.CreateRandomIdentityAddress();
-        var recipient2Address = TestDataGenerator.CreateRandomIdentityAddress();
-        var anonymizedAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var senderAddress = CreateRandomIdentityAddress();
+        var recipient1Address = CreateRandomIdentityAddress();
+        var recipient2Address = CreateRandomIdentityAddress();
+        var anonymizedAddress = CreateRandomIdentityAddress();
 
         var message = CreateMessage((senderAddress, new List<IdentityAddress> { recipient1Address, recipient2Address }));
 
@@ -125,7 +121,7 @@ public class AnonymizeParticipantTests : AbstractTestsBase
 
         var message = new Message(
             parameters.createdBy,
-            TestDataGenerator.CreateRandomDeviceId(),
+            CreateRandomDeviceId(),
             [],
             [],
             recipientInformation
