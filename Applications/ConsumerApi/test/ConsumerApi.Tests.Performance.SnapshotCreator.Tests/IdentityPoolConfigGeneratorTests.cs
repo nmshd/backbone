@@ -1,6 +1,7 @@
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 using FluentAssertions;
+using Xunit.Abstractions;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests;
 
@@ -472,12 +473,12 @@ public class IdentityPoolConfigGeneratorTests
         var sut = new IdentityPoolConfigGenerator();
 
         // Act
-        (bool Status, string Message) result = await sut.GenerateJsonPoolConfig(inputFile, workSheet);
+        var (status, message) = await sut.GenerateJsonPoolConfig(inputFile, workSheet);
 
         // Assert
 
-        result.Status.Should().BeTrue();
-        result.Message.Should().Be(expectedPoolConfigJsonFilePath);
+        status.Should().BeTrue();
+        message.Should().Be(expectedPoolConfigJsonFilePath);
 
         File.Exists(expectedPoolConfigJsonFilePath).Should().BeTrue();
         (await sut.VerifyJsonPoolConfig(inputFile, workSheet, expectedPoolConfigJsonFilePath)).Should().BeTrue();
