@@ -16,6 +16,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Relationships;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Tags;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
@@ -49,6 +50,7 @@ public class Client
         Relationships = new RelationshipsEndpoint(endpointClient);
         RelationshipTemplates = new RelationshipTemplatesEndpoint(endpointClient);
         SyncRuns = new SyncRunsEndpoint(endpointClient);
+        Tags = new TagsEndpoint(endpointClient);
         Tokens = new TokensEndpoint(endpointClient);
     }
 
@@ -67,6 +69,7 @@ public class Client
     public RelationshipsEndpoint Relationships { get; }
     public RelationshipTemplatesEndpoint RelationshipTemplates { get; }
     public SyncRunsEndpoint SyncRuns { get; }
+    public TagsEndpoint Tags { get; }
     public TokensEndpoint Tokens { get; }
     // ReSharper restore UnusedAutoPropertyAccessor.Global
 
