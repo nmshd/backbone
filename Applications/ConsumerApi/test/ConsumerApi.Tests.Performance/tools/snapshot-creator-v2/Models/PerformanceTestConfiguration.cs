@@ -19,7 +19,7 @@ public record PerformanceTestConfiguration(
             return true;
         }
 
-        var isConfigEqual = Configuration.App.Equals(other.Configuration.App) && 
+        var isConfigEqual = Configuration.App.Equals(other.Configuration.App) &&
                             Configuration.Connector.Equals(other.Configuration.Connector);
         var isPoolConfigsEqual = IdentityPoolConfigs.SequenceEqual(other.IdentityPoolConfigs);
 
