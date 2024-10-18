@@ -1,7 +1,4 @@
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.BuildingBlocks.Application.Tests.Pagination;
 

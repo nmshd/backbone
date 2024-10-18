@@ -4,10 +4,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Fcm;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Fcm;
 

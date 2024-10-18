@@ -2,10 +2,8 @@
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationCompleted;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.DomainEvents;
 
@@ -15,7 +13,7 @@ public class RelationshipReactivationCompletedDomainEventHandlerTests : Abstract
     public async Task Creates_an_external_event()
     {
         // Arrange
-        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityAddress = CreateRandomIdentityAddress();
         var relationshipReactivationCompletedIntegrationEvent = new RelationshipReactivationCompletedDomainEvent("someRelationshipId", identityAddress);
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();

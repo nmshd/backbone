@@ -1,11 +1,9 @@
 ﻿using Backbone.Job.IdentityDeletion.Workers;
 using Backbone.Modules.Devices.Application.Identities.Commands.CancelStaleIdentityDeletionProcesses;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Xunit;
 
 namespace Backbone.Job.IdentityDeletion.Tests.Tests;
 

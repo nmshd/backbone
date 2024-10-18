@@ -11,4 +11,17 @@
 
         <MetalamaLicense>112591-ZU658QQQXEAETFQCB88YNBFRY2EWBBJFF4JX3YHRW87WNTFR46ULX7HRZDATQASR28MWN7JFS6ZTZ9QGMJHBKCL4GUAFN7768NAMQ6K8V4R3EWTHJP6A6EKXC46SYPT5TMW9QQGD9AZSNSQQBU9RGDWQHEQKPZUXVDVKBJKP</MetalamaLicense>
     </PropertyGroup>
+
+    <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests')) Or $(MSBuildProjectName.EndsWith('Tests.Integration'))">
+        <PackageReference Include="FluentAssertions" Version="6.12.1" />
+        <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1">
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+            <PrivateAssets>all</PrivateAssets>
+        </PackageReference>
+
+        <Using Include="FluentAssertions" />
+        <Using Include="Backbone.UnitTestTools.BaseClasses" />
+        <Using Include="Backbone.UnitTestTools.Data.TestDataGenerator" Static="True" />
+        <Using Include="Xunit" />
+    </ItemGroup>
 </Project>

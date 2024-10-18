@@ -1,10 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Domain;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 

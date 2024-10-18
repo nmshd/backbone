@@ -1,8 +1,5 @@
 ﻿using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Extensions;
-using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.BuildingBlocks.Application.Tests.Extensions;
 

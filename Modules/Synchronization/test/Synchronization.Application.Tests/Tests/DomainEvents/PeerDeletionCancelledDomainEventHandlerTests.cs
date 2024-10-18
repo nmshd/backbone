@@ -2,10 +2,8 @@
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeletionCancelled;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.DomainEvents;
 
@@ -15,7 +13,7 @@ public class PeerDeletionCancelledDomainEventHandlerTests : AbstractTestsBase
     public async Task Creates_an_external_event()
     {
         // Arrange
-        var peerOfIdentityWithDeletionCancelled = TestDataGenerator.CreateRandomIdentityAddress();
+        var peerOfIdentityWithDeletionCancelled = CreateRandomIdentityAddress();
         var domainEvent = new PeerDeletionCancelledDomainEvent(peerOfIdentityWithDeletionCancelled, "some-relationship-id", "some-deletedIdentity-id");
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();

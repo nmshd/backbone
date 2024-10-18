@@ -2,11 +2,8 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.Data;
 using FakeItEasy;
 using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
 
@@ -18,7 +15,7 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var mockRepository = A.Fake<IRelationshipTemplatesRepository>();
 
-        var oldIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var oldIdentityAddress = CreateRandomIdentityAddress();
         var relationshipTemplateAllocations = new List<RelationshipTemplateAllocation> { new(RelationshipTemplateId.New(), oldIdentityAddress, DeviceId.New()) };
 
         var request = new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(oldIdentityAddress);
@@ -43,8 +40,8 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var mockRepository = A.Fake<IRelationshipTemplatesRepository>();
 
-        var oldIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
-        var anotherIdentityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var oldIdentityAddress = CreateRandomIdentityAddress();
+        var anotherIdentityAddress = CreateRandomIdentityAddress();
         var relationshipTemplateAllocations = new List<RelationshipTemplateAllocation> { new(RelationshipTemplateId.New(), oldIdentityAddress, DeviceId.New()) };
 
         var request = new AnonymizeRelationshipTemplateAllocationsAllocatedByIdentityCommand(anotherIdentityAddress);
