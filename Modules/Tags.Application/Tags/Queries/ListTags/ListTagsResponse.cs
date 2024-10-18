@@ -35,9 +35,9 @@ public class ListTagsResponseConverter : JsonConverter<ListTagsResponse>
         writer.WriteStartObject("tagsForAttributeValueTypes");
         foreach (var (name, tags) in value)
         {
-            writer.WriteStartArray(name);
+            writer.WriteStartObject(name);
             foreach (var tag in tags) WriteTag(writer, tag);
-            writer.WriteEndArray();
+            writer.WriteEndObject();
         }
 
         writer.WriteEndObject();
@@ -47,19 +47,19 @@ public class ListTagsResponseConverter : JsonConverter<ListTagsResponse>
 
     private void WriteTag(Utf8JsonWriter writer, TagInfo tag)
     {
-        writer.WriteStartObject();
         writer.WriteStartObject(tag.Tag);
 
+        writer.WriteStartObject("displayNames");
         foreach (var (lang, title) in tag.DisplayNames) writer.WriteString(lang, title);
+        writer.WriteEndObject();
 
         if (tag.Children.Count > 0)
         {
-            writer.WriteStartArray("children");
+            writer.WriteStartObject("children");
             foreach (var child in tag.Children) WriteTag(writer, child);
-            writer.WriteEndArray();
+            writer.WriteEndObject();
         }
 
-        writer.WriteEndObject();
         writer.WriteEndObject();
     }
 }
