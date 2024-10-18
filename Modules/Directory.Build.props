@@ -27,6 +27,14 @@
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
+
+        <PackageReference Include="FluentAssertions" Version="6.12.1" />
+
+        <Using Include="FluentAssertions" />
+        <Using Include="Backbone.UnitTestTools.BaseClasses" />
+        <Using Include="Backbone.UnitTestTools.Data.TestDataGenerator" Static="True" />
+        <Using Include="Xunit" />
+
     </ItemGroup>
 
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
