@@ -68,7 +68,7 @@ public static class ApplicationErrors
 
         public static ApplicationError CannotStartSyncRunWhileIdentityIsToBeDeleted()
         {
-            return new ApplicationError("error.platform.validation.syncRun.cannotStartSyncRunWhileIdentityIsToBeDeleted", "Cannot start a sync run. Identity is marked for deletion.");
+            return new ApplicationError("error.platform.validation.syncRun.cannotStartSyncRunWhileIdentityIsToBeDeleted", "Sync run cannot be started when identity is marked for deletion.");
         }
     }
 }
