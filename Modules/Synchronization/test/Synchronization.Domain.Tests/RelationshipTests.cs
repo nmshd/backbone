@@ -2,7 +2,7 @@
 
 namespace Backbone.Modules.Synchronization.Domain.Tests;
 
-public class RelationshipTests
+public class RelationshipTests : AbstractTestsBase
 {
     [Fact]
     public void IsBetween_returns_true_when_both_are_part_of_the_relationship()
