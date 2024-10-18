@@ -6,12 +6,9 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.Commands.PushDatawalletModifications;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Commands.PushDatawalletModifications;
 

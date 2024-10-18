@@ -2,10 +2,8 @@
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeleted;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.DomainEvents;
 

@@ -3,11 +3,8 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
-using FluentAssertions;
-using Xunit;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
@@ -351,7 +348,7 @@ public class IdentityTests : AbstractTestsBase
     public async Task Changing_Tier_updates_identity_with_new_tier()
     {
         // Arrange
-        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityAddress = CreateRandomIdentityAddress();
         var identity = new Identity(identityAddress, TierId.Parse("tier-id"));
         var newTier = new Tier(TierId.Parse("new-tier-id"), "New Tier");
 
@@ -419,7 +416,7 @@ public class IdentityTests : AbstractTestsBase
     public void Changing_Tier_fails_when_old_and_new_tier_match()
     {
         // Arrange
-        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityAddress = CreateRandomIdentityAddress();
         var oldTier = new Tier(TierId.Parse("tier-id"), "Old Tier");
         var identity = new Identity(identityAddress, oldTier.Id);
 
@@ -435,7 +432,7 @@ public class IdentityTests : AbstractTestsBase
 
     private static Identity CreateIdentity()
     {
-        return new Identity(TestDataGenerator.CreateRandomIdentityAddress(), TierId.Parse("tier-id"));
+        return new Identity(CreateRandomIdentityAddress(), TierId.Parse("tier-id"));
     }
 }
 

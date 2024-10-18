@@ -1,9 +1,7 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Tiers;
+
 public class TierIdTests : AbstractTestsBase
 {
     [Fact]

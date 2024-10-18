@@ -7,12 +7,9 @@ using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.StartSyncRun;
 

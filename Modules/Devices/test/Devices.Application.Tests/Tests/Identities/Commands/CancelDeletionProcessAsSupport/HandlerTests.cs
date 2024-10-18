@@ -5,11 +5,8 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.CancelDeletionProcessAsSupport;
 

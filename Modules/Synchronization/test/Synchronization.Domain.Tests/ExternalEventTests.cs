@@ -1,8 +1,5 @@
 ﻿using Backbone.Modules.Synchronization.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
-using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Domain.Tests;
 

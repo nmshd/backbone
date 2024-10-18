@@ -1,10 +1,7 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
-using FluentAssertions;
-using Xunit;
 using static Backbone.Modules.Messages.Domain.Tests.TestHelpers.TestData;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Messages;
@@ -35,7 +32,7 @@ public class ExpressionTests : AbstractTestsBase
         var message = CreateMessageWithOneRecipient();
 
         // Act
-        var result = message.EvaluateWasExchangedBetweenExpression(message.CreatedBy, TestDataGenerator.CreateRandomIdentityAddress());
+        var result = message.EvaluateWasExchangedBetweenExpression(message.CreatedBy, CreateRandomIdentityAddress());
 
         // Assert
         result.Should().BeFalse();
@@ -45,7 +42,7 @@ public class ExpressionTests : AbstractTestsBase
 
     #region HasParticipant
 
-    private static readonly IdentityAddress ANONYMIZED_ADDRESS = TestDataGenerator.CreateRandomIdentityAddress();
+    private static readonly IdentityAddress ANONYMIZED_ADDRESS = CreateRandomIdentityAddress();
 
     [Fact]
     public void HasParticipant_is_true_for_sender_when_no_relationship_is_decomposed()

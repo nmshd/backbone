@@ -4,10 +4,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.RefreshExpirationTimeOfSyncRun;
 

@@ -3,12 +3,10 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database;
 using Backbone.Modules.Files.Infrastructure.Persistence.Database.Repository;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
 using Microsoft.Extensions.Options;
-using Xunit;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Infrastructure.Tests.Tests.Repositories;
@@ -21,7 +19,7 @@ public class FilesRepositoryTests : AbstractTestsBase
         // Arrange
         var mockBlobStorage = A.Fake<IBlobStorage>();
 
-        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityAddress = CreateRandomIdentityAddress();
         var files = new List<File> { GenerateFile(identityAddress), GenerateFile(identityAddress) };
         var repository = CreateFilesRepository(files, mockBlobStorage);
 
@@ -34,7 +32,7 @@ public class FilesRepositoryTests : AbstractTestsBase
 
     private static File GenerateFile(IdentityAddress identityAddress)
     {
-        return new File(identityAddress, TestDataGenerator.CreateRandomDeviceId(), identityAddress, [], [], [], 0, DateTime.Now, []);
+        return new File(identityAddress, CreateRandomDeviceId(), identityAddress, [], [], [], 0, DateTime.Now, []);
     }
 
     private static FilesRepository CreateFilesRepository(List<File> files, IBlobStorage mockBlobStorage)

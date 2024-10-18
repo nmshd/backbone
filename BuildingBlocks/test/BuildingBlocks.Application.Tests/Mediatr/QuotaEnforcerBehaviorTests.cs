@@ -3,12 +3,9 @@ using Backbone.BuildingBlocks.Application.Attributes;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.BuildingBlocks.Application.QuotaCheck;
 using Backbone.BuildingBlocks.Domain;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Behaviors;
 using Backbone.UnitTestTools.Extensions;
-using FluentAssertions;
 using MediatR;
-using Xunit;
 
 namespace Backbone.BuildingBlocks.Application.Tests.Mediatr;
 

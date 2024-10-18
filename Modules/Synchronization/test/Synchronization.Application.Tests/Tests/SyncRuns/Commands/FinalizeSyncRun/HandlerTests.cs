@@ -4,10 +4,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.FinalizeSyncRun;
 

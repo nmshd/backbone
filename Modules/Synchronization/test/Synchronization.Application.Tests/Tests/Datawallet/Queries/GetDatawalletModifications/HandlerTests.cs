@@ -4,12 +4,9 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
-using FluentAssertions;
 using FluentAssertions.Execution;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Queries.GetDatawalletModifications;
 

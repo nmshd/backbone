@@ -1,9 +1,7 @@
 ﻿using Backbone.Modules.Challenges.Application.Challenges.Commands.DeleteChallengesOfIdentity;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 
 namespace Backbone.Modules.Challenges.Application.Tests.Tests.Challenges.Commands.DeleteChallengesOfIdentity;
 
@@ -16,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteChallengesOfIdentityCommand(TestDataGenerator.CreateRandomIdentityAddress()));
+        var validationResult = validator.TestValidate(new DeleteChallengesOfIdentityCommand(CreateRandomIdentityAddress()));
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();

@@ -1,9 +1,7 @@
 ﻿using Backbone.Modules.Files.Application.Identities.Commands.DeleteFilesOfIdentity;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 
 namespace Backbone.Modules.Files.Application.Tests.Tests.Identities.Commands.DeleteFilesOfIdentity;
 
@@ -16,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteFilesOfIdentityCommand(TestDataGenerator.CreateRandomIdentityAddress()));
+        var validationResult = validator.TestValidate(new DeleteFilesOfIdentityCommand(CreateRandomIdentityAddress()));
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();

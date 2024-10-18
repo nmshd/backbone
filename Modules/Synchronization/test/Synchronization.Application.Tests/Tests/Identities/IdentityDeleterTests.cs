@@ -3,11 +3,8 @@ using Backbone.Modules.Synchronization.Application.Datawallets.Commands.DeleteDa
 using Backbone.Modules.Synchronization.Application.Identities;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.DeleteExternalEventsOfIdentity;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.DeleteSyncRunsOfIdentity;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using MediatR;
-using Xunit;
-using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Identities;
 
