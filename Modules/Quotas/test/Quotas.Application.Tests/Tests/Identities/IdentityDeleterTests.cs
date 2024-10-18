@@ -1,11 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Quotas.Application.Identities;
 using Backbone.Modules.Quotas.Application.Identities.Commands.DeleteIdentity;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using MediatR;
-using Xunit;
-using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
 

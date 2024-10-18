@@ -1,6 +1,5 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Tooling.Extensions;
-using FluentAssertions;
 using FluentAssertions.Execution;
 using FluentAssertions.Numeric;
 
@@ -17,7 +16,9 @@ public static class ExhaustionDateExtensions
 public class ExhaustionDateAssertions :
     ComparableTypeAssertions<ExhaustionDate, ExhaustionDateAssertions>
 {
-    public ExhaustionDateAssertions(ExhaustionDate subject) : base(subject) { }
+    public ExhaustionDateAssertions(ExhaustionDate subject) : base(subject)
+    {
+    }
 
     protected override string Identifier => "ExhaustionDate";
 

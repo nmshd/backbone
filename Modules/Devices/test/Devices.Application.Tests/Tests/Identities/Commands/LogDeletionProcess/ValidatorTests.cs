@@ -1,8 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Commands.LogDeletionProcess;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.LogDeletionProcess;
 
@@ -15,7 +13,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new LogDeletionProcessCommand(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress(), "aggregateType"));
+        var validationResult = validator.TestValidate(new LogDeletionProcessCommand(CreateRandomIdentityAddress(), "aggregateType"));
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();

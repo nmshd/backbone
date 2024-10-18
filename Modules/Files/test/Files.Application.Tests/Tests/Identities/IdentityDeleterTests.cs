@@ -1,11 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Files.Application.Identities;
 using Backbone.Modules.Files.Application.Identities.Commands.DeleteFilesOfIdentity;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using MediatR;
-using Xunit;
-using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Files.Application.Tests.Tests.Identities;
 

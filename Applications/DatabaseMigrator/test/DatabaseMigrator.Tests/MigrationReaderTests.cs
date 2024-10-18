@@ -1,5 +1,4 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.PostgreSql;
 

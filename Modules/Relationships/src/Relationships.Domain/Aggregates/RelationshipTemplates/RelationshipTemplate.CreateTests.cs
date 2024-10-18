@@ -1,10 +1,5 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.Data;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
@@ -16,9 +11,9 @@ public class RelationshipTemplateCreateTests : AbstractTestsBase
     public void Raises_RelationshipTemplateCreatedDomainEvent(string? forAddress)
     {
         // Arrange
-        var address = TestDataGenerator.CreateRandomIdentityAddress();
+        var address = CreateRandomIdentityAddress();
         var forIdentity = forAddress == null ? null : IdentityAddress.ParseUnsafe(forAddress);
-        var deviceId = TestDataGenerator.CreateRandomDeviceId();
+        var deviceId = CreateRandomDeviceId();
         var expiresAt = DateTime.UtcNow;
         byte[] content = [1, 1, 1, 1, 1, 1, 1, 1];
 

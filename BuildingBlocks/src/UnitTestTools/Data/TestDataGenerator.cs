@@ -6,9 +6,11 @@ namespace Backbone.UnitTestTools.Data;
 
 public static class TestDataGenerator
 {
-    public static string GenerateString(int resultLength, char[]? chars = null)
+    private static readonly char[] DEFAULT_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".ToCharArray();
+
+    public static string CreateRandomString(int resultLength, char[]? chars = null)
     {
-        chars ??= ['A', 'B', 'C'];
+        chars ??= DEFAULT_CHARS;
 
         Random random = new();
         return new string(Enumerable.Repeat(chars, resultLength).Select(s => s[random.Next(s.Length)]).ToArray());

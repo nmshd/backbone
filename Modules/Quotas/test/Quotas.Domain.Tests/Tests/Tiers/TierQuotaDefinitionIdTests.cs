@@ -1,7 +1,4 @@
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
-using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Tiers;
 

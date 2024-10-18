@@ -1,4 +1,3 @@
-using FluentAssertions;
 using FluentAssertions.Specialized;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 

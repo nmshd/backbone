@@ -4,7 +4,6 @@ using Backbone.AdminApi.Sdk.Endpoints.Tiers.Types.Responses;
 using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.UnitTestTools.Data;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
@@ -32,7 +31,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     [Given("a Tier t")]
     public async Task GivenATier()
     {
-        var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + TestDataGenerator.GenerateString(12) });
+        var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + CreateRandomString(12) });
         response.Should().BeASuccess();
 
         _existingTierName = response.Result!.Name;
@@ -71,7 +70,7 @@ internal class TiersStepDefinitions : BaseStepDefinitions
     [When("a POST request is sent to the /Tiers endpoint")]
     public async Task WhenAPOSTRequestIsSentToTheTiersEndpoint()
     {
-        _tierResponse = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + TestDataGenerator.GenerateString(12) });
+        _tierResponse = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + CreateRandomString(12) });
     }
 
     [When("a POST request is sent to the /Tiers endpoint with the name t.Name")]

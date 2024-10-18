@@ -4,17 +4,14 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.FinalizeSyncRun;
 
 public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 {
-    private readonly IdentityAddress _activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-    private readonly DeviceId _activeDevice = TestDataGenerator.CreateRandomDeviceId();
+    private readonly IdentityAddress _activeIdentity = CreateRandomIdentityAddress();
+    private readonly DeviceId _activeDevice = CreateRandomDeviceId();
 
     public HandlerTests()
     {
@@ -27,8 +24,8 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         // Arrange
         var syncRun = SyncRunBuilder
             .Build()
-            .CreatedBy(TestDataGenerator.CreateRandomIdentityAddress())
-            .CreatedByDevice(TestDataGenerator.CreateRandomDeviceId())
+            .CreatedBy(CreateRandomIdentityAddress())
+            .CreatedByDevice(CreateRandomDeviceId())
             .Create();
         _arrangeContext.SaveEntity(syncRun);
 
@@ -230,7 +227,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         var syncRun = SyncRunBuilder
             .Build()
             .CreatedBy(_activeIdentity)
-            .CreatedByDevice(TestDataGenerator.CreateRandomDeviceId())
+            .CreatedByDevice(CreateRandomDeviceId())
             .Running()
             .Create();
         _arrangeContext.SaveEntity(syncRun);

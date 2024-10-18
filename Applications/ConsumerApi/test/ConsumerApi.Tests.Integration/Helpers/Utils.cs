@@ -9,7 +9,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
-using Backbone.UnitTestTools.Data;
 using Newtonsoft.Json;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Helpers;
@@ -122,7 +121,7 @@ public static class Utils
             Recipients = recipients.Select(r => new SendMessageRequestRecipientInformation
             {
                 Address = r.IdentityData!.Address,
-                EncryptedKey = TestDataGenerator.CreateRandomBytes(30)
+                EncryptedKey = CreateRandomBytes(30)
             }).ToList(),
             Attachments = []
         };

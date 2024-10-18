@@ -1,9 +1,7 @@
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Tiers;
+
 public class TierNameTests : AbstractTestsBase
 {
     [Theory]
@@ -22,7 +20,7 @@ public class TierNameTests : AbstractTestsBase
     [InlineData(2)]
     public void Cannot_create_tier_name_with_invalid_name_length(int length)
     {
-        var invalidTierName = TestDataGenerator.GenerateString(length);
+        var invalidTierName = CreateRandomString(length);
         var tierName = TierName.Create(invalidTierName);
 
         var isTierNameInvalid = tierName.IsFailure;

@@ -1,8 +1,6 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Commands.DeleteIdentity;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Commands.DeleteIdentity;
 
@@ -15,7 +13,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new DeleteIdentityCommand(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress()));
+        var validationResult = validator.TestValidate(new DeleteIdentityCommand(CreateRandomIdentityAddress()));
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();

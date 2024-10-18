@@ -1,6 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestDomainEvents;
-using FluentAssertions;
 using FluentAssertions.Extensions;
 using Polly;
 using Xunit.Sdk;

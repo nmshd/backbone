@@ -1,9 +1,7 @@
 using Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 using Validator = Backbone.Modules.Devices.Application.Tiers.Commands.CreateTier.Validator;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Tiers.Commands.CreateTier;

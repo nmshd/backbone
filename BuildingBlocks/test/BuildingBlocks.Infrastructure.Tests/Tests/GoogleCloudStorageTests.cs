@@ -1,11 +1,8 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
-using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.Tests;
