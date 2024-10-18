@@ -13,7 +13,7 @@ public class RelationshipReactivationCompletedDomainEventHandlerTests : Abstract
     public async Task Creates_an_external_event()
     {
         // Arrange
-        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityAddress = CreateRandomIdentityAddress();
         var relationshipReactivationCompletedIntegrationEvent = new RelationshipReactivationCompletedDomainEvent("someRelationshipId", identityAddress);
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();

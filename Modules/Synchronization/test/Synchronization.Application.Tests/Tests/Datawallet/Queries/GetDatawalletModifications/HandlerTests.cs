@@ -14,7 +14,7 @@ public class HandlerTests : AbstractTestsBase
 {
     private const ushort DATAWALLET_VERSION = 1;
 
-    private static readonly IdentityAddress ACTIVE_IDENTITY = TestDataGenerator.CreateRandomIdentityAddress();
+    private static readonly IdentityAddress ACTIVE_IDENTITY = CreateRandomIdentityAddress();
 
     private readonly SynchronizationDbContext _arrangeContext;
     private readonly SynchronizationDbContext _actContext;
@@ -149,7 +149,7 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         _arrangeContext.SaveEntity(CreateDatawalletForActiveIdentity());
-        var anotherIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+        var anotherIdentity = CreateRandomIdentityAddress();
         var datawallet = CreateDatawalletFor(anotherIdentity);
         datawallet.AddModification(new DatawalletExtensions.AddModificationParameters());
         _arrangeContext.SaveEntity(datawallet);
@@ -167,7 +167,7 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         var datawalletOfActiveIdentity = CreateDatawalletForActiveIdentity();
-        var anotherIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+        var anotherIdentity = CreateRandomIdentityAddress();
         var datawalletOfAnotherIdentity = CreateDatawalletFor(anotherIdentity);
         var modificationOfAnotherIdentity = datawalletOfAnotherIdentity.AddModification(new DatawalletExtensions.AddModificationParameters());
 

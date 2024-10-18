@@ -4,7 +4,7 @@ namespace Backbone.UnitTestTools.Data;
 
 public static class TestDataGenerator
 {
-    public static string GenerateString(int resultLength, char[]? chars = null)
+    public static string CreateRandomString(int resultLength, char[]? chars = null)
     {
         chars ??= ['A', 'B', 'C'];
 

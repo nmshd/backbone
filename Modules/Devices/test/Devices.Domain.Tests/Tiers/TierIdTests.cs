@@ -9,7 +9,7 @@ public class TierIdTests : AbstractTestsBase
     {
         const string validTierIdPrefix = "TIR";
         const int validIdLengthWithoutPrefix = 17;
-        var validIdValue = validTierIdPrefix + TestDataGenerator.GenerateString(validIdLengthWithoutPrefix);
+        var validIdValue = validTierIdPrefix + CreateRandomString(validIdLengthWithoutPrefix);
 
         var tierId = TierId.Create(validIdValue);
         var isTierIdValid = tierId.IsSuccess;
@@ -28,7 +28,7 @@ public class TierIdTests : AbstractTestsBase
     public void Cannot_create_tier_id_with_invalid_id_prefix()
     {
         const string invalidTierIdPrefix = "TIE";
-        var tierId = TierId.Create(invalidTierIdPrefix + TestDataGenerator.GenerateString(17));
+        var tierId = TierId.Create(invalidTierIdPrefix + CreateRandomString(17));
 
         var isTierIdInvalid = tierId.IsFailure;
         var errorCode = tierId.Error.Code;

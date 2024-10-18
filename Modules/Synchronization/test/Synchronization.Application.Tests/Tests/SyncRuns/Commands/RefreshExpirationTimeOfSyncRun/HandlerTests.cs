@@ -14,11 +14,11 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
     public async Task Cannot_refresh_expiration_time_of_sync_run_created_by_other_device()
     {
         // Arrange
-        var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
+        var activeIdentity = CreateRandomIdentityAddress();
+        var activeDevice = CreateRandomDeviceId();
         var handler = CreateHandler(activeIdentity, activeDevice);
 
-        var syncRun = SyncRunBuilder.Build().CreatedBy(activeIdentity).CreatedByDevice(TestDataGenerator.CreateRandomDeviceId()).Create();
+        var syncRun = SyncRunBuilder.Build().CreatedBy(activeIdentity).CreatedByDevice(CreateRandomDeviceId()).Create();
         _arrangeContext.SaveEntity(syncRun);
 
 
@@ -34,11 +34,11 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
     public async Task Cannot_refresh_expiration_time_of_sync_run_created_by_other_identity()
     {
         // Arrange
-        var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
+        var activeIdentity = CreateRandomIdentityAddress();
+        var activeDevice = CreateRandomDeviceId();
         var handler = CreateHandler(activeIdentity, activeDevice);
 
-        var syncRun = SyncRunBuilder.Build().CreatedBy(TestDataGenerator.CreateRandomIdentityAddress()).CreatedByDevice(TestDataGenerator.CreateRandomDeviceId()).Create();
+        var syncRun = SyncRunBuilder.Build().CreatedBy(CreateRandomIdentityAddress()).CreatedByDevice(CreateRandomDeviceId()).Create();
         _arrangeContext.SaveEntity(syncRun);
 
 
@@ -54,8 +54,8 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
     public async Task Refresh_expiration_time()
     {
         // Arrange
-        var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
+        var activeIdentity = CreateRandomIdentityAddress();
+        var activeDevice = CreateRandomDeviceId();
         var handler = CreateHandler(activeIdentity, activeDevice);
 
         var syncRun = SyncRunBuilder.Build().CreatedBy(activeIdentity).CreatedByDevice(activeDevice).Create();
@@ -77,8 +77,8 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
     public async Task Refresh_expiration_time_of_expired_sync_run()
     {
         // Arrange
-        var activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
+        var activeIdentity = CreateRandomIdentityAddress();
+        var activeDevice = CreateRandomDeviceId();
         var handler = CreateHandler(activeIdentity, activeDevice);
 
         var utcNow = DateTime.UtcNow;

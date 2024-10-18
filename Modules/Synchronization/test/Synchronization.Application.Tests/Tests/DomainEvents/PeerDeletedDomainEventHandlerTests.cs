@@ -13,7 +13,7 @@ public class PeerDeletedDomainEventHandlerTests : AbstractTestsBase
     public async Task Creates_an_external_event()
     {
         // Arrange
-        var peerOfDeletedIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+        var peerOfDeletedIdentity = CreateRandomIdentityAddress();
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
 

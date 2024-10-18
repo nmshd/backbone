@@ -10,8 +10,8 @@ namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Comm
 
 public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 {
-    private readonly IdentityAddress _activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-    private readonly DeviceId _activeDevice = TestDataGenerator.CreateRandomDeviceId();
+    private readonly IdentityAddress _activeIdentity = CreateRandomIdentityAddress();
+    private readonly DeviceId _activeDevice = CreateRandomDeviceId();
 
     public HandlerTests()
     {
@@ -24,8 +24,8 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         // Arrange
         var syncRun = SyncRunBuilder
             .Build()
-            .CreatedBy(TestDataGenerator.CreateRandomIdentityAddress())
-            .CreatedByDevice(TestDataGenerator.CreateRandomDeviceId())
+            .CreatedBy(CreateRandomIdentityAddress())
+            .CreatedByDevice(CreateRandomDeviceId())
             .Create();
         _arrangeContext.SaveEntity(syncRun);
 
@@ -227,7 +227,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         var syncRun = SyncRunBuilder
             .Build()
             .CreatedBy(_activeIdentity)
-            .CreatedByDevice(TestDataGenerator.CreateRandomDeviceId())
+            .CreatedByDevice(CreateRandomDeviceId())
             .Running()
             .Create();
         _arrangeContext.SaveEntity(syncRun);

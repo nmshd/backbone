@@ -13,7 +13,7 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests : AbstractTes
     public async Task Creates_an_external_event_if_initiator_is_someone_else()
     {
         // Arrange
-        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityAddress = CreateRandomIdentityAddress();
         var identityDeletionProcessStartedDomainEvent = new IdentityDeletionProcessStartedDomainEvent(identityAddress, "some-deletion-process-id", null);
 
         var fakeDbContext = A.Fake<ISynchronizationDbContext>();
@@ -31,7 +31,7 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests : AbstractTes
     public async Task Does_nothing_if_initiator_is_deletion_process_owner()
     {
         // Arrange
-        var deletionProcessOwner = TestDataGenerator.CreateRandomIdentityAddress();
+        var deletionProcessOwner = CreateRandomIdentityAddress();
         var identityDeletionProcessStartedDomainEvent = new IdentityDeletionProcessStartedDomainEvent(deletionProcessOwner, "some-deletion-process-id", deletionProcessOwner);
 
         var fakeDbContext = A.Fake<ISynchronizationDbContext>();

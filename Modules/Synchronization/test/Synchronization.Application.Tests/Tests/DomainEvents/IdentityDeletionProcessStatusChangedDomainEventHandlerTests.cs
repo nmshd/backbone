@@ -13,7 +13,7 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandlerTests : Abstr
     public async Task Creates_an_external_event_if_initiator_is_someone_else()
     {
         // Arrange
-        var deletionProcessOwner = TestDataGenerator.CreateRandomIdentityAddress();
+        var deletionProcessOwner = CreateRandomIdentityAddress();
         var identityDeletionProcessStatusChangedDomainEvent = new IdentityDeletionProcessStatusChangedDomainEvent(deletionProcessOwner, "someDeletionProcessId", null);
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();
@@ -32,7 +32,7 @@ public class IdentityDeletionProcessStatusChangedDomainEventHandlerTests : Abstr
     public async Task Does_nothing_if_initiator_is_deletion_process_owner()
     {
         // Arrange
-        var deletionProcessOwner = TestDataGenerator.CreateRandomIdentityAddress();
+        var deletionProcessOwner = CreateRandomIdentityAddress();
         var identityDeletionProcessStatusChangedDomainEvent = new IdentityDeletionProcessStatusChangedDomainEvent(deletionProcessOwner, "someDeletionProcessId", deletionProcessOwner);
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();

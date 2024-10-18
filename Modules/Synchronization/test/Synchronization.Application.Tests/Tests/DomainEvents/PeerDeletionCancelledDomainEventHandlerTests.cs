@@ -13,7 +13,7 @@ public class PeerDeletionCancelledDomainEventHandlerTests : AbstractTestsBase
     public async Task Creates_an_external_event()
     {
         // Arrange
-        var peerOfIdentityWithDeletionCancelled = TestDataGenerator.CreateRandomIdentityAddress();
+        var peerOfIdentityWithDeletionCancelled = CreateRandomIdentityAddress();
         var domainEvent = new PeerDeletionCancelledDomainEvent(peerOfIdentityWithDeletionCancelled, "some-relationship-id", "some-deletedIdentity-id");
 
         var mockDbContext = A.Fake<ISynchronizationDbContext>();

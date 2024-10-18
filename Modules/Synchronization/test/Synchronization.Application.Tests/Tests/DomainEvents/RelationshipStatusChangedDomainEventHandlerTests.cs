@@ -13,7 +13,7 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
     public async Task Creates_an_external_event()
     {
         // Arrange
-        var relationshipTo = TestDataGenerator.CreateRandomIdentityAddress();
+        var relationshipTo = CreateRandomIdentityAddress();
         var @event = new RelationshipStatusChangedDomainEvent
         {
             RelationshipId = "REL1",
@@ -36,7 +36,7 @@ public class RelationshipStatusChangedDomainEventHandlerTests : AbstractTestsBas
     public async Task Does_not_create_an_external_event_if_new_status_is_ReadyForDeletion()
     {
         // Arrange
-        var relationshipTo = TestDataGenerator.CreateRandomIdentityAddress();
+        var relationshipTo = CreateRandomIdentityAddress();
         var @event = new RelationshipStatusChangedDomainEvent
         {
             RelationshipId = "REL1",

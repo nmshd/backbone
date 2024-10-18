@@ -29,7 +29,7 @@ public class DatawalletTests : AbstractTestsBase
     [Fact]
     public void New_datawallet_should_have_all_properties_set()
     {
-        var owner = TestDataGenerator.CreateRandomIdentityAddress();
+        var owner = CreateRandomIdentityAddress();
         var version = new Datawallet.DatawalletVersion(2);
 
         var datawallet = new Datawallet(version, owner);
@@ -93,17 +93,17 @@ public class DatawalletTests : AbstractTestsBase
 
     private static Datawallet CreateDatawallet()
     {
-        return new Datawallet(new Datawallet.DatawalletVersion(1), TestDataGenerator.CreateRandomIdentityAddress());
+        return new Datawallet(new Datawallet.DatawalletVersion(1), CreateRandomIdentityAddress());
     }
 
     private static Datawallet CreateDatawallet(Datawallet.DatawalletVersion version)
     {
-        return new Datawallet(version, TestDataGenerator.CreateRandomIdentityAddress());
+        return new Datawallet(version, CreateRandomIdentityAddress());
     }
 
     private static DatawalletModification AddModificationToDatawallet(Datawallet datawallet)
     {
-        return datawallet.AddModification(DatawalletModificationType.Create, new Datawallet.DatawalletVersion(1), "aCollection", "anId", "aPayloadCategory", TestDataGenerator.CreateRandomBytes(),
-            TestDataGenerator.CreateRandomDeviceId());
+        return datawallet.AddModification(DatawalletModificationType.Create, new Datawallet.DatawalletVersion(1), "aCollection", "anId", "aPayloadCategory", CreateRandomBytes(),
+            CreateRandomDeviceId());
     }
 }

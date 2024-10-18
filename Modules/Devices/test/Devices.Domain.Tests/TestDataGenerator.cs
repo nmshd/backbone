@@ -38,14 +38,6 @@ public static class TestDataGenerator
         return identity;
     }
 
-    public static string GenerateString(int resultLength, char[]? chars = null)
-    {
-        chars ??= ['A', 'B', 'C'];
-
-        Random random = new();
-        return new string(Enumerable.Repeat(chars, resultLength).Select(s => s[random.Next(s.Length)]).ToArray());
-    }
-
     public static Identity CreateIdentityWithApprovedDeletionProcess()
     {
         var identity = CreateIdentity();

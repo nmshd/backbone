@@ -12,7 +12,7 @@ public class ExternalEventBuilder
 
     private ExternalEventBuilder()
     {
-        _owner = TestDataGenerator.CreateRandomIdentityAddress();
+        _owner = CreateRandomIdentityAddress();
     }
 
     public static ExternalEventBuilder Build()
