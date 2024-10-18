@@ -34,6 +34,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="TestData\PerformanceTestData-plusNewMedium.xlsx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\pool-config.heavy.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
