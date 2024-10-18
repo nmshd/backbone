@@ -472,7 +472,7 @@ public class IdentityPoolConfigGeneratorTests
         var sut = new IdentityPoolConfigGenerator();
 
         // Act
-        var result = await sut.GenerateJsonPoolConfig(inputFile, workSheet);
+        (bool Status, string Message) result = await sut.GenerateJsonPoolConfig(inputFile, workSheet);
 
         // Assert
 
