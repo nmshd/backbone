@@ -1,4 +1,3 @@
-using System.Text.Json;
 using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
@@ -23,12 +22,10 @@ namespace Backbone.Modules.Relationships.ConsumerApi.Controllers;
 public class RelationshipTemplatesController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;
-    private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-    public RelationshipTemplatesController(IMediator mediator, IOptions<ApplicationOptions> options, IOptions<JsonOptions> jsonOptions) : base(mediator)
+    public RelationshipTemplatesController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
     {
         _options = options.Value;
-        _jsonSerializerOptions = jsonOptions.Value.JsonSerializerOptions;
     }
 
     [HttpGet("{id}")]
@@ -43,27 +40,14 @@ public class RelationshipTemplatesController : ApiControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListRelationshipTemplatesResponse>),
         StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter, [FromQuery] string? templates, [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetAll([FromQuery] PaginationFilter paginationFilter, [FromQuery] ListRelationshipTemplatesQueryItem[]? templates,
+        [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
-        List<RelationshipTemplateQueryItem>? relationshipTemplateQueryItems;
+        // We keep this code for backwards compatibility reasons. In a few months the `templates`
+        // parameter will become required, and the fallback to `ids` will be removed.
+        templates = templates is { Length: > 0 } ? templates : ids.Select(id => new ListRelationshipTemplatesQueryItem { Id = id }).ToArray();
 
-        if (templates != null)
-        {
-            try
-            {
-                relationshipTemplateQueryItems = JsonSerializer.Deserialize<List<RelationshipTemplateQueryItem>>(templates, _jsonSerializerOptions);
-            }
-            catch (JsonException ex)
-            {
-                throw new ApplicationException(GenericApplicationErrors.Validation.InputCannotBeParsed(ex.Message));
-            }
-        }
-        else
-        {
-            relationshipTemplateQueryItems = ids.Select(id => new RelationshipTemplateQueryItem { Id = id }).ToList();
-        }
-
-        var request = new ListRelationshipTemplatesQuery(paginationFilter, relationshipTemplateQueryItems);
+        var request = new ListRelationshipTemplatesQuery(paginationFilter, templates);
 
         request.PaginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 

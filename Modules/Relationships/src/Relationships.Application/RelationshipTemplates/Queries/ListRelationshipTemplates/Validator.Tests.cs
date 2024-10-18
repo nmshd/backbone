@@ -3,7 +3,6 @@ using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
@@ -17,7 +16,8 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), new[] { new RelationshipTemplateQueryItem() { Id = RelationshipTemplateId.New(), Password = [1, 2, 3] } }));
+        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(),
+            new[] { new ListRelationshipTemplatesQueryItem() { Id = RelationshipTemplateId.New(), Password = [1, 2, 3] } }));
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -30,7 +30,8 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), new[] { new RelationshipTemplateQueryItem() { Id = RelationshipTemplateId.New() } }));
+        var validationResult =
+            validator.TestValidate(new ListRelationshipTemplatesQuery(new PaginationFilter(), new[] { new ListRelationshipTemplatesQueryItem() { Id = RelationshipTemplateId.New() } }));
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();

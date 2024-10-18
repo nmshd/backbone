@@ -21,7 +21,7 @@ User requests Relationship Templates
           | rt12         | i2            | i3          | -        |
           | rt13         | i2            | i3          | password |
           | rt14         | i2            | i3          | password |
-        When <activeIdentity> sends a GET request to the /RelationshipTemplate endpoint with the following payloads
+        When <activeIdentity> sends a GET request to the /RelationshipTemplates endpoint with the following payloads
           | templateName | passwordOnGet |
           | rt1          | -             |
           | rt2          | -             |
@@ -37,7 +37,8 @@ User requests Relationship Templates
           | rt12         | -             |
           | rt13         | password      |
           | rt14         | wordpass      |
-        Then the response contains Relationship Template(s) <retreivedTemplates>
+        Then the response status code is 200 (OK)
+        And the response contains Relationship Template(s) <retreivedTemplates>
 
         Examples:
           | activeIdentity | retreivedTemplates                                              |
