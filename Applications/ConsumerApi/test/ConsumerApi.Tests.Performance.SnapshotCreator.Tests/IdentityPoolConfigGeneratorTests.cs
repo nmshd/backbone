@@ -406,14 +406,14 @@ public class IdentityPoolConfigGeneratorTests
         // Assert
         actualPoolConfig.Should().NotBeNull();
 
-        var areEqual  = actualPoolConfig.Equals(expectedPoolConfig); //Note: Should().BeEquivalentTo does not invoke overridden Equals method
+        var areEqual = actualPoolConfig.Equals(expectedPoolConfig); //Note: Should().BeEquivalentTo does not invoke overridden Equals method
         areEqual.Should().BeTrue();
     }
 
     #endregion
 
     #region Deserialize From Excel Tests
-    
+
     [Theory]
     [InlineData("PerformanceTestData.xlsx", "heavy")]
     [InlineData("PerformanceTestData.xlsx", "light")]
@@ -433,11 +433,9 @@ public class IdentityPoolConfigGeneratorTests
         var areEqual = actualPoolConfig.Equals(expectedPoolConfig); //Note: Should().BeEquivalentTo does not invoke overridden Equals method
         areEqual.Should().BeTrue();
     }
-    
+
     #endregion
-    
-    
-    
+
     #region Verify Json Pool Config
 
     [Theory]
@@ -451,7 +449,7 @@ public class IdentityPoolConfigGeneratorTests
         var inputFile = Path.Combine(_testDataFolder, excelFile);
 
         var sut = new IdentityPoolConfigGenerator();
-        
+
         // Act
         var result = await sut.VerifyJsonPoolConfig(inputFile, workSheet, expectedJson);
 

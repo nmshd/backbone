@@ -27,11 +27,11 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
     internal static async Task<PerformanceTestConfiguration> DeserializeFromExcel(string excelFile, string workSheet)
     {
         var excelMapper = new ExcelMapper(excelFile) { SkipBlankRows = true, SkipBlankCells = true, TrackObjects = false };
-        
+
         await using var stream = new FileStream(excelFile, FileMode.Open, FileAccess.Read);
         var poolConfigFromExcel = await excelMapper.FetchAsync(stream, workSheet);
 
-        
+
         List<IdentityPoolConfiguration> identityPoolConfigs = new();
         Configuration configuration = new();
 
