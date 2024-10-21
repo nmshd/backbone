@@ -40,13 +40,8 @@ public static class TestDataGenerator
             CreateRandomDeviceId(),
             identityAddress,
             CreateRandomBytes(),
-            CreateRandomTierId(),
+            TierId.Generate(),
             1,
             CommunicationLanguage.DEFAULT_LANGUAGE);
-    }
-
-    public static TierId CreateRandomTierId()
-    {
-        return TierId.Generate();
     }
 }
