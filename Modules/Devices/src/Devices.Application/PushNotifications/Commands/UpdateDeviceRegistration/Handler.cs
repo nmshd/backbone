@@ -30,10 +30,9 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
 
     public async Task<UpdateDeviceRegistrationResponse> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(_activeIdentity, CancellationToken.None);
+        var identity = await _identitiesRepository.FindByAddress(_activeIdentity, CancellationToken.None) ?? throw new NotFoundException(nameof(Identity));
 
-        if (identity!.Status == IdentityStatus.ToBeDeleted)
-            throw new ApplicationException(ApplicationErrors.Devices.CannotSendNotificationsWhileIdentityIsToBeDeleted());
+        identity.EnsureIdentityIsToBeDeleted();
 
         var parseHandleResult = PnsHandle.Parse(DeserializePlatform(request.Platform), request.Handle);
 

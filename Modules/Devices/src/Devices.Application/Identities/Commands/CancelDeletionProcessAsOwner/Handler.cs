@@ -38,8 +38,7 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        if (identity.Status != IdentityStatus.ToBeDeleted)
-            await _notificationSender.SendNotification(identity.Address, new DeletionProcessCancelledByOwnerNotification(), cancellationToken);
+        await _notificationSender.SendNotification(identity.Address, new DeletionProcessCancelledByOwnerNotification(), cancellationToken);
 
         return new CancelDeletionProcessAsOwnerResponse(deletionProcess);
     }
