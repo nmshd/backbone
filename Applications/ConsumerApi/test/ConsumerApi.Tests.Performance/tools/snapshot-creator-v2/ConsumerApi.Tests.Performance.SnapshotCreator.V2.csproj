@@ -31,4 +31,9 @@
       <PackageReference Include="ExcelMapper" Version="5.2.592" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Enums\" />
+      <Folder Include="Constants\" />
+    </ItemGroup>
+
 </Project>
