@@ -38,10 +38,8 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     {
         // Arrange
         var fakeMediator = A.Fake<IMediator>();
-
         var identity1 = CreateIdentity();
         var identity2 = CreateIdentity();
-
         SetupRipeDeletionProcessesCommand(fakeMediator, identity1.Address, identity2.Address);
 
         var mockIdentityDeleter = A.Fake<IIdentityDeleter>();
@@ -87,7 +85,6 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
 
         A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity3.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity3);
-
 
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
