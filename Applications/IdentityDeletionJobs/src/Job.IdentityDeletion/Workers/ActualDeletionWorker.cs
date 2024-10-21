@@ -5,7 +5,6 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
 using CSharpFunctionalExtensions;
 using MediatR;
 
@@ -77,8 +76,7 @@ public class ActualDeletionWorker : IHostedService
     {
         var identity = await _identitiesRepository.FindByAddress(identityAddress, CancellationToken.None);
 
-        if (identity == null || identity.IsToBeDeleted())
-            return;
+        identity?.EnsureIdentityIsToBeDeleted();
 
         await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsPushNotification(), cancellationToken);
     }

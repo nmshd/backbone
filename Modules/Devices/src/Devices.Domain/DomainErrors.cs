@@ -74,4 +74,9 @@ public static class DomainErrors
         return new DomainError("error.platform.validation.device.maxIdentitiesLessThanCurrentIdentities",
             $"The requested maximum number of identities {requestedMaxIdentities} is less than the current number of identities {identitiesCount}.");
     }
+
+    public static DomainError IdentityIsToBeDeleted()
+    {
+        return new DomainError("error.platform.validation.device.identityIsToBeDeleted", "Identity not found or is in status to be deleted.");
+    }
 }
