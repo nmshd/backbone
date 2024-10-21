@@ -1,7 +1,6 @@
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 using FluentAssertions;
-using Xunit.Abstractions;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests;
 
@@ -13,11 +12,11 @@ public class IdentityPoolConfigGeneratorTests
 
     private static PerformanceTestConfiguration GetExpectedPoolConfiguration(string loadTestTag)
     {
-        PerformanceTestConfiguration expectedPoolConfiguration = loadTestTag switch
+        var expectedPoolConfiguration = loadTestTag switch
         {
-            "heavy" => new(HeavyLoadIdentityPool, HeavyLoadConfiguration),
-            "light" => new(LightLoadIdentityPool, LightLoadConfiguration),
-            "test" => new(TestLoadIdentityPool, TestLoadConfiguration),
+            WORKBOOK_SHEET_HEAVY_LOAD => new PerformanceTestConfiguration(HeavyLoadIdentityPool, HeavyLoadConfiguration),
+            WORKBOOK_SHEET_LIGHT_LOAD => new PerformanceTestConfiguration(LightLoadIdentityPool, LightLoadConfiguration),
+            WORKBOOK_SHEET_TEST_LOAD => new PerformanceTestConfiguration(TestLoadIdentityPool, TestLoadConfiguration),
             _ => throw new ArgumentException($"Invalid load test tag: {loadTestTag}", nameof(loadTestTag))
         };
 
@@ -168,9 +167,9 @@ public class IdentityPoolConfigGeneratorTests
     [
         new()
         {
-            Type = "never",
-            Name = "NeverUse",
-            Alias = "e",
+            Type = POOL_TYPE_NEVER,
+            Name = POOL_NAME_NEVER,
+            Alias = POOL_ALIAS_NEVER,
             Amount = 10,
             NumberOfRelationshipTemplates = 0,
             NumberOfRelationships = 0,
@@ -182,9 +181,9 @@ public class IdentityPoolConfigGeneratorTests
         },
         new()
         {
-            Type = "app",
-            Name = "AppLight",
-            Alias = "a1",
+            Type = POOL_TYPE_APP,
+            Name = POOL_NAME_APP_LIGHT,
+            Alias = POOL_ALIAS_APP_LIGHT,
             Amount = 50,
             NumberOfRelationshipTemplates = 0,
             NumberOfRelationships = 0,
@@ -196,9 +195,9 @@ public class IdentityPoolConfigGeneratorTests
         },
         new()
         {
-            Type = "app",
-            Name = "AppMedium",
-            Alias = "a2",
+            Type = POOL_TYPE_APP,
+            Name = POOL_NAME_APP_MEDIUM,
+            Alias = POOL_ALIAS_APP_MEDIUM,
             Amount = 150,
             NumberOfRelationshipTemplates = 0,
             NumberOfRelationships = 2,
@@ -210,9 +209,9 @@ public class IdentityPoolConfigGeneratorTests
         },
         new()
         {
-            Type = "app",
-            Name = "AppHeavy",
-            Alias = "a3",
+            Type = POOL_TYPE_APP,
+            Name = POOL_NAME_APP_HEAVY,
+            Alias = POOL_ALIAS_APP_HEAVY,
             Amount = 300,
             NumberOfRelationshipTemplates = 0,
             NumberOfRelationships = 5,
@@ -224,9 +223,9 @@ public class IdentityPoolConfigGeneratorTests
         },
         new()
         {
-            Type = "connector",
-            Name = "ConnectorLight",
-            Alias = "c1",
+            Type = POOL_TYPE_CONNECTOR,
+            Name = POOL_NAME_CONNECTOR_LIGHT,
+            Alias = POOL_ALIAS_CONNECTOR_LIGHT,
             Amount = 2,
             NumberOfRelationshipTemplates = 1,
             NumberOfRelationships = 9,
@@ -238,9 +237,9 @@ public class IdentityPoolConfigGeneratorTests
         },
         new()
         {
-            Type = "connector",
-            Name = "ConnectorMedium",
-            Alias = "c2",
+            Type = POOL_TYPE_CONNECTOR,
+            Name = POOL_NAME_CONNECTOR_MEDIUM,
+            Alias = POOL_ALIAS_CONNECTOR_MEDIUM,
             Amount = 15,
             NumberOfRelationshipTemplates = 20,
             NumberOfRelationships = 29,
@@ -252,9 +251,9 @@ public class IdentityPoolConfigGeneratorTests
         },
         new()
         {
-            Type = "connector",
-            Name = "ConnectorHeavy",
-            Alias = "c3",
+            Type = POOL_TYPE_CONNECTOR,
+            Name = POOL_NAME_CONNECTOR_HEAVY,
+            Alias = POOL_ALIAS_CONNECTOR_HEAVY,
             Amount = 15,
             NumberOfRelationshipTemplates = 30,
             NumberOfRelationships = 90,
@@ -289,9 +288,9 @@ public class IdentityPoolConfigGeneratorTests
     [
         new()
         {
-            Type = "never",
-            Name = "NeverUse",
-            Alias = "e",
+            Type = POOL_TYPE_NEVER,
+            Name = POOL_NAME_NEVER,
+            Alias = POOL_ALIAS_NEVER,
             Amount = 5000,
             NumberOfRelationshipTemplates = 0,
             NumberOfRelationships = 0,
@@ -303,9 +302,9 @@ public class IdentityPoolConfigGeneratorTests
         },
         new()
         {
-            Type = "app",
-            Name = "AppLight",
-            Alias = "a1",
+            Type = POOL_TYPE_APP,
+            Name = POOL_NAME_APP_LIGHT,
+            Alias = POOL_ALIAS_APP_LIGHT,
             Amount = 500,
             NumberOfRelationshipTemplates = 1,
             NumberOfRelationships = 1,
@@ -317,9 +316,9 @@ public class IdentityPoolConfigGeneratorTests
         },
         new()
         {
-            Type = "app",
-            Name = "AppMedium",
-            Alias = "a2",
+            Type = POOL_TYPE_APP,
+            Name = POOL_NAME_APP_MEDIUM,
+            Alias = POOL_ALIAS_APP_MEDIUM,
             Amount = 1500,
             NumberOfRelationshipTemplates = 2,
             NumberOfRelationships = 2,
@@ -331,9 +330,9 @@ public class IdentityPoolConfigGeneratorTests
         },
         new()
         {
-            Type = "app",
-            Name = "AppHeavy",
-            Alias = "a3",
+            Type = POOL_TYPE_APP,
+            Name = POOL_NAME_APP_HEAVY,
+            Alias = POOL_ALIAS_APP_HEAVY,
             Amount = 3500,
             NumberOfRelationshipTemplates = 5,
             NumberOfRelationships = 5,
@@ -345,9 +344,9 @@ public class IdentityPoolConfigGeneratorTests
         },
         new()
         {
-            Type = "connector",
-            Name = "ConnectorLight",
-            Alias = "c1",
+            Type = POOL_TYPE_CONNECTOR,
+            Name = POOL_NAME_CONNECTOR_LIGHT,
+            Alias = POOL_ALIAS_CONNECTOR_LIGHT,
             Amount = 10,
             NumberOfRelationshipTemplates = 100,
             NumberOfRelationships = 21,
@@ -359,9 +358,9 @@ public class IdentityPoolConfigGeneratorTests
         },
         new()
         {
-            Type = "connector",
-            Name = "ConnectorMedium",
-            Alias = "c2",
+            Type = POOL_TYPE_CONNECTOR,
+            Name = POOL_NAME_CONNECTOR_MEDIUM,
+            Alias = POOL_ALIAS_CONNECTOR_MEDIUM,
             Amount = 20,
             NumberOfRelationshipTemplates = 8000,
             NumberOfRelationships = 252,
@@ -373,9 +372,9 @@ public class IdentityPoolConfigGeneratorTests
         },
         new()
         {
-            Type = "connector",
-            Name = "ConnectorHeavy",
-            Alias = "c3",
+            Type = POOL_TYPE_CONNECTOR,
+            Name = POOL_NAME_CONNECTOR_HEAVY,
+            Alias = POOL_ALIAS_CONNECTOR_HEAVY,
             Amount = 30,
             NumberOfRelationshipTemplates = 12000,
             NumberOfRelationships = 525,
@@ -463,7 +462,7 @@ public class IdentityPoolConfigGeneratorTests
     #region Generate Json Pool Config
 
     [Theory]
-    [InlineData("PerformanceTestData-plusNewMedium.xlsx", "medium", "pool-config.medium.json")]
+    [InlineData("PerformanceTestData-plusNewMedium.xlsx", WORKBOOK_SHEET_MEDIUM_LOAD, "pool-config.medium.json")]
     public async Task GenerateJsonPoolConfig_InputPerformanceTestDataExcel_ReturnsSuccess(string excelFile, string workSheet, string expectedLoadTestJsonFilename)
     {
         // Arrange
@@ -482,6 +481,32 @@ public class IdentityPoolConfigGeneratorTests
 
         File.Exists(expectedPoolConfigJsonFilePath).Should().BeTrue();
         (await sut.VerifyJsonPoolConfig(inputFile, workSheet, expectedPoolConfigJsonFilePath)).Should().BeTrue();
+    }
+
+    #endregion
+
+    #region Generate Excel RelationshipsAndMessages Pool Config
+
+    [Theory]
+    [InlineData("test", "pool-config.test.json")]
+    public async Task GenerateExcelRelationshipsAndMessagesPoolConfig_InputPerformanceTestDataExcel_ReturnsSuccess(string workSheet, string expectedLoadTestJsonFilename)
+    {
+        // Arrange
+        var poolConfigJsonFilePath = Path.Combine(_testDataFolder, expectedLoadTestJsonFilename);
+        var expectedRelationshipsFilePath = Path.Combine(_testDataFolder, $"{RELATIONSHIPS_AND_MESSAGE_POOL_CONFIGS_FILE_NAME}.{workSheet}.{EXCEL_FILE_EXT}");
+        var sut = new IdentityPoolConfigGenerator();
+
+        // Act
+        var (status, message) = await sut.GenerateExcelRelationshipsAndMessagesPoolConfig(poolConfigJsonFilePath, workSheet);
+
+        // Assert
+
+        status.Should().BeTrue();
+        message.Should().Be(expectedRelationshipsFilePath);
+
+        File.Exists(expectedRelationshipsFilePath).Should().BeTrue();
+
+        throw new Exception("Still in development");
     }
 
     #endregion

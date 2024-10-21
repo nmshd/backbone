@@ -36,7 +36,7 @@ verify-json --source PerformanceTestData.xlsx --pool-config [all | <filename>]
 
 - [ ] Verify JSON Pool Config Command
 
-#### 3.1.2 Generate JSON
+#### 3.1.2 Generate JSON Pool Config
 
 > generates the json-pool-<worksheet-name>.json files from the source PerformanceTestData.xls
 
@@ -51,7 +51,7 @@ generate-json --source PerformanceTestData.xlsx --worksheet [all | <worksheet-na
 
 #### 3.1.3 Generate RelationshipsAndMessagePoolConfigs Excel Command
 
-> generates the RelationshipsAndMessagePoolConfigs.xlsx
+> generates the RelationshipsAndMessagePoolConfigs.<worksheet-name>.xlsx
 
 ```shell
 generate-relationships --poolsFile pool-config.<worksheet-name>.json
@@ -59,16 +59,17 @@ generate-relationships --poolsFile pool-config.<worksheet-name>.json
 
 ##### 3.1.3.1 Methods and Tests:
 
-- [ ] Generate RelationshipsAndMessagePoolConfigs Excel (RelationshipsAndMessagePoolConfigs.xlsx)
+- [x] Generate Relationships Excel (RelationshipsAndMessagePoolConfigs.<worksheet-name>.xlsx)
+- [ ] Distribute Messages on Relationships (RelationshipsAndMessagePoolConfigs.<worksheet-name>.xlsx)
 - [ ] Generate RelationshipsAndMessagePoolConfigs Excel Command
 
 #### 3.1.4 Apply RelationshipsAndMessagePoolConfigs Excel in Database Command
 
 > Apply Pools CSV in Database Command
-> apply --baseAddress <ConsumerApi:Port> --clientId <Client-Id> --clientSecret <Client-Secret> --poolsFile pool-config.test.json --source <RelationshipsAndMessagePoolConfigs>
+> apply --baseAddress <ConsumerApi:Port> --clientId <Client-Id> --clientSecret <Client-Secret> --poolsFile pool-config.test.json --source <RelationshipsAndMessagePoolConfigs>.<worksheet-name>.xlsx
 
 ```shell
-apply --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pool-config.test.json --source RelationshipsAndMessagePoolConfigs.xlsx
+apply --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pool-config.test.json --source RelationshipsAndMessagePoolConfigs.test.xlsx
 ```
 
 ##### 3.1.4.1 Methods and Tests:
