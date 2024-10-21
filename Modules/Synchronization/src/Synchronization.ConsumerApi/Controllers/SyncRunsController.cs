@@ -46,10 +46,9 @@ public class SyncRunsController : ApiControllerBase
         [FromHeader(Name = "X-Supported-Datawallet-Version")]
         ushort supportedDatawalletVersion, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), CancellationToken.None);
+        var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), CancellationToken.None) ?? throw new NotFoundException(nameof(Identity));
 
-        if (identity!.Status == IdentityStatus.ToBeDeleted)
-            throw new ApplicationException(ApplicationErrors.SyncRuns.CannotStartSyncRunWhileIdentityIsToBeDeleted());
+        identity.EnsureIdentityIsToBeDeleted();
 
         var response = await _mediator.Send(new StartSyncRunCommand(
             requestBody.Type ?? SyncRunDTO.SyncRunType.ExternalEventSync, requestBody.Duration,

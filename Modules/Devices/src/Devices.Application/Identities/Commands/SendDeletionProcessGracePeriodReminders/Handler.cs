@@ -61,35 +61,26 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
 
     private async Task SendReminder3(Identity identity, int daysToDeletion, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        if (identity.Status != IdentityStatus.ToBeDeleted)
-        {
-            await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification(daysToDeletion), cancellationToken);
-            identity.DeletionGracePeriodReminder3Sent();
-            await _identitiesRepository.Update(identity, cancellationToken);
-            _logger.Reminder3Sent(deletionProcessId);
-        }
+        await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification(daysToDeletion), cancellationToken);
+        identity.DeletionGracePeriodReminder3Sent();
+        await _identitiesRepository.Update(identity, cancellationToken);
+        _logger.Reminder3Sent(deletionProcessId);
     }
 
     private async Task SendReminder2(Identity identity, int daysToDeletion, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        if (identity.Status != IdentityStatus.ToBeDeleted)
-        {
-            await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification(daysToDeletion), cancellationToken);
-            identity.DeletionGracePeriodReminder2Sent();
-            await _identitiesRepository.Update(identity, cancellationToken);
-            _logger.Reminder2Sent(deletionProcessId);
-        }
+        await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification(daysToDeletion), cancellationToken);
+        identity.DeletionGracePeriodReminder2Sent();
+        await _identitiesRepository.Update(identity, cancellationToken);
+        _logger.Reminder2Sent(deletionProcessId);
     }
 
     private async Task SendReminder1(Identity identity, int daysToDeletion, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        if (identity.Status != IdentityStatus.ToBeDeleted)
-        {
-            await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification(daysToDeletion), cancellationToken);
-            identity.DeletionGracePeriodReminder1Sent();
-            await _identitiesRepository.Update(identity, cancellationToken);
-            _logger.Reminder1Sent(deletionProcessId);
-        }
+        await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification(daysToDeletion), cancellationToken);
+        identity.DeletionGracePeriodReminder1Sent();
+        await _identitiesRepository.Update(identity, cancellationToken);
+        _logger.Reminder1Sent(deletionProcessId);
     }
 }
 

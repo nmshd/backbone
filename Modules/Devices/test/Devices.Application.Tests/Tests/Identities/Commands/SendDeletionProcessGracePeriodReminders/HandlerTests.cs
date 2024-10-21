@@ -179,7 +179,7 @@ public class HandlerTests : AbstractTestsBase
 
         // Assert
         A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessGracePeriodReminderPushNotification>._, A<CancellationToken>._))
-            .MustNotHaveHappened();
+            .MustHaveHappenedOnceExactly();
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>.That.Matches(i =>
                 i.Address == identity.Address
                 && i.DeletionProcesses.FirstOrDefault(d => d.Status == DeletionProcessStatus.Approved)!.GracePeriodReminder1SentAt == null
