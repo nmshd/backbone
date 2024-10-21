@@ -67,7 +67,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     }
 
     [Fact]
-    public async Task Sends_push_notification_to_each_deleted_identity()
+    public async Task Does_not_send_push_notification_to_each_deleted_identity()
     {
         // Arrange
         var fakeMediator = A.Fake<IMediator>();
