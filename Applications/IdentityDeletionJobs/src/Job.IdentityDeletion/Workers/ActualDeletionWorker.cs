@@ -1,10 +1,12 @@
-﻿using Backbone.BuildingBlocks.Application.Identities;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using CSharpFunctionalExtensions;
 using MediatR;
 
@@ -74,9 +76,9 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task NotifyIdentityAboutStartingDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(identityAddress, CancellationToken.None);
+        var identity = await _identitiesRepository.FindByAddress(identityAddress, CancellationToken.None) ?? throw new NotFoundException(nameof(Identity));
 
-        identity?.EnsureIdentityIsToBeDeleted();
+        identity.EnsureIdentityIsToBeDeleted();
 
         await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsPushNotification(), cancellationToken);
     }
