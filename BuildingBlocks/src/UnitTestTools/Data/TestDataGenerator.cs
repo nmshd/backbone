@@ -34,11 +34,11 @@ public static class TestDataGenerator
         return bytes;
     }
 
-    public static Identity CreateIdentity(IdentityAddress identityAddress)
+    public static Identity CreateIdentity()
     {
         return new Identity(
             CreateRandomDeviceId(),
-            identityAddress,
+            CreateRandomIdentityAddress(),
             CreateRandomBytes(),
             TierId.Generate(),
             1,

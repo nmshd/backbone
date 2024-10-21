@@ -38,20 +38,19 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     {
         // Arrange
         var fakeMediator = A.Fake<IMediator>();
-        var identityAddress1 = CreateRandomIdentityAddress();
-        var identityAddress2 = CreateRandomIdentityAddress();
-        SetupRipeDeletionProcessesCommand(fakeMediator, identityAddress1, identityAddress2);
 
-        var identity1 = CreateIdentity(identityAddress1);
-        var identity2 = CreateIdentity(identityAddress2);
+        var identity1 = CreateIdentity();
+        var identity2 = CreateIdentity();
+
+        SetupRipeDeletionProcessesCommand(fakeMediator, identity1.Address, identity2.Address);
 
         var mockIdentityDeleter = A.Fake<IIdentityDeleter>();
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identityAddress1, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity1.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity1);
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identityAddress2, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity2.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity2);
 
         A.CallTo(() => fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._))
@@ -63,8 +62,8 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         await worker.StartProcessing(CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockIdentityDeleter.Delete(identityAddress1)).MustHaveHappenedOnceExactly();
-        A.CallTo(() => mockIdentityDeleter.Delete(identityAddress2)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentityDeleter.Delete(identity1.Address)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockIdentityDeleter.Delete(identity2.Address)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -72,25 +71,21 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     {
         // Arrange
         var fakeMediator = A.Fake<IMediator>();
-        var identityAddress1 = CreateRandomIdentityAddress();
-        var identityAddress2 = CreateRandomIdentityAddress();
-        var identityAddress3 = CreateRandomIdentityAddress();
-        SetupRipeDeletionProcessesCommand(fakeMediator, identityAddress1, identityAddress2, identityAddress3);
+        var identity1 = CreateIdentity();
+        var identity2 = CreateIdentity();
+        var identity3 = CreateIdentity();
+        SetupRipeDeletionProcessesCommand(fakeMediator, identity1.Address, identity2.Address, identity3.Address);
         A.CallTo(() => fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse([]));
-
-        var identity1 = CreateIdentity(identityAddress1);
-        var identity2 = CreateIdentity(identityAddress2);
-        var identity3 = CreateIdentity(identityAddress3);
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identityAddress1, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity1.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity1);
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identityAddress2, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity2.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity2);
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identityAddress3, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity3.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity3);
 
 
@@ -102,7 +97,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         await worker.StartProcessing(CancellationToken.None);
 
         // Assert
-        foreach (var identityAddress in new[] { identityAddress1, identityAddress2, identityAddress3 })
+        foreach (var identityAddress in new[] { identity1.Address, identity2.Address, identity3.Address })
         {
             A.CallTo(() => mockPushNotificationSender.SendNotification(identityAddress, A<IPushNotification>._, A<CancellationToken>._)).MustNotHaveHappened();
         }
