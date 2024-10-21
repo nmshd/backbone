@@ -329,6 +329,11 @@ public class Identity : Entity
     {
         return new Identity("test", address, publicKey, tierId, 1, CommunicationLanguage.DEFAULT_LANGUAGE, username);
     }
+
+    public bool IsToBeDeleted()
+    {
+        return Status == IdentityStatus.ToBeDeleted;
+    }
 }
 
 public enum DeletionProcessStatus

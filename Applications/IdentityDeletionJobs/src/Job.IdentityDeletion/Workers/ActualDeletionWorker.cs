@@ -77,8 +77,10 @@ public class ActualDeletionWorker : IHostedService
     {
         var identity = await _identitiesRepository.FindByAddress(identityAddress, CancellationToken.None);
 
-        if (identity!.Status != IdentityStatus.ToBeDeleted)
-            await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsPushNotification(), cancellationToken);
+        if (identity == null || identity.IsToBeDeleted())
+            return;
+
+        await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsPushNotification(), cancellationToken);
     }
 
     private async Task Delete(IdentityAddress identityAddress)
