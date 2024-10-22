@@ -47,8 +47,7 @@ public class SyncRunsController : ApiControllerBase
         ushort supportedDatawalletVersion, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), CancellationToken.None) ?? throw new NotFoundException(nameof(Identity));
-
-        identity.EnsureIdentityIsNotToBeDeleted();
+        EnsurePeerIsNotToBeDeleted(identity);
 
         var response = await _mediator.Send(new StartSyncRunCommand(
             requestBody.Type ?? SyncRunDTO.SyncRunType.ExternalEventSync, requestBody.Duration,
@@ -121,6 +120,12 @@ public class SyncRunsController : ApiControllerBase
     {
         var response = await _mediator.Send(new RefreshExpirationTimeOfSyncRunCommand(id), cancellationToken);
         return Ok(response);
+    }
+
+    private static void EnsurePeerIsNotToBeDeleted(Identity identity)
+    {
+        if (identity.Status is IdentityStatus.ToBeDeleted)
+            throw new ApplicationException(ApplicationErrors.SyncRuns.CannotStartSyncRunWhileIdentityIsToBeDeleted());
     }
 }
 
