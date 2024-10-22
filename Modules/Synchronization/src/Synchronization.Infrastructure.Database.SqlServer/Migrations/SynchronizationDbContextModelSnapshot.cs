@@ -18,7 +18,7 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Synchronization")
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -118,6 +118,25 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                     b.ToTable("DatawalletModifications", "Synchronization");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Relationships.Relationship", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("char(20)")
+                        .IsFixedLength();
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Relationships", "Relationships", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", b =>
                 {
                     b.Property<string>("Id")
@@ -126,11 +145,18 @@ namespace Backbone.Modules.Synchronization.Infrastructure.Database.SqlServer.Mig
                         .HasColumnType("char(20)")
                         .IsFixedLength();
 
+                    b.Property<string>("Context")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<long>("Index")
                         .HasColumnType("bigint");
+
+                    b.Property<bool>("IsDeliveryBlocked")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Owner")
                         .IsRequired()
