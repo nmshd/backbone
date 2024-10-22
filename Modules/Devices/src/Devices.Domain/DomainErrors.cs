@@ -77,6 +77,6 @@ public static class DomainErrors
 
     public static DomainError IdentityIsToBeDeleted()
     {
-        return new DomainError("error.platform.validation.device.identityIsToBeDeleted", "Identity not found or is in status to be deleted.");
+        return new DomainError("error.platform.validation.device.identityIsToBeDeleted", "Identity is in status to be deleted.");
     }
 }
