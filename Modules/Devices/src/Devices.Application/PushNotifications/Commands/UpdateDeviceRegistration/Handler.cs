@@ -1,11 +1,9 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
-using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
@@ -18,22 +16,16 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
     private readonly DeviceId _activeDevice;
     private readonly IdentityAddress _activeIdentity;
     private readonly IPushNotificationRegistrationService _pushRegistrationService;
-    private readonly IIdentitiesRepository _identitiesRepository;
 
-    public Handler(IPushNotificationRegistrationService pushRegistrationService, IUserContext userContext, IIdentitiesRepository identitiesRepository)
+    public Handler(IPushNotificationRegistrationService pushRegistrationService, IUserContext userContext)
     {
         _pushRegistrationService = pushRegistrationService;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
-        _identitiesRepository = identitiesRepository;
     }
 
     public async Task<UpdateDeviceRegistrationResponse> Handle(UpdateDeviceRegistrationCommand request, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(_activeIdentity, CancellationToken.None) ?? throw new NotFoundException(nameof(Identity));
-
-        identity.EnsureIdentityIsNotToBeDeleted();
-
         var parseHandleResult = PnsHandle.Parse(DeserializePlatform(request.Platform), request.Handle);
 
         if (parseHandleResult.IsFailure)
