@@ -1,4 +1,5 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+
 namespace Backbone.UnitTestTools.Data;
 
 public static class TestDataGenerator
