@@ -1,9 +1,7 @@
 ﻿using Backbone.Modules.Challenges.Application.Challenges.Queries.GetChallengeById;
 using Backbone.Modules.Challenges.Domain.Ids;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 using Validator = Backbone.Modules.Challenges.Application.Challenges.Queries.GetChallengeById.Validator;
 
 namespace Backbone.Modules.Challenges.Application.Tests.Tests.Challenges.Queries.GetChallengeById;

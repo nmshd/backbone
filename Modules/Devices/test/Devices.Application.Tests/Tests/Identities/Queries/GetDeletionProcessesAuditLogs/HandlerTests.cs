@@ -2,14 +2,11 @@
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Repository;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
-using FluentAssertions;
 using FluentAssertions.Execution;
 using Microsoft.AspNetCore.Identity;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetDeletionProcessesAuditLogs;
 

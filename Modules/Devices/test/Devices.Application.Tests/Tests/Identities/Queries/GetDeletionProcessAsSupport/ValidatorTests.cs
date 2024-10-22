@@ -1,9 +1,7 @@
 ﻿using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsSupport;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetDeletionProcessAsSupport;
 
@@ -16,7 +14,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetDeletionProcessAsSupportQuery(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress(), IdentityDeletionProcessId.Generate()));
+        var validationResult = validator.TestValidate(new GetDeletionProcessAsSupportQuery(CreateRandomIdentityAddress(), IdentityDeletionProcessId.Generate()));
 
         // Assert
         validationResult.ShouldNotHaveAnyValidationErrors();
@@ -42,7 +40,7 @@ public class ValidatorTests : AbstractTestsBase
         var validator = new Validator();
 
         // Act
-        var validationResult = validator.TestValidate(new GetDeletionProcessAsSupportQuery(UnitTestTools.Data.TestDataGenerator.CreateRandomIdentityAddress(), "invalid-deletion-process-id"));
+        var validationResult = validator.TestValidate(new GetDeletionProcessAsSupportQuery(CreateRandomIdentityAddress(), "invalid-deletion-process-id"));
 
         // Assert
         validationResult.ShouldHaveValidationErrorForId(nameof(GetDeletionProcessAsSupportQuery.DeletionProcessId));

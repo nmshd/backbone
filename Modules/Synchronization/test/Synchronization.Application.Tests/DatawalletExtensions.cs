@@ -15,10 +15,10 @@ public static class DatawalletExtensions
     {
         public string ObjectIdentifier { get; init; } = "anIdentifier";
         public string PayloadCategory { get; init; } = "aPayloadCategory";
-        public DeviceId CreatedByDevice { get; init; } = TestDataGenerator.CreateRandomDeviceId();
+        public DeviceId CreatedByDevice { get; init; } = CreateRandomDeviceId();
         public string Collection { get; init; } = "aCollection";
         public DatawalletModificationType Type { get; init; } = DatawalletModificationType.Create;
-        public byte[] EncryptedPayload { get; init; } = TestDataGenerator.CreateRandomBytes();
+        public byte[] EncryptedPayload { get; init; } = CreateRandomBytes();
         public Datawallet.DatawalletVersion DatawalletVersion { get; init; } = new(1);
     }
 }

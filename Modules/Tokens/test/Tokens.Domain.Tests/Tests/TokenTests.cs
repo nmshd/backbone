@@ -2,11 +2,6 @@
 using Backbone.Modules.Tokens.Domain.DomainEvents;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Domain.Tests.TestHelpers;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.Data;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Tokens.Domain.Tests.Tests;
 
@@ -16,8 +11,8 @@ public class TokenTests : AbstractTestsBase
     public void Raises_TemplateCreatedDomainEvent_on_creation()
     {
         // Arrange
-        var address = TestDataGenerator.CreateRandomIdentityAddress();
-        var deviceId = TestDataGenerator.CreateRandomDeviceId();
+        var address = CreateRandomIdentityAddress();
+        var deviceId = CreateRandomDeviceId();
         var expiresAt = DateTime.UtcNow;
         byte[] content = [1, 1, 1, 1, 1, 1, 1, 1];
 

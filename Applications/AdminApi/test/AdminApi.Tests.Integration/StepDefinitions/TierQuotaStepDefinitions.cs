@@ -3,7 +3,6 @@ using Backbone.AdminApi.Sdk.Endpoints.Tiers.Types.Requests;
 using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.UnitTestTools.Data;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
@@ -27,7 +26,7 @@ internal class TierQuotaStepDefinitions : BaseStepDefinitions
     [Given("a Tier t")]
     public async Task GivenAValidTier()
     {
-        var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + TestDataGenerator.GenerateString(12) });
+        var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + CreateRandomString(12) });
         response.Should().BeASuccess();
 
         _tierId = response.Result!.Id;

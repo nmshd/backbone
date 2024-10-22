@@ -1,10 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
 using Backbone.Modules.Files.Domain.Entities;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 
 namespace Backbone.Modules.Files.Application.Tests.Tests.Files.Queries.ListFileMetadata;
 

@@ -1,8 +1,5 @@
 using Backbone.SseServer.Controllers;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.SseServerTests;
 

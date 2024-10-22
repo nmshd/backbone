@@ -1,8 +1,4 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.Data;
-using FluentAssertions;
-using Xunit;
 using static Backbone.Modules.Relationships.Domain.TestHelpers.TestData;
 
 namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
@@ -13,7 +9,7 @@ public class RelationshipHasParticipantExpressionTests : AbstractTestsBase
     public void WithParticipant_From()
     {
         // Arrange
-        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityAddress = CreateRandomIdentityAddress();
         var relationship = CreateActiveRelationship(from: identityAddress);
 
         // Act
@@ -27,7 +23,7 @@ public class RelationshipHasParticipantExpressionTests : AbstractTestsBase
     public void WithParticipant_To()
     {
         // Arrange
-        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityAddress = CreateRandomIdentityAddress();
         var relationship = CreateActiveRelationship(to: identityAddress);
 
         // Act
@@ -42,8 +38,8 @@ public class RelationshipHasParticipantExpressionTests : AbstractTestsBase
     public void WithParticipant_Mixed()
     {
         // Arrange
-        var identityAddressFrom = TestDataGenerator.CreateRandomIdentityAddress();
-        var identityAddressTo = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityAddressFrom = CreateRandomIdentityAddress();
+        var identityAddressTo = CreateRandomIdentityAddress();
         var relationship = CreateActiveRelationship(from: identityAddressFrom, to: identityAddressTo);
 
         // Act

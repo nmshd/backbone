@@ -1,8 +1,5 @@
-﻿using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.Data;
-using Backbone.UnitTestTools.FluentValidation;
+﻿using Backbone.UnitTestTools.FluentValidation;
 using FluentValidation.TestHelper;
-using Xunit;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 
@@ -21,7 +18,7 @@ public class ValidatorTests : AbstractTestsBase
                 ExpiresAt = DateTime.UtcNow.AddDays(1),
                 MaxNumberOfAllocations = 1,
                 Content = [1],
-                ForIdentity = TestDataGenerator.CreateRandomIdentityAddress(), Password = [1]
+                ForIdentity = CreateRandomIdentityAddress(), Password = [1]
             });
 
         // Assert

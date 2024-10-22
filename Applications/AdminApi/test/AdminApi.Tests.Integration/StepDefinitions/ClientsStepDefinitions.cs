@@ -4,7 +4,6 @@ using Backbone.AdminApi.Sdk.Endpoints.Tiers.Types.Requests;
 using Backbone.AdminApi.Tests.Integration.Configuration;
 using Backbone.AdminApi.Tests.Integration.Extensions;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
-using Backbone.UnitTestTools.Data;
 using Microsoft.Extensions.Options;
 
 namespace Backbone.AdminApi.Tests.Integration.StepDefinitions;
@@ -48,7 +47,7 @@ internal class ClientsStepDefinitions : BaseStepDefinitions
 
     public async Task<string> CreateTier()
     {
-        var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + TestDataGenerator.GenerateString(12) });
+        var response = await _client.Tiers.CreateTier(new CreateTierRequest { Name = "TestTier_" + CreateRandomString(12) });
         response.Should().BeASuccess();
 
         // allow the event queue to trigger the creation of this tier on the Quotas module

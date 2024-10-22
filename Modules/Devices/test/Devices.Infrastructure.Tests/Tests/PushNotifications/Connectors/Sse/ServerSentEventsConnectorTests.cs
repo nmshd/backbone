@@ -1,13 +1,9 @@
 ﻿using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
-using Xunit;
 using static Backbone.Modules.Devices.Infrastructure.Tests.TestDataGenerator;
-using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Sse;
 

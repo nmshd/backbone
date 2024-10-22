@@ -19,6 +19,9 @@ spec:
       template:
         spec:
           restartPolicy: Never
+          {{- with .Values.global.serviceAccount.name}}
+          serviceAccountName: {{ . }}
+          {{- end }}
           {{- with .Values.actualidentitydeletion.podSecurityContext }}
           securityContext:
             {{- toYaml . | nindent 12 }}

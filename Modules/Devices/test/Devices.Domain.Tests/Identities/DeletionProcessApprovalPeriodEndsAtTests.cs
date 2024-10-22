@@ -1,8 +1,5 @@
 ﻿using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
-using FluentAssertions;
-using Xunit;
 using static Backbone.Modules.Devices.Domain.Tests.TestDataGenerator;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
