@@ -1,6 +1,8 @@
+import 'package:admin_api_sdk/admin_api_sdk.dart';
 import 'package:admin_api_types/admin_api_types.dart';
 import 'package:data_table_2/data_table_2.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:intl/intl.dart';
 
 import '/core/core.dart';
@@ -94,9 +96,11 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
   }
 
   Future<void> _reloadAnnouncements() async {
-    //TODO: uncomment when the endpoint is ready
-    // final response = await GetIt.I.get<AdminApiClient>().announcements.getAnnouncements();
-    // if (mounted) setState(() => _announcements = response.data);
-    if (mounted) setState(() => _announcements = []);
+    final response = await GetIt.I.get<AdminApiClient>().announcements.getAnnouncements();
+    final announcements = response.data..sort((a, b) => a.createdAt.compareTo(b.createdAt));
+
+    setState(() {
+      _announcements = announcements;
+    });
   }
 }
