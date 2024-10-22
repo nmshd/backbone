@@ -40,7 +40,6 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
 
         var daysUntilDeletion = deletionProcess.GracePeriodEndsAt?.DaysUntilDate() ??
                                 throw new Exception($"Expected '{nameof(deletionProcess.GracePeriodEndsAt)}' to be set but found 'null' instead.");
-
         await _notificationSender.SendNotification(identity.Address, new DeletionProcessApprovedNotification(daysUntilDeletion), cancellationToken);
 
         return new ApproveDeletionProcessResponse(deletionProcess);
