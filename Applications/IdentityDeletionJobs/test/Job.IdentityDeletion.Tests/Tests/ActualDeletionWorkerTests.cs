@@ -43,18 +43,18 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         SetupRipeDeletionProcessesCommand(fakeMediator, identity1.Address, identity2.Address);
 
         var mockIdentityDeleter = A.Fake<IIdentityDeleter>();
-        var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
+        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity1.Address, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(identity1.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity1);
 
-        A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity2.Address, A<CancellationToken>._, A<bool>._))
+        A.CallTo(() => fakeIdentitiesRepository.FindByAddress(identity2.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity2);
 
         A.CallTo(() => fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._))
             .Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
 
-        var worker = CreateWorker(fakeMediator, [mockIdentityDeleter], mockIdentitiesRepository);
+        var worker = CreateWorker(fakeMediator, [mockIdentityDeleter], fakeIdentitiesRepository);
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
