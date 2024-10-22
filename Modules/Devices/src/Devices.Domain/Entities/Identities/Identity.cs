@@ -330,7 +330,7 @@ public class Identity : Entity
         return new Identity("test", address, publicKey, tierId, 1, CommunicationLanguage.DEFAULT_LANGUAGE, username);
     }
 
-    public void EnsureIdentityIsToBeDeleted()
+    public void EnsureIdentityIsNotToBeDeleted()
     {
         if (Status == IdentityStatus.ToBeDeleted)
             throw new DomainException(DomainErrors.IdentityIsToBeDeleted());

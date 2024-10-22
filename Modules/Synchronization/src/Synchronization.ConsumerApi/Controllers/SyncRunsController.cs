@@ -48,7 +48,7 @@ public class SyncRunsController : ApiControllerBase
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), CancellationToken.None) ?? throw new NotFoundException(nameof(Identity));
 
-        identity.EnsureIdentityIsToBeDeleted();
+        identity.EnsureIdentityIsNotToBeDeleted();
 
         var response = await _mediator.Send(new StartSyncRunCommand(
             requestBody.Type ?? SyncRunDTO.SyncRunType.ExternalEventSync, requestBody.Duration,

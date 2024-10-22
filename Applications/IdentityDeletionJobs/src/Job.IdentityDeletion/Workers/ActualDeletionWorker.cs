@@ -78,7 +78,7 @@ public class ActualDeletionWorker : IHostedService
     {
         var identity = await _identitiesRepository.FindByAddress(identityAddress, CancellationToken.None) ?? throw new NotFoundException(nameof(Identity));
 
-        identity.EnsureIdentityIsToBeDeleted();
+        identity.EnsureIdentityIsNotToBeDeleted();
 
         await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsPushNotification(), cancellationToken);
     }

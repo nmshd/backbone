@@ -32,7 +32,7 @@ public class Handler : IRequestHandler<UpdateDeviceRegistrationCommand, UpdateDe
     {
         var identity = await _identitiesRepository.FindByAddress(_activeIdentity, CancellationToken.None) ?? throw new NotFoundException(nameof(Identity));
 
-        identity.EnsureIdentityIsToBeDeleted();
+        identity.EnsureIdentityIsNotToBeDeleted();
 
         var parseHandleResult = PnsHandle.Parse(DeserializePlatform(request.Platform), request.Handle);
 
