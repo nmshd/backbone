@@ -89,7 +89,6 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
         var poolConfigFromJson = await DeserializeFromJson(poolConfigJsonFile);
         var poolConfigFromExcel = await DeserializeFromExcel(excelFile, workSheetName);
         var result = poolConfigFromJson.Equals(poolConfigFromExcel);
-
         return result;
     }
 
@@ -166,13 +165,13 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
                                 SenderPool: appIdentity.PoolAlias,
                                 SenderIdentityId: appIdentity.Id,
                                 ReceiverPool: connectorIdentity.PoolAlias,
-                                ReceiverIdentityId: connectorIdentity.Id,
-                                NumberOfSentMessages: 0) //TBD: add number of sent messages
+                                ReceiverIdentityId: connectorIdentity.Id)
                         );
 
                         // Decrement available relationships of the app identity
                         appIdentity.DecrementAvailableRelationships();
 
+                        appIdentity.ConfigureMessagesSentTo(connectorIdentity);
 
                         // Add relationship between connector identity and app identity (reverse relationship)
                         connectorIdentity.RelationshipAndMessages.Add(
@@ -180,8 +179,7 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
                                 SenderPool: connectorIdentity.PoolAlias,
                                 SenderIdentityId: connectorIdentity.Id,
                                 ReceiverPool: appIdentity.PoolAlias,
-                                ReceiverIdentityId: appIdentity.Id,
-                                NumberOfSentMessages: 0) //TBD: add number of sent messages
+                                ReceiverIdentityId: appIdentity.Id)
                         );
 
                         // Decrement available relationships of the connector identity

@@ -19,7 +19,7 @@ public record IdentityPool
         Identities = [];
         for (var i = 0; i < identityPoolConfiguration.Amount; i++)
         {
-            Identities.Add(new Identity(i + 1, identityPoolConfiguration.NumberOfRelationships, Alias));
+            Identities.Add(new Identity(i + 1, Type, identityPoolConfiguration));
         }
     }
 

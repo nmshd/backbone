@@ -13,27 +13,22 @@
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="Config\pool-config.heavy.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Config\pool-config.light.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Config\pool-config.test.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Config\PerformanceTestData.xlsx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="Config\pool-config.heavy.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Config\pool-config.light.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Config\pool-config.test.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Config\PerformanceTestData.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="ExcelMapper" Version="5.2.592" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Enums\" />
-      <Folder Include="Constants\" />
+        <PackageReference Include="ExcelMapper" Version="5.2.592" />
     </ItemGroup>
 
 </Project>
