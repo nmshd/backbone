@@ -26,14 +26,14 @@ public class TagsStepDefinitions
         _responseContext.WhenResponse = _listTagsResponse = await client.Tags.ListTags();
     }
 
-    [Then("the response should support the english language")]
-    public void AndTheResponseShouldSupportTheEnglishLanguage()
+    [Then("the response supports the English language")]
+    public void AndTheResponseSupportsTheEnglishLanguage()
     {
         _listTagsResponse!.Result!.SupportedLanguages.Should().Contain("en");
     }
 
-    [Then("the response attributes should contain tags")]
-    public void AndTheResponseAttributesShouldContainTags()
+    [Then("the response attributes contain tags")]
+    public void AndTheResponseAttributesContainTags()
     {
         foreach (var attr in _listTagsResponse!.Result!.TagsForAttributeValueTypes.Values)
         {

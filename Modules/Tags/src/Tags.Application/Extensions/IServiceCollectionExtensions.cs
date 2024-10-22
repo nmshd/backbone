@@ -14,6 +14,6 @@ public static class IServiceCollectionExtensions
 
     public static void AddTags(this IServiceCollection services, ApplicationOptions applicationOptions)
     {
-        services.AddSingleton(_ => new TagProvider(applicationOptions.Attributes));
+        services.AddSingleton(new TagProvider(applicationOptions.Attributes));
     }
 }

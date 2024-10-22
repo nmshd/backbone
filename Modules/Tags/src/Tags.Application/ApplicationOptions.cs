@@ -34,7 +34,7 @@ public static class DisplayNamesValidator
 {
     public static ValidationResult? Validate(Dictionary<string, string> displayNames, ValidationContext context)
     {
-        return displayNames.ContainsKey("en") ? ValidationResult.Success : new ValidationResult($"No english display name is provided for Tag {GetTagName(context)}");
+        return displayNames.ContainsKey("en") ? ValidationResult.Success : new ValidationResult($"No English display name is provided for Tag {GetTagName(context)}");
     }
 
     private static string GetTagName(ValidationContext context)

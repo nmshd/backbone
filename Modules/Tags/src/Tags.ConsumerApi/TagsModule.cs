@@ -25,6 +25,6 @@ public class TagsModule : AbstractModule
 
     public override void ConfigureEventBus(IEventBus eventBus)
     {
-        //No Event bus needed here
+        // No Event bus needed here
     }
 }
