@@ -1,14 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Domain.Events;
 
 namespace Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.RelationshipReactivationCompleted;
+
 public class RelationshipReactivationCompletedDomainEvent : DomainEvent
 {
-    public RelationshipReactivationCompletedDomainEvent(string relationshipId, string peer)
-    {
-        RelationshipId = relationshipId;
-        Peer = peer;
-    }
-
-    public string RelationshipId { get; }
-    public string Peer { get; }
+    public required string RelationshipId { get; set; }
+    public required string NewRelationshipStatus { get; set; }
+    public required string Peer { get; set; }
 }

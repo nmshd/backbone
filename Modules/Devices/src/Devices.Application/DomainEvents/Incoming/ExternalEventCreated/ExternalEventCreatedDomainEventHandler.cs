@@ -16,6 +16,9 @@ public class ExternalEventCreatedDomainEventHandler : IDomainEventHandler<Extern
 
     public async Task Handle(ExternalEventCreatedDomainEvent @event)
     {
+        if (@event.IsDeliveryBlocked)
+            return;
+
         await _pushSenderService.SendNotification(@event.Owner, new ExternalEventCreatedPushNotification(), CancellationToken.None);
     }
 }

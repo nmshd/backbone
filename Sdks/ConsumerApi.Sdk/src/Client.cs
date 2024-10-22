@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.SDK.Crypto;
+﻿using System.Text.Json;
+using Backbone.BuildingBlocks.SDK.Crypto;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges;
@@ -20,7 +21,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Tags;
 using Backbone.ConsumerApi.Sdk.Endpoints.Tokens;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
-using Newtonsoft.Json;
 
 namespace Backbone.ConsumerApi.Sdk;
 
@@ -170,7 +170,7 @@ public class Client
             ClientSecret = client._configuration.Authentication.ClientCredentials.ClientSecret,
             IdentityVersion = 1,
             SignedChallenge = signedChallenge,
-            IdentityPublicKey = ConvertibleString.FromUtf8(JsonConvert.SerializeObject(new CryptoSignaturePublicKey
+            IdentityPublicKey = ConvertibleString.FromUtf8(JsonSerializer.Serialize(new CryptoSignaturePublicKey
             {
                 alg = CryptoExchangeAlgorithm.ECDH_X25519,
                 pub = keyPair.PublicKey.Base64Representation
@@ -246,7 +246,7 @@ public class Client
             throw new Exception(
                 $"There was an error when creating a challenge for the new identity. The error code was '{createChallengeResponse.Error.Code}'. The message was '{createChallengeResponse.Error.Message}'.");
 
-        var serializedChallenge = JsonConvert.SerializeObject(createChallengeResponse.Result);
+        var serializedChallenge = JsonSerializer.Serialize(createChallengeResponse.Result);
 
         var challengeSignature = signatureHelper.CreateSignature(keyPair.PrivateKey, ConvertibleString.FromUtf8(serializedChallenge));
         var signedChallenge = new SignedChallenge(serializedChallenge, challengeSignature);
