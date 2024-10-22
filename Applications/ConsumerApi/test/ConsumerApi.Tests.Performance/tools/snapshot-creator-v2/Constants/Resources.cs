@@ -51,4 +51,6 @@ public static class Resources
     public const string CONNECTOR_NO_MORE_IDENTITIES_AVAILABLE = "No more connector identities available";
 
     public const string IDENTITY_NO_MORE_RELATIONSHIPS_AVAILABLE = "No more relationships available";
+    public const string? IDENTITY_NO_MORE_MESSAGES_TO_SEND = "No more messages to send";
+    public const string? IDENTITY_NO_MORE_MESSAGES_TO_RECEIVE = "Can't receive more messages";
 }
