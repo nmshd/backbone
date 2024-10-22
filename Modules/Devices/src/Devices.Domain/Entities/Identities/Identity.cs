@@ -332,7 +332,7 @@ public class Identity : Entity
 
     public void EnsureIdentityIsToBeDeleted()
     {
-        if (this == null || Status == IdentityStatus.ToBeDeleted)
+        if (Status == IdentityStatus.ToBeDeleted)
             throw new DomainException(DomainErrors.IdentityIsToBeDeleted());
     }
 }
