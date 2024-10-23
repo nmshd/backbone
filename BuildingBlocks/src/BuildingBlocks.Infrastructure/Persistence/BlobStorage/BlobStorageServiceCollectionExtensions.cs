@@ -41,8 +41,8 @@ public static class BlobStorageServiceCollectionExtensions
                 services.Configure<S3Options>(opt =>
                 {
                     opt.ServiceUrl = options.S3Config!.ServiceUrl;
-                    opt.AccessKey = options.S3Config!.AccessKey;
-                    opt.SecretKey = options.S3Config!.SecretKey;
+                    opt.KeyId = options.S3Config!.AccessKey;
+                    opt.Key = options.S3Config!.SecretKey;
                     opt.BucketName = options.S3Config!.BucketName;
                 });
 

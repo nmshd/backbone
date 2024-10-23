@@ -25,7 +25,7 @@ public class S3BlobStorage : IBlobStorage, IDisposable
             ForcePathStyle = true
         };
 
-        _s3Client = new AmazonS3Client(config.Value.AccessKey, config.Value.SecretKey, s3Config);
+        _s3Client = new AmazonS3Client(config.Value.KeyId, config.Value.Key, s3Config);
         _changedBlobs = new List<ChangedBlob>();
         _removedBlobs = new List<RemovedBlob>();
         _bucketName = config.Value.BucketName;

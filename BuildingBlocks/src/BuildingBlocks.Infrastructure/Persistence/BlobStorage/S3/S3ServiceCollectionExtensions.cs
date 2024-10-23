@@ -1,4 +1,4 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.S3;
@@ -19,8 +19,8 @@ public static class S3ServiceCollectionExtensions
         services.Configure<S3Options>(opt =>
         {
             opt.ServiceUrl = options.ServiceUrl;
-            opt.AccessKey = options.AccessKey;
-            opt.SecretKey = options.SecretKey;
+            opt.KeyId = options.KeyId;
+            opt.Key = options.Key;
             opt.BucketName = options.BucketName;
         });
 
@@ -31,7 +31,7 @@ public static class S3ServiceCollectionExtensions
 public class S3Options
 {
     public string ServiceUrl { get; set; } = string.Empty;
-    public string AccessKey { get; set; } = string.Empty;
-    public string SecretKey { get; set; } = string.Empty;
+    public string KeyId { get; set; } = string.Empty;
+    public string Key { get; set; } = string.Empty;
     public string BucketName { get; set; } = string.Empty;
 }
