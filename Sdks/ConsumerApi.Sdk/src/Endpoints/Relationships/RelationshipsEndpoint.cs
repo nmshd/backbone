@@ -58,7 +58,7 @@ public class RelationshipsEndpoint(EndpointClient client) : ConsumerApiEndpoint(
         return await _client.Put<Relationship>($"api/{API_VERSION}/Relationships/{relationshipId}/Terminate");
     }
 
-    public async Task<ApiResponse<RelationshipMetadata>> RelationshipReactivationRequest(string relationshipId)
+    public async Task<ApiResponse<RelationshipMetadata>> ReactivateRelationship(string relationshipId)
     {
         return await _client.Put<RelationshipMetadata>($"api/{API_VERSION}/Relationships/{relationshipId}/Reactivate");
     }
