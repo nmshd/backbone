@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
-using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -64,7 +63,7 @@ public class AzureStorageAccountTests : AbstractTestsBase
         var services = new ServiceCollection()
             .AddLogging();
 
-        services.AddAzureStorageAccount(new BlobStorageOptions.AzureStorageAccountOptions
+        services.AddAzureStorageAccount(new AzureStorageAccountOptions
         {
             ConnectionString = "UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://127.0.0.1;",
             ContainerName = "test"

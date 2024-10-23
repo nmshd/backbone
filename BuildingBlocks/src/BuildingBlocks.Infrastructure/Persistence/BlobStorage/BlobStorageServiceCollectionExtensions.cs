@@ -67,24 +67,6 @@ public class BlobStorageOptions : IValidatableObject
         _ => throw new Exception("Unsupported ProductName")
     };
 
-    public class AzureStorageAccountOptions
-    {
-        public required string ConnectionString { get; set; }
-
-        [Required]
-        [MinLength(2)]
-        public required string ContainerName { get; set; }
-    }
-
-    public class GoogleCloudStorageOptions
-    {
-        public required string? ServiceAccountJson { get; set; }
-
-        [Required]
-        [MinLength(2)]
-        public required string BucketName { get; set; }
-    }
-
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (ProductName == AZURE_STORAGE_ACCOUNT && AzureStorageAccount == null)

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.Tooling.Extensions;
 using Google.Apis.Auth.OAuth2;
@@ -9,7 +10,7 @@ namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleC
 
 public static class GoogleCloudStorageServiceCollectionExtensions
 {
-    public static void AddGoogleCloudStorage(this IServiceCollection services, BlobStorageOptions.GoogleCloudStorageOptions options)
+    public static void AddGoogleCloudStorage(this IServiceCollection services, GoogleCloudStorageOptions options)
     {
         services.AddSingleton(_ =>
         {
@@ -37,4 +38,13 @@ public static class GoogleCloudStorageServiceCollectionExtensions
             return new GoogleCloudStorage(storageClient, logger);
         });
     }
+}
+
+public class GoogleCloudStorageOptions
+{
+    public required string? ServiceAccountJson { get; set; }
+
+    [Required]
+    [MinLength(2)]
+    public required string BucketName { get; set; }
 }
