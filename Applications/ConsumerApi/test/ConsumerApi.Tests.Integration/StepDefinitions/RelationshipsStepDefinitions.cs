@@ -133,7 +133,7 @@ internal class RelationshipsStepDefinitions
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         var relationship = _relationshipsContext.Relationships[relationshipName];
-        await client.Relationships.AcceptRelationship(relationship.Id, new AcceptRelationshipRequest { CreationResponseContent = TestData.SOME_BYTES });
+        _responseContext.WhenResponse = await client.Relationships.AcceptRelationship(relationship.Id, new AcceptRelationshipRequest { CreationResponseContent = TestData.SOME_BYTES });
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/Reject endpoint")]
@@ -141,7 +141,7 @@ internal class RelationshipsStepDefinitions
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         var relationship = _relationshipsContext.Relationships[relationshipName];
-        await client.Relationships.RejectRelationship(relationship.Id, new RejectRelationshipRequest { CreationResponseContent = TestData.SOME_BYTES });
+        _responseContext.WhenResponse = await client.Relationships.RejectRelationship(relationship.Id, new RejectRelationshipRequest { CreationResponseContent = TestData.SOME_BYTES });
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/Revoke endpoint")]
@@ -149,7 +149,7 @@ internal class RelationshipsStepDefinitions
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         var relationship = _relationshipsContext.Relationships[relationshipName];
-        await client.Relationships.RevokeRelationship(relationship.Id, new RevokeRelationshipRequest { CreationResponseContent = TestData.SOME_BYTES });
+        _responseContext.WhenResponse = await client.Relationships.RevokeRelationship(relationship.Id, new RevokeRelationshipRequest { CreationResponseContent = TestData.SOME_BYTES });
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a PUT request to the /Relationships/{{{RegexFor.SINGLE_THING}.Id}}/Terminate endpoint")]
