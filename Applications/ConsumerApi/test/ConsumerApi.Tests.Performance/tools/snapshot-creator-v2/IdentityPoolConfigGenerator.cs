@@ -68,13 +68,13 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
                 Name = (string)row[nameof(IdentityPoolConfiguration.Name)],
                 Alias = (string)row[nameof(IdentityPoolConfiguration.Alias)],
                 Amount = Convert.ToInt64(row[nameof(IdentityPoolConfiguration.Amount)]),
-                NumberOfRelationshipTemplates = Convert.ToInt64(row[nameof(IdentityPoolConfiguration.NumberOfRelationshipTemplates)]),
-                NumberOfRelationships = Convert.ToInt64(row[nameof(IdentityPoolConfiguration.NumberOfRelationships)]),
-                NumberOfSentMessages = Convert.ToInt64(row[nameof(IdentityPoolConfiguration.NumberOfSentMessages)]),
-                NumberOfReceivedMessages = Convert.ToInt64(row[nameof(IdentityPoolConfiguration.NumberOfReceivedMessages)]),
-                NumberOfDatawalletModifications = Convert.ToInt64(row[nameof(IdentityPoolConfiguration.NumberOfDatawalletModifications)]),
-                NumberOfDevices = Convert.ToInt64(row[nameof(IdentityPoolConfiguration.NumberOfDevices)]),
-                NumberOfChallenges = Convert.ToInt64(row[nameof(IdentityPoolConfiguration.NumberOfChallenges)])
+                NumberOfRelationshipTemplates = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfRelationshipTemplates)]),
+                NumberOfRelationships = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfRelationships)]),
+                NumberOfSentMessages = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfSentMessages)]),
+                NumberOfReceivedMessages = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfReceivedMessages)]),
+                NumberOfDatawalletModifications = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfDatawalletModifications)]),
+                NumberOfDevices = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfDevices)]),
+                NumberOfChallenges = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfChallenges)])
             };
 
             identityPoolConfigs.Add(item);
@@ -165,7 +165,8 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
                                 SenderPool: appIdentity.PoolAlias,
                                 SenderIdentityId: appIdentity.Id,
                                 ReceiverPool: connectorIdentity.PoolAlias,
-                                ReceiverIdentityId: connectorIdentity.Id)
+                                ReceiverIdentityId: connectorIdentity.Id,
+                                ReceiverIdentity: connectorIdentity)
                         );
 
                         // Decrement available relationships of the app identity
@@ -179,11 +180,14 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
                                 SenderPool: connectorIdentity.PoolAlias,
                                 SenderIdentityId: connectorIdentity.Id,
                                 ReceiverPool: appIdentity.PoolAlias,
-                                ReceiverIdentityId: appIdentity.Id)
+                                ReceiverIdentityId: appIdentity.Id,
+                                ReceiverIdentity: appIdentity)
                         );
 
                         // Decrement available relationships of the connector identity
                         connectorIdentity.DecrementAvailableRelationships();
+
+                        connectorIdentity.ConfigureMessagesSentTo(appIdentity);
                     }
                 }
             }
