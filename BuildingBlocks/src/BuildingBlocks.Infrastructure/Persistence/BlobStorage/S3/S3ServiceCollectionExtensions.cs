@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.S3;
@@ -24,7 +24,6 @@ public static class S3ServiceCollectionExtensions
             opt.BucketName = options.BucketName;
         });
 
-        services.AddSingleton<S3ClientFactory>();
         services.AddScoped<IBlobStorage, S3BlobStorage>();
     }
 }

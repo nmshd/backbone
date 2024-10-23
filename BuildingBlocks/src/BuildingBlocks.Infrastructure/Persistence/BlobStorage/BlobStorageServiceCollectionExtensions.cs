@@ -46,7 +46,6 @@ public static class BlobStorageServiceCollectionExtensions
                     opt.BucketName = options.S3Config!.BucketName;
                 });
 
-                services.AddSingleton<S3ClientFactory>();
                 services.AddScoped<IBlobStorage, S3BlobStorage>();
 
                 break;
