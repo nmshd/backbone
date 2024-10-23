@@ -1,7 +1,6 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.Modules.Files.Application.Files.DTOs;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Files.Domain.Entities;
 using MediatR;
 
 namespace Backbone.Modules.Files.Application.Files.Queries.ListFileMetadata;
@@ -10,24 +9,16 @@ public class Handler : IRequestHandler<ListFileMetadataQuery, ListFileMetadataRe
 {
     private readonly IFilesRepository _filesRepository;
     private readonly IUserContext _userContext;
-    private readonly IMapper _mapper;
 
-    public Handler(IFilesRepository filesRepository, IUserContext userContext, IMapper mapper)
+    public Handler(IFilesRepository filesRepository, IUserContext userContext)
     {
         _filesRepository = filesRepository;
         _userContext = userContext;
-        _mapper = mapper;
     }
-
 
     public async Task<ListFileMetadataResponse> Handle(ListFileMetadataQuery request, CancellationToken cancellationToken)
     {
-        var dbPaginationResult = await _filesRepository.FindFilesByCreator(request.Ids, _userContext.GetAddress(), request.PaginationFilter, cancellationToken);
-
-        var items = _mapper.Map<FileMetadataDTO[]>(dbPaginationResult.ItemsOnPage);
-
-        var response = new ListFileMetadataResponse(items, request.PaginationFilter, dbPaginationResult.TotalNumberOfItems);
-
-        return response;
+        var dbPaginationResult = await _filesRepository.FindFilesByCreator(request.Ids.Select(FileId.Parse), _userContext.GetAddress(), request.PaginationFilter, cancellationToken);
+        return new ListFileMetadataResponse(dbPaginationResult, request.PaginationFilter);
     }
 }

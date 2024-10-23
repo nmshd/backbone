@@ -5,19 +5,15 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Database;
 using Backbone.Modules.Quotas.Infrastructure.Persistence.Repository;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
-using FluentAssertions;
 using FluentAssertions.Execution;
-using Xunit;
 
 namespace Backbone.Modules.Quotas.Infrastructure.Tests.Tests.Repositories;
 
 public class MessagesRepositoryTests : AbstractTestsBase
 {
-    private readonly IdentityAddress _identityAddress1 = TestDataGenerator.CreateRandomIdentityAddress();
-    private readonly IdentityAddress _identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
+    private readonly IdentityAddress _identityAddress1 = CreateRandomIdentityAddress();
+    private readonly IdentityAddress _identityAddress2 = CreateRandomIdentityAddress();
 
     private readonly MessagesDbContext _messagesArrangeContext;
     private readonly QuotasDbContext _actContext;
@@ -50,7 +46,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
     public async Task Counts_entities_within_timeframe_hour_quotaPeriod()
     {
         // Arrange
-        var messages = new List<Message>()
+        var messages = new List<Message>
         {
             CreateMessage(TODAY, _identityAddress1),
             CreateMessage(YESTERDAY, _identityAddress1),
@@ -73,7 +69,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
     public async Task Counts_entities_within_timeframe_month_quotaPeriod()
     {
         // Arrange
-        var messages = new List<Message>()
+        var messages = new List<Message>
         {
             CreateMessage(TODAY, _identityAddress1),
             CreateMessage(YESTERDAY, _identityAddress1),
@@ -98,7 +94,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
     public async Task Counts_entities_total_quotaPeriod()
     {
         // Arrange
-        var messages = new List<Message>()
+        var messages = new List<Message>
         {
             CreateMessage(TODAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress1),
@@ -121,7 +117,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
     public async Task Counts_entities_only_for_requested_identityAddress()
     {
         // Arrange
-        var messages = new List<Message>()
+        var messages = new List<Message>
         {
             CreateMessage(TODAY, _identityAddress1),
             CreateMessage(TOMORROW, _identityAddress2),
@@ -149,7 +145,7 @@ public class MessagesRepositoryTests : AbstractTestsBase
         var message = new Message(
             identityAddress,
             DeviceId.New(),
-            Array.Empty<byte>(),
+            [],
             [],
             []
         );

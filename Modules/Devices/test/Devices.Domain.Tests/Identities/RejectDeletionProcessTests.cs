@@ -4,9 +4,6 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -97,8 +94,8 @@ public class RejectDeletionProcessTests : AbstractTestsBase
 
     private static Identity CreateIdentity()
     {
-        var address = IdentityAddress.Create([], "id1");
-        return new Identity("", address, [], TierId.Generate(), 1);
+        var address = IdentityAddress.Create([], "prod.enmeshed.eu");
+        return new Identity("", address, [], TierId.Generate(), 1, CommunicationLanguage.DEFAULT_LANGUAGE);
     }
 
     private static Identity CreateIdentityWithDeletionProcessWaitingForApproval()

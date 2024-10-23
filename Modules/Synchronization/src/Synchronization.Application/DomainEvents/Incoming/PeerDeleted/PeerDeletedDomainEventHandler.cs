@@ -1,10 +1,13 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.DomainEvents.Incoming.PeerDeleted;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
+using Backbone.Tooling;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.Modules.Synchronization.Application.DomainEvents.Incoming.PeerDeleted;
+
 public class PeerDeletedDomainEventHandler : IDomainEventHandler<PeerDeletedDomainEvent>
 {
     private readonly ISynchronizationDbContext _dbContext;
@@ -16,24 +19,25 @@ public class PeerDeletedDomainEventHandler : IDomainEventHandler<PeerDeletedDoma
         _logger = logger;
     }
 
-    public async Task Handle(PeerDeletedDomainEvent domainEvent)
+    public async Task Handle(PeerDeletedDomainEvent @event)
     {
-        await CreateExternalEvent(domainEvent);
-    }
-
-    private async Task CreateExternalEvent(PeerDeletedDomainEvent @event)
-    {
-#pragma warning disable IDE0037
-        var payload = new { RelationshipId = @event.RelationshipId };
-#pragma warning restore IDE0037
         try
         {
-            await _dbContext.CreateExternalEvent(@event.PeerOfDeletedIdentity, ExternalEventType.PeerDeleted, payload);
+            await CreatePeerDeletedExternalEvent(@event);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occured while processing a domain event.");
             throw;
         }
+    }
+
+    private async Task CreatePeerDeletedExternalEvent(PeerDeletedDomainEvent @event)
+    {
+        var payload = new PeerDeletedExternalEvent.EventPayload { RelationshipId = @event.RelationshipId, DeletionDate = SystemTime.UtcNow };
+
+        var externalEvent = new PeerDeletedExternalEvent(IdentityAddress.Parse(@event.PeerOfDeletedIdentity), payload);
+
+        await _dbContext.CreateExternalEvent(externalEvent);
     }
 }

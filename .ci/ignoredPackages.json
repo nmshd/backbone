@@ -1,0 +1,1 @@
+﻿["Serilog.Enrichers.Demystifier", "SpecFlow.NUnit", "Testcontainers.PostgreSql"]

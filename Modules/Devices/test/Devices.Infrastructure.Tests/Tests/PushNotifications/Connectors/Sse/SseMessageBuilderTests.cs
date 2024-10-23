@@ -1,8 +1,5 @@
 ﻿using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Sse;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Sse;
 

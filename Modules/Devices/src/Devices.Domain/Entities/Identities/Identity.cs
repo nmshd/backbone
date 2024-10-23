@@ -26,7 +26,7 @@ public class Identity : Entity
         _deletionProcesses = null!;
     }
 
-    public Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion)
+    private Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion, CommunicationLanguage deviceCommunicationLanguage, string username)
     {
         ClientId = clientId;
         Address = address;
@@ -37,6 +37,25 @@ public class Identity : Entity
         TierId = tierId;
         Status = IdentityStatus.Active;
         _deletionProcesses = [];
+
+        Devices.Add(Device.CreateTestDevice(this, deviceCommunicationLanguage, username));
+
+        RaiseDomainEvent(new IdentityCreatedDomainEvent(this));
+    }
+
+    public Identity(string clientId, IdentityAddress address, byte[] publicKey, TierId tierId, byte identityVersion, CommunicationLanguage deviceCommunicationLanguage)
+    {
+        ClientId = clientId;
+        Address = address;
+        PublicKey = publicKey;
+        IdentityVersion = identityVersion;
+        CreatedAt = SystemTime.UtcNow;
+        Devices = [];
+        TierId = tierId;
+        Status = IdentityStatus.Active;
+        _deletionProcesses = [];
+
+        Devices.Add(new Device(this, deviceCommunicationLanguage));
 
         RaiseDomainEvent(new IdentityCreatedDomainEvent(this));
     }
@@ -81,6 +100,13 @@ public class Identity : Entity
         return Devices.Count < 1;
     }
 
+    public Device AddDevice(CommunicationLanguage communicationLanguage, DeviceId createdByDevice)
+    {
+        var newDevice = new Device(this, communicationLanguage, createdByDevice);
+        Devices.Add(newDevice);
+        return newDevice;
+    }
+
     public void ChangeTier(TierId id)
     {
         if (id == Tier.QUEUED_FOR_DELETION.Id || TierId == Tier.QUEUED_FOR_DELETION.Id)
@@ -115,7 +141,7 @@ public class Identity : Entity
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
         TierId = Tier.QUEUED_FOR_DELETION.Id;
         Status = IdentityStatus.ToBeDeleted;
-        RaiseDomainEvent(new IdentityToBeDeletedDomainEvent(Address));
+        RaiseDomainEvent(new IdentityToBeDeletedDomainEvent(Address, deletionProcess.GracePeriodEndsAt!.Value));
 
         return deletionProcess;
     }
@@ -168,7 +194,7 @@ public class Identity : Entity
         deletionProcess.Approve(Address, deviceId);
 
         Status = IdentityStatus.ToBeDeleted;
-        RaiseDomainEvent(new IdentityToBeDeletedDomainEvent(Address));
+        RaiseDomainEvent(new IdentityToBeDeletedDomainEvent(Address, deletionProcess.GracePeriodEndsAt!.Value));
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
         TierId = Tier.QUEUED_FOR_DELETION.Id;
 
@@ -297,6 +323,11 @@ public class Identity : Entity
     private IdentityDeletionProcess GetDeletionProcessWithId(IdentityDeletionProcessId deletionProcessId)
     {
         return DeletionProcesses.FirstOrDefault(x => x.Id == deletionProcessId) ?? throw new DomainException(GenericDomainErrors.NotFound(nameof(IdentityDeletionProcess)));
+    }
+
+    public static Identity CreateTestIdentity(IdentityAddress address, byte[] publicKey, TierId tierId, string username)
+    {
+        return new Identity("test", address, publicKey, tierId, 1, CommunicationLanguage.DEFAULT_LANGUAGE, username);
     }
 }
 

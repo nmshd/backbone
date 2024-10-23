@@ -17,8 +17,8 @@ public class SyncRunBuilder
 
     public SyncRunBuilder()
     {
-        _createdBy = TestDataGenerator.CreateRandomIdentityAddress();
-        _createdByDevice = TestDataGenerator.CreateRandomDeviceId();
+        _createdBy = CreateRandomIdentityAddress();
+        _createdByDevice = CreateRandomDeviceId();
         _isRunning = true;
     }
 
@@ -80,7 +80,7 @@ public class SyncRunBuilder
         var syncRun = new SyncRun(_currentIndex++, DURATION, _createdBy, _createdByDevice, _externalEvents, SyncRun.SyncRunType.ExternalEventSync);
 
         if (!_isRunning)
-            syncRun.FinalizeExternalEventSync(Array.Empty<ExternalEventResult>());
+            syncRun.FinalizeExternalEventSync([]);
 
         if (_expiresAt != null)
             syncRun.ExpiresAt = _expiresAt.Value;

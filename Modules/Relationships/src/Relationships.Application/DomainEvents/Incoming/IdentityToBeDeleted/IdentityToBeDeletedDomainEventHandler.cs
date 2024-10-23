@@ -1,7 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
+using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Incoming;
-using Backbone.Modules.Relationships.Domain.Entities;
 
 namespace Backbone.Modules.Relationships.Application.DomainEvents.Incoming.IdentityToBeDeleted;
 
@@ -18,7 +19,7 @@ public class IdentityToBeDeletedDomainEventHandler : IDomainEventHandler<Identit
     {
         var relationships = await GetRelationshipsOf(@event.IdentityAddress);
 
-        NotifyRelationshipsOfPeerToBeDeleted(@event.IdentityAddress, relationships);
+        NotifyRelationshipsOfPeerToBeDeleted(@event.IdentityAddress, relationships, @event.GracePeriodEndsAt);
 
         await _relationshipsRepository.Update(relationships);
     }
@@ -26,17 +27,17 @@ public class IdentityToBeDeletedDomainEventHandler : IDomainEventHandler<Identit
     private async Task<List<Relationship>> GetRelationshipsOf(string identityAddress)
     {
         var relationships = (await _relationshipsRepository
-            .FindRelationships(r => (r.From == identityAddress || r.To == identityAddress) && r.Status == RelationshipStatus.Active,
+            .FindRelationships(
+                Relationship.HasParticipant(identityAddress).And(Relationship.HasStatusInWhichPeerShouldBeNotifiedAboutDeletion()),
                 CancellationToken.None)).ToList();
-
         return relationships;
     }
 
-    private static void NotifyRelationshipsOfPeerToBeDeleted(string identityToBeDeleted, IEnumerable<Relationship> relationships)
+    private static void NotifyRelationshipsOfPeerToBeDeleted(string identityToBeDeleted, IEnumerable<Relationship> relationships, DateTime gracePeriodEndsAt)
     {
         foreach (var relationship in relationships)
         {
-            relationship.ParticipantIsToBeDeleted(identityToBeDeleted);
+            relationship.ParticipantIsToBeDeleted(identityToBeDeleted, gracePeriodEndsAt);
         }
     }
 }

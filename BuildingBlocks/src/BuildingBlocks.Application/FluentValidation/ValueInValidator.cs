@@ -1,5 +1,4 @@
 using System.Collections;
-using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using FluentValidation;
 using FluentValidation.Validators;
 
@@ -11,7 +10,7 @@ public class ValueInValidator<T, TProperty> : PropertyValidator<T, TProperty>
 
     public ValueInValidator(IEnumerable validValues)
     {
-        if (validValues == null) throw new ArgumentNullException(nameof(validValues));
+        ArgumentNullException.ThrowIfNull(validValues);
 
         ValidValues = validValues.Cast<object?>().ToList();
 
@@ -54,16 +53,5 @@ public class ValueInValidator<T, TProperty> : PropertyValidator<T, TProperty>
     protected override string GetDefaultMessageTemplate(string errorCode)
     {
         return "'{PropertyName}' must have one of the following values: {ValidValues}";
-    }
-}
-
-public static class ValidatorExtensions
-{
-    public static IRuleBuilderOptions<T, TProperty> In<T, TProperty>(this IRuleBuilder<T, TProperty> ruleBuilder,
-        params TProperty[] validOptions)
-    {
-        return ruleBuilder
-            .SetValidator(new ValueInValidator<T, TProperty>(validOptions))
-            .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code);
     }
 }

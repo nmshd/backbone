@@ -24,7 +24,7 @@ public static class DomainErrors
             string.IsNullOrEmpty(reason) ? $"The Push Notification Service Platform is invalid{formattedReason}." : reason);
     }
 
-    public static DomainError CannotDeleteBasicTier(string reason = "")
+    public static DomainError CannotDeleteBasicTier()
     {
         return new DomainError("error.platform.validation.device.basicTierCannotBeDeleted", "The 'Basic' Tier cannot be deleted.");
     }
@@ -67,5 +67,11 @@ public static class DomainErrors
     public static DomainError DeletionProcessMustBePastDueApproval()
     {
         return new DomainError("error.platform.validation.device.noDeletionProcessIsPastDueApproval", "No deletion process is past due approval.");
+    }
+
+    public static DomainError MaxIdentitiesLessThanCurrentIdentities(int requestedMaxIdentities, int identitiesCount)
+    {
+        return new DomainError("error.platform.validation.device.maxIdentitiesLessThanCurrentIdentities",
+            $"The requested maximum number of identities {requestedMaxIdentities} is less than the current number of identities {identitiesCount}.");
     }
 }

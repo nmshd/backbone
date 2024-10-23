@@ -1,6 +1,5 @@
 using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
@@ -27,7 +26,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
         _options = options.Value;
     }
 
-    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IdentityAddress recipient, IPushNotification notification)
+    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IPushNotification notification)
     {
         var registrationsArray = registrations as PnsRegistration[] ?? registrations.ToArray();
 
@@ -35,9 +34,11 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
 
         var sendResults = new SendResults();
 
-        var tasks = registrationsArray.Select(r => SendNotification(r, notification, sendResults));
+        foreach (var registration in registrationsArray)
+        {
+            await SendNotification(registration, notification, sendResults);
+        }
 
-        await Task.WhenAll(tasks);
         return sendResults;
     }
 
@@ -54,7 +55,7 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
             .SetToken(registration.Handle.Value)
             .Build();
 
-        _logger.Sending(notificationContent.EventName, registration.DeviceId, registration.IdentityAddress, registration.Handle.Value);
+        _logger.Sending(notificationContent.EventName);
 
         var firebaseMessaging = _firebaseMessagingFactory.CreateForAppId(registration.AppId);
         try
@@ -103,6 +104,6 @@ internal static partial class FirebaseCloudMessagingConnectorLogs
         EventId = 227730,
         EventName = "FirebaseCloudMessagingConnector.Sending",
         Level = LogLevel.Debug,
-        Message = "Sending push notification (type '{eventName}') to device '{deviceId}' of '{address}' with handle '{handle}'.")]
-    public static partial void Sending(this ILogger logger, string eventName, string deviceId, string address, string handle);
+        Message = "Sending push notification (type '{eventName}').")]
+    public static partial void Sending(this ILogger logger, string eventName);
 }

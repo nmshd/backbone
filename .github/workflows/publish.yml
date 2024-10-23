@@ -18,7 +18,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Docker Login
-        uses: docker/login-action@v3.0.0
+        uses: docker/login-action@v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -33,7 +33,7 @@ jobs:
         with:
           version: "lab:latest"
           driver: cloud
-          endpoint: "jssoft/js-soft"
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
       - name: Build and Push Container Image
         run: ./.ci/acli/buildContainerImage.js
         env:
@@ -49,7 +49,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Docker Login
-        uses: docker/login-action@v3.0.0
+        uses: docker/login-action@v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -64,7 +64,7 @@ jobs:
         with:
           version: "lab:latest"
           driver: cloud
-          endpoint: "jssoft/js-soft"
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
       - name: Build and Push Container Image
         run: ./.ci/aui/buildContainerImage.js
         env:
@@ -80,7 +80,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Docker Login
-        uses: docker/login-action@v3.0.0
+        uses: docker/login-action@v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -95,7 +95,7 @@ jobs:
         with:
           version: "lab:latest"
           driver: cloud
-          endpoint: "jssoft/js-soft"
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
       - name: Build and Push Container Image
         run: ./.ci/capi/buildContainerImage.js
         env:
@@ -111,7 +111,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Docker Login
-        uses: docker/login-action@v3.0.0
+        uses: docker/login-action@v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -126,7 +126,7 @@ jobs:
         with:
           version: "lab:latest"
           driver: cloud
-          endpoint: "jssoft/js-soft"
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
       - name: Build and Push Container Image
         run: ./.ci/eh/buildContainerImage.js
         env:
@@ -142,7 +142,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Docker Login
-        uses: docker/login-action@v3.0.0
+        uses: docker/login-action@v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -157,7 +157,7 @@ jobs:
         with:
           version: "lab:latest"
           driver: cloud
-          endpoint: "jssoft/js-soft"
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
       - name: Build and Push Container Image
         run: ./.ci/dbm/buildContainerImage.js
         env:
@@ -173,7 +173,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Docker Login
-        uses: docker/login-action@v3.0.0
+        uses: docker/login-action@v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -188,7 +188,7 @@ jobs:
         with:
           version: "lab:latest"
           driver: cloud
-          endpoint: "jssoft/js-soft"
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
       - name: Build and Push Container Image
         run: ./.ci/idj/buildContainerImage.js
         env:
@@ -204,7 +204,7 @@ jobs:
       - name: Install script dependencies
         run: npm install --prefix ./.ci
       - name: Docker Login
-        uses: docker/login-action@v3.0.0
+        uses: docker/login-action@v3.3.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
@@ -219,7 +219,7 @@ jobs:
         with:
           version: "lab:latest"
           driver: cloud
-          endpoint: "jssoft/js-soft"
+          endpoint: ${{ secrets.CLOUD_BUILDER_ENDPOINT }}
       - name: Build and Push Container Image
         run: ./.ci/sses/buildContainerImage.js
         env:

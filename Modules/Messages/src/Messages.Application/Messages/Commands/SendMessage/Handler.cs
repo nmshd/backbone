@@ -1,4 +1,3 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
@@ -13,7 +12,6 @@ namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
 public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 {
     private readonly ILogger<Handler> _logger;
-    private readonly IMapper _mapper;
     private readonly ApplicationOptions _options;
     private readonly IUserContext _userContext;
     private readonly IMessagesRepository _messagesRepository;
@@ -21,14 +19,12 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
 
     public Handler(
         IUserContext userContext,
-        IMapper mapper,
         IOptionsSnapshot<ApplicationOptions> options,
         ILogger<Handler> logger,
         IMessagesRepository messagesRepository,
         IRelationshipsRepository relationshipsRepository)
     {
         _userContext = userContext;
-        _mapper = mapper;
         _logger = logger;
         _options = options.Value;
         _messagesRepository = messagesRepository;
@@ -47,8 +43,7 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
             recipients);
 
         await _messagesRepository.Add(message, cancellationToken);
-
-        return _mapper.Map<SendMessageResponse>(message);
+        return new SendMessageResponse(message);
     }
 
     private async Task<List<RecipientInformation>> ValidateRecipients(SendMessageCommand request, CancellationToken cancellationToken)
@@ -58,30 +53,30 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
         var sender = _userContext.GetAddress();
         var recipients = new List<RecipientInformation>();
 
+        var i = 0;
+
         foreach (var recipientDto in request.Recipients)
         {
-            var idOfRelationshipBetweenSenderAndRecipient = await _relationshipsRepository.GetIdOfRelationshipBetweenSenderAndRecipient(sender, recipientDto.Address);
+            var relationshipBetweenSenderAndRecipient = await _relationshipsRepository.FindYoungestRelationship(sender, recipientDto.Address, cancellationToken);
 
-            if (idOfRelationshipBetweenSenderAndRecipient == null)
+            if (relationshipBetweenSenderAndRecipient == null)
             {
-                _logger.LogInformation("Sending message aborted. There is no relationship between sender ({sender}) and recipient ({recipient}).", sender, recipientDto.Address);
+                _logger.LogInformation("Sending message aborted. There is no relationship between the sender and the recipient at index {recipientIndex}.", i);
                 throw new OperationFailedException(ApplicationErrors.NoRelationshipToRecipientExists(recipientDto.Address));
             }
 
             var numberOfUnreceivedMessagesFromActiveIdentity = await _messagesRepository.CountUnreceivedMessagesFromSenderToRecipient(sender, recipientDto.Address, cancellationToken);
 
-            if (numberOfUnreceivedMessagesFromActiveIdentity >= _options.MaxNumberOfUnreceivedMessagesFromOneSender)
-            {
-                _logger.LogInformation(
-                    "Sending message aborted. Recipient '{recipient}' already has '{numberOfUnreceivedMessagesFromActiveIdentity}' unreceived messages from sender '{sender}', which is more than the maximum ({maxNumberOfUnreceivedMessagesFromOneSender}).",
-                    recipientDto.Address, numberOfUnreceivedMessagesFromActiveIdentity, sender, _options.MaxNumberOfUnreceivedMessagesFromOneSender);
+            relationshipBetweenSenderAndRecipient.EnsureSendingMessagesIsAllowed(
+                _userContext.GetAddress(),
+                numberOfUnreceivedMessagesFromActiveIdentity,
+                _options.MaxNumberOfUnreceivedMessagesFromOneSender);
 
-                throw new OperationFailedException(ApplicationErrors.MaxNumberOfUnreceivedMessagesReached(recipientDto.Address));
-            }
-
-            var recipient = new RecipientInformation(recipientDto.Address, idOfRelationshipBetweenSenderAndRecipient, recipientDto.EncryptedKey);
+            var recipient = new RecipientInformation(recipientDto.Address, relationshipBetweenSenderAndRecipient.Id, recipientDto.EncryptedKey);
 
             recipients.Add(recipient);
+
+            i++;
         }
 
         _logger.LogInformation("Successfully validated all recipients.");

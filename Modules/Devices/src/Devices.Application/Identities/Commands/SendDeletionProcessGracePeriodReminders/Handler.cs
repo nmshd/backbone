@@ -1,6 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -36,7 +35,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
 
             if (deletionProcess.GracePeriodReminder3SentAt != null)
             {
-                _logger.NoReminderSent(identity.Address);
+                _logger.NoReminderSent();
                 continue;
             }
 
@@ -65,7 +64,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
         await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification(daysToDeletion), cancellationToken);
         identity.DeletionGracePeriodReminder3Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
-        _logger.Reminder3Sent(identity.Address, deletionProcessId);
+        _logger.Reminder3Sent(deletionProcessId);
     }
 
     private async Task SendReminder2(Identity identity, int daysToDeletion, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
@@ -73,7 +72,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
         await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification(daysToDeletion), cancellationToken);
         identity.DeletionGracePeriodReminder2Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
-        _logger.Reminder2Sent(identity.Address, deletionProcessId);
+        _logger.Reminder2Sent(deletionProcessId);
     }
 
     private async Task SendReminder1(Identity identity, int daysToDeletion, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
@@ -81,7 +80,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
         await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification(daysToDeletion), cancellationToken);
         identity.DeletionGracePeriodReminder1Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
-        _logger.Reminder1Sent(identity.Address, deletionProcessId);
+        _logger.Reminder1Sent(deletionProcessId);
     }
 }
 
@@ -91,27 +90,27 @@ internal static partial class SendDeletionProcessGracePeriodRemindersLogs
         EventId = 659877,
         EventName = "Devices.SendDeletionProcessGracePeriodReminders.NoReminderSent",
         Level = LogLevel.Information,
-        Message = "Identity '{identityAddress}': No Grace period reminder sent.")]
-    public static partial void NoReminderSent(this ILogger logger, IdentityAddress identityAddress);
+        Message = "No Grace period reminder sent.")]
+    public static partial void NoReminderSent(this ILogger logger);
 
     [LoggerMessage(
         EventId = 343043,
         EventName = "Devices.SendDeletionProcessGracePeriodReminders.Reminder1Sent",
         Level = LogLevel.Information,
-        Message = "Identity '{identityAddress}': Grace period reminder 1 sent for deletion process '{deletionProcessId}'")]
-    public static partial void Reminder1Sent(this ILogger logger, IdentityAddress identityAddress, IdentityDeletionProcessId deletionProcessId);
+        Message = "Grace period reminder 1 sent for deletion process '{deletionProcessId}'.")]
+    public static partial void Reminder1Sent(this ILogger logger, IdentityDeletionProcessId deletionProcessId);
 
     [LoggerMessage(
         EventId = 153402,
         EventName = "Devices.SendDeletionProcessGracePeriodReminders.Reminder2Sent",
         Level = LogLevel.Information,
-        Message = "Identity '{identityAddress}': Grace period reminder 2 sent for deletion process '{deletionProcessId}'")]
-    public static partial void Reminder2Sent(this ILogger logger, IdentityAddress identityAddress, IdentityDeletionProcessId deletionProcessId);
+        Message = "Grace period reminder 2 sent for deletion process '{deletionProcessId}'.")]
+    public static partial void Reminder2Sent(this ILogger logger, IdentityDeletionProcessId deletionProcessId);
 
     [LoggerMessage(
         EventId = 233773,
         EventName = "Devices.SendDeletionProcessGracePeriodReminders.Reminder3Sent",
         Level = LogLevel.Information,
-        Message = "Identity '{identityAddress}': Grace period reminder 3 sent for deletion process '{deletionProcessId}'")]
-    public static partial void Reminder3Sent(this ILogger logger, IdentityAddress identityAddress, IdentityDeletionProcessId deletionProcessId);
+        Message = "Grace period reminder 3 sent for deletion process '{deletionProcessId}'.")]
+    public static partial void Reminder3Sent(this ILogger logger, IdentityDeletionProcessId deletionProcessId);
 }

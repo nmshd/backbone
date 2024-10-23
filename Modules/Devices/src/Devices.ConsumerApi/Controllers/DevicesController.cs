@@ -38,7 +38,7 @@ public class DevicesController : ApiControllerBase
     [ProducesError(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> RegisterDevice(RegisterDeviceRequest request, CancellationToken cancellationToken)
     {
-        var command = new RegisterDeviceCommand()
+        var command = new RegisterDeviceCommand
         {
             CommunicationLanguage = request.CommunicationLanguage ?? "en",
             SignedChallenge = request.SignedChallenge,
@@ -72,7 +72,7 @@ public class DevicesController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<ListDevicesResponse>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ListDevices([FromQuery] PaginationFilter paginationFilter, [FromQuery] IEnumerable<DeviceId> ids, CancellationToken cancellationToken)
+    public async Task<IActionResult> ListDevices([FromQuery] PaginationFilter paginationFilter, [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
@@ -99,7 +99,7 @@ public class DevicesController : ApiControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> DeleteDevice([FromRoute] DeviceId id, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new DeleteDeviceCommand { DeviceId = id, }, cancellationToken);
+        await _mediator.Send(new DeleteDeviceCommand { DeviceId = id }, cancellationToken);
         return NoContent();
     }
 }

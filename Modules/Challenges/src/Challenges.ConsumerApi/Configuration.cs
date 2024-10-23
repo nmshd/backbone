@@ -27,4 +27,7 @@ public class SqlDatabase
     [Required]
     [MinLength(1)]
     public string ConnectionString { get; set; } = null!;
+
+    [Required]
+    public bool EnableHealthCheck { get; set; } = true;
 }

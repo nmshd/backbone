@@ -17,7 +17,7 @@ public class MessageCreatedDomainEventHandler : IDomainEventHandler<MessageCreat
     public async Task Handle(MessageCreatedDomainEvent domainEvent)
     {
         var identities = new List<string> { domainEvent.CreatedBy };
-        var metrics = new List<string> { MetricKey.NumberOfSentMessages.Value };
+        var metrics = new List<MetricKey> { MetricKey.NUMBER_OF_SENT_MESSAGES };
 
         await _metricStatusesService.RecalculateMetricStatuses(identities, metrics, CancellationToken.None);
     }

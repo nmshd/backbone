@@ -1,7 +1,5 @@
 using Backbone.Crypto.Implementations.Deprecated.BouncyCastle;
 using Backbone.Crypto.Implementations.Deprecated.BouncyCastle.Symmetric;
-using Backbone.UnitTestTools.BaseClasses;
-using Xunit;
 
 namespace Backbone.Crypto.Tests;
 

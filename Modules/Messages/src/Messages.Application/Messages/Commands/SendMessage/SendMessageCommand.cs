@@ -1,5 +1,4 @@
 using Backbone.BuildingBlocks.Application.Attributes;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using MediatR;
 
 namespace Backbone.Modules.Messages.Application.Messages.Commands.SendMessage;
@@ -14,7 +13,7 @@ public class SendMessageCommand : IRequest<SendMessageResponse>
 
 public class SendMessageCommandRecipientInformation
 {
-    public required IdentityAddress Address { get; set; }
+    public required string Address { get; set; }
     public required byte[] EncryptedKey { get; set; }
 }
 

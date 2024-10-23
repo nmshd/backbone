@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Synchronization.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Synchronization.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(SynchronizationDbContext))]
     partial class SynchronizationDbContextModelSnapshot : ModelSnapshot
@@ -18,7 +18,7 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Synchronization")
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -33,10 +33,10 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("Owner")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<ushort>("Version")
                         .IsUnicode(false)
@@ -58,13 +58,6 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
-                    b.Property<string>("BlobReference")
-                        .IsRequired()
-                        .HasMaxLength(32)
-                        .IsUnicode(false)
-                        .HasColumnType("character(32)")
-                        .IsFixedLength();
-
                     b.Property<string>("Collection")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -75,10 +68,10 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
                         .IsRequired()
@@ -125,6 +118,25 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                     b.ToTable("DatawalletModifications", "Synchronization");
                 });
 
+            modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Relationships.Relationship", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("character(20)")
+                        .IsFixedLength();
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Relationships", "Relationships", t =>
+                        {
+                            t.ExcludeFromMigrations();
+                        });
+                });
+
             modelBuilder.Entity("Backbone.Modules.Synchronization.Domain.Entities.Sync.ExternalEvent", b =>
                 {
                     b.Property<string>("Id")
@@ -133,18 +145,25 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character(20)")
                         .IsFixedLength();
 
+                    b.Property<string>("Context")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<long>("Index")
                         .HasColumnType("bigint");
 
+                    b.Property<bool>("IsDeliveryBlocked")
+                        .HasColumnType("boolean");
+
                     b.Property<string>("Owner")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("Payload")
                         .IsRequired()
@@ -186,8 +205,8 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("ErrorCode")
                         .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("character varying(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("ExternalEventId")
                         .IsRequired()
@@ -226,10 +245,10 @@ namespace Synchronization.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
                         .IsRequired()

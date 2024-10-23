@@ -2,25 +2,23 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.StronglyTypedIds.Records;
-using SimpleBase;
 
 namespace Backbone.DevelopmentKit.Identity.ValueObjects;
 
 [Serializable]
 [TypeConverter(typeof(IdentityAddressTypeConverter))]
-public record IdentityAddress : StronglyTypedId
+public partial record IdentityAddress : StronglyTypedId
 {
-    public const int MAX_LENGTH = 36;
+    private const string DELETED_IDENTITY_STRING = "deleted identity";
+    public const int MAX_LENGTH = 80;
+    private const int CHECKSUM_LENGTH = 2;
+    private const string CHECKSUM_LENGTH_S = "2";
 
     private IdentityAddress(string stringValue) : base(stringValue)
     {
-    }
-
-    public string ToString(string? format, IFormatProvider? formatProvider)
-    {
-        return ToString();
     }
 
     public static IdentityAddress Parse(string stringValue)
@@ -43,44 +41,50 @@ public record IdentityAddress : StronglyTypedId
     {
         if (stringValue == null) return false;
 
-        var lengthIsValid = stringValue.Length <= MAX_LENGTH;
+        if (stringValue.Length > MAX_LENGTH)
+            return false;
 
-        var realm = stringValue[..3];
+        var matches = IdentityAddressValidatorRegex().Matches(stringValue);
 
-        var concatenation = Base58.Bitcoin.Decode(stringValue.AsSpan(3)).ToArray();
-        var hashedPublicKey = concatenation[..20];
-        var givenChecksum = concatenation[20..];
+        if (matches.Count == 0) return false;
 
-        var realmBytes = Encoding.UTF8.GetBytes(realm);
-        var correctChecksum = CalculateChecksum(realmBytes, hashedPublicKey);
+        var matchGroups = matches.First().Groups;
 
-        var checksumIsValid = givenChecksum.SequenceEqual(correctChecksum);
+        if (!matchGroups.TryGetValue("checksum", out var givenChecksum))
+            return false;
 
-        return lengthIsValid && checksumIsValid;
+        if (!matchGroups.TryGetValue("addressWithoutChecksum", out var addressWithoutChecksum))
+            return false;
+
+        var expectedChecksum = CalculateChecksum(addressWithoutChecksum.Value);
+
+        var checksumIsValid = givenChecksum.Value == expectedChecksum;
+
+        return checksumIsValid;
     }
 
-    public static IdentityAddress Create(byte[] publicKey, string realm)
+    public static IdentityAddress Create(byte[] publicKey, string didDomainName)
     {
-        var hashedPublicKey = SHA256.Create().ComputeHash(SHA512.Create().ComputeHash(publicKey))[..20];
-        var realmBytes = Encoding.UTF8.GetBytes(realm);
-        var checksum = CalculateChecksum(realmBytes, hashedPublicKey);
-        var concatenation = hashedPublicKey.Concat(checksum).ToArray();
-        var address = realm + Base58.Bitcoin.Encode(concatenation);
+        var hashedPublicKey = SHA256.HashData(SHA512.HashData(publicKey))[..10];
 
-        return new IdentityAddress(address);
+        var identitySpecificPart = Hex(hashedPublicKey);
+
+        var mainPhrase = $"did:e:{didDomainName}:dids:{identitySpecificPart}";
+        var checksum = CalculateChecksum(mainPhrase);
+
+        return new IdentityAddress((mainPhrase + checksum).ToLower());
     }
 
-    private static byte[] CalculateChecksum(byte[] realmBytes, byte[] hashedPublicKey)
+    public static IdentityAddress GetAnonymized(string didDomainName)
     {
-        var checksumSource = realmBytes.Concat(hashedPublicKey).ToArray();
-        var checksumHash = SHA256.Create().ComputeHash(SHA512.Create().ComputeHash(checksumSource));
-        var checksum = checksumHash[..4];
-        return checksum;
+        return Create(Encoding.Unicode.GetBytes(DELETED_IDENTITY_STRING), didDomainName);
     }
 
-    public override string ToString()
+    private static string CalculateChecksum(string phrase) => Hex(SHA256.HashData(Encoding.ASCII.GetBytes(phrase)))[..CHECKSUM_LENGTH];
+
+    private static string Hex(byte[] bytes)
     {
-        return Value;
+        return Convert.ToHexString(bytes).ToLower();
     }
 
     #region Converters
@@ -115,6 +119,9 @@ public record IdentityAddress : StronglyTypedId
     {
         return ParseUnsafe(stringValue);
     }
+
+    [GeneratedRegex($@"^(?<addressWithoutChecksum>did:e:(?<didDomainName>(?:[a-z0-9-]+\.)*[a-z]{{2,}}):dids:(?<identitySpecificPart>[0-9a-f]{{20}}))(?<checksum>[0-9a-f]{{{CHECKSUM_LENGTH_S}}})$")]
+    public static partial Regex IdentityAddressValidatorRegex();
 
     #endregion
 }

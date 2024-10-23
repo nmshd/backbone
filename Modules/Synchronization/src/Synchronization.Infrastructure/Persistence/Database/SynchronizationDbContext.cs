@@ -9,6 +9,7 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Extensions;
 using Backbone.Modules.Synchronization.Application.Infrastructure;
 using Backbone.Modules.Synchronization.Domain.Entities;
+using Backbone.Modules.Synchronization.Domain.Entities.Relationships;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.Data.SqlClient;
@@ -38,6 +39,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
     public DbSet<ExternalEvent> ExternalEvents { get; set; } = null!;
     public DbSet<SyncRun> SyncRuns { get; set; } = null!;
     public DbSet<SyncError> SyncErrors { get; set; } = null!;
+    public DbSet<Relationship> Relationships { get; set; } = null!;
 
     public async Task<DbPaginationResult<DatawalletModification>> GetDatawalletModifications(IdentityAddress activeIdentity, long? localIndex, PaginationFilter paginationFilter,
         CancellationToken cancellationToken)
@@ -94,24 +96,29 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         return datawallet;
     }
 
-    public async Task<ExternalEvent> CreateExternalEvent(IdentityAddress owner, ExternalEventType type, object payload)
+    public async Task CreateExternalEvent(ExternalEvent externalEvent)
     {
-        ExternalEvent? externalEvent = null;
-
         await RunInTransaction(async () =>
         {
-            if (externalEvent != null)
-                // if the transaction is retried, the old event has to be removed from the DbSet, because a new one with a new index is added
-                Set<ExternalEvent>().Remove(externalEvent);
+            var nextIndex = await GetNextExternalEventIndexForIdentity(externalEvent.Owner);
 
-            var nextIndex = await GetNextExternalEventIndexForIdentity(owner);
-            externalEvent = new ExternalEvent(type, owner, nextIndex, payload);
+            // if the transaction is retried, it usually means that there was a race condition, which means
+            // that we have to recalculate the Index to avoid getting the same race condition again.
+            externalEvent.UpdateIndex(nextIndex);
 
-            await ExternalEvents.AddAsync(externalEvent);
+            await Set<ExternalEvent>().AddAsync(externalEvent);
+
             await SaveChangesAsync(CancellationToken.None);
         }, [DbErrorCodes.SQLSERVER_INDEX_ALREADY_EXISTS, DbErrorCodes.POSTGRES_INDEX_ALREADY_EXISTS]);
+    }
 
-        return externalEvent!;
+    public async Task DeleteUnsyncedExternalEventsWithOwnerAndContext(IdentityAddress owner, string context)
+    {
+        await Set<ExternalEvent>()
+            .Unsynced()
+            .WithOwner(owner)
+            .WithContext(context)
+            .ExecuteDeleteAsync();
     }
 
     public async Task<SyncRun> GetSyncRun(SyncRunId syncRunId, IdentityAddress createdBy, CancellationToken cancellationToken)
@@ -166,6 +173,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         var unsyncedEvents = await ExternalEvents
             .WithOwner(owner)
             .Unsynced()
+            .NotBlocked()
             .WithErrorCountBelow(maxErrorCount)
             .ToListAsync(cancellationToken);
 
@@ -182,6 +190,17 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         return query;
     }
 
+    public async Task<List<ExternalEvent>> GetBlockedExternalEventsWithTypeAndContext(ExternalEventType type, string context, CancellationToken cancellationToken)
+    {
+        var query = await ExternalEvents
+            .Blocked()
+            .WithType(type)
+            .WithContext(context)
+            .ToListAsync(cancellationToken);
+
+        return query;
+    }
+
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {
         base.ConfigureConventions(configurationBuilder);
@@ -193,6 +212,7 @@ public class SynchronizationDbContext : AbstractDbContextBase, ISynchronizationD
         configurationBuilder.Properties<SyncRunId>().AreUnicode(false).AreFixedLength().HaveMaxLength(SyncRunId.MAX_LENGTH).HaveConversion<SyncRunIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<ExternalEventId>().AreUnicode(false).AreFixedLength().HaveMaxLength(ExternalEventId.MAX_LENGTH).HaveConversion<ExternalEventIdEntityFrameworkValueConverter>();
         configurationBuilder.Properties<SyncErrorId>().AreUnicode(false).AreFixedLength().HaveMaxLength(SyncErrorId.MAX_LENGTH).HaveConversion<SyncErrorIdEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<RelationshipId>().AreUnicode(false).AreFixedLength().HaveMaxLength(RelationshipId.MAX_LENGTH).HaveConversion<RelationshipIdEntityFrameworkValueConverter>();
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

@@ -1,0 +1,35 @@
+﻿using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessAsOwner;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.UnitTestTools.FluentValidation;
+using FluentValidation.TestHelper;
+
+namespace Backbone.Modules.Devices.Application.Tests.Tests.Identities.Queries.GetDeletionProcessAsOwner;
+
+public class ValidatorTests : AbstractTestsBase
+{
+    [Fact]
+    public void Happy_path()
+    {
+        // Arrange
+        var validator = new Validator();
+
+        // Act
+        var validationResult = validator.TestValidate(new GetDeletionProcessAsOwnerQuery { Id = IdentityDeletionProcessId.Generate() });
+
+        // Assert
+        validationResult.ShouldNotHaveAnyValidationErrors();
+    }
+
+    [Fact]
+    public void Fails_when_deletion_process_id_is_invalid()
+    {
+        // Arrange
+        var validator = new Validator();
+
+        // Act
+        var validationResult = validator.TestValidate(new GetDeletionProcessAsOwnerQuery { Id = "some-invalid-deletion-process-id" });
+
+        // Assert
+        validationResult.ShouldHaveValidationErrorForId(nameof(GetDeletionProcessAsOwnerQuery.Id));
+    }
+}

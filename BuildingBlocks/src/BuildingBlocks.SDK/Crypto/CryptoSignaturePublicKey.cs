@@ -6,6 +6,6 @@ namespace Backbone.BuildingBlocks.SDK.Crypto;
 
 public class CryptoSignaturePublicKey
 {
-    public required CryptoExchangeAlgorithm alg;
-    public required string pub;
+    public required CryptoExchangeAlgorithm alg { get; set; }
+    public required string pub { get; set; }
 }

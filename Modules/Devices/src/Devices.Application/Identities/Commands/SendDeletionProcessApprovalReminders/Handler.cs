@@ -1,6 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -15,7 +14,6 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly IPushNotificationSender _pushNotificationSender;
     private readonly ILogger<Handler> _logger;
-
 
     public Handler(IIdentitiesRepository identitiesRepository, IPushNotificationSender pushNotificationSender, ILogger<Handler> logger)
     {
@@ -37,7 +35,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
 
             if (deletionProcess.ApprovalReminder3SentAt != null)
             {
-                _logger.NoApprovalReminderSent(identity.Address);
+                _logger.NoApprovalReminderSent();
                 continue;
             }
 
@@ -66,7 +64,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
         await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), cancellationToken);
         identity.DeletionProcessApprovalReminder3Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
-        _logger.ApprovalReminder3Sent(identity.Address, deletionProcessId);
+        _logger.ApprovalReminder3Sent(deletionProcessId);
     }
 
     private async Task SendReminder2(Identity identity, int daysUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
@@ -74,7 +72,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
         await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), cancellationToken);
         identity.DeletionProcessApprovalReminder2Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
-        _logger.ApprovalReminder2Sent(identity.Address, deletionProcessId);
+        _logger.ApprovalReminder2Sent(deletionProcessId);
     }
 
     private async Task SendReminder1(Identity identity, int daysUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
@@ -82,7 +80,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
         await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), cancellationToken);
         identity.DeletionProcessApprovalReminder1Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
-        _logger.ApprovalReminder1Sent(identity.Address, deletionProcessId);
+        _logger.ApprovalReminder1Sent(deletionProcessId);
     }
 }
 
@@ -92,27 +90,27 @@ internal static partial class SendDeletionProcessApprovalRemindersLogs
         EventId = 476389,
         EventName = "Devices.SendDeletionProcessApprovalReminders.NoApprovalReminderSent",
         Level = LogLevel.Information,
-        Message = "Identity '{identityAddress}': No Approval reminder sent.")]
-    public static partial void NoApprovalReminderSent(this ILogger logger, IdentityAddress identityAddress);
+        Message = "No Approval reminder sent.")]
+    public static partial void NoApprovalReminderSent(this ILogger logger);
 
     [LoggerMessage(
         EventId = 919500,
         EventName = "Devices.SendDeletionProcessApprovalReminders.ApprovalReminder1Sent",
         Level = LogLevel.Information,
-        Message = "Identity '{identityAddress}': Approval reminder 1 sent for deletion process '{deletionProcessId}'")]
-    public static partial void ApprovalReminder1Sent(this ILogger logger, IdentityAddress identityAddress, IdentityDeletionProcessId deletionProcessId);
+        Message = "Approval reminder 1 sent for deletion process '{deletionProcessId}'.")]
+    public static partial void ApprovalReminder1Sent(this ILogger logger, IdentityDeletionProcessId deletionProcessId);
 
     [LoggerMessage(
         EventId = 961917,
         EventName = "Devices.SendDeletionProcessApprovalReminders.ApprovalReminder2Sent",
         Level = LogLevel.Information,
-        Message = "Identity '{identityAddress}': Approval reminder 2 sent for deletion process '{deletionProcessId}'")]
-    public static partial void ApprovalReminder2Sent(this ILogger logger, IdentityAddress identityAddress, IdentityDeletionProcessId deletionProcessId);
+        Message = "Approval reminder 2 sent for deletion process '{deletionProcessId}'.")]
+    public static partial void ApprovalReminder2Sent(this ILogger logger, IdentityDeletionProcessId deletionProcessId);
 
     [LoggerMessage(
         EventId = 887809,
         EventName = "Devices.SendDeletionProcessApprovalReminders.ApprovalReminder3Sent",
         Level = LogLevel.Information,
-        Message = "Identity '{identityAddress}': Approval reminder 3 sent for deletion process '{deletionProcessId}'")]
-    public static partial void ApprovalReminder3Sent(this ILogger logger, IdentityAddress identityAddress, IdentityDeletionProcessId deletionProcessId);
+        Message = "Approval reminder 3 sent for deletion process '{deletionProcessId}'.")]
+    public static partial void ApprovalReminder3Sent(this ILogger logger, IdentityDeletionProcessId deletionProcessId);
 }

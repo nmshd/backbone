@@ -3,11 +3,7 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Identities;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.Metrics;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
-using FluentAssertions;
-using Xunit;
 using MetricKey = Backbone.Modules.Quotas.Domain.Aggregates.Metrics.MetricKey;
 
 namespace Backbone.Modules.Quotas.Domain.Tests.Tests.Identities;
@@ -35,7 +31,7 @@ public class IdentityTests : AbstractTestsBase
     public void Creating_a_quota_with_duplicate_quota_metric_period_throws_domain_exception()
     {
         // Arrange
-        var metricKey = MetricKey.NumberOfSentMessages;
+        var metricKey = MetricKey.NUMBER_OF_SENT_MESSAGES;
         var identity = CreateIdentity();
         identity.CreateIndividualQuota(metricKey, 5, QuotaPeriod.Hour);
 
@@ -55,8 +51,8 @@ public class IdentityTests : AbstractTestsBase
     {
         // Arrange
         var identity = CreateIdentity();
-        var tierQuotaDefinition1 = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
-        var tierQuotaDefinition2 = new TierQuotaDefinition(MetricKey.UsedFileStorageSpace, 2, QuotaPeriod.Hour);
+        var tierQuotaDefinition1 = new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Day);
+        var tierQuotaDefinition2 = new TierQuotaDefinition(MetricKey.USED_FILE_STORAGE_SPACE, 2, QuotaPeriod.Hour);
 
         // Act
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition1);
@@ -83,7 +79,7 @@ public class IdentityTests : AbstractTestsBase
     {
         // Arrange
         var identity = CreateIdentity();
-        var createdQuota = identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
+        var createdQuota = identity.CreateIndividualQuota(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Day);
 
         // Act
         identity.DeleteIndividualQuota(createdQuota.Id);
@@ -97,8 +93,8 @@ public class IdentityTests : AbstractTestsBase
     {
         // Arrange
         var identity = new Identity("some-address", TierId.Parse("tier-id"));
-        var firstQuota = identity.CreateIndividualQuota(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
-        var secondQuota = identity.CreateIndividualQuota(MetricKey.NumberOfFiles, 1, QuotaPeriod.Day);
+        var firstQuota = identity.CreateIndividualQuota(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Day);
+        var secondQuota = identity.CreateIndividualQuota(MetricKey.NUMBER_OF_FILES, 1, QuotaPeriod.Day);
 
         // Act
         identity.DeleteIndividualQuota(firstQuota.Id);
@@ -132,7 +128,7 @@ public class IdentityTests : AbstractTestsBase
     {
         // Arrange
         var identity = CreateIdentity();
-        var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
+        var tierQuotaDefinition = new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Day);
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
 
         // Act
@@ -147,8 +143,8 @@ public class IdentityTests : AbstractTestsBase
     {
         // Arrange
         var identity = new Identity("some-address", TierId.Parse("tier-id"));
-        var tierQuotaDefinition1 = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
-        var tierQuotaDefinition2 = new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
+        var tierQuotaDefinition1 = new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Day);
+        var tierQuotaDefinition2 = new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Day);
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition1);
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition2);
 
@@ -183,16 +179,16 @@ public class IdentityTests : AbstractTestsBase
         // Arrange
         var identity = CreateIdentity();
 
-        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Hour));
 
         // Act
         var metricCalculatorFactoryStub = new MetricCalculatorFactoryStub(new MetricCalculatorStub(0));
 
-        await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, metricCalculatorFactoryStub);
+        await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], metricCalculatorFactoryStub);
 
         // Assert
         identity.MetricStatuses.Should().HaveCount(1);
-        identity.MetricStatuses.First().MetricKey.Should().Be(MetricKey.NumberOfSentMessages);
+        identity.MetricStatuses.First().MetricKey.Should().Be(MetricKey.NUMBER_OF_SENT_MESSAGES);
     }
 
     [Fact]
@@ -202,12 +198,12 @@ public class IdentityTests : AbstractTestsBase
         var identity = CreateIdentity();
 
         // Act
-        await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, new MetricCalculatorFactoryStub());
+        await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub());
 
         // Assert
         identity.MetricStatuses.Should().HaveCount(1);
-        identity.MetricStatuses.First().MetricKey.Should().Be(MetricKey.NumberOfSentMessages);
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.Unexhausted);
+        identity.MetricStatuses.First().MetricKey.Should().Be(MetricKey.NUMBER_OF_SENT_MESSAGES);
+        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.UNEXHAUSTED);
     }
 
     [Fact]
@@ -215,15 +211,15 @@ public class IdentityTests : AbstractTestsBase
     {
         // Arrange
         var identity = CreateIdentity();
-        await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, new MetricCalculatorFactoryStub());
+        await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub());
 
         // Act
-        await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, new MetricCalculatorFactoryStub());
+        await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub());
 
         // Assert
         identity.MetricStatuses.Should().HaveCount(1);
-        identity.MetricStatuses.First().MetricKey.Should().Be(MetricKey.NumberOfSentMessages);
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.Unexhausted);
+        identity.MetricStatuses.First().MetricKey.Should().Be(MetricKey.NUMBER_OF_SENT_MESSAGES);
+        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.UNEXHAUSTED);
     }
 
     [Fact]
@@ -233,10 +229,10 @@ public class IdentityTests : AbstractTestsBase
         SystemTime.Set(DateTime.Parse("2023-01-15T12:00:00"));
 
         var identity = new Identity("some-address", TierId.Parse("tier-id"));
-        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Hour));
 
         // Act
-        await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, new MetricCalculatorFactoryStub(1));
+        await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(1));
 
         // Assert
         identity.MetricStatuses.First().IsExhaustedUntil.Should().BeEndOfHour();
@@ -249,11 +245,11 @@ public class IdentityTests : AbstractTestsBase
         SystemTime.Set(DateTime.Parse("2023-01-15T12:00:00"));
 
         var identity = CreateIdentity();
-        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
-        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 2, QuotaPeriod.Day));
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Hour));
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 2, QuotaPeriod.Day));
 
         // Act
-        await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, new MetricCalculatorFactoryStub(1));
+        await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(1));
 
         // Assert
         identity.MetricStatuses.First().IsExhaustedUntil.Should().BeEndOfHour();
@@ -261,11 +257,11 @@ public class IdentityTests : AbstractTestsBase
         // To make sure that the order of the added Quotas does not matter, we do the same with reversed order
         // Arrange
         identity = new Identity("some-address", TierId.Parse("tier-id"));
-        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 2, QuotaPeriod.Day));
-        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 2, QuotaPeriod.Day));
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Hour));
 
         // Act
-        await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, new MetricCalculatorFactoryStub(1));
+        await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(1));
 
         // Assert
         identity.MetricStatuses.First().IsExhaustedUntil.Should().BeEndOfHour();
@@ -278,11 +274,11 @@ public class IdentityTests : AbstractTestsBase
         SystemTime.Set(DateTime.Parse("2023-01-15T12:00:00"));
 
         var identity = CreateIdentity();
-        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
-        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day));
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Hour));
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Day));
 
         // Act
-        await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, new MetricCalculatorFactoryStub(1));
+        await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(1));
 
         // Assert
         identity.MetricStatuses.First().IsExhaustedUntil.Should().BeEndOfDay();
@@ -290,11 +286,11 @@ public class IdentityTests : AbstractTestsBase
         // To make sure that the order of the added Quotas does not matter, we do the same with reversed order
         // Arrange
         identity = CreateIdentity();
-        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day));
-        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Day));
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Hour));
 
         // Act
-        await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, new MetricCalculatorFactoryStub(1));
+        await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(1));
 
         // Assert
         identity.MetricStatuses.First().IsExhaustedUntil.Should().BeEndOfDay();
@@ -309,15 +305,15 @@ public class IdentityTests : AbstractTestsBase
         SystemTime.Set(DateTime.Parse("2023-01-15T12:00:00"));
 
         var identity = CreateIdentity();
-        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
-        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 2, QuotaPeriod.Day));
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Hour));
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 2, QuotaPeriod.Day));
 
         // first update; only the hourly Quota is exhausted
-        await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, new MetricCalculatorFactoryStub(1));
+        await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(1));
 
         // Act
         // second update; now the daily Quota is exhausted as well
-        await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, new MetricCalculatorFactoryStub(2));
+        await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(2));
 
         // Assert
         identity.MetricStatuses.First().IsExhaustedUntil.Should().BeEndOfDay();
@@ -330,17 +326,17 @@ public class IdentityTests : AbstractTestsBase
         SystemTime.Set(DateTime.Parse("2023-01-15T12:00:00"));
 
         var identity = CreateIdentity();
-        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Hour));
+        identity.AssignTierQuotaFromDefinition(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Hour));
 
         // first update; the Quota is exhausted
-        await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, new MetricCalculatorFactoryStub(1));
+        await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(1));
 
         // Act
         // second update; the Quota is not exhausted anymore
-        await identity.UpdateMetricStatuses(new[] { MetricKey.NumberOfSentMessages }, new MetricCalculatorFactoryStub(0));
+        await identity.UpdateMetricStatuses([MetricKey.NUMBER_OF_SENT_MESSAGES], new MetricCalculatorFactoryStub(0));
 
         // Assert
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.Unexhausted);
+        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.UNEXHAUSTED);
     }
 
     #endregion
@@ -351,7 +347,7 @@ public class IdentityTests : AbstractTestsBase
     public async Task Changing_Tier_updates_identity_with_new_tier()
     {
         // Arrange
-        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityAddress = CreateRandomIdentityAddress();
         var identity = new Identity(identityAddress, TierId.Parse("tier-id"));
         var newTier = new Tier(TierId.Parse("new-tier-id"), "New Tier");
 
@@ -372,12 +368,12 @@ public class IdentityTests : AbstractTestsBase
     {
         // Arrange
         var identity = CreateIdentity();
-        await identity.AddUnexhaustedTierQuotaToIdentity(MetricKey.NumberOfFiles, 1);
-        await identity.AddUnexhaustedTierQuotaToIdentity(MetricKey.NumberOfRelationships, 1);
+        await identity.AddUnexhaustedTierQuotaToIdentity(MetricKey.NUMBER_OF_FILES, 1);
+        await identity.AddUnexhaustedTierQuotaToIdentity(MetricKey.NUMBER_OF_RELATIONSHIPS, 1);
 
         var newTier = new Tier(TierId.Parse("new-tier-id"), "New Tier");
-        newTier.CreateQuota(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day);
-        newTier.CreateQuota(MetricKey.NumberOfRelationships, 1, QuotaPeriod.Day);
+        newTier.CreateQuota(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Day);
+        newTier.CreateQuota(MetricKey.NUMBER_OF_RELATIONSHIPS, 1, QuotaPeriod.Day);
 
         // Act
         await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(1), CancellationToken.None);
@@ -385,8 +381,8 @@ public class IdentityTests : AbstractTestsBase
         // Assert
         identity.TierQuotas.Should().HaveCount(2);
         identity.TierQuotas.Should()
-            .Contain(q => q.MetricKey == MetricKey.NumberOfSentMessages)
-            .And.Contain(q => q.MetricKey == MetricKey.NumberOfRelationships);
+            .Contain(q => q.MetricKey == MetricKey.NUMBER_OF_SENT_MESSAGES)
+            .And.Contain(q => q.MetricKey == MetricKey.NUMBER_OF_RELATIONSHIPS);
     }
 
     /**
@@ -400,26 +396,26 @@ public class IdentityTests : AbstractTestsBase
     {
         // Arrange
         var identity = CreateIdentity();
-        await identity.AddExhaustedTierQuotaToIdentity(MetricKey.NumberOfFiles, 1);
-        await identity.AddUnexhaustedTierQuotaToIdentity(MetricKey.NumberOfSentMessages, 3);
+        await identity.AddExhaustedTierQuotaToIdentity(MetricKey.NUMBER_OF_FILES, 1);
+        await identity.AddUnexhaustedTierQuotaToIdentity(MetricKey.NUMBER_OF_SENT_MESSAGES, 3);
 
         var newTier = new Tier(TierId.Parse("new-tier-id"), "New Tier");
-        newTier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfFiles, 3, QuotaPeriod.Day));
-        newTier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, 1, QuotaPeriod.Day));
+        newTier.Quotas.Add(new TierQuotaDefinition(MetricKey.NUMBER_OF_FILES, 3, QuotaPeriod.Day));
+        newTier.Quotas.Add(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, 1, QuotaPeriod.Day));
 
         // Act
         await identity.ChangeTier(newTier, new MetricCalculatorFactoryStub(2), CancellationToken.None);
 
         // Assert
-        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.Unexhausted);
-        identity.MetricStatuses.Second().IsExhaustedUntil.Should().NotBe(ExhaustionDate.Unexhausted);
+        identity.MetricStatuses.First().IsExhaustedUntil.Should().Be(ExhaustionDate.UNEXHAUSTED);
+        identity.MetricStatuses.Second().IsExhaustedUntil.Should().NotBe(ExhaustionDate.UNEXHAUSTED);
     }
 
     [Fact]
     public void Changing_Tier_fails_when_old_and_new_tier_match()
     {
         // Arrange
-        var identityAddress = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityAddress = CreateRandomIdentityAddress();
         var oldTier = new Tier(TierId.Parse("tier-id"), "Old Tier");
         var identity = new Identity(identityAddress, oldTier.Id);
 
@@ -435,7 +431,7 @@ public class IdentityTests : AbstractTestsBase
 
     private static Identity CreateIdentity()
     {
-        return new Identity(TestDataGenerator.CreateRandomIdentityAddress(), TierId.Parse("tier-id"));
+        return new Identity(CreateRandomIdentityAddress(), TierId.Parse("tier-id"));
     }
 }
 
@@ -487,6 +483,26 @@ public class MetricCalculatorFactoryStub : MetricCalculatorFactory
     {
         return _calculator;
     }
+
+    protected override IMetricCalculator CreateNumberOfStartedDeletionProcessesCalculator()
+    {
+        return _calculator;
+    }
+
+    protected override IMetricCalculator CreateNumberOfCreatedDatawalletModificationsCalculator()
+    {
+        return _calculator;
+    }
+
+    protected override IMetricCalculator CreateNumberOfCreatedDevicesCalculator()
+    {
+        return _calculator;
+    }
+
+    protected override IMetricCalculator CreateNumberOfCreatedChallengesCalculator()
+    {
+        return _calculator;
+    }
 }
 
 public class MetricCalculatorStub : IMetricCalculator
@@ -515,19 +531,13 @@ public static class IdentityExtensions
     {
         var tierQuotaDefinition = new TierQuotaDefinition(metricKey, max, QuotaPeriod.Day);
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
-        await identity.UpdateMetricStatuses(new[] { metricKey }, new MetricCalculatorFactoryStub(0));
-    }
-
-    public static async Task AddUnexhaustedIndividualQuotaToIdentity(this Identity identity, MetricKey metricKey, int max)
-    {
-        identity.CreateIndividualQuota(metricKey, max, QuotaPeriod.Day);
-        await identity.UpdateMetricStatuses(new[] { metricKey }, new MetricCalculatorFactoryStub(0));
+        await identity.UpdateMetricStatuses([metricKey], new MetricCalculatorFactoryStub(0));
     }
 
     public static async Task AddExhaustedTierQuotaToIdentity(this Identity identity, MetricKey metricKey, int max)
     {
         var tierQuotaDefinition = new TierQuotaDefinition(metricKey, max, QuotaPeriod.Day);
         identity.AssignTierQuotaFromDefinition(tierQuotaDefinition);
-        await identity.UpdateMetricStatuses(new[] { metricKey }, new MetricCalculatorFactoryStub(max));
+        await identity.UpdateMetricStatuses([metricKey], new MetricCalculatorFactoryStub(max));
     }
 }

@@ -11,24 +11,20 @@ $provider = switch ($provider) {
 }
 $repoRoot = git rev-parse --show-toplevel
 $dbContextName = "${moduleName}DbContext"
-$adminApiProject = "$repoRoot\AdminApi\src\AdminApi"
-$consumerApiProject = "$repoRoot\ConsumerApi"
-$startupProject = If ($moduleName -eq "AdminApi") { $adminApiProject } Else { $consumerApiProject }
+$startupProject = "$repoRoot\Applications\DatabaseMigrator\src\DatabaseMigrator"
 
 function AddMigration {    
     param (
         $provider
     )
 
+    New-Item env:"Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
+
     switch ($moduleName) {
         "AdminApi" {
-            New-Item env:"Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
-
-            $migrationProject = "$repoRoot\AdminApi\src\AdminApi.Infrastructure.Database.$provider"
+            $migrationProject = "$repoRoot\Applications\AdminApi\src\AdminApi.Infrastructure.Database.$provider"
         }
         Default {
-            New-Item env:"Modules__${moduleName}__Infrastructure__SqlDatabase__Provider" -Value $provider -Force | Out-Null
-
             $migrationProject = "$repoRoot\Modules\$moduleName\src\$moduleName.Infrastructure.Database.$provider"
         }
     }

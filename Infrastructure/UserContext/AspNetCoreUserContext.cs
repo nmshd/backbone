@@ -1,4 +1,3 @@
-using System.ComponentModel;
 using System.Security.Claims;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
@@ -29,7 +28,6 @@ public class AspNetCoreUserContext : IUserContext
     public IdentityAddress? GetAddressOrNull()
     {
         var address = GetHttpContext().User.FindFirstValue(ADDRESS_CLAIM);
-
         return address == null ? null : IdentityAddress.Parse(address);
     }
 
@@ -42,7 +40,6 @@ public class AspNetCoreUserContext : IUserContext
     public DeviceId? GetDeviceIdOrNull()
     {
         var deviceId = GetHttpContext().User.FindFirstValue(DEVICE_ID_CLAIM);
-
         return deviceId == null ? null : DeviceId.Parse(deviceId);
     }
 
@@ -55,7 +52,6 @@ public class AspNetCoreUserContext : IUserContext
     public string? GetUserIdOrNull()
     {
         var userId = GetHttpContext().User.FindFirstValue(USER_ID_CLAIM);
-
         return userId;
     }
 
@@ -68,31 +64,6 @@ public class AspNetCoreUserContext : IUserContext
     {
         var username = GetHttpContext().User.Identities.FirstOrDefault()?.Name;
         return username;
-    }
-
-    public IEnumerable<string> GetRoles()
-    {
-        var rolesClaim = GetHttpContext().User.FindFirstValue(ClaimTypes.Role);
-
-        if (rolesClaim == null) return new List<string>();
-
-        return rolesClaim.Split(' ');
-    }
-
-    public SubscriptionPlan GetSubscriptionPlan()
-    {
-        var subscriptionPlanClaim = GetHttpContext().User.FindFirstValue(SUBSCRIPTION_PLAN_CLAIM);
-
-        if (string.IsNullOrEmpty(subscriptionPlanClaim)) return SubscriptionPlan.Undefined;
-
-        switch (subscriptionPlanClaim)
-        {
-            case "free": return SubscriptionPlan.Free;
-            case "paid": return SubscriptionPlan.Paid;
-            default:
-                throw new InvalidEnumArgumentException(
-                    $"The value '{subscriptionPlanClaim}' is not a supported subscription plan.");
-        }
     }
 
     private HttpContext GetHttpContext()

@@ -1,4 +1,3 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Extensions;
@@ -21,7 +20,6 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
     private readonly IdentityAddress _activeIdentity;
 
     private readonly ISynchronizationDbContext _dbContext;
-    private readonly IMapper _mapper;
 
     private CancellationToken _cancellationToken;
     private Datawallet? _datawallet;
@@ -29,14 +27,12 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
     private StartSyncRunCommand _request = null!;
     private DatawalletVersion? _supportedDatawalletVersion;
 
-    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext, IMapper mapper)
+    public Handler(ISynchronizationDbContext dbContext, IUserContext userContext)
     {
         _dbContext = dbContext;
-        _mapper = mapper;
         _activeIdentity = userContext.GetAddress();
         _activeDevice = userContext.GetDeviceId();
     }
-
 
     public async Task<StartSyncRunResponse> Handle(StartSyncRunCommand request, CancellationToken cancellationToken)
     {
@@ -125,7 +121,7 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
     private async Task<SyncRun> CreateNewSyncRun(IEnumerable<ExternalEvent> events)
     {
         var newIndex = DetermineNextSyncRunIndex();
-        var syncRun = new SyncRun(newIndex, _request.Duration ?? DEFAULT_DURATION, _activeIdentity, _activeDevice, events, _mapper.Map<SyncRun.SyncRunType>(_request.Type));
+        var syncRun = new SyncRun(newIndex, _request.Duration ?? DEFAULT_DURATION, _activeIdentity, _activeDevice, events, MapSyncRunType(_request.Type));
 
         await _dbContext.Set<SyncRun>().AddAsync(syncRun, _cancellationToken);
         try
@@ -143,20 +139,23 @@ public class Handler : IRequestHandler<StartSyncRunCommand, StartSyncRunResponse
         return syncRun;
     }
 
+    private static SyncRun.SyncRunType MapSyncRunType(SyncRunDTO.SyncRunType type)
+    {
+        return type switch
+        {
+            SyncRunDTO.SyncRunType.DatawalletVersionUpgrade => SyncRun.SyncRunType.DatawalletVersionUpgrade,
+            SyncRunDTO.SyncRunType.ExternalEventSync => SyncRun.SyncRunType.ExternalEventSync,
+            _ => throw new Exception($"Unsupported Sync Run Type: {type}")
+        };
+    }
+
     private long DetermineNextSyncRunIndex()
     {
         return _previousSyncRun == null ? 0 : _previousSyncRun.Index + 1;
     }
 
-    private StartSyncRunResponse CreateResponse(StartSyncRunStatus status, SyncRun? newSyncRun = null)
+    private static StartSyncRunResponse CreateResponse(StartSyncRunStatus status, SyncRun? newSyncRun = null)
     {
-        var syncRunDTO = _mapper.Map<SyncRunDTO>(newSyncRun);
-
-        var response = new StartSyncRunResponse
-        {
-            Status = status,
-            SyncRun = syncRunDTO
-        };
-        return response;
+        return new StartSyncRunResponse(status, newSyncRun);
     }
 }

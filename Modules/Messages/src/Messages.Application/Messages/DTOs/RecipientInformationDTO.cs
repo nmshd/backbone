@@ -1,13 +1,19 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
 
 namespace Backbone.Modules.Messages.Application.Messages.DTOs;
 
-public class RecipientInformationDTO : IMapTo<RecipientInformation>
+public class RecipientInformationDTO
 {
-    public required IdentityAddress Address { get; set; }
-    public required byte[] EncryptedKey { get; set; }
+    public RecipientInformationDTO(RecipientInformation recipientInformation)
+    {
+        Address = recipientInformation.Address;
+        EncryptedKey = recipientInformation.EncryptedKey;
+        ReceivedAt = recipientInformation.ReceivedAt;
+        ReceivedByDevice = recipientInformation.ReceivedByDevice?.Value;
+    }
+
+    public string Address { get; set; }
+    public byte[] EncryptedKey { get; set; }
     public DateTime? ReceivedAt { get; set; }
-    public DeviceId? ReceivedByDevice { get; set; }
+    public string? ReceivedByDevice { get; set; }
 }

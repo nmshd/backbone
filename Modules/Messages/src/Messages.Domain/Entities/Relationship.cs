@@ -17,6 +17,15 @@ public class Relationship : Entity
         Status = default;
     }
 
+    private Relationship(RelationshipId id, IdentityAddress from, IdentityAddress to, DateTime createdAt, RelationshipStatus status)
+    {
+        Id = id;
+        From = from;
+        To = to;
+        CreatedAt = createdAt;
+        Status = status;
+    }
+
     public RelationshipId Id { get; }
 
     public IdentityAddress From { get; }
@@ -25,6 +34,25 @@ public class Relationship : Entity
     public DateTime CreatedAt { get; }
 
     public RelationshipStatus Status { get; }
+
+    public void EnsureSendingMessagesIsAllowed(IdentityAddress activeIdentity, int numberOfUnreceivedMessagesFromActiveIdentity, int maxNumberOfUnreceivedMessagesFromOneSender)
+    {
+        if (Status is not (RelationshipStatus.Active or RelationshipStatus.Terminated))
+            throw new DomainException(DomainErrors.RelationshipToRecipientNotActive(GetPeerOf(activeIdentity)));
+
+        if (numberOfUnreceivedMessagesFromActiveIdentity >= maxNumberOfUnreceivedMessagesFromOneSender)
+            throw new DomainException(DomainErrors.MaxNumberOfUnreceivedMessagesReached(To));
+    }
+
+    public static Relationship LoadForTesting(RelationshipId id, IdentityAddress from, IdentityAddress to, DateTime createdAt, RelationshipStatus status)
+    {
+        return new Relationship(id, from, to, createdAt, status);
+    }
+
+    private IdentityAddress GetPeerOf(IdentityAddress activeIdentity)
+    {
+        return From == activeIdentity ? To : From;
+    }
 }
 
 public enum RelationshipStatus
@@ -33,6 +61,7 @@ public enum RelationshipStatus
     Active = 20,
     Rejected = 30,
     Revoked = 40,
-    Terminating = 50,
-    Terminated = 60
+    Terminated = 50,
+    DeletionProposed = 60,
+    ReadyForDeletion = 70
 }

@@ -1,25 +1,25 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Messages.Domain.Ids;
+using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Messages.Infrastructure.Persistence.Database.Repository;
+
 public class RelationshipsRepository : IRelationshipsRepository
 {
-    private readonly MessagesDbContext _dbContext;
+    private readonly IQueryable<Relationship> _readOnlyRelationships;
 
     public RelationshipsRepository(MessagesDbContext dbContext)
     {
-        _dbContext = dbContext;
+        _readOnlyRelationships = dbContext.Relationships.AsNoTracking();
     }
 
-    public Task<RelationshipId?> GetIdOfRelationshipBetweenSenderAndRecipient(IdentityAddress sender, IdentityAddress recipient)
+    public Task<Relationship?> FindYoungestRelationship(IdentityAddress sender, IdentityAddress recipient, CancellationToken cancellationToken)
     {
-        return _dbContext.Relationships
-            .AsNoTracking()
+        return _readOnlyRelationships
             .WithParticipants(sender, recipient)
-            .Select(r => r.Id)
-            .FirstOrDefaultAsync();
+            .OrderByDescending(r => r.CreatedAt)
+            .FirstOrDefaultAsync(cancellationToken);
     }
 }

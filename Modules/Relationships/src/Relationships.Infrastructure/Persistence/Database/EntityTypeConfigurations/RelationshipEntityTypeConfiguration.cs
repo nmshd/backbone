@@ -1,5 +1,5 @@
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -11,14 +11,19 @@ public class RelationshipEntityTypeConfiguration : EntityEntityTypeConfiguration
     {
         base.Configure(builder);
 
-        builder.HasIndex(x => x.From);
-        builder.HasIndex(x => x.To);
+        base.Configure(builder);
+
+        builder.HasIndex(x => x.From).HasMethod("hash");
+        builder.HasIndex(x => x.To).HasMethod("hash");
 
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.RelationshipTemplateId);
         builder.Property(x => x.CreatedAt);
 
-        builder.Metadata.FindNavigation(nameof(Relationship.Changes))!.SetPropertyAccessMode(PropertyAccessMode.Field);
+        builder.Property(x => x.CreationContent);
+        builder.Property(x => x.CreationResponseContent);
+
+        builder.HasMany(r => r.AuditLog).WithOne().OnDelete(DeleteBehavior.Cascade);
     }
 }

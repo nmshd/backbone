@@ -5,38 +5,25 @@ using Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestDomainEventHandlers;
 using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestDomainEvents;
 using Backbone.Tooling.Extensions;
-using Backbone.UnitTestTools.BaseClasses;
 using Divergic.Logging.Xunit;
-using FluentAssertions;
-using FluentAssertions.Extensions;
+using FakeItEasy;
 using Google.Api.Gax;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.PubSub.V1;
 using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit;
+using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub;
 
-public class GoogleCloudPubSubTests : AbstractTestsBase
+public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
 {
     private readonly EventBusFactory _factory;
 
     public GoogleCloudPubSubTests(ITestOutputHelper output)
     {
         _factory = new EventBusFactory(output);
-    }
-
-    public override void Dispose()
-    {
-        _factory.Dispose();
-
-        TestEvent1DomainEventHandler1.Instances.Clear();
-        TestEvent1DomainEventHandler2.Instances.Clear();
-        TestEvent2DomainEventHandler.Instances.Clear();
-
-        base.Dispose();
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
@@ -132,105 +119,126 @@ public class GoogleCloudPubSubTests : AbstractTestsBase
         TestEvent1DomainEventHandler1.ShouldEventuallyHaveOneTriggeredInstance();
         TestEvent1DomainEventHandler2.ShouldNotHaveAnyTriggeredInstance();
     }
-}
 
-public class EventBusFactory : IDisposable
-{
-    public record Instance(
-        AutofacServiceProvider AutofacServiceProviders,
-        EventBusGoogleCloudPubSub EventBusClient,
-        DefaultGoogleCloudPubSubPersisterConnection PersisterConnection);
-
-    public const string PROJECT_ID = "nbp-nmshd-bkb";
-    public const string TOPIC_NAME = "test-topic";
-    public const string SUBSCRIPTION_NAME_PREFIX = "subscription1";
-
-    private readonly ICacheLogger<EventBusGoogleCloudPubSub> _logger;
-
-    public const string CONNECTION_INFO = "";
-
-    private readonly List<Instance> _instances = [];
-
-    public EventBusFactory(ITestOutputHelper output)
+    public override void Dispose()
     {
-        _logger = output.BuildLoggerFor<EventBusGoogleCloudPubSub>();
+        Task.Run(async () => await DisposeAsync()).GetAwaiter().GetResult();
     }
 
-    public EventBusGoogleCloudPubSub CreateEventBus(string subscriptionNamePrefix = SUBSCRIPTION_NAME_PREFIX)
+    public async ValueTask DisposeAsync()
     {
-        var builder = new ContainerBuilder();
-        builder.RegisterType<TestEvent1DomainEventHandler1>();
-        builder.RegisterType<TestEvent1DomainEventHandler2>();
+        await _factory.DisposeAsync();
 
-        var autofacServiceProvider = new AutofacServiceProvider(builder.Build());
-        var lifeTimeScope = autofacServiceProvider.GetRequiredService<ILifetimeScope>();
-        var eventBusSubscriptionsManager = new InMemoryEventBusSubscriptionsManager();
-        var persisterConnection = new DefaultGoogleCloudPubSubPersisterConnection(PROJECT_ID, TOPIC_NAME,
-            subscriptionNamePrefix, CONNECTION_INFO);
-        var eventBusClient = new EventBusGoogleCloudPubSub(persisterConnection, _logger,
-            eventBusSubscriptionsManager, lifeTimeScope, new HandlerRetryBehavior() { NumberOfRetries = 5, MinimumBackoff = 2, MaximumBackoff = 120 });
-
-        var instance = new Instance(autofacServiceProvider, eventBusClient, persisterConnection);
-        _instances.Add(instance);
-
-        return eventBusClient;
+        TestEvent1DomainEventHandler1.Instances.Clear();
+        TestEvent1DomainEventHandler2.Instances.Clear();
+        TestEvent2DomainEventHandler.Instances.Clear();
     }
 
-    public void Dispose()
+    private class EventBusFactory : IDisposable, IAsyncDisposable
     {
-        _logger.Dispose();
+        private record Instance(
+            AutofacServiceProvider AutofacServiceProviders,
+            EventBusGoogleCloudPubSub EventBusClient);
 
-        foreach (var instance in _instances)
+        private const string PROJECT_ID = "nbp-nmshd-bkb";
+        private const string TOPIC_NAME = "test-topic";
+        private const string SUBSCRIPTION_NAME_PREFIX = "subscription1";
+
+        private readonly ICacheLogger<EventBusGoogleCloudPubSub> _logger;
+
+        private const string CONNECTION_INFO = "";
+
+        private readonly List<Instance> _instances = [];
+
+        public EventBusFactory(ITestOutputHelper output)
         {
-            instance.AutofacServiceProviders.Dispose();
-            instance.EventBusClient.Dispose();
-            instance.PersisterConnection.Dispose();
+            _logger = output.BuildLoggerFor<EventBusGoogleCloudPubSub>();
         }
 
-        CleanupTestSubscriptions();
-    }
-
-    public void CleanupTestSubscriptions()
-    {
-        var gcpCredentials = CONNECTION_INFO.IsEmpty() ? null : GoogleCredential.FromJson(CONNECTION_INFO);
-
-        var subscriberServiceApiClient = new SubscriberServiceApiClientBuilder
+        public EventBusGoogleCloudPubSub CreateEventBus(string subscriptionNamePrefix = SUBSCRIPTION_NAME_PREFIX)
         {
-            GoogleCredential = gcpCredentials,
-            EmulatorDetection = EmulatorDetection.EmulatorOrProduction
-        }.Build();
+            var builder = new ContainerBuilder();
+            builder.RegisterType<TestEvent1DomainEventHandler1>();
+            builder.RegisterType<TestEvent1DomainEventHandler2>();
 
-        CleanupSubscription(
-            subscriberServiceApiClient,
-            SubscriptionName.FromProjectSubscription(PROJECT_ID, "subscription1-TestEvent1")
-        );
+            var autofacServiceProvider = new AutofacServiceProvider(builder.Build());
+            var lifeTimeScope = autofacServiceProvider.GetRequiredService<ILifetimeScope>();
+            var eventBusSubscriptionsManager = new InMemoryEventBusSubscriptionsManager();
+            var persisterConnection = new DefaultGoogleCloudPubSubPersisterConnection(A.Dummy<ILogger<DefaultGoogleCloudPubSubPersisterConnection>>(), PROJECT_ID, TOPIC_NAME,
+                subscriptionNamePrefix, CONNECTION_INFO);
+            var eventBusClient = new EventBusGoogleCloudPubSub(
+                persisterConnection,
+                _logger,
+                eventBusSubscriptionsManager,
+                lifeTimeScope,
+                new HandlerRetryBehavior { NumberOfRetries = 5, MinimumBackoff = 2, MaximumBackoff = 120 });
 
-        CleanupSubscription(
-            subscriberServiceApiClient,
-            SubscriptionName.FromProjectSubscription(PROJECT_ID, "subscription1-TestEvent2")
-        );
+            var instance = new Instance(autofacServiceProvider, eventBusClient);
+            _instances.Add(instance);
 
-        CleanupSubscription(
-            subscriberServiceApiClient,
-            SubscriptionName.FromProjectSubscription(PROJECT_ID, "subscription2-TestEvent1")
-        );
-
-        CleanupSubscription(
-            subscriberServiceApiClient,
-            SubscriptionName.FromProjectSubscription(PROJECT_ID, "subscription2-TestEvent2")
-        );
-    }
-
-    public void CleanupSubscription(SubscriberServiceApiClient subscriberServiceApiClient, SubscriptionName subscriptionName)
-    {
-        try
-        {
-            subscriberServiceApiClient.GetSubscription(subscriptionName);
-            subscriberServiceApiClient.DeleteSubscription(subscriptionName);
+            return eventBusClient;
         }
-        catch (RpcException ex)
+
+        public void Dispose()
         {
-            if (ex.Status.StatusCode != StatusCode.NotFound) throw;
+            Task.Run(async () => await DisposeAsync()).GetAwaiter().GetResult();
+        }
+
+        public async ValueTask DisposeAsync()
+        {
+            _logger.Dispose();
+
+            foreach (var instance in _instances)
+            {
+                instance.AutofacServiceProviders.Dispose();
+                await instance.EventBusClient.DisposeAsync();
+            }
+
+            CleanupTestSubscriptions();
+        }
+
+        private void CleanupTestSubscriptions()
+        {
+            var gcpCredentials = CONNECTION_INFO.IsEmpty() ? null : GoogleCredential.FromJson(CONNECTION_INFO);
+
+            var subscriberServiceApiClient = new SubscriberServiceApiClientBuilder
+            {
+                GoogleCredential = gcpCredentials,
+                EmulatorDetection = EmulatorDetection.EmulatorOrProduction
+            }.Build();
+
+            CleanupSubscription(
+                subscriberServiceApiClient,
+                SubscriptionName.FromProjectSubscription(PROJECT_ID, "subscription1-TestEvent1")
+            );
+
+            CleanupSubscription(
+                subscriberServiceApiClient,
+                SubscriptionName.FromProjectSubscription(PROJECT_ID, "subscription1-TestEvent2")
+            );
+
+            CleanupSubscription(
+                subscriberServiceApiClient,
+                SubscriptionName.FromProjectSubscription(PROJECT_ID, "subscription2-TestEvent1")
+            );
+
+            CleanupSubscription(
+                subscriberServiceApiClient,
+                SubscriptionName.FromProjectSubscription(PROJECT_ID, "subscription2-TestEvent2")
+            );
+        }
+
+        private static void CleanupSubscription(SubscriberServiceApiClient subscriberServiceApiClient, SubscriptionName subscriptionName)
+        {
+            try
+            {
+                subscriberServiceApiClient.GetSubscription(subscriptionName);
+                subscriberServiceApiClient.DeleteSubscription(subscriptionName);
+            }
+            catch (RpcException ex)
+            {
+                if (ex.Status.StatusCode != StatusCode.NotFound) throw;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Domain;
+using Backbone.Tooling;
 
 namespace Backbone.BuildingBlocks.API;
 
@@ -11,7 +12,7 @@ public class HttpError
         Code = code;
         Message = message;
         Docs = docs;
-        Time = DateTime.UtcNow;
+        Time = SystemTime.UtcNow;
         Data = data;
     }
 
@@ -155,11 +156,6 @@ public struct HttpErrorId
     }
 
     public override string ToString()
-    {
-        return StringValue;
-    }
-
-    public string ToString(string format, IFormatProvider formatProvider)
     {
         return StringValue;
     }

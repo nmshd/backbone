@@ -5,4 +5,5 @@ namespace Backbone.Modules.Devices.Domain.DomainEvents.Incoming.ExternalEventCre
 public class ExternalEventCreatedDomainEvent : DomainEvent
 {
     public required string Owner { get; set; }
+    public required bool IsDeliveryBlocked { get; set; }
 }

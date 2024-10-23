@@ -3,7 +3,9 @@ using System.Text;
 using Autofac;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Domain.Events;
+using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
+using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Polly;
@@ -76,9 +78,9 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         var eventName = @event.GetType().Name;
 
-        _logger.LogInformation("Creating RabbitMQ channel to publish event: '{EventId}' ({EventName})", @event.DomainEventId, eventName);
+        _logger.LogInformation("Creating RabbitMQ channel to publish a '{EventName}'.", eventName);
 
-        _logger.LogInformation("Declaring RabbitMQ exchange to publish event: '{EventId}'", @event.DomainEventId);
+        _logger.LogInformation("Declaring RabbitMQ exchange to publish a '{EventName}'.", eventName);
 
         var message = JsonConvert.SerializeObject(@event, new JsonSerializerSettings
         {
@@ -89,12 +91,14 @@ public class EventBusRabbitMq : IEventBus, IDisposable
 
         policy.Execute(() =>
         {
-            _logger.LogDebug("Publishing event to RabbitMQ: '{EventId}'", @event.DomainEventId);
+            _logger.LogDebug("Publishing a {EventName} to RabbitMQ.", eventName);
 
             using var channel = _persistentConnection.CreateModel();
             var properties = channel.CreateBasicProperties();
             properties.DeliveryMode = 2; // persistent
             properties.MessageId = @event.DomainEventId;
+
+            properties.CorrelationId = CustomLogContext.GetCorrelationId();
 
             channel.BasicPublish(BROKER_NAME,
                 eventName,
@@ -102,7 +106,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
                 properties,
                 body);
 
-            _logger.PublishedDomainEvent(@event.DomainEventId);
+            _logger.PublishedDomainEvent();
         });
     }
 
@@ -161,11 +165,18 @@ public class EventBusRabbitMq : IEventBus, IDisposable
         {
             var eventName = eventArgs.RoutingKey;
             var message = Encoding.UTF8.GetString(eventArgs.Body.ToArray());
+
             try
             {
-                await ProcessEvent(eventName, message);
+                var correlationId = eventArgs.BasicProperties.CorrelationId;
+                correlationId = correlationId.IsNullOrEmpty() ? Guid.NewGuid().ToString() : correlationId;
 
-                channel.BasicAck(eventArgs.DeliveryTag, false);
+                using (CustomLogContext.SetCorrelationId(correlationId))
+                {
+                    await ProcessEvent(eventName, message);
+
+                    channel.BasicAck(eventArgs.DeliveryTag, false);
+                }
             }
             catch (Exception ex)
             {
@@ -228,7 +239,7 @@ public class EventBusRabbitMq : IEventBus, IDisposable
     }
 }
 
-internal static partial class EventBusRabbitMQLogs
+internal static partial class EventBusRabbitMqLogs
 {
     [LoggerMessage(
         EventId = 411326,
@@ -241,8 +252,8 @@ internal static partial class EventBusRabbitMQLogs
         EventId = 585231,
         EventName = "EventBusRabbitMQ.PublishedDomainEvent",
         Level = LogLevel.Debug,
-        Message = "Successfully published event with id '{domainEventId}'.")]
-    public static partial void PublishedDomainEvent(this ILogger logger, string domainEventId);
+        Message = "Successfully published the event.")]
+    public static partial void PublishedDomainEvent(this ILogger logger);
 
     [LoggerMessage(
         EventId = 702822,

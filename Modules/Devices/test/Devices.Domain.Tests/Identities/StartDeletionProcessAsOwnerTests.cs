@@ -5,10 +5,6 @@ using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Domain.Tests.Identities.TestDoubles;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -134,7 +130,7 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
 
     private static Identity CreateIdentity()
     {
-        var address = IdentityAddress.Create(Array.Empty<byte>(), "id1");
-        return new Identity("", address, Array.Empty<byte>(), TierId.Generate(), 1);
+        var address = IdentityAddress.Create([], "prod.enmeshed.eu");
+        return new Identity("", address, [], TierId.Generate(), 1, CommunicationLanguage.DEFAULT_LANGUAGE);
     }
 }

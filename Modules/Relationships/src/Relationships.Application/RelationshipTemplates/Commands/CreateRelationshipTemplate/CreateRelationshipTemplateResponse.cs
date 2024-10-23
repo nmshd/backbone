@@ -1,11 +1,15 @@
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Mapping;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
 
-public class CreateRelationshipTemplateResponse : IMapTo<RelationshipTemplate>
+public class CreateRelationshipTemplateResponse
 {
-    public required RelationshipTemplateId Id { get; set; }
-    public required DateTime CreatedAt { get; set; }
+    public CreateRelationshipTemplateResponse(RelationshipTemplate relationshipTemplate)
+    {
+        Id = relationshipTemplate.Id;
+        CreatedAt = relationshipTemplate.CreatedAt;
+    }
+
+    public string Id { get; set; }
+    public DateTime CreatedAt { get; set; }
 }

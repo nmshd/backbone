@@ -1,7 +1,7 @@
-using AutoMapper;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
@@ -9,27 +9,28 @@ namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Comma
 public class Handler : IRequestHandler<CreateRelationshipTemplateCommand, CreateRelationshipTemplateResponse>
 {
     private readonly IRelationshipTemplatesRepository _relationshipTemplatesRepository;
-    private readonly IMapper _mapper;
     private readonly IUserContext _userContext;
 
-    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository, IUserContext userContext, IMapper mapper)
+    public Handler(IRelationshipTemplatesRepository relationshipTemplatesRepository, IUserContext userContext)
     {
         _relationshipTemplatesRepository = relationshipTemplatesRepository;
         _userContext = userContext;
-        _mapper = mapper;
     }
 
     public async Task<CreateRelationshipTemplateResponse> Handle(CreateRelationshipTemplateCommand request, CancellationToken cancellationToken)
     {
+        var forIdentity = request.ForIdentity == null ? null : IdentityAddress.Parse(request.ForIdentity);
         var template = new RelationshipTemplate(
             _userContext.GetAddress(),
             _userContext.GetDeviceId(),
             request.MaxNumberOfAllocations,
             request.ExpiresAt,
-            request.Content);
+            request.Content,
+            forIdentity,
+            request.Password);
 
         await _relationshipTemplatesRepository.Add(template, cancellationToken);
 
-        return _mapper.Map<CreateRelationshipTemplateResponse>(template);
+        return new CreateRelationshipTemplateResponse(template);
     }
 }

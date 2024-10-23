@@ -13,6 +13,7 @@ public class IdentityDeletionProcess : Entity
     private IdentityDeletionProcess()
     {
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
+        IdentityAddress = null!;
         _auditLog = null!;
         Id = null!;
     }
@@ -20,6 +21,7 @@ public class IdentityDeletionProcess : Entity
     private IdentityDeletionProcess(IdentityAddress createdBy, DeletionProcessStatus status)
     {
         Id = IdentityDeletionProcessId.Generate();
+        IdentityAddress = null!;
         CreatedAt = SystemTime.UtcNow;
         Status = status;
 
@@ -31,6 +33,7 @@ public class IdentityDeletionProcess : Entity
     private IdentityDeletionProcess(IdentityAddress createdBy, DeviceId createdByDevice)
     {
         Id = IdentityDeletionProcessId.Generate();
+        IdentityAddress = null!;
         CreatedAt = SystemTime.UtcNow;
 
         ApproveInternally(createdBy, createdByDevice);
@@ -39,9 +42,11 @@ public class IdentityDeletionProcess : Entity
     }
 
     public IdentityDeletionProcessId Id { get; }
+
+    private IdentityAddress IdentityAddress { get; }
+
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
-    public DateTime DeletionStartedAt { get; private set; }
     public DateTime CreatedAt { get; }
     public DateTime ApprovalPeriodEndsAt => CreatedAt.AddDays(IdentityDeletionConfiguration.LengthOfApprovalPeriod);
 
@@ -64,17 +69,11 @@ public class IdentityDeletionProcess : Entity
     public DateTime? GracePeriodReminder2SentAt { get; private set; }
     public DateTime? GracePeriodReminder3SentAt { get; private set; }
 
+    public DateTime? DeletionStartedAt { get; private set; }
+
     public bool HasApprovalPeriodExpired => Status == DeletionProcessStatus.WaitingForApproval && SystemTime.UtcNow >= ApprovalPeriodEndsAt;
 
     public bool HasGracePeriodExpired => Status == DeletionProcessStatus.Approved && SystemTime.UtcNow >= GracePeriodEndsAt;
-
-    private void ApproveInternally(IdentityAddress address, DeviceId createdByDevice)
-    {
-        ApprovedAt = SystemTime.UtcNow;
-        ApprovedByDevice = createdByDevice;
-        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
-        ChangeStatus(DeletionProcessStatus.Approved, address, address);
-    }
 
     public static IdentityDeletionProcess StartAsSupport(IdentityAddress createdBy)
     {
@@ -148,6 +147,14 @@ public class IdentityDeletionProcess : Entity
 
         ApproveInternally(address, approvedByDevice);
         _auditLog.Add(IdentityDeletionProcessAuditLogEntry.ProcessApproved(Id, address, approvedByDevice));
+    }
+
+    private void ApproveInternally(IdentityAddress address, DeviceId createdByDevice)
+    {
+        ApprovedAt = SystemTime.UtcNow;
+        ApprovedByDevice = createdByDevice;
+        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
+        ChangeStatus(DeletionProcessStatus.Approved, address, address);
     }
 
     public void Reject(IdentityAddress address, DeviceId rejectedByDevice)

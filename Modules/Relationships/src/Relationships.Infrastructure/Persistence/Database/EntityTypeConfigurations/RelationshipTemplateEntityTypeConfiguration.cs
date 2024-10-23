@@ -1,5 +1,5 @@
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database.EntityTypeConfigurations;
-using Backbone.Modules.Relationships.Domain.Entities;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -9,6 +9,8 @@ public class RelationshipTemplateEntityTypeConfiguration : EntityEntityTypeConfi
 {
     public override void Configure(EntityTypeBuilder<RelationshipTemplate> builder)
     {
+        base.Configure(builder);
+
         base.Configure(builder);
 
         builder
@@ -23,5 +25,9 @@ public class RelationshipTemplateEntityTypeConfiguration : EntityEntityTypeConfi
             .WithOne()
             .HasForeignKey(x => x.RelationshipTemplateId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        builder
+            .Property(x => x.Password)
+            .HasMaxLength(RelationshipTemplate.MAX_PASSWORD_LENGTH);
     }
 }

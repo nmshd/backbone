@@ -7,7 +7,7 @@ using Org.BouncyCastle.Security;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 
-public class JwtGenerator : IJwtGenerator
+public sealed class JwtGenerator : IJwtGenerator
 {
     private readonly ApnsJwtCache _jwtCache;
 
@@ -27,7 +27,7 @@ public class JwtGenerator : IJwtGenerator
         }
     }
 
-    protected virtual Jwt CreateNew(string privateKey, string keyId, string teamId)
+    private Jwt CreateNew(string privateKey, string keyId, string teamId)
     {
         var keyParams = (ECPrivateKeyParameters)PrivateKeyFactory.CreateKey(Convert.FromBase64String(privateKey));
         var q = keyParams.Parameters.G.Multiply(keyParams.D).Normalize();

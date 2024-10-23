@@ -1,22 +1,17 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.FinalizeSyncRun;
 
 public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
 {
-    private readonly IdentityAddress _activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
-    private readonly DeviceId _activeDevice = TestDataGenerator.CreateRandomDeviceId();
+    private readonly IdentityAddress _activeIdentity = CreateRandomIdentityAddress();
+    private readonly DeviceId _activeDevice = CreateRandomDeviceId();
 
     public HandlerTests()
     {
@@ -29,8 +24,8 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         // Arrange
         var syncRun = SyncRunBuilder
             .Build()
-            .CreatedBy(TestDataGenerator.CreateRandomIdentityAddress())
-            .CreatedByDevice(TestDataGenerator.CreateRandomDeviceId())
+            .CreatedBy(CreateRandomIdentityAddress())
+            .CreatedByDevice(CreateRandomDeviceId())
             .Create();
         _arrangeContext.SaveEntity(syncRun);
 
@@ -115,8 +110,8 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
     public async Task Missing_results_lead_to_SyncErrors()
     {
         // Arrange
-        var item1 = ExternalEventBuilder.Build().WithOwner(_activeIdentity).Create();
-        var item2 = ExternalEventBuilder.Build().WithOwner(_activeIdentity).Create();
+        var item1 = ExternalEventBuilder.Build().WithOwner(_activeIdentity).WithIndex(0).Create();
+        var item2 = ExternalEventBuilder.Build().WithOwner(_activeIdentity).WithIndex(1).Create();
         var items = _arrangeContext.SaveEntities(item1, item2);
 
         var syncRun = SyncRunBuilder
@@ -232,7 +227,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         var syncRun = SyncRunBuilder
             .Build()
             .CreatedBy(_activeIdentity)
-            .CreatedByDevice(TestDataGenerator.CreateRandomDeviceId())
+            .CreatedByDevice(CreateRandomDeviceId())
             .Running()
             .Create();
         _arrangeContext.SaveEntity(syncRun);
@@ -254,11 +249,7 @@ public class HandlerTests : RequestHandlerTestsBase<SynchronizationDbContext>
         A.CallTo(() => userContext.GetAddress()).Returns(activeIdentity);
         A.CallTo(() => userContext.GetDeviceId()).Returns(activeDevice);
 
-        var mapper = AutoMapperProfile.CreateMapper();
-
-        var eventBus = A.Fake<IEventBus>();
-
-        return new Handler(_actContext, userContext, mapper, eventBus);
+        return new Handler(_actContext, userContext);
     }
 
     #endregion

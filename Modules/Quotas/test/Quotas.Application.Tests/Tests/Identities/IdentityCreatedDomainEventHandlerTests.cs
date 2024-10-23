@@ -6,10 +6,8 @@ using Backbone.Modules.Quotas.Domain.Aggregates.Metrics;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.IdentityCreated;
 using Backbone.Modules.Quotas.Domain.Metrics;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
-using Xunit;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.Identities;
 
@@ -42,8 +40,8 @@ public class IdentityCreatedDomainEventHandlerTests : AbstractTestsBase
 
         const int max = 5;
         var tier = new Tier(tierId, "some-tier-name");
-        tier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, max, QuotaPeriod.Month));
-        tier.Quotas.Add(new TierQuotaDefinition(MetricKey.NumberOfSentMessages, max, QuotaPeriod.Week));
+        tier.Quotas.Add(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, max, QuotaPeriod.Month));
+        tier.Quotas.Add(new TierQuotaDefinition(MetricKey.NUMBER_OF_SENT_MESSAGES, max, QuotaPeriod.Week));
 
         var mockIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var stubTiersRepository = new FindTiersStubRepository(tier);
@@ -57,7 +55,7 @@ public class IdentityCreatedDomainEventHandlerTests : AbstractTestsBase
         A.CallTo(() => mockIdentitiesRepository.Add(A<Identity>.That.Matches(i => i.TierQuotas.Count == 2), CancellationToken.None)).MustHaveHappened();
     }
 
-    private IdentityCreatedDomainEventHandler CreateHandler(IIdentitiesRepository identities, FindTiersStubRepository tiers)
+    private static IdentityCreatedDomainEventHandler CreateHandler(IIdentitiesRepository identities, FindTiersStubRepository tiers)
     {
         var logger = A.Fake<ILogger<IdentityCreatedDomainEventHandler>>();
         var metricCalculatorFactory = A.Fake<MetricCalculatorFactory>();

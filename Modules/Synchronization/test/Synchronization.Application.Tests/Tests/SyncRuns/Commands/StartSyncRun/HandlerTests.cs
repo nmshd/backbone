@@ -2,18 +2,14 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.StartSyncRun;
 using Backbone.Modules.Synchronization.Application.SyncRuns.DTOs;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using FluentAssertions;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.SyncRuns.Commands.StartSyncRun;
 
@@ -21,8 +17,8 @@ public class HandlerTests : AbstractTestsBase
 {
     private const int DATAWALLET_VERSION = 1;
     private readonly SynchronizationDbContext _actContext;
-    private readonly DeviceId _activeDevice = TestDataGenerator.CreateRandomDeviceId();
-    private readonly IdentityAddress _activeIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+    private readonly DeviceId _activeDevice = CreateRandomDeviceId();
+    private readonly IdentityAddress _activeIdentity = CreateRandomIdentityAddress();
     private readonly SynchronizationDbContext _arrangeContext;
     private readonly SynchronizationDbContext _assertionContext;
     private readonly DbContextOptions<SynchronizationDbContext> _dbOptions;
@@ -120,10 +116,10 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var handler = CreateHandler(_activeIdentity);
 
-        var itemWithoutErrors = ExternalEventBuilder.Build().WithOwner(_activeIdentity).Create();
+        var itemWithoutErrors = ExternalEventBuilder.Build().WithOwner(_activeIdentity).WithIndex(0).Create();
         _arrangeContext.SaveEntity(itemWithoutErrors);
 
-        var itemWithMaxErrorCount = ExternalEventBuilder.Build().WithOwner(_activeIdentity).WithMaxErrorCount().Create();
+        var itemWithMaxErrorCount = ExternalEventBuilder.Build().WithOwner(_activeIdentity).WithIndex(1).WithMaxErrorCount().Create();
         _arrangeContext.SaveEntity(itemWithMaxErrorCount);
 
 
@@ -132,7 +128,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Assert
-        var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId == response.SyncRun.Id);
+        var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId! == response.SyncRun!.Id);
         itemsOfSyncRun.Should().Contain(i => i.Id == itemWithoutErrors.Id);
         itemsOfSyncRun.Should().NotContain(i => i.Id == itemWithMaxErrorCount.Id);
     }
@@ -162,7 +158,7 @@ public class HandlerTests : AbstractTestsBase
         var itemOfActiveIdentity = ExternalEventBuilder.Build().WithOwner(_activeIdentity).Create();
         _arrangeContext.SaveEntity(itemOfActiveIdentity);
 
-        var itemOfOtherIdentity = ExternalEventBuilder.Build().WithOwner(TestDataGenerator.CreateRandomIdentityAddress()).Create();
+        var itemOfOtherIdentity = ExternalEventBuilder.Build().WithOwner(CreateRandomIdentityAddress()).Create();
         _arrangeContext.SaveEntity(itemOfOtherIdentity);
 
 
@@ -171,7 +167,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Assert
-        var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId == response.SyncRun.Id);
+        var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId! == response.SyncRun!.Id);
         itemsOfSyncRun.Should().Contain(i => i.Id == itemOfActiveIdentity.Id);
         itemsOfSyncRun.Should().NotContain(i => i.Id == itemOfOtherIdentity.Id);
     }
@@ -182,8 +178,8 @@ public class HandlerTests : AbstractTestsBase
         // Arrange
         var handler = CreateHandler(_activeIdentity);
 
-        var unsyncedItem = _arrangeContext.SaveEntity(ExternalEventBuilder.Build().WithOwner(_activeIdentity).Create());
-        var syncedItem = _arrangeContext.SaveEntity(ExternalEventBuilder.Build().WithOwner(_activeIdentity).AlreadySynced().Create());
+        var unsyncedItem = _arrangeContext.SaveEntity(ExternalEventBuilder.Build().WithOwner(_activeIdentity).WithIndex(0).Create());
+        var syncedItem = _arrangeContext.SaveEntity(ExternalEventBuilder.Build().WithOwner(_activeIdentity).WithIndex(1).AlreadySynced().Create());
 
 
         // Act
@@ -191,7 +187,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         // Assert
-        var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId == response.SyncRun.Id);
+        var itemsOfSyncRun = _assertionContext.ExternalEvents.Where(i => i.SyncRunId! == response.SyncRun!.Id);
         itemsOfSyncRun.Should().Contain(i => i.Id == unsyncedItem.Id);
         itemsOfSyncRun.Should().NotContain(i => i.Id == syncedItem.Id);
     }
@@ -229,7 +225,7 @@ public class HandlerTests : AbstractTestsBase
         canceledSyncRun.FinalizedAt.Should().NotBeNull();
 
         var externalEventOfCanceledSyncRun = _assertionContext.ExternalEvents.First(i => i.Id == externalEvent.Id);
-        externalEventOfCanceledSyncRun.SyncRunId.Should().Be(response.SyncRun.Id);
+        externalEventOfCanceledSyncRun.SyncRunId?.Value.Should().Be(response.SyncRun!.Id);
         externalEventOfCanceledSyncRun.SyncErrorCount.Should().Be(1);
     }
 
@@ -252,7 +248,7 @@ public class HandlerTests : AbstractTestsBase
 
     private Handler CreateHandler(IdentityAddress activeIdentity)
     {
-        var activeDevice = TestDataGenerator.CreateRandomDeviceId();
+        var activeDevice = CreateRandomDeviceId();
         var handler = CreateHandler(activeIdentity, activeDevice);
         return handler;
     }
@@ -263,9 +259,7 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => userContext.GetAddress()).Returns(activeIdentity);
         A.CallTo(() => userContext.GetDeviceId()).Returns(createdByDevice);
 
-        var mapper = AutoMapperProfile.CreateMapper();
-
-        return new Handler(dbContext ?? _actContext, userContext, mapper);
+        return new Handler(dbContext ?? _actContext, userContext);
     }
 
     #endregion

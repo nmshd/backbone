@@ -359,8 +359,11 @@ out.yaml
 # helm
 **/Chart.lock
 
-#Performance Tests
+# npm
 dist
+
+# Performance Tests
+scripts/windows/dumps/dump-files
 
 # ci
 .ci/package-lock.json
@@ -371,4 +374,7 @@ dist
 **/SpecFlow/
 
 # flutter
-!AdminUi/packages/*
+!Applications/AdminUi/packages/*
+
+# Hardlinks for appsettings.override.json
+Applications/**/appsettings.override.json

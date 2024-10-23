@@ -10,29 +10,30 @@ public class ExternalEvent : Entity
     private readonly List<SyncError> _errors = [];
 
     // ReSharper disable once UnusedMember.Local
-    private ExternalEvent()
+    protected ExternalEvent()
     {
+        Context = null!;
         // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         Id = null!;
         Owner = null!;
         Payload = null!;
     }
 
-    public ExternalEvent(ExternalEventType type, IdentityAddress owner, long index, object payload)
+    protected ExternalEvent(ExternalEventType type, IdentityAddress owner, object payload, string? context = null)
     {
         Id = ExternalEventId.New();
         Type = type;
-        Index = index;
         Owner = owner;
         CreatedAt = SystemTime.UtcNow;
         Payload = payload;
+        Context = context;
 
         RaiseDomainEvent(new ExternalEventCreatedDomainEvent(this));
     }
 
     public ExternalEventId Id { get; }
     public ExternalEventType Type { get; }
-    public long Index { get; }
+    public long Index { get; private set; }
 
     public IdentityAddress Owner { get; }
     public DateTime CreatedAt { get; }
@@ -43,6 +44,24 @@ public class ExternalEvent : Entity
     public SyncRun? SyncRun { get; private set; }
     public SyncRunId? SyncRunId { get; private set; }
     public IReadOnlyCollection<SyncError> Errors => _errors;
+
+    public string? Context { get; }
+    public bool IsDeliveryBlocked { get; private set; }
+
+    public void UpdateIndex(long newIndex)
+    {
+        Index = newIndex;
+    }
+
+    public void BlockDelivery()
+    {
+        IsDeliveryBlocked = true;
+    }
+
+    public void UnblockDelivery()
+    {
+        IsDeliveryBlocked = false;
+    }
 
     public void AssignToSyncRun(SyncRun syncRun)
     {
@@ -61,12 +80,14 @@ public class ExternalEvent : Entity
 public enum ExternalEventType
 {
     MessageReceived = 0,
-    MessageDelivered = 1,
-    RelationshipChangeCreated = 2,
-    RelationshipChangeCompleted = 3,
-    IdentityDeletionProcessStarted = 4,
-    IdentityDeletionProcessStatusChanged = 5,
-    PeerToBeDeleted = 6,
-    PeerDeletionCancelled = 7,
-    PeerDeleted = 8
+
+    RelationshipStatusChanged = 10,
+    RelationshipReactivationRequested = 12,
+    RelationshipReactivationCompleted = 13,
+
+    IdentityDeletionProcessStarted = 20,
+    IdentityDeletionProcessStatusChanged = 21,
+    PeerToBeDeleted = 22,
+    PeerDeletionCancelled = 23,
+    PeerDeleted = 24
 }

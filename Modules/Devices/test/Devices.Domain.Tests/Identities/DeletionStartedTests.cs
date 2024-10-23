@@ -2,10 +2,6 @@
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.FluentAssertions.Extensions;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
@@ -24,7 +20,7 @@ public class DeletionStartedTests : AbstractTestsBase
 
         // Assert
         identity.Status.Should().Be(IdentityStatus.Deleting);
-        identity.DeletionProcesses.First().DeletionStartedAt.Should().Be(SystemTime.UtcNow);
+        identity.DeletionProcesses[0].DeletionStartedAt.Should().Be(SystemTime.UtcNow);
     }
 
     [Fact]

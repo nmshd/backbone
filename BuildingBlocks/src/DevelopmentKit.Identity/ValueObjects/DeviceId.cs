@@ -11,7 +11,7 @@ public record DeviceId : StronglyTypedId
 {
     public const int MAX_LENGTH = DEFAULT_MAX_LENGTH;
 
-    private const string PREFIX = "DVC";
+    public const string PREFIX = "DVC";
 
     private static readonly StronglyTypedIdHelpers UTILS = new(PREFIX, DEFAULT_VALID_CHARS, MAX_LENGTH);
 

@@ -1,16 +1,12 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Synchronization.Application.AutoMapper;
 using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
-using FluentAssertions;
 using FluentAssertions.Execution;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Queries.GetDatawalletModifications;
 
@@ -18,7 +14,7 @@ public class HandlerTests : AbstractTestsBase
 {
     private const ushort DATAWALLET_VERSION = 1;
 
-    private static readonly IdentityAddress ACTIVE_IDENTITY = TestDataGenerator.CreateRandomIdentityAddress();
+    private static readonly IdentityAddress ACTIVE_IDENTITY = CreateRandomIdentityAddress();
 
     private readonly SynchronizationDbContext _arrangeContext;
     private readonly SynchronizationDbContext _actContext;
@@ -108,12 +104,12 @@ public class HandlerTests : AbstractTestsBase
         datawallet.AddModification(new DatawalletExtensions.AddModificationParameters
         {
             Type = DatawalletModificationType.Update,
-            ObjectIdentifier = "id1"
+            ObjectIdentifier = "oid1"
         });
         datawallet.AddModification(new DatawalletExtensions.AddModificationParameters
         {
             Type = DatawalletModificationType.Update,
-            ObjectIdentifier = "id2"
+            ObjectIdentifier = "oid2"
         });
         _arrangeContext.SaveEntity(datawallet);
 
@@ -153,7 +149,7 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         _arrangeContext.SaveEntity(CreateDatawalletForActiveIdentity());
-        var anotherIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+        var anotherIdentity = CreateRandomIdentityAddress();
         var datawallet = CreateDatawalletFor(anotherIdentity);
         datawallet.AddModification(new DatawalletExtensions.AddModificationParameters());
         _arrangeContext.SaveEntity(datawallet);
@@ -171,73 +167,73 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         var datawalletOfActiveIdentity = CreateDatawalletForActiveIdentity();
-        var anotherIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+        var anotherIdentity = CreateRandomIdentityAddress();
         var datawalletOfAnotherIdentity = CreateDatawalletFor(anotherIdentity);
         var modificationOfAnotherIdentity = datawalletOfAnotherIdentity.AddModification(new DatawalletExtensions.AddModificationParameters());
 
         var createId1Category1 = datawalletOfActiveIdentity.AddModification(new DatawalletExtensions.AddModificationParameters
         {
             Type = DatawalletModificationType.Create,
-            ObjectIdentifier = "id1",
+            ObjectIdentifier = "oid1",
             PayloadCategory = "category1"
         });
         var createId1Category2 = datawalletOfActiveIdentity.AddModification(new DatawalletExtensions.AddModificationParameters
         {
             Type = DatawalletModificationType.Create,
-            ObjectIdentifier = "id1",
+            ObjectIdentifier = "oid1",
             PayloadCategory = "category2"
         });
         var createId2Category1 = datawalletOfActiveIdentity.AddModification(new DatawalletExtensions.AddModificationParameters
         {
             Type = DatawalletModificationType.Create,
-            ObjectIdentifier = "id2",
+            ObjectIdentifier = "oid2",
             PayloadCategory = "category1"
         });
         var createId2Category2 = datawalletOfActiveIdentity.AddModification(new DatawalletExtensions.AddModificationParameters
         {
             Type = DatawalletModificationType.Create,
-            ObjectIdentifier = "id2",
+            ObjectIdentifier = "oid2",
             PayloadCategory = "category2"
         });
         var firstUpdateId1Category1 = datawalletOfActiveIdentity.AddModification(new DatawalletExtensions.AddModificationParameters
         {
             Type = DatawalletModificationType.Update,
-            ObjectIdentifier = "id1",
+            ObjectIdentifier = "oid1",
             PayloadCategory = "category1"
         });
         var updateId1Category2 = datawalletOfActiveIdentity.AddModification(new DatawalletExtensions.AddModificationParameters
         {
             Type = DatawalletModificationType.Update,
-            ObjectIdentifier = "id1",
+            ObjectIdentifier = "oid1",
             PayloadCategory = "category2"
         });
         var updateId2Category2 = datawalletOfActiveIdentity.AddModification(new DatawalletExtensions.AddModificationParameters
         {
             Type = DatawalletModificationType.Update,
-            ObjectIdentifier = "id2",
+            ObjectIdentifier = "oid2",
             PayloadCategory = "category2"
         });
         var secondUpdateId1Category1 = datawalletOfActiveIdentity.AddModification(new DatawalletExtensions.AddModificationParameters
         {
             Type = DatawalletModificationType.Update,
-            ObjectIdentifier = "id1",
+            ObjectIdentifier = "oid1",
             PayloadCategory = "category1"
         });
         var deleteId2 = datawalletOfActiveIdentity.AddModification(new DatawalletExtensions.AddModificationParameters
         {
             Type = DatawalletModificationType.Delete,
-            ObjectIdentifier = "id2"
+            ObjectIdentifier = "oid2"
         });
         var lastUpdateId1Category1 = datawalletOfActiveIdentity.AddModification(new DatawalletExtensions.AddModificationParameters
         {
             Type = DatawalletModificationType.Update,
-            ObjectIdentifier = "id1",
+            ObjectIdentifier = "oid1",
             PayloadCategory = "category1"
         });
         var deleteId1 = datawalletOfActiveIdentity.AddModification(new DatawalletExtensions.AddModificationParameters
         {
             Type = DatawalletModificationType.Delete,
-            ObjectIdentifier = "id1"
+            ObjectIdentifier = "oid1"
         });
 
         _arrangeContext.SaveEntity(datawalletOfAnotherIdentity);
@@ -270,11 +266,11 @@ public class HandlerTests : AbstractTestsBase
         var datawallet = CreateDatawalletForActiveIdentity();
         datawallet.AddModification(new DatawalletExtensions.AddModificationParameters
         {
-            ObjectIdentifier = "id1"
+            ObjectIdentifier = "oid1"
         });
         datawallet.AddModification(new DatawalletExtensions.AddModificationParameters
         {
-            ObjectIdentifier = "id2"
+            ObjectIdentifier = "oid2"
         });
         _arrangeContext.SaveEntity(datawallet);
 
@@ -292,15 +288,15 @@ public class HandlerTests : AbstractTestsBase
         var datawallet = CreateDatawalletForActiveIdentity();
         datawallet.AddModification(new DatawalletExtensions.AddModificationParameters
         {
-            ObjectIdentifier = "id1"
+            ObjectIdentifier = "oid1"
         });
         datawallet.AddModification(new DatawalletExtensions.AddModificationParameters
         {
-            ObjectIdentifier = "id2"
+            ObjectIdentifier = "oid2"
         });
         datawallet.AddModification(new DatawalletExtensions.AddModificationParameters
         {
-            ObjectIdentifier = "id3"
+            ObjectIdentifier = "oid3"
         });
         _arrangeContext.SaveEntity(datawallet);
 
@@ -331,11 +327,11 @@ public class HandlerTests : AbstractTestsBase
         var datawallet = CreateDatawalletForActiveIdentity();
         datawallet.AddModification(new DatawalletExtensions.AddModificationParameters
         {
-            ObjectIdentifier = "id1"
+            ObjectIdentifier = "oid1"
         });
         datawallet.AddModification(new DatawalletExtensions.AddModificationParameters
         {
-            ObjectIdentifier = "id2"
+            ObjectIdentifier = "oid2"
         });
         _arrangeContext.SaveEntity(datawallet);
 
@@ -362,6 +358,6 @@ public class HandlerTests : AbstractTestsBase
         var userContext = A.Fake<IUserContext>();
         A.CallTo(() => userContext.GetAddress()).Returns(ACTIVE_IDENTITY);
 
-        return new Handler(_actContext, AutoMapperProfile.CreateMapper(), userContext);
+        return new Handler(_actContext, userContext);
     }
 }

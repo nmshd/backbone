@@ -4,9 +4,11 @@ namespace Backbone.UnitTestTools.Data;
 
 public static class TestDataGenerator
 {
-    public static string GenerateString(int resultLength, char[]? chars = null)
+    private static readonly char[] DEFAULT_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".ToCharArray();
+
+    public static string CreateRandomString(int resultLength, char[]? chars = null)
     {
-        chars ??= ['A', 'B', 'C'];
+        chars ??= DEFAULT_CHARS;
 
         Random random = new();
         return new string(Enumerable.Repeat(chars, resultLength).Select(s => s[random.Next(s.Length)]).ToArray());
@@ -14,7 +16,7 @@ public static class TestDataGenerator
 
     public static IdentityAddress CreateRandomIdentityAddress()
     {
-        return IdentityAddress.Create(CreateRandomBytes(), "id1");
+        return IdentityAddress.Create(CreateRandomBytes(), "prod.enmeshed.eu");
     }
 
     public static DeviceId CreateRandomDeviceId()
@@ -22,12 +24,11 @@ public static class TestDataGenerator
         return DeviceId.New();
     }
 
-    public static byte[] CreateRandomBytes()
+    public static byte[] CreateRandomBytes(int length = 10)
     {
         var random = new Random();
-        var bytes = new byte[10];
+        var bytes = new byte[length];
         random.NextBytes(bytes);
         return bytes;
     }
 }
-

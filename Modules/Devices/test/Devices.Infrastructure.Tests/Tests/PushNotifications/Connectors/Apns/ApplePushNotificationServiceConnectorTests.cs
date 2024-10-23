@@ -5,12 +5,9 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using FluentAssertions;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Apns;
 
@@ -26,13 +23,13 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
         var connector = CreateConnector(client);
 
         // Act
-        var recipient = IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j");
+        var recipient = IdentityAddress.Parse("did:e:prod.enmeshed.eu:dids:b9d25bd0a2bbd3aa48437c");
         var registrations = new List<PnsRegistration>
         {
             new(recipient, DeviceId.New(), PnsHandle.Parse(PushNotificationPlatform.Apns, "some-device-id").Value, APP_ID, PushEnvironment.Development)
         };
 
-        await connector.Send(registrations, recipient, new TestPushNotification { Data = "test-notification-payload" });
+        await connector.Send(registrations, new TestPushNotification { Data = "test-notification-payload" });
 
         // Assert
         client.SendAsyncCalls.Should().Be(1);

@@ -13,20 +13,15 @@ public interface ISynchronizationDbContext : IDbContext
 
     Task<Datawallet?> GetDatawalletForInsertion(IdentityAddress owner, CancellationToken cancellationToken);
     Task<Datawallet?> GetDatawallet(IdentityAddress owner, CancellationToken cancellationToken);
-    Task<ExternalEvent> CreateExternalEvent(IdentityAddress owner, ExternalEventType type, object payload);
+    Task CreateExternalEvent(ExternalEvent externalEvent);
+    Task DeleteUnsyncedExternalEventsWithOwnerAndContext(IdentityAddress owner, string context);
     Task<SyncRun> GetSyncRun(SyncRunId syncRunId, IdentityAddress createdBy, CancellationToken cancellationToken);
     Task<bool> IsActiveSyncRunAvailable(IdentityAddress createdBy, CancellationToken cancellationToken);
-
-    Task<SyncRun> GetSyncRunAsNoTracking(SyncRunId syncRunId, IdentityAddress createdBy,
-        CancellationToken cancellationToken);
-
-    Task<SyncRun> GetSyncRunWithExternalEvents(SyncRunId syncRunId, IdentityAddress createdBy,
-        CancellationToken cancellationToken);
-
+    Task<SyncRun> GetSyncRunAsNoTracking(SyncRunId syncRunId, IdentityAddress createdBy, CancellationToken cancellationToken);
+    Task<SyncRun> GetSyncRunWithExternalEvents(SyncRunId syncRunId, IdentityAddress createdBy, CancellationToken cancellationToken);
     Task<SyncRun?> GetPreviousSyncRunWithExternalEvents(IdentityAddress createdBy, CancellationToken cancellationToken);
-
-    Task<List<ExternalEvent>> GetUnsyncedExternalEvents(IdentityAddress owner, byte maxErrorCount,
-        CancellationToken cancellationToken);
+    Task<List<ExternalEvent>> GetUnsyncedExternalEvents(IdentityAddress owner, byte maxErrorCount, CancellationToken cancellationToken);
+    Task<List<ExternalEvent>> GetBlockedExternalEventsWithTypeAndContext(ExternalEventType type, string context, CancellationToken cancellationToken);
 
     Task<DbPaginationResult<ExternalEvent>> GetExternalEventsOfSyncRun(PaginationFilter paginationFilter,
         IdentityAddress owner, SyncRunId syncRunId, CancellationToken cancellationToken);

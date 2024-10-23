@@ -22,6 +22,7 @@ public class IdentitiesRepository : IIdentitiesRepository
     private readonly DbSet<Device> _devices;
     private readonly IQueryable<Device> _readonlyDevices;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly DbSet<IdentityDeletionProcessAuditLogEntry> _identityDeletionProcessAuditLogs;
     private readonly IQueryable<IdentityDeletionProcessAuditLogEntry> _readonlyIdentityDeletionProcessAuditLogs;
 
     public IdentitiesRepository(DevicesDbContext dbContext, UserManager<ApplicationUser> userManager)
@@ -31,6 +32,7 @@ public class IdentitiesRepository : IIdentitiesRepository
         _dbContext = dbContext;
         _devices = dbContext.Devices;
         _readonlyDevices = dbContext.Devices.AsNoTracking();
+        _identityDeletionProcessAuditLogs = dbContext.IdentityDeletionProcessAuditLogs;
         _readonlyIdentityDeletionProcessAuditLogs = dbContext.IdentityDeletionProcessAuditLogs.AsNoTracking();
         _userManager = userManager;
     }
@@ -67,9 +69,18 @@ public class IdentitiesRepository : IIdentitiesRepository
         return await _readonlyIdentities.CountAsync(i => i.ClientId == clientId, cancellationToken);
     }
 
-    public async Task AddUser(ApplicationUser user, string password)
+    public async Task Add(Identity identity, string password)
     {
-        var createUserResult = await _userManager.CreateAsync(user, password);
+        var createUserResult = await _userManager.CreateAsync(identity.Devices.First().User, password);
+        if (!createUserResult.Succeeded)
+            throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
+    }
+
+    public async Task UpdateWithNewDevice(Identity identity, string password)
+    {
+        var newDevice = identity.Devices.MaxBy(d => d.CreatedAt)!;
+
+        var createUserResult = await _userManager.CreateAsync(newDevice.User, password);
         if (!createUserResult.Succeeded)
             throw new OperationFailedException(ApplicationErrors.Devices.RegistrationFailed(createUserResult.Errors.First().Description));
     }
@@ -104,7 +115,16 @@ public class IdentitiesRepository : IIdentitiesRepository
     public async Task Update(Identity identity, CancellationToken cancellationToken)
     {
         _identities.Update(identity);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        try
+        {
+            await _dbContext.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateException exception)
+        {
+            if (exception.HasReason(DbUpdateExceptionReason.DuplicateIndex) && exception.InnerException!.Message.Contains("IX_only_one_active_deletion_process"))
+                throw new OnlyOneActiveDeletionProcessAllowedException(exception);
+            throw;
+        }
     }
 
     public async Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
@@ -118,5 +138,11 @@ public class IdentitiesRepository : IIdentitiesRepository
     public async Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
     {
         await _identities.Where(filter).ExecuteDeleteAsync(cancellationToken);
+    }
+
+    public async Task AddDeletionProcessAuditLogEntry(IdentityDeletionProcessAuditLogEntry auditLogEntry)
+    {
+        _identityDeletionProcessAuditLogs.Add(auditLogEntry);
+        await _dbContext.SaveChangesAsync();
     }
 }

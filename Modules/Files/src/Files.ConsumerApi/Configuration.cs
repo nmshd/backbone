@@ -43,6 +43,9 @@ public class Configuration
             [Required]
             [MinLength(1)]
             public string ConnectionString { get; set; } = string.Empty;
+
+            [Required]
+            public bool EnableHealthCheck { get; set; } = true;
         }
 
         public class IonosS3Config

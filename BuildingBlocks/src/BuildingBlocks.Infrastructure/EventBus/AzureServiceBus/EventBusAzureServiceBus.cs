@@ -3,15 +3,16 @@ using Autofac;
 using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Events;
+using Backbone.BuildingBlocks.Infrastructure.CorrelationIds;
 using Backbone.BuildingBlocks.Infrastructure.EventBus.Json;
+using Backbone.Tooling.Extensions;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
 namespace Backbone.BuildingBlocks.Infrastructure.EventBus.AzureServiceBus;
 
-public class EventBusAzureServiceBus : IEventBus, IDisposable
+public class EventBusAzureServiceBus : IEventBus, IDisposable, IAsyncDisposable
 {
     private const string DOMAIN_EVENT_SUFFIX = "DomainEvent";
     private const string TOPIC_NAME = "default";
@@ -27,8 +28,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
 
     public EventBusAzureServiceBus(IServiceBusPersisterConnection serviceBusPersisterConnection,
         ILogger<EventBusAzureServiceBus> logger, IEventBusSubscriptionsManager subscriptionManager,
-        ILifetimeScope autofac,
-        HandlerRetryBehavior handlerRetryBehavior,
+        ILifetimeScope autofac, HandlerRetryBehavior handlerRetryBehavior,
         string subscriptionClientName)
     {
         _serviceBusPersisterConnection = serviceBusPersisterConnection;
@@ -38,16 +38,19 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         _subscriptionName = subscriptionClientName;
         _sender = _serviceBusPersisterConnection.TopicClient.CreateSender(TOPIC_NAME);
         var options = new ServiceBusProcessorOptions { MaxConcurrentCalls = 10, AutoCompleteMessages = false };
-        _processor =
-            _serviceBusPersisterConnection.TopicClient.CreateProcessor(TOPIC_NAME, _subscriptionName, options);
-
+        _processor = _serviceBusPersisterConnection.TopicClient.CreateProcessor(TOPIC_NAME, _subscriptionName, options);
         _handlerRetryBehavior = handlerRetryBehavior;
     }
 
     public void Dispose()
     {
+        Task.Run(async () => await DisposeAsync()).GetAwaiter().GetResult();
+    }
+
+    public async ValueTask DisposeAsync()
+    {
         _subscriptionManager.Clear();
-        _processor.CloseAsync().GetAwaiter().GetResult();
+        await _processor.CloseAsync();
     }
 
     public async void Publish(DomainEvent @event)
@@ -63,7 +66,8 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
         {
             MessageId = @event.DomainEventId,
             Body = new BinaryData(body),
-            Subject = eventName
+            Subject = eventName,
+            CorrelationId = CustomLogContext.GetCorrelationId()
         };
 
         _logger.SendingDomainEvent(message.MessageId);
@@ -117,12 +121,18 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             {
                 var eventName = $"{args.Message.Subject}{DOMAIN_EVENT_SUFFIX}";
                 var messageData = args.Message.Body.ToString();
+                var correlationId = args.Message.CorrelationId;
 
-                // Complete the message so that it is not received again.
-                if (await ProcessEvent(eventName, messageData))
-                    await args.CompleteMessageAsync(args.Message);
-                else
-                    _logger.EventWasNotProcessed(args.Message.MessageId);
+                correlationId = correlationId.IsNullOrEmpty() ? CustomLogContext.GenerateCorrelationId() : correlationId;
+
+                using (CustomLogContext.SetCorrelationId(correlationId))
+                {
+                    // Complete the message so that it is not received again.
+                    if (await ProcessEvent(eventName, messageData))
+                        await args.CompleteMessageAsync(args.Message);
+                    else
+                        _logger.EventWasNotProcessed(args.Message.MessageId);
+                }
             };
 
         _processor.ProcessErrorAsync += ErrorHandler;
@@ -176,7 +186,7 @@ public class EventBusAzureServiceBus : IEventBus, IDisposable
             }
             catch (Exception ex)
             {
-                _logger.ErrorWhileProcessingDomainEvent(domainEvent.DomainEventId, ex);
+                _logger.ErrorWhileProcessingDomainEvent(eventName, ex);
                 return false;
             }
         }
@@ -226,6 +236,6 @@ internal static partial class EventBusAzureServiceBusLogs
         EventId = 146670,
         EventName = "EventBusAzureServiceBus.ErrorWhileProcessingDomainEvent",
         Level = LogLevel.Error,
-        Message = "An error occurred while processing the domain event with id '{domainEventId}'.")]
-    public static partial void ErrorWhileProcessingDomainEvent(this ILogger logger, string domainEventId, Exception ex);
+        Message = "An error occurred while processing the '{domainEventName}'.")]
+    public static partial void ErrorWhileProcessingDomainEvent(this ILogger logger, string domainEventName, Exception ex);
 }

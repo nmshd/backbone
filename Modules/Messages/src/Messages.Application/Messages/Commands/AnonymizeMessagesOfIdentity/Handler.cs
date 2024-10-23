@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Messages.Domain.Entities;
 using MediatR;
@@ -9,7 +8,6 @@ namespace Backbone.Modules.Messages.Application.Messages.Commands.AnonymizeMessa
 
 public class Handler : IRequestHandler<AnonymizeMessagesOfIdentityCommand>
 {
-    private const string DELETED_IDENTITY_STRING = "deleted identity";
     private readonly IMessagesRepository _messagesRepository;
     private readonly ApplicationOptions _applicationOptions;
 
@@ -21,13 +19,13 @@ public class Handler : IRequestHandler<AnonymizeMessagesOfIdentityCommand>
 
     public async Task Handle(AnonymizeMessagesOfIdentityCommand request, CancellationToken cancellationToken)
     {
-        var messages = await _messagesRepository.Find(Message.WasCreatedBy(request.IdentityAddress), cancellationToken);
+        var messages = await _messagesRepository.Find(Message.HasParticipant(request.IdentityAddress), cancellationToken);
 
-        var newIdentityAddress = IdentityAddress.Create(Encoding.Unicode.GetBytes(DELETED_IDENTITY_STRING), _applicationOptions.AddressPrefix);
+        var newIdentityAddress = IdentityAddress.GetAnonymized(_applicationOptions.DidDomainName);
 
         foreach (var message in messages)
         {
-            message.ReplaceIdentityAddress(request.IdentityAddress, newIdentityAddress);
+            message.AnonymizeParticipant(request.IdentityAddress, newIdentityAddress);
         }
 
         await _messagesRepository.Update(messages);

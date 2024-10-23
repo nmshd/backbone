@@ -1,17 +1,22 @@
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Relationships.Domain.Ids;
 using MediatR;
 
 namespace Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 
 public class ListRelationshipTemplatesQuery : IRequest<ListRelationshipTemplatesResponse>
 {
-    public ListRelationshipTemplatesQuery(PaginationFilter paginationFilter, IEnumerable<RelationshipTemplateId>? ids)
+    public ListRelationshipTemplatesQuery(PaginationFilter paginationFilter, IEnumerable<ListRelationshipTemplatesQueryItem>? queries)
     {
         PaginationFilter = paginationFilter;
-        Ids = ids == null ? [] : ids.ToList();
+        QueryItems = queries == null ? [] : queries.ToList();
     }
 
     public PaginationFilter PaginationFilter { get; set; }
-    public List<RelationshipTemplateId> Ids { get; set; }
+    public List<ListRelationshipTemplatesQueryItem> QueryItems { get; set; }
+}
+
+public class ListRelationshipTemplatesQueryItem
+{
+    public required string Id { get; set; }
+    public byte[]? Password { get; set; }
 }

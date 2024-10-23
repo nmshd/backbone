@@ -3,17 +3,14 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.Extensions;
 using FakeItEasy;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.NotificationTexts;
 
 public class PushNotificationTextProviderTests : AbstractTestsBase
 {
-    private static readonly string[] SUPPORTED_LANGUAGES = ["en", "pt"];
+    private static readonly string[] SUPPORTED_LANGUAGES = ["en", "de", "pt", "it"];
     public static readonly TheoryData<Type> NOTIFICATION_TYPES_DATA = new(GetNotificationTypes());
 
     [Fact]

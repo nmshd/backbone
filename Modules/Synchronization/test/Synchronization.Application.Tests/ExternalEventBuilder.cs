@@ -1,39 +1,24 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Synchronization.Domain.Entities.Relationships;
 using Backbone.Modules.Synchronization.Domain.Entities.Sync;
 
 namespace Backbone.Modules.Synchronization.Application.Tests;
 
 public class ExternalEventBuilder
 {
-    private static int _currentIndex;
     private byte _errorCount;
     private IdentityAddress _owner;
-    private object _payload;
     private SyncRun? _syncRun;
-    private ExternalEventType _type;
+    private int _index;
 
     private ExternalEventBuilder()
     {
-        _type = ExternalEventType.MessageDelivered;
-        _owner = TestDataGenerator.CreateRandomIdentityAddress();
-        _payload = new { SomeArbitraryProperty = "SomeArbitraryValue" };
+        _owner = CreateRandomIdentityAddress();
     }
 
     public static ExternalEventBuilder Build()
     {
         return new ExternalEventBuilder();
-    }
-
-    public ExternalEventBuilder WithType(ExternalEventType type)
-    {
-        _type = type;
-        return this;
-    }
-
-    public ExternalEventBuilder WithPayload(object payload)
-    {
-        _payload = payload;
-        return this;
     }
 
     public ExternalEventBuilder WithOwner(IdentityAddress owner)
@@ -65,12 +50,20 @@ public class ExternalEventBuilder
         return this;
     }
 
+    public ExternalEventBuilder WithIndex(int index)
+    {
+        _index = index;
+        return this;
+    }
+
     public ExternalEvent Create()
     {
-        var externalEvent = new ExternalEvent(_type, _owner, _currentIndex++, _payload)
+        var externalEvent = new MessageReceivedExternalEvent(_owner, new MessageReceivedExternalEvent.EventPayload { Id = "MSG11111111111111111" }, RelationshipId.New())
         {
             SyncErrorCount = _errorCount
         };
+
+        externalEvent.UpdateIndex(_index);
 
         if (_syncRun != null)
             externalEvent.AssignToSyncRun(_syncRun);

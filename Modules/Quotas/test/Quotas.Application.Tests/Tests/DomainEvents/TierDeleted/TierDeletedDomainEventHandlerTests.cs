@@ -2,10 +2,8 @@ using Backbone.Modules.Quotas.Application.DomainEvents.Incoming.TierDeleted;
 using Backbone.Modules.Quotas.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Quotas.Domain.Aggregates.Tiers;
 using Backbone.Modules.Quotas.Domain.DomainEvents.Incoming.TierDeleted;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
-using Xunit;
 
 namespace Backbone.Modules.Quotas.Application.Tests.Tests.DomainEvents.TierDeleted;
 
@@ -29,7 +27,7 @@ public class TierDeletedDomainEventHandlerTests : AbstractTestsBase
         A.CallTo(() => tiersRepository.RemoveById(tier.Id)).MustHaveHappenedOnceExactly();
     }
 
-    private TierDeletedDomainEventHandler CreateHandler(ITiersRepository tiersRepository)
+    private static TierDeletedDomainEventHandler CreateHandler(ITiersRepository tiersRepository)
     {
         return new TierDeletedDomainEventHandler(A.Dummy<ILogger<TierDeletedDomainEventHandler>>(), tiersRepository);
     }

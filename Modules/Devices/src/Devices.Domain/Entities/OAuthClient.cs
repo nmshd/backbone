@@ -29,8 +29,11 @@ public class OAuthClient : Entity
     public DateTime CreatedAt { get; }
     public int? MaxIdentities { get; private set; }
 
-    public bool Update(TierId newDefaultTier, int? newMaxIdentities)
+    public bool Update(TierId newDefaultTier, int? newMaxIdentities, int identitiesCount)
     {
+        if (newMaxIdentities < identitiesCount)
+            throw new DomainException(DomainErrors.MaxIdentitiesLessThanCurrentIdentities(newMaxIdentities.Value, identitiesCount));
+
         var hasChanges = false;
 
         if (DefaultTier != newDefaultTier)

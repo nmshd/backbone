@@ -24,11 +24,11 @@ public class MessagesRepository : IMessagesRepository
         _dbContext = dbContext;
     }
 
-    public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false, bool fillBody = true)
+    public async Task<Message> Find(MessageId id, IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
         var message = await (track ? _messages : _readOnlyMessages)
             .IncludeAll(_dbContext)
-            .WithSenderOrRecipient(address)
+            .Where(Message.HasParticipant(address))
             .FirstWithId(id, cancellationToken);
 
         return message;
@@ -58,7 +58,7 @@ public class MessagesRepository : IMessagesRepository
         if (ids.Any())
             query = query.WithIdsIn(ids);
 
-        var messages = await query.WithSenderOrRecipient(requiredParticipant)
+        var messages = await query.Where(Message.HasParticipant(requiredParticipant))
             .OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
         return messages;
@@ -81,5 +81,10 @@ public class MessagesRepository : IMessagesRepository
         return await _messages.IncludeAll(_dbContext)
             .Where(expression)
             .ToListAsync(cancellationToken);
+    }
+
+    public async Task Delete(MessageId messageId, CancellationToken cancellationToken)
+    {
+        await _messages.Where(m => m.Id == messageId).ExecuteDeleteAsync(cancellationToken);
     }
 }

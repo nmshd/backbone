@@ -3,6 +3,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.PushNotifications.Commands.DeletePnsRegistrationsOfIdentity;
+
 public class Handler : IRequestHandler<DeletePnsRegistrationsOfIdentityCommand>
 {
     private readonly IPnsRegistrationsRepository _pnsRegistrationRepository;

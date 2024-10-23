@@ -14,15 +14,7 @@ public class IdentitySummaryDTO
         CreatedAt = identity.CreatedAt;
         Status = identity.Status;
 
-        Devices = identity.Devices.Select(d => new DeviceDTO
-        {
-            CreatedAt = d.CreatedAt,
-            CreatedByDevice = d.CreatedByDevice,
-            Id = d.Id,
-            LastLogin = new LastLoginInformation { Time = d.User.LastLoginAt },
-            Username = d.User.UserName!,
-            CommunicationLanguage = d.CommunicationLanguage
-        });
+        Devices = identity.Devices.Select(d => new DeviceDTO(d));
         NumberOfDevices = identity.Devices.Count;
 
         IdentityVersion = identity.IdentityVersion;

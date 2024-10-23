@@ -4,10 +4,7 @@ using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
 using Backbone.Tooling;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.FluentAssertions.Extensions;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.Connectors.Apns;
 
@@ -36,7 +33,7 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
 
         // Act
         var request = new ApnsMessageBuilder("someAppBundleIdentifier", "https://api.development.push.apple.com/3/device/someDeviceId", "someValidJwt")
-            .AddContent(new NotificationContent(IdentityAddress.Parse("id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"),
+            .AddContent(new NotificationContent(IdentityAddress.Parse("did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d"), DevicePushIdentifier.Parse("DPIaaaaaaaaaaaaaaaaa"),
                 new TestPushNotification { SomeProperty = "someValue" }))
             .SetNotificationText("someNotificationTextTitle", "someNotificationTextBody")
             .SetNotificationId(1)
@@ -49,7 +46,7 @@ public class ApnsMessageBuilderTests : AbstractTestsBase
             {
                 'notId': 1,
                 'content': {
-                    'accRef': 'id1KJnD8ipfckRQ1ivAhNVLtypmcVM5vPX4j',
+                    'accRef': 'did:e:prod.enmeshed.eu:dids:1a7063b5d2c7a8945bf43d',
                     'devicePushIdentifier' : 'DPIaaaaaaaaaaaaaaaaa',
                     'eventName': 'Test',
                     'sentAt': '2021-01-01T00:00:00.000Z',

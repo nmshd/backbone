@@ -8,7 +8,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Messages.Infrastructure.Database.Postgres.Migrations
+namespace Backbone.Modules.Messages.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(MessagesDbContext))]
     partial class MessagesDbContextModelSnapshot : ModelSnapshot
@@ -18,7 +18,7 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Messages")
-                .HasAnnotation("ProductVersion", "8.0.3")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -60,10 +60,10 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
                         .IsRequired()
@@ -75,6 +75,8 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CreatedBy");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("CreatedBy"), "hash");
 
                     b.ToTable("Messages", "Messages");
                 });
@@ -89,14 +91,20 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.Property<byte[]>("EncryptedKey")
                         .IsRequired()
                         .HasColumnType("bytea");
+
+                    b.Property<bool>("IsRelationshipDecomposedByRecipient")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsRelationshipDecomposedBySender")
+                        .HasColumnType("boolean");
 
                     b.Property<string>("MessageId")
                         .IsRequired()
@@ -127,8 +135,6 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.HasIndex("ReceivedAt");
 
-                    b.HasIndex("RelationshipId");
-
                     b.HasIndex("Address", "MessageId");
 
                     b.ToTable("RecipientInformation", "Messages");
@@ -147,17 +153,20 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
 
                     b.Property<string>("From")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
 
                     b.Property<string>("To")
                         .IsRequired()
-                        .HasMaxLength(36)
+                        .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("character(36)")
-                        .IsFixedLength();
+                        .HasColumnType("character varying(80)")
+                        .IsFixedLength(false);
 
                     b.HasKey("Id");
 
@@ -181,12 +190,6 @@ namespace Messages.Infrastructure.Database.Postgres.Migrations
                     b.HasOne("Backbone.Modules.Messages.Domain.Entities.Message", null)
                         .WithMany("Recipients")
                         .HasForeignKey("MessageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Backbone.Modules.Messages.Domain.Entities.Relationship", null)
-                        .WithMany()
-                        .HasForeignKey("RelationshipId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -1,7 +1,6 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Extensions;
@@ -13,9 +12,9 @@ public static class RelationshipQueryableExtensions
         return query.WithParticipant(participant1).WithParticipant(participant2);
     }
 
-    public static IQueryable<Relationship> WithParticipant(this IQueryable<Relationship> query, IdentityAddress identityId)
+    public static IQueryable<Relationship> WithParticipant(this IQueryable<Relationship> query, IdentityAddress participantAddress)
     {
-        return query.Where(r => r.To == identityId || r.From == identityId);
+        return query.Where(Relationship.HasParticipant(participantAddress));
     }
 
     public static IQueryable<Relationship> WithIdIn(this IQueryable<Relationship> query, IEnumerable<RelationshipId> ids)

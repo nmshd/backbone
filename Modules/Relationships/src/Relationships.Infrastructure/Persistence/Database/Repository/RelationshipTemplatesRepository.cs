@@ -4,12 +4,13 @@ using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Relationships.Domain.Entities;
-using Backbone.Modules.Relationships.Domain.Ids;
+using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
+using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Extensions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Relationships.Infrastructure.Persistence.Database.Repository;
+
 public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
 {
     private readonly DbSet<RelationshipTemplate> _templates;
@@ -36,24 +37,36 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         await _templates.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 
-    public async Task<RelationshipTemplate> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false, bool fillContent = true)
+    public async Task<RelationshipTemplate?> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
     {
         var template = await (track ? _templates : _readOnlyTemplates)
-                    .Include(r => r.Allocations)
-                    .NotExpiredFor(identityAddress)
-                    .NotDeleted()
-                    .FirstWithId(id, cancellationToken);
+            .Include(r => r.Allocations)
+            .NotExpiredFor(identityAddress)
+            .Where(RelationshipTemplate.CanBeCollectedBy(identityAddress))
+            .FirstWithIdOrDefault(id, cancellationToken);
 
         return template;
     }
 
-    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplatesWithIds(IEnumerable<RelationshipTemplateId> ids, IdentityAddress identityAddress, PaginationFilter paginationFilter, CancellationToken cancellationToken, bool track = false)
+    public async Task<DbPaginationResult<RelationshipTemplate>> FindTemplates(IEnumerable<ListRelationshipTemplatesQueryItem> queryItems, IdentityAddress activeIdentity,
+        PaginationFilter paginationFilter,
+        CancellationToken cancellationToken, bool track = false)
     {
+        var queryItemsList = queryItems.ToList();
+
+        Expression<Func<RelationshipTemplate, bool>> idAndPasswordFilter = template => false;
+
+        foreach (var inputQuery in queryItemsList)
+        {
+            idAndPasswordFilter = idAndPasswordFilter
+                .Or(RelationshipTemplate.HasId(RelationshipTemplateId.Parse(inputQuery.Id))
+                    .And(RelationshipTemplate.CanBeCollectedWithPassword(activeIdentity, inputQuery.Password)));
+        }
+
         var query = (track ? _templates : _readOnlyTemplates)
-                    .AsQueryable()
-                    .NotExpiredFor(identityAddress)
-                    .NotDeleted()
-                    .WithIdIn(ids);
+            .NotExpiredFor(activeIdentity)
+            .Where(RelationshipTemplate.CanBeCollectedBy(activeIdentity))
+            .Where(idAndPasswordFilter);
 
         var templates = await query.OrderAndPaginate(d => d.CreatedAt, paginationFilter, cancellationToken);
 
