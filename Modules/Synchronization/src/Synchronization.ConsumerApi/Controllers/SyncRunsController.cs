@@ -4,7 +4,7 @@ using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Synchronization.Application;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
@@ -30,13 +30,11 @@ public class SyncRunsController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;
     private readonly IUserContext _userContext;
-    private readonly IIdentitiesRepository _identitiesRepository;
 
-    public SyncRunsController(IMediator mediator, IOptions<ApplicationOptions> options, IUserContext userContext, IIdentitiesRepository identitiesRepository) : base(mediator)
+    public SyncRunsController(IMediator mediator, IOptions<ApplicationOptions> options, IUserContext userContext) : base(mediator)
     {
         _options = options.Value;
         _userContext = userContext;
-        _identitiesRepository = identitiesRepository;
     }
 
     [HttpPost]
@@ -46,8 +44,8 @@ public class SyncRunsController : ApiControllerBase
         [FromHeader(Name = "X-Supported-Datawallet-Version")]
         ushort supportedDatawalletVersion, CancellationToken cancellationToken)
     {
-        var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), CancellationToken.None) ?? throw new NotFoundException(nameof(Identity));
-        EnsurePeerIsNotToBeDeleted(identity);
+        var identityResponse = await _mediator.Send(new GetIdentityQuery(_userContext.GetAddress()), cancellationToken);
+        EnsureIdentityIsNotToBeDeleted(identityResponse);
 
         var response = await _mediator.Send(new StartSyncRunCommand(
             requestBody.Type ?? SyncRunDTO.SyncRunType.ExternalEventSync, requestBody.Duration,
@@ -122,9 +120,9 @@ public class SyncRunsController : ApiControllerBase
         return Ok(response);
     }
 
-    private static void EnsurePeerIsNotToBeDeleted(Identity identity)
+    private static void EnsureIdentityIsNotToBeDeleted(GetIdentityResponse identityResponse)
     {
-        if (identity.Status is IdentityStatus.ToBeDeleted)
+        if (identityResponse.Status is IdentityStatus.ToBeDeleted)
             throw new ApplicationException(ApplicationErrors.SyncRuns.CannotStartSyncRunWhileIdentityIsToBeDeleted());
     }
 }
