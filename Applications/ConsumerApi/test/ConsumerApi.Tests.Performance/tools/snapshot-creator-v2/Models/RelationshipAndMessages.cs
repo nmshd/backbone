@@ -6,10 +6,9 @@ public record RelationshipAndMessages(
     string SenderPool,
     int SenderIdentityId,
     string ReceiverPool,
-    int ReceiverIdentityId)
+    int ReceiverIdentityId,
+    [property: Ignore] Identity ReceiverIdentity)
 {
     public int NumberOfSentMessages { get; set; }
-
-    [Ignore] public bool ModuloSentApplied { get; set; }
-    [Ignore] public bool ModuloReceivedApplied { get; set; }
+    [Ignore] public int NumberOfReceivedMessages { get; set; }
 }

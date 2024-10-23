@@ -13,23 +13,23 @@ public record IdentityPoolConfiguration
     [JsonPropertyName(nameof(Amount))] public long Amount { get; set; }
 
     [JsonPropertyName(nameof(NumberOfRelationshipTemplates))]
-    public long NumberOfRelationshipTemplates { get; set; }
+    public int NumberOfRelationshipTemplates { get; set; }
 
     [JsonPropertyName(nameof(NumberOfRelationships))]
-    public long NumberOfRelationships { get; set; }
+    public int NumberOfRelationships { get; set; }
 
     [JsonPropertyName(nameof(NumberOfSentMessages))]
-    public long NumberOfSentMessages { get; set; }
+    public int NumberOfSentMessages { get; set; }
 
     [JsonPropertyName(nameof(NumberOfReceivedMessages))]
-    public long NumberOfReceivedMessages { get; set; }
+    public int NumberOfReceivedMessages { get; set; }
 
     [JsonPropertyName(nameof(NumberOfDatawalletModifications))]
-    public long NumberOfDatawalletModifications { get; set; }
+    public int NumberOfDatawalletModifications { get; set; }
 
     [JsonPropertyName(nameof(NumberOfDevices))]
-    public long NumberOfDevices { get; set; }
+    public int NumberOfDevices { get; set; }
 
     [JsonPropertyName(nameof(NumberOfChallenges))]
-    public long NumberOfChallenges { get; set; }
+    public int NumberOfChallenges { get; set; }
 }
