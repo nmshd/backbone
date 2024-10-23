@@ -47,5 +47,10 @@ public static class GenericApplicationErrors
 
             return new ApplicationError("error.platform.validation.pagination.invalidPageSize", message);
         }
+
+        public static ApplicationError InputCannotBeParsed(string reason = "The input cannot be parsed.")
+        {
+            return new ApplicationError("error.platform.inputCannotBeParsed", reason);
+        }
     }
 }
