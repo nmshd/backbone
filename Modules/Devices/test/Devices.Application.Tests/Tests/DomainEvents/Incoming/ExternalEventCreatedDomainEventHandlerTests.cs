@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.BuildingBlocks.Application.PushNotifications;
+﻿using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.ExternalEventCreated;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.ExternalEvents;
@@ -15,15 +14,13 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
     {
         // Arrange
         var mockPushSender = A.Fake<IPushNotificationSender>();
-        var fakeUserContext = A.Fake<IUserContext>();
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var identity = TestDataGenerator.CreateIdentity();
 
-        var handler = new ExternalEventCreatedDomainEventHandler(mockPushSender, fakeUserContext, fakeIdentitiesRepository);
+        var handler = new ExternalEventCreatedDomainEventHandler(mockPushSender, fakeIdentitiesRepository);
 
         var externalEventOwner = CreateRandomIdentityAddress();
 
-        A.CallTo(() => fakeUserContext.GetAddress()).Returns(externalEventOwner);
         A.CallTo(() => fakeIdentitiesRepository.FindByAddress(externalEventOwner, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
         // Act
@@ -38,17 +35,15 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
     {
         // Arrange
         var mockPushSender = A.Fake<IPushNotificationSender>();
-        var fakeUserContext = A.Fake<IUserContext>();
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var identity = TestDataGenerator.CreateIdentity();
 
-        var handler = new ExternalEventCreatedDomainEventHandler(mockPushSender, fakeUserContext, fakeIdentitiesRepository);
+        var handler = new ExternalEventCreatedDomainEventHandler(mockPushSender, fakeIdentitiesRepository);
 
         var externalEventOwner = CreateRandomIdentityAddress();
 
         identity.StartDeletionProcessAsOwner(identity.Devices[0].Id);
 
-        A.CallTo(() => fakeUserContext.GetAddress()).Returns(externalEventOwner);
         A.CallTo(() => fakeIdentitiesRepository.FindByAddress(externalEventOwner, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
         // Act
@@ -63,15 +58,13 @@ public class ExternalEventCreatedDomainEventHandlerTests : AbstractTestsBase
     {
         // Arrange
         var mockPushSender = A.Fake<IPushNotificationSender>();
-        var fakeUserContext = A.Fake<IUserContext>();
         var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
         var identity = TestDataGenerator.CreateIdentity();
 
-        var handler = new ExternalEventCreatedDomainEventHandler(mockPushSender, fakeUserContext, fakeIdentitiesRepository);
+        var handler = new ExternalEventCreatedDomainEventHandler(mockPushSender, fakeIdentitiesRepository);
 
         var externalEventOwner = CreateRandomIdentityAddress();
 
-        A.CallTo(() => fakeUserContext.GetAddress()).Returns(externalEventOwner);
         A.CallTo(() => fakeIdentitiesRepository.FindByAddress(externalEventOwner, A<CancellationToken>._, A<bool>._)).Returns(identity);
 
         // Act
