@@ -3,7 +3,6 @@ using Backbone.FilesSanityCheck.Extensions;
 using Backbone.FilesSanityCheck.Infrastructure.DataSource;
 using Backbone.FilesSanityCheck.Infrastructure.Reporter;
 using Backbone.Modules.Files.Infrastructure.Persistence;
-using Backbone.Tooling.Extensions;
 
 namespace Backbone.FilesSanityCheck;
 
@@ -51,9 +50,7 @@ public class Program
                     options.DbOptions.DbConnectionString = configuration.GetSqlDatabaseConfiguration().ConnectionString;
                     options.DbOptions.Provider = configuration.GetSqlDatabaseConfiguration().Provider;
 
-                    options.BlobStorageOptions.ConnectionInfo = configuration.GetBlobStorageConfiguration().ConnectionInfo;
-                    options.BlobStorageOptions.CloudProvider = configuration.GetBlobStorageConfiguration().CloudProvider;
-                    options.BlobStorageOptions.Container = configuration.GetBlobStorageConfiguration().ContainerName.IsNullOrEmpty() ? "files" : configuration.GetBlobStorageConfiguration().ContainerName;
+                    options.BlobStorageOptions = configuration.GetBlobStorageConfiguration();
                 });
             });
     }

@@ -1,12 +1,13 @@
 using System.ComponentModel.DataAnnotations;
+using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage;
 
 namespace Backbone.FilesSanityCheck.Extensions;
 
 internal static class IConfigurationExtensions
 {
-    public static BlobStorageConfiguration GetBlobStorageConfiguration(this IConfiguration configuration)
+    public static BlobStorageOptions GetBlobStorageConfiguration(this IConfiguration configuration)
     {
-        return configuration.GetSection("BlobStorage").Get<BlobStorageConfiguration>() ?? new BlobStorageConfiguration();
+        return configuration.GetSection("BlobStorage").Get<BlobStorageOptions>() ?? new BlobStorageOptions();
     }
 
     public static SqlDatabaseConfiguration GetSqlDatabaseConfiguration(this IConfiguration configuration)
@@ -25,18 +26,4 @@ public class SqlDatabaseConfiguration
     [Required]
     [MinLength(1)]
     public string ConnectionString { get; set; } = string.Empty;
-}
-
-public class BlobStorageConfiguration
-{
-    [Required]
-    [MinLength(1)]
-    [RegularExpression("Azure|GoogleCloud")]
-    public string CloudProvider { get; set; } = string.Empty;
-
-    [Required]
-    [MinLength(1)]
-    public string ConnectionInfo { get; set; } = string.Empty;
-
-    public string ContainerName { get; set; } = string.Empty;
 }
