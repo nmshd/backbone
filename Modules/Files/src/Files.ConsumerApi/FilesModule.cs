@@ -36,10 +36,10 @@ public class FilesModule : AbstractModule
                     ? "files"
                     : parsedConfiguration.Infrastructure.BlobStorage.ContainerName;
 
-            if (options.BlobStorageOptions.IonosS3Config != null) options.BlobStorageOptions.IonosS3Config.AccessKey = parsedConfiguration.Infrastructure.BlobStorage.IonosS3Config!.AccessKey;
-            if (options.BlobStorageOptions.IonosS3Config != null) options.BlobStorageOptions.IonosS3Config.BucketName = parsedConfiguration.Infrastructure.BlobStorage.IonosS3Config!.BucketName;
-            if (options.BlobStorageOptions.IonosS3Config != null) options.BlobStorageOptions.IonosS3Config.SecretKey = parsedConfiguration.Infrastructure.BlobStorage.IonosS3Config!.SecretKey;
-            if (options.BlobStorageOptions.IonosS3Config != null) options.BlobStorageOptions.IonosS3Config.ServiceUrl = parsedConfiguration.Infrastructure.BlobStorage.IonosS3Config!.ServiceUrl;
+            if (options.BlobStorageOptions.S3Config != null) options.BlobStorageOptions.S3Config.AccessKey = parsedConfiguration.Infrastructure.BlobStorage.S3Config!.AccessKey;
+            if (options.BlobStorageOptions.S3Config != null) options.BlobStorageOptions.S3Config.BucketName = parsedConfiguration.Infrastructure.BlobStorage.S3Config!.BucketName;
+            if (options.BlobStorageOptions.S3Config != null) options.BlobStorageOptions.S3Config.SecretKey = parsedConfiguration.Infrastructure.BlobStorage.S3Config!.SecretKey;
+            if (options.BlobStorageOptions.S3Config != null) options.BlobStorageOptions.S3Config.ServiceUrl = parsedConfiguration.Infrastructure.BlobStorage.S3Config!.ServiceUrl;
         });
 
         if (parsedConfiguration.Infrastructure.SqlDatabase.EnableHealthCheck)

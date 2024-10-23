@@ -1,21 +1,22 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.Ionos;
-public static class IonosS3ServiceCollectionExtensions
+namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.S3;
+
+public static class S3ServiceCollectionExtensions
 {
-    public static void AddIonosS3(this IServiceCollection services,
-        Action<IonosS3Options> setupOptions)
+    public static void AddS3(this IServiceCollection services,
+        Action<S3Options> setupOptions)
     {
-        var options = new IonosS3Options();
+        var options = new S3Options();
         setupOptions.Invoke(options);
 
-        services.AddIonosS3(options);
+        services.AddS3(options);
     }
 
-    public static void AddIonosS3(this IServiceCollection services, IonosS3Options options)
+    public static void AddS3(this IServiceCollection services, S3Options options)
     {
-        services.Configure<IonosS3Options>(opt =>
+        services.Configure<S3Options>(opt =>
         {
             opt.ServiceUrl = options.ServiceUrl;
             opt.AccessKey = options.AccessKey;
@@ -23,12 +24,12 @@ public static class IonosS3ServiceCollectionExtensions
             opt.BucketName = options.BucketName;
         });
 
-        services.AddSingleton<IonosS3ClientFactory>();
-        services.AddScoped<IBlobStorage, IonosS3BlobStorage>();
+        services.AddSingleton<S3ClientFactory>();
+        services.AddScoped<IBlobStorage, S3BlobStorage>();
     }
 }
 
-public class IonosS3Options
+public class S3Options
 {
     public string ServiceUrl { get; set; } = string.Empty;
     public string AccessKey { get; set; } = string.Empty;

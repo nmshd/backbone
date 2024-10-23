@@ -23,14 +23,14 @@ public class Configuration
         {
             [Required]
             [MinLength(1)]
-            [RegularExpression("Azure|GoogleCloud|Ionos")]
+            [RegularExpression("Azure|GoogleCloud|S3")]
             public string CloudProvider { get; set; } = string.Empty;
 
             public string ConnectionInfo { get; set; } = string.Empty;
 
             public string ContainerName { get; set; } = string.Empty;
 
-            public IonosS3Config? IonosS3Config { get; set; }
+            public S3Config? S3Config { get; set; }
         }
 
         public class SqlDatabaseConfiguration
@@ -48,7 +48,7 @@ public class Configuration
             public bool EnableHealthCheck { get; set; } = true;
         }
 
-        public class IonosS3Config
+        public class S3Config
         {
             [Required]
             public string ServiceUrl { get; set; } = string.Empty;

@@ -1,12 +1,13 @@
 ﻿using Amazon.S3;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.Ionos;
-public class IonosS3ClientFactory
-{
-    private readonly IonosS3Options _options;
+namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.S3;
 
-    public IonosS3ClientFactory(IOptions<IonosS3Options> options)
+public class S3ClientFactory
+{
+    private readonly S3Options _options;
+
+    public S3ClientFactory(IOptions<S3Options> options)
     {
         _options = options.Value;
     }

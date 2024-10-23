@@ -7,16 +7,17 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistenc
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.Ionos;
-public class IonosS3BlobStorage : IBlobStorage, IDisposable
+namespace Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.S3;
+
+public class S3BlobStorage : IBlobStorage, IDisposable
 {
     private readonly IAmazonS3 _s3Client;
     private readonly List<ChangedBlob> _changedBlobs;
     private readonly IList<RemovedBlob> _removedBlobs;
     private readonly string _bucketName;
-    private readonly ILogger<IonosS3BlobStorage> _logger;
+    private readonly ILogger<S3BlobStorage> _logger;
 
-    public IonosS3BlobStorage(IOptions<IonosS3Options> config, ILogger<IonosS3BlobStorage> logger)
+    public S3BlobStorage(IOptions<S3Options> config, ILogger<S3BlobStorage> logger)
     {
         var s3Config = new AmazonS3Config
         {
@@ -170,7 +171,9 @@ public class IonosS3BlobStorage : IBlobStorage, IDisposable
             _logger.LogError("A blob with key '{blobName}' already exists.", key);
             throw new BlobAlreadyExistsException(key);
         }
-        catch (AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound) { }
+        catch (AmazonS3Exception ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+        {
+        }
     }
 
     private async Task DeleteRemovedBlobs()
