@@ -2,7 +2,10 @@ using Backbone.BuildingBlocks.API;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.API.Mvc.ControllerAttributes;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
+using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.Pagination;
+using Backbone.Modules.Devices.Application.Identities.Queries.GetIdentity;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Synchronization.Application;
 using Backbone.Modules.Synchronization.Application.Datawallets.DTOs;
 using Backbone.Modules.Synchronization.Application.SyncRuns.Commands.FinalizeSyncRun;
@@ -26,12 +29,13 @@ namespace Backbone.Modules.Synchronization.ConsumerApi.Controllers;
 public class SyncRunsController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;
+    private readonly IUserContext _userContext;
 
-    public SyncRunsController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
+    public SyncRunsController(IMediator mediator, IOptions<ApplicationOptions> options, IUserContext userContext) : base(mediator)
     {
         _options = options.Value;
+        _userContext = userContext;
     }
-
 
     [HttpPost]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<StartSyncRunResponse>), StatusCodes.Status200OK)]
@@ -40,6 +44,9 @@ public class SyncRunsController : ApiControllerBase
         [FromHeader(Name = "X-Supported-Datawallet-Version")]
         ushort supportedDatawalletVersion, CancellationToken cancellationToken)
     {
+        var identityResponse = await _mediator.Send(new GetIdentityQuery(_userContext.GetAddress()), cancellationToken);
+        EnsureIdentityIsNotToBeDeleted(identityResponse);
+
         var response = await _mediator.Send(new StartSyncRunCommand(
             requestBody.Type ?? SyncRunDTO.SyncRunType.ExternalEventSync, requestBody.Duration,
             supportedDatawalletVersion), cancellationToken);
@@ -111,6 +118,12 @@ public class SyncRunsController : ApiControllerBase
     {
         var response = await _mediator.Send(new RefreshExpirationTimeOfSyncRunCommand(id), cancellationToken);
         return Ok(response);
+    }
+
+    private static void EnsureIdentityIsNotToBeDeleted(GetIdentityResponse identityResponse)
+    {
+        if (identityResponse.Status is IdentityStatus.ToBeDeleted)
+            throw new ApplicationException(ApplicationErrors.SyncRuns.CannotStartSyncRunWhileIdentityIsToBeDeleted());
     }
 }
 

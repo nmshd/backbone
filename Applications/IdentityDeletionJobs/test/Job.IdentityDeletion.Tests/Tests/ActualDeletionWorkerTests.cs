@@ -5,7 +5,6 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Job.IdentityDeletion.Workers;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.FindRelationshipsOfIdentity;
-using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using CSharpFunctionalExtensions;
 using FakeItEasy;
 using MediatR;
@@ -45,7 +44,7 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         var worker = CreateWorker(fakeMediator, [mockIdentityDeleter]);
 
         A.CallTo(() => fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._))
-            .Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
+            .Returns(new FindRelationshipsOfIdentityResponse([]));
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
