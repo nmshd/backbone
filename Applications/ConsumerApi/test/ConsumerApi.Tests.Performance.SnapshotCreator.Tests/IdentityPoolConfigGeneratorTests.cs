@@ -1,6 +1,8 @@
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 using FluentAssertions;
+using Ganss.Excel;
+using Newtonsoft.Json;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests;
 
@@ -488,12 +490,17 @@ public class IdentityPoolConfigGeneratorTests
     #region Generate Excel RelationshipsAndMessages Pool Config
 
     [Theory]
-    [InlineData("test", "pool-config.test.json")]
-    public async Task GenerateExcelRelationshipsAndMessagesPoolConfig_InputPerformanceTestDataExcel_ReturnsSuccess(string workSheet, string expectedLoadTestJsonFilename)
+    [InlineData("test", "pool-config.test.json", "ExpectedRelationshipsAndMessagePoolConfigs.test.json")]
+    public async Task GenerateExcelRelationshipsAndMessagesPoolConfig_InputPerformanceTestDataExcel_ReturnsSuccess(string workSheet, string poolConfigJsonFilename, string expectedLoadTestJsonFile)
     {
         // Arrange
-        var poolConfigJsonFilePath = Path.Combine(_testDataFolder, expectedLoadTestJsonFilename);
+        var poolConfigJsonFilePath = Path.Combine(_testDataFolder, poolConfigJsonFilename);
         var expectedRelationshipsFilePath = Path.Combine(_testDataFolder, $"{RELATIONSHIPS_AND_MESSAGE_POOL_CONFIGS_FILE_NAME}.{workSheet}.{EXCEL_FILE_EXT}");
+        var expectedLoadTestDataFilePath = Path.Combine(_testDataFolder, expectedLoadTestJsonFile);
+
+        await using var fileStream = File.OpenRead(expectedLoadTestDataFilePath);
+        var expectedLoadTestData = await System.Text.Json.JsonSerializer.DeserializeAsync<RelationshipAndMessages[]>(fileStream);
+
         var sut = new IdentityPoolConfigGenerator();
 
         // Act
@@ -506,7 +513,8 @@ public class IdentityPoolConfigGeneratorTests
 
         File.Exists(expectedRelationshipsFilePath).Should().BeTrue();
 
-        throw new Exception("Still in development");
+        var actualLoadTestData = await (new ExcelMapper().FetchAsync<RelationshipAndMessages>(expectedRelationshipsFilePath));
+        actualLoadTestData.Should().BeEquivalentTo(expectedLoadTestData);
     }
 
     #endregion

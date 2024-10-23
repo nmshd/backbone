@@ -101,7 +101,7 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
             return (false, INVALID_FILE_PATH);
         }
 
-        var poolConfigJsonFilePath = Path.Combine(filePath, $"{POOL_CONFIG_JSON_NAME}.{workSheetName}.{POOL_CONFIG_JSON_EXT}");
+        var poolConfigJsonFilePath = Path.Combine(filePath, $"{POOL_CONFIG_JSON_NAME}.{workSheetName}.{JSON_FILE_EXT}");
 
         try
         {
@@ -154,50 +154,103 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
                     while (appIdentity.HasAvailableRelationships)
                     {
                         // Find a connector identity with available relationships in all connector identity pools 
-                        var connectorIdentity = connectorIdentityPools
-                                                    .SelectMany(cip => cip.Identities)
-                                                    .FirstOrDefault(i => i.HasAvailableRelationships)
-                                                ?? throw new InvalidOperationException(CONNECTOR_NO_MORE_IDENTITIES_AVAILABLE);
+                        var connectorIdentities = connectorIdentityPools
+                            .SelectMany(cip => cip.Identities)
+                            .Where(i => i.HasAvailableRelationships)
+                            .ToArray();
+
+
+                        Identity receiverConnectorIdentity = null;
+                        foreach (var connectorIdentity in connectorIdentities)
+                        {
+                            var hasAppIdentityaConnectorIdentityRelationship = appIdentity.RelationshipAndMessages.Any(rm => rm.ReceiverIdentityId == connectorIdentity.Id);
+                            var hasConnectorIdentityanAppIdentityRelationship = connectorIdentity.RelationshipAndMessages.Any(rm => rm.ReceiverIdentityId == appIdentity.Id);
+
+                            if (hasAppIdentityaConnectorIdentityRelationship || hasConnectorIdentityanAppIdentityRelationship)
+                            {
+                                continue;
+                            }
+
+                            if (!connectorIdentity.HasAvailableRelationships)
+                            {
+                                continue;
+                            }
+
+                            receiverConnectorIdentity = connectorIdentity;
+                            break;
+                        }
+
+                        if (receiverConnectorIdentity == null)
+                        {
+                            receiverConnectorIdentity = connectorIdentities.FirstOrDefault(c => c.HasAvailableRelationships);
+
+                            if (receiverConnectorIdentity == null)
+                            {
+                                throw new InvalidOperationException(string.Format(RELATIONSHIP_NO_RECEIVER_AVAILABLE, appIdentity.Id, appIdentity.PoolAlias));
+                            }
+                        }
 
                         // Add relationship between app identity and connector identity (forward relationship)
-                        appIdentity.RelationshipAndMessages.Add(
-                            new RelationshipAndMessages(
-                                SenderPool: appIdentity.PoolAlias,
-                                SenderIdentityId: appIdentity.Id,
-                                ReceiverPool: connectorIdentity.PoolAlias,
-                                ReceiverIdentityId: connectorIdentity.Id,
-                                ReceiverIdentity: connectorIdentity)
-                        );
+                        var relationshipAndMessages = new RelationshipAndMessages(
+                            SenderPool: appIdentity.PoolAlias,
+                            SenderIdentityId: appIdentity.Id,
+                            ReceiverPool: receiverConnectorIdentity.PoolAlias,
+                            ReceiverIdentityId: receiverConnectorIdentity.Id);
+
+                        appIdentity.RelationshipAndMessages.Add(relationshipAndMessages);
 
                         // Decrement available relationships of the app identity
                         appIdentity.DecrementAvailableRelationships();
 
-                        appIdentity.ConfigureMessagesSentTo(connectorIdentity);
+                        if (appIdentity.HasAvailableRelationships)
+                        {
+                            relationshipAndMessages.NumberOfSentMessages = appIdentity.MessagesToSendPerRelationship;
+                        }
+                        else
+                        {
+                            relationshipAndMessages.NumberOfSentMessages = appIdentity.ModuloSendMessages > 0
+                                ? (appIdentity.MessagesToSendPerRelationship + appIdentity.ModuloSendMessages)
+                                : appIdentity.MessagesToSendPerRelationship;
+                        }
+
 
                         // Add relationship between connector identity and app identity (reverse relationship)
-                        connectorIdentity.RelationshipAndMessages.Add(
-                            new RelationshipAndMessages(
-                                SenderPool: connectorIdentity.PoolAlias,
-                                SenderIdentityId: connectorIdentity.Id,
-                                ReceiverPool: appIdentity.PoolAlias,
-                                ReceiverIdentityId: appIdentity.Id,
-                                ReceiverIdentity: appIdentity)
-                        );
+                        var reverseRelationshipAndMessages = new RelationshipAndMessages(
+                            SenderPool: receiverConnectorIdentity.PoolAlias,
+                            SenderIdentityId: receiverConnectorIdentity.Id,
+                            ReceiverPool: appIdentity.PoolAlias,
+                            ReceiverIdentityId: appIdentity.Id);
+
+                        receiverConnectorIdentity.RelationshipAndMessages.Add(reverseRelationshipAndMessages);
 
                         // Decrement available relationships of the connector identity
-                        connectorIdentity.DecrementAvailableRelationships();
+                        receiverConnectorIdentity.DecrementAvailableRelationships();
 
-                        connectorIdentity.ConfigureMessagesSentTo(appIdentity);
+                        if (receiverConnectorIdentity.HasAvailableRelationships)
+                        {
+                            reverseRelationshipAndMessages.NumberOfSentMessages = receiverConnectorIdentity.MessagesToSendPerRelationship;
+                        }
+                        else
+                        {
+                            reverseRelationshipAndMessages.NumberOfSentMessages = receiverConnectorIdentity.ModuloSendMessages > 0
+                                ? (receiverConnectorIdentity.MessagesToSendPerRelationship + receiverConnectorIdentity.ModuloSendMessages)
+                                : receiverConnectorIdentity.MessagesToSendPerRelationship;
+                        }
                     }
                 }
             }
 
             #endregion
 
-            #region Save Relationships and Messages to Excel
+            #region Save Relationships and Messages to Excel (and JSON, too)
 
             var relationshipAndMessagesList =
-                identityPools.SelectMany(ipr => ipr.Identities.SelectMany(i => i.RelationshipAndMessages));
+                identityPools.SelectMany(ipr => ipr.Identities.SelectMany(i => i.RelationshipAndMessages)).ToArray();
+
+            var jsonString = JsonSerializer.Serialize(relationshipAndMessagesList, new JsonSerializerOptions { WriteIndented = true });
+            var jsonFilePath = Path.Combine(savePath, $"{RELATIONSHIPS_AND_MESSAGE_POOL_CONFIGS_FILE_NAME}.{workSheetName}.{JSON_FILE_EXT}");
+            await File.WriteAllTextAsync(jsonFilePath, jsonString);
+
 
             await new ExcelMapper().SaveAsync(excelFilePath, relationshipAndMessagesList, workSheetName);
 

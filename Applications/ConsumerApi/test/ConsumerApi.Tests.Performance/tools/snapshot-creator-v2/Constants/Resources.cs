@@ -28,7 +28,7 @@ public static class Resources
 
     public const string INVALID_FILE_PATH = "Invalid file path";
     public const string POOL_CONFIG_JSON_NAME = "pool-config";
-    public const string POOL_CONFIG_JSON_EXT = "json";
+    public const string JSON_FILE_EXT = "json";
 
     public const string WORKBOOK_SHEET_TEST_LOAD = "test";
     public const string WORKBOOK_SHEET_LIGHT_LOAD = "light";
@@ -48,9 +48,7 @@ public static class Resources
     public const string CONNECTOR_NUMBER_OF_RECEIVED_MESSAGES_ADD_ON = "Connector.NumberOfReceivedMessagesAddOn";
     public const string CONNECTOR_TOTAL_NUMBER_OF_AVAILABLE_RELATIONSHIPS = "Connector.TotalNumberOfAvailableRelationships";
 
-    public const string CONNECTOR_NO_MORE_IDENTITIES_AVAILABLE = "No more connector identities available";
-
     public const string IDENTITY_NO_MORE_RELATIONSHIPS_AVAILABLE = "No more relationships available";
-    public const string? IDENTITY_NO_MORE_MESSAGES_TO_SEND = "No more messages to send";
-    public const string? IDENTITY_NO_MORE_MESSAGES_TO_RECEIVE = "Can't receive more messages";
+
+    public const string RELATIONSHIP_NO_RECEIVER_AVAILABLE = "No further receiver identity available to establish a relationship to sender identity Id: {0} of {1}";
 }

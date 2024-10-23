@@ -60,7 +60,7 @@ generate-relationships --poolsFile pool-config.<worksheet-name>.json
 ##### 3.1.3.1 Methods and Tests:
 
 - [x] Generate Relationships Excel (RelationshipsAndMessagePoolConfigs.<worksheet-name>.xlsx)
-- [ ] Distribute Messages on Relationships (RelationshipsAndMessagePoolConfigs.<worksheet-name>.xlsx)
+- [x] Distribute Messages on Relationships (RelationshipsAndMessagePoolConfigs.<worksheet-name>.xlsx)
 - [ ] Generate RelationshipsAndMessagePoolConfigs Excel Command
 
 #### 3.1.4 Apply RelationshipsAndMessagePoolConfigs Excel in Database Command
