@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
+    <ProjectReference Include="..\Announcements.Application\Announcements.Application.csproj" />
   </ItemGroup>
 
 </Project>

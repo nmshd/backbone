@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Announcements.Application;
 
 namespace Backbone.Modules.Announcements.ConsumerApi;
 
