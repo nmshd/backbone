@@ -3,17 +3,16 @@ using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Backbone.Modules.Messages.Domain.Entities;
+using Backbone.Modules.Messages.Domain.Ids;
 using Backbone.Modules.Messages.Infrastructure.Persistence.Database;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Backbone.Tooling;
 using Backbone.UnitTestTools.Data;
 using Backbone.UnitTestTools.Extensions;
-using FluentAssertions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Xunit;
 using Relationship = Backbone.Modules.Relationships.Domain.Aggregates.Relationships.Relationship;
 
 namespace Backbone.Job.IdentityDeletion.Tests.Integration;
@@ -90,7 +89,7 @@ public class ActualDeletionWorkerTests
     {
         // Arrange
         var identityToBeDeleted = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
-        var peer = TestDataGenerator.CreateRandomIdentityAddress();
+        var peer = CreateRandomIdentityAddress();
 
         GetService<MessagesDbContext>();
 
@@ -118,7 +117,7 @@ public class ActualDeletionWorkerTests
     {
         // Arrange
         var identityToBeDeleted = await SeedDatabaseWithIdentityWithRipeDeletionProcess();
-        var peer = TestDataGenerator.CreateRandomIdentityAddress();
+        var peer = CreateRandomIdentityAddress();
 
         GetService<RelationshipsDbContext>();
 
@@ -160,7 +159,7 @@ public class ActualDeletionWorkerTests
     {
         var dbContext = GetService<MessagesDbContext>();
 
-        var recipient = new RecipientInformation(to, []);
+        var recipient = new RecipientInformation(to, RelationshipId.New(), []);
         var message = new Message(from, DeviceId.New(), [], [], [recipient]);
 
         await dbContext.SaveEntity(message);
@@ -192,7 +191,7 @@ public class ActualDeletionWorkerTests
     {
         var dbContext = GetService<DevicesDbContext>();
 
-        var identity = new Identity("test", TestDataGenerator.CreateRandomIdentityAddress(), [], TierId.Generate(), 1, CommunicationLanguage.DEFAULT_LANGUAGE);
+        var identity = new Identity("test", CreateRandomIdentityAddress(), [], TierId.Generate(), 1, CommunicationLanguage.DEFAULT_LANGUAGE);
 
         var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
         identity.Devices.Add(device);

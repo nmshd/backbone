@@ -17,8 +17,8 @@ public class SyncRunBuilder
 
     public SyncRunBuilder()
     {
-        _createdBy = TestDataGenerator.CreateRandomIdentityAddress();
-        _createdByDevice = TestDataGenerator.CreateRandomDeviceId();
+        _createdBy = CreateRandomIdentityAddress();
+        _createdByDevice = CreateRandomDeviceId();
         _isRunning = true;
     }
 

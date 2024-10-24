@@ -1,6 +1,6 @@
 ﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
-using Backbone.UnitTestTools.Data;
+using Backbone.Modules.Messages.Domain.Ids;
 
 namespace Backbone.Modules.Messages.Domain.Tests.TestHelpers;
 
@@ -8,19 +8,20 @@ public static class TestData
 {
     public static Message CreateMessageWithOneRecipient(IdentityAddress? senderAddress = null, IdentityAddress? recipientAddress = null)
     {
-        senderAddress ??= TestDataGenerator.CreateRandomIdentityAddress();
-        recipientAddress ??= TestDataGenerator.CreateRandomIdentityAddress();
+        senderAddress ??= CreateRandomIdentityAddress();
+        recipientAddress ??= CreateRandomIdentityAddress();
 
-        var recipient = new RecipientInformation(recipientAddress, []);
-        return new Message(senderAddress, TestDataGenerator.CreateRandomDeviceId(), [], [], [recipient]);
+        var recipient = new RecipientInformation(recipientAddress, RelationshipId.New(), []);
+        return new Message(senderAddress, CreateRandomDeviceId(), [], [], [recipient]);
     }
 
     public static Message CreateMessageWithTwoRecipients(IdentityAddress? senderAddress = null, IdentityAddress? recipient1Address = null, IdentityAddress? recipient2Address = null)
     {
-        senderAddress ??= TestDataGenerator.CreateRandomIdentityAddress();
-        recipient1Address ??= TestDataGenerator.CreateRandomIdentityAddress();
-        recipient2Address ??= TestDataGenerator.CreateRandomIdentityAddress();
+        senderAddress ??= CreateRandomIdentityAddress();
+        recipient1Address ??= CreateRandomIdentityAddress();
+        recipient2Address ??= CreateRandomIdentityAddress();
 
-        return new Message(senderAddress, TestDataGenerator.CreateRandomDeviceId(), [], [], [new RecipientInformation(recipient1Address, []), new RecipientInformation(recipient2Address, [])]);
+        return new Message(senderAddress, CreateRandomDeviceId(), [], [],
+            [new RecipientInformation(recipient1Address, RelationshipId.New(), []), new RecipientInformation(recipient2Address, RelationshipId.New(), [])]);
     }
 }

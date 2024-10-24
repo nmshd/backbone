@@ -68,10 +68,11 @@ public class Handler : IRequestHandler<SendMessageCommand, SendMessageResponse>
             var numberOfUnreceivedMessagesFromActiveIdentity = await _messagesRepository.CountUnreceivedMessagesFromSenderToRecipient(sender, recipientDto.Address, cancellationToken);
 
             relationshipBetweenSenderAndRecipient.EnsureSendingMessagesIsAllowed(
+                _userContext.GetAddress(),
                 numberOfUnreceivedMessagesFromActiveIdentity,
                 _options.MaxNumberOfUnreceivedMessagesFromOneSender);
 
-            var recipient = new RecipientInformation(recipientDto.Address, recipientDto.EncryptedKey);
+            var recipient = new RecipientInformation(recipientDto.Address, relationshipBetweenSenderAndRecipient.Id, recipientDto.EncryptedKey);
 
             recipients.Add(recipient);
 

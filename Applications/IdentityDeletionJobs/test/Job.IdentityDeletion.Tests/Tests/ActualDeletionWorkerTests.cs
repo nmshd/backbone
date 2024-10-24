@@ -5,15 +5,11 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Job.IdentityDeletion.Workers;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.FindRelationshipsOfIdentity;
-using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.Data;
 using CSharpFunctionalExtensions;
 using FakeItEasy;
 using MediatR;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Xunit;
 
 namespace Backbone.Job.IdentityDeletion.Tests.Tests;
 
@@ -40,15 +36,15 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     {
         // Arrange
         var fakeMediator = A.Fake<IMediator>();
-        var identityAddress1 = TestDataGenerator.CreateRandomIdentityAddress();
-        var identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityAddress1 = CreateRandomIdentityAddress();
+        var identityAddress2 = CreateRandomIdentityAddress();
         SetupRipeDeletionProcessesCommand(fakeMediator, identityAddress1, identityAddress2);
 
         var mockIdentityDeleter = A.Fake<IIdentityDeleter>();
         var worker = CreateWorker(fakeMediator, [mockIdentityDeleter]);
 
         A.CallTo(() => fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._))
-            .Returns(new FindRelationshipsOfIdentityResponse(new List<Relationship>()));
+            .Returns(new FindRelationshipsOfIdentityResponse([]));
 
         // Act
         await worker.StartProcessing(CancellationToken.None);
@@ -63,9 +59,9 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
     {
         // Arrange
         var fakeMediator = A.Fake<IMediator>();
-        var identityAddress1 = TestDataGenerator.CreateRandomIdentityAddress();
-        var identityAddress2 = TestDataGenerator.CreateRandomIdentityAddress();
-        var identityAddress3 = TestDataGenerator.CreateRandomIdentityAddress();
+        var identityAddress1 = CreateRandomIdentityAddress();
+        var identityAddress2 = CreateRandomIdentityAddress();
+        var identityAddress3 = CreateRandomIdentityAddress();
         SetupRipeDeletionProcessesCommand(fakeMediator, identityAddress1, identityAddress2, identityAddress3);
         A.CallTo(() => fakeMediator.Send(A<FindRelationshipsOfIdentityQuery>._, A<CancellationToken>._)).Returns(new FindRelationshipsOfIdentityResponse([]));
 

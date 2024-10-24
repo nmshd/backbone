@@ -9,7 +9,6 @@ using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.Crypto;
 using Backbone.Crypto.Implementations;
-using Backbone.UnitTestTools.Data;
 using Newtonsoft.Json;
 
 namespace Backbone.ConsumerApi.Tests.Integration.Helpers;
@@ -105,7 +104,7 @@ public static class Utils
     {
         var relationshipMetadata = await CreateTerminatedRelationshipBetween(client1, client2);
 
-        var reactivateRelationshipResponse = await client2.Relationships.RelationshipReactivationRequest(relationshipMetadata.Id);
+        var reactivateRelationshipResponse = await client2.Relationships.ReactivateRelationship(relationshipMetadata.Id);
         reactivateRelationshipResponse.Should().BeASuccess();
 
         var getRelationshipResponse = await client2.Relationships.GetRelationship(relationshipMetadata.Id);
@@ -122,7 +121,7 @@ public static class Utils
             Recipients = recipients.Select(r => new SendMessageRequestRecipientInformation
             {
                 Address = r.IdentityData!.Address,
-                EncryptedKey = TestDataGenerator.CreateRandomBytes(30)
+                EncryptedKey = CreateRandomBytes(30)
             }).ToList(),
             Attachments = []
         };

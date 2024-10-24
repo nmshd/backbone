@@ -9,8 +9,10 @@ public class ExternalEventCreatedDomainEvent : DomainEvent
     {
         EventId = externalEvent.Id;
         Owner = externalEvent.Owner;
+        IsDeliveryBlocked = externalEvent.IsDeliveryBlocked;
     }
 
     public string EventId { get; }
     public string Owner { get; }
+    public bool IsDeliveryBlocked { get; }
 }

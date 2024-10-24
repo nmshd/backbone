@@ -2,10 +2,7 @@ using System.Diagnostics;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.AzureStorageAccount;
-using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
 using Microsoft.Extensions.DependencyInjection;
-using Xunit;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.Tests;
 
@@ -66,10 +63,7 @@ public class AzureStorageAccountTests : AbstractTestsBase
         var services = new ServiceCollection()
             .AddLogging();
 
-        services.AddAzureStorageAccount(x =>
-        {
-            x.ConnectionString = "UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://127.0.0.1;";
-        });
+        services.AddAzureStorageAccount(x => { x.ConnectionString = "UseDevelopmentStorage=true;DevelopmentStorageProxyUri=http://127.0.0.1;"; });
 
         var serviceProvider = services.BuildServiceProvider();
         return serviceProvider.GetRequiredService<IBlobStorage>();

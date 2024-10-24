@@ -2,52 +2,48 @@
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Messages.Domain.Entities;
 using Backbone.Modules.Messages.Domain.Ids;
-using Backbone.UnitTestTools.BaseClasses;
-using Backbone.UnitTestTools.Data;
-using FluentAssertions;
-using Xunit;
 
 namespace Backbone.Modules.Messages.Domain.Tests.Relationships;
 
-public class RelationshipTests : AbstractTestsBase
+public class EnsureSendingMessagesIsAllowedTests : AbstractTestsBase
 {
     [Fact]
-    public void Relationship_must_be_active_to_allow_sending_messages()
+    public void Throws_if_relationship_is_pending()
     {
         // Arrange
         var relationship = CreateRelationship(RelationshipStatus.Pending);
 
         // Act
-        var acting = () => relationship.EnsureSendingMessagesIsAllowed(0, 5);
+        var acting = () => relationship.EnsureSendingMessagesIsAllowed(CreateRandomIdentityAddress(), 0, 5);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.message.relationshipToRecipientNotActive");
     }
 
     [Fact]
-    public void Max_number_of_unreceived_messages_must_not_be_reached()
+    public void Throws_if_max_number_of_unreceived_messages_is_reached()
     {
         // Arrange
         var relationship = CreateRelationship();
 
         // Act
-        var acting = () => relationship.EnsureSendingMessagesIsAllowed(5, 5);
+        var acting = () => relationship.EnsureSendingMessagesIsAllowed(CreateRandomIdentityAddress(), 5, 5);
 
         // Assert
         acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.message.maxNumberOfUnreceivedMessagesReached");
     }
 
     [Fact]
-    public void Relationship_cannot_be_terminated_to_allow_sending_messages()
+    public void Does_not_throw_if_relationship_is_terminated()
     {
         // Arrange
         var relationship = CreateRelationship(RelationshipStatus.Terminated);
 
         // Act
-        var acting = () => relationship.EnsureSendingMessagesIsAllowed(0, 5);
+        var acting = () => relationship.EnsureSendingMessagesIsAllowed(CreateRandomIdentityAddress(), 0, 5);
 
         // Assert
-        acting.Should().Throw<DomainException>().Which.Code.Should().Be("error.platform.validation.message.relationshipToRecipientNotActive");
+        acting.Should().NotThrow<Exception>();
     }
 
     #region helpers
@@ -61,8 +57,8 @@ public class RelationshipTests : AbstractTestsBase
         RelationshipStatus? status = null)
     {
         relationshipId ??= "REL00000000000000000";
-        from ??= TestDataGenerator.CreateRandomIdentityAddress();
-        to ??= TestDataGenerator.CreateRandomIdentityAddress();
+        from ??= CreateRandomIdentityAddress();
+        to ??= CreateRandomIdentityAddress();
         createdAt ??= DateTime.UtcNow;
         status ??= RelationshipStatus.Active;
 

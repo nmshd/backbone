@@ -19,6 +19,7 @@ Identity gets all its Messages
         And i1 has sent a Message m to i2 and i3
         And i1 has terminated r12
         And i1 has decomposed r12
+        And 1 second(s) have passed
         When i1 sends a GET request to the /Messages endpoint
         Then the response status code is 200 (Ok)
         And the response contains the Message m
@@ -31,6 +32,7 @@ Identity gets all its Messages
         And i1 has sent a Message m to i2 and i3
         And i2 has terminated r12
         And i2 has decomposed r12
+        And 1 second(s) have passed
         When i1 sends a GET request to the /Messages endpoint
         Then the response status code is 200 (Ok)
         And the response contains the Message m
@@ -43,6 +45,7 @@ Identity gets all its Messages
         And i1 has terminated r12
         And i1 has decomposed r12
         And i2 has decomposed r12
+        And 1 second(s) have passed
         When i1 sends a GET request to the /Messages endpoint
         Then the response status code is 200 (Ok)
         And the response contains the Message m
@@ -57,6 +60,7 @@ Identity gets all its Messages
         And i1 has decomposed r12
         And i1 has terminated r13
         And i1 has decomposed r13
+        And 1 second(s) have passed
         When i1 sends a GET request to the /Messages endpoint
         Then the response status code is 200 (Ok)
         And the response does not contain the Message m
@@ -68,6 +72,7 @@ Identity gets all its Messages
         And i1 has sent a Message m to i2 and i3
         And i2 has terminated r12
         And i2 has decomposed r12
+        And 1 second(s) have passed
         When i2 sends a GET request to the /Messages endpoint
         Then the response status code is 200 (Ok)
         And the response does not contain the Message m
@@ -80,6 +85,7 @@ Identity gets all its Messages
         And i1 has terminated r12
         And i1 has decomposed r12
         And i2 has decomposed r12
+        And 1 second(s) have passed
         When i3 sends a GET request to the /Messages endpoint
         Then the response status code is 200 (Ok)
         And the response contains the Message m
@@ -95,6 +101,7 @@ Identity gets all its Messages
         And i1 has terminated r13
         And i1 has decomposed r13
         And i3 has decomposed r13
+        And 1 second(s) have passed
         When i1 sends a GET request to the /Messages endpoint
         Then the response status code is 200 (Ok)
         And the response does not contain the Message m

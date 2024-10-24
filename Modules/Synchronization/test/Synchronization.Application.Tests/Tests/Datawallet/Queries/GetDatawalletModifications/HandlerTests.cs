@@ -4,12 +4,9 @@ using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Synchronization.Application.Datawallets.Queries.GetModifications;
 using Backbone.Modules.Synchronization.Domain.Entities;
 using Backbone.Modules.Synchronization.Infrastructure.Persistence.Database;
-using Backbone.UnitTestTools.BaseClasses;
 using Backbone.UnitTestTools.TestDoubles.Fakes;
 using FakeItEasy;
-using FluentAssertions;
 using FluentAssertions.Execution;
-using Xunit;
 
 namespace Backbone.Modules.Synchronization.Application.Tests.Tests.Datawallet.Queries.GetDatawalletModifications;
 
@@ -17,7 +14,7 @@ public class HandlerTests : AbstractTestsBase
 {
     private const ushort DATAWALLET_VERSION = 1;
 
-    private static readonly IdentityAddress ACTIVE_IDENTITY = TestDataGenerator.CreateRandomIdentityAddress();
+    private static readonly IdentityAddress ACTIVE_IDENTITY = CreateRandomIdentityAddress();
 
     private readonly SynchronizationDbContext _arrangeContext;
     private readonly SynchronizationDbContext _actContext;
@@ -152,7 +149,7 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         _arrangeContext.SaveEntity(CreateDatawalletForActiveIdentity());
-        var anotherIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+        var anotherIdentity = CreateRandomIdentityAddress();
         var datawallet = CreateDatawalletFor(anotherIdentity);
         datawallet.AddModification(new DatawalletExtensions.AddModificationParameters());
         _arrangeContext.SaveEntity(datawallet);
@@ -170,7 +167,7 @@ public class HandlerTests : AbstractTestsBase
     {
         // Arrange
         var datawalletOfActiveIdentity = CreateDatawalletForActiveIdentity();
-        var anotherIdentity = TestDataGenerator.CreateRandomIdentityAddress();
+        var anotherIdentity = CreateRandomIdentityAddress();
         var datawalletOfAnotherIdentity = CreateDatawalletFor(anotherIdentity);
         var modificationOfAnotherIdentity = datawalletOfAnotherIdentity.AddModification(new DatawalletExtensions.AddModificationParameters());
 

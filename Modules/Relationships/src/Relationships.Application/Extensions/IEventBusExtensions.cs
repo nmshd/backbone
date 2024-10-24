@@ -8,13 +8,12 @@ namespace Backbone.Modules.Relationships.Application.Extensions;
 
 public static class IEventBusExtensions
 {
-    public static IEventBus AddRelationshipsDomainEventSubscriptions(this IEventBus eventBus)
+    public static void AddRelationshipsDomainEventSubscriptions(this IEventBus eventBus)
     {
-        eventBus.SubscribeToIdentitiesEvents();
-        return eventBus;
+        SubscribeToIdentitiesEvents(eventBus);
     }
 
-    private static void SubscribeToIdentitiesEvents(this IEventBus eventBus)
+    private static void SubscribeToIdentitiesEvents(IEventBus eventBus)
     {
         eventBus.Subscribe<IdentityToBeDeletedDomainEvent, IdentityToBeDeletedDomainEventHandler>();
         eventBus.Subscribe<IdentityDeletionCancelledDomainEvent, IdentityDeletionCancelledDomainEventHandler>();

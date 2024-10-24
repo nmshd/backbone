@@ -1,10 +1,7 @@
 ﻿using System.Linq.Expressions;
 using Backbone.Modules.Files.Application.Identities.Commands.DeleteFilesOfIdentity;
 using Backbone.Modules.Files.Application.Infrastructure.Persistence.Repository;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
-using Xunit;
-using static Backbone.UnitTestTools.Data.TestDataGenerator;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Application.Tests.Tests.Identities.Commands.DeleteFilesOfIdentity;

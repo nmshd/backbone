@@ -35,10 +35,10 @@ public class Relationship : Entity
 
     public RelationshipStatus Status { get; }
 
-    public void EnsureSendingMessagesIsAllowed(int numberOfUnreceivedMessagesFromActiveIdentity, int maxNumberOfUnreceivedMessagesFromOneSender)
+    public void EnsureSendingMessagesIsAllowed(IdentityAddress activeIdentity, int numberOfUnreceivedMessagesFromActiveIdentity, int maxNumberOfUnreceivedMessagesFromOneSender)
     {
-        if (Status != RelationshipStatus.Active)
-            throw new DomainException(DomainErrors.RelationshipToRecipientNotActive(To));
+        if (Status is not (RelationshipStatus.Active or RelationshipStatus.Terminated))
+            throw new DomainException(DomainErrors.RelationshipToRecipientNotActive(GetPeerOf(activeIdentity)));
 
         if (numberOfUnreceivedMessagesFromActiveIdentity >= maxNumberOfUnreceivedMessagesFromOneSender)
             throw new DomainException(DomainErrors.MaxNumberOfUnreceivedMessagesReached(To));
@@ -47,6 +47,11 @@ public class Relationship : Entity
     public static Relationship LoadForTesting(RelationshipId id, IdentityAddress from, IdentityAddress to, DateTime createdAt, RelationshipStatus status)
     {
         return new Relationship(id, from, to, createdAt, status);
+    }
+
+    private IdentityAddress GetPeerOf(IdentityAddress activeIdentity)
+    {
+        return From == activeIdentity ? To : From;
     }
 }
 

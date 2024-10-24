@@ -1,8 +1,5 @@
 using Backbone.BuildingBlocks.Application.Extensions;
-using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
 using FluentValidation;
-using Xunit;
 
 namespace Backbone.BuildingBlocks.Application.Tests.FluentValidation;
 

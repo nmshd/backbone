@@ -1,11 +1,8 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
 using Backbone.Modules.Tokens.Application.Identities;
 using Backbone.Modules.Tokens.Application.Tokens.Commands.DeleteTokensOfIdentity;
-using Backbone.UnitTestTools.BaseClasses;
 using FakeItEasy;
 using MediatR;
-using Xunit;
-using static Backbone.UnitTestTools.Data.TestDataGenerator;
 
 namespace Backbone.Modules.Tokens.Application.Tests.Tests.Identities;
 
