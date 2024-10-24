@@ -77,3 +77,20 @@ apply --baseAddress http://localhost:8081 --clientId test --clientSecret test --
 - [ ] Apply RelationshipsAndMessagePoolConfigs Excel (Create Database Snapshot)
 - [ ] Apply RelationshipsAndMessagePoolConfigs Excel in Database Command
 
+## 3.2 Console Application (CLI)
+
+Command Line Parser Nuget we want to use: McMaster.Extensions.CommandLineUtils
+
+nuget: https://www.nuget.org/packages/McMaster.Extensions.CommandLineUtils/
+
+Current branch vector:
+
+```
+main --> abl-10 --> abl-10-fill-db-for-perftests-tool -> abl-244-fill-db-for-perftests-tool
+```
+
+Start Console Application in : abl-244-fill-db-for-perftests-tool
+PR (Intermediate Review) Branch: abl-10-fill-db-for-perftests-tool
+PR (Intermediate Review): https://github.com/nmshd/backbone/pull/921
+
+

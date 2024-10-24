@@ -2,7 +2,7 @@
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 
-public record Identity(int Id, IdentityPoolType IdentityPoolType, IdentityPoolConfiguration IdentityPoolConfiguration)
+public record Identity(int Address, IdentityPoolType IdentityPoolType, IdentityPoolConfiguration IdentityPoolConfiguration)
 {
     public List<RelationshipAndMessages> RelationshipAndMessages { get; } = [];
 
