@@ -1,8 +1,9 @@
-﻿using Backbone.Modules.Announcements.Domain.Ids;
+﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.Modules.Announcements.Domain.Ids;
 
 namespace Backbone.Modules.Announcements.Domain.Entities
 {
-    public class Announcement
+    public class Announcement : Entity
     {
         public AnnouncementId Id { get; set; }
         public DateTime CreatedAt { get; set; }

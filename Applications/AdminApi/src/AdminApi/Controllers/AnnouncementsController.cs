@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Backbone.BuildingBlocks.API.Mvc;
+﻿using Backbone.BuildingBlocks.API.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +14,6 @@ public class AnnouncementsController : ApiControllerBase
     }
 
     [HttpPost]
-    //[ProducesResponseType(StatusCodes.Status200OK)]
     public IActionResult CreateAnnouncement(CancellationToken cancellationToken)
     {
         return Ok();
