@@ -2,9 +2,9 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Modules.Tags.Application;
 using Backbone.Modules.Tags.Application.Extensions;
+using Backbone.Modules.Tags.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 
 namespace Backbone.Modules.Tags.ConsumerApi;
 
@@ -15,12 +15,9 @@ public class TagsModule : AbstractModule
     public override void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
     {
         services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
-        services.ConfigureAndValidate<Configuration>(configuration.Bind);
-
-        var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<ApplicationOptions>>().Value;
 
         services.AddApplication();
-        services.AddTags(parsedConfiguration);
+        services.AddPersistence();
     }
 
     public override void ConfigureEventBus(IEventBus eventBus)

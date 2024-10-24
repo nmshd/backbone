@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Backbone.Modules.Tags.Domain;
 
 namespace Backbone.Modules.Tags.Application;
 
@@ -13,21 +14,9 @@ public class AttributeInfo
     public string Name { get; set; } = string.Empty;
 
     [Required]
-    [MinLength(1)]
-    public List<TagInfo> Tags { get; set; } = [];
-}
+    public List<string> SupportedLanguages { get; set; } = [];
 
-public class TagInfo
-{
-    [Required]
-    [MinLength(1)]
-    public string Tag { get; set; } = string.Empty;
-
-    [Required]
-    [CustomValidation(typeof(DisplayNamesValidator), "Validate")]
-    public Dictionary<string, string> DisplayNames { get; set; } = [];
-
-    public List<TagInfo> Children { get; set; } = [];
+    public Dictionary<string, Dictionary<string, TagInfo>> TagsForAttributeValueTypes { get; set; } = [];
 }
 
 public static class DisplayNamesValidator

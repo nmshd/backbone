@@ -11,9 +11,4 @@ public static class IServiceCollectionExtensions
             .RegisterServicesFromAssemblyContaining<ListTagsQuery>()
         );
     }
-
-    public static void AddTags(this IServiceCollection services, ApplicationOptions applicationOptions)
-    {
-        services.AddSingleton(new TagProvider(applicationOptions.Attributes));
-    }
 }
