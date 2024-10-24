@@ -10,4 +10,15 @@ class AnnouncementsEndpoint extends Endpoint {
         '/api/v1/Announcements',
         transformer: (e) => (e as List).map(AnnouncementOverview.fromJson).toList(),
       );
+
+  Future<ApiResponse<CreateAnnouncement>> createAnnouncement({
+    required String expiresAt,
+    required String severity,
+    required List<AnnouncementText> announcementTexts,
+  }) =>
+      post(
+        '/api/v1/Announcements',
+        data: {'expiresAt': expiresAt, 'severity': severity, 'announcementTexts': announcementTexts},
+        transformer: CreateAnnouncement.fromJson,
+      );
 }
