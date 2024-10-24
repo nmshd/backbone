@@ -4,8 +4,8 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 
 public record PerformanceTestConfiguration(
     [property: JsonPropertyName("Pools")] List<IdentityPoolConfiguration> IdentityPoolConfigs,
-    [property: JsonPropertyName("Configuration")]
-    Configuration Configuration)
+    [property: JsonPropertyName("Verification")]
+    VerificationConfiguration VerificationConfiguration)
 {
     public virtual bool Equals(PerformanceTestConfiguration? other)
     {
@@ -19,8 +19,8 @@ public record PerformanceTestConfiguration(
             return true;
         }
 
-        var isConfigEqual = Configuration.App.Equals(other.Configuration.App) &&
-                            Configuration.Connector.Equals(other.Configuration.Connector);
+        var isConfigEqual = VerificationConfiguration.App.Equals(other.VerificationConfiguration.App) &&
+                            VerificationConfiguration.Connector.Equals(other.VerificationConfiguration.Connector);
         var isPoolConfigsEqual = IdentityPoolConfigs.SequenceEqual(other.IdentityPoolConfigs);
 
 
@@ -31,8 +31,8 @@ public record PerformanceTestConfiguration(
     {
         var hash = new HashCode();
 
-        hash.Add(Configuration.App);
-        hash.Add(Configuration.Connector);
+        hash.Add(VerificationConfiguration.App);
+        hash.Add(VerificationConfiguration.Connector);
 
         foreach (var poolConfig in IdentityPoolConfigs)
         {

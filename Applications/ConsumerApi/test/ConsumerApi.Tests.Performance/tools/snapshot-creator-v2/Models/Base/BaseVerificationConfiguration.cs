@@ -2,7 +2,7 @@
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models.Base;
 
-public record BaseConfig
+public record BaseVerificationConfiguration
 {
     [JsonPropertyName(nameof(TotalNumberOfSentMessages))]
     public long TotalNumberOfSentMessages { get; set; }
@@ -11,5 +11,5 @@ public record BaseConfig
     public long TotalNumberOfReceivedMessages { get; set; }
 
     [JsonPropertyName(nameof(NumberOfReceivedMessagesAddOn))]
-    public long NumberOfReceivedMessagesAddOn { get; set; }
+    public int NumberOfReceivedMessagesAddOn { get; set; }
 }

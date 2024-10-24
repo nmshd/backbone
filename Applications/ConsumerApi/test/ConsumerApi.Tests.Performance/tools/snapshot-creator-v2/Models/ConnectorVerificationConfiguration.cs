@@ -3,7 +3,7 @@ using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models.Base;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 
-public record ConnectorConfig : BaseConfig
+public record ConnectorVerificationConfiguration : BaseVerificationConfiguration
 {
     [JsonPropertyName(nameof(TotalNumberOfAvailableRelationships))]
     public long TotalNumberOfAvailableRelationships { get; set; }

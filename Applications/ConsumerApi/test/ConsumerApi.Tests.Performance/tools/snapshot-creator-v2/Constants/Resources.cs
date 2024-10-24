@@ -50,5 +50,6 @@ public static class Resources
 
     public const string IDENTITY_NO_MORE_RELATIONSHIPS_AVAILABLE = "No more relationships available";
 
-    public const string RELATIONSHIP_NO_RECEIVER_AVAILABLE = "No further receiver identity available to establish a relationship to sender identity Id: {0} of {1}";
+    public const string RELATIONSHIP_NO_RECEIVER_AVAILABLE = "No further receiver identity available to establish a relationship to sender identity Address: {0} of {1}";
+    public const string RELATIONSHIP_COUNT_MISMATCH = "Relationship count mismatch. Expected: {0}, Actual: {1}";
 }

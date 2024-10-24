@@ -2,7 +2,6 @@ using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 using FluentAssertions;
 using Ganss.Excel;
-using Newtonsoft.Json;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests;
 
@@ -16,26 +15,26 @@ public class IdentityPoolConfigGeneratorTests
     {
         var expectedPoolConfiguration = loadTestTag switch
         {
-            WORKBOOK_SHEET_HEAVY_LOAD => new PerformanceTestConfiguration(HeavyLoadIdentityPool, HeavyLoadConfiguration),
-            WORKBOOK_SHEET_LIGHT_LOAD => new PerformanceTestConfiguration(LightLoadIdentityPool, LightLoadConfiguration),
-            WORKBOOK_SHEET_TEST_LOAD => new PerformanceTestConfiguration(TestLoadIdentityPool, TestLoadConfiguration),
+            WORKBOOK_SHEET_HEAVY_LOAD => new PerformanceTestConfiguration(HeavyLoadIdentityPool, HeavyLoadVerificationConfiguration),
+            WORKBOOK_SHEET_LIGHT_LOAD => new PerformanceTestConfiguration(LightLoadIdentityPool, LightLoadVerificationConfiguration),
+            WORKBOOK_SHEET_TEST_LOAD => new PerformanceTestConfiguration(TestLoadIdentityPool, TestLoadVerificationConfiguration),
             _ => throw new ArgumentException($"Invalid load test tag: {loadTestTag}", nameof(loadTestTag))
         };
 
         return expectedPoolConfiguration;
     }
 
-    private static Configuration TestLoadConfiguration =>
+    private static VerificationConfiguration TestLoadVerificationConfiguration =>
         new()
         {
-            App = new AppConfig
+            App = new AppVerificationConfiguration
             {
                 TotalNumberOfSentMessages = 48,
                 TotalNumberOfReceivedMessages = 45,
                 NumberOfReceivedMessagesAddOn = 3,
                 TotalNumberOfRelationships = 22
             },
-            Connector = new ConnectorConfig
+            Connector = new ConnectorVerificationConfiguration
             {
                 TotalNumberOfSentMessages = 48,
                 TotalNumberOfReceivedMessages = 46,
@@ -146,17 +145,17 @@ public class IdentityPoolConfigGeneratorTests
         }
     ];
 
-    private static Configuration LightLoadConfiguration =>
+    private static VerificationConfiguration LightLoadVerificationConfiguration =>
         new()
         {
-            App = new AppConfig
+            App = new AppVerificationConfiguration
             {
                 TotalNumberOfSentMessages = 16500,
                 TotalNumberOfReceivedMessages = 16500,
                 NumberOfReceivedMessagesAddOn = 0,
                 TotalNumberOfRelationships = 1800
             },
-            Connector = new ConnectorConfig
+            Connector = new ConnectorVerificationConfiguration
             {
                 TotalNumberOfSentMessages = 16500,
                 TotalNumberOfReceivedMessages = 16499,
@@ -267,17 +266,17 @@ public class IdentityPoolConfigGeneratorTests
         }
     ];
 
-    private static Configuration HeavyLoadConfiguration =>
+    private static VerificationConfiguration HeavyLoadVerificationConfiguration =>
         new()
         {
-            App = new AppConfig
+            App = new AppVerificationConfiguration
             {
                 TotalNumberOfSentMessages = 780000,
                 TotalNumberOfReceivedMessages = 780000,
                 NumberOfReceivedMessagesAddOn = 1000,
                 TotalNumberOfRelationships = 21000
             },
-            Connector = new ConnectorConfig
+            Connector = new ConnectorVerificationConfiguration
             {
                 TotalNumberOfSentMessages = 781000,
                 TotalNumberOfReceivedMessages = 780000,

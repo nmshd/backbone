@@ -92,7 +92,7 @@
       "NumberOfChallenges": 30
     }
   ],
-  "Verification": {
+  "Configuration": {
     "App": {
       "TotalNumberOfSentMessages": 48,
       "TotalNumberOfReceivedMessages": 45,
