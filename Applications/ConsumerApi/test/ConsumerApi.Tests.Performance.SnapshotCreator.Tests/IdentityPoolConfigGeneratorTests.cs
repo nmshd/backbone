@@ -272,16 +272,16 @@ public class IdentityPoolConfigGeneratorTests
             App = new AppVerificationConfiguration
             {
                 TotalNumberOfSentMessages = 780000,
-                TotalNumberOfReceivedMessages = 780000,
-                NumberOfReceivedMessagesAddOn = 1000,
+                TotalNumberOfReceivedMessages = 776500,
+                NumberOfReceivedMessagesAddOn = 3500,
                 TotalNumberOfRelationships = 21000
             },
             Connector = new ConnectorVerificationConfiguration
             {
-                TotalNumberOfSentMessages = 781000,
+                TotalNumberOfSentMessages = 780000,
                 TotalNumberOfReceivedMessages = 780000,
                 NumberOfReceivedMessagesAddOn = 0,
-                TotalNumberOfAvailableRelationships = 21000
+                TotalNumberOfAvailableRelationships = 21010
             }
         };
 
@@ -338,7 +338,7 @@ public class IdentityPoolConfigGeneratorTests
             NumberOfRelationshipTemplates = 5,
             NumberOfRelationships = 5,
             NumberOfSentMessages = 200,
-            NumberOfReceivedMessages = 165,
+            NumberOfReceivedMessages = 164,
             NumberOfDatawalletModifications = 1500,
             NumberOfDevices = 3,
             NumberOfChallenges = 20
@@ -349,10 +349,10 @@ public class IdentityPoolConfigGeneratorTests
             Name = POOL_NAME_CONNECTOR_LIGHT,
             Alias = POOL_ALIAS_CONNECTOR_LIGHT,
             Amount = 10,
-            NumberOfRelationshipTemplates = 100,
-            NumberOfRelationships = 21,
-            NumberOfSentMessages = 100,
-            NumberOfReceivedMessages = 780,
+            NumberOfRelationshipTemplates = 0,
+            NumberOfRelationships = 0,
+            NumberOfSentMessages = 0,
+            NumberOfReceivedMessages = 0,
             NumberOfDatawalletModifications = 0,
             NumberOfDevices = 1,
             NumberOfChallenges = 10
@@ -364,9 +364,9 @@ public class IdentityPoolConfigGeneratorTests
             Alias = POOL_ALIAS_CONNECTOR_MEDIUM,
             Amount = 20,
             NumberOfRelationshipTemplates = 8000,
-            NumberOfRelationships = 252,
+            NumberOfRelationships = 263,
             NumberOfSentMessages = 12000,
-            NumberOfReceivedMessages = 9360,
+            NumberOfReceivedMessages = 9750,
             NumberOfDatawalletModifications = 0,
             NumberOfDevices = 1,
             NumberOfChallenges = 100
