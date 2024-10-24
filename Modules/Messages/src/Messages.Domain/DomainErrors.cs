@@ -10,7 +10,7 @@ public static class DomainErrors
 
         return new DomainError(
             "error.platform.validation.message.relationshipToRecipientNotActive",
-            $"Cannot send message to {recipientText} because the relationship to it is not active. If it's terminated, you'll need to reactivate it to be able to send messages again.");
+            $"Cannot send message to {recipientText} because the relationship to it is not active.");
     }
 
     public static DomainError MaxNumberOfUnreceivedMessagesReached(string recipient = "")
