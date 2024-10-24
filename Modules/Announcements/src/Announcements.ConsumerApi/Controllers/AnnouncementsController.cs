@@ -13,8 +13,8 @@ public class AnnouncementsController : ApiControllerBase
     {
     }
 
-    [HttpPost]
-    public IActionResult CreateAnnouncement()
+    [HttpGet]
+    public IActionResult GetAllAnnouncements()
     {
         return Ok();
     }

@@ -376,15 +376,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{D67D404E-1FE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{399BA0C2-C130-4C8E-8F2D-8BB45AB9FD1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Announcements.ConsumerApi", "Modules\Announcements\src\Announcements.ConsumerApi\Announcements.ConsumerApi.csproj", "{8D3E9953-BF24-4E8D-A337-90A5DE0B43D1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Announcements.ConsumerApi", "Modules\Announcements\src\Announcements.ConsumerApi\Announcements.ConsumerApi.csproj", "{8D3E9953-BF24-4E8D-A337-90A5DE0B43D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Announcements.Domain", "Modules\Announcements\src\Announcements.Domain\Announcements.Domain.csproj", "{5AEE6DCE-F448-4593-8897-6C8511D7F3F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Announcements.Domain", "Modules\Announcements\src\Announcements.Domain\Announcements.Domain.csproj", "{5AEE6DCE-F448-4593-8897-6C8511D7F3F2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Announcements.Infrastructure", "Modules\Announcements\src\Announcements.Infrastructure\Announcements.Infrastructure.csproj", "{AF71E018-9D16-4C13-9646-6FACC474F138}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Announcements.Infrastructure", "Modules\Announcements\src\Announcements.Infrastructure\Announcements.Infrastructure.csproj", "{AF71E018-9D16-4C13-9646-6FACC474F138}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Announcements.Infrastructure.Postgres", "Modules\Announcements\src\Announcements.Infrastructure.Postgres\Announcements.Infrastructure.Postgres.csproj", "{4176C717-C052-4A41-A8D1-4BA321205471}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Announcements.Infrastructure.Postgres", "Modules\Announcements\src\Announcements.Infrastructure.Postgres\Announcements.Infrastructure.Postgres.csproj", "{4176C717-C052-4A41-A8D1-4BA321205471}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Announcements.Infrastructure.SqlServer", "Modules\Announcements\src\Announcements.Infrastructure.SqlServer\Announcements.Infrastructure.SqlServer.csproj", "{CAC08F1F-4187-46A8-8B77-7DD7A1022D66}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Announcements.Infrastructure.SqlServer", "Modules\Announcements\src\Announcements.Infrastructure.SqlServer\Announcements.Infrastructure.SqlServer.csproj", "{CAC08F1F-4187-46A8-8B77-7DD7A1022D66}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Announcements.Application", "Modules\Announcements\src\Announcements.Application\Announcements.Application.csproj", "{69F91E3A-3F97-4F08-A451-223B5BF12A07}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -844,6 +846,10 @@ Global
 		{CAC08F1F-4187-46A8-8B77-7DD7A1022D66}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CAC08F1F-4187-46A8-8B77-7DD7A1022D66}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CAC08F1F-4187-46A8-8B77-7DD7A1022D66}.Release|Any CPU.Build.0 = Release|Any CPU
+		{69F91E3A-3F97-4F08-A451-223B5BF12A07}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{69F91E3A-3F97-4F08-A451-223B5BF12A07}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{69F91E3A-3F97-4F08-A451-223B5BF12A07}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{69F91E3A-3F97-4F08-A451-223B5BF12A07}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1021,6 +1027,7 @@ Global
 		{AF71E018-9D16-4C13-9646-6FACC474F138} = {D67D404E-1FE6-4CC6-B0F8-20DB87B9F23A}
 		{4176C717-C052-4A41-A8D1-4BA321205471} = {D67D404E-1FE6-4CC6-B0F8-20DB87B9F23A}
 		{CAC08F1F-4187-46A8-8B77-7DD7A1022D66} = {D67D404E-1FE6-4CC6-B0F8-20DB87B9F23A}
+		{69F91E3A-3F97-4F08-A451-223B5BF12A07} = {D67D404E-1FE6-4CC6-B0F8-20DB87B9F23A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1F3BD2C6-7CB3-450F-A21A-23EA520D5B7A}
