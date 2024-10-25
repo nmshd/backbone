@@ -4,7 +4,14 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 
 public record VerificationConfiguration
 {
-    [JsonPropertyName(nameof(App))] public AppVerificationConfiguration App { get; set; } = null!;
+    [JsonPropertyName(nameof(TotalNumberOfRelationships))]
+    public int TotalNumberOfRelationships { get; set; }
 
-    [JsonPropertyName(nameof(Connector))] public ConnectorVerificationConfiguration Connector { get; set; } = null!;
+
+    [JsonPropertyName(nameof(TotalConnectorSentMessages))]
+    public long TotalConnectorSentMessages { get; set; }
+
+
+    [JsonPropertyName(nameof(TotalAppSentMessages))]
+    public long TotalAppSentMessages { get; set; }
 }

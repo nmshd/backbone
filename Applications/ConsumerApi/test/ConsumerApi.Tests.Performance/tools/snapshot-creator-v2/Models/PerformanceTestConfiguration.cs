@@ -19,8 +19,7 @@ public record PerformanceTestConfiguration(
             return true;
         }
 
-        var isConfigEqual = VerificationConfiguration.App.Equals(other.VerificationConfiguration.App) &&
-                            VerificationConfiguration.Connector.Equals(other.VerificationConfiguration.Connector);
+        var isConfigEqual = VerificationConfiguration.Equals(other.VerificationConfiguration);
         var isPoolConfigsEqual = IdentityPoolConfigs.SequenceEqual(other.IdentityPoolConfigs);
 
 
@@ -31,8 +30,7 @@ public record PerformanceTestConfiguration(
     {
         var hash = new HashCode();
 
-        hash.Add(VerificationConfiguration.App);
-        hash.Add(VerificationConfiguration.Connector);
+        hash.Add(VerificationConfiguration);
 
         foreach (var poolConfig in IdentityPoolConfigs)
         {

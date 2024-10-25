@@ -27,20 +27,9 @@ public class IdentityPoolConfigGeneratorTests
     private static VerificationConfiguration TestLoadVerificationConfiguration =>
         new()
         {
-            App = new AppVerificationConfiguration
-            {
-                TotalNumberOfSentMessages = 48,
-                TotalNumberOfReceivedMessages = 45,
-                NumberOfReceivedMessagesAddOn = 3,
-                TotalNumberOfRelationships = 22
-            },
-            Connector = new ConnectorVerificationConfiguration
-            {
-                TotalNumberOfSentMessages = 48,
-                TotalNumberOfReceivedMessages = 46,
-                NumberOfReceivedMessagesAddOn = 2,
-                TotalNumberOfAvailableRelationships = 27
-            }
+            TotalNumberOfRelationships = 22,
+            TotalAppSentMessages = 48,
+            TotalConnectorSentMessages = 48
         };
 
     private static List<IdentityPoolConfiguration> TestLoadIdentityPool =>
@@ -148,20 +137,9 @@ public class IdentityPoolConfigGeneratorTests
     private static VerificationConfiguration LightLoadVerificationConfiguration =>
         new()
         {
-            App = new AppVerificationConfiguration
-            {
-                TotalNumberOfSentMessages = 16500,
-                TotalNumberOfReceivedMessages = 16500,
-                NumberOfReceivedMessagesAddOn = 0,
-                TotalNumberOfRelationships = 1800
-            },
-            Connector = new ConnectorVerificationConfiguration
-            {
-                TotalNumberOfSentMessages = 16500,
-                TotalNumberOfReceivedMessages = 16499,
-                NumberOfReceivedMessagesAddOn = 1,
-                TotalNumberOfAvailableRelationships = 1803
-            }
+            TotalNumberOfRelationships = 1800,
+            TotalAppSentMessages = 16500,
+            TotalConnectorSentMessages = 16500
         };
 
     private static List<IdentityPoolConfiguration> LightLoadIdentityPool =>
@@ -217,7 +195,7 @@ public class IdentityPoolConfigGeneratorTests
             NumberOfRelationshipTemplates = 0,
             NumberOfRelationships = 5,
             NumberOfSentMessages = 50,
-            NumberOfReceivedMessages = 40,
+            NumberOfReceivedMessages = 41,
             NumberOfDatawalletModifications = 1,
             NumberOfDevices = 3,
             NumberOfChallenges = 20
@@ -269,20 +247,9 @@ public class IdentityPoolConfigGeneratorTests
     private static VerificationConfiguration HeavyLoadVerificationConfiguration =>
         new()
         {
-            App = new AppVerificationConfiguration
-            {
-                TotalNumberOfSentMessages = 780000,
-                TotalNumberOfReceivedMessages = 776500,
-                NumberOfReceivedMessagesAddOn = 3500,
-                TotalNumberOfRelationships = 21000
-            },
-            Connector = new ConnectorVerificationConfiguration
-            {
-                TotalNumberOfSentMessages = 780000,
-                TotalNumberOfReceivedMessages = 780000,
-                NumberOfReceivedMessagesAddOn = 0,
-                TotalNumberOfAvailableRelationships = 21010
-            }
+            TotalNumberOfRelationships = 20500,
+            TotalAppSentMessages = 775000,
+            TotalConnectorSentMessages = 780000
         };
 
     private static List<IdentityPoolConfiguration> HeavyLoadIdentityPool =>
@@ -307,10 +274,10 @@ public class IdentityPoolConfigGeneratorTests
             Name = POOL_NAME_APP_LIGHT,
             Alias = POOL_ALIAS_APP_LIGHT,
             Amount = 500,
-            NumberOfRelationshipTemplates = 1,
-            NumberOfRelationships = 1,
-            NumberOfSentMessages = 10,
-            NumberOfReceivedMessages = 15,
+            NumberOfRelationshipTemplates = 0,
+            NumberOfRelationships = 0,
+            NumberOfSentMessages = 0,
+            NumberOfReceivedMessages = 0,
             NumberOfDatawalletModifications = 50,
             NumberOfDevices = 1,
             NumberOfChallenges = 1
@@ -338,7 +305,7 @@ public class IdentityPoolConfigGeneratorTests
             NumberOfRelationshipTemplates = 5,
             NumberOfRelationships = 5,
             NumberOfSentMessages = 200,
-            NumberOfReceivedMessages = 164,
+            NumberOfReceivedMessages = 167,
             NumberOfDatawalletModifications = 1500,
             NumberOfDevices = 3,
             NumberOfChallenges = 20
@@ -364,9 +331,9 @@ public class IdentityPoolConfigGeneratorTests
             Alias = POOL_ALIAS_CONNECTOR_MEDIUM,
             Amount = 20,
             NumberOfRelationshipTemplates = 8000,
-            NumberOfRelationships = 263,
+            NumberOfRelationships = 257,
             NumberOfSentMessages = 12000,
-            NumberOfReceivedMessages = 9750,
+            NumberOfReceivedMessages = 9687,
             NumberOfDatawalletModifications = 0,
             NumberOfDevices = 1,
             NumberOfChallenges = 100
@@ -378,9 +345,9 @@ public class IdentityPoolConfigGeneratorTests
             Alias = POOL_ALIAS_CONNECTOR_HEAVY,
             Amount = 30,
             NumberOfRelationshipTemplates = 12000,
-            NumberOfRelationships = 525,
+            NumberOfRelationships = 513,
             NumberOfSentMessages = 18000,
-            NumberOfReceivedMessages = 19500,
+            NumberOfReceivedMessages = 19375,
             NumberOfDatawalletModifications = 0,
             NumberOfDevices = 1,
             NumberOfChallenges = 300
@@ -507,7 +474,7 @@ public class IdentityPoolConfigGeneratorTests
 
         // Assert
 
-        status.Should().BeTrue();
+        status.Should().BeTrue($"The operation should succeed, but failed with message: {message}");
         message.Should().Be(expectedRelationshipsFilePath);
 
         File.Exists(expectedRelationshipsFilePath).Should().BeTrue();
