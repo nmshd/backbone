@@ -16,4 +16,5 @@ public record Identity(int Address, IdentityPoolType IdentityPoolType, IdentityP
 
     public int MessagesToSendPerRelationship => IdentityPoolConfiguration.NumberOfSentMessages / IdentityPoolConfiguration.NumberOfRelationships;
     public int ModuloSendMessages => IdentityPoolConfiguration.NumberOfSentMessages % IdentityPoolConfiguration.NumberOfRelationships;
+    public int NumberOfSentMessages { get; private set; } = IdentityPoolConfiguration.NumberOfSentMessages;
 }

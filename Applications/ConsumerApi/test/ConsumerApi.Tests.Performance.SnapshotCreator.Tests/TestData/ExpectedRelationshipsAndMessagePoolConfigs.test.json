@@ -242,69 +242,69 @@
     "SenderIdentityAddress": 2,
     "ReceiverPool": "a3",
     "ReceiverIdentityAddress": 1,
-    "NumberOfSentMessages": 1
+    "NumberOfSentMessages": 2
   },
   {
     "SenderPool": "c3",
     "SenderIdentityAddress": 2,
     "ReceiverPool": "a3",
     "ReceiverIdentityAddress": 2,
-    "NumberOfSentMessages": 1
+    "NumberOfSentMessages": 2
   },
   {
     "SenderPool": "c3",
     "SenderIdentityAddress": 2,
     "ReceiverPool": "a3",
     "ReceiverIdentityAddress": 3,
-    "NumberOfSentMessages": 1
+    "NumberOfSentMessages": 2
   },
   {
     "SenderPool": "c3",
     "SenderIdentityAddress": 2,
     "ReceiverPool": "a3",
     "ReceiverIdentityAddress": 3,
-    "NumberOfSentMessages": 1
+    "NumberOfSentMessages": 2
   },
   {
     "SenderPool": "c3",
     "SenderIdentityAddress": 3,
     "ReceiverPool": "a3",
     "ReceiverIdentityAddress": 1,
-    "NumberOfSentMessages": 1
+    "NumberOfSentMessages": 2
   },
   {
     "SenderPool": "c3",
     "SenderIdentityAddress": 3,
     "ReceiverPool": "a3",
     "ReceiverIdentityAddress": 2,
-    "NumberOfSentMessages": 1
+    "NumberOfSentMessages": 2
   },
   {
     "SenderPool": "c3",
     "SenderIdentityAddress": 3,
     "ReceiverPool": "a3",
     "ReceiverIdentityAddress": 3,
-    "NumberOfSentMessages": 1
+    "NumberOfSentMessages": 4
   },
   {
     "SenderPool": "c3",
     "SenderIdentityAddress": 4,
     "ReceiverPool": "a3",
     "ReceiverIdentityAddress": 1,
-    "NumberOfSentMessages": 1
+    "NumberOfSentMessages": 2
   },
   {
     "SenderPool": "c3",
     "SenderIdentityAddress": 4,
     "ReceiverPool": "a3",
     "ReceiverIdentityAddress": 2,
-    "NumberOfSentMessages": 1
+    "NumberOfSentMessages": 2
   },
   {
     "SenderPool": "c3",
     "SenderIdentityAddress": 4,
     "ReceiverPool": "a3",
     "ReceiverIdentityAddress": 3,
-    "NumberOfSentMessages": 1
+    "NumberOfSentMessages": 4
   }
 ]
