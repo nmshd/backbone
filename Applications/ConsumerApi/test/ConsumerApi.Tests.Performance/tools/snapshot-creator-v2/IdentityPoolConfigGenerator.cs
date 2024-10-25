@@ -204,9 +204,18 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
 
                         receiverConnectorIdentity.DecrementAvailableRelationships();
 
-                        reverseRelationshipAndMessages.NumberOfSentMessages = receiverConnectorIdentity.HasAvailableRelationships
-                            ? receiverConnectorIdentity.MessagesToSendPerRelationship
-                            : receiverConnectorIdentity.MessagesToSendPerRelationship + receiverConnectorIdentity.ModuloSendMessages;
+                        var totalSentMessagesPerRelationship = receiverConnectorIdentity.NumberOfSentMessages / receiverConnectorIdentity.RelationshipAndMessages.Count;
+                        var modulo = receiverConnectorIdentity.NumberOfSentMessages % receiverConnectorIdentity.RelationshipAndMessages.Count;
+
+                        foreach (var relationshipAndMessage in receiverConnectorIdentity.RelationshipAndMessages)
+                        {
+                            relationshipAndMessage.NumberOfSentMessages = totalSentMessagesPerRelationship;
+                        }
+
+                        if (modulo == 0) continue;
+
+                        var relationshipAndMessageWithModulo = receiverConnectorIdentity.RelationshipAndMessages.Last();
+                        relationshipAndMessageWithModulo.NumberOfSentMessages += modulo;
                     }
                 }
             }
@@ -224,24 +233,24 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
                 throw new InvalidOperationException(string.Format(RELATIONSHIP_COUNT_MISMATCH, poolConfig.VerificationConfiguration.TotalNumberOfRelationships, relationShipCount));
             }
 
-            //void VerifyNumberOfSentMessages(RelationshipAndMessages[] relationshipAndMessages, IdentityPoolType identityPoolType, long expectedTotalNumberOfSentMessages)
-            //{
-            //    var filteredRelationships = relationshipAndMessages.Where(rm => rm.ReceiverIdentityPoolType == identityPoolType).ToList();
-            //    var actualTotalNumberOfSentMessages = filteredRelationships.Sum(rm => rm.NumberOfSentMessages);
+            void VerifyNumberOfSentMessages(RelationshipAndMessages[] relationshipAndMessages, IdentityPoolType identityPoolType, long expectedTotalNumberOfSentMessages)
+            {
+                var filteredRelationships = relationshipAndMessages.Where(rm => rm.ReceiverIdentityPoolType == identityPoolType).ToList();
+                var actualTotalNumberOfSentMessages = filteredRelationships.Sum(rm => rm.NumberOfSentMessages);
 
-            //    if (actualTotalNumberOfSentMessages == expectedTotalNumberOfSentMessages) return;
+                if (actualTotalNumberOfSentMessages == expectedTotalNumberOfSentMessages) return;
 
-            //    var messageDifference = expectedTotalNumberOfSentMessages - actualTotalNumberOfSentMessages;
+                var messageDifference = expectedTotalNumberOfSentMessages - actualTotalNumberOfSentMessages;
 
-            //    if (messageDifference == 0) return;
+                if (messageDifference == 0) return;
 
-            //    throw new InvalidOperationException(string.Format(VERIFICATION_TOTAL_NUMBER_OF_SENT_MESSAGES_FAILED, identityPoolType, expectedTotalNumberOfSentMessages,
-            //        actualTotalNumberOfSentMessages));
-            //}
+                throw new InvalidOperationException(string.Format(VERIFICATION_TOTAL_NUMBER_OF_SENT_MESSAGES_FAILED, identityPoolType, expectedTotalNumberOfSentMessages,
+                    actualTotalNumberOfSentMessages));
+            }
 
-            //VerifyNumberOfSentMessages(relationshipAndMessagesList, IdentityPoolType.Connector, poolConfig.VerificationConfiguration.TotalAppSentMessages);
+            VerifyNumberOfSentMessages(relationshipAndMessagesList, IdentityPoolType.Connector, poolConfig.VerificationConfiguration.TotalAppSentMessages);
 
-            //VerifyNumberOfSentMessages(relationshipAndMessagesList, IdentityPoolType.App, poolConfig.VerificationConfiguration.TotalConnectorSentMessages);
+            VerifyNumberOfSentMessages(relationshipAndMessagesList, IdentityPoolType.App, poolConfig.VerificationConfiguration.TotalConnectorSentMessages);
 
             var jsonString = JsonSerializer.Serialize(relationshipAndMessagesList, new JsonSerializerOptions { WriteIndented = true });
             var jsonFilePath = Path.Combine(savePath, $"{RELATIONSHIPS_AND_MESSAGE_POOL_CONFIGS_FILE_NAME}.{workSheetName}.{JSON_FILE_EXT}");
