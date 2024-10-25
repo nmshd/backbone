@@ -47,7 +47,7 @@
       "NumberOfRelationshipTemplates": 0,
       "NumberOfRelationships": 5,
       "NumberOfSentMessages": 50,
-      "NumberOfReceivedMessages": 40,
+      "NumberOfReceivedMessages": 41,
       "NumberOfDatawalletModifications": 1,
       "NumberOfDevices": 3,
       "NumberOfChallenges": 20
@@ -93,17 +93,8 @@
     }
   ],
   "Verification": {
-    "App": {
-      "TotalNumberOfSentMessages": 16500,
-      "TotalNumberOfReceivedMessages": 16500,
-      "NumberOfReceivedMessagesAddOn": 0,
-      "TotalNumberOfRelationships": 1800
-    },
-    "Connector": {
-      "TotalNumberOfSentMessages": 16500,
-      "TotalNumberOfReceivedMessages": 16499,
-      "NumberOfReceivedMessagesAddOn": 1,
-      "TotalNumberOfAvailableRelationships": 1803
-    }
+    "TotalNumberOfRelationships": 1800,
+    "TotalConnectorSentMessages": 16500,
+    "TotalAppSentMessages": 16500
   }
 }

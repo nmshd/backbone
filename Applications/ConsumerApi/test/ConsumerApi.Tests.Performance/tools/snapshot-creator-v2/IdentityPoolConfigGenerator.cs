@@ -29,8 +29,8 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
 
         var performanceTestConfiguration = new PerformanceTestConfiguration(identityPoolConfigs, verificationConfiguration);
 
-        var materializedPoolConfig = poolConfigFromExcel as dynamic[] ?? poolConfigFromExcel.ToArray();
-        if (materializedPoolConfig.Length == 0)
+        var materializedPoolConfig = poolConfigFromExcel as List<dynamic> ?? poolConfigFromExcel.ToList();
+        if (materializedPoolConfig.Count == 0)
         {
             throw new InvalidOperationException(PERFORMANCE_TEST_CONFIGURATION_EXCEL_FILE_EMPTY);
         }
@@ -40,20 +40,9 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
             throw new InvalidOperationException($"{PERFORMANCE_TEST_CONFIGURATION_FIRST_ROW_MISMATCH} {nameof(IDictionary<string, object>)}");
         }
 
-        verificationConfiguration.App = new AppVerificationConfiguration
-        {
-            TotalNumberOfSentMessages = Convert.ToInt64(firstRow[APP_TOTAL_NUMBER_OF_SENT_MESSAGES]),
-            TotalNumberOfReceivedMessages = Convert.ToInt64(firstRow[APP_TOTAL_NUMBER_OF_RECEIVED_MESSAGES]),
-            NumberOfReceivedMessagesAddOn = Convert.ToInt32(firstRow[APP_NUMBER_OF_RECEIVED_MESSAGES_ADD_ON]),
-            TotalNumberOfRelationships = Convert.ToInt64(firstRow[APP_TOTAL_NUMBER_OF_RELATIONSHIPS])
-        };
-        verificationConfiguration.Connector = new ConnectorVerificationConfiguration
-        {
-            TotalNumberOfSentMessages = Convert.ToInt64(firstRow[CONNECTOR_TOTAL_NUMBER_OF_SENT_MESSAGES]),
-            TotalNumberOfReceivedMessages = Convert.ToInt64(firstRow[CONNECTOR_TOTAL_NUMBER_OF_RECEIVED_MESSAGES]),
-            NumberOfReceivedMessagesAddOn = Convert.ToInt32(firstRow[CONNECTOR_NUMBER_OF_RECEIVED_MESSAGES_ADD_ON]),
-            TotalNumberOfAvailableRelationships = Convert.ToInt64(firstRow[CONNECTOR_TOTAL_NUMBER_OF_AVAILABLE_RELATIONSHIPS])
-        };
+        verificationConfiguration.TotalNumberOfRelationships = Convert.ToInt32(firstRow[TOTAL_NUMBER_OF_RELATIONSHIPS]);
+        verificationConfiguration.TotalAppSentMessages = Convert.ToInt64(firstRow[APP_TOTAL_NUMBER_OF_SENT_MESSAGES]);
+        verificationConfiguration.TotalConnectorSentMessages = Convert.ToInt64(firstRow[CONNECTOR_TOTAL_NUMBER_OF_SENT_MESSAGES]);
 
         foreach (var data in materializedPoolConfig)
         {
@@ -137,27 +126,25 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
 
             var identityPools = poolConfig.IdentityPoolConfigs
                 .Select(poolConfigIdentityPoolConfig => new IdentityPool(poolConfigIdentityPoolConfig))
-                .ToArray();
+                .ToList();
 
             #endregion
 
             #region Iterate over each App IdentityPool and App Identity and build a relationship to an available connector Identity
 
-            var appIdentityPools = identityPools.Where(ip => ip.Type == IdentityPoolType.App).ToArray();
-            var connectorIdentityPools = identityPools.Where(ip => ip.Type == IdentityPoolType.Connector).ToArray();
+            var appIdentityPools = identityPools.Where(ip => ip.Type == IdentityPoolType.App).ToList();
+            var connectorIdentityPools = identityPools.Where(ip => ip.Type == IdentityPoolType.Connector).ToList();
 
             foreach (var appIdentityPool in appIdentityPools)
             {
-                // Iterate over each App Identity in that App Pool and find a Connector Identity with available relationships
                 foreach (var appIdentity in appIdentityPool.Identities)
                 {
                     while (appIdentity.HasAvailableRelationships)
                     {
-                        // Find a connector identity with available relationships in all connector identity pools 
                         var connectorIdentities = connectorIdentityPools
                             .SelectMany(cip => cip.Identities)
                             .Where(i => i.HasAvailableRelationships)
-                            .ToArray();
+                            .ToList();
 
 
                         Identity receiverConnectorIdentity = null;
@@ -190,7 +177,6 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
                             }
                         }
 
-                        // Add relationship between app identity and connector identity (forward relationship)
                         var relationshipAndMessages = new RelationshipAndMessages(
                             SenderPool: appIdentity.PoolAlias,
                             SenderIdentityAddress: appIdentity.Address,
@@ -200,7 +186,6 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
 
                         appIdentity.RelationshipAndMessages.Add(relationshipAndMessages);
 
-                        // Decrement available relationships of the app identity
                         appIdentity.DecrementAvailableRelationships();
 
                         relationshipAndMessages.NumberOfSentMessages = appIdentity.HasAvailableRelationships
@@ -208,7 +193,6 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
                             : appIdentity.MessagesToSendPerRelationship + appIdentity.ModuloSendMessages;
 
 
-                        // Add relationship between connector identity and app identity (reverse relationship)
                         var reverseRelationshipAndMessages = new RelationshipAndMessages(
                             SenderPool: receiverConnectorIdentity.PoolAlias,
                             SenderIdentityAddress: receiverConnectorIdentity.Address,
@@ -218,7 +202,6 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
 
                         receiverConnectorIdentity.RelationshipAndMessages.Add(reverseRelationshipAndMessages);
 
-                        // Decrement available relationships of the connector identity
                         receiverConnectorIdentity.DecrementAvailableRelationships();
 
                         reverseRelationshipAndMessages.NumberOfSentMessages = receiverConnectorIdentity.HasAvailableRelationships
@@ -230,63 +213,41 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
 
             #endregion
 
+
             var relationshipAndMessagesList =
                 identityPools.SelectMany(ipr => ipr.Identities.SelectMany(i => i.RelationshipAndMessages)).ToArray();
 
-            var relationShipCount = relationshipAndMessagesList.Length / 2; // Note: Div by 2 because a pair of forward/reverse relationship is equal to 1 relationship
+            var relationShipCount = relationshipAndMessagesList.Length / 2; // Note: Div by 2 because a pair of relationships (forward/reverse) is equal to 1 relationship
 
-            if (relationShipCount != poolConfig.VerificationConfiguration.App.TotalNumberOfRelationships)
+            if (relationShipCount != poolConfig.VerificationConfiguration.TotalNumberOfRelationships)
             {
-                throw new InvalidOperationException(string.Format(RELATIONSHIP_COUNT_MISMATCH, poolConfig.VerificationConfiguration.App.TotalNumberOfRelationships, relationShipCount));
+                throw new InvalidOperationException(string.Format(RELATIONSHIP_COUNT_MISMATCH, poolConfig.VerificationConfiguration.TotalNumberOfRelationships, relationShipCount));
             }
 
-            void VerifyAndFixNumberOfSentMessages(RelationshipAndMessages[] relationshipAndMessages, IdentityPoolType identityPoolType, int expectedTotalNumberOfSentMessages)
-            {
-                var filteredRelationships = relationshipAndMessages.Where(rm => rm.ReceiverIdentityPoolType == identityPoolType).ToList();
-                var actualTotalNumberOfSentMessages = filteredRelationships.Sum(rm => rm.NumberOfSentMessages);
+            //void VerifyNumberOfSentMessages(RelationshipAndMessages[] relationshipAndMessages, IdentityPoolType identityPoolType, long expectedTotalNumberOfSentMessages)
+            //{
+            //    var filteredRelationships = relationshipAndMessages.Where(rm => rm.ReceiverIdentityPoolType == identityPoolType).ToList();
+            //    var actualTotalNumberOfSentMessages = filteredRelationships.Sum(rm => rm.NumberOfSentMessages);
 
-                if (actualTotalNumberOfSentMessages == expectedTotalNumberOfSentMessages) return;
+            //    if (actualTotalNumberOfSentMessages == expectedTotalNumberOfSentMessages) return;
 
-                var messageDifference = expectedTotalNumberOfSentMessages - actualTotalNumberOfSentMessages;
+            //    var messageDifference = expectedTotalNumberOfSentMessages - actualTotalNumberOfSentMessages;
 
-                if (messageDifference == 0) return;
+            //    if (messageDifference == 0) return;
 
-                var correctionMessages = messageDifference / filteredRelationships.Count;
+            //    throw new InvalidOperationException(string.Format(VERIFICATION_TOTAL_NUMBER_OF_SENT_MESSAGES_FAILED, identityPoolType, expectedTotalNumberOfSentMessages,
+            //        actualTotalNumberOfSentMessages));
+            //}
 
-                foreach (var relationship in filteredRelationships)
-                {
-                    relationship.NumberOfSentMessages += correctionMessages;
-                }
+            //VerifyNumberOfSentMessages(relationshipAndMessagesList, IdentityPoolType.Connector, poolConfig.VerificationConfiguration.TotalAppSentMessages);
 
-                var correctionModulo = messageDifference % filteredRelationships.Count;
-
-                if (correctionModulo == 0) return;
-
-                var lastRelationship = filteredRelationships.Last();
-                lastRelationship.NumberOfSentMessages += correctionModulo;
-            }
-
-            #region Verify Sent Messages against the Pool VerificationConfiguration were ConnectorPool Idenities are the receivers
-
-            VerifyAndFixNumberOfSentMessages(relationshipAndMessagesList, IdentityPoolType.Connector, (int)poolConfig.VerificationConfiguration.App.TotalNumberOfSentMessages);
-
-            #endregion
-
-            #region Verify Sent Messages against the Pool VerificationConfiguration were AppPool Identities are the receivers
-
-            VerifyAndFixNumberOfSentMessages(relationshipAndMessagesList, IdentityPoolType.App, (int)poolConfig.VerificationConfiguration.Connector.TotalNumberOfSentMessages);
-
-            #endregion
-
-            #region Save Relationships and Messages to Excel (and JSON, too)
+            //VerifyNumberOfSentMessages(relationshipAndMessagesList, IdentityPoolType.App, poolConfig.VerificationConfiguration.TotalConnectorSentMessages);
 
             var jsonString = JsonSerializer.Serialize(relationshipAndMessagesList, new JsonSerializerOptions { WriteIndented = true });
             var jsonFilePath = Path.Combine(savePath, $"{RELATIONSHIPS_AND_MESSAGE_POOL_CONFIGS_FILE_NAME}.{workSheetName}.{JSON_FILE_EXT}");
             await File.WriteAllTextAsync(jsonFilePath, jsonString);
 
             await new ExcelMapper().SaveAsync(excelFilePath, relationshipAndMessagesList, workSheetName);
-
-            #endregion
         }
         catch (Exception e)
         {

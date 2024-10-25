@@ -11,5 +11,5 @@ public record RelationshipAndMessages(
     int ReceiverIdentityAddress,
     [property: Ignore, JsonIgnore] IdentityPoolType ReceiverIdentityPoolType)
 {
-    public int NumberOfSentMessages { get; set; }
+    public long NumberOfSentMessages { get; set; }
 }

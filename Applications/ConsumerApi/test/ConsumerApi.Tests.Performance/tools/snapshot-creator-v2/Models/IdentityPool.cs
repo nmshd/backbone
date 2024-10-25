@@ -15,7 +15,6 @@ public record IdentityPool
             _ => throw new InvalidOperationException(POOL_TYPE_UNKNOWN)
         };
 
-        // Identities of that Pool
         Identities = [];
         for (var i = 0; i < identityPoolConfiguration.Amount; i++)
         {

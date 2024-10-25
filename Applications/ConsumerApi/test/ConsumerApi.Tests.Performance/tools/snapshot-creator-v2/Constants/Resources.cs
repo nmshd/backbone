@@ -38,18 +38,14 @@ public static class Resources
     public const string RELATIONSHIPS_AND_MESSAGE_POOL_CONFIGS_FILE_NAME = "RelationshipsAndMessagePoolConfigs";
     public const string EXCEL_FILE_EXT = "xlsx";
 
+    public const string TOTAL_NUMBER_OF_RELATIONSHIPS = "App.TotalNumberOfRelationships";
     public const string APP_TOTAL_NUMBER_OF_SENT_MESSAGES = "App.TotalNumberOfSentMessages";
-    public const string APP_TOTAL_NUMBER_OF_RECEIVED_MESSAGES = "App.TotalNumberOfReceivedMessages";
-    public const string APP_NUMBER_OF_RECEIVED_MESSAGES_ADD_ON = "App.NumberOfReceivedMessagesAddOn";
-    public const string APP_TOTAL_NUMBER_OF_RELATIONSHIPS = "App.TotalNumberOfRelationships";
-
     public const string CONNECTOR_TOTAL_NUMBER_OF_SENT_MESSAGES = "Connector.TotalNumberOfSentMessages";
-    public const string CONNECTOR_TOTAL_NUMBER_OF_RECEIVED_MESSAGES = "Connector.TotalNumberOfReceivedMessages";
-    public const string CONNECTOR_NUMBER_OF_RECEIVED_MESSAGES_ADD_ON = "Connector.NumberOfReceivedMessagesAddOn";
-    public const string CONNECTOR_TOTAL_NUMBER_OF_AVAILABLE_RELATIONSHIPS = "Connector.TotalNumberOfAvailableRelationships";
 
     public const string IDENTITY_NO_MORE_RELATIONSHIPS_AVAILABLE = "No more relationships available";
 
     public const string RELATIONSHIP_NO_RECEIVER_AVAILABLE = "No further receiver identity available to establish a relationship to sender identity Address: {0} of {1}";
     public const string RELATIONSHIP_COUNT_MISMATCH = "Relationship count mismatch. Expected: {0}, Actual: {1}";
+
+    public const string VERIFICATION_TOTAL_NUMBER_OF_SENT_MESSAGES_FAILED = "Verification of total number of sent messages to receiver pool {0} failed. Expected: {1}, actual: {2}";
 }

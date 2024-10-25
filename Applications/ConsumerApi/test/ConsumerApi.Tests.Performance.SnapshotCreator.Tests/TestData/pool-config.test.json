@@ -93,17 +93,8 @@
     }
   ],
   "Verification": {
-    "App": {
-      "TotalNumberOfSentMessages": 48,
-      "TotalNumberOfReceivedMessages": 45,
-      "NumberOfReceivedMessagesAddOn": 3,
-      "TotalNumberOfRelationships": 22
-    },
-    "Connector": {
-      "TotalNumberOfSentMessages": 48,
-      "TotalNumberOfReceivedMessages": 46,
-      "NumberOfReceivedMessagesAddOn": 2,
-      "TotalNumberOfAvailableRelationships": 27
-    }
+    "TotalNumberOfRelationships": 22,
+    "TotalConnectorSentMessages": 48,
+    "TotalAppSentMessages": 48
   }
 }
