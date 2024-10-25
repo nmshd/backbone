@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
         foreach (var identity in identities)
         {
             var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval) ?? throw new NotFoundException(nameof(IdentityDeletionProcess));
-            var daysUntilApprovalPeriodEnds = (deletionProcess.ApprovalPeriodEndsAt - SystemTime.UtcNow).Days;
+            var secondsUntilApprovalPeriodEnds = (deletionProcess.ApprovalPeriodEndsAt - SystemTime.UtcNow).Seconds;
 
             if (deletionProcess.ApprovalReminder3SentAt != null)
             {
@@ -39,22 +39,27 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
                 continue;
             }
 
-            if (daysUntilApprovalPeriodEnds <= IdentityDeletionConfiguration.ApprovalReminder3.Time)
+            if (secondsUntilApprovalPeriodEnds <= (long)IdentityDeletionConfiguration.Instance.ApprovalReminder3.SecondsBeforeEndOfApprovalPeriod)
             {
-                await SendReminder3(identity, daysUntilApprovalPeriodEnds, deletionProcess.Id, cancellationToken);
+                await SendReminder3(identity, secondsUntilApprovalPeriodEnds, deletionProcess.Id, cancellationToken);
                 continue;
             }
 
-            if (deletionProcess.ApprovalReminder2SentAt != null) continue;
-            if (daysUntilApprovalPeriodEnds <= IdentityDeletionConfiguration.ApprovalReminder2.Time)
+            if (deletionProcess.ApprovalReminder2SentAt != null)
+                continue;
+
+            if (secondsUntilApprovalPeriodEnds <= (long)IdentityDeletionConfiguration.Instance.ApprovalReminder2.SecondsBeforeEndOfApprovalPeriod)
             {
-                await SendReminder2(identity, daysUntilApprovalPeriodEnds, deletionProcess.Id, cancellationToken);
+                await SendReminder2(identity, secondsUntilApprovalPeriodEnds, deletionProcess.Id, cancellationToken);
                 continue;
             }
 
-            if (deletionProcess.ApprovalReminder1SentAt == null && daysUntilApprovalPeriodEnds <= IdentityDeletionConfiguration.ApprovalReminder1.Time)
+            if (deletionProcess.ApprovalReminder1SentAt != null)
+                continue;
+
+            if (secondsUntilApprovalPeriodEnds <= (long)IdentityDeletionConfiguration.Instance.ApprovalReminder1.SecondsBeforeEndOfApprovalPeriod)
             {
-                await SendReminder1(identity, daysUntilApprovalPeriodEnds, deletionProcess.Id, cancellationToken);
+                await SendReminder1(identity, secondsUntilApprovalPeriodEnds, deletionProcess.Id, cancellationToken);
             }
         }
     }

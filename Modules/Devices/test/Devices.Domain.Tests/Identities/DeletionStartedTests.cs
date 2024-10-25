@@ -13,7 +13,7 @@ public class DeletionStartedTests : AbstractTestsBase
         // Arrange
         var identity = CreateIdentityWithApprovedDeletionProcess();
 
-        SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod).AddDays(1)); // past deletion grace period
+        SystemTime.Set(SystemTime.UtcNow.AddSeconds(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInSeconds).AddDays(1)); // past deletion grace period
 
         // Act
         identity.DeletionStarted();
@@ -69,7 +69,7 @@ public class DeletionStartedTests : AbstractTestsBase
         //Arrange
         var activeIdentity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
 
-        SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod).AddDays(1));
+        SystemTime.Set(SystemTime.UtcNow.AddSeconds(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInSeconds).AddDays(1));
 
         //Act
         activeIdentity.DeletionStarted();

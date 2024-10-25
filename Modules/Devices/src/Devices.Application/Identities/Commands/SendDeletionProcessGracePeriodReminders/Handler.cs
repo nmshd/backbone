@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
         foreach (var identity in identities)
         {
             var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved) ?? throw new NotFoundException(nameof(IdentityDeletionProcess));
-            var daysToDeletion = (deletionProcess.GracePeriodEndsAt!.Value - SystemTime.UtcNow).Days;
+            var secondsUntilDeletion = (deletionProcess.GracePeriodEndsAt!.Value - SystemTime.UtcNow).Seconds;
 
             if (deletionProcess.GracePeriodReminder3SentAt != null)
             {
@@ -39,22 +39,27 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
                 continue;
             }
 
-            if (daysToDeletion <= IdentityDeletionConfiguration.GracePeriodNotification3.Time)
+            if (secondsUntilDeletion <= (long)IdentityDeletionConfiguration.Instance.GracePeriodNotification3.SecondsBeforeEndOfGracePeriod)
             {
-                await SendReminder3(identity, daysToDeletion, deletionProcess.Id, cancellationToken);
+                await SendReminder3(identity, secondsUntilDeletion, deletionProcess.Id, cancellationToken);
                 continue;
             }
 
-            if (deletionProcess.GracePeriodReminder2SentAt != null) continue;
-            if (daysToDeletion <= IdentityDeletionConfiguration.GracePeriodNotification2.Time)
+            if (deletionProcess.GracePeriodReminder2SentAt != null)
+                continue;
+
+            if (secondsUntilDeletion <= (long)IdentityDeletionConfiguration.Instance.GracePeriodNotification2.SecondsBeforeEndOfGracePeriod)
             {
-                await SendReminder2(identity, daysToDeletion, deletionProcess.Id, cancellationToken);
+                await SendReminder2(identity, secondsUntilDeletion, deletionProcess.Id, cancellationToken);
                 continue;
             }
 
-            if (deletionProcess.GracePeriodReminder1SentAt == null && daysToDeletion <= IdentityDeletionConfiguration.GracePeriodNotification1.Time)
+            if (deletionProcess.GracePeriodReminder1SentAt != null)
+                continue;
+
+            if (secondsUntilDeletion <= (long)IdentityDeletionConfiguration.Instance.GracePeriodNotification1.SecondsBeforeEndOfGracePeriod)
             {
-                await SendReminder1(identity, daysToDeletion, deletionProcess.Id, cancellationToken);
+                await SendReminder1(identity, secondsUntilDeletion, deletionProcess.Id, cancellationToken);
             }
         }
     }
