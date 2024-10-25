@@ -5,7 +5,7 @@ public class AnnouncementTextDTO
 {
     public AnnouncementTextDTO(AnnouncementText announcementText)
     {
-        AnnouncementId = announcementText.AnnouncementTextId;
+        AnnouncementId = announcementText.Id;
         Language = announcementText.Language;
         Title = announcementText.Title;
         Body = announcementText.Body;
