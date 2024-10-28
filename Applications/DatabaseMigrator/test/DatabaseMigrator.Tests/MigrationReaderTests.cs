@@ -4,7 +4,7 @@ using Testcontainers.PostgreSql;
 
 namespace Backbone.DatabaseMigrator.Tests;
 
-public class MigrationReaderTests
+public class MigrationReaderTests : AbstractTestsBase
 {
     [Fact]
     public async Task Returns_migrations_in_correct_order()
