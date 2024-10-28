@@ -26,7 +26,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
         var identityA = Identity.CreateTestIdentity(IdentityAddress.Create([1, 1, 1, 1, 1], _applicationOptions.DidDomainName), [1, 1, 1, 1, 1], basicTier!.Id, "USRa");
         var identityB = Identity.CreateTestIdentity(IdentityAddress.Create([2, 2, 2, 2, 2], _applicationOptions.DidDomainName), [2, 2, 2, 2, 2], basicTier.Id, "USRb");
 
-        await _identitiesRepository.Add(identityA, "Aa1.......");
-        await _identitiesRepository.Add(identityB, "Bb1.......");
+        await _identitiesRepository.Add(identityA, "Aaaaaaaa1!");
+        await _identitiesRepository.Add(identityB, "Bbbbbbbb1!");
     }
 }
