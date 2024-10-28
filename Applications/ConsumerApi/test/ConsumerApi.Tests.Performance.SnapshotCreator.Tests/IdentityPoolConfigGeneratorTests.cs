@@ -457,6 +457,8 @@ public class IdentityPoolConfigGeneratorTests
 
     [Theory]
     [InlineData("test", "pool-config.test.json", "ExpectedRelationshipsAndMessagePoolConfigs.test.json")]
+    [InlineData("light", "pool-config.light.json", "ExpectedRelationshipsAndMessagePoolConfigs.light.json")]
+    [InlineData("heavy", "pool-config.heavy.json", "ExpectedRelationshipsAndMessagePoolConfigs.heavy.json")]
     public async Task GenerateExcelRelationshipsAndMessagesPoolConfig_InputPerformanceTestDataExcel_ReturnsSuccess(string workSheet, string poolConfigJsonFilename, string expectedLoadTestJsonFile)
     {
         // Arrange

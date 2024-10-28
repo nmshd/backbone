@@ -34,6 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="TestData\ExpectedRelationshipsAndMessagePoolConfigs.heavy.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\ExpectedRelationshipsAndMessagePoolConfigs.light.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="TestData\ExpectedRelationshipsAndMessagePoolConfigs.test.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
