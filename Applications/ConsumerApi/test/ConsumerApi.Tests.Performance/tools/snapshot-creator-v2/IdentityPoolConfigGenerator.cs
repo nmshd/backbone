@@ -2,6 +2,8 @@
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Enums;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Interfaces;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Readers;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Writers;
 using Ganss.Excel;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2;
@@ -16,72 +18,16 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
         return poolConfig;
     }
 
-    internal static async Task<PerformanceTestConfiguration> DeserializeFromExcel(string excelFile, string workSheet)
-    {
-        var excelMapper = new ExcelMapper(excelFile) { SkipBlankRows = true, SkipBlankCells = true, TrackObjects = false };
 
-        await using var stream = new FileStream(excelFile, FileMode.Open, FileAccess.Read);
-        var poolConfigFromExcel = await excelMapper.FetchAsync(stream, workSheet);
-
-
-        List<IdentityPoolConfiguration> identityPoolConfigs = [];
-        VerificationConfiguration verificationConfiguration = new();
-
-        var performanceTestConfiguration = new PerformanceTestConfiguration(identityPoolConfigs, verificationConfiguration);
-
-        var materializedPoolConfig = poolConfigFromExcel as List<dynamic> ?? poolConfigFromExcel.ToList();
-        if (materializedPoolConfig.Count == 0)
-        {
-            throw new InvalidOperationException(PERFORMANCE_TEST_CONFIGURATION_EXCEL_FILE_EMPTY);
-        }
-
-        if (materializedPoolConfig.First() is not IDictionary<string, object> firstRow)
-        {
-            throw new InvalidOperationException($"{PERFORMANCE_TEST_CONFIGURATION_FIRST_ROW_MISMATCH} {nameof(IDictionary<string, object>)}");
-        }
-
-        verificationConfiguration.TotalNumberOfRelationships = Convert.ToInt32(firstRow[TOTAL_NUMBER_OF_RELATIONSHIPS]);
-        verificationConfiguration.TotalAppSentMessages = Convert.ToInt64(firstRow[APP_TOTAL_NUMBER_OF_SENT_MESSAGES]);
-        verificationConfiguration.TotalConnectorSentMessages = Convert.ToInt64(firstRow[CONNECTOR_TOTAL_NUMBER_OF_SENT_MESSAGES]);
-
-        foreach (var data in materializedPoolConfig)
-        {
-            if (data is not IDictionary<string, object> row)
-            {
-                continue;
-            }
-
-            var item = new IdentityPoolConfiguration
-            {
-                Type = (string)row[nameof(IdentityPoolConfiguration.Type)],
-                Name = (string)row[nameof(IdentityPoolConfiguration.Name)],
-                Alias = (string)row[nameof(IdentityPoolConfiguration.Alias)],
-                Amount = Convert.ToInt64(row[nameof(IdentityPoolConfiguration.Amount)]),
-                NumberOfRelationshipTemplates = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfRelationshipTemplates)]),
-                NumberOfRelationships = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfRelationships)]),
-                NumberOfSentMessages = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfSentMessages)]),
-                NumberOfReceivedMessages = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfReceivedMessages)]),
-                NumberOfDatawalletModifications = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfDatawalletModifications)]),
-                NumberOfDevices = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfDevices)]),
-                NumberOfChallenges = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfChallenges)])
-            };
-
-            identityPoolConfigs.Add(item);
-        }
-
-        return performanceTestConfiguration;
-    }
-
-
-    public async Task<bool> VerifyJsonPoolConfig(string excelFile, string workSheetName, string poolConfigJsonFile)
+    public async Task<bool> VerifyPoolConfig(string excelFile, string workSheetName, string poolConfigJsonFile)
     {
         var poolConfigFromJson = await DeserializeFromJson(poolConfigJsonFile);
-        var poolConfigFromExcel = await DeserializeFromExcel(excelFile, workSheetName);
+        var poolConfigFromExcel = await new PerformanceTestConfigurationExcelReader().Read(excelFile, workSheetName);
         var result = poolConfigFromJson.Equals(poolConfigFromExcel);
         return result;
     }
 
-    public async Task<(bool Status, string Message)> GenerateJsonPoolConfig(string excelFile, string workSheetName)
+    public async Task<(bool Status, string Message)> GeneratePoolConfig(string excelFile, string workSheetName)
     {
         var filePath = Path.GetDirectoryName(excelFile);
 
@@ -90,21 +36,19 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
             return (false, INVALID_FILE_PATH);
         }
 
-        var poolConfigJsonFilePath = Path.Combine(filePath, $"{POOL_CONFIG_JSON_NAME}.{workSheetName}.{JSON_FILE_EXT}");
-
+        (bool Status, string Message) result;
         try
         {
-            var poolConfigFromExcel = await DeserializeFromExcel(excelFile, workSheetName);
-            var poolConfigJson = JsonSerializer.Serialize(poolConfigFromExcel, new JsonSerializerOptions { WriteIndented = true });
-
-            await File.WriteAllTextAsync(poolConfigJsonFilePath, poolConfigJson);
+            var poolConfigFromExcel = await new PerformanceTestConfigurationExcelReader().Read(excelFile, workSheetName);
+            result = await new PoolConfigurationJsonWriter().Write(poolConfigFromExcel, workSheetName);
         }
         catch (Exception e)
         {
             return (false, e.Message);
         }
 
-        return (true, poolConfigJsonFilePath);
+
+        return result;
     }
 
     public async Task<(bool Status, string Message)> GenerateExcelRelationshipsAndMessagesPoolConfig(string poolConfigJsonFile, string workSheetName)
@@ -249,12 +193,8 @@ public class IdentityPoolConfigGenerator : IIdentityPoolConfigGenerator
             }
 
             VerifyNumberOfSentMessages(relationshipAndMessagesList, IdentityPoolType.Connector, poolConfig.VerificationConfiguration.TotalAppSentMessages);
-
             VerifyNumberOfSentMessages(relationshipAndMessagesList, IdentityPoolType.App, poolConfig.VerificationConfiguration.TotalConnectorSentMessages);
 
-            var jsonString = JsonSerializer.Serialize(relationshipAndMessagesList, new JsonSerializerOptions { WriteIndented = true });
-            var jsonFilePath = Path.Combine(savePath, $"{RELATIONSHIPS_AND_MESSAGE_POOL_CONFIGS_FILE_NAME}.{workSheetName}.{JSON_FILE_EXT}");
-            await File.WriteAllTextAsync(jsonFilePath, jsonString);
 
             await new ExcelMapper().SaveAsync(excelFilePath, relationshipAndMessagesList, workSheetName);
         }

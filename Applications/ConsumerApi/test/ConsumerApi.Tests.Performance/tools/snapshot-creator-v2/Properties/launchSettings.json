@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-json": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-json --source .\\Config\\PerformanceTestData-plusNewMedium.xlsx --worksheet medium"
+    }
+  }
+}

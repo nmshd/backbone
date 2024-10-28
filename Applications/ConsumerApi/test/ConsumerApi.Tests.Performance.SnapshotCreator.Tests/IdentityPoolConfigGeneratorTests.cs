@@ -1,5 +1,7 @@
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Commands;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Readers;
 using FluentAssertions;
 using Ganss.Excel;
 
@@ -391,9 +393,10 @@ public class IdentityPoolConfigGeneratorTests
         // Arrange
         var excelFile = Path.Combine(_testDataFolder, excelFileName);
         var expectedPoolConfig = GetExpectedPoolConfiguration(loadTestTag: workSheetName);
+        var performanceTestConfigurationExcelReader = new PerformanceTestConfigurationExcelReader();
 
         // Act
-        var actualPoolConfig = await IdentityPoolConfigGenerator.DeserializeFromExcel(excelFile, workSheetName);
+        var actualPoolConfig = await performanceTestConfigurationExcelReader.Read(excelFile, workSheetName);
 
         // Assert
         actualPoolConfig.Should().NotBeNull();
@@ -410,7 +413,7 @@ public class IdentityPoolConfigGeneratorTests
     [InlineData("PerformanceTestData.xlsx", "heavy", "pool-config.heavy.json")]
     [InlineData("PerformanceTestData.xlsx", "light", "pool-config.light.json")]
     [InlineData("PerformanceTestData.xlsx", "test", "pool-config.test.json")]
-    public async Task VerifyJsonPoolConfig_InputPerformanceTestDataExcel_ReturnsSuccess(string excelFile, string workSheet, string expectedLoadTestJsonFilename)
+    public async Task VerifyPoolConfig_InputPerformanceTestDataExcel_ReturnsSuccess(string excelFile, string workSheet, string expectedLoadTestJsonFilename)
     {
         // Arrange
         var expectedJson = Path.Combine(_testDataFolder, expectedLoadTestJsonFilename);
@@ -419,7 +422,7 @@ public class IdentityPoolConfigGeneratorTests
         var sut = new IdentityPoolConfigGenerator();
 
         // Act
-        var result = await sut.VerifyJsonPoolConfig(inputFile, workSheet, expectedJson);
+        var result = await sut.VerifyPoolConfig(inputFile, workSheet, expectedJson);
 
         // Assert
         result.Should().BeTrue();
@@ -431,7 +434,7 @@ public class IdentityPoolConfigGeneratorTests
 
     [Theory]
     [InlineData("PerformanceTestData-plusNewMedium.xlsx", WORKBOOK_SHEET_MEDIUM_LOAD, "pool-config.medium.json")]
-    public async Task GenerateJsonPoolConfig_InputPerformanceTestDataExcel_ReturnsSuccess(string excelFile, string workSheet, string expectedLoadTestJsonFilename)
+    public async Task GeneratePoolConfig_InputPerformanceTestDataExcel_ReturnsSuccess(string excelFile, string workSheet, string expectedLoadTestJsonFilename)
     {
         // Arrange
         var expectedPoolConfigJsonFilePath = Path.Combine(_testDataFolder, expectedLoadTestJsonFilename);
@@ -440,15 +443,14 @@ public class IdentityPoolConfigGeneratorTests
         var sut = new IdentityPoolConfigGenerator();
 
         // Act
-        var (status, message) = await sut.GenerateJsonPoolConfig(inputFile, workSheet);
+        var (status, message) = await sut.GeneratePoolConfig(inputFile, workSheet);
 
         // Assert
 
         status.Should().BeTrue();
-        message.Should().Be(expectedPoolConfigJsonFilePath);
 
         File.Exists(expectedPoolConfigJsonFilePath).Should().BeTrue();
-        (await sut.VerifyJsonPoolConfig(inputFile, workSheet, expectedPoolConfigJsonFilePath)).Should().BeTrue();
+        (await sut.VerifyPoolConfig(inputFile, workSheet, expectedPoolConfigJsonFilePath)).Should().BeTrue();
     }
 
     #endregion
