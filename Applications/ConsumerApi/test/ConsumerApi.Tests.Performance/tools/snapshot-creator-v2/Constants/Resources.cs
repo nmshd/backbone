@@ -28,6 +28,7 @@ public static class Resources
 
     public const string INVALID_FILE_PATH = "Invalid file path";
     public const string POOL_CONFIG_JSON_NAME = "pool-config";
+    public const string POOL_CONFIG_JSON_WITH_RELATIONSHIP_AND_MESSAGES = "pool-config-relationships";
     public const string JSON_FILE_EXT = "json";
 
     public const string WORKBOOK_SHEET_TEST_LOAD = "test";

@@ -4,9 +4,7 @@ using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Commands;
 
-public class PoolConfigurationJsonGeneratorCommand(
-    IPoolConfigurationJsonWriter poolConfigurationJsonWriter,
-    IPerformanceTestConfigurationExcelReader performanceTestConfigurationExcelReader)
+public class PoolConfigurationJsonGeneratorCommand(IPerformanceTestConfigurationExcelReader performanceTestConfigurationExcelReader, IPoolConfigurationJsonWriter poolConfigurationJsonWriter)
     : ICommand<PoolConfigurationJsonGeneratorCommandArgs, StatusMessage>
 {
     public async Task<StatusMessage> Execute(PoolConfigurationJsonGeneratorCommandArgs parameter)

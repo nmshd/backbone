@@ -11,6 +11,10 @@
     "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-relationships": {
       "commandName": "Project",
       "commandLineArgs": "generate-relationships --pool-config .\\Config\\pool-config.test.json --worksheet test"
+    },
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-all": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-all --source .\\Config\\PerformanceTestData.xlsx --worksheet test"
     }
   }
 }
