@@ -13,12 +13,14 @@ public static class DevicesServiceCollectionExtensions
     {
         services.AddApplication(configuration);
 
-        var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<DevicesConfiguration>>().Value;
+        services.ConfigureAndValidate<DevicesConfiguration.InfrastructureConfiguration>(configuration.GetSection("Infrastructure").Bind);
+
+        var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<DevicesConfiguration.InfrastructureConfiguration>>().Value;
 
         services.AddDatabase(options =>
         {
-            options.Provider = parsedConfiguration.Infrastructure.SqlDatabase.Provider;
-            options.ConnectionString = parsedConfiguration.Infrastructure.SqlDatabase.ConnectionString;
+            options.Provider = parsedConfiguration.SqlDatabase.Provider;
+            options.ConnectionString = parsedConfiguration.SqlDatabase.ConnectionString;
         });
 
         services.AddSingleton<ISignatureHelper, SignatureHelper>(_ => SignatureHelper.CreateEd25519WithRawKeyFormat());

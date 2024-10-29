@@ -108,7 +108,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddCustomFluentValidation()
         .AddCustomIdentity(environment)
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
-        .AddDevices(configuration.GetSection("Modules:Devices:Application"))
+        .AddDevices(configuration.GetSection("Modules:Devices"))
         .AddQuotas(parsedConfiguration.Modules.Quotas)
         .AddChallenges(parsedConfiguration.Modules.Challenges)
         .AddHealthChecks();
