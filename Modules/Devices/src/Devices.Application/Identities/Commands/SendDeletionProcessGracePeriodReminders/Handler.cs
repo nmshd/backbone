@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
         foreach (var identity in identities)
         {
             var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved) ?? throw new NotFoundException(nameof(IdentityDeletionProcess));
-            var secondsUntilDeletion = (ulong)(deletionProcess.GracePeriodEndsAt!.Value - SystemTime.UtcNow).TotalSeconds;
+            var secondsUntilDeletion = (ulong)double.Max(0, (deletionProcess.GracePeriodEndsAt!.Value - SystemTime.UtcNow).TotalSeconds);
 
             if (deletionProcess.GracePeriodReminder3SentAt != null)
             {

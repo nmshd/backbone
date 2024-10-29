@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
         foreach (var identity in identities)
         {
             var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval) ?? throw new NotFoundException(nameof(IdentityDeletionProcess));
-            var secondsUntilApprovalPeriodEnds = (ulong)(deletionProcess.ApprovalPeriodEndsAt - SystemTime.UtcNow).TotalSeconds;
+            var secondsUntilApprovalPeriodEnds = (ulong)double.Max(0, (deletionProcess.ApprovalPeriodEndsAt - SystemTime.UtcNow).TotalSeconds);
 
             if (deletionProcess.ApprovalReminder3SentAt != null)
             {
