@@ -1,12 +1,18 @@
-﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
+﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Interfaces;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Readers.Base;
 using Ganss.Excel;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Readers;
 
-public class PerformanceTestConfigurationExcelReader
+public class PerformanceTestConfigurationExcelReader : PerformanceTestConfigurationReaderBase, IPerformanceTestConfigurationExcelReader
 {
+    protected override string[] ValidExtensions { get; } = [".xlsx", ".xls"];
+
     public async Task<PerformanceTestConfiguration> Read(string filePath, string workSheet)
     {
+        VerifyFileExtension(filePath);
+
         var excelMapper = new ExcelMapper(filePath) { SkipBlankRows = true, SkipBlankCells = true, TrackObjects = false };
 
         await using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);

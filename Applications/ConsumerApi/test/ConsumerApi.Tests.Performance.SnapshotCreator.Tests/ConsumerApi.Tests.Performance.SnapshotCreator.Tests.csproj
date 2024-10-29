@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -61,7 +61,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
     <ProjectReference Include="..\ConsumerApi.Tests.Performance\tools\snapshot-creator-v2\ConsumerApi.Tests.Performance.SnapshotCreator.V2.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Readers\" />
   </ItemGroup>
 
 </Project>

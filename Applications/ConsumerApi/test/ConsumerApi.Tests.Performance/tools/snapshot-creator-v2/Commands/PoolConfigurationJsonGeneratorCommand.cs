@@ -1,37 +1,31 @@
-﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Readers;
-using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Writers;
-using Microsoft.Extensions.Logging;
+﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Commands.Args;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Interfaces;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Commands;
 
-public class PoolConfigurationJsonGeneratorCommand : ICommand<PoolConfigurationJsonGeneratorCommandArgs, (bool Status, string Message)>
+public class PoolConfigurationJsonGeneratorCommand(
+    IPoolConfigurationJsonWriter poolConfigurationJsonWriter,
+    IPerformanceTestConfigurationExcelReader performanceTestConfigurationExcelReader)
+    : ICommand<PoolConfigurationJsonGeneratorCommandArgs, StatusMessage>
 {
-    private readonly ILogger<PoolConfigurationJsonGeneratorCommand> _logger;
-    private readonly PoolConfigurationJsonWriter _poolConfigurationJsonWriter;
-    private readonly PerformanceTestConfigurationExcelReader _performanceTestConfigurationExcelReader;
-
-    public PoolConfigurationJsonGeneratorCommand(
-        ILogger<PoolConfigurationJsonGeneratorCommand> logger,
-        PoolConfigurationJsonWriter poolConfigurationJsonWriter,
-        PerformanceTestConfigurationExcelReader performanceTestConfigurationExcelReader)
+    public async Task<StatusMessage> Execute(PoolConfigurationJsonGeneratorCommandArgs parameter)
     {
-        _logger = logger;
-        _poolConfigurationJsonWriter = poolConfigurationJsonWriter;
-        _performanceTestConfigurationExcelReader = performanceTestConfigurationExcelReader;
-    }
+        StatusMessage result;
+        try
+        {
+            var poolConfigFromExcel = await performanceTestConfigurationExcelReader.Read(parameter.ExcelFilePath, parameter.WorkSheetName);
 
-    public async Task<(bool Status, string Message)> Execute(PoolConfigurationJsonGeneratorCommandArgs parameter)
-    {
-        var poolConfigFromExcel = await _performanceTestConfigurationExcelReader.Read(parameter.ExcelFilePath, parameter.WorkSheetName);
-        var result = await _poolConfigurationJsonWriter.Write(poolConfigFromExcel, parameter.WorkSheetName);
+            var path = Path.GetDirectoryName(parameter.ExcelFilePath);
+            var poolConfigJsonFilePath = Path.Combine(path!, $"{POOL_CONFIG_JSON_NAME}.{parameter.WorkSheetName}.{JSON_FILE_EXT}");
+
+            result = await poolConfigurationJsonWriter.Write(poolConfigFromExcel, poolConfigJsonFilePath);
+        }
+        catch (Exception e)
+        {
+            return new StatusMessage(false, e.Message);
+        }
 
         return result;
     }
-}
-
-public record PoolConfigurationJsonGeneratorCommandArgs(string ExcelFilePath, string WorkSheetName);
-
-public interface ICommand<in TArgs, TResult> where TArgs : class
-{
-    Task<TResult> Execute(TArgs parameter);
 }

@@ -9,12 +9,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="Docs\**" />
-      <EmbeddedResource Remove="Docs\**" />
-      <None Remove="Docs\**" />
-    </ItemGroup>
-
-    <ItemGroup>
         <InternalsVisibleTo Include="Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests" />
     </ItemGroup>
 
@@ -45,6 +39,7 @@
 
     <ItemGroup>
       <Folder Include="Commands\Args\" />
+      <Folder Include="Readers\NewFolder\" />
     </ItemGroup>
 
 </Project>

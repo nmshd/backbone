@@ -8,8 +8,16 @@ public record RelationshipAndMessages(
     string SenderPool,
     int SenderIdentityAddress,
     string ReceiverPool,
-    int ReceiverIdentityAddress,
-    [property: Ignore, JsonIgnore] IdentityPoolType ReceiverIdentityPoolType)
+    int ReceiverIdentityAddress)
 {
     public long NumberOfSentMessages { get; set; }
+
+    [Ignore, JsonIgnore]
+    public IdentityPoolType ReceiverIdentityPoolType => ReceiverPool.FirstOrDefault() switch
+    {
+        'n' => IdentityPoolType.Never,
+        'a' => IdentityPoolType.App,
+        'c' => IdentityPoolType.Connector,
+        _ => throw new InvalidOperationException(POOL_TYPE_UNKNOWN)
+    };
 }

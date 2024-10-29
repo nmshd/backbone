@@ -48,4 +48,6 @@ public static class Resources
     public const string RELATIONSHIP_COUNT_MISMATCH = "Relationship count mismatch. Expected: {0}, Actual: {1}";
 
     public const string VERIFICATION_TOTAL_NUMBER_OF_SENT_MESSAGES_FAILED = "Verification of total number of sent messages to receiver pool {0} failed. Expected: {1}, actual: {2}";
+
+    public const string PERFORMANCE_TEST_CONFIG_READER_INVALID_FILE_EXT = "Invalid file extension. Supported extensions are {0}, actual: {1}";
 }
