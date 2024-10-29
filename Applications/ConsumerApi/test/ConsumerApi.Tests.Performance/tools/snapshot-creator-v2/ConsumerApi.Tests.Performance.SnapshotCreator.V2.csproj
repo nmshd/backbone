@@ -43,8 +43,4 @@
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.1" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Commands\Args\" />
-    </ItemGroup>
-
 </Project>
