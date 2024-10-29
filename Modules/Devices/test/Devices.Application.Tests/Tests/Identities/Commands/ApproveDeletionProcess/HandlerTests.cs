@@ -33,7 +33,7 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => mockIdentitiesRepository.FindByAddress(identity.Address, A<CancellationToken>._, A<bool>._))
             .Returns(identity);
 
-        var mockPushNotificationSender = A.Dummy<IPushNotificationSender>();
+        var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
         var handler = CreateHandler(mockIdentitiesRepository, fakeUserContext, mockPushNotificationSender);
 

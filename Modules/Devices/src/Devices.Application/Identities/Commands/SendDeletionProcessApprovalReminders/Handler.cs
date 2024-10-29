@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
         foreach (var identity in identities)
         {
             var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.WaitingForApproval) ?? throw new NotFoundException(nameof(IdentityDeletionProcess));
-            var secondsUntilApprovalPeriodEnds = (ulong)double.Max(0, (deletionProcess.ApprovalPeriodEndsAt - SystemTime.UtcNow).TotalSeconds);
+            var daysUntilApprovalPeriodEnds = (deletionProcess.ApprovalPeriodEndsAt - SystemTime.UtcNow).Days;
 
             if (deletionProcess.ApprovalReminder3SentAt != null)
             {
@@ -39,52 +39,44 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
                 continue;
             }
 
-            if (secondsUntilApprovalPeriodEnds <= IdentityDeletionConfiguration.Instance.ApprovalReminder3.SecondsBeforeEndOfApprovalPeriod)
+            if (daysUntilApprovalPeriodEnds <= IdentityDeletionConfiguration.Instance.ApprovalReminder3.DaysBeforeEndOfApprovalPeriod)
             {
-                await SendReminder3(identity, secondsUntilApprovalPeriodEnds, deletionProcess.Id, cancellationToken);
+                await SendReminder3(identity, daysUntilApprovalPeriodEnds, deletionProcess.Id, cancellationToken);
                 continue;
             }
 
-            if (deletionProcess.ApprovalReminder2SentAt != null)
-                continue;
-
-            if (secondsUntilApprovalPeriodEnds <= IdentityDeletionConfiguration.Instance.ApprovalReminder2.SecondsBeforeEndOfApprovalPeriod)
+            if (deletionProcess.ApprovalReminder2SentAt != null) continue;
+            if (daysUntilApprovalPeriodEnds <= IdentityDeletionConfiguration.Instance.ApprovalReminder2.DaysBeforeEndOfApprovalPeriod)
             {
-                await SendReminder2(identity, secondsUntilApprovalPeriodEnds, deletionProcess.Id, cancellationToken);
+                await SendReminder2(identity, daysUntilApprovalPeriodEnds, deletionProcess.Id, cancellationToken);
                 continue;
             }
 
-            if (deletionProcess.ApprovalReminder1SentAt != null)
-                continue;
-
-            if (secondsUntilApprovalPeriodEnds <= IdentityDeletionConfiguration.Instance.ApprovalReminder1.SecondsBeforeEndOfApprovalPeriod)
+            if (deletionProcess.ApprovalReminder1SentAt == null && daysUntilApprovalPeriodEnds <= IdentityDeletionConfiguration.Instance.ApprovalReminder1.DaysBeforeEndOfApprovalPeriod)
             {
-                await SendReminder1(identity, secondsUntilApprovalPeriodEnds, deletionProcess.Id, cancellationToken);
+                await SendReminder1(identity, daysUntilApprovalPeriodEnds, deletionProcess.Id, cancellationToken);
             }
         }
     }
 
-    private async Task SendReminder3(Identity identity, ulong secondsUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
+    private async Task SendReminder3(Identity identity, int daysUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        var daysUntilApprovalPeriodEnds = (int)TimeSpan.FromSeconds(secondsUntilApprovalPeriodEnds).TotalDays;
         await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), cancellationToken);
         identity.DeletionProcessApprovalReminder3Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
         _logger.ApprovalReminder3Sent(deletionProcessId);
     }
 
-    private async Task SendReminder2(Identity identity, ulong secondsUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
+    private async Task SendReminder2(Identity identity, int daysUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        var daysUntilApprovalPeriodEnds = (int)TimeSpan.FromSeconds(secondsUntilApprovalPeriodEnds).TotalDays;
         await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), cancellationToken);
         identity.DeletionProcessApprovalReminder2Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
         _logger.ApprovalReminder2Sent(deletionProcessId);
     }
 
-    private async Task SendReminder1(Identity identity, ulong secondsUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
+    private async Task SendReminder1(Identity identity, int daysUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        var daysUntilApprovalPeriodEnds = (int)TimeSpan.FromSeconds(secondsUntilApprovalPeriodEnds).TotalDays;
         await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification(daysUntilApprovalPeriodEnds), cancellationToken);
         identity.DeletionProcessApprovalReminder1Sent();
         await _identitiesRepository.Update(identity, cancellationToken);

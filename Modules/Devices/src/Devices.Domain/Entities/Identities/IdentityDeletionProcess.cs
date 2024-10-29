@@ -48,7 +48,7 @@ public class IdentityDeletionProcess : Entity
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
     public DateTime CreatedAt { get; }
-    public DateTime ApprovalPeriodEndsAt => CreatedAt.AddSeconds(IdentityDeletionConfiguration.Instance.LengthOfApprovalPeriodInSeconds);
+    public DateTime ApprovalPeriodEndsAt => CreatedAt.AddDays(IdentityDeletionConfiguration.Instance.LengthOfApprovalPeriodInDays);
 
     public DateTime? ApprovalReminder1SentAt { get; private set; }
     public DateTime? ApprovalReminder2SentAt { get; private set; }
@@ -153,7 +153,7 @@ public class IdentityDeletionProcess : Entity
     {
         ApprovedAt = SystemTime.UtcNow;
         ApprovedByDevice = createdByDevice;
-        GracePeriodEndsAt = SystemTime.UtcNow.AddSeconds(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInSeconds);
+        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays);
         ChangeStatus(DeletionProcessStatus.Approved, address, address);
     }
 

@@ -52,7 +52,7 @@ public class HandlerTests : AbstractTestsBase
         var anIdentity = identities.First();
         anIdentity.StartDeletionProcessAsOwner(anIdentity.Devices.First().Id);
 
-        SystemTime.Set(SystemTime.UtcNow.AddSeconds(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInSeconds));
+        SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays));
 
         var handler = CreateHandler(identitiesRepository);
 

@@ -4,21 +4,8 @@ public record IdentityDeletionConfiguration
 {
     public static IdentityDeletionConfiguration Instance { get; private set; } = new();
 
-    public uint LengthOfApprovalPeriodInDays
-    {
-        get => (uint)(LengthOfApprovalPeriodInSeconds / 24 / 60 / 60);
-        set => LengthOfApprovalPeriodInSeconds = value * 24 * 60 * 60;
-    }
-
-    public ulong LengthOfApprovalPeriodInSeconds { get; set; } = (ulong)TimeSpan.FromDays(7).TotalSeconds;
-
-    public uint LengthOfGracePeriodInDays
-    {
-        get => (uint)(LengthOfGracePeriodInSeconds / 24 / 60 / 60);
-        set => LengthOfGracePeriodInSeconds = value * 24 * 60 * 60;
-    }
-
-    public ulong LengthOfGracePeriodInSeconds { get; set; } = (ulong)TimeSpan.FromDays(14).TotalSeconds;
+    public double LengthOfApprovalPeriodInDays { get; set; } = 7;
+    public double LengthOfGracePeriodInDays { get; set; } = 14;
 
     public GracePeriodNotificationConfiguration GracePeriodNotification1 { get; set; } = new() { DaysBeforeEndOfGracePeriod = 12 };
     public GracePeriodNotificationConfiguration GracePeriodNotification2 { get; set; } = new() { DaysBeforeEndOfGracePeriod = 10 };
@@ -31,22 +18,10 @@ public record IdentityDeletionConfiguration
 
 public class ApprovalReminderNotificationConfiguration
 {
-    public ulong SecondsBeforeEndOfApprovalPeriod { get; set; }
-
-    public uint DaysBeforeEndOfApprovalPeriod
-    {
-        get => (uint)(SecondsBeforeEndOfApprovalPeriod / 24 / 60 / 60);
-        set => SecondsBeforeEndOfApprovalPeriod = value * 24 * 60 * 60;
-    }
+    public uint DaysBeforeEndOfApprovalPeriod { get; set; }
 }
 
 public class GracePeriodNotificationConfiguration
 {
-    public ulong SecondsBeforeEndOfGracePeriod { get; set; }
-
-    public uint DaysBeforeEndOfGracePeriod
-    {
-        get => (uint)(SecondsBeforeEndOfGracePeriod / 24 / 60 / 60);
-        set => SecondsBeforeEndOfGracePeriod = value * 24 * 60 * 60;
-    }
+    public uint DaysBeforeEndOfGracePeriod { get; set; }
 }
