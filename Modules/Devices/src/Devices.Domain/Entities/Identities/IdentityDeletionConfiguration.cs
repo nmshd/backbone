@@ -10,7 +10,7 @@ public record IdentityDeletionConfiguration
         set => LengthOfApprovalPeriodInSeconds = value * 24 * 60 * 60;
     }
 
-    public ulong LengthOfApprovalPeriodInSeconds { get; set; }
+    public ulong LengthOfApprovalPeriodInSeconds { get; set; } = (ulong)TimeSpan.FromDays(7).TotalSeconds;
 
     public uint LengthOfGracePeriodInDays
     {
@@ -18,7 +18,7 @@ public record IdentityDeletionConfiguration
         set => LengthOfGracePeriodInSeconds = value * 24 * 60 * 60;
     }
 
-    public ulong LengthOfGracePeriodInSeconds { get; set; }
+    public ulong LengthOfGracePeriodInSeconds { get; set; } = (ulong)TimeSpan.FromDays(14).TotalSeconds;
 
     public GracePeriodNotificationConfiguration GracePeriodNotification1 { get; set; } = new() { DaysBeforeEndOfGracePeriod = 12 };
     public GracePeriodNotificationConfiguration GracePeriodNotification2 { get; set; } = new() { DaysBeforeEndOfGracePeriod = 10 };

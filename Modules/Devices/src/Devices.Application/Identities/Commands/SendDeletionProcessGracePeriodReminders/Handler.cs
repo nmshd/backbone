@@ -31,7 +31,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
         foreach (var identity in identities)
         {
             var deletionProcess = identity.GetDeletionProcessInStatus(DeletionProcessStatus.Approved) ?? throw new NotFoundException(nameof(IdentityDeletionProcess));
-            var secondsUntilDeletion = (deletionProcess.GracePeriodEndsAt!.Value - SystemTime.UtcNow).Seconds;
+            var secondsUntilDeletion = (ulong)(deletionProcess.GracePeriodEndsAt!.Value - SystemTime.UtcNow).TotalSeconds;
 
             if (deletionProcess.GracePeriodReminder3SentAt != null)
             {
@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
                 continue;
             }
 
-            if (secondsUntilDeletion <= (long)IdentityDeletionConfiguration.Instance.GracePeriodNotification3.SecondsBeforeEndOfGracePeriod)
+            if (secondsUntilDeletion <= IdentityDeletionConfiguration.Instance.GracePeriodNotification3.SecondsBeforeEndOfGracePeriod)
             {
                 await SendReminder3(identity, secondsUntilDeletion, deletionProcess.Id, cancellationToken);
                 continue;
@@ -48,7 +48,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
             if (deletionProcess.GracePeriodReminder2SentAt != null)
                 continue;
 
-            if (secondsUntilDeletion <= (long)IdentityDeletionConfiguration.Instance.GracePeriodNotification2.SecondsBeforeEndOfGracePeriod)
+            if (secondsUntilDeletion <= IdentityDeletionConfiguration.Instance.GracePeriodNotification2.SecondsBeforeEndOfGracePeriod)
             {
                 await SendReminder2(identity, secondsUntilDeletion, deletionProcess.Id, cancellationToken);
                 continue;
@@ -57,31 +57,34 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
             if (deletionProcess.GracePeriodReminder1SentAt != null)
                 continue;
 
-            if (secondsUntilDeletion <= (long)IdentityDeletionConfiguration.Instance.GracePeriodNotification1.SecondsBeforeEndOfGracePeriod)
+            if (secondsUntilDeletion <= IdentityDeletionConfiguration.Instance.GracePeriodNotification1.SecondsBeforeEndOfGracePeriod)
             {
                 await SendReminder1(identity, secondsUntilDeletion, deletionProcess.Id, cancellationToken);
             }
         }
     }
 
-    private async Task SendReminder3(Identity identity, int daysToDeletion, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
+    private async Task SendReminder3(Identity identity, ulong secondsUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
+        var daysToDeletion = (int)TimeSpan.FromSeconds(secondsUntilApprovalPeriodEnds).TotalDays;
         await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification(daysToDeletion), cancellationToken);
         identity.DeletionGracePeriodReminder3Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
         _logger.Reminder3Sent(deletionProcessId);
     }
 
-    private async Task SendReminder2(Identity identity, int daysToDeletion, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
+    private async Task SendReminder2(Identity identity, ulong secondsUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
+        var daysToDeletion = (int)TimeSpan.FromSeconds(secondsUntilApprovalPeriodEnds).TotalDays;
         await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification(daysToDeletion), cancellationToken);
         identity.DeletionGracePeriodReminder2Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
         _logger.Reminder2Sent(deletionProcessId);
     }
 
-    private async Task SendReminder1(Identity identity, int daysToDeletion, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
+    private async Task SendReminder1(Identity identity, ulong secondsUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
+        var daysToDeletion = (int)TimeSpan.FromSeconds(secondsUntilApprovalPeriodEnds).TotalDays;
         await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification(daysToDeletion), cancellationToken);
         identity.DeletionGracePeriodReminder1Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
