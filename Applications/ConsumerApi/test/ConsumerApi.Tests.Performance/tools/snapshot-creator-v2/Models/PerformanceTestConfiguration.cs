@@ -21,9 +21,9 @@ public record PerformanceTestConfiguration(
 
         var isConfigEqual = VerificationConfiguration.Equals(other.VerificationConfiguration);
         var isPoolConfigsEqual = IdentityPoolConfigs.SequenceEqual(other.IdentityPoolConfigs);
+        var isRelationshipAndMessagesEqual = RelationshipAndMessages.SequenceEqual(other.RelationshipAndMessages);
 
-
-        return isConfigEqual && isPoolConfigsEqual;
+        return isConfigEqual && isPoolConfigsEqual && isRelationshipAndMessagesEqual;
     }
 
     public override int GetHashCode()
@@ -37,6 +37,14 @@ public record PerformanceTestConfiguration(
             hash.Add(poolConfig);
         }
 
+        foreach (var relationshipAndMessage in RelationshipAndMessages)
+        {
+            hash.Add(relationshipAndMessage);
+        }
+
         return hash.ToHashCode();
     }
+
+    [JsonPropertyName("RelationshipAndMessages")]
+    public List<RelationshipAndMessages> RelationshipAndMessages { get; init; } = [];
 }

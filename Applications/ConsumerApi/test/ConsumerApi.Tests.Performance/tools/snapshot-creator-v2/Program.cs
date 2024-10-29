@@ -28,6 +28,7 @@ public class Program
                 services.AddSingleton<PoolConfigurationJsonGeneratorCommand>();
                 services.AddSingleton<PoolConfigurationJsonValidatorCommand>();
                 services.AddSingleton<RelationshipAndMessagesGeneratorCommand>();
+                services.AddSingleton<PoolConfigWithRelationshipAndMessagesGeneratorCommand>();
             })
             .RunCommandLineApplicationAsync(args, app =>
             {
@@ -91,6 +92,27 @@ public class Program
                         var result = await relationshipAndMessagesGeneratorCommand.Execute(new RelationshipAndMessagesGeneratorCommandArgs(poolsFile!, worksheetName!));
 
                         Console.WriteLine(result.Status ? $"Relationships and Messages Excel generated at {result.Message}" : $"Error: {result.Message}");
+
+                        return 0;
+                    });
+                });
+
+                app.Command("generate-all", command =>
+                {
+                    command.Description = "Generate JSON Pool Config including all Relationships and Messages in a single JSON File";
+                    var sourceOption = command.Option<string>("-s|--source <SOURCE>", "Source Excel File", CommandOptionType.SingleValue);
+                    var worksheetOption = command.Option<string>("-w|--worksheet <WORKSHEET>", "Excel Worksheet Name", CommandOptionType.SingleValue);
+
+                    command.OnExecuteAsync(async _ =>
+                    {
+                        var excelFilePath = sourceOption.Value();
+                        var workSheetName = worksheetOption.Value();
+
+                        var poolConfigWithRelationshipAndMessagesGeneratorCommand = app.GetRequiredService<PoolConfigWithRelationshipAndMessagesGeneratorCommand>();
+
+                        var result = await poolConfigWithRelationshipAndMessagesGeneratorCommand.Execute(new PoolConfigWithRelationshipAndMessagesGeneratorCommandArgs(excelFilePath!, workSheetName!));
+
+                        Console.WriteLine(result.Status ? $"Pool Configs with Relationships and Messages JSON generated at {result.Message}" : $"Error: {result.Message}");
 
                         return 0;
                     });

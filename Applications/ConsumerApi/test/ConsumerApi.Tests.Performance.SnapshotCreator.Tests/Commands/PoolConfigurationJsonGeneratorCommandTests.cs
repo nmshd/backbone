@@ -23,7 +23,7 @@ public class PoolConfigurationJsonGeneratorCommandTests : SnapshotCreatorTestsBa
         var poolConfigJsonWriter = new PoolConfigurationJsonWriter();
         var performanceTestConfigurationExcelReader = new PerformanceTestConfigurationExcelReader();
 
-        var sut = new PoolConfigurationJsonGeneratorCommand(poolConfigJsonWriter, performanceTestConfigurationExcelReader);
+        var sut = new PoolConfigurationJsonGeneratorCommand(performanceTestConfigurationExcelReader, poolConfigJsonWriter);
 
         // Act
         var statusMessage = await sut.Execute(new PoolConfigurationJsonGeneratorCommandArgs(inputFile, workSheet));

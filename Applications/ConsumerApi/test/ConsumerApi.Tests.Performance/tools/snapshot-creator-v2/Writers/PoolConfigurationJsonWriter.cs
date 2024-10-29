@@ -18,6 +18,6 @@ public class PoolConfigurationJsonWriter : IPoolConfigurationJsonWriter
             return new StatusMessage(false, e.Message);
         }
 
-        return new StatusMessage(true, filePath);
+        return new StatusMessage(true, Path.GetFullPath(filePath));
     }
 }
