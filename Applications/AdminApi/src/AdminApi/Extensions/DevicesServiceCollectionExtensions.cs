@@ -11,7 +11,7 @@ public static class DevicesServiceCollectionExtensions
 {
     public static IServiceCollection AddDevices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddApplication(configuration);
+        services.AddApplication(configuration.GetSection("Application"));
 
         services.ConfigureAndValidate<DevicesConfiguration.InfrastructureConfiguration>(configuration.GetSection("Infrastructure").Bind);
 
