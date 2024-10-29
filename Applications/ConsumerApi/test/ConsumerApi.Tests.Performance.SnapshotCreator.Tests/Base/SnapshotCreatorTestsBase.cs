@@ -1,19 +1,15 @@
-using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2;
-using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Commands;
-using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
-using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Readers;
-using FluentAssertions;
-using Ganss.Excel;
+﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
+using Backbone.UnitTestTools.BaseClasses;
 
-namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Base;
 
-public class IdentityPoolConfigGeneratorTests
+public abstract class SnapshotCreatorTestsBase : AbstractTestsBase
 {
-    private readonly string _testDataFolder = Path.Combine(AppContext.BaseDirectory, "TestData");
+    protected string TestDataFolder { get; } = Path.Combine(AppContext.BaseDirectory, "TestData");
 
     #region Helper Methods
 
-    private static PerformanceTestConfiguration GetExpectedPoolConfiguration(string loadTestTag)
+    protected virtual PerformanceTestConfiguration GetExpectedPoolConfiguration(string loadTestTag)
     {
         var expectedPoolConfiguration = loadTestTag switch
         {
@@ -26,7 +22,7 @@ public class IdentityPoolConfigGeneratorTests
         return expectedPoolConfiguration;
     }
 
-    private static VerificationConfiguration TestLoadVerificationConfiguration =>
+    protected virtual VerificationConfiguration TestLoadVerificationConfiguration =>
         new()
         {
             TotalNumberOfRelationships = 22,
@@ -34,7 +30,7 @@ public class IdentityPoolConfigGeneratorTests
             TotalConnectorSentMessages = 48
         };
 
-    private static List<IdentityPoolConfiguration> TestLoadIdentityPool =>
+    protected virtual List<IdentityPoolConfiguration> TestLoadIdentityPool =>
     [
         new()
         {
@@ -136,7 +132,7 @@ public class IdentityPoolConfigGeneratorTests
         }
     ];
 
-    private static VerificationConfiguration LightLoadVerificationConfiguration =>
+    protected virtual VerificationConfiguration LightLoadVerificationConfiguration =>
         new()
         {
             TotalNumberOfRelationships = 1800,
@@ -144,7 +140,7 @@ public class IdentityPoolConfigGeneratorTests
             TotalConnectorSentMessages = 16500
         };
 
-    private static List<IdentityPoolConfiguration> LightLoadIdentityPool =>
+    protected virtual List<IdentityPoolConfiguration> LightLoadIdentityPool =>
     [
         new()
         {
@@ -246,7 +242,7 @@ public class IdentityPoolConfigGeneratorTests
         }
     ];
 
-    private static VerificationConfiguration HeavyLoadVerificationConfiguration =>
+    protected virtual VerificationConfiguration HeavyLoadVerificationConfiguration =>
         new()
         {
             TotalNumberOfRelationships = 20500,
@@ -254,7 +250,7 @@ public class IdentityPoolConfigGeneratorTests
             TotalConnectorSentMessages = 780000
         };
 
-    private static List<IdentityPoolConfiguration> HeavyLoadIdentityPool =>
+    protected virtual List<IdentityPoolConfiguration> HeavyLoadIdentityPool =>
     [
         new()
         {
@@ -355,137 +351,6 @@ public class IdentityPoolConfigGeneratorTests
             NumberOfChallenges = 300
         }
     ];
-
-    #endregion
-
-    #region Deserialize From Json Tests
-
-    [Theory]
-    [InlineData("pool-config.heavy.json", "heavy")]
-    [InlineData("pool-config.light.json", "light")]
-    [InlineData("pool-config.test.json", "test")]
-    public async Task DeserializeFromJson_InputPoolConfigJson_ReturnsPoolConfiguration(string poolConfigJsonFilename, string loadTestTag)
-    {
-        // Arrange
-        var poolConfigJsonFile = Path.Combine(_testDataFolder, poolConfigJsonFilename);
-        var expectedPoolConfig = GetExpectedPoolConfiguration(loadTestTag);
-
-        // Act
-        var actualPoolConfig = await IdentityPoolConfigGenerator.DeserializeFromJson(poolConfigJsonFile);
-
-        // Assert
-        actualPoolConfig.Should().NotBeNull();
-
-        var areEqual = actualPoolConfig.Equals(expectedPoolConfig); //Note: Should().BeEquivalentTo does not invoke overridden Equals method
-        areEqual.Should().BeTrue();
-    }
-
-    #endregion
-
-    #region Deserialize From Excel Tests
-
-    [Theory]
-    [InlineData("PerformanceTestData.xlsx", "heavy")]
-    [InlineData("PerformanceTestData.xlsx", "light")]
-    [InlineData("PerformanceTestData.xlsx", "test")]
-    public async Task DeserializeFromExcel_InputExcelFile_ReturnsPoolConfiguration(string excelFileName, string workSheetName)
-    {
-        // Arrange
-        var excelFile = Path.Combine(_testDataFolder, excelFileName);
-        var expectedPoolConfig = GetExpectedPoolConfiguration(loadTestTag: workSheetName);
-        var performanceTestConfigurationExcelReader = new PerformanceTestConfigurationExcelReader();
-
-        // Act
-        var actualPoolConfig = await performanceTestConfigurationExcelReader.Read(excelFile, workSheetName);
-
-        // Assert
-        actualPoolConfig.Should().NotBeNull();
-
-        var areEqual = actualPoolConfig.Equals(expectedPoolConfig); //Note: Should().BeEquivalentTo does not invoke overridden Equals method
-        areEqual.Should().BeTrue();
-    }
-
-    #endregion
-
-    #region Verify Json Pool Config
-
-    [Theory]
-    [InlineData("PerformanceTestData.xlsx", "heavy", "pool-config.heavy.json")]
-    [InlineData("PerformanceTestData.xlsx", "light", "pool-config.light.json")]
-    [InlineData("PerformanceTestData.xlsx", "test", "pool-config.test.json")]
-    public async Task VerifyPoolConfig_InputPerformanceTestDataExcel_ReturnsSuccess(string excelFile, string workSheet, string expectedLoadTestJsonFilename)
-    {
-        // Arrange
-        var expectedJson = Path.Combine(_testDataFolder, expectedLoadTestJsonFilename);
-        var inputFile = Path.Combine(_testDataFolder, excelFile);
-
-        var sut = new IdentityPoolConfigGenerator();
-
-        // Act
-        var result = await sut.VerifyPoolConfig(inputFile, workSheet, expectedJson);
-
-        // Assert
-        result.Should().BeTrue();
-    }
-
-    #endregion
-
-    #region Generate Json Pool Config
-
-    [Theory]
-    [InlineData("PerformanceTestData-plusNewMedium.xlsx", WORKBOOK_SHEET_MEDIUM_LOAD, "pool-config.medium.json")]
-    public async Task GeneratePoolConfig_InputPerformanceTestDataExcel_ReturnsSuccess(string excelFile, string workSheet, string expectedLoadTestJsonFilename)
-    {
-        // Arrange
-        var expectedPoolConfigJsonFilePath = Path.Combine(_testDataFolder, expectedLoadTestJsonFilename);
-        var inputFile = Path.Combine(_testDataFolder, excelFile);
-
-        var sut = new IdentityPoolConfigGenerator();
-
-        // Act
-        var (status, message) = await sut.GeneratePoolConfig(inputFile, workSheet);
-
-        // Assert
-
-        status.Should().BeTrue();
-
-        File.Exists(expectedPoolConfigJsonFilePath).Should().BeTrue();
-        (await sut.VerifyPoolConfig(inputFile, workSheet, expectedPoolConfigJsonFilePath)).Should().BeTrue();
-    }
-
-    #endregion
-
-    #region Generate Excel RelationshipsAndMessages Pool Config
-
-    [Theory]
-    [InlineData("test", "pool-config.test.json", "ExpectedRelationshipsAndMessagePoolConfigs.test.json")]
-    [InlineData("light", "pool-config.light.json", "ExpectedRelationshipsAndMessagePoolConfigs.light.json")]
-    [InlineData("heavy", "pool-config.heavy.json", "ExpectedRelationshipsAndMessagePoolConfigs.heavy.json")]
-    public async Task GenerateExcelRelationshipsAndMessagesPoolConfig_InputPerformanceTestDataExcel_ReturnsSuccess(string workSheet, string poolConfigJsonFilename, string expectedLoadTestJsonFile)
-    {
-        // Arrange
-        var poolConfigJsonFilePath = Path.Combine(_testDataFolder, poolConfigJsonFilename);
-        var expectedRelationshipsFilePath = Path.Combine(_testDataFolder, $"{RELATIONSHIPS_AND_MESSAGE_POOL_CONFIGS_FILE_NAME}.{workSheet}.{EXCEL_FILE_EXT}");
-        var expectedLoadTestDataFilePath = Path.Combine(_testDataFolder, expectedLoadTestJsonFile);
-
-        await using var fileStream = File.OpenRead(expectedLoadTestDataFilePath);
-        var expectedLoadTestData = await System.Text.Json.JsonSerializer.DeserializeAsync<RelationshipAndMessages[]>(fileStream);
-
-        var sut = new IdentityPoolConfigGenerator();
-
-        // Act
-        var (status, message) = await sut.GenerateExcelRelationshipsAndMessagesPoolConfig(poolConfigJsonFilePath, workSheet);
-
-        // Assert
-
-        status.Should().BeTrue($"The operation should succeed, but failed with message: {message}");
-        message.Should().Be(expectedRelationshipsFilePath);
-
-        File.Exists(expectedRelationshipsFilePath).Should().BeTrue();
-
-        var actualLoadTestData = await (new ExcelMapper().FetchAsync<RelationshipAndMessages>(expectedRelationshipsFilePath));
-        actualLoadTestData.Should().BeEquivalentTo(expectedLoadTestData);
-    }
 
     #endregion
 }

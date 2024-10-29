@@ -3,6 +3,14 @@
     "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-json": {
       "commandName": "Project",
       "commandLineArgs": "generate-json --source .\\Config\\PerformanceTestData-plusNewMedium.xlsx --worksheet medium"
+    },
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - verify-json": {
+      "commandName": "Project",
+      "commandLineArgs": "verify-json --source .\\Config\\PerformanceTestData.xlsx --worksheet test --pool-config .\\Config\\pool-config.test.json"
+    },
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-relationships": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-relationships --pool-config .\\Config\\pool-config.test.json --worksheet test"
     }
   }
 }
