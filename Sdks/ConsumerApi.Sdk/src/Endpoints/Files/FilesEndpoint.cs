@@ -44,4 +44,9 @@ public class FilesEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
             .Authenticate()
             .ExecuteRaw();
     }
+
+    public async Task<ApiResponse<EmptyResponse>> DeleteFile(string id)
+    {
+        return await _client.Delete<EmptyResponse>($"api/{API_VERSION}/Files/{id}");
+    }
 }
