@@ -6,6 +6,7 @@ using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Files.Application;
 using Backbone.Modules.Files.Application.Files.Commands.CreateFile;
+using Backbone.Modules.Files.Application.Files.Commands.DeleteFile;
 using Backbone.Modules.Files.Application.Files.DTOs;
 using Backbone.Modules.Files.Application.Files.Queries.GetFileContent;
 using Backbone.Modules.Files.Application.Files.Queries.GetFileMetadata;
@@ -79,6 +80,15 @@ public class FilesController : ApiControllerBase
     {
         var metadata = await _mediator.Send(new GetFileMetadataQuery { Id = fileId }, cancellationToken);
         return Ok(metadata);
+    }
+
+    [HttpDelete("{fileId}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteFile(string fileId, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new DeleteFileCommand { Id = fileId }, cancellationToken);
+        return NoContent();
     }
 
     [HttpGet]

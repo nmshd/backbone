@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using File = Backbone.Modules.Files.Domain.Entities.File;
 
 namespace Backbone.Modules.Files.Infrastructure.Persistence.Database.Repository;
+
 public class FilesRepository : IFilesRepository
 {
     private readonly DbSet<File> _files;
@@ -34,6 +35,15 @@ public class FilesRepository : IFilesRepository
     {
         _blobStorage.Add(_blobOptions.RootFolder, file.Id, file.Content);
         await _files.AddAsync(file, cancellationToken);
+        await _blobStorage.SaveAsync();
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
+    public async Task Delete(File file, CancellationToken cancellationToken)
+    {
+        _blobStorage.Remove(_blobOptions.RootFolder, file.Id);
+        _files.Remove(file);
+
         await _blobStorage.SaveAsync();
         await _dbContext.SaveChangesAsync(cancellationToken);
     }
