@@ -1,25 +1,25 @@
 ﻿using Backbone.BuildingBlocks.Domain;
-using Backbone.Modules.Announcements.Domain.Ids;
 
 namespace Backbone.Modules.Announcements.Domain.Entities;
+
 public class AnnouncementText : Entity
 {
     public AnnouncementText()
     {
-        Id = null!;
+        AnnouncementId = null!;
         Title = null!;
         Body = null!;
     }
 
-    public AnnouncementText(AnnouncementLanguage language, string title, byte[] body)
+    public AnnouncementText(AnnouncementId announcementId, AnnouncementLanguage language, string title, byte[] body)
     {
-        Id = AnnouncementTextId.New();
+        AnnouncementId = announcementId;
         Language = language;
         Title = title;
         Body = body;
     }
 
-    public AnnouncementTextId Id { get; set; }
+    public AnnouncementId AnnouncementId { get; }
     public AnnouncementLanguage Language { get; set; }
     public string Title { get; set; }
     public byte[] Body { get; set; }

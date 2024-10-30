@@ -1,5 +1,4 @@
 ﻿using Backbone.BuildingBlocks.Domain;
-using Backbone.Modules.Announcements.Domain.Ids;
 
 namespace Backbone.Modules.Announcements.Domain.Entities
 {
