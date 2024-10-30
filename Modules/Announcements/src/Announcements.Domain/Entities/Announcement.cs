@@ -5,24 +5,29 @@ namespace Backbone.Modules.Announcements.Domain.Entities
 {
     public class Announcement : Entity
     {
-        private Announcement()
+        // ReSharper disable once UnusedMember.Local
+        private Announcement(List<AnnouncementText> texts)
         {
             // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
             Id = null!;
+            Texts = texts;
         }
 
-        public Announcement(AnnouncementSeverity severity, DateTime? expiresAt = null)
+        public Announcement(AnnouncementSeverity severity, List<AnnouncementText> texts, DateTime? expiresAt)
         {
             Id = AnnouncementId.New();
             CreatedAt = DateTime.Now;
             ExpiresAt = expiresAt;
             Severity = severity;
+            Texts = texts;
         }
 
-        public AnnouncementId Id { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime? ExpiresAt { get; set; }
-        public AnnouncementSeverity Severity { get; set; }
+        public AnnouncementId Id { get; }
+        public DateTime CreatedAt { get; }
+        public DateTime? ExpiresAt { get; }
+        public AnnouncementSeverity Severity { get; }
+
+        public List<AnnouncementText> Texts { get; }
     }
 }
 
