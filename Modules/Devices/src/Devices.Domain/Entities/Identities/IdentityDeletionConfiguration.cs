@@ -18,10 +18,10 @@ public record IdentityDeletionConfiguration
 
 public class ApprovalReminderNotificationConfiguration
 {
-    public uint DaysBeforeEndOfApprovalPeriod { get; set; }
+    public double DaysBeforeEndOfApprovalPeriod { get; set; }
 }
 
 public class GracePeriodNotificationConfiguration
 {
-    public uint DaysBeforeEndOfGracePeriod { get; set; }
+    public double DaysBeforeEndOfGracePeriod { get; set; }
 }
