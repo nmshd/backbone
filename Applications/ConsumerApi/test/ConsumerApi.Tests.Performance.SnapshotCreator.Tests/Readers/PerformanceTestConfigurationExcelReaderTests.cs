@@ -9,14 +9,15 @@ public class PerformanceTestConfigurationExcelReaderTests : SnapshotCreatorTests
     #region Verify Json Pool Config
 
     [Theory]
-    [InlineData("PerformanceTestData.xlsx", "heavy")]
-    [InlineData("PerformanceTestData.xlsx", "light")]
-    [InlineData("PerformanceTestData.xlsx", "test")]
-    public async Task Read_InputPerformanceTestDataExcel_ReturnsPoolConfiguration(string excelFile, string loadTestTag)
+    [InlineData("PerformanceTestData.xlsx", "heavy", "expected-pool-config.heavy.json")]
+    [InlineData("PerformanceTestData.xlsx", "light", "expected-pool-config.light.json")]
+    [InlineData("PerformanceTestData.xlsx", "test", "expected-pool-config.test.json")]
+    public async Task Read_InputPerformanceTestDataExcel_ReturnsPoolConfiguration(string excelFile, string loadTestTag, string expectedPoolConfigJsonFilename)
     {
         // Arrange
         var poolConfigExcelFile = Path.Combine(TestDataFolder, excelFile);
-        var expectedPoolConfig = GetExpectedPoolConfiguration(loadTestTag);
+        var expectedPoolConfig = await GetExpectedPoolConfiguration(expectedPoolConfigJsonFilename);
+        expectedPoolConfig.RelationshipAndMessages.Clear(); //Note: Excel reader does only read the pool config, not the relationships and messages
         var sut = new PerformanceTestConfigurationExcelReader();
 
         // Act
@@ -24,9 +25,7 @@ public class PerformanceTestConfigurationExcelReaderTests : SnapshotCreatorTests
 
         // Assert
         actualPoolConfig.Should().NotBeNull();
-
-        var areEqual = actualPoolConfig.Equals(expectedPoolConfig); //Note: Should().BeEquivalentTo does not invoke overridden Equals method
-        areEqual.Should().BeTrue();
+        actualPoolConfig.Should().BeEquivalentTo(expectedPoolConfig);
     }
 
     #endregion

@@ -23,58 +23,43 @@ https://github.com/nmshd/backbone/tree/abl-10-fill-db-for-perftests-tool
 > verifies the json pool-config-<worksheet-name>.json files against the source PerformanceTestData.xls for validity
 
 ```shell
-verify-json --source PerformanceTestData.xlsx --pool-config [all | <filename>]
+verify --source PerformanceTestData.xlsx --worksheet <worksheet-name> --pool-config pool-config.<worksheet-name>.json
 ```
 
 ##### 3.1.1.1 Methods and Tests:
 
 - [x] Deserialize from JSON
-
 - [x] Deserialize from Excel Calculation (PerformanceTestData.xlsx)
-
 - [x] Verify JSON configs against Excel Calculation (PerformanceTestData.xlsx)
+- [x] Verify JSON Pool Config Command
 
-- [ ] Verify JSON Pool Config Command
 
-#### 3.1.2 Generate JSON Pool Config
+#### 3.1.2 Generate  Json Pool Configs with Relationships And Message Command
 
-> generates the json-pool-<worksheet-name>.json files from the source PerformanceTestData.xls
+> generates the pool-config.<worksheet-name>.json
 
 ```shell
-generate-json --source PerformanceTestData.xlsx --worksheet [all | <worksheet-name> ]
+generate --source PerformanceTestData.xlsx --worksheet <worksheet-name>
 ```
 
 ##### 3.1.2.1 Methods and Tests:
 
 - [x] Generate JSON configs from Excel Calculation (PerformanceTestData.xlsx)
-- [ ] Generate JSON Command
+- [x] Generate Relationships and Messages
+- [x] Distribute JSON configs with Relationships and Messages (pool-config.<worksheet-name>.json)
+- [x] Generate RelationshipsAndMessagePoolConfigs Excel Command
 
-#### 3.1.3 Generate RelationshipsAndMessagePoolConfigs Excel Command
+#### 3.1.3 Apply RelationshipsAndMessagePoolConfigs Excel in Database Command
 
-> generates the RelationshipsAndMessagePoolConfigs.<worksheet-name>.xlsx
+> Applie the pools configs including their relationships and messages in the Database
 
 ```shell
-generate-relationships --poolsFile pool-config.<worksheet-name>.json
+apply --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config pool-config.<worksheet-name>.json
 ```
 
 ##### 3.1.3.1 Methods and Tests:
 
-- [x] Generate Relationships Excel (RelationshipsAndMessagePoolConfigs.<worksheet-name>.xlsx)
-- [x] Distribute Messages on Relationships (RelationshipsAndMessagePoolConfigs.<worksheet-name>.xlsx)
-- [ ] Generate RelationshipsAndMessagePoolConfigs Excel Command
-
-#### 3.1.4 Apply RelationshipsAndMessagePoolConfigs Excel in Database Command
-
-> Apply Pools CSV in Database Command
-> apply --baseAddress <ConsumerApi:Port> --clientId <Client-Id> --clientSecret <Client-Secret> --poolsFile pool-config.test.json --source <RelationshipsAndMessagePoolConfigs>.<worksheet-name>.xlsx
-
-```shell
-apply --baseAddress http://localhost:8081 --clientId test --clientSecret test --poolsFile pool-config.test.json --source RelationshipsAndMessagePoolConfigs.test.xlsx
-```
-
-##### 3.1.4.1 Methods and Tests:
-
-- [ ] Apply RelationshipsAndMessagePoolConfigs Excel (Create Database Snapshot)
+- [ ] Apply pools configs including their relationships and messages in the Database (Create Database Snapshot)
 - [ ] Apply RelationshipsAndMessagePoolConfigs Excel in Database Command
 
 ## 3.2 Console Application (CLI)
@@ -86,10 +71,9 @@ nuget: https://www.nuget.org/packages/McMaster.Extensions.CommandLineUtils/
 Current branch vector:
 
 ```
-main --> abl-10 --> abl-10-fill-db-for-perftests-tool -> abl-244-fill-db-for-perftests-tool
+main --> abl-10 --> abl-10-fill-db-for-perftests-tool
 ```
 
-Start Console Application in : abl-244-fill-db-for-perftests-tool
 PR (Intermediate Review) Branch: abl-10-fill-db-for-perftests-tool
 PR (Intermediate Review): https://github.com/nmshd/backbone/pull/921
 

@@ -96,5 +96,315 @@
     "TotalNumberOfRelationships": 22,
     "TotalConnectorSentMessages": 48,
     "TotalAppSentMessages": 48
-  }
+  },
+  "RelationshipAndMessages": [
+    {
+      "SenderPool": "a1",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "c1",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 0
+    },
+    {
+      "SenderPool": "a2",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "c2",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a2",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "c2",
+      "RecipientIdentityAddress": 2,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a2",
+      "SenderIdentityAddress": 2,
+      "RecipientPool": "c2",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a2",
+      "SenderIdentityAddress": 2,
+      "RecipientPool": "c2",
+      "RecipientIdentityAddress": 2,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a2",
+      "SenderIdentityAddress": 3,
+      "RecipientPool": "c2",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a2",
+      "SenderIdentityAddress": 3,
+      "RecipientPool": "c2",
+      "RecipientIdentityAddress": 2,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 2,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 3,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 4,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 4
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 2,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 2,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 2,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 2,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 3,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 2,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 4,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 2,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 4
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 3,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 3,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 2,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 3,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 3,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 3,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 4,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "a3",
+      "SenderIdentityAddress": 3,
+      "RecipientPool": "c3",
+      "RecipientIdentityAddress": 2,
+      "NumberOfSentMessages": 4
+    },
+    {
+      "SenderPool": "c1",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "a1",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 0
+    },
+    {
+      "SenderPool": "c2",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "a2",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "c2",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "a2",
+      "RecipientIdentityAddress": 2,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "c2",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "a2",
+      "RecipientIdentityAddress": 3,
+      "NumberOfSentMessages": 4
+    },
+    {
+      "SenderPool": "c2",
+      "SenderIdentityAddress": 2,
+      "RecipientPool": "a2",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "c2",
+      "SenderIdentityAddress": 2,
+      "RecipientPool": "a2",
+      "RecipientIdentityAddress": 2,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "c2",
+      "SenderIdentityAddress": 2,
+      "RecipientPool": "a2",
+      "RecipientIdentityAddress": 3,
+      "NumberOfSentMessages": 4
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 1
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 1
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 2,
+      "NumberOfSentMessages": 1
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 2,
+      "NumberOfSentMessages": 1
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 1,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 3,
+      "NumberOfSentMessages": 4
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 2,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 2,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 2,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 2,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 3,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 2,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 3,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 3,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 3,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 2,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 3,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 3,
+      "NumberOfSentMessages": 4
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 4,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 1,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 4,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 2,
+      "NumberOfSentMessages": 2
+    },
+    {
+      "SenderPool": "c3",
+      "SenderIdentityAddress": 4,
+      "RecipientPool": "a3",
+      "RecipientIdentityAddress": 3,
+      "NumberOfSentMessages": 4
+    }
+  ]
 }

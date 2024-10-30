@@ -19,20 +19,17 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="Config\PerformanceTestData-plusNewMedium.xlsx">
+        <None Update="Config\PerformanceTestData.xlsx">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="Config\pool-config.heavy.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="Config\pool-config.light.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="Config\pool-config.test.json">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="Config\PerformanceTestData.xlsx">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 

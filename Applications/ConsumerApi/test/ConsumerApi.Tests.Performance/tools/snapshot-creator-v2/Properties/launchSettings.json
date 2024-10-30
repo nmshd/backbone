@@ -1,20 +1,28 @@
 {
   "profiles": {
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-json": {
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - verify test": {
       "commandName": "Project",
-      "commandLineArgs": "generate-json --source .\\Config\\PerformanceTestData-plusNewMedium.xlsx --worksheet medium"
+      "commandLineArgs": "verify --source .\\Config\\PerformanceTestData.xlsx --worksheet test --pool-config .\\Config\\pool-config.test.json"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - verify-json": {
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - verify light": {
       "commandName": "Project",
-      "commandLineArgs": "verify-json --source .\\Config\\PerformanceTestData.xlsx --worksheet test --pool-config .\\Config\\pool-config.test.json"
+      "commandLineArgs": "verify --source .\\Config\\PerformanceTestData.xlsx --worksheet light --pool-config .\\Config\\pool-config.light.json"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-relationships": {
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - verify heavy": {
       "commandName": "Project",
-      "commandLineArgs": "generate-relationships --pool-config .\\Config\\pool-config.test.json --worksheet test"
+      "commandLineArgs": "verify --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy --pool-config .\\Config\\pool-config.heavy.json"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-all": {
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate test": {
       "commandName": "Project",
-      "commandLineArgs": "generate-all --source .\\Config\\PerformanceTestData.xlsx --worksheet test"
+      "commandLineArgs": "generate --source .\\Config\\PerformanceTestData.xlsx --worksheet test"
+    },
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate light": {
+      "commandName": "Project",
+      "commandLineArgs": "generate --source .\\Config\\PerformanceTestData.xlsx --worksheet light"
+    },
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate heavy": {
+      "commandName": "Project",
+      "commandLineArgs": "generate --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy"
     }
   }
 }

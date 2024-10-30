@@ -7,13 +7,13 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 public record RelationshipAndMessages(
     string SenderPool,
     int SenderIdentityAddress,
-    string ReceiverPool,
-    int ReceiverIdentityAddress)
+    string RecipientPool,
+    int RecipientIdentityAddress)
 {
     public long NumberOfSentMessages { get; set; }
 
     [Ignore, JsonIgnore]
-    public IdentityPoolType ReceiverIdentityPoolType => ReceiverPool.FirstOrDefault() switch
+    public IdentityPoolType RecipientIdentityPoolType => RecipientPool.FirstOrDefault() switch
     {
         'n' => IdentityPoolType.Never,
         'a' => IdentityPoolType.App,
