@@ -9,14 +9,14 @@ public class PerformanceTestConfigurationJsonReaderTests : SnapshotCreatorTestsB
     #region Deserialize From Json Tests
 
     [Theory]
-    [InlineData("pool-config.heavy.json", "heavy")]
-    [InlineData("pool-config.light.json", "light")]
-    [InlineData("pool-config.test.json", "test")]
-    public async Task Read_InputPoolConfigJson_ReturnsPoolConfiguration(string poolConfigJsonFilename, string loadTestTag)
+    [InlineData("pool-config.heavy.json", "expected-pool-config.heavy.json")]
+    [InlineData("pool-config.light.json", "expected-pool-config.light.json")]
+    [InlineData("pool-config.test.json", "expected-pool-config.test.json")]
+    public async Task Read_InputPoolConfigJson_ReturnsPoolConfiguration(string poolConfigJsonFilename, string expectedPoolConfigJsonFilename)
     {
         // Arrange
         var poolConfigJsonFile = Path.Combine(TestDataFolder, poolConfigJsonFilename);
-        var expectedPoolConfig = GetExpectedPoolConfiguration(loadTestTag);
+        var expectedPoolConfig = await GetExpectedPoolConfiguration(expectedPoolConfigJsonFilename);
         var sut = new PerformanceTestConfigurationJsonReader();
 
         // Act
@@ -24,9 +24,7 @@ public class PerformanceTestConfigurationJsonReaderTests : SnapshotCreatorTestsB
 
         // Assert
         actualPoolConfig.Should().NotBeNull();
-
-        var areEqual = actualPoolConfig.Equals(expectedPoolConfig); //Note: Should().BeEquivalentTo does not invoke overridden Equals method
-        areEqual.Should().BeTrue();
+        actualPoolConfig.Should().BeEquivalentTo(expectedPoolConfig);
     }
 
     #endregion

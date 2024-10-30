@@ -26,18 +26,12 @@ public static class Resources
     public const string PERFORMANCE_TEST_CONFIGURATION_EXCEL_FILE_EMPTY = "Excel file is empty";
     public const string PERFORMANCE_TEST_CONFIGURATION_FIRST_ROW_MISMATCH = "First row is not of type";
 
-    public const string INVALID_FILE_PATH = "Invalid file path";
-    public const string POOL_CONFIG_JSON_NAME = "pool-config";
     public const string POOL_CONFIG_JSON_WITH_RELATIONSHIP_AND_MESSAGES = "pool-config-relationships";
     public const string JSON_FILE_EXT = "json";
 
     public const string WORKBOOK_SHEET_TEST_LOAD = "test";
     public const string WORKBOOK_SHEET_LIGHT_LOAD = "light";
-    public const string WORKBOOK_SHEET_MEDIUM_LOAD = "medium";
     public const string WORKBOOK_SHEET_HEAVY_LOAD = "heavy";
-
-    public const string RELATIONSHIPS_AND_MESSAGE_POOL_CONFIGS_FILE_NAME = "RelationshipsAndMessagePoolConfigs";
-    public const string EXCEL_FILE_EXT = "xlsx";
 
     public const string TOTAL_NUMBER_OF_RELATIONSHIPS = "App.TotalNumberOfRelationships";
     public const string APP_TOTAL_NUMBER_OF_SENT_MESSAGES = "App.TotalNumberOfSentMessages";
@@ -45,10 +39,10 @@ public static class Resources
 
     public const string IDENTITY_NO_MORE_RELATIONSHIPS_AVAILABLE = "No more relationships available";
 
-    public const string RELATIONSHIP_NO_RECEIVER_AVAILABLE = "No further receiver identity available to establish a relationship to sender identity Address: {0} of {1}";
+    public const string RELATIONSHIP_NO_RECIPIENT_AVAILABLE = "No further recipient identity available to establish a relationship to sender identity Address: {0} of {1}";
     public const string RELATIONSHIP_COUNT_MISMATCH = "Relationship count mismatch. Expected: {0}, Actual: {1}";
 
-    public const string VERIFICATION_TOTAL_NUMBER_OF_SENT_MESSAGES_FAILED = "Verification of total number of sent messages to receiver pool {0} failed. Expected: {1}, actual: {2}";
+    public const string VERIFICATION_TOTAL_NUMBER_OF_SENT_MESSAGES_FAILED = "Verification of total number of sent messages to recipient pool {0} failed. Expected: {1}, actual: {2}";
 
     public const string PERFORMANCE_TEST_CONFIG_READER_INVALID_FILE_EXT = "Invalid file extension. Supported extensions are {0}, actual: {1}";
 }

@@ -22,38 +22,15 @@ public class Program
                 services.AddSingleton<IPoolConfigurationJsonWriter, PoolConfigurationJsonWriter>();
                 services.AddSingleton<IPerformanceTestConfigurationJsonReader, PerformanceTestConfigurationJsonReader>();
                 services.AddSingleton<IPoolConfigurationJsonValidator, PoolConfigurationJsonValidator>();
-                services.AddSingleton<IRelationshipAndMessagesExcelWriter, RelationshipAndMessagesExcelWriter>();
+
                 services.AddSingleton<IRelationshipAndMessagesGenerator, RelationshipAndMessagesGenerator>();
 
-                services.AddSingleton<PoolConfigurationJsonGeneratorCommand>();
                 services.AddSingleton<PoolConfigurationJsonValidatorCommand>();
-                services.AddSingleton<RelationshipAndMessagesGeneratorCommand>();
                 services.AddSingleton<PoolConfigWithRelationshipAndMessagesGeneratorCommand>();
             })
             .RunCommandLineApplicationAsync(args, app =>
             {
-                app.Command("generate-json", command =>
-                {
-                    command.Description = "Generate JSON Pool Config";
-                    var sourceOption = command.Option<string>("-s|--source <SOURCE>", "Source Excel File", CommandOptionType.SingleValue);
-                    var worksheetOption = command.Option<string>("-w|--worksheet <WORKSHEET>", "Excel Worksheet Name", CommandOptionType.SingleValue);
-
-                    command.OnExecuteAsync(async _ =>
-                    {
-                        var excelFilePath = sourceOption.Value();
-                        var workSheetName = worksheetOption.Value();
-
-                        var poolConfigJsonGeneratorCommand = app.GetRequiredService<PoolConfigurationJsonGeneratorCommand>();
-
-                        var result = await poolConfigJsonGeneratorCommand.Execute(new PoolConfigurationJsonGeneratorCommandArgs(excelFilePath!, workSheetName!));
-
-                        Console.WriteLine(result.Status ? $"Pool Config JSON generated at {result.Message}" : $"Error: {result.Message}");
-
-                        return 0;
-                    });
-                });
-
-                app.Command("verify-json", command =>
+                app.Command("verify", command =>
                 {
                     command.Description = "Verify JSON Pool Config";
                     var sourceOption = command.Option<string>("-s|--source <SOURCE>", "Source Excel File", CommandOptionType.SingleValue);
@@ -76,28 +53,7 @@ public class Program
                     });
                 });
 
-                app.Command("generate-relationships", command =>
-                {
-                    command.Description = "Generate Relationships and Messages Excel";
-                    var poolsFileOption = command.Option<string>("-p|--pool-config <POOLCONFIG>", "Pool Config JSON File", CommandOptionType.SingleValue);
-                    var worksheetOption = command.Option<string>("-w|--worksheet <WORKSHEET>", "Excel Worksheet Name", CommandOptionType.SingleValue);
-
-                    command.OnExecuteAsync(async _ =>
-                    {
-                        var poolsFile = poolsFileOption.Value();
-                        var worksheetName = worksheetOption.Value();
-
-                        var relationshipAndMessagesGeneratorCommand = app.GetRequiredService<RelationshipAndMessagesGeneratorCommand>();
-
-                        var result = await relationshipAndMessagesGeneratorCommand.Execute(new RelationshipAndMessagesGeneratorCommandArgs(poolsFile!, worksheetName!));
-
-                        Console.WriteLine(result.Status ? $"Relationships and Messages Excel generated at {result.Message}" : $"Error: {result.Message}");
-
-                        return 0;
-                    });
-                });
-
-                app.Command("generate-all", command =>
+                app.Command("generate", command =>
                 {
                     command.Description = "Generate JSON Pool Config including all Relationships and Messages in a single JSON File";
                     var sourceOption = command.Option<string>("-s|--source <SOURCE>", "Source Excel File", CommandOptionType.SingleValue);

@@ -27,11 +27,11 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
                         .ToList();
 
 
-                    Identity receiverConnectorIdentity = null;
+                    Identity recipientConnectorIdentity = null;
                     foreach (var connectorIdentity in connectorIdentities)
                     {
-                        var hasAppIdentityaConnectorIdentityRelationship = appIdentity.RelationshipAndMessages.Any(rm => rm.ReceiverIdentityAddress == connectorIdentity.Address);
-                        var hasConnectorIdentityanAppIdentityRelationship = connectorIdentity.RelationshipAndMessages.Any(rm => rm.ReceiverIdentityAddress == appIdentity.Address);
+                        var hasAppIdentityaConnectorIdentityRelationship = appIdentity.RelationshipAndMessages.Any(rm => rm.RecipientIdentityAddress == connectorIdentity.Address);
+                        var hasConnectorIdentityanAppIdentityRelationship = connectorIdentity.RelationshipAndMessages.Any(rm => rm.RecipientIdentityAddress == appIdentity.Address);
 
                         if (hasAppIdentityaConnectorIdentityRelationship || hasConnectorIdentityanAppIdentityRelationship)
                         {
@@ -43,25 +43,25 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
                             continue;
                         }
 
-                        receiverConnectorIdentity = connectorIdentity;
+                        recipientConnectorIdentity = connectorIdentity;
                         break;
                     }
 
-                    if (receiverConnectorIdentity == null)
+                    if (recipientConnectorIdentity == null)
                     {
-                        receiverConnectorIdentity = connectorIdentities.FirstOrDefault(c => c.HasAvailableRelationships);
+                        recipientConnectorIdentity = connectorIdentities.FirstOrDefault(c => c.HasAvailableRelationships);
 
-                        if (receiverConnectorIdentity == null)
+                        if (recipientConnectorIdentity == null)
                         {
-                            throw new InvalidOperationException(string.Format(RELATIONSHIP_NO_RECEIVER_AVAILABLE, appIdentity.Address, appIdentity.PoolAlias));
+                            throw new InvalidOperationException(string.Format(RELATIONSHIP_NO_RECIPIENT_AVAILABLE, appIdentity.Address, appIdentity.PoolAlias));
                         }
                     }
 
                     var relationshipAndMessages = new RelationshipAndMessages(
                         SenderPool: appIdentity.PoolAlias,
                         SenderIdentityAddress: appIdentity.Address,
-                        ReceiverPool: receiverConnectorIdentity.PoolAlias,
-                        ReceiverIdentityAddress: receiverConnectorIdentity.Address);
+                        RecipientPool: recipientConnectorIdentity.PoolAlias,
+                        RecipientIdentityAddress: recipientConnectorIdentity.Address);
 
                     appIdentity.RelationshipAndMessages.Add(relationshipAndMessages);
 
@@ -73,26 +73,26 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
 
 
                     var reverseRelationshipAndMessages = new RelationshipAndMessages(
-                        SenderPool: receiverConnectorIdentity.PoolAlias,
-                        SenderIdentityAddress: receiverConnectorIdentity.Address,
-                        ReceiverPool: appIdentity.PoolAlias,
-                        ReceiverIdentityAddress: appIdentity.Address);
+                        SenderPool: recipientConnectorIdentity.PoolAlias,
+                        SenderIdentityAddress: recipientConnectorIdentity.Address,
+                        RecipientPool: appIdentity.PoolAlias,
+                        RecipientIdentityAddress: appIdentity.Address);
 
-                    receiverConnectorIdentity.RelationshipAndMessages.Add(reverseRelationshipAndMessages);
+                    recipientConnectorIdentity.RelationshipAndMessages.Add(reverseRelationshipAndMessages);
 
-                    receiverConnectorIdentity.DecrementAvailableRelationships();
+                    recipientConnectorIdentity.DecrementAvailableRelationships();
 
-                    var totalSentMessagesPerRelationship = receiverConnectorIdentity.NumberOfSentMessages / receiverConnectorIdentity.RelationshipAndMessages.Count;
-                    var modulo = receiverConnectorIdentity.NumberOfSentMessages % receiverConnectorIdentity.RelationshipAndMessages.Count;
+                    var totalSentMessagesPerRelationship = recipientConnectorIdentity.NumberOfSentMessages / recipientConnectorIdentity.RelationshipAndMessages.Count;
+                    var modulo = recipientConnectorIdentity.NumberOfSentMessages % recipientConnectorIdentity.RelationshipAndMessages.Count;
 
-                    foreach (var relationshipAndMessage in receiverConnectorIdentity.RelationshipAndMessages)
+                    foreach (var relationshipAndMessage in recipientConnectorIdentity.RelationshipAndMessages)
                     {
                         relationshipAndMessage.NumberOfSentMessages = totalSentMessagesPerRelationship;
                     }
 
                     if (modulo == 0) continue;
 
-                    var relationshipAndMessageWithModulo = receiverConnectorIdentity.RelationshipAndMessages.Last();
+                    var relationshipAndMessageWithModulo = recipientConnectorIdentity.RelationshipAndMessages.Last();
                     relationshipAndMessageWithModulo.NumberOfSentMessages += modulo;
                 }
             }
@@ -116,9 +116,9 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
         return relationshipAndMessagesList;
     }
 
-    internal static void VerifyNumberOfSentMessages(RelationshipAndMessages[] relationshipAndMessages, IdentityPoolType identityPoolType, long expectedTotalNumberOfSentMessages)
+    internal static void VerifyNumberOfSentMessages(RelationshipAndMessages[] relationshipAndMessages, IdentityPoolType recipientIdentityPoolType, long expectedTotalNumberOfSentMessages)
     {
-        var filteredRelationships = relationshipAndMessages.Where(rm => rm.ReceiverIdentityPoolType == identityPoolType).ToList();
+        var filteredRelationships = relationshipAndMessages.Where(rm => rm.RecipientIdentityPoolType == recipientIdentityPoolType).ToList();
         var actualTotalNumberOfSentMessages = filteredRelationships.Sum(rm => rm.NumberOfSentMessages);
 
         if (actualTotalNumberOfSentMessages == expectedTotalNumberOfSentMessages) return;
@@ -127,7 +127,7 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
 
         if (messageDifference == 0) return;
 
-        throw new InvalidOperationException(string.Format(VERIFICATION_TOTAL_NUMBER_OF_SENT_MESSAGES_FAILED, identityPoolType, expectedTotalNumberOfSentMessages,
+        throw new InvalidOperationException(string.Format(VERIFICATION_TOTAL_NUMBER_OF_SENT_MESSAGES_FAILED, recipientIdentityPoolType, expectedTotalNumberOfSentMessages,
             actualTotalNumberOfSentMessages));
     }
 }

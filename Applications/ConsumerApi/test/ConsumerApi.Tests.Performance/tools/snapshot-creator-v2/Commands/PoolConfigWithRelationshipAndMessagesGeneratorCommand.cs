@@ -23,8 +23,17 @@ public class PoolConfigWithRelationshipAndMessagesGeneratorCommand(
             poolConfigFromExcel.RelationshipAndMessages.AddRange(relationshipAndMessages);
 
             var path = Path.GetDirectoryName(parameter.ExcelFilePath);
-            var poolConfigJsonFilePath = Path.Combine(path!, $"{POOL_CONFIG_JSON_WITH_RELATIONSHIP_AND_MESSAGES}.{parameter.WorkSheetName}.{JSON_FILE_EXT}");
 
+            var snapshotFolder = Path.Combine(path!, $"{DateTime.Now:yyyyMMddHHmmss}-snapshot-{parameter.WorkSheetName}");
+
+            if (Directory.Exists(snapshotFolder))
+            {
+                Directory.Delete(snapshotFolder, true);
+            }
+
+            Directory.CreateDirectory(snapshotFolder);
+
+            var poolConfigJsonFilePath = Path.Combine(snapshotFolder!, $"{POOL_CONFIG_JSON_WITH_RELATIONSHIP_AND_MESSAGES}.{parameter.WorkSheetName}.{JSON_FILE_EXT}");
             result = await poolConfigurationJsonWriter.Write(poolConfigFromExcel, poolConfigJsonFilePath);
         }
         catch (Exception e)
