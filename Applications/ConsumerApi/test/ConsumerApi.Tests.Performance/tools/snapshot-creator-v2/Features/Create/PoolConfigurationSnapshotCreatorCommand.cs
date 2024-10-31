@@ -23,9 +23,10 @@ public class PoolConfigurationSnapshotCreatorCommand(
             _clientCredentials = new ClientCredentials(parameter.ClientId, parameter.ClientSecret);
             var identities = await mediator.Send(new CreateIdentities.Command(_poolConfig.IdentityPoolConfigurations, parameter.BaseAddress, _clientCredentials));
 
-            identities = await mediator.Send(new AddDevices.Command(identities));
+            identities = await mediator.Send(new AddDevices.Command(identities, parameter.BaseAddress, _clientCredentials));
 
             // Create RelationshipTemplates
+
 
             // Create Relationships
 

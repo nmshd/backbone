@@ -12,7 +12,7 @@ public record CreateIdentities
     public record Command(
         List<IdentityPoolConfiguration> IdentityPoolConfigurations,
         string BaseUrl,
-        ClientCredentials ClientCrentials) : IRequest<List<DomainIdentity>>;
+        ClientCredentials ClientCredentials) : IRequest<List<DomainIdentity>>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
     public record CommandHandler(ILogger<CommandHandler> Logger) : IRequestHandler<Command, List<DomainIdentity>>
@@ -27,36 +27,22 @@ public record CreateIdentities
             {
                 foreach (var identityConfiguration in identityPoolConfiguration.Identities)
                 {
-                    var sdkClient = await Client.CreateForNewIdentity(request.BaseUrl, request.ClientCrentials, PasswordHelper.GeneratePassword(18, 24));
+                    var sdkClient = await Client.CreateForNewIdentity(request.BaseUrl, request.ClientCredentials, PasswordHelper.GeneratePassword(18, 24));
 
                     if (sdkClient.DeviceData is null)
                         throw new Exception("The SDK could not be used to create a new database Identity.");
 
-                    var deviceDataDeviceId = sdkClient.IdentityData?.Address ?? "no address";
+                    var identityAddress = sdkClient.IdentityData?.Address ?? "no address";
 
                     var createdIdentity = new DomainIdentity(
                         sdkClient.DeviceData.UserCredentials,
-                        deviceDataDeviceId,
+                        identityAddress,
                         sdkClient.DeviceData.DeviceId,
                         identityPoolConfiguration,
-                        identityConfiguration.Address);
+                        identityConfiguration.Address,
+                        identityConfiguration.NumberOfDevices);
 
                     identities.Add(createdIdentity);
-
-                    if (identityConfiguration.Devices == 0) continue;
-
-                    for (var i = 0; i < identityConfiguration.Devices; i++)
-                    {
-                        var newDevice = await sdkClient.OnboardNewDevice(PasswordHelper.GeneratePassword(18, 24));
-
-                        if (newDevice is null)
-                            throw new Exception("The SDK could not be used to create a new database Device.");
-
-                        if (newDevice.DeviceData is null)
-                            throw new Exception($"The SDK could not be used to create a new database Device. {nameof(newDevice.DeviceData)} is null.");
-
-                        createdIdentity.AddDevice(newDevice.DeviceData.DeviceId);
-                    }
                 }
             }
 

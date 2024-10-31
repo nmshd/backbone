@@ -18,5 +18,5 @@ public record IdentityConfiguration(int Address, IdentityPoolType IdentityPoolTy
     public int ModuloSendMessages => PoolConfiguration.NumberOfSentMessages % PoolConfiguration.NumberOfRelationships;
     public int NumberOfSentMessages { get; private set; } = PoolConfiguration.NumberOfSentMessages;
 
-    public int Devices => PoolConfiguration.NumberOfDevices;
+    public int NumberOfDevices => PoolConfiguration.NumberOfDevices;
 }
