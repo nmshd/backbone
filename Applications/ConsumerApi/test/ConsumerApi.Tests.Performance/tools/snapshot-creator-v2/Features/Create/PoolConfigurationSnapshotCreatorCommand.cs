@@ -3,10 +3,12 @@ using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Interfaces;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create;
 
 public class PoolConfigurationSnapshotCreatorCommand(
+    ILogger<PoolConfigurationSnapshotCreatorCommand> logger,
     IPerformanceTestConfigurationJsonReader performanceTestConfigurationJsonReader,
     IMediator mediator)
     : ICommand<PoolConfigurationSnapshotCreatorCommandArgs, StatusMessage>
@@ -18,15 +20,19 @@ public class PoolConfigurationSnapshotCreatorCommand(
     {
         try
         {
-            _poolConfig = await performanceTestConfigurationJsonReader.Read(parameter.JsonFilePath);
+            logger.LogInformation("Creating pool configuration with relationships and messages ...");
 
+            _poolConfig = await performanceTestConfigurationJsonReader.Read(parameter.JsonFilePath);
             _clientCredentials = new ClientCredentials(parameter.ClientId, parameter.ClientSecret);
+
             var identities = await mediator.Send(new CreateIdentities.Command(_poolConfig.IdentityPoolConfigurations, parameter.BaseAddress, _clientCredentials));
+            logger.LogInformation("Identities created");
 
             identities = await mediator.Send(new AddDevices.Command(identities, parameter.BaseAddress, _clientCredentials));
+            logger.LogInformation("Devices added");
 
-            // Create RelationshipTemplates
-
+            identities = await mediator.Send(new CreateRelationshipTemplates.Command(identities, parameter.BaseAddress, _clientCredentials));
+            logger.LogInformation("Relationship templates created");
 
             // Create Relationships
 
@@ -35,6 +41,9 @@ public class PoolConfigurationSnapshotCreatorCommand(
             // Create Messages
 
             // Create DatawalletModifications
+
+
+            logger.LogInformation("Pool configuration with relationships and messages created successfully.");
         }
         catch (Exception e)
         {

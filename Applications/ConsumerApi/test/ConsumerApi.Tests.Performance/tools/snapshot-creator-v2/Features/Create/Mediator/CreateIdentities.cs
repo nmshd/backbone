@@ -3,7 +3,6 @@ using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 using Backbone.Tooling;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Mediator;
 
@@ -11,23 +10,21 @@ public record CreateIdentities
 {
     public record Command(
         List<IdentityPoolConfiguration> IdentityPoolConfigurations,
-        string BaseUrl,
+        string BaseUrlAddress,
         ClientCredentials ClientCredentials) : IRequest<List<DomainIdentity>>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler(ILogger<CommandHandler> Logger) : IRequestHandler<Command, List<DomainIdentity>>
+    public record CommandHandler : IRequestHandler<Command, List<DomainIdentity>>
     {
         public async Task<List<DomainIdentity>> Handle(Command request, CancellationToken cancellationToken)
         {
-            Logger.LogInformation("Creating identities ...");
             var identities = new List<DomainIdentity>();
-
 
             foreach (var identityPoolConfiguration in request.IdentityPoolConfigurations)
             {
                 foreach (var identityConfiguration in identityPoolConfiguration.Identities)
                 {
-                    var sdkClient = await Client.CreateForNewIdentity(request.BaseUrl, request.ClientCredentials, PasswordHelper.GeneratePassword(18, 24));
+                    var sdkClient = await Client.CreateForNewIdentity(request.BaseUrlAddress, request.ClientCredentials, PasswordHelper.GeneratePassword(18, 24));
 
                     if (sdkClient.DeviceData is null)
                         throw new Exception("The SDK could not be used to create a new database Identity.");
@@ -40,7 +37,8 @@ public record CreateIdentities
                         sdkClient.DeviceData.DeviceId,
                         identityPoolConfiguration,
                         identityConfiguration.Address,
-                        identityConfiguration.NumberOfDevices);
+                        identityConfiguration.NumberOfDevices,
+                        identityConfiguration.NumberOfRelationshipTemplates);
 
                     identities.Add(createdIdentity);
                 }

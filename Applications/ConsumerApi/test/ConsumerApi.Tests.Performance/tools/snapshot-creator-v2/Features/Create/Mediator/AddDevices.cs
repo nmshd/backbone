@@ -1,29 +1,25 @@
-﻿using System.Net.Sockets;
-using Backbone.ConsumerApi.Sdk;
+﻿using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 using Backbone.Tooling;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Mediator;
 
 public record AddDevices
 {
-    public record Command(List<DomainIdentity> Identities, string BaseUrl, ClientCredentials ClientCredentials) : IRequest<List<DomainIdentity>>;
+    public record Command(List<DomainIdentity> Identities, string BaseUrlAddress, ClientCredentials ClientCredentials) : IRequest<List<DomainIdentity>>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler(ILogger<CommandHandler> Logger) : IRequestHandler<Command, List<DomainIdentity>>
+    public record CommandHandler : IRequestHandler<Command, List<DomainIdentity>>
     {
         public async Task<List<DomainIdentity>> Handle(Command request, CancellationToken cancellationToken)
         {
-            Logger.LogInformation("Adding devices ...");
-
             var identitiesWithDevices = request.Identities.Where(i => i.NumberOfDevices > 0);
 
             foreach (var identity in identitiesWithDevices)
             {
-                var sdkClient = Client.CreateForExistingIdentity(request.BaseUrl, request.ClientCredentials, identity.UserCredentials);
+                var sdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials);
 
                 for (var i = 0; i < identity.NumberOfDevices; i++)
                 {

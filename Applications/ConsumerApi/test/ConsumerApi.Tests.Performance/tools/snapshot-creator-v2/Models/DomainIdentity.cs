@@ -1,4 +1,5 @@
 ﻿using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 
@@ -8,9 +9,12 @@ public record DomainIdentity(
     string DeviceId,
     IdentityPoolConfiguration IdentityPoolConfiguration,
     int IdentityConfigurationAddress, // the address from pool-config json 
-    int NumberOfDevices)
+    int NumberOfDevices,
+    int NumberOfRelationshipTemplates)
 {
     public List<string> DeviceIds = [];
+
+    public List<CreateRelationshipTemplateResponse> RelationshipTemplates { get; } = [];
 
     public void AddDevice(string deviceId)
     {
