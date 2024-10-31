@@ -42,10 +42,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Features\Create\Mediator\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <ProjectReference Include="..\..\..\..\..\..\Sdks\ConsumerApi.Sdk\src\ConsumerApi.Sdk.csproj" />
     </ItemGroup>
 

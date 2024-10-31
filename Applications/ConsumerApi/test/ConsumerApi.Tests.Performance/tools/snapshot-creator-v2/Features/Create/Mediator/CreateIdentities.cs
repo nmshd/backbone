@@ -38,7 +38,8 @@ public record CreateIdentities
                         identityPoolConfiguration,
                         identityConfiguration.Address,
                         identityConfiguration.NumberOfDevices,
-                        identityConfiguration.NumberOfRelationshipTemplates);
+                        identityConfiguration.NumberOfRelationshipTemplates,
+                        identityConfiguration.IdentityPoolType);
 
                     identities.Add(createdIdentity);
                 }

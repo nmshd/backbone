@@ -1,4 +1,5 @@
-﻿using Backbone.ConsumerApi.Sdk.Authentication;
+﻿using System;
+using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Mediator;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Interfaces;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
@@ -34,7 +35,8 @@ public class PoolConfigurationSnapshotCreatorCommand(
             identities = await mediator.Send(new CreateRelationshipTemplates.Command(identities, parameter.BaseAddress, _clientCredentials));
             logger.LogInformation("Relationship templates created");
 
-            // Create Relationships
+            identities = await mediator.Send(new CreateRelationships.Command(_poolConfig.RelationshipAndMessages, identities, parameter.BaseAddress, _clientCredentials));
+            logger.LogInformation("Relationships created");
 
             // Create Challenges
 
