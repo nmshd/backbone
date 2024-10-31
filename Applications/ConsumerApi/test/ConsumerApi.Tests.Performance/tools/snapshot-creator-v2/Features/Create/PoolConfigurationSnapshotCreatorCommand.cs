@@ -38,7 +38,7 @@ public class PoolConfigurationSnapshotCreatorCommand(
             identities = await mediator.Send(new CreateRelationships.Command(_poolConfig.RelationshipAndMessages, identities, parameter.BaseAddress, _clientCredentials));
             logger.LogInformation("Relationships created");
 
-            // Create Challenges
+            identities = await mediator.Send(new CreateChallenges.Command(identities, parameter.BaseAddress, _clientCredentials));
 
             // Create Messages
 
