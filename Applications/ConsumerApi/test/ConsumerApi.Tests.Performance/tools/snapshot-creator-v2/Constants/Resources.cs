@@ -45,4 +45,5 @@ public static class Resources
     public const string VERIFICATION_TOTAL_NUMBER_OF_SENT_MESSAGES_FAILED = "Verification of total number of sent messages to recipient pool {0} failed. Expected: {1}, actual: {2}";
 
     public const string PERFORMANCE_TEST_CONFIG_READER_INVALID_FILE_EXT = "Invalid file extension. Supported extensions are {0}, actual: {1}";
+    public const string IDENTITY_POOL_CONFIGURATION_NOT_CREATED = "Identity Pool Configuration not created, but is a pre-condition to generate relationships";
 }

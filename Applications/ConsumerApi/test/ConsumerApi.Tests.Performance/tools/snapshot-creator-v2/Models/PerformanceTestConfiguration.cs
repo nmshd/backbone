@@ -3,7 +3,7 @@
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 
 public record PerformanceTestConfiguration(
-    [property: JsonPropertyName("Pools")] List<IdentityPoolConfiguration> IdentityPoolConfigs,
+    [property: JsonPropertyName("Pools")] List<PoolConfiguration> PoolConfigurations,
     [property: JsonPropertyName("Verification")]
     VerificationConfiguration VerificationConfiguration)
 {
@@ -20,7 +20,7 @@ public record PerformanceTestConfiguration(
         }
 
         var isConfigEqual = VerificationConfiguration.Equals(other.VerificationConfiguration);
-        var isPoolConfigsEqual = IdentityPoolConfigs.SequenceEqual(other.IdentityPoolConfigs);
+        var isPoolConfigsEqual = PoolConfigurations.SequenceEqual(other.PoolConfigurations);
         var isRelationshipAndMessagesEqual = RelationshipAndMessages.SequenceEqual(other.RelationshipAndMessages);
 
         return isConfigEqual && isPoolConfigsEqual && isRelationshipAndMessagesEqual;
@@ -32,7 +32,7 @@ public record PerformanceTestConfiguration(
 
         hash.Add(VerificationConfiguration);
 
-        foreach (var poolConfig in IdentityPoolConfigs)
+        foreach (var poolConfig in PoolConfigurations)
         {
             hash.Add(poolConfig);
         }
@@ -47,4 +47,21 @@ public record PerformanceTestConfiguration(
 
     [JsonPropertyName("RelationshipAndMessages")]
     public List<RelationshipAndMessages> RelationshipAndMessages { get; init; } = [];
+
+
+    [JsonIgnore] public bool IsIdentityPoolConfigurationCreated { get; private set; }
+
+    [JsonIgnore] public List<IdentityPoolConfiguration> IdentityPoolConfigurations { get; private set; } = [];
+
+    public List<IdentityPoolConfiguration> CreateIdentityPoolConfigurations()
+    {
+        if (IsIdentityPoolConfigurationCreated) return IdentityPoolConfigurations;
+
+        IdentityPoolConfigurations = PoolConfigurations
+            .Select(poolConfiguration => new IdentityPoolConfiguration(poolConfiguration))
+            .ToList();
+
+        IsIdentityPoolConfigurationCreated = true;
+        return IdentityPoolConfigurations;
+    }
 }

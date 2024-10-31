@@ -1,35 +1,30 @@
-﻿using System.Text.Json.Serialization;
+﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Enums;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 
 public record IdentityPoolConfiguration
 {
-    [JsonPropertyName(nameof(Type))] public string Type { get; set; } = null!;
+    public IdentityPoolConfiguration(PoolConfiguration poolConfiguration)
+    {
+        Alias = poolConfiguration.Alias;
+        Type = poolConfiguration.Type switch
+        {
+            POOL_TYPE_NEVER => IdentityPoolType.Never,
+            POOL_TYPE_APP => IdentityPoolType.App,
+            POOL_TYPE_CONNECTOR => IdentityPoolType.Connector,
+            _ => throw new InvalidOperationException(POOL_TYPE_UNKNOWN)
+        };
 
-    [JsonPropertyName(nameof(Name))] public string Name { get; set; } = null!;
+        Identities = [];
+        for (var i = 0; i < poolConfiguration.Amount; i++)
+        {
+            Identities.Add(new IdentityConfiguration(i + 1, Type, poolConfiguration));
+        }
+    }
 
-    [JsonPropertyName(nameof(Alias))] public string Alias { get; set; } = null!;
+    public string Alias { get; }
 
-    [JsonPropertyName(nameof(Amount))] public long Amount { get; set; }
+    public IdentityPoolType Type { get; }
 
-    [JsonPropertyName(nameof(NumberOfRelationshipTemplates))]
-    public int NumberOfRelationshipTemplates { get; set; }
-
-    [JsonPropertyName(nameof(NumberOfRelationships))]
-    public int NumberOfRelationships { get; set; }
-
-    [JsonPropertyName(nameof(NumberOfSentMessages))]
-    public int NumberOfSentMessages { get; set; }
-
-    [JsonPropertyName(nameof(NumberOfReceivedMessages))]
-    public int NumberOfReceivedMessages { get; set; }
-
-    [JsonPropertyName(nameof(NumberOfDatawalletModifications))]
-    public int NumberOfDatawalletModifications { get; set; }
-
-    [JsonPropertyName(nameof(NumberOfDevices))]
-    public int NumberOfDevices { get; set; }
-
-    [JsonPropertyName(nameof(NumberOfChallenges))]
-    public int NumberOfChallenges { get; set; }
+    public List<IdentityConfiguration> Identities { get; }
 }

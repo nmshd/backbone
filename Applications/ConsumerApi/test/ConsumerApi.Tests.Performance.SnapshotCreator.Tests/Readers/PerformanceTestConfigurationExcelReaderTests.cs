@@ -1,6 +1,5 @@
 ﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Base;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Readers;
-using FluentAssertions;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Readers;
 

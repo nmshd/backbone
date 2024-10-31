@@ -1,7 +1,5 @@
 ﻿using System.Text.Json;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
-using Backbone.UnitTestTools.BaseClasses;
-using FluentAssertions;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Base;
 

@@ -6,8 +6,3 @@ public interface IPerformanceTestConfigurationJsonReader
 {
     Task<PerformanceTestConfiguration> Read(string filePath);
 }
-
-public interface IPerformanceTestConfigurationExcelReader
-{
-    Task<PerformanceTestConfiguration> Read(string filePath, string workSheet);
-}

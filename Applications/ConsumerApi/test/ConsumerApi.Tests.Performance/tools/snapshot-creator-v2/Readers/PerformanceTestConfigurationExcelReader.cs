@@ -19,7 +19,7 @@ public class PerformanceTestConfigurationExcelReader : PerformanceTestConfigurat
         var poolConfigFromExcel = await excelMapper.FetchAsync(stream, workSheet);
 
 
-        List<IdentityPoolConfiguration> identityPoolConfigs = [];
+        List<PoolConfiguration> identityPoolConfigs = [];
         VerificationConfiguration verificationConfiguration = new();
 
         var performanceTestConfiguration = new PerformanceTestConfiguration(identityPoolConfigs, verificationConfiguration);
@@ -46,19 +46,19 @@ public class PerformanceTestConfigurationExcelReader : PerformanceTestConfigurat
                 continue;
             }
 
-            var item = new IdentityPoolConfiguration
+            var item = new PoolConfiguration
             {
-                Type = (string)row[nameof(IdentityPoolConfiguration.Type)],
-                Name = (string)row[nameof(IdentityPoolConfiguration.Name)],
-                Alias = (string)row[nameof(IdentityPoolConfiguration.Alias)],
-                Amount = Convert.ToInt64(row[nameof(IdentityPoolConfiguration.Amount)]),
-                NumberOfRelationshipTemplates = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfRelationshipTemplates)]),
-                NumberOfRelationships = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfRelationships)]),
-                NumberOfSentMessages = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfSentMessages)]),
-                NumberOfReceivedMessages = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfReceivedMessages)]),
-                NumberOfDatawalletModifications = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfDatawalletModifications)]),
-                NumberOfDevices = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfDevices)]),
-                NumberOfChallenges = Convert.ToInt32(row[nameof(IdentityPoolConfiguration.NumberOfChallenges)])
+                Type = (string)row[nameof(PoolConfiguration.Type)],
+                Name = (string)row[nameof(PoolConfiguration.Name)],
+                Alias = (string)row[nameof(PoolConfiguration.Alias)],
+                Amount = Convert.ToInt64(row[nameof(PoolConfiguration.Amount)]),
+                NumberOfRelationshipTemplates = Convert.ToInt32(row[nameof(PoolConfiguration.NumberOfRelationshipTemplates)]),
+                NumberOfRelationships = Convert.ToInt32(row[nameof(PoolConfiguration.NumberOfRelationships)]),
+                NumberOfSentMessages = Convert.ToInt32(row[nameof(PoolConfiguration.NumberOfSentMessages)]),
+                NumberOfReceivedMessages = Convert.ToInt32(row[nameof(PoolConfiguration.NumberOfReceivedMessages)]),
+                NumberOfDatawalletModifications = Convert.ToInt32(row[nameof(PoolConfiguration.NumberOfDatawalletModifications)]),
+                NumberOfDevices = Convert.ToInt32(row[nameof(PoolConfiguration.NumberOfDevices)]),
+                NumberOfChallenges = Convert.ToInt32(row[nameof(PoolConfiguration.NumberOfChallenges)])
             };
 
             identityPoolConfigs.Add(item);

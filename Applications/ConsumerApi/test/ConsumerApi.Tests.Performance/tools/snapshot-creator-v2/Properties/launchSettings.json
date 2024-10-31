@@ -1,28 +1,40 @@
 {
   "profiles": {
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - verify test": {
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - verify-config test": {
       "commandName": "Project",
-      "commandLineArgs": "verify --source .\\Config\\PerformanceTestData.xlsx --worksheet test --pool-config .\\Config\\pool-config.test.json"
+      "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet test --pool-config .\\Config\\pool-config.test.json"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - verify light": {
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - verify-config light": {
       "commandName": "Project",
-      "commandLineArgs": "verify --source .\\Config\\PerformanceTestData.xlsx --worksheet light --pool-config .\\Config\\pool-config.light.json"
+      "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet light --pool-config .\\Config\\pool-config.light.json"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - verify heavy": {
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - verify-config heavy": {
       "commandName": "Project",
-      "commandLineArgs": "verify --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy --pool-config .\\Config\\pool-config.heavy.json"
+      "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy --pool-config .\\Config\\pool-config.heavy.json"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate test": {
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-config test": {
       "commandName": "Project",
-      "commandLineArgs": "generate --source .\\Config\\PerformanceTestData.xlsx --worksheet test"
+      "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet test"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate light": {
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-config light": {
       "commandName": "Project",
-      "commandLineArgs": "generate --source .\\Config\\PerformanceTestData.xlsx --worksheet light"
+      "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet light"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate heavy": {
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-config heavy": {
       "commandName": "Project",
-      "commandLineArgs": "generate --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy"
+      "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy"
+    },
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - create-snapshot test": {
+      "commandName": "Project",
+      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\pool-config.test.json"
+    },
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - create-snapshot light": {
+      "commandName": "Project",
+      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\pool-config.light.json"
+    },
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - create-snapshot heavy": {
+      "commandName": "Project",
+      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\pool-config.heavy.json"
     }
   }
 }

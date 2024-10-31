@@ -1,7 +1,4 @@
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Base;
-using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Generator;
-using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
-using FluentAssertions;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Generator;
 

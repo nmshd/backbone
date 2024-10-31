@@ -2,7 +2,7 @@
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Interfaces;
 
-public interface IPoolConfigurationJsonWriter
+public interface IPerformanceTestConfigurationExcelReader
 {
-    Task<StatusMessage> Write(PerformanceTestConfiguration poolConfigFromExcel, string filePath);
+    Task<PerformanceTestConfiguration> Read(string filePath, string workSheet);
 }

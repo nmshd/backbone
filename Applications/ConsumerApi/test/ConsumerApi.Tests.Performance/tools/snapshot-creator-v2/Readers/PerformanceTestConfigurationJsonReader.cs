@@ -16,6 +16,8 @@ public class PerformanceTestConfigurationJsonReader : PerformanceTestConfigurati
         var poolConfigFromJsonString = await File.ReadAllTextAsync(filePath);
         var poolConfig = JsonSerializer.Deserialize<PerformanceTestConfiguration>(poolConfigFromJsonString);
 
+        poolConfig.CreateIdentityPoolConfigurations();
+
         return poolConfig;
     }
 }

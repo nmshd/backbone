@@ -1,16 +1,15 @@
-﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Commands.Args;
-using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Interfaces;
+﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Interfaces;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
 
-namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Commands;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Generate;
 
-public class PoolConfigWithRelationshipAndMessagesGeneratorCommand(
+public class PoolConfigurationGeneratorCommand(
     IPerformanceTestConfigurationExcelReader performanceTestConfigurationExcelReader,
     IRelationshipAndMessagesGenerator relationshipAndMessagesGenerator,
     IPoolConfigurationJsonWriter poolConfigurationJsonWriter)
-    : ICommand<PoolConfigWithRelationshipAndMessagesGeneratorCommandArgs, StatusMessage>
+    : ICommand<PoolConfigurationGeneratorCommandArgs, StatusMessage>
 {
-    public async Task<StatusMessage> Execute(PoolConfigWithRelationshipAndMessagesGeneratorCommandArgs parameter)
+    public async Task<StatusMessage> Execute(PoolConfigurationGeneratorCommandArgs parameter)
     {
         StatusMessage result;
         try

@@ -23,7 +23,7 @@ https://github.com/nmshd/backbone/tree/abl-10-fill-db-for-perftests-tool
 > verifies the json pool-config-<worksheet-name>.json files against the source PerformanceTestData.xls for validity
 
 ```shell
-verify --source PerformanceTestData.xlsx --worksheet <worksheet-name> --pool-config pool-config.<worksheet-name>.json
+verify-config --source PerformanceTestData.xlsx --worksheet <worksheet-name> --pool-config pool-config.<worksheet-name>.json
 ```
 
 ##### 3.1.1.1 Methods and Tests:
@@ -39,7 +39,7 @@ verify --source PerformanceTestData.xlsx --worksheet <worksheet-name> --pool-con
 > generates the pool-config.<worksheet-name>.json
 
 ```shell
-generate --source PerformanceTestData.xlsx --worksheet <worksheet-name>
+generate-config --source PerformanceTestData.xlsx --worksheet <worksheet-name>
 ```
 
 ##### 3.1.2.1 Methods and Tests:
@@ -49,12 +49,12 @@ generate --source PerformanceTestData.xlsx --worksheet <worksheet-name>
 - [x] Distribute JSON configs with Relationships and Messages (pool-config.<worksheet-name>.json)
 - [x] Generate RelationshipsAndMessagePoolConfigs Excel Command
 
-#### 3.1.3 Apply RelationshipsAndMessagePoolConfigs Excel in Database Command
+#### 3.1.3 Create Identity relationships and messages Command
 
 > Applie the pools configs including their relationships and messages in the Database
 
 ```shell
-apply --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config pool-config.<worksheet-name>.json
+create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config pool-config.<worksheet-name>.json
 ```
 
 ##### 3.1.3.1 Methods and Tests:
