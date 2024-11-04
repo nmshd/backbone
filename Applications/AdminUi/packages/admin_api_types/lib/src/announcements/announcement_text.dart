@@ -6,10 +6,12 @@ part 'announcement_text.g.dart';
 
 @JsonSerializable()
 class AnnouncementText {
+  final String language;
   final String title;
   final String body;
 
   AnnouncementText({
+    required this.language,
     required this.title,
     required this.body,
   });

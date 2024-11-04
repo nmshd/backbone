@@ -64,9 +64,9 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
                   rows: _announcements
                       .map(
                         (announcement) => DataRow2(
-                          onTap: () => showAnnouncementDetailsDialog(context: context, announcementTexts: announcement.announcementTexts),
+                          onTap: () => showAnnouncementDetailsDialog(context: context, announcementTexts: announcement.texts),
                           cells: [
-                            DataCell(Text(announcement.englishTitle)),
+                            DataCell(Text(announcement.texts.firstWhere((t) => t.language == 'en').title)), // TODO: find a better way
                             DataCell(
                               Tooltip(
                                 message:
@@ -76,9 +76,14 @@ class _AnnouncementsOverviewState extends State<AnnouncementsOverview> {
                             ),
                             DataCell(
                               Tooltip(
-                                message:
-                                    '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.expiresAt)} ${DateFormat.Hms().format(announcement.expiresAt)}',
-                                child: Text(DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.expiresAt)),
+                                message: announcement.expiresAt != null
+                                    ? '${DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.expiresAt!)} ${DateFormat.Hms().format(announcement.expiresAt!)}'
+                                    : '',
+                                child: Text(
+                                  announcement.expiresAt != null
+                                      ? DateFormat.yMd(Localizations.localeOf(context).languageCode).format(announcement.expiresAt!)
+                                      : '',
+                                ),
                               ),
                             ),
                             DataCell(Text(announcement.severity)),

@@ -12,13 +12,13 @@ class AnnouncementsEndpoint extends Endpoint {
       );
 
   Future<ApiResponse<CreateAnnouncement>> createAnnouncement({
-    required String expiresAt,
+    required String? expiresAt,
     required String severity,
     required List<AnnouncementText> announcementTexts,
   }) =>
       post(
         '/api/v1/Announcements',
-        data: {'expiresAt': expiresAt, 'severity': severity, 'announcementTexts': announcementTexts},
+        data: {'expiresAt': expiresAt, 'severity': severity, 'texts': announcementTexts},
         transformer: CreateAnnouncement.fromJson,
       );
 }

@@ -207,6 +207,7 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
 
     final announcementTexts = <AnnouncementText>[
       AnnouncementText(
+        language: 'en',
         title: _englishTextController.titleController.text,
         body: _englishTextController.bodyController.text,
       ),
@@ -216,6 +217,11 @@ class _CreateAnnouncementDialogState extends State<_CreateAnnouncementDialog> {
       if (_selectedLanguages.contains(language.name)) {
         announcementTexts.add(
           AnnouncementText(
+            language: switch (language) {
+              OptionalLanguageType.german => 'de',
+              OptionalLanguageType.portuguese => 'pt',
+              OptionalLanguageType.italian => 'it',
+            }, // TODO: find a better way
             title: _languageTextControllers[language.index].titleController.text,
             body: _languageTextControllers[language.index].bodyController.text,
           ),

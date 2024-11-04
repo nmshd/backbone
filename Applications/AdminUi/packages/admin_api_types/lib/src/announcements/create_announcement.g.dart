@@ -7,13 +7,13 @@ part of 'create_announcement.dart';
 // **************************************************************************
 
 CreateAnnouncement _$CreateAnnouncementFromJson(Map<String, dynamic> json) => CreateAnnouncement(
-      expiresAt: DateTime.parse(json['expiresAt'] as String),
+      expiresAt: json['expiresAt'] == null ? null : DateTime.parse(json['expiresAt'] as String),
       severity: json['severity'] as String,
-      announcementTexts: (json['announcementTexts'] as List<dynamic>).map(AnnouncementText.fromJson).toList(),
+      texts: (json['texts'] as List<dynamic>).map(AnnouncementText.fromJson).toList(),
     );
 
 Map<String, dynamic> _$CreateAnnouncementToJson(CreateAnnouncement instance) => <String, dynamic>{
-      'expiresAt': instance.expiresAt.toIso8601String(),
+      'expiresAt': instance.expiresAt?.toIso8601String(),
       'severity': instance.severity,
-      'announcementTexts': instance.announcementTexts,
+      'texts': instance.texts,
     };

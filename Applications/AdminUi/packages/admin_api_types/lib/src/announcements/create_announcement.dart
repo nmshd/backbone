@@ -6,14 +6,14 @@ part 'create_announcement.g.dart';
 
 @JsonSerializable()
 class CreateAnnouncement {
-  final DateTime expiresAt;
+  final DateTime? expiresAt;
   final String severity;
-  final List<AnnouncementText> announcementTexts;
+  final List<AnnouncementText> texts;
 
   CreateAnnouncement({
     required this.expiresAt,
     required this.severity,
-    required this.announcementTexts,
+    required this.texts,
   });
 
   factory CreateAnnouncement.fromJson(dynamic json) => _$CreateAnnouncementFromJson(json as Map<String, dynamic>);
