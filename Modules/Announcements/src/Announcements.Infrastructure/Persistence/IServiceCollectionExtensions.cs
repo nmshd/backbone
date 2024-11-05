@@ -18,8 +18,6 @@ public static class IServiceCollectionExtensions
     public static void AddPersistence(this IServiceCollection services, PersistenceOptions options)
     {
         services.AddDatabase(options.DbOptions);
-
-        services.AddTransient<IAnnouncementsRepository, AnnouncementsRepository>();
     }
 }
 

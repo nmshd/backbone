@@ -112,6 +112,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         .AddDatabase(parsedConfiguration.Infrastructure.SqlDatabase)
         .AddDevices(parsedConfiguration.Modules.Devices)
         .AddQuotas(parsedConfiguration.Modules.Quotas)
+        .AddAnnouncements(parsedConfiguration.Modules.Announcements)
         .AddChallenges(parsedConfiguration.Modules.Challenges)
         .AddHealthChecks();
 

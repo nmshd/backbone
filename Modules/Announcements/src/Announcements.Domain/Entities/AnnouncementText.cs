@@ -4,16 +4,19 @@ namespace Backbone.Modules.Announcements.Domain.Entities;
 
 public class AnnouncementText : Entity
 {
-    public AnnouncementText()
+    // ReSharper disable once UnusedMember.Local
+    private AnnouncementText()
     {
+        // This constructor is for EF Core only; initializing the properties with null is therefore not a problem
         AnnouncementId = null!;
+        Language = null!;
         Title = null!;
         Body = null!;
     }
 
-    public AnnouncementText(AnnouncementId announcementId, AnnouncementLanguage language, string title, byte[] body)
+    public AnnouncementText(AnnouncementLanguage language, string title, string body)
     {
-        AnnouncementId = announcementId;
+        AnnouncementId = null!; // will be set by EF Core
         Language = language;
         Title = title;
         Body = body;
@@ -22,12 +25,5 @@ public class AnnouncementText : Entity
     public AnnouncementId AnnouncementId { get; }
     public AnnouncementLanguage Language { get; set; }
     public string Title { get; set; }
-    public byte[] Body { get; set; }
-}
-
-public enum AnnouncementLanguage
-{
-    English,
-    German,
-    Portuguese
+    public string Body { get; set; }
 }

@@ -10,6 +10,8 @@ public class AnnouncementEntityTypeConfiguration : EntityEntityTypeConfiguration
     {
         base.Configure(builder);
 
+        builder.HasKey(a => a.Id);
+        
         builder.Property(a => a.CreatedAt);
         builder.Property(a => a.ExpiresAt);
         builder.Property(a => a.Severity);

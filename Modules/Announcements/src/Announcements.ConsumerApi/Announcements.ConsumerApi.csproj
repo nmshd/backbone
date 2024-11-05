@@ -9,6 +9,13 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\BuildingBlocks\src\BuildingBlocks.API\BuildingBlocks.API.csproj" />
     <ProjectReference Include="..\Announcements.Application\Announcements.Application.csproj" />
+      <ProjectReference Include="..\Announcements.Infrastructure.Database.Postgres\Announcements.Infrastructure.Database.Postgres.csproj" />
+      <ProjectReference Include="..\Announcements.Infrastructure.Database.SqlServer\Announcements.Infrastructure.Database.SqlServer.csproj" />
+      <ProjectReference Include="..\Announcements.Infrastructure\Announcements.Infrastructure.csproj" />
   </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="8.0.3" />
+    </ItemGroup>
 
 </Project>

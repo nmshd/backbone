@@ -1,6 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.Database;
 using Backbone.Modules.Announcements.Domain.Entities;
+using Backbone.Modules.Announcements.Infrastructure.Persistence.Database.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 
 namespace Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
@@ -25,7 +26,9 @@ public class AnnouncementsDbContext : AbstractDbContextBase
     {
         base.ConfigureConventions(configurationBuilder);
 
-        configurationBuilder.Properties<AnnouncementId>().AreUnicode(false).AreFixedLength().HaveMaxLength(AnnouncementId.MAX_LENGTH);
+        configurationBuilder.Properties<AnnouncementId>().AreUnicode(false).AreFixedLength().HaveMaxLength(AnnouncementId.MAX_LENGTH).HaveConversion<AnnouncementIdEntityFrameworkValueConverter>();
+        configurationBuilder.Properties<AnnouncementLanguage>().AreUnicode(false).AreFixedLength().HaveMaxLength(AnnouncementLanguage.LENGTH)
+            .HaveConversion<AnnouncementLanguageEntityFrameworkValueConverter>();
     }
 
     protected override void OnModelCreating(ModelBuilder builder)

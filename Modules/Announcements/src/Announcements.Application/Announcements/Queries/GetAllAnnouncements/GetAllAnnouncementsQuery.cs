@@ -1,3 +1,5 @@
-﻿namespace Backbone.Modules.Announcements.Application.Announcements.Queries.GetAllAnnouncements;
+﻿using MediatR;
 
-public class GetAllAnnouncementsQuery;
+namespace Backbone.Modules.Announcements.Application.Announcements.Queries.GetAllAnnouncements;
+
+public class GetAllAnnouncementsQuery : IRequest<GetAllAnnouncementsResponse>;

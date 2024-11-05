@@ -6,12 +6,12 @@ public class AnnouncementTextDTO
 {
     public AnnouncementTextDTO(AnnouncementText announcementText)
     {
-        Language = announcementText.Language;
+        Language = announcementText.Language.Value;
         Title = announcementText.Title;
         Body = announcementText.Body;
     }
 
-    public AnnouncementLanguage Language { get; set; }
+    public string Language { get; set; }
     public string Title { get; set; }
-    public byte[] Body { get; set; }
+    public string Body { get; set; }
 }

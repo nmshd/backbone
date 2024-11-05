@@ -11,6 +11,8 @@ using Backbone.ConsumerApi;
 using Backbone.ConsumerApi.Configuration;
 using Backbone.ConsumerApi.Extensions;
 using Backbone.Infrastructure.EventBus;
+using Backbone.Modules.Announcements.ConsumerApi;
+using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
 using Backbone.Modules.Challenges.ConsumerApi;
 using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Backbone.Modules.Devices.ConsumerApi;
@@ -110,7 +112,8 @@ static WebApplication CreateApp(string[] args)
             .MigrateDbContext<MessagesDbContext>()
             .MigrateDbContext<SynchronizationDbContext>()
             .MigrateDbContext<TokensDbContext>()
-            .MigrateDbContext<QuotasDbContext>();
+            .MigrateDbContext<QuotasDbContext>()
+            .MigrateDbContext<AnnouncementsDbContext>();
     }
 
     app
@@ -141,6 +144,7 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
     services.AddTransient<QuotasDbContextSeeder>();
 
     services
+        .AddModule<AnnouncementsModule>(configuration)
         .AddModule<ChallengesModule>(configuration)
         .AddModule<DevicesModule>(configuration)
         .AddModule<FilesModule>(configuration)

@@ -1,4 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
+using Backbone.Modules.Announcements.Infrastructure.Persistence.Database.Repository;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,7 +29,7 @@ public static class IServiceCollectionExtensions
                 switch (options.Provider)
                 {
                     case SQLSERVER:
-                        dbContextOptions.UseSqlServer(options.DbConnectionString, sqlOptions =>
+                        dbContextOptions.UseSqlServer(options.ConnectionString, sqlOptions =>
                         {
                             sqlOptions.CommandTimeout(options.CommandTimeout);
                             sqlOptions.MigrationsAssembly(SQLSERVER_MIGRATIONS_ASSEMBLY);
@@ -36,7 +38,7 @@ public static class IServiceCollectionExtensions
                         });
                         break;
                     case POSTGRES:
-                        dbContextOptions.UseNpgsql(options.DbConnectionString, sqlOptions =>
+                        dbContextOptions.UseNpgsql(options.ConnectionString, sqlOptions =>
                         {
                             sqlOptions.CommandTimeout(options.CommandTimeout);
                             sqlOptions.MigrationsAssembly(POSTGRES_MIGRATIONS_ASSEMBLY);
@@ -48,12 +50,14 @@ public static class IServiceCollectionExtensions
                         throw new Exception($"Unsupported database provider: {options.Provider}");
                 }
             });
+
+        services.AddTransient<IAnnouncementsRepository, AnnouncementsRepository>();
     }
 
     public class DbOptions
     {
         public string Provider { get; set; } = null!;
-        public string DbConnectionString { get; set; } = null!;
+        public string ConnectionString { get; set; } = null!;
         public int CommandTimeout { get; set; } = 20;
         public RetryOptions RetryOptions { get; set; } = new();
     }
