@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Domain;
+using Backbone.Modules.Announcements.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Announcements.Domain.Entities;
@@ -20,6 +21,8 @@ public class Announcement : Entity
         ExpiresAt = expiresAt;
         Severity = severity;
         Texts = texts;
+
+        RaiseDomainEvent(new AnnouncementCreatedDomainEvent(this));
     }
 
     public AnnouncementId Id { get; }
