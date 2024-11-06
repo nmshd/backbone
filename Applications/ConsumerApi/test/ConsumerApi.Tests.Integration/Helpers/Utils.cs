@@ -51,9 +51,44 @@ public static class Utils
         return getRelationshipResponse.Result!;
     }
 
+    public static async Task<Relationship> CreatePendingRelationshipBetween(Client client2, string templateId)
+    {
+        var createRelationshipRequest = new CreateRelationshipRequest
+        {
+            RelationshipTemplateId = templateId,
+            Content = TestData.SOME_BYTES
+        };
+
+        var createRelationshipResponse = await client2.Relationships.CreateRelationship(createRelationshipRequest);
+        createRelationshipResponse.Should().BeASuccess();
+
+        var getRelationshipResponse = await client2.Relationships.GetRelationship(createRelationshipResponse.Result!.Id);
+        getRelationshipResponse.Should().BeASuccess();
+
+        return getRelationshipResponse.Result!;
+    }
+
     public static async Task<Relationship> EstablishRelationshipBetween(Client client1, Client client2)
     {
         var pendingRelationship = await CreatePendingRelationshipBetween(client1, client2);
+
+        var acceptRelationshipRequest = new AcceptRelationshipRequest
+        {
+            CreationResponseContent = TestData.SOME_BYTES
+        };
+
+        var acceptRelationshipResponse = await client1.Relationships.AcceptRelationship(pendingRelationship.Id, acceptRelationshipRequest);
+        acceptRelationshipResponse.Should().BeASuccess();
+
+        var getRelationshipResponse = await client1.Relationships.GetRelationship(pendingRelationship.Id);
+        getRelationshipResponse.Should().BeASuccess();
+
+        return getRelationshipResponse.Result!;
+    }
+
+    public static async Task<Relationship> EstablishRelationshipBetween(Client client1, Client client2, string templateId)
+    {
+        var pendingRelationship = await CreatePendingRelationshipBetween(client2, templateId);
 
         var acceptRelationshipRequest = new AcceptRelationshipRequest
         {

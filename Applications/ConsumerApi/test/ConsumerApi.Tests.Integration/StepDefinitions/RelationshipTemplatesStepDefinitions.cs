@@ -126,6 +126,15 @@ internal class RelationshipTemplatesStepDefinitions
         _responseContext.WhenResponse = _listRelationshipTemplatesResponse = await client.RelationshipTemplates.ListTemplates(queryItems);
     }
 
+    [When($"{RegexFor.SINGLE_THING} sends a DELETE request to the /RelationshipTemplates/{RegexFor.SINGLE_THING} endpoint")]
+    public async Task WhenISendsADeleteRequestToTheRelationshipTemplatesEndpoint(string identityName, string templateName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[templateName].Id;
+
+        await client.RelationshipTemplates.DeleteTemplate(relationshipTemplateId);
+    }
+
     #endregion
 
     #region Then
