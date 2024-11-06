@@ -1,4 +1,5 @@
 ﻿using Backbone.BuildingBlocks.API.Mvc;
+using Backbone.Modules.Announcements.Application.Announcements.Queries.GetAllAnnouncementsInLanguage;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +15,9 @@ public class AnnouncementsController : ApiControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAllAnnouncements()
+    public async Task<IActionResult> GetAllAnnouncements([FromQuery] string language)
     {
-        return Ok();
+        var announcements = await _mediator.Send(new GetAllAnnouncementsInLanguageQuery { Language = language });
+        return Ok(announcements);
     }
 }
