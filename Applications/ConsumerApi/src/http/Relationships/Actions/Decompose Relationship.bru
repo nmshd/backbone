@@ -1,0 +1,21 @@
+meta {
+  name: /Relationships/{id}/Decompose
+  type: http
+  seq: 5
+}
+
+put {
+  url: {{baseUrl}}/Relationships/{{id}}/Decompose
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "creationResponseContent": ""
+  }
+}
+
+vars:pre-request {
+  id: REL8DyBnfWYiXCzxkMiv
+}
