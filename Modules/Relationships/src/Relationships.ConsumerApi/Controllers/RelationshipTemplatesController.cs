@@ -6,6 +6,7 @@ using Backbone.BuildingBlocks.Application.Pagination;
 using Backbone.Modules.Relationships.Application;
 using Backbone.Modules.Relationships.Application.Relationships.DTOs;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.CreateRelationshipTemplate;
+using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.DeleteRelationshipTemplate;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.GetRelationshipTemplate;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Queries.ListRelationshipTemplates;
 using MediatR;
@@ -66,5 +67,14 @@ public class RelationshipTemplatesController : ApiControllerBase
     {
         var response = await _mediator.Send(request, cancellationToken);
         return CreatedAtAction(nameof(GetById), new { id = response.Id }, response);
+    }
+
+    [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesError(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Delete(string id, CancellationToken cancellationToken)
+    {
+        await _mediator.Send(new DeleteRelationshipTemplateCommand { Id = id }, cancellationToken);
+        return NoContent();
     }
 }
