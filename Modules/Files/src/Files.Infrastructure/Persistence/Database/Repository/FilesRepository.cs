@@ -44,8 +44,8 @@ public class FilesRepository : IFilesRepository
         _blobStorage.Remove(_blobOptions.RootFolder, file.Id);
         _files.Remove(file);
 
-        await _blobStorage.SaveAsync();
         await _dbContext.SaveChangesAsync(cancellationToken);
+        await _blobStorage.SaveAsync();
     }
 
     public async Task DeleteFilesOfIdentity(Expression<Func<File, bool>> filter, CancellationToken cancellationToken)
