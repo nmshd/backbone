@@ -1,6 +1,8 @@
 ﻿using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types;
+using Backbone.ConsumerApi.Sdk.Endpoints.Files.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types;
@@ -36,22 +38,10 @@ public static class Utils
         var relationshipTemplateResponse = await client1.RelationshipTemplates.CreateTemplate(createRelationshipTemplateRequest);
         relationshipTemplateResponse.Should().BeASuccess();
 
-        var createRelationshipRequest = new CreateRelationshipRequest
-        {
-            RelationshipTemplateId = relationshipTemplateResponse.Result!.Id,
-            Content = TestData.SOME_BYTES
-        };
-
-        var createRelationshipResponse = await client2.Relationships.CreateRelationship(createRelationshipRequest);
-        createRelationshipResponse.Should().BeASuccess();
-
-        var getRelationshipResponse = await client2.Relationships.GetRelationship(createRelationshipResponse.Result!.Id);
-        getRelationshipResponse.Should().BeASuccess();
-
-        return getRelationshipResponse.Result!;
+        return await CreatePendingRelationshipUsingTemplate(client2, relationshipTemplateResponse.Result!.Id);
     }
 
-    public static async Task<Relationship> CreatePendingRelationshipBetween(Client client2, string templateId)
+    public static async Task<Relationship> CreatePendingRelationshipUsingTemplate(Client client2, string templateId)
     {
         var createRelationshipRequest = new CreateRelationshipRequest
         {
@@ -88,7 +78,7 @@ public static class Utils
 
     public static async Task<Relationship> EstablishRelationshipBetween(Client client1, Client client2, string templateId)
     {
-        var pendingRelationship = await CreatePendingRelationshipBetween(client2, templateId);
+        var pendingRelationship = await CreatePendingRelationshipUsingTemplate(client2, templateId);
 
         var acceptRelationshipRequest = new AcceptRelationshipRequest
         {
@@ -146,6 +136,29 @@ public static class Utils
         getRelationshipResponse.Should().BeASuccess();
 
         return getRelationshipResponse.Result!;
+    }
+
+    public static async Task<FileMetadata> CreateFile(Client client)
+    {
+        var createFileRequest = new CreateFileRequest
+        {
+            Content = new MemoryStream("content"u8.ToArray()),
+            Owner = client.IdentityData!.Address,
+            OwnerSignature = TestData.SOME_BASE64_STRING,
+            CipherHash = TestData.SOME_BASE64_STRING,
+            ExpiresAt = DateTime.UtcNow.AddDays(1),
+            EncryptedProperties = TestData.SOME_BASE64_STRING
+        };
+
+        var createFileResponse = await client.Files.UploadFile(createFileRequest);
+
+        createFileResponse.Should().BeASuccess();
+
+        var getFileMetadataResponse = await client.Files.GetFileMetadata(createFileResponse.Result!.Id);
+
+        getFileMetadataResponse.Should().BeASuccess();
+
+        return getFileMetadataResponse.Result!;
     }
 
     public static async Task<Message> SendMessage(Client sender, params Client[] recipients)

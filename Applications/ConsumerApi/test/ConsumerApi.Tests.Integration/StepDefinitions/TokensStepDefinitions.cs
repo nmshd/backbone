@@ -139,6 +139,15 @@ internal class TokensStepDefinitions
         _responseContext.WhenResponse = _listTokensResponse = await client.Tokens.ListTokens(queryItems);
     }
 
+    [When($"{RegexFor.SINGLE_THING} sends a DELETE request to the /Tokens/{RegexFor.SINGLE_THING}.Id endpoint")]
+    public async Task WhenISendsADeleteRequestToTheTokensIdEndpoint(string identityName, string tokenName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
+
+        _responseContext.WhenResponse = await client.Tokens.DeleteToken(tokenId);
+    }
+
     #endregion
 
     #region Then

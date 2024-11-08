@@ -2,7 +2,6 @@
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Responses;
-using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
@@ -32,14 +31,6 @@ internal class RelationshipsStepDefinitions
     #endregion
 
     #region Given
-
-    [Given($"a Relationship Template {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
-    public async Task GivenARelationshipTemplateCreatedByIdentity(string templateName, string identityName)
-    {
-        var client = _clientPool.FirstForIdentityName(identityName);
-        _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[templateName] =
-            (await client.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES })).Result!;
-    }
 
     [Given($"a pending Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
     public async Task GivenAPendingRelationshipBetween(string relationshipName, string participant1Name, string participant2Name, string creatorName)
@@ -239,7 +230,7 @@ internal class RelationshipsStepDefinitions
         _canEstablishRelationshipResponse!.Result!.Code.Should().BeNull();
     }
 
-    [Then($"the relationship {RegexFor.SINGLE_THING} still exists")]
+    [Then($"the Relationship {RegexFor.SINGLE_THING} still exists")]
     public async Task ThenTheRelationshipStillExists(string relationshipName)
     {
         var relationship = _relationshipsContext.Relationships[relationshipName];
@@ -251,7 +242,7 @@ internal class RelationshipsStepDefinitions
         _relationshipsContext.Relationships[relationshipName] = getRelationshipResponse.Result!;
     }
 
-    [Then($"the relationship {RegexFor.SINGLE_THING} does not have a relationship template")]
+    [Then($"the Relationship {RegexFor.SINGLE_THING} does not have a relationship template")]
     public void ThenTheRelationshipDoesNotHaveARelationshipTemplate(string relationshipName)
     {
         var relationship = _relationshipsContext.Relationships[relationshipName];

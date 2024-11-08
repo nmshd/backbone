@@ -31,6 +31,14 @@ internal class RelationshipTemplatesStepDefinitions
 
     #region Given
 
+    [Given($"a Relationship Template {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
+    public async Task GivenARelationshipTemplateCreatedByIdentity(string templateName, string identityName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[templateName] =
+            (await client.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES })).Result!;
+    }
+
     [Given($@"Relationship Template {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING} with password ""([^""]*)"" and forIdentity {RegexFor.OPTIONAL_SINGLE_THING}")]
     public async Task GivenRelationshipTemplateCreatedByTokenOwnerWithPasswordAndForIdentity(string relationshipTemplateName, string identityName, string passwordString, string forIdentityName)
     {
@@ -126,13 +134,13 @@ internal class RelationshipTemplatesStepDefinitions
         _responseContext.WhenResponse = _listRelationshipTemplatesResponse = await client.RelationshipTemplates.ListTemplates(queryItems);
     }
 
-    [When($"{RegexFor.SINGLE_THING} sends a DELETE request to the /RelationshipTemplates/{RegexFor.SINGLE_THING} endpoint")]
+    [When($"{RegexFor.SINGLE_THING} sends a DELETE request to the /RelationshipTemplates/{RegexFor.SINGLE_THING}.Id endpoint")]
     public async Task WhenISendsADeleteRequestToTheRelationshipTemplatesEndpoint(string identityName, string templateName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
         var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[templateName].Id;
 
-        await client.RelationshipTemplates.DeleteTemplate(relationshipTemplateId);
+        _responseContext.WhenResponse = await client.RelationshipTemplates.DeleteTemplate(relationshipTemplateId);
     }
 
     #endregion
