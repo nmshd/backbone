@@ -76,8 +76,8 @@ public class Relationship : Entity
     public RelationshipTemplateId RelationshipTemplateId { get; }
     public RelationshipTemplate RelationshipTemplate { get; }
 
-    public IdentityAddress From { get; }
-    public IdentityAddress To { get; }
+    public IdentityAddress From { get; private set; }
+    public IdentityAddress To { get; private set; }
 
     public DateTime CreatedAt { get; }
 
@@ -298,6 +298,13 @@ public class Relationship : Entity
             DecomposeAsFirstParticipant(activeIdentity, activeDevice);
         else
             DecomposeAsSecondParticipant(activeIdentity, activeDevice);
+
+        RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
+    }
+
+    public void DecomposeDueToIdentityDeletion(IdentityAddress identityToBeDeleted)
+    {
+        EnsureHasParticipant(identityToBeDeleted);
 
         RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
