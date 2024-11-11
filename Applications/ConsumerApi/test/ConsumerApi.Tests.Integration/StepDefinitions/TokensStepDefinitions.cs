@@ -135,15 +135,10 @@ internal class TokensStepDefinitions
     [When($@"{RegexFor.OPTIONAL_SINGLE_THING} sends a GET request to the /Tokens/{RegexFor.SINGLE_THING}.Id endpoint")]
     public async Task WhenIdentitySendsAGetRequestToTheTokensIdEndpoint(string identityName, string tokenName)
     {
-        var isAuthenticated = identityName != "-";
-
-        var client = isAuthenticated ? _clientPool.FirstForIdentityName(identityName) : _clientPool.Anonymous;
+        var client = _clientPool.FirstForIdentityName(identityName);
         var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
 
-        if (isAuthenticated)
-            _responseContext.WhenResponse = await client.Tokens.GetToken(tokenId);
-        else
-            _responseContext.WhenResponse = await client.Tokens.GetTokenUnauthenticated(tokenId);
+        _responseContext.WhenResponse = await client.Tokens.GetToken(tokenId);
     }
 
     [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /Tokens endpoint with the following payloads")]
