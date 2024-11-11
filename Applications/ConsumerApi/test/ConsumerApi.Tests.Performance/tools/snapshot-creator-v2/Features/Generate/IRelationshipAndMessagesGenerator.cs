@@ -1,4 +1,4 @@
-﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Models;
+﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Generate;
 

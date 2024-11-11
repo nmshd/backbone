@@ -1,5 +1,5 @@
 ﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Base;
-using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Readers;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Readers;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Readers;
 

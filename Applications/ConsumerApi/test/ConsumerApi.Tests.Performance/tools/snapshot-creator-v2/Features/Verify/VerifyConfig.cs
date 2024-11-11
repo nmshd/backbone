@@ -1,0 +1,32 @@
+﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Generate;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Interfaces;
+using MediatR;
+
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Verify;
+
+public record VerifyConfig
+{
+    public record Command(string ExcelFilePath, string WorkSheetName, string JsonFilePath) : IRequest<bool>;
+
+    public record CommandHandler(
+        IPerformanceTestConfigurationExcelReader PerformanceTestConfigurationExcelReader,
+        IPerformanceTestConfigurationJsonReader PerformanceTestConfigurationJsonReader,
+        IRelationshipAndMessagesGenerator RelationshipAndMessagesGenerator,
+        IPoolConfigurationJsonValidator PoolConfigurationJsonValidator) : IRequestHandler<Command, bool>
+    {
+        public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
+        {
+            var poolConfigFromExcel = await PerformanceTestConfigurationExcelReader.Read(request.ExcelFilePath, request.WorkSheetName);
+
+            var relationshipAndMessages = RelationshipAndMessagesGenerator.Generate(poolConfigFromExcel);
+            poolConfigFromExcel.RelationshipAndMessages.Clear();
+            poolConfigFromExcel.RelationshipAndMessages.AddRange(relationshipAndMessages);
+
+            var poolConfigFromJson = await PerformanceTestConfigurationJsonReader.Read(request.JsonFilePath);
+
+            var result = await PoolConfigurationJsonValidator.Validate(poolConfigFromJson, poolConfigFromExcel);
+
+            return result;
+        }
+    }
+}
