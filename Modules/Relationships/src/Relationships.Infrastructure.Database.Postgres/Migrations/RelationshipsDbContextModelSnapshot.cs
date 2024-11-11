@@ -139,7 +139,6 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                         .HasColumnType("boolean");
 
                     b.Property<string>("RelationshipTemplateId")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("character(20)")
@@ -234,8 +233,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrat
                     b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", "RelationshipTemplate")
                         .WithMany("Relationships")
                         .HasForeignKey("RelationshipTemplateId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("RelationshipTemplate");
                 });

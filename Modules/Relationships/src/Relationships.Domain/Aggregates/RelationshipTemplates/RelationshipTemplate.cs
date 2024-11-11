@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
@@ -79,6 +80,11 @@ public class RelationshipTemplate : Entity
                password != null && Password.SequenceEqual(password) ||
                CreatedBy == activeIdentity || // The owner shouldn't need a password to get the template
                Allocations.Any(a => a.AllocatedBy == activeIdentity); // if the template has already been allocated by the active identity, it doesn't need to pass the password again 
+    }
+
+    public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
+    {
+        if (CreatedBy != identityAddress) throw new DomainActionForbiddenException();
     }
 
     #region Expressions

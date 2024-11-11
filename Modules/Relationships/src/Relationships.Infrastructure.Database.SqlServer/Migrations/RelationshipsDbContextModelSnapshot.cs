@@ -139,7 +139,6 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                         .HasColumnType("bit");
 
                     b.Property<string>("RelationshipTemplateId")
-                        .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
                         .HasColumnType("char(20)")
@@ -232,8 +231,7 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                     b.HasOne("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", "RelationshipTemplate")
                         .WithMany("Relationships")
                         .HasForeignKey("RelationshipTemplateId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("RelationshipTemplate");
                 });

@@ -46,6 +46,17 @@ internal class TokensStepDefinitions
         _tokensContext.CreateTokenResponses[relationshipTemplateName] = response.Result!;
     }
 
+    [Given($@"Token {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
+    public async Task GivenTokenCreatedByIdentity(string tokenName, string identityName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        var response = await client.Tokens.CreateToken(
+            new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW, ForIdentity = null, Password = null });
+
+        _tokensContext.CreateTokenResponses[tokenName] = response.Result!;
+    }
+
     [Given(@"the following Tokens")]
     public async Task GivenTheFollowingTokens(Table table)
     {
@@ -121,6 +132,15 @@ internal class TokensStepDefinitions
                 : await client.Tokens.GetTokenUnauthenticated(tokenId);
     }
 
+    [When($@"{RegexFor.OPTIONAL_SINGLE_THING} sends a GET request to the /Tokens/{RegexFor.SINGLE_THING}.Id endpoint")]
+    public async Task WhenIdentitySendsAGetRequestToTheTokensIdEndpoint(string identityName, string tokenName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
+
+        _responseContext.WhenResponse = await client.Tokens.GetToken(tokenId);
+    }
+
     [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /Tokens endpoint with the following payloads")]
     public async Task WhenISendsAGETRequestToTheTokensEndpointWithTheFollowingPayloads(string identityName, Table table)
     {
@@ -137,6 +157,15 @@ internal class TokensStepDefinitions
         }).ToList();
 
         _responseContext.WhenResponse = _listTokensResponse = await client.Tokens.ListTokens(queryItems);
+    }
+
+    [When($"{RegexFor.SINGLE_THING} sends a DELETE request to the /Tokens/{RegexFor.SINGLE_THING}.Id endpoint")]
+    public async Task WhenISendsADeleteRequestToTheTokensIdEndpoint(string identityName, string tokenName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
+
+        _responseContext.WhenResponse = await client.Tokens.DeleteToken(tokenId);
     }
 
     #endregion
