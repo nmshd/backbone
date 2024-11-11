@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<DeleteFileCommand>
     {
         var file = await _filesRepository.Find(FileId.Parse(request.Id), cancellationToken, fillContent: false) ?? throw new NotFoundException(nameof(File));
 
-        if (file.CreatedBy != _userContext.GetAddress()) throw new ActionForbiddenException();
+        file.EnsureCanBeDeletedBy(_userContext.GetAddress());
 
         await _filesRepository.Delete(file, cancellationToken);
     }

@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<DeleteTokenCommand>
     {
         var token = await _tokensRepository.Find(TokenId.Parse(request.Id), _userContext.GetAddress(), cancellationToken) ?? throw new NotFoundException(nameof(Token));
 
-        if (token.CreatedBy != _userContext.GetAddress()) throw new ActionForbiddenException();
+        token.EnsureCanBeDeletedBy(_userContext.GetAddress());
 
         await _tokensRepository.DeleteToken(token, cancellationToken);
     }

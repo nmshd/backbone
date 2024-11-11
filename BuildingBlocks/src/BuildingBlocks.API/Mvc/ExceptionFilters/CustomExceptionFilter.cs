@@ -166,6 +166,8 @@ public class CustomExceptionFilter : ExceptionFilterAttribute
     {
         if (exception.Code == GenericDomainErrors.NotFound().Code)
             return HttpStatusCode.NotFound;
+        if (exception.Code == GenericDomainErrors.Forbidden().Code)
+            return HttpStatusCode.Forbidden;
 
         return HttpStatusCode.BadRequest;
     }

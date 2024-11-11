@@ -22,7 +22,7 @@ public class Handler : IRequestHandler<DeleteRelationshipTemplateCommand>
         var relationshipTemplate = await _relationshipTemplatesRepository.Find(RelationshipTemplateId.Parse(request.Id), _userContext.GetAddress(), cancellationToken) ??
                                    throw new NotFoundException(nameof(RelationshipTemplate));
 
-        if (relationshipTemplate.CreatedBy != _userContext.GetAddress()) throw new ActionForbiddenException();
+        relationshipTemplate.EnsureCanBeDeletedBy(_userContext.GetAddress());
 
         await _relationshipTemplatesRepository.Delete(relationshipTemplate, cancellationToken);
     }
