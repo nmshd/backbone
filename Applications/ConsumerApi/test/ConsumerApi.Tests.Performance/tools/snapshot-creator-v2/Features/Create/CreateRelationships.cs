@@ -49,13 +49,10 @@ public record CreateRelationships
                     var appIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, appIdentity.UserCredentials);
                     var connectorIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, connectorIdentity.UserCredentials);
 
-                    var nextRelationshipTemplate = connectorIdentity.RelationshipTemplates.FirstOrDefault();
-
-                    if (nextRelationshipTemplate is null)
-                    {
-                        throw new InvalidOperationException(
-                            $"Connector Identity {connectorIdentity.IdentityAddress}/{connectorIdentity.ConfigurationIdentityAddress}/{connectorIdentity.IdentityPoolType} [IdentityAddress/ConfigAddress/Pool] has no further RelationshipTemplates.");
-                    }
+                    var nextRelationshipTemplate = connectorIdentity.RelationshipTemplates.FirstOrDefault() ??
+                                                   throw new InvalidOperationException(
+                                                       $"Connector Identity {connectorIdentity.IdentityAddress}/{connectorIdentity.ConfigurationIdentityAddress}/{connectorIdentity.IdentityPoolType}" +
+                                                       $" [IdentityAddress/ConfigAddress/Pool] has no further RelationshipTemplates.");
 
                     connectorIdentity.RelationshipTemplates.Remove(nextRelationshipTemplate);
 
