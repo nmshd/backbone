@@ -57,9 +57,9 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
                     }
 
                     var relationshipAndMessages = new RelationshipAndMessages(
-                        SenderPool: appIdentity.PoolAlias,
+                        SenderPoolAlias: appIdentity.PoolAlias,
                         SenderIdentityAddress: appIdentity.Address,
-                        RecipientPool: recipientConnectorIdentityConfiguration.PoolAlias,
+                        RecipientPoolAlias: recipientConnectorIdentityConfiguration.PoolAlias,
                         RecipientIdentityAddress: recipientConnectorIdentityConfiguration.Address);
 
                     appIdentity.RelationshipAndMessages.Add(relationshipAndMessages);
@@ -72,9 +72,9 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
 
 
                     var reverseRelationshipAndMessages = new RelationshipAndMessages(
-                        SenderPool: recipientConnectorIdentityConfiguration.PoolAlias,
+                        SenderPoolAlias: recipientConnectorIdentityConfiguration.PoolAlias,
                         SenderIdentityAddress: recipientConnectorIdentityConfiguration.Address,
-                        RecipientPool: appIdentity.PoolAlias,
+                        RecipientPoolAlias: appIdentity.PoolAlias,
                         RecipientIdentityAddress: appIdentity.Address);
 
                     recipientConnectorIdentityConfiguration.RelationshipAndMessages.Add(reverseRelationshipAndMessages);

@@ -28,7 +28,6 @@ public record CreateChallenges
                 {
                     var challenge = (await sdkClient.Challenges.CreateChallenge()).Result;
 
-
                     if (challenge is null) continue;
 
                     identitiesWithChallenge.Challenges.Add(challenge);

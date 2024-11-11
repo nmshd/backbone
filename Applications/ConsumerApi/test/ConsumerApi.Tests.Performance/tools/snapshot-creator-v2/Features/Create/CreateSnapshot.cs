@@ -38,12 +38,14 @@ public record CreateSnapshot
                 identities = await Mediator.Send(new CreateRelationshipTemplates.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
                 Logger.LogInformation("Relationship templates created");
 
-                identities = await Mediator.Send(new CreateRelationships.Command(poolConfig.RelationshipAndMessages, identities, request.BaseAddress, clientCredentials), cancellationToken);
+                identities = await Mediator.Send(new CreateRelationships.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
                 Logger.LogInformation("Relationships created");
 
                 identities = await Mediator.Send(new CreateChallenges.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                Logger.LogInformation("Challenges created");
 
-                // Create Messages
+                identities = await Mediator.Send(new CreateMessages.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
+                Logger.LogInformation("Messages created");
 
                 // Create DatawalletModifications
 

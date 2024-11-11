@@ -9,7 +9,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public record CreateRelationships
 {
-    public record Command(List<RelationshipAndMessages> RelationshipAndMessages, List<DomainIdentity> Identities, string BaseUrlAddress, ClientCredentials ClientCredentials)
+    public record Command(List<DomainIdentity> Identities, List<RelationshipAndMessages> RelationshipAndMessages, string BaseUrlAddress, ClientCredentials ClientCredentials)
         : IRequest<List<DomainIdentity>>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
@@ -28,13 +28,20 @@ public record CreateRelationships
             foreach (var appIdentity in appIdentities)
             {
                 var connectorRecipientIds = request.RelationshipAndMessages
-                    .Where(r => r.RecipientIdentityPoolType == IdentityPoolType.Connector)
-                    .Where(r => r.SenderIdentityAddress == appIdentity.IdentityConfigurationAddress)
-                    .Select(r => r.RecipientIdentityAddress)
+                    .Where(r =>
+                        r.RecipientIdentityPoolType == IdentityPoolType.Connector &&
+                        r.SenderIdentityAddress == appIdentity.ConfigurationIdentityAddress)
+                    .Select(r =>
+                    (
+                        r.RecipientIdentityAddress,
+                        r.RecipientPoolAlias
+                    ))
                     .ToList();
 
                 var connectorIdentityToEstablishRelationshipWith = connectorIdentities
-                    .Where(c => connectorRecipientIds.Contains(c.IdentityConfigurationAddress))
+                    .Where(c => connectorRecipientIds.Any(cr =>
+                        cr.RecipientPoolAlias == c.PoolAlias &&
+                        cr.RecipientIdentityAddress == c.ConfigurationIdentityAddress))
                     .ToList();
 
                 foreach (var connectorIdentity in connectorIdentityToEstablishRelationshipWith)
@@ -42,9 +49,15 @@ public record CreateRelationships
                     var appIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, appIdentity.UserCredentials);
                     var connectorIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, connectorIdentity.UserCredentials);
 
-                    var nextRelationshipTemplate = connectorIdentity.RelationshipTemplates.First();
-                    var index = connectorIdentity.RelationshipTemplates.IndexOf(nextRelationshipTemplate);
-                    connectorIdentity.RelationshipTemplates.RemoveAt(index);
+                    var nextRelationshipTemplate = connectorIdentity.RelationshipTemplates.FirstOrDefault();
+
+                    if (nextRelationshipTemplate is null)
+                    {
+                        throw new InvalidOperationException(
+                            $"Connector Identity {connectorIdentity.IdentityAddress}/{connectorIdentity.ConfigurationIdentityAddress}/{connectorIdentity.IdentityPoolType} [IdentityAddress/ConfigAddress/Pool] has no further RelationshipTemplates.");
+                    }
+
+                    connectorIdentity.RelationshipTemplates.Remove(nextRelationshipTemplate);
 
                     var createRelationshipResponse = await appIdentitySdkClient.Relationships.CreateRelationship(
                         new CreateRelationshipRequest

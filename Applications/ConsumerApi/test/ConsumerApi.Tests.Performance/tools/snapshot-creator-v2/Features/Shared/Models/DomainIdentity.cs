@@ -10,11 +10,12 @@ public record DomainIdentity(
     string IdentityAddress, // the real identity address returned by sdk 
     string DeviceId,
     IdentityPoolConfiguration IdentityPoolConfiguration,
-    int IdentityConfigurationAddress, // the address from pool-config json 
+    int ConfigurationIdentityAddress, // the address from pool-config json 
     int NumberOfDevices,
     int NumberOfRelationshipTemplates,
     IdentityPoolType IdentityPoolType,
-    int NumberOfChallenges)
+    int NumberOfChallenges,
+    string PoolAlias)
 {
     public List<string> DeviceIds = [];
 
@@ -22,6 +23,8 @@ public record DomainIdentity(
 
     public Dictionary<string, DomainIdentity> EstablishedRelationshipsById { get; } = [];
     public List<Challenge> Challenges { get; set; } = [];
+
+    public HashSet<(string messageId, DomainIdentity recipient)> Messages { get; private set; } = [];
 
     public void AddDevice(string deviceId)
     {

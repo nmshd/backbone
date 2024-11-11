@@ -5,15 +5,15 @@ using Ganss.Excel;
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
 
 public record RelationshipAndMessages(
-    string SenderPool,
+    string SenderPoolAlias,
     int SenderIdentityAddress,
-    string RecipientPool,
+    string RecipientPoolAlias,
     int RecipientIdentityAddress)
 {
     public long NumberOfSentMessages { get; set; }
 
     [Ignore, JsonIgnore]
-    public IdentityPoolType RecipientIdentityPoolType => RecipientPool.FirstOrDefault() switch
+    public IdentityPoolType RecipientIdentityPoolType => RecipientPoolAlias.FirstOrDefault() switch
     {
         'n' => IdentityPoolType.Never,
         'a' => IdentityPoolType.App,

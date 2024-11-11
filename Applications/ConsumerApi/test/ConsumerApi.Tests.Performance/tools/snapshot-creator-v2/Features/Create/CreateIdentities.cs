@@ -40,7 +40,8 @@ public record CreateIdentities
                         identityConfiguration.NumberOfDevices,
                         identityConfiguration.NumberOfRelationshipTemplates,
                         identityConfiguration.IdentityPoolType,
-                        identityConfiguration.NumberOfChallenges);
+                        identityConfiguration.NumberOfChallenges,
+                        identityConfiguration.PoolAlias);
 
                     identities.Add(createdIdentity);
                 }
