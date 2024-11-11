@@ -7,26 +7,26 @@ namespace Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates
 public class RelationshipTemplateDeleteTests : AbstractTestsBase
 {
     [Fact]
-    public void RelationshipTemplateCanBeDeletedByItsOwner()
+    public void RelationshipTemplate_can_be_deleted_by_its_owner()
     {
         var identity = CreateRandomIdentityAddress();
         var relationshipTemplate = CreateRelationshipTemplate(identity);
 
-        var func = () => relationshipTemplate.EnsureCanBeDeletedBy(identity);
+        var acting = () => relationshipTemplate.EnsureCanBeDeletedBy(identity);
 
-        func.Should().NotThrow();
+        acting.Should().NotThrow();
     }
 
     [Fact]
-    public void RelationshipTemplateCanNotBeDeletedByOthers()
+    public void RelationshipTemplate_can_not_be_deleted_by_others()
     {
         var creatorIdentity = CreateRandomIdentityAddress();
         var otherIdentity = CreateRandomIdentityAddress();
         var relationshipTemplate = CreateRelationshipTemplate(creatorIdentity);
 
-        var func = () => relationshipTemplate.EnsureCanBeDeletedBy(otherIdentity);
+        var acting = () => relationshipTemplate.EnsureCanBeDeletedBy(otherIdentity);
 
-        func.Should().Throw<DomainActionForbiddenException>();
+        acting.Should().Throw<DomainActionForbiddenException>();
     }
 
     private RelationshipTemplate CreateRelationshipTemplate(IdentityAddress identity)

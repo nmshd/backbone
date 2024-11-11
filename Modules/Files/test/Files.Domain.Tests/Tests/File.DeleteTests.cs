@@ -9,26 +9,26 @@ namespace Backbone.Modules.Files.Domain.Tests.Tests;
 public class FileDeleteTests : AbstractTestsBase
 {
     [Fact]
-    public void FileCanBeDeletedByItsOwner()
+    public void File_can_be_deleted_by_its_owner()
     {
         var identity = CreateRandomIdentityAddress();
         var file = CreateFile(identity);
 
-        var func = () => file.EnsureCanBeDeletedBy(identity);
+        var acting = () => file.EnsureCanBeDeletedBy(identity);
 
-        func.Should().NotThrow();
+        acting.Should().NotThrow();
     }
 
     [Fact]
-    public void FileCanNotBeDeletedByOthers()
+    public void File_can_not_be_deleted_by_others()
     {
         var creatorIdentity = CreateRandomIdentityAddress();
         var otherIdentity = CreateRandomIdentityAddress();
         var file = CreateFile(creatorIdentity);
 
-        var func = () => file.EnsureCanBeDeletedBy(otherIdentity);
+        var acting = () => file.EnsureCanBeDeletedBy(otherIdentity);
 
-        func.Should().Throw<DomainActionForbiddenException>();
+        acting.Should().Throw<DomainActionForbiddenException>();
     }
 
     private static File CreateFile(IdentityAddress identityAddress)

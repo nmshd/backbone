@@ -57,26 +57,26 @@ public class TokenTests : AbstractTestsBase
     }
 
     [Fact]
-    public void TokenCanBeDeletedByItsOwner()
+    public void Token_can_be_deleted_by_its_owner()
     {
         var identityAddress = CreateRandomIdentityAddress();
         var token = TestData.CreateToken(identityAddress, null);
 
-        var func = () => token.EnsureCanBeDeletedBy(identityAddress);
+        var acting = () => token.EnsureCanBeDeletedBy(identityAddress);
 
-        func.Should().NotThrow();
+        acting.Should().NotThrow();
     }
 
     [Fact]
-    public void TokenCanNotBeDeletedByOthers()
+    public void Token_can_not_be_deleted_by_others()
     {
         var creatorIdentity = CreateRandomIdentityAddress();
         var otherIdentity = CreateRandomIdentityAddress();
         var token = TestData.CreateToken(creatorIdentity, null);
 
-        var func = () => token.EnsureCanBeDeletedBy(otherIdentity);
+        var acting = () => token.EnsureCanBeDeletedBy(otherIdentity);
 
-        func.Should().Throw<DomainActionForbiddenException>();
+        acting.Should().Throw<DomainActionForbiddenException>();
     }
 
     private static bool EvaluateCanBeCollectedByExpression(Token token, IdentityAddress? identityAddress)
