@@ -15,5 +15,5 @@ User deletes a Relationship Template
         Given Identity i
         And a Relationship Template t created by i
         When i sends a DELETE request to the /RelationshipTemplates/t.Id endpoint
-        And i sends a GET request to the /RelationshipTemplates/t.Id endpoint with password "-"
+        And i sends a GET request to the /RelationshipTemplates/t.Id endpoint
         Then the response status code is 404 (Not Found)

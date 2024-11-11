@@ -116,6 +116,16 @@ internal class RelationshipTemplatesStepDefinitions
             : await client.RelationshipTemplates.GetTemplate(relationshipTemplateId);
     }
 
+    [When($"{RegexFor.SINGLE_THING} sends a GET request to the /RelationshipTemplates/{RegexFor.SINGLE_THING}.Id endpoint")]
+    public async Task WhenIdentitySendsAGetRequestToTheRelationshipTemplatesIdEndpoint(string identityName, string relationshipTemplateName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[relationshipTemplateName].Id;
+
+        _responseContext.WhenResponse = await client.RelationshipTemplates.GetTemplate(relationshipTemplateId);
+    }
+
     [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /RelationshipTemplates endpoint with the following payloads")]
     public async Task WhenISendsAGETRequestToTheRelationshipTemplatesEndpointWithTheFollowingPayloads(string identityName, Table table)
     {

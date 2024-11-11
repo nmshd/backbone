@@ -46,6 +46,17 @@ internal class TokensStepDefinitions
         _tokensContext.CreateTokenResponses[relationshipTemplateName] = response.Result!;
     }
 
+    [Given($@"Token {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
+    public async Task GivenTokenCreatedByIdentity(string tokenName, string identityName)
+    {
+        var client = _clientPool.FirstForIdentityName(identityName);
+
+        var response = await client.Tokens.CreateToken(
+            new CreateTokenRequest { Content = TestData.SOME_BYTES, ExpiresAt = TOMORROW, ForIdentity = null, Password = null });
+
+        _tokensContext.CreateTokenResponses[tokenName] = response.Result!;
+    }
+
     [Given(@"the following Tokens")]
     public async Task GivenTheFollowingTokens(Table table)
     {
@@ -119,6 +130,20 @@ internal class TokensStepDefinitions
             _responseContext.WhenResponse = isPasswordProvided
                 ? await client.Tokens.GetTokenUnauthenticated(tokenId, Convert.FromBase64String(password.Trim()))
                 : await client.Tokens.GetTokenUnauthenticated(tokenId);
+    }
+
+    [When($@"{RegexFor.OPTIONAL_SINGLE_THING} sends a GET request to the /Tokens/{RegexFor.SINGLE_THING}.Id endpoint")]
+    public async Task WhenIdentitySendsAGetRequestToTheTokensIdEndpoint(string identityName, string tokenName)
+    {
+        var isAuthenticated = identityName != "-";
+
+        var client = isAuthenticated ? _clientPool.FirstForIdentityName(identityName) : _clientPool.Anonymous;
+        var tokenId = _tokensContext.CreateTokenResponses[tokenName].Id;
+
+        if (isAuthenticated)
+            _responseContext.WhenResponse = await client.Tokens.GetToken(tokenId);
+        else
+            _responseContext.WhenResponse = await client.Tokens.GetTokenUnauthenticated(tokenId);
     }
 
     [When($@"{RegexFor.SINGLE_THING} sends a GET request to the /Tokens endpoint with the following payloads")]
