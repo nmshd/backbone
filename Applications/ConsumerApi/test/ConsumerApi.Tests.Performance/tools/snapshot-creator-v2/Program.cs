@@ -19,10 +19,11 @@ public class Program
             {
                 services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblyContaining<Program>());
 
-                services.AddSingleton<IPerformanceTestConfigurationExcelReader, PerformanceTestConfigurationExcelReader>();
+                services.AddSingleton<IPoolConfigurationExcelReader, PoolConfigurationExcelReader>();
                 services.AddSingleton<IPoolConfigurationJsonWriter, PoolConfigurationJsonWriter>();
-                services.AddSingleton<IPerformanceTestConfigurationJsonReader, PerformanceTestConfigurationJsonReader>();
+                services.AddSingleton<IPoolConfigurationJsonReader, PoolConfigurationJsonReader>();
                 services.AddSingleton<IPoolConfigurationJsonValidator, PoolConfigurationJsonValidator>();
+
                 services.AddSingleton<IRelationshipAndMessagesGenerator, RelationshipAndMessagesGenerator>();
             })
             .RunCommandLineApplicationAsync(args, app =>

@@ -5,7 +5,7 @@ using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Readers;
 
-public class PerformanceTestConfigurationJsonReader : PerformanceTestConfigurationReaderBase, IPerformanceTestConfigurationJsonReader
+public class PoolConfigurationJsonReader : PoolConfigurationReaderBase, IPoolConfigurationJsonReader
 {
     protected override string[] ValidExtensions { get; } = [".json"];
 

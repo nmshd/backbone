@@ -9,7 +9,7 @@ public record GenerateConfig
     public record Command(string ExcelFilePath, string WorkSheetName) : IRequest<StatusMessage>;
 
     public class CommandHandler(
-        IPerformanceTestConfigurationExcelReader performanceTestConfigurationExcelReader,
+        IPoolConfigurationExcelReader poolConfigurationExcelReader,
         IRelationshipAndMessagesGenerator relationshipAndMessagesGenerator,
         IPoolConfigurationJsonWriter poolConfigurationJsonWriter)
         : IRequestHandler<Command, StatusMessage>
@@ -19,7 +19,7 @@ public record GenerateConfig
             StatusMessage result;
             try
             {
-                var poolConfigFromExcel = await performanceTestConfigurationExcelReader.Read(request.ExcelFilePath, request.WorkSheetName);
+                var poolConfigFromExcel = await poolConfigurationExcelReader.Read(request.ExcelFilePath, request.WorkSheetName);
 
                 var relationshipAndMessages = relationshipAndMessagesGenerator.Generate(poolConfigFromExcel);
 
@@ -37,7 +37,7 @@ public record GenerateConfig
 
                 Directory.CreateDirectory(snapshotFolder);
 
-                var poolConfigJsonFilePath = Path.Combine(snapshotFolder!, $"{POOL_CONFIG_JSON_WITH_RELATIONSHIP_AND_MESSAGES}.{request.WorkSheetName}.{JSON_FILE_EXT}");
+                var poolConfigJsonFilePath = Path.Combine(snapshotFolder!, $"pool-config.{request.WorkSheetName}.json");
                 result = await poolConfigurationJsonWriter.Write(poolConfigFromExcel, poolConfigJsonFilePath);
             }
             catch (Exception e)

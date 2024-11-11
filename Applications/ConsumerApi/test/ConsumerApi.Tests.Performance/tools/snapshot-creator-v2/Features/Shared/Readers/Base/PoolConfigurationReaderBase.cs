@@ -1,6 +1,6 @@
 ﻿namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Readers.Base;
 
-public abstract class PerformanceTestConfigurationReaderBase
+public abstract class PoolConfigurationReaderBase
 {
     protected abstract string[] ValidExtensions { get; }
 

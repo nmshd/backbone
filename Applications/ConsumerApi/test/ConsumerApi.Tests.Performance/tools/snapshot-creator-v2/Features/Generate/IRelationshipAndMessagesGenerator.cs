@@ -4,5 +4,5 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Gen
 
 public interface IRelationshipAndMessagesGenerator
 {
-    RelationshipAndMessages[] Generate(PerformanceTestConfiguration performanceTestConfiguration);
+    RelationshipAndMessages[] Generate(PerformanceTestConfiguration poolConfiguration);
 }

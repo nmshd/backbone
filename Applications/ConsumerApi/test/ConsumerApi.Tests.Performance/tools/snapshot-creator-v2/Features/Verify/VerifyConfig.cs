@@ -9,20 +9,20 @@ public record VerifyConfig
     public record Command(string ExcelFilePath, string WorkSheetName, string JsonFilePath) : IRequest<bool>;
 
     public record CommandHandler(
-        IPerformanceTestConfigurationExcelReader PerformanceTestConfigurationExcelReader,
-        IPerformanceTestConfigurationJsonReader PerformanceTestConfigurationJsonReader,
+        IPoolConfigurationExcelReader PoolConfigurationExcelReader,
+        IPoolConfigurationJsonReader PoolConfigurationJsonReader,
         IRelationshipAndMessagesGenerator RelationshipAndMessagesGenerator,
         IPoolConfigurationJsonValidator PoolConfigurationJsonValidator) : IRequestHandler<Command, bool>
     {
         public async Task<bool> Handle(Command request, CancellationToken cancellationToken)
         {
-            var poolConfigFromExcel = await PerformanceTestConfigurationExcelReader.Read(request.ExcelFilePath, request.WorkSheetName);
+            var poolConfigFromExcel = await PoolConfigurationExcelReader.Read(request.ExcelFilePath, request.WorkSheetName);
 
             var relationshipAndMessages = RelationshipAndMessagesGenerator.Generate(poolConfigFromExcel);
             poolConfigFromExcel.RelationshipAndMessages.Clear();
             poolConfigFromExcel.RelationshipAndMessages.AddRange(relationshipAndMessages);
 
-            var poolConfigFromJson = await PerformanceTestConfigurationJsonReader.Read(request.JsonFilePath);
+            var poolConfigFromJson = await PoolConfigurationJsonReader.Read(request.JsonFilePath);
 
             var result = await PoolConfigurationJsonValidator.Validate(poolConfigFromJson, poolConfigFromExcel);
 

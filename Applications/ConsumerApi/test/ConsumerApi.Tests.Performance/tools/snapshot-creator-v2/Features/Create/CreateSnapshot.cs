@@ -1,5 +1,4 @@
-﻿using System;
-using Backbone.ConsumerApi.Sdk.Authentication;
+﻿using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Interfaces;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
 using MediatR;
@@ -17,7 +16,7 @@ public record CreateSnapshot
 
     public record CommandHandler(
         ILogger<CommandHandler> Logger,
-        IPerformanceTestConfigurationJsonReader PerformanceTestConfigurationJsonReader,
+        IPoolConfigurationJsonReader PoolConfigurationJsonReader,
         IMediator Mediator)
         : IRequestHandler<Command, StatusMessage>
     {
@@ -27,7 +26,7 @@ public record CreateSnapshot
             {
                 Logger.LogInformation("Creating pool configuration with relationships and messages ...");
 
-                var poolConfig = await PerformanceTestConfigurationJsonReader.Read(request.JsonFilePath);
+                var poolConfig = await PoolConfigurationJsonReader.Read(request.JsonFilePath);
                 var clientCredentials = new ClientCredentials(request.ClientId, request.ClientSecret);
 
                 var identities = await Mediator.Send(new CreateIdentities.Command(poolConfig.IdentityPoolConfigurations, request.BaseAddress, clientCredentials), cancellationToken);

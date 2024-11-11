@@ -5,7 +5,7 @@ using Ganss.Excel;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Readers;
 
-public class PerformanceTestConfigurationExcelReader : PerformanceTestConfigurationReaderBase, IPerformanceTestConfigurationExcelReader
+public class PoolConfigurationExcelReader : PoolConfigurationReaderBase, IPoolConfigurationExcelReader
 {
     protected override string[] ValidExtensions { get; } = [".xlsx", ".xls"];
 

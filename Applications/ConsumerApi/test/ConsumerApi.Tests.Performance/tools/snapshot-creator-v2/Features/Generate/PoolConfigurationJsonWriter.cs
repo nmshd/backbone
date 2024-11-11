@@ -5,11 +5,11 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Gen
 
 public class PoolConfigurationJsonWriter : IPoolConfigurationJsonWriter
 {
-    public async Task<StatusMessage> Write(PerformanceTestConfiguration poolConfigFromExcel, string filePath)
+    public async Task<StatusMessage> Write(PerformanceTestConfiguration poolConfiguration, string filePath)
     {
         try
         {
-            var poolConfigJson = JsonSerializer.Serialize(poolConfigFromExcel, new JsonSerializerOptions { WriteIndented = true });
+            var poolConfigJson = JsonSerializer.Serialize(poolConfiguration, new JsonSerializerOptions { WriteIndented = true });
             await File.WriteAllTextAsync(filePath, poolConfigJson);
         }
         catch (Exception e)

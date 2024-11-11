@@ -3,7 +3,7 @@ using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Readers;
 
-public class PerformanceTestConfigurationJsonReaderTests : SnapshotCreatorTestsBase
+public class PoolConfigurationJsonReaderTests : SnapshotCreatorTestsBase
 {
     #region Deserialize From Json Tests
 
@@ -16,7 +16,7 @@ public class PerformanceTestConfigurationJsonReaderTests : SnapshotCreatorTestsB
         // Arrange
         var poolConfigJsonFile = Path.Combine(TestDataFolder, poolConfigJsonFilename);
         var expectedPoolConfig = await GetExpectedPoolConfiguration(expectedPoolConfigJsonFilename);
-        var sut = new PerformanceTestConfigurationJsonReader();
+        var sut = new PoolConfigurationJsonReader();
 
         // Act
         var actualPoolConfig = await sut.Read(poolConfigJsonFile);

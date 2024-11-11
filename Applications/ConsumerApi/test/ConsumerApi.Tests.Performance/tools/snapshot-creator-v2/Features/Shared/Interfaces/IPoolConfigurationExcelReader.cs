@@ -2,7 +2,7 @@
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Interfaces;
 
-public interface IPerformanceTestConfigurationJsonReader
+public interface IPoolConfigurationExcelReader
 {
-    Task<PerformanceTestConfiguration> Read(string filePath);
+    Task<PerformanceTestConfiguration> Read(string filePath, string workSheet);
 }

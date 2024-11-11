@@ -5,11 +5,11 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Gen
 
 public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerator
 {
-    public RelationshipAndMessages[] Generate(PerformanceTestConfiguration performanceTestConfiguration)
+    public RelationshipAndMessages[] Generate(PerformanceTestConfiguration poolConfiguration)
     {
-        if (!performanceTestConfiguration.IsIdentityPoolConfigurationCreated) throw new InvalidOperationException(IDENTITY_POOL_CONFIGURATION_NOT_CREATED);
+        if (!poolConfiguration.IsIdentityPoolConfigurationCreated) throw new InvalidOperationException(IDENTITY_POOL_CONFIGURATION_NOT_CREATED);
 
-        var identityPools = performanceTestConfiguration.IdentityPoolConfigurations;
+        var identityPools = poolConfiguration.IdentityPoolConfigurations;
 
         var appIdentityPools = identityPools.Where(ip => ip.Type == IdentityPoolType.App).ToList();
         var connectorIdentityPools = identityPools.Where(ip => ip.Type == IdentityPoolType.Connector).ToList();
@@ -103,13 +103,13 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
 
         var relationShipCount = relationshipAndMessagesList.Length / 2; // Note: Div by 2 because a pair of relationships (forward/reverse) is equal to 1 relationship
 
-        if (relationShipCount != performanceTestConfiguration.VerificationConfiguration.TotalNumberOfRelationships)
+        if (relationShipCount != poolConfiguration.VerificationConfiguration.TotalNumberOfRelationships)
         {
-            throw new InvalidOperationException(string.Format(RELATIONSHIP_COUNT_MISMATCH, performanceTestConfiguration.VerificationConfiguration.TotalNumberOfRelationships, relationShipCount));
+            throw new InvalidOperationException(string.Format(RELATIONSHIP_COUNT_MISMATCH, poolConfiguration.VerificationConfiguration.TotalNumberOfRelationships, relationShipCount));
         }
 
-        VerifyNumberOfSentMessages(relationshipAndMessagesList, IdentityPoolType.Connector, performanceTestConfiguration.VerificationConfiguration.TotalAppSentMessages);
-        VerifyNumberOfSentMessages(relationshipAndMessagesList, IdentityPoolType.App, performanceTestConfiguration.VerificationConfiguration.TotalConnectorSentMessages);
+        VerifyNumberOfSentMessages(relationshipAndMessagesList, IdentityPoolType.Connector, poolConfiguration.VerificationConfiguration.TotalAppSentMessages);
+        VerifyNumberOfSentMessages(relationshipAndMessagesList, IdentityPoolType.App, poolConfiguration.VerificationConfiguration.TotalConnectorSentMessages);
 
 
         return relationshipAndMessagesList;

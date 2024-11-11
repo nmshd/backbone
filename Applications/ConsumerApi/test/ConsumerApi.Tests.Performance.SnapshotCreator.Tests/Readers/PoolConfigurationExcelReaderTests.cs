@@ -3,7 +3,7 @@ using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Readers;
 
-public class PerformanceTestConfigurationExcelReaderTests : SnapshotCreatorTestsBase
+public class PoolConfigurationExcelReaderTests : SnapshotCreatorTestsBase
 {
     #region Verify Json Pool Config
 
@@ -17,7 +17,7 @@ public class PerformanceTestConfigurationExcelReaderTests : SnapshotCreatorTests
         var poolConfigExcelFile = Path.Combine(TestDataFolder, excelFile);
         var expectedPoolConfig = await GetExpectedPoolConfiguration(expectedPoolConfigJsonFilename);
         expectedPoolConfig.RelationshipAndMessages.Clear(); //Note: Excel reader does only read the pool config, not the relationships and messages
-        var sut = new PerformanceTestConfigurationExcelReader();
+        var sut = new PoolConfigurationExcelReader();
 
         // Act
         var actualPoolConfig = await sut.Read(poolConfigExcelFile, loadTestTag);

@@ -4,9 +4,9 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Ver
 
 public class PoolConfigurationJsonValidator : IPoolConfigurationJsonValidator
 {
-    public Task<bool> Validate(PerformanceTestConfiguration poolConfigJsonFile, PerformanceTestConfiguration poolConfigFromExcel)
+    public Task<bool> Validate(PerformanceTestConfiguration poolConfigurationFromJson, PerformanceTestConfiguration poolConfigurationFromExcel)
     {
-        var result = poolConfigJsonFile.Equals(poolConfigFromExcel);
+        var result = poolConfigurationFromJson.Equals(poolConfigurationFromExcel);
         return Task.FromResult(result);
     }
 }

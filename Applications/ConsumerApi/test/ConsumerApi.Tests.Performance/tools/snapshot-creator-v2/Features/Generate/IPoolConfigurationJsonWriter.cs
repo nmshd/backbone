@@ -4,5 +4,5 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Gen
 
 public interface IPoolConfigurationJsonWriter
 {
-    Task<StatusMessage> Write(PerformanceTestConfiguration poolConfigFromExcel, string filePath);
+    Task<StatusMessage> Write(PerformanceTestConfiguration poolConfiguration, string filePath);
 }
