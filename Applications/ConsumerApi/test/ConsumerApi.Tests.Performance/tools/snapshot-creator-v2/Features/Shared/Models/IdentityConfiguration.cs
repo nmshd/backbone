@@ -21,4 +21,5 @@ public record IdentityConfiguration(int Address, IdentityPoolType IdentityPoolTy
     public int NumberOfDevices => PoolConfiguration.NumberOfDevices;
     public int NumberOfRelationshipTemplates => PoolConfiguration.NumberOfRelationshipTemplates;
     public int NumberOfChallenges => PoolConfiguration.NumberOfChallenges;
+    public int NumberOfDatawalletModifications => PoolConfiguration.NumberOfDatawalletModifications;
 }

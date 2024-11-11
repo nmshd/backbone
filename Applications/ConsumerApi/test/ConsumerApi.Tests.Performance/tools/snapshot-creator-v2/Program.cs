@@ -25,6 +25,8 @@ public class Program
                 services.AddSingleton<IPoolConfigurationJsonValidator, PoolConfigurationJsonValidator>();
 
                 services.AddSingleton<IRelationshipAndMessagesGenerator, RelationshipAndMessagesGenerator>();
+
+                services.AddSingleton<IOutputHelper, OutputHelper>();
             })
             .RunCommandLineApplicationAsync(args, app =>
             {

@@ -4,7 +4,7 @@ using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.
 using Backbone.Tooling;
 using MediatR;
 
-namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create;
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 
 public record CreateIdentities
 {
@@ -41,7 +41,8 @@ public record CreateIdentities
                         identityConfiguration.NumberOfRelationshipTemplates,
                         identityConfiguration.IdentityPoolType,
                         identityConfiguration.NumberOfChallenges,
-                        identityConfiguration.PoolAlias);
+                        identityConfiguration.PoolAlias,
+                        identityConfiguration.NumberOfDatawalletModifications);
 
                     identities.Add(createdIdentity);
                 }
