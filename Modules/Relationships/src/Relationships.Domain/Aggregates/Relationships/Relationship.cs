@@ -73,8 +73,8 @@ public class Relationship : Entity
     }
 
     public RelationshipId Id { get; }
-    public RelationshipTemplateId RelationshipTemplateId { get; }
-    public RelationshipTemplate RelationshipTemplate { get; }
+    public RelationshipTemplateId? RelationshipTemplateId { get; }
+    public RelationshipTemplate? RelationshipTemplate { get; }
 
     public IdentityAddress From { get; private set; }
     public IdentityAddress To { get; private set; }

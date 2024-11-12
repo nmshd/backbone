@@ -1,0 +1,21 @@
+meta {
+  name: /Relationships/{id}/Terminate
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/Relationships/{{id}}/Terminate
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "creationResponseContent": ""
+  }
+}
+
+vars:pre-request {
+  id: REL8DyBnfWYiXCzxkMiv
+}

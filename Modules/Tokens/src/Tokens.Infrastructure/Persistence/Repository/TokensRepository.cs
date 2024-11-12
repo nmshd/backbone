@@ -91,5 +91,11 @@ public class TokensRepository : ITokensRepository
         await _tokensDbSet.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 
+    public async Task DeleteToken(Token token, CancellationToken cancellationToken)
+    {
+        _tokensDbSet.Remove(token);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
     #endregion
 }
