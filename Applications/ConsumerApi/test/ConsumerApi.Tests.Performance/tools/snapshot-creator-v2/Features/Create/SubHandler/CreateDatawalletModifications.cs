@@ -1,4 +1,5 @@
-﻿using Backbone.ConsumerApi.Sdk;
+﻿using System.Numerics;
+using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
@@ -56,22 +57,68 @@ public record CreateDatawalletModifications
 
         private static List<PushDatawalletModificationsRequestItem> PreGenerateDatawalletModifications(int datawalletModifications)
         {
-            List<PushDatawalletModificationsRequestItem> result = [];
-            var objectIterator = 1;
+            var result = new List<PushDatawalletModificationsRequestItem>();
+            uint objectIterator = 1;
+            if (datawalletModifications < 10)
+            {
+                // can't be divided properly. Will only do creates.
+                for (uint i = 0; i < datawalletModifications; i++)
+                {
+                    result.Add(new PushDatawalletModificationsRequestItem
+                    {
+                        Collection = "Performance-Tests",
+                        DatawalletVersion = 2,
+                        Type = "Create",
+                        ObjectIdentifier = "OBJ" + objectIterator++.ToString("D12"),
+                        PayloadCategory = "Userdata"
+                    });
+                }
+
+                return result;
+            }
+
+            var idsAndOperationsDictionary = new Dictionary<string, List<string>>();
+            var random = new Random();
 
             for (uint i = 0; i < datawalletModifications; i++)
             {
-                result.Add(new PushDatawalletModificationsRequestItem
+                if (i < datawalletModifications * 3 / 10)
                 {
-                    Collection = "Performance-Tests",
-                    DatawalletVersion = 2,
-                    Type = "Create",
-                    ObjectIdentifier = "OBJ" + objectIterator++.ToString("D12"),
-                    PayloadCategory = "Userdata"
-                });
+                    // create
+                    idsAndOperationsDictionary.Add("OBJ" + objectIterator++.ToString("D12"), ["Create"]);
+                }
+                else if (i < datawalletModifications * 9 / 10)
+                {
+                    // update
+                    GetRandomElement(random, idsAndOperationsDictionary).Add("Update");
+                }
+                else
+                {
+                    // delete
+                    var selectedKey = idsAndOperationsDictionary.Where(p => !p.Value.Contains("Delete")).Select(p => p.Key).First();
+                    idsAndOperationsDictionary[selectedKey].Add("Delete");
+                }
+            }
+
+            foreach (var (id, operations) in idsAndOperationsDictionary)
+            {
+                result.AddRange(operations.Select(operation => new PushDatawalletModificationsRequestItem
+                {
+                    Collection = "Requests",
+                    DatawalletVersion = 1,
+                    ObjectIdentifier = id,
+                    Type = operation,
+                    PayloadCategory = "Metadata"
+                }));
             }
 
             return result;
+        }
+
+        public static T GetRandomElement<T, TU>(Random random, IDictionary<TU, T> dictionary)
+        {
+            var randomElementIndex = Convert.ToInt32(random.NextInt64() % dictionary.Count);
+            return dictionary[dictionary.Keys.Skip(randomElementIndex - 1).First()];
         }
     }
 }
