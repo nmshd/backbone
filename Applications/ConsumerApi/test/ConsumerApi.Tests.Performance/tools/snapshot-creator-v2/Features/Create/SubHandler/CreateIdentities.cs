@@ -29,13 +29,9 @@ public record CreateIdentities
                     if (sdkClient.DeviceData is null)
                         throw new Exception("The SDK could not be used to create a new database Identity.");
 
-                    var identityAddress = sdkClient.IdentityData?.Address ?? "no address";
-
                     var createdIdentity = new DomainIdentity(
                         sdkClient.DeviceData.UserCredentials,
-                        identityAddress,
-                        sdkClient.DeviceData.DeviceId,
-                        identityPoolConfiguration,
+                        sdkClient.IdentityData?.Address ?? "no address",
                         identityConfiguration.Address,
                         identityConfiguration.NumberOfDevices,
                         identityConfiguration.NumberOfRelationshipTemplates,

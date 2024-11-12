@@ -28,35 +28,35 @@ public record CreateRelationships
             foreach (var appIdentity in appIdentities)
             {
                 var connectorRecipientIds = request.RelationshipAndMessages
-                    .Where(r =>
-                        r.RecipientIdentityPoolType == IdentityPoolType.Connector &&
-                        r.SenderIdentityAddress == appIdentity.ConfigurationIdentityAddress)
-                    .Select(r =>
+                    .Where(relationship =>
+                        appIdentity.PoolAlias == relationship.SenderPoolAlias &&
+                        appIdentity.ConfigurationIdentityAddress == relationship.SenderIdentityAddress)
+                    .Select(relationship =>
                     (
-                        r.RecipientIdentityAddress,
-                        r.RecipientPoolAlias
+                        relationship.RecipientIdentityAddress,
+                        relationship.RecipientPoolAlias
                     ))
                     .ToList();
 
                 var connectorIdentityToEstablishRelationshipWith = connectorIdentities
-                    .Where(c => connectorRecipientIds.Any(cr =>
-                        cr.RecipientPoolAlias == c.PoolAlias &&
-                        cr.RecipientIdentityAddress == c.ConfigurationIdentityAddress))
+                    .Where(connectorIdentity => connectorRecipientIds.Any(relationship =>
+                        connectorIdentity.PoolAlias == relationship.RecipientPoolAlias &&
+                        connectorIdentity.ConfigurationIdentityAddress == relationship.RecipientIdentityAddress))
                     .ToList();
 
                 foreach (var connectorIdentity in connectorIdentityToEstablishRelationshipWith)
                 {
                     var appIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, appIdentity.UserCredentials);
                     var connectorIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, connectorIdentity.UserCredentials);
+
                     var nextRelationshipTemplate = connectorIdentity.RelationshipTemplates.FirstOrDefault(t => t.Used == false);
 
                     if (nextRelationshipTemplate == default)
                     {
                         throw new InvalidOperationException(
                             $"Connector Identity {connectorIdentity.IdentityAddress}/{connectorIdentity.ConfigurationIdentityAddress}/{connectorIdentity.IdentityPoolType}" +
-                            $" [IdentityAddress/ConfigAddress/Pool] has no further RelationshipTemplates.");
+                            $" [IdentityAddress/ConfigurationIdentityAddress/PoolAlias] has no further RelationshipTemplates.");
                     }
-
 
                     nextRelationshipTemplate.Used = true;
 

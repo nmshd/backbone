@@ -58,10 +58,10 @@ public record CreateDatawalletModifications
         private static List<PushDatawalletModificationsRequestItem> PreGenerateDatawalletModifications(int datawalletModifications)
         {
             var result = new List<PushDatawalletModificationsRequestItem>();
-            uint objectIterator = 1;
+            var objectIterator = 1;
+
             if (datawalletModifications < 10)
             {
-                // can't be divided properly. Will only do creates.
                 for (uint i = 0; i < datawalletModifications; i++)
                 {
                     result.Add(new PushDatawalletModificationsRequestItem
@@ -80,7 +80,7 @@ public record CreateDatawalletModifications
             var idsAndOperationsDictionary = new Dictionary<string, List<string>>();
             var random = new Random();
 
-            for (uint i = 0; i < datawalletModifications; i++)
+            for (var i = 0; i < datawalletModifications; i++)
             {
                 if (i < datawalletModifications * 3 / 10)
                 {

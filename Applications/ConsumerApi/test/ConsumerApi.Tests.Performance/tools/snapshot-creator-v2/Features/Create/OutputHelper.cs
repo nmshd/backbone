@@ -8,7 +8,7 @@ public class OutputHelper : IOutputHelper
     public void WriteIdentities(string outputDirName, List<DomainIdentity> identities)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("Address;DeviceId;Username;Password;Alias");
+        stringBuilder.AppendLine("IdentityAddress;DeviceId;Username;Password;ConfigurationIdentityAddress;PoolAlias");
 
         foreach (var pool in identities)
         {
@@ -19,8 +19,9 @@ public class OutputHelper : IOutputHelper
                     stringBuilder.AppendLine($"""
                                               {identity.IdentityAddress};
                                               {deviceId};
-                                              {identity.UserCredentials.Username};"
-                                              {identity.UserCredentials.Password}";
+                                              {identity.UserCredentials.Username};
+                                              "{identity.UserCredentials.Password}";
+                                              {pool.ConfigurationIdentityAddress};
                                               {pool.PoolAlias}
                                               """);
                 }
@@ -51,7 +52,9 @@ public class OutputHelper : IOutputHelper
     public void WriteRelationships(string outputDirName, List<DomainIdentity> identities)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("RelationshipId;AddressFrom;AddressTo");
+        stringBuilder.AppendLine("RelationshipId;" +
+                                 "IdentityAddressFrom;ConfigurationIdentityAddressFrom;PoolAliasFrom;" +
+                                 "IdentityAddressTo;ConfigurationIdentityAddressTo;PoolAliasTo");
 
         foreach (var identity in identities)
         {
@@ -59,7 +62,11 @@ public class OutputHelper : IOutputHelper
             {
                 stringBuilder.AppendLine($"{relatedIdentity.Key};" +
                                          $"{identity.IdentityAddress};" +
-                                         $"{relatedIdentity.Value.IdentityAddress}");
+                                         $"{identity.ConfigurationIdentityAddress};" +
+                                         $"{identity.PoolAlias};" +
+                                         $"{relatedIdentity.Value.IdentityAddress};" +
+                                         $"{relatedIdentity.Value.ConfigurationIdentityAddress};" +
+                                         $"{relatedIdentity.Value.PoolAlias};");
             }
         }
 
@@ -70,7 +77,7 @@ public class OutputHelper : IOutputHelper
     public void WriteChallenges(string outputDirName, List<DomainIdentity> identities)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("CreatedByAddress;ChallengeId;CreatedByDevice");
+        stringBuilder.AppendLine("CreatedByIdentityAddress;IdentityAddress;ConfigurationIdentityAddress;PoolAlias;ChallengeId;CreatedByDevice");
 
         var identitiesWithChallenges = identities.Where(identity => identity.Challenges.Count > 0);
 
@@ -78,7 +85,12 @@ public class OutputHelper : IOutputHelper
         {
             foreach (var challenge in identity.Challenges)
             {
-                stringBuilder.AppendLine($"{challenge.CreatedBy};{challenge.Id};{challenge.CreatedByDevice}");
+                stringBuilder.AppendLine($"{challenge.CreatedBy};" +
+                                         $"{identity.IdentityAddress};" +
+                                         $"{identity.ConfigurationIdentityAddress};" +
+                                         $"{identity.PoolAlias};" +
+                                         $"{challenge.Id};" +
+                                         $"{challenge.CreatedByDevice}");
             }
         }
 
@@ -89,7 +101,9 @@ public class OutputHelper : IOutputHelper
     public void WriteMessages(string outputDirName, List<DomainIdentity> identities)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("MessageId;AddressFrom;AddressTo");
+        stringBuilder.AppendLine("MessageId;" +
+                                 "IdentityAddressFrom;ConfigurationIdentityAddressFrom;PoolAliasFrom;" +
+                                 "IdentityAddressTo;ConfigurationIdentityAddressTo;PoolAliasTo");
 
         var identitiesWithSentMessages = identities.Where(identity => identity.SentMessages.Count > 0);
 
@@ -97,7 +111,13 @@ public class OutputHelper : IOutputHelper
         {
             foreach (var (messageId, recipient) in identity.SentMessages)
             {
-                stringBuilder.AppendLine($"{messageId};{identity.IdentityAddress};{recipient.IdentityAddress}");
+                stringBuilder.AppendLine($"{messageId};" +
+                                         $"{identity.IdentityAddress};" +
+                                         $"{identity.ConfigurationIdentityAddress};" +
+                                         $"{identity.PoolAlias};" +
+                                         $"{recipient.IdentityAddress};" +
+                                         $"{recipient.ConfigurationIdentityAddress};" +
+                                         $"{recipient.PoolAlias};");
             }
         }
 
@@ -108,13 +128,17 @@ public class OutputHelper : IOutputHelper
     public void WriteDatawalletModifications(string outputDirName, List<DomainIdentity> identities)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("IdentityAddress;ModificationIndex;ModificationId");
+        stringBuilder.AppendLine("IdentityAddress;ConfigurationIdentityAddress;PoolAlias;ModificationIndex;ModificationId");
 
         foreach (var identity in identities)
         {
             foreach (var modification in identity.DatawalletModifications)
             {
-                stringBuilder.AppendLine($"{identity.IdentityAddress};{modification.Index};{modification.Id}");
+                stringBuilder.AppendLine($"{identity.IdentityAddress};" +
+                                         $"{identity.ConfigurationIdentityAddress};" +
+                                         $"{identity.PoolAlias};" +
+                                         $"{modification.Index};" +
+                                         $"{modification.Id}");
             }
         }
 

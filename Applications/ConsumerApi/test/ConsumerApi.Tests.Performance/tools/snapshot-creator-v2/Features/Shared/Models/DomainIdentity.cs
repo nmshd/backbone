@@ -9,15 +9,14 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Sha
 public record DomainIdentity(
     UserCredentials UserCredentials,
     string IdentityAddress, // the real identity address returned by sdk 
-    string DeviceId,
-    IdentityPoolConfiguration IdentityPoolConfiguration,
     int ConfigurationIdentityAddress, // the address from pool-config json 
     int NumberOfDevices,
     int NumberOfRelationshipTemplates,
     IdentityPoolType IdentityPoolType,
     int NumberOfChallenges,
     string PoolAlias,
-    int NumberOfDatawalletModifications)
+    int NumberOfDatawalletModifications
+)
 {
     public List<string> DeviceIds = [];
 
@@ -26,7 +25,7 @@ public record DomainIdentity(
     public Dictionary<string, DomainIdentity> EstablishedRelationshipsById { get; } = [];
     public List<Challenge> Challenges { get; } = [];
 
-    public HashSet<(string messageId, DomainIdentity recipient)> SentMessages { get; } = [];
+    public List<(string messageId, DomainIdentity recipient)> SentMessages { get; } = [];
 
     public List<CreatedDatawalletModification> DatawalletModifications { get; private set; } = [];
 

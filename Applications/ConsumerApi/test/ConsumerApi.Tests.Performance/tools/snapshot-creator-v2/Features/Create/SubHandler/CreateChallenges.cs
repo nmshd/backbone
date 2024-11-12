@@ -26,7 +26,9 @@ public record CreateChallenges
 
                 for (var i = 0; i < identitiesWithChallenge.NumberOfChallenges; i++)
                 {
-                    var challenge = (await sdkClient.Challenges.CreateChallenge()).Result;
+                    var apiResponse = await sdkClient.Challenges.CreateChallenge();
+
+                    var challenge = apiResponse.Result;
 
                     if (challenge is null) continue;
 

@@ -26,18 +26,18 @@ public record CreateMessages
                     .Where(relationship =>
                         senderIdentity.PoolAlias == relationship.SenderPoolAlias &&
                         senderIdentity.ConfigurationIdentityAddress == relationship.SenderIdentityAddress)
-                    .Select(r =>
+                    .Select(relationship =>
                     (
-                        r.RecipientIdentityAddress,
-                        r.RecipientPoolAlias
+                        relationship.RecipientIdentityAddress,
+                        relationship.RecipientPoolAlias
                     ))
                     .ToList();
 
 
                 var recipientIdentities = request.Identities
                     .Where(recipient => recipientsRelationshipIds.Any(relationship =>
-                        relationship.RecipientPoolAlias == recipient.PoolAlias &&
-                        relationship.RecipientIdentityAddress == recipient.ConfigurationIdentityAddress))
+                        recipient.PoolAlias == relationship.RecipientPoolAlias &&
+                        recipient.ConfigurationIdentityAddress == relationship.RecipientIdentityAddress))
                     .ToList();
 
 
