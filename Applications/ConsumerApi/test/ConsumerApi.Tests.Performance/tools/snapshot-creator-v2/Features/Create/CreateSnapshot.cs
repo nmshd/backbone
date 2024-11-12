@@ -23,7 +23,7 @@ public record CreateSnapshot
         IOutputHelper OutputHelper)
         : IRequestHandler<Command, StatusMessage>
     {
-        private readonly string _outputDirName = $"{Path.GetTempPath()}poolCreator.{SystemTime.UtcNow:yyyyMMdd-HHmmss}";
+        private readonly string _outputDirName = Path.Combine(AppContext.BaseDirectory, $"Snapshot.{SystemTime.UtcNow:yyyyMMdd-HHmmss}");
 
         public async Task<StatusMessage> Handle(Command request, CancellationToken cancellationToken)
         {

@@ -61,7 +61,7 @@ public record CreateMessages
 
                     if (messageResponse.Result is null) continue;
 
-                    senderIdentity.Messages.Add((messageResponse.Result.Id, recipientIdentity));
+                    senderIdentity.SentMessages.Add((messageResponse.Result.Id, recipientIdentity));
                 }
             }
 

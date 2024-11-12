@@ -1,6 +1,5 @@
 ﻿using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
-using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Enums;
@@ -22,14 +21,14 @@ public record DomainIdentity(
 {
     public List<string> DeviceIds = [];
 
-    public List<CreateRelationshipTemplateResponse> RelationshipTemplates { get; } = [];
+    public List<(CreateRelationshipTemplateResponse Template, bool Used)> RelationshipTemplates { get; } = [];
 
     public Dictionary<string, DomainIdentity> EstablishedRelationshipsById { get; } = [];
-    public List<Challenge> Challenges { get; set; } = [];
+    public List<Challenge> Challenges { get; } = [];
 
-    public HashSet<(string messageId, DomainIdentity recipient)> Messages { get; private set; } = [];
+    public HashSet<(string messageId, DomainIdentity recipient)> SentMessages { get; } = [];
 
-    public List<CreatedDatawalletModification> DatawalletModifications { get; set; } = [];
+    public List<CreatedDatawalletModification> DatawalletModifications { get; private set; } = [];
 
     public void AddDevice(string deviceId)
     {

@@ -48,18 +48,22 @@ public record CreateRelationships
                 {
                     var appIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, appIdentity.UserCredentials);
                     var connectorIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, connectorIdentity.UserCredentials);
+                    var nextRelationshipTemplate = connectorIdentity.RelationshipTemplates.FirstOrDefault(t => t.Used == false);
 
-                    var nextRelationshipTemplate = connectorIdentity.RelationshipTemplates.FirstOrDefault() ??
-                                                   throw new InvalidOperationException(
-                                                       $"Connector Identity {connectorIdentity.IdentityAddress}/{connectorIdentity.ConfigurationIdentityAddress}/{connectorIdentity.IdentityPoolType}" +
-                                                       $" [IdentityAddress/ConfigAddress/Pool] has no further RelationshipTemplates.");
+                    if (nextRelationshipTemplate == default)
+                    {
+                        throw new InvalidOperationException(
+                            $"Connector Identity {connectorIdentity.IdentityAddress}/{connectorIdentity.ConfigurationIdentityAddress}/{connectorIdentity.IdentityPoolType}" +
+                            $" [IdentityAddress/ConfigAddress/Pool] has no further RelationshipTemplates.");
+                    }
 
-                    connectorIdentity.RelationshipTemplates.Remove(nextRelationshipTemplate);
+
+                    nextRelationshipTemplate.Used = true;
 
                     var createRelationshipResponse = await appIdentitySdkClient.Relationships.CreateRelationship(
                         new CreateRelationshipRequest
                         {
-                            RelationshipTemplateId = nextRelationshipTemplate.Id,
+                            RelationshipTemplateId = nextRelationshipTemplate.Template.Id,
                             Content = []
                         });
 
