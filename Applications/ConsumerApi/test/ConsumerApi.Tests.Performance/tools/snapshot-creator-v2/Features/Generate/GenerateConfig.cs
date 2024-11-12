@@ -6,12 +6,13 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Gen
 
 public record GenerateConfig
 {
-    public record Command(string ExcelFilePath, string WorkSheetName) : IRequest<StatusMessage>;
+    public record Command(string ExcelFilePath, string WorkSheetName, bool DebugMode = false) : IRequest<StatusMessage>;
 
     public class CommandHandler(
         IPoolConfigurationExcelReader poolConfigurationExcelReader,
         IRelationshipAndMessagesGenerator relationshipAndMessagesGenerator,
-        IPoolConfigurationJsonWriter poolConfigurationJsonWriter)
+        IPoolConfigurationJsonWriter poolConfigurationJsonWriter,
+        IExcelWriter excelWriter)
         : IRequestHandler<Command, StatusMessage>
     {
         public async Task<StatusMessage> Handle(Command request, CancellationToken cancellationToken)
@@ -39,6 +40,17 @@ public record GenerateConfig
 
                 var poolConfigJsonFilePath = Path.Combine(snapshotFolder!, $"pool-config.{request.WorkSheetName}.json");
                 result = await poolConfigurationJsonWriter.Write(poolConfigFromExcel, poolConfigJsonFilePath);
+
+                if (!request.DebugMode)
+                {
+                    return result;
+                }
+
+                var excelFilePath = Path.Combine(snapshotFolder!, $"pool-config.{request.WorkSheetName}.xlsx");
+                await excelWriter.Write(excelFilePath, poolConfigFromExcel.PoolConfigurations);
+
+                excelFilePath = Path.Combine(snapshotFolder!, $"relationships.{request.WorkSheetName}.xlsx");
+                await excelWriter.Write(excelFilePath, poolConfigFromExcel.RelationshipAndMessages);
             }
             catch (Exception e)
             {

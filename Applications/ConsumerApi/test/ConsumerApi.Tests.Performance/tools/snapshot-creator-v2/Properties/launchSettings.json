@@ -24,6 +24,18 @@
       "commandName": "Project",
       "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy"
     },
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-config test (debugmode)": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet test --debug"
+    },
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-config light (debugmode)": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet light --debug"
+    },
+    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-config heavy (debugmode)": {
+      "commandName": "Project",
+      "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy --debug"
+    },
     "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - create-snapshot test": {
       "commandName": "Project",
       "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\pool-config.test.json"

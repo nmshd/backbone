@@ -27,6 +27,7 @@ public class Program
                 services.AddSingleton<IRelationshipAndMessagesGenerator, RelationshipAndMessagesGenerator>();
 
                 services.AddSingleton<IOutputHelper, OutputHelper>();
+                services.AddSingleton<IExcelWriter, ExcelWriter>();
             })
             .RunCommandLineApplicationAsync(args, app =>
             {
@@ -58,17 +59,22 @@ public class Program
                     command.Description = "Generate JSON Pool Config including all Relationships and Messages in a single JSON File";
                     var sourceOption = command.Option<string>("-s|--source <SOURCE>", "Source Excel File", CommandOptionType.SingleValue);
                     var worksheetOption = command.Option<string>("-w|--worksheet <WORKSHEET>", "Excel Worksheet Name", CommandOptionType.SingleValue);
+                    var debugModeOption = command.Option<bool>("-d|--debug", "Debug Mode. If enabled, the pool config is generated as an Excel file for easier readability.",
+                        CommandOptionType.NoValue);
 
                     command.OnExecuteAsync(async cancellationToken =>
                     {
                         var excelFilePath = sourceOption.Value();
                         var workSheetName = worksheetOption.Value();
+                        var debugMode = debugModeOption.ParsedValue;
 
                         var mediator = app.GetRequiredService<IMediator>();
 
-                        var result = await mediator.Send(new GenerateConfig.Command(excelFilePath!, workSheetName!), cancellationToken);
+                        var result = await mediator.Send(new GenerateConfig.Command(excelFilePath!, workSheetName!, debugMode), cancellationToken);
 
-                        Console.WriteLine(result.Status ? $"Pool Configs with Relationships and Messages JSON generated at {result.Message}" : $"Error: {result.Message}");
+                        Console.WriteLine(result.Status
+                            ? $"Pool Configs with Relationships and Messages JSON {(debugMode ? "and EXCEL" : string.Empty)} generated at {Path.GetDirectoryName(result.Message)}"
+                            : $"Error: {result.Message}");
 
                         return 0;
                     });
