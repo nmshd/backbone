@@ -36,6 +36,11 @@ public class PnsRegistrationsRepository : IPnsRegistrationsRepository
         }
     }
 
+    public IAsyncEnumerable<PnsRegistration> FindAll(bool track = false)
+    {
+        return (track ? _registrations : _readonlyRegistrations).ToAsyncEnumerable();
+    }
+
     public async Task<IEnumerable<PnsRegistration>> FindWithAddress(IdentityAddress address, CancellationToken cancellationToken, bool track = false)
     {
         return await (track ? _registrations : _readonlyRegistrations)
