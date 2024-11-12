@@ -13,12 +13,12 @@ public record CreateMessages
         List<DomainIdentity> Identities,
         List<RelationshipAndMessages> RelationshipAndMessages,
         string BaseUrlAddress,
-        ClientCredentials ClientCredentials) : IRequest<List<DomainIdentity>>;
+        ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler : IRequestHandler<Command, List<DomainIdentity>>
+    public record CommandHandler : IRequestHandler<Command, Unit>
     {
-        public async Task<List<DomainIdentity>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             foreach (var senderIdentity in request.Identities)
             {
@@ -65,7 +65,7 @@ public record CreateMessages
                 }
             }
 
-            return request.Identities;
+            return Unit.Value;
         }
     }
 }

@@ -38,9 +38,9 @@ public class OutputHelper : IOutputHelper
 
         foreach (var identity in identities)
         {
-            foreach (var template in identity.RelationshipTemplates)
+            foreach (var (template, used) in identity.RelationshipTemplates)
             {
-                stringBuilder.AppendLine($"{identity.IdentityAddress};{template.Template.Id};{template.Used}");
+                stringBuilder.AppendLine($"{identity.IdentityAddress};{template.Id};{used}");
             }
         }
 

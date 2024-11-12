@@ -8,12 +8,12 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public record AddDevices
 {
-    public record Command(List<DomainIdentity> Identities, string BaseUrlAddress, ClientCredentials ClientCredentials) : IRequest<List<DomainIdentity>>;
+    public record Command(List<DomainIdentity> Identities, string BaseUrlAddress, ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler : IRequestHandler<Command, List<DomainIdentity>>
+    public record CommandHandler : IRequestHandler<Command, Unit>
     {
-        public async Task<List<DomainIdentity>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             var identitiesWithDevices = request.Identities.Where(i => i.NumberOfDevices > 0);
 
@@ -33,7 +33,7 @@ public record AddDevices
                 }
             }
 
-            return request.Identities;
+            return Unit.Value;
         }
     }
 }

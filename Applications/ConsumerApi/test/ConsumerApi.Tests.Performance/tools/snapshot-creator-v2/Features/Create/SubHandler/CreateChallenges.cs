@@ -10,12 +10,12 @@ public record CreateChallenges
     public record Command(
         List<DomainIdentity> Identities,
         string BaseUrlAddress,
-        ClientCredentials ClientCredentials) : IRequest<List<DomainIdentity>>;
+        ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator
-    public record CommandHandler : IRequestHandler<Command, List<DomainIdentity>>
+    public record CommandHandler : IRequestHandler<Command, Unit>
     {
-        public async Task<List<DomainIdentity>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             var identitiesWithChallenges = request.Identities.Where(i => i.NumberOfChallenges > 0).ToList();
 
@@ -34,7 +34,7 @@ public record CreateChallenges
                 }
             }
 
-            return identitiesWithChallenges;
+            return Unit.Value;
         }
     }
 }

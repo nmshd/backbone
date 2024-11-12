@@ -12,12 +12,12 @@ public record CreateDatawalletModifications
     public record Command(
         List<DomainIdentity> Identities,
         string BaseAddress,
-        ClientCredentials ClientCredentials) : IRequest<List<DomainIdentity>>;
+        ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator
-    public record CommandHandler : IRequestHandler<Command, List<DomainIdentity>>
+    public record CommandHandler : IRequestHandler<Command, Unit>
     {
-        public async Task<List<DomainIdentity>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             var identitiesWithDatawalletModifications = request.Identities
                 .Where(i => i.NumberOfDatawalletModifications > 0)
@@ -51,10 +51,10 @@ public record CreateDatawalletModifications
                 identity.SetDatawalletModifications(finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications);
             }
 
-            return request.Identities;
+            return Unit.Value;
         }
 
-        private List<PushDatawalletModificationsRequestItem> PreGenerateDatawalletModifications(int datawalletModifications)
+        private static List<PushDatawalletModificationsRequestItem> PreGenerateDatawalletModifications(int datawalletModifications)
         {
             List<PushDatawalletModificationsRequestItem> result = [];
             var objectIterator = 1;

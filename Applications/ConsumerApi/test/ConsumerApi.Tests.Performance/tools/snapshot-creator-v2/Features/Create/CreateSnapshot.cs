@@ -35,29 +35,35 @@ public record CreateSnapshot
                 var clientCredentials = new ClientCredentials(request.ClientId, request.ClientSecret);
 
                 var identities = await Mediator.Send(new CreateIdentities.Command(poolConfig.IdentityPoolConfigurations, request.BaseAddress, clientCredentials), cancellationToken);
+
                 OutputHelper.WriteIdentities(_outputDirName, identities);
                 Logger.LogInformation("Identities created");
 
-                identities = await Mediator.Send(new AddDevices.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                await Mediator.Send(new AddDevices.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
                 Logger.LogInformation("Devices added");
 
-                identities = await Mediator.Send(new CreateRelationshipTemplates.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                await Mediator.Send(new CreateRelationshipTemplates.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+
                 OutputHelper.WriteRelationshipTemplates(_outputDirName, identities);
                 Logger.LogInformation("Relationship templates created");
 
-                identities = await Mediator.Send(new CreateRelationships.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
+                await Mediator.Send(new CreateRelationships.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
+
                 OutputHelper.WriteRelationships(_outputDirName, identities);
                 Logger.LogInformation("Relationships created");
 
-                identities = await Mediator.Send(new CreateChallenges.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                await Mediator.Send(new CreateChallenges.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+
                 OutputHelper.WriteChallenges(_outputDirName, identities);
                 Logger.LogInformation("Challenges created");
 
-                identities = await Mediator.Send(new CreateMessages.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
+                await Mediator.Send(new CreateMessages.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
+
                 OutputHelper.WriteMessages(_outputDirName, identities);
                 Logger.LogInformation("Messages created");
 
-                identities = await Mediator.Send(new CreateDatawalletModifications.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                await Mediator.Send(new CreateDatawalletModifications.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+
                 OutputHelper.WriteDatawalletModifications(_outputDirName, identities);
                 Logger.LogInformation("DatawalletModifications created");
             }

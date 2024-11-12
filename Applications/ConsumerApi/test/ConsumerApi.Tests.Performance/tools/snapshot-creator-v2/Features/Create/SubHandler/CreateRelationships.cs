@@ -10,12 +10,12 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 public record CreateRelationships
 {
     public record Command(List<DomainIdentity> Identities, List<RelationshipAndMessages> RelationshipAndMessages, string BaseUrlAddress, ClientCredentials ClientCredentials)
-        : IRequest<List<DomainIdentity>>;
+        : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler : IRequestHandler<Command, List<DomainIdentity>>
+    public record CommandHandler : IRequestHandler<Command, Unit>
     {
-        public async Task<List<DomainIdentity>> Handle(Command request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             var connectorIdentities = request.Identities.Where(i => i.IdentityPoolType == IdentityPoolType.Connector).ToList();
             var appIdentities = request.Identities.Where(i => i.IdentityPoolType == IdentityPoolType.App).ToList();
@@ -78,7 +78,7 @@ public record CreateRelationships
                 }
             }
 
-            return request.Identities;
+            return Unit.Value;
         }
     }
 }
