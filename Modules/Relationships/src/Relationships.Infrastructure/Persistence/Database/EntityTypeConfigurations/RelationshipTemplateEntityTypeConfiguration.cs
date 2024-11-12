@@ -17,8 +17,8 @@ public class RelationshipTemplateEntityTypeConfiguration : EntityEntityTypeConfi
             .HasMany(x => x.Relationships)
             .WithOne(x => x.RelationshipTemplate)
             .HasForeignKey(x => x.RelationshipTemplateId)
-            .IsRequired()
-            .OnDelete(DeleteBehavior.Restrict);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.SetNull);
 
         builder
             .HasMany(x => x.Allocations)

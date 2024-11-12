@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Domain.DomainEvents;
 using Backbone.Tooling;
@@ -55,6 +56,11 @@ public class Token : Entity
             Password == null ||
             password != null && Password.SequenceEqual(password) ||
             CreatedBy == address; // The owner shouldn't need a password to get the template
+    }
+
+    public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
+    {
+        if (CreatedBy != identityAddress) throw new DomainActionForbiddenException();
     }
 
     #region Expressions

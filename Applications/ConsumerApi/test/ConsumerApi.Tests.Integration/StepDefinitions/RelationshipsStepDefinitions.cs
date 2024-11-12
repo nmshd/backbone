@@ -1,7 +1,7 @@
-﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+﻿using System.Net;
+using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Responses;
-using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Extensions;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
@@ -14,14 +14,16 @@ internal class RelationshipsStepDefinitions
     #region Constructor, Fields, Properties
 
     private readonly RelationshipsContext _relationshipsContext;
+    private readonly RelationshipTemplatesContext _relationshipTemplatesContext;
     private readonly ResponseContext _responseContext;
     private readonly ClientPool _clientPool;
 
     private ApiResponse<CanEstablishRelationshipResponse>? _canEstablishRelationshipResponse;
 
-    public RelationshipsStepDefinitions(RelationshipsContext relationshipsContext, ResponseContext responseContext, ClientPool clientPool)
+    public RelationshipsStepDefinitions(RelationshipsContext relationshipsContext, RelationshipTemplatesContext relationshipTemplatesContext, ResponseContext responseContext, ClientPool clientPool)
     {
         _relationshipsContext = relationshipsContext;
+        _relationshipTemplatesContext = relationshipTemplatesContext;
         _responseContext = responseContext;
         _clientPool = clientPool;
     }
@@ -29,14 +31,6 @@ internal class RelationshipsStepDefinitions
     #endregion
 
     #region Given
-
-    [Given($"a Relationship Template {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
-    public async Task GivenARelationshipTemplateCreatedByIdentity(string templateName, string identityName)
-    {
-        var client = _clientPool.FirstForIdentityName(identityName);
-        _relationshipsContext.CreateRelationshipTemplateResponses[templateName] =
-            (await client.RelationshipTemplates.CreateTemplate(new CreateRelationshipTemplateRequest { Content = TestData.SOME_BYTES })).Result!;
-    }
 
     [Given($"a pending Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING} created by {RegexFor.SINGLE_THING}")]
     public async Task GivenAPendingRelationshipBetween(string relationshipName, string participant1Name, string participant2Name, string creatorName)
@@ -63,6 +57,16 @@ internal class RelationshipsStepDefinitions
         var participant2 = _clientPool.FirstForIdentityName(participant2Address);
 
         _relationshipsContext.Relationships[relationshipName] = await Utils.EstablishRelationshipBetween(participant2, participant1);
+    }
+
+    [Given($"an active Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING} with template {RegexFor.SINGLE_THING}")]
+    public async Task GivenAnActiveRelationshipBetween(string relationshipName, string participant1Address, string participant2Address, string templateName)
+    {
+        var participant1 = _clientPool.FirstForIdentityName(participant1Address);
+        var participant2 = _clientPool.FirstForIdentityName(participant2Address);
+        var template = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[templateName];
+
+        _relationshipsContext.Relationships[relationshipName] = await Utils.EstablishRelationshipBetween(participant1, participant2, template.Id);
     }
 
     [Given($"a terminated Relationship {RegexFor.SINGLE_THING} between {RegexFor.SINGLE_THING} and {RegexFor.SINGLE_THING}")]
@@ -122,7 +126,7 @@ internal class RelationshipsStepDefinitions
     public async Task WhenIdentitySendsAPostRequestToTheRelationshipsEndpointWithRelationshipTemplateId(string identityName, string templateName)
     {
         var client = _clientPool.FirstForIdentityName(identityName);
-        var relationshipTemplateId = _relationshipsContext.CreateRelationshipTemplateResponses[templateName].Id;
+        var relationshipTemplateId = _relationshipTemplatesContext.CreateRelationshipTemplatesResponses[templateName].Id;
 
         _responseContext.WhenResponse =
             await client.Relationships.CreateRelationship(new CreateRelationshipRequest { RelationshipTemplateId = relationshipTemplateId, Content = TestData.SOME_BYTES });
@@ -224,6 +228,25 @@ internal class RelationshipsStepDefinitions
     public void ThenThereIsNoCode()
     {
         _canEstablishRelationshipResponse!.Result!.Code.Should().BeNull();
+    }
+
+    [Then($"the Relationship {RegexFor.SINGLE_THING} still exists")]
+    public async Task ThenTheRelationshipStillExists(string relationshipName)
+    {
+        var relationship = _relationshipsContext.Relationships[relationshipName];
+        var client = _clientPool.FirstForIdentityAddress(relationship.From);
+
+        var getRelationshipResponse = await client.Relationships.GetRelationship(relationship.Id);
+        getRelationshipResponse.Status.Should().Be(HttpStatusCode.OK);
+
+        _relationshipsContext.Relationships[relationshipName] = getRelationshipResponse.Result!;
+    }
+
+    [Then($"the Relationship {RegexFor.SINGLE_THING} does not have a relationship template")]
+    public void ThenTheRelationshipDoesNotHaveARelationshipTemplate(string relationshipName)
+    {
+        var relationship = _relationshipsContext.Relationships[relationshipName];
+        relationship.RelationshipTemplateId.Should().BeNull();
     }
 
     #endregion

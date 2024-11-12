@@ -1,0 +1,21 @@
+meta {
+  name: /Relationships/{id}/Revoke
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/Relationships/{{id}}/Revoke
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "creationResponseContent": ""
+  }
+}
+
+vars:pre-request {
+  id: REL8DyBnfWYiXCzxkMiv
+}

@@ -1,47 +1,27 @@
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
 
-public class IdentityDeletionConfiguration
+public record IdentityDeletionConfiguration
 {
-    public static int LengthOfApprovalPeriod => 7;
-    public static int LengthOfGracePeriod => 14;
+    public static IdentityDeletionConfiguration Instance { get; private set; } = new();
 
-    public static GracePeriodNotificationConfiguration GracePeriodNotification1 { get; } = new()
-    {
-        Time = 12
-    };
+    public double LengthOfApprovalPeriodInDays { get; set; } = 7;
+    public double LengthOfGracePeriodInDays { get; set; } = 14;
 
-    public static GracePeriodNotificationConfiguration GracePeriodNotification2 { get; } = new()
-    {
-        Time = 10
-    };
+    public GracePeriodNotificationConfiguration GracePeriodNotification1 { get; set; } = new() { DaysBeforeEndOfGracePeriod = 12 };
+    public GracePeriodNotificationConfiguration GracePeriodNotification2 { get; set; } = new() { DaysBeforeEndOfGracePeriod = 10 };
+    public GracePeriodNotificationConfiguration GracePeriodNotification3 { get; set; } = new() { DaysBeforeEndOfGracePeriod = 5 };
 
-    public static GracePeriodNotificationConfiguration GracePeriodNotification3 { get; } = new()
-    {
-        Time = 5
-    };
-
-    public static ApprovalReminderNotificationConfiguration ApprovalReminder1 { get; } = new()
-    {
-        Time = 6
-    };
-
-    public static ApprovalReminderNotificationConfiguration ApprovalReminder2 { get; } = new()
-    {
-        Time = 4
-    };
-
-    public static ApprovalReminderNotificationConfiguration ApprovalReminder3 { get; } = new()
-    {
-        Time = 2
-    };
-}
-
-public class GracePeriodNotificationConfiguration
-{
-    public int Time { get; init; }
+    public ApprovalReminderNotificationConfiguration ApprovalReminder1 { get; set; } = new() { DaysBeforeEndOfApprovalPeriod = 6 };
+    public ApprovalReminderNotificationConfiguration ApprovalReminder2 { get; set; } = new() { DaysBeforeEndOfApprovalPeriod = 4 };
+    public ApprovalReminderNotificationConfiguration ApprovalReminder3 { get; set; } = new() { DaysBeforeEndOfApprovalPeriod = 2 };
 }
 
 public class ApprovalReminderNotificationConfiguration
 {
-    public int Time { get; init; }
+    public double DaysBeforeEndOfApprovalPeriod { get; set; }
+}
+
+public class GracePeriodNotificationConfiguration
+{
+    public double DaysBeforeEndOfGracePeriod { get; set; }
 }

@@ -1,5 +1,6 @@
 using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Files.Domain.DomainEvents.Out;
 using Backbone.Tooling;
@@ -83,6 +84,11 @@ public class File : Entity
     public DateTime ExpiresAt { get; set; }
 
     public byte[] EncryptedProperties { get; set; }
+
+    public void EnsureCanBeDeletedBy(IdentityAddress identityAddress)
+    {
+        if (CreatedBy != identityAddress) throw new DomainActionForbiddenException();
+    }
 
     public static Expression<Func<File, bool>> IsExpired =>
         file => file.ExpiresAt <= SystemTime.UtcNow;

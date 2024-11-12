@@ -8,7 +8,7 @@
 
     <ItemGroup>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
-        <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.2" />
+        <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.3" />
         <PackageReference Include="Serilog.Enrichers.Sensitive" Version="1.7.3" />
         <PackageReference Include="Serilog.Exceptions" Version="8.4.0" />
         <PackageReference Include="Serilog.Exceptions.EntityFrameworkCore" Version="8.4.0" />
