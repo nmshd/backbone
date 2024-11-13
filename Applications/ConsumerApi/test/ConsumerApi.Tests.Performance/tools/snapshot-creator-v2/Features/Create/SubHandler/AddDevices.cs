@@ -15,13 +15,11 @@ public record AddDevices
     {
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            var identitiesWithDevices = request.Identities.Where(i => i.NumberOfDevices > 0);
-
-            foreach (var identity in identitiesWithDevices)
+            foreach (var identity in request.Identities)
             {
-                var sdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials);
+                var sdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials, identity.IdentityData);
 
-                for (var i = 0; i < identity.NumberOfDevices; i++)
+                for (var i = 1; i < identity.NumberOfDevices; i++)
                 {
                     var newDevice = await sdkClient.OnboardNewDevice(PasswordHelper.GeneratePassword(18, 24));
 

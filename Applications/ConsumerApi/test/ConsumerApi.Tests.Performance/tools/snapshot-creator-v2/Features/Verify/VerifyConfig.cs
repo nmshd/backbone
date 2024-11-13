@@ -8,6 +8,7 @@ public record VerifyConfig
 {
     public record Command(string ExcelFilePath, string WorkSheetName, string JsonFilePath) : IRequest<bool>;
 
+    // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
     public record CommandHandler(
         IPoolConfigurationExcelReader PoolConfigurationExcelReader,
         IPoolConfigurationJsonReader PoolConfigurationJsonReader,
@@ -19,6 +20,7 @@ public record VerifyConfig
             var poolConfigFromExcel = await PoolConfigurationExcelReader.Read(request.ExcelFilePath, request.WorkSheetName);
 
             var relationshipAndMessages = RelationshipAndMessagesGenerator.Generate(poolConfigFromExcel);
+
             poolConfigFromExcel.RelationshipAndMessages.Clear();
             poolConfigFromExcel.RelationshipAndMessages.AddRange(relationshipAndMessages);
 

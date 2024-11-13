@@ -8,6 +8,7 @@ public record GenerateConfig
 {
     public record Command(string ExcelFilePath, string WorkSheetName, bool DebugMode = false) : IRequest<StatusMessage>;
 
+    // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
     public class CommandHandler(
         IPoolConfigurationExcelReader poolConfigurationExcelReader,
         IRelationshipAndMessagesGenerator relationshipAndMessagesGenerator,
@@ -29,7 +30,7 @@ public record GenerateConfig
 
                 var path = Path.GetDirectoryName(request.ExcelFilePath);
 
-                var snapshotFolder = Path.Combine(path!, $"{DateTime.Now:yyyyMMddHHmmss}-snapshot-{request.WorkSheetName}");
+                var snapshotFolder = Path.Combine(path!, $"PoolConfig-{request.WorkSheetName.ToUpper()}.{DateTime.UtcNow:yyyyMMdd-HHmmss}");
 
                 if (Directory.Exists(snapshotFolder))
                 {

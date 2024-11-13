@@ -1,5 +1,4 @@
-﻿using System.Numerics;
-using Backbone.ConsumerApi.Sdk;
+﻿using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;

@@ -23,7 +23,7 @@ public record CreateSnapshot
         IOutputHelper OutputHelper)
         : IRequestHandler<Command, StatusMessage>
     {
-        private readonly string _outputDirName = Path.Combine(AppContext.BaseDirectory, $"Snapshot.{SystemTime.UtcNow:yyyyMMdd-HHmmss}");
+        private readonly string _outputDirName = Path.Combine(AppContext.BaseDirectory, $"Snapshot.{DateTime.UtcNow:yyyyMMdd-HHmmss}");
 
         public async Task<StatusMessage> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -35,37 +35,34 @@ public record CreateSnapshot
                 var clientCredentials = new ClientCredentials(request.ClientId, request.ClientSecret);
 
                 var identities = await Mediator.Send(new CreateIdentities.Command(poolConfig.IdentityPoolConfigurations, request.BaseAddress, clientCredentials), cancellationToken);
-
-                OutputHelper.WriteIdentities(_outputDirName, identities);
                 Logger.LogInformation("Identities created");
 
                 await Mediator.Send(new AddDevices.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                await OutputHelper.WriteIdentities(_outputDirName, identities);
                 Logger.LogInformation("Devices added");
 
                 await Mediator.Send(new CreateRelationshipTemplates.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
-
-                OutputHelper.WriteRelationshipTemplates(_outputDirName, identities);
+                await OutputHelper.WriteRelationshipTemplates(_outputDirName, identities);
                 Logger.LogInformation("Relationship templates created");
 
                 await Mediator.Send(new CreateRelationships.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
-
-                OutputHelper.WriteRelationships(_outputDirName, identities);
+                await OutputHelper.WriteRelationships(_outputDirName, identities);
                 Logger.LogInformation("Relationships created");
 
-                await Mediator.Send(new CreateChallenges.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                //await Mediator.Send(new CreateChallenges.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
 
-                OutputHelper.WriteChallenges(_outputDirName, identities);
-                Logger.LogInformation("Challenges created");
+                //OutputHelper.WriteChallenges(_outputDirName, identities);
+                //Logger.LogInformation("Challenges created");
 
-                await Mediator.Send(new CreateMessages.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
+                //await Mediator.Send(new CreateMessages.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
 
-                OutputHelper.WriteMessages(_outputDirName, identities);
-                Logger.LogInformation("Messages created");
+                //OutputHelper.WriteMessages(_outputDirName, identities);
+                //Logger.LogInformation("Messages created");
 
-                await Mediator.Send(new CreateDatawalletModifications.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                //await Mediator.Send(new CreateDatawalletModifications.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
 
-                OutputHelper.WriteDatawalletModifications(_outputDirName, identities);
-                Logger.LogInformation("DatawalletModifications created");
+                //OutputHelper.WriteDatawalletModifications(_outputDirName, identities);
+                //Logger.LogInformation("DatawalletModifications created");
             }
             catch (Exception e)
             {

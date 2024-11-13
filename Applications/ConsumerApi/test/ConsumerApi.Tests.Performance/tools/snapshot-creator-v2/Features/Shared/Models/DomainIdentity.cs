@@ -1,4 +1,5 @@
-﻿using Backbone.ConsumerApi.Sdk.Authentication;
+﻿using Backbone.ConsumerApi.Sdk;
+using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Responses;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types;
@@ -8,17 +9,18 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Sha
 
 public record DomainIdentity(
     UserCredentials UserCredentials,
-    string IdentityAddress, // the real identity address returned by sdk 
+    IdentityData? IdentityData,
     int ConfigurationIdentityAddress, // the address from pool-config json 
     int NumberOfDevices,
     int NumberOfRelationshipTemplates,
     IdentityPoolType IdentityPoolType,
     int NumberOfChallenges,
     string PoolAlias,
-    int NumberOfDatawalletModifications
-)
+    int NumberOfDatawalletModifications)
 {
     public List<string> DeviceIds = [];
+
+    public string? IdentityAddress => IdentityData?.Address; // the real identity address returned by sdk
 
     public List<(CreateRelationshipTemplateResponse Template, bool Used)> RelationshipTemplates { get; } = [];
 

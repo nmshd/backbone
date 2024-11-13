@@ -7,103 +7,128 @@ using McMaster.Extensions.CommandLineUtils;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2;
 
 public class Program
 {
-    private static Task<int> Main(string[] args)
-    {
-        return new HostBuilder()
+    private static Task<int> Main(string[] args) =>
+        new HostBuilder()
+            .ConfigureLogging(configureLogging =>
+            {
+                configureLogging.ClearProviders();
+                configureLogging.AddConsole();
+                configureLogging.AddDebug();
+            })
             .ConfigureServices((_, services) =>
             {
                 services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblyContaining<Program>());
-
                 services.AddSingleton<IPoolConfigurationExcelReader, PoolConfigurationExcelReader>();
                 services.AddSingleton<IPoolConfigurationJsonWriter, PoolConfigurationJsonWriter>();
                 services.AddSingleton<IPoolConfigurationJsonReader, PoolConfigurationJsonReader>();
                 services.AddSingleton<IPoolConfigurationJsonValidator, PoolConfigurationJsonValidator>();
-
                 services.AddSingleton<IRelationshipAndMessagesGenerator, RelationshipAndMessagesGenerator>();
-
                 services.AddSingleton<IOutputHelper, OutputHelper>();
                 services.AddSingleton<IExcelWriter, ExcelWriter>();
             })
             .RunCommandLineApplicationAsync(args, app =>
             {
-                app.Command("verify-config", command =>
-                {
-                    command.Description = "Verify JSON Pool Config";
-                    var sourceOption = command.Option<string>("-s|--source <SOURCE>", "Source Excel File", CommandOptionType.SingleValue);
-                    var worksheetOption = command.Option<string>("-w|--worksheet <WORKSHEET>", "Excel Worksheet Name", CommandOptionType.SingleValue);
-                    var poolConfigOption = command.Option<string>("-p|--pool-config <POOLCONFIG>", "Pool Config JSON File", CommandOptionType.SingleValue);
-
-                    command.OnExecuteAsync(async cancellationToken =>
-                    {
-                        var excelFilePath = sourceOption.Value();
-                        var worksheetName = worksheetOption.Value();
-                        var jsonFilePath = poolConfigOption.Value();
-
-                        var mediator = app.GetRequiredService<IMediator>();
-
-                        var result = await mediator.Send(new VerifyConfig.Command(excelFilePath!, worksheetName!, jsonFilePath!), cancellationToken);
-
-                        Console.WriteLine(result ? "Pool Config JSON is valid" : "Pool Config JSON is invalid");
-
-                        return 0;
-                    });
-                });
-
-                app.Command("generate-config", command =>
-                {
-                    command.Description = "Generate JSON Pool Config including all Relationships and Messages in a single JSON File";
-                    var sourceOption = command.Option<string>("-s|--source <SOURCE>", "Source Excel File", CommandOptionType.SingleValue);
-                    var worksheetOption = command.Option<string>("-w|--worksheet <WORKSHEET>", "Excel Worksheet Name", CommandOptionType.SingleValue);
-                    var debugModeOption = command.Option<bool>("-d|--debug", "Debug Mode. If enabled, the pool config is generated as an Excel file for easier readability.",
-                        CommandOptionType.NoValue);
-
-                    command.OnExecuteAsync(async cancellationToken =>
-                    {
-                        var excelFilePath = sourceOption.Value();
-                        var workSheetName = worksheetOption.Value();
-                        var debugMode = debugModeOption.ParsedValue;
-
-                        var mediator = app.GetRequiredService<IMediator>();
-
-                        var result = await mediator.Send(new GenerateConfig.Command(excelFilePath!, workSheetName!, debugMode), cancellationToken);
-
-                        Console.WriteLine(result.Status
-                            ? $"Pool Configs with Relationships and Messages JSON {(debugMode ? "and EXCEL" : string.Empty)} generated at {Path.GetDirectoryName(result.Message)}"
-                            : $"Error: {result.Message}");
-
-                        return 0;
-                    });
-                });
-
-                app.Command("create-snapshot", command =>
-                {
-                    command.Description = "Apply Pool Config with Relationships and Messages to the Consumer API";
-                    var baseAddressOption = command.Option<string>("-b|--baseAddress <BASEADDRESS>", "Base Address of the Consumer API", CommandOptionType.SingleValue);
-                    var clientIdOption = command.Option<string>("-c|--clientId <CLIENTID>", "Client Id of the Consumer API", CommandOptionType.SingleValue);
-                    var clientSecretOption = command.Option<string>("-s|--clientSecret <CLIENTSECRET>", "Client Secret of the Consumer API", CommandOptionType.SingleValue);
-                    var poolConfigOption = command.Option<string>("-p|--pool-config <POOLCONFIG>", "Pool Config JSON File", CommandOptionType.SingleValue);
-
-                    command.OnExecuteAsync(async cancellationToken =>
-                    {
-                        var baseAddress = baseAddressOption.Value();
-                        var clientId = clientIdOption.Value();
-                        var clientSecret = clientSecretOption.Value();
-                        var poolConfigJsonFilePath = poolConfigOption.Value();
-
-                        var mediator = app.GetRequiredService<IMediator>();
-
-                        var result = await mediator.Send(new CreateSnapshot.Command(baseAddress!, clientId!, clientSecret!, poolConfigJsonFilePath!), cancellationToken);
-
-                        Console.WriteLine(result.Status ? "Snapshot created successfully" : $"Error: {result.Message}");
-                    });
-                });
+                app.Command("verify-config", VerifyConfigCommand);
+                app.Command("generate-config", GenerateConfigCommand);
+                app.Command("create-snapshot", CreateSnapshotCommand);
 
                 app.OnExecute(() => Console.WriteLine("No command provided. add --help for guidance."));
             });
+
+    private static void VerifyConfigCommand(CommandLineApplication command)
+    {
+        command.Description = "Verify JSON Pool Config";
+        var sourceOption = command.Option<string>("-s|--source <SOURCE>", "Source Excel File", CommandOptionType.SingleValue);
+        var worksheetOption = command.Option<string>("-w|--worksheet <WORKSHEET>", "Excel Worksheet Name", CommandOptionType.SingleValue);
+        var poolConfigOption = command.Option<string>("-p|--pool-config <POOLCONFIG>", "Pool Config JSON File", CommandOptionType.SingleValue);
+
+        command.OnExecuteAsync(async cancellationToken =>
+        {
+            var excelFilePath = sourceOption.Value();
+            var worksheetName = worksheetOption.Value();
+            var jsonFilePath = poolConfigOption.Value();
+
+            var mediator = command.GetRequiredService<IMediator>();
+            var logger = command.GetRequiredService<ILogger<VerifyConfig>>();
+
+            var result = await mediator.Send(new VerifyConfig.Command(excelFilePath!, worksheetName!, jsonFilePath!), cancellationToken);
+
+            logger.LogInformation("Pool Config {JsonConfigFile} is {Status}", jsonFilePath, result ? "valid" : "invalid");
+
+            return 0;
+        });
+    }
+
+    private static void GenerateConfigCommand(CommandLineApplication command)
+    {
+        command.Description = "Generate JSON Pool Config including all Relationships and Messages in a single JSON File";
+        var sourceOption = command.Option<string>("-s|--source <SOURCE>", "Source Excel File", CommandOptionType.SingleValue);
+        var worksheetOption = command.Option<string>("-w|--worksheet <WORKSHEET>", "Excel Worksheet Name", CommandOptionType.SingleValue);
+        var debugModeOption = command.Option<bool>("-d|--debug", "Debug Mode. If enabled, the pool config is generated as an Excel file for easier readability.",
+            CommandOptionType.NoValue);
+
+        command.OnExecuteAsync(async cancellationToken =>
+        {
+            var excelFilePath = sourceOption.Value();
+            var workSheetName = worksheetOption.Value();
+            var debugMode = debugModeOption.ParsedValue;
+
+            var mediator = command.GetRequiredService<IMediator>();
+            var logger = command.GetRequiredService<ILogger<GenerateConfig>>();
+
+            var result = await mediator.Send(new GenerateConfig.Command(excelFilePath!, workSheetName!, debugMode), cancellationToken);
+
+            if (result.Status)
+            {
+                logger.LogInformation("Pool Configs with Relationships and Messages JSON {WithDebugModeExcel} generated at {Path}",
+                    debugMode ? "and EXCEL" : string.Empty,
+                    Path.GetDirectoryName(result.Message));
+            }
+            else
+            {
+                logger.LogError("Error: {Message}", result.Message);
+            }
+
+            return 0;
+        });
+    }
+
+    private static void CreateSnapshotCommand(CommandLineApplication command)
+    {
+        command.Description = "Apply Pool Config with Relationships and Messages to the Consumer API";
+        var baseAddressOption = command.Option<string>("-b|--baseAddress <BASEADDRESS>", "Base Address of the Consumer API", CommandOptionType.SingleValue);
+        var clientIdOption = command.Option<string>("-c|--clientId <CLIENTID>", "Client Id of the Consumer API", CommandOptionType.SingleValue);
+        var clientSecretOption = command.Option<string>("-s|--clientSecret <CLIENTSECRET>", "Client Secret of the Consumer API", CommandOptionType.SingleValue);
+        var poolConfigOption = command.Option<string>("-p|--pool-config <POOLCONFIG>", "Pool Config JSON File", CommandOptionType.SingleValue);
+
+        command.OnExecuteAsync(async cancellationToken =>
+        {
+            var baseAddress = baseAddressOption.Value();
+            var clientId = clientIdOption.Value();
+            var clientSecret = clientSecretOption.Value();
+            var poolConfigJsonFilePath = poolConfigOption.Value();
+
+            var mediator = command.GetRequiredService<IMediator>();
+            var logger = command.GetRequiredService<ILogger<CreateSnapshot>>();
+
+            var result = await mediator.Send(new CreateSnapshot.Command(baseAddress!, clientId!, clientSecret!, poolConfigJsonFilePath!), cancellationToken);
+
+            if (result.Status)
+            {
+                logger.LogInformation("Snapshot created successfully");
+            }
+            else
+            {
+                logger.LogError("Error: {Message}", result.Message);
+            }
+
+            return 0;
+        });
     }
 }

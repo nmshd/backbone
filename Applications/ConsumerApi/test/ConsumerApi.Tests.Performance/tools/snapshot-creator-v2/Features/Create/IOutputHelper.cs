@@ -4,10 +4,10 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public interface IOutputHelper
 {
-    void WriteIdentities(string outputDirName, List<DomainIdentity> identities);
-    void WriteRelationshipTemplates(string outputDirName, List<DomainIdentity> identities);
-    void WriteRelationships(string outputDirName, List<DomainIdentity> identities);
-    void WriteChallenges(string outputDirName, List<DomainIdentity> identities);
-    void WriteMessages(string outputDirName, List<DomainIdentity> identities);
-    void WriteDatawalletModifications(string outputDirName, List<DomainIdentity> identities);
+    Task WriteIdentities(string outputDirName, List<DomainIdentity> identities);
+    Task WriteRelationshipTemplates(string outputDirName, List<DomainIdentity> identities);
+    Task WriteRelationships(string outputDirName, List<DomainIdentity> identities);
+    Task WriteChallenges(string outputDirName, List<DomainIdentity> identities);
+    Task WriteMessages(string outputDirName, List<DomainIdentity> identities);
+    Task WriteDatawalletModifications(string outputDirName, List<DomainIdentity> identities);
 }

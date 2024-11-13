@@ -31,7 +31,7 @@ public record CreateIdentities
 
                     var createdIdentity = new DomainIdentity(
                         sdkClient.DeviceData.UserCredentials,
-                        sdkClient.IdentityData?.Address ?? "no address",
+                        sdkClient.IdentityData,
                         identityConfiguration.Address,
                         identityConfiguration.NumberOfDevices,
                         identityConfiguration.NumberOfRelationshipTemplates,
@@ -39,6 +39,8 @@ public record CreateIdentities
                         identityConfiguration.NumberOfChallenges,
                         identityConfiguration.PoolAlias,
                         identityConfiguration.NumberOfDatawalletModifications);
+
+                    createdIdentity.AddDevice(sdkClient.DeviceData.DeviceId);
 
                     identities.Add(createdIdentity);
                 }

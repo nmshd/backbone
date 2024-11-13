@@ -1,83 +1,95 @@
 ﻿using System.Text;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
+using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create;
 
 public class OutputHelper : IOutputHelper
 {
-    public void WriteIdentities(string outputDirName, List<DomainIdentity> identities)
+    public async Task WriteIdentities(string outputDirName, List<DomainIdentity> identities)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("IdentityAddress;DeviceId;Username;Password;ConfigurationIdentityAddress;PoolAlias");
+        stringBuilder.AppendLine("IdentityAddress;ConfigurationIdentityAddress;PoolAlias;IdentityPoolType;DeviceId;Username;Password");
 
-        foreach (var pool in identities)
+        foreach (var identity in identities)
         {
-            foreach (var identity in identities)
+            foreach (var deviceId in identity.DeviceIds)
             {
-                foreach (var deviceId in identity.DeviceIds)
-                {
-                    stringBuilder.AppendLine($"""
-                                              {identity.IdentityAddress};
-                                              {deviceId};
-                                              {identity.UserCredentials.Username};
-                                              "{identity.UserCredentials.Password}";
-                                              {pool.ConfigurationIdentityAddress};
-                                              {pool.PoolAlias}
-                                              """);
-                }
+                stringBuilder.AppendLine(
+                    $"""{identity.IdentityAddress};{identity.ConfigurationIdentityAddress};{identity.PoolAlias};{identity.IdentityPoolType};{deviceId};{identity.UserCredentials.Username};"{identity.UserCredentials.Password}" """);
             }
         }
 
         var filePath = Path.Combine(outputDirName, "identities.csv");
-        File.WriteAllTextAsync(filePath, stringBuilder.ToString());
+
+        if (!Directory.Exists(outputDirName))
+        {
+            Directory.CreateDirectory(outputDirName);
+        }
+
+        var content = stringBuilder.ToString();
+        await File.WriteAllTextAsync(filePath, content);
     }
 
-    public void WriteRelationshipTemplates(string outputDirName, List<DomainIdentity> identities)
+    public async Task WriteRelationshipTemplates(string outputDirName, List<DomainIdentity> identities)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("IdentityAddress;RelationshipTemplateId;Used");
+        stringBuilder.AppendLine("IdentityAddress;ConfigurationIdentityAddress;PoolAlias;IdentityPoolType;RelationshipTemplateId;Used");
 
-        foreach (var identity in identities)
+        var identitiesWithRelationshipTemplates = identities.Where(i => i.RelationshipTemplates.Count > 0);
+
+        foreach (var identity in identitiesWithRelationshipTemplates)
         {
             foreach (var (template, used) in identity.RelationshipTemplates)
             {
-                stringBuilder.AppendLine($"{identity.IdentityAddress};{template.Id};{used}");
+                stringBuilder.AppendLine($"{identity.IdentityAddress};{identity.ConfigurationIdentityAddress};{identity.PoolAlias};{identity.IdentityPoolType};{template.Id};{used}");
             }
         }
 
-        var filePath = Path.Combine(outputDirName, "relationshipTemplates.csv");
-        File.WriteAllTextAsync(filePath, stringBuilder.ToString());
+        var filePath = Path.Combine(outputDirName, "relationship_templates.csv");
+
+        if (!Directory.Exists(outputDirName))
+        {
+            Directory.CreateDirectory(outputDirName);
+        }
+
+        var content = stringBuilder.ToString();
+        await File.WriteAllTextAsync(filePath, content);
     }
 
-    public void WriteRelationships(string outputDirName, List<DomainIdentity> identities)
+    public async Task WriteRelationships(string outputDirName, List<DomainIdentity> identities)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("RelationshipId;" +
-                                 "IdentityAddressFrom;ConfigurationIdentityAddressFrom;PoolAliasFrom;" +
-                                 "IdentityAddressTo;ConfigurationIdentityAddressTo;PoolAliasTo");
+        stringBuilder.AppendLine(
+            "RelationshipId;IdentityAddressFrom;ConfigurationIdentityAddressFrom;PoolAliasFrom;IdentityPoolTypeFrom;IdentityAddressTo;ConfigurationIdentityAddressTo;PoolAliasTo;IdentityPoolTypeTo");
 
-        foreach (var identity in identities)
+        var identitiesWithRelationships = identities.Where(identity => identity.EstablishedRelationshipsById.Count > 0);
+
+        foreach (var identity in identitiesWithRelationships)
         {
             foreach (var relatedIdentity in identity.EstablishedRelationshipsById)
             {
-                stringBuilder.AppendLine($"{relatedIdentity.Key};" +
-                                         $"{identity.IdentityAddress};" +
-                                         $"{identity.ConfigurationIdentityAddress};" +
-                                         $"{identity.PoolAlias};" +
-                                         $"{relatedIdentity.Value.IdentityAddress};" +
-                                         $"{relatedIdentity.Value.ConfigurationIdentityAddress};" +
-                                         $"{relatedIdentity.Value.PoolAlias};");
+                stringBuilder.AppendLine(
+                    $"{relatedIdentity.Key};{identity.IdentityAddress};{identity.ConfigurationIdentityAddress};{identity.PoolAlias};{identity.IdentityPoolType};" +
+                    $"{relatedIdentity.Value.IdentityAddress};{relatedIdentity.Value.ConfigurationIdentityAddress};{relatedIdentity.Value.PoolAlias};{relatedIdentity.Value.IdentityPoolType}");
             }
         }
 
         var filePath = Path.Combine(outputDirName, "relationships.csv");
-        File.WriteAllTextAsync(filePath, stringBuilder.ToString());
+
+        if (!Directory.Exists(outputDirName))
+        {
+            Directory.CreateDirectory(outputDirName);
+        }
+
+        var content = stringBuilder.ToString();
+        await File.WriteAllTextAsync(filePath, content);
     }
 
-    public void WriteChallenges(string outputDirName, List<DomainIdentity> identities)
+    public async Task WriteChallenges(string outputDirName, List<DomainIdentity> identities)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("CreatedByIdentityAddress;IdentityAddress;ConfigurationIdentityAddress;PoolAlias;ChallengeId;CreatedByDevice");
+        stringBuilder.AppendLine("CreatedByIdentityAddress;IdentityAddress;ConfigurationIdentityAddress;PoolAlias;IdentityPoolType;ChallengeId;CreatedByDevice");
 
         var identitiesWithChallenges = identities.Where(identity => identity.Challenges.Count > 0);
 
@@ -85,25 +97,27 @@ public class OutputHelper : IOutputHelper
         {
             foreach (var challenge in identity.Challenges)
             {
-                stringBuilder.AppendLine($"{challenge.CreatedBy};" +
-                                         $"{identity.IdentityAddress};" +
-                                         $"{identity.ConfigurationIdentityAddress};" +
-                                         $"{identity.PoolAlias};" +
-                                         $"{challenge.Id};" +
-                                         $"{challenge.CreatedByDevice}");
+                stringBuilder.AppendLine(
+                    $"{challenge.CreatedBy};{identity.IdentityAddress};{identity.ConfigurationIdentityAddress};{identity.PoolAlias};{identity.IdentityPoolType};{challenge.Id};{challenge.CreatedByDevice}");
             }
         }
 
         var filePath = Path.Combine(outputDirName, "challenges.csv");
-        File.WriteAllTextAsync(filePath, stringBuilder.ToString());
+
+        if (!Directory.Exists(outputDirName))
+        {
+            Directory.CreateDirectory(outputDirName);
+        }
+
+        var content = stringBuilder.ToString();
+        await File.WriteAllTextAsync(filePath, content);
     }
 
-    public void WriteMessages(string outputDirName, List<DomainIdentity> identities)
+    public async Task WriteMessages(string outputDirName, List<DomainIdentity> identities)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("MessageId;" +
-                                 "IdentityAddressFrom;ConfigurationIdentityAddressFrom;PoolAliasFrom;" +
-                                 "IdentityAddressTo;ConfigurationIdentityAddressTo;PoolAliasTo");
+        stringBuilder.AppendLine(
+            "MessageId;IdentityAddressFrom;ConfigurationIdentityAddressFrom;PoolAliasFrom;IdentityPoolTypeFrom;IdentityAddressTo;ConfigurationIdentityAddressTo;PoolAliasTo;IdentityPoolTypeTo");
 
         var identitiesWithSentMessages = identities.Where(identity => identity.SentMessages.Count > 0);
 
@@ -111,38 +125,44 @@ public class OutputHelper : IOutputHelper
         {
             foreach (var (messageId, recipient) in identity.SentMessages)
             {
-                stringBuilder.AppendLine($"{messageId};" +
-                                         $"{identity.IdentityAddress};" +
-                                         $"{identity.ConfigurationIdentityAddress};" +
-                                         $"{identity.PoolAlias};" +
-                                         $"{recipient.IdentityAddress};" +
-                                         $"{recipient.ConfigurationIdentityAddress};" +
-                                         $"{recipient.PoolAlias};");
+                stringBuilder.AppendLine(
+                    $"{messageId};{identity.IdentityAddress};{identity.ConfigurationIdentityAddress};{identity.PoolAlias};{identity.IdentityPoolType};" +
+                    $"{recipient.IdentityAddress};{recipient.ConfigurationIdentityAddress};{recipient.PoolAlias};{recipient.IdentityPoolType}");
             }
         }
 
         var filePath = Path.Combine(outputDirName, "messages.csv");
-        File.WriteAllTextAsync(filePath, stringBuilder.ToString());
+
+        if (!Directory.Exists(outputDirName))
+        {
+            Directory.CreateDirectory(outputDirName);
+        }
+
+        var content = stringBuilder.ToString();
+        await File.WriteAllTextAsync(filePath, content);
     }
 
-    public void WriteDatawalletModifications(string outputDirName, List<DomainIdentity> identities)
+    public async Task WriteDatawalletModifications(string outputDirName, List<DomainIdentity> identities)
     {
         var stringBuilder = new StringBuilder();
-        stringBuilder.AppendLine("IdentityAddress;ConfigurationIdentityAddress;PoolAlias;ModificationIndex;ModificationId");
+        stringBuilder.AppendLine("IdentityAddress;ConfigurationIdentityAddress;PoolAlias;IdentityPoolType;ModificationIndex;ModificationId");
 
         foreach (var identity in identities)
         {
             foreach (var modification in identity.DatawalletModifications)
             {
-                stringBuilder.AppendLine($"{identity.IdentityAddress};" +
-                                         $"{identity.ConfigurationIdentityAddress};" +
-                                         $"{identity.PoolAlias};" +
-                                         $"{modification.Index};" +
-                                         $"{modification.Id}");
+                stringBuilder.AppendLine($"{identity.IdentityAddress};{identity.ConfigurationIdentityAddress};{identity.PoolAlias};{identity.IdentityPoolType};{modification.Index};{modification.Id}");
             }
         }
 
-        var filePath = Path.Combine(outputDirName, "datawalletModifications.csv");
-        File.WriteAllTextAsync(filePath, stringBuilder.ToString());
+        var filePath = Path.Combine(outputDirName, "datawallet_modifications.csv");
+
+        if (!Directory.Exists(outputDirName))
+        {
+            Directory.CreateDirectory(outputDirName);
+        }
+
+        var content = stringBuilder.ToString();
+        await File.WriteAllTextAsync(filePath, content);
     }
 }
