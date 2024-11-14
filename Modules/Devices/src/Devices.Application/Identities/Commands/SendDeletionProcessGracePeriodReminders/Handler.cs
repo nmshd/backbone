@@ -68,7 +68,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
     {
         await _pushSender.SendNotification(
             new DeletionProcessGracePeriodReminderPushNotification((int)Math.Ceiling(daysUntilGracePeriodEnds)),
-            new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
             cancellationToken
         );
         identity.DeletionGracePeriodReminder3Sent();
@@ -80,7 +80,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
     {
         await _pushSender.SendNotification(
             new DeletionProcessGracePeriodReminderPushNotification((int)Math.Ceiling(daysUntilGracePeriodEnds)),
-            new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
             cancellationToken
         );
         identity.DeletionGracePeriodReminder2Sent();
@@ -92,7 +92,7 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
     {
         await _pushSender.SendNotification(
             new DeletionProcessGracePeriodReminderPushNotification((int)Math.Ceiling(daysUntilGracePeriodEnds)),
-            new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
             cancellationToken
         );
         identity.DeletionGracePeriodReminder1Sent();

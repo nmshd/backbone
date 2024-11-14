@@ -29,7 +29,7 @@ public class ExternalEventCreatedDomainEventHandler : IDomainEventHandler<Extern
         if (identity.Status != IdentityStatus.ToBeDeleted)
             await _pushSenderService.SendNotification(
                 new ExternalEventCreatedPushNotification(),
-                new SendPushNotificationFilter { IncludedIdentities = [@event.Owner] },
+                SendPushNotificationFilter.AllDevicesOf(@event.Owner),
                 CancellationToken.None
             );
     }

@@ -63,7 +63,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
     {
         await _pushNotificationSender.SendNotification(
             new DeletionProcessWaitingForApprovalReminderPushNotification((int)Math.Ceiling(daysUntilApprovalPeriodEnds)),
-            new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
             cancellationToken
         );
         identity.DeletionProcessApprovalReminder3Sent();
@@ -75,7 +75,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
     {
         await _pushNotificationSender.SendNotification(
             new DeletionProcessWaitingForApprovalReminderPushNotification((int)Math.Ceiling(daysUntilApprovalPeriodEnds)),
-            new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
             cancellationToken
         );
         identity.DeletionProcessApprovalReminder2Sent();
@@ -87,7 +87,7 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
     {
         await _pushNotificationSender.SendNotification(
             new DeletionProcessWaitingForApprovalReminderPushNotification((int)Math.Ceiling(daysUntilApprovalPeriodEnds)),
-            new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
             cancellationToken
         );
         identity.DeletionProcessApprovalReminder1Sent();

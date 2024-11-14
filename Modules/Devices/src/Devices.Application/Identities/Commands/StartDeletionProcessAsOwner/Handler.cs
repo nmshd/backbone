@@ -40,7 +40,7 @@ public class Handler : IRequestHandler<StartDeletionProcessAsOwnerCommand, Start
 
         await _notificationSender.SendNotification(
             new DeletionProcessStartedPushNotification(),
-            new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
             cancellationToken
         );
 

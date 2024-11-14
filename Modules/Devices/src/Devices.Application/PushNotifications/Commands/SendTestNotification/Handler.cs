@@ -21,7 +21,7 @@ public class Handler : IRequestHandler<SendTestNotificationCommand, Unit>
     {
         await _pushSenderService.SendNotification(
             new TestPushNotification { Data = request.Data },
-            new SendPushNotificationFilter { IncludedIdentities = [_activeIdentity] },
+            SendPushNotificationFilter.AllDevicesOf(_activeIdentity),
             cancellationToken
         );
         return Unit.Value;

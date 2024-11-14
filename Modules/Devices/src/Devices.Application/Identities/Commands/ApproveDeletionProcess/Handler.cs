@@ -45,7 +45,7 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
 
         await _notificationSender.SendNotification(
             new DeletionProcessApprovedPushNotification(daysUntilDeletion),
-            new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
             cancellationToken
         );
 

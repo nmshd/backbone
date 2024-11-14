@@ -30,7 +30,7 @@ public class Handler : IRequestHandler<CancelDeletionAsSupportCommand, CancelDel
 
         await _notificationSender.SendNotification(
             new DeletionProcessCancelledBySupportPushNotification(),
-            new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
             cancellationToken
         );
 

@@ -18,11 +18,9 @@ public class DatawalletModifiedDomainEventHandler : IDomainEventHandler<Datawall
     public async Task Handle(DatawalletModifiedDomainEvent domainEvent)
     {
         var notification = new DatawalletModificationsCreatedPushNotification(domainEvent.ModifiedByDevice);
-        await _pushSenderService.SendNotification(notification,
-            new SendPushNotificationFilter
-            {
-                ExcludedDevices = [DeviceId.Parse(domainEvent.ModifiedByDevice)],
-                IncludedIdentities = [domainEvent.Identity]
-            }, CancellationToken.None);
+        await _pushSenderService.SendNotification(
+            notification,
+            SendPushNotificationFilter.AllDevicesOfExcept(IdentityAddress.ParseUnsafe(domainEvent.Identity), DeviceId.Parse(domainEvent.ModifiedByDevice)),
+            CancellationToken.None);
     }
 }
