@@ -295,9 +295,9 @@ public class Relationship : Entity
         EnsureStatus(RelationshipStatus.Rejected, RelationshipStatus.Revoked, RelationshipStatus.Terminated, RelationshipStatus.DeletionProposed);
 
         if (Status is RelationshipStatus.Terminated or RelationshipStatus.Rejected or RelationshipStatus.Revoked)
-            DecomposeAsFirstParticipant(activeIdentity, activeDevice);
+            DecomposeAsFirstParticipant(activeIdentity, activeDevice, RelationshipAuditLogEntryReason.Decomposition);
         else
-            DecomposeAsSecondParticipant(activeIdentity, activeDevice);
+            DecomposeAsSecondParticipant(activeIdentity, activeDevice, RelationshipAuditLogEntryReason.Decomposition);
 
         RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
@@ -305,20 +305,24 @@ public class Relationship : Entity
     public void DecomposeDueToIdentityDeletion(IdentityAddress identityToBeDeleted)
     {
         EnsureHasParticipant(identityToBeDeleted);
+        EnsureRelationshipNotDecomposedBy(identityToBeDeleted);
+
+        if (Status is RelationshipStatus.DeletionProposed)
+            DecomposeAsSecondParticipant(identityToBeDeleted, null, RelationshipAuditLogEntryReason.DecompositionDueToIdentityDeletion);
+        else
+            DecomposeAsFirstParticipant(identityToBeDeleted, null, RelationshipAuditLogEntryReason.DecompositionDueToIdentityDeletion);
 
         RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
-    private void DecomposeAsFirstParticipant(IdentityAddress activeIdentity, DeviceId activeDevice)
+    private void DecomposeAsFirstParticipant(IdentityAddress activeIdentity, DeviceId? activeDevice, RelationshipAuditLogEntryReason reason)
     {
-        EnsureStatus(RelationshipStatus.Terminated, RelationshipStatus.Rejected, RelationshipStatus.Revoked);
-
         var oldStatus = Status;
 
         Status = RelationshipStatus.DeletionProposed;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.Decomposition,
+            reason,
             oldStatus,
             RelationshipStatus.DeletionProposed,
             activeIdentity,
@@ -332,14 +336,14 @@ public class Relationship : Entity
             ToHasDecomposed = true;
     }
 
-    private void DecomposeAsSecondParticipant(IdentityAddress activeIdentity, DeviceId activeDevice)
+    private void DecomposeAsSecondParticipant(IdentityAddress activeIdentity, DeviceId? activeDevice, RelationshipAuditLogEntryReason reason)
     {
         EnsureStatus(RelationshipStatus.DeletionProposed);
 
         Status = RelationshipStatus.ReadyForDeletion;
 
         var auditLogEntry = new RelationshipAuditLogEntry(
-            RelationshipAuditLogEntryReason.Decomposition,
+            reason,
             RelationshipStatus.DeletionProposed,
             RelationshipStatus.ReadyForDeletion,
             activeIdentity,
