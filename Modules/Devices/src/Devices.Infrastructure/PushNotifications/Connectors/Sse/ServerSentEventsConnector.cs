@@ -16,6 +16,7 @@ public class ServerSentEventsConnector : IPnsConnector
         _logger = logger;
     }
 
+    // The `notificationText` parameter is not used in this implementation, so we make it optional. This simplifies the tests.
     public async Task<SendResult> Send(PnsRegistration registration, IPushNotification notification, NotificationText? notificationText = null)
     {
         try
