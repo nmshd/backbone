@@ -8,7 +8,7 @@ public class RelationshipAuditLogEntryDTO
     {
         CreatedAt = entry.CreatedAt;
         CreatedBy = entry.CreatedBy;
-        CreatedByDevice = entry.CreatedByDevice;
+        CreatedByDevice = entry.CreatedByDevice?.Value;
         Reason = entry.Reason.ToString();
         OldStatus = entry.OldStatus.ToDtoString();
         NewStatus = entry.NewStatus.ToDtoString();
@@ -16,7 +16,7 @@ public class RelationshipAuditLogEntryDTO
 
     public DateTime CreatedAt { get; set; }
     public string CreatedBy { get; set; }
-    public string CreatedByDevice { get; set; }
+    public string? CreatedByDevice { get; set; }
     public string Reason { get; set; }
 
     public string? OldStatus { get; set; }
