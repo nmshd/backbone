@@ -1,9 +1,7 @@
-﻿using System.Globalization;
-using Backbone.BuildingBlocks.Application.PushNotifications;
+﻿using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
-using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.NotificationTexts;
 
@@ -11,24 +9,6 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
 {
     private static readonly string[] SUPPORTED_LANGUAGES = ["en", "de", "pt", "it"];
     public static readonly TheoryData<Type> NOTIFICATION_TYPES_DATA = new(GetNotificationTypes());
-
-    [Fact]
-    public void Empty_translation_throws_custom_exception()
-    {
-        // Arrange
-        // TODO: are these lines necessary? cant we use the real one?
-        var fakeResourceManager = A.Fake<PushNotificationResourceManager>();
-
-        A.CallTo(() => fakeResourceManager.GetString(A<string>._, A<CultureInfo>._)).Returns("");
-
-        var notificationTextProvider = CreateNotificationTextProvider();
-
-        // Act
-        var acting = () => notificationTextProvider.GetNotificationTextForLanguage(typeof(PushNotificationWithoutExistingTexts), CommunicationLanguage.DEFAULT_LANGUAGE);
-
-        // Assert
-        acting.Should().Throw<MissingPushNotificationTextException>();
-    }
 
     [Fact]
     public void Missing_translation_throws_custom_exception()
