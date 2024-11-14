@@ -53,8 +53,10 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
     {
         var registrations = await _pnsRegistrationsRepository.Find(r => filter.IncludedIdentities.Contains(r.IdentityAddress) && !filter.ExcludedDevices.Contains(r.DeviceId), cancellationToken);
 
+        var deviceIds = registrations.Select(r => r.DeviceId).ToList();
+
         var devices = await _identitiesRepository.FindDevices(
-            d => filter.IncludedIdentities.Contains(d.IdentityAddress) && !filter.ExcludedDevices.Contains(d.Id),
+            d => deviceIds.Contains(d.Id),
             d => new { d.Id, d.CommunicationLanguage },
             cancellationToken
         );
