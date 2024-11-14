@@ -33,4 +33,9 @@ public class RelationshipAuditLogEntry : Entity
     public IdentityAddress CreatedBy { get; private set; }
     public DeviceId? CreatedByDevice { get; }
     public DateTime CreatedAt { get; }
+
+    public void Anonymize(IdentityAddress anonymousIdentity)
+    {
+        CreatedBy = anonymousIdentity;
+    }
 }
