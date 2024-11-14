@@ -68,7 +68,7 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
     {
         var deviceIds = devices.Select(d => d.Id).ToArray();
 
-        var registrations = await _pnsRegistrationsRepository.Find(r => deviceIds.Contains(r.DeviceId), cancellationToken);
+        var registrations = await _pnsRegistrationsRepository.FindByDeviceIds(deviceIds, cancellationToken);
 
         var groups = registrations.GroupBy(registration => registration.Handle.Platform);
 
@@ -86,11 +86,11 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
                 });
 
             var sendResults = await Task.WhenAll(sendTasks);
-            await HandleNotificationResponses(new SendResults(sendResults));
+            await HandleSendNotificationResponses(new SendResults(sendResults));
         }
     }
 
-    private async Task HandleNotificationResponses(SendResults sendResults)
+    private async Task HandleSendNotificationResponses(SendResults sendResults)
     {
         var deviceIdsToDelete = new List<DeviceId>();
         foreach (var sendResult in sendResults.Failures)
@@ -156,7 +156,7 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
             _logger.UnregisteredDevice();
     }
 
-    private class DeviceWithOnlyIdAndCommunicationLanguage
+    public class DeviceWithOnlyIdAndCommunicationLanguage
     {
         public required DeviceId Id { get; init; }
         public required CommunicationLanguage CommunicationLanguage { get; init; }
