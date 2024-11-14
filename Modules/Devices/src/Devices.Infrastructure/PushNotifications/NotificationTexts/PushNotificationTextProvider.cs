@@ -6,10 +6,6 @@ using Backbone.Tooling.Extensions;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 
-/*
- * 1. Get text from IPushNotificationWithText
- * 2. Get text from ResourceManager (IPushNotification)
- */
 public class PushNotificationTextProvider : IPushNotificationTextProvider
 {
     private readonly PushNotificationResourceManager _resourceManager;
