@@ -33,33 +33,41 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
 
     public async Task SendNotification(IPushNotification notification, SendPushNotificationFilter filter, CancellationToken cancellationToken)
     {
-        var notificationTexts = _notificationTextProvider.GetNotificationTextsForLanguages(notification.GetType(), await GetDistinctCommunicationLanguages(filter, cancellationToken));
-        await SendNotificationInternal(notification, filter, notificationTexts, cancellationToken);
+        var devices = await FindDevices(filter, cancellationToken);
+
+        var notificationTexts = _notificationTextProvider.GetNotificationTextsForLanguages(notification.GetType(), GetDistinctCommunicationLanguages(devices));
+        await SendNotificationInternal(notification, devices, notificationTexts, cancellationToken);
     }
 
     public async Task SendNotification(IPushNotification notification, SendPushNotificationFilter filter, Dictionary<string, NotificationText> notificationTexts,
         CancellationToken cancellationToken)
     {
+        var devices = await FindDevices(filter, cancellationToken);
+
         await SendNotificationInternal(
             notification,
-            filter,
+            devices,
             notificationTexts.ToDictionary(kvp => CommunicationLanguage.Create(kvp.Key).Value, kvp => kvp.Value),
             cancellationToken
         );
     }
 
-    private async Task SendNotificationInternal(IPushNotification notification, SendPushNotificationFilter filter, Dictionary<CommunicationLanguage, NotificationText> notificationTexts,
-        CancellationToken cancellationToken)
+    private async Task<DeviceWithCommunicationLanguage[]> FindDevices(SendPushNotificationFilter filter, CancellationToken cancellationToken)
     {
-        var registrations = await _pnsRegistrationsRepository.Find(r => filter.IncludedIdentities.Contains(r.IdentityAddress) && !filter.ExcludedDevices.Contains(r.DeviceId), cancellationToken);
-
-        var deviceIds = registrations.Select(r => r.DeviceId).ToList();
-
         var devices = await _identitiesRepository.FindDevices(
-            d => deviceIds.Contains(d.Id),
-            d => new { d.Id, d.CommunicationLanguage },
+            d => filter.IncludedIdentities.Contains(d.IdentityAddress) && !filter.ExcludedDevices.Contains(d.Id),
+            d => new DeviceWithCommunicationLanguage { Id = d.Id, CommunicationLanguage = d.CommunicationLanguage },
             cancellationToken
         );
+        return devices;
+    }
+
+    private async Task SendNotificationInternal(IPushNotification notification, DeviceWithCommunicationLanguage[] devices,
+        Dictionary<CommunicationLanguage, NotificationText> notificationTexts, CancellationToken cancellationToken)
+    {
+        var deviceIds = devices.Select(d => d.Id).ToArray();
+
+        var registrations = await _pnsRegistrationsRepository.Find(r => deviceIds.Contains(r.DeviceId), cancellationToken);
 
         var groups = registrations.GroupBy(registration => registration.Handle.Platform);
 
@@ -81,14 +89,8 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
         }
     }
 
-    private async Task<List<CommunicationLanguage>> GetDistinctCommunicationLanguages(SendPushNotificationFilter filter, CancellationToken cancellationToken)
+    private static List<CommunicationLanguage> GetDistinctCommunicationLanguages(IEnumerable<DeviceWithCommunicationLanguage> devices)
     {
-        var devices = await _identitiesRepository.FindDevices(
-            d => filter.IncludedIdentities.Contains(d.IdentityAddress) && !filter.ExcludedDevices.Contains(d.Id),
-            d => new { d.CommunicationLanguage },
-            cancellationToken
-        );
-
         return devices.Select(d => d.CommunicationLanguage).Distinct().ToList();
     }
 
@@ -156,6 +158,12 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
 
         if (numberOfDeletedDevices == 1)
             _logger.UnregisteredDevice();
+    }
+
+    private class DeviceWithCommunicationLanguage
+    {
+        public required DeviceId Id { get; init; }
+        public required CommunicationLanguage CommunicationLanguage { get; init; }
     }
 }
 

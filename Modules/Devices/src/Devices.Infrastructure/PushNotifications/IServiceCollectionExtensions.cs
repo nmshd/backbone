@@ -56,8 +56,6 @@ public static class IServiceCollectionExtensions
     {
         services.AddHttpClient();
         services.AddTransient<ApplePushNotificationServiceConnector>();
-        services.AddTransient<IPushNotificationRegistrationService, PushService>();
-        services.AddTransient<IPushNotificationSender, PushService>();
         services.AddTransient<IJwtGenerator, JwtGenerator>();
         services.AddSingleton<ApnsJwtCache>();
     }
