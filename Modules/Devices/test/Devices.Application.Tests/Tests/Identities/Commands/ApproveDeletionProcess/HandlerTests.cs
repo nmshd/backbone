@@ -53,7 +53,7 @@ public class HandlerTests : AbstractTestsBase
 
 
         A.CallTo(() => mockPushNotificationSender.SendNotification(
-            A<DeletionProcessApprovedNotification>.That.Matches(n => n.DaysUntilDeletion == IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays),
+            A<DeletionProcessApprovedPushNotification>.That.Matches(n => n.DaysUntilDeletion == IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays),
             A<SendPushNotificationFilter>.That.Matches(f => f.IncludedIdentities.Contains(identity.Address)),
             A<CancellationToken>._)
         ).MustHaveHappenedOnceExactly();

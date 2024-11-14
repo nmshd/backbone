@@ -60,7 +60,7 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
         return
             typeof(TestPushNotification)
                 .Assembly.GetTypes()
-                .Where(t => t.IsAssignableTo(typeof(IPushNotificationWithConstantText)) && !t.IsInterface);
+                .Where(t => t.IsAssignableTo(typeof(IPushNotification)) && !t.IsInterface);
     }
 
     private class AllSupportedLanguagesExceptEnglishCrossJoinedWithNotificationTypes : TheoryData<CommunicationLanguage, Type>
@@ -80,4 +80,4 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
     }
 }
 
-public record PushNotificationWithoutExistingTexts : IPushNotificationWithConstantText;
+public record PushNotificationWithoutExistingTexts : IPushNotification;

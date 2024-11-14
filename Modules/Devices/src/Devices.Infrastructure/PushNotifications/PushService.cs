@@ -31,13 +31,13 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
         _identitiesRepository = identitiesRepository;
     }
 
-    public async Task SendNotification(IPushNotificationWithConstantText notification, SendPushNotificationFilter filter, CancellationToken cancellationToken)
+    public async Task SendNotification(IPushNotification notification, SendPushNotificationFilter filter, CancellationToken cancellationToken)
     {
         var notificationTexts = _notificationTextProvider.GetNotificationTextsForLanguages(notification.GetType(), await GetDistinctCommunicationLanguages(filter, cancellationToken));
         await SendNotificationInternal(notification, filter, notificationTexts, cancellationToken);
     }
 
-    public async Task SendNotification(IPushNotificationWithDynamicText notification, SendPushNotificationFilter filter, Dictionary<string, NotificationText> notificationTexts,
+    public async Task SendNotification(IPushNotification notification, SendPushNotificationFilter filter, Dictionary<string, NotificationText> notificationTexts,
         CancellationToken cancellationToken)
     {
         await SendNotificationInternal(

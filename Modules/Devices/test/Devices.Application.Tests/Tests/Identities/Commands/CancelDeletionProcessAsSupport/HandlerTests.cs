@@ -41,7 +41,7 @@ public class HandlerTests : AbstractTestsBase
         result.CancelledAt.Should().Be(utcNow);
 
         A.CallTo(() => mockPushNotificationSender.SendNotification(
-            A<DeletionProcessCancelledBySupportNotification>._,
+            A<DeletionProcessCancelledBySupportPushNotification>._,
             A<SendPushNotificationFilter>.That.Matches(f => f.IncludedIdentities.Contains(identity.Address)),
             A<CancellationToken>._)
         ).MustHaveHappenedOnceExactly();

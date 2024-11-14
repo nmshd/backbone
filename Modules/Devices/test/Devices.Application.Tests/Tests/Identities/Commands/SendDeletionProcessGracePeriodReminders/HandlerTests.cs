@@ -19,7 +19,7 @@ public class HandlerTests : AbstractTestsBase
         var mockPushNotificationSender = A.Fake<IPushNotificationSender>();
 
         A.CallTo(() => mockIdentitiesRepository.FindAllWithDeletionProcessInStatus(A<DeletionProcessStatus>._, A<CancellationToken>._, A<bool>._))
-            .Returns(new List<Identity>());
+            .Returns([]);
 
         var handler = CreateHandler(mockIdentitiesRepository, mockPushNotificationSender);
 
@@ -30,7 +30,7 @@ public class HandlerTests : AbstractTestsBase
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>._, A<CancellationToken>._))
             .MustNotHaveHappened();
         A.CallTo(() => mockPushNotificationSender.SendNotification(
-                A<IPushNotificationWithConstantText>._,
+                A<DeletionProcessGracePeriodReminderPushNotification>._,
                 A<SendPushNotificationFilter>._,
                 A<CancellationToken>._))
             .MustNotHaveHappened();

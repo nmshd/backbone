@@ -44,7 +44,7 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
         var daysUntilDeletion = deletionProcess.GracePeriodEndsAt.Value.DaysUntilDate();
 
         await _notificationSender.SendNotification(
-            new DeletionProcessApprovedNotification(daysUntilDeletion),
+            new DeletionProcessApprovedPushNotification(daysUntilDeletion),
             new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
             cancellationToken
         );

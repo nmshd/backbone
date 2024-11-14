@@ -29,7 +29,8 @@ public class HandlerTests : AbstractTestsBase
         // Assert
         A.CallTo(() => mockIdentitiesRepository.Update(A<Identity>._, A<CancellationToken>._))
             .MustNotHaveHappened();
-        A.CallTo(() => mockPushNotificationSender.SendNotification(A<IPushNotificationWithConstantText>._,
+        A.CallTo(() => mockPushNotificationSender.SendNotification(
+                A<DeletionProcessApprovedPushNotification>._,
                 A<SendPushNotificationFilter>._,
                 A<CancellationToken>._))
             .MustNotHaveHappened();

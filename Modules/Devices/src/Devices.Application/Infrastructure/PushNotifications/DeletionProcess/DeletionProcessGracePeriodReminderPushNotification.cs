@@ -2,4 +2,4 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 
-public record DeletionProcessGracePeriodReminderPushNotification(int DaysUntilDeletion) : IPushNotificationWithConstantText;
+public record DeletionProcessGracePeriodReminderPushNotification(int DaysUntilDeletion) : IPushNotification;

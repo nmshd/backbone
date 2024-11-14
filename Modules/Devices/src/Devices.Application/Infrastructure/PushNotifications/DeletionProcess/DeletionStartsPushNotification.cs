@@ -2,4 +2,4 @@
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 
-public record DeletionStartsPushNotification : IPushNotificationWithConstantText;
+public record DeletionStartsPushNotification : IPushNotification;

@@ -29,7 +29,7 @@ public class Handler : IRequestHandler<CancelDeletionAsSupportCommand, CancelDel
         await _identitiesRepository.Update(identity, cancellationToken);
 
         await _notificationSender.SendNotification(
-            new DeletionProcessCancelledBySupportNotification(),
+            new DeletionProcessCancelledBySupportPushNotification(),
             new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
             cancellationToken
         );

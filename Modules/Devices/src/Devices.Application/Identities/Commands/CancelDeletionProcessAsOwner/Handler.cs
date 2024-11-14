@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
         await _identitiesRepository.Update(identity, cancellationToken);
 
         await _notificationSender.SendNotification(
-            new DeletionProcessCancelledByOwnerNotification(),
+            new DeletionProcessCancelledByOwnerPushNotification(),
             new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
             cancellationToken
         );
