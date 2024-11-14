@@ -21,10 +21,10 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
     private readonly IPushNotificationTextProvider _notificationTextProvider;
     private readonly IIdentitiesRepository _identitiesRepository;
 
-    public PushService(IPnsRegistrationsRepository pnsRegistrationRepository, PnsConnectorFactory pnsConnectorFactory, ILogger<PushService> logger,
+    public PushService(IPnsRegistrationsRepository pnsRegistrationsRepository, PnsConnectorFactory pnsConnectorFactory, ILogger<PushService> logger,
         IPushNotificationTextProvider notificationTextProvider, IIdentitiesRepository identitiesRepository)
     {
-        _pnsRegistrationsRepository = pnsRegistrationRepository;
+        _pnsRegistrationsRepository = pnsRegistrationsRepository;
         _pnsConnectorFactory = pnsConnectorFactory;
         _logger = logger;
         _notificationTextProvider = notificationTextProvider;
@@ -152,17 +152,10 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
 
     public async Task DeleteRegistration(DeviceId deviceId, CancellationToken cancellationToken)
     {
-        var registration = await _pnsRegistrationsRepository.FindByDeviceId(deviceId, cancellationToken, track: true);
+        var numberOfDeletedDevices = await _pnsRegistrationsRepository.Delete([deviceId], cancellationToken);
 
-        if (registration == null)
-        {
-            _logger.LogInformation("Device not found.");
-        }
-        else
-        {
-            await _pnsRegistrationsRepository.Delete(new List<DeviceId> { deviceId }, cancellationToken);
+        if (numberOfDeletedDevices == 1)
             _logger.UnregisteredDevice();
-        }
     }
 }
 
