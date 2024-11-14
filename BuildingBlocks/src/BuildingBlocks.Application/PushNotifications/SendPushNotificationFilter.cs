@@ -11,19 +11,19 @@ public record SendPushNotificationFilter
     public List<DeviceId> ExcludedDevices { get; set; } = [];
     public List<IdentityAddress> IncludedIdentities { get; set; } = [];
 
-    public static SendPushNotificationFilter AllDevicesOf(IdentityAddress address)
+    public static SendPushNotificationFilter AllDevicesOf(params IdentityAddress[] recipientAddresses)
     {
         return new SendPushNotificationFilter
         {
-            IncludedIdentities = [address]
+            IncludedIdentities = [.. recipientAddresses]
         };
     }
 
-    public static SendPushNotificationFilter AllDevicesOfExcept(IdentityAddress address, params DeviceId[] deviceIds)
+    public static SendPushNotificationFilter AllDevicesOfExcept(IdentityAddress recipientAddress, params DeviceId[] deviceIds)
     {
         return new SendPushNotificationFilter
         {
-            IncludedIdentities = [address],
+            IncludedIdentities = [recipientAddress],
             ExcludedDevices = [.. deviceIds]
         };
     }
