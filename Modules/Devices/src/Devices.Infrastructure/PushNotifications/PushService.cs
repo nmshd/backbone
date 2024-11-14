@@ -5,7 +5,9 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors;
+using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 using Microsoft.Extensions.Logging;
 
@@ -16,31 +18,47 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
     private readonly IPnsRegistrationsRepository _pnsRegistrationsRepository;
     private readonly ILogger<PushService> _logger;
     private readonly PnsConnectorFactory _pnsConnectorFactory;
+    private readonly IPushNotificationTextProvider _notificationTextProvider;
+    private readonly IIdentitiesRepository _identitiesRepository;
 
-    public PushService(IPnsRegistrationsRepository pnsRegistrationRepository, PnsConnectorFactory pnsConnectorFactory, ILogger<PushService> logger)
+    public PushService(IPnsRegistrationsRepository pnsRegistrationRepository, PnsConnectorFactory pnsConnectorFactory, ILogger<PushService> logger,
+        IPushNotificationTextProvider notificationTextProvider, IIdentitiesRepository identitiesRepository)
     {
         _pnsRegistrationsRepository = pnsRegistrationRepository;
         _pnsConnectorFactory = pnsConnectorFactory;
         _logger = logger;
+        _notificationTextProvider = notificationTextProvider;
+        _identitiesRepository = identitiesRepository;
     }
 
-    public async Task SendNotification(IdentityAddress recipient, IPushNotification notification, CancellationToken cancellationToken)
+    public async Task SendNotification(IPushNotificationWithConstantText notification, SendPushNotificationFilter filter, CancellationToken cancellationToken)
     {
-        var registrations = await _pnsRegistrationsRepository.FindWithAddress(recipient, cancellationToken);
-
-        await SendNotification(registrations, notification, cancellationToken);
+        var notificationTexts = _notificationTextProvider.GetNotificationTextsForLanguages(notification.GetType(), await GetDistinctCommunicationLanguages(filter, cancellationToken));
+        await SendNotificationInternal(notification, filter, notificationTexts, cancellationToken);
     }
 
-    public async Task SendFilteredNotification(IdentityAddress recipient, IPushNotification notification, IEnumerable<string> excludedDevices, CancellationToken cancellationToken)
+    public async Task SendNotification(IPushNotificationWithDynamicText notification, SendPushNotificationFilter filter, Dictionary<string, NotificationText> notificationTexts,
+        CancellationToken cancellationToken)
     {
-        var registrations = await _pnsRegistrationsRepository.FindWithAddress(recipient, cancellationToken);
-        registrations = registrations.Where(x => !excludedDevices.Contains(x.DeviceId));
-
-        await SendNotification(registrations, notification, cancellationToken);
+        await SendNotificationInternal(
+            notification,
+            filter,
+            notificationTexts.ToDictionary(kvp => CommunicationLanguage.Create(kvp.Key).Value, kvp => kvp.Value),
+            cancellationToken
+        );
     }
 
-    private async Task SendNotification(IEnumerable<PnsRegistration> registrations, IPushNotification notification, CancellationToken cancellationToken)
+    private async Task SendNotificationInternal(IPushNotification notification, SendPushNotificationFilter filter, Dictionary<CommunicationLanguage, NotificationText> notificationTexts,
+        CancellationToken cancellationToken)
     {
+        var registrations = await _pnsRegistrationsRepository.Find(r => filter.IncludedIdentities.Contains(r.IdentityAddress) && !filter.ExcludedDevices.Contains(r.DeviceId), cancellationToken);
+
+        var devices = await _identitiesRepository.FindDevices(
+            d => filter.IncludedIdentities.Contains(d.IdentityAddress) && !filter.ExcludedDevices.Contains(d.Id),
+            d => new { d.Id, d.CommunicationLanguage },
+            cancellationToken
+        );
+
         var groups = registrations.GroupBy(registration => registration.Handle.Platform);
 
         foreach (var group in groups)
@@ -49,9 +67,27 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
 
             var pnsConnector = _pnsConnectorFactory.CreateFor(platform);
 
-            var sendResults = await pnsConnector.Send(group, notification);
-            await HandleNotificationResponses(sendResults);
+            var sendTasks = group
+                .Select(r =>
+                {
+                    var device = devices.First(d => d.Id == r.DeviceId);
+                    return pnsConnector.Send(r, notification, notificationTexts[device.CommunicationLanguage]);
+                });
+
+            var sendResults = await Task.WhenAll(sendTasks);
+            await HandleNotificationResponses(new SendResults(sendResults));
         }
+    }
+
+    private async Task<List<CommunicationLanguage>> GetDistinctCommunicationLanguages(SendPushNotificationFilter filter, CancellationToken cancellationToken)
+    {
+        var devices = await _identitiesRepository.FindDevices(
+            d => filter.IncludedIdentities.Contains(d.IdentityAddress) && !filter.ExcludedDevices.Contains(d.Id),
+            d => new { d.CommunicationLanguage },
+            cancellationToken
+        );
+
+        return devices.Select(d => d.CommunicationLanguage).Distinct().ToList();
     }
 
     private async Task HandleNotificationResponses(SendResults sendResults)
@@ -64,7 +100,6 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
                 case ErrorReason.InvalidHandle:
                     _logger.DeletingDeviceRegistration();
                     deviceIdsToDelete.Add(sendResult.DeviceId);
-
                     break;
                 case ErrorReason.Unexpected:
                     _logger.ErrorWhileTryingToSendNotification(sendResult.Error.Message);
@@ -123,7 +158,7 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
         }
         else
         {
-            await _pnsRegistrationsRepository.Delete([deviceId], cancellationToken);
+            await _pnsRegistrationsRepository.Delete(new List<DeviceId> { deviceId }, cancellationToken);
             _logger.UnregisteredDevice();
         }
     }

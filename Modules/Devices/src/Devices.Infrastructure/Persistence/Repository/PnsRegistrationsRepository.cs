@@ -63,4 +63,9 @@ public class PnsRegistrationsRepository : IPnsRegistrationsRepository
     {
         await _registrations.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
+
+    public async Task<IEnumerable<PnsRegistration>> Find(Expression<Func<PnsRegistration, bool>> filter, CancellationToken cancellationToken)
+    {
+        return await _registrations.Where(filter).ToListAsync(cancellationToken);
+    }
 }

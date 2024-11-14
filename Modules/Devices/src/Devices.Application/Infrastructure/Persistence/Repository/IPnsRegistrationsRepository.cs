@@ -12,4 +12,5 @@ public interface IPnsRegistrationsRepository
     Task<PnsRegistration?> FindByDeviceId(DeviceId deviceId, CancellationToken cancellationToken, bool track = false);
     Task Delete(List<DeviceId> deviceIds, CancellationToken cancellationToken);
     Task Delete(Expression<Func<PnsRegistration, bool>> filter, CancellationToken cancellationToken);
+    Task<IEnumerable<PnsRegistration>> Find(Expression<Func<PnsRegistration, bool>> filter, CancellationToken cancellationToken);
 }

@@ -66,7 +66,11 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
 
     private async Task SendReminder3(Identity identity, double daysUntilGracePeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification((int)Math.Ceiling(daysUntilGracePeriodEnds)), cancellationToken);
+        await _pushSender.SendNotification(
+            new DeletionProcessGracePeriodReminderPushNotification((int)Math.Ceiling(daysUntilGracePeriodEnds)),
+            new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
+            cancellationToken
+        );
         identity.DeletionGracePeriodReminder3Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
         _logger.Reminder3Sent(deletionProcessId);
@@ -74,7 +78,11 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
 
     private async Task SendReminder2(Identity identity, double daysUntilGracePeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification((int)Math.Ceiling(daysUntilGracePeriodEnds)), cancellationToken);
+        await _pushSender.SendNotification(
+            new DeletionProcessGracePeriodReminderPushNotification((int)Math.Ceiling(daysUntilGracePeriodEnds)),
+            new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
+            cancellationToken
+        );
         identity.DeletionGracePeriodReminder2Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
         _logger.Reminder2Sent(deletionProcessId);
@@ -82,7 +90,11 @@ public class Handler : IRequestHandler<SendDeletionProcessGracePeriodRemindersCo
 
     private async Task SendReminder1(Identity identity, double daysUntilGracePeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        await _pushSender.SendNotification(identity.Address, new DeletionProcessGracePeriodReminderPushNotification((int)Math.Ceiling(daysUntilGracePeriodEnds)), cancellationToken);
+        await _pushSender.SendNotification(
+            new DeletionProcessGracePeriodReminderPushNotification((int)Math.Ceiling(daysUntilGracePeriodEnds)),
+            new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
+            cancellationToken
+        );
         identity.DeletionGracePeriodReminder1Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
         _logger.Reminder1Sent(deletionProcessId);

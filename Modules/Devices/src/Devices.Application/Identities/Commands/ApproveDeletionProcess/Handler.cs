@@ -1,7 +1,7 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -43,7 +43,12 @@ public class Handler : IRequestHandler<ApproveDeletionProcessCommand, ApproveDel
 
         var daysUntilDeletion = deletionProcess.GracePeriodEndsAt.Value.DaysUntilDate();
 
-        await _notificationSender.SendNotification(identity.Address, new DeletionProcessApprovedNotification(daysUntilDeletion), cancellationToken);
+
+        await _notificationSender.SendNotification(
+            new DeletionProcessApprovedNotification(daysUntilDeletion),
+            new SendPushNotificationFilter { IncludedIdentities = [identity.Address] },
+            cancellationToken
+        );
 
         return new ApproveDeletionProcessResponse(deletionProcess);
     }

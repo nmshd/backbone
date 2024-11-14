@@ -2,4 +2,4 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Datawallet;
 
-public record DatawalletModificationsCreatedPushNotification(string CreatedByDevice) : IPushNotification;
+public record DatawalletModificationsCreatedPushNotification(string CreatedByDevice) : IPushNotificationWithConstantText;

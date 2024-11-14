@@ -70,7 +70,7 @@ public class ActualDeletionWorker : IHostedService
 
     private async Task NotifyIdentityAboutStartingDeletion(IdentityAddress identityAddress, CancellationToken cancellationToken)
     {
-        await _pushNotificationSender.SendNotification(identityAddress, new DeletionStartsPushNotification(), cancellationToken);
+        await _pushNotificationSender.SendNotification(new DeletionStartsPushNotification(), new SendPushNotificationFilter { IncludedIdentities = [identityAddress] }, cancellationToken);
     }
 
     private async Task Delete(IdentityAddress identityAddress)

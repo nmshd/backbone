@@ -2,4 +2,4 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 
-public record DeletionProcessWaitingForApprovalReminderPushNotification(int DaysUntilApprovalPeriodEnds) : IPushNotification;
+public record DeletionProcessWaitingForApprovalReminderPushNotification(int DaysUntilApprovalPeriodEnds) : IPushNotificationWithConstantText;
