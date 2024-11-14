@@ -35,6 +35,8 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
     public async Task Delete(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
     {
         await _templates.Where(filter).ExecuteDeleteAsync(cancellationToken);
+
+        _dbContext.ChangeTracker.Clear();
     }
 
     public async Task Delete(RelationshipTemplate template, CancellationToken cancellationToken)
