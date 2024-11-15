@@ -22,8 +22,10 @@ public class IdentityDeletionProcessStartedDomainEventHandlerTests : AbstractTes
         await handler.Handle(identityDeletionProcessStartedDomainEvent);
 
         // Assert
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address,
-            A<DeletionProcessStartedPushNotification>._, CancellationToken.None)
+        A.CallTo(() => mockPushNotificationSender.SendNotification(
+            A<DeletionProcessStartedPushNotification>._,
+            A<SendPushNotificationFilter>.That.Matches(f => f.IncludedIdentities.Contains(identity.Address)),
+            CancellationToken.None)
         ).MustHaveHappenedOnceExactly();
     }
 }

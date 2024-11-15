@@ -2,4 +2,4 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 
-public record DeletionProcessCancelledByOwnerNotification : IPushNotification;
+public record DeletionProcessCancelledByOwnerPushNotification : IPushNotification;

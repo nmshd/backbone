@@ -1,9 +1,9 @@
-using Backbone.DevelopmentKit.Identity.ValueObjects;
-
 namespace Backbone.BuildingBlocks.Application.PushNotifications;
 
 public interface IPushNotificationSender
 {
-    Task SendNotification(IdentityAddress recipient, IPushNotification notification, CancellationToken cancellationToken);
-    Task SendFilteredNotification(IdentityAddress recipient, IPushNotification notification, IEnumerable<string> excludedDevices, CancellationToken cancellationToken);
+    Task SendNotification(IPushNotification notification, SendPushNotificationFilter filter, CancellationToken cancellationToken);
+
+    Task SendNotification(IPushNotification notification, SendPushNotificationFilter filter, Dictionary<string, NotificationText> notificationTexts,
+        CancellationToken cancellationToken);
 }

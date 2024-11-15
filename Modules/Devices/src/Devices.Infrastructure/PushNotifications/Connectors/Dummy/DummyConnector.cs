@@ -14,17 +14,11 @@ public class DummyConnector : IPnsConnector
         _logger = logger;
     }
 
-    public Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IPushNotification notification)
+    public Task<SendResult> Send(PnsRegistration registration, IPushNotification notification, NotificationText notificationText)
     {
         _logger.Sending(notification.GetEventName());
 
-        var sendResults = new SendResults();
-        foreach (var registration in registrations)
-        {
-            sendResults.AddSuccess(registration.DeviceId);
-        }
-
-        return Task.FromResult(sendResults);
+        return Task.FromResult(SendResult.Success(registration.DeviceId));
     }
 
     public void ValidateRegistration(PnsRegistration registration)
