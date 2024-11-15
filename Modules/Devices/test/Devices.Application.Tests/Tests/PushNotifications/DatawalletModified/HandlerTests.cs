@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.DomainEvents.Incoming.DatawalletModificationCreated;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Datawallet;
 using Backbone.Modules.Devices.Domain.DomainEvents.Incoming.DatawalletModificationCreated;
 using FakeItEasy;
 
@@ -21,7 +22,11 @@ public class HandlerTests : AbstractTestsBase
         await handler.Handle(domainEvent);
 
         // Assert
-        var expectedFilteredDeviceIds = new List<string>([modifiedByDevice.Value]);
-        A.CallTo(() => mockSender.SendFilteredNotification(identity, A<IPushNotification>._, expectedFilteredDeviceIds, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockSender.SendNotification(A<DatawalletModificationsCreatedPushNotification>._,
+                A<SendPushNotificationFilter>.That.Matches(f =>
+                    f.IncludedIdentities.Contains(identity) &&
+                    f.ExcludedDevices.Contains(modifiedByDevice)),
+                A<CancellationToken>._))
+            .MustHaveHappenedOnceExactly();
     }
 }
