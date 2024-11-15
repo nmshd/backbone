@@ -11,6 +11,9 @@ public class Configuration
     [Required]
     public InfrastructureConfiguration Infrastructure { get; set; } = new();
 
+    [Required]
+    public Dictionary<string, IEnumerable<PublicRelationshipTemplateReferenceDefinition>> PublicRelationshipTemplateReferences { get; set; } = [];
+
     public class InfrastructureConfiguration
     {
         [Required]
@@ -30,5 +33,17 @@ public class Configuration
             [Required]
             public bool EnableHealthCheck { get; set; } = true;
         }
+    }
+
+    public class PublicRelationshipTemplateReferenceDefinition
+    {
+        [Required]
+        public string Title { get; set; } = string.Empty;
+
+        [Required]
+        public string Description { get; set; } = string.Empty;
+
+        [Required]
+        public string TruncatedReference { get; set; } = string.Empty;
     }
 }
