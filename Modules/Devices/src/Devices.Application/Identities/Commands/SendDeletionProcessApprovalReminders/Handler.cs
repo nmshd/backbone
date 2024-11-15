@@ -61,8 +61,11 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
 
     private async Task SendReminder3(Identity identity, double daysUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification((int)Math.Ceiling(daysUntilApprovalPeriodEnds)),
-            cancellationToken);
+        await _pushNotificationSender.SendNotification(
+            new DeletionProcessWaitingForApprovalReminderPushNotification((int)Math.Ceiling(daysUntilApprovalPeriodEnds)),
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
+            cancellationToken
+        );
         identity.DeletionProcessApprovalReminder3Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
         _logger.ApprovalReminder3Sent(deletionProcessId);
@@ -70,8 +73,11 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
 
     private async Task SendReminder2(Identity identity, double daysUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification((int)Math.Ceiling(daysUntilApprovalPeriodEnds)),
-            cancellationToken);
+        await _pushNotificationSender.SendNotification(
+            new DeletionProcessWaitingForApprovalReminderPushNotification((int)Math.Ceiling(daysUntilApprovalPeriodEnds)),
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
+            cancellationToken
+        );
         identity.DeletionProcessApprovalReminder2Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
         _logger.ApprovalReminder2Sent(deletionProcessId);
@@ -79,8 +85,11 @@ public class Handler : IRequestHandler<SendDeletionProcessApprovalRemindersComma
 
     private async Task SendReminder1(Identity identity, double daysUntilApprovalPeriodEnds, IdentityDeletionProcessId deletionProcessId, CancellationToken cancellationToken)
     {
-        await _pushNotificationSender.SendNotification(identity.Address, new DeletionProcessWaitingForApprovalReminderPushNotification((int)Math.Ceiling(daysUntilApprovalPeriodEnds)),
-            cancellationToken);
+        await _pushNotificationSender.SendNotification(
+            new DeletionProcessWaitingForApprovalReminderPushNotification((int)Math.Ceiling(daysUntilApprovalPeriodEnds)),
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
+            cancellationToken
+        );
         identity.DeletionProcessApprovalReminder1Sent();
         await _identitiesRepository.Update(identity, cancellationToken);
         _logger.ApprovalReminder1Sent(deletionProcessId);

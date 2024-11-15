@@ -2,7 +2,6 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 using FirebaseAdmin.Messaging;
 using Microsoft.Extensions.Logging;
@@ -13,44 +12,26 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.F
 public class FirebaseCloudMessagingConnector : IPnsConnector
 {
     private readonly FirebaseMessagingFactory _firebaseMessagingFactory;
-    private readonly IPushNotificationTextProvider _notificationTextProvider;
     private readonly ILogger<FirebaseCloudMessagingConnector> _logger;
     private readonly FcmOptions _options;
 
-    public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory, IOptions<FcmOptions> options,
-        IPushNotificationTextProvider notificationTextProvider, ILogger<FirebaseCloudMessagingConnector> logger)
+    public FirebaseCloudMessagingConnector(FirebaseMessagingFactory firebaseMessagingFactory, IOptions<FcmOptions> options, ILogger<FirebaseCloudMessagingConnector> logger)
     {
         _firebaseMessagingFactory = firebaseMessagingFactory;
-        _notificationTextProvider = notificationTextProvider;
         _logger = logger;
         _options = options.Value;
     }
 
-    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IPushNotification notification)
+    public async Task<SendResult> Send(PnsRegistration registration, IPushNotification notification, NotificationText notificationText)
     {
-        var registrationsArray = registrations as PnsRegistration[] ?? registrations.ToArray();
+        ValidateRegistration(registration);
 
-        ValidateRegistrations(registrationsArray);
-
-        var sendResults = new SendResults();
-
-        foreach (var registration in registrationsArray)
-        {
-            await SendNotification(registration, notification, sendResults);
-        }
-
-        return sendResults;
-    }
-
-    private async Task SendNotification(PnsRegistration registration, IPushNotification notification, SendResults sendResults)
-    {
-        var (notificationTitle, notificationBody) = await _notificationTextProvider.GetNotificationTextForDeviceId(notification.GetType(), registration.DeviceId);
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
 
         var message = new FcmMessageBuilder()
             .AddContent(notificationContent)
-            .SetNotificationText(notificationTitle, notificationBody)
+            .SetNotificationText(notificationText.Title, notificationText.Body)
             .SetTag(notificationId)
             .SetToken(registration.Handle.Value)
             .Build();
@@ -61,27 +42,15 @@ public class FirebaseCloudMessagingConnector : IPnsConnector
         try
         {
             await firebaseMessaging.SendAsync(message);
-            sendResults.AddSuccess(registration.DeviceId);
+            return SendResult.Success(registration.DeviceId);
         }
         catch (FirebaseMessagingException ex)
         {
-            switch (ex.MessagingErrorCode)
+            return ex.MessagingErrorCode switch
             {
-                case MessagingErrorCode.InvalidArgument or MessagingErrorCode.Unregistered:
-                    sendResults.AddFailure(registration.DeviceId, ErrorReason.InvalidHandle);
-                    break;
-                default:
-                    sendResults.AddFailure(registration.DeviceId, ErrorReason.Unexpected, ex.Message);
-                    break;
-            }
-        }
-    }
-
-    private void ValidateRegistrations(IEnumerable<PnsRegistration> registrations)
-    {
-        foreach (var registration in registrations)
-        {
-            ValidateRegistration(registration);
+                MessagingErrorCode.InvalidArgument or MessagingErrorCode.Unregistered => SendResult.Failure(registration.DeviceId, ErrorReason.InvalidHandle),
+                _ => SendResult.Failure(registration.DeviceId, ErrorReason.Unexpected, ex.Message)
+            };
         }
     }
 

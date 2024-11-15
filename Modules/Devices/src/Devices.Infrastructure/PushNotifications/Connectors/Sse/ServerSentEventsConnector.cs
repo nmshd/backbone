@@ -16,33 +16,27 @@ public class ServerSentEventsConnector : IPnsConnector
         _logger = logger;
     }
 
-    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IPushNotification notification)
+    // The `notificationText` parameter is not used in this implementation, so we make it optional. This simplifies the tests.
+    public async Task<SendResult> Send(PnsRegistration registration, IPushNotification notification, NotificationText? notificationText = null)
     {
-        var sendResults = new SendResults();
-
-        foreach (var registration in registrations)
+        try
         {
-            try
-            {
-                var eventName = notification.GetEventName();
+            var eventName = notification.GetEventName();
 
-                _logger.Sending(eventName);
+            _logger.Sending(eventName);
 
-                await _sseServerClient.SendEvent(registration.IdentityAddress, eventName);
-                sendResults.AddSuccess(registration.DeviceId);
-            }
-            catch (SseClientNotRegisteredException)
-            {
-                sendResults.AddFailure(registration.DeviceId, ErrorReason.InvalidHandle);
-            }
-            catch (Exception ex)
-            {
-                _logger.ErrorOnSend(ex);
-                sendResults.AddFailure(registration.DeviceId, ErrorReason.Unexpected);
-            }
+            await _sseServerClient.SendEvent(registration.IdentityAddress, eventName);
+            return SendResult.Success(registration.DeviceId);
         }
-
-        return sendResults;
+        catch (SseClientNotRegisteredException)
+        {
+            return SendResult.Failure(registration.DeviceId, ErrorReason.InvalidHandle);
+        }
+        catch (Exception ex)
+        {
+            _logger.ErrorOnSend(ex);
+            return SendResult.Failure(registration.DeviceId, ErrorReason.Unexpected);
+        }
     }
 
     public void ValidateRegistration(PnsRegistration registration)
