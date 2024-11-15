@@ -28,6 +28,7 @@ public interface IIdentitiesRepository
     Task<DbPaginationResult<Device>> FindAllDevicesOfIdentity(IdentityAddress identity, IEnumerable<DeviceId> ids, PaginationFilter paginationFilter, CancellationToken cancellationToken);
     Task<Device?> GetDeviceById(DeviceId deviceId, CancellationToken cancellationToken, bool track = false);
     Task Update(Device device, CancellationToken cancellationToken);
+    Task<T[]> FindDevices<T>(Expression<Func<Device, bool>> filter, Expression<Func<Device, T>> selector, CancellationToken cancellationToken, bool track = false);
 
     #endregion
 
