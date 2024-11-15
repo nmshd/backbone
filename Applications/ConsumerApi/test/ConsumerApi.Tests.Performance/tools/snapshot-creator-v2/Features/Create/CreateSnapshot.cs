@@ -2,7 +2,6 @@
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Interfaces;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
-using Backbone.Tooling;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -23,13 +22,13 @@ public record CreateSnapshot
         IOutputHelper OutputHelper)
         : IRequestHandler<Command, StatusMessage>
     {
-        private readonly string _outputDirName = Path.Combine(AppContext.BaseDirectory, $"Snapshot.{DateTime.UtcNow:yyyyMMdd-HHmmss}");
-
         public async Task<StatusMessage> Handle(Command request, CancellationToken cancellationToken)
         {
             try
             {
                 Logger.LogInformation("Creating pool configuration with relationships and messages ...");
+
+                var outputDirName = CreateSnapshotDirAndCopyPoolConfigFiles(request.JsonFilePath);
 
                 var poolConfig = await PoolConfigurationJsonReader.Read(request.JsonFilePath);
                 var clientCredentials = new ClientCredentials(request.ClientId, request.ClientSecret);
@@ -37,16 +36,16 @@ public record CreateSnapshot
                 var identities = await Mediator.Send(new CreateIdentities.Command(poolConfig.IdentityPoolConfigurations, request.BaseAddress, clientCredentials), cancellationToken);
                 Logger.LogInformation("Identities created");
 
-                await Mediator.Send(new AddDevices.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
-                await OutputHelper.WriteIdentities(_outputDirName, identities);
+                await Mediator.Send(new CreateDevices.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                await OutputHelper.WriteIdentities(outputDirName, identities);
                 Logger.LogInformation("Devices added");
 
                 await Mediator.Send(new CreateRelationshipTemplates.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
-                await OutputHelper.WriteRelationshipTemplates(_outputDirName, identities);
+                await OutputHelper.WriteRelationshipTemplates(outputDirName, identities);
                 Logger.LogInformation("Relationship templates created");
 
                 await Mediator.Send(new CreateRelationships.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
-                await OutputHelper.WriteRelationships(_outputDirName, identities);
+                await OutputHelper.WriteRelationships(outputDirName, identities);
                 Logger.LogInformation("Relationships created");
 
                 //await Mediator.Send(new CreateChallenges.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
@@ -71,6 +70,38 @@ public record CreateSnapshot
 
 
             return new StatusMessage(true, "Pool configuration with relationships and messages created successfully.");
+        }
+
+        private static string CreateSnapshotDirAndCopyPoolConfigFiles(string jsonFullFilePath)
+        {
+            if (!File.Exists(jsonFullFilePath))
+            {
+                throw new FileNotFoundException("Pool configuration file not found.", jsonFullFilePath);
+            }
+
+            var loadTestToken = Path.GetFileNameWithoutExtension(jsonFullFilePath).Split('.').Last();
+            var workloadName = loadTestToken.ToUpper();
+            var snapshotDirectoryName = Path.Combine(AppContext.BaseDirectory, $"Snapshot-{workloadName}.{DateTime.UtcNow:yyyyMMdd-HHmmss}");
+
+            Directory.CreateDirectory(snapshotDirectoryName);
+
+            var configDirectory = Path.Combine(snapshotDirectoryName, "PoolConfig");
+            Directory.CreateDirectory(configDirectory);
+
+            var poolConfigDirectoryName = Path.GetDirectoryName(jsonFullFilePath)!;
+            var poolConfigs = Directory.GetFiles(poolConfigDirectoryName);
+
+            foreach (var sourceFileName in poolConfigs)
+            {
+                var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(sourceFileName);
+                if (!fileNameWithoutExtension.EndsWith(loadTestToken)) continue;
+
+                var fileName = Path.GetFileName(sourceFileName);
+                var destFileName = Path.Combine(configDirectory, fileName);
+                File.Copy(sourceFileName, destFileName, true);
+            }
+
+            return snapshotDirectoryName;
         }
     }
 }

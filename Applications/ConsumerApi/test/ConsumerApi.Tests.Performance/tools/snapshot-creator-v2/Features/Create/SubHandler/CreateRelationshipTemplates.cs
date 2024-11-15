@@ -37,7 +37,7 @@ public record CreateRelationshipTemplates
 
                     if (relationshipTemplateResponse.Result is null) continue;
 
-                    identity.RelationshipTemplates.Add((Template: relationshipTemplateResponse.Result, Used: false));
+                    identity.RelationshipTemplates.Add(new RelationshipTemplateBag(relationshipTemplateResponse.Result, false));
                 }
             }
 

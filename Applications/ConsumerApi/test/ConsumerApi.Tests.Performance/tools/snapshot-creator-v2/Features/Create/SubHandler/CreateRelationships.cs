@@ -44,17 +44,42 @@ public record CreateRelationships
                         connectorIdentity.ConfigurationIdentityAddress == relationship.RecipientIdentityAddress))
                     .ToList();
 
-                foreach (var connectorIdentity in connectorIdentityToEstablishRelationshipWith)
+                List<DomainIdentity> recipientIdentities;
+
+                // note: it can happen that an app identity has more than one relationship to the same connector identity
+                if (connectorRecipientIds.Count > connectorIdentityToEstablishRelationshipWith.Count)
+                {
+                    recipientIdentities = [];
+
+                    foreach (var (recipientIdentityAddress, recipientPoolAlias) in connectorRecipientIds)
+                    {
+                        var recipientIdentity =
+                            connectorIdentityToEstablishRelationshipWith
+                                .FirstOrDefault(c =>
+                                    c.PoolAlias == recipientPoolAlias &&
+                                    c.ConfigurationIdentityAddress == recipientIdentityAddress) ??
+                            throw new InvalidOperationException($"Recipient identity with Address '{recipientIdentityAddress}' in Pool {recipientPoolAlias}" +
+                                                                $" not found in {nameof(connectorIdentityToEstablishRelationshipWith)}");
+
+                        recipientIdentities.Add(recipientIdentity);
+                    }
+                }
+                else
+                {
+                    recipientIdentities = connectorIdentityToEstablishRelationshipWith;
+                }
+
+                foreach (var recipientIdentity in recipientIdentities)
                 {
                     var appIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, appIdentity.UserCredentials);
-                    var connectorIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, connectorIdentity.UserCredentials);
+                    var connectorIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, recipientIdentity.UserCredentials);
 
-                    var nextRelationshipTemplate = connectorIdentity.RelationshipTemplates.FirstOrDefault(t => t.Used == false);
+                    var nextRelationshipTemplate = recipientIdentity.RelationshipTemplates.FirstOrDefault(t => t.Used == false);
 
                     if (nextRelationshipTemplate == default)
                     {
                         throw new InvalidOperationException(
-                            $"Connector Identity {connectorIdentity.IdentityAddress}/{connectorIdentity.ConfigurationIdentityAddress}/{connectorIdentity.IdentityPoolType}" +
+                            $"Connector Identity {recipientIdentity.IdentityAddress}/{recipientIdentity.ConfigurationIdentityAddress}/{recipientIdentity.IdentityPoolType}" +
                             $" [IdentityAddress/ConfigurationIdentityAddress/PoolAlias] has no further RelationshipTemplates.");
                     }
 
@@ -74,7 +99,7 @@ public record CreateRelationships
 
                     if (acceptRelationshipResponse.Result is null) continue;
 
-                    appIdentity.EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, connectorIdentity);
+                    appIdentity.EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, recipientIdentity);
                 }
             }
 

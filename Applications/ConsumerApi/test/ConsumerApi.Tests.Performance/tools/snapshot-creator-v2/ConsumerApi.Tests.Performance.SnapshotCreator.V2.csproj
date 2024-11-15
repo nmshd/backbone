@@ -12,6 +12,15 @@
       <Compile Remove="Docs\**" />
       <EmbeddedResource Remove="Docs\**" />
       <None Remove="Docs\**" />
+      <None Update="Config\PoolConfig-TEST.20241114-081045\pool-config.test.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Config\PoolConfig-TEST.20241114-081045\relationships.test.xlsx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="Config\PoolConfig-TEST.20241114-081045\pool-config.test.xlsx">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
     <ItemGroup>

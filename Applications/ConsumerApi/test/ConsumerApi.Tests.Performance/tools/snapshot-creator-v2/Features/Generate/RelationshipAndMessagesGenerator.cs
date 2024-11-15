@@ -11,89 +11,96 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
 
         var identityPools = poolConfiguration.IdentityPoolConfigurations;
 
-        var appIdentityPools = identityPools.Where(ip => ip.Type == IdentityPoolType.App).ToList();
-        var connectorIdentityPools = identityPools.Where(ip => ip.Type == IdentityPoolType.Connector).ToList();
+        var appIdentities = identityPools
+            .Where(ip => ip.Type == IdentityPoolType.App)
+            .SelectMany(a => a.Identities)
+            .ToList();
+        var connectorIdentities = identityPools
+            .Where(ip => ip.Type == IdentityPoolType.Connector)
+            .SelectMany(c => c.Identities)
+            .ToList();
 
-        foreach (var appIdentityPool in appIdentityPools)
+        foreach (var appIdentity in appIdentities)
         {
-            foreach (var appIdentity in appIdentityPool.Identities)
+            while (appIdentity.HasAvailableRelationships)
             {
-                while (appIdentity.HasAvailableRelationships)
+                var availableConnectorIdentities = connectorIdentities
+                    .Where(i => i.HasAvailableRelationships)
+                    .ToList();
+
+
+                IdentityConfiguration recipientConnectorIdentity = null;
+                foreach (var connectorIdentity in availableConnectorIdentities)
                 {
-                    var connectorIdentities = connectorIdentityPools
-                        .SelectMany(cip => cip.Identities)
-                        .Where(i => i.HasAvailableRelationships)
-                        .ToList();
+                    var hasRelationship =
+                        // e.g. pool: a3 address: 1 has a forward-relationship with pool: c3 address: 1
+                        appIdentity.RelationshipAndMessages
+                            .Any(rm =>
+                                rm.RecipientPoolAlias == connectorIdentity.PoolAlias &&
+                                rm.RecipientIdentityAddress == connectorIdentity.Address) ||
 
+                        // e.g. pool: c3 address: 1 has a reverse-relationship with pool: a3 address: 1
+                        connectorIdentity.RelationshipAndMessages
+                            .Any(rm =>
+                                rm.RecipientPoolAlias == appIdentity.PoolAlias &&
+                                rm.RecipientIdentityAddress == appIdentity.Address);
 
-                    IdentityConfiguration recipientConnectorIdentityConfiguration = null;
-                    foreach (var connectorIdentity in connectorIdentities)
+                    if (hasRelationship)
                     {
-                        var hasAppIdentityaConnectorIdentityRelationship = appIdentity.RelationshipAndMessages.Any(rm => rm.RecipientIdentityAddress == connectorIdentity.Address);
-                        var hasConnectorIdentityanAppIdentityRelationship = connectorIdentity.RelationshipAndMessages.Any(rm => rm.RecipientIdentityAddress == appIdentity.Address);
-
-                        if (hasAppIdentityaConnectorIdentityRelationship || hasConnectorIdentityanAppIdentityRelationship)
-                        {
-                            continue;
-                        }
-
-                        if (!connectorIdentity.HasAvailableRelationships)
-                        {
-                            continue;
-                        }
-
-                        recipientConnectorIdentityConfiguration = connectorIdentity;
-                        break;
+                        continue;
                     }
 
-                    if (recipientConnectorIdentityConfiguration == null)
+                    if (!connectorIdentity.HasAvailableRelationships)
                     {
-                        recipientConnectorIdentityConfiguration = connectorIdentities.FirstOrDefault(c => c.HasAvailableRelationships);
-
-                        if (recipientConnectorIdentityConfiguration == null)
-                        {
-                            throw new InvalidOperationException(string.Format(RELATIONSHIP_NO_RECIPIENT_AVAILABLE, appIdentity.Address, appIdentity.PoolAlias));
-                        }
+                        continue;
                     }
 
-                    var relationshipAndMessages = new RelationshipAndMessages(
-                        SenderPoolAlias: appIdentity.PoolAlias,
-                        SenderIdentityAddress: appIdentity.Address,
-                        RecipientPoolAlias: recipientConnectorIdentityConfiguration.PoolAlias,
-                        RecipientIdentityAddress: recipientConnectorIdentityConfiguration.Address);
-
-                    appIdentity.RelationshipAndMessages.Add(relationshipAndMessages);
-
-                    appIdentity.DecrementAvailableRelationships();
-
-                    relationshipAndMessages.NumberOfSentMessages = appIdentity.HasAvailableRelationships
-                        ? appIdentity.MessagesToSendPerRelationship
-                        : appIdentity.MessagesToSendPerRelationship + appIdentity.ModuloSendMessages;
-
-
-                    var reverseRelationshipAndMessages = new RelationshipAndMessages(
-                        SenderPoolAlias: recipientConnectorIdentityConfiguration.PoolAlias,
-                        SenderIdentityAddress: recipientConnectorIdentityConfiguration.Address,
-                        RecipientPoolAlias: appIdentity.PoolAlias,
-                        RecipientIdentityAddress: appIdentity.Address);
-
-                    recipientConnectorIdentityConfiguration.RelationshipAndMessages.Add(reverseRelationshipAndMessages);
-
-                    recipientConnectorIdentityConfiguration.DecrementAvailableRelationships();
-
-                    var totalSentMessagesPerRelationship = recipientConnectorIdentityConfiguration.NumberOfSentMessages / recipientConnectorIdentityConfiguration.RelationshipAndMessages.Count;
-                    var modulo = recipientConnectorIdentityConfiguration.NumberOfSentMessages % recipientConnectorIdentityConfiguration.RelationshipAndMessages.Count;
-
-                    foreach (var relationshipAndMessage in recipientConnectorIdentityConfiguration.RelationshipAndMessages)
-                    {
-                        relationshipAndMessage.NumberOfSentMessages = totalSentMessagesPerRelationship;
-                    }
-
-                    if (modulo == 0) continue;
-
-                    var relationshipAndMessageWithModulo = recipientConnectorIdentityConfiguration.RelationshipAndMessages.Last();
-                    relationshipAndMessageWithModulo.NumberOfSentMessages += modulo;
+                    recipientConnectorIdentity = connectorIdentity;
+                    break;
                 }
+
+                if (recipientConnectorIdentity == null)
+                {
+                    throw new InvalidOperationException($"No further recipient identity available to establish a relationship to sender identity Address: {appIdentity.Address} of {appIdentity.PoolAlias}");
+                }
+
+                var relationshipAndMessages = new RelationshipAndMessages(
+                    SenderPoolAlias: appIdentity.PoolAlias,
+                    SenderIdentityAddress: appIdentity.Address,
+                    RecipientPoolAlias: recipientConnectorIdentity.PoolAlias,
+                    RecipientIdentityAddress: recipientConnectorIdentity.Address);
+
+                appIdentity.RelationshipAndMessages.Add(relationshipAndMessages);
+
+                appIdentity.DecrementAvailableRelationships();
+
+                relationshipAndMessages.NumberOfSentMessages = appIdentity.HasAvailableRelationships
+                    ? appIdentity.MessagesToSendPerRelationship
+                    : appIdentity.MessagesToSendPerRelationship + appIdentity.ModuloSendMessages;
+
+
+                var reverseRelationshipAndMessages = new RelationshipAndMessages(
+                    SenderPoolAlias: recipientConnectorIdentity.PoolAlias,
+                    SenderIdentityAddress: recipientConnectorIdentity.Address,
+                    RecipientPoolAlias: appIdentity.PoolAlias,
+                    RecipientIdentityAddress: appIdentity.Address);
+
+                recipientConnectorIdentity.RelationshipAndMessages.Add(reverseRelationshipAndMessages);
+
+                recipientConnectorIdentity.DecrementAvailableRelationships();
+
+                var totalSentMessagesPerRelationship = recipientConnectorIdentity.NumberOfSentMessages / recipientConnectorIdentity.RelationshipAndMessages.Count;
+                var modulo = recipientConnectorIdentity.NumberOfSentMessages % recipientConnectorIdentity.RelationshipAndMessages.Count;
+
+                foreach (var relationshipAndMessage in recipientConnectorIdentity.RelationshipAndMessages)
+                {
+                    relationshipAndMessage.NumberOfSentMessages = totalSentMessagesPerRelationship;
+                }
+
+                if (modulo == 0) continue;
+
+                var relationshipAndMessageWithModulo = recipientConnectorIdentity.RelationshipAndMessages.Last();
+                relationshipAndMessageWithModulo.NumberOfSentMessages += modulo;
             }
         }
 

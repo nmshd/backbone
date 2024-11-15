@@ -22,7 +22,7 @@ public record DomainIdentity(
 
     public string? IdentityAddress => IdentityData?.Address; // the real identity address returned by sdk
 
-    public List<(CreateRelationshipTemplateResponse Template, bool Used)> RelationshipTemplates { get; } = [];
+    public List<RelationshipTemplateBag> RelationshipTemplates { get; } = [];
 
     public Dictionary<string, DomainIdentity> EstablishedRelationshipsById { get; } = [];
     public List<Challenge> Challenges { get; } = [];

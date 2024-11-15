@@ -1,6 +1,5 @@
 ﻿using System.Text;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
-using Org.BouncyCastle.Asn1.Ocsp;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create;
 
@@ -40,9 +39,9 @@ public class OutputHelper : IOutputHelper
 
         foreach (var identity in identitiesWithRelationshipTemplates)
         {
-            foreach (var (template, used) in identity.RelationshipTemplates)
+            foreach (var relationshipTemplateBag in identity.RelationshipTemplates)
             {
-                stringBuilder.AppendLine($"{identity.IdentityAddress};{identity.ConfigurationIdentityAddress};{identity.PoolAlias};{identity.IdentityPoolType};{template.Id};{used}");
+                stringBuilder.AppendLine($"{identity.IdentityAddress};{identity.ConfigurationIdentityAddress};{identity.PoolAlias};{identity.IdentityPoolType};{relationshipTemplateBag.Template.Id};{relationshipTemplateBag.Used}");
             }
         }
 

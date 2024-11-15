@@ -1,52 +1,56 @@
 {
   "profiles": {
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - verify-config test": {
+    "SnapshotCreator.V2 - verify-config test": {
       "commandName": "Project",
       "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet test --pool-config .\\Config\\pool-config.test.json"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - verify-config light": {
+    "SnapshotCreator.V2 - verify-config light": {
       "commandName": "Project",
       "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet light --pool-config .\\Config\\pool-config.light.json"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - verify-config heavy": {
+    "SnapshotCreator.V2 - verify-config heavy": {
       "commandName": "Project",
       "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy --pool-config .\\Config\\pool-config.heavy.json"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-config test": {
+    "SnapshotCreator.V2 - generate-config test": {
       "commandName": "Project",
       "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet test"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-config light": {
+    "SnapshotCreator.V2 - generate-config light": {
       "commandName": "Project",
       "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet light"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-config heavy": {
+    "SnapshotCreator.V2 - generate-config heavy": {
       "commandName": "Project",
       "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-config test (debugmode)": {
+    "SnapshotCreator.V2 - generate-config test (debugmode)": {
       "commandName": "Project",
       "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet test --debug"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-config light (debugmode)": {
+    "SnapshotCreator.V2 - generate-config light (debugmode)": {
       "commandName": "Project",
       "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet light --debug"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - generate-config heavy (debugmode)": {
+    "SnapshotCreator.V2 - generate-config heavy (debugmode)": {
       "commandName": "Project",
       "commandLineArgs": "generate-config --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy --debug"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - create-snapshot test": {
+    "SnapshotCreator.V2 - create-snapshot test": {
       "commandName": "Project",
       "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\pool-config.test.json"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - create-snapshot light": {
+    "SnapshotCreator.V2 - create-snapshot light": {
       "commandName": "Project",
       "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\pool-config.light.json"
     },
-    "ConsumerApi.Tests.Performance.SnapshotCreator.V2 - create-snapshot heavy": {
+    "SnapshotCreator.V2 - create-snapshot heavy": {
       "commandName": "Project",
       "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\pool-config.heavy.json"
+    },
+    "SnapshotCreator.V2 - create-snapshot test (PoolConfig-TEST.20241114-081045)": {
+      "commandName": "Project",
+      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\PoolConfig-TEST.20241114-081045\\pool-config.test.json"
     }
   }
 }
