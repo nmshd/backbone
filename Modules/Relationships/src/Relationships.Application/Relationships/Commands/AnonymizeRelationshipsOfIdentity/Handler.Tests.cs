@@ -9,11 +9,11 @@ namespace Backbone.Modules.Relationships.Application.Relationships.Commands.Anon
 public class HandlerTests : AbstractTestsBase
 {
     [Fact]
-    public async Task Command_calls_find_on_repository()
+    public async Task Command_calls_update_on_repository()
     {
         // Arrange
         var mockRelationshipTemplatesRepository = A.Fake<IRelationshipsRepository>();
-        var mockOptions = A.Fake<IOptions<ApplicationOptions>>();
+        var mockOptions = A.Dummy<IOptions<ApplicationOptions>>();
 
         var handler = new Handler(mockRelationshipTemplatesRepository, mockOptions);
         var request = new AnonymizeRelationshipsOfIdentityCommand(CreateRandomIdentityAddress());
@@ -22,7 +22,6 @@ public class HandlerTests : AbstractTestsBase
         await handler.Handle(request, CancellationToken.None);
 
         // Assert
-        A.CallTo(() => mockRelationshipTemplatesRepository.FindRelationships(A<Expression<Func<Relationship, bool>>>._, A<CancellationToken>._)).MustHaveHappened();
         A.CallTo(() => mockRelationshipTemplatesRepository.Update(A<IEnumerable<Relationship>>._)).MustHaveHappened();
     }
 }

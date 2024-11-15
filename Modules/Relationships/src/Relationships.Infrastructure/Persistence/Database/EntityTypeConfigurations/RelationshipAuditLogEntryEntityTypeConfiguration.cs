@@ -19,6 +19,6 @@ public class RelationshipAuditLogEntryEntityTypeConfiguration : EntityEntityType
         builder.Property(x => x.OldStatus);
         builder.Property(x => x.NewStatus);
         builder.Property(x => x.CreatedBy);
-        builder.Property(x => x.CreatedByDevice).IsRequired(false);
+        builder.Property(x => x.CreatedByDevice);
     }
 }

@@ -20,7 +20,7 @@ public class Handler : IRequestHandler<AnonymizeRelationshipsOfIdentityCommand>
     {
         var relationships = (await _relationshipsRepository.FindRelationships(Relationship.HasParticipant(request.IdentityAddress), cancellationToken)).ToList();
 
-        foreach (var relationship in relationships) relationship.Anonymize(request.IdentityAddress, _options.DidDomainName);
+        foreach (var relationship in relationships) relationship.AnonymizeParticipant(request.IdentityAddress, _options.DidDomainName);
 
         await _relationshipsRepository.Update(relationships);
     }

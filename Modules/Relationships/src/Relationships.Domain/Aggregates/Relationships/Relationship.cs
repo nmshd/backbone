@@ -368,19 +368,21 @@ public class Relationship : Entity
             throw new DomainException(DomainErrors.RequestingIdentityDoesNotBelongToRelationship());
     }
 
-    public void Anonymize(IdentityAddress activeIdentity, string didDomainName)
+    public void AnonymizeParticipant(IdentityAddress identityToAnonymize, string didDomainName)
     {
-        EnsureHasParticipant(activeIdentity);
+        EnsureHasParticipant(identityToAnonymize);
         EnsureStatus(RelationshipStatus.DeletionProposed, RelationshipStatus.ReadyForDeletion);
 
         var anonymousIdentity = IdentityAddress.GetAnonymized(didDomainName);
 
-        if (From == activeIdentity) From = anonymousIdentity;
-        else To = anonymousIdentity;
+        if (From == identityToAnonymize)
+            From = anonymousIdentity;
+        else
+            To = anonymousIdentity;
 
         foreach (var auditLogEntry in AuditLog)
-            if (auditLogEntry.CreatedBy == activeIdentity)
-                auditLogEntry.Anonymize(anonymousIdentity);
+            if (auditLogEntry.CreatedBy == identityToAnonymize)
+                auditLogEntry.AnonymizeIdentity(anonymousIdentity);
     }
 
     public void ParticipantIsToBeDeleted(IdentityAddress identityToBeDeleted, DateTime gracePeriodEndsAt)
