@@ -1,10 +1,10 @@
 using System.Net;
+using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications.Handles;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.Apns;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 using FakeItEasy;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -24,12 +24,9 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
 
         // Act
         var recipient = IdentityAddress.Parse("did:e:prod.enmeshed.eu:dids:b9d25bd0a2bbd3aa48437c");
-        var registrations = new List<PnsRegistration>
-        {
-            new(recipient, DeviceId.New(), PnsHandle.Parse(PushNotificationPlatform.Apns, "some-device-id").Value, APP_ID, PushEnvironment.Development)
-        };
+        var registration = new PnsRegistration(recipient, DeviceId.New(), PnsHandle.Parse(PushNotificationPlatform.Apns, "some-device-id").Value, APP_ID, PushEnvironment.Development);
 
-        await connector.Send(registrations, new TestPushNotification { Data = "test-notification-payload" });
+        await connector.Send(registration, new TestPushNotification { Data = "test-notification-payload" }, new NotificationText("Test Title", "Test Body"));
 
         // Assert
         client.SendAsyncCalls.Should().Be(1);
@@ -58,9 +55,8 @@ public class ApplePushNotificationServiceConnectorTests : AbstractTestsBase
         });
         var jwtGenerator = A.Dummy<IJwtGenerator>();
         var logger = A.Dummy<ILogger<ApplePushNotificationServiceConnector>>();
-        var notificationTextProvider = A.Dummy<IPushNotificationTextProvider>();
 
-        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, notificationTextProvider, logger);
+        return new ApplePushNotificationServiceConnector(httpClientFactory, options, jwtGenerator, logger);
     }
 
     private static IHttpClientFactory CreateHttpClientFactoryReturning(HttpClient client)
