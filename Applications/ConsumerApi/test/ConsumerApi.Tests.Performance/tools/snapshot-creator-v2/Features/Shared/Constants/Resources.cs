@@ -14,8 +14,6 @@ public static class Resources
     public const string APP_TOTAL_NUMBER_OF_SENT_MESSAGES = "App.TotalNumberOfSentMessages";
     public const string CONNECTOR_TOTAL_NUMBER_OF_SENT_MESSAGES = "Connector.TotalNumberOfSentMessages";
 
-    public const string IDENTITY_NO_MORE_RELATIONSHIPS_AVAILABLE = "No more relationships available";
-
     public const string RELATIONSHIP_COUNT_MISMATCH = "Relationship count mismatch. Expected: {0}, Actual: {1}";
 
     public const string VERIFICATION_TOTAL_NUMBER_OF_SENT_MESSAGES_FAILED = "Verification of total number of sent messages to recipient pool {0} failed. Expected: {1}, actual: {2}";

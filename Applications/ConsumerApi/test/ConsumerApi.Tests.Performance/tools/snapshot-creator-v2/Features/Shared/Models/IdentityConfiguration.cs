@@ -12,7 +12,7 @@ public record IdentityConfiguration(int Address, IdentityPoolType IdentityPoolTy
 
     public int NumberOfRelationships { get; private set; } = PoolConfiguration.NumberOfRelationships;
 
-    public int DecrementAvailableRelationships() => NumberOfRelationships == 0 ? throw new InvalidOperationException(IDENTITY_NO_MORE_RELATIONSHIPS_AVAILABLE) : NumberOfRelationships--;
+    public int DecrementAvailableRelationships() => NumberOfRelationships == 0 ? throw new InvalidOperationException("No more relationships available") : NumberOfRelationships--;
 
     public int MessagesToSendPerRelationship => PoolConfiguration.NumberOfSentMessages / PoolConfiguration.NumberOfRelationships;
     public int ModuloSendMessages => PoolConfiguration.NumberOfSentMessages % PoolConfiguration.NumberOfRelationships;
@@ -22,4 +22,14 @@ public record IdentityConfiguration(int Address, IdentityPoolType IdentityPoolTy
     public int NumberOfRelationshipTemplates => PoolConfiguration.NumberOfRelationshipTemplates;
     public int NumberOfChallenges => PoolConfiguration.NumberOfChallenges;
     public int NumberOfDatawalletModifications => PoolConfiguration.NumberOfDatawalletModifications;
+
+    public void IncrementAvailableRelationships()
+    {
+        if (NumberOfRelationships == PoolConfiguration.NumberOfRelationships)
+        {
+            throw new InvalidOperationException("Can't add more relationships than configured");
+        }
+        
+        NumberOfRelationships++;
+    }
 }
