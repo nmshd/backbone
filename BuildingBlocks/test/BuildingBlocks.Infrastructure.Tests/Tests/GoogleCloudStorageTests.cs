@@ -1,8 +1,10 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.BlobStorage;
 using Backbone.BuildingBlocks.Infrastructure.Persistence.BlobStorage.GoogleCloudStorage;
+using FakeItEasy;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Storage.V1;
+using Microsoft.Extensions.Logging;
 using Xunit.Abstractions;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.Tests;
@@ -19,8 +21,7 @@ public class GoogleCloudStorageTests : AbstractTestsBase, IAsyncLifetime
 
         _storageClient = StorageClient.Create(GoogleCredential.FromJson(authJson));
 
-        var logger = output.BuildLoggerFor<GoogleCloudStorage>();
-        _blobStorageUnderTest = new GoogleCloudStorage(_storageClient, logger);
+        _blobStorageUnderTest = new GoogleCloudStorage(_storageClient, A.Fake<ILogger<GoogleCloudStorage>>());
     }
 
     public Task InitializeAsync()
