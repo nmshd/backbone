@@ -9,18 +9,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="Docs\**" />
-      <EmbeddedResource Remove="Docs\**" />
-      <None Remove="Docs\**" />
-      <None Update="Config\PoolConfig-TEST.20241114-081045\pool-config.test.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Config\PoolConfig-TEST.20241114-081045\relationships.test.xlsx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="Config\PoolConfig-TEST.20241114-081045\pool-config.test.xlsx">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <Compile Remove="Docs\**" />
+        <EmbeddedResource Remove="Docs\**" />
+        <None Remove="Docs\**" />
+        <None Update="Config\PoolConfig-TEST.20241114-081045\pool-config.test.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Config\PoolConfig-TEST.20241114-081045\relationships.test.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Config\PoolConfig-TEST.20241114-081045\pool-config.test.xlsx">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>
@@ -29,16 +29,16 @@
 
     <ItemGroup>
         <None Update="Config\PerformanceTestData.xlsx">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="Config\pool-config.heavy.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="Config\pool-config.light.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="Config\pool-config.test.json">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 
@@ -51,7 +51,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\..\..\..\Sdks\ConsumerApi.Sdk\src\ConsumerApi.Sdk.csproj" />
+        <ProjectReference Include="..\..\..\..\..\..\Sdks\ConsumerApi.Sdk\src\ConsumerApi.Sdk.csproj" />
     </ItemGroup>
 
 </Project>

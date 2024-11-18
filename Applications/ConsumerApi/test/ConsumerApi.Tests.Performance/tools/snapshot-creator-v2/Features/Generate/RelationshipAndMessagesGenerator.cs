@@ -22,8 +22,6 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
 
         foreach (var appIdentity in appIdentities)
         {
-            System.Diagnostics.Debug.WriteLine($"app-pool:{appIdentity.PoolAlias}  address:{appIdentity.Address}");
-
             while (appIdentity.HasAvailableRelationships)
             {
                 var availableConnectorIdentities = connectorIdentities
@@ -35,18 +33,10 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
                 IdentityConfiguration recipientConnectorIdentity = null;
                 foreach (var connectorIdentity in availableConnectorIdentities)
                 {
-                    var hasRelationship =
-                        // e.g. pool: a3 address: 1 has a forward-relationship with pool: c3 address: 1
-                        appIdentity.RelationshipAndMessages
-                            .Any(rm =>
-                                rm.RecipientPoolAlias == connectorIdentity.PoolAlias &&
-                                rm.RecipientIdentityAddress == connectorIdentity.Address) ||
-
-                        // e.g. pool: c3 address: 1 has a reverse-relationship with pool: a3 address: 1
-                        connectorIdentity.RelationshipAndMessages
-                            .Any(rm =>
-                                rm.RecipientPoolAlias == appIdentity.PoolAlias &&
-                                rm.RecipientIdentityAddress == appIdentity.Address);
+                    var hasRelationship = appIdentity.RelationshipAndMessages
+                        .Any(rm =>
+                            rm.RecipientPoolAlias == connectorIdentity.PoolAlias &&
+                            rm.RecipientIdentityAddress == connectorIdentity.Address);
 
                     if (hasRelationship)
                     {
@@ -66,15 +56,8 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
 
                 if (recipientConnectorIdentity == null)
                 {
-                    #region Attempt 2: Try find another connector identity for that app identity and try to move an existing app identity relationship
+                    #region Attempt 2: Try find another connector identity for that app identity and try to move an existing app identities relationship to another connector identity
 
-                    /*  Note: In case we land here, it means that there is no further recipient identity available to establish a relationship to app identity.
-                     *  Reason: all available connector identities have already established a relationship with the app identity and one a single relationship between an app and a connector identity is allowed.
-                     *
-                     *  This is a workaround to find another connector identity for that app identity and try to move an existing app identity to connector identity relationship to another connector identity.
-                     */
-
-                    // Get all connector identities that have not established a relationship with the current app identity. E.g. app identity pool: a3 address: 1 has NOT established a relationship with pool: c3 address: 1  
                     var connectorIdentitiesThatCurrentAppIdentityHasNoRelationshipWith = connectorIdentities
                         .Where(c => !c.RelationshipAndMessages.Any(crm =>
                             crm.RecipientPoolAlias == appIdentity.PoolAlias &&
@@ -93,20 +76,16 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
                         {
                             break;
                         }
-                        
-                        System.Diagnostics.Debug.WriteLine($"connector-pool:{connectorIdentity.PoolAlias}  address:{connectorIdentity.Address}");
 
                         RelationshipAndMessages[] removeableRelationships = [.. connectorIdentity.RelationshipAndMessages];
 
                         foreach (var reverseRelationship in removeableRelationships)
                         {
-                            #region Remove the relationship and retrieve that appIdentityWithRelationship that has the relationship with the connector identity
+                            #region Remove the relationship and retrieve appIdentityWithRelationship that has a relationship with current connector identity
 
-                            // Remove the relationship from the connector identity
                             connectorIdentity.RelationshipAndMessages.Remove(reverseRelationship);
                             connectorIdentity.IncrementAvailableRelationships();
 
-                            // Get the app identity that has the relationship with the connector identity
                             var appIdentityWithRelationship = appIdentities.First(ai =>
                                 ai.PoolAlias == reverseRelationship.RecipientPoolAlias &&
                                 ai.Address == reverseRelationship.RecipientIdentityAddress);
@@ -115,16 +94,15 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
                                 rm.RecipientPoolAlias == connectorIdentity.PoolAlias &&
                                 rm.RecipientIdentityAddress == connectorIdentity.Address);
 
-                            // Remove the relationship from the app identity
                             appIdentityWithRelationship.RelationshipAndMessages.Remove(relationship);
                             appIdentityWithRelationship.IncrementAvailableRelationships();
 
                             #endregion
 
-                            #region Can that appIdentityWithRelationship establish a relationship with any other connector identity?
+                            #region Can appIdentityWithRelationship establish a relationship with any other connector identity?
 
                             var connectorIdentitiesExceptCurrentOne = connectorIdentities.Except([connectorIdentity]).ToList();
-                            
+
                             var availableConnectorIdentitiesForAppIdentityWithRelationship = connectorIdentitiesExceptCurrentOne
                                 .Where(c => c.HasAvailableRelationships)
                                 .Where(c => !c.RelationshipAndMessages.Any(crm =>
@@ -132,61 +110,22 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
                                     crm.RecipientIdentityAddress == appIdentityWithRelationship.Address))
                                 .ToList();
 
-                            // if no, revert removal of relationship and continue
                             if (availableConnectorIdentitiesForAppIdentityWithRelationship.Count == 0)
                             {
                                 appIdentityWithRelationship.RelationshipAndMessages.Add(relationship);
                                 connectorIdentity.RelationshipAndMessages.Add(reverseRelationship);
-
                                 continue;
                             }
 
                             #endregion
 
-                            #region Establish a new relationship between appIdentityWithRelationship and another available connector identity
+                            #region Create a new Relationship for appIdentityWithRelationship
 
-                            // Establish a relationship between appIdentityWithRelationship and a new connector identity
                             var newRecipientConnectorIdentity = availableConnectorIdentitiesForAppIdentityWithRelationship.First();
+                            CreateRelationship(appIdentityWithRelationship, newRecipientConnectorIdentity);
 
-                            var newRelationshipAndMessages = new RelationshipAndMessages(
-                                SenderPoolAlias: appIdentityWithRelationship.PoolAlias,
-                                SenderIdentityAddress: appIdentityWithRelationship.Address,
-                                RecipientPoolAlias: newRecipientConnectorIdentity.PoolAlias,
-                                RecipientIdentityAddress: newRecipientConnectorIdentity.Address);
-
-                            appIdentityWithRelationship.RelationshipAndMessages.Add(newRelationshipAndMessages);
-                            appIdentityWithRelationship.DecrementAvailableRelationships();
-
-                            newRelationshipAndMessages.NumberOfSentMessages = appIdentityWithRelationship.HasAvailableRelationships
-                                ? appIdentityWithRelationship.MessagesToSendPerRelationship
-                                : appIdentityWithRelationship.MessagesToSendPerRelationship + appIdentityWithRelationship.ModuloSendMessages;
-
-                            var reverseRelationshipToApp = new RelationshipAndMessages(
-                                SenderPoolAlias: newRecipientConnectorIdentity.PoolAlias,
-                                SenderIdentityAddress: newRecipientConnectorIdentity.Address,
-                                RecipientPoolAlias: appIdentityWithRelationship.PoolAlias,
-                                RecipientIdentityAddress: appIdentityWithRelationship.Address);
-
-                            newRecipientConnectorIdentity.RelationshipAndMessages.Add(reverseRelationshipToApp);
-                            newRecipientConnectorIdentity.DecrementAvailableRelationships();
-
-                            var totalSentMessagesPerRelationship2 = newRecipientConnectorIdentity.NumberOfSentMessages / newRecipientConnectorIdentity.RelationshipAndMessages.Count;
-                            var modulo2 = newRecipientConnectorIdentity.NumberOfSentMessages % newRecipientConnectorIdentity.RelationshipAndMessages.Count;
-
-                            foreach (var relationshipAndMessage in newRecipientConnectorIdentity.RelationshipAndMessages)
-                            {
-                                relationshipAndMessage.NumberOfSentMessages = totalSentMessagesPerRelationship2;
-                            }
-
-                            if (modulo2 != 0)
-                            {
-                                var relationshipAndMessageWithModulo2 = newRecipientConnectorIdentity.RelationshipAndMessages.Last();
-                                relationshipAndMessageWithModulo2.NumberOfSentMessages += modulo2;                                
-                            }
-                            
                             #endregion
 
-                            // FInally select that connectorIdentity to establish a relationship between the current app identity and it
                             recipientConnectorIdentity = connectorIdentity;
                             break;
                         }
@@ -202,43 +141,7 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
                     #endregion
                 }
 
-                var relationshipAndMessages = new RelationshipAndMessages(
-                    SenderPoolAlias: appIdentity.PoolAlias,
-                    SenderIdentityAddress: appIdentity.Address,
-                    RecipientPoolAlias: recipientConnectorIdentity.PoolAlias,
-                    RecipientIdentityAddress: recipientConnectorIdentity.Address);
-
-                appIdentity.RelationshipAndMessages.Add(relationshipAndMessages);
-
-                appIdentity.DecrementAvailableRelationships();
-
-                relationshipAndMessages.NumberOfSentMessages = appIdentity.HasAvailableRelationships
-                    ? appIdentity.MessagesToSendPerRelationship
-                    : appIdentity.MessagesToSendPerRelationship + appIdentity.ModuloSendMessages;
-
-
-                var reverseRelationshipAndMessages = new RelationshipAndMessages(
-                    SenderPoolAlias: recipientConnectorIdentity.PoolAlias,
-                    SenderIdentityAddress: recipientConnectorIdentity.Address,
-                    RecipientPoolAlias: appIdentity.PoolAlias,
-                    RecipientIdentityAddress: appIdentity.Address);
-
-                recipientConnectorIdentity.RelationshipAndMessages.Add(reverseRelationshipAndMessages);
-
-                recipientConnectorIdentity.DecrementAvailableRelationships();
-
-                var totalSentMessagesPerRelationship = recipientConnectorIdentity.NumberOfSentMessages / recipientConnectorIdentity.RelationshipAndMessages.Count;
-                var modulo = recipientConnectorIdentity.NumberOfSentMessages % recipientConnectorIdentity.RelationshipAndMessages.Count;
-
-                foreach (var relationshipAndMessage in recipientConnectorIdentity.RelationshipAndMessages)
-                {
-                    relationshipAndMessage.NumberOfSentMessages = totalSentMessagesPerRelationship;
-                }
-
-                if (modulo == 0) continue;
-
-                var relationshipAndMessageWithModulo = recipientConnectorIdentity.RelationshipAndMessages.Last();
-                relationshipAndMessageWithModulo.NumberOfSentMessages += modulo;
+                CreateRelationship(appIdentity, recipientConnectorIdentity);
             }
         }
 
@@ -258,6 +161,45 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
 
 
         return relationshipAndMessagesList;
+    }
+
+    private static void CreateRelationship(IdentityConfiguration senderIdentity, IdentityConfiguration recipientIdentity)
+    {
+        var relationshipAndMessages = new RelationshipAndMessages(
+            SenderPoolAlias: senderIdentity.PoolAlias,
+            SenderIdentityAddress: senderIdentity.Address,
+            RecipientPoolAlias: recipientIdentity.PoolAlias,
+            RecipientIdentityAddress: recipientIdentity.Address);
+
+        senderIdentity.RelationshipAndMessages.Add(relationshipAndMessages);
+        senderIdentity.DecrementAvailableRelationships();
+
+        relationshipAndMessages.NumberOfSentMessages = senderIdentity.HasAvailableRelationships
+            ? senderIdentity.MessagesToSendPerRelationship
+            : senderIdentity.MessagesToSendPerRelationship + senderIdentity.ModuloSendMessages;
+
+
+        var reverseRelationshipAndMessages = new RelationshipAndMessages(
+            SenderPoolAlias: recipientIdentity.PoolAlias,
+            SenderIdentityAddress: recipientIdentity.Address,
+            RecipientPoolAlias: senderIdentity.PoolAlias,
+            RecipientIdentityAddress: senderIdentity.Address);
+
+        recipientIdentity.RelationshipAndMessages.Add(reverseRelationshipAndMessages);
+        recipientIdentity.DecrementAvailableRelationships();
+
+        var totalSentMessagesPerRelationship = recipientIdentity.NumberOfSentMessages / recipientIdentity.RelationshipAndMessages.Count;
+        var modulo = recipientIdentity.NumberOfSentMessages % recipientIdentity.RelationshipAndMessages.Count;
+
+        foreach (var relationshipAndMessage in recipientIdentity.RelationshipAndMessages)
+        {
+            relationshipAndMessage.NumberOfSentMessages = totalSentMessagesPerRelationship;
+        }
+
+        if (modulo == 0) return;
+
+        var relationshipAndMessageWithModulo = recipientIdentity.RelationshipAndMessages.Last();
+        relationshipAndMessageWithModulo.NumberOfSentMessages += modulo;
     }
 
     private static void VerifyNumberOfSentMessages(RelationshipAndMessages[] relationshipAndMessages, IdentityPoolType recipientIdentityPoolType, long expectedTotalNumberOfSentMessages)
