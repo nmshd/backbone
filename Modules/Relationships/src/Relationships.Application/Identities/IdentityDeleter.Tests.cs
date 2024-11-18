@@ -1,5 +1,5 @@
 ﻿using Backbone.BuildingBlocks.Application.Identities;
-using Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeRelationshipsOfIdentity;
+using Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeAndAnonymizeRelationshipsOfIdentity;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.AnonymizeRelationshipTemplateAllocationsAllocatedByIdentity;
 using Backbone.Modules.Relationships.Application.RelationshipTemplates.Commands.DeleteRelationshipTemplatesOfIdentity;
 using FakeItEasy;
@@ -23,7 +23,7 @@ public class IdentityDeleterTests : AbstractTestsBase
 
         // Assert
         A.CallTo(() => mockMediator.Send(
-            A<DecomposeRelationshipsOfIdentityCommand>.That.Matches(i => i.IdentityAddress == identityAddress),
+            A<DecomposeAndAnonymizeRelationshipsOfIdentityCommand>.That.Matches(i => i.IdentityAddress == identityAddress),
             A<CancellationToken>._)).MustHaveHappenedOnceExactly();
         A.CallTo(() => mockMediator.Send(
             A<DeleteRelationshipTemplatesOfIdentityCommand>.That.Matches(i => i.IdentityAddress == identityAddress),

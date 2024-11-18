@@ -1,10 +1,9 @@
-﻿using System.Linq.Expressions;
-using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 using FakeItEasy;
 using Microsoft.Extensions.Options;
 
-namespace Backbone.Modules.Relationships.Application.Relationships.Commands.AnonymizeRelationshipsOfIdentity;
+namespace Backbone.Modules.Relationships.Application.Relationships.Commands.DecomposeAndAnonymizeRelationshipsOfIdentity;
 
 public class HandlerTests : AbstractTestsBase
 {
@@ -16,7 +15,7 @@ public class HandlerTests : AbstractTestsBase
         var mockOptions = A.Dummy<IOptions<ApplicationOptions>>();
 
         var handler = new Handler(mockRelationshipTemplatesRepository, mockOptions);
-        var request = new AnonymizeRelationshipsOfIdentityCommand(CreateRandomIdentityAddress());
+        var request = new DecomposeAndAnonymizeRelationshipsOfIdentityCommand(CreateRandomIdentityAddress());
 
         // Act
         await handler.Handle(request, CancellationToken.None);
