@@ -40,10 +40,38 @@ public record CreateMessages
                         recipient.ConfigurationIdentityAddress == relationship.RecipientIdentityAddress))
                     .ToList();
 
+                var recipientIdentityIds = recipientIdentities
+                    .Select(c =>
+                    (
+                        c.ConfigurationIdentityAddress,
+                        c.PoolAlias
+                    ))
+                    .ToList();
+
+                if (recipientsRelationshipIds.Count != recipientIdentities.Count ||
+                    !recipientsRelationshipIds.SequenceEqual(recipientIdentityIds))
+                {
+                    throw new InvalidOperationException("Mismatch between configured relationships and connector identities." +
+                                                        Environment.NewLine +
+                                                        $"sender-identity: {senderIdentity.IdentityAddress}/{senderIdentity.ConfigurationIdentityAddress}/{senderIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
+                                                        Environment.NewLine +
+                                                        $"Expected: {string.Join(", ", recipientsRelationshipIds.Select(c => $"{c.RecipientIdentityAddress}/{c.RecipientPoolAlias}"))} " +
+                                                        Environment.NewLine +
+                                                        $"Actual: {string.Join(", ", recipientIdentityIds.Select(c => $"{c.ConfigurationIdentityAddress}/{c.PoolAlias}"))}");
+                }
 
                 foreach (var recipientIdentity in recipientIdentities)
                 {
                     var sdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, senderIdentity.UserCredentials);
+
+                    if (recipientIdentity.IdentityAddress is null)
+                    {
+                        throw new InvalidOperationException("Recipient identity address is null." +
+                                                            Environment.NewLine +
+                                                            $"sender-identity: {senderIdentity.IdentityAddress}/{senderIdentity.ConfigurationIdentityAddress}/{senderIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
+                                                            Environment.NewLine +
+                                                            $"recipient-identity: null/{recipientIdentity.ConfigurationIdentityAddress}/{recipientIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}");
+                    }
 
                     var messageResponse = await sdkClient.Messages.SendMessage(new SendMessageRequest
                     {
@@ -58,6 +86,21 @@ public record CreateMessages
                         Attachments = [],
                         Body = ConvertibleString.FromUtf8("Message body").BytesRepresentation
                     });
+
+                    if (messageResponse.IsError)
+                    {
+                        throw new InvalidOperationException("Failed to send message." +
+                                                            Environment.NewLine +
+                                                            $"sender-identity: {senderIdentity.IdentityAddress}/{senderIdentity.ConfigurationIdentityAddress}/{senderIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
+                                                            Environment.NewLine +
+                                                            $"recipient-identity: {recipientIdentity.IdentityAddress}/{recipientIdentity.ConfigurationIdentityAddress}/{recipientIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
+                                                            Environment.NewLine +
+                                                            $"Error Id: {messageResponse.Error.Id}" +
+                                                            Environment.NewLine +
+                                                            $"Error Code: {messageResponse.Error.Code}" +
+                                                            Environment.NewLine +
+                                                            $"Error Message: {messageResponse.Error.Message}");
+                    }
 
                     if (messageResponse.Result is null) continue;
 

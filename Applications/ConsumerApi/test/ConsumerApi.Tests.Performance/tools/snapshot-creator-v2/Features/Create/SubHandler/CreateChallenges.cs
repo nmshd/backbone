@@ -31,7 +31,9 @@ public record CreateChallenges
                     {
                         throw new InvalidOperationException("Failed to create challenge." +
                                                             Environment.NewLine +
-                                                            $"app-identity: {identitiesWithChallenge.IdentityAddress}/{identitiesWithChallenge.ConfigurationIdentityAddress}/{identitiesWithChallenge.PoolAlias} [IdentityAddress/ConfigurationIdentityAddress/PoolAlias]" +
+                                                            $"app-identity: {identitiesWithChallenge.IdentityAddress}/{identitiesWithChallenge.ConfigurationIdentityAddress}/{identitiesWithChallenge.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
+                                                            Environment.NewLine +
+                                                            $"Error Id: {apiResponse.Error.Id}" +
                                                             Environment.NewLine +
                                                             $"Error Code: {apiResponse.Error.Code}" +
                                                             Environment.NewLine +

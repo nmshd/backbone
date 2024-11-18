@@ -52,10 +52,9 @@ public record CreateSnapshot
                 await OutputHelper.WriteChallenges(outputDirName, identities);
                 Logger.LogInformation("Challenges created");
 
-                //await Mediator.Send(new CreateMessages.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
-
-                //OutputHelper.WriteMessages(_outputDirName, identities);
-                //Logger.LogInformation("Messages created");
+                await Mediator.Send(new CreateMessages.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
+                await OutputHelper.WriteMessages(outputDirName, identities);
+                Logger.LogInformation("Messages created");
 
                 //await Mediator.Send(new CreateDatawalletModifications.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
 

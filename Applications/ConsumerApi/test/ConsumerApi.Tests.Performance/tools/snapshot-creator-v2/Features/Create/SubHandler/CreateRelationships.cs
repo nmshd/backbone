@@ -21,8 +21,15 @@ public record CreateRelationships
             var appIdentities = request.Identities.Where(i => i.IdentityPoolType == IdentityPoolType.App).ToList();
 
 
-            if (connectorIdentities.Any(c => c.RelationshipTemplates.Count < 1))
-                throw new Exception("One or more relationship target connector identities do not have a usable relationship template.");
+            if (connectorIdentities.Any(c => c.RelationshipTemplates.Count == 0))
+                throw new Exception("One or more relationship target connector identities do not have a usable relationship template." +
+                                    Environment.NewLine +
+                                    "Connector identities:" +
+                                    Environment.NewLine +
+                                    $"{string.Join($",{Environment.NewLine}",
+                                        connectorIdentities
+                                            .Where(c => c.RelationshipTemplates.Count == 0)
+                                            .Select(c => $"{c.IdentityAddress}/{c.ConfigurationIdentityAddress}/{c.PoolAlias} {IDENTITY_LOG_SUFFIX}"))}");
 
 
             foreach (var appIdentity in appIdentities)
@@ -58,25 +65,25 @@ public record CreateRelationships
                 {
                     throw new InvalidOperationException("Mismatch between configured relationships and connector identities." +
                                                         Environment.NewLine +
-                                                        $"app-identity: {appIdentity.IdentityAddress}/{appIdentity.ConfigurationIdentityAddress}/{appIdentity.PoolAlias} [IdentityAddress/ConfigurationIdentityAddress/PoolAlias]" +
+                                                        $"app-identity: {appIdentity.IdentityAddress}/{appIdentity.ConfigurationIdentityAddress}/{appIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
                                                         Environment.NewLine +
                                                         $"Expected: {string.Join(", ", connectorRecipientIds.Select(c => $"{c.RecipientIdentityAddress}/{c.RecipientPoolAlias}"))} " +
                                                         Environment.NewLine +
                                                         $"Actual: {string.Join(", ", connectorIdentityToEstablishRelationshipWithIds.Select(c => $"{c.ConfigurationIdentityAddress}/{c.PoolAlias}"))}");
                 }
 
-                foreach (var recipientIdentity in connectorIdentityToEstablishRelationshipWith)
+                foreach (var connectorIdentity in connectorIdentityToEstablishRelationshipWith)
                 {
                     var appIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, appIdentity.UserCredentials);
-                    var connectorIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, recipientIdentity.UserCredentials);
+                    var connectorIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, connectorIdentity.UserCredentials);
 
-                    var nextRelationshipTemplate = recipientIdentity.RelationshipTemplates.FirstOrDefault(t => t.Used == false);
+                    var nextRelationshipTemplate = connectorIdentity.RelationshipTemplates.FirstOrDefault(t => t.Used == false);
 
                     if (nextRelationshipTemplate == default)
                     {
-                        throw new InvalidOperationException(
-                            $"Connector Identity {recipientIdentity.IdentityAddress}/{recipientIdentity.ConfigurationIdentityAddress}/{recipientIdentity.IdentityPoolType}" +
-                            $" [IdentityAddress/ConfigurationIdentityAddress/PoolAlias] has no further RelationshipTemplates.");
+                        throw new InvalidOperationException("Connector Identity has no further RelationshipTemplates." +
+                                                            Environment.NewLine +
+                                                            $"connector-identity: {connectorIdentity.IdentityAddress}/{connectorIdentity.ConfigurationIdentityAddress}/{connectorIdentity.IdentityPoolType} {IDENTITY_LOG_SUFFIX}");
                     }
 
                     nextRelationshipTemplate.Used = true;
@@ -92,9 +99,11 @@ public record CreateRelationships
                     {
                         throw new InvalidOperationException("Failed to create relationship." +
                                                             Environment.NewLine +
-                                                            $"app-identity: {appIdentity.IdentityAddress}/{appIdentity.ConfigurationIdentityAddress}/{appIdentity.PoolAlias} [IdentityAddress/ConfigurationIdentityAddress/PoolAlias]" +
+                                                            $"app-identity: {appIdentity.IdentityAddress}/{appIdentity.ConfigurationIdentityAddress}/{appIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
                                                             Environment.NewLine +
-                                                            $"connector-identity: {recipientIdentity.IdentityAddress}/{recipientIdentity.ConfigurationIdentityAddress}/{recipientIdentity.PoolAlias} [IdentityAddress/ConfigurationIdentityAddress/PoolAlias]" +
+                                                            $"connector-identity: {connectorIdentity.IdentityAddress}/{connectorIdentity.ConfigurationIdentityAddress}/{connectorIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
+                                                            Environment.NewLine +
+                                                            $"Error Id: {createRelationshipResponse.Error.Id}" +
                                                             Environment.NewLine +
                                                             $"Error Code: {createRelationshipResponse.Error.Code}" +
                                                             Environment.NewLine +
@@ -105,14 +114,15 @@ public record CreateRelationships
                         createRelationshipResponse.Result!.Id,
                         new AcceptRelationshipRequest());
 
-
                     if (acceptRelationshipResponse.IsError)
                     {
                         throw new InvalidOperationException("Failed to accept relationship." +
                                                             Environment.NewLine +
-                                                            $"app-identity: {appIdentity.IdentityAddress}/{appIdentity.ConfigurationIdentityAddress}/{appIdentity.PoolAlias} [IdentityAddress/ConfigurationIdentityAddress/PoolAlias] a" +
+                                                            $"app-identity: {appIdentity.IdentityAddress}/{appIdentity.ConfigurationIdentityAddress}/{appIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
                                                             Environment.NewLine +
-                                                            $"connector-identity: {recipientIdentity.IdentityAddress}/{recipientIdentity.ConfigurationIdentityAddress}/{recipientIdentity.PoolAlias} [IdentityAddress/ConfigurationIdentityAddress/PoolAlias] " +
+                                                            $"connector-identity: {connectorIdentity.IdentityAddress}/{connectorIdentity.ConfigurationIdentityAddress}/{connectorIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
+                                                            Environment.NewLine +
+                                                            $"Error Id: {acceptRelationshipResponse.Error.Id}" +
                                                             Environment.NewLine +
                                                             $"Error Code: {acceptRelationshipResponse.Error.Code}" +
                                                             Environment.NewLine +
@@ -121,7 +131,7 @@ public record CreateRelationships
 
                     if (acceptRelationshipResponse.Result is null) continue;
 
-                    appIdentity.EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, recipientIdentity);
+                    appIdentity.EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, connectorIdentity);
                 }
             }
 

@@ -20,4 +20,6 @@ public static class Resources
 
     public const string PERFORMANCE_TEST_CONFIG_READER_INVALID_FILE_EXT = "Invalid file extension. Supported extensions are {0}, actual: {1}";
     public const string IDENTITY_POOL_CONFIGURATION_NOT_CREATED = "Identity Pool Configuration not created, but is a pre-condition to generate relationships";
+
+    public const string IDENTITY_LOG_SUFFIX = "[IdentityAddress/ConfigurationIdentityAddress/PoolAlias]";
 }
