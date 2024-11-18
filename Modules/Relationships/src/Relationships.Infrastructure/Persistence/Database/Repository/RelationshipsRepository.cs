@@ -100,8 +100,6 @@ public class RelationshipsRepository : IRelationshipsRepository
     public async Task DeleteRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
     {
         await _relationships.Where(filter).ExecuteDeleteAsync(cancellationToken);
-
-        _dbContext.ChangeTracker.Clear();
     }
 
     public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
