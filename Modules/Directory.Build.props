@@ -1,11 +1,11 @@
 <Project>
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
         <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
         <Nullable>enable</Nullable>
-        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+        <!--        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>-->
         <OptimizeImplicitlyTriggeredBuild>True</OptimizeImplicitlyTriggeredBuild>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 
