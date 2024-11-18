@@ -19,7 +19,6 @@ public record CreateChallenges
         {
             var identitiesWithChallenges = request.Identities.Where(i => i.NumberOfChallenges > 0).ToList();
 
-
             foreach (var identitiesWithChallenge in identitiesWithChallenges)
             {
                 var sdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identitiesWithChallenge.UserCredentials);
@@ -27,6 +26,17 @@ public record CreateChallenges
                 for (var i = 0; i < identitiesWithChallenge.NumberOfChallenges; i++)
                 {
                     var apiResponse = await sdkClient.Challenges.CreateChallenge();
+
+                    if (apiResponse.IsError)
+                    {
+                        throw new InvalidOperationException("Failed to create challenge." +
+                                                            Environment.NewLine +
+                                                            $"app-identity: {identitiesWithChallenge.IdentityAddress}/{identitiesWithChallenge.ConfigurationIdentityAddress}/{identitiesWithChallenge.PoolAlias} [IdentityAddress/ConfigurationIdentityAddress/PoolAlias]" +
+                                                            Environment.NewLine +
+                                                            $"Error Code: {apiResponse.Error.Code}" +
+                                                            Environment.NewLine +
+                                                            $"Error Message: {apiResponse.Error.Message}");
+                    }
 
                     var challenge = apiResponse.Result;
 

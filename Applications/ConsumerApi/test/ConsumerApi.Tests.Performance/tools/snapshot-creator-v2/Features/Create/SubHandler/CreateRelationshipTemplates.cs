@@ -35,6 +35,17 @@ public record CreateRelationshipTemplates
                             MaxNumberOfAllocations = 1000
                         });
 
+                    if (relationshipTemplateResponse.IsError)
+                    {
+                        throw new InvalidOperationException("Failed to create relationship template." +
+                                                            Environment.NewLine +
+                                                            $"app-identity: {identity.IdentityAddress}/{identity.ConfigurationIdentityAddress}/{identity.PoolAlias} [IdentityAddress/ConfigurationIdentityAddress/PoolAlias]" +
+                                                            Environment.NewLine +
+                                                            $"Error Code: {relationshipTemplateResponse.Error.Code}" +
+                                                            Environment.NewLine +
+                                                            $"Error Message: {relationshipTemplateResponse.Error.Message}");
+                    }
+
                     if (relationshipTemplateResponse.Result is null) continue;
 
                     identity.RelationshipTemplates.Add(new RelationshipTemplateBag(relationshipTemplateResponse.Result, false));

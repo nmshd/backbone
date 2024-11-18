@@ -26,7 +26,6 @@ public record CreateDevices
                     if (newDevice.DeviceData is null)
                         throw new Exception("The SDK could not be used to create a new database Device or the DeviceData is null.");
 
-
                     identity.AddDevice(newDevice.DeviceData.DeviceId);
                 }
             }

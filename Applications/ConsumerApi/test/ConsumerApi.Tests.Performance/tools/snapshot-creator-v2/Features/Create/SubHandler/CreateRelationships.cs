@@ -44,32 +44,28 @@ public record CreateRelationships
                         connectorIdentity.ConfigurationIdentityAddress == relationship.RecipientIdentityAddress))
                     .ToList();
 
-                List<DomainIdentity> recipientIdentities;
 
-                // note: it can happen that an app identity has more than one relationship to the same connector identity
-                if (connectorRecipientIds.Count > connectorIdentityToEstablishRelationshipWith.Count)
+                var connectorIdentityToEstablishRelationshipWithIds = connectorIdentityToEstablishRelationshipWith
+                    .Select(c =>
+                    (
+                        c.ConfigurationIdentityAddress,
+                        c.PoolAlias
+                    ))
+                    .ToList();
+
+                if (connectorRecipientIds.Count != connectorIdentityToEstablishRelationshipWith.Count ||
+                    !connectorRecipientIds.SequenceEqual(connectorIdentityToEstablishRelationshipWithIds))
                 {
-                    recipientIdentities = [];
-
-                    foreach (var (recipientIdentityAddress, recipientPoolAlias) in connectorRecipientIds)
-                    {
-                        var recipientIdentity =
-                            connectorIdentityToEstablishRelationshipWith
-                                .FirstOrDefault(c =>
-                                    c.PoolAlias == recipientPoolAlias &&
-                                    c.ConfigurationIdentityAddress == recipientIdentityAddress) ??
-                            throw new InvalidOperationException($"Recipient identity with Address '{recipientIdentityAddress}' in Pool {recipientPoolAlias}" +
-                                                                $" not found in {nameof(connectorIdentityToEstablishRelationshipWith)}");
-
-                        recipientIdentities.Add(recipientIdentity);
-                    }
-                }
-                else
-                {
-                    recipientIdentities = connectorIdentityToEstablishRelationshipWith;
+                    throw new InvalidOperationException("Mismatch between configured relationships and connector identities." +
+                                                        Environment.NewLine +
+                                                        $"app-identity: {appIdentity.IdentityAddress}/{appIdentity.ConfigurationIdentityAddress}/{appIdentity.PoolAlias} [IdentityAddress/ConfigurationIdentityAddress/PoolAlias]" +
+                                                        Environment.NewLine +
+                                                        $"Expected: {string.Join(", ", connectorRecipientIds.Select(c => $"{c.RecipientIdentityAddress}/{c.RecipientPoolAlias}"))} " +
+                                                        Environment.NewLine +
+                                                        $"Actual: {string.Join(", ", connectorIdentityToEstablishRelationshipWithIds.Select(c => $"{c.ConfigurationIdentityAddress}/{c.PoolAlias}"))}");
                 }
 
-                foreach (var recipientIdentity in recipientIdentities)
+                foreach (var recipientIdentity in connectorIdentityToEstablishRelationshipWith)
                 {
                     var appIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, appIdentity.UserCredentials);
                     var connectorIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, recipientIdentity.UserCredentials);
@@ -92,10 +88,36 @@ public record CreateRelationships
                             Content = []
                         });
 
+                    if (createRelationshipResponse.IsError)
+                    {
+                        throw new InvalidOperationException("Failed to create relationship." +
+                                                            Environment.NewLine +
+                                                            $"app-identity: {appIdentity.IdentityAddress}/{appIdentity.ConfigurationIdentityAddress}/{appIdentity.PoolAlias} [IdentityAddress/ConfigurationIdentityAddress/PoolAlias]" +
+                                                            Environment.NewLine +
+                                                            $"connector-identity: {recipientIdentity.IdentityAddress}/{recipientIdentity.ConfigurationIdentityAddress}/{recipientIdentity.PoolAlias} [IdentityAddress/ConfigurationIdentityAddress/PoolAlias]" +
+                                                            Environment.NewLine +
+                                                            $"Error Code: {createRelationshipResponse.Error.Code}" +
+                                                            Environment.NewLine +
+                                                            $"Error Message: {createRelationshipResponse.Error.Message}");
+                    }
+
                     var acceptRelationshipResponse = await connectorIdentitySdkClient.Relationships.AcceptRelationship(
                         createRelationshipResponse.Result!.Id,
                         new AcceptRelationshipRequest());
 
+
+                    if (acceptRelationshipResponse.IsError)
+                    {
+                        throw new InvalidOperationException("Failed to accept relationship." +
+                                                            Environment.NewLine +
+                                                            $"app-identity: {appIdentity.IdentityAddress}/{appIdentity.ConfigurationIdentityAddress}/{appIdentity.PoolAlias} [IdentityAddress/ConfigurationIdentityAddress/PoolAlias] a" +
+                                                            Environment.NewLine +
+                                                            $"connector-identity: {recipientIdentity.IdentityAddress}/{recipientIdentity.ConfigurationIdentityAddress}/{recipientIdentity.PoolAlias} [IdentityAddress/ConfigurationIdentityAddress/PoolAlias] " +
+                                                            Environment.NewLine +
+                                                            $"Error Code: {acceptRelationshipResponse.Error.Code}" +
+                                                            Environment.NewLine +
+                                                            $"Error Message: {acceptRelationshipResponse.Error.Message}");
+                    }
 
                     if (acceptRelationshipResponse.Result is null) continue;
 

@@ -48,10 +48,9 @@ public record CreateSnapshot
                 await OutputHelper.WriteRelationships(outputDirName, identities);
                 Logger.LogInformation("Relationships created");
 
-                //await Mediator.Send(new CreateChallenges.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
-
-                //OutputHelper.WriteChallenges(_outputDirName, identities);
-                //Logger.LogInformation("Challenges created");
+                await Mediator.Send(new CreateChallenges.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                await OutputHelper.WriteChallenges(outputDirName, identities);
+                Logger.LogInformation("Challenges created");
 
                 //await Mediator.Send(new CreateMessages.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
 
