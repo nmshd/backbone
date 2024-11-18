@@ -1,10 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
-    </PropertyGroup>
-
     <ItemGroup>
         <ProjectReference Include="..\..\..\BuildingBlocks\src\BuildingBlocks.SDK\BuildingBlocks.SDK.csproj" />
         <ProjectReference Include="..\..\..\BuildingBlocks\src\Crypto\Crypto.csproj" />
