@@ -3,10 +3,6 @@
     <PropertyGroup>
         <IsPackable>false</IsPackable>
     </PropertyGroup>
-    <ItemGroup Label="Packages references only to fix vulnerabilities">
-        <PackageReference Include="Azure.Identity" Version="1.11.4" />
-        <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="MediatR" Version="12.4.1" />

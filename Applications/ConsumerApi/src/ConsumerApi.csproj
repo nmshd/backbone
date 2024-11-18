@@ -4,10 +4,6 @@
         <UserSecretsId>f114fba8-95dd-4fee-8385-af8e8a343c68</UserSecretsId>
     </PropertyGroup>
 
-    <ItemGroup Label="Packages references only to fix vulnerabilities">
-        <PackageReference Include="Azure.Identity" Version="1.11.4" />
-    </ItemGroup>
-
     <ItemGroup>
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2" />
         <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />

@@ -4,10 +4,6 @@
         <IsPackable>false</IsPackable>
     </PropertyGroup>
 
-    <ItemGroup Label="Packages references only to fix vulnerabilities">
-        <PackageReference Include="Azure.Identity" Version="1.11.4" />
-    </ItemGroup>
-
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="9.0.0" />
         <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0" />

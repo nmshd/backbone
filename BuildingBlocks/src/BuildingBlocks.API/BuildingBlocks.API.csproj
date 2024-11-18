@@ -1,9 +1,5 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-    <ItemGroup Label="Packages references only to fix vulnerabilities">
-        <PackageReference Include="Azure.Identity" Version="1.11.4" />
-    </ItemGroup>
-
     <ItemGroup>
         <PackageReference Include="AspNetCore.HealthChecks.NpgSql" Version="8.0.2" />
         <PackageReference Include="AspNetCore.HealthChecks.SqlServer" Version="8.0.2" />
