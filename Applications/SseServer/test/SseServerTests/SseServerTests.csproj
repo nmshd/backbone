@@ -5,6 +5,10 @@
         <IsTestProject>true</IsTestProject>
     </PropertyGroup>
 
+    <ItemGroup Label="Packages references only to fix vulnerabilities">
+        <PackageReference Include="Azure.Identity" Version="1.11.4" />
+    </ItemGroup>
+
     <ItemGroup>
         <PackageReference Include="coverlet.collector" Version="6.0.2" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />

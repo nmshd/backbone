@@ -8,6 +8,10 @@
         <ProjectReference Include="..\Quotas.Infrastructure\Quotas.Infrastructure.csproj" />
     </ItemGroup>
 
+    <ItemGroup Label="Packages references only to fix vulnerabilities">
+        <PackageReference Include="Azure.Identity" Version="1.11.4" />
+    </ItemGroup>
+
     <ItemGroup>
         <PackageReference Include="ReHackt.Extensions.Options.Validation" Version="9.0.0" />
     </ItemGroup>

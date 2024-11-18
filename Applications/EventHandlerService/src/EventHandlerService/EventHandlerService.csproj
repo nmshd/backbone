@@ -6,6 +6,10 @@
         <DockerfileContext>..\..\..</DockerfileContext>
     </PropertyGroup>
 
+    <ItemGroup Label="Packages references only to fix vulnerabilities">
+        <PackageReference Include="Azure.Identity" Version="1.11.4" />
+    </ItemGroup>
+
     <ItemGroup>
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
         <PackageReference Include="Serilog.Enrichers.Demystifier" Version="1.0.3" />
