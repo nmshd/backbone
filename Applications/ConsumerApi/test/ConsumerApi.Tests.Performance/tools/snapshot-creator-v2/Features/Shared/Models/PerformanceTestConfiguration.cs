@@ -22,6 +22,11 @@ public record PerformanceTestConfiguration(
         var isConfigEqual = VerificationConfiguration.Equals(other.VerificationConfiguration);
         var isPoolConfigsEqual = PoolConfigurations.SequenceEqual(other.PoolConfigurations);
 
+        if (RelationshipAndMessages.Count == 0 && other.RelationshipAndMessages.Count == 0)
+        {
+            return isConfigEqual && isPoolConfigsEqual;
+        }
+
         var a1PoolRelations = RelationshipAndMessages.Where(r => r.SenderPoolAlias == "a1").ToList();
         var a2PoolRelations = RelationshipAndMessages.Where(r => r.SenderPoolAlias == "a2").ToList();
         var a3PoolRelations = RelationshipAndMessages.Where(r => r.SenderPoolAlias == "a3").ToList();
