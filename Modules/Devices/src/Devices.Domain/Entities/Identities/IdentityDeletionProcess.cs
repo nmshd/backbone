@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
@@ -48,7 +49,7 @@ public class IdentityDeletionProcess : Entity
     public IReadOnlyList<IdentityDeletionProcessAuditLogEntry> AuditLog => _auditLog;
     public DeletionProcessStatus Status { get; private set; }
     public DateTime CreatedAt { get; }
-    public DateTime ApprovalPeriodEndsAt => CreatedAt.AddDays(IdentityDeletionConfiguration.LengthOfApprovalPeriod);
+    public DateTime ApprovalPeriodEndsAt => CreatedAt.AddDays(IdentityDeletionConfiguration.Instance.LengthOfApprovalPeriodInDays);
 
     public DateTime? ApprovalReminder1SentAt { get; private set; }
     public DateTime? ApprovalReminder2SentAt { get; private set; }
@@ -153,7 +154,7 @@ public class IdentityDeletionProcess : Entity
     {
         ApprovedAt = SystemTime.UtcNow;
         ApprovedByDevice = createdByDevice;
-        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod);
+        GracePeriodEndsAt = SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays);
         ChangeStatus(DeletionProcessStatus.Approved, address, address);
     }
 

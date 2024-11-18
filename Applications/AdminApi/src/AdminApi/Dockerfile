@@ -91,7 +91,7 @@ RUN dotnet publish /p:ContinuousIntegrationBuild=true /p:UseAppHost=false --no-r
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app/publish/health "/src/Applications/HealthCheck/src/HealthCheck.csproj"
 
 #### Build Flutter Admin UI ####
-FROM ghcr.io/cirruslabs/flutter:3.24.4 AS flutter-build-env
+FROM ghcr.io/cirruslabs/flutter:3.24.5 AS flutter-build-env
 
 COPY Applications/AdminUi /src
 WORKDIR /src
@@ -101,7 +101,7 @@ WORKDIR /src/apps/admin_ui
 RUN flutter build web --output /build
 
 #### Final #####
-FROM mcr.microsoft.com/dotnet/aspnet:8.0.10-jammy-chiseled
+FROM mcr.microsoft.com/dotnet/aspnet:8.0.11-jammy-chiseled
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD [ "dotnet", "/app/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]

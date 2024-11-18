@@ -1,8 +1,9 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.BuildingBlocks.Application.PushNotifications;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 
 public interface IPushNotificationTextProvider
 {
-    Task<(string Title, string Body)> GetNotificationTextForDeviceId(Type pushNotificationType, DeviceId deviceId);
+    Dictionary<CommunicationLanguage, NotificationText> GetNotificationTextsForLanguages(Type pushNotificationType, IEnumerable<CommunicationLanguage> languages);
 }

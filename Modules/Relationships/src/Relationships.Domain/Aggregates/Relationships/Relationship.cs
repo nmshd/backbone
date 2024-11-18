@@ -1,6 +1,7 @@
 using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
@@ -73,8 +74,8 @@ public class Relationship : Entity
     }
 
     public RelationshipId Id { get; }
-    public RelationshipTemplateId RelationshipTemplateId { get; }
-    public RelationshipTemplate RelationshipTemplate { get; }
+    public RelationshipTemplateId? RelationshipTemplateId { get; }
+    public RelationshipTemplate? RelationshipTemplate { get; }
 
     public IdentityAddress From { get; }
     public IdentityAddress To { get; }

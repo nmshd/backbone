@@ -2,7 +2,6 @@ using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.BuildingBlocks.Infrastructure.Exceptions;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
 using Backbone.Modules.Devices.Domain.Aggregates.PushNotifications;
-using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.Responses;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -13,52 +12,22 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors.A
 public class ApplePushNotificationServiceConnector : IPnsConnector
 {
     private readonly IJwtGenerator _jwtGenerator;
-    private readonly IPushNotificationTextProvider _notificationTextProvider;
     private readonly HttpClient _httpClient;
     private readonly ILogger<ApplePushNotificationServiceConnector> _logger;
     private readonly ApnsOptions _options;
 
-    public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<ApnsOptions> options, IJwtGenerator jwtGenerator,
-        IPushNotificationTextProvider notificationTextProvider, ILogger<ApplePushNotificationServiceConnector> logger)
+    public ApplePushNotificationServiceConnector(IHttpClientFactory httpClientFactory, IOptions<ApnsOptions> options, IJwtGenerator jwtGenerator, ILogger<ApplePushNotificationServiceConnector> logger)
     {
         _httpClient = httpClientFactory.CreateClient();
         _jwtGenerator = jwtGenerator;
-        _notificationTextProvider = notificationTextProvider;
         _logger = logger;
         _options = options.Value;
     }
 
-    public async Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IPushNotification notification)
+    public async Task<SendResult> Send(PnsRegistration registration, IPushNotification notification, NotificationText notificationText)
     {
-        ValidateRegistrations(registrations);
+        ValidateRegistration(registration);
 
-        var sendResults = new SendResults();
-
-        foreach (var registration in registrations)
-        {
-            await SendNotification(registration, notification, sendResults);
-        }
-
-        return sendResults;
-    }
-
-    private void ValidateRegistrations(IEnumerable<PnsRegistration> registrations)
-    {
-        foreach (var registration in registrations)
-        {
-            ValidateRegistration(registration);
-        }
-    }
-
-    public void ValidateRegistration(PnsRegistration registration)
-    {
-        if (!_options.HasConfigForBundleId(registration.AppId))
-            throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedBundleIds()));
-    }
-
-    private async Task SendNotification(PnsRegistration registration, IPushNotification notification, SendResults sendResults)
-    {
-        var (notificationTitle, notificationBody) = await _notificationTextProvider.GetNotificationTextForDeviceId(notification.GetType(), registration.DeviceId);
         var notificationId = GetNotificationId(notification);
         var notificationContent = new NotificationContent(registration.IdentityAddress, registration.DevicePushIdentifier, notification);
 
@@ -67,7 +36,7 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
 
         var request = new ApnsMessageBuilder(registration.AppId, BuildUrl(registration.Environment, registration.Handle.Value), jwt.Value)
             .AddContent(notificationContent)
-            .SetNotificationText(notificationTitle, notificationBody)
+            .SetNotificationText(notificationText.Title, notificationText.Body)
             .SetNotificationId(notificationId)
             .Build();
 
@@ -76,15 +45,20 @@ public class ApplePushNotificationServiceConnector : IPnsConnector
         var response = await _httpClient.SendAsync(request);
 
         if (response.IsSuccessStatusCode)
-            sendResults.AddSuccess(registration.DeviceId);
-        else
-        {
-            var responseContent = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync())!;
-            if (responseContent.reason == "Unregistered")
-                sendResults.AddFailure(registration.DeviceId, ErrorReason.InvalidHandle);
-            else
-                sendResults.AddFailure(registration.DeviceId, ErrorReason.Unexpected, responseContent.Reason);
-        }
+            return SendResult.Success(registration.DeviceId);
+
+        var responseContent = JsonConvert.DeserializeObject<dynamic>(await response.Content.ReadAsStringAsync())!;
+
+        if (responseContent.reason == "Unregistered")
+            return SendResult.Failure(registration.DeviceId, ErrorReason.InvalidHandle);
+
+        return SendResult.Failure(registration.DeviceId, ErrorReason.Unexpected, responseContent.Reason);
+    }
+
+    public void ValidateRegistration(PnsRegistration registration)
+    {
+        if (!_options.HasConfigForBundleId(registration.AppId))
+            throw new InfrastructureException(InfrastructureErrors.InvalidPushNotificationConfiguration(_options.GetSupportedBundleIds()));
     }
 
     private static string BuildUrl(PushEnvironment environment, string handle)

@@ -40,7 +40,11 @@ public class HandlerTests : AbstractTestsBase
         result.Status.Should().Be(DeletionProcessStatus.Cancelled);
         result.CancelledAt.Should().Be(utcNow);
 
-        A.CallTo(() => mockPushNotificationSender.SendNotification(identity.Address, A<DeletionProcessCancelledBySupportNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => mockPushNotificationSender.SendNotification(
+            A<DeletionProcessCancelledBySupportPushNotification>._,
+            A<SendPushNotificationFilter>.That.Matches(f => f.IncludedIdentities.Contains(identity.Address)),
+            A<CancellationToken>._)
+        ).MustHaveHappenedOnceExactly();
     }
 
     [Fact]

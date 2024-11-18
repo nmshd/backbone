@@ -16,6 +16,6 @@ public class IdentityDeletionProcessStartedDomainEventHandler : IDomainEventHand
 
     public async Task Handle(IdentityDeletionProcessStartedDomainEvent @event)
     {
-        await _pushNotificationSender.SendNotification(@event.Address, new DeletionProcessStartedPushNotification(), CancellationToken.None);
+        await _pushNotificationSender.SendNotification(new DeletionProcessStartedPushNotification(), SendPushNotificationFilter.AllDevicesOf(@event.Address), CancellationToken.None);
     }
 }

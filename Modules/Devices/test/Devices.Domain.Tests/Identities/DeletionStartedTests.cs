@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling;
@@ -13,7 +13,7 @@ public class DeletionStartedTests : AbstractTestsBase
         // Arrange
         var identity = CreateIdentityWithApprovedDeletionProcess();
 
-        SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod).AddDays(1)); // past deletion grace period
+        SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays).AddDays(1)); // past deletion grace period
 
         // Act
         identity.DeletionStarted();
@@ -69,7 +69,7 @@ public class DeletionStartedTests : AbstractTestsBase
         //Arrange
         var activeIdentity = TestDataGenerator.CreateIdentityWithApprovedDeletionProcess();
 
-        SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.LengthOfGracePeriod).AddDays(1));
+        SystemTime.Set(SystemTime.UtcNow.AddDays(IdentityDeletionConfiguration.Instance.LengthOfGracePeriodInDays).AddDays(1));
 
         //Act
         activeIdentity.DeletionStarted();

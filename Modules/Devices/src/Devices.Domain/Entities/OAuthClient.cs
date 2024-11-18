@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;
 
 namespace Backbone.Modules.Devices.Domain.Entities;

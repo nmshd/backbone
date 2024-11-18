@@ -37,6 +37,12 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         await _templates.Where(filter).ExecuteDeleteAsync(cancellationToken);
     }
 
+    public async Task Delete(RelationshipTemplate template, CancellationToken cancellationToken)
+    {
+        _templates.Remove(template);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
+
     public async Task<RelationshipTemplate?> Find(RelationshipTemplateId id, IdentityAddress identityAddress, CancellationToken cancellationToken, bool track = false)
     {
         var template = await (track ? _templates : _readOnlyTemplates)

@@ -3,7 +3,6 @@ using Backbone.BuildingBlocks.API.Extensions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.Crypto.Abstractions;
 using Backbone.Crypto.Implementations;
-using Backbone.Modules.Devices.Application;
 using Backbone.Modules.Devices.Application.Extensions;
 using Backbone.Modules.Devices.Infrastructure.Persistence;
 using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
@@ -21,12 +20,11 @@ public class DevicesModule : AbstractModule
 
     public override void ConfigureServices(IServiceCollection services, IConfigurationSection configuration)
     {
-        services.ConfigureAndValidate<ApplicationOptions>(options => configuration.GetSection("Application").Bind(options));
         services.ConfigureAndValidate<Configuration>(configuration.Bind);
 
         var parsedConfiguration = services.BuildServiceProvider().GetRequiredService<IOptions<Configuration>>().Value;
 
-        services.AddApplication();
+        services.AddApplication(configuration.GetSection("Application"));
 
         services.AddDatabase(options =>
         {
