@@ -1,10 +1,7 @@
-﻿using System.Globalization;
-using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
+﻿using Backbone.BuildingBlocks.Application.PushNotifications;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.PushNotifications.NotificationTexts;
-using Backbone.UnitTestTools.Extensions;
-using FakeItEasy;
 
 namespace Backbone.Modules.Devices.Infrastructure.Tests.Tests.PushNotifications.NotificationTexts;
 
@@ -14,96 +11,61 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
     public static readonly TheoryData<Type> NOTIFICATION_TYPES_DATA = new(GetNotificationTypes());
 
     [Fact]
-    public void Empty_translation_throws_custom_exception()
-    {
-        // Arrange
-        var device = TestDataGenerator.CreateDevice();
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        var fakeResourceManager = A.Fake<PushNotificationResourceManager>();
-
-        A.CallTo(() => fakeIdentitiesRepository.GetDeviceById(device.Id, A<CancellationToken>._, A<bool>._)).Returns(device);
-        A.CallTo(() => fakeResourceManager.GetString(A<string>._, A<CultureInfo>._)).Returns("");
-
-        var notificationTextProvider = CreateNotificationTextProvider(fakeIdentitiesRepository, fakeResourceManager);
-
-        // Act
-        var acting = async () => await notificationTextProvider.GetNotificationTextForDeviceId(typeof(PushNotificationWithoutExistingTexts), device.Id);
-
-        // Assert
-        acting.Should().AwaitThrowAsync<MissingPushNotificationTextException, (string PageTitle, string Body)>();
-    }
-
-    [Fact]
     public void Missing_translation_throws_custom_exception()
     {
         // Arrange
-        var device = TestDataGenerator.CreateDevice();
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => fakeIdentitiesRepository.GetDeviceById(device.Id, A<CancellationToken>._, A<bool>._)).Returns(device);
-
-        var notificationTextProvider = CreateNotificationTextProvider(fakeIdentitiesRepository);
+        var notificationTextProvider = CreateNotificationTextProvider();
 
         // Act
-        var acting = async () => await notificationTextProvider.GetNotificationTextForDeviceId(typeof(PushNotificationWithoutExistingTexts), device.Id);
+        var acting = () => notificationTextProvider.GetNotificationTextForLanguage(typeof(PushNotificationWithoutExistingTexts), CommunicationLanguage.DEFAULT_LANGUAGE);
 
         // Assert
-        acting.Should().AwaitThrowAsync<MissingPushNotificationTextException, (string PageTitle, string Body)>();
+        acting.Should().Throw<MissingPushNotificationTextException>();
     }
 
     [Theory, MemberData(nameof(NOTIFICATION_TYPES_DATA))]
-    public async Task All_push_notifications_have_english_texts(Type notificationType)
+    public void All_push_notifications_have_english_texts(Type notificationType)
     {
         // Arrange
-        var device = TestDataGenerator.CreateDevice();
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => fakeIdentitiesRepository.GetDeviceById(device.Id, A<CancellationToken>._, A<bool>._)).Returns(device);
-
-        var notificationTextProvider = CreateNotificationTextProvider(fakeIdentitiesRepository);
+        var notificationTextProvider = CreateNotificationTextProvider();
 
         // Act
-        var acting = async () => await notificationTextProvider.GetNotificationTextForDeviceId(notificationType, device.Id);
+        var acting = () => notificationTextProvider.GetNotificationTextForLanguage(notificationType, CommunicationLanguage.DEFAULT_LANGUAGE);
 
         // Assert
-        await acting.Should().NotThrowAsync<MissingPushNotificationTextException>();
+        acting.Should().NotThrow<MissingPushNotificationTextException>();
     }
 
     [Theory, ClassData(typeof(AllSupportedLanguagesExceptEnglishCrossJoinedWithNotificationTypes))]
-    public async Task All_push_notifications_have_translations_for_all_supported_languages(string language, Type notificationType)
+    public void All_push_notifications_have_translations_for_all_supported_languages(CommunicationLanguage language, Type notificationType)
     {
         // Arrange
-        var englishDevice = TestDataGenerator.CreateDevice();
-        var foreignDevice = TestDataGenerator.CreateDevice(language);
-
-        var fakeIdentitiesRepository = A.Fake<IIdentitiesRepository>();
-        A.CallTo(() => fakeIdentitiesRepository.GetDeviceById(englishDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(englishDevice);
-        A.CallTo(() => fakeIdentitiesRepository.GetDeviceById(foreignDevice.Id, A<CancellationToken>._, A<bool>._)).Returns(foreignDevice);
-
-        var notificationTextProvider = CreateNotificationTextProvider(fakeIdentitiesRepository);
+        var notificationTextProvider = CreateNotificationTextProvider();
 
         // Act
-        var englishText = await notificationTextProvider.GetNotificationTextForDeviceId(notificationType, englishDevice.Id);
-        var foreignText = await notificationTextProvider.GetNotificationTextForDeviceId(notificationType, foreignDevice.Id);
+        var englishText = notificationTextProvider.GetNotificationTextForLanguage(notificationType, CommunicationLanguage.DEFAULT_LANGUAGE);
+        var foreignTexts = notificationTextProvider.GetNotificationTextForLanguage(notificationType, language);
 
         // Assert
-        foreignText.Should().NotBe(englishText);
+        foreignTexts.Should().NotBe(englishText);
     }
 
-    private static PushNotificationTextProvider CreateNotificationTextProvider(IIdentitiesRepository? fakeIdentitiesRepository = null, PushNotificationResourceManager? resourceManager = null)
+    private static PushNotificationTextProvider CreateNotificationTextProvider(PushNotificationResourceManager? resourceManager = null)
     {
-        return new PushNotificationTextProvider(
-            fakeIdentitiesRepository ?? A.Fake<IIdentitiesRepository>(),
-            resourceManager ?? new PushNotificationResourceManager()
-        );
+        return new PushNotificationTextProvider(resourceManager ?? new PushNotificationResourceManager());
     }
 
     private static IEnumerable<Type> GetNotificationTypes()
     {
-        return typeof(TestPushNotification).Assembly.GetTypes().Where(t => typeof(IPushNotification).IsAssignableFrom(t) && !t.IsInterface);
+        return
+            typeof(TestPushNotification)
+                .Assembly.GetTypes()
+                .Where(t => t.IsAssignableTo(typeof(IPushNotification)) && !t.IsInterface);
     }
 
-    private class AllSupportedLanguagesExceptEnglishCrossJoinedWithNotificationTypes : TheoryData<string, Type>
+    private class AllSupportedLanguagesExceptEnglishCrossJoinedWithNotificationTypes : TheoryData<CommunicationLanguage, Type>
     {
-        private static readonly string[] SUPPORTED_LANGUAGES_EXCEPT_ENGLISH = SUPPORTED_LANGUAGES.Where(l => l != "en").ToArray();
+        private static readonly CommunicationLanguage[] SUPPORTED_LANGUAGES_EXCEPT_ENGLISH = SUPPORTED_LANGUAGES.Where(l => l != "en").Select(l => CommunicationLanguage.Create(l).Value).ToArray();
 
         public AllSupportedLanguagesExceptEnglishCrossJoinedWithNotificationTypes()
         {
