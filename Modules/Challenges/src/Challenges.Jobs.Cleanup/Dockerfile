@@ -1,5 +1,5 @@
 # Build
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build-env
 WORKDIR /src
 
 ARG VERSION
@@ -11,7 +11,7 @@ WORKDIR "/src/Challenges.Jobs.Cleanup"
 RUN dotnet publish /p:ContinuousIntegrationBuild=true --configuration Release --output /app --no-restore
 
 # Run	
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-alpine3.18
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine
 WORKDIR /app
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=0
 RUN apk add icu-libs
