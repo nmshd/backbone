@@ -68,7 +68,7 @@ public static class IServiceCollectionExtensions
         services.AddAuthentication().AddJwtBearer(options =>
         {
             var privateKeyBytes = Convert.FromBase64String(configuration.Authentication.JwtSigningCertificate);
-            var certificate = X509CertificateLoader.LoadCertificate(privateKeyBytes);
+            var certificate = new X509Certificate2(privateKeyBytes, (string?)null);
             options.TokenValidationParameters.IssuerSigningKey = new X509SecurityKey(certificate);
             options.TokenValidationParameters.ValidateIssuer = false;
             options.TokenValidationParameters.ValidateAudience = false;
