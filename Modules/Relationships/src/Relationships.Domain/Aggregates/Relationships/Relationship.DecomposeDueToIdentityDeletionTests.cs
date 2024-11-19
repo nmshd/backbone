@@ -7,6 +7,8 @@ namespace Backbone.Modules.Relationships.Domain.Aggregates.Relationships;
 
 public class RelationshipDecomposeDueToIdentityDeletionTests : AbstractTestsBase
 {
+    private const string DID_DOMAIN_NAME = "localhost";
+
     [Theory]
     [InlineData(RelationshipStatus.Pending)]
     [InlineData(RelationshipStatus.Active)]
@@ -19,7 +21,7 @@ public class RelationshipDecomposeDueToIdentityDeletionTests : AbstractTestsBase
         var relationship = CreateRelationshipInStatus(status, IDENTITY_1, IDENTITY_2);
 
         // Act
-        var acting = () => relationship.DecomposeDueToIdentityDeletion(IDENTITY_1);
+        var acting = () => relationship.DecomposeDueToIdentityDeletion(IDENTITY_1, DID_DOMAIN_NAME);
 
         // Assert
         acting.Should().NotThrow();
@@ -35,7 +37,7 @@ public class RelationshipDecomposeDueToIdentityDeletionTests : AbstractTestsBase
         var relationship = CreateRelationshipDecomposedByFrom(IDENTITY_1, IDENTITY_2);
 
         // Act
-        var acting = () => relationship.DecomposeDueToIdentityDeletion(IDENTITY_1);
+        var acting = () => relationship.DecomposeDueToIdentityDeletion(IDENTITY_1, DID_DOMAIN_NAME);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.relationshipAlreadyDecomposed");
@@ -48,7 +50,7 @@ public class RelationshipDecomposeDueToIdentityDeletionTests : AbstractTestsBase
         var relationship = CreateActiveRelationship(IDENTITY_1, IDENTITY_2);
 
         // Act
-        var acting = () => relationship.DecomposeDueToIdentityDeletion(CreateRandomIdentityAddress());
+        var acting = () => relationship.DecomposeDueToIdentityDeletion(CreateRandomIdentityAddress(), DID_DOMAIN_NAME);
 
         // Assert
         acting.Should().Throw<DomainException>().WithError("error.platform.validation.relationship.requestingIdentityDoesNotBelongToRelationship");
@@ -59,13 +61,29 @@ public class RelationshipDecomposeDueToIdentityDeletionTests : AbstractTestsBase
     {
         // Arrange
         var relationship = CreateActiveRelationship(IDENTITY_1, IDENTITY_2);
-        relationship.DecomposeDueToIdentityDeletion(IDENTITY_1);
+        relationship.DecomposeDueToIdentityDeletion(IDENTITY_1, DID_DOMAIN_NAME);
 
         // Act
-        var acting = () => relationship.DecomposeDueToIdentityDeletion(IDENTITY_2);
+        var acting = () => relationship.DecomposeDueToIdentityDeletion(IDENTITY_2, DID_DOMAIN_NAME);
 
         // Assert
         acting.Should().NotThrow();
         relationship.Status.Should().Be(RelationshipStatus.ReadyForDeletion);
+    }
+
+    [Fact]
+    public void Anonymize_anonymizes_the_audit_logs()
+    {
+        // Arrange
+        var relationship = CreateActiveRelationship(IDENTITY_1, IDENTITY_2);
+        var anonymousIdentity = IdentityAddress.GetAnonymized(DID_DOMAIN_NAME);
+
+        // Act
+        relationship.DecomposeDueToIdentityDeletion(IDENTITY_1, DID_DOMAIN_NAME);
+
+        // Assert
+        relationship.AuditLog.Should().HaveCount(3);
+        relationship.AuditLog[0].CreatedBy.Should().Be(anonymousIdentity);
+        relationship.AuditLog[2].CreatedBy.Should().Be(anonymousIdentity);
     }
 }

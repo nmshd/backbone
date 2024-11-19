@@ -303,7 +303,7 @@ public class Relationship : Entity
         RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
-    public void DecomposeDueToIdentityDeletion(IdentityAddress identityToBeDeleted)
+    public void DecomposeDueToIdentityDeletion(IdentityAddress identityToBeDeleted, string didDomainName)
     {
         EnsureHasParticipant(identityToBeDeleted);
         EnsureRelationshipNotDecomposedBy(identityToBeDeleted);
@@ -313,6 +313,7 @@ public class Relationship : Entity
         else
             DecomposeAsFirstParticipant(identityToBeDeleted, null, RelationshipAuditLogEntryReason.DecompositionDueToIdentityDeletion);
 
+        AnonymizeParticipant(identityToBeDeleted, didDomainName);
         RaiseDomainEvent(new RelationshipStatusChangedDomainEvent(this));
     }
 
@@ -368,7 +369,7 @@ public class Relationship : Entity
             throw new DomainException(DomainErrors.RequestingIdentityDoesNotBelongToRelationship());
     }
 
-    public void AnonymizeParticipant(IdentityAddress identityToAnonymize, string didDomainName)
+    private void AnonymizeParticipant(IdentityAddress identityToAnonymize, string didDomainName)
     {
         EnsureHasParticipant(identityToAnonymize);
         EnsureStatus(RelationshipStatus.DeletionProposed, RelationshipStatus.ReadyForDeletion);
