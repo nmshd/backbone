@@ -5,7 +5,7 @@
         <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
         <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
         <Nullable>enable</Nullable>
-        <!--        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>-->
+        <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
         <OptimizeImplicitlyTriggeredBuild>True</OptimizeImplicitlyTriggeredBuild>
         <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 
