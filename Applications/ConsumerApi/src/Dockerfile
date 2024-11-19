@@ -19,7 +19,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=chisel /opt/chisel/chisel /usr/bin/
-COPY --from=mcr.microsoft.com/dotnet/nightly/runtime:9.0-noble-chiseled / /runtime-ref
+COPY --from=mcr.microsoft.com/dotnet/runtime:9.0-noble-chiseled / /runtime-ref
 
 RUN mkdir /rootfs \
     && chisel cut --release "ubuntu-24.04" --root /rootfs \
