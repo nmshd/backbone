@@ -30,7 +30,7 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
 
                 #region Attempt 1: Try find a connector identity for that app identity that has not established a relationship yet
 
-                IdentityConfiguration recipientConnectorIdentity = null;
+                IdentityConfiguration? recipientConnectorIdentity = null;
                 foreach (var connectorIdentity in availableConnectorIdentities)
                 {
                     var hasRelationship = appIdentity.RelationshipAndMessages

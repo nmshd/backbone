@@ -16,7 +16,9 @@ public class PoolConfigurationExcelReaderTests : SnapshotCreatorTestsBase
         // Arrange
         var poolConfigExcelFile = Path.Combine(TestDataFolder, excelFile);
         var expectedPoolConfig = await GetExpectedPoolConfiguration(expectedPoolConfigJsonFilename);
-        expectedPoolConfig.RelationshipAndMessages.Clear(); //Note: Excel reader does only read the pool config, not the relationships and messages
+        expectedPoolConfig.Should().NotBeNull();
+        expectedPoolConfig!.RelationshipAndMessages.Clear(); //Note: Excel reader does only read the pool config, not the relationships and messages
+
         var sut = new PoolConfigurationExcelReader();
 
         // Act

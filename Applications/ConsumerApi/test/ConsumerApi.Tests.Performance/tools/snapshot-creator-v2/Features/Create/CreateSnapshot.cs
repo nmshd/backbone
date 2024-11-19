@@ -31,6 +31,12 @@ public record CreateSnapshot
                 var outputDirName = CreateSnapshotDirAndCopyPoolConfigFiles(request.JsonFilePath);
 
                 var poolConfig = await PoolConfigurationJsonReader.Read(request.JsonFilePath);
+
+                if (poolConfig is null)
+                {
+                    return new StatusMessage(false, "Pool configuration could not be read.");
+                }
+
                 var clientCredentials = new ClientCredentials(request.ClientId, request.ClientSecret);
 
                 var identities = await Mediator.Send(new CreateIdentities.Command(poolConfig.IdentityPoolConfigurations, request.BaseAddress, clientCredentials), cancellationToken);

@@ -12,7 +12,7 @@ public abstract class SnapshotCreatorTestsBase : AbstractTestsBase
 
     protected string TestDataFolder { get; } = Path.Combine(AppContext.BaseDirectory, "TestData");
 
-    protected async Task<PerformanceTestConfiguration> GetExpectedPoolConfiguration(string expectedPoolConfigJsonFilename)
+    protected async Task<PerformanceTestConfiguration?> GetExpectedPoolConfiguration(string expectedPoolConfigJsonFilename)
     {
         var fullFilePath = Path.Combine(TestDataFolder, expectedPoolConfigJsonFilename);
         var result = await new PoolConfigurationJsonReader().Read(fullFilePath);

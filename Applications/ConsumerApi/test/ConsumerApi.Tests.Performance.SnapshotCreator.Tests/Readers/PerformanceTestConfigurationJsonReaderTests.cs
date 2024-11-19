@@ -16,6 +16,7 @@ public class PoolConfigurationJsonReaderTests : SnapshotCreatorTestsBase
         // Arrange
         var poolConfigJsonFile = Path.Combine(TestDataFolder, poolConfigJsonFilename);
         var expectedPoolConfig = await GetExpectedPoolConfiguration(expectedPoolConfigJsonFilename);
+        expectedPoolConfig.Should().NotBeNull();
         var sut = new PoolConfigurationJsonReader();
 
         // Act

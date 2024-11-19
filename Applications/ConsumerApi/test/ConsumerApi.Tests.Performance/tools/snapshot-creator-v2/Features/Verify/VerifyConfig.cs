@@ -25,6 +25,9 @@ public record VerifyConfig
             poolConfigFromExcel.RelationshipAndMessages.AddRange(relationshipAndMessages);
 
             var poolConfigFromJson = await PoolConfigurationJsonReader.Read(request.JsonFilePath);
+
+            if (poolConfigFromJson is null) return false;
+
             var result = await PoolConfigurationJsonValidator.Validate(poolConfigFromJson, poolConfigFromExcel);
 
             return result;

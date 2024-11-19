@@ -9,14 +9,14 @@ public class PoolConfigurationJsonReader : PoolConfigurationReaderBase, IPoolCon
 {
     protected override string[] ValidExtensions { get; } = [".json"];
 
-    public async Task<PerformanceTestConfiguration> Read(string filePath)
+    public async Task<PerformanceTestConfiguration?> Read(string filePath)
     {
         VerifyFileExtension(filePath);
 
         var poolConfigFromJsonString = await File.ReadAllTextAsync(filePath);
         var poolConfig = JsonSerializer.Deserialize<PerformanceTestConfiguration>(poolConfigFromJsonString);
 
-        poolConfig.CreateIdentityPoolConfigurations();
+        poolConfig?.CreateIdentityPoolConfigurations();
 
         return poolConfig;
     }

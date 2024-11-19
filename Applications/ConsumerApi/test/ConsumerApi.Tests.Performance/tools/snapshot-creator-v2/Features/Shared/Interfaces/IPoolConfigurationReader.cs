@@ -4,5 +4,5 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Sha
 
 public interface IPoolConfigurationJsonReader
 {
-    Task<PerformanceTestConfiguration> Read(string filePath);
+    Task<PerformanceTestConfiguration?> Read(string filePath);
 }
