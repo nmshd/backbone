@@ -17,7 +17,7 @@ public record DomainIdentity(
     string PoolAlias,
     int NumberOfDatawalletModifications)
 {
-    public List<string> DeviceIds = [];
+    public readonly List<string> DeviceIds = [];
 
     public string? IdentityAddress => IdentityData?.Address; // the real identity address returned by sdk
 
@@ -26,7 +26,7 @@ public record DomainIdentity(
     public Dictionary<string, DomainIdentity> EstablishedRelationshipsById { get; } = [];
     public List<Challenge> Challenges { get; } = [];
 
-    public List<(string messageId, DomainIdentity recipient)> SentMessages { get; } = [];
+    public List<MessageBag> SentMessages { get; } = [];
 
     public List<CreatedDatawalletModification> DatawalletModifications { get; private set; } = [];
 

@@ -29,15 +29,10 @@ public record CreateChallenges
 
                     if (apiResponse.IsError)
                     {
-                        throw new InvalidOperationException("Failed to create challenge." +
-                                                            Environment.NewLine +
-                                                            $"app-identity: {identitiesWithChallenge.IdentityAddress}/{identitiesWithChallenge.ConfigurationIdentityAddress}/{identitiesWithChallenge.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
-                                                            Environment.NewLine +
-                                                            $"Error Id: {apiResponse.Error.Id}" +
-                                                            Environment.NewLine +
-                                                            $"Error Code: {apiResponse.Error.Code}" +
-                                                            Environment.NewLine +
-                                                            $"Error Message: {apiResponse.Error.Message}");
+                        throw new InvalidOperationException(BuildErrorDetails(
+                            "Failed to create challenge.",
+                            identitiesWithChallenge,
+                            apiResponse));
                     }
 
                     var challenge = apiResponse.Result;

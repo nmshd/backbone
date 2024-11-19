@@ -41,7 +41,8 @@ public class OutputHelper : IOutputHelper
         {
             foreach (var relationshipTemplateBag in identity.RelationshipTemplates)
             {
-                stringBuilder.AppendLine($"{identity.IdentityAddress};{identity.ConfigurationIdentityAddress};{identity.PoolAlias};{identity.IdentityPoolType};{relationshipTemplateBag.Template.Id};{relationshipTemplateBag.Used}");
+                stringBuilder.AppendLine(
+                    $"{identity.IdentityAddress};{identity.ConfigurationIdentityAddress};{identity.PoolAlias};{identity.IdentityPoolType};{relationshipTemplateBag.Template.Id};{relationshipTemplateBag.Used}");
             }
         }
 
@@ -116,16 +117,16 @@ public class OutputHelper : IOutputHelper
     {
         var stringBuilder = new StringBuilder();
         stringBuilder.AppendLine(
-            "MessageId;IdentityAddressFrom;ConfigurationIdentityAddressFrom;PoolAliasFrom;IdentityPoolTypeFrom;IdentityAddressTo;ConfigurationIdentityAddressTo;PoolAliasTo;IdentityPoolTypeTo");
+            "MessageId;IdentityAddressFrom;CreatedByDevice;ConfigurationIdentityAddressFrom;PoolAliasFrom;IdentityPoolTypeFrom;IdentityAddressTo;ConfigurationIdentityAddressTo;PoolAliasTo;IdentityPoolTypeTo");
 
         var identitiesWithSentMessages = identities.Where(identity => identity.SentMessages.Count > 0);
 
         foreach (var identity in identitiesWithSentMessages)
         {
-            foreach (var (messageId, recipient) in identity.SentMessages)
+            foreach (var (messageId, createdByDevice, recipient) in identity.SentMessages)
             {
                 stringBuilder.AppendLine(
-                    $"{messageId};{identity.IdentityAddress};{identity.ConfigurationIdentityAddress};{identity.PoolAlias};{identity.IdentityPoolType};" +
+                    $"{messageId};{identity.IdentityAddress};{createdByDevice};{identity.ConfigurationIdentityAddress};{identity.PoolAlias};{identity.IdentityPoolType};" +
                     $"{recipient.IdentityAddress};{recipient.ConfigurationIdentityAddress};{recipient.PoolAlias};{recipient.IdentityPoolType}");
             }
         }

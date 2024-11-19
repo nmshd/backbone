@@ -24,7 +24,10 @@ public record CreateDevices
                     var newDevice = await sdkClient.OnboardNewDevice(PasswordHelper.GeneratePassword(18, 24));
 
                     if (newDevice.DeviceData is null)
-                        throw new Exception("The SDK could not be used to create a new database Device or the DeviceData is null.");
+                    {
+                        throw new InvalidOperationException(
+                            $"The SDK could not be used to create a new database Device for config {identity.IdentityAddress}/{identity.ConfigurationIdentityAddress}/{identity.PoolAlias} {IDENTITY_LOG_SUFFIX}");
+                    }
 
                     identity.AddDevice(newDevice.DeviceData.DeviceId);
                 }

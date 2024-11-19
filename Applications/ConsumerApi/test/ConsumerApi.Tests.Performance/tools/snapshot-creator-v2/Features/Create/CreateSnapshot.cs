@@ -56,10 +56,9 @@ public record CreateSnapshot
                 await OutputHelper.WriteMessages(outputDirName, identities);
                 Logger.LogInformation("Messages created");
 
-                //await Mediator.Send(new CreateDatawalletModifications.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
-
-                //OutputHelper.WriteDatawalletModifications(_outputDirName, identities);
-                //Logger.LogInformation("DatawalletModifications created");
+                await Mediator.Send(new CreateDatawalletModifications.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                await OutputHelper.WriteDatawalletModifications(outputDirName, identities);
+                Logger.LogInformation("DatawalletModifications created");
             }
             catch (Exception e)
             {

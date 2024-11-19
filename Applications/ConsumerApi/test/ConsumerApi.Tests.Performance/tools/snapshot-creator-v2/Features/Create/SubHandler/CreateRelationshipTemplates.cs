@@ -37,15 +37,10 @@ public record CreateRelationshipTemplates
 
                     if (relationshipTemplateResponse.IsError)
                     {
-                        throw new InvalidOperationException("Failed to create relationship template." +
-                                                            Environment.NewLine +
-                                                            $"app-identity: {identity.IdentityAddress}/{identity.ConfigurationIdentityAddress}/{identity.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
-                                                            Environment.NewLine +
-                                                            $"Error Id: {relationshipTemplateResponse.Error.Id}" +
-                                                            Environment.NewLine +
-                                                            $"Error Code: {relationshipTemplateResponse.Error.Code}" +
-                                                            Environment.NewLine +
-                                                            $"Error Message: {relationshipTemplateResponse.Error.Message}");
+                        throw new InvalidOperationException(BuildErrorDetails(
+                            "Failed to create relationship template.",
+                            identity,
+                            relationshipTemplateResponse));
                     }
 
                     if (relationshipTemplateResponse.Result is null) continue;

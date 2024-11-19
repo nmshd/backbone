@@ -1,4 +1,9 @@
-﻿namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Constants;
+﻿using System.Text;
+using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
+
+namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Constants;
 
 public static class Resources
 {
@@ -22,4 +27,61 @@ public static class Resources
     public const string IDENTITY_POOL_CONFIGURATION_NOT_CREATED = "Identity Pool Configuration not created, but is a pre-condition to generate relationships";
 
     public const string IDENTITY_LOG_SUFFIX = "[IdentityAddress/ConfigurationIdentityAddress/PoolAlias]";
+
+    public static string BuildErrorDetails<TResult>(string message, DomainIdentity? senderIdentity, DomainIdentity? recipientIdentity, ApiResponse<TResult>? apiResponse = null)
+    {
+        var sb = new StringBuilder();
+
+        sb.AppendLine(message);
+
+        if (senderIdentity is not null)
+        {
+            sb.AppendLine($"Identity: {senderIdentity.IdentityAddress}/{senderIdentity.ConfigurationIdentityAddress}/{senderIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}");
+        }
+
+        if (recipientIdentity is not null)
+        {
+            sb.AppendLine($"Recipient Identity: {recipientIdentity.IdentityAddress}/{recipientIdentity.ConfigurationIdentityAddress}/{recipientIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}");
+        }
+
+        if (apiResponse is null) return sb.ToString();
+
+        sb.AppendLine($"HTTP Statuscode: {apiResponse.Status}");
+
+        if (apiResponse.Error is null) return sb.ToString();
+
+        sb.AppendLine($"Error Id: {apiResponse.Error.Id}");
+        sb.AppendLine($"Error Code: {apiResponse.Error.Code}");
+        sb.AppendLine($"Error Message: {apiResponse.Error?.Message}");
+
+        return sb.ToString();
+    }
+
+    public static string BuildErrorDetails<TResult>(string message, DomainIdentity? identity, ApiResponse<TResult>? apiResponse = null) => BuildErrorDetails(message, identity, null, apiResponse);
+    public static string BuildErrorDetails(string message, DomainIdentity? identity, DomainIdentity? recipientIdentity) => BuildErrorDetails<object>(message, identity, recipientIdentity);
+
+    public static string BuildRelationshipErrorDetails(string message, DomainIdentity? identity, List<RelationshipIdBag>? expectedItems, List<RelationshipIdBag>? actualItems)
+    {
+        var sb = new StringBuilder();
+
+        sb.AppendLine(message);
+
+        if (identity is not null)
+        {
+            sb.AppendLine($"Identity: {identity.IdentityAddress}/{identity.ConfigurationIdentityAddress}/{identity.PoolAlias} {IDENTITY_LOG_SUFFIX}");
+        }
+
+
+        if (expectedItems is { Count: > 0 })
+        {
+            sb.AppendLine($"Expected: {string.Join(", ", expectedItems.Select(c => $"{c.IdentityAddress}/{c.PoolAlias}"))}");
+        }
+
+        if (actualItems is { Count: > 0 })
+        {
+            sb.AppendLine($"Actual: {string.Join(", ", actualItems.Select(c => $"{c.IdentityAddress}/{c.PoolAlias}"))}");
+        }
+
+        return sb.ToString();
+    }
 }

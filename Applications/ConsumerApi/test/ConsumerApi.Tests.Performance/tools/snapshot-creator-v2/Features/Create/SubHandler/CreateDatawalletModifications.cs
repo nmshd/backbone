@@ -35,6 +35,14 @@ public record CreateDatawalletModifications
                     },
                     1);
 
+                if (startDatawalletVersionUpgradeResponse.IsError)
+                {
+                    throw new InvalidOperationException(BuildErrorDetails(
+                        "Failed to start the DataWallet Sync-Run.",
+                        identity,
+                        startDatawalletVersionUpgradeResponse));
+                }
+
                 if (startDatawalletVersionUpgradeResponse.Result is null) continue;
 
                 var finalizeDatawalletVersionUpgradeResponse = await sdk.SyncRuns.FinalizeDatawalletVersionUpgrade(
@@ -45,6 +53,13 @@ public record CreateDatawalletModifications
                         NewDatawalletVersion = 3
                     });
 
+                if (finalizeDatawalletVersionUpgradeResponse.IsError)
+                {
+                    throw new InvalidOperationException(BuildErrorDetails(
+                        "Failed to finalize the DataWallet Sync-Run.",
+                        identity,
+                        finalizeDatawalletVersionUpgradeResponse));
+                }
 
                 if (finalizeDatawalletVersionUpgradeResponse.Result is null) continue;
 

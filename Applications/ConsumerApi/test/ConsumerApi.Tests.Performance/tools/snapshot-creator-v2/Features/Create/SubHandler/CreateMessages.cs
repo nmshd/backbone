@@ -27,72 +27,52 @@ public record CreateMessages
                         senderIdentity.PoolAlias == relationship.SenderPoolAlias &&
                         senderIdentity.ConfigurationIdentityAddress == relationship.SenderIdentityAddress &&
                         relationship.NumberOfSentMessages > 0)
-                    .Select(relationship =>
-                    (
+                    .Select(relationship => new RelationshipIdBag(
                         relationship.RecipientIdentityAddress,
                         relationship.RecipientPoolAlias,
-                        relationship.NumberOfSentMessages
-                    ))
+                        relationship.NumberOfSentMessages))
                     .ToList();
-
 
                 var recipientIdentities = request.Identities
                     .Where(recipient => recipientsRelationshipIds.Any(relationship =>
-                        recipient.PoolAlias == relationship.RecipientPoolAlias &&
-                        recipient.ConfigurationIdentityAddress == relationship.RecipientIdentityAddress))
+                        recipient.PoolAlias == relationship.PoolAlias &&
+                        recipient.ConfigurationIdentityAddress == relationship.IdentityAddress))
                     .ToList();
 
                 var recipientRelationshipIdsWithoutNumMessages = recipientIdentities
-                    .Select(c =>
-                    (
-                        c.ConfigurationIdentityAddress,
-                        c.PoolAlias
-                    ))
+                    .Select(c => new RelationshipIdBag(c.ConfigurationIdentityAddress, c.PoolAlias))
                     .OrderBy(c => c.PoolAlias)
-                    .ThenBy(c => c.ConfigurationIdentityAddress)
+                    .ThenBy(c => c.IdentityAddress)
                     .ToList();
 
                 var recipientIdentityIds = recipientIdentities
-                    .Select(c =>
-                    (
-                        c.ConfigurationIdentityAddress,
-                        c.PoolAlias
-                    ))
+                    .Select(c => new RelationshipIdBag(c.ConfigurationIdentityAddress, c.PoolAlias))
                     .OrderBy(c => c.PoolAlias)
-                    .ThenBy(c => c.ConfigurationIdentityAddress)
+                    .ThenBy(c => c.IdentityAddress)
                     .ToList();
 
-                if (recipientsRelationshipIds.Count != recipientIdentityIds.Count ||
-                    !recipientRelationshipIdsWithoutNumMessages.SequenceEqual(recipientIdentityIds))
+                if (!recipientRelationshipIdsWithoutNumMessages.SequenceEqual(recipientIdentityIds))
                 {
-                    throw new InvalidOperationException("Mismatch between configured relationships and connector identities." +
-                                                        Environment.NewLine +
-                                                        $"sender-identity: {senderIdentity.IdentityAddress}/{senderIdentity.ConfigurationIdentityAddress}/{senderIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
-                                                        Environment.NewLine +
-                                                        $"Expected: {string.Join(", ", recipientsRelationshipIds.Select(c => $"{c.RecipientIdentityAddress}/{c.RecipientPoolAlias}"))} " +
-                                                        Environment.NewLine +
-                                                        $"Actual: {string.Join(", ", recipientIdentityIds.Select(c => $"{c.ConfigurationIdentityAddress}/{c.PoolAlias}"))}");
+                    throw new InvalidOperationException(BuildRelationshipErrorDetails("Mismatch between configured relationships and connector identities.",
+                        senderIdentity,
+                        recipientRelationshipIdsWithoutNumMessages,
+                        recipientIdentityIds));
                 }
 
                 foreach (var recipientIdentity in recipientIdentities)
                 {
-                    var numSentMessages = recipientsRelationshipIds
-                        .First(c =>
-                            c.RecipientIdentityAddress == recipientIdentity.ConfigurationIdentityAddress &&
-                            c.RecipientPoolAlias == recipientIdentity.PoolAlias).NumberOfSentMessages;
+                    if (recipientIdentity.IdentityAddress is null)
+                    {
+                        throw new InvalidOperationException(BuildErrorDetails("Recipient identity address is null.", senderIdentity, recipientIdentity));
+                    }
+
+                    var numSentMessages = recipientsRelationshipIds.First(relationshipIdBag =>
+                        relationshipIdBag.IdentityAddress == recipientIdentity.ConfigurationIdentityAddress &&
+                        relationshipIdBag.PoolAlias == recipientIdentity.PoolAlias).NumberOfSentMessages;
 
                     for (var i = 0; i < numSentMessages; i++)
                     {
                         var sdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, senderIdentity.UserCredentials);
-
-                        if (recipientIdentity.IdentityAddress is null)
-                        {
-                            throw new InvalidOperationException("Recipient identity address is null." +
-                                                                Environment.NewLine +
-                                                                $"sender-identity: {senderIdentity.IdentityAddress}/{senderIdentity.ConfigurationIdentityAddress}/{senderIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
-                                                                Environment.NewLine +
-                                                                $"recipient-identity: null/{recipientIdentity.ConfigurationIdentityAddress}/{recipientIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}");
-                        }
 
                         var messageResponse = await sdkClient.Messages.SendMessage(new SendMessageRequest
                         {
@@ -108,24 +88,19 @@ public record CreateMessages
                             Body = ConvertibleString.FromUtf8("Message body").BytesRepresentation
                         });
 
+
                         if (messageResponse.IsError)
                         {
-                            throw new InvalidOperationException("Failed to send message." +
-                                                                Environment.NewLine +
-                                                                $"sender-identity: {senderIdentity.IdentityAddress}/{senderIdentity.ConfigurationIdentityAddress}/{senderIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
-                                                                Environment.NewLine +
-                                                                $"recipient-identity: {recipientIdentity.IdentityAddress}/{recipientIdentity.ConfigurationIdentityAddress}/{recipientIdentity.PoolAlias} {IDENTITY_LOG_SUFFIX}" +
-                                                                Environment.NewLine +
-                                                                $"Error Id: {messageResponse.Error.Id}" +
-                                                                Environment.NewLine +
-                                                                $"Error Code: {messageResponse.Error.Code}" +
-                                                                Environment.NewLine +
-                                                                $"Error Message: {messageResponse.Error.Message}");
+                            throw new InvalidOperationException(BuildErrorDetails(
+                                "Failed to send message.",
+                                senderIdentity,
+                                recipientIdentity,
+                                messageResponse));
                         }
 
                         if (messageResponse.Result is null) continue;
 
-                        senderIdentity.SentMessages.Add((messageResponse.Result.Id, recipientIdentity));
+                        senderIdentity.SentMessages.Add(new MessageBag(messageResponse.Result.Id, sdkClient.DeviceData!.DeviceId, recipientIdentity));
                     }
                 }
             }

@@ -8,6 +8,7 @@ using Backbone.ConsumerApi.Sdk.Endpoints.Relationships.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.RelationshipTemplates.Types.Requests;
 using Backbone.ConsumerApi.Sdk.Endpoints.SyncRuns.Types.Requests;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Application.Printer;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Domain;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsFile;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.PoolsGenerator;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tools;
@@ -190,7 +191,7 @@ public class EntityCreator
                 if (sdk.DeviceData is null)
                     throw new Exception("The SDK could not be used to create a new Identity.");
 
-                var createdIdentity = new Domain.Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
+                var createdIdentity = new Identity(sdk.DeviceData.UserCredentials, sdk.IdentityData?.Address ?? "no address", sdk.DeviceData.DeviceId, pool, i + 1);
 
                 if (pool.NumberOfDevices > 1)
                 {
@@ -278,11 +279,20 @@ public class EntityCreator
             foreach (var identity in pool.Identities)
             {
                 var sdk = Client.CreateForExistingIdentity(_httpClientPool[Environment.CurrentManagedThreadId], _clientCredentials, identity.UserCredentials);
-                var startDatawalletVersionUpgradeResponse = await sdk.SyncRuns.StartSyncRun(new StartSyncRunRequest { Type = SyncRunType.DatawalletVersionUpgrade, Duration = 100 }, 1);
+
+                var startDatawalletVersionUpgradeResponse = await sdk.SyncRuns.StartSyncRun(
+                    new StartSyncRunRequest
+                    {
+                        Type = SyncRunType.DatawalletVersionUpgrade,
+                        Duration = 100
+                    },
+                    1);
+
 
                 if (startDatawalletVersionUpgradeResponse.Result is null) continue;
 
-                var finalizeDatawalletVersionUpgradeResponse = await sdk.SyncRuns.FinalizeDatawalletVersionUpgrade(startDatawalletVersionUpgradeResponse.Result.SyncRun.Id,
+                var finalizeDatawalletVersionUpgradeResponse = await sdk.SyncRuns.FinalizeDatawalletVersionUpgrade(
+                    startDatawalletVersionUpgradeResponse.Result.SyncRun.Id,
                     new FinalizeDatawalletVersionUpgradeRequest
                     {
                         DatawalletModifications = PreGenerateDatawalletModifications(identity.Pool.NumberOfDatawalletModifications),

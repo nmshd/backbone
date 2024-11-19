@@ -27,7 +27,8 @@ public record CreateIdentities
                     var sdkClient = await Client.CreateForNewIdentity(request.BaseUrlAddress, request.ClientCredentials, PasswordHelper.GeneratePassword(18, 24));
 
                     if (sdkClient.DeviceData is null)
-                        throw new Exception("The SDK could not be used to create a new database Identity.");
+                        throw new InvalidOperationException(
+                            $"The SDK could not be used to create a new database Identity for config {identityConfiguration.Address}/{identityConfiguration.PoolAlias} [IdentityAddress/Pool]");
 
                     var createdIdentity = new DomainIdentity(
                         sdkClient.DeviceData.UserCredentials,
