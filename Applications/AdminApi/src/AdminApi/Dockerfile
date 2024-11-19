@@ -11,7 +11,7 @@ WORKDIR /opt/chisel
 RUN go build ./cmd/chisel
 
 #### Build application ####
-FROM mcr.microsoft.com/dotnet/sdk:8.0-jammy AS build-env
+FROM mcr.microsoft.com/dotnet/sdk:9.0-noble AS build-env
 
 # use chisel to install libicu
 RUN apt-get update \
@@ -19,11 +19,11 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 COPY --from=chisel /opt/chisel/chisel /usr/bin/
-COPY --from=mcr.microsoft.com/dotnet/nightly/runtime:8.0-jammy-chiseled / /runtime-ref
+COPY --from=mcr.microsoft.com/dotnet/runtime:9.0-noble-chiseled / /runtime-ref
 
 RUN mkdir /rootfs \
-    && chisel cut --release "ubuntu-22.04" --root /rootfs \
-    libicu70_libs \
+    && chisel cut --release "ubuntu-24.04" --root /rootfs \
+    libicu74_libs \
     \
     # Remove duplicates from rootfs that exist in runtime-ref
     && fdupes /runtime-ref /rootfs -rdpN \
@@ -98,7 +98,7 @@ WORKDIR /src/apps/admin_ui
 RUN flutter build web --output /build
 
 #### Final #####
-FROM mcr.microsoft.com/dotnet/aspnet:8.0.11-jammy-chiseled
+FROM mcr.microsoft.com/dotnet/aspnet:9.0-noble-chiseled
 
 LABEL org.opencontainers.image.source="https://github.com/nmshd/backbone"
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 CMD [ "dotnet", "/app/health/Backbone.HealthCheck.dll", "--", "http://localhost:8080/health" ]

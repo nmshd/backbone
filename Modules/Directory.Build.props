@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
         <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
@@ -21,7 +21,6 @@
         <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-7jgj-8wvc-jh57" />
         <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-cmhx-cq75-c4mj" />
         <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-m5vv-6r4h-3vj9" />
-        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-hh2w-p6rv-4g7w" />
         <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-x674-v45j-fwxw" />
         <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-wvxc-855f-jvrv" />
     </ItemGroup>

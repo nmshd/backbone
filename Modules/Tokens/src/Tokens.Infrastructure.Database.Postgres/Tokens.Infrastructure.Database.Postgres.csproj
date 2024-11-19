@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <ItemGroup>
+        <PackageReference Include="Polly" Version="8.5.0" />
+    </ItemGroup>
+
+    <ItemGroup>
         <ProjectReference Include="..\Tokens.Infrastructure\Tokens.Infrastructure.csproj" />
     </ItemGroup>
 
