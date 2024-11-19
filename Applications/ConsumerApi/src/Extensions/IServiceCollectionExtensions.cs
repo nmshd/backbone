@@ -131,7 +131,7 @@ public static class IServiceCollectionExtensions
             .AddServer(options =>
             {
                 var privateKeyBytes = Convert.FromBase64String(configuration.JwtSigningCertificate);
-                var certificate = new X509Certificate2(privateKeyBytes, (string?)null);
+                var certificate = X509CertificateLoader.LoadCertificate(privateKeyBytes);
                 options.AddSigningCertificate(certificate);
 
                 options.SetTokenEndpointUris("connect/token");
