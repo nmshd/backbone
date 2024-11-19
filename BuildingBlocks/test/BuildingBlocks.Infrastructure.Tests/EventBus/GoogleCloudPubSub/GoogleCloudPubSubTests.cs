@@ -5,7 +5,6 @@ using Backbone.BuildingBlocks.Infrastructure.EventBus.GoogleCloudPubSub;
 using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestDomainEventHandlers;
 using Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub.TestDomainEvents;
 using Backbone.Tooling.Extensions;
-using Divergic.Logging.Xunit;
 using FakeItEasy;
 using Google.Api.Gax;
 using Google.Apis.Auth.OAuth2;
@@ -13,7 +12,6 @@ using Google.Cloud.PubSub.V1;
 using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Xunit.Abstractions;
 
 namespace Backbone.BuildingBlocks.Infrastructure.Tests.EventBus.GoogleCloudPubSub;
 
@@ -21,9 +19,9 @@ public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
 {
     private readonly EventBusFactory _factory;
 
-    public GoogleCloudPubSubTests(ITestOutputHelper output)
+    public GoogleCloudPubSubTests()
     {
-        _factory = new EventBusFactory(output);
+        _factory = new EventBusFactory();
     }
 
     [Fact(Skip = "No valid emulator for GCP")]
@@ -144,22 +142,17 @@ public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
         private const string TOPIC_NAME = "test-topic";
         private const string SUBSCRIPTION_NAME_PREFIX = "subscription1";
 
-        private readonly ICacheLogger<EventBusGoogleCloudPubSub> _logger;
-
         private const string CONNECTION_INFO = "";
 
         private readonly List<Instance> _instances = [];
-
-        public EventBusFactory(ITestOutputHelper output)
-        {
-            _logger = output.BuildLoggerFor<EventBusGoogleCloudPubSub>();
-        }
 
         public EventBusGoogleCloudPubSub CreateEventBus(string subscriptionNamePrefix = SUBSCRIPTION_NAME_PREFIX)
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<TestEvent1DomainEventHandler1>();
             builder.RegisterType<TestEvent1DomainEventHandler2>();
+
+            var logger = A.Fake<ILogger<EventBusGoogleCloudPubSub>>();
 
             var autofacServiceProvider = new AutofacServiceProvider(builder.Build());
             var lifeTimeScope = autofacServiceProvider.GetRequiredService<ILifetimeScope>();
@@ -168,7 +161,7 @@ public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
                 subscriptionNamePrefix, CONNECTION_INFO);
             var eventBusClient = new EventBusGoogleCloudPubSub(
                 persisterConnection,
-                _logger,
+                logger,
                 eventBusSubscriptionsManager,
                 lifeTimeScope,
                 new HandlerRetryBehavior { NumberOfRetries = 5, MinimumBackoff = 2, MaximumBackoff = 120 });
@@ -186,8 +179,6 @@ public class GoogleCloudPubSubTests : AbstractTestsBase, IAsyncDisposable
 
         public async ValueTask DisposeAsync()
         {
-            _logger.Dispose();
-
             foreach (var instance in _instances)
             {
                 instance.AutofacServiceProviders.Dispose();
