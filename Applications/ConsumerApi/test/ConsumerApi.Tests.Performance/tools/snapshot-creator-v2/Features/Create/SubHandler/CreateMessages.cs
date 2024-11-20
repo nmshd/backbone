@@ -40,7 +40,7 @@ public record CreateMessages
                     .ToList();
 
                 var recipientRelationshipIdsWithoutNumMessages = recipientsRelationshipIds
-                    .Select(relationshipIdBag => relationshipIdBag with { NumberOfSentMessages = 0 })
+                    .Select(relationshipIdBag => relationshipIdBag with { NumberOfSentMessages = default })
                     .OrderBy(relationshipIdBag => relationshipIdBag.PoolAlias)
                     .ThenBy(relationshipIdBag => relationshipIdBag.IdentityAddress)
                     .ToList();

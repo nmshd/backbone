@@ -77,12 +77,12 @@ public static class Resources
 
         if (expectedItems is { Count: > 0 })
         {
-            sb.AppendLine($"Expected: {string.Join(", ", expectedItems.Select(c => $"{c.IdentityAddress}/{c.PoolAlias}"))}");
+            sb.AppendLine($"Expected: {string.Join(", ", expectedItems.Select(c => $"{c.IdentityAddress}/{c.PoolAlias}/{(c.NumberOfSentMessages == default ? "null" : c.NumberOfSentMessages)}"))}");
         }
 
         if (actualItems is { Count: > 0 })
         {
-            sb.AppendLine($"Actual: {string.Join(", ", actualItems.Select(c => $"{c.IdentityAddress}/{c.PoolAlias}"))}");
+            sb.AppendLine($"Actual: {string.Join(", ", actualItems.Select(c => $"{c.IdentityAddress}/{c.PoolAlias}/{(c.NumberOfSentMessages == default ? "null" : c.NumberOfSentMessages)}"))}");
         }
 
         return sb.ToString();
