@@ -77,10 +77,10 @@ public class RelationshipDecomposeDueToIdentityDeletionTests : AbstractTestsBase
         // Arrange
         var relationship = CreateActiveRelationship(IDENTITY_1, IDENTITY_2);
         var anonymousIdentity = IdentityAddress.GetAnonymized(DID_DOMAIN_NAME);
-        
+
         // Act
         relationship.DecomposeDueToIdentityDeletion(IDENTITY_1, DID_DOMAIN_NAME);
-        
+
         // Assert
         relationship.From.Should().Be(anonymousIdentity);
         relationship.FromHasDecomposed.Should().BeTrue();
