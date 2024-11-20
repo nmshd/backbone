@@ -42,7 +42,11 @@ public record CreateRelationships
                     .Where(relationship =>
                         appIdentity.PoolAlias == relationship.SenderPoolAlias &&
                         appIdentity.ConfigurationIdentityAddress == relationship.SenderIdentityAddress)
-                    .Select(relationship => new RelationshipIdBag(relationship.RecipientIdentityAddress, relationship.RecipientPoolAlias))
+                    .Select(relationship => new RelationshipIdBag(
+                        relationship.RecipientIdentityAddress,
+                        relationship.RecipientPoolAlias))
+                    .OrderBy(relationshipIdBag => relationshipIdBag.PoolAlias)
+                    .ThenBy(relationshipIdBag => relationshipIdBag.IdentityAddress)
                     .ToList();
 
                 var connectorIdentityToEstablishRelationshipWith = connectorIdentities
@@ -52,7 +56,11 @@ public record CreateRelationships
                     .ToList();
 
                 var connectorIdentityToEstablishRelationshipWithIds = connectorIdentityToEstablishRelationshipWith
-                    .Select(c => new RelationshipIdBag(c.ConfigurationIdentityAddress, c.PoolAlias))
+                    .Select(connectorIdentity => new RelationshipIdBag(
+                        connectorIdentity.ConfigurationIdentityAddress,
+                        connectorIdentity.PoolAlias))
+                    .OrderBy(relationshipIdBag => relationshipIdBag.PoolAlias)
+                    .ThenBy(relationshipIdBag => relationshipIdBag.IdentityAddress)
                     .ToList();
 
                 if (!connectorRecipientIds.SequenceEqual(connectorIdentityToEstablishRelationshipWithIds))

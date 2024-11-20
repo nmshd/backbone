@@ -39,16 +39,16 @@ public record CreateMessages
                         recipient.ConfigurationIdentityAddress == relationship.IdentityAddress))
                     .ToList();
 
-                var recipientRelationshipIdsWithoutNumMessages = recipientIdentities
-                    .Select(c => new RelationshipIdBag(c.ConfigurationIdentityAddress, c.PoolAlias))
-                    .OrderBy(c => c.PoolAlias)
-                    .ThenBy(c => c.IdentityAddress)
+                var recipientRelationshipIdsWithoutNumMessages = recipientsRelationshipIds
+                    .Select(relationshipIdBag => relationshipIdBag with { NumberOfSentMessages = 0 })
+                    .OrderBy(relationshipIdBag => relationshipIdBag.PoolAlias)
+                    .ThenBy(relationshipIdBag => relationshipIdBag.IdentityAddress)
                     .ToList();
 
                 var recipientIdentityIds = recipientIdentities
                     .Select(c => new RelationshipIdBag(c.ConfigurationIdentityAddress, c.PoolAlias))
-                    .OrderBy(c => c.PoolAlias)
-                    .ThenBy(c => c.IdentityAddress)
+                    .OrderBy(relationshipIdBag => relationshipIdBag.PoolAlias)
+                    .ThenBy(relationshipIdBag => relationshipIdBag.IdentityAddress)
                     .ToList();
 
                 if (!recipientRelationshipIdsWithoutNumMessages.SequenceEqual(recipientIdentityIds))
