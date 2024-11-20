@@ -72,9 +72,7 @@ public record CreateRelationships
 
                     if (nextRelationshipTemplate == default)
                     {
-                        throw new InvalidOperationException("Connector Identity has no further RelationshipTemplates." +
-                                                            Environment.NewLine +
-                                                            $"connector-identity: {connectorIdentity.IdentityAddress}/{connectorIdentity.ConfigurationIdentityAddress}/{connectorIdentity.IdentityPoolType} {IDENTITY_LOG_SUFFIX}");
+                        throw new InvalidOperationException(BuildErrorDetails("Connector Identity has no further RelationshipTemplates.", appIdentity, connectorIdentity));
                     }
 
                     nextRelationshipTemplate.Used = true;
