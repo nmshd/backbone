@@ -11,7 +11,6 @@ public class Configuration
     [Required]
     public InfrastructureConfiguration Infrastructure { get; set; } = new();
 
-    [Required]
     public Dictionary<string, IEnumerable<PublicRelationshipTemplateReferenceDefinition>> PublicRelationshipTemplateReferences { get; set; } = [];
 
     public class InfrastructureConfiguration
