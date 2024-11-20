@@ -57,8 +57,11 @@ public static class Resources
         return sb.ToString();
     }
 
-    public static string BuildErrorDetails<TResult>(string message, DomainIdentity? identity, ApiResponse<TResult>? apiResponse = null) => BuildErrorDetails(message, identity, null, apiResponse);
-    public static string BuildErrorDetails(string message, DomainIdentity? identity, DomainIdentity? recipientIdentity) => BuildErrorDetails<object>(message, identity, recipientIdentity);
+    public static string BuildErrorDetails<TResult>(string message, DomainIdentity? identity, ApiResponse<TResult>? apiResponse) =>
+        BuildErrorDetails(message, identity, recipientIdentity: null, apiResponse);
+
+    public static string BuildErrorDetails(string message, DomainIdentity? identity, DomainIdentity? recipientIdentity) =>
+        BuildErrorDetails<object>(message, identity, recipientIdentity);
 
     public static string BuildRelationshipErrorDetails(string message, DomainIdentity? identity, List<RelationshipIdBag>? expectedItems, List<RelationshipIdBag>? actualItems)
     {

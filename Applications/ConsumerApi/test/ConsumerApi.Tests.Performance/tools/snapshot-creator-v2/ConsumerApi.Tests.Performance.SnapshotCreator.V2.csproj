@@ -8,6 +8,24 @@
         <Compile Remove="Docs\**" />
         <EmbeddedResource Remove="Docs\**" />
         <None Remove="Docs\**" />
+        <None Update="Config\PoolConfig-HEAVY\pool-config.heavy.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Config\PoolConfig-HEAVY\pool-config.heavy.xlsx">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Config\PoolConfig-HEAVY\relationships.heavy.xlsx">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Config\PoolConfig-LIGHT\pool-config.light.json">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Config\PoolConfig-LIGHT\pool-config.light.xlsx">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Config\PoolConfig-LIGHT\relationships.light.xlsx">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
         <None Update="Config\PoolConfig-TEST.20241114-081045\pool-config.test.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
