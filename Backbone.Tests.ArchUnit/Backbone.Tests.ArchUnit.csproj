@@ -6,7 +6,7 @@
 
     <ItemGroup>
         <PackageReference Include="MediatR" Version="12.4.1" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
         <PackageReference Include="TngTech.ArchUnitNET.xUnit" Version="0.11.0" />
         <PackageReference Include="FluentAssertions" Version="6.12.2" />
         <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1">
