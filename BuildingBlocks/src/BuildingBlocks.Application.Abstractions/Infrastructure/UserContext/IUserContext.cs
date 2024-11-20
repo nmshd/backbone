@@ -15,4 +15,7 @@ public interface IUserContext
 
     string GetUsername();
     string? GetUsernameOrNull();
+
+    string GetClientId();
+    string? GetClientIdOrNull();
 }
