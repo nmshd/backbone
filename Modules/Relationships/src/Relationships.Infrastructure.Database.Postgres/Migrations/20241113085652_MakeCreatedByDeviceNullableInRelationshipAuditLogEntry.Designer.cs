@@ -3,69 +3,72 @@ using System;
 using Backbone.Modules.Relationships.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migrations
+namespace Backbone.Modules.Relationships.Infrastructure.Database.Postgres.Migrations
 {
     [DbContext(typeof(RelationshipsDbContext))]
-    partial class RelationshipsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241113085652_MakeCreatedByDeviceNullableInRelationshipAuditLogEntry")]
+    partial class MakeCreatedByDeviceNullableInRelationshipAuditLogEntry
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasDefaultSchema("Relationships")
                 .HasAnnotation("ProductVersion", "8.0.11")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+                .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
             modelBuilder.Entity("Backbone.Modules.Relationships.Domain.Aggregates.RelationshipTemplates.RelationshipTemplate", b =>
                 {
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<byte[]>("Content")
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("bytea");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)")
+                        .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
                         .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<DateTime?>("ExpiresAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("ForIdentity")
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)")
+                        .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
 
                     b.Property<int?>("MaxNumberOfAllocations")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<byte[]>("Password")
                         .HasMaxLength(200)
-                        .HasColumnType("varbinary(200)");
+                        .HasColumnType("bytea");
 
                     b.HasKey("Id");
 
@@ -76,32 +79,32 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("AllocatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("AllocatedBy")
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)")
+                        .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
 
                     b.Property<string>("AllocatedByDevice")
                         .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<string>("RelationshipTemplateId")
                         .IsRequired()
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.HasKey("Id");
@@ -116,56 +119,58 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<byte[]>("CreationContent")
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("bytea");
 
                     b.Property<byte[]>("CreationResponseContent")
-                        .HasColumnType("varbinary(max)");
+                        .HasColumnType("bytea");
 
                     b.Property<string>("From")
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)")
+                        .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
 
                     b.Property<bool>("FromHasDecomposed")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.Property<string>("RelationshipTemplateId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<int>("Status")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("To")
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)")
+                        .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
 
                     b.Property<bool>("ToHasDecomposed")
-                        .HasColumnType("bit");
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("From")
-                        .HasAnnotation("Npgsql:IndexMethod", "hash");
+                    b.HasIndex("From");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("From"), "hash");
 
                     b.HasIndex("RelationshipTemplateId");
 
-                    b.HasIndex("To")
-                        .HasAnnotation("Npgsql:IndexMethod", "hash");
+                    b.HasIndex("To");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("To"), "hash");
 
                     b.ToTable("Relationships", "Relationships");
                 });
@@ -175,38 +180,38 @@ namespace Backbone.Modules.Relationships.Infrastructure.Database.SqlServer.Migra
                     b.Property<string>("Id")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("CreatedBy")
                         .IsRequired()
                         .HasMaxLength(80)
                         .IsUnicode(false)
-                        .HasColumnType("varchar(80)")
+                        .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
 
                     b.Property<string>("CreatedByDevice")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.Property<int>("NewStatus")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int?>("OldStatus")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("Reason")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("RelationshipId")
                         .HasMaxLength(20)
                         .IsUnicode(false)
-                        .HasColumnType("char(20)")
+                        .HasColumnType("character(20)")
                         .IsFixedLength();
 
                     b.HasKey("Id");

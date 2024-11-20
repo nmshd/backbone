@@ -104,6 +104,6 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
     {
-        return await _relationships.Where(filter).ToListAsync(cancellationToken);
+        return await _relationships.IncludeAll(_dbContext).Where(filter).ToListAsync(cancellationToken);
     }
 }

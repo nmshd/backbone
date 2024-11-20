@@ -15,7 +15,7 @@ public class RelationshipAuditLogEntry : Entity
         CreatedByDevice = null!;
     }
 
-    public RelationshipAuditLogEntry(RelationshipAuditLogEntryReason reason, RelationshipStatus? oldStatus, RelationshipStatus newStatus, IdentityAddress createdBy, DeviceId createdByDevice)
+    public RelationshipAuditLogEntry(RelationshipAuditLogEntryReason reason, RelationshipStatus? oldStatus, RelationshipStatus newStatus, IdentityAddress createdBy, DeviceId? createdByDevice)
     {
         Id = RelationshipAuditLogEntryId.New();
         Reason = reason;
@@ -30,7 +30,12 @@ public class RelationshipAuditLogEntry : Entity
     public RelationshipAuditLogEntryReason Reason { get; }
     public RelationshipStatus? OldStatus { get; }
     public RelationshipStatus NewStatus { get; }
-    public IdentityAddress CreatedBy { get; }
-    public DeviceId CreatedByDevice { get; }
+    public IdentityAddress CreatedBy { get; private set; }
+    public DeviceId? CreatedByDevice { get; }
     public DateTime CreatedAt { get; }
+
+    public void AnonymizeIdentity(IdentityAddress anonymousIdentity)
+    {
+        CreatedBy = anonymousIdentity;
+    }
 }
