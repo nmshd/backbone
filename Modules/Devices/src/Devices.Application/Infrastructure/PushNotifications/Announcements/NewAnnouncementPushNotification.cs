@@ -2,7 +2,7 @@
 
 namespace Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.Announcements;
 
-public class NewAnnouncementPushNotification : IPushNotificationWithDynamicText
+public class NewAnnouncementPushNotification : IPushNotification
 {
     public required string AnnouncementId { get; set; }
 }

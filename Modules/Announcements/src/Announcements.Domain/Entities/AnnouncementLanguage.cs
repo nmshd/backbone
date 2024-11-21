@@ -1,6 +1,6 @@
 ﻿using System.Globalization;
-using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 
 namespace Backbone.Modules.Announcements.Domain.Entities;
 

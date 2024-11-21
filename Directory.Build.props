@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>Backbone.$(MSBuildProjectName)</AssemblyName>
         <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
@@ -11,6 +11,19 @@
 
         <MetalamaLicense>112591-ZU658QQQXEAETFQCB88YNBFRY2EWBBJFF4JX3YHRW87WNTFR46ULX7HRZDATQASR28MWN7JFS6ZTZ9QGMJHBKCL4GUAFN7768NAMQ6K8V4R3EWTHJP6A6EKXC46SYPT5TMW9QQGD9AZSNSQQBU9RGDWQHEQKPZUXVDVKBJKP</MetalamaLicense>
     </PropertyGroup>
+
+    <!-- TODO: remove this PropertyGroup once the following Rider bug was fixed: https://youtrack.jetbrains.com/issue/RIDER-119965/NuGetAuditSuppress-ignored-->
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+        <NuGetAuditMode>direct</NuGetAuditMode>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-7jgj-8wvc-jh57" />
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-cmhx-cq75-c4mj" />
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-m5vv-6r4h-3vj9" />
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-x674-v45j-fwxw" />
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-wvxc-855f-jvrv" />
+    </ItemGroup>
 
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests')) Or $(MSBuildProjectName.EndsWith('Tests.Integration'))">
         <PackageReference Include="FluentAssertions" Version="6.12.2" />
