@@ -35,6 +35,11 @@ public record DomainIdentity(
         DeviceIds.Add(deviceId);
     }
 
+    public void AddDevices(IEnumerable<string> deviceIds)
+    {
+        DeviceIds.AddRange(deviceIds);
+    }
+
     public void SetDatawalletModifications(List<CreatedDatawalletModification> resultDatawalletModifications)
     {
         DatawalletModifications = resultDatawalletModifications;

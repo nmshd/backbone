@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Generate;
 
-public record GenerateConfig
+public abstract record GenerateConfig
 {
     public record Command(string ExcelFilePath, string WorkSheetName, bool DebugMode = false) : IRequest<StatusMessage>;
 
@@ -39,7 +39,7 @@ public record GenerateConfig
 
                 Directory.CreateDirectory(snapshotFolder);
 
-                var poolConfigJsonFilePath = Path.Combine(snapshotFolder!, $"pool-config.{request.WorkSheetName}.json");
+                var poolConfigJsonFilePath = Path.Combine(snapshotFolder, $"pool-config.{request.WorkSheetName}.json");
                 result = await poolConfigurationJsonWriter.Write(poolConfigFromExcel, poolConfigJsonFilePath);
 
                 if (!request.DebugMode)
@@ -47,15 +47,15 @@ public record GenerateConfig
                     return result;
                 }
 
-                var excelFilePath = Path.Combine(snapshotFolder!, $"pool-config.{request.WorkSheetName}.xlsx");
+                var excelFilePath = Path.Combine(snapshotFolder, $"pool-config.{request.WorkSheetName}.xlsx");
                 await excelWriter.Write(excelFilePath, poolConfigFromExcel.PoolConfigurations);
 
-                excelFilePath = Path.Combine(snapshotFolder!, $"relationships.{request.WorkSheetName}.xlsx");
+                excelFilePath = Path.Combine(snapshotFolder, $"relationships.{request.WorkSheetName}.xlsx");
                 await excelWriter.Write(excelFilePath, poolConfigFromExcel.RelationshipAndMessages);
             }
             catch (Exception e)
             {
-                return new StatusMessage(false, e.Message);
+                return new StatusMessage(false, e.Message, e);
             }
 
             return result;

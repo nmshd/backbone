@@ -4,7 +4,7 @@ using MediatR;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Verify;
 
-public record VerifyConfig
+public abstract record VerifyConfig
 {
     public record Command(string ExcelFilePath, string WorkSheetName, string JsonFilePath) : IRequest<bool>;
 

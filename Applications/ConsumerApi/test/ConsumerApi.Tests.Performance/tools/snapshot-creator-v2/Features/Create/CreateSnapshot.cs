@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create;
 
-public record CreateSnapshot
+public abstract record CreateSnapshot
 {
     public record Command(
         string BaseAddress,
@@ -29,7 +29,6 @@ public record CreateSnapshot
                 Logger.LogInformation("Creating pool configuration with relationships and messages ...");
 
                 var outputDirName = CreateSnapshotDirAndCopyPoolConfigFiles(request.JsonFilePath);
-
                 var poolConfig = await PoolConfigurationJsonReader.Read(request.JsonFilePath);
 
                 if (poolConfig is null)
@@ -46,6 +45,14 @@ public record CreateSnapshot
                 await OutputHelper.WriteIdentities(outputDirName, identities);
                 Logger.LogInformation("Devices added");
 
+                await Mediator.Send(new CreateChallenges.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                await OutputHelper.WriteChallenges(outputDirName, identities);
+                Logger.LogInformation("Challenges created");
+
+                await Mediator.Send(new CreateDatawalletModifications.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                await OutputHelper.WriteDatawalletModifications(outputDirName, identities);
+                Logger.LogInformation("DatawalletModifications created");
+
                 await Mediator.Send(new CreateRelationshipTemplates.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
                 await OutputHelper.WriteRelationshipTemplates(outputDirName, identities);
                 Logger.LogInformation("Relationship templates created");
@@ -54,21 +61,13 @@ public record CreateSnapshot
                 await OutputHelper.WriteRelationships(outputDirName, identities);
                 Logger.LogInformation("Relationships created");
 
-                await Mediator.Send(new CreateChallenges.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
-                await OutputHelper.WriteChallenges(outputDirName, identities);
-                Logger.LogInformation("Challenges created");
-
                 await Mediator.Send(new CreateMessages.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
                 await OutputHelper.WriteMessages(outputDirName, identities);
                 Logger.LogInformation("Messages created");
-
-                await Mediator.Send(new CreateDatawalletModifications.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
-                await OutputHelper.WriteDatawalletModifications(outputDirName, identities);
-                Logger.LogInformation("DatawalletModifications created");
             }
             catch (Exception e)
             {
-                return new StatusMessage(false, e.Message);
+                return new StatusMessage(false, e.Message, e);
             }
 
 

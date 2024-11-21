@@ -5,34 +5,50 @@ using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Verify;
 using McMaster.Extensions.CommandLineUtils;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2;
 
 public class Program
 {
-    private static Task<int> Main(string[] args) =>
-        new HostBuilder()
-            .ConfigureLogging(configureLogging =>
-            {
-                configureLogging.ClearProviders();
-                configureLogging.AddConsole();
-                configureLogging.AddDebug();
-            })
-            .ConfigureServices((_, services) =>
-            {
-                services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblyContaining<Program>());
-                services.AddSingleton<IPoolConfigurationExcelReader, PoolConfigurationExcelReader>();
-                services.AddSingleton<IPoolConfigurationJsonWriter, PoolConfigurationJsonWriter>();
-                services.AddSingleton<IPoolConfigurationJsonReader, PoolConfigurationJsonReader>();
-                services.AddSingleton<IPoolConfigurationJsonValidator, PoolConfigurationJsonValidator>();
-                services.AddSingleton<IRelationshipAndMessagesGenerator, RelationshipAndMessagesGenerator>();
-                services.AddSingleton<IOutputHelper, OutputHelper>();
-                services.AddSingleton<IExcelWriter, ExcelWriter>();
-            })
-            .RunCommandLineApplicationAsync(args, app =>
+    private static async Task<int> Main(string[] args)
+    {
+        var configurationBuilder = new ConfigurationBuilder()
+            .AddJsonFile("appsettings.json")
+            .Build();
+
+        Log.Logger = new LoggerConfiguration()
+            .ReadFrom.Configuration(configurationBuilder)
+            .CreateLogger();
+
+        try
+        {
+            Log.Information("Starting up");
+
+            var hostBuilder = new HostBuilder()
+                .ConfigureAppConfiguration((_, config) => { config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true); })
+                .ConfigureLogging(configureLogging =>
+                {
+                    configureLogging.ClearProviders();
+                    configureLogging.AddSerilog();
+                })
+                .ConfigureServices((_, services) =>
+                {
+                    services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblyContaining<Program>());
+                    services.AddSingleton<IPoolConfigurationExcelReader, PoolConfigurationExcelReader>();
+                    services.AddSingleton<IPoolConfigurationJsonWriter, PoolConfigurationJsonWriter>();
+                    services.AddSingleton<IPoolConfigurationJsonReader, PoolConfigurationJsonReader>();
+                    services.AddSingleton<IPoolConfigurationJsonValidator, PoolConfigurationJsonValidator>();
+                    services.AddSingleton<IRelationshipAndMessagesGenerator, RelationshipAndMessagesGenerator>();
+                    services.AddSingleton<IOutputHelper, OutputHelper>();
+                    services.AddSingleton<IExcelWriter, ExcelWriter>();
+                });
+
+            await hostBuilder.RunCommandLineApplicationAsync(args, app =>
             {
                 app.Command("verify-config", VerifyConfigCommand);
                 app.Command("generate-config", GenerateConfigCommand);
@@ -40,6 +56,19 @@ public class Program
 
                 app.OnExecute(() => Console.WriteLine("No command provided. add --help for guidance."));
             });
+        }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "Application start-up failed");
+            return 1;
+        }
+        finally
+        {
+            await Log.CloseAndFlushAsync();
+        }
+
+        return 0;
+    }
 
     private static void VerifyConfigCommand(CommandLineApplication command)
     {
@@ -92,7 +121,7 @@ public class Program
             }
             else
             {
-                logger.LogError("Error: {Message}", result.Message);
+                logger.LogError(result.Exception, "Error: {Message}", result.Message);
             }
 
             return 0;
@@ -125,7 +154,7 @@ public class Program
             }
             else
             {
-                logger.LogError("Error: {Message}", result.Message);
+                logger.LogError(result.Exception, "Error: {Message}", result.Message);
             }
 
             return 0;
