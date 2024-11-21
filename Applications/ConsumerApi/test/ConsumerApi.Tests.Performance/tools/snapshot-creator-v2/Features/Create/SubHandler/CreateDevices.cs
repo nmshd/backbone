@@ -48,6 +48,12 @@ public abstract record CreateDevices
 
             var sdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials, identity.IdentityData);
 
+            if (identity.DeviceIds.Count == 1)
+            {
+                // Note: One Device gets already added in the Identity creation handler
+                deviceIds.Add(identity.DeviceIds[0]);
+            }
+
             for (var i = 1; i < identity.NumberOfDevices; i++)
             {
                 var newDevice = await sdkClient.OnboardNewDevice(PasswordHelper.GeneratePassword(18, 24));
