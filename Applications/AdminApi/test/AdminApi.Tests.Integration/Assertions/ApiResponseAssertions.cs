@@ -1,8 +1,8 @@
-﻿using Backbone.AdminApi.Tests.Integration.Support;
+﻿using System.Text.Json;
+using Backbone.AdminApi.Tests.Integration.Support;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
-using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Backbone.AdminApi.Tests.Integration.Assertions;
 
