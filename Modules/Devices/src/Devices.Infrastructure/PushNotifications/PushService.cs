@@ -83,7 +83,11 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
                 .Select(r =>
                 {
                     var device = devices.First(d => d.Id == r.DeviceId);
-                    return pnsConnector.Send(r, notification, notificationTexts[device.CommunicationLanguage]);
+
+                    if (!notificationTexts.TryGetValue(device.CommunicationLanguage, out var notificationText))
+                        notificationText = notificationTexts[CommunicationLanguage.DEFAULT_LANGUAGE];
+
+                    return pnsConnector.Send(r, notification, notificationText);
                 });
 
             var sendResults = await Task.WhenAll(sendTasks);
