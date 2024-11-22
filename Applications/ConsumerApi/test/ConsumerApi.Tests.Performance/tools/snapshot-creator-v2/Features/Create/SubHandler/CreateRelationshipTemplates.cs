@@ -22,6 +22,7 @@ public abstract record CreateRelationshipTemplates
         private int _numberOfCreatedRelationshipTemplates;
         private int _totalRelationshipTemplates;
         private readonly Lock _lockObj = new();
+        private readonly SemaphoreSlim _semaphoreSlim = new(10);
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -43,25 +44,35 @@ public abstract record CreateRelationshipTemplates
 
         private async Task ExecuteCreateRelationshipTemplates(Command request, DomainIdentity identity)
         {
-            Stopwatch stopwatch = new();
+            await _semaphoreSlim.WaitAsync();
 
-            stopwatch.Start();
-            var createdRelationshipTemplates = await CreateRelationshipTemplates(request, identity);
-            stopwatch.Stop();
-
-            using (_lockObj.EnterScope())
+            try
             {
-                _numberOfCreatedRelationshipTemplates += createdRelationshipTemplates.Count;
-            }
+                Stopwatch stopwatch = new();
 
-            Logger.LogDebug(
-                "Created {CreatedRelationshipTemplates}/{TotalRelationshipTemplates} relationship templates.Relationship templates of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
-                _numberOfCreatedRelationshipTemplates,
-                _totalRelationshipTemplates,
-                identity.IdentityAddress,
-                identity.ConfigurationIdentityAddress,
-                identity.PoolAlias,
-                stopwatch.ElapsedMilliseconds);
+                stopwatch.Start();
+                var createdRelationshipTemplates = await CreateRelationshipTemplates(request, identity);
+                stopwatch.Stop();
+
+                using (_lockObj.EnterScope())
+                {
+                    _numberOfCreatedRelationshipTemplates += createdRelationshipTemplates.Count;
+                }
+
+                Logger.LogDebug(
+                    "Created {CreatedRelationshipTemplates}/{TotalRelationshipTemplates} relationship templates.  Semaphore.Count: {SemaphoreCount} - Relationship templates of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
+                    _numberOfCreatedRelationshipTemplates,
+                    _totalRelationshipTemplates,
+                    _semaphoreSlim.CurrentCount,
+                    identity.IdentityAddress,
+                    identity.ConfigurationIdentityAddress,
+                    identity.PoolAlias,
+                    stopwatch.ElapsedMilliseconds);
+            }
+            finally
+            {
+                _semaphoreSlim.Release();
+            }
         }
 
         private static async Task<List<RelationshipTemplateBag>> CreateRelationshipTemplates(Command request, DomainIdentity identity)

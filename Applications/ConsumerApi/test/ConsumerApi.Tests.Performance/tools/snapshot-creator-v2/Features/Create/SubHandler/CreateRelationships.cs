@@ -25,6 +25,7 @@ public abstract record CreateRelationships
         private int _numberOfCreatedRelationships;
         private int _totalRelationships;
         private readonly Lock _lockObj = new();
+        private readonly SemaphoreSlim _semaphore = new(10);
         private DomainIdentity[] _connectorIdentities = null!;
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -60,21 +61,31 @@ public abstract record CreateRelationships
 
         private async Task ExecuteOuterCreateRelationships(Command request, DomainIdentity appIdentity)
         {
-            Stopwatch stopwatch = new();
-
-            stopwatch.Start();
-            var connectorIdentityToEstablishRelationshipWith = GetConnectorIdentitiesToEstablishRelationshipWith(request, appIdentity, _connectorIdentities);
-            stopwatch.Stop();
-
-            Logger.LogDebug("Connector identities to establish relationship with for App Identity {Address}/{ConfigurationAddress}/{Pool} found in {ElapsedMilliseconds} ms",
-                appIdentity.IdentityAddress,
-                appIdentity.ConfigurationIdentityAddress,
-                appIdentity.PoolAlias,
-                stopwatch.ElapsedMilliseconds);
-
-            foreach (var connectorIdentity in connectorIdentityToEstablishRelationshipWith)
+            await _semaphore.WaitAsync();
+            try
             {
-                await ExecuteInnerCreateRelationship(request, appIdentity, connectorIdentity);
+                Stopwatch stopwatch = new();
+
+                stopwatch.Start();
+                var connectorIdentityToEstablishRelationshipWith = GetConnectorIdentitiesToEstablishRelationshipWith(request, appIdentity, _connectorIdentities);
+                stopwatch.Stop();
+
+                Logger.LogDebug(
+                    " Semaphore.Count: {SemaphoreCount} - Connector identities to establish relationship with for App Identity {Address}/{ConfigurationAddress}/{Pool} found in {ElapsedMilliseconds} ms",
+                    _semaphore.CurrentCount,
+                    appIdentity.IdentityAddress,
+                    appIdentity.ConfigurationIdentityAddress,
+                    appIdentity.PoolAlias,
+                    stopwatch.ElapsedMilliseconds);
+
+                foreach (var connectorIdentity in connectorIdentityToEstablishRelationshipWith)
+                {
+                    await ExecuteInnerCreateRelationship(request, appIdentity, connectorIdentity);
+                }
+            }
+            finally
+            {
+                _semaphore.Release();
             }
         }
 

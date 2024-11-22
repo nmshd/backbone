@@ -21,6 +21,7 @@ public abstract record CreateIdentities
         private int _numberOfCreatedIdentities;
         private int _totalIdentities;
         private readonly Lock _lockObj = new();
+        private readonly SemaphoreSlim _semaphoreSlim = new(10);
 
         public async Task<List<DomainIdentity>> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -44,24 +45,34 @@ public abstract record CreateIdentities
 
         private async Task ExecuteCreateIdentity(Command request, IdentityConfiguration identityConfiguration, List<DomainIdentity> identities)
         {
-            Stopwatch stopwatch = new();
-            stopwatch.Start();
-            var createdIdentity = await CreateIdentity(request, identityConfiguration);
-            stopwatch.Stop();
-
-            using (_lockObj.EnterScope())
+            await _semaphoreSlim.WaitAsync();
+            try
             {
-                _numberOfCreatedIdentities++;
-                identities.Add(createdIdentity);
-            }
+                Stopwatch stopwatch = new();
+                stopwatch.Start();
+                var createdIdentity = await CreateIdentity(request, identityConfiguration);
+                stopwatch.Stop();
 
-            Logger.LogDebug("Created {CreatedIdentities}/{TotalIdentities} identities. Identity {Address}/{ConfigurationAddress}/{Pool} added in {ElapsedMilliseconds} ms",
-                _numberOfCreatedIdentities,
-                _totalIdentities,
-                createdIdentity.IdentityAddress,
-                createdIdentity.ConfigurationIdentityAddress,
-                createdIdentity.PoolAlias,
-                stopwatch.ElapsedMilliseconds);
+                using (_lockObj.EnterScope())
+                {
+                    _numberOfCreatedIdentities++;
+                    identities.Add(createdIdentity);
+                }
+
+                Logger.LogDebug(
+                    "Created {CreatedIdentities}/{TotalIdentities} identities. Semaphore.Count: {SemaphoreCount} - Identity {Address}/{ConfigurationAddress}/{Pool} added in {ElapsedMilliseconds} ms",
+                    _numberOfCreatedIdentities,
+                    _totalIdentities,
+                    _semaphoreSlim.CurrentCount,
+                    createdIdentity.IdentityAddress,
+                    createdIdentity.ConfigurationIdentityAddress,
+                    createdIdentity.PoolAlias,
+                    stopwatch.ElapsedMilliseconds);
+            }
+            finally
+            {
+                _semaphoreSlim.Release();
+            }
         }
 
         private static async Task<DomainIdentity> CreateIdentity(Command request, IdentityConfiguration identityConfiguration)

@@ -18,6 +18,7 @@ public abstract record CreateDevices
         private int _numberOfCreatedDevices;
         private int _totalNumberOfDevices;
         private readonly Lock _lockObj = new();
+        private readonly SemaphoreSlim _semaphoreSlim = new(10);
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -35,25 +36,36 @@ public abstract record CreateDevices
 
         private async Task ExecuteCreateDevices(Command request, DomainIdentity identity)
         {
-            Stopwatch stopwatch = new();
+            await _semaphoreSlim.WaitAsync();
 
-            stopwatch.Start();
-            var deviceIds = await CreateDevices(request, identity);
-            stopwatch.Stop();
-
-            using (_lockObj.EnterScope())
+            try
             {
-                _numberOfCreatedDevices += deviceIds.Count;
-            }
+                Stopwatch stopwatch = new();
 
-            Logger.LogDebug("Created {CreatedDevices}/{TotalNumberOfDevices} devices. Devices {DeviceIds} of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
-                _numberOfCreatedDevices,
-                _totalNumberOfDevices,
-                string.Join(',', deviceIds),
-                identity.IdentityAddress,
-                identity.ConfigurationIdentityAddress,
-                identity.PoolAlias,
-                stopwatch.ElapsedMilliseconds);
+                stopwatch.Start();
+                var deviceIds = await CreateDevices(request, identity);
+                stopwatch.Stop();
+
+                using (_lockObj.EnterScope())
+                {
+                    _numberOfCreatedDevices += deviceIds.Count;
+                }
+
+                Logger.LogDebug(
+                    "Created {CreatedDevices}/{TotalNumberOfDevices} devices.  Semaphore.Count: {SemaphoreCount} - Devices {DeviceIds} of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
+                    _numberOfCreatedDevices,
+                    _totalNumberOfDevices,
+                    _semaphoreSlim.CurrentCount,
+                    string.Join(',', deviceIds),
+                    identity.IdentityAddress,
+                    identity.ConfigurationIdentityAddress,
+                    identity.PoolAlias,
+                    stopwatch.ElapsedMilliseconds);
+            }
+            finally
+            {
+                _semaphoreSlim.Release();
+            }
         }
 
         private static async Task<List<string>> CreateDevices(Command request, DomainIdentity identity)

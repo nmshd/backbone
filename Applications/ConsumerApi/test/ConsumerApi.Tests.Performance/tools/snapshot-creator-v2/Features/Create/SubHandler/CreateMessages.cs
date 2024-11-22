@@ -23,6 +23,7 @@ public abstract record CreateMessages
         private int _numberOfCreatedMessages;
         private long _totalMessages;
         private readonly Lock _lockObj = new();
+        private readonly SemaphoreSlim _semaphoreSlim = new(10);
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -40,20 +41,30 @@ public abstract record CreateMessages
 
         private async Task ExecuteOuterCreateMessages(Command request, DomainIdentity senderIdentity)
         {
-            Stopwatch stopwatch = new();
-            stopwatch.Start();
-            var recipientBag = GetRecipientIdentities(request, senderIdentity);
-            stopwatch.Stop();
+            await _semaphoreSlim.WaitAsync();
 
-            Logger.LogDebug("Recipient identities for Sender Identity {Address}/{ConfigurationAddress}/{Pool} found in {ElapsedMilliseconds} ms",
-                senderIdentity.IdentityAddress,
-                senderIdentity.ConfigurationIdentityAddress,
-                senderIdentity.PoolAlias,
-                stopwatch.ElapsedMilliseconds);
-
-            foreach (var recipientIdentity in recipientBag.RecipientIdentities)
+            try
             {
-                await ExecuteInnerCreateMessages(request, recipientIdentity, senderIdentity, recipientBag);
+                Stopwatch stopwatch = new();
+                stopwatch.Start();
+                var recipientBag = GetRecipientIdentities(request, senderIdentity);
+                stopwatch.Stop();
+
+                Logger.LogDebug(" Semaphore.Count: {SemaphoreCount} - Recipient identities for Sender Identity {Address}/{ConfigurationAddress}/{Pool} found in {ElapsedMilliseconds} ms",
+                    _semaphoreSlim.CurrentCount,
+                    senderIdentity.IdentityAddress,
+                    senderIdentity.ConfigurationIdentityAddress,
+                    senderIdentity.PoolAlias,
+                    stopwatch.ElapsedMilliseconds);
+
+                foreach (var recipientIdentity in recipientBag.RecipientIdentities)
+                {
+                    await ExecuteInnerCreateMessages(request, recipientIdentity, senderIdentity, recipientBag);
+                }
+            }
+            finally
+            {
+                _semaphoreSlim.Release();
             }
         }
 

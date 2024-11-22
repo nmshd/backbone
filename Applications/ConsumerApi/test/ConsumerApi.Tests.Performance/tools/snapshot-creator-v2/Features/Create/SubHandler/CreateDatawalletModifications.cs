@@ -24,6 +24,7 @@ public abstract record CreateDatawalletModifications
         private int _numberOfCreatedDatawalletModifications;
         private int _totalDatawalletModifications;
         private readonly Lock _lockObj = new();
+        private readonly SemaphoreSlim _semaphoreSlim = new(10);
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -45,34 +46,43 @@ public abstract record CreateDatawalletModifications
 
         private async Task ExecuteCreateDatawalletModifications(Command request, DomainIdentity identity)
         {
-            Stopwatch stopwatch = new();
-
-            stopwatch.Start();
-            var finalizeDatawalletVersionUpgradeResponse = await CreateDatawalletModifications(request, identity);
-            stopwatch.Stop();
-
-            if (finalizeDatawalletVersionUpgradeResponse.Result is null)
+            await _semaphoreSlim.WaitAsync();
+            try
             {
-                throw new InvalidOperationException(BuildErrorDetails($"Failed to finalize the DataWallet Sync-Run. {nameof(finalizeDatawalletVersionUpgradeResponse)}.Result is null.",
-                    identity,
-                    finalizeDatawalletVersionUpgradeResponse));
-            }
+                Stopwatch stopwatch = new();
 
-            using (_lockObj.EnterScope())
+                stopwatch.Start();
+                var finalizeDatawalletVersionUpgradeResponse = await CreateDatawalletModifications(request, identity);
+                stopwatch.Stop();
+
+                if (finalizeDatawalletVersionUpgradeResponse.Result is null)
+                {
+                    throw new InvalidOperationException(BuildErrorDetails($"Failed to finalize the DataWallet Sync-Run. {nameof(finalizeDatawalletVersionUpgradeResponse)}.Result is null.",
+                        identity,
+                        finalizeDatawalletVersionUpgradeResponse));
+                }
+
+                using (_lockObj.EnterScope())
+                {
+                    _numberOfCreatedDatawalletModifications += finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications.Count;
+                }
+
+                Logger.LogDebug(
+                    "Created {CreatedDatawalletModifications}/{TotalDatawalletModifications} datawallet modifications.  Semaphore.Count: {SemaphoreCount} - Datawallet modifications of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
+                    _numberOfCreatedDatawalletModifications,
+                    _totalDatawalletModifications,
+                    _semaphoreSlim.CurrentCount,
+                    identity.IdentityAddress,
+                    identity.ConfigurationIdentityAddress,
+                    identity.PoolAlias,
+                    stopwatch.ElapsedMilliseconds);
+
+                identity.SetDatawalletModifications(finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications);
+            }
+            finally
             {
-                _numberOfCreatedDatawalletModifications += finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications.Count;
+                _semaphoreSlim.Release();
             }
-
-            Logger.LogDebug(
-                "Created {CreatedDatawalletModifications}/{TotalDatawalletModifications} datawallet modifications. Datawallet modifications of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
-                _numberOfCreatedDatawalletModifications,
-                _totalDatawalletModifications,
-                identity.IdentityAddress,
-                identity.ConfigurationIdentityAddress,
-                identity.PoolAlias,
-                stopwatch.ElapsedMilliseconds);
-
-            identity.SetDatawalletModifications(finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications);
         }
 
         private static async Task<ApiResponse<FinalizeDatawalletVersionUpgradeResponse>> CreateDatawalletModifications(Command request, DomainIdentity identity)

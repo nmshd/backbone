@@ -21,6 +21,7 @@ public abstract record CreateChallenges
         private int _numberOfCreatedChallenges;
         private int _totalChallenges;
         private readonly Lock _lockObj = new();
+        private readonly SemaphoreSlim _semaphoreSlim = new(10);
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -40,24 +41,35 @@ public abstract record CreateChallenges
 
         private async Task ExecuteCreateChallenges(Command request, DomainIdentity identityWithChallenge)
         {
-            Stopwatch stopwatch = new();
+            await _semaphoreSlim.WaitAsync();
 
-            stopwatch.Start();
-            var challenges = await CreateChallenges(request, identityWithChallenge);
-            stopwatch.Stop();
-
-            using (_lockObj.EnterScope())
+            try
             {
-                _numberOfCreatedChallenges += challenges.Count;
-            }
+                Stopwatch stopwatch = new();
 
-            Logger.LogDebug("Created {CreatedChallenges}/{TotalChallenges} challenges. Challenges of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
-                _numberOfCreatedChallenges,
-                _totalChallenges,
-                identityWithChallenge.IdentityAddress,
-                identityWithChallenge.ConfigurationIdentityAddress,
-                identityWithChallenge.PoolAlias,
-                stopwatch.ElapsedMilliseconds);
+                stopwatch.Start();
+                var challenges = await CreateChallenges(request, identityWithChallenge);
+                stopwatch.Stop();
+
+                using (_lockObj.EnterScope())
+                {
+                    _numberOfCreatedChallenges += challenges.Count;
+                }
+
+                Logger.LogDebug(
+                    "Created {CreatedChallenges}/{TotalChallenges} challenges.  Semaphore.Count: {SemaphoreCount} - Challenges of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
+                    _numberOfCreatedChallenges,
+                    _totalChallenges,
+                    _semaphoreSlim.CurrentCount,
+                    identityWithChallenge.IdentityAddress,
+                    identityWithChallenge.ConfigurationIdentityAddress,
+                    identityWithChallenge.PoolAlias,
+                    stopwatch.ElapsedMilliseconds);
+            }
+            finally
+            {
+                _semaphoreSlim.Release();
+            }
         }
 
         private async Task<List<Challenge>> CreateChallenges(Command request, DomainIdentity identityWithChallenge)
