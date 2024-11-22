@@ -39,7 +39,7 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
 
         var communicationLanguageResult = CommunicationLanguage.Create(command.CommunicationLanguage);
 
-        var newDevice = identity.AddDevice(communicationLanguageResult.Value, _userContext.GetDeviceId());
+        var newDevice = identity.AddDevice(communicationLanguageResult.Value, _userContext.GetDeviceId(), command.IsBackupDevice);
 
         await _identitiesRepository.UpdateWithNewDevice(identity, command.DevicePassword);
 

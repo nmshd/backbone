@@ -199,7 +199,7 @@ public class Client
         return (identityData, deviceData);
     }
 
-    public async Task<Client> OnboardNewDevice(string password)
+    public async Task<Client> OnboardNewDevice(string password, bool isBackupDevice = false)
     {
         if (DeviceData == null)
             throw new Exception("The device data is missing. This is probably because you're using an unauthenticated client. In order to onboard a new device, the client needs to be authenticated.");
@@ -209,7 +209,8 @@ public class Client
         var createDeviceResponse = await Devices.RegisterDevice(new RegisterDeviceRequest
         {
             DevicePassword = password,
-            SignedChallenge = signedChallenge
+            SignedChallenge = signedChallenge,
+            IsBackupDevice = isBackupDevice
         });
 
         if (createDeviceResponse.IsError)

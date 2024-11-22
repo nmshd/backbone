@@ -135,7 +135,7 @@ public class DeviceTests : AbstractTestsBase
 
     private static Device CreateUnonboardedDevice(Identity identity)
     {
-        return identity.AddDevice(CommunicationLanguage.DEFAULT_LANGUAGE, identity.Devices.First().Id);
+        return identity.AddDevice(CommunicationLanguage.DEFAULT_LANGUAGE, identity.Devices.First().Id, false);
     }
 
     private static Device CreateOnboardedDevice(Identity identity)
