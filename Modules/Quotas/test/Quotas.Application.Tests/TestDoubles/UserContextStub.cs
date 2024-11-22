@@ -44,4 +44,14 @@ internal class UserContextStub : IUserContext
     {
         throw new NotSupportedException();
     }
+
+    public string GetClientId()
+    {
+        throw new NotSupportedException();
+    }
+
+    public string? GetClientIdOrNull()
+    {
+        throw new NotSupportedException();
+    }
 }
