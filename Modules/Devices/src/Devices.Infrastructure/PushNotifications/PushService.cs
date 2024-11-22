@@ -56,7 +56,8 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
     private async Task<DeviceWithOnlyIdAndCommunicationLanguage[]> FindDevices(SendPushNotificationFilter filter, CancellationToken cancellationToken)
     {
         var result = await _identitiesRepository.FindDevices(
-            d => filter.IncludedIdentities.Contains(d.IdentityAddress) && !filter.ExcludedDevices.Contains(d.Id),
+            d => (filter.IncludedIdentities.Count == 0 || filter.IncludedIdentities.Contains(d.IdentityAddress)) &&
+                 !filter.ExcludedDevices.Contains(d.Id),
             d => new DeviceWithOnlyIdAndCommunicationLanguage { Id = d.Id, CommunicationLanguage = d.CommunicationLanguage },
             cancellationToken
         );
