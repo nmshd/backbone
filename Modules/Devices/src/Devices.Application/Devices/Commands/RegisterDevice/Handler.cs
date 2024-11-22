@@ -9,6 +9,7 @@ using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using ApplicationException = Backbone.BuildingBlocks.Application.Abstractions.Exceptions.ApplicationException;
 
 namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 
@@ -30,6 +31,8 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
     public async Task<RegisterDeviceResponse> Handle(RegisterDeviceCommand command, CancellationToken cancellationToken)
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
+
+        if (await _identitiesRepository.HasBackupDevice(identity.Address, cancellationToken)) throw new ApplicationException(ApplicationErrors.Devices.BackupDeviceAlreadyExists());
 
         await _challengeValidator.Validate(command.SignedChallenge, PublicKey.FromBytes(identity.PublicKey));
         _logger.LogTrace("Successfully validated challenge.");
