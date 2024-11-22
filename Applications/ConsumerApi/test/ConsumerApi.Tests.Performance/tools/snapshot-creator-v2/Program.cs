@@ -38,6 +38,7 @@ public class Program
                 })
                 .ConfigureServices((_, services) =>
                 {
+                    services.AddHttpClient("snapshot-creator");
                     services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblyContaining<Program>());
                     services.AddSingleton<IPoolConfigurationExcelReader, PoolConfigurationExcelReader>();
                     services.AddSingleton<IPoolConfigurationJsonWriter, PoolConfigurationJsonWriter>();
@@ -138,7 +139,7 @@ public class Program
 
         command.OnExecuteAsync(async cancellationToken =>
         {
-            var baseAddress = baseAddressOption.Value();
+            var baseAddress = baseAddressOption.Value() ?? "http://localhost:8081";
             var clientId = clientIdOption.Value();
             var clientSecret = clientSecretOption.Value();
             var poolConfigJsonFilePath = poolConfigOption.Value();
@@ -146,7 +147,7 @@ public class Program
             var mediator = command.GetRequiredService<IMediator>();
             var logger = command.GetRequiredService<ILogger<CreateSnapshot>>();
 
-            var result = await mediator.Send(new CreateSnapshot.Command(baseAddress!, clientId!, clientSecret!, poolConfigJsonFilePath!), cancellationToken);
+            var result = await mediator.Send(new CreateSnapshot.Command(baseAddress, clientId!, clientSecret!, poolConfigJsonFilePath!), cancellationToken);
 
             if (result.Status)
             {

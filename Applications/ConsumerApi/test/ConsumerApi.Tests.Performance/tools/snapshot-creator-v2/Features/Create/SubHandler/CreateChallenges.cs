@@ -16,40 +16,53 @@ public abstract record CreateChallenges
         ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator
-    public record CommandHandler(ILogger<CreateChallenges> Logger) : IRequestHandler<Command, Unit>
+    public record CommandHandler(ILogger<CreateChallenges> Logger, IHttpClientFactory HttpClientFactory) : IRequestHandler<Command, Unit>
     {
+        private int _numberOfCreatedChallenges;
+        private int _totalChallenges;
+        private readonly Lock _lockObj = new();
+
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            var identitiesWithChallenges = request.Identities.Where(i => i.NumberOfChallenges > 0).ToList();
+            var identitiesWithChallenges = request.Identities.Where(i => i.NumberOfChallenges > 0).ToArray();
 
-            var totalChallenges = identitiesWithChallenges.Sum(i => i.NumberOfChallenges);
-            var numberOfCreatedChallenges = 0;
+            _totalChallenges = identitiesWithChallenges.Sum(i => i.NumberOfChallenges);
+            _numberOfCreatedChallenges = 0;
 
-            foreach (var identityWithChallenge in identitiesWithChallenges)
-            {
-                Stopwatch stopwatch = new();
+            var tasks = identitiesWithChallenges
+                .Select(identityWithChallenge => ExecuteCreateChallenges(request, identityWithChallenge))
+                .ToArray();
 
-                stopwatch.Start();
-                var challenges = await CreateChallenges(request, identityWithChallenge);
-                stopwatch.Stop();
-
-                numberOfCreatedChallenges += challenges.Count;
-                Logger.LogDebug("Created {CreatedChallenges}/{TotalChallenges} challenges. Challenges of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
-                    numberOfCreatedChallenges,
-                    totalChallenges,
-                    identityWithChallenge.IdentityAddress,
-                    identityWithChallenge.ConfigurationIdentityAddress,
-                    identityWithChallenge.PoolAlias,
-                    stopwatch.ElapsedMilliseconds);
-            }
+            await Task.WhenAll(tasks);
 
             return Unit.Value;
+        }
+
+        private async Task ExecuteCreateChallenges(Command request, DomainIdentity identityWithChallenge)
+        {
+            Stopwatch stopwatch = new();
+
+            stopwatch.Start();
+            var challenges = await CreateChallenges(request, identityWithChallenge);
+            stopwatch.Stop();
+
+            using (_lockObj.EnterScope())
+            {
+                _numberOfCreatedChallenges += challenges.Count;
+            }
+
+            Logger.LogDebug("Created {CreatedChallenges}/{TotalChallenges} challenges. Challenges of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
+                _numberOfCreatedChallenges,
+                _totalChallenges,
+                identityWithChallenge.IdentityAddress,
+                identityWithChallenge.ConfigurationIdentityAddress,
+                identityWithChallenge.PoolAlias,
+                stopwatch.ElapsedMilliseconds);
         }
 
         private async Task<List<Challenge>> CreateChallenges(Command request, DomainIdentity identityWithChallenge)
         {
             List<Challenge> challenges = [];
-
             var sdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identityWithChallenge.UserCredentials);
 
             for (var i = 0; i < identityWithChallenge.NumberOfChallenges; i++)

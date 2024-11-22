@@ -17,37 +17,51 @@ public abstract record CreateRelationshipTemplates
         ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler(ILogger<CreateRelationshipTemplates> Logger) : IRequestHandler<Command, Unit>
+    public record CommandHandler(ILogger<CreateRelationshipTemplates> Logger, IHttpClientFactory HttpClientFactory) : IRequestHandler<Command, Unit>
     {
+        private int _numberOfCreatedRelationshipTemplates;
+        private int _totalRelationshipTemplates;
+        private readonly Lock _lockObj = new();
+
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             var identitiesWithRelationshipTemplates = request.Identities
                 .Where(i => i.NumberOfRelationshipTemplates > 0)
-                .ToList();
+                .ToArray();
 
-            var totalRelationshipTemplates = identitiesWithRelationshipTemplates.Sum(i => i.NumberOfRelationshipTemplates);
-            var numberOfCreatedRelationshipTemplates = 0;
+            _totalRelationshipTemplates = identitiesWithRelationshipTemplates.Sum(i => i.NumberOfRelationshipTemplates);
+            _numberOfCreatedRelationshipTemplates = 0;
 
-            foreach (var identity in identitiesWithRelationshipTemplates)
-            {
-                Stopwatch stopwatch = new();
+            var tasks = identitiesWithRelationshipTemplates
+                .Select(identityWithRelationshipTemplate => ExecuteCreateRelationshipTemplates(request, identityWithRelationshipTemplate))
+                .ToArray();
 
-                stopwatch.Start();
-                var createdRelationshipTemplates = await CreateRelationshipTemplates(request, identity);
-                stopwatch.Stop();
-
-                numberOfCreatedRelationshipTemplates += createdRelationshipTemplates.Count;
-                Logger.LogDebug(
-                    "Created {CreatedRelationshipTemplates}/{TotalRelationshipTemplates} relationship templates.Relationship templates of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
-                    numberOfCreatedRelationshipTemplates,
-                    totalRelationshipTemplates,
-                    identity.IdentityAddress,
-                    identity.ConfigurationIdentityAddress,
-                    identity.PoolAlias,
-                    stopwatch.ElapsedMilliseconds);
-            }
+            await Task.WhenAll(tasks);
 
             return Unit.Value;
+        }
+
+        private async Task ExecuteCreateRelationshipTemplates(Command request, DomainIdentity identity)
+        {
+            Stopwatch stopwatch = new();
+
+            stopwatch.Start();
+            var createdRelationshipTemplates = await CreateRelationshipTemplates(request, identity);
+            stopwatch.Stop();
+
+            using (_lockObj.EnterScope())
+            {
+                _numberOfCreatedRelationshipTemplates += createdRelationshipTemplates.Count;
+            }
+
+            Logger.LogDebug(
+                "Created {CreatedRelationshipTemplates}/{TotalRelationshipTemplates} relationship templates.Relationship templates of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
+                _numberOfCreatedRelationshipTemplates,
+                _totalRelationshipTemplates,
+                identity.IdentityAddress,
+                identity.ConfigurationIdentityAddress,
+                identity.PoolAlias,
+                stopwatch.ElapsedMilliseconds);
         }
 
         private static async Task<List<RelationshipTemplateBag>> CreateRelationshipTemplates(Command request, DomainIdentity identity)

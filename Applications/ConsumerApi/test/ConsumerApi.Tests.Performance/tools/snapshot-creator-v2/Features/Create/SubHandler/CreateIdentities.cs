@@ -16,39 +16,52 @@ public abstract record CreateIdentities
         ClientCredentials ClientCredentials) : IRequest<List<DomainIdentity>>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler(ILogger<CreateIdentities> Logger) : IRequestHandler<Command, List<DomainIdentity>>
+    public record CommandHandler(ILogger<CreateIdentities> Logger, IHttpClientFactory HttpClientFactory) : IRequestHandler<Command, List<DomainIdentity>>
     {
+        private int _numberOfCreatedIdentities;
+        private int _totalIdentities;
+        private readonly Lock _lockObj = new();
+
         public async Task<List<DomainIdentity>> Handle(Command request, CancellationToken cancellationToken)
         {
             var identities = new List<DomainIdentity>();
 
             var identityConfigurations = request.IdentityPoolConfigurations
                 .SelectMany(identityPoolConfiguration => identityPoolConfiguration.Identities)
-                .ToList();
+                .ToArray();
 
-            var totalIdentities = identityConfigurations.Count;
-            var numberOfCreatedIdentities = 0;
+            _totalIdentities = identityConfigurations.Length;
+            _numberOfCreatedIdentities = 0;
 
-            foreach (var identityConfiguration in identityConfigurations)
+            var tasks = identityConfigurations
+                .Select(identityConfiguration => ExecuteCreateIdentity(request, identityConfiguration, identities))
+                .ToArray();
+
+            await Task.WhenAll(tasks);
+
+            return identities;
+        }
+
+        private async Task ExecuteCreateIdentity(Command request, IdentityConfiguration identityConfiguration, List<DomainIdentity> identities)
+        {
+            Stopwatch stopwatch = new();
+            stopwatch.Start();
+            var createdIdentity = await CreateIdentity(request, identityConfiguration);
+            stopwatch.Stop();
+
+            using (_lockObj.EnterScope())
             {
-                Stopwatch stopwatch = new();
-                stopwatch.Start();
-                var createdIdentity = await CreateIdentity(request, identityConfiguration);
-                stopwatch.Stop();
-
-                numberOfCreatedIdentities++;
-                Logger.LogDebug("Created {CreatedIdentities}/{TotalIdentities} identities. Identity {Address}/{ConfigurationAddress}/{Pool} added in {ElapsedMilliseconds} ms",
-                    numberOfCreatedIdentities,
-                    totalIdentities,
-                    createdIdentity.IdentityAddress,
-                    createdIdentity.ConfigurationIdentityAddress,
-                    createdIdentity.PoolAlias,
-                    stopwatch.ElapsedMilliseconds);
-
+                _numberOfCreatedIdentities++;
                 identities.Add(createdIdentity);
             }
 
-            return identities;
+            Logger.LogDebug("Created {CreatedIdentities}/{TotalIdentities} identities. Identity {Address}/{ConfigurationAddress}/{Pool} added in {ElapsedMilliseconds} ms",
+                _numberOfCreatedIdentities,
+                _totalIdentities,
+                createdIdentity.IdentityAddress,
+                createdIdentity.ConfigurationIdentityAddress,
+                createdIdentity.PoolAlias,
+                stopwatch.ElapsedMilliseconds);
         }
 
         private static async Task<DomainIdentity> CreateIdentity(Command request, IdentityConfiguration identityConfiguration)

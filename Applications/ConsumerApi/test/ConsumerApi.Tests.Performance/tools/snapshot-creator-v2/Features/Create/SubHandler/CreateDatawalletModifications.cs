@@ -15,56 +15,69 @@ public abstract record CreateDatawalletModifications
 {
     public record Command(
         List<DomainIdentity> Identities,
-        string BaseAddress,
+        string BaseUrlAddress,
         ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator
-    public record CommandHandler(ILogger<CreateDatawalletModifications> Logger) : IRequestHandler<Command, Unit>
+    public record CommandHandler(ILogger<CreateDatawalletModifications> Logger, IHttpClientFactory HttpClientFactory) : IRequestHandler<Command, Unit>
     {
+        private int _numberOfCreatedDatawalletModifications;
+        private int _totalDatawalletModifications;
+        private readonly Lock _lockObj = new();
+
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             var identitiesWithDatawalletModifications = request.Identities
                 .Where(i => i.NumberOfDatawalletModifications > 0)
-                .ToList();
+                .ToArray();
 
-            var totalDatawalletModifications = identitiesWithDatawalletModifications.Sum(i => i.NumberOfDatawalletModifications);
-            var numberOfCreatedDatawalletModifications = 0;
+            _totalDatawalletModifications = identitiesWithDatawalletModifications.Sum(i => i.NumberOfDatawalletModifications);
+            _numberOfCreatedDatawalletModifications = 0;
 
-            foreach (var identity in identitiesWithDatawalletModifications)
-            {
-                Stopwatch stopwatch = new();
+            var tasks = identitiesWithDatawalletModifications
+                .Select(identityWithDatawalletModifications => ExecuteCreateDatawalletModifications(request, identityWithDatawalletModifications))
+                .ToArray();
 
-                stopwatch.Start();
-                var finalizeDatawalletVersionUpgradeResponse = await CreateDatawalletModifications(request, identity);
-                stopwatch.Stop();
-
-                if (finalizeDatawalletVersionUpgradeResponse.Result is null)
-                {
-                    throw new InvalidOperationException(BuildErrorDetails($"Failed to finalize the DataWallet Sync-Run. {nameof(finalizeDatawalletVersionUpgradeResponse)}.Result is null.",
-                        identity,
-                        finalizeDatawalletVersionUpgradeResponse));
-                }
-
-                numberOfCreatedDatawalletModifications += finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications.Count;
-
-                Logger.LogDebug(
-                    "Created {CreatedDatawalletModifications}/{TotalDatawalletModifications} datawallet modifications. Datawallet modifications of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
-                    numberOfCreatedDatawalletModifications,
-                    totalDatawalletModifications,
-                    identity.IdentityAddress,
-                    identity.ConfigurationIdentityAddress,
-                    identity.PoolAlias,
-                    stopwatch.ElapsedMilliseconds);
-
-                identity.SetDatawalletModifications(finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications);
-            }
+            await Task.WhenAll(tasks);
 
             return Unit.Value;
         }
 
+        private async Task ExecuteCreateDatawalletModifications(Command request, DomainIdentity identity)
+        {
+            Stopwatch stopwatch = new();
+
+            stopwatch.Start();
+            var finalizeDatawalletVersionUpgradeResponse = await CreateDatawalletModifications(request, identity);
+            stopwatch.Stop();
+
+            if (finalizeDatawalletVersionUpgradeResponse.Result is null)
+            {
+                throw new InvalidOperationException(BuildErrorDetails($"Failed to finalize the DataWallet Sync-Run. {nameof(finalizeDatawalletVersionUpgradeResponse)}.Result is null.",
+                    identity,
+                    finalizeDatawalletVersionUpgradeResponse));
+            }
+
+            using (_lockObj.EnterScope())
+            {
+                _numberOfCreatedDatawalletModifications += finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications.Count;
+            }
+
+            Logger.LogDebug(
+                "Created {CreatedDatawalletModifications}/{TotalDatawalletModifications} datawallet modifications. Datawallet modifications of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
+                _numberOfCreatedDatawalletModifications,
+                _totalDatawalletModifications,
+                identity.IdentityAddress,
+                identity.ConfigurationIdentityAddress,
+                identity.PoolAlias,
+                stopwatch.ElapsedMilliseconds);
+
+            identity.SetDatawalletModifications(finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications);
+        }
+
         private static async Task<ApiResponse<FinalizeDatawalletVersionUpgradeResponse>> CreateDatawalletModifications(Command request, DomainIdentity identity)
         {
-            var sdk = Client.CreateForExistingIdentity(request.BaseAddress, request.ClientCredentials, identity.UserCredentials);
+            var sdk = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials);
 
             var startDatawalletVersionUpgradeResponse = await sdk.SyncRuns.StartSyncRun(
                 new StartSyncRunRequest
@@ -163,7 +176,7 @@ public abstract record CreateDatawalletModifications
             return result;
         }
 
-        private static T GetRandomElement<T, TU>(Random random, IDictionary<TU, T> dictionary)
+        private static T GetRandomElement<T, TU>(Random random, Dictionary<TU, T> dictionary) where TU : notnull
         {
             var randomElementIndex = Convert.ToInt32(random.NextInt64() % dictionary.Count);
             return dictionary[dictionary.Keys.Skip(randomElementIndex - 1).First()];

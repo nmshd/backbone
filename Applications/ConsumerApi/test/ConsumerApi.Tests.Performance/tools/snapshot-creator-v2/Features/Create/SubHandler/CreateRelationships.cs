@@ -20,22 +20,27 @@ public abstract record CreateRelationships
         ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler(ILogger<CreateRelationships> Logger) : IRequestHandler<Command, Unit>
+    public record CommandHandler(ILogger<CreateRelationships> Logger, IHttpClientFactory HttpClientFactory) : IRequestHandler<Command, Unit>
     {
+        private int _numberOfCreatedRelationships;
+        private int _totalRelationships;
+        private readonly Lock _lockObj = new();
+        private DomainIdentity[] _connectorIdentities = null!;
+
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            var totalRelationships = request.RelationshipAndMessages.Count / 2;
-            var numberOfCreatedRelationships = 0;
+            _totalRelationships = request.RelationshipAndMessages.Count / 2;
+            _numberOfCreatedRelationships = 0;
 
-            var connectorIdentities = request.Identities.Where(i => i.IdentityPoolType == IdentityPoolType.Connector).ToList();
-            var appIdentities = request.Identities.Where(i => i.IdentityPoolType == IdentityPoolType.App).ToList();
+            _connectorIdentities = request.Identities.Where(i => i.IdentityPoolType == IdentityPoolType.Connector).ToArray();
+            var appIdentities = request.Identities.Where(i => i.IdentityPoolType == IdentityPoolType.App).ToArray();
 
-            if (connectorIdentities.Any(c => c.RelationshipTemplates.Count == 0))
+            if (_connectorIdentities.Any(c => c.RelationshipTemplates.Count == 0))
             {
-                var materializedConnectorIdentities = connectorIdentities
+                var materializedConnectorIdentities = _connectorIdentities
                     .Where(c => c.RelationshipTemplates.Count == 0)
                     .Select(c => $"{c.IdentityAddress}/{c.ConfigurationIdentityAddress}/{c.PoolAlias} {IDENTITY_LOG_SUFFIX}")
-                    .ToList();
+                    .ToArray();
 
                 throw new InvalidOperationException("One or more relationship target connector identities do not have a usable relationship template." +
                                                     Environment.NewLine +
@@ -44,54 +49,69 @@ public abstract record CreateRelationships
                                                     $"{string.Join($",{Environment.NewLine}", materializedConnectorIdentities)}");
             }
 
+            var tasks = appIdentities
+                .Select(appIdentity => ExecuteOuterCreateRelationships(request, appIdentity))
+                .ToArray();
 
-            foreach (var appIdentity in appIdentities)
-            {
-                Stopwatch stopwatch = new();
-
-                stopwatch.Start();
-                var connectorIdentityToEstablishRelationshipWith = GetConnectorIdentitiesToEstablishRelationshipWith(request, appIdentity, connectorIdentities);
-                stopwatch.Stop();
-
-                Logger.LogDebug("Connector identities to establish relationship with for App Identity {Address}/{ConfigurationAddress}/{Pool} found in {ElapsedMilliseconds} ms",
-                    appIdentity.IdentityAddress,
-                    appIdentity.ConfigurationIdentityAddress,
-                    appIdentity.PoolAlias,
-                    stopwatch.ElapsedMilliseconds);
-
-                foreach (var connectorIdentity in connectorIdentityToEstablishRelationshipWith)
-                {
-                    stopwatch.Restart();
-                    var acceptRelationshipResponse = await CreateRelationship(request, appIdentity, connectorIdentity);
-                    stopwatch.Stop();
-
-                    if (acceptRelationshipResponse.Result is null)
-                    {
-                        throw new InvalidOperationException(BuildErrorDetails($"Relationship was not created. {nameof(acceptRelationshipResponse)}.Result is null ",
-                            appIdentity,
-                            connectorIdentity));
-                    }
-
-                    numberOfCreatedRelationships++;
-                    Logger.LogDebug("Created {CreatedRelationships}/{TotalRelationships} relationships. Relationship {RelationshipId} " +
-                                    "for App Identity {Address}/{ConfigurationAddress}/{Pool} " +
-                                    "with Connector Identity {ConnectorAddress}/{ConnectorConfigurationAddress}/{ConnectorPool} created in {ElapsedMilliseconds} ms",
-                        numberOfCreatedRelationships,
-                        totalRelationships,
-                        acceptRelationshipResponse.Result!.Id,
-                        appIdentity.IdentityAddress,
-                        appIdentity.ConfigurationIdentityAddress,
-                        appIdentity.PoolAlias,
-                        connectorIdentity.IdentityAddress,
-                        connectorIdentity.ConfigurationIdentityAddress,
-                        connectorIdentity.PoolAlias,
-                        stopwatch.ElapsedMilliseconds);
-
-                    appIdentity.EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, connectorIdentity);
-                }
-            }
+            await Task.WhenAll(tasks);
 
             return Unit.Value;
+        }
+
+        private async Task ExecuteOuterCreateRelationships(Command request, DomainIdentity appIdentity)
+        {
+            Stopwatch stopwatch = new();
+
+            stopwatch.Start();
+            var connectorIdentityToEstablishRelationshipWith = GetConnectorIdentitiesToEstablishRelationshipWith(request, appIdentity, _connectorIdentities);
+            stopwatch.Stop();
+
+            Logger.LogDebug("Connector identities to establish relationship with for App Identity {Address}/{ConfigurationAddress}/{Pool} found in {ElapsedMilliseconds} ms",
+                appIdentity.IdentityAddress,
+                appIdentity.ConfigurationIdentityAddress,
+                appIdentity.PoolAlias,
+                stopwatch.ElapsedMilliseconds);
+
+            foreach (var connectorIdentity in connectorIdentityToEstablishRelationshipWith)
+            {
+                await ExecuteInnerCreateRelationship(request, appIdentity, connectorIdentity);
+            }
+        }
+
+        private async Task ExecuteInnerCreateRelationship(Command request, DomainIdentity appIdentity, DomainIdentity connectorIdentity)
+        {
+            Stopwatch stopwatch = new();
+            stopwatch.Start();
+            var acceptRelationshipResponse = await CreateRelationship(request, appIdentity, connectorIdentity);
+            stopwatch.Stop();
+
+            if (acceptRelationshipResponse.Result is null)
+            {
+                throw new InvalidOperationException(BuildErrorDetails($"Relationship was not created. {nameof(acceptRelationshipResponse)}.Result is null ",
+                    appIdentity,
+                    connectorIdentity));
+            }
+
+            using (_lockObj.EnterScope())
+            {
+                _numberOfCreatedRelationships++;
+            }
+
+            Logger.LogDebug("Created {CreatedRelationships}/{TotalRelationships} relationships. Relationship {RelationshipId} " +
+                            "for App Identity {Address}/{ConfigurationAddress}/{Pool} " +
+                            "with Connector Identity {ConnectorAddress}/{ConnectorConfigurationAddress}/{ConnectorPool} created in {ElapsedMilliseconds} ms",
+                _numberOfCreatedRelationships,
+                _totalRelationships,
+                acceptRelationshipResponse.Result!.Id,
+                appIdentity.IdentityAddress,
+                appIdentity.ConfigurationIdentityAddress,
+                appIdentity.PoolAlias,
+                connectorIdentity.IdentityAddress,
+                connectorIdentity.ConfigurationIdentityAddress,
+                connectorIdentity.PoolAlias,
+                stopwatch.ElapsedMilliseconds);
+
+            appIdentity.EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, connectorIdentity);
         }
 
         private static async Task<ApiResponse<RelationshipMetadata>> CreateRelationship(Command request, DomainIdentity appIdentity,
@@ -143,10 +163,10 @@ public abstract record CreateRelationships
                 : acceptRelationshipResponse;
         }
 
-        private static List<DomainIdentity> GetConnectorIdentitiesToEstablishRelationshipWith(
+        private static DomainIdentity[] GetConnectorIdentitiesToEstablishRelationshipWith(
             Command request,
             DomainIdentity appIdentity,
-            List<DomainIdentity> connectorIdentities)
+            DomainIdentity[] connectorIdentities)
         {
             var connectorRecipientIds = request.RelationshipAndMessages
                 .Where(relationship =>
@@ -157,13 +177,13 @@ public abstract record CreateRelationships
                     relationship.RecipientPoolAlias))
                 .OrderBy(relationshipIdBag => relationshipIdBag.PoolAlias)
                 .ThenBy(relationshipIdBag => relationshipIdBag.IdentityAddress)
-                .ToList();
+                .ToArray();
 
             var connectorIdentityToEstablishRelationshipWith = connectorIdentities
                 .Where(connectorIdentity => connectorRecipientIds.Any(relationship =>
                     connectorIdentity.PoolAlias == relationship.PoolAlias &&
                     connectorIdentity.ConfigurationIdentityAddress == relationship.IdentityAddress))
-                .ToList();
+                .ToArray();
 
             var connectorIdentityToEstablishRelationshipWithIds = connectorIdentityToEstablishRelationshipWith
                 .Select(connectorIdentity => new RelationshipIdBag(
@@ -171,7 +191,7 @@ public abstract record CreateRelationships
                     connectorIdentity.PoolAlias))
                 .OrderBy(relationshipIdBag => relationshipIdBag.PoolAlias)
                 .ThenBy(relationshipIdBag => relationshipIdBag.IdentityAddress)
-                .ToList();
+                .ToArray();
 
             return !connectorRecipientIds.SequenceEqual(connectorIdentityToEstablishRelationshipWithIds)
                 ? throw new InvalidOperationException(BuildRelationshipErrorDetails("Mismatch between configured relationships and connector identities.",

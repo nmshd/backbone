@@ -18,48 +18,68 @@ public abstract record CreateMessages
         ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler(ILogger<CreateMessages> Logger) : IRequestHandler<Command, Unit>
+    public record CommandHandler(ILogger<CreateMessages> Logger, IHttpClientFactory HttpClientFactory) : IRequestHandler<Command, Unit>
     {
+        private int _numberOfCreatedMessages;
+        private long _totalMessages;
+        private readonly Lock _lockObj = new();
+
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            var totalMessages = request.RelationshipAndMessages.Sum(relationship => relationship.NumberOfSentMessages);
-            var numberOfCreatedMessages = 0;
+            _totalMessages = request.RelationshipAndMessages.Sum(relationship => relationship.NumberOfSentMessages);
+            _numberOfCreatedMessages = 0;
 
-            foreach (var senderIdentity in request.Identities)
-            {
-                Stopwatch stopwatch = new();
-                stopwatch.Start();
-                var recipientBag = GetRecipientIdentities(request, senderIdentity);
-                stopwatch.Stop();
+            var tasks = request.Identities
+                .Select(identity => ExecuteOuterCreateMessages(request, identity))
+                .ToArray();
 
-                Logger.LogDebug("Recipient identities for Sender Identity {Address}/{ConfigurationAddress}/{Pool} found in {ElapsedMilliseconds} ms",
-                    senderIdentity.IdentityAddress,
-                    senderIdentity.ConfigurationIdentityAddress,
-                    senderIdentity.PoolAlias,
-                    stopwatch.ElapsedMilliseconds);
-
-                foreach (var recipientIdentity in recipientBag.RecipientIdentities)
-                {
-                    stopwatch.Restart();
-                    var sentMessages = await CreateMessages(request, recipientIdentity, senderIdentity, recipientBag);
-                    stopwatch.Stop();
-
-                    numberOfCreatedMessages += sentMessages.Count;
-                    Logger.LogDebug(
-                        "Created {CreatedMessages}/{TotalMessages} messages. Messages from Sender Identity {SenderAddress}/{SenderConfigurationAddress}/{SenderPool} to Recipient Identity {RecipientAddress}/{RecipientConfigurationAddress}/{RecipientPool} created in {ElapsedMilliseconds} ms",
-                        numberOfCreatedMessages,
-                        totalMessages,
-                        senderIdentity.IdentityAddress,
-                        senderIdentity.ConfigurationIdentityAddress,
-                        senderIdentity.PoolAlias,
-                        recipientIdentity.IdentityAddress,
-                        recipientIdentity.ConfigurationIdentityAddress,
-                        recipientIdentity.PoolAlias,
-                        stopwatch.ElapsedMilliseconds);
-                }
-            }
+            await Task.WhenAll(tasks);
 
             return Unit.Value;
+        }
+
+        private async Task ExecuteOuterCreateMessages(Command request, DomainIdentity senderIdentity)
+        {
+            Stopwatch stopwatch = new();
+            stopwatch.Start();
+            var recipientBag = GetRecipientIdentities(request, senderIdentity);
+            stopwatch.Stop();
+
+            Logger.LogDebug("Recipient identities for Sender Identity {Address}/{ConfigurationAddress}/{Pool} found in {ElapsedMilliseconds} ms",
+                senderIdentity.IdentityAddress,
+                senderIdentity.ConfigurationIdentityAddress,
+                senderIdentity.PoolAlias,
+                stopwatch.ElapsedMilliseconds);
+
+            foreach (var recipientIdentity in recipientBag.RecipientIdentities)
+            {
+                await ExecuteInnerCreateMessages(request, recipientIdentity, senderIdentity, recipientBag);
+            }
+        }
+
+        private async Task ExecuteInnerCreateMessages(Command request, DomainIdentity recipientIdentity, DomainIdentity senderIdentity, RecipientBag recipientBag)
+        {
+            Stopwatch stopwatch = new();
+            stopwatch.Start();
+            var sentMessages = await CreateMessages(request, recipientIdentity, senderIdentity, recipientBag);
+            stopwatch.Stop();
+
+            using (_lockObj.EnterScope())
+            {
+                _numberOfCreatedMessages += sentMessages.Count;
+            }
+
+            Logger.LogDebug(
+                "Created {CreatedMessages}/{TotalMessages} messages. Messages from Sender Identity {SenderAddress}/{SenderConfigurationAddress}/{SenderPool} to Recipient Identity {RecipientAddress}/{RecipientConfigurationAddress}/{RecipientPool} created in {ElapsedMilliseconds} ms",
+                _numberOfCreatedMessages,
+                _totalMessages,
+                senderIdentity.IdentityAddress,
+                senderIdentity.ConfigurationIdentityAddress,
+                senderIdentity.PoolAlias,
+                recipientIdentity.IdentityAddress,
+                recipientIdentity.ConfigurationIdentityAddress,
+                recipientIdentity.PoolAlias,
+                stopwatch.ElapsedMilliseconds);
         }
 
         private static async Task<List<MessageBag>> CreateMessages(
@@ -128,25 +148,25 @@ public abstract record CreateMessages
                     relationship.RecipientIdentityAddress,
                     relationship.RecipientPoolAlias,
                     relationship.NumberOfSentMessages))
-                .ToList();
+                .ToArray();
 
             var recipientIdentities = request.Identities
                 .Where(recipient => recipientsRelationshipIds.Any(relationship =>
                     recipient.PoolAlias == relationship.PoolAlias &&
                     recipient.ConfigurationIdentityAddress == relationship.IdentityAddress))
-                .ToList();
+                .ToArray();
 
             var recipientRelationshipIdsWithoutNumMessages = recipientsRelationshipIds
                 .Select(relationshipIdBag => relationshipIdBag with { NumberOfSentMessages = default })
                 .OrderBy(relationshipIdBag => relationshipIdBag.PoolAlias)
                 .ThenBy(relationshipIdBag => relationshipIdBag.IdentityAddress)
-                .ToList();
+                .ToArray();
 
             var recipientIdentityIds = recipientIdentities
                 .Select(c => new RelationshipIdBag(c.ConfigurationIdentityAddress, c.PoolAlias))
                 .OrderBy(relationshipIdBag => relationshipIdBag.PoolAlias)
                 .ThenBy(relationshipIdBag => relationshipIdBag.IdentityAddress)
-                .ToList();
+                .ToArray();
 
             return !recipientRelationshipIdsWithoutNumMessages.SequenceEqual(recipientIdentityIds)
                 ? throw new InvalidOperationException(BuildRelationshipErrorDetails("Mismatch between configured relationships and connector identities.",

@@ -13,33 +13,47 @@ public abstract record CreateDevices
     public record Command(List<DomainIdentity> Identities, string BaseUrlAddress, ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler(ILogger<CreateDevices> Logger) : IRequestHandler<Command, Unit>
+    public record CommandHandler(ILogger<CreateDevices> Logger, IHttpClientFactory HttpClientFactory) : IRequestHandler<Command, Unit>
     {
+        private int _numberOfCreatedDevices;
+        private int _totalNumberOfDevices;
+        private readonly Lock _lockObj = new();
+
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
-            var totalNumberOfDevices = request.Identities.Sum(i => i.NumberOfDevices);
-            var numberOfCreatedDevices = 0;
+            _totalNumberOfDevices = request.Identities.Sum(i => i.NumberOfDevices);
+            _numberOfCreatedDevices = 0;
 
-            foreach (var identity in request.Identities)
-            {
-                Stopwatch stopwatch = new();
+            var tasks = request.Identities
+                .Select(identity => ExecuteCreateDevices(request, identity))
+                .ToArray();
 
-                stopwatch.Start();
-                var deviceIds = await CreateDevices(request, identity);
-                stopwatch.Stop();
-
-                numberOfCreatedDevices += deviceIds.Count;
-                Logger.LogDebug("Created {CreatedDevices}/{TotalNumberOfDevices} devices. Devices {DeviceIds} of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
-                    numberOfCreatedDevices,
-                    totalNumberOfDevices,
-                    string.Join(',', deviceIds),
-                    identity.IdentityAddress,
-                    identity.ConfigurationIdentityAddress,
-                    identity.PoolAlias,
-                    stopwatch.ElapsedMilliseconds);
-            }
+            await Task.WhenAll(tasks);
 
             return Unit.Value;
+        }
+
+        private async Task ExecuteCreateDevices(Command request, DomainIdentity identity)
+        {
+            Stopwatch stopwatch = new();
+
+            stopwatch.Start();
+            var deviceIds = await CreateDevices(request, identity);
+            stopwatch.Stop();
+
+            using (_lockObj.EnterScope())
+            {
+                _numberOfCreatedDevices += deviceIds.Count;
+            }
+
+            Logger.LogDebug("Created {CreatedDevices}/{TotalNumberOfDevices} devices. Devices {DeviceIds} of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
+                _numberOfCreatedDevices,
+                _totalNumberOfDevices,
+                string.Join(',', deviceIds),
+                identity.IdentityAddress,
+                identity.ConfigurationIdentityAddress,
+                identity.PoolAlias,
+                stopwatch.ElapsedMilliseconds);
         }
 
         private static async Task<List<string>> CreateDevices(Command request, DomainIdentity identity)

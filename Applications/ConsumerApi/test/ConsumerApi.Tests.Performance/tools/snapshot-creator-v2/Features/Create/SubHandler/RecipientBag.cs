@@ -2,4 +2,4 @@
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 
-public record RecipientBag(List<RelationshipIdBag> RelationshipIds, List<DomainIdentity> RecipientIdentities);
+public record RecipientBag(RelationshipIdBag[] RelationshipIds, DomainIdentity[] RecipientIdentities);

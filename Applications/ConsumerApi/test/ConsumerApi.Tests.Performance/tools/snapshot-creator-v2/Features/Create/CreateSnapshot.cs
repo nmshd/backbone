@@ -1,4 +1,5 @@
-﻿using Backbone.ConsumerApi.Sdk.Authentication;
+﻿using System.Diagnostics;
+using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Interfaces;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
@@ -28,6 +29,7 @@ public abstract record CreateSnapshot
             {
                 Logger.LogInformation("Creating pool configuration with relationships and messages ...");
 
+
                 var outputDirName = CreateSnapshotDirAndCopyPoolConfigFiles(request.JsonFilePath);
                 var poolConfig = await PoolConfigurationJsonReader.Read(request.JsonFilePath);
 
@@ -38,38 +40,75 @@ public abstract record CreateSnapshot
 
                 var clientCredentials = new ClientCredentials(request.ClientId, request.ClientSecret);
 
+                Stopwatch stopwatch = new();
+                stopwatch.Start();
+
                 var identities = await Mediator.Send(new CreateIdentities.Command(poolConfig.IdentityPoolConfigurations, request.BaseAddress, clientCredentials), cancellationToken);
-                Logger.LogInformation("Identities created");
+
+                stopwatch.Stop();
+                var totalRunTime = stopwatch.Elapsed;
+                Logger.LogInformation("Identities created in {ElapsedTime}", stopwatch.Elapsed);
+
+                stopwatch.Restart();
 
                 await Mediator.Send(new CreateDevices.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
                 await OutputHelper.WriteIdentities(outputDirName, identities);
-                Logger.LogInformation("Devices added");
+
+                stopwatch.Stop();
+                totalRunTime += stopwatch.Elapsed;
+                Logger.LogInformation("Devices added in {ElapsedTime}", stopwatch.Elapsed);
+
+                stopwatch.Restart();
 
                 await Mediator.Send(new CreateChallenges.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
                 await OutputHelper.WriteChallenges(outputDirName, identities);
-                Logger.LogInformation("Challenges created");
+
+                stopwatch.Stop();
+                totalRunTime += stopwatch.Elapsed;
+                Logger.LogInformation("Challenges created in {ElapsedTime}", stopwatch.Elapsed);
+
+                stopwatch.Restart();
 
                 await Mediator.Send(new CreateDatawalletModifications.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
                 await OutputHelper.WriteDatawalletModifications(outputDirName, identities);
-                Logger.LogInformation("DatawalletModifications created");
+
+                stopwatch.Stop();
+                totalRunTime += stopwatch.Elapsed;
+                Logger.LogInformation("DatawalletModifications created in {ElapsedTime}", stopwatch.Elapsed);
+
+                stopwatch.Restart();
 
                 await Mediator.Send(new CreateRelationshipTemplates.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
                 await OutputHelper.WriteRelationshipTemplates(outputDirName, identities);
-                Logger.LogInformation("Relationship templates created");
+
+                stopwatch.Stop();
+                totalRunTime += stopwatch.Elapsed;
+                Logger.LogInformation("Relationship templates created in {ElapsedTime}", stopwatch.Elapsed);
+
+                stopwatch.Restart();
 
                 await Mediator.Send(new CreateRelationships.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
                 await OutputHelper.WriteRelationships(outputDirName, identities);
-                Logger.LogInformation("Relationships created");
+
+                stopwatch.Stop();
+                totalRunTime += stopwatch.Elapsed;
+                Logger.LogInformation("Relationships created {ElapsedTime}", stopwatch.Elapsed);
+
+                stopwatch.Restart();
 
                 await Mediator.Send(new CreateMessages.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
                 await OutputHelper.WriteMessages(outputDirName, identities);
-                Logger.LogInformation("Messages created");
+
+                stopwatch.Stop();
+                totalRunTime += stopwatch.Elapsed;
+                Logger.LogInformation("Messages created in {ElapsedTime}", stopwatch.Elapsed);
+
+                Logger.LogInformation("Pool configuration with relationships and messages created in {ElapsedTime}", totalRunTime);
             }
             catch (Exception e)
             {
                 return new StatusMessage(false, e.Message, e);
             }
-
 
             return new StatusMessage(true, "Pool configuration with relationships and messages created successfully.");
         }

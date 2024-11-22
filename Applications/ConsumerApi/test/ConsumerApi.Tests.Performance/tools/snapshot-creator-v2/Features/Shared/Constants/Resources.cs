@@ -63,7 +63,7 @@ public static class Resources
     public static string BuildErrorDetails(string message, DomainIdentity? identity, DomainIdentity? recipientIdentity) =>
         BuildErrorDetails<object>(message, identity, recipientIdentity);
 
-    public static string BuildRelationshipErrorDetails(string message, DomainIdentity? identity, List<RelationshipIdBag>? expectedItems, List<RelationshipIdBag>? actualItems)
+    public static string BuildRelationshipErrorDetails(string message, DomainIdentity? identity, RelationshipIdBag[]? expectedItems, RelationshipIdBag[]? actualItems)
     {
         var sb = new StringBuilder();
 
@@ -74,13 +74,12 @@ public static class Resources
             sb.AppendLine($"Identity: {identity.IdentityAddress}/{identity.ConfigurationIdentityAddress}/{identity.PoolAlias} {IDENTITY_LOG_SUFFIX}");
         }
 
-
-        if (expectedItems is { Count: > 0 })
+        if (expectedItems is { Length: > 0 })
         {
             sb.AppendLine($"Expected: {string.Join(", ", expectedItems.Select(c => $"{c.IdentityAddress}/{c.PoolAlias}/{(c.NumberOfSentMessages == default ? "null" : c.NumberOfSentMessages)}"))}");
         }
 
-        if (actualItems is { Count: > 0 })
+        if (actualItems is { Length: > 0 })
         {
             sb.AppendLine($"Actual: {string.Join(", ", actualItems.Select(c => $"{c.IdentityAddress}/{c.PoolAlias}/{(c.NumberOfSentMessages == default ? "null" : c.NumberOfSentMessages)}"))}");
         }
