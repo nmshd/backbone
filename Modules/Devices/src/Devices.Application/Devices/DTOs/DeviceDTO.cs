@@ -12,6 +12,7 @@ public class DeviceDTO
         CreatedByDevice = device.CreatedByDevice;
         LastLogin = new LastLoginInformation { Time = device.User.LastLoginAt };
         CommunicationLanguage = device.CommunicationLanguage;
+        IsBackupDevice = device.IsBackupDevice;
     }
 
     public string Id { get; set; }
@@ -20,6 +21,7 @@ public class DeviceDTO
     public string CreatedByDevice { get; set; }
     public LastLoginInformation LastLogin { get; set; }
     public string CommunicationLanguage { get; set; }
+    public bool IsBackupDevice { get; set; }
 }
 
 public class LastLoginInformation

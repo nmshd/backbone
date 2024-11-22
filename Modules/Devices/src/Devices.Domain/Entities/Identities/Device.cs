@@ -27,6 +27,7 @@ public class Device : Entity
         CreatedAt = SystemTime.UtcNow;
         CreatedByDevice = Id;
         CommunicationLanguage = communicationLanguage;
+        IsBackupDevice = false;
 
         User = new ApplicationUser(this, username);
 
@@ -34,12 +35,13 @@ public class Device : Entity
         IdentityAddress = null!;
     }
 
-    public Device(Identity identity, CommunicationLanguage communicationLanguage, DeviceId? createdByDevice = null)
+    public Device(Identity identity, CommunicationLanguage communicationLanguage, DeviceId? createdByDevice = null, bool isBackupDevice = false)
     {
         Id = DeviceId.New();
         CreatedAt = SystemTime.UtcNow;
         CreatedByDevice = createdByDevice ?? Id;
         CommunicationLanguage = communicationLanguage;
+        IsBackupDevice = isBackupDevice;
 
         User = new ApplicationUser(this);
 
@@ -69,13 +71,12 @@ public class Device : Entity
 
     public DeviceId CreatedByDevice { get; set; }
 
+    public bool IsBackupDevice { get; private set; }
+
     public DateTime? DeletedAt { get; set; }
     public DeviceId? DeletedByDevice { get; set; }
 
     public bool IsOnboarded => User.HasLoggedIn;
-
-    public static Expression<Func<Device, bool>> IsNotDeleted =>
-        device => device.DeletedAt == null && device.DeletedByDevice == null;
 
     private DomainError? CanBeDeletedBy(IdentityAddress addressOfActiveIdentity)
     {
@@ -115,4 +116,14 @@ public class Device : Entity
     {
         return new Device(identity, communicationLanguage, username);
     }
+
+    #region Expressions
+
+    public static Expression<Func<Device, bool>> IsNotDeleted =>
+        device => device.DeletedAt == null && device.DeletedByDevice == null;
+
+    public static Expression<Func<Device, bool>> IsBackup =>
+        device => device.IsBackupDevice;
+
+    #endregion
 }

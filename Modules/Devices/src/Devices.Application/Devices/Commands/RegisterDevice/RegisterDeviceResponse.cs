@@ -10,10 +10,12 @@ public class RegisterDeviceResponse
         Username = user.UserName!;
         CreatedByDevice = user.Device.CreatedByDevice;
         CreatedAt = user.Device.CreatedAt;
+        IsBackupDevice = user.Device.IsBackupDevice;
     }
 
     public string Id { get; set; }
     public string Username { get; set; }
     public DateTime CreatedAt { get; set; }
     public string CreatedByDevice { get; set; }
+    public bool IsBackupDevice { get; set; }
 }
