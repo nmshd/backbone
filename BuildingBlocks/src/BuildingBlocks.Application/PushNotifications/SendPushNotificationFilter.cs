@@ -27,4 +27,13 @@ public record SendPushNotificationFilter
             ExcludedDevices = [.. deviceIds]
         };
     }
+
+    public static SendPushNotificationFilter AllDevicesOfAllIdentities()
+    {
+        return new SendPushNotificationFilter
+        {
+            IncludedIdentities = [],
+            ExcludedDevices = []
+        };
+    }
 }

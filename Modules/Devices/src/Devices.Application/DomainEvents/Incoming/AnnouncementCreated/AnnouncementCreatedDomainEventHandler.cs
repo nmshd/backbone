@@ -18,6 +18,7 @@ public class AnnouncementCreatedDomainEventHandler : IDomainEventHandler<Announc
     {
         var pushNotificationTexts = @event.Texts.ToDictionary(k => k.Language, k => new NotificationText(k.Title, k.Body) { Title = k.Title, Body = k.Body });
 
-        await _pushSenderService.SendNotification(new NewAnnouncementPushNotification { AnnouncementId = @event.Id }, new SendPushNotificationFilter(), pushNotificationTexts, CancellationToken.None);
+        await _pushSenderService.SendNotification(new NewAnnouncementPushNotification { AnnouncementId = @event.Id }, SendPushNotificationFilter.AllDevicesOfAllIdentities(), pushNotificationTexts,
+            CancellationToken.None);
     }
 }
