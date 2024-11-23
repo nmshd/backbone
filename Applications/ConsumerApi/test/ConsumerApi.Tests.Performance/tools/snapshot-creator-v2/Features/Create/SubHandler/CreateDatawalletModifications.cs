@@ -19,12 +19,12 @@ public abstract record CreateDatawalletModifications
         ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator
-    public record CommandHandler(ILogger<CreateDatawalletModifications> Logger, IHttpClientFactory HttpClientFactory) : IRequestHandler<Command, Unit>
+    public record CommandHandler(ILogger<CreateDatawalletModifications> Logger) : IRequestHandler<Command, Unit>
     {
         private int _numberOfCreatedDatawalletModifications;
         private int _totalDatawalletModifications;
         private readonly Lock _lockObj = new();
-        private readonly SemaphoreSlim _semaphoreSlim = new(10);
+        private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {

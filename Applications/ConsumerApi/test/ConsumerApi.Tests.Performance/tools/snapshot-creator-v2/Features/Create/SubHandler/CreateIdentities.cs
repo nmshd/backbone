@@ -16,12 +16,12 @@ public abstract record CreateIdentities
         ClientCredentials ClientCredentials) : IRequest<List<DomainIdentity>>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler(ILogger<CreateIdentities> Logger, IHttpClientFactory HttpClientFactory) : IRequestHandler<Command, List<DomainIdentity>>
+    public record CommandHandler(ILogger<CreateIdentities> Logger) : IRequestHandler<Command, List<DomainIdentity>>
     {
         private int _numberOfCreatedIdentities;
         private int _totalIdentities;
         private readonly Lock _lockObj = new();
-        private readonly SemaphoreSlim _semaphoreSlim = new(10);
+        private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
 
         public async Task<List<DomainIdentity>> Handle(Command request, CancellationToken cancellationToken)
         {
