@@ -15,7 +15,8 @@ public record DomainIdentity(
     IdentityPoolType IdentityPoolType,
     int NumberOfChallenges,
     string PoolAlias,
-    int NumberOfDatawalletModifications)
+    int NumberOfDatawalletModifications,
+    int NumberOfSentMessages)
 {
     public readonly List<string> DeviceIds = [];
 

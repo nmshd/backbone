@@ -23,16 +23,27 @@ public abstract record CreateMessages
         private int _numberOfCreatedMessages;
         private long _totalMessages;
         private readonly Lock _lockObj = new();
-        private readonly SemaphoreSlim _semaphoreSlim = new(1);
+        private readonly SemaphoreSlim _semaphore = new(10);
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             _totalMessages = request.RelationshipAndMessages.Sum(relationship => relationship.NumberOfSentMessages);
             _numberOfCreatedMessages = 0;
 
-            var tasks = request.Identities
-                .Select(identity => ExecuteOuterCreateMessages(request, identity))
+            var senderIdentities = request.Identities
+                .Where(identity => request.RelationshipAndMessages.Any(relationship =>
+                    identity.PoolAlias == relationship.SenderPoolAlias &&
+                    identity.ConfigurationIdentityAddress == relationship.SenderIdentityAddress &&
+                    relationship.NumberOfSentMessages > 0))
                 .ToArray();
+
+            var sum = senderIdentities.Sum(s => s.NumberOfSentMessages);
+            if (sum != _totalMessages)
+            {
+                throw new InvalidOperationException($"Mismatch between configured relationships and connector identities. SenderIdentities.SumMessages: {sum}, TotalMessages: {_totalMessages}");
+            }
+
+            var tasks = senderIdentities.Select(senderIdentity => ExecuteOuterCreateMessages(request, senderIdentity)).ToArray();
 
             await Task.WhenAll(tasks);
 
@@ -41,31 +52,29 @@ public abstract record CreateMessages
 
         private async Task ExecuteOuterCreateMessages(Command request, DomainIdentity senderIdentity)
         {
-            await _semaphoreSlim.WaitAsync();
+            await _semaphore.WaitAsync();
 
             try
             {
                 var recipientBag = GetRecipientIdentities(request, senderIdentity);
 
-                var senderIdentitySkdClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, senderIdentity.UserCredentials);
-
-                var tasks = recipientBag.RecipientIdentities
-                    .Select(recipientIdentity => ExecuteInnerCreateMessages(recipientIdentity, senderIdentity, recipientBag, senderIdentitySkdClient))
-                    .ToArray();
-
-                await Task.WhenAll(tasks);
+                foreach (var recipientIdentity in recipientBag.RecipientIdentities)
+                {
+                    await ExecuteInnerCreateMessages(request, recipientIdentity, senderIdentity, recipientBag);
+                }
             }
             finally
             {
-                _semaphoreSlim.Release();
+                _semaphore.Release();
             }
         }
 
-        private async Task ExecuteInnerCreateMessages(DomainIdentity recipientIdentity, DomainIdentity senderIdentity, RecipientBag recipientBag, Client senderIdentitySdkClient)
+        private async Task ExecuteInnerCreateMessages(Command request, DomainIdentity recipientIdentity, DomainIdentity senderIdentity, RecipientBag recipientBag)
         {
             Stopwatch stopwatch = new();
             stopwatch.Start();
-            var sentMessages = await CreateMessages(recipientIdentity, senderIdentity, recipientBag, senderIdentitySdkClient);
+            var skdClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, senderIdentity.UserCredentials);
+            var sentMessages = await CreateMessages(recipientIdentity, senderIdentity, recipientBag, skdClient);
             stopwatch.Stop();
 
             using (_lockObj.EnterScope())

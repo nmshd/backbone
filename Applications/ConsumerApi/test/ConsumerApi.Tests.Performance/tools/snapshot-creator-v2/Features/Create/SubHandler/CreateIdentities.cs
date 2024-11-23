@@ -92,7 +92,8 @@ public abstract record CreateIdentities
                 identityConfiguration.IdentityPoolType,
                 identityConfiguration.NumberOfChallenges,
                 identityConfiguration.PoolAlias,
-                identityConfiguration.NumberOfDatawalletModifications);
+                identityConfiguration.NumberOfDatawalletModifications,
+                identityConfiguration.NumberOfSentMessages);
 
             if (string.IsNullOrWhiteSpace(sdkClient.DeviceData.DeviceId))
             {

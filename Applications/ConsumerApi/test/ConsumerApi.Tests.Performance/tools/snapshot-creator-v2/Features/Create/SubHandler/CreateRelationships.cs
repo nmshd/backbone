@@ -25,7 +25,7 @@ public abstract record CreateRelationships
         private int _numberOfCreatedRelationships;
         private int _totalRelationships;
         private readonly Lock _lockObj = new();
-        private readonly SemaphoreSlim _semaphore = new(1);
+        private readonly SemaphoreSlim _semaphore = new(10);
         private DomainIdentity[] _connectorIdentities = null!;
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
