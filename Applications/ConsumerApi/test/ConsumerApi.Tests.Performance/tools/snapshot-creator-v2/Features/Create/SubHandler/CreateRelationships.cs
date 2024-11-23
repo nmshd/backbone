@@ -25,7 +25,7 @@ public abstract record CreateRelationships
         private int _numberOfCreatedRelationships;
         private int _totalRelationships;
         private readonly Lock _lockObj = new();
-        private readonly SemaphoreSlim _semaphore = new(10);
+        private readonly SemaphoreSlim _semaphore = new(1);
         private DomainIdentity[] _connectorIdentities = null!;
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -64,24 +64,19 @@ public abstract record CreateRelationships
             await _semaphore.WaitAsync();
             try
             {
-                Stopwatch stopwatch = new();
-
-                stopwatch.Start();
                 var connectorIdentityToEstablishRelationshipWith = GetConnectorIdentitiesToEstablishRelationshipWith(request, appIdentity, _connectorIdentities);
-                stopwatch.Stop();
 
-                Logger.LogDebug(
-                    " Semaphore.Count: {SemaphoreCount} - Connector identities to establish relationship with for App Identity {Address}/{ConfigurationAddress}/{Pool} found in {ElapsedMilliseconds} ms",
-                    _semaphore.CurrentCount,
-                    appIdentity.IdentityAddress,
-                    appIdentity.ConfigurationIdentityAddress,
-                    appIdentity.PoolAlias,
-                    stopwatch.ElapsedMilliseconds);
+                var appIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, appIdentity.UserCredentials);
+                var connectorIdentitySdkClients = connectorIdentityToEstablishRelationshipWith
+                    .ToDictionary(connectorIdentity => connectorIdentity,
+                        connectorIdentity => Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, connectorIdentity.UserCredentials));
 
-                foreach (var connectorIdentity in connectorIdentityToEstablishRelationshipWith)
-                {
-                    await ExecuteInnerCreateRelationship(request, appIdentity, connectorIdentity);
-                }
+
+                var tasks = connectorIdentityToEstablishRelationshipWith
+                    .Select(connectorIdentity => ExecuteInnerCreateRelationship(appIdentity, connectorIdentity, appIdentitySdkClient, connectorIdentitySdkClients[connectorIdentity]))
+                    .ToArray();
+
+                await Task.WhenAll(tasks);
             }
             finally
             {
@@ -89,11 +84,11 @@ public abstract record CreateRelationships
             }
         }
 
-        private async Task ExecuteInnerCreateRelationship(Command request, DomainIdentity appIdentity, DomainIdentity connectorIdentity)
+        private async Task ExecuteInnerCreateRelationship(DomainIdentity appIdentity, DomainIdentity connectorIdentity, Client appIdentitySdkClient, Client connectorIdentitySdkClient)
         {
             Stopwatch stopwatch = new();
             stopwatch.Start();
-            var acceptRelationshipResponse = await CreateRelationship(request, appIdentity, connectorIdentity);
+            var acceptRelationshipResponse = await CreateRelationship(appIdentity, connectorIdentity, appIdentitySdkClient, connectorIdentitySdkClient);
             stopwatch.Stop();
 
             if (acceptRelationshipResponse.Result is null)
@@ -106,6 +101,7 @@ public abstract record CreateRelationships
             using (_lockObj.EnterScope())
             {
                 _numberOfCreatedRelationships++;
+                appIdentity.EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, connectorIdentity);
             }
 
             Logger.LogDebug("Created {CreatedRelationships}/{TotalRelationships} relationships. Relationship {RelationshipId} " +
@@ -121,16 +117,11 @@ public abstract record CreateRelationships
                 connectorIdentity.ConfigurationIdentityAddress,
                 connectorIdentity.PoolAlias,
                 stopwatch.ElapsedMilliseconds);
-
-            appIdentity.EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, connectorIdentity);
         }
 
-        private static async Task<ApiResponse<RelationshipMetadata>> CreateRelationship(Command request, DomainIdentity appIdentity,
-            DomainIdentity connectorIdentity)
+        private static async Task<ApiResponse<RelationshipMetadata>> CreateRelationship(DomainIdentity appIdentity, DomainIdentity connectorIdentity, Client appIdentitySdkClient,
+            Client connectorIdentitySdkClient)
         {
-            var appIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, appIdentity.UserCredentials);
-            var connectorIdentitySdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, connectorIdentity.UserCredentials);
-
             var nextRelationshipTemplate = connectorIdentity.RelationshipTemplates.FirstOrDefault(t => t.Used == false);
 
             if (nextRelationshipTemplate == default)

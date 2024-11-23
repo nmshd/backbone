@@ -23,7 +23,7 @@ public abstract record CreateMessages
         private int _numberOfCreatedMessages;
         private long _totalMessages;
         private readonly Lock _lockObj = new();
-        private readonly SemaphoreSlim _semaphoreSlim = new(10);
+        private readonly SemaphoreSlim _semaphoreSlim = new(1);
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -45,22 +45,15 @@ public abstract record CreateMessages
 
             try
             {
-                Stopwatch stopwatch = new();
-                stopwatch.Start();
                 var recipientBag = GetRecipientIdentities(request, senderIdentity);
-                stopwatch.Stop();
 
-                Logger.LogDebug(" Semaphore.Count: {SemaphoreCount} - Recipient identities for Sender Identity {Address}/{ConfigurationAddress}/{Pool} found in {ElapsedMilliseconds} ms",
-                    _semaphoreSlim.CurrentCount,
-                    senderIdentity.IdentityAddress,
-                    senderIdentity.ConfigurationIdentityAddress,
-                    senderIdentity.PoolAlias,
-                    stopwatch.ElapsedMilliseconds);
+                var senderIdentitySkdClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, senderIdentity.UserCredentials);
 
-                foreach (var recipientIdentity in recipientBag.RecipientIdentities)
-                {
-                    await ExecuteInnerCreateMessages(request, recipientIdentity, senderIdentity, recipientBag);
-                }
+                var tasks = recipientBag.RecipientIdentities
+                    .Select(recipientIdentity => ExecuteInnerCreateMessages(recipientIdentity, senderIdentity, recipientBag, senderIdentitySkdClient))
+                    .ToArray();
+
+                await Task.WhenAll(tasks);
             }
             finally
             {
@@ -68,15 +61,16 @@ public abstract record CreateMessages
             }
         }
 
-        private async Task ExecuteInnerCreateMessages(Command request, DomainIdentity recipientIdentity, DomainIdentity senderIdentity, RecipientBag recipientBag)
+        private async Task ExecuteInnerCreateMessages(DomainIdentity recipientIdentity, DomainIdentity senderIdentity, RecipientBag recipientBag, Client senderIdentitySdkClient)
         {
             Stopwatch stopwatch = new();
             stopwatch.Start();
-            var sentMessages = await CreateMessages(request, recipientIdentity, senderIdentity, recipientBag);
+            var sentMessages = await CreateMessages(recipientIdentity, senderIdentity, recipientBag, senderIdentitySdkClient);
             stopwatch.Stop();
 
             using (_lockObj.EnterScope())
             {
+                senderIdentity.SentMessages.AddRange(sentMessages);
                 _numberOfCreatedMessages += sentMessages.Count;
             }
 
@@ -93,11 +87,10 @@ public abstract record CreateMessages
                 stopwatch.ElapsedMilliseconds);
         }
 
-        private static async Task<List<MessageBag>> CreateMessages(
-            Command request,
-            DomainIdentity recipientIdentity,
+        private static async Task<List<MessageBag>> CreateMessages(DomainIdentity recipientIdentity,
             DomainIdentity senderIdentity,
-            RecipientBag recipientBag)
+            RecipientBag recipientBag,
+            Client senderIdentitySdkClient)
         {
             if (recipientIdentity.IdentityAddress is null)
             {
@@ -112,9 +105,7 @@ public abstract record CreateMessages
 
             for (var i = 0; i < numSentMessages; i++)
             {
-                var sdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, senderIdentity.UserCredentials);
-
-                var messageResponse = await sdkClient.Messages.SendMessage(new SendMessageRequest
+                var messageResponse = await senderIdentitySdkClient.Messages.SendMessage(new SendMessageRequest
                 {
                     Recipients =
                     [
@@ -140,10 +131,8 @@ public abstract record CreateMessages
 
                 if (messageResponse.Result is null) continue;
 
-                sentMessages.Add(new MessageBag(messageResponse.Result.Id, sdkClient.DeviceData!.DeviceId, recipientIdentity));
+                sentMessages.Add(new MessageBag(messageResponse.Result.Id, senderIdentitySdkClient.DeviceData!.DeviceId, recipientIdentity));
             }
-
-            senderIdentity.SentMessages.AddRange(sentMessages);
 
             return sentMessages;
         }

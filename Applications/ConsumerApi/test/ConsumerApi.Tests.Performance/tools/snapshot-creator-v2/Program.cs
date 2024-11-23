@@ -38,7 +38,7 @@ public class Program
                 })
                 .ConfigureServices((_, services) =>
                 {
-                    services.AddHttpClient("snapshot-creator");
+                    services.AddHttpClient();
                     services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblyContaining<Program>());
                     services.AddSingleton<IPoolConfigurationExcelReader, PoolConfigurationExcelReader>();
                     services.AddSingleton<IPoolConfigurationJsonWriter, PoolConfigurationJsonWriter>();
