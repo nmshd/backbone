@@ -68,6 +68,25 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
         });
     }
 
+    [When(@"a POST request is sent to the /Announcements endpoint without an English translation")]
+    public async Task WhenAPOSTRequestIsSentToTheAnnouncementsEndpointWithoutAnEnglishTranslation()
+    {
+        _announcementResponse = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        {
+            Severity = AnnouncementSeverity.High,
+            ExpiresAt = SystemTime.UtcNow.AddDays(1),
+            Texts =
+            [
+                new CreateAnnouncementRequestText
+                {
+                    Language = "de",
+                    Title = "Titel",
+                    Body = "Inhalt"
+                }
+            ]
+        });
+    }
+
     [Then(@"the response status code is (\d+) \(.+\)")]
     public void ThenTheResponseStatusCodeIs(int expectedStatusCode)
     {
@@ -96,5 +115,21 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     public void ThenTheResponseContainsTheAnnouncementA()
     {
         _announcementsResponse!.Result.Should().ContainSingle(a => a.Id == _givenAnnouncement!.Id);
+    }
+
+    [Then(@"the response content contains an error with the error code ""([^""]+)""")]
+    public void ThenTheResponseContentIncludesAnErrorWithTheErrorCode(string errorCode)
+    {
+        if (_announcementResponse != null)
+        {
+            _announcementResponse!.Error.Should().NotBeNull();
+            _announcementResponse.Error!.Code.Should().Be(errorCode);
+        }
+
+        if (_announcementsResponse != null)
+        {
+            _announcementsResponse.Error.Should().NotBeNull();
+            _announcementsResponse.Error!.Code.Should().Be(errorCode);
+        }
     }
 }
