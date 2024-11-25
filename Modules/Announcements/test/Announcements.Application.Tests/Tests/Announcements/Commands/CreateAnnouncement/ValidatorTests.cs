@@ -42,8 +42,10 @@ public class ValidatorTests
         var validationResult = validator.TestValidate(CreateCommand(languages: ["eng", "e"]));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorFor("Texts[0].Language").WithErrorMessage("This language is not a valid two letter ISO language name.");
-        validationResult.ShouldHaveValidationErrorFor("Texts[1].Language").WithErrorMessage("This language is not a valid two letter ISO language name.");
+        validationResult.ShouldHaveValidationErrorFor("Texts[0].Language").WithErrorCode("error.platform.validation.invalidPropertyValue")
+            .WithErrorMessage("This language is not a valid two letter ISO language name.");
+        validationResult.ShouldHaveValidationErrorFor("Texts[1].Language").WithErrorCode("error.platform.validation.invalidPropertyValue")
+            .WithErrorMessage("This language is not a valid two letter ISO language name.");
     }
 
     [Fact]
@@ -56,8 +58,8 @@ public class ValidatorTests
         var validationResult = validator.TestValidate(CreateCommand(title: "", body: null));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorFor("Texts[0].Title").WithErrorMessage("'Title' must not be empty.");
-        validationResult.ShouldHaveValidationErrorFor("Texts[0].Body").WithErrorMessage("'Body' must not be empty.");
+        validationResult.ShouldHaveValidationErrorFor("Texts[0].Title").WithErrorCode("error.platform.validation.invalidPropertyValue").WithErrorMessage("'Title' must not be empty.");
+        validationResult.ShouldHaveValidationErrorFor("Texts[0].Body").WithErrorCode("error.platform.validation.invalidPropertyValue").WithErrorMessage("'Body' must not be empty.");
     }
 
     private static CreateAnnouncementCommand CreateCommand(List<string>? languages = null, string title = "Test Title", string? body = "Test Body")
