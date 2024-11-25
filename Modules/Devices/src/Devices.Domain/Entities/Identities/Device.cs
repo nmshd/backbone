@@ -112,6 +112,11 @@ public class Device : Entity
         DeletedByDevice = deletedByDevice;
     }
 
+    public void MarkAsBackupDeviceUsed()
+    {
+        if (IsBackupDevice) IsBackupDevice = false;
+    }
+
     public static Device CreateTestDevice(Identity identity, CommunicationLanguage communicationLanguage, string username)
     {
         return new Device(identity, communicationLanguage, username);

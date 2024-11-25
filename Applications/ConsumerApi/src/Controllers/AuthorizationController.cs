@@ -2,6 +2,7 @@ using System.Security.Claims;
 using Backbone.BuildingBlocks.API.Mvc;
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.Modules.Devices.Application;
+using Backbone.Modules.Devices.Application.Devices.Commands.UseBackupDevice;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Tooling.Extensions;
 using MediatR;
@@ -79,6 +80,11 @@ public class AuthorizationController : ApiControllerBase
         }.Intersect(request.GetScopes()));
 
         identity.SetDestinations(GetDestinations);
+
+        if (user.Device.IsBackupDevice)
+        {
+            await _mediator.Send(new UseBackupDeviceCommand { DeviceId = user.Device.Id });
+        }
 
         return SignIn(new ClaimsPrincipal(identity), OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
     }
