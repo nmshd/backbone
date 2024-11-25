@@ -1,5 +1,6 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.FluentValidation;
+using Backbone.Modules.Announcements.Domain.Entities;
 using FluentValidation;
 
 namespace Backbone.Modules.Announcements.Application.Announcements.Commands.CreateAnnouncement;
@@ -9,7 +10,7 @@ public class Validator : AbstractValidator<CreateAnnouncementCommand>
     public Validator()
     {
         RuleFor(x => x.Texts)
-            .Must(x => x.Any(t => t.Language == "en"))
+            .Must(x => x.Any(t => t.Language == AnnouncementLanguage.DEFAULT_LANGUAGE.Value))
             .WithErrorCode(GenericApplicationErrors.Validation.InvalidPropertyValue().Code)
             .WithMessage("There must be a text for English.");
 

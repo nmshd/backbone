@@ -6,6 +6,7 @@ namespace Backbone.Modules.Announcements.Domain.Entities;
 
 public record AnnouncementLanguage
 {
+    public static readonly AnnouncementLanguage DEFAULT_LANGUAGE = new("en");
     private static readonly CultureInfo[] CULTURES = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures);
 
     public const int LENGTH = 2;
