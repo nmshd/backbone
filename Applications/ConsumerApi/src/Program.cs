@@ -104,6 +104,7 @@ static WebApplication CreateApp(string[] args)
     if ((app.Environment.IsLocal() || app.Environment.IsDevelopment()) && app.Configuration.GetValue<bool>("RunMigrations"))
     {
         app
+            .MigrateDbContext<AnnouncementsDbContext>()
             .MigrateDbContext<ChallengesDbContext>()
             .MigrateDbContext<DevicesDbContext>()
             .MigrateDbContext<FilesDbContext>()
@@ -112,8 +113,7 @@ static WebApplication CreateApp(string[] args)
             .MigrateDbContext<MessagesDbContext>()
             .MigrateDbContext<SynchronizationDbContext>()
             .MigrateDbContext<TokensDbContext>()
-            .MigrateDbContext<QuotasDbContext>()
-            .MigrateDbContext<AnnouncementsDbContext>();
+            .MigrateDbContext<QuotasDbContext>();
     }
 
     app
