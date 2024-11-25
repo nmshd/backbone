@@ -22,7 +22,7 @@ public class CreateAnnouncementCommandTextValidator : AbstractValidator<CreateAn
     public CreateAnnouncementCommandTextValidator()
     {
         RuleFor(x => x.Language).TwoLetterIsoLanguage();
-        RuleFor(x => x.Title).NotEmpty();
-        RuleFor(x => x.Body).NotEmpty();
+        RuleFor(x => x.Title).DetailedNotEmpty();
+        RuleFor(x => x.Body).DetailedNotEmpty();
     }
 }
