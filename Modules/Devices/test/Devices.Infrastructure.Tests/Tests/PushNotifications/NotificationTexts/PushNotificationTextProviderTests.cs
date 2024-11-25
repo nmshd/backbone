@@ -62,7 +62,7 @@ public class PushNotificationTextProviderTests : AbstractTestsBase
             typeof(TestPushNotification)
                 .Assembly.GetTypes()
                 .Where(t => t.IsAssignableTo(typeof(IPushNotification)) && !t.IsInterface)
-                .Where(t => t != typeof(NewAnnouncementPushNotification));
+                .Where(t => t != typeof(NewAnnouncementPushNotification)); // `NewAnnouncementPushNotification` does not have a translatable text and must therefore be excluded
     }
 
     private class AllSupportedLanguagesExceptEnglishCrossJoinedWithNotificationTypes : TheoryData<CommunicationLanguage, Type>
