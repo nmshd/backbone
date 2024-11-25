@@ -11,6 +11,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 public abstract record CreateChallenges
 {
     public record Command(
+        CreateSnapshot.PerformanceLoadTest LoadTag,
         List<DomainIdentity> Identities,
         string BaseUrlAddress,
         ClientCredentials ClientCredentials) : IRequest<Unit>;
@@ -21,7 +22,7 @@ public abstract record CreateChallenges
         private int _numberOfCreatedChallenges;
         private int _totalChallenges;
         private readonly Lock _lockObj = new();
-        private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
+        private SemaphoreSlim _semaphoreSlim = null!;
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -29,6 +30,16 @@ public abstract record CreateChallenges
 
             _totalChallenges = identitiesWithChallenges.Sum(i => i.NumberOfChallenges);
             _numberOfCreatedChallenges = 0;
+
+            var maxDegreeOfParallelism = request.LoadTag switch
+            {
+                CreateSnapshot.PerformanceLoadTest.Low => Environment.ProcessorCount,
+                CreateSnapshot.PerformanceLoadTest.Medium => Environment.ProcessorCount,
+                CreateSnapshot.PerformanceLoadTest.High => Environment.ProcessorCount / 2,
+                _ => Environment.ProcessorCount / 2
+            };
+
+            _semaphoreSlim = new SemaphoreSlim(maxDegreeOfParallelism);
 
             var tasks = identitiesWithChallenges
                 .Select(identityWithChallenge => ExecuteCreateChallenges(request, identityWithChallenge))

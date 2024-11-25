@@ -14,6 +14,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 public abstract record CreateDatawalletModifications
 {
     public record Command(
+        CreateSnapshot.PerformanceLoadTest LoadTag,
         List<DomainIdentity> Identities,
         string BaseUrlAddress,
         ClientCredentials ClientCredentials) : IRequest<Unit>;
@@ -24,7 +25,7 @@ public abstract record CreateDatawalletModifications
         private int _numberOfCreatedDatawalletModifications;
         private int _totalDatawalletModifications;
         private readonly Lock _lockObj = new();
-        private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
+        private SemaphoreSlim _semaphoreSlim = null!;
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -34,6 +35,16 @@ public abstract record CreateDatawalletModifications
 
             _totalDatawalletModifications = identitiesWithDatawalletModifications.Sum(i => i.NumberOfDatawalletModifications);
             _numberOfCreatedDatawalletModifications = 0;
+
+            var maxDegreeOfParallelism = request.LoadTag switch
+            {
+                CreateSnapshot.PerformanceLoadTest.Low => Environment.ProcessorCount,
+                CreateSnapshot.PerformanceLoadTest.Medium => Environment.ProcessorCount,
+                CreateSnapshot.PerformanceLoadTest.High => Environment.ProcessorCount / 2,
+                _ => Environment.ProcessorCount / 2
+            };
+
+            _semaphoreSlim = new SemaphoreSlim(maxDegreeOfParallelism);
 
             var tasks = identitiesWithDatawalletModifications
                 .Select(identityWithDatawalletModifications => ExecuteCreateDatawalletModifications(request, identityWithDatawalletModifications))

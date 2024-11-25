@@ -12,6 +12,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 public abstract record CreateMessages
 {
     public record Command(
+        CreateSnapshot.PerformanceLoadTest LoadTag,
         List<DomainIdentity> Identities,
         List<RelationshipAndMessages> RelationshipAndMessages,
         string BaseUrlAddress,
@@ -23,7 +24,8 @@ public abstract record CreateMessages
         private int _numberOfCreatedMessages;
         private long _totalMessages;
         private readonly Lock _lockObj = new();
-        private readonly SemaphoreSlim _semaphore = new(Environment.ProcessorCount);
+        private SemaphoreSlim _semaphoreSlim = null!;
+        private SemaphoreSlim _createMessagesSemaphore = null!;
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -43,6 +45,17 @@ public abstract record CreateMessages
                 throw new InvalidOperationException($"Mismatch between configured relationships and connector identities. SenderIdentities.SumMessages: {sum}, TotalMessages: {_totalMessages}");
             }
 
+            var maxDegreeOfParallelism = request.LoadTag switch
+            {
+                CreateSnapshot.PerformanceLoadTest.Low => Environment.ProcessorCount,
+                CreateSnapshot.PerformanceLoadTest.Medium => Environment.ProcessorCount,
+                CreateSnapshot.PerformanceLoadTest.High => Environment.ProcessorCount / 2,
+                _ => Environment.ProcessorCount / 2
+            };
+
+            _semaphoreSlim = new SemaphoreSlim(maxDegreeOfParallelism);
+            _createMessagesSemaphore = new SemaphoreSlim(maxDegreeOfParallelism);
+
             var tasks = senderIdentities.Select(senderIdentity => ExecuteOuterCreateMessages(request, senderIdentity)).ToArray();
 
             await Task.WhenAll(tasks);
@@ -52,7 +65,7 @@ public abstract record CreateMessages
 
         private async Task ExecuteOuterCreateMessages(Command request, DomainIdentity senderIdentity)
         {
-            await _semaphore.WaitAsync();
+            await _semaphoreSlim.WaitAsync();
 
             try
             {
@@ -66,11 +79,9 @@ public abstract record CreateMessages
             }
             finally
             {
-                _semaphore.Release();
+                _semaphoreSlim.Release();
             }
         }
-
-        private readonly SemaphoreSlim _createMessagesSemaphore = new(Environment.ProcessorCount);
 
         private async Task ExecuteInnerCreateMessages(Command request, DomainIdentity recipientIdentity, DomainIdentity senderIdentity, RecipientBag recipientBag)
         {

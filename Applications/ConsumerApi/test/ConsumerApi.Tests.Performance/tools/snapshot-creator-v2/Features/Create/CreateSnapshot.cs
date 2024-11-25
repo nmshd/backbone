@@ -10,6 +10,13 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public abstract record CreateSnapshot
 {
+    public enum PerformanceLoadTest
+    {
+        Low,
+        Medium,
+        High
+    }
+
     public record Command(
         string BaseAddress,
         string ClientId,
@@ -23,6 +30,24 @@ public abstract record CreateSnapshot
         IOutputHelper OutputHelper)
         : IRequestHandler<Command, StatusMessage>
     {
+        private static PerformanceLoadTest GetLoadTag(string jsonFullFilePath)
+        {
+            if (!File.Exists(jsonFullFilePath))
+            {
+                throw new FileNotFoundException("Pool configuration file not found.", jsonFullFilePath);
+            }
+
+            var loadTestToken = Path.GetFileNameWithoutExtension(jsonFullFilePath).Split('.').Last();
+
+            return loadTestToken switch
+            {
+                "low" => PerformanceLoadTest.Low,
+                "medium" => PerformanceLoadTest.Medium,
+                "heavy" => PerformanceLoadTest.High,
+                _ => PerformanceLoadTest.Medium
+            };
+        }
+
         public async Task<StatusMessage> Handle(Command request, CancellationToken cancellationToken)
         {
             try
@@ -30,6 +55,7 @@ public abstract record CreateSnapshot
                 Logger.LogInformation("Creating pool configuration with relationships and messages ...");
 
 
+                var loadTag = GetLoadTag(request.JsonFilePath);
                 var outputDirName = CreateSnapshotDirAndCopyPoolConfigFiles(request.JsonFilePath);
                 var poolConfig = await PoolConfigurationJsonReader.Read(request.JsonFilePath);
 
@@ -43,7 +69,7 @@ public abstract record CreateSnapshot
                 Stopwatch stopwatch = new();
                 stopwatch.Start();
 
-                var identities = await Mediator.Send(new CreateIdentities.Command(poolConfig.IdentityPoolConfigurations, request.BaseAddress, clientCredentials), cancellationToken);
+                var identities = await Mediator.Send(new CreateIdentities.Command(loadTag, poolConfig.IdentityPoolConfigurations, request.BaseAddress, clientCredentials), cancellationToken);
 
                 stopwatch.Stop();
                 var totalRunTime = stopwatch.Elapsed;
@@ -51,7 +77,7 @@ public abstract record CreateSnapshot
 
                 stopwatch.Restart();
 
-                await Mediator.Send(new CreateDevices.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                await Mediator.Send(new CreateDevices.Command(loadTag, identities, request.BaseAddress, clientCredentials), cancellationToken);
                 await OutputHelper.WriteIdentities(outputDirName, identities);
 
                 stopwatch.Stop();
@@ -60,7 +86,7 @@ public abstract record CreateSnapshot
 
                 stopwatch.Restart();
 
-                await Mediator.Send(new CreateChallenges.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                await Mediator.Send(new CreateChallenges.Command(loadTag, identities, request.BaseAddress, clientCredentials), cancellationToken);
                 await OutputHelper.WriteChallenges(outputDirName, identities);
 
                 stopwatch.Stop();
@@ -69,7 +95,7 @@ public abstract record CreateSnapshot
 
                 stopwatch.Restart();
 
-                await Mediator.Send(new CreateDatawalletModifications.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                await Mediator.Send(new CreateDatawalletModifications.Command(loadTag, identities, request.BaseAddress, clientCredentials), cancellationToken);
                 await OutputHelper.WriteDatawalletModifications(outputDirName, identities);
 
                 stopwatch.Stop();
@@ -78,7 +104,7 @@ public abstract record CreateSnapshot
 
                 stopwatch.Restart();
 
-                await Mediator.Send(new CreateRelationshipTemplates.Command(identities, request.BaseAddress, clientCredentials), cancellationToken);
+                await Mediator.Send(new CreateRelationshipTemplates.Command(loadTag, identities, request.BaseAddress, clientCredentials), cancellationToken);
                 await OutputHelper.WriteRelationshipTemplates(outputDirName, identities);
 
                 stopwatch.Stop();
@@ -87,7 +113,7 @@ public abstract record CreateSnapshot
 
                 stopwatch.Restart();
 
-                await Mediator.Send(new CreateRelationships.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
+                await Mediator.Send(new CreateRelationships.Command(loadTag, identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
                 await OutputHelper.WriteRelationships(outputDirName, identities);
 
                 stopwatch.Stop();
@@ -96,7 +122,7 @@ public abstract record CreateSnapshot
 
                 stopwatch.Restart();
 
-                await Mediator.Send(new CreateMessages.Command(identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
+                await Mediator.Send(new CreateMessages.Command(loadTag, identities, poolConfig.RelationshipAndMessages, request.BaseAddress, clientCredentials), cancellationToken);
                 await OutputHelper.WriteMessages(outputDirName, identities);
 
                 stopwatch.Stop();

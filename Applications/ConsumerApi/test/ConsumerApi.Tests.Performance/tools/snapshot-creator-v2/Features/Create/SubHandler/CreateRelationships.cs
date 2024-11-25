@@ -14,6 +14,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 public abstract record CreateRelationships
 {
     public record Command(
+        CreateSnapshot.PerformanceLoadTest LoadTag,
         List<DomainIdentity> Identities,
         List<RelationshipAndMessages> RelationshipAndMessages,
         string BaseUrlAddress,
@@ -25,7 +26,7 @@ public abstract record CreateRelationships
         private int _numberOfCreatedRelationships;
         private int _totalRelationships;
         private readonly Lock _lockObj = new();
-        private readonly SemaphoreSlim _semaphore = new(Environment.ProcessorCount);
+        private SemaphoreSlim _semaphoreSlim = null!;
         private DomainIdentity[] _connectorIdentities = null!;
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
@@ -50,6 +51,16 @@ public abstract record CreateRelationships
                                                     $"{string.Join($",{Environment.NewLine}", materializedConnectorIdentities)}");
             }
 
+            var maxDegreeOfParallelism = request.LoadTag switch
+            {
+                CreateSnapshot.PerformanceLoadTest.Low => Environment.ProcessorCount,
+                CreateSnapshot.PerformanceLoadTest.Medium => Environment.ProcessorCount,
+                CreateSnapshot.PerformanceLoadTest.High => Environment.ProcessorCount / 2,
+                _ => Environment.ProcessorCount / 2
+            };
+
+            _semaphoreSlim = new SemaphoreSlim(maxDegreeOfParallelism);
+
             var tasks = appIdentities
                 .Select(appIdentity => ExecuteOuterCreateRelationships(request, appIdentity))
                 .ToArray();
@@ -61,7 +72,7 @@ public abstract record CreateRelationships
 
         private async Task ExecuteOuterCreateRelationships(Command request, DomainIdentity appIdentity)
         {
-            await _semaphore.WaitAsync();
+            await _semaphoreSlim.WaitAsync();
             try
             {
                 var connectorIdentityToEstablishRelationshipWith = GetConnectorIdentitiesToEstablishRelationshipWith(request, appIdentity, _connectorIdentities);
@@ -80,7 +91,7 @@ public abstract record CreateRelationships
             }
             finally
             {
-                _semaphore.Release();
+                _semaphoreSlim.Release();
             }
         }
 

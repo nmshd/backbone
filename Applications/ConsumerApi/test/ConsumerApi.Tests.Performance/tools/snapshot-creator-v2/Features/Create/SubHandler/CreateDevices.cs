@@ -10,7 +10,7 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public abstract record CreateDevices
 {
-    public record Command(List<DomainIdentity> Identities, string BaseUrlAddress, ClientCredentials ClientCredentials) : IRequest<Unit>;
+    public record Command(CreateSnapshot.PerformanceLoadTest LoadTag, List<DomainIdentity> Identities, string BaseUrlAddress, ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
     public record CommandHandler(ILogger<CreateDevices> Logger) : IRequestHandler<Command, Unit>
@@ -18,12 +18,22 @@ public abstract record CreateDevices
         private int _numberOfCreatedDevices;
         private int _totalNumberOfDevices;
         private readonly Lock _lockObj = new();
-        private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
+        private SemaphoreSlim _semaphoreSlim = null!;
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
             _totalNumberOfDevices = request.Identities.Sum(i => i.NumberOfDevices);
             _numberOfCreatedDevices = 0;
+
+            var maxDegreeOfParallelism = request.LoadTag switch
+            {
+                CreateSnapshot.PerformanceLoadTest.Low => Environment.ProcessorCount,
+                CreateSnapshot.PerformanceLoadTest.Medium => Environment.ProcessorCount,
+                CreateSnapshot.PerformanceLoadTest.High => Environment.ProcessorCount / 2,
+                _ => Environment.ProcessorCount / 2
+            };
+
+            _semaphoreSlim = new SemaphoreSlim(maxDegreeOfParallelism);
 
             var tasks = request.Identities
                 .Select(identity => ExecuteCreateDevices(request, identity))
