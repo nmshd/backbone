@@ -14,12 +14,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Using Include="Xunit" />
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
-      <ProjectReference Include="..\..\src\Announcements.Application\Announcements.Application.csproj" />
+        <ProjectReference Include="..\..\src\Announcements.Application\Announcements.Application.csproj" />
     </ItemGroup>
 
 </Project>

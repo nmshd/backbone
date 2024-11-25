@@ -4,8 +4,8 @@ namespace Backbone.Modules.Announcements.Domain;
 
 public class DomainErrors
 {
-    public static DomainError? InvalidAnnouncementLanguage()
+    public static DomainError InvalidAnnouncementLanguage()
     {
-        return new DomainError("error.platform.validation.invalidAnnouncementLanguage", "The Announcement Language must be a valid two letter ISO code");
+        return new DomainError("error.platform.validation.invalidAnnouncementLanguage", "The Announcement Language must be a valid two letter ISO code.");
     }
 }
