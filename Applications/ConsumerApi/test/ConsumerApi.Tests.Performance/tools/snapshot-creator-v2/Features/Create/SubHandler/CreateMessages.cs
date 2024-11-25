@@ -58,10 +58,11 @@ public abstract record CreateMessages
             {
                 var recipientBag = GetRecipientIdentities(request, senderIdentity);
 
-                foreach (var recipientIdentity in recipientBag.RecipientIdentities)
-                {
-                    await ExecuteInnerCreateMessages(request, recipientIdentity, senderIdentity, recipientBag);
-                }
+                var tasks = recipientBag.RecipientIdentities
+                    .Select(recipientIdentity => ExecuteInnerCreateMessages(request, recipientIdentity, senderIdentity, recipientBag))
+                    .ToArray();
+
+                await Task.WhenAll(tasks);
             }
             finally
             {
@@ -69,31 +70,41 @@ public abstract record CreateMessages
             }
         }
 
+        private readonly SemaphoreSlim _createMessagesSemaphore = new(Environment.ProcessorCount);
+
         private async Task ExecuteInnerCreateMessages(Command request, DomainIdentity recipientIdentity, DomainIdentity senderIdentity, RecipientBag recipientBag)
         {
-            Stopwatch stopwatch = new();
-            stopwatch.Start();
-            var skdClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, senderIdentity.UserCredentials);
-            var sentMessages = await CreateMessages(recipientIdentity, senderIdentity, recipientBag, skdClient);
-            stopwatch.Stop();
-
-            using (_lockObj.EnterScope())
+            await _createMessagesSemaphore.WaitAsync();
+            try
             {
-                senderIdentity.SentMessages.AddRange(sentMessages);
-                _numberOfCreatedMessages += sentMessages.Count;
-            }
+                Stopwatch stopwatch = new();
+                stopwatch.Start();
+                var skdClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, senderIdentity.UserCredentials);
+                var sentMessages = await CreateMessages(recipientIdentity, senderIdentity, recipientBag, skdClient);
+                stopwatch.Stop();
 
-            Logger.LogDebug(
-                "Created {CreatedMessages}/{TotalMessages} messages. Messages from Sender Identity {SenderAddress}/{SenderConfigurationAddress}/{SenderPool} to Recipient Identity {RecipientAddress}/{RecipientConfigurationAddress}/{RecipientPool} created in {ElapsedMilliseconds} ms",
-                _numberOfCreatedMessages,
-                _totalMessages,
-                senderIdentity.IdentityAddress,
-                senderIdentity.ConfigurationIdentityAddress,
-                senderIdentity.PoolAlias,
-                recipientIdentity.IdentityAddress,
-                recipientIdentity.ConfigurationIdentityAddress,
-                recipientIdentity.PoolAlias,
-                stopwatch.ElapsedMilliseconds);
+                using (_lockObj.EnterScope())
+                {
+                    senderIdentity.SentMessages.AddRange(sentMessages);
+                    _numberOfCreatedMessages += sentMessages.Count;
+                }
+
+                Logger.LogDebug(
+                    "Created {CreatedMessages}/{TotalMessages} messages. Messages from Sender Identity {SenderAddress}/{SenderConfigurationAddress}/{SenderPool} to Recipient Identity {RecipientAddress}/{RecipientConfigurationAddress}/{RecipientPool} created in {ElapsedMilliseconds} ms",
+                    _numberOfCreatedMessages,
+                    _totalMessages,
+                    senderIdentity.IdentityAddress,
+                    senderIdentity.ConfigurationIdentityAddress,
+                    senderIdentity.PoolAlias,
+                    recipientIdentity.IdentityAddress,
+                    recipientIdentity.ConfigurationIdentityAddress,
+                    recipientIdentity.PoolAlias,
+                    stopwatch.ElapsedMilliseconds);
+            }
+            finally
+            {
+                _createMessagesSemaphore.Release();
+            }
         }
 
         private static async Task<List<MessageBag>> CreateMessages(DomainIdentity recipientIdentity,
