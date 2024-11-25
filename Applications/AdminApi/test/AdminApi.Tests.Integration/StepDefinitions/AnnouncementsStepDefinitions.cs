@@ -16,9 +16,31 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
 {
     private ApiResponse<Announcement>? _announcementResponse;
     private ApiResponse<GetAllAnnouncementsResponse>? _announcementsResponse;
+    private Announcement? _givenAnnouncement;
 
     public AnnouncementsStepDefinitions(HttpClientFactory factory, IOptions<HttpClientOptions> options) : base(factory, options)
     {
+    }
+
+    [Given(@"an existing Announcement a")]
+    public async Task GivenAnExistingAnnouncementA()
+    {
+        var response = await _client.Announcements.CreateAnnouncement(new CreateAnnouncementRequest
+        {
+            Texts =
+            [
+                new CreateAnnouncementRequestText
+                {
+                    Language = "en",
+                    Title = "Title",
+                    Body = "Body"
+                }
+            ],
+            Severity = AnnouncementSeverity.Medium,
+            ExpiresAt = DateTime.UtcNow
+        });
+
+        _givenAnnouncement = response.Result;
     }
 
     [When(@"a GET request is sent to the /Announcements endpoint")]
@@ -68,5 +90,11 @@ internal class AnnouncementsStepDefinitions : BaseStepDefinitions
     {
         _announcementsResponse!.Result.Should().NotBeNull();
         await _announcementsResponse.Should().ComplyWithSchema();
+    }
+
+    [Then(@"the response contains the Announcement a")]
+    public void ThenTheResponseContainsTheAnnouncementA()
+    {
+        _announcementsResponse!.Result.Should().ContainSingle(a => a.Id == _givenAnnouncement!.Id);
     }
 }
