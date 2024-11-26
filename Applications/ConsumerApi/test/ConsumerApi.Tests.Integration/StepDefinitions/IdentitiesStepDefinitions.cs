@@ -95,8 +95,6 @@ internal class IdentitiesStepDefinitions
         _responseContext.WhenResponse = await _clientPool.Anonymous.Identities.CreateIdentity(createIdentityPayload);
     }
 
-    #endregion
-
     [When($@"an anonymous user sends a GET request to the /Identities/IsDeleted endpoint with {RegexFor.SINGLE_THING}.Username")]
     public async Task WhenAnAnonymousUserSendsAGETRequestToTheIdentitiesIsDeletedEndpointWithDUsername(string deviceName)
     {
@@ -106,6 +104,10 @@ internal class IdentitiesStepDefinitions
 
         _responseContext.WhenResponse = _isDeletedResponse = await _clientPool.Anonymous.Identities.IsDeleted(device.Result!.Username);
     }
+
+    #endregion
+
+    #region Then
 
     [Then(@"the response says that the identity was not deleted")]
     public void ThenTheResponseSaysThatTheIdentityWasNotDeleted()
@@ -118,4 +120,6 @@ internal class IdentitiesStepDefinitions
     {
         _isDeletedResponse!.Result!.DeletionDate.Should().BeNull();
     }
+
+    #endregion
 }
