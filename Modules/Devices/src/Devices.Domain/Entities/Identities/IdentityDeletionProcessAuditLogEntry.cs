@@ -234,7 +234,8 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
 
     public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> IsAssociatedToUser(Username username)
     {
-        return logEntry => logEntry.UsernameHashesBase64!.Contains(Convert.ToBase64String(Hasher.HashUtf8(username.Value.Trim())));
+        var usernameHashBase64 = Convert.ToBase64String(Hasher.HashUtf8(username.Value.Trim()));
+        return logEntry => logEntry.UsernameHashesBase64 != null && logEntry.UsernameHashesBase64.Contains(usernameHashBase64);
     }
 }
 
