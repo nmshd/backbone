@@ -233,7 +233,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         UsernameHashesBase64 = concatenatedHashedUsernamesInBase64;
     }
 
-    public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> BelongsToUser(Username username)
+    public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> IsAssociatedToUser(Username username)
     {
         return logEntry => logEntry.UsernameHashesBase64!.Contains(Convert.ToBase64String(Hasher.HashUtf8(username.Value.Trim())));
     }

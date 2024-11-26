@@ -3,7 +3,7 @@ using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Identities;
 
-public class IdentityDeletionProcessAuditLogEntryTests
+public class IdentityDeletionProcessAuditLogEntryTests : AbstractTestsBase
 {
     [Fact]
     public void AssociateUsernames_happy_path()
@@ -19,7 +19,7 @@ public class IdentityDeletionProcessAuditLogEntryTests
     }
 
     [Fact]
-    public void BelongsToUser_returns_true_if_audit_log_entry_contains_username()
+    public void IsAssociatedToUser_returns_true_if_audit_log_entry_contains_username()
     {
         // Arrange
         var username1 = Username.Parse("USR1111111111111111");
@@ -28,8 +28,8 @@ public class IdentityDeletionProcessAuditLogEntryTests
         auditLogEntry.AssociateUsernames([username1, username2]);
 
         // Act
-        var resultForUsername1 = IdentityDeletionProcessAuditLogEntry.BelongsToUser(username1).Compile()(auditLogEntry);
-        var resultForUsername2 = IdentityDeletionProcessAuditLogEntry.BelongsToUser(username2).Compile()(auditLogEntry);
+        var resultForUsername1 = IdentityDeletionProcessAuditLogEntry.IsAssociatedToUser(username1).Compile()(auditLogEntry);
+        var resultForUsername2 = IdentityDeletionProcessAuditLogEntry.IsAssociatedToUser(username2).Compile()(auditLogEntry);
 
         // Assert
         resultForUsername1.Should().BeTrue();
@@ -37,7 +37,7 @@ public class IdentityDeletionProcessAuditLogEntryTests
     }
 
     [Fact]
-    public void BelongsToUser_returns_false_if_user_is_not_authorized()
+    public void IsAssociatedToUser_returns_false_if_user_is_not_authorized()
     {
         // Arrange
         var unauthorizedUsername = Username.Parse("USR3333333333333333");
@@ -45,7 +45,7 @@ public class IdentityDeletionProcessAuditLogEntryTests
         auditLogEntry.AssociateUsernames([Username.Parse("USR1111111111111111"), Username.Parse("USR2222222222222222")]);
 
         // Act
-        var resultForUnauthorizedUsername = IdentityDeletionProcessAuditLogEntry.BelongsToUser(unauthorizedUsername).Compile()(auditLogEntry);
+        var resultForUnauthorizedUsername = IdentityDeletionProcessAuditLogEntry.IsAssociatedToUser(unauthorizedUsername).Compile()(auditLogEntry);
 
         // Assert
         resultForUnauthorizedUsername.Should().BeFalse();

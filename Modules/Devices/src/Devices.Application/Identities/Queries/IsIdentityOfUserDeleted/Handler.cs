@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<IsIdentityOfUserDeletedQuery, IsIdentityO
     public async Task<IsIdentityOfUserDeletedResponse> Handle(IsIdentityOfUserDeletedQuery request, CancellationToken cancellationToken)
     {
         var auditLogEntries = await _identitiesRepository.GetIdentityDeletionProcessAuditLogs(
-            IdentityDeletionProcessAuditLogEntry.BelongsToUser(Username.Parse(request.Username)),
+            IdentityDeletionProcessAuditLogEntry.IsAssociatedToUser(Username.Parse(request.Username)),
             cancellationToken);
 
         var deletionCompletedAuditLogEntry = auditLogEntries.FirstOrDefault(l => l.MessageKey == MessageKey.DeletionCompleted);
