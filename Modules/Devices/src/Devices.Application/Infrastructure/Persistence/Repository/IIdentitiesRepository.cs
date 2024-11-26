@@ -39,5 +39,7 @@ public interface IIdentitiesRepository
 
     Task AddDeletionProcessAuditLogEntry(IdentityDeletionProcessAuditLogEntry auditLogEntry);
 
+    Task Update(IEnumerable<IdentityDeletionProcessAuditLogEntry> auditLogEntries, CancellationToken cancellationToken);
+
     #endregion
 }

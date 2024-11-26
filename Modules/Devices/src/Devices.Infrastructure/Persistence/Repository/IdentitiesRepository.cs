@@ -164,4 +164,10 @@ public class IdentitiesRepository : IIdentitiesRepository
         _identityDeletionProcessAuditLogs.Add(auditLogEntry);
         await _dbContext.SaveChangesAsync();
     }
+
+    public async Task Update(IEnumerable<IdentityDeletionProcessAuditLogEntry> auditLogEntries, CancellationToken cancellationToken)
+    {
+        _identityDeletionProcessAuditLogs.UpdateRange(auditLogEntries);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+    }
 }
