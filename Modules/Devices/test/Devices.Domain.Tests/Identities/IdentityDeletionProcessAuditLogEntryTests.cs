@@ -15,7 +15,7 @@ public class IdentityDeletionProcessAuditLogEntryTests : AbstractTestsBase
         auditLogEntry.AssociateUsernames([Username.Parse("USR1111111111111111"), Username.Parse("USR2222222222222222")]);
 
         // Assert
-        auditLogEntry.UsernameHashesBase64.Should().NotBeEmpty();
+        auditLogEntry.UsernameHashesBase64.Should().Be("jj3azydpiPwK4iFxo/wpCP6pP5Yf5MStnu/hyzMUZ14=FQao/LArcVbFzRs4RgYCU5JycRx9zmJMxY5ApJ0Nk8E=");
     }
 
     [Fact]
@@ -40,14 +40,14 @@ public class IdentityDeletionProcessAuditLogEntryTests : AbstractTestsBase
     public void IsAssociatedToUser_returns_false_if_user_is_not_associated()
     {
         // Arrange
-        var unauthorizedUsername = Username.Parse("USR3333333333333333");
+        var unassociatedUsername = Username.Parse("USR3333333333333333");
         var auditLogEntry = IdentityDeletionProcessAuditLogEntry.DeletionCompleted(CreateRandomIdentityAddress());
         auditLogEntry.AssociateUsernames([Username.Parse("USR1111111111111111"), Username.Parse("USR2222222222222222")]);
 
         // Act
-        var resultForUnauthorizedUsername = IdentityDeletionProcessAuditLogEntry.IsAssociatedToUser(unauthorizedUsername).Compile()(auditLogEntry);
+        var result = IdentityDeletionProcessAuditLogEntry.IsAssociatedToUser(unassociatedUsername).Compile()(auditLogEntry);
 
         // Assert
-        resultForUnauthorizedUsername.Should().BeFalse();
+        result.Should().BeFalse();
     }
 }
