@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common;
+﻿using System.Collections.Specialized;
+using Backbone.BuildingBlocks.SDK.Endpoints.Common;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
@@ -40,6 +41,6 @@ public class IdentitiesEndpoint(EndpointClient client) : ConsumerApiEndpoint(cli
 
     public async Task<ApiResponse<IsDeletedResponse>> IsDeleted(string username)
     {
-        return await _client.GetUnauthenticated<IsDeletedResponse>($"api/{API_VERSION}/Identities/IsDeleted", new Dictionary<string, string> { { "username", username } });
+        return await _client.GetUnauthenticated<IsDeletedResponse>($"api/{API_VERSION}/Identities/IsDeleted", new NameValueCollection { { "username", username } });
     }
 }

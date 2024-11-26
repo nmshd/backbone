@@ -50,26 +50,21 @@ public class EndpointClient
             .Execute();
     }
 
-    public async Task<ApiResponse<T>> Get<T>(string url, object? requestContent = null, PaginationFilter? pagination = null)
+    public async Task<ApiResponse<T>> Get<T>(string url, NameValueCollection? queryParameters = null, PaginationFilter? pagination = null)
     {
         return await Request<T>(HttpMethod.Get, url)
             .Authenticate()
             .WithPagination(pagination)
-            .WithJson(requestContent)
+            .AddQueryParameters(queryParameters)
             .Execute();
     }
 
-    public async Task<ApiResponse<T>> GetUnauthenticated<T>(string url, Dictionary<string, string>? queryParameters = null, PaginationFilter? pagination = null)
+    public async Task<ApiResponse<T>> GetUnauthenticated<T>(string url, NameValueCollection? queryParameters = null, PaginationFilter? pagination = null)
     {
-        var queryBuilder = Request<T>(HttpMethod.Get, url)
-            .WithPagination(pagination);
-
-        foreach (var (key, value) in queryParameters ?? [])
-        {
-            queryBuilder.AddQueryParameter(key, value);
-        }
-
-        return await queryBuilder.Execute();
+        return await Request<T>(HttpMethod.Get, url)
+            .WithPagination(pagination)
+            .AddQueryParameters(queryParameters)
+            .Execute();
     }
 
     public async Task<ApiResponse<T>> Put<T>(string url, object? requestContent = null)
@@ -239,6 +234,14 @@ public class EndpointClient
         public RequestBuilder<T> AddQueryParameters(IQueryParameterStorage parameters)
         {
             _queryParameters.Add(parameters.ToQueryParameters());
+            return this;
+        }
+
+        public RequestBuilder<T> AddQueryParameters(NameValueCollection? parameters)
+        {
+            if (parameters != null)
+                _queryParameters.Add(parameters);
+
             return this;
         }
 
