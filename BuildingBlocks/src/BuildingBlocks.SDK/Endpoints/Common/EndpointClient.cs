@@ -201,7 +201,9 @@ public class EndpointClient
 
         public RequestBuilder<T> WithPagination(PaginationFilter? pagination)
         {
-            if (pagination != null) AddQueryParameters(pagination);
+            if (pagination != null)
+                AddQueryParameters(pagination);
+
             return this;
         }
 
@@ -233,8 +235,7 @@ public class EndpointClient
 
         public RequestBuilder<T> AddQueryParameters(IQueryParameterStorage parameters)
         {
-            _queryParameters.Add(parameters.ToQueryParameters());
-            return this;
+            return AddQueryParameters(parameters.ToQueryParameters());
         }
 
         public RequestBuilder<T> AddQueryParameters(NameValueCollection? parameters)
