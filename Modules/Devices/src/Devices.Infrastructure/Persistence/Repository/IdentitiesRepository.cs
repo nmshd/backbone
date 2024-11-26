@@ -53,10 +53,20 @@ public class IdentitiesRepository : IIdentitiesRepository
             .ToArrayAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken)
+    public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogs(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter,
+        CancellationToken cancellationToken, bool track = false)
     {
-        return await _readonlyIdentityDeletionProcessAuditLogs
-            .Where(auditLog => auditLog.IdentityAddressHash == identityAddressHash)
+        // Clearing the change tracker needs to be done because in case of the actual identity deletion, the deletion
+        // process including all its audit log entries is read first. Then the deletion process is deleted without the
+        // change tracker being involved. This leads to auditLogEntry.ProcessId being set to null in the database (because
+        // of the foreign key configuration). But the change tracker does not know about that.
+        // Later on during the actual deletion we want to update all existing audit log entries to set the usernames.
+        // And when trying to save the updated audit log entries, EF Core tries to save the process id as well, which is
+        // impossible, because the deletion process was deleted already.
+        _dbContext.ChangeTracker.Clear();
+
+        return await (track ? _identityDeletionProcessAuditLogs : _readonlyIdentityDeletionProcessAuditLogs)
+            .Where(filter)
             .ToListAsync(cancellationToken);
     }
 
