@@ -59,12 +59,17 @@ public class EndpointClient
             .Execute();
     }
 
-    public async Task<ApiResponse<T>> GetUnauthenticated<T>(string url, object? requestContent = null, PaginationFilter? pagination = null)
+    public async Task<ApiResponse<T>> GetUnauthenticated<T>(string url, Dictionary<string, string>? queryParameters = null, PaginationFilter? pagination = null)
     {
-        return await Request<T>(HttpMethod.Get, url)
-            .WithPagination(pagination)
-            .WithJson(requestContent)
-            .Execute();
+        var queryBuilder = Request<T>(HttpMethod.Get, url)
+            .WithPagination(pagination);
+
+        foreach (var (key, value) in queryParameters ?? [])
+        {
+            queryBuilder.AddQueryParameter(key, value);
+        }
+
+        return await queryBuilder.Execute();
     }
 
     public async Task<ApiResponse<T>> Put<T>(string url, object? requestContent = null)

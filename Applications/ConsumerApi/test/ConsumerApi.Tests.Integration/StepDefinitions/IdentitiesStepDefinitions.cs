@@ -1,8 +1,10 @@
 ﻿using Backbone.BuildingBlocks.SDK.Crypto;
+using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types;
 using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Identities.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
@@ -26,6 +28,8 @@ internal class IdentitiesStepDefinitions
     private readonly ResponseContext _responseContext;
     private readonly ChallengesContext _challengesContext;
     private readonly ClientPool _clientPool;
+
+    private ApiResponse<IsDeletedResponse>? _isDeletedResponse;
 
     public IdentitiesStepDefinitions(ResponseContext responseContext, ChallengesContext challengesContext, ClientPool clientPool, HttpClientFactory factory,
         IOptions<HttpConfiguration> httpConfiguration)
@@ -92,4 +96,26 @@ internal class IdentitiesStepDefinitions
     }
 
     #endregion
+
+    [When($@"an anonymous user sends a GET request to the /Identities/IsDeleted endpoint with {RegexFor.SINGLE_THING}.Username")]
+    public async Task WhenAnAnonymousUserSendsAGETRequestToTheIdentitiesIsDeletedEndpointWithDUsername(string deviceName)
+    {
+        var client = _clientPool.GetForDeviceName(deviceName);
+
+        var device = await client.Devices.GetActiveDevice();
+
+        _responseContext.WhenResponse = _isDeletedResponse = await _clientPool.Anonymous.Identities.IsDeleted(device.Result!.Username);
+    }
+
+    [Then(@"the response says that the identity was not deleted")]
+    public void ThenTheResponseSaysThatTheIdentityWasNotDeleted()
+    {
+        _isDeletedResponse!.Result!.IsDeleted.Should().BeFalse();
+    }
+
+    [Then(@"the deletion date is not set")]
+    public void ThenTheDeletionDateIsNotSet()
+    {
+        _isDeletedResponse!.Result!.DeletionDate.Should().BeNull();
+    }
 }

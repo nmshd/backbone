@@ -37,4 +37,9 @@ public class IdentitiesEndpoint(EndpointClient client) : ConsumerApiEndpoint(cli
     {
         return await _client.Put<CancelDeletionProcessResponse>($"api/{API_VERSION}/Identities/Self/DeletionProcesses/{id}/Cancel");
     }
+
+    public async Task<ApiResponse<IsDeletedResponse>> IsDeleted(string username)
+    {
+        return await _client.GetUnauthenticated<IsDeletedResponse>($"api/{API_VERSION}/Identities/IsDeleted", new Dictionary<string, string> { { "username", username } });
+    }
 }
