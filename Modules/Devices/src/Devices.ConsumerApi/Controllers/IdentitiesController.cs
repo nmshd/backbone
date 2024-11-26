@@ -131,9 +131,9 @@ public class IdentitiesController : ApiControllerBase
     }
 
     [HttpGet("IsDeleted")]
+    [AllowAnonymous]
     [ProducesResponseType(typeof(IsIdentityOfUserDeletedResponse), StatusCodes.Status200OK)]
     [ProducesError(StatusCodes.Status200OK)]
-    [AllowAnonymous]
     public async Task<IActionResult> IsIdentityOfUserDeleted([FromQuery(Name = "username")] string username, CancellationToken cancellationToken)
     {
         var response = await _mediator.Send(new IsIdentityOfUserDeletedQuery(username), cancellationToken);

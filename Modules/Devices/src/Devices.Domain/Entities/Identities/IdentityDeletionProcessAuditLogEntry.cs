@@ -215,22 +215,20 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     public static IdentityDeletionProcessAuditLogEntry DeletionCompleted(IdentityAddress identityAddress)
     {
         return new IdentityDeletionProcessAuditLogEntry(
-            null,
-            MessageKey.DeletionCompleted,
-            Hasher.HashUtf8(identityAddress.Value),
-            null,
-            DeletionProcessStatus.Deleting,
-            null
+            processId: null,
+            messageKey: MessageKey.DeletionCompleted,
+            identityAddressHash: Hasher.HashUtf8(identityAddress.Value),
+            deviceIdHash: null,
+            oldStatus: DeletionProcessStatus.Deleting,
+            newStatus: null
         );
     }
 
     public void AssociateUsernames(IEnumerable<Username> usernames)
     {
         var hashedUsernames = usernames.Select(u => Hasher.HashUtf8(u.Value.Trim()));
-        var hashedUsernamesInBase64 = hashedUsernames.Select(Convert.ToBase64String);
-        var concatenatedHashedUsernamesInBase64 = string.Join("", hashedUsernamesInBase64);
-
-        UsernameHashesBase64 = concatenatedHashedUsernamesInBase64;
+        var base64 = hashedUsernames.Select(Convert.ToBase64String);
+        UsernameHashesBase64 = string.Join("", base64);
     }
 
     public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> IsAssociatedToUser(Username username)
