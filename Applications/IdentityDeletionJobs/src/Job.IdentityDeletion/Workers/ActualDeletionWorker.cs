@@ -89,7 +89,7 @@ public class ActualDeletionWorker : IHostedService
 
         var usernames = identity.Devices.Select(d => d.Username);
 
-        await _mediator.Send(new HandleCompletedDeletionProcessCommand(identityAddress, usernames));
+        await _mediator.Send(new HandleCompletedDeletionProcessCommand(identityAddress.Value, usernames));
     }
 
     private void LogErroringDeletionTriggers(IEnumerable<KeyValuePair<IdentityAddress, UnitResult<DomainError>>> erroringDeletionTriggers)
