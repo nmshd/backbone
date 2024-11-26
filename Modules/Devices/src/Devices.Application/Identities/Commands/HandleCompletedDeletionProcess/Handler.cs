@@ -18,11 +18,16 @@ public class Handler : IRequestHandler<HandleCompletedDeletionProcessCommand>
     {
         await _identitiesRepository.AddDeletionProcessAuditLogEntry(IdentityDeletionProcessAuditLogEntry.DeletionCompleted(request.IdentityAddress));
 
-        var identityAddressHash = Hasher.HashUtf8(IdentityAddress.ParseUnsafe(request.IdentityAddress));
+        await AssociateUsernames(request, cancellationToken);
+    }
+
+    private async Task AssociateUsernames(HandleCompletedDeletionProcessCommand request, CancellationToken cancellationToken)
+    {
+        var identityAddressHash = Hasher.HashUtf8(request.IdentityAddress);
 
         var auditLogEntries = await _identitiesRepository.GetIdentityDeletionProcessAuditLogs(l => l.IdentityAddressHash == identityAddressHash, CancellationToken.None, track: true);
 
-        var auditLogEntriesArray = auditLogEntries as IdentityDeletionProcessAuditLogEntry[] ?? auditLogEntries.ToArray();
+        var auditLogEntriesArray = auditLogEntries.ToArray();
 
         foreach (var auditLogEntry in auditLogEntriesArray)
         {
