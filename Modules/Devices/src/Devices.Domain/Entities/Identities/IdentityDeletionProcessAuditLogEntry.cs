@@ -1,4 +1,5 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using System.Linq.Expressions;
+using Backbone.BuildingBlocks.Domain;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Tooling;
 
@@ -36,7 +37,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     public byte[] IdentityAddressHash { get; }
     public byte[]? DeviceIdHash { get; }
     public DeletionProcessStatus? OldStatus { get; }
-    public DeletionProcessStatus NewStatus { get; }
+    public DeletionProcessStatus? NewStatus { get; }
     public Dictionary<string, string>? AdditionalData { get; }
     public string? UsernameHashesBase64 { get; private set; }
 
@@ -230,6 +231,11 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         var concatenatedHashedUsernamesInBase64 = string.Join("", hashedUsernamesInBase64);
 
         UsernameHashesBase64 = concatenatedHashedUsernamesInBase64;
+    }
+
+    public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> BelongsToUser(Username username)
+    {
+        return logEntry => logEntry.UsernameHashesBase64!.Contains(Convert.ToBase64String(Hasher.HashUtf8(username.Value.Trim())));
     }
 }
 
