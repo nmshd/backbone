@@ -19,7 +19,7 @@ public class IdentityDeletionProcessAuditLogEntryTests : AbstractTestsBase
     }
 
     [Fact]
-    public void IsAssociatedToUser_returns_true_if_audit_log_entry_contains_username()
+    public void IsAssociatedToUser_returns_true_if_user_is_associated()
     {
         // Arrange
         var username1 = Username.Parse("USR1111111111111111");
@@ -37,7 +37,7 @@ public class IdentityDeletionProcessAuditLogEntryTests : AbstractTestsBase
     }
 
     [Fact]
-    public void IsAssociatedToUser_returns_false_if_user_is_not_authorized()
+    public void IsAssociatedToUser_returns_false_if_user_is_not_associated()
     {
         // Arrange
         var unauthorizedUsername = Username.Parse("USR3333333333333333");
