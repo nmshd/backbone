@@ -226,9 +226,10 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
 
     public void AssociateUsernames(IEnumerable<Username> usernames)
     {
-        var hashedUsernames = usernames.Select(u => Hasher.HashUtf8(u.Value.Trim()));
-        var base64 = hashedUsernames.Select(Convert.ToBase64String);
-        UsernameHashesBase64 = string.Join("", base64);
+        UsernameHashesBase64 = usernames
+            .Select(u => Hasher.HashUtf8(u.Value.Trim()))
+            .Select(Convert.ToBase64String)
+            .Aggregate((result, current) => result + current);
     }
 
     public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> IsAssociatedToUser(Username username)
