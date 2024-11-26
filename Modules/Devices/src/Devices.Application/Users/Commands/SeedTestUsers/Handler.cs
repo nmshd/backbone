@@ -12,6 +12,8 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
     private readonly ApplicationOptions _applicationOptions;
     private readonly IIdentitiesRepository _identitiesRepository;
     private readonly ITiersRepository _tiersRepository;
+    private Tier? _basicTier;
+    private CancellationToken _cancellationToken;
 
     public Handler(IIdentitiesRepository identitiesRepository, ITiersRepository tiersRepository, IOptions<ApplicationOptions> applicationOptions)
     {
@@ -22,31 +24,23 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
 
     public async Task Handle(SeedTestUsersCommand request, CancellationToken cancellationToken)
     {
-        var basicTier = await _tiersRepository.FindBasicTier(cancellationToken);
+        _cancellationToken = cancellationToken;
+        _basicTier = (await _tiersRepository.FindBasicTier(cancellationToken))!;
 
-        await CreateIdentityAIfNecessary(basicTier!, cancellationToken);
-        await CreateIdentityBIfNecessary(basicTier!, cancellationToken);
+        await CreateIdentityIfNecessary([1, 1, 1, 1, 1], "USRa", "Aaaaaaaa1!");
+        await CreateIdentityIfNecessary([1, 1, 1, 1, 1], "USRa", "Bbbbbbbb1!");
     }
 
-    private async Task CreateIdentityAIfNecessary(Tier basicTier, CancellationToken cancellationToken)
+    private async Task CreateIdentityIfNecessary(byte[] publicKey, string username, string password)
     {
-        var addressOfIdentityA = IdentityAddress.Create([1, 1, 1, 1, 1], _applicationOptions.DidDomainName);
-        var identityA = await _identitiesRepository.FindByAddress(addressOfIdentityA, cancellationToken);
-        if (identityA == null)
-        {
-            identityA = Identity.CreateTestIdentity(addressOfIdentityA, [1, 1, 1, 1, 1], basicTier.Id, "USRa");
-            await _identitiesRepository.Add(identityA, "Aaaaaaaa1!");
-        }
-    }
+        var address = IdentityAddress.Create(publicKey, _applicationOptions.DidDomainName);
 
-    private async Task CreateIdentityBIfNecessary(Tier basicTier, CancellationToken cancellationToken)
-    {
-        var addressOfIdentityB = IdentityAddress.Create([2, 2, 2, 2, 2], _applicationOptions.DidDomainName);
-        var identityB = await _identitiesRepository.FindByAddress(addressOfIdentityB, cancellationToken);
-        if (identityB == null)
+        var identityExists = await _identitiesRepository.Exists(address, _cancellationToken);
+
+        if (!identityExists)
         {
-            identityB = Identity.CreateTestIdentity(addressOfIdentityB, [2, 2, 2, 2, 2], basicTier.Id, "USRb");
-            await _identitiesRepository.Add(identityB, "Bbbbbbbb1!");
+            var identity = Identity.CreateTestIdentity(address, publicKey, _basicTier!.Id, username);
+            await _identitiesRepository.Add(identity, password);
         }
     }
 }
