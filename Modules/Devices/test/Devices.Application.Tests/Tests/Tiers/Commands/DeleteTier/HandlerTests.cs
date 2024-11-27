@@ -1,5 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
-using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Tiers.Commands.DeleteTier;
 using Backbone.Modules.Devices.Domain.Aggregates.Tier;

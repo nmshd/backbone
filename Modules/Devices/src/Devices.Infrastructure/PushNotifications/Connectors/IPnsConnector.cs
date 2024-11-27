@@ -6,6 +6,6 @@ namespace Backbone.Modules.Devices.Infrastructure.PushNotifications.Connectors;
 
 public interface IPnsConnector
 {
-    Task<SendResults> Send(IEnumerable<PnsRegistration> registrations, IPushNotification notification);
+    Task<SendResult> Send(PnsRegistration registration, IPushNotification notification, NotificationText notificationText);
     void ValidateRegistration(PnsRegistration registration);
 }

@@ -1,4 +1,4 @@
-﻿using Backbone.BuildingBlocks.Domain;
+﻿using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;

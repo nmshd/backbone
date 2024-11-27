@@ -1,6 +1,6 @@
 using Backbone.BuildingBlocks.Domain.Errors;
 
-namespace Backbone.BuildingBlocks.Domain;
+namespace Backbone.BuildingBlocks.Domain.Exceptions;
 
 public class DomainException : Exception
 {

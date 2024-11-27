@@ -6,6 +6,13 @@
     ignorePaths: ["**/node_modules/**", "**/bower_components/**", "**/vendor/**", "**/examples/**"], // we have to set this, in order to override the default that comes from `config:recommended`, which ignores any packages in directories like "tests"
     packageRules: [
         {
+            // we don't want to update ArchUnitNET currently, because there is a bug in the latest version (see https://github.com/TNG/ArchUnitNET/issues/320)
+            matchDatasources: ["nuget"],
+            packageNames: ["TngTech.ArchUnitNET.xUnit"],
+            enabled: false
+        },
+
+        {
             // we don't want to update eslint currently, because there is a breaking change in its config
             matchDatasources: ["npm"],
             packageNames: ["eslint"],
@@ -45,6 +52,13 @@
             groupName: "minor-updates-nuget",
             matchDatasources: ["nuget"],
             matchUpdateTypes: ["minor"]
+        },
+        {
+            groupName: "minor-updates-npm",
+            matchDatasources: ["npm"],
+            matchUpdateTypes: ["minor"],
+            automerge: true,
+            automergeType: "branch"
         },
         {
             groupName: "minor-updates-dart",

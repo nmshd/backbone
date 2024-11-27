@@ -1,11 +1,12 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
-using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 
 namespace Backbone.Modules.Devices.Application.Identities.Commands.RejectDeletionProcess;
+
 public class Handler : IRequestHandler<RejectDeletionProcessCommand, RejectDeletionProcessResponse>
 {
     private readonly IIdentitiesRepository _identitiesRepository;

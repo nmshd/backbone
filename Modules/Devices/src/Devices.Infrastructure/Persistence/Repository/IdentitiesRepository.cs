@@ -44,6 +44,15 @@ public class IdentitiesRepository : IIdentitiesRepository
             .FirstWithAddressOrDefault(address, cancellationToken);
     }
 
+    public async Task<T[]> FindDevices<T>(Expression<Func<Device, bool>> filter, Expression<Func<Device, T>> selector, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _devices : _readonlyDevices)
+            .IncludeAll(_dbContext)
+            .Where(filter)
+            .Select(selector)
+            .ToArrayAsync(cancellationToken);
+    }
+
     public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken)
     {
         return await _readonlyIdentityDeletionProcessAuditLogs

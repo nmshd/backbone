@@ -19,7 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Setup Flutter
-        uses: subosito/flutter-action@v2.16.0
+        uses: subosito/flutter-action@v2.17.0
       - name: Run checks
         run: ./.ci/aui/runChecks.sh
 
@@ -43,7 +43,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.x"
+          dotnet-version: "9.x"
       - name: Cache NuGet packages
         uses: actions/cache@v4
         with:
@@ -73,7 +73,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: "8.x"
+          dotnet-version: "9.x"
       - name: Cache NuGet packages
         uses: actions/cache@v4
         with:
@@ -134,7 +134,7 @@ jobs:
       - name: Setup NuGet
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.x
+          dotnet-version: 9.x
 
       - name: Cache Image
         uses: actions/cache@v4
@@ -198,7 +198,7 @@ jobs:
       - name: Setup NuGet
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.x
+          dotnet-version: 9.x
 
       - name: Cache NuGet packages
         uses: actions/cache@v4
@@ -344,7 +344,7 @@ jobs:
       - name: Setup Dotnet
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 8.x
+          dotnet-version: 9.x
       - name: Install nuget-licenses tool
         run: dotnet tool install --global nuget-license
       - name: Show Allowed Licenses

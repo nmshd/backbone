@@ -123,10 +123,10 @@
   <data name="DatawalletModificationsCreatedPushNotification.Title" xml:space="preserve">
     <value>Atualizações Disponíveis</value>
   </data>
-  <data name="DeletionProcessApprovedNotification.Body" xml:space="preserve">
+    <data name="DeletionProcessApprovedPushNotification.Body" xml:space="preserve">
     <value>Um dos processos de eliminação de uma das suas identidades foi aprovado e será processado brevemente.</value>
   </data>
-  <data name="DeletionProcessApprovedNotification.Title" xml:space="preserve">
+    <data name="DeletionProcessApprovedPushNotification.Title" xml:space="preserve">
     <value>Processo de eliminação aprovado</value>
   </data>
   <data name="TestPushNotification.Body" xml:space="preserve">
@@ -135,16 +135,16 @@
   <data name="TestPushNotification.Title" xml:space="preserve">
     <value>Teste</value>
   </data>
-  <data name="DeletionProcessCancelledByOwnerNotification.Body" xml:space="preserve">
+    <data name="DeletionProcessCancelledByOwnerPushNotification.Body" xml:space="preserve">
     <value>Um dos processos de eliminação de uma das suas identidades foi cancelado por si.</value>
   </data>
-  <data name="DeletionProcessCancelledByOwnerNotification.Title" xml:space="preserve">
+    <data name="DeletionProcessCancelledByOwnerPushNotification.Title" xml:space="preserve">
     <value>Um processo de eliminação foi cancelado</value>
   </data>
-  <data name="DeletionProcessCancelledBySupportNotification.Body" xml:space="preserve">
+    <data name="DeletionProcessCancelledBySupportPushNotification.Body" xml:space="preserve">
     <value>Um dos processos de eliminação de uma das suas identidades foi cancelado pela equipa de suporte.</value>
   </data>
-  <data name="DeletionProcessCancelledBySupportNotification.Title" xml:space="preserve">
+    <data name="DeletionProcessCancelledBySupportPushNotification.Title" xml:space="preserve">
     <value>Um processo de eliminação foi cancelado</value>
   </data>
   <data name="DeletionProcessGracePeriodReminderPushNotification.Body" xml:space="preserve">

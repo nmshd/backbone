@@ -28,7 +28,11 @@ public class Handler : IRequestHandler<CancelDeletionAsSupportCommand, CancelDel
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        await _notificationSender.SendNotification(identity.Address, new DeletionProcessCancelledBySupportNotification(), cancellationToken);
+        await _notificationSender.SendNotification(
+            new DeletionProcessCancelledBySupportPushNotification(),
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
+            cancellationToken
+        );
 
         return new CancelDeletionAsSupportResponse(deletionProcess);
     }

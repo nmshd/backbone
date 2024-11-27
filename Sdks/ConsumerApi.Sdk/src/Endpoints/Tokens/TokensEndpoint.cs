@@ -52,4 +52,9 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
     {
         return await _client.Get<Token>($"api/{API_VERSION}/Tokens/{id}?password={Convert.ToBase64String(password)}");
     }
+
+    public async Task<ApiResponse<EmptyResponse>> DeleteToken(string id)
+    {
+        return await _client.Delete<EmptyResponse>($"api/{API_VERSION}/Tokens/{id}");
+    }
 }

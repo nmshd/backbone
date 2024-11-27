@@ -4,6 +4,7 @@ using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Job.IdentityDeletion.Workers;
 using Backbone.Modules.Devices.Application.Identities.Commands.TriggerRipeDeletionProcesses;
+using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Relationships.Application.Relationships.Queries.FindRelationshipsOfIdentity;
 using CSharpFunctionalExtensions;
 using FakeItEasy;
@@ -74,7 +75,11 @@ public class ActualDeletionWorkerTests : AbstractTestsBase
         // Assert
         foreach (var identityAddress in new[] { identityAddress1, identityAddress2, identityAddress3 })
         {
-            A.CallTo(() => mockPushNotificationSender.SendNotification(identityAddress, A<IPushNotification>._, A<CancellationToken>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => mockPushNotificationSender.SendNotification(
+                A<DeletionStartsPushNotification>._,
+                A<SendPushNotificationFilter>.That.Matches(f => f.IncludedIdentities.Contains(identityAddress)),
+                A<CancellationToken>._)
+            ).MustHaveHappenedOnceExactly();
         }
     }
 

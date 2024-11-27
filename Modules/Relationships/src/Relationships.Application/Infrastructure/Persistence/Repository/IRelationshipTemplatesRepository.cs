@@ -16,6 +16,7 @@ public interface IRelationshipTemplatesRepository
     Task Add(RelationshipTemplate template, CancellationToken cancellationToken);
     Task Update(RelationshipTemplate template);
     Task Delete(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken);
+    Task Delete(RelationshipTemplate template, CancellationToken cancellationToken);
 
     #region RelationshipTemplateAllocations
 

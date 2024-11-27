@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.Persistence.Database;
 using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.BuildingBlocks.Application.Pagination;
-using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Relationships.Application.Infrastructure;
 using Backbone.Modules.Relationships.Application.Infrastructure.Persistence.Repository;
@@ -104,6 +104,6 @@ public class RelationshipsRepository : IRelationshipsRepository
 
     public async Task<IEnumerable<Relationship>> FindRelationships(Expression<Func<Relationship, bool>> filter, CancellationToken cancellationToken)
     {
-        return await _relationships.Where(filter).ToListAsync(cancellationToken);
+        return await _relationships.IncludeAll(_dbContext).Where(filter).ToListAsync(cancellationToken);
     }
 }

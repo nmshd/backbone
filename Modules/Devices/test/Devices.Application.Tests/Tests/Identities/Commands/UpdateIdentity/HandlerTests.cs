@@ -1,5 +1,5 @@
 using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
-using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Devices.Application.Identities.Commands.UpdateIdentity;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;

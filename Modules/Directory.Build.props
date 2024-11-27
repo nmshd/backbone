@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <AssemblyName>Backbone.Modules.$(MSBuildProjectName)</AssemblyName>
         <RootNamespace>$(AssemblyName.Replace(" ", "_"))</RootNamespace>
@@ -12,6 +12,19 @@
         <MetalamaLicense>112591-ZU658QQQXEAETFQCB88YNBFRY2EWBBJFF4JX3YHRW87WNTFR46ULX7HRZDATQASR28MWN7JFS6ZTZ9QGMJHBKCL4GUAFN7768NAMQ6K8V4R3EWTHJP6A6EKXC46SYPT5TMW9QQGD9AZSNSQQBU9RGDWQHEQKPZUXVDVKBJKP</MetalamaLicense>
     </PropertyGroup>
 
+    <!-- TODO: remove this PropertyGroup once the following Rider bug was fixed: https://youtrack.jetbrains.com/issue/RIDER-119965/NuGetAuditSuppress-ignored-->
+    <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+        <NuGetAuditMode>direct</NuGetAuditMode>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-7jgj-8wvc-jh57" />
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-cmhx-cq75-c4mj" />
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-m5vv-6r4h-3vj9" />
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-x674-v45j-fwxw" />
+        <NuGetAuditSuppress Include="https://github.com/advisories/GHSA-wvxc-855f-jvrv" />
+    </ItemGroup>
+
     <!-- Relationships Module is currently the only one with its respective unit tests next to the production (within the same project, as opposed to on a separate one) -->
     <ItemGroup Condition="'$(Configuration)' != 'Release' And $(MSBuildProjectFile.Contains('Relationships'))">
         <ProjectReference Include="..\..\..\..\BuildingBlocks\src\UnitTestTools\UnitTestTools.csproj" />
@@ -22,13 +35,13 @@
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
         <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="FluentAssertions" Version="6.12.1" />
+        <PackageReference Include="FluentAssertions" Version="6.12.2" />
 
         <Using Include="FluentAssertions" />
         <Using Include="Backbone.UnitTestTools.BaseClasses" />
@@ -38,7 +51,7 @@
     </ItemGroup>
 
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
-        <PackageReference Include="FluentAssertions" Version="6.12.1" />
+        <PackageReference Include="FluentAssertions" Version="6.12.2" />
         <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>

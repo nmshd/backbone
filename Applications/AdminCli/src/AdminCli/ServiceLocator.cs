@@ -38,7 +38,7 @@ public class ServiceLocator
                 options.AddApplicationStore<CustomOpenIddictEntityFrameworkCoreApplicationStore>();
             });
 
-        services.AddApplication();
+        services.AddApplicationWithoutIdentityDeletion();
 
         services.AddSingleton<IQuotaChecker, AlwaysSuccessQuotaChecker>();
 

@@ -29,6 +29,7 @@ public static class Dependencies
         services.AddScoped<ClientPool>(sp => new ClientPool(sp.GetRequiredService<HttpClientFactory>(), sp.GetRequiredService<IOptions<HttpConfiguration>>()));
 
         services.AddScoped<ChallengesContext>();
+        services.AddScoped<FilesContext>();
         services.AddScoped<IdentitiesContext>();
         services.AddScoped<MessagesContext>();
         services.AddScoped<RelationshipsContext>();

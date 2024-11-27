@@ -123,22 +123,22 @@
     <data name="DatawalletModificationsCreatedPushNotification.Title" xml:space="preserve">
       <value>Updates available</value>
   </data>
-    <data name="DeletionProcessApprovedNotification.Body" xml:space="preserve">
+    <data name="DeletionProcessApprovedPushNotification.Body" xml:space="preserve">
       <value>A deletion process of one of your identities has been was approved and will be processed shortly.</value>
   </data>
-    <data name="DeletionProcessApprovedNotification.Title" xml:space="preserve">
+    <data name="DeletionProcessApprovedPushNotification.Title" xml:space="preserve">
     <value>A deletion process has been approved</value>
   </data>
-    <data name="DeletionProcessCancelledByOwnerNotification.Body" xml:space="preserve">
+    <data name="DeletionProcessCancelledByOwnerPushNotification.Body" xml:space="preserve">
       <value>A deletion process of one of your identities has been cancelled by you.</value>
   </data>
-    <data name="DeletionProcessCancelledByOwnerNotification.Title" xml:space="preserve">
+    <data name="DeletionProcessCancelledByOwnerPushNotification.Title" xml:space="preserve">
     <value>A deletion process has been cancelled</value>
   </data>
-    <data name="DeletionProcessCancelledBySupportNotification.Body" xml:space="preserve">
+    <data name="DeletionProcessCancelledBySupportPushNotification.Body" xml:space="preserve">
       <value>A deletion process of one of your identities has been cancelled by our support team.</value>
   </data>
-    <data name="DeletionProcessCancelledBySupportNotification.Title" xml:space="preserve">
+    <data name="DeletionProcessCancelledBySupportPushNotification.Title" xml:space="preserve">
     <value>A deletion process has been cancelled</value>
   </data>
     <data name="DeletionProcessGracePeriodReminderPushNotification.Body" xml:space="preserve">

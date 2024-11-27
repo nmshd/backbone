@@ -1,4 +1,5 @@
-﻿using Backbone.DevelopmentKit.Identity.ValueObjects;
+﻿using Backbone.BuildingBlocks.Domain.Exceptions;
+using Backbone.DevelopmentKit.Identity.ValueObjects;
 using Backbone.Modules.Tokens.Domain.DomainEvents;
 using Backbone.Modules.Tokens.Domain.Entities;
 using Backbone.Modules.Tokens.Domain.Tests.TestHelpers;
@@ -53,6 +54,29 @@ public class TokenTests : AbstractTestsBase
 
         // Assert
         result.Should().Be(expectedResult);
+    }
+
+    [Fact]
+    public void Token_can_be_deleted_by_its_owner()
+    {
+        var identityAddress = CreateRandomIdentityAddress();
+        var token = TestData.CreateToken(identityAddress, null);
+
+        var acting = () => token.EnsureCanBeDeletedBy(identityAddress);
+
+        acting.Should().NotThrow();
+    }
+
+    [Fact]
+    public void Token_can_not_be_deleted_by_others()
+    {
+        var creatorIdentity = CreateRandomIdentityAddress();
+        var otherIdentity = CreateRandomIdentityAddress();
+        var token = TestData.CreateToken(creatorIdentity, null);
+
+        var acting = () => token.EnsureCanBeDeletedBy(otherIdentity);
+
+        acting.Should().Throw<DomainActionForbiddenException>();
     }
 
     private static bool EvaluateCanBeCollectedByExpression(Token token, IdentityAddress? identityAddress)

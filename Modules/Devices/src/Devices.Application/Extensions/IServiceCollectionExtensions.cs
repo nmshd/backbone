@@ -3,14 +3,25 @@ using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.EventBus;
 using Backbone.BuildingBlocks.Application.MediatR;
 using Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 using Backbone.Modules.Devices.Application.Devices.Queries.ListDevices;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using FluentValidation;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Backbone.Modules.Devices.Application.Extensions;
 
 public static class IServiceCollectionExtensions
 {
-    public static void AddApplication(this IServiceCollection services)
+    public static void AddApplication(this IServiceCollection services, IConfiguration applicationConfiguration)
+    {
+        services.ConfigureAndValidate<ApplicationOptions>(applicationConfiguration.Bind);
+
+        applicationConfiguration.GetSection("IdentityDeletion").Bind(IdentityDeletionConfiguration.Instance);
+
+        services.AddApplicationWithoutIdentityDeletion();
+    }
+
+    public static void AddApplicationWithoutIdentityDeletion(this IServiceCollection services)
     {
         services.AddMediatR(c => c
             .RegisterServicesFromAssemblyContaining<RegisterDeviceCommand>()

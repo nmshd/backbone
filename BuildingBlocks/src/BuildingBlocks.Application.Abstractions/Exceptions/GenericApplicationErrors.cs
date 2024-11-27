@@ -7,7 +7,7 @@ public static class GenericApplicationErrors
         var formattedRecordName = string.IsNullOrEmpty(recordName) ? "Record" : recordName;
 
         return new ApplicationError("error.platform.recordNotFound",
-            $"{formattedRecordName} not found. Make sure the ID exists and the record is not expired.");
+            $"{formattedRecordName} not found. Make sure the ID exists and the record is not expired. If a password is required to fetch the record, make sure you passed the correct one.");
     }
 
     public static ApplicationError Unauthorized()

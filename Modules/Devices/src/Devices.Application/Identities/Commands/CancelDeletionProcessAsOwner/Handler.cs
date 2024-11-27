@@ -1,7 +1,7 @@
 ﻿using Backbone.BuildingBlocks.Application.Abstractions.Exceptions;
 using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.BuildingBlocks.Application.PushNotifications;
-using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Devices.Application.Infrastructure.PushNotifications.DeletionProcess;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -38,7 +38,11 @@ public class Handler : IRequestHandler<CancelDeletionProcessAsOwnerCommand, Canc
 
         await _identitiesRepository.Update(identity, cancellationToken);
 
-        await _notificationSender.SendNotification(identity.Address, new DeletionProcessCancelledByOwnerNotification(), cancellationToken);
+        await _notificationSender.SendNotification(
+            new DeletionProcessCancelledByOwnerPushNotification(),
+            SendPushNotificationFilter.AllDevicesOf(identity.Address),
+            cancellationToken
+        );
 
         return new CancelDeletionProcessAsOwnerResponse(deletionProcess);
     }

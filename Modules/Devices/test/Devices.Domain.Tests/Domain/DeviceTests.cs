@@ -1,4 +1,4 @@
-using Backbone.BuildingBlocks.Domain;
+using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Domain;

@@ -246,10 +246,10 @@ GRANT SELECT ON SCHEMA::Challenges TO quotas
 GRANT SELECT ON SCHEMA::Devices TO quotas
 GRANT SELECT ON SCHEMA::Files TO quotas
 GRANT SELECT ON SCHEMA::Messages TO quotas
-GRANT SELECT ON SCHEMA::Relationships TO synchronization
 GRANT SELECT ON SCHEMA::Relationships TO quotas
 GRANT SELECT ON SCHEMA::Synchronization TO quotas
 GRANT SELECT ON SCHEMA::Tokens TO quotas
+GRANT SELECT ON SCHEMA::Relationships TO synchronization
 GRANT SELECT ON SCHEMA::Relationships TO adminUi
 GRANT SELECT ON SCHEMA::Files TO adminUi
 GRANT SELECT ON SCHEMA::Messages TO adminUi

@@ -43,4 +43,9 @@ public class RelationshipTemplatesEndpoint(EndpointClient client) : ConsumerApiE
     {
         return await _client.Post<CreateRelationshipTemplateResponse>($"api/{API_VERSION}/RelationshipTemplates", request);
     }
+
+    public async Task<ApiResponse<EmptyResponse>> DeleteTemplate(string id)
+    {
+        return await _client.Delete<EmptyResponse>($"api/{API_VERSION}/RelationshipTemplates/{id}");
+    }
 }
