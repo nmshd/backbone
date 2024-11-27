@@ -18,7 +18,7 @@ public class GenericArrayModelBinder : IModelBinder
     public Task BindModelAsync(ModelBindingContext bindingContext)
     {
         var elementType = bindingContext.ModelType.GetElementType()!;
-        var templates = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType))!;
+        var items = (IList)Activator.CreateInstance(typeof(List<>).MakeGenericType(elementType))!;
         var query = bindingContext.HttpContext.Request.Query;
 
         for (var i = 0; ; i++)
@@ -29,7 +29,7 @@ public class GenericArrayModelBinder : IModelBinder
             var queryValueFound = false;
             foreach (var property in properties)
             {
-                var key = $"templates.{i}.{property.Name.ToLower()}";
+                var key = $"{bindingContext.ModelName}.{i}.{property.Name.ToLower()}";
 
                 if (!query.TryGetValue(key, out var queryValue))
                     continue;
@@ -49,14 +49,14 @@ public class GenericArrayModelBinder : IModelBinder
             if (!queryValueFound)
                 break;
 
-            templates.Add(instance);
+            items.Add(instance);
         }
 
-        var resultArray = Array.CreateInstance(elementType, templates.Count);
+        var resultArray = Array.CreateInstance(elementType, items.Count);
 
-        for (var i = 0; i < templates.Count; i++)
+        for (var i = 0; i < items.Count; i++)
         {
-            resultArray.SetValue(templates[i], i);
+            resultArray.SetValue(items[i], i);
         }
 
         bindingContext.Result = ModelBindingResult.Success(resultArray);
