@@ -26,17 +26,17 @@ public class TokensEndpoint(EndpointClient client) : ConsumerApiEndpoint(client)
     public async Task<ApiResponse<ListTokensResponse>> ListTokens(IEnumerable<ListTokensQueryItem> queryItems, PaginationFilter? pagination = null)
     {
         var request = _client
-            .Request<ListTokensResponse>(HttpMethod.Get, $"api/{API_VERSION}/RelationshipTemplates")
+            .Request<ListTokensResponse>(HttpMethod.Get, $"api/{API_VERSION}/Tokens")
             .Authenticate()
             .WithPagination(pagination);
 
         var i = 0;
         foreach (var queryItem in queryItems)
         {
-            request.AddQueryParameter($"templates.{i}.id", queryItem.Id);
+            request.AddQueryParameter($"tokens.{i}.id", queryItem.Id);
 
             if (queryItem.Password != null)
-                request.AddQueryParameter($"templates.{i}.password", queryItem.Password);
+                request.AddQueryParameter($"tokens.{i}.password", queryItem.Password);
 
             i++;
         }
