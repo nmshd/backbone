@@ -1,5 +1,5 @@
 ﻿using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
-using Backbone.Modules.Announcements.Infrastructure.Persistence.Database.Repository;
+using Backbone.Modules.Announcements.Infrastructure.Persistence.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.DependencyInjection;

@@ -1,9 +1,10 @@
 ﻿using Backbone.BuildingBlocks.Application.Extensions;
 using Backbone.Modules.Announcements.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Announcements.Domain.Entities;
+using Backbone.Modules.Announcements.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Announcements.Infrastructure.Persistence.Database.Repository;
+namespace Backbone.Modules.Announcements.Infrastructure.Persistence.Repository;
 
 public class AnnouncementsRepository : IAnnouncementsRepository
 {
