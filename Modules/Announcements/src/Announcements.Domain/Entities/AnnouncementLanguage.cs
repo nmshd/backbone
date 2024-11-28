@@ -18,7 +18,7 @@ public record AnnouncementLanguage
 
     public string Value { get; }
 
-    public static AnnouncementLanguage ParseUnsafe(string value)
+    public static AnnouncementLanguage Parse(string value)
     {
         var validationResult = Validate(value);
 

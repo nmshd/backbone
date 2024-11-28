@@ -16,7 +16,7 @@ public class Handler : IRequestHandler<CreateAnnouncementCommand, AnnouncementDT
 
     public async Task<AnnouncementDTO> Handle(CreateAnnouncementCommand request, CancellationToken cancellationToken)
     {
-        var texts = request.Texts.Select(t => new AnnouncementText(AnnouncementLanguage.ParseUnsafe(t.Language), t.Title, t.Body)).ToList();
+        var texts = request.Texts.Select(t => new AnnouncementText(AnnouncementLanguage.Parse(t.Language), t.Title, t.Body)).ToList();
 
         var announcement = new Announcement(request.Severity, texts, request.ExpiresAt);
 

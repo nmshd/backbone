@@ -12,7 +12,7 @@ public class AnnouncementLanguageEntityFrameworkValueConverter : ValueConverter<
     public AnnouncementLanguageEntityFrameworkValueConverter(ConverterMappingHints mappingHints)
         : base(
             id => id.Value,
-            value => AnnouncementLanguage.ParseUnsafe(value),
+            value => AnnouncementLanguage.Parse(value),
             mappingHints
         )
     {

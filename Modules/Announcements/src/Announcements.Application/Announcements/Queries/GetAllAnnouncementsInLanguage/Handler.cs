@@ -17,7 +17,7 @@ public class Handler : IRequestHandler<GetAllAnnouncementsInLanguageQuery, GetAl
     {
         var announcements = await _announcementsRepository.FindAll(cancellationToken);
 
-        var expectedLanguage = AnnouncementLanguage.ParseUnsafe(request.Language);
+        var expectedLanguage = AnnouncementLanguage.Parse(request.Language);
 
         return new GetAllAnnouncementsInLanguageResponse(announcements, expectedLanguage);
     }
