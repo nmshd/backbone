@@ -15,6 +15,7 @@ public class IdentityDeletionProcessAuditLogEntryTests : AbstractTestsBase
         auditLogEntry.AssociateUsernames([Username.Parse("USR1111111111111111"), Username.Parse("USR2222222222222222")]);
 
         // Assert
+        auditLogEntry.UsernameHashesBase64.Should().HaveCount(2);
         auditLogEntry.UsernameHashesBase64.Should().Contain("jj3azydpiPwK4iFxo/wpCP6pP5Yf5MStnu/hyzMUZ14=", "FQao/LArcVbFzRs4RgYCU5JycRx9zmJMxY5ApJ0Nk8E=");
     }
 
