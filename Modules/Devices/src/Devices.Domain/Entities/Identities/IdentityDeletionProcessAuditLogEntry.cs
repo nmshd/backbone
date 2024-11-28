@@ -39,7 +39,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
     public DeletionProcessStatus? OldStatus { get; }
     public DeletionProcessStatus? NewStatus { get; }
     public Dictionary<string, string>? AdditionalData { get; }
-    public string? UsernameHashesBase64 { get; private set; }
+    public List<string>? UsernameHashesBase64 { get; private set; }
 
     public static IdentityDeletionProcessAuditLogEntry ProcessStartedByOwner(IdentityDeletionProcessId processId, IdentityAddress identityAddress, DeviceId deviceId)
     {
@@ -229,7 +229,7 @@ public class IdentityDeletionProcessAuditLogEntry : Entity
         UsernameHashesBase64 = usernames
             .Select(u => Hasher.HashUtf8(u.Value.Trim()))
             .Select(Convert.ToBase64String)
-            .Aggregate((result, current) => result + current);
+            .ToList();
     }
 
     public static Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> IsAssociatedToUser(Username username)
