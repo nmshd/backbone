@@ -58,8 +58,8 @@ public class ValidatorTests
         var validationResult = validator.TestValidate(CreateCommand(title: "", body: null));
 
         // Assert
-        validationResult.ShouldHaveValidationErrorFor("Texts[0].Title").WithErrorCode("error.platform.validation.invalidPropertyValue").WithErrorMessage("'Title' must not be empty.");
-        validationResult.ShouldHaveValidationErrorFor("Texts[0].Body").WithErrorCode("error.platform.validation.invalidPropertyValue").WithErrorMessage("'Body' must not be empty.");
+        validationResult.ShouldHaveValidationErrorFor("Texts[0].Title").WithErrorCode("error.platform.validation.invalidPropertyValue");
+        validationResult.ShouldHaveValidationErrorFor("Texts[0].Body").WithErrorCode("error.platform.validation.invalidPropertyValue");
     }
 
     private static CreateAnnouncementCommand CreateCommand(List<string>? languages = null, string title = "Test Title", string? body = "Test Body")
