@@ -114,7 +114,8 @@ public class Device : Entity
 
     public void MarkAsBackupDeviceUsed()
     {
-        if (IsBackupDevice) IsBackupDevice = false;
+        if (!IsBackupDevice) throw new DomainException(new DomainError("error.platform.validation.device.deviceIsNotABackup", "The device has to be a backup device to be marked as used"));
+        IsBackupDevice = false;
     }
 
     public static Device CreateTestDevice(Identity identity, CommunicationLanguage communicationLanguage, string username)

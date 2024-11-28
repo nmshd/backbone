@@ -133,6 +133,34 @@ public class DeviceTests : AbstractTestsBase
         domainException.Code.Should().Be("error.platform.validation.device.deviceCannotBeDeleted");
     }
 
+    [Fact]
+    public void A_backup_device_can_be_marked_as_used()
+    {
+        // Arrange
+        var activeIdentity = TestDataGenerator.CreateIdentity();
+        var device = CreateBackupDevice(activeIdentity);
+
+        // Act
+        device.MarkAsBackupDeviceUsed();
+
+        // Assert
+        device.IsBackupDevice.Should().BeFalse();
+    }
+
+    [Fact]
+    public void A_non_backup_device_can_not_be_marked_as_used()
+    {
+        // Arrange
+        var activeIdentity = TestDataGenerator.CreateIdentity();
+        var device = CreateOnboardedDevice(activeIdentity);
+
+        // Act
+        var action = device.MarkAsBackupDeviceUsed;
+
+        // Assert
+        action.Should().Throw<DomainException>().And.Code.Should().Be("error.platform.validation.device.deviceIsNotABackup");
+    }
+
     private static Device CreateUnonboardedDevice(Identity identity)
     {
         return identity.AddDevice(CommunicationLanguage.DEFAULT_LANGUAGE, identity.Devices.First().Id, false);
@@ -143,5 +171,10 @@ public class DeviceTests : AbstractTestsBase
         var activeDevice = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
         activeDevice.User.LoginOccurred();
         return activeDevice;
+    }
+
+    private static Device CreateBackupDevice(Identity identity)
+    {
+        return new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE, null, true);
     }
 }
