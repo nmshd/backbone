@@ -395,14 +395,11 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("NewStatus")
+                    b.Property<int>("NewStatus")
                         .HasColumnType("int");
 
                     b.Property<int?>("OldStatus")
                         .HasColumnType("int");
-
-                    b.Property<string>("UsernameHashesBase64")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

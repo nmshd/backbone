@@ -396,14 +396,11 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("NewStatus")
+                    b.Property<int>("NewStatus")
                         .HasColumnType("integer");
 
                     b.Property<int?>("OldStatus")
                         .HasColumnType("integer");
-
-                    b.Property<string>("UsernameHashesBase64")
-                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
