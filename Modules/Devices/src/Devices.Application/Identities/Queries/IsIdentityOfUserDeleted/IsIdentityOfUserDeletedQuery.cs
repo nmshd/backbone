@@ -4,10 +4,5 @@ namespace Backbone.Modules.Devices.Application.Identities.Queries.IsIdentityOfUs
 
 public class IsIdentityOfUserDeletedQuery : IRequest<IsIdentityOfUserDeletedResponse>
 {
-    public IsIdentityOfUserDeletedQuery(string username)
-    {
-        Username = username;
-    }
-
-    public string Username { get; }
+    public required string Username { get; init; }
 }
