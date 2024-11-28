@@ -24,12 +24,10 @@ namespace Backbone.Modules.Tokens.ConsumerApi.Controllers;
 public class TokensController : ApiControllerBase
 {
     private readonly ApplicationOptions _options;
-    private readonly JsonSerializerOptions _jsonSerializerOptions;
 
-    public TokensController(IMediator mediator, IOptions<ApplicationOptions> options, IOptions<JsonOptions> jsonOptions) : base(mediator)
+    public TokensController(IMediator mediator, IOptions<ApplicationOptions> options) : base(mediator)
     {
         _options = options.Value;
-        _jsonSerializerOptions = jsonOptions.Value.JsonSerializerOptions;
     }
 
     [HttpPost]
@@ -52,28 +50,14 @@ public class TokensController : ApiControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(PagedHttpResponseEnvelope<TokenDTO>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> ListTokens([FromQuery] PaginationFilter paginationFilter, [FromQuery] string? tokens,
+    public async Task<IActionResult> ListTokens([FromQuery] PaginationFilter paginationFilter, [FromQuery] ListTokensQueryItem[]? tokens,
         [FromQuery] IEnumerable<string> ids, CancellationToken cancellationToken)
     {
-        List<ListTokensQueryItem>? tokenQueryItems;
+        // We keep this code for backwards compatibility reasons. In a few months the `templates`
+        // parameter will become required, and the fallback to `ids` will be removed.
+        tokens = tokens is { Length: > 0 } ? tokens : ids.Select(id => new ListTokensQueryItem { Id = id }).ToArray();
 
-        if (tokens != null)
-        {
-            try
-            {
-                tokenQueryItems = JsonSerializer.Deserialize<List<ListTokensQueryItem>>(tokens, _jsonSerializerOptions);
-            }
-            catch (JsonException ex)
-            {
-                throw new ApplicationException(GenericApplicationErrors.Validation.InputCannotBeParsed(ex.Message));
-            }
-        }
-        else
-        {
-            tokenQueryItems = ids.Select(id => new ListTokensQueryItem { Id = id }).ToList();
-        }
-
-        var request = new ListTokensQuery(paginationFilter, tokenQueryItems);
+        var request = new ListTokensQuery(paginationFilter, tokens);
 
         paginationFilter.PageSize ??= _options.Pagination.DefaultPageSize;
 
