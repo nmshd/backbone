@@ -46,7 +46,7 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
 
         _logger.CreatedDevice();
 
-        return new RegisterDeviceResponse(newDevice.User);
+        return new RegisterDeviceResponse(newDevice);
     }
 }
 

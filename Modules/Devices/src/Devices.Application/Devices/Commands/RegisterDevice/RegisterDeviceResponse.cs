@@ -4,13 +4,13 @@ namespace Backbone.Modules.Devices.Application.Devices.Commands.RegisterDevice;
 
 public class RegisterDeviceResponse
 {
-    public RegisterDeviceResponse(ApplicationUser user)
+    public RegisterDeviceResponse(Device device)
     {
-        Id = user.DeviceId;
-        Username = user.UserName!;
-        CreatedByDevice = user.Device.CreatedByDevice;
-        CreatedAt = user.Device.CreatedAt;
-        IsBackupDevice = user.Device.IsBackupDevice;
+        Id = device.Id.Value;
+        Username = device.User.UserName!;
+        CreatedByDevice = device.CreatedByDevice.Value;
+        CreatedAt = device.CreatedAt;
+        IsBackupDevice = device.IsBackupDevice;
     }
 
     public string Id { get; set; }
