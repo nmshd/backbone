@@ -1,6 +1,7 @@
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Domain;
 
@@ -146,31 +147,34 @@ public class DeviceTests : AbstractTestsBase
     }
 
     [Fact]
-    public void Login_occurred()
+    public void When_a_device_logs_in_the_last_login_date_is_set()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
         var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
+        var utcNow = DateTime.UtcNow;
+        SystemTime.Set(utcNow);
 
         // Act
         device.LoginOccurred();
 
         // Assert
-        device.User.HasLoggedIn.Should().BeTrue();
+        device.User.LastLoginAt.Should().Be(utcNow);
     }
 
     [Fact]
-    public void Login_occurred_creates_a_BackupDeviceUsedDomainEvent_if_logged_in_device_is_backup_device()
+    public void When_a_backup_device_logs_in_a_BackupDeviceUsedDomainEvent_is_raised()
     {
         // Arrange
         var identity = TestDataGenerator.CreateIdentity();
-        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE, isBackupDevice: true);
+        var device = identity.AddDevice(CommunicationLanguage.DEFAULT_LANGUAGE, identity.Devices.First().Id, true);
 
         // Act
         device.LoginOccurred();
 
         // Assert
-        device.Should().HaveASingleDomainEvent<BackupDeviceUsedDomainEvent>().Should().NotBeNull();
+        var domainEvent = device.Should().HaveASingleDomainEvent<BackupDeviceUsedDomainEvent>();
+        domainEvent.IdentityAddress.Should().Be(identity.Address);
     }
 
     private static Device CreateUnonboardedDevice(Identity identity)
