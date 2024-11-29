@@ -1,4 +1,3 @@
-import 'package:admin_api_sdk/src/endpoints/announcements_endpoint.dart';
 import 'package:admin_api_sdk/src/endpoints/metrics_endpoint.dart';
 import 'package:dio/dio.dart';
 
@@ -14,7 +13,6 @@ class AdminApiClient {
   late final RelationshipsEndpoint relationships;
   late final MessagesEndpoint messages;
   late final MetricsEndpoint metrics;
-  late final AnnouncementsEndpoint announcements;
 
   AdminApiClient._(String baseUrl, String apiKey) {
     final dio = Dio(
@@ -33,7 +31,6 @@ class AdminApiClient {
     relationships = RelationshipsEndpoint(dio);
     messages = MessagesEndpoint(dio);
     metrics = MetricsEndpoint(dio);
-    announcements = AnnouncementsEndpoint(dio);
   }
 
   static Future<AdminApiClient> create({required String baseUrl, required String apiKey}) async {
