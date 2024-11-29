@@ -12,6 +12,7 @@ using Backbone.Modules.Devices.Application.Devices.Commands.UpdateActiveDevice;
 using Backbone.Modules.Devices.Application.Devices.DTOs;
 using Backbone.Modules.Devices.Application.Devices.Queries.GetActiveDevice;
 using Backbone.Modules.Devices.Application.Devices.Queries.ListDevices;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -40,7 +41,7 @@ public class DevicesController : ApiControllerBase
     {
         var command = new RegisterDeviceCommand
         {
-            CommunicationLanguage = request.CommunicationLanguage ?? "en",
+            CommunicationLanguage = request.CommunicationLanguage ?? CommunicationLanguage.DEFAULT_LANGUAGE.Value,
             SignedChallenge = request.SignedChallenge,
             DevicePassword = request.DevicePassword,
             IsBackupDevice = request.IsBackupDevice

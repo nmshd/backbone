@@ -2,6 +2,7 @@
 using Backbone.BuildingBlocks.SDK.Crypto;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common;
 using Backbone.ConsumerApi.Sdk.Authentication;
+using Backbone.ConsumerApi.Sdk.Endpoints.Announcements;
 using Backbone.ConsumerApi.Sdk.Endpoints.Challenges;
 using Backbone.ConsumerApi.Sdk.Endpoints.Datawallets;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices;
@@ -39,6 +40,7 @@ public class Client
         DeviceData = deviceData;
         IdentityData = identityData;
 
+        Announcements = new AnnouncementsEndpoint(endpointClient);
         Challenges = new ChallengesEndpoint(endpointClient);
         Datawallet = new DatawalletEndpoint(endpointClient);
         Devices = new DevicesEndpoint(endpointClient);
@@ -58,6 +60,7 @@ public class Client
     public IdentityData? IdentityData { get; }
 
     // ReSharper disable UnusedAutoPropertyAccessor.Global
+    public AnnouncementsEndpoint Announcements { get; }
     public ChallengesEndpoint Challenges { get; }
     public DatawalletEndpoint Datawallet { get; }
     public DevicesEndpoint Devices { get; }

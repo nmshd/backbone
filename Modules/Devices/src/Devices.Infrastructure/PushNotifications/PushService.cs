@@ -56,7 +56,8 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
     private async Task<DeviceWithOnlyIdAndCommunicationLanguage[]> FindDevices(SendPushNotificationFilter filter, CancellationToken cancellationToken)
     {
         var result = await _identitiesRepository.FindDevices(
-            d => filter.IncludedIdentities.Contains(d.IdentityAddress) && !filter.ExcludedDevices.Contains(d.Id),
+            d => (filter.IncludedIdentities.Count == 0 || filter.IncludedIdentities.Contains(d.IdentityAddress)) &&
+                 !filter.ExcludedDevices.Contains(d.Id),
             d => new DeviceWithOnlyIdAndCommunicationLanguage { Id = d.Id, CommunicationLanguage = d.CommunicationLanguage },
             cancellationToken
         );
@@ -82,7 +83,11 @@ public class PushService : IPushNotificationRegistrationService, IPushNotificati
                 .Select(r =>
                 {
                     var device = devices.First(d => d.Id == r.DeviceId);
-                    return pnsConnector.Send(r, notification, notificationTexts[device.CommunicationLanguage]);
+
+                    if (!notificationTexts.TryGetValue(device.CommunicationLanguage, out var notificationText))
+                        notificationText = notificationTexts[CommunicationLanguage.DEFAULT_LANGUAGE];
+
+                    return pnsConnector.Send(r, notification, notificationText);
                 });
 
             var sendResults = await Task.WhenAll(sendTasks);

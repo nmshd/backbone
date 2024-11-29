@@ -9,13 +9,14 @@ public record CommunicationLanguage
     public static readonly CommunicationLanguage DEFAULT_LANGUAGE = new("en");
     private static readonly CultureInfo[] CULTURES = CultureInfo.GetCultures(CultureTypes.AllCultures & ~CultureTypes.NeutralCultures);
 
-    public string Value { get; }
     public const int LENGTH = 2;
 
     private CommunicationLanguage(string value)
     {
         Value = value;
     }
+
+    public string Value { get; }
 
     public static Result<CommunicationLanguage, DomainError> Create(string value)
     {

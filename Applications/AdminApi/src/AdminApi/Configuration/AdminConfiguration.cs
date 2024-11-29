@@ -47,6 +47,9 @@ public class AdminConfiguration
     public class ModulesConfiguration
     {
         [Required]
+        public AnnouncementsConfiguration Announcements { get; set; } = new();
+
+        [Required]
         public DevicesConfiguration Devices { get; set; } = new();
 
         [Required]
