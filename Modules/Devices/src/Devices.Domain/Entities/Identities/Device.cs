@@ -22,6 +22,9 @@ public class Device : Entity
         CommunicationLanguage = null!;
     }
 
+    /**
+     * This constructor is only used for creating test devices.
+     */
     private Device(Identity identity, CommunicationLanguage communicationLanguage, string username)
     {
         Id = DeviceId.New();
