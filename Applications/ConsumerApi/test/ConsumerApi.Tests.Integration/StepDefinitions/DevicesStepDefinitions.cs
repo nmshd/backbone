@@ -53,21 +53,19 @@ internal class DevicesStepDefinitions
     [Given($"an Identity {RegexFor.SINGLE_THING} with a Device {RegexFor.SINGLE_THING} and an unonboarded Device {RegexFor.SINGLE_THING}")]
     public async Task GivenAnIdentityWithADeviceAndAnUnonboardedDevice(string identityName, string onboardedDeviceName, string unonboardedDeviceName)
     {
-        await CreateDeviceAndUnonboardedDevice(identityName, onboardedDeviceName, unonboardedDeviceName, false);
+        var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
+        _clientPool.Add(client).ForIdentity(identityName).AndDevice(onboardedDeviceName);
+        var clientForBackupDevice = await client.OnboardNewDevice("Passw0rd");
+        _clientPool.Add(clientForBackupDevice).ForIdentity(identityName).AndDevice(unonboardedDeviceName);
     }
 
     [Given($"an Identity {RegexFor.SINGLE_THING} with a Device {RegexFor.SINGLE_THING} and a backup Device {RegexFor.SINGLE_THING}")]
     public async Task GivenAnIdentityWithADeviceAndABackupDevice(string identityName, string onboardedDeviceName, string backupDeviceName)
     {
-        await CreateDeviceAndUnonboardedDevice(identityName, onboardedDeviceName, backupDeviceName, true);
-    }
-
-    private async Task CreateDeviceAndUnonboardedDevice(string identityName, string onboardedDeviceName, string unonboardedDeviceName, bool isBackupDevice)
-    {
         var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
         _clientPool.Add(client).ForIdentity(identityName).AndDevice(onboardedDeviceName);
-        var clientForBackupDevice = await client.OnboardNewDevice("Passw0rd", isBackupDevice);
-        _clientPool.Add(clientForBackupDevice).ForIdentity(identityName).AndDevice(unonboardedDeviceName);
+        var clientForBackupDevice = await client.OnboardNewBackupDevice("Passw0rd");
+        _clientPool.Add(clientForBackupDevice).ForIdentity(identityName).AndDevice(backupDeviceName);
     }
 
     [Given($"an Identity {RegexFor.SINGLE_THING} with Devices {RegexFor.LIST_OF_THINGS}")]

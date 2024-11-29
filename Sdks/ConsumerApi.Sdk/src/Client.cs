@@ -202,7 +202,17 @@ public class Client
         return (identityData, deviceData);
     }
 
-    public async Task<Client> OnboardNewDevice(string password, bool isBackupDevice = false)
+    public async Task<Client> OnboardNewDevice(string password)
+    {
+        return await OnboardNewDevice(password, false);
+    }
+
+    public async Task<Client> OnboardNewBackupDevice(string password)
+    {
+        return await OnboardNewDevice(password, true);
+    }
+
+    private async Task<Client> OnboardNewDevice(string password, bool isBackupDevice)
     {
         if (DeviceData == null)
             throw new Exception("The device data is missing. This is probably because you're using an unauthenticated client. In order to onboard a new device, the client needs to be authenticated.");
