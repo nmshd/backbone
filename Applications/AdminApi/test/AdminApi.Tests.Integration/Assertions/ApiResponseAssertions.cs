@@ -1,8 +1,8 @@
-﻿using Backbone.AdminApi.Tests.Integration.Support;
+﻿using System.Text.Json;
+using Backbone.AdminApi.Tests.Integration.Support;
 using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
 using FluentAssertions.Execution;
 using FluentAssertions.Primitives;
-using Newtonsoft.Json;
 
 namespace Backbone.AdminApi.Tests.Integration.Assertions;
 
@@ -25,7 +25,7 @@ public class ApiResponseAssertions<T> : ReferenceTypeAssertions<ApiResponse<T>, 
 
         if (Subject.Result != null)
         {
-            var resultJson = JsonConvert.SerializeObject(Subject.Result);
+            var resultJson = JsonSerializer.Serialize(Subject.Result);
             var (isValid, errors) = await JsonValidator.ValidateJsonSchema<T>(resultJson);
 
             assertion.ForCondition(_ => isValid)

@@ -115,6 +115,15 @@ public class IdentitiesRepository : IIdentitiesRepository
             .FirstOrDefaultAsync(d => d.Id == deviceId, cancellationToken);
     }
 
+    public async Task<IEnumerable<Device>> GetDevicesByIds(IEnumerable<DeviceId> deviceIds, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _devices : _readonlyDevices)
+            .NotDeleted()
+            .IncludeAll(_dbContext)
+            .Where(d => deviceIds.Contains(d.Id))
+            .ToListAsync(cancellationToken);
+    }
+
     public async Task Update(Device device, CancellationToken cancellationToken)
     {
         _devices.Update(device);

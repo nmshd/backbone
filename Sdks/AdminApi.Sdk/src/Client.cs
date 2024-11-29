@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Backbone.AdminApi.Sdk.Authentication;
+using Backbone.AdminApi.Sdk.Endpoints.Announcements;
 using Backbone.AdminApi.Sdk.Endpoints.ApiKeyValidation;
 using Backbone.AdminApi.Sdk.Endpoints.Challenges;
 using Backbone.AdminApi.Sdk.Endpoints.Clients;
@@ -25,6 +26,7 @@ public class Client
         var endpointClient = new EndpointClient(httpClient, authenticator, jsonSerializerOptions);
 
         ApiKeyValidation = new ApiKeyValidationEndpoint(endpointClient);
+        Announcements = new AnnouncementsEndpoint(endpointClient);
         Clients = new ClientsEndpoint(endpointClient);
         Identities = new IdentitiesEndpoint(endpointClient);
         Metrics = new MetricsEndpoint(endpointClient);
@@ -35,6 +37,7 @@ public class Client
     }
 
     public ApiKeyValidationEndpoint ApiKeyValidation { get; }
+    public AnnouncementsEndpoint Announcements { get; }
     public ClientsEndpoint Clients { get; }
     public IdentitiesEndpoint Identities { get; }
     public MetricsEndpoint Metrics { get; }

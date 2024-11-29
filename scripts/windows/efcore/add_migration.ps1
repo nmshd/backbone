@@ -1,5 +1,5 @@
 Param(
-    [parameter(Mandatory)][ValidateSet("AdminApi", "Challenges", "Devices", "Files", "Messages", "Quotas", "Relationships", "Synchronization", "Tokens")] $moduleName,
+    [parameter(Mandatory)][ValidateSet("AdminApi", "Announcements", "Challenges", "Devices", "Files", "Messages", "Quotas", "Relationships", "Synchronization", "Tokens")] $moduleName,
     [parameter(Mandatory)] $migrationName,
     [parameter(Mandatory)][ValidateSet("s", "p", "SqlServer", "Postgres", "")] $provider
 )
