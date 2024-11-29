@@ -5,7 +5,6 @@ using Backbone.AdminApi.Sdk.Endpoints.ApiKeyValidation;
 using Backbone.AdminApi.Sdk.Endpoints.Challenges;
 using Backbone.AdminApi.Sdk.Endpoints.Clients;
 using Backbone.AdminApi.Sdk.Endpoints.Identities;
-using Backbone.AdminApi.Sdk.Endpoints.Logs;
 using Backbone.AdminApi.Sdk.Endpoints.Messages;
 using Backbone.AdminApi.Sdk.Endpoints.Metrics;
 using Backbone.AdminApi.Sdk.Endpoints.Relationships;
@@ -30,7 +29,6 @@ public class Client
         Announcements = new AnnouncementsEndpoint(endpointClient);
         Clients = new ClientsEndpoint(endpointClient);
         Identities = new IdentitiesEndpoint(endpointClient);
-        Logs = new LogsEndpoint(endpointClient);
         Metrics = new MetricsEndpoint(endpointClient);
         Relationships = new RelationshipsEndpoint(endpointClient);
         Tiers = new TiersEndpoint(endpointClient);
@@ -42,7 +40,6 @@ public class Client
     public AnnouncementsEndpoint Announcements { get; }
     public ClientsEndpoint Clients { get; }
     public IdentitiesEndpoint Identities { get; }
-    public LogsEndpoint Logs { get; }
     public MetricsEndpoint Metrics { get; }
     public RelationshipsEndpoint Relationships { get; }
     public TiersEndpoint Tiers { get; }
