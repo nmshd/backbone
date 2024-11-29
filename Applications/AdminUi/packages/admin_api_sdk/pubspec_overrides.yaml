@@ -1,4 +1,0 @@
-# melos_managed_dependency_overrides: admin_api_types
-dependency_overrides:
-  admin_api_types:
-    path: ..\\admin_api_types
