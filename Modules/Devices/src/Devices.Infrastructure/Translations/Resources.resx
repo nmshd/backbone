@@ -181,6 +181,6 @@
         <value>Backup Device used</value>
     </data>
     <data name="BackupDeviceUsedPushNotification.Body" xml:space="preserve">
-        <value>Your backup device was used</value>
+        <value>Your backup device was used.</value>
     </data>
 </root>

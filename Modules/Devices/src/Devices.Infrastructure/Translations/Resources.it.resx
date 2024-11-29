@@ -82,6 +82,6 @@
         <value>Dispositivo di recupero usato</value>
     </data>
     <data name="BackupDeviceUsedPushNotification.Body" xml:space="preserve">
-        <value>Il dispositivo di backup è stato utilizzato</value>
+        <value>Il dispositivo di backup è stato utilizzato.</value>
     </data>
 </root>

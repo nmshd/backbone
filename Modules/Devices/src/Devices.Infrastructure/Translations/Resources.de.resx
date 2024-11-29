@@ -82,6 +82,6 @@
         <value>Wiederherstellungsgerät benutzt</value>
     </data>
     <data name="BackupDeviceUsedPushNotification.Body" xml:space="preserve">
-        <value>Ihr Wiederherstellungsgerät wurde benutzt</value>
+        <value>Ihr Wiederherstellungsgerät wurde benutzt.</value>
     </data>
 </root>

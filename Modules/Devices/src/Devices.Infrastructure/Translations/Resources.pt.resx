@@ -181,6 +181,6 @@
       <value>Dispositivo de recuperação utilizado</value>
   </data>
     <data name="BackupDeviceUsedPushNotification.Body" xml:space="preserve">
-      <value>O seu dispositivo de cópia de segurança foi utilizado</value>
-  </data>
+        <value>O seu dispositivo de cópia de segurança foi utilizado.</value>
+    </data>
 </root>

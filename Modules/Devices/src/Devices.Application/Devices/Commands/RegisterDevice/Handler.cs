@@ -32,7 +32,8 @@ public class Handler : IRequestHandler<RegisterDeviceCommand, RegisterDeviceResp
     {
         var identity = await _identitiesRepository.FindByAddress(_userContext.GetAddress(), cancellationToken, track: true) ?? throw new NotFoundException(nameof(Identity));
 
-        if (await _identitiesRepository.HasBackupDevice(identity.Address, cancellationToken)) throw new ApplicationException(ApplicationErrors.Devices.BackupDeviceAlreadyExists());
+        if (await _identitiesRepository.HasBackupDevice(identity.Address, cancellationToken))
+            throw new ApplicationException(ApplicationErrors.Devices.BackupDeviceAlreadyExists());
 
         await _challengeValidator.Validate(command.SignedChallenge, PublicKey.FromBytes(identity.PublicKey));
         _logger.LogTrace("Successfully validated challenge.");
