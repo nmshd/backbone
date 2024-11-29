@@ -3,6 +3,7 @@ using Backbone.BuildingBlocks.Domain;
 using Backbone.BuildingBlocks.Domain.Errors;
 using Backbone.BuildingBlocks.Domain.Exceptions;
 using Backbone.DevelopmentKit.Identity.ValueObjects;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Entities.Identities;
@@ -112,10 +113,15 @@ public class Device : Entity
         DeletedByDevice = deletedByDevice;
     }
 
-    public void MarkAsBackupDeviceUsed()
+    public void LoginOccurred()
     {
-        if (!IsBackupDevice) throw new DomainException(new DomainError("error.platform.validation.device.deviceIsNotABackup", "The device has to be a backup device to be marked as used"));
-        IsBackupDevice = false;
+        if (IsBackupDevice)
+        {
+            IsBackupDevice = false;
+            RaiseDomainEvent(new BackupDeviceUsedDomainEvent(IdentityAddress));
+        }
+
+        User.LoginOccurred();
     }
 
     public static Device CreateTestDevice(Identity identity, CommunicationLanguage communicationLanguage, string username)

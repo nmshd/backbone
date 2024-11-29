@@ -1,4 +1,5 @@
 using Backbone.BuildingBlocks.Domain.Exceptions;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Domain;
@@ -55,8 +56,6 @@ public class DeviceTests : AbstractTestsBase
         var identity = TestDataGenerator.CreateIdentity();
         var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
 
-        device.User = new ApplicationUser(device);
-
         // Act
         var isOnboarded = device.IsOnboarded;
 
@@ -71,8 +70,7 @@ public class DeviceTests : AbstractTestsBase
         var identity = TestDataGenerator.CreateIdentity();
         var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
 
-        device.User = new ApplicationUser(device);
-        device.User.LoginOccurred();
+        device.LoginOccurred();
 
         // Act
         var isOnboarded = device.IsOnboarded;
@@ -141,24 +139,38 @@ public class DeviceTests : AbstractTestsBase
         var device = CreateBackupDevice(activeIdentity);
 
         // Act
-        device.MarkAsBackupDeviceUsed();
+        device.LoginOccurred();
 
         // Assert
         device.IsBackupDevice.Should().BeFalse();
     }
 
     [Fact]
-    public void A_non_backup_device_can_not_be_marked_as_used()
+    public void Login_occurred()
     {
         // Arrange
-        var activeIdentity = TestDataGenerator.CreateIdentity();
-        var device = CreateOnboardedDevice(activeIdentity);
+        var identity = TestDataGenerator.CreateIdentity();
+        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
 
         // Act
-        var action = device.MarkAsBackupDeviceUsed;
+        device.LoginOccurred();
 
         // Assert
-        action.Should().Throw<DomainException>().And.Code.Should().Be("error.platform.validation.device.deviceIsNotABackup");
+        device.User.HasLoggedIn.Should().BeTrue();
+    }
+
+    [Fact]
+    public void Login_occurred_creates_a_BackupDeviceUsedDomainEvent_if_logged_in_device_is_backup_device()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentity();
+        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE, isBackupDevice: true);
+
+        // Act
+        device.LoginOccurred();
+
+        // Assert
+        device.Should().HaveASingleDomainEvent<BackupDeviceUsedDomainEvent>().Should().NotBeNull();
     }
 
     private static Device CreateUnonboardedDevice(Identity identity)
@@ -168,9 +180,9 @@ public class DeviceTests : AbstractTestsBase
 
     private static Device CreateOnboardedDevice(Identity identity)
     {
-        var activeDevice = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
-        activeDevice.User.LoginOccurred();
-        return activeDevice;
+        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
+        device.LoginOccurred();
+        return device;
     }
 
     private static Device CreateBackupDevice(Identity identity)
