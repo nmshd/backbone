@@ -92,16 +92,19 @@ internal class DevicesStepDefinitions
     [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Devices endpoint with a valid signature on {RegexFor.SINGLE_THING}")]
     public async Task WhenIdentitySendsAPostRequestToTheDevicesEndpointWithASignedChallenge(string identityName, string challengeName)
     {
-        await SendRegisterDeviceCommand(identityName, challengeName, false);
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        var signedChallenge = CreateSignedChallenge(identity, _challengesContext.Challenges[challengeName]);
+
+        _responseContext.WhenResponse = _registerDeviceResponse = await identity.Devices.RegisterDevice(new RegisterDeviceRequest
+        {
+            DevicePassword = DEVICE_PASSWORD,
+            SignedChallenge = signedChallenge,
+            IsBackupDevice = false
+        });
     }
 
     [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Devices endpoint with a valid signature on {RegexFor.SINGLE_THING} as a backup Device")]
     public async Task WhenIdentitySendsAPostRequestToTheDevicesEndpointWithASignedChallengeAsABackupDevice(string identityName, string challengeName)
-    {
-        await SendRegisterDeviceCommand(identityName, challengeName, true);
-    }
-
-    private async Task SendRegisterDeviceCommand(string identityName, string challengeName, bool isBackupDevice)
     {
         var identity = _clientPool.FirstForIdentityName(identityName);
         var signedChallenge = CreateSignedChallenge(identity, _challengesContext.Challenges[challengeName]);
@@ -110,7 +113,7 @@ internal class DevicesStepDefinitions
         {
             DevicePassword = DEVICE_PASSWORD,
             SignedChallenge = signedChallenge,
-            IsBackupDevice = isBackupDevice
+            IsBackupDevice = true
         });
     }
 
