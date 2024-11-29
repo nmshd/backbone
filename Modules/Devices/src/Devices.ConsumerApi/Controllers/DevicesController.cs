@@ -44,7 +44,7 @@ public class DevicesController : ApiControllerBase
             CommunicationLanguage = request.CommunicationLanguage ?? CommunicationLanguage.DEFAULT_LANGUAGE.Value,
             SignedChallenge = request.SignedChallenge,
             DevicePassword = request.DevicePassword,
-            IsBackupDevice = request.IsBackupDevice
+            IsBackupDevice = request.IsBackupDevice ?? false
         };
 
         var response = await _mediator.Send(command, cancellationToken);
@@ -111,5 +111,5 @@ public class RegisterDeviceRequest
     public required string DevicePassword { get; set; }
     public string? CommunicationLanguage { get; set; }
     public required SignedChallengeDTO SignedChallenge { get; set; }
-    public bool IsBackupDevice { get; set; } = false;
+    public bool? IsBackupDevice { get; set; }
 }
