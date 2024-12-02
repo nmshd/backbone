@@ -1,5 +1,7 @@
 using Backbone.BuildingBlocks.Domain.Exceptions;
+using Backbone.Modules.Devices.Domain.DomainEvents.Outgoing;
 using Backbone.Modules.Devices.Domain.Entities.Identities;
+using Backbone.Tooling;
 
 namespace Backbone.Modules.Devices.Domain.Tests.Domain;
 
@@ -55,8 +57,6 @@ public class DeviceTests : AbstractTestsBase
         var identity = TestDataGenerator.CreateIdentity();
         var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
 
-        device.User = new ApplicationUser(device);
-
         // Act
         var isOnboarded = device.IsOnboarded;
 
@@ -71,8 +71,7 @@ public class DeviceTests : AbstractTestsBase
         var identity = TestDataGenerator.CreateIdentity();
         var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
 
-        device.User = new ApplicationUser(device);
-        device.User.LoginOccurred();
+        device.LoginOccurred();
 
         // Act
         var isOnboarded = device.IsOnboarded;
@@ -133,15 +132,65 @@ public class DeviceTests : AbstractTestsBase
         domainException.Code.Should().Be("error.platform.validation.device.deviceCannotBeDeleted");
     }
 
+    [Fact]
+    public void A_backup_device_can_be_marked_as_used()
+    {
+        // Arrange
+        var activeIdentity = TestDataGenerator.CreateIdentity();
+        var device = CreateBackupDevice(activeIdentity);
+
+        // Act
+        device.LoginOccurred();
+
+        // Assert
+        device.IsBackupDevice.Should().BeFalse();
+    }
+
+    [Fact]
+    public void When_a_device_logs_in_the_last_login_date_is_set()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentity();
+        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
+        var utcNow = DateTime.UtcNow;
+        SystemTime.Set(utcNow);
+
+        // Act
+        device.LoginOccurred();
+
+        // Assert
+        device.User.LastLoginAt.Should().Be(utcNow);
+    }
+
+    [Fact]
+    public void When_a_backup_device_logs_in_a_BackupDeviceUsedDomainEvent_is_raised()
+    {
+        // Arrange
+        var identity = TestDataGenerator.CreateIdentity();
+        var device = identity.AddDevice(CommunicationLanguage.DEFAULT_LANGUAGE, identity.Devices.First().Id, true);
+
+        // Act
+        device.LoginOccurred();
+
+        // Assert
+        var domainEvent = device.Should().HaveASingleDomainEvent<BackupDeviceUsedDomainEvent>();
+        domainEvent.IdentityAddress.Should().Be(identity.Address);
+    }
+
     private static Device CreateUnonboardedDevice(Identity identity)
     {
-        return identity.AddDevice(CommunicationLanguage.DEFAULT_LANGUAGE, identity.Devices.First().Id);
+        return identity.AddDevice(CommunicationLanguage.DEFAULT_LANGUAGE, identity.Devices.First().Id, false);
     }
 
     private static Device CreateOnboardedDevice(Identity identity)
     {
-        var activeDevice = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
-        activeDevice.User.LoginOccurred();
-        return activeDevice;
+        var device = new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE);
+        device.LoginOccurred();
+        return device;
+    }
+
+    private static Device CreateBackupDevice(Identity identity)
+    {
+        return new Device(identity, CommunicationLanguage.DEFAULT_LANGUAGE, null, true);
     }
 }

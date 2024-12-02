@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <root>
-    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" id="root" xmlns="">
         <xsd:element name="root" msdata:IsDataSet="true">
             
         </xsd:element>
@@ -77,5 +77,11 @@
     </data>
     <data name="TestPushNotification.Body" xml:space="preserve">
         <value>Questa è una notifica push di prova.</value>
+    </data>
+    <data name="BackupDeviceUsedPushNotification.Title" xml:space="preserve">
+        <value>Dispositivo di recupero usato</value>
+    </data>
+    <data name="BackupDeviceUsedPushNotification.Body" xml:space="preserve">
+        <value>Il dispositivo di backup è stato utilizzato.</value>
     </data>
 </root>

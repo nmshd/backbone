@@ -1,6 +1,8 @@
-﻿using Backbone.ConsumerApi.Sdk;
+﻿using Backbone.BuildingBlocks.SDK.Endpoints.Common.Types;
+using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Requests;
+using Backbone.ConsumerApi.Sdk.Endpoints.Devices.Types.Responses;
 using Backbone.ConsumerApi.Tests.Integration.Configuration;
 using Backbone.ConsumerApi.Tests.Integration.Contexts;
 using Backbone.ConsumerApi.Tests.Integration.Helpers;
@@ -23,6 +25,8 @@ internal class DevicesStepDefinitions
     private readonly ChallengesContext _challengesContext;
     private readonly ResponseContext _responseContext;
     private readonly ClientPool _clientPool;
+
+    private ApiResponse<RegisterDeviceResponse>? _registerDeviceResponse;
 
     public DevicesStepDefinitions(ChallengesContext challengesContext, ResponseContext responseContext, HttpClientFactory factory,
         IOptions<HttpConfiguration> httpConfiguration, ClientPool clientPool)
@@ -51,8 +55,17 @@ internal class DevicesStepDefinitions
     {
         var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
         _clientPool.Add(client).ForIdentity(identityName).AndDevice(onboardedDeviceName);
-        var clientForUnOnboardedDevice = await client.OnboardNewDevice("Passw0rd");
-        _clientPool.Add(clientForUnOnboardedDevice).ForIdentity(identityName).AndDevice(unonboardedDeviceName);
+        var clientForBackupDevice = await client.OnboardNewDevice("Passw0rd");
+        _clientPool.Add(clientForBackupDevice).ForIdentity(identityName).AndDevice(unonboardedDeviceName);
+    }
+
+    [Given($"an Identity {RegexFor.SINGLE_THING} with a Device {RegexFor.SINGLE_THING} and a backup Device {RegexFor.SINGLE_THING}")]
+    public async Task GivenAnIdentityWithADeviceAndABackupDevice(string identityName, string onboardedDeviceName, string backupDeviceName)
+    {
+        var client = await Client.CreateForNewIdentity(_httpClient, _clientCredentials, DEVICE_PASSWORD);
+        _clientPool.Add(client).ForIdentity(identityName).AndDevice(onboardedDeviceName);
+        var clientForBackupDevice = await client.OnboardNewBackupDevice("Passw0rd");
+        _clientPool.Add(clientForBackupDevice).ForIdentity(identityName).AndDevice(backupDeviceName);
     }
 
     [Given($"an Identity {RegexFor.SINGLE_THING} with Devices {RegexFor.LIST_OF_THINGS}")]
@@ -82,10 +95,25 @@ internal class DevicesStepDefinitions
         var identity = _clientPool.FirstForIdentityName(identityName);
         var signedChallenge = CreateSignedChallenge(identity, _challengesContext.Challenges[challengeName]);
 
-        _responseContext.WhenResponse = await identity.Devices.RegisterDevice(new RegisterDeviceRequest
+        _responseContext.WhenResponse = _registerDeviceResponse = await identity.Devices.RegisterDevice(new RegisterDeviceRequest
         {
             DevicePassword = DEVICE_PASSWORD,
-            SignedChallenge = signedChallenge
+            SignedChallenge = signedChallenge,
+            IsBackupDevice = false
+        });
+    }
+
+    [When($"{RegexFor.SINGLE_THING} sends a POST request to the /Devices endpoint with a valid signature on {RegexFor.SINGLE_THING} as a backup Device")]
+    public async Task WhenIdentitySendsAPostRequestToTheDevicesEndpointWithASignedChallengeAsABackupDevice(string identityName, string challengeName)
+    {
+        var identity = _clientPool.FirstForIdentityName(identityName);
+        var signedChallenge = CreateSignedChallenge(identity, _challengesContext.Challenges[challengeName]);
+
+        _responseContext.WhenResponse = _registerDeviceResponse = await identity.Devices.RegisterDevice(new RegisterDeviceRequest
+        {
+            DevicePassword = DEVICE_PASSWORD,
+            SignedChallenge = signedChallenge,
+            IsBackupDevice = true
         });
     }
 
@@ -172,6 +200,12 @@ internal class DevicesStepDefinitions
         var response = await client.Devices.ListDevices();
         response.Result!.Count.Should().Be(1);
         response.Result!.First().CommunicationLanguage.Should().Be(_communicationLanguage);
+    }
+
+    [Then("the created Device is a backup Device")]
+    public void ThenTheCreatedDeviceIsABackupDevice()
+    {
+        _registerDeviceResponse!.Result!.IsBackupDevice.Should().BeTrue();
     }
 
     #endregion
