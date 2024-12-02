@@ -25,7 +25,7 @@ public class SseController : ControllerBase
 
     [HttpGet("/api/v1/sse")]
     [Authorize]
-    public async Task<IActionResult> Subscribe()
+    public async Task Subscribe()
     {
         var address = _userContext.GetAddress().Value;
 
@@ -56,8 +56,7 @@ public class SseController : ControllerBase
         }
         catch (ClientAlreadyRegisteredException)
         {
-            return BadRequest(HttpError.ForProduction("error.platform.sseClientAlreadyRegistered",
-                "An SSE client for your identity is already registered. You can only register once per identity.", ""));
+            // if it is already registered, everything is fine
         }
         catch (OperationCanceledException)
         {
@@ -72,8 +71,6 @@ public class SseController : ControllerBase
             _eventQueue.Deregister(address);
             await _mediator.Send(new DeleteDeviceRegistrationCommand());
         }
-
-        return Ok();
     }
 }
 
