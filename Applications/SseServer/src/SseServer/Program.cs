@@ -13,7 +13,6 @@ using Backbone.SseServer.Extensions;
 using Backbone.Tooling.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Logging;
 using Serilog;
 using Serilog.Exceptions;
 using Serilog.Exceptions.Core;
@@ -142,9 +141,6 @@ static void Configure(WebApplication app)
             .AddCustomHeader("Strict-Transport-Security", "max-age=5184000; includeSubDomains")
             .AddCustomHeader("X-Frame-Options", "Deny")
     );
-
-    if (app.Environment.IsDevelopment())
-        IdentityModelEventSource.ShowPII = true;
 
     app.UseAuthentication().UseAuthorization();
 
