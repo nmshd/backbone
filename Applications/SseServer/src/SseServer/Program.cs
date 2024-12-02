@@ -75,7 +75,7 @@ static WebApplication CreateApp(string[] args)
         )
         .UseServiceProviderFactory(new AutofacServiceProviderFactory());
 
-    ConfigureServices(builder.Services, builder.Configuration);
+    ConfigureServices(builder.Services, builder.Configuration, builder.Environment);
 
     var app = builder.Build();
     Configure(app);
@@ -88,7 +88,7 @@ static WebApplication CreateApp(string[] args)
     return app;
 }
 
-static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+static void ConfigureServices(IServiceCollection services, IConfiguration configuration, IWebHostEnvironment environment)
 {
     services.ConfigureAndValidate<Configuration>(configuration.Bind);
 
@@ -151,8 +151,6 @@ static void Configure(WebApplication app)
     app.MapControllers();
 
     app.MapHealthChecks("/health");
-
-    app.UseResponseCaching();
 }
 
 static void LoadConfiguration(WebApplicationBuilder webApplicationBuilder, string[] strings)
