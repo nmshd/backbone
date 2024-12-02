@@ -59,6 +59,10 @@ public class SseController : ControllerBase
             return BadRequest(HttpError.ForProduction("error.platform.sseClientAlreadyRegistered",
                 "An SSE client for your identity is already registered. You can only register once per identity.", ""));
         }
+        catch (OperationCanceledException)
+        {
+            // this is expected when the client disconnects
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "An error occurred while processing the request.");
