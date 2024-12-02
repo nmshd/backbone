@@ -154,6 +154,14 @@ public class IdentitiesRepository : IIdentitiesRepository
             .ToListAsync(cancellationToken);
     }
 
+    public async Task<Identity> FindSingle(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false)
+    {
+        return await (track ? _identities : _readonlyIdentities)
+            .IncludeAll(_dbContext)
+            .Where(filter)
+            .SingleAsync(cancellationToken);
+    }
+
     public async Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken)
     {
         await _identities.Where(filter).ExecuteDeleteAsync(cancellationToken);
