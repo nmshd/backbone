@@ -48,7 +48,7 @@ internal class ChallengesStepDefinitions
 
     #region When
 
-    [When("an anonymous user sends a POST request is sent to the /Challenges endpoint")]
+    [When("an anonymous user sends a POST request to the /Challenges endpoint")]
     public async Task WhenAnAnonymousUserSendsAPostRequestIsSentToTheChallengesEndpoint()
     {
         var client = _clientPool.Anonymous;

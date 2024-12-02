@@ -95,6 +95,8 @@ public class Identity : Entity
 
     public IdentityStatus Status { get; private set; }
 
+    public bool IsGracePeriodOver => DeletionGracePeriodEndsAt != null && DeletionGracePeriodEndsAt < SystemTime.UtcNow;
+
     public bool IsNew()
     {
         return Devices.Count < 1;
@@ -278,16 +280,6 @@ public class Identity : Entity
         return DeletionProcesses.FirstOrDefault(x => x.Status == deletionProcessStatus);
     }
 
-    public static Expression<Func<Identity, bool>> HasAddress(IdentityAddress address)
-    {
-        return i => i.Address == address.ToString();
-    }
-
-    public static Expression<Func<Identity, bool>> IsReadyForDeletion()
-    {
-        return i => i.Status == IdentityStatus.ToBeDeleted && i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow;
-    }
-
     public IdentityDeletionProcess CancelDeletionProcessAsOwner(IdentityDeletionProcessId deletionProcessId, DeviceId cancelledByDeviceId)
     {
         EnsureIdentityOwnsDevice(cancelledByDeviceId);
@@ -329,6 +321,25 @@ public class Identity : Entity
     {
         return new Identity("test", address, publicKey, tierId, 1, CommunicationLanguage.DEFAULT_LANGUAGE, username);
     }
+
+    #region Expressions
+
+    public static Expression<Func<Identity, bool>> HasAddress(IdentityAddress address)
+    {
+        return i => i.Address == address.ToString();
+    }
+
+    public static Expression<Func<Identity, bool>> IsReadyForDeletion()
+    {
+        return i => i.Status == IdentityStatus.ToBeDeleted && i.DeletionGracePeriodEndsAt != null && i.DeletionGracePeriodEndsAt < SystemTime.UtcNow;
+    }
+
+    public static Expression<Func<Identity, bool>> HasUser(string username)
+    {
+        return i => i.Devices.Any(d => d.User.UserName == username);
+    }
+
+    #endregion
 }
 
 public enum DeletionProcessStatus

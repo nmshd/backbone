@@ -16,6 +16,7 @@ public interface IIdentitiesRepository
     Task<IEnumerable<Identity>> FindAllWithDeletionProcessInStatus(DeletionProcessStatus status, CancellationToken cancellationToken, bool track = false);
     Task<int> CountByClientId(string clientId, CancellationToken cancellationToken);
     Task<IEnumerable<Identity>> Find(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false);
+    Task<Identity> FindSingle(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken, bool track = false);
     Task Delete(Expression<Func<Identity, bool>> filter, CancellationToken cancellationToken);
 
     Task Add(Identity identity, string password);
@@ -36,8 +37,12 @@ public interface IIdentitiesRepository
 
     #region Deletion Process Audit Logs
 
-    Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogsByAddress(byte[] identityAddressHash, CancellationToken cancellationToken);
+    Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogs(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter,
+        CancellationToken cancellationToken, bool track = false);
+
     Task AddDeletionProcessAuditLogEntry(IdentityDeletionProcessAuditLogEntry auditLogEntry);
+
+    Task Update(IEnumerable<IdentityDeletionProcessAuditLogEntry> auditLogEntries, CancellationToken cancellationToken);
 
     #endregion
 }

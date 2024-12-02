@@ -131,10 +131,9 @@ public class DeletionProcessApprovalReminderTests : AbstractTestsBase
         return new Identity("", address, [], TierId.Generate(), 1, CommunicationLanguage.DEFAULT_LANGUAGE);
     }
 
-    [Fact]
     public override void Dispose()
     {
-        Hasher.Reset();
         base.Dispose();
+        Hasher.Reset();
     }
 }
