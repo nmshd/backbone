@@ -41,7 +41,7 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
 
-        <PackageReference Include="FluentAssertions" Version="6.12.2" />
+        <PackageReference Include="FluentAssertions" Version="7.0.0" />
 
         <Using Include="FluentAssertions" />
         <Using Include="Backbone.UnitTestTools.BaseClasses" />
@@ -51,7 +51,7 @@
     </ItemGroup>
 
     <ItemGroup Condition="$(MSBuildProjectName.EndsWith('Tests'))">
-        <PackageReference Include="FluentAssertions" Version="6.12.2" />
+        <PackageReference Include="FluentAssertions" Version="7.0.0" />
         <PackageReference Include="GitHubActionsTestLogger" Version="2.4.1">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
