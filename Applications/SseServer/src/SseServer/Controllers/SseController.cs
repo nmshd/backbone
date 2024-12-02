@@ -1,5 +1,4 @@
-﻿using Backbone.BuildingBlocks.API;
-using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
+﻿using Backbone.BuildingBlocks.Application.Abstractions.Infrastructure.UserContext;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.DeleteDeviceRegistration;
 using Backbone.Modules.Devices.Application.PushNotifications.Commands.UpdateDeviceRegistration;
 using MediatR;
@@ -25,7 +24,7 @@ public class SseController : ControllerBase
 
     [HttpGet("/api/v1/sse")]
     [Authorize]
-    public async Task Subscribe()
+    public async Task Subscribe(CancellationToken cancellationToken)
     {
         var address = _userContext.GetAddress().Value;
 
@@ -34,7 +33,7 @@ public class SseController : ControllerBase
             Handle = "sse-handle", // this is just some dummy value; the SSE connector doesn't use it
             AppId = "sse-client", // this is just some dummy value; the SSE connector doesn't use it
             Platform = "sse"
-        });
+        }, cancellationToken);
 
         Response.StatusCode = 200;
         Response.Headers.CacheControl = "no-cache";
@@ -69,7 +68,8 @@ public class SseController : ControllerBase
         finally
         {
             _eventQueue.Deregister(address);
-            await _mediator.Send(new DeleteDeviceRegistrationCommand());
+            // we must NOT pass the cancellation token here, because otherwise the device registration would not be deleted in case the request was cancelled
+            await _mediator.Send(new DeleteDeviceRegistrationCommand(), CancellationToken.None);
         }
     }
 }
