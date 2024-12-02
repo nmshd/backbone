@@ -102,9 +102,9 @@ public class Identity : Entity
         return Devices.Count < 1;
     }
 
-    public Device AddDevice(CommunicationLanguage communicationLanguage, DeviceId createdByDevice)
+    public Device AddDevice(CommunicationLanguage communicationLanguage, DeviceId createdByDevice, bool isBackupDevice)
     {
-        var newDevice = new Device(this, communicationLanguage, createdByDevice);
+        var newDevice = new Device(this, communicationLanguage, createdByDevice, isBackupDevice);
         Devices.Add(newDevice);
         return newDevice;
     }

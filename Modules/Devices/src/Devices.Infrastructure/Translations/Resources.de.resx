@@ -78,4 +78,10 @@
     <data name="TestPushNotification.Title" xml:space="preserve">
         <value>Test</value>
     </data>
+    <data name="BackupDeviceUsedPushNotification.Title" xml:space="preserve">
+        <value>Wiederherstellungsgerät benutzt</value>
+    </data>
+    <data name="BackupDeviceUsedPushNotification.Body" xml:space="preserve">
+        <value>Ihr Wiederherstellungsgerät wurde benutzt.</value>
+    </data>
 </root>

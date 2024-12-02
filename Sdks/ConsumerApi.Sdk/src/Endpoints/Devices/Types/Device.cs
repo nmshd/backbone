@@ -8,6 +8,7 @@ public class Device
     public required string CreatedByDevice { get; set; }
     public required LastLoginInformation LastLogin { get; set; }
     public required string CommunicationLanguage { get; set; }
+    public required bool IsBackupDevice { get; set; }
 }
 
 public class LastLoginInformation

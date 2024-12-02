@@ -53,6 +53,14 @@ public class IdentitiesRepository : IIdentitiesRepository
             .ToArrayAsync(cancellationToken);
     }
 
+    public async Task<bool> HasBackupDevice(IdentityAddress identity, CancellationToken cancellationToken)
+    {
+        return await _readonlyDevices
+            .OfIdentity(identity)
+            .Where(Device.IsBackup)
+            .AnyAsync(cancellationToken);
+    }
+
     public async Task<IEnumerable<IdentityDeletionProcessAuditLogEntry>> GetIdentityDeletionProcessAuditLogs(Expression<Func<IdentityDeletionProcessAuditLogEntry, bool>> filter,
         CancellationToken cancellationToken, bool track = false)
     {

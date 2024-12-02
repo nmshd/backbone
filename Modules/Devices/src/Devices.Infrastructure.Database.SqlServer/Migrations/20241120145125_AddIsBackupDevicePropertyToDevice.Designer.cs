@@ -4,6 +4,7 @@ using Backbone.Modules.Devices.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
 {
     [DbContext(typeof(DevicesDbContext))]
-    partial class DevicesDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241120145125_AddIsBackupDevicePropertyToDevice")]
+    partial class AddIsBackupDevicePropertyToDevice
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -398,14 +401,11 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.SqlServer.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("NewStatus")
+                    b.Property<int>("NewStatus")
                         .HasColumnType("int");
 
                     b.Property<int?>("OldStatus")
                         .HasColumnType("int");
-
-                    b.PrimitiveCollection<string>("UsernameHashesBase64")
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 

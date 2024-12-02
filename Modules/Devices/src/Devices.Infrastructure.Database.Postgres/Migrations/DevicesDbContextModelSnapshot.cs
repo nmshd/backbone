@@ -222,6 +222,9 @@ namespace Backbone.Modules.Devices.Infrastructure.Database.Postgres.Migrations
                         .HasColumnType("character varying(80)")
                         .IsFixedLength(false);
 
+                    b.Property<bool>("IsBackupDevice")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
 
                     b.HasIndex("IdentityAddress");
