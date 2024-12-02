@@ -13,6 +13,7 @@ using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcess
 using Backbone.Modules.Devices.Application.Identities.Queries.GetDeletionProcessesAsOwner;
 using Backbone.Modules.Devices.Application.Identities.Queries.GetOwnIdentity;
 using Backbone.Modules.Devices.Application.Identities.Queries.IsIdentityOfUserDeleted;
+using Backbone.Modules.Devices.Domain.Entities.Identities;
 using Backbone.Modules.Devices.Infrastructure.OpenIddict;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -53,7 +54,7 @@ public class IdentitiesController : ApiControllerBase
             DevicePassword = request.DevicePassword,
             IdentityPublicKey = request.IdentityPublicKey,
             IdentityVersion = request.IdentityVersion,
-            CommunicationLanguage = request.DeviceCommunicationLanguage ?? "en",
+            CommunicationLanguage = request.DeviceCommunicationLanguage ?? CommunicationLanguage.DEFAULT_LANGUAGE.Value,
             SignedChallenge = new SignedChallengeDTO
             {
                 Challenge = request.SignedChallenge.Challenge,

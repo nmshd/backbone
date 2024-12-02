@@ -25,8 +25,6 @@ public class DevicesDbContextSeeder : IDbSeeder<DevicesDbContext>
 
     private async Task SeedEverything(DevicesDbContext context)
     {
-        await context.Database.EnsureCreatedAsync();
-
         await SeedBasicTier(context);
         await SeedQueuedForDeletionTier();
         await SeedApplicationUsers();

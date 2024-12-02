@@ -3,9 +3,11 @@ using Backbone.Modules.Challenges.Application.Extensions;
 using Backbone.Modules.Challenges.Application.Infrastructure.Persistence.Repository;
 using Backbone.Modules.Challenges.Domain.Entities;
 using Backbone.Modules.Challenges.Domain.Ids;
+using Backbone.Modules.Challenges.Infrastructure.Persistence.Database;
 using Microsoft.EntityFrameworkCore;
 
-namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Database.Repository;
+namespace Backbone.Modules.Challenges.Infrastructure.Persistence.Repository;
+
 public class ChallengesRepository : IChallengesRepository
 {
     private readonly DbSet<Challenge> _challenges;
@@ -16,6 +18,7 @@ public class ChallengesRepository : IChallengesRepository
         _challenges = dbContext.Challenges;
         _dbContext = dbContext;
     }
+
     public async Task<Challenge> Find(ChallengeId id, CancellationToken cancellationToken)
     {
         return await _challenges

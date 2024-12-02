@@ -14,6 +14,7 @@ DROP SCHEMA "Tokens" cascade;
 DROP SCHEMA "Quotas" cascade;
 */
 
+CREATE SCHEMA IF NOT EXISTS "Announcements";
 CREATE SCHEMA IF NOT EXISTS "Challenges";
 CREATE SCHEMA IF NOT EXISTS "Devices";
 CREATE SCHEMA IF NOT EXISTS "Files";
@@ -34,6 +35,16 @@ BEGIN
    IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'nmshdAdmin') THEN
       CREATE USER "nmshdAdmin" WITH password 'Passw0rd';
       RAISE NOTICE 'User "nmshdAdmin" created';
+   END IF;
+END
+$$;
+
+DO
+$$
+BEGIN
+   IF NOT EXISTS (SELECT usename FROM pg_user WHERE usename = 'announcements') THEN
+      CREATE USER "announcements" WITH password 'Passw0rd';
+      RAISE NOTICE 'User "announcements" created';
    END IF;
 END
 $$;
@@ -130,6 +141,7 @@ $$;
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Authorizations +++++++++++++++++++++++++++++++++++++++++++++++++*/
 
+GRANT USAGE ON SCHEMA "Announcements" TO announcements;
 GRANT USAGE ON SCHEMA "Challenges" TO challenges;
 GRANT USAGE ON SCHEMA "Devices" TO devices;
 GRANT USAGE ON SCHEMA "Files" TO files;
@@ -140,6 +152,7 @@ GRANT USAGE ON SCHEMA "Synchronization" TO synchronization;
 GRANT USAGE ON SCHEMA "Tokens" TO tokens;
 GRANT USAGE ON SCHEMA "AdminUi" TO "adminUi";
 
+ALTER DEFAULT PRIVILEGES IN SCHEMA "Announcements" GRANT ALL ON TABLES TO announcements;
 ALTER DEFAULT PRIVILEGES IN SCHEMA "Challenges" GRANT ALL ON TABLES TO challenges;
 ALTER DEFAULT PRIVILEGES IN SCHEMA "Devices" GRANT ALL ON TABLES TO devices;
 ALTER DEFAULT PRIVILEGES IN SCHEMA "Files" GRANT ALL ON TABLES TO files;
@@ -226,6 +239,13 @@ GRANT USAGE ON SCHEMA "Tokens" TO quotas;
 GRANT SELECT ON ALL TABLES IN SCHEMA "Tokens" TO quotas;
 ALTER DEFAULT PRIVILEGES IN SCHEMA "Tokens" GRANT SELECT ON TABLES TO quotas;
 
+CREATE TABLE IF NOT EXISTS "Announcements"."__EFMigrationsHistory"
+(
+    "MigrationId" character varying(150) COLLATE pg_catalog."default" NOT NULL,
+    "ProductVersion" character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT "PK___EFMigrationsHistory" PRIMARY KEY ("MigrationId")
+);
+ALTER TABLE IF EXISTS "Announcements"."__EFMigrationsHistory" OWNER to announcements;
 
 CREATE TABLE IF NOT EXISTS "Challenges"."__EFMigrationsHistory"
 (
@@ -301,7 +321,8 @@ ALTER TABLE IF EXISTS "AdminUi"."__EFMigrationsHistory" OWNER to "adminUi";
 
 /*+++++++++++++++++++++++++++++++++++++++++++++++++ Schema Owners ++++++++++++++++++++++++++++++++++++++++++++++++++*/
 
-GRANT challenges TO "nmshdAdmin";;
+GRANT challenges TO "announcements";
+GRANT challenges TO "nmshdAdmin";
 GRANT devices TO "nmshdAdmin";
 GRANT messages TO "nmshdAdmin";
 GRANT synchronization TO "nmshdAdmin";
