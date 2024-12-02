@@ -105,4 +105,10 @@ public class RejectDeletionProcessTests : AbstractTestsBase
         identity.StartDeletionProcessAsSupport();
         return identity;
     }
+
+    public override void Dispose()
+    {
+        base.Dispose();
+        Hasher.Reset();
+    }
 }
