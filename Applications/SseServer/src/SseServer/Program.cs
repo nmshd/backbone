@@ -117,6 +117,8 @@ static void ConfigureServices(IServiceCollection services, IConfiguration config
         options.KnownProxies.Clear();
     });
 
+    services.AddCustomIdentity(environment);
+
     services.AddPushNotifications(parsedConfiguration.Modules.Devices.Infrastructure.PushNotifications);
 }
 
