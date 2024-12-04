@@ -79,10 +79,21 @@ public class RelationshipTemplatesRepository : IRelationshipTemplatesRepository
         return templates;
     }
 
+    public async Task<IEnumerable<RelationshipTemplate>> FindTemplates(Expression<Func<RelationshipTemplate, bool>> filter, CancellationToken cancellationToken)
+    {
+        return await _templates.Where(filter).ToListAsync(cancellationToken);
+    }
+
     public async Task Update(RelationshipTemplate template)
     {
         _templates.Update(template);
         await _dbContext.SaveChangesAsync();
+    }
+
+    public async Task Update(IEnumerable<RelationshipTemplate> templates, CancellationToken cancellationToken)
+    {
+        _templates.UpdateRange(templates);
+        await _dbContext.SaveChangesAsync(cancellationToken);
     }
 
     public async Task<IEnumerable<RelationshipTemplateAllocation>> FindRelationshipTemplateAllocations(Expression<Func<RelationshipTemplateAllocation, bool>> filter,
