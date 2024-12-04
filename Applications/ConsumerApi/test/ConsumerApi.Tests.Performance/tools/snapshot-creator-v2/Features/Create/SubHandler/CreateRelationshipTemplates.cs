@@ -12,7 +12,6 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 public abstract record CreateRelationshipTemplates
 {
     public record Command(
-        CreateSnapshot.PerformanceLoadTest LoadTag,
         List<DomainIdentity> Identities,
         string BaseUrlAddress,
         ClientCredentials ClientCredentials) : IRequest<Unit>;
@@ -23,7 +22,7 @@ public abstract record CreateRelationshipTemplates
         private int _numberOfCreatedRelationshipTemplates;
         private int _totalRelationshipTemplates;
         private readonly Lock _lockObj = new();
-        private SemaphoreSlim _semaphoreSlim = null!;
+        private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
 
         public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
         {
@@ -33,17 +32,6 @@ public abstract record CreateRelationshipTemplates
 
             _totalRelationshipTemplates = identitiesWithRelationshipTemplates.Sum(i => i.NumberOfRelationshipTemplates);
             _numberOfCreatedRelationshipTemplates = 0;
-
-
-            var maxDegreeOfParallelism = request.LoadTag switch
-            {
-                CreateSnapshot.PerformanceLoadTest.Low => Environment.ProcessorCount,
-                CreateSnapshot.PerformanceLoadTest.Medium => Environment.ProcessorCount,
-                CreateSnapshot.PerformanceLoadTest.High => Environment.ProcessorCount / 2,
-                _ => Environment.ProcessorCount / 2
-            };
-
-            _semaphoreSlim = new SemaphoreSlim(maxDegreeOfParallelism);
 
             var tasks = identitiesWithRelationshipTemplates
                 .Select(identityWithRelationshipTemplate => ExecuteCreateRelationshipTemplates(request, identityWithRelationshipTemplate))

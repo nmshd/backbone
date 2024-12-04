@@ -11,7 +11,6 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 public abstract record CreateIdentities
 {
     public record Command(
-        CreateSnapshot.PerformanceLoadTest LoadTag,
         List<IdentityPoolConfiguration> IdentityPoolConfigurations,
         string BaseUrlAddress,
         ClientCredentials ClientCredentials) : IRequest<List<DomainIdentity>>;
@@ -22,21 +21,11 @@ public abstract record CreateIdentities
         private int _numberOfCreatedIdentities;
         private int _totalIdentities;
         private readonly Lock _lockObj = new();
-        private SemaphoreSlim _semaphoreSlim = null!;
+        private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
 
         public async Task<List<DomainIdentity>> Handle(Command request, CancellationToken cancellationToken)
         {
             var identities = new List<DomainIdentity>();
-
-            var maxDegreeOfParallelism = request.LoadTag switch
-            {
-                CreateSnapshot.PerformanceLoadTest.Low => Environment.ProcessorCount,
-                CreateSnapshot.PerformanceLoadTest.Medium => Environment.ProcessorCount,
-                CreateSnapshot.PerformanceLoadTest.High => Environment.ProcessorCount / 2,
-                _ => Environment.ProcessorCount / 2
-            };
-
-            _semaphoreSlim = new SemaphoreSlim(maxDegreeOfParallelism);
 
             var identityConfigurations = request.IdentityPoolConfigurations
                 .SelectMany(identityPoolConfiguration => identityPoolConfiguration.Identities)
