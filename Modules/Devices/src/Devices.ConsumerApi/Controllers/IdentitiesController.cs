@@ -70,9 +70,10 @@ public class IdentitiesController : ApiControllerBase
     [HttpPost("Self/DeletionProcesses")]
     [ProducesResponseType(typeof(HttpResponseEnvelopeResult<StartDeletionProcessAsOwnerResponse>), StatusCodes.Status201Created)]
     [ProducesError(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> StartDeletionProcess(CancellationToken cancellationToken)
+    public async Task<IActionResult> StartDeletionProcess(StartDeletionProcessAsOwnerCommand? request, CancellationToken cancellationToken)
     {
-        var response = await _mediator.Send(new StartDeletionProcessAsOwnerCommand(), cancellationToken);
+        request ??= new StartDeletionProcessAsOwnerCommand();
+        var response = await _mediator.Send(request, cancellationToken);
         return Created("", response);
     }
 
