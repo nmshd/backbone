@@ -1,12 +1,10 @@
 ﻿using System.Diagnostics;
-using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
-using Backbone.Tooling;
 using Microsoft.Extensions.Logging;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 
-public class DeviceFactory(ILogger<DeviceFactory> logger) : IDeviceFactory
+public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiClient consumerApiClient) : IDeviceFactory
 {
     private int _numberOfCreatedDevices;
     public int TotalNumberOfDevices { get; set; }
@@ -47,11 +45,11 @@ public class DeviceFactory(ILogger<DeviceFactory> logger) : IDeviceFactory
         }
     }
 
-    private async Task<List<string>> CreateDevices(CreateDevices.Command request, DomainIdentity identity)
+    internal async Task<List<string>> CreateDevices(CreateDevices.Command request, DomainIdentity identity)
     {
         List<string> deviceIds = [];
 
-        var sdkClient = Client.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials, identity.IdentityData);
+        var sdkClient = consumerApiClient.CreateForExistingIdentity(request, identity);
 
         if (identity.DeviceIds.Count == 1)
         {
@@ -61,22 +59,12 @@ public class DeviceFactory(ILogger<DeviceFactory> logger) : IDeviceFactory
 
         for (var i = 1; i < identity.NumberOfDevices; i++)
         {
-            var newDeviceId = await OnBoardNewDevice(identity, sdkClient);
+            var newDeviceId = await consumerApiClient.OnBoardNewDevice(identity, sdkClient);
 
             deviceIds.Add(newDeviceId);
         }
 
         identity.AddDevices(deviceIds);
         return deviceIds;
-    }
-
-    public async Task<string> OnBoardNewDevice(DomainIdentity identity, Client sdkClient)
-    {
-        var newDevice = await sdkClient.OnboardNewDevice(PasswordHelper.GeneratePassword(18, 24));
-
-        return newDevice.DeviceData is null
-            ? throw new InvalidOperationException(
-                $"The SDK could not be used to create a new database Device for config {identity.IdentityAddress}/{identity.ConfigurationIdentityAddress}/{identity.PoolAlias} {IDENTITY_LOG_SUFFIX}")
-            : newDevice.DeviceData.DeviceId;
     }
 }

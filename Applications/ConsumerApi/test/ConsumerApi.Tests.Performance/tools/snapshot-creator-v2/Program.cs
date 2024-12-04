@@ -48,6 +48,7 @@ public class Program
                     services.AddSingleton<IOutputHelper, OutputHelper>();
                     services.AddSingleton<IExcelWriter, ExcelWriter>();
 
+                    services.AddSingleton<IConsumerApiClient, ConsumerApiClient>();
                     services.AddTransient<IIdentityFactory, IdentityFactory>();
                     services.AddTransient<IDeviceFactory, DeviceFactory>();
                 });
