@@ -30,115 +30,19 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
 
                 #region Attempt 1: Try find a connector identity for that app identity that has not established a relationship yet
 
-                IdentityConfiguration? recipientConnectorIdentity = null;
-                foreach (var connectorIdentity in availableConnectorIdentities)
-                {
-                    var hasRelationship = appIdentity.RelationshipAndMessages
-                        .Any(rm =>
-                            rm.RecipientPoolAlias == connectorIdentity.PoolAlias &&
-                            rm.RecipientIdentityAddress == connectorIdentity.Address);
-
-                    if (hasRelationship)
-                    {
-                        continue;
-                    }
-
-                    if (!connectorIdentity.HasAvailableRelationships)
-                    {
-                        continue;
-                    }
-
-                    recipientConnectorIdentity = connectorIdentity;
-                    break;
-                }
+                var recipientConnectorIdentity = TryFindConnectorIdentityForThatAppIdentity(availableConnectorIdentities, appIdentity);
 
                 #endregion
 
                 if (recipientConnectorIdentity == null)
                 {
-                    #region Attempt 2: Try find another connector identity for that app identity and try to move an existing app identities relationship to another connector identity
-
-                    var connectorIdentitiesThatCurrentAppIdentityHasNoRelationshipWith = connectorIdentities
-                        .Where(c => !c.RelationshipAndMessages.Any(crm =>
-                            crm.RecipientPoolAlias == appIdentity.PoolAlias &&
-                            crm.RecipientIdentityAddress == appIdentity.Address))
-                        .ToList();
-
-                    if (connectorIdentitiesThatCurrentAppIdentityHasNoRelationshipWith.Count == 0)
-                    {
-                        throw new InvalidOperationException(
-                            $"No further recipient identity available to establish a relationship to sender identity Address: {appIdentity.Address} of {appIdentity.PoolAlias}.");
-                    }
-
-                    foreach (var connectorIdentity in connectorIdentitiesThatCurrentAppIdentityHasNoRelationshipWith)
-                    {
-                        if (recipientConnectorIdentity != null)
-                        {
-                            break;
-                        }
-
-                        RelationshipAndMessages[] removeableRelationships = [.. connectorIdentity.RelationshipAndMessages];
-
-                        foreach (var reverseRelationship in removeableRelationships)
-                        {
-                            #region Remove the relationship and retrieve appIdentityWithRelationship that has a relationship with current connector identity
-
-                            connectorIdentity.RelationshipAndMessages.Remove(reverseRelationship);
-                            connectorIdentity.IncrementAvailableRelationships();
-
-                            var appIdentityWithRelationship = appIdentities.First(ai =>
-                                ai.PoolAlias == reverseRelationship.RecipientPoolAlias &&
-                                ai.Address == reverseRelationship.RecipientIdentityAddress);
-
-                            var relationship = appIdentityWithRelationship.RelationshipAndMessages.First(rm =>
-                                rm.RecipientPoolAlias == connectorIdentity.PoolAlias &&
-                                rm.RecipientIdentityAddress == connectorIdentity.Address);
-
-                            appIdentityWithRelationship.RelationshipAndMessages.Remove(relationship);
-                            appIdentityWithRelationship.IncrementAvailableRelationships();
-
-                            #endregion
-
-                            #region Can appIdentityWithRelationship establish a relationship with any other connector identity?
-
-                            var connectorIdentitiesExceptCurrentOne = connectorIdentities.Except([connectorIdentity]).ToList();
-
-                            var availableConnectorIdentitiesForAppIdentityWithRelationship = connectorIdentitiesExceptCurrentOne
-                                .Where(c => c.HasAvailableRelationships)
-                                .Where(c => !c.RelationshipAndMessages.Any(crm =>
-                                    crm.RecipientPoolAlias == appIdentityWithRelationship.PoolAlias &&
-                                    crm.RecipientIdentityAddress == appIdentityWithRelationship.Address))
-                                .ToList();
-
-                            if (availableConnectorIdentitiesForAppIdentityWithRelationship.Count == 0)
-                            {
-                                appIdentityWithRelationship.RelationshipAndMessages.Add(relationship);
-                                connectorIdentity.RelationshipAndMessages.Add(reverseRelationship);
-                                continue;
-                            }
-
-                            #endregion
-
-                            #region Create a new Relationship for appIdentityWithRelationship
-
-                            var newRecipientConnectorIdentity = availableConnectorIdentitiesForAppIdentityWithRelationship.First();
-                            CreateRelationship(appIdentityWithRelationship, newRecipientConnectorIdentity);
-
-                            #endregion
-
-                            recipientConnectorIdentity = connectorIdentity;
-                            break;
-                        }
-                    }
-
+                    recipientConnectorIdentity = TryFindAnotherConnectorIdentityForThatAppIdentity(connectorIdentities, appIdentity, recipientConnectorIdentity, appIdentities);
 
                     if (recipientConnectorIdentity is null)
                     {
                         throw new InvalidOperationException(
                             $"No further recipient identity available to establish a relationship to sender identity Address: {appIdentity.Address} of {appIdentity.PoolAlias}.");
                     }
-
-                    #endregion
                 }
 
                 CreateRelationship(appIdentity, recipientConnectorIdentity);
@@ -161,6 +65,123 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
 
 
         return relationshipAndMessagesList;
+    }
+
+    private static IdentityConfiguration? TryFindConnectorIdentityForThatAppIdentity(List<IdentityConfiguration> availableConnectorIdentities,
+        IdentityConfiguration appIdentity)
+    {
+        IdentityConfiguration? recipientConnectorIdentity = null;
+        foreach (var connectorIdentity in availableConnectorIdentities)
+        {
+            var hasRelationship = appIdentity.RelationshipAndMessages
+                .Any(rm =>
+                    rm.RecipientPoolAlias == connectorIdentity.PoolAlias &&
+                    rm.RecipientIdentityAddress == connectorIdentity.Address);
+
+            if (hasRelationship)
+            {
+                continue;
+            }
+
+            if (!connectorIdentity.HasAvailableRelationships)
+            {
+                continue;
+            }
+
+            recipientConnectorIdentity = connectorIdentity;
+            break;
+        }
+
+        return recipientConnectorIdentity;
+    }
+
+    private static IdentityConfiguration? TryFindAnotherConnectorIdentityForThatAppIdentity(List<IdentityConfiguration> connectorIdentities,
+        IdentityConfiguration appIdentity, IdentityConfiguration? recipientConnectorIdentity, List<IdentityConfiguration> appIdentities)
+    {
+        var connectorIdentitiesThatCurrentAppIdentityHasNoRelationshipWith = connectorIdentities
+            .Where(c => !c.RelationshipAndMessages.Any(crm =>
+                crm.RecipientPoolAlias == appIdentity.PoolAlias &&
+                crm.RecipientIdentityAddress == appIdentity.Address))
+            .ToList();
+
+        if (connectorIdentitiesThatCurrentAppIdentityHasNoRelationshipWith.Count == 0)
+        {
+            throw new InvalidOperationException(
+                $"No further recipient identity available to establish a relationship to sender identity Address: {appIdentity.Address} of {appIdentity.PoolAlias}.");
+        }
+
+        foreach (var connectorIdentity in connectorIdentitiesThatCurrentAppIdentityHasNoRelationshipWith)
+        {
+            if (recipientConnectorIdentity != null)
+            {
+                break;
+            }
+
+            RelationshipAndMessages[] removeableRelationships = [.. connectorIdentity.RelationshipAndMessages];
+
+            foreach (var reverseRelationship in removeableRelationships)
+            {
+                var (identityConfiguration, relationshipAndMessages) = RemoveRelationshipFromAppIdentity(connectorIdentity, reverseRelationship, appIdentities);
+
+                var availableConnectorIdentitiesForAppIdentityWithRelationship =
+                    AvailableConnectorIdentitiesForAppIdentityWithRelationship(connectorIdentities, connectorIdentity, identityConfiguration);
+
+                if (availableConnectorIdentitiesForAppIdentityWithRelationship.Count == 0)
+                {
+                    identityConfiguration.RelationshipAndMessages.Add(relationshipAndMessages);
+                    connectorIdentity.RelationshipAndMessages.Add(reverseRelationship);
+                    continue;
+                }
+
+                CreateNewRelationshipForAppIdentity(availableConnectorIdentitiesForAppIdentityWithRelationship, identityConfiguration);
+
+                recipientConnectorIdentity = connectorIdentity;
+                break;
+            }
+        }
+
+        return recipientConnectorIdentity;
+    }
+
+    private static List<IdentityConfiguration> AvailableConnectorIdentitiesForAppIdentityWithRelationship(List<IdentityConfiguration> connectorIdentities,
+        IdentityConfiguration connectorIdentity, IdentityConfiguration identityConfiguration)
+    {
+        var connectorIdentitiesExceptCurrentOne = connectorIdentities.Except([connectorIdentity]).ToList();
+
+        var availableConnectorIdentitiesForAppIdentityWithRelationship = connectorIdentitiesExceptCurrentOne
+            .Where(c => c.HasAvailableRelationships)
+            .Where(c => !c.RelationshipAndMessages.Any(crm =>
+                crm.RecipientPoolAlias == identityConfiguration.PoolAlias &&
+                crm.RecipientIdentityAddress == identityConfiguration.Address))
+            .ToList();
+        return availableConnectorIdentitiesForAppIdentityWithRelationship;
+    }
+
+
+    private static (IdentityConfiguration identityConfiguration, RelationshipAndMessages relationshipAndMessages) RemoveRelationshipFromAppIdentity(IdentityConfiguration connectorIdentity,
+        RelationshipAndMessages reverseRelationship, List<IdentityConfiguration> appIdentities)
+    {
+        connectorIdentity.RelationshipAndMessages.Remove(reverseRelationship);
+        connectorIdentity.IncrementAvailableRelationships();
+
+        var appIdentityWithRelationship = appIdentities.First(ai =>
+            ai.PoolAlias == reverseRelationship.RecipientPoolAlias &&
+            ai.Address == reverseRelationship.RecipientIdentityAddress);
+
+        var relationship = appIdentityWithRelationship.RelationshipAndMessages.First(rm =>
+            rm.RecipientPoolAlias == connectorIdentity.PoolAlias &&
+            rm.RecipientIdentityAddress == connectorIdentity.Address);
+
+        appIdentityWithRelationship.RelationshipAndMessages.Remove(relationship);
+        appIdentityWithRelationship.IncrementAvailableRelationships();
+        return (appIdentityWithRelationship, relationship);
+    }
+
+    private static void CreateNewRelationshipForAppIdentity(List<IdentityConfiguration> availableConnectorIdentitiesForAppIdentityWithRelationship,
+        IdentityConfiguration appIdentityWithRelationship)
+    {
+        var newRecipientConnectorIdentity = availableConnectorIdentitiesForAppIdentityWithRelationship.First();
+        CreateRelationship(appIdentityWithRelationship, newRecipientConnectorIdentity);
     }
 
     private static void CreateRelationship(IdentityConfiguration senderIdentity, IdentityConfiguration recipientIdentity)

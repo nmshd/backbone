@@ -2,15 +2,15 @@
   "profiles": {
     "SnapshotCreator.V2 - verify-config test": {
       "commandName": "Project",
-      "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet test --pool-config .\\Config\\pool-config.test.json"
+      "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet test --pool-config .\\Config\\PoolConfig-TEST\\pool-config.test.json"
     },
     "SnapshotCreator.V2 - verify-config light": {
       "commandName": "Project",
-      "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet light --pool-config .\\Config\\pool-config.light.json"
+      "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet light --pool-config .\\Config\\PoolConfig-LIGHT\\pool-config.light.json"
     },
     "SnapshotCreator.V2 - verify-config heavy": {
       "commandName": "Project",
-      "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy --pool-config .\\Config\\pool-config.heavy.json"
+      "commandLineArgs": "verify-config --source .\\Config\\PerformanceTestData.xlsx --worksheet heavy --pool-config .\\Config\\PoolConfig-HEAVY\\pool-config.heavy.json"
     },
     "SnapshotCreator.V2 - generate-config test": {
       "commandName": "Project",
@@ -38,25 +38,13 @@
     },
     "SnapshotCreator.V2 - create-snapshot test": {
       "commandName": "Project",
-      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\pool-config.test.json"
+      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\PoolConfig-TEST\\pool-config.test.json"
     },
     "SnapshotCreator.V2 - create-snapshot light": {
       "commandName": "Project",
-      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\pool-config.light.json"
-    },
-    "SnapshotCreator.V2 - create-snapshot heavy": {
-      "commandName": "Project",
-      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\pool-config.heavy.json"
-    },
-    "SnapshotCreator.V2 - create-snapshot test (PoolConfig-TEST)": {
-      "commandName": "Project",
-      "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\PoolConfig-TEST\\pool-config.test.json"
-    },
-    "SnapshotCreator.V2 - create-snapshot light (PoolConfig-LIGHT)": {
-      "commandName": "Project",
       "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\PoolConfig-LIGHT\\pool-config.light.json"
     },
-    "SnapshotCreator.V2 - create-snapshot heavy (PoolConfig-HEAVY)": {
+    "SnapshotCreator.V2 - create-snapshot heavy": {
       "commandName": "Project",
       "commandLineArgs": "create-snapshot --baseAddress http://localhost:8081 --clientId test --clientSecret test --pool-config .\\Config\\PoolConfig-HEAVY\\pool-config.heavy.json"
     }
