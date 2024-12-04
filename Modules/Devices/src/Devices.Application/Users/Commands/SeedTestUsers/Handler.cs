@@ -28,7 +28,7 @@ public class Handler : IRequestHandler<SeedTestUsersCommand>
         _basicTier = (await _tiersRepository.FindBasicTier(cancellationToken))!;
 
         await CreateIdentityIfNecessary([1, 1, 1, 1, 1], "USRa", "Aaaaaaaa1!");
-        await CreateIdentityIfNecessary([1, 1, 1, 1, 1], "USRa", "Bbbbbbbb1!");
+        await CreateIdentityIfNecessary([2, 2, 2, 2, 2], "USRb", "Bbbbbbbb1!");
     }
 
     private async Task CreateIdentityIfNecessary(byte[] publicKey, string username, string password)
