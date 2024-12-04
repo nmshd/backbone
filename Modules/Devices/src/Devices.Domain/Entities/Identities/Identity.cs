@@ -130,14 +130,14 @@ public class Identity : Entity
         return deletionProcess;
     }
 
-    public IdentityDeletionProcess StartDeletionProcessAsOwner(DeviceId asDevice)
+    public IdentityDeletionProcess StartDeletionProcessAsOwner(DeviceId asDevice, double? lengthOfGracePeriodInDays = null)
     {
         EnsureNoActiveProcessExists();
         EnsureIdentityOwnsDevice(asDevice);
 
         TierIdBeforeDeletion = TierId;
 
-        var deletionProcess = IdentityDeletionProcess.StartAsOwner(Address, asDevice);
+        var deletionProcess = IdentityDeletionProcess.StartAsOwner(Address, asDevice, lengthOfGracePeriodInDays);
         _deletionProcesses.Add(deletionProcess);
 
         DeletionGracePeriodEndsAt = deletionProcess.GracePeriodEndsAt;
