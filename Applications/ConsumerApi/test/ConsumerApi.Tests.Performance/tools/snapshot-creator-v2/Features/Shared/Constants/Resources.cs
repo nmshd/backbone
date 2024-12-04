@@ -63,7 +63,7 @@ public static class Resources
     public static string BuildErrorDetails(string message, DomainIdentity? identity, DomainIdentity? recipientIdentity) =>
         BuildErrorDetails<object>(message, identity, recipientIdentity);
 
-    public static string BuildRelationshipErrorDetails(string message, DomainIdentity? identity, RelationshipIdBag[]? expectedItems, RelationshipIdBag[]? actualItems)
+    public static string BuildRelationshipErrorDetails(string message, DomainIdentity? identity, RelationshipIdentityBag[]? expectedItems, RelationshipIdentityBag[]? actualItems)
     {
         var sb = new StringBuilder();
 

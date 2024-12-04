@@ -163,7 +163,7 @@ public abstract record CreateMessages
                     senderIdentity.PoolAlias == relationship.SenderPoolAlias &&
                     senderIdentity.ConfigurationIdentityAddress == relationship.SenderIdentityAddress &&
                     relationship.NumberOfSentMessages > 0)
-                .Select(relationship => new RelationshipIdBag(
+                .Select(relationship => new RelationshipIdentityBag(
                     relationship.RecipientIdentityAddress,
                     relationship.RecipientPoolAlias,
                     relationship.NumberOfSentMessages))
@@ -182,7 +182,7 @@ public abstract record CreateMessages
                 .ToArray();
 
             var recipientIdentityIds = recipientIdentities
-                .Select(c => new RelationshipIdBag(c.ConfigurationIdentityAddress, c.PoolAlias))
+                .Select(c => new RelationshipIdentityBag(c.ConfigurationIdentityAddress, c.PoolAlias))
                 .OrderBy(relationshipIdBag => relationshipIdBag.PoolAlias)
                 .ThenBy(relationshipIdBag => relationshipIdBag.IdentityAddress)
                 .ToArray();

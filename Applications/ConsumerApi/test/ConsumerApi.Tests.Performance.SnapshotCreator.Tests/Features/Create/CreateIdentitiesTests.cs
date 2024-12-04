@@ -12,7 +12,7 @@ public class CreateIdentitiesTests : SnapshotCreatorTestsBase
     public async Task Handle_ShouldReturnListOfDomainIdentities_WhenValidCommand()
     {
         // Arrange
-        var createIdenityCommand = A.Fake<ICreateIdentityCommand>();
+        var identityFactory = A.Fake<IIdentityFactory>();
 
         var identities = new List<IdentityPoolConfiguration>()
         {
@@ -23,12 +23,12 @@ public class CreateIdentitiesTests : SnapshotCreatorTestsBase
 
         var fakeDomainIdentity = A.Fake<DomainIdentity>();
 
-        A.CallTo(() => createIdenityCommand.CreateIdentity(
+        A.CallTo(() => identityFactory.Create(
             A<CreateIdentities.Command>.Ignored,
             A<IdentityConfiguration>.Ignored)).Returns(fakeDomainIdentity);
 
 
-        var handler = new CreateIdentities.CommandHandler(createIdenityCommand);
+        var handler = new CreateIdentities.CommandHandler(identityFactory);
         var command = new CreateIdentities.Command(
             identities,
             "http://localhost:8081",
@@ -42,20 +42,19 @@ public class CreateIdentitiesTests : SnapshotCreatorTestsBase
         result.Should().NotBeNull();
         result.Should().NotBeEmpty();
 
-        A.CallTo(() => createIdenityCommand.CreateIdentity(
+        A.CallTo(() => identityFactory.Create(
             A<CreateIdentities.Command>.Ignored,
             A<IdentityConfiguration>.Ignored)).MustHaveHappened(identities.Count, Times.Exactly);
 
         result.Count.Should().Be(identities.Count);
-        createIdenityCommand.TotalIdentities.Should().Be(result.Count);
+        identityFactory.TotalIdentities.Should().Be(result.Count);
     }
-
 
     [Fact]
     public async Task Handle_ShouldReturnEmptyList_WhenNoIdentitiesProvided()
     {
-        var createIdenityCommand = A.Fake<ICreateIdentityCommand>();
-        var handler = new CreateIdentities.CommandHandler(createIdenityCommand);
+        var identityFactory = A.Fake<IIdentityFactory>();
+        var handler = new CreateIdentities.CommandHandler(identityFactory);
         var command = new CreateIdentities.Command(
             new List<IdentityPoolConfiguration>(),
             "http://localhost:8081",
@@ -66,17 +65,16 @@ public class CreateIdentitiesTests : SnapshotCreatorTestsBase
 
         result.Should().NotBeNull();
         result.Should().BeEmpty();
-        A.CallTo(() => createIdenityCommand.CreateIdentity(
+        A.CallTo(() => identityFactory.Create(
             A<CreateIdentities.Command>.Ignored,
             A<IdentityConfiguration>.Ignored)).MustNotHaveHappened();
     }
 
-
     [Fact]
     public async Task Handle_ShouldThrowException_WhenNullIdentitiesProvided()
     {
-        var createIdenityCommand = A.Fake<ICreateIdentityCommand>();
-        var handler = new CreateIdentities.CommandHandler(createIdenityCommand);
+        var identityFactory = A.Fake<IIdentityFactory>();
+        var handler = new CreateIdentities.CommandHandler(identityFactory);
         var command = new CreateIdentities.Command(
             null!,
             "http://localhost:8081",

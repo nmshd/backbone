@@ -174,7 +174,7 @@ public abstract record CreateRelationships
                 .Where(relationship =>
                     appIdentity.PoolAlias == relationship.SenderPoolAlias &&
                     appIdentity.ConfigurationIdentityAddress == relationship.SenderIdentityAddress)
-                .Select(relationship => new RelationshipIdBag(
+                .Select(relationship => new RelationshipIdentityBag(
                     relationship.RecipientIdentityAddress,
                     relationship.RecipientPoolAlias))
                 .OrderBy(relationshipIdBag => relationshipIdBag.PoolAlias)
@@ -188,7 +188,7 @@ public abstract record CreateRelationships
                 .ToArray();
 
             var connectorIdentityToEstablishRelationshipWithIds = connectorIdentityToEstablishRelationshipWith
-                .Select(connectorIdentity => new RelationshipIdBag(
+                .Select(connectorIdentity => new RelationshipIdentityBag(
                     connectorIdentity.ConfigurationIdentityAddress,
                     connectorIdentity.PoolAlias))
                 .OrderBy(relationshipIdBag => relationshipIdBag.PoolAlias)

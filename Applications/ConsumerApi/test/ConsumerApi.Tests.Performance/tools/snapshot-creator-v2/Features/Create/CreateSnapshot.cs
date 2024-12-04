@@ -10,13 +10,6 @@ namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Cre
 
 public abstract record CreateSnapshot
 {
-    public enum PerformanceLoadTest
-    {
-        Low,
-        Medium,
-        High
-    }
-
     public record Command(
         string BaseAddress,
         string ClientId,

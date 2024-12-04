@@ -2,8 +2,8 @@
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 
-public interface ICreateIdentityCommand
+public interface IIdentityFactory
 {
-    Task<DomainIdentity> CreateIdentity(CreateIdentities.Command request, IdentityConfiguration identityConfiguration);
+    Task<DomainIdentity> Create(CreateIdentities.Command request, IdentityConfiguration identityConfiguration);
     int TotalIdentities { get; set; }
 }

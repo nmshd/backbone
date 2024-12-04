@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 
-public record IdentityCommand(ILogger<IdentityCommand> Logger) : ICreateIdentityCommand
+public class IdentityFactory(ILogger<IdentityFactory> logger) : IIdentityFactory
 {
     private int _numberOfCreatedIdentities;
     public int TotalIdentities { get; set; }
@@ -15,7 +15,7 @@ public record IdentityCommand(ILogger<IdentityCommand> Logger) : ICreateIdentity
     private readonly Lock _lockObj = new();
     private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
 
-    public async Task<DomainIdentity> CreateIdentity(CreateIdentities.Command request, IdentityConfiguration identityConfiguration)
+    public async Task<DomainIdentity> Create(CreateIdentities.Command request, IdentityConfiguration identityConfiguration)
     {
         DomainIdentity createdIdentity;
         await _semaphoreSlim.WaitAsync();
@@ -23,7 +23,7 @@ public record IdentityCommand(ILogger<IdentityCommand> Logger) : ICreateIdentity
         {
             Stopwatch stopwatch = new();
             stopwatch.Start();
-            createdIdentity = await InnerCreateIdentity(request, identityConfiguration);
+            createdIdentity = await InnerCreate(request, identityConfiguration);
             stopwatch.Stop();
 
             using (_lockObj.EnterScope())
@@ -31,7 +31,7 @@ public record IdentityCommand(ILogger<IdentityCommand> Logger) : ICreateIdentity
                 _numberOfCreatedIdentities++;
             }
 
-            Logger.LogDebug(
+            logger.LogDebug(
                 "Created {CreatedIdentities}/{TotalIdentities} identities. Semaphore.Count: {SemaphoreCount} - Identity {Address}/{ConfigurationAddress}/{Pool} added in {ElapsedMilliseconds} ms",
                 _numberOfCreatedIdentities,
                 TotalIdentities,
@@ -49,7 +49,7 @@ public record IdentityCommand(ILogger<IdentityCommand> Logger) : ICreateIdentity
         return createdIdentity;
     }
 
-    private static async Task<DomainIdentity> InnerCreateIdentity(CreateIdentities.Command request, IdentityConfiguration identityConfiguration)
+    private static async Task<DomainIdentity> InnerCreate(CreateIdentities.Command request, IdentityConfiguration identityConfiguration)
     {
         var sdkClient = await Client.CreateForNewIdentity(request.BaseUrlAddress, request.ClientCredentials, PasswordHelper.GeneratePassword(18, 24));
 

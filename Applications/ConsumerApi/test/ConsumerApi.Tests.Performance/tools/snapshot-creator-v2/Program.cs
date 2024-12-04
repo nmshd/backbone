@@ -48,7 +48,8 @@ public class Program
                     services.AddSingleton<IOutputHelper, OutputHelper>();
                     services.AddSingleton<IExcelWriter, ExcelWriter>();
 
-                    services.AddTransient<ICreateIdentityCommand, IdentityCommand>();
+                    services.AddTransient<IIdentityFactory, IdentityFactory>();
+                    services.AddTransient<IDeviceFactory, DeviceFactory>();
                 });
 
             await hostBuilder.RunCommandLineApplicationAsync(args, app =>
