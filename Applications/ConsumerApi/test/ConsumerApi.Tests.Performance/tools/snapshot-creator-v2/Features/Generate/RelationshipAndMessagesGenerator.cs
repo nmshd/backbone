@@ -28,11 +28,7 @@ public class RelationshipAndMessagesGenerator : IRelationshipAndMessagesGenerato
                     .Where(i => i.HasAvailableRelationships)
                     .ToList();
 
-                #region Attempt 1: Try find a connector identity for that app identity that has not established a relationship yet
-
                 var recipientConnectorIdentity = TryFindConnectorIdentityForThatAppIdentity(availableConnectorIdentities, appIdentity);
-
-                #endregion
 
                 if (recipientConnectorIdentity == null)
                 {

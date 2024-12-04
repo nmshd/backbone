@@ -1,10 +1,6 @@
-﻿using System.Diagnostics;
-using Backbone.ConsumerApi.Sdk;
-using Backbone.ConsumerApi.Sdk.Authentication;
+﻿using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
-using Backbone.Tooling;
 using MediatR;
-using Microsoft.Extensions.Logging;
 
 namespace Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 
@@ -16,93 +12,26 @@ public abstract record CreateIdentities
         ClientCredentials ClientCredentials) : IRequest<List<DomainIdentity>>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler(ILogger<CreateIdentities> Logger) : IRequestHandler<Command, List<DomainIdentity>>
-    {
-        private int _numberOfCreatedIdentities;
-        private int _totalIdentities;
-        private readonly Lock _lockObj = new();
-        private readonly SemaphoreSlim _semaphoreSlim = new(Environment.ProcessorCount);
 
+    public record CommandHandler(ICreateIdentityCommand IdentityCommand) : IRequestHandler<Command, List<DomainIdentity>>
+    {
         public async Task<List<DomainIdentity>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var identities = new List<DomainIdentity>();
+            ArgumentNullException.ThrowIfNull(request);
 
             var identityConfigurations = request.IdentityPoolConfigurations
                 .SelectMany(identityPoolConfiguration => identityPoolConfiguration.Identities)
                 .ToArray();
 
-            _totalIdentities = identityConfigurations.Length;
-            _numberOfCreatedIdentities = 0;
+            IdentityCommand.TotalIdentities = identityConfigurations.Length;
 
             var tasks = identityConfigurations
-                .Select(identityConfiguration => ExecuteCreateIdentity(request, identityConfiguration, identities))
+                .Select(identityConfiguration => IdentityCommand.CreateIdentity(request, identityConfiguration))
                 .ToArray();
 
-            await Task.WhenAll(tasks);
+            var identities = await Task.WhenAll(tasks);
 
-            return identities;
-        }
-
-        private async Task ExecuteCreateIdentity(Command request, IdentityConfiguration identityConfiguration, List<DomainIdentity> identities)
-        {
-            await _semaphoreSlim.WaitAsync();
-            try
-            {
-                Stopwatch stopwatch = new();
-                stopwatch.Start();
-                var createdIdentity = await CreateIdentity(request, identityConfiguration);
-                stopwatch.Stop();
-
-                using (_lockObj.EnterScope())
-                {
-                    _numberOfCreatedIdentities++;
-                    identities.Add(createdIdentity);
-                }
-
-                Logger.LogDebug(
-                    "Created {CreatedIdentities}/{TotalIdentities} identities. Semaphore.Count: {SemaphoreCount} - Identity {Address}/{ConfigurationAddress}/{Pool} added in {ElapsedMilliseconds} ms",
-                    _numberOfCreatedIdentities,
-                    _totalIdentities,
-                    _semaphoreSlim.CurrentCount,
-                    createdIdentity.IdentityAddress,
-                    createdIdentity.ConfigurationIdentityAddress,
-                    createdIdentity.PoolAlias,
-                    stopwatch.ElapsedMilliseconds);
-            }
-            finally
-            {
-                _semaphoreSlim.Release();
-            }
-        }
-
-        private static async Task<DomainIdentity> CreateIdentity(Command request, IdentityConfiguration identityConfiguration)
-        {
-            var sdkClient = await Client.CreateForNewIdentity(request.BaseUrlAddress, request.ClientCredentials, PasswordHelper.GeneratePassword(18, 24));
-
-            if (sdkClient.DeviceData is null)
-                throw new InvalidOperationException(
-                    $"The sdkClient.DeviceData is null. Could not be used to create a new database Identity for config {identityConfiguration.Address}/{identityConfiguration.PoolAlias} [IdentityAddress/Pool]");
-
-            var createdIdentity = new DomainIdentity(
-                sdkClient.DeviceData.UserCredentials,
-                sdkClient.IdentityData,
-                identityConfiguration.Address,
-                identityConfiguration.NumberOfDevices,
-                identityConfiguration.NumberOfRelationshipTemplates,
-                identityConfiguration.IdentityPoolType,
-                identityConfiguration.NumberOfChallenges,
-                identityConfiguration.PoolAlias,
-                identityConfiguration.NumberOfDatawalletModifications,
-                identityConfiguration.NumberOfSentMessages);
-
-            if (string.IsNullOrWhiteSpace(sdkClient.DeviceData.DeviceId))
-            {
-                throw new InvalidOperationException(
-                    $"The sdkClient.DeviceData.DeviceId is null or empty. Could not be used to create a new database Device for config {identityConfiguration.Address}/{identityConfiguration.PoolAlias} [IdentityAddress/Pool]");
-            }
-
-            createdIdentity.AddDevice(sdkClient.DeviceData.DeviceId);
-            return createdIdentity;
+            return [.. identities];
         }
     }
 }

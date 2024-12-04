@@ -1,4 +1,5 @@
 ﻿using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.SubHandler;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Generate;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Interfaces;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Readers;
@@ -46,6 +47,8 @@ public class Program
                     services.AddSingleton<IRelationshipAndMessagesGenerator, RelationshipAndMessagesGenerator>();
                     services.AddSingleton<IOutputHelper, OutputHelper>();
                     services.AddSingleton<IExcelWriter, ExcelWriter>();
+
+                    services.AddTransient<ICreateIdentityCommand, IdentityCommand>();
                 });
 
             await hostBuilder.RunCommandLineApplicationAsync(args, app =>
