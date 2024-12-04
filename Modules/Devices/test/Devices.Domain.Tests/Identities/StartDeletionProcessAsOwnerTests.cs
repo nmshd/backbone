@@ -99,6 +99,22 @@ public class StartDeletionProcessAsOwnerTests : AbstractTestsBase
         identityToBeDeletedDomainEvent.IdentityAddress.Should().Be(activeIdentity.Address);
     }
 
+    [Fact]
+    public void Passing_a_lengthOfDeletionGracePeriod_overrides_the_configured_value()
+    {
+        //Arrange
+        var activeIdentity = TestDataGenerator.CreateIdentity();
+        var activeDevice = activeIdentity.Devices[0];
+        SystemTime.Set("2000-01-01");
+
+        //Act
+        activeIdentity.StartDeletionProcessAsOwner(activeDevice.Id, 1);
+
+        // Assert
+        activeIdentity.DeletionGracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-02"));
+        activeIdentity.DeletionProcesses.First().GracePeriodEndsAt.Should().Be(DateTime.Parse("2000-01-02"));
+    }
+
     private static void AssertDeletionProcessWasStarted(Identity activeIdentity)
     {
         activeIdentity.DeletionProcesses.Should().HaveCount(1);
