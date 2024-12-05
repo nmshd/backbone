@@ -20,7 +20,7 @@ public abstract record CreateRelationships
         ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler(ILogger<CreateRelationships> Logger) : IRequestHandler<Command, Unit>
+    public class CommandHandler(ILogger<CreateRelationships> logger) : IRequestHandler<Command, Unit>
     {
         private int _numberOfCreatedRelationships;
         private int _totalRelationships;
@@ -104,7 +104,7 @@ public abstract record CreateRelationships
                 appIdentity.EstablishedRelationshipsById.Add(acceptRelationshipResponse.Result.Id, connectorIdentity);
             }
 
-            Logger.LogDebug("Created {CreatedRelationships}/{TotalRelationships} relationships. Relationship {RelationshipId} " +
+            logger.LogDebug("Created {CreatedRelationships}/{TotalRelationships} relationships. Relationship {RelationshipId} " +
                             "for App Identity {Address}/{ConfigurationAddress}/{Pool} " +
                             "with Connector Identity {ConnectorAddress}/{ConnectorConfigurationAddress}/{ConnectorPool} created in {ElapsedMilliseconds} ms",
                 _numberOfCreatedRelationships,

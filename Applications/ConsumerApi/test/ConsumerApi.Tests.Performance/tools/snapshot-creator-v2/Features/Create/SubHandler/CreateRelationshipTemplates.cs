@@ -17,7 +17,7 @@ public abstract record CreateRelationshipTemplates
         ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler(ILogger<CreateRelationshipTemplates> Logger) : IRequestHandler<Command, Unit>
+    public class CommandHandler(ILogger<CreateRelationshipTemplates> logger) : IRequestHandler<Command, Unit>
     {
         private int _numberOfCreatedRelationshipTemplates;
         private int _totalRelationshipTemplates;
@@ -59,7 +59,7 @@ public abstract record CreateRelationshipTemplates
                     _numberOfCreatedRelationshipTemplates += createdRelationshipTemplates.Count;
                 }
 
-                Logger.LogDebug(
+                logger.LogDebug(
                     "Created {CreatedRelationshipTemplates}/{TotalRelationshipTemplates} relationship templates.  Semaphore.Count: {SemaphoreCount} - Relationship templates of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
                     _numberOfCreatedRelationshipTemplates,
                     _totalRelationshipTemplates,

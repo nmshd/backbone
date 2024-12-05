@@ -19,7 +19,7 @@ public abstract record CreateMessages
         ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator 
-    public record CommandHandler(ILogger<CreateMessages> Logger) : IRequestHandler<Command, Unit>
+    public class CommandHandler(ILogger<CreateMessages> logger) : IRequestHandler<Command, Unit>
     {
         private int _numberOfCreatedMessages;
         private long _totalMessages;
@@ -89,7 +89,7 @@ public abstract record CreateMessages
                     _numberOfCreatedMessages += sentMessages.Count;
                 }
 
-                Logger.LogDebug(
+                logger.LogDebug(
                     "Created {CreatedMessages}/{TotalMessages} messages. Messages from Sender Identity {SenderAddress}/{SenderConfigurationAddress}/{SenderPool} to Recipient Identity {RecipientAddress}/{RecipientConfigurationAddress}/{RecipientPool} created in {ElapsedMilliseconds} ms",
                     _numberOfCreatedMessages,
                     _totalMessages,

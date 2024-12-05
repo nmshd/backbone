@@ -1,4 +1,5 @@
 ﻿using Backbone.ConsumerApi.Sdk;
+using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.Tests.Base;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Factories;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Helper;
@@ -21,7 +22,7 @@ public class DeviceFactoryTests : SnapshotCreatorTestsBase
         var logger = A.Fake<ILogger<DeviceFactory>>();
         var consumerApiClient = A.Fake<IConsumerApiHelper>();
 
-        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<CreateDevices.Command>.Ignored, A<DomainIdentity>.Ignored))!.Returns(_sdkClient);
+        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<string>.Ignored, A<ClientCredentials>.Ignored, A<UserCredentials>.Ignored, A<IdentityData>.Ignored))!.Returns(_sdkClient);
         A.CallTo(() => consumerApiClient.OnBoardNewDevice(A<DomainIdentity>.Ignored, A<Client>.Ignored))
             .Returns($"deviceId");
 
@@ -48,7 +49,7 @@ public class DeviceFactoryTests : SnapshotCreatorTestsBase
 
         var consumerApiClient = A.Fake<IConsumerApiHelper>();
 
-        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<CreateDevices.Command>.Ignored, A<DomainIdentity>.Ignored))!.Returns(_sdkClient);
+        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<string>.Ignored, A<ClientCredentials>.Ignored, A<UserCredentials>.Ignored, A<IdentityData>.Ignored))!.Returns(_sdkClient);
 
         A.CallTo(() => consumerApiClient.OnBoardNewDevice(A<DomainIdentity>.Ignored, A<Client>.Ignored))
             .Returns($"deviceId");
@@ -62,8 +63,7 @@ public class DeviceFactoryTests : SnapshotCreatorTestsBase
         var result = await sut.CreateDevices(request, identity);
 
         // ASSERT
-
-        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(request, identity))
+        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(request.BaseUrlAddress, request.ClientCredentials, identity.UserCredentials, null))
             .MustHaveHappenedOnceExactly();
 
         A.CallTo(() => consumerApiClient.OnBoardNewDevice(identity, _sdkClient!))
@@ -82,7 +82,7 @@ public class DeviceFactoryTests : SnapshotCreatorTestsBase
         var logger = A.Fake<ILogger<DeviceFactory>>();
         var consumerApiClient = A.Fake<IConsumerApiHelper>();
 
-        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<CreateDevices.Command>.Ignored, A<DomainIdentity>.Ignored))!.Returns(_sdkClient);
+        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<string>.Ignored, A<ClientCredentials>.Ignored, A<UserCredentials>.Ignored, A<IdentityData>.Ignored))!.Returns(_sdkClient);
         A.CallTo(() => consumerApiClient.OnBoardNewDevice(A<DomainIdentity>.Ignored, A<Client>.Ignored))
             .Returns($"deviceId");
 
@@ -107,7 +107,7 @@ public class DeviceFactoryTests : SnapshotCreatorTestsBase
         var logger = A.Fake<ILogger<DeviceFactory>>();
         var consumerApiClient = A.Fake<IConsumerApiHelper>();
 
-        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<CreateDevices.Command>.Ignored, A<DomainIdentity>.Ignored))!.Returns(_sdkClient);
+        A.CallTo(() => consumerApiClient.CreateForExistingIdentity(A<string>.Ignored, A<ClientCredentials>.Ignored, A<UserCredentials>.Ignored, A<IdentityData>.Ignored))!.Returns(_sdkClient);
         A.CallTo(() => consumerApiClient.OnBoardNewDevice(A<DomainIdentity>.Ignored, A<Client>.Ignored))
             .Returns($"deviceId");
 

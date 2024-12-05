@@ -19,7 +19,7 @@ public abstract record CreateDatawalletModifications
         ClientCredentials ClientCredentials) : IRequest<Unit>;
 
     // ReSharper disable once UnusedMember.Global - Invoked via IMediator
-    public record CommandHandler(ILogger<CreateDatawalletModifications> Logger) : IRequestHandler<Command, Unit>
+    public class CommandHandler(ILogger<CreateDatawalletModifications> logger) : IRequestHandler<Command, Unit>
     {
         private int _numberOfCreatedDatawalletModifications;
         private int _totalDatawalletModifications;
@@ -36,7 +36,7 @@ public abstract record CreateDatawalletModifications
             _numberOfCreatedDatawalletModifications = 0;
 
             var tasks = identitiesWithDatawalletModifications
-                .Select(identityWithDatawalletModifications => ExecuteCreateDatawalletModifications(request, identityWithDatawalletModifications))
+                .Select(identityWithDatawalletModifications => Create(request, identityWithDatawalletModifications))
                 .ToArray();
 
             await Task.WhenAll(tasks);
@@ -44,7 +44,7 @@ public abstract record CreateDatawalletModifications
             return Unit.Value;
         }
 
-        private async Task ExecuteCreateDatawalletModifications(Command request, DomainIdentity identity)
+        private async Task Create(Command request, DomainIdentity identity)
         {
             await _semaphoreSlim.WaitAsync();
             try
@@ -67,7 +67,7 @@ public abstract record CreateDatawalletModifications
                     _numberOfCreatedDatawalletModifications += finalizeDatawalletVersionUpgradeResponse.Result.DatawalletModifications.Count;
                 }
 
-                Logger.LogDebug(
+                logger.LogDebug(
                     "Created {CreatedDatawalletModifications}/{TotalDatawalletModifications} datawallet modifications.  Semaphore.Count: {SemaphoreCount} - Datawallet modifications of Identity {Address}/{ConfigurationAddress}/{Pool} created in {ElapsedMilliseconds} ms",
                     _numberOfCreatedDatawalletModifications,
                     _totalDatawalletModifications,

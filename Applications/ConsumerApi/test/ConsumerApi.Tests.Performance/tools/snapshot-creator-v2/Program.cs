@@ -52,6 +52,7 @@ public class Program
                     services.AddSingleton<IConsumerApiHelper, ConsumerApiHelper>();
                     services.AddTransient<IIdentityFactory, IdentityFactory>();
                     services.AddTransient<IDeviceFactory, DeviceFactory>();
+                    services.AddTransient<IChallengeFactory, ChallengeFactory>();
                 });
 
             await hostBuilder.RunCommandLineApplicationAsync(args, app =>
