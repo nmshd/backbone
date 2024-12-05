@@ -53,12 +53,7 @@ public class DeviceFactory(ILogger<DeviceFactory> logger, IConsumerApiHelper con
 
         var sdkClient = consumerApiHelper.CreateForExistingIdentity(request, identity);
 
-        if (identity.DeviceIds.Count == 1)
-        {
-            // Note: One Device gets already added in the Identity creation handler
-            deviceIds.Add(identity.DeviceIds[0]);
-        }
-
+        // Note: The reason for starting the loop at 1 is that the first device is already created in the IdentityFactory
         for (var i = 1; i < identity.NumberOfDevices; i++)
         {
             var newDeviceId = await consumerApiHelper.OnBoardNewDevice(identity, sdkClient);

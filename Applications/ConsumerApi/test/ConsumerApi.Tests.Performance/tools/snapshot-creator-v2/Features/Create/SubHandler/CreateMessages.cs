@@ -2,7 +2,7 @@
 using Backbone.ConsumerApi.Sdk;
 using Backbone.ConsumerApi.Sdk.Authentication;
 using Backbone.ConsumerApi.Sdk.Endpoints.Messages.Types.Requests;
-using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Modes;
+using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Create.Models;
 using Backbone.ConsumerApi.Tests.Performance.SnapshotCreator.V2.Features.Shared.Models;
 using Backbone.Crypto;
 using MediatR;

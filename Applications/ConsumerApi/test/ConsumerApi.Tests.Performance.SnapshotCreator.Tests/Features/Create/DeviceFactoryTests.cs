@@ -39,7 +39,7 @@ public class DeviceFactoryTests
     }
 
     [Fact]
-    public async Task OnBoardNewDevice_CreatesNewDevice_ReturnsDeviceId()
+    public async Task CreateDevices_NumDeviceIdsGreaterOne_ReturnsDeviceId()
     {
         // ARRANGE
         _sdkClient ??= GetSdkClient();
